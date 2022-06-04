@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-29 05:10+0000\n"
+"PO-Revision-Date: 2022-06-04 05:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4014,9 +4014,8 @@ msgid "Schematic Editor"
 msgstr "Edytor Schematów"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Numeracja"
+msgstr "Opcje numerowania"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -7751,9 +7750,8 @@ msgid "Selection"
 msgstr "Wybór"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Osiągnięto koniec arkusza."
+msgstr "Rekursywnie wewnątrz arkuszy"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -12437,18 +12435,16 @@ msgid "Wire & Bus Properties"
 msgstr "Właściwości połączeń i magistral"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Notacja symboli składowych:"
+msgstr "Numerowanie symboli"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "Automatyczne rozmieszczanie pól symboli"
+msgstr "Automatyczne numerowanie symboli"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Numeruj zagnieżdżając się w arkuszach"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -14236,9 +14232,8 @@ msgid "KiCad Schematic Editor"
 msgstr "Edytor Schematów programu KiCad"
 
 #: eeschema/sch_edit_frame.cpp:271
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "Zgodność ze schematem"
+msgstr "Hierarchia schematów"
 
 #: eeschema/sch_edit_frame.cpp:318
 msgid "New schematic file is unsaved"
@@ -17567,23 +17562,20 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "Linie można rysować wyłącznie poziomo i pionowo"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr ""
-"Linie można rysować tylko poziomo, pionowo lub kończyć pod kątem 45 stopni"
+msgstr "Linie rysowane tylko poziomo, pionowo lub pod kątem 45 stopni"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Switch to next line mode"
 msgstr "Przełącz na następny tryb rysowania linii"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Automatycznie dopasuj"
+msgstr "Numeruj automatycznie"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Przełącza funkcję automatycznej numeracji dla nowych symboli"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
@@ -17607,9 +17599,8 @@ msgid "Enter Sheet"
 msgstr "Wejdź w arkusz"
 
 #: eeschema/tools/ee_actions.cpp:728
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "Wyświetla zawartość wybranego arkusza w edytorze schematów"
+msgstr "Przełącza na wybrany arkusz w edytorze schematów"
 
 #: eeschema/tools/ee_actions.cpp:733
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17624,49 +17615,44 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "Wyświetla nadrzędny arkusz w oknie edytora schematów"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Navigate Up"
-msgstr "Nawiguj do strony"
+msgstr "Nawiguj w górę"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Przenieś się o jeden arkusz wyżej w hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Navigate Back"
-msgstr "Nawiguj do strony"
+msgstr "Nawiguj w dół"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "Przenieś się o jeden arkusz niżej w hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:756
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "Nawigator"
+msgstr "Nawiguj do następnego"
 
 #: eeschema/tools/ee_actions.cpp:756
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "Przenosi się w tył w historii nawigacji"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "Poprzednia warstwa"
+msgstr "Poprzedni arkusz"
 
 #: eeschema/tools/ee_actions.cpp:762
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "Przenosi się na poprzedni arkusz z uwzględnieniem ich numeracji"
 
 #: eeschema/tools/ee_actions.cpp:768
-#, fuzzy
 msgid "Next Sheet"
-msgstr "Wejdź w arkusz"
+msgstr "Następny arkusz"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "Przenosi się na następny arkusz z uwzględnieniem ich numeracji"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Hierarchy Navigator"
@@ -19519,9 +19505,8 @@ msgid "Open project directory in file explorer"
 msgstr "Otwórz folder projektu w eksploratorze plików"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Dodaj repozytorium"
+msgstr "Dodaj do domyślnego repozytorium"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -21171,9 +21156,8 @@ msgstr "Rozwiązanie proste:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "Aproksymata łuku do wielokąta:"
+msgstr "Aproksymacja:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -26668,7 +26652,6 @@ msgid "degree"
 msgstr "stopni"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "Właściwości obszarów nie będących warstwami miedzi"
 
@@ -31721,13 +31704,13 @@ msgid "Save Footprint Association File"
 msgstr "Zapisz plik z przydziałem footprintów do komponentów"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
 "Plik zawiera kształty pól, które nie są obsługiwane przez eksporter "
-"Hyperlynx (Dopuszczalne są wyłącznie pola owalne, prostokątne i okrągłe)."
+"Hyperlynx (Dopuszczalne są wyłącznie pola owalne, prostokątne, zaokrąglone i "
+"okrągłe)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
@@ -32083,9 +32066,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Przekroczenie współczynnika marginesu pasty"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "Biblioteka"
+msgstr "Identyfikator biblioteki"
 
 #: pcbnew/footprint.h:232
 #, c-format
