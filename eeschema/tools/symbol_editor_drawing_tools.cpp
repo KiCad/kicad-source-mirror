@@ -42,8 +42,13 @@ static void* g_lastPinWeakPtr;
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
+        m_lastTextBold( false ),
+        m_lastTextItalic( false ),
         m_lastTextAngle( ANGLE_HORIZONTAL ),
+        m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
         m_lastFillStyle( FILL_T::NO_FILL ),
+        m_lastFillColor( COLOR4D::UNSPECIFIED ),
+        m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false )
 {
@@ -310,7 +315,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     SHAPE_T                 type = aEvent.Parameter<SHAPE_T>();
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
-    LIB_ITEM*               item = nullptr;
+    LIB_SHAPE*              item = nullptr;
     bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
 
     // We might be running as the same shape in another co-routine.  Make sure that one
@@ -398,9 +403,25 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             int lineWidth = Mils2iu( settings->m_Defaults.line_width );
 
             if( isTextBox )
-                item = new LIB_TEXTBOX( symbol, lineWidth, m_lastFillStyle );
+            {
+                LIB_TEXTBOX* textbox = new LIB_TEXTBOX( symbol, lineWidth, m_lastFillStyle );
+
+                textbox->SetBold( m_lastTextBold );
+                textbox->SetItalic( m_lastTextItalic );
+                textbox->SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
+                                              Mils2iu( settings->m_Defaults.text_size ) ) );
+                textbox->SetTextAngle( m_lastTextAngle );
+                textbox->SetHorizJustify( m_lastTextJust );
+
+                item = textbox;
+            }
             else
+            {
                 item = new LIB_SHAPE( symbol, type, lineWidth, m_lastFillStyle );
+            }
+
+            item->SetStroke( m_lastStroke );
+            item->SetFillColor( m_lastFillColor );
 
             item->SetFlags( IS_NEW );
             item->BeginEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) );
@@ -430,6 +451,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 if( isTextBox )
                 {
+                    LIB_TEXTBOX*                  textbox = static_cast<LIB_TEXTBOX*>( item );
                     DIALOG_LIB_TEXTBOX_PROPERTIES dlg( m_frame, static_cast<LIB_TEXTBOX*>( item ) );
 
                     if( dlg.ShowQuasiModal() != wxID_OK )
@@ -437,7 +459,16 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                         cleanup();
                         continue;
                     }
+
+                    m_lastTextBold = textbox->IsBold();
+                    m_lastTextItalic = textbox->IsItalic();
+                    m_lastTextAngle = textbox->GetTextAngle();
+                    m_lastTextJust = textbox->GetHorizJustify();
                 }
+
+                m_lastStroke = item->GetStroke();
+                m_lastFillStyle = item->GetFillMode();
+                m_lastFillColor = item->GetFillColor();
 
                 m_view->ClearPreview();
 

@@ -65,10 +65,15 @@ private:
     void setTransitions() override;
 
 private:
-    EDA_ANGLE m_lastTextAngle;
-    FILL_T    m_lastFillStyle;
-    bool      m_drawSpecificConvert;
-    bool      m_drawSpecificUnit;
+    bool              m_lastTextBold;
+    bool              m_lastTextItalic;
+    EDA_ANGLE         m_lastTextAngle;
+    GR_TEXT_H_ALIGN_T m_lastTextJust;
+    FILL_T            m_lastFillStyle;
+    COLOR4D           m_lastFillColor;
+    STROKE_PARAMS     m_lastStroke;
+    bool              m_drawSpecificConvert;
+    bool              m_drawSpecificUnit;
 };
 
 #endif /* SYMBOL_EDITOR_DRAWING_TOOLS_H */
