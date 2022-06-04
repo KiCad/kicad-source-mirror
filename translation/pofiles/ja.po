@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-31 13:29+0000\n"
+"PO-Revision-Date: 2022-06-04 19:05+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3985,9 +3985,8 @@ msgid "Schematic Editor"
 msgstr "回路図エディター"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "アノテーション"
+msgstr "アノテーションのオプション"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -12365,14 +12364,13 @@ msgid "Wire & Bus Properties"
 msgstr "配線、バスのプロパティ"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "シンボル ユニットの表記方法:"
+msgstr "シンボル アノテーション"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
 #, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "シンボル フィールドを自動配置 (&u)"
+msgstr "シンボルの自動アノテーション"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
@@ -33172,11 +33170,10 @@ msgstr "認識されないレイヤー '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:262 pcbnew/pcb_expr_evaluator.cpp:329
 #: pcbnew/pcb_expr_evaluator.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr ""
-"%s へのフットプリント識別子引数 (A、B、または参照指定子) がありません。"
+msgstr "%s へのフットプリント識別子引数 (A、B、または参照指定子) がありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
