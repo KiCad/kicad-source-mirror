@@ -684,7 +684,9 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
+            if( ( flatList[ii].GetLibPart()->GetUnitCount() > 1 )
+                && ( flatList[ii].m_unit > 0 )
+                && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
             {
                 msg.Printf( _( "Duplicate items %s%s%s\n" ),
                             flatList[ii].GetRef(),
