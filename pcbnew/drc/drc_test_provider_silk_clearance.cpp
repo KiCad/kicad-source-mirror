@@ -207,9 +207,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 // single footprint or on the board.
                 if( aRefItem->Type() == PCB_SHAPE_T && aTestItem->Type() == PCB_SHAPE_T )
                 {
-                    // also true when both are nullptr
-                    if( aRefItem->GetParentFootprint() == aTestItem->GetParentFootprint() )
-                        return true;
+                    return true;
+                }
+                else if( aRefItem->Type() == PCB_FP_SHAPE_T && aTestItem->Type() == PCB_FP_SHAPE_T
+                        &&  aRefItem->GetParentFootprint() == aTestItem->GetParentFootprint() )
+                {
+                    return true;
                 }
 
                 if( aRefShape->Collide( aTestShape, minClearance, &actual, &pos ) )
