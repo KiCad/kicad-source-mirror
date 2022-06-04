@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,79 +23,82 @@
 /**
  * Returns the default display name for a given layer.  These are not the same as the canonical
  * name in LSET::Name(), which is used in board files and cannot be translated or changed.
+ * WARNING: do not translate board physical layers names (F.Cu to User.9): because canonical names
+ * are used in files (boards and fab files), using translated names in UI create mistakes for users.
+ * Board physical layers names must be seen as proper nouns.
  */
 wxString LayerName( int aLayer )
 {
     switch( aLayer )
     {
     // PCB_LAYER_ID
-    case F_Cu:              return _( "F.Cu" );
-    case In1_Cu:            return _( "In1.Cu" );
-    case In2_Cu:            return _( "In2.Cu" );
-    case In3_Cu:            return _( "In3.Cu" );
-    case In4_Cu:            return _( "In4.Cu" );
-    case In5_Cu:            return _( "In5.Cu" );
-    case In6_Cu:            return _( "In6.Cu" );
-    case In7_Cu:            return _( "In7.Cu" );
-    case In8_Cu:            return _( "In8.Cu" );
-    case In9_Cu:            return _( "In9.Cu" );
-    case In10_Cu:           return _( "In10.Cu" );
-    case In11_Cu:           return _( "In11.Cu" );
-    case In12_Cu:           return _( "In12.Cu" );
-    case In13_Cu:           return _( "In13.Cu" );
-    case In14_Cu:           return _( "In14.Cu" );
-    case In15_Cu:           return _( "In15.Cu" );
-    case In16_Cu:           return _( "In16.Cu" );
-    case In17_Cu:           return _( "In17.Cu" );
-    case In18_Cu:           return _( "In18.Cu" );
-    case In19_Cu:           return _( "In19.Cu" );
-    case In20_Cu:           return _( "In20.Cu" );
-    case In21_Cu:           return _( "In21.Cu" );
-    case In22_Cu:           return _( "In22.Cu" );
-    case In23_Cu:           return _( "In23.Cu" );
-    case In24_Cu:           return _( "In24.Cu" );
-    case In25_Cu:           return _( "In25.Cu" );
-    case In26_Cu:           return _( "In26.Cu" );
-    case In27_Cu:           return _( "In27.Cu" );
-    case In28_Cu:           return _( "In28.Cu" );
-    case In29_Cu:           return _( "In29.Cu" );
-    case In30_Cu:           return _( "In30.Cu" );
-    case B_Cu:              return _( "B.Cu" );
+    case F_Cu:              return wxT( "F.Cu" );
+    case In1_Cu:            return wxT( "In1.Cu" );
+    case In2_Cu:            return wxT( "In2.Cu" );
+    case In3_Cu:            return wxT( "In3.Cu" );
+    case In4_Cu:            return wxT( "In4.Cu" );
+    case In5_Cu:            return wxT( "In5.Cu" );
+    case In6_Cu:            return wxT( "In6.Cu" );
+    case In7_Cu:            return wxT( "In7.Cu" );
+    case In8_Cu:            return wxT( "In8.Cu" );
+    case In9_Cu:            return wxT( "In9.Cu" );
+    case In10_Cu:           return wxT( "In10.Cu" );
+    case In11_Cu:           return wxT( "In11.Cu" );
+    case In12_Cu:           return wxT( "In12.Cu" );
+    case In13_Cu:           return wxT( "In13.Cu" );
+    case In14_Cu:           return wxT( "In14.Cu" );
+    case In15_Cu:           return wxT( "In15.Cu" );
+    case In16_Cu:           return wxT( "In16.Cu" );
+    case In17_Cu:           return wxT( "In17.Cu" );
+    case In18_Cu:           return wxT( "In18.Cu" );
+    case In19_Cu:           return wxT( "In19.Cu" );
+    case In20_Cu:           return wxT( "In20.Cu" );
+    case In21_Cu:           return wxT( "In21.Cu" );
+    case In22_Cu:           return wxT( "In22.Cu" );
+    case In23_Cu:           return wxT( "In23.Cu" );
+    case In24_Cu:           return wxT( "In24.Cu" );
+    case In25_Cu:           return wxT( "In25.Cu" );
+    case In26_Cu:           return wxT( "In26.Cu" );
+    case In27_Cu:           return wxT( "In27.Cu" );
+    case In28_Cu:           return wxT( "In28.Cu" );
+    case In29_Cu:           return wxT( "In29.Cu" );
+    case In30_Cu:           return wxT( "In30.Cu" );
+    case B_Cu:              return wxT( "B.Cu" );
 
     // Technicals
-    case B_Adhes:           return _( "B.Adhesive" );
-    case F_Adhes:           return _( "F.Adhesive" );
-    case B_Paste:           return _( "B.Paste" );
-    case F_Paste:           return _( "F.Paste" );
-    case B_SilkS:           return _( "B.Silkscreen" );
-    case F_SilkS:           return _( "F.Silkscreen" );
-    case B_Mask:            return _( "B.Mask" );
-    case F_Mask:            return _( "F.Mask" );
+    case B_Adhes:           return wxT( "B.Adhesive" );
+    case F_Adhes:           return wxT( "F.Adhesive" );
+    case B_Paste:           return wxT( "B.Paste" );
+    case F_Paste:           return wxT( "F.Paste" );
+    case B_SilkS:           return wxT( "B.Silkscreen" );
+    case F_SilkS:           return wxT( "F.Silkscreen" );
+    case B_Mask:            return wxT( "B.Mask" );
+    case F_Mask:            return wxT( "F.Mask" );
 
     // Users
-    case Dwgs_User:         return _( "User.Drawings" );
-    case Cmts_User:         return _( "User.Comments" );
-    case Eco1_User:         return _( "User.Eco1" );
-    case Eco2_User:         return _( "User.Eco2" );
-    case Edge_Cuts:         return _( "Edge.Cuts" );
-    case Margin:            return _( "Margin" );
+    case Dwgs_User:         return wxT( "User.Drawings" );
+    case Cmts_User:         return wxT( "User.Comments" );
+    case Eco1_User:         return wxT( "User.Eco1" );
+    case Eco2_User:         return wxT( "User.Eco2" );
+    case Edge_Cuts:         return wxT( "Edge.Cuts" );
+    case Margin:            return wxT( "Margin" );
 
     // Footprint
-    case F_CrtYd:           return _( "F.Courtyard" );
-    case B_CrtYd:           return _( "B.Courtyard" );
-    case F_Fab:             return _( "F.Fab" );
-    case B_Fab:             return _( "B.Fab" );
+    case F_CrtYd:           return wxT( "F.Courtyard" );
+    case B_CrtYd:           return wxT( "B.Courtyard" );
+    case F_Fab:             return wxT( "F.Fab" );
+    case B_Fab:             return wxT( "B.Fab" );
 
     // User definable layers.
-    case User_1:            return _( "User.1" );
-    case User_2:            return _( "User.2" );
-    case User_3:            return _( "User.3" );
-    case User_4:            return _( "User.4" );
-    case User_5:            return _( "User.5" );
-    case User_6:            return _( "User.6" );
-    case User_7:            return _( "User.7" );
-    case User_8:            return _( "User.8" );
-    case User_9:            return _( "User.9" );
+    case User_1:            return wxT( "User.1" );
+    case User_2:            return wxT( "User.2" );
+    case User_3:            return wxT( "User.3" );
+    case User_4:            return wxT( "User.4" );
+    case User_5:            return wxT( "User.5" );
+    case User_6:            return wxT( "User.6" );
+    case User_7:            return wxT( "User.7" );
+    case User_8:            return wxT( "User.8" );
+    case User_9:            return wxT( "User.9" );
 
     // Rescue
     case Rescue:            return _( "Rescue" );
