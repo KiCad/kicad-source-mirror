@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-26 02:37+0000\n"
+"PO-Revision-Date: 2022-06-04 01:00+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3946,9 +3946,8 @@ msgid "Schematic Editor"
 msgstr "原理图编辑器"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "标注"
+msgstr "标注选项"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -7612,9 +7611,8 @@ msgid "Selection"
 msgstr "选择"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "到达图框的末尾。"
+msgstr "递归到子图框"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -12198,18 +12196,16 @@ msgid "Wire & Bus Properties"
 msgstr "导线 & 总线属性"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "符号单元表示法："
+msgstr "符号标注"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "自动放置符号字段 (&U)"
+msgstr "自动标注符号"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "递归标注子图框"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -13942,9 +13938,8 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCad 原理图编辑器"
 
 #: eeschema/sch_edit_frame.cpp:271
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "原理图一致性检验"
+msgstr "原理图层次结构"
 
 #: eeschema/sch_edit_frame.cpp:318
 msgid "New schematic file is unsaved"
@@ -17165,22 +17160,20 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "水平和垂直画的线"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr "水平和垂直画的线，末端有45度角"
+msgstr "水平、垂直和以 45 度角绘制的线"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Switch to next line mode"
 msgstr "切换到下一个线模式"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "自动调整"
+msgstr "自动标注"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "切换是否自动标注新部件符号"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
@@ -17203,9 +17196,8 @@ msgid "Enter Sheet"
 msgstr "进入分页"
 
 #: eeschema/tools/ee_actions.cpp:728
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "在原理图编辑器中显示所选图框的内容"
+msgstr "对原理图编辑器中所提供图框的内容的更改"
 
 #: eeschema/tools/ee_actions.cpp:733
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17220,49 +17212,44 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "在原理图编辑器中显示父级图框"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Navigate Up"
-msgstr "导航到页面"
+msgstr "向上导航"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "在层级中往上导航一个图框"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Navigate Back"
-msgstr "导航到页面"
+msgstr "向后导航"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "前移图框导航历史"
 
 #: eeschema/tools/ee_actions.cpp:756
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "导航"
+msgstr "向前导航"
 
 #: eeschema/tools/ee_actions.cpp:756
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "后移图框导航历史"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "上一层"
+msgstr "上一图框"
 
 #: eeschema/tools/ee_actions.cpp:762
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "移动到先前编号的图框"
 
 #: eeschema/tools/ee_actions.cpp:768
-#, fuzzy
 msgid "Next Sheet"
-msgstr "进入分页"
+msgstr "下一图框"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "移动到下一编号图框"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Hierarchy Navigator"
@@ -19091,9 +19078,8 @@ msgid "Open project directory in file explorer"
 msgstr "在文件资源管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "添加仓库"
+msgstr "添加默认仓库"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -20721,9 +20707,8 @@ msgstr "简单的解决方案："
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "一个多边形弧近似值："
+msgstr "近似值："
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -26106,7 +26091,6 @@ msgid "degree"
 msgstr "程度"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "非敷铜区属性"
 
@@ -31071,12 +31055,11 @@ msgid "Save Footprint Association File"
 msgstr "保存封装关联文件"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
-msgstr ""
-"文件包含 Hyperynx 导出器不支持的焊盘形状 (支持的形状为椭圆形、矩形和圆形）。"
+msgstr "文件包含 Hyperynx 导出器不支持的焊盘形状 "
+"(支持的形状为椭圆形、矩形、圆角矩形和圆形）。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
@@ -31423,9 +31406,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "焊锡膏边缘率覆盖"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "库 ID："
+msgstr "库 ID"
 
 #: pcbnew/footprint.h:232
 #, c-format
