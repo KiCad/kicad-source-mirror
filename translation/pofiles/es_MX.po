@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-03 23:04+0000\n"
+"PO-Revision-Date: 2022-06-04 19:05+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -14260,9 +14260,8 @@ msgid "KiCad Schematic Editor"
 msgstr "Editor de esquemas de KiCad"
 
 #: eeschema/sch_edit_frame.cpp:271
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "Paridad de esquema"
+msgstr "Jerarquía esquemática"
 
 #: eeschema/sch_edit_frame.cpp:318
 msgid "New schematic file is unsaved"
@@ -17599,11 +17598,9 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "Líneas dibujadas horizontalmente y verticalmente"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
 msgstr ""
-"Líneas dibujadas horizontalmente y verticalmente, con un ángulo final de 45 "
-"grados"
+"Líneas dibujadas horizontalmente, verticalmente y en un ángulo de 45 grados"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Switch to next line mode"
@@ -17638,10 +17635,8 @@ msgid "Enter Sheet"
 msgstr "Entrar en la hoja"
 
 #: eeschema/tools/ee_actions.cpp:728
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr ""
-"Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
+msgstr "Cambiar el contenido de la hoja proporcionada en el editor de esquemas"
 
 #: eeschema/tools/ee_actions.cpp:733
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17657,49 +17652,44 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "Mostrar la hoja padre en el editor de esquema"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Navigate Up"
-msgstr "Navegar a la página"
+msgstr "Navegar hacia arriba"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Sube una hoja en la jerarquía"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Navigate Back"
-msgstr "Navegar a la página"
+msgstr "Navegar hacia atrás"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "Avanzar en el historial de navegación de la hoja"
 
 #: eeschema/tools/ee_actions.cpp:756
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "Explorador"
+msgstr "Navegar hacia adelante"
 
 #: eeschema/tools/ee_actions.cpp:756
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "Retroceder en el historial de navegación de la hoja"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "Capa anterior"
+msgstr "Hoja anterior"
 
 #: eeschema/tools/ee_actions.cpp:762
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "Mover a la hoja anterior por número"
 
 #: eeschema/tools/ee_actions.cpp:768
-#, fuzzy
 msgid "Next Sheet"
-msgstr "Orientar hoja"
+msgstr "Hoja siguiente"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "Pasar a la siguiente hoja por número"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Hierarchy Navigator"
@@ -21214,9 +21204,8 @@ msgstr "Solución simple:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "Escala aproximada:"
+msgstr "Aproximación:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -32162,9 +32151,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Remplazo de relación de margen de la pasta de soldadura"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "Biblioteca <"
+msgstr "ID de biblioteca"
 
 #: pcbnew/footprint.h:232
 #, c-format
