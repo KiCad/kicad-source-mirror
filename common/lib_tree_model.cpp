@@ -296,7 +296,7 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxStr
 
     if( m_Children.size() )
     {
-    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+        for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
             child->UpdateScore( aMatcher, aLib );
             m_Score = std::max( m_Score, child->m_Score );
