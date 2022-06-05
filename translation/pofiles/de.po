@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
 "PO-Revision-Date: 2022-06-05 23:52+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -14126,7 +14126,7 @@ msgstr "&Einheiten"
 #: pagelayout_editor/menubar.cpp:172 pcbnew/menubar_footprint_editor.cpp:254
 #: pcbnew/menubar_pcb_editor.cpp:476
 msgid "&Place"
-msgstr "Ein&fügen"
+msgstr "Hinzu&fügen"
 
 #: eeschema/menubar.cpp:315
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
@@ -17148,7 +17148,7 @@ msgstr "Spannungsquelle hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:282
 msgid "Add a power port"
-msgstr "Spannungsquelle hinzufügen"
+msgstr "Eine Spannungsquelle hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:288
 msgid "Add No Connect Flag"
@@ -17172,7 +17172,7 @@ msgstr "Buseintritt für Verbindung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:300
 msgid "Add a wire entry to a bus"
-msgstr "Führt eine elektrische Verbindung an einen Bus"
+msgstr "Eine elektrische Verbindung an einen Bus führen"
 
 #: eeschema/tools/ee_actions.cpp:306
 msgid "Add Label"
@@ -17180,7 +17180,7 @@ msgstr "Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:306
 msgid "Add a net label"
-msgstr "Netzbezeichner hinzufügen"
+msgstr "Einen Netzbezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:311
 #, fuzzy
@@ -17194,7 +17194,7 @@ msgstr "Fügt einen Netzklassenbezeichner hinzu"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
-msgstr "Hierarchische Bezeichner hinzufügen"
+msgstr "Hierarchischen Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
@@ -17202,7 +17202,7 @@ msgstr "Einen hierarchischen Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
-msgstr "Schaltplan hinzufügen"
+msgstr "Schaltplanblatt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add a hierarchical sheet"
@@ -17214,7 +17214,7 @@ msgstr "Schaltplanpin importieren"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
 msgid "Import a hierarchical sheet pin"
-msgstr "Einen hierarchischen Schaltplanpin importieren"
+msgstr "Einen Pin aus einem hierarchischen Schaltplan importieren"
 
 #: eeschema/tools/ee_actions.cpp:339
 msgid "Add Global Label"
@@ -36696,7 +36696,7 @@ msgstr "Via-Größe wählen"
 
 #: pcbnew/tools/drawing_tool.cpp:311 pcbnew/tools/drawing_tool.cpp:1757
 msgid "Draw a line segment"
-msgstr "Linien-Segment zeichnen"
+msgstr "Ein Liniensegment zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:392
 #, fuzzy
@@ -36705,23 +36705,23 @@ msgstr "Zeichnet eine Linie"
 
 #: pcbnew/tools/drawing_tool.cpp:392 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
-msgstr "Rechteck zeichnen"
+msgstr "Ein Rechteck zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:444 pcbnew/tools/pcb_actions.cpp:99
 msgid "Draw a circle"
-msgstr "Kreis zeichnen"
+msgstr "Einen Kreis zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:495 pcbnew/tools/pcb_actions.cpp:105
 msgid "Draw an arc"
-msgstr "Kreisbogen zeichnen"
+msgstr "Einen Kreisbogen zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:703
 msgid "Place a text"
-msgstr "Text hinzufügen"
+msgstr "Einen Text hinzufügen"
 
 #: pcbnew/tools/drawing_tool.cpp:1037
 msgid "Draw a dimension"
-msgstr "Bemaßung zeichnen"
+msgstr "Eine Bemaßung zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:1247
 msgid "No graphic items found in file."
@@ -36729,11 +36729,11 @@ msgstr "Keine Grafikelemente in der zu importierenden Datei gefunden."
 
 #: pcbnew/tools/drawing_tool.cpp:1297 pcbnew/tools/drawing_tool.cpp:1368
 msgid "Place a DXF_SVG drawing"
-msgstr "Einfügen einer DXF_SVG Grafik"
+msgstr "Eine DXF_SVG-Zeichnung hinzufügen"
 
 #: pcbnew/tools/drawing_tool.cpp:1444
 msgid "Move the footprint reference anchor"
-msgstr "Bezugspunkt für Footprintanker verschieben"
+msgstr "Footprintanker (Bezugspunkt) verschieben"
 
 #: pcbnew/tools/drawing_tool.cpp:2214
 msgid "Self-intersecting polygons are not allowed"
@@ -36745,7 +36745,7 @@ msgstr "Via-Position verstößt gegen DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2944
 msgid "Place via"
-msgstr "Via platzieren"
+msgstr "Via hinzufügen"
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
@@ -36781,7 +36781,7 @@ msgstr "Leiterbahnbreite und Via-Größe bearbeiten"
 
 #: pcbnew/tools/edit_tool.cpp:770
 msgid "At least two straight track segments must be selected."
-msgstr "Es müssen mindestens zwei gerade Leiterbahnsegmente ausgewählt werden."
+msgstr "Mindestens zwei gerade Leiterbahnsegmente müssen ausgewählt sein."
 
 #: pcbnew/tools/edit_tool.cpp:774
 msgid "Enter fillet radius:"
@@ -36798,7 +36798,7 @@ msgid ""
 "The fillet operation was not performed."
 msgstr ""
 "Ein Radius von Null wurde eingegeben.\n"
-"Die Filetoperation wurde nicht durchgeführt."
+"Die Abrundung wurde nicht durchgeführt."
 
 #: pcbnew/tools/edit_tool.cpp:943
 msgid "Unable to fillet the selected track segments."
@@ -36891,7 +36891,7 @@ msgid ""
 "Press <esc> to cancel or double-click to commit"
 msgstr ""
 "Klick auf Pad %s%d\n"
-"Bitte Esc betätigen um abzubrechen oder mit Doppelklick annehmen"
+"<Esc> drücken, um abzubrechen oder Doppelklick, um auszuführen"
 
 #: pcbnew/tools/pad_tool.cpp:358 pcbnew/tools/pad_tool.cpp:455
 msgid "Renumber pads"
@@ -36899,7 +36899,7 @@ msgstr "Pads neu nummerieren"
 
 #: pcbnew/tools/pad_tool.cpp:560
 msgid "Place pad"
-msgstr "Pad platzieren"
+msgstr "Pad hinzufügen"
 
 #: pcbnew/tools/pad_tool.cpp:596
 #, c-format
@@ -36922,51 +36922,51 @@ msgstr "Pads neu kombinieren"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
-msgstr "Erstelle Polygon aus Auswahl"
+msgstr "Polygon aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
-msgstr "Erstellt aus der Auswahl ein grafisches Polygon"
+msgstr "Erzeugt aus der Auswahl ein grafisches Polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Create Zone from Selection"
-msgstr "Erstelle Zone aus Auswahl"
+msgstr "Fläche aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
-msgstr "Erstellt aus der Auswahl eine Kupferfläche"
+msgstr "Erzeugt aus der Auswahl eine Kupferfläche"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Create Rule Area from Selection"
-msgstr "Erstelle Regelbereich aus Auswahl"
+msgstr "Regelbereich aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
-msgstr "Erstellt einen Regelbereich aus der Auswahl"
+msgstr "Erzeugt einen Regelbereich aus der Auswahl"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Create Lines from Selection"
-msgstr "Erstelle Linien aus Auswahl"
+msgstr "Linien aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
-msgstr "Erstellt grafische Linien aus der Auswahl"
+msgstr "Erzeugt grafische Linien aus der Auswahl"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Create Arc from Selection"
-msgstr "Erstelle Bogen aus Auswahl"
+msgstr "Bogen aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Creates an arc from the selected line segment"
-msgstr "Erstellt einen Bogen aus dem ausgewählten Liniensegment"
+msgstr "Erzeugt einen Kreisbogen aus dem ausgewählten Liniensegment"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Create Tracks from Selection"
-msgstr "Erstelle Leiterbahnen aus Auswahl"
+msgstr "Leiterbahnen aus Auswahl erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Erstellt Leiterbahnen aus den ausgewählten Grafik-Linien"
+msgstr "Erzeugt Leiterbahnen aus den ausgewählten Grafiklinien"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -36974,7 +36974,7 @@ msgstr "Linie zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw a line"
-msgstr "Zeichnet eine Linie"
+msgstr "Eine Linie zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Graphic Polygon"
@@ -36982,7 +36982,7 @@ msgstr "Grafisches Polygon zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw a graphic polygon"
-msgstr "Zeichnet ein grafisches Polygon"
+msgstr "Ein grafisches Polygon zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw Rectangle"
@@ -37002,9 +37002,7 @@ msgstr "Platineneigenschaften hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
-"Auf einer Grafiklage eine Tabelle mit Platineneigenschaften-Eigenschaften "
-"hinzufügen"
+msgstr "Auf einer Grafiklage eine Tabelle mit Platineneigenschaften hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
@@ -37050,7 +37048,7 @@ msgstr "Orthogonale Bemaßung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add an orthogonal dimension"
-msgstr "Hinzufügen einer orthogonalen Bemaßung"
+msgstr "Eine orthogonale Bemaßung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Leader"
@@ -37062,11 +37060,11 @@ msgstr "Hinweislinienbemaßung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:165
 msgid "Add Filled Zone"
-msgstr "Gefüllte Flächen hinzufügen"
+msgstr "Gefüllte Fläche hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:165
 msgid "Add a filled zone"
-msgstr "Gefüllte Flächen hinzufügen"
+msgstr "Eine gefüllte Fläche hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:171
 msgid "Add Vias"
@@ -37082,15 +37080,15 @@ msgstr "Regelbereich hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:177
 msgid "Add a rule area (keepout)"
-msgstr "Hinzufügen eines Regelbereichs (Sperrfläche)"
+msgstr "Einen Regelbereich (Sperrfläche) hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:183
 msgid "Add a Zone Cutout"
-msgstr "Ausschnitt einer Fläche hinzufügen"
+msgstr "Flächenaussparung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:183
 msgid "Add a cutout area of an existing zone"
-msgstr "Fügt den Ausschnitt einer Flächen zu einer existierenden Zone hinzu"
+msgstr "Einen Aussparungsbereich zu einer bestehenden Fläche hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:189
 msgid "Add a Similar Zone"
@@ -37099,8 +37097,8 @@ msgstr "Ähnliche Fläche hinzufügen"
 #: pcbnew/tools/pcb_actions.cpp:189
 msgid "Add a zone with the same settings as an existing zone"
 msgstr ""
-"Fügt eine Fläche mit den gleichen Einstellungen einer bereits existierenden "
-"Fläche hinzu"
+"Eine Fläche mit den gleichen Einstellungen wie eine bestehende Fläche "
+"hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Import Graphics..."
@@ -37108,7 +37106,7 @@ msgstr "Grafiken importieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Import 2D drawing file"
-msgstr "Importieren einer 2D-Zeichnung"
+msgstr "Eine 2D-Zeichnung importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:201
 msgid "Place the Footprint Anchor"
@@ -38504,7 +38502,7 @@ msgstr "Ecke ziehen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2233
 msgid "Add a zone corner"
-msgstr "Gefüllte Flächen hinzufügen"
+msgstr "Ecke zur Fläche hinzufügen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2270
 msgid "Split segment"
