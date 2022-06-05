@@ -462,6 +462,8 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
     default:
         break;
     }
+
+    return false;
 }
 
 

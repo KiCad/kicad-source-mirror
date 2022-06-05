@@ -428,7 +428,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
         int barThickness = underscoreBBox.GetHeight();
 
         // Shorten the bar a little so its rounded ends don't make it over-long
-        double barTrim = barThickness / 2;
+        double barTrim = barThickness / 2.0;
 
         VECTOR2I topLeft( aPosition );
         VECTOR2I topRight( aPosition );
