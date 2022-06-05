@@ -2,13 +2,14 @@
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-04 05:28+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2022-06-05 23:52+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -205,7 +206,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
-msgstr "Raytracing"
+msgstr "Śledzenie promieni"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:608
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:300
@@ -4201,7 +4202,7 @@ msgstr "Ekran"
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:913
 msgid "Footprint"
-msgstr "Footprint"
+msgstr "Ślad stopy"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pad.cpp:916
@@ -18600,7 +18601,7 @@ msgstr "Archiwum ZIP '%s' nie może zostać otwarte."
 #: gerbview/files.cpp:479
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Pomijany plik '%s' (plik zadań Gerber)."
+msgstr "Pomijany plik '%s' (pliki Gerber )."
 
 #: gerbview/files.cpp:524
 #, c-format
