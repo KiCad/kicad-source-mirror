@@ -57,6 +57,11 @@ public:
     virtual bool IsRoot() const { return true; }
 
     /**
+     * For items with footprint fields.
+     */
+    virtual wxString GetFootprint() { return wxEmptyString; }
+
+    /**
      * For items with units, return the number of units.
      */
     virtual int GetUnitCount() const { return 0; }

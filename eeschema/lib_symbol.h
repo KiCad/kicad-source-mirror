@@ -169,6 +169,11 @@ public:
 
     wxString GetSearchText() override;
 
+    wxString GetFootprint() override
+    {
+        return GetFootprintField().GetText();
+    }
+
     /**
      * For symbols derived from other symbols, IsRoot() indicates no derivation.
      */

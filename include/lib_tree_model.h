@@ -130,6 +130,7 @@ public:
 
     wxString    m_Name;        // Actual name of the part
     wxString    m_Desc;        // Description to be displayed
+    wxString    m_Footprint;   // Footprint ID as a string (ie: the footprint field text)
     wxString    m_MatchName;   // Normalized name for matching
     wxString    m_SearchText;  // Descriptive text to search
     bool        m_Normalized;  // Support for lazy normalization.

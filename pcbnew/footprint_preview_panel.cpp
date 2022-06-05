@@ -86,7 +86,7 @@ const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor()
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
 
-    return settings->GetCursorColor();
+    return settings->GetLayerColor( F_Fab );
 }
 
 

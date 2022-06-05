@@ -515,16 +515,18 @@ void DIALOG_CHOOSE_SYMBOL::OnFootprintSelected( wxCommandEvent& aEvent )
 
 void DIALOG_CHOOSE_SYMBOL::OnComponentPreselected( wxCommandEvent& aEvent )
 {
-    int unit = 0;
+    LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
-    LIB_ID id = m_tree->GetSelectedLibId( &unit );
-
-    if( id.IsValid() )
+    if( node && node->m_LibId.IsValid() )
     {
-        m_symbol_preview->DisplaySymbol( id, unit );
+        m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit );
 
-        ShowFootprintFor( id );
-        PopulateFootprintSelector( id );
+        if( !node->m_Footprint.IsEmpty() )
+            ShowFootprint( node->m_Footprint );
+        else
+            ShowFootprintFor( node->m_LibId );
+
+        PopulateFootprintSelector( node->m_LibId );
     }
     else
     {
@@ -533,7 +535,7 @@ void DIALOG_CHOOSE_SYMBOL::OnComponentPreselected( wxCommandEvent& aEvent )
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
 
-        PopulateFootprintSelector( id );
+        PopulateFootprintSelector( LIB_ID() );
     }
 }
 

@@ -164,6 +164,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
 
     m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();
+    m_Footprint = aItem->GetFootprint();
 
     m_MatchName = aItem->GetName();
     m_SearchText = aItem->GetSearchText();

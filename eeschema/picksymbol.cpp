@@ -131,7 +131,10 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
             modelAdapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
     }
 
-    std::vector< LIB_TREE_ITEM* > history_list;
+    std::vector<LIB_SYMBOL>     history_list_storage;
+    std::vector<LIB_TREE_ITEM*> history_list;
+
+    history_list_storage.reserve( aHistoryList.size() );
 
     for( const PICKED_SYMBOL& i : aHistoryList )
     {
@@ -139,7 +142,19 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
 
         // This can be null, for example when a symbol has been deleted from a library
         if( symbol )
-            history_list.push_back( symbol );
+        {
+            history_list_storage.emplace_back( *symbol );
+
+            for( const std::pair<int, wxString>& fieldDef : i.Fields )
+            {
+                LIB_FIELD* field = history_list_storage.back().GetFieldById( fieldDef.first );
+
+                if( field )
+                    field->SetText( fieldDef.second );
+            }
+
+            history_list.push_back( &history_list_storage.back() );
+        }
     }
 
     modelAdapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
