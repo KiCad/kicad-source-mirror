@@ -2833,7 +2833,13 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     wxString name, prefix, tmp;
 
     name = tokens.GetNextToken();
-    name = EscapeString( name, CTX_LIBID );
+
+    // Don't escape symbol library name if it's already been escaped.  Given that the original
+    // change to escape the symbol library name has resulted in rescue libraries with escaped
+    // names, we will have to live with the consequences.
+    if( name == UnescapeString( name ) )
+        name = EscapeString( name, CTX_LIBID );
+
     pos += name.size() + 1;
 
     prefix = tokens.GetNextToken();
