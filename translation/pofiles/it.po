@@ -108,7 +108,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-27 13:46+0200\n"
+"PO-Revision-Date: 2022-06-06 19:26+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -4131,9 +4131,8 @@ msgid "Schematic Editor"
 msgstr "Editor schemi elettrici"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Annotazioni"
+msgstr "Opzioni annotazioni"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -7853,9 +7852,8 @@ msgid "Selection"
 msgstr "Selezione"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Raggiunta la fine del foglio."
+msgstr "Ricorsione nei sottofogli"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -12535,18 +12533,16 @@ msgid "Wire & Bus Properties"
 msgstr "Proprietà filo & bus"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Notazione unità simbolo:"
+msgstr "Annotazione simbolo"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "Piazza a&utomaticamente campi simbolo"
+msgstr "Annota automaticamente i simboli"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Annota ricorsivamente i sottofogli"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -14329,9 +14325,8 @@ msgid "KiCad Schematic Editor"
 msgstr "Editor schemi KiCad"
 
 #: eeschema/sch_edit_frame.cpp:271
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "Parità schema"
+msgstr "Gerarchia schema"
 
 #: eeschema/sch_edit_frame.cpp:318
 msgid "New schematic file is unsaved"
@@ -17510,24 +17505,20 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "Linee disegnate orizzontalmente e verticalmente"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr ""
-"Linee disegnate orizzontalmente e verticalmente, con un angolo a 45 gradi "
-"alla fine"
+msgstr "Linee disegnate orizzontalmente e verticalmente, e a 45 gradi"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Switch to next line mode"
 msgstr "Passa alla modalità linea successiva"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Regola automaticamente"
+msgstr "Annota automaticamente"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Commuta l'annotazione automatica di nuovi simboli"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
@@ -17550,9 +17541,8 @@ msgid "Enter Sheet"
 msgstr "Accedi al foglio"
 
 #: eeschema/tools/ee_actions.cpp:728
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "Mostra i contenuti del foglio selezionato nell'editor degli schemi"
+msgstr "Cambia nei contenuti del foglio fornito nell'editor degli schemi"
 
 #: eeschema/tools/ee_actions.cpp:733
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17567,49 +17557,44 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "Mostra il foglio genitore nella finestra dell'editor degli schemi"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Navigate Up"
-msgstr "Naviga alla pagina"
+msgstr "Naviga su"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Naviga su di un foglio nella gerarchia"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Navigate Back"
-msgstr "Naviga alla pagina"
+msgstr "Naviga indietro"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "Spostati in avanti nella cronologia della navigazione dei fogli"
 
 #: eeschema/tools/ee_actions.cpp:756
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "Navigatore"
+msgstr "Naviga in avanti"
 
 #: eeschema/tools/ee_actions.cpp:756
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "Spostati indietro nella cronologia della navigazione dei fogli"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "Strato precedente"
+msgstr "Foglio precedente"
 
 #: eeschema/tools/ee_actions.cpp:762
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "Spostati al foglio precedente per numero"
 
 #: eeschema/tools/ee_actions.cpp:768
-#, fuzzy
 msgid "Next Sheet"
-msgstr "Accedi al foglio"
+msgstr "Foglio successivo"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "Spostati al foglio successivo per numero"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Hierarchy Navigator"
@@ -19456,9 +19441,8 @@ msgid "Open project directory in file explorer"
 msgstr "Apri la cartella del progetto nell'esploratore file"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Aggiungi repository"
+msgstr "Aggiungi repository predefinito"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -21106,9 +21090,8 @@ msgstr "Soluzione semplice:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "Posizione X:"
+msgstr "Approssimazione:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -26598,7 +26581,6 @@ msgid "degree"
 msgstr "gradi"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "Proprietà zone non in rame"
 
@@ -27143,7 +27125,7 @@ msgstr "Allineatore, da globale a scheda"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1678
 msgid "Test point pad"
-msgstr "piazzola punto di test"
+msgstr "Piazzola punto di test"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1679
 msgid "Heatsink pad"
@@ -31349,13 +31331,10 @@ msgid "Save Footprint Association File"
 msgstr "Salva file di associazione impronte"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
-msgstr ""
-"Il file contiene forme di piazzole non supportate dall'esportatore Hyperlynx "
-"(le forme supportate sono ovali, rettangolari, circolari)."
+msgstr "Il file contiene forme di piazzole non supportate dall'esportatore Hyperlynx (le forme supportate sono ovali, rettangolari, rettangolari stondate e circolari)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
@@ -31712,9 +31691,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Scavalcamento rapporto margine pastasalda"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "Libreria"
+msgstr "ID libreria"
 
 #: pcbnew/footprint.h:232
 #, c-format
@@ -38875,57 +38853,21 @@ msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "File Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Genera file forature Excellon2"
+msgstr "File forature Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "File progetto KiCad"
+msgstr "Progetto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Schema non-KiCad..."
+msgstr "Schema KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "File di circuiti stampati KiCad"
-
-#~ msgid "Keep hierarchy navigator open"
-#~ msgstr "Mantieni il navigatore della gerarchia aperto"
-
-#~ msgid ""
-#~ "Lines drawn horizontally and vertically, with a 45 degree angle start"
-#~ msgstr ""
-#~ "Linee disegnate orizzontalmente e verticalmente, con un angolo di 45 "
-#~ "gradi all'inizio"
-
-#~ msgid "Selection only"
-#~ msgstr "Solo selezione"
-
-#~ msgid "Add Default"
-#~ msgstr "Aggiungi predefinito"
-
-#~ msgid "Constrain outline to H, V and 45 degrees"
-#~ msgstr "Limita i contorni a O, V e 45 gradi"
-
-#~ msgid "Constrain outline to H, V and 45 deg"
-#~ msgstr "Limita i contorni a O, V e 45 gradi"
-
-#~ msgid "Draw the area using horizontal, vertical and 45 degree lines only"
-#~ msgstr ""
-#~ "Disegno area consentito solo orizzontalmente, verticalmente e a 45 gradi"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
+msgstr "Circuito stampato KiCad"
