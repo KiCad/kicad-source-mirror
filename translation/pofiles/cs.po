@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-23 04:27+0000\n"
+"PO-Revision-Date: 2022-06-06 19:15+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3984,9 +3984,8 @@ msgid "Schematic Editor"
 msgstr "Editor schémat"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Očíslování"
+msgstr "Možnosti očíslování"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -5383,7 +5382,6 @@ msgid "Drawing sheet"
 msgstr "List kreslení"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
 msgstr "Okraje strany"
 
@@ -5894,9 +5892,8 @@ msgid "Save current document to another location"
 msgstr "Uloží aktuální dokument na jiné místo"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Uložit kopii jako..."
+msgstr "Uložit kopii..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -9335,9 +9332,8 @@ msgstr "Pozice Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:316
 #: pcbnew/pcb_dimension.cpp:337 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:310
-#, fuzzy
 msgid "Font"
-msgstr "Písmo:"
+msgstr "Písmo"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9406,9 +9402,8 @@ msgid "Passive"
 msgstr "Pasivní"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:166
-#, fuzzy
 msgid "Dot"
-msgstr "Tečky"
+msgstr "Tečka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 msgid "Diamond"
@@ -9423,7 +9418,7 @@ msgstr "Formátování"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:42
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
 msgid "ALL"
-msgstr ""
+msgstr "VŠE"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 msgid "Standard"
@@ -9536,7 +9531,7 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
 msgid "Pin count:"
-msgstr "počet vývodů:"
+msgstr "Počet vývodů:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
 #, fuzzy
@@ -9553,9 +9548,8 @@ msgid "Group Selected"
 msgstr "Výběr mřížky"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtrovat podle počtu pinů"
+msgstr "Filtrovat podle jednotek:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -10984,9 +10978,8 @@ msgid "Hierarchical path:"
 msgstr "Hierarchická cesta:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
-#, fuzzy
 msgid "path"
-msgstr "Cesta souborů:"
+msgstr "cesta"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11790,9 +11783,8 @@ msgid "Propagation delay"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:976
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
@@ -11828,7 +11820,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1031
 msgid "ohm / unit"
-msgstr ""
+msgstr "ohm / jednotka"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
 #, fuzzy
@@ -11837,7 +11829,7 @@ msgstr "Délka vodiče:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
-msgstr ""
+msgstr "henry / jednotka"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1046
 msgid "Capacitance per unit length"
@@ -11845,7 +11837,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1053
 msgid "farad / unit"
-msgstr ""
+msgstr "farad / jednotka"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
 #, fuzzy
@@ -12000,9 +11992,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Symboly seskupovat na základě společných vlastností"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Exportovat symbol jako SVG..."
+msgstr "Exportovat jako CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -12374,9 +12365,8 @@ msgid "Update Symbol Fields"
 msgstr "Aktualizovat pole součástky"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "Tloušťka čáry:"
+msgstr "Šířka drátu/sběrnice:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 #, fuzzy
@@ -12432,9 +12422,8 @@ msgid "Appearance"
 msgstr "Vzhled"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "Výchozí formát"
+msgstr "Výchozí písmo:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -12536,9 +12525,8 @@ msgid "90 deg Angle"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 stupňů"
+msgstr "Úhel 45 stupňů"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
@@ -12827,9 +12815,8 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "Zvýrazněné položky:"
+msgstr "Přerušované čáry"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
@@ -16719,9 +16706,8 @@ msgid "Make a copy of the selected symbol"
 msgstr "Udělat kopii vybraného symbolu"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Záchrana symbolů..."
+msgstr "Přejmenovat symbol..."
 
 #: eeschema/tools/ee_actions.cpp:138
 #, fuzzy
@@ -17418,9 +17404,8 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Vytvořit rozpisku materiálu z aktuálního schématu"
 
 #: eeschema/tools/ee_actions.cpp:661
-#, fuzzy
 msgid "Select on PCB"
-msgstr "Vybrat položky na DPS"
+msgstr "Vybrat na DPS"
 
 #: eeschema/tools/ee_actions.cpp:662
 #, fuzzy
@@ -17920,9 +17905,8 @@ msgstr "Není vybrána žádná knihovna symbolů."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Název sítě:"
+msgstr "Nový název:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #, fuzzy
@@ -18522,9 +18506,8 @@ msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b>Soubor gerber job nemůže být načten jako soubor plot</b> <i>%s</i>"
 
 #: gerbview/files.cpp:300
-#, fuzzy
 msgid "Loading files..."
-msgstr "Načítání pravidel..."
+msgstr "Načítám soubory..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
@@ -18816,9 +18799,8 @@ msgid "<No selection>"
 msgstr "<Žádný výběr>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "Otevřít soubor(y) kreslení Gerber..."
+msgstr "Otevřít automaticky detekovaný soubor(y)..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
@@ -19445,9 +19427,8 @@ msgid "Open project directory in file explorer"
 msgstr "Otevřít adresář projektu Průzkumníku souborů"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Přidat repositář"
+msgstr "Přidat výchozí repozitář"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -19499,14 +19480,12 @@ msgid "Uninstall"
 msgstr "Odinstalovat"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "Použít změny"
+msgstr "Použít čekající změny"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:132
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "Zrušit změny"
+msgstr "Zahodit čekající změny"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:174
 msgid ""
@@ -19536,9 +19515,8 @@ msgid "Installed (%d)"
 msgstr "Instalováno (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Spravovat"
+msgstr "Spravovat..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19577,9 +19555,9 @@ msgid "Aborting remaining tasks."
 msgstr "Přerušení zbývajících úkolů."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Staženo %lld/%lld Kb"
+msgstr "Staženo %lld/%lld kB"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -19602,14 +19580,12 @@ msgid "Applying Package Changes"
 msgstr "Použít změny balíčku"
 
 #: kicad/pcm/dialogs/panel_package.cpp:93
-#, fuzzy
 msgid "Install Pending"
-msgstr "Instalovaná velikost"
+msgstr "Nainstalovat čekající"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Odinstalovat"
+msgstr "Odinstalovat čekající"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19715,9 +19691,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "Chyba načítání seznamu nainstalovaných balíčků: %s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "Stáhnout %lld/%lld Kb"
+msgstr "Stahuje se %lld/%lld kB"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -22579,11 +22555,11 @@ msgstr "Žlutá"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 #, fuzzy
@@ -22592,11 +22568,11 @@ msgstr "Lomená čára"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Phenolic natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Hliník"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 #: pcbnew/exporters/exporter_vrml.cpp:103
@@ -24206,17 +24182,16 @@ msgid "0.00 in / 0 mils / 0.0 mm"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0.00000"
+msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -24537,13 +24512,12 @@ msgid "*** library footprint not found ***"
 msgstr "*** pouzdro nenalezeno ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Vrátit změny"
+msgstr ": (žádné změny)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -25988,9 +25962,8 @@ msgid "Via Diameter"
 msgstr "Průměr prokovu"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "Průměr prokovu"
+msgstr "průměr mikroprokovu"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
