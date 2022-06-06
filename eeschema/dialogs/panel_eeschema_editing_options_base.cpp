@@ -24,7 +24,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText24->Wrap( -1 );
 	sbSizerEditOpt->Add( m_staticText24, 0, wxALL, 5 );
 
-	wxString m_choiceLineModeChoices[] = { _("Free Angle"), _("90 deg Angle"), _("45 deg Angle"), _("135 deg Angle") };
+	wxString m_choiceLineModeChoices[] = { _("Free Angle"), _("90 deg Angle"), _("45 deg Angle") };
 	int m_choiceLineModeNChoices = sizeof( m_choiceLineModeChoices ) / sizeof( wxString );
 	m_choiceLineMode = new wxChoice( sbSizerEditOpt->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLineModeNChoices, m_choiceLineModeChoices, 0 );
 	m_choiceLineMode->SetSelection( 1 );
