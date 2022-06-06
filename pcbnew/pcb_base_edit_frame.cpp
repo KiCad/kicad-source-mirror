@@ -113,7 +113,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
         {
             const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
 
-            if( mru.size() > 1 )
+            if( mru.size() > 0 )
             {
                 EDA_VIEW_SWITCHER switcher( this, mru, presetSwitchKey );
 
@@ -136,7 +136,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
         {
             const wxArrayString& mru = m_appearancePanel->GetViewportsMRU();
 
-            if( mru.size() > 1 )
+            if( mru.size() > 0 )
             {
                 EDA_VIEW_SWITCHER switcher( this, mru, viewSwitchKey );
 

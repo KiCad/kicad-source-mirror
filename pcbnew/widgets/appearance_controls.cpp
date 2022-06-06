@@ -2720,7 +2720,7 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
     }
     else if( index == count - 1 )
     {
-        // Delete an existing preset
+        // Delete an existing viewport
         wxArrayString headers;
         std::vector<wxArrayString> items;
 
@@ -2743,7 +2743,7 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
 
             if( idx != wxNOT_FOUND )
             {
-                m_layerPresets.erase( viewportName );
+                m_viewports.erase( viewportName );
                 m_cbViewports->Delete( idx );
                 m_viewportMRU.Remove( viewportName );
             }

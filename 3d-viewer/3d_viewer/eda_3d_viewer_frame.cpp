@@ -28,7 +28,12 @@
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
+#include <wx/choice.h>
+#include <wx/dialog.h>
 #include "eda_3d_viewer_frame.h"
+#include "eda_list_dialog.h"
+#include "wx/generic/textdlgg.h"
+#include <dialogs/eda_view_switcher.h>
 #include <eda_3d_viewer_settings.h>
 #include <3d_viewer_id.h>
 #include <3d_viewer/tools/eda_3d_actions.h>
@@ -40,6 +45,7 @@
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <project/project_file.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
@@ -73,8 +79,8 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER_FRAME, EDA_BASE_FRAME )
                     EDA_3D_VIEWER_FRAME::Process_Special_Functions )
 
     EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER_FRAME::Exit3DFrame )
-    EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER_FRAME::OnRenderEngineSelection )
-    EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER_FRAME::OnDisableRayTracing )
+    EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER_FRAME::onRenderEngineSelection )
+    EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER_FRAME::onDisableRayTracing )
 
     EVT_CLOSE( EDA_3D_VIEWER_FRAME::OnCloseWindow )
 END_EVENT_TABLE()
@@ -85,6 +91,8 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
         KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
                       wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) ),
         m_mainToolBar( nullptr ), m_canvas( nullptr ), m_currentCamera( m_trackBallCamera ),
+        m_viewportsLabel( nullptr ),
+        m_cbViewports( nullptr ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D ), m_spaceMouse( nullptr )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s" ), aTitle );
@@ -112,6 +120,8 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     LoadSettings( cfg );
     loadCommonSettings();
+
+    SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
@@ -171,6 +181,13 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
     // the canvas before it will respond to mouse wheel events.
     m_canvas->SetFocus();
+
+    m_cbViewports->Connect( wxEVT_COMMAND_CHOICE_SELECTED,
+                            wxCommandEventHandler( EDA_3D_VIEWER_FRAME::onViewportChanged ),
+                            nullptr, this );
+    m_cbViewports->Connect( wxEVT_UPDATE_UI,
+                            wxUpdateUIEventHandler( EDA_3D_VIEWER_FRAME::onUpdateViewportsCb ),
+                            nullptr, this );
 }
 
 
@@ -182,6 +199,15 @@ EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
         delete m_spaceMouse;
     }
 #endif
+
+    Prj().GetProjectFile().m_Viewports3D = GetUserViewports();
+
+    m_cbViewports->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED,
+                               wxCommandEventHandler( EDA_3D_VIEWER_FRAME::onViewportChanged ),
+                               nullptr, this );
+    m_cbViewports->Disconnect( wxEVT_UPDATE_UI,
+                               wxUpdateUIEventHandler( EDA_3D_VIEWER_FRAME::onUpdateViewportsCb ),
+                               nullptr, this );
 
     m_canvas->SetEventDispatcher( nullptr );
 
@@ -252,6 +278,45 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,   ACTION_CONDITIONS().Check( ortho ) );
 
 #undef GridSizeCheck
+}
+
+
+bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
+{
+    static bool s_viewportSwitcherShown = false;
+
+#ifdef __WXMAC__
+    wxKeyCode viewSwitchKey = WXK_ALT;
+#else
+    wxKeyCode viewSwitchKey = WXK_WINDOWS_LEFT;
+#endif
+
+    if( aEvent.GetEventType() != wxEVT_CHAR && aEvent.GetEventType() != wxEVT_CHAR_HOOK )
+        return wxFrame::TryBefore( aEvent );
+
+    if( !s_viewportSwitcherShown && wxGetKeyState( viewSwitchKey ) && wxGetKeyState( WXK_TAB ) )
+    {
+        if( this->IsActive() )
+        {
+            if( m_viewportMRU.size() > 0 )
+            {
+                EDA_VIEW_SWITCHER switcher( this, m_viewportMRU, viewSwitchKey );
+
+                s_viewportSwitcherShown = true;
+                switcher.ShowModal();
+                s_viewportSwitcherShown = false;
+
+                int idx = switcher.GetSelection();
+
+                if( idx >= 0 && idx < (int) m_viewportMRU.size() )
+                    applyViewport( m_viewportMRU[idx] );
+
+                return true;
+            }
+        }
+    }
+
+    return wxFrame::TryBefore( aEvent );
 }
 
 
@@ -369,27 +434,192 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 }
 
 
-void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
+std::vector<VIEWPORT3D> EDA_3D_VIEWER_FRAME::GetUserViewports() const
 {
-    RENDER_ENGINE old_engine = m_boardAdapter.m_Cfg->m_Render.engine;
+    std::vector<VIEWPORT3D> ret;
+
+    for( const std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
+        ret.emplace_back( pair.second );
+
+    return ret;
+}
+
+
+void EDA_3D_VIEWER_FRAME::SetUserViewports( std::vector<VIEWPORT3D>& aViewportList )
+{
+    m_viewports.clear();
+
+    for( const VIEWPORT3D& viewport : aViewportList )
+    {
+        if( m_viewports.count( viewport.name ) )
+            continue;
+
+        m_viewports[viewport.name] = viewport;
+
+        m_viewportMRU.Add( viewport.name );
+    }
+}
+
+
+void EDA_3D_VIEWER_FRAME::applyViewport( const wxString& aViewportName )
+{
+    int idx = m_cbViewports->FindString( aViewportName );
+
+    if( idx >= 0 && m_cbViewports->GetSelection() != idx )
+    {
+        m_cbViewports->SetSelection( idx );
+        m_lastSelectedViewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( idx ) );
+
+        m_currentCamera.SetViewMatrix( m_lastSelectedViewport->matrix );
+
+        if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+    }
+    else
+    {
+        m_cbViewports->SetSelection( -1 ); // separator
+        m_lastSelectedViewport = nullptr;
+    }
+}
+
+
+void EDA_3D_VIEWER_FRAME::onViewportChanged( wxCommandEvent& aEvent )
+{
+    int count = m_cbViewports->GetCount();
+    int index = m_cbViewports->GetSelection();
+
+    if( index >= 0 && index < count - 3 )
+    {
+        VIEWPORT3D* viewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( index ) );
+
+        wxCHECK( viewport, /* void */ );
+
+        applyViewport( viewport->name );
+
+        if( !viewport->name.IsEmpty() )
+        {
+            m_viewportMRU.Remove( viewport->name );
+            m_viewportMRU.Insert( viewport->name, 0 );
+        }
+    }
+    else if( index == count - 2 )
+    {
+        // Save current state to new preset
+        wxString name;
+
+        wxTextEntryDialog dlg( this, _( "Viewport name:" ), _( "Save Viewport" ), name );
+
+        if( dlg.ShowModal() != wxID_OK )
+        {
+            if( m_lastSelectedViewport )
+                m_cbViewports->SetStringSelection( m_lastSelectedViewport->name );
+            else
+                m_cbViewports->SetSelection( -1 );
+
+            return;
+        }
+
+        name = dlg.GetValue();
+        bool exists = m_viewports.count( name );
+
+        if( !exists )
+        {
+            m_viewports[name] = VIEWPORT3D( name, m_currentCamera.GetViewMatrix() );
+
+            index = m_cbViewports->Insert( name, index-1, static_cast<void*>( &m_viewports[name] ) );
+        }
+        else
+        {
+            index = m_cbViewports->FindString( name );
+            m_viewportMRU.Remove( name );
+        }
+
+        m_cbViewports->SetSelection( index );
+        m_viewportMRU.Insert( name, 0 );
+
+        return;
+    }
+    else if( index == count - 1 )
+    {
+        // Delete an existing viewport
+        wxArrayString headers;
+        std::vector<wxArrayString> items;
+
+        headers.Add( _( "Viewports" ) );
+
+        for( std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
+        {
+            wxArrayString item;
+            item.Add( pair.first );
+            items.emplace_back( item );
+        }
+
+        EDA_LIST_DIALOG dlg( this, _( "Delete Viewport" ), headers, items );
+        dlg.SetListLabel( _( "Select viewport:" ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            wxString viewportName = dlg.GetTextSelection();
+            int idx = m_cbViewports->FindString( viewportName );
+
+            if( idx != wxNOT_FOUND )
+            {
+                m_viewports.erase( viewportName );
+                m_cbViewports->Delete( idx );
+                m_viewportMRU.Remove( viewportName );
+            }
+        }
+
+        if( m_lastSelectedViewport )
+            m_cbViewports->SetStringSelection( m_lastSelectedViewport->name );
+        else
+            m_cbViewports->SetSelection( -1 );
+
+        return;
+    }
+
+    passOnFocus();
+}
+
+
+void EDA_3D_VIEWER_FRAME::onUpdateViewportsCb( wxUpdateUIEvent& aEvent )
+{
+    int count = m_cbViewports->GetCount();
+    int index = m_cbViewports->GetSelection();
+
+    if( index >= 0 && index < count - 3 )
+    {
+        VIEWPORT3D* viewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( index ) );
+
+        wxCHECK( viewport, /* void */ );
+
+        if( m_currentCamera.GetViewMatrix() != viewport->matrix )
+            m_cbViewports->SetSelection( -1 );
+    }
+}
+
+
+void EDA_3D_VIEWER_FRAME::onRenderEngineSelection( wxCommandEvent &event )
+{
+    RENDER_ENGINE& engine = m_boardAdapter.m_Cfg->m_Render.engine;
+    RENDER_ENGINE  old_engine = engine;
 
     if( old_engine == RENDER_ENGINE::OPENGL )
-        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::RAYTRACING;
+        engine = RENDER_ENGINE::RAYTRACING;
     else
-        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
+        engine = RENDER_ENGINE::OPENGL;
 
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s " ),
-                m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ?
-                                                                          wxT( "raytracing" )
-                                                                          :
-                                                                          wxT( "realtime" ) );
+                engine == RENDER_ENGINE::RAYTRACING ? wxT( "raytracing" ) : wxT( "realtime" ) );
 
-    if( old_engine != m_boardAdapter.m_Cfg->m_Render.engine )
+    if( old_engine != engine )
         RenderEngineChanged();
 }
 
 
-void EDA_3D_VIEWER_FRAME::OnDisableRayTracing( wxCommandEvent& aEvent )
+void EDA_3D_VIEWER_FRAME::onDisableRayTracing( wxCommandEvent& aEvent )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::%s disabling ray tracing." ),
                 __WXFUNCTION__ );
@@ -432,6 +662,13 @@ void EDA_3D_VIEWER_FRAME::OnSetFocus( wxFocusEvent& aEvent )
         m_canvas->SetFocus();
 
     aEvent.Skip();
+}
+
+
+void EDA_3D_VIEWER_FRAME::passOnFocus()
+{
+    if( m_canvas )
+        m_canvas->SetFocus();
 }
 
 

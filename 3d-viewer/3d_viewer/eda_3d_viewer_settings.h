@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,7 +26,7 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
-
+#include "render_settings.h"
 
 class EDA_3D_VIEWER_SETTINGS : public APP_SETTINGS_BASE
 {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,6 +27,7 @@
 // Can be removed by refactoring PARAM_LAYER_PRESET
 #include <nlohmann/json.hpp>
 #include <math/box2.h>
+#include <glm/glm.hpp>
 
 /**
  * This file contains data structures that are saved in the project file or project local settings
@@ -211,5 +212,36 @@ private:
 
     std::vector<VIEWPORT>* m_viewports;
 };
+
+
+struct VIEWPORT3D
+{
+    VIEWPORT3D( const wxString& aName = wxEmptyString ) :
+            name( aName )
+    { }
+
+    VIEWPORT3D( const wxString& aName, glm::mat4 aViewMatrix ) :
+            name( aName ),
+            matrix( aViewMatrix )
+    { }
+
+    wxString  name;
+    glm::mat4 matrix;
+};
+
+
+class PARAM_VIEWPORT3D : public PARAM_LAMBDA<nlohmann::json>
+{
+public:
+    PARAM_VIEWPORT3D( const std::string& aPath, std::vector<VIEWPORT3D>* aViewportList );
+
+private:
+    nlohmann::json viewportsToJson();
+
+    void jsonToViewports( const nlohmann::json & aJson );
+
+    std::vector<VIEWPORT3D>* m_viewports;
+};
+
 
 #endif // KICAD_BOARD_PROJECT_SETTINGS_H

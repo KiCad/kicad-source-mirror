@@ -11,6 +11,7 @@ include_directories(
     3d_viewer
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include/gal/opengl
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${INC_AFTER}
     )
 

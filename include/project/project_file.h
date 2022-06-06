@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -170,6 +170,7 @@ public:
 
     std::vector<LAYER_PRESET>     m_LayerPresets;   /// List of stored layer presets
     std::vector<VIEWPORT>         m_Viewports;      /// List of stored viewports (pos + zoom)
+    std::vector<VIEWPORT3D>       m_Viewports3D;    /// List of stored 3D viewports (view matrixes)
 
 private:
     /// An list of schematic sheets in this project
