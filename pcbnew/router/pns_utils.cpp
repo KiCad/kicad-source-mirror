@@ -141,29 +141,67 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalk
 }
 
 
+static bool IsSegment45Degree( const SEG& aS )
+{
+    double angle = 180.0 / M_PI
+                   * atan2( (double) aS.B.y - (double) aS.A.y, (double) aS.B.x - (double) aS.A.x );
+
+    if( angle < 0 )
+        angle += 360.0;
+
+    double angle_a = fabs( fmod( angle, 45.0 ) );
+
+    if( angle_a > 1.0 && angle_a < 44.0 )
+        return false;
+
+    return true;
+}
+
+
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
+
 const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness )
 {
+    const int kinkThreshold = 10;
+
     int cl = aClearance + aWalkaroundThickness / 2;
-    int d = aSeg.GetWidth() / 2 + cl;
-    int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d );
+    double d = (double)aSeg.GetWidth() / 2.0 + cl;
+    double x = KiROUND( 2.0 / ( 1.0 + M_SQRT2 ) * d ); 
+    int dr = KiROUND( d );
+    int xr = KiROUND( x );
+    int xr2 = KiROUND( x / 2.0 );
 
     const VECTOR2I a = aSeg.GetSeg().A;
-    const VECTOR2I b = aSeg.GetSeg().B;
+    VECTOR2I b = aSeg.GetSeg().B;
+    int len = aSeg.GetSeg().Length();
+
+    if ( !IsSegment45Degree( aSeg.GetSeg() ) && len <= kinkThreshold )
+    {
+
+        int w = b.x - a.x;
+        int h = b.y - a.y;
+        int ll = std::max( std::abs( w ), std::abs( h ) );
+
+        b = a + VECTOR2I( sgn( w ) * ll, sgn( h ) * ll );
+    }
 
     if( a == b )
     {
         return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
                               VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
                               cl,
-                              2.0 * ( 1.0 - M_SQRT1_2 ) * d );
+                              xr );
     }
 
     VECTOR2I dir = b - a;
-    VECTOR2I p0 = dir.Perpendicular().Resize( d );
-    VECTOR2I ds = dir.Perpendicular().Resize( x / 2 );
-    VECTOR2I pd = dir.Resize( x / 2 );
-    VECTOR2I dp = dir.Resize( d );
+    VECTOR2I p0 = dir.Perpendicular().Resize( dr );
+    VECTOR2I ds = dir.Perpendicular().Resize( xr2 );
+    VECTOR2I pd = dir.Resize( xr2 );
+    VECTOR2I dp = dir.Resize( dr );
 
     SHAPE_LINE_CHAIN s;
 
