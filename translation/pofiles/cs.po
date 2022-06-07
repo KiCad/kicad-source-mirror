@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-06 19:15+0000\n"
+"PO-Revision-Date: 2022-06-07 22:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -807,12 +807,10 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Použít okolní okluzi obrazovky a odrazy globálního osvětlení na konečné "
-"vykreslení (pomalé)"
+"Okluze okolního prostoru obrazovky a odrazy globálního osvětlení (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -7451,9 +7449,8 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "Uložit přiřazení pouzdra v polích pouzdra symbolu schématu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Uložit do schématu"
+msgstr "Uložit do schématu a souboru"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -14471,9 +14468,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1255
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník zaobleného obdélníku (%d) nenalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1318
 #, c-format
@@ -15464,11 +15461,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ve vybraném schématu jsou názvy knihoven, které v aktuální tabulce knihovny "
-"projektu chybí. To může mít za následek porušené odkazy na knihovnu symbolů "
-"pro načtené schéma.\n"
+"Ve vybraném schématu jsou názvy knihoven, které v aktuální tabulce knihoven "
+"projektu chybí.     To může mít za následek porušené odkazy na knihovnu "
+"symbolů pro načtené schéma.\n"
 "\n"
-"Přejete si pokračovat?"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15490,6 +15487,7 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:315
+#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15497,11 +15495,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ve vybraném schématu jsou názvy knihoven symbolů, které ve vybrané tabulce "
-"knihovny schémat chybí.  To může mít za následek porušené reference symbolů "
-"knihovny.\n"
-"\n"
-"Přejete si pokračovat?"
+"V načteném schématu jsou názvy knihoven, které v tabulce knihovny načtených "
+"projektů schématu chybí. To může mít za následek nefunkční odkazy na "
+"knihovnu symbolů schématu. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:376
 #, fuzzy
@@ -16000,9 +15996,8 @@ msgid "Library changes are unsaved"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Knihovna symbolů '%s' již existuje."
+msgstr "Načtení knihovny symbolů bylo zrušeno uživatelem."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:592
 #: eeschema/tools/sch_edit_tool.cpp:119
@@ -18204,9 +18199,8 @@ msgid "Drawing Mode"
 msgstr "Režim kreslení"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
-#, fuzzy
 msgid "Sketch flashed items"
-msgstr "Bliká jako obrys"
+msgstr "Nákresy blikajících položek"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:46
 msgid "Sketch lines"
@@ -18285,7 +18279,7 @@ msgstr "Formát souřadnic"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "Formát souřadnic není určen ve formátu Excellon."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
@@ -19228,7 +19222,7 @@ msgstr "Náhled souborů Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Převod bitmapové obrázky na symboly schématu nebo pouzdra DPS"
+msgstr "Převod bitmapového obrázku na symboly schématu nebo pouzdra DPS"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -19835,6 +19829,8 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"Balík s identifikátorem %s je již nainstalován, musíte tento balíček nejprve "
+"odinstalovat."
 
 #: kicad/pcm/pcm_task_manager.cpp:363
 #, c-format
@@ -20299,7 +20295,7 @@ msgstr "Způsob psaní klíčového slova je ${klíčovéslovo}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:581
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Každé klíčové slovo je nahrazeno svou hodnotou"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:582
 msgid "These build-in keywords are always available:"
@@ -21428,7 +21424,7 @@ msgstr "Délka prokovu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr ""
+msgstr "Délka prokovu je tloušťka desky pro průchozí otvory prokovů"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -22630,7 +22626,7 @@ msgstr "Odstranit spoj nepřipojený na obou koncích"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove via connected on fewer than two layers"
-msgstr ""
+msgstr "Odstranit prokovy spojené na méně než dvou vrstvách"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -33531,9 +33527,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nelze najít prohlížeč PDF pro '%s'."
+msgstr "Nelze najít index podložky '%d' v pouzdře '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
@@ -36899,9 +36895,8 @@ msgid "Ungroup"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:719
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "vybraných skupin"
+msgstr "Zrušit seskupení všech vybraných skupin"
 
 #: pcbnew/tools/pcb_actions.cpp:724
 msgid "Remove Items"
