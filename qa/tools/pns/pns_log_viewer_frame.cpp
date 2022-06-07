@@ -65,8 +65,8 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
 {
     Polyline( aL );
 
-    if( name.length() > 0 )
-        m_labelMgr->Add( aL.CPoint(-1), name, GetStrokeColor() );
+    if( name.length() > 0  && aL.PointCount() > 0 )
+        m_labelMgr->Add( aL.CPoint( -1 ), name, GetStrokeColor() );
 }
 
 
@@ -251,7 +251,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
             {
                 auto seg = static_cast<SHAPE_SEGMENT*>( sh );
                 m_overlay->Line( seg->GetSeg().A, seg->GetSeg().B );
-                
+
                 break;
             }
             case SH_RECT:
@@ -566,7 +566,7 @@ static bool isLine45Degree( const SHAPE_LINE_CHAIN* lc )
 
 bool PNS_LOG_VIEWER_FRAME::filterStringMatches( PNS_DEBUG_SHAPE* ent )
 {
-    
+
     std::set<PNS_DEBUG_SHAPE*> processed;
     std::deque<PNS_DEBUG_SHAPE*> q;
 
@@ -784,7 +784,7 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
     {
         if ( ent.isHideOp )
         {
-    
+
             auto parent = ent.item->Parent();
             if( parent )
             {
@@ -802,11 +802,11 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
     }
 
     view->SetVisible( m_previewItems.get(), true );
-    
+
     view->Update( m_previewItems.get() );
     printf("DBG vgrp %p total %d\n", m_previewItems.get(), m_previewItems->GetSize() );
 
-    
+
     //view->UpdateAllItems( KIGFX::ALL );
 }
 
@@ -938,7 +938,7 @@ int ttt_main_func( int argc, char* argv[] )
         rvi[i] = NearestPointFixpt( segs[i], pts[i]);
     }
     tmrFix.Show();
-    
+
     PROF_TIMER tmrDbl("nearest-double");
     for(int i = 0; i < n ; i++)
     {
