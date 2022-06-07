@@ -363,7 +363,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         for( const auto& ip : intersectingPts )
         {
             //debugDecorator->AddPoint( ip.p, ip.valid?3:6, 100000, (const char *) wxString::Format("obstacle-isect-point-%d" ).c_str() );
-            if(ip.valid)
+            if( ip.valid )
                 updateNearest( ip, obstacle.m_item, obstacleHull, false );
         }
 
@@ -374,8 +374,10 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
             int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
-            int viaClearance = GetClearance( obstacle.m_item, &via ) + via.Diameter() / 2;
-            int holeClearance = GetHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
+            int viaClearance = GetClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                               + via.Diameter() / 2;
+            int holeClearance =
+                    GetHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon ) + viaHoleRadius;
 
             if( holeClearance > viaClearance )
                 viaClearance = holeClearance;
@@ -392,9 +394,13 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 updateNearest( ip, obstacle.m_item, obstacleHull, false );
         }
 
-        if( m_collisionQueryScope == CQS_ALL_RULES && obstacle.m_item->Hole() )
+        if( ( m_collisionQueryScope == CQS_ALL_RULES
+              || !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( obstacle.m_item,
+                                                                           layer ) )
+            && obstacle.m_item->Hole() )
         {
-            clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
+            clearance = GetHoleClearance( obstacle.m_item, aLine, aUseClearanceEpsilon )
+                        + aLine->Width() / 2;
             obstacleHull = obstacle.m_item->HoleHull( clearance, 0, layer );
             //debugDecorator->AddLine( obstacleHull, 4 );
 
@@ -410,9 +416,13 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 // Don't use via.Drill(); it doesn't include the plating thickness
                 int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
-                int viaClearance = GetClearance( obstacle.m_item, &via ) + via.Diameter() / 2;
-                int holeClearance = GetHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
-                int holeToHole = GetHoleToHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
+                int viaClearance = GetClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                                   + via.Diameter() / 2;
+                int holeClearance = GetHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                                    + viaHoleRadius;
+                int holeToHole =
+                        GetHoleToHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                        + viaHoleRadius;
 
                 if( holeClearance > viaClearance )
                     viaClearance = holeClearance;
@@ -420,7 +430,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 if( holeToHole > viaClearance )
                     viaClearance = holeToHole;
 
-                obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
+                obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
                 //debugDecorator->AddLine( obstacleHull, 5 );
 
                 intersectingPts.clear();

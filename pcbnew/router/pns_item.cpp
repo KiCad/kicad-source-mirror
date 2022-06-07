@@ -88,7 +88,12 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     if( zoneB && Parent() && !checkKeepout( zoneB, Parent() ) )
         return false;
 
-    if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES && (holeA || holeB ) )
+    bool thisNotFlashed  = !iface->IsFlashedOnLayer( this, aOther->Layer() );
+    bool otherNotFlashed = !iface->IsFlashedOnLayer( aOther, Layer() );
+
+    if( ( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES
+          || ( thisNotFlashed || otherNotFlashed ) )
+        && ( holeA || holeB ) )
     {
         int holeClearance = aNode->GetHoleClearance( this, aOther );
 
@@ -117,10 +122,10 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
         }
     }
 
-    if( !aOther->Layers().IsMultilayer() && !iface->IsFlashedOnLayer( this, aOther->Layer()) )
+    if( !aOther->Layers().IsMultilayer() && thisNotFlashed )
         return false;
 
-    if( !Layers().IsMultilayer() && !iface->IsFlashedOnLayer( aOther, Layer()) )
+    if( !Layers().IsMultilayer() && otherNotFlashed )
         return false;
 
     int clearance = aOverrideClearance >= 0 ? aOverrideClearance : aNode->GetClearance( this, aOther );
