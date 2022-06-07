@@ -118,8 +118,8 @@ public:
         return SHAPE_LINE_CHAIN();
     }
 
-    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness,
-                                             int aLayer ) const
+    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness = 0,
+                                             int aLayer = -1 ) const
     {
         return SHAPE_LINE_CHAIN();
     }

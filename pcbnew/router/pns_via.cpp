@@ -77,12 +77,23 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
     int width = m_diameter;
 
     if( !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
-        width = m_drill;
+        width = m_hole.GetRadius() * 2;
 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
     return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ),
                          VECTOR2I( width, width ),
-                         cl + 1, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
+                         cl, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
+}
+
+
+const SHAPE_LINE_CHAIN VIA::HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+{
+    int cl = ( aClearance + aWalkaroundThickness / 2 );
+    int width = m_hole.GetRadius() * 2;
+
+    // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
+    return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ), VECTOR2I( width, width ), cl,
+                          ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
 }
 
 
