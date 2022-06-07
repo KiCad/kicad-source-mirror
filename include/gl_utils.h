@@ -24,7 +24,7 @@
 #ifndef GL_UTILS_H
 #define GL_UTILS_H
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <gal/opengl/kiglew.h> // Must be included first
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 
@@ -45,62 +45,63 @@ public:
         /// Windows would include <wglext.h> and call wglSwapIntervalEXT
 #if defined( __linux__ ) && !defined( KICAD_USE_EGL )
 
-        Display *dpy = glXGetCurrentDisplay();
-        GLXDrawable drawable = glXGetCurrentDrawable();
-        std::string vendor( reinterpret_cast<const char*>( glGetString( GL_VENDOR ) ) );
-        bool is_mesa = ( vendor.find( "Mesa" ) != std::string::npos );
-
-        if( !is_mesa && glXSwapIntervalEXT && glXQueryDrawable && dpy && drawable )
+        if( Display* dpy = glXGetCurrentDisplay() )
         {
+            GLXDrawable drawable = glXGetCurrentDrawable();
+
             std::string exts( glXQueryExtensionsString( dpy, DefaultScreen( dpy ) ) );
 
-            if( aVal < 0 )
+            if( glXSwapIntervalEXT && glXQueryDrawable && drawable
+                && exts.find( "GLX_EXT_swap_control" ) != std::string::npos )
             {
-                if( exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
+                if( aVal < 0 )
                 {
-                    aVal = 0;
-                }
-                else
-                {
-                    // Even though the extensions might be available,
-                    // we need to be sure that late/adaptive swaps are
-                    // enabled on the drawable.
-
-                    unsigned lateSwapsEnabled = 0;
-                    glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &lateSwapsEnabled );
-
-                    if( !lateSwapsEnabled )
+                    if( exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
                     {
                         aVal = 0;
                     }
+                    else
+                    {
+                        // Even though the extensions might be available,
+                        // we need to be sure that late/adaptive swaps are
+                        // enabled on the drawable.
+
+                        unsigned lateSwapsEnabled = 0;
+                        glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT,
+                                          &lateSwapsEnabled );
+
+                        if( !lateSwapsEnabled )
+                        {
+                            aVal = 0;
+                        }
+                    }
                 }
+
+                unsigned clampedInterval;
+                glXSwapIntervalEXT( dpy, drawable, aVal );
+                glXQueryDrawable( dpy, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval );
+
+                return clampedInterval;
             }
 
-            unsigned clampedInterval;
-            glXSwapIntervalEXT( dpy, drawable, aVal );
-            glXQueryDrawable( dpy, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval );
+            if( glXSwapIntervalMESA && glXGetSwapIntervalMESA
+                && exts.find( "GLX_MESA_swap_control" ) != std::string::npos )
+            {
+                if( aVal < 0 )
+                    aVal = 0;
 
-            return clampedInterval;
-        }
+                glXSwapIntervalMESA( aVal );
+                return glXGetSwapIntervalMESA();
+            }
 
-        if( glXSwapIntervalMESA &&glXGetSwapIntervalMESA )
-        {
-            if( aVal < 0 )
-                aVal = 0;
+            if( aVal > 0 && glXSwapIntervalSGI
+                && exts.find( "GLX_SGI_swap_control" ) != std::string::npos )
+            {
+                if( glXSwapIntervalSGI( aVal ) )
+                    glXSwapIntervalSGI( 1 );
 
-            glXSwapIntervalMESA( aVal );
-            return glXGetSwapIntervalMESA();
-        }
-
-        if( glXSwapIntervalSGI )
-        {
-            if( aVal < 1 )
-                aVal = 1;
-
-            if( glXSwapIntervalSGI( aVal ) )
-                glXSwapIntervalSGI( 1 );
-
-            return 1;
+                return 1;
+            }
         }
 
         return std::numeric_limits<int>::max();
@@ -111,4 +112,3 @@ public:
 };
 
 #endif /* GL_CONTEXT_MANAGER_H */
-
