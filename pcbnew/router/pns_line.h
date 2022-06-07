@@ -183,8 +183,6 @@ public:
 
     bool Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const;
 
-    bool Is45Degree() const;
-
     ///< Print out all linked segments.
     void ShowLinks() const;
 

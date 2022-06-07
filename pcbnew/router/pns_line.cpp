@@ -533,36 +533,6 @@ const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness, 
    return SegmentHull( m_seg, aClearance, aWalkaroundThickness );
 }
 
-
-bool LINE::Is45Degree() const
-{
-    for( int i = 0; i < m_line.SegmentCount(); i++ )
-    {
-        const SEG& s = m_line.CSegment( i );
-
-        if( m_line.IsArcSegment( i ) )
-            continue;
-
-        if( s.Length() < 10 )
-            continue;
-
-        double angle = 180.0 / M_PI *
-                       atan2( (double) s.B.y - (double) s.A.y,
-                              (double) s.B.x - (double) s.A.x );
-
-        if( angle < 0 )
-            angle += 360.0;
-
-        double angle_a = fabs( fmod( angle, 45.0 ) );
-
-        if( angle_a > 1.0 && angle_a < 44.0 )
-            return false;
-    }
-
-    return true;
-}
-
-
 const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
 {
     const int IterationLimit = 5;
