@@ -160,6 +160,8 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( eeconfig() )
     {
         eeconfig()->m_System.units = static_cast<int>( m_userUnits );
+        wxAuiPaneInfo& hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+        m_showHierarchy =  hierarchy.IsShown();
         eeconfig()->m_AuiPanels.show_schematic_hierarchy = m_showHierarchy;
         eeconfig()->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
     }

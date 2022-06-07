@@ -833,6 +833,14 @@ public:
      */
     void ToggleSchematicHierarchy();
 
+    /**
+     * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel
+     */
+    static const wxString SchematicHierarchyPaneName()
+    {
+        return wxT( "SchematicHierarchy" );
+    }
+
     DECLARE_EVENT_TABLE()
 
 protected:

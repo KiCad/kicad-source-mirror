@@ -209,6 +209,9 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::toggleAnnotateAuto,      ACTION_TOOLBAR::TOGGLE );
 
+    m_optionsToolBar->AddScaledSeparator( this );
+    m_optionsToolBar->Add( EE_ACTIONS::showHierarchy,           ACTION_TOOLBAR::TOGGLE );
+
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );
 
@@ -224,7 +227,8 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
 {
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxAuiPaneInfo&     hierarchy = m_auimgr.GetPane( "SchematicHierarchy" );
+    wxAuiPaneInfo&     hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    m_showHierarchy =  hierarchy.IsShown();
 
     // show auxiliary Vertical layers and visibility manager toolbar
     m_showHierarchy = !m_showHierarchy;

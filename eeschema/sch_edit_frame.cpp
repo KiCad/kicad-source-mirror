@@ -267,9 +267,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Top().Layer( 6 ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 4 ) );
-    m_auimgr.AddPane( m_hierarchy, EDA_PANE().Palette().Name( "SchematicHierarchy" )
+    m_auimgr.AddPane( m_hierarchy, EDA_PANE().Palette().Name( SchematicHierarchyPaneName() )
                       .Caption( _("Schematic Hierarchy") )
                       .Left().Layer( 3 )
+                      .CloseButton( true )
                       .MinSize(120, -1)
                       .BestSize(200, -1));
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
@@ -288,7 +289,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     initScreenZoom();
 
-    wxAuiPaneInfo& hierarchy = m_auimgr.GetPane( "SchematicHierarchy" );
+    wxAuiPaneInfo& hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
     hierarchy.Show( m_showHierarchy );
 
     if( eeconfig() && ( eeconfig()->m_AuiPanels.left_panel_width > 0 ) )
@@ -418,7 +419,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto hierarchyNavigatorCond =
             [ this ] ( const SELECTION& aSel )
             {
-                return m_auimgr.GetPane( "SchematicHierarchy" ).IsShown();
+                return m_auimgr.GetPane( SchematicHierarchyPaneName() ).IsShown();
             };
 
 

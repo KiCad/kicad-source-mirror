@@ -771,7 +771,7 @@ TOOL_ACTION EE_ACTIONS::navigateNext( "eeschema.NavigateTool.next",
 TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
         AS_GLOBAL,
         MD_CTRL + 'H', "",
-        _( "Hierarchy Navigator" ), _( "Show schematic sheet hierarchy" ),
+        _( "Hierarchy Navigator" ), _( "Show or hide the schematic sheet hierarchy navigator" ),
         BITMAPS::hierarchy_nav );
 
 TOOL_ACTION EE_ACTIONS::hypertextCommand( "eeschema.NavigateTool.hypertextCommand",
