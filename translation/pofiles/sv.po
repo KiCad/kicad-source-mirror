@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-05-12 20:18+0000\n"
+"PO-Revision-Date: 2022-06-08 14:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -7551,7 +7551,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:346
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "För att generera BOM krävs ett fullständigt annoterat schema."
+msgstr ""
+"För att generera en materiallista (BOM) krävs ett fullständigt annoterat "
+"schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:383 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -15642,7 +15644,7 @@ msgstr "Kunde inte öppna symbol-fotavtryck-länkfil '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
-msgstr "Välj minst en egenskap för att kommentera."
+msgstr "Välj minst en egenskap att överföra till kretsschemat (back-annotate)."
 
 #: eeschema/tools/backannotate.cpp:97
 msgid ""
@@ -21672,15 +21674,16 @@ msgstr "Utesluten"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:110
 msgid "Reannotate PCB"
-msgstr "Kommentera om kretskortet"
+msgstr "Numrera om mönsterkortet"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:277
 msgid "No PCB to reannotate!"
-msgstr "Ingen PCB att kommentera om!"
+msgstr "Det finns inget mönsterkort att numrera om!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB successfully reannotated"
-msgstr "PCB framgångsrikt återannoterad"
+msgstr ""
+"Mönsterkortets referensbeteckningar har numrerats om med lyckat resultat"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid ""
@@ -29005,7 +29008,7 @@ msgstr "nätklass '%s' (differentialpar)"
 
 #: pcbnew/drc/drc_engine.cpp:426
 msgid "keepout area"
-msgstr "Spärrzon"
+msgstr "spärrzon"
 
 #: pcbnew/drc/drc_engine.cpp:428
 #, c-format
