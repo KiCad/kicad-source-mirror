@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-05 23:52+0000\n"
+"PO-Revision-Date: 2022-06-08 23:13+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -3238,7 +3238,6 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:27
-#, fuzzy
 msgid "I agree to provide anonymous reports"
 msgstr "Я согласен предоставлять анонимные отчеты"
 
@@ -4027,9 +4026,8 @@ msgid "Schematic Editor"
 msgstr "Редактор схем"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Обозначения"
+msgstr "Параметры обозначения"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -4997,7 +4995,7 @@ msgstr "Он отсутствует.\n"
 
 #: common/kiway.cpp:315
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Возможно файл разделяемой библиотеки (.dll или .so) отсутствует.\n"
+msgstr "Возможно файл общей библиотеки (.dll или .so) отсутствует.\n"
 
 #: common/kiway.cpp:317
 msgid ""
@@ -5425,9 +5423,8 @@ msgid "Drawing sheet"
 msgstr "Форматная рамка"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
-msgstr "Границы страницы"
+msgstr "Границы страниц"
 
 #: common/layer_id.cpp:148
 msgid "Footprints front"
@@ -6542,7 +6539,7 @@ msgid ""
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "Не удалось запустить браузер по умолчанию.\n"
-"Для получении информации о том как помочь проекту KiCad посетите %s"
+"Для пожертвования проекту KiCad посетите %s"
 
 #: common/tool/grid_menu.cpp:99
 #, c-format
@@ -7741,9 +7738,8 @@ msgid "Selection"
 msgstr "Выделение"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Достигнут конец листа."
+msgstr "Достигнут конец листа"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -7820,7 +7816,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Просмотрено:\n"
+"Искали:\n"
 "\t%s\n"
 "\t%s"
 
@@ -12364,7 +12360,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "Обновить значения символов, которые были изменены на печатной плате."
+msgstr ""
+"Обновить значения символов, которые были изменены в редакторе печатной платы."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -33651,13 +33648,12 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Поток Pads6 имеет неожиданную длину для записи 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Дуга области запрета на слое Altium (%d) не имеет аналога в KiCad. Она будет "
-"размещена на слое Eco1_User."
+"Altium слой (%d) не имеет аналога в KiCad. Размещен на KiCad слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:364
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:344
