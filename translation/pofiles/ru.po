@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-06-03 23:04+0000\n"
+"PO-Revision-Date: 2022-06-08 23:13+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
 "Language: ru\n"
@@ -4853,7 +4853,7 @@ msgstr "Он отсутствует.\n"
 
 #: common/kiway.cpp:314
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Возможно файл разделяемой библиотеки (.dll или .so) отсутствует.\n"
+msgstr "Возможно файл общей библиотеки (.dll или .so) отсутствует.\n"
 
 #: common/kiway.cpp:316
 msgid ""
@@ -6337,7 +6337,7 @@ msgid ""
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "Не удалось запустить браузер по умолчанию.\n"
-"Для получении информации о том как помочь проекту KiCad посетите %s"
+"Для пожертвования проекту KiCad посетите %s"
 
 #: common/tool/grid_menu.cpp:99
 #, c-format
@@ -7581,7 +7581,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Просмотрено:\n"
+"Искали:\n"
 "\t%s\n"
 "\t%s"
 
@@ -11696,7 +11696,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "Обновить значения символов, которые были изменены на печатной плате."
+msgstr ""
+"Обновить значения символов, которые были изменены в редакторе печатной платы."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
