@@ -399,10 +399,12 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                                                                            layer ) )
             && obstacle.m_item->Hole() )
         {
-            clearance = GetHoleClearance( obstacle.m_item, aLine, aUseClearanceEpsilon )
-                        + aLine->Width() / 2;
-            obstacleHull = obstacle.m_item->HoleHull( clearance, 0, layer );
-            //debugDecorator->AddLine( obstacleHull, 4 );
+            clearance = GetHoleClearance( obstacle.m_item, aLine, aUseClearanceEpsilon );
+            int copperClearance = GetClearance( obstacle.m_item, aLine, aUseClearanceEpsilon );
+
+            clearance = std::max( clearance, copperClearance );
+
+            obstacleHull = obstacle.m_item->HoleHull( clearance, aLine->Width(), layer );
 
             intersectingPts.clear();
             HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
