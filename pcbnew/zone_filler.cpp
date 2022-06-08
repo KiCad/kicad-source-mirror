@@ -1417,14 +1417,14 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         VECTOR2I  shapePos = pad->ShapePos();
         EDA_ANGLE spokesAngle = pad->GetThermalSpokeAngle();
 
-        // We use the bounding-box to lay out the spokes, but for this to work the
-        // bounding box has to be built at the same rotation as the spokes.
-        // We have to use a dummy pad to avoid dirtying the cached shapes
+        // We use the bounding-box to lay out the spokes, but for this to work the bounding
+        // box has to be built at the same rotation as the spokes.  We have to use a dummy pad
+        // to avoid dirtying the cached shapes.
         PAD dummy_pad( *pad );
         dummy_pad.SetOrientation( spokesAngle );
 
         // Spokes are from center of pad, not from hole
-        dummy_pad.SetPosition( -1*pad->GetOffset() );
+        dummy_pad.SetPosition( -1 * pad->GetOffset() );
 
         BOX2I reliefBB = dummy_pad.GetBoundingBox();
         reliefBB.Inflate( thermalReliefGap + epsilon );
@@ -1467,7 +1467,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 break;
             }
 
-            // Rotate and move the spokes tho the right position
+            // Rotate and move the spokes to the right position
             spoke.Rotate( pad->GetOrientation() + spokesAngle );
             spoke.Move( shapePos );
 
