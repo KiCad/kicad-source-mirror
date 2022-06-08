@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-08 23:13+0000\n"
+"PO-Revision-Date: 2022-06-09 04:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -12466,7 +12466,7 @@ msgstr "Отображать предупреждения ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
 msgid "Show ERC exclusions"
-msgstr "Отображать исключения DRC"
+msgstr "Отображать исключения ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
@@ -12478,7 +12478,7 @@ msgstr "Выделение и подсветка"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected child items"
-msgstr "Выделять дочерние элементы"
+msgstr "Начертить дочерние элементы"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Fill selected shapes"
@@ -12490,7 +12490,7 @@ msgstr "Толщина выделения:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:91
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(цвет подсветки выделенного можно установить на вкладке \"Цвета\")"
+msgstr "(цвет подсветки выделенного можно редактировать на вкладке \"Цвета\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:95
 msgid "Highlight thickness:"
@@ -12499,7 +12499,7 @@ msgstr "Толщина подсветки:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:110
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "Сквозное выделение"
+msgstr "Двухстороння связь"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
@@ -12530,7 +12530,6 @@ msgid "Line Drawing Mode:"
 msgstr "Режим рисования линий:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "Свободный угол"
 
@@ -12670,7 +12669,7 @@ msgstr "Автоматически размещать поля символов"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:207
 msgid "A&llow field autoplace to change justification"
-msgstr "Разрешить при авто-размещении изменять выравнивание поля"
+msgstr "Разрешить авто-размещении при изменения выравнивания"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
