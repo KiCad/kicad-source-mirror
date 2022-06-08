@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:55-0700\n"
-"PO-Revision-Date: 2022-06-05 23:52+0000\n"
+"PO-Revision-Date: 2022-06-08 23:13+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -1800,6 +1800,8 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"Цей шлях був визначений  процесом, що був запущений ззовні і\n"
+"повинен бути тимчасово перезаписаний."
 
 #: common/dialogs/dialog_configure_paths.cpp:377
 msgid ""
@@ -3936,7 +3938,7 @@ msgstr "Редактор схем"
 
 #: common/eda_base_frame.cpp:1022
 msgid "Annotation Options"
-msgstr ""
+msgstr "Параметри позначення"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -3966,7 +3968,7 @@ msgstr "Плагіни дій"
 
 #: common/eda_base_frame.cpp:1047
 msgid "Origins & Axes"
-msgstr ""
+msgstr "Початок координат & Осі"
 
 #: common/eda_base_frame.cpp:1053
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
@@ -4173,7 +4175,7 @@ msgstr "Перелік елементів"
 
 #: common/eda_item.cpp:341
 msgid "NetInfo"
-msgstr ""
+msgstr "Інформація про зв'язки"
 
 #: common/eda_item.cpp:342 pcbnew/pcb_group.cpp:335
 #: pcbnew/tools/pcb_actions.cpp:714
@@ -4190,11 +4192,11 @@ msgstr "Прапорець \"Не під'єднано\""
 
 #: common/eda_item.cpp:347
 msgid "Wire Entry"
-msgstr ""
+msgstr "Вхід для дроту"
 
 #: common/eda_item.cpp:348
 msgid "Bus Entry"
-msgstr ""
+msgstr "Вхід шини"
 
 #: common/eda_item.cpp:350 eeschema/sch_bitmap.cpp:205
 msgid "Bitmap"
@@ -4647,7 +4649,7 @@ msgstr "Шлях пошуку 3D моделі"
 
 #: common/filename_resolver.cpp:465
 msgid "Alias: "
-msgstr ""
+msgstr "Псевдоніми: "
 
 #: common/filename_resolver.cpp:468
 msgid "This path:"
@@ -4825,7 +4827,7 @@ msgstr "Додати до виділеного"
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:744
 #: pcbnew/tools/pcb_actions.cpp:766
 msgid "Highlight Net"
-msgstr ""
+msgstr "Підсвітка зв'язків"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
@@ -4874,20 +4876,25 @@ msgid ""
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
+"Фатальна помилка при встановленні. Файл:\n"
+"'%s'\n"
+"не може бути завантаженим\n"
 
 #: common/kiway.cpp:313
 msgid "It is missing.\n"
-msgstr ""
+msgstr "Відсутнє.\n"
 
 #: common/kiway.cpp:315
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
+msgstr "Можливо, файл спільної бібліотеки (.dll або .so) відсутній.\n"
 
 #: common/kiway.cpp:317
 msgid ""
 "From command line: argv[0]:\n"
 "'"
 msgstr ""
+"З командного рядка: argv[0]:\n"
+"'"
 
 #: common/kiway.cpp:434 common/kiway.cpp:438 common/kiway.cpp:442
 msgid "Error loading editor."
@@ -5072,71 +5079,71 @@ msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
-msgstr ""
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
 msgid "User.Eco2"
-msgstr ""
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr ""
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr ""
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr ""
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr ""
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr "Користувача.1"
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr "Користувача.2"
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr "Користувача.3"
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr "Користувача.4"
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr "Користувач 5"
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr "Користувач 6"
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr "Користувач 7"
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr "Користувач 8"
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr "Користувач 9"
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:939
 msgid "Rescue"
@@ -6405,6 +6412,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"Не вдалося запустити браузер по замовчуванні.\n"
+"Для отримання інформації про допомогу проекту KiCad, відвідайте %s"
 
 #: common/tool/common_control.cpp:272
 msgid "Get involved with KiCad"
@@ -6416,6 +6425,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"Не вдалося запустити браузер по замовчуванні.\n"
+"Для пожертвування для KiCad проекту, відвідайте %s"
 
 #: common/tool/grid_menu.cpp:99
 #, c-format
@@ -7297,6 +7308,8 @@ msgstr ""
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
+"Компоненті '%s' посадковим місцем '%s' був знайдений <b>в багатьох</b> "
+"бібліотеках.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
@@ -7313,6 +7326,9 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"Під час спроби конвертувати призначення посадкових місць виникли такі "
+"помилки:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
 msgid ""
@@ -7320,6 +7336,9 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Необхідно повторно вручну назначити їх якщо ви хочете щоб вони корректно "
+"оновилися при наступному імпорту в Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
@@ -7347,6 +7366,9 @@ msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"Налаштувати список файлів асоціації посадкових місць (.equ).  Ці файли "
+"використовуються для автоматичного присвоєння імен посадкових місць із "
+"значень символів.."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7479,33 +7501,36 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
+"Файл скрипту:\n"
+"%s\n"
+"не знайдено. Скрипт не доступний."
 
 #: eeschema/component_references_lister.cpp:627
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr ""
+msgstr "Елемент не позначений: %s%s (частина %d)\n"
 
 #: eeschema/component_references_lister.cpp:634
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr ""
+msgstr "Елемент не позначений: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:652
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr ""
+msgstr "Помилка: символ %s%s%s (частина %d) перевищує визначені одиниці (%d)\n"
 
 #: eeschema/component_references_lister.cpp:689
 #: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr ""
+msgstr "Дублювання елементів %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:696
 #: eeschema/component_references_lister.cpp:724
 #, c-format
 msgid "Duplicate items %s%s\n"
-msgstr ""
+msgstr "Дублювання елементів %s%s\n"
 
 #: eeschema/component_references_lister.cpp:736
 #, c-format
@@ -7517,12 +7542,15 @@ msgstr "Різні значення для %s%d%s (%s) та %s%d%s (%s)"
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
+"Обидва %s та %s прикріплені до тих самих елементів; %s буде "
+"використовуватися в списку зв'язків"
 
 #: eeschema/connection_graph.cpp:2632
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
+"Зв'язок %s графічно підключена до шини %s , але не є учасником цієї шини"
 
 #: eeschema/connection_graph.cpp:3073
 #, c-format
@@ -7556,7 +7584,7 @@ msgstr "%s не знайдено"
 
 #: eeschema/cross-probing.cpp:324
 msgid "Selected net:"
-msgstr ""
+msgstr "Вибраний зв'язок:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -7587,11 +7615,11 @@ msgstr "Тільки поточний аркуш"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 msgid "Selection"
-msgstr ""
+msgstr "Виділення"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Recurse into subsheets"
-msgstr ""
+msgstr "Досягнуто кінця листа"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -7601,12 +7629,12 @@ msgstr "Порядок"
 #: eeschema/dialogs/dialog_annotate_base.cpp:63
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:40
 msgid "Sort symbols by &X position"
-msgstr ""
+msgstr "Сортувати символи осі &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:81
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:58
 msgid "Sort symbols by &Y position"
-msgstr ""
+msgstr "Сортувати символи по осі &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Keep existing annotations"
@@ -7666,6 +7694,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Шукали:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8287,7 +8320,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:386
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC скасовано користувачем.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:388 pcbnew/dialogs/dialog_drc.cpp:284
 msgid "Done.<br><br>"
@@ -8800,6 +8833,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Виникла помилка під час запису пустого символу в таблицю бібліотеки.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -8819,6 +8855,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"'%s' є некоректним символом таблиці біліотеки.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
@@ -8834,10 +8873,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Помилка під час завантаження глобальної бібліотеки символів.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 msgid "Diameter:"
-msgstr ""
+msgstr "Діаметр:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic's junction dot size."
@@ -9237,6 +9279,8 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
+"Ім'я символу в бібліотеці і також по замовчуванні\n"
+"значення символу під час додавання в схему."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -11886,10 +11930,13 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
+"Оновити асоціації посадкових місць символів, чиї посадові місця були "
+"замінені іншими посадочними місцями на друкованій платі."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
 msgstr ""
+"Оновити значення символів, що були замінені в редакторі друкованої плати."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -11897,27 +11944,27 @@ msgstr "Імена звʼязків"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
-msgstr ""
+msgstr "Оновити схему з друкованої плати"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
-msgstr ""
+msgstr "Батьківський символ:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
-msgstr ""
+msgstr "Видалити поля, якщо немає батьківського символу"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr ""
+msgstr "Скинути поля, що порожні в батьківському символі"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
-msgstr ""
+msgstr "Оновити поля символу"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
-msgstr ""
+msgstr "Ширина провідника/шини:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 msgid "Set width to 0 to use netclass's wire/bus widths."
@@ -11926,19 +11973,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
-msgstr ""
+msgstr "Властивості провідника & шини"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
 msgid "Symbol Annotation"
-msgstr ""
+msgstr "Призначення імен симолів"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
 msgid "Automatically annotate symbols"
-msgstr ""
+msgstr "Автоматичне призначення імен симолів"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Рекурсивна нумерація вкладених аркушів"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11949,22 +11996,22 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 msgid "(symbol editor only)"
-msgstr ""
+msgstr "(тільки в редакторі символів)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:244
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:483
 msgid "Color Preview"
-msgstr ""
+msgstr "Перегляд кольору"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:432
 msgid "/path/to/sheet"
-msgstr ""
+msgstr "/шлях/до/лист"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 #: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:795
 #: pcbnew/pcb_edit_frame.cpp:276 pcbnew/pcb_edit_frame.cpp:1308
 msgid "Appearance"
-msgstr ""
+msgstr "Зовнішній вигляд"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 msgid "Default font:"
@@ -15187,7 +15234,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
 msgid "Symbol library loading was cancelled by user."
-msgstr ""
+msgstr "Завантаження бібліотеки символів скасовано користувачем."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:592
 #: eeschema/tools/sch_edit_tool.cpp:119
@@ -15729,7 +15776,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:307
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "Повторне зв'язування посадкового сліду скасовано користувачем."
 
 #: eeschema/tools/backannotate.cpp:330
 #, c-format
@@ -23207,7 +23254,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:282
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- DRC скасовано користувачем.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:527
 #, c-format
@@ -31640,6 +31687,7 @@ msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
+"Altium шар(%d) немає еквавіленту в KiCad . Переміщений в KiCad шар Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:364
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:344
@@ -31650,7 +31698,7 @@ msgstr ""
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:444
 msgid "Open cancelled by user."
-msgstr ""
+msgstr "Відкриття скасовано користувачем."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:513
 #, c-format
@@ -31702,6 +31750,8 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Розмір знайдений в Altium шарі (%d) неває аналогу в KiCad. Переміщений на "
+"KiCad шар Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1547
 msgid "Loading dimension drawings..."
@@ -31799,6 +31849,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
+"Не мідний слід %s знайдений в Altium шарі(%d) немає аналогу в KiCad. "
+"Переміщений на KiCad шар Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2643
 #, c-format
@@ -32415,6 +32467,8 @@ msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
+"Для знайдений елементів не визначено шару. Ви бажаєте\n"
+"відновити на шарі User.Comments?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:931
 msgid "Undefined layers:"
