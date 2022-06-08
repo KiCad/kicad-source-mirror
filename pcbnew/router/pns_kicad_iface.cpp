@@ -1178,7 +1178,7 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const
 }
 
 
-bool PNS_KICAD_IFACE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const
+bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const
 {
     /// Default is all layers
     if( aLayer < 0 )
