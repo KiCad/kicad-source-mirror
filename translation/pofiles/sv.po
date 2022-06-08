@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-08 14:51+0000\n"
+"PO-Revision-Date: 2022-06-08 23:13+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -22801,7 +22801,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"Låsta fotavtryck kommer inte att kommenteras"
+"Låsta fotavtryck kommer inte att numreras"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:319
 #, c-format
@@ -22989,7 +22989,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 msgid "Reannotate anyway?"
-msgstr "Kommentera ändå?"
+msgstr "Gör om numreringen ändå?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
 #, c-format
