@@ -516,15 +516,19 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     m_enabledLayers = GetUILayerMask();
 
-    if( m_enabledLayers != m_pcb->GetEnabledLayers() )
+    LSET previousEnabled = m_pcb->GetEnabledLayers();
+
+    if( m_enabledLayers != previousEnabled )
     {
         m_pcb->SetEnabledLayers( m_enabledLayers );
+
+        LSET changedLayers = m_enabledLayers ^ previousEnabled;
 
         /* Ensure enabled layers are also visible
          * This is mainly to avoid mistakes if some enabled
          * layers are not visible when exiting this dialog
          */
-        m_pcb->SetVisibleLayers( m_enabledLayers );
+        m_pcb->SetVisibleLayers( m_pcb->GetVisibleLayers() | changedLayers );
 
         modified = true;
     }
