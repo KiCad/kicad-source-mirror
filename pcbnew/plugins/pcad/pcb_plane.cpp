@@ -70,6 +70,9 @@ bool PCB_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
 
     lNode = FindNode( aNode, wxT( "pcbPoly" ) );
 
+    if( !lNode )
+        lNode = FindNode( aNode, wxT( "planeOutline" ) );
+
     if( lNode )
     {
         // retrieve plane outline

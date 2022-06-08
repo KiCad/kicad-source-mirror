@@ -85,6 +85,10 @@ bool PCB_COPPER_POUR::Parse( XNODE* aNode, const wxString& aDefaultUnits,
 
     lNode = FindNode( aNode, wxT( "pcbPoly" ) );
 
+    // If the pour doesn't have the newer `pcbPoly` tag, check for the older `pourOutline` tag
+    if( !lNode )
+        lNode = FindNode( aNode, wxT( "pourOutline" ) );
+
     if( lNode )
     {
         // retrieve copper pour outline
