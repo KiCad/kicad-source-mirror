@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:55-0700\n"
-"PO-Revision-Date: 2022-06-08 23:13+0000\n"
+"PO-Revision-Date: 2022-06-09 04:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -12015,74 +12015,74 @@ msgstr "Зовнішній вигляд"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 msgid "Default font:"
-msgstr ""
+msgstr "Шрифт по замовчуванні:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
-msgstr ""
+msgstr "Показати приховані ніжки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 msgid "Show hidden fields"
-msgstr ""
+msgstr "Показати приховані поля"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
 msgid "Show ERC errors"
-msgstr ""
+msgstr "Показати помилки ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
 msgid "Show ERC warnings"
-msgstr ""
+msgstr "Показати попередження ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
 msgid "Show ERC exclusions"
-msgstr ""
+msgstr "Показати ERC винятки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
-msgstr ""
+msgstr "Показати межі сторінки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
 msgid "Selection && Highlighting"
-msgstr ""
+msgstr "Виділення && Підсвічування"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected child items"
-msgstr ""
+msgstr "Накреслити вибрані дочірні елементи"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Fill selected shapes"
-msgstr ""
+msgstr "Заповнити вибрані фігури"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:83
 msgid "Selection thickness:"
-msgstr ""
+msgstr "Товщина виділення:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:91
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr ""
+msgstr "(вибраний колір можна редагувати на сторінці \"Кольори\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:95
 msgid "Highlight thickness:"
-msgstr ""
+msgstr "Товщина підсвітки:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:110
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr ""
+msgstr "Двосторонній зв'язок"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Cross-probe on selection"
-msgstr ""
+msgstr "Двостороннє виділення"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
 msgid "Center view on cross-probed items"
-msgstr ""
+msgstr "Сконцентрувати перегляд виділених елементів"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Zoom to fit cross-probed items"
-msgstr ""
+msgstr "Збільшити до розмірів екрану виділених елементів"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -12095,27 +12095,27 @@ msgstr "Виділяти звʼязки в схемі які виділені в
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "Line Drawing Mode:"
-msgstr ""
+msgstr "Режим малювання ліній:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Free Angle"
-msgstr ""
+msgstr "Вільний кут"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Кут 90°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "45 deg Angle"
-msgstr ""
+msgstr "Кут 45°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Кут 135°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
-msgstr ""
+msgstr "Перетягування мишею виконує операцією перетягування (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:34
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -12174,7 +12174,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
 msgid "Long Click"
-msgstr ""
+msgstr "Довге натискання"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:108
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
@@ -12183,26 +12183,26 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Clarify selection from menu."
-msgstr ""
+msgstr "Уточнення вибору з меню."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid "Add item(s) to selection."
-msgstr ""
+msgstr "Додати елемент(и) до виділення."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
-msgstr ""
+msgstr "Ctrl+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:124
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:172
 #: pcbnew/dialogs/panel_edit_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Remove item(s) from selection."
-msgstr ""
+msgstr "Видалити елемент(и) з вибраного."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
@@ -12214,41 +12214,41 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:168
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
 msgid "Symbol Field Automatic Placement"
-msgstr ""
+msgstr "Автоматичне розміщення полей символу"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "A&utomatically place symbol fields"
-msgstr ""
+msgstr "Автоматичне розмістити поля символу"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:207
 msgid "A&llow field autoplace to change justification"
-msgstr ""
+msgstr "Дозволити авто-розміщення поля під час зміни вирівнювання"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr ""
+msgstr "Дозволити вирівнювання полей по сітці 50 міл"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:217
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Repeated Items"
-msgstr ""
+msgstr "Елементи що повторюються"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:227
 msgid "&Horizontal pitch:"
-msgstr ""
+msgstr "Крок по горизонталі:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:238
 msgid "&Vertical pitch:"
-msgstr ""
+msgstr "Крок по вертикалі:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:249
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:120
 msgid "Label increment:"
-msgstr ""
+msgstr "Приріст мітки:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "Dialog Preferences"
@@ -12257,49 +12257,50 @@ msgstr "Діалог Налаштувань"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
 msgid "Show footprint previews in Symbol Chooser"
 msgstr ""
+"Показувати попередній перегляд посадкового місця в діалозі вибору символів"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 msgid "Annotations"
-msgstr ""
+msgstr "Позначення"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
-msgstr ""
+msgstr "Позначення одиниці символу:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
-msgstr ""
+msgstr ".A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
-msgstr ""
+msgstr "-A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
-msgstr ""
+msgstr "_A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
-msgstr ""
+msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:44
 msgid "Default text size:"
-msgstr ""
+msgstr "Розмір тексту по замовчуванню:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Text offset ratio:"
-msgstr ""
+msgstr "Відносне зміщення тексту:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
