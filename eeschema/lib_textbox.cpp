@@ -338,7 +338,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( penWidth > 0 )
     {
-        if( !aPlotter->GetColorMode() || color != COLOR4D::UNSPECIFIED )
+        if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
