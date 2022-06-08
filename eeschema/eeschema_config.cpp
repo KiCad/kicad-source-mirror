@@ -161,9 +161,21 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         eeconfig()->m_System.units = static_cast<int>( m_userUnits );
         wxAuiPaneInfo& hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-        m_showHierarchy =  hierarchy.IsShown();
+        m_showHierarchy = hierarchy.IsShown();
         eeconfig()->m_AuiPanels.show_schematic_hierarchy = m_showHierarchy;
-        eeconfig()->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+
+        if( hierarchy.IsFloating() )
+        {
+            eeconfig()->m_AuiPanels.schematic_hierarchy_float = true;
+            eeconfig()->m_AuiPanels.hierarchy_panel_float_width  = hierarchy.floating_size.x;
+            eeconfig()->m_AuiPanels.hierarchy_panel_float_height = hierarchy.floating_size.y;
+        }
+        else
+        {
+            eeconfig()->m_AuiPanels.hierarchy_panel_docked_width     = m_hierarchy->GetSize().x;
+            eeconfig()->m_AuiPanels.schematic_hierarchy_float = false;
+        }
+
     }
 }
 

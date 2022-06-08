@@ -270,15 +270,39 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_hierarchy, EDA_PANE().Palette().Name( SchematicHierarchyPaneName() )
                       .Caption( _("Schematic Hierarchy") )
                       .Left().Layer( 3 )
+                      .TopDockable( false )
+                      .BottomDockable( false )
                       .CloseButton( true )
                       .MinSize(120, -1)
-                      .BestSize(200, -1));
+                      .BestSize(150, -1)
+                      .FloatingSize( 200, 80 )
+                      );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer( 2 ) );
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
                       .Center() );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
                       .Bottom().Layer( 6 ) );
+
+    wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+
+    if( eeconfig() )
+    {
+        hierarchy_pane.FloatingSize( eeconfig()->m_AuiPanels.hierarchy_panel_float_width,
+                                     eeconfig()->m_AuiPanels.hierarchy_panel_float_height );
+
+        if( eeconfig()->m_AuiPanels.schematic_hierarchy_float )
+            hierarchy_pane.Float();
+
+        if( eeconfig()->m_AuiPanels.hierarchy_panel_docked_width > 0 )
+        {
+            hierarchy_pane.BestSize( eeconfig()->m_AuiPanels.hierarchy_panel_docked_width, -1);
+            SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                            eeconfig()->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        }
+    }
+
+    hierarchy_pane.Show( m_showHierarchy );
 
     FinishAUIInitialization();
 
@@ -288,12 +312,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadProjectSettings();
 
     initScreenZoom();
-
-    wxAuiPaneInfo& hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-    hierarchy.Show( m_showHierarchy );
-
-    if( eeconfig() && ( eeconfig()->m_AuiPanels.left_panel_width > 0 ) )
-        SetAuiPaneSize( m_auimgr, hierarchy, eeconfig()->m_AuiPanels.left_panel_width, -1 );
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
@@ -320,6 +338,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure the window is on top
     Raise();
+
+    // Now every sizes are fixed, set the initial hierarchy_pane floating position
+    // to the left top corner of the canvas
+    wxPoint canvas_pos = GetCanvas()->GetScreenPosition();
+    hierarchy_pane.FloatingPosition( canvas_pos.x + 10, canvas_pos.y + 10 );
 }
 
 

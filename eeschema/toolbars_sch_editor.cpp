@@ -227,19 +227,45 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
 {
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxAuiPaneInfo&     hierarchy = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-    m_showHierarchy =  hierarchy.IsShown();
+    wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    m_showHierarchy =  hierarchy_pane.IsShown();
 
     // show auxiliary Vertical layers and visibility manager toolbar
     m_showHierarchy = !m_showHierarchy;
-    hierarchy.Show( m_showHierarchy );
+    hierarchy_pane.Show( m_showHierarchy );
 
-    if( m_showHierarchy && cfg )
-        SetAuiPaneSize( m_auimgr, hierarchy, cfg->m_AuiPanels.left_panel_width, -1 );
+    if( m_showHierarchy )
+    {
+        if( cfg )
+        {
+            if( hierarchy_pane.IsFloating() )
+            {
+                hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
+                                             cfg->m_AuiPanels.hierarchy_panel_float_height );
+                m_auimgr.Update();
+            }
+            else
+            {
+                hierarchy_pane.BestSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, -1);
+                // SetAuiPaneSize also update m_auimgr
+                SetAuiPaneSize( m_auimgr, hierarchy_pane, cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+            }
+        }
+        else
+            m_auimgr.Update();
+    }
     else
     {
         if( cfg )
-            cfg->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+        {
+            if( hierarchy_pane.IsFloating() )
+            {
+                cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
+                cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
+            }
+            else
+                cfg->m_AuiPanels.hierarchy_panel_docked_width = m_hierarchy->GetSize().x;
+        }
 
         m_auimgr.Update();
     }

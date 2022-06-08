@@ -65,8 +65,11 @@ public:
 
     struct AUI_PANELS
     {
-        int  left_panel_width;
-        bool show_schematic_hierarchy;
+        int  hierarchy_panel_docked_width;  // width of hierarchy tree panel and pane when docked
+        int  hierarchy_panel_float_width;   // width of hierarchy tree panel when floating
+        int  hierarchy_panel_float_height;  // height of hierarchy tree panel when floating
+        bool schematic_hierarchy_float;     // show hierarchy tree panel as floating
+        bool show_schematic_hierarchy;      // show hierarchy tree pane
     };
 
     struct AUTOPLACE_FIELDS

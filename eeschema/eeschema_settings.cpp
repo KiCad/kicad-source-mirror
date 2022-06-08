@@ -125,8 +125,17 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "aui.show_schematic_hierarchy",
             &m_AuiPanels.show_schematic_hierarchy, true ) );
 
-    m_params.emplace_back( new PARAM<int>( "aui.left_panel_width",
-            &m_AuiPanels.left_panel_width, -1 ) );
+    m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_docked_width",
+            &m_AuiPanels.hierarchy_panel_docked_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_float_width",
+            &m_AuiPanels.hierarchy_panel_float_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_float_height",
+            &m_AuiPanels.hierarchy_panel_float_height, -1 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.schematic_hierarchy_float",
+            &m_AuiPanels.schematic_hierarchy_float, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",
             &m_AutoplaceFields.enable, true ) );
