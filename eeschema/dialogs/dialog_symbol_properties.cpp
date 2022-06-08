@@ -89,6 +89,14 @@ public:
 
     void BuildAttrs()
     {
+        for( wxGridCellAttr* attr : m_nameAttrs )
+            attr->DecRef();
+
+        m_nameAttrs.clear();
+
+        if( m_readOnlyAttr )
+            m_readOnlyAttr->DecRef();
+
         m_readOnlyAttr = new wxGridCellAttr;
         m_readOnlyAttr->SetReadOnly( true );
 
@@ -117,10 +125,16 @@ public:
             m_nameAttrs.push_back( attr );
         }
 
+        if( m_typeAttr )
+            m_typeAttr->DecRef();
+
         m_typeAttr = new wxGridCellAttr;
         m_typeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinTypeIcons(),
                                                                    PinTypeNames() ) );
         m_typeAttr->SetReadOnly( true );
+
+        if( m_shapeAttr )
+            m_shapeAttr->DecRef();
 
         m_shapeAttr = new wxGridCellAttr;
         m_shapeAttr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinShapeIcons(),
@@ -1024,6 +1038,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort( wxGridEvent& aEvent )
         ascending = true;
 
     m_dataModel->SortRows( sortCol, ascending );
+    m_dataModel->BuildAttrs();
 }
 
 
