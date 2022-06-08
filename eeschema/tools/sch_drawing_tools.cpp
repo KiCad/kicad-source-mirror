@@ -69,8 +69,11 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextAngle( ANGLE_0 ),
         m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
         m_lastFillStyle( FILL_T::NO_FILL ),
+        m_lastTextboxFillStyle( FILL_T::NO_FILL ),
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
+        m_lastTextboxFillColor( COLOR4D::UNSPECIFIED ),
         m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_lastTextboxStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
@@ -1499,7 +1502,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             if( isTextBox )
             {
-                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( 0, m_lastFillStyle );
+                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( 0, m_lastTextboxFillStyle );
 
                 textbox->SetBold( m_lastTextBold );
                 textbox->SetItalic( m_lastTextItalic );
@@ -1507,16 +1510,18 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                                               sch_settings.m_DefaultTextSize ) );
                 textbox->SetTextAngle( m_lastTextAngle );
                 textbox->SetHorizJustify( m_lastTextJust );
+                textbox->SetStroke( m_lastTextboxStroke );
+                textbox->SetFillColor( m_lastTextboxFillColor );
 
                 item = textbox;
             }
             else
             {
                 item = new SCH_SHAPE( type, 0, m_lastFillStyle );
-            }
 
-            item->SetStroke( m_lastStroke );
-            item->SetFillColor( m_lastFillColor );
+                item->SetStroke( m_lastStroke );
+                item->SetFillColor( m_lastFillColor );
+            }
 
             item->SetFlags( IS_NEW );
             item->BeginEdit( (wxPoint) cursorPos );
@@ -1551,11 +1556,16 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     m_lastTextItalic = textbox->IsItalic();
                     m_lastTextAngle = textbox->GetTextAngle();
                     m_lastTextJust = textbox->GetHorizJustify();
+                    m_lastTextboxStroke = textbox->GetStroke();
+                    m_lastTextboxFillStyle = textbox->GetFillMode();
+                    m_lastTextboxFillColor = textbox->GetFillColor();
                 }
-
-                m_lastStroke = item->GetStroke();
-                m_lastFillStyle = item->GetFillMode();
-                m_lastFillColor = item->GetFillColor();
+                else
+                {
+                    m_lastStroke = item->GetStroke();
+                    m_lastFillStyle = item->GetFillMode();
+                    m_lastFillColor = item->GetFillColor();
+                }
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
                 m_selectionTool->AddItemToSel( item );
