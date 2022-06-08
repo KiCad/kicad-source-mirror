@@ -46,7 +46,7 @@
 #include <lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
 #include <bitmaps.h>
-#include <grid_tricks.h>
+#include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <confirm.h>
 #include <lib_table_grid.h>
@@ -64,7 +64,6 @@
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <macros.h>
-
 // clang-format off
 
 /**
@@ -246,12 +245,11 @@ public:
 #define MYID_OPTIONS_EDITOR  15151
 
 
-class FP_GRID_TRICKS : public GRID_TRICKS
+class FP_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
     FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
-            GRID_TRICKS( aGrid ),
-            m_dialog( aParent )
+            LIB_TABLE_GRID_TRICKS( aGrid ), m_dialog( aParent )
     { }
 
 protected:
@@ -297,7 +295,7 @@ protected:
             menu.AppendSeparator();
         }
 
-        GRID_TRICKS::showPopupMenu( menu );
+        LIB_TABLE_GRID_TRICKS::showPopupMenu( menu );
     }
 
     void doPopupSelection( wxCommandEvent& event ) override
@@ -305,7 +303,7 @@ protected:
         if( event.GetId() == MYID_OPTIONS_EDITOR )
             optionsEditor( m_grid->GetGridCursorRow() );
         else
-            GRID_TRICKS::doPopupSelection( event );
+            LIB_TABLE_GRID_TRICKS::doPopupSelection( event );
     }
 
     /// handle specialized clipboard text, with leading "(fp_lib_table", OR

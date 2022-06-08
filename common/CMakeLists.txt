@@ -320,6 +320,7 @@ set( COMMON_SRCS
     layer_id.cpp
     lib_id.cpp
     lib_table_base.cpp
+    lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     locale_io.cpp

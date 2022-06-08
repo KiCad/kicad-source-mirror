@@ -28,7 +28,7 @@
 #include <lib_id.h>
 #include <symbol_lib_table.h>
 #include <lib_table_lexer.h>
-#include <grid_tricks.h>
+#include <lib_table_grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <confirm.h>
 #include <bitmaps.h>
@@ -133,12 +133,11 @@ public:
     }
 };
 
-
-class SYMBOL_GRID_TRICKS : public GRID_TRICKS
+class SYMBOL_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
 public:
     SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
-        GRID_TRICKS( aGrid ),
+        LIB_TABLE_GRID_TRICKS( aGrid ),
         m_dialog( aParent )
     {
     }

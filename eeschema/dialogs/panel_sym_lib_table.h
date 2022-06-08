@@ -21,13 +21,13 @@
 #ifndef PANEL_SYM_LIB_TABLE_H
 #define PANEL_SYM_LIB_TABLE_H
 
+#include <grid_tricks.h>
 #include <dialogs/dialog_edit_library_tables.h>
 #include <panel_sym_lib_table_base.h>
-
+#include <lib_table_grid.h>
 
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_GRID;
-
 
 /**
  * Dialog to show and edit symbol library tables.
