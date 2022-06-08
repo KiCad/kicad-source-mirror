@@ -1382,7 +1382,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
             // For circle pads, the thermal spoke orientation is 45 deg
             if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-                padAngle = s_RoundPadThermalSpokeAngle;
+                padAngle += s_RoundPadThermalSpokeAngle;
 
             for( int i = 0; i < 4; i++ )
             {
