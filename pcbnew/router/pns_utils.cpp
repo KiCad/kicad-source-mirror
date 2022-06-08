@@ -170,7 +170,7 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
 
     int cl = aClearance + aWalkaroundThickness / 2;
     double d = (double)aSeg.GetWidth() / 2.0 + cl;
-    double x = KiROUND( 2.0 / ( 1.0 + M_SQRT2 ) * d ); 
+    double x = 2.0 / ( 1.0 + M_SQRT2 ) * d;
     int dr = KiROUND( d );
     int xr = KiROUND( x );
     int xr2 = KiROUND( x / 2.0 );
@@ -179,7 +179,7 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     VECTOR2I b = aSeg.GetSeg().B;
     int len = aSeg.GetSeg().Length();
 
-    if ( !IsSegment45Degree( aSeg.GetSeg() ) && len <= kinkThreshold )
+    if ( !IsSegment45Degree( aSeg.GetSeg() ) && len <= kinkThreshold && len > 0 )
     {
 
         int w = b.x - a.x;
@@ -191,10 +191,12 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
 
     if( a == b )
     {
+        int xx2 = KiROUND( 2.0 * ( 1.0 - M_SQRT2 ) * d );
+
         return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
                               VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
                               cl,
-                              xr );
+                              xx2 );
     }
 
     VECTOR2I dir = b - a;
