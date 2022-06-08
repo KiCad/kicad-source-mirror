@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-06-08 23:13+0000\n"
+"PO-Revision-Date: 2022-06-09 04:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
 "Language: ru\n"
@@ -11776,7 +11776,7 @@ msgstr "Отображать выделенный текст как прямоу
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
-msgstr "Выделять дочерние элементы"
+msgstr "Начертить дочерние элементы"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
@@ -11793,7 +11793,7 @@ msgstr "(цвет подсветки можно установить на вкл
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "Сквозное выделение"
+msgstr "Двухстороння связь"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 msgid "Center view on cross-probed items"
@@ -11941,7 +11941,7 @@ msgstr "Автоматически размещать поля символов"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
 msgid "A&llow field autoplace to change justification"
-msgstr "Разрешить при авто-размещении изменять выравнивание поля"
+msgstr "Разрешить авто-размещении при изменения выравнивания"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
