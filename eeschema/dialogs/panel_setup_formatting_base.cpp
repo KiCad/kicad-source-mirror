@@ -76,7 +76,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_offsetRatioUnits->Wrap( -1 );
 	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
-	m_labelSizeRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Global label size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSizeRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Global label margin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelSizeRatioLabel->Wrap( -1 );
 	m_labelSizeRatioLabel->SetToolTip( _("Percentage of the text size to use as space around a global label") );
 
@@ -149,7 +149,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bSizer61->Add( m_choiceJunctionDotSize, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	sbSizer2->Add( bSizer61, 0, wxBOTTOM|wxEXPAND, 5 );
+	sbSizer2->Add( bSizer61, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxALL, 5 );
@@ -239,7 +239,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer6->Add( m_dashedLineHelp, 0, wxALL, 5 );
 
 
-	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxBOTTOM, 5 );
+	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bPanelSizer->Add( bRightColumn, 1, wxRIGHT|wxLEFT|wxEXPAND, 10 );
