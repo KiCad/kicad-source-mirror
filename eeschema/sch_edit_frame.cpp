@@ -172,8 +172,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .BottomDockable( false )
                       .CloseButton( true )
                       .MinSize(120, -1)
-                      .BestSize(150, -1)
+                      .BestSize(200, -1)
                       .FloatingSize( 200, 80 )
+                      .Show( false )
                       );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer( 2 ) );
@@ -186,11 +187,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( eeconfig() )
     {
-        hierarchy_pane.FloatingSize( eeconfig()->m_AuiPanels.hierarchy_panel_float_width,
-                                     eeconfig()->m_AuiPanels.hierarchy_panel_float_height );
-
-        if( eeconfig()->m_AuiPanels.schematic_hierarchy_float )
-            hierarchy_pane.Float();
+        if( eeconfig()->m_AuiPanels.hierarchy_panel_float_width > 0
+            && eeconfig()->m_AuiPanels.hierarchy_panel_float_height > 0 )
+        {
+            hierarchy_pane.FloatingSize( eeconfig()->m_AuiPanels.hierarchy_panel_float_width,
+                                         eeconfig()->m_AuiPanels.hierarchy_panel_float_height );
+        }
 
         if( eeconfig()->m_AuiPanels.hierarchy_panel_docked_width > 0 )
         {
@@ -200,8 +202,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         }
     }
 
-    hierarchy_pane.Show( m_showHierarchy );
-
     FinishAUIInitialization();
 
     resolveCanvasType();
@@ -210,6 +210,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadProjectSettings();
 
     initScreenZoom();
+
+    m_hierarchy->Connect( wxEVT_SIZE,
+                          wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
+                          NULL, this );
+
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
@@ -241,11 +246,20 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to the left top corner of the canvas
     wxPoint canvas_pos = GetCanvas()->GetScreenPosition();
     hierarchy_pane.FloatingPosition( canvas_pos.x + 10, canvas_pos.y + 10 );
+
+    if( eeconfig() && eeconfig()->m_AuiPanels.schematic_hierarchy_float )
+        hierarchy_pane.Float();
+
+    hierarchy_pane.Show( m_showHierarchy );
 }
 
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+
+    m_hierarchy->Disconnect( wxEVT_SIZE,
+                          wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
+                          NULL, this );
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
 
@@ -286,6 +300,38 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     }
 
     delete m_hierarchy;
+}
+
+
+void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+
+    // Called when resizing the Hierarchy Navigator panel
+    // Store the current pane size
+    // It allows to retrieve the last defined pane size when switching between
+    // docked and floating pane state
+    // Note: *DO NOT* call m_auimgr.Update() here: it crashes Kicad at leat on Windows
+
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+
+    if( cfg && m_hierarchy->IsShown() )
+    {
+        cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
+        cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
+
+        // initialize hierarchy_panel_docked_width and best size only if the hierarchy_pane
+        // width is > 0 (i.e. if its size is already set and has meaning)
+        // if it is floating, its size is not initialized (only floating_size is initialized)
+        // initializing hierarchy_pane.best_size is useful when switching to float pane and
+        // after switching to the docked pane, to retrieve the last docked pane width
+        if( hierarchy_pane.rect.width > 50 )    // 50 is a good margin
+        {
+            cfg->m_AuiPanels.hierarchy_panel_docked_width = hierarchy_pane.rect.width;
+            hierarchy_pane.best_size.x = hierarchy_pane.rect.width;
+        }
+    }
 }
 
 
