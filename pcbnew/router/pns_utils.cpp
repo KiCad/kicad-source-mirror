@@ -23,6 +23,7 @@
 #include "pns_line.h"
 #include "pns_via.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 #include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
@@ -143,18 +144,20 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalk
 
 static bool IsSegment45Degree( const SEG& aS )
 {
-    double angle = 180.0 / M_PI
-                   * atan2( (double) aS.B.y - (double) aS.A.y, (double) aS.B.x - (double) aS.A.x );
+    VECTOR2I dir( aS.B - aS.A );
 
-    if( angle < 0 )
-        angle += 360.0;
+    if( std::abs( dir.x ) <= 1 )
+        return true;
+    
+    if( std::abs( dir.y ) <= 1 )
+        return true;
+    
+    int delta = std::abs(dir.x) - std::abs(dir.y);
 
-    double angle_a = fabs( fmod( angle, 45.0 ) );
+    if( delta >= -1 && delta <= 1)
+        return true;
 
-    if( angle_a > 1.0 && angle_a < 44.0 )
-        return false;
-
-    return true;
+    return false;
 }
 
 
@@ -166,7 +169,7 @@ template <typename T> int sgn(T val) {
 const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness )
 {
-    const int kinkThreshold = 10;
+    const int kinkThreshold = aClearance / 10;
 
     int cl = aClearance + aWalkaroundThickness / 2;
     double d = (double)aSeg.GetWidth() / 2.0 + cl;
@@ -178,15 +181,56 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     const VECTOR2I a = aSeg.GetSeg().A;
     VECTOR2I b = aSeg.GetSeg().B;
     int len = aSeg.GetSeg().Length();
+    int w = b.x - a.x;
+    int h = b.y - a.y;
 
-    if ( !IsSegment45Degree( aSeg.GetSeg() ) && len <= kinkThreshold && len > 0 )
+    /*
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+
+    if( len < kinkThreshold )
     {
+        PNS_DBG( dbg, AddShape, &aSeg, CYAN,  10000, wxString::Format( "kinky-seg 45 %d l %d dx %d dy %d", !!IsSegment45Degree( aSeg.GetSeg() ), len, w, h ) );
+    }
+    */
 
-        int w = b.x - a.x;
-        int h = b.y - a.y;
-        int ll = std::max( std::abs( w ), std::abs( h ) );
+    if ( !IsSegment45Degree( aSeg.GetSeg() ) )
+    {
+        if ( len <= kinkThreshold && len > 0 )
+        {
+            int ll = std::max( std::abs( w ), std::abs( h ) );
 
-        b = a + VECTOR2I( sgn( w ) * ll, sgn( h ) * ll );
+            b = a + VECTOR2I( sgn( w ) * ll, sgn( h ) * ll );
+        }
+    }
+    else
+    {
+        if( len <= kinkThreshold )
+        {
+            int delta45 = std::abs( std::abs(w) - std::abs(h) );
+            if( std::abs(w) <= 1 ) // almost vertical
+            {
+                w = 0;
+                cl ++;
+            }
+            else if ( std::abs(h) <= 1 ) // almost horizontal
+            {
+                h = 0;
+                cl ++;
+            }
+            else if ( delta45 <= 2 ) // almost 45 degree
+            {
+                int newW = sgn( w ) * std::max( std::abs(w), std::abs( h ) );
+                int newH = sgn( h ) * std::max( std::abs(w), std::abs( h ) );
+                w = newW;
+                h = newH;
+                cl += 2;
+                //PNS_DBG( dbg, AddShape, &aSeg, CYAN,  10000, wxString::Format( "almostkinky45 45 %d l %d dx %d dy %d", !!IsSegment45Degree( aSeg.GetSeg() ), len, w, h ) );
+
+            }
+
+            b.x = a.x + w;
+            b.y = a.y + h;
+        }
     }
 
     if( a == b )
