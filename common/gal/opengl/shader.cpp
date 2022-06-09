@@ -106,7 +106,7 @@ bool SHADER::Link()
 
     // Check the Link state
     GLint tmp;
-    glGetObjectParameterivARB( programNumber, GL_OBJECT_LINK_STATUS_ARB, &tmp );
+    glGetProgramiv( programNumber, GL_LINK_STATUS, &tmp );
     isShaderLinked = !!tmp;
 
 #ifdef DEBUG
