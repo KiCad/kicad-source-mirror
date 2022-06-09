@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-02-20 11:55+0000\n"
+"PO-Revision-Date: 2022-06-11 16:19+0000\n"
 "Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v6/sk/>\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -26,7 +26,6 @@ msgstr ""
 "X-Poedit-SearchPath-6: 3d-viewer\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Všetky súbory"
 
@@ -102,14 +101,13 @@ msgid "Build BVH for holes and vias"
 msgstr "Vytvárajte BVH pre diery a priechody"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Vaša verzia OpenGL nie je podporovaná. Potrebné minimum je 1,5"
+msgstr "Vaša verzia OpenGL nie je podporovaná. Potrebné minimum je 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Čas renderovania %.3f s"
+msgstr "Čas renderovania %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:730
 #, c-format
@@ -135,16 +133,15 @@ msgid "Load OpenGL: layers"
 msgstr "Načítanie OpenGL: vrstvy"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Načítanie OpenGL: vrstvy"
+msgstr "Načítanie OpenGL: vrstva %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:670
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
 #: pcbnew/plugins/altium/altium_pcb.cpp:1372
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Načítanie 3D modelov"
+msgstr "Načítanie 3D modelov..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:680
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:942
@@ -160,9 +157,9 @@ msgstr "Čas opätovného načítania %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Načítavam %s"
+msgstr "Načítavam %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:561
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
