@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,6 @@ private:
     void onSpinButton( wxCommandEvent &aEvent );
     void onBorderChecked( wxCommandEvent& event ) override;
     void onFillChecked( wxCommandEvent& event ) override;
-    void onFillSwatch( wxCommandEvent& aEvent );
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;

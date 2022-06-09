@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,8 +31,8 @@ class FONT_CHOICE;
 #include <wx/sizer.h>
 #include <wx/hyperlink.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
@@ -48,11 +48,6 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			wxID_SIZE = 1000
-		};
-
 		wxGridBagSizer* m_textEntrySizer;
 		wxStaticText* m_textLabel;
 		wxStyledTextCtrl* m_textCtrl;
@@ -73,6 +68,9 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_textColorLabel;
+		wxPanel* m_panelBorderColor1;
+		COLOR_SWATCH* m_textColorSwatch;
 		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
@@ -94,7 +92,7 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
@@ -104,7 +102,6 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_TEXTBOX_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Box Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-
 		~DIALOG_LIB_TEXTBOX_PROPERTIES_BASE();
 
 };

@@ -25,15 +25,16 @@
 #include <symbol_editor_settings.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
 #include <base_units.h>
 #include <general.h>
+#include <settings/color_settings.h>
 #include <lib_textbox.h>
 #include <confirm.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <dialog_lib_textbox_properties.h>
-#include <widgets/color_swatch.h>
 #include "symbol_editor_drawing_tools.h"
 
 DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
@@ -46,7 +47,11 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
     for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
         m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
@@ -54,6 +59,7 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_fillColorSwatch->SetSwatchBackground( schematicBackground );
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
 
@@ -64,6 +70,9 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
             } );
 
     m_textEntrySizer->AddGrowableRow( 0 );
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
 
     SetInitialFocus( m_textCtrl );
 
@@ -124,6 +133,7 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
+    m_textColorSwatch->SetSwatchColor( m_currentText->GetTextColor(), false );
 
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
@@ -240,6 +250,7 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     }
 
     m_currentText->SetItalic( m_italic->IsChecked() );
+    m_currentText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
     if( m_spin0->IsChecked() )
     {
