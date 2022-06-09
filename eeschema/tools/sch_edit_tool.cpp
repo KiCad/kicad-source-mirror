@@ -324,6 +324,8 @@ bool SCH_EDIT_TOOL::Init()
                                        SCH_TEXT_T,
                                        EOT };
 
+    auto toChangeCondition = ( E_C::OnlyTypes( allLabelTypes ) );
+
     static KICAD_T toLabelTypes[] = { SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
@@ -408,12 +410,12 @@ bool SCH_EDIT_TOOL::Init()
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,     E_C::SingleSymbolOrPower && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toLabel,             anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toHLabel,            anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toGLabel,            anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toText,              anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toLabel,          anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && E_C::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
@@ -441,11 +443,16 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::toLabel,          toLabelCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toCLabel,         toCLabelCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toGLabel,         toGLabelCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toText,           toTextCondition, 200 );
+    CONDITIONAL_MENU* convertToSelSubMenu = new CONDITIONAL_MENU(m_selectionTool);
+    convertToSelSubMenu->SetTitle( _( "Change To" ) );
+    convertToSelSubMenu->SetIcon( BITMAPS::right );
+    selToolMenu.AddMenu( convertToSelSubMenu, toChangeCondition, 200 );
+
+    convertToSelSubMenu->AddItem( EE_ACTIONS::toLabel,  toLabelCondition, 200 );
+    convertToSelSubMenu->AddItem( EE_ACTIONS::toCLabel, toCLabelCondition, 200 );
+    convertToSelSubMenu->AddItem( EE_ACTIONS::toHLabel, toHLabelCondition, 200 );
+    convertToSelSubMenu->AddItem( EE_ACTIONS::toGLabel, toGLabelCondition, 200 );
+    convertToSelSubMenu->AddItem( EE_ACTIONS::toText,   toTextCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
     selToolMenu.AddSeparator( 300 );

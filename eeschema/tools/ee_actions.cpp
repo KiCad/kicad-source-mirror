@@ -89,7 +89,8 @@ TOOL_ACTION EE_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
 TOOL_ACTION EE_ACTIONS::selectConnection( "eeschema.InteractiveSelection.SelectConnection",
         AS_GLOBAL,
         MD_ALT + '4', LEGACY_HK_NAME( "Select Connection" ),
-        _( "Select Connection" ), _( "Select a complete connection" ) );
+        _( "Select Connection" ), _( "Select a complete connection" ),
+        BITMAPS::net_highlight_schematic);
 
 TOOL_ACTION EE_ACTIONS::selectionMenu( "eeschema.InteractiveSelection.SelectionMenu",
         AS_GLOBAL );
@@ -466,7 +467,8 @@ TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
 
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",
-        _( "Assign Netclass..." ), _( "Assign a netclass to the net of the selected wire" ) );
+        _( "Assign Netclass..." ), _( "Assign a netclass to the net of the selected wire" ),
+        BITMAPS::netlist);
 
 TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
         AS_GLOBAL, 0, "",
