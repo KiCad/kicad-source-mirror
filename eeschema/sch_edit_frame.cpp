@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,108 +88,6 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
-
-// non-member so it can be moved easily, and kept REALLY private.
-// Do NOT Clear() in here.
-static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int aIndex )
-{
-    for( unsigned i=0; i<aSrc.GetCount();  ++i )
-        aDst->AddPaths( aSrc[i], aIndex );
-}
-
-
-SEARCH_STACK* PROJECT::SchSearchS()
-{
-    SEARCH_STACK* ss = (SEARCH_STACK*) GetElem( PROJECT::ELEM_SCH_SEARCH_STACK );
-
-    wxASSERT( !ss || dynamic_cast<SEARCH_STACK*>( GetElem( PROJECT::ELEM_SCH_SEARCH_STACK ) ) );
-
-    if( !ss )
-    {
-        ss = new SEARCH_STACK();
-
-        // Make PROJECT the new SEARCH_STACK owner.
-        SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, ss );
-
-        // to the empty SEARCH_STACK for SchSearchS(), add project dir as first
-        ss->AddPaths( m_project_name.GetPath() );
-
-        // next add the paths found in *.pro, variable "LibDir"
-        wxString        libDir;
-
-        try
-        {
-            SYMBOL_LIBS::LibNamesAndPaths( this, false, &libDir );
-        }
-        catch( const IO_ERROR& )
-        {
-        }
-
-        if( !!libDir )
-        {
-            wxArrayString   paths;
-
-            SEARCH_STACK::Split( &paths, libDir );
-
-            for( unsigned i =0; i<paths.GetCount();  ++i )
-            {
-                wxString path = AbsolutePath( paths[i] );
-
-                ss->AddPaths( path );     // at the end
-            }
-        }
-
-        // append all paths from aSList
-        add_search_paths( ss, Kiface().KifaceSearch(), -1 );
-    }
-
-    return ss;
-}
-
-
-SYMBOL_LIBS* PROJECT::SchLibs()
-{
-    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
-
-    wxASSERT( !libs || libs->Type() == SYMBOL_LIBS_T );
-
-    if( !libs )
-    {
-        libs = new SYMBOL_LIBS();
-
-        // Make PROJECT the new SYMBOL_LIBS owner.
-        SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
-
-        try
-        {
-            libs->LoadAllLibraries( this );
-        }
-        catch( const PARSE_ERROR& pe )
-        {
-            wxString    lib_list = UTF8( pe.inputLine );
-            wxWindow*   parent = Pgm().App().GetTopWindow();
-
-            // parent of this dialog cannot be NULL since that breaks the Kiway() chain.
-            HTML_MESSAGE_BOX dlg( parent, _( "Not Found" ) );
-
-            dlg.MessageSet( _( "The following libraries were not found:" ) );
-
-            dlg.ListSet( lib_list );
-
-            dlg.Layout();
-
-            dlg.ShowModal();
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxWindow* parent = Pgm().App().GetTopWindow();
-
-            DisplayError( parent, ioe.What() );
-        }
-    }
-
-    return libs;
-}
 
 
 BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
@@ -884,6 +782,9 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     if( !Schematic().GetFileName().IsEmpty() && !Schematic().RootScreen()->IsEmpty() )
         UpdateFileHistory( fileName );
+
+    // Make sure local settings are persisted
+    SaveProjectSettings();
 
     Schematic().RootScreen()->Clear();
 

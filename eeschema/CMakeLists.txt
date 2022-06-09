@@ -199,6 +199,7 @@ set( EESCHEMA_SRCS
     pin_numbers.cpp
     pin_type.cpp
     project_rescue.cpp
+    project_sch_specific.cpp
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp
