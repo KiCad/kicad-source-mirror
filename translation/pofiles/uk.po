@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:55-0700\n"
-"PO-Revision-Date: 2022-06-09 04:01+0000\n"
+"PO-Revision-Date: 2022-06-11 16:15+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -16618,52 +16618,52 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:680
 msgid "Show ERC Errors"
-msgstr ""
+msgstr "Показати ERC помилки"
 
 #: eeschema/tools/ee_actions.cpp:680
 msgid "Show markers for electrical rules checker errors"
-msgstr ""
+msgstr "Показати маркери для помилок електричних правил"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Show ERC Exclusions"
-msgstr ""
+msgstr "Показати ERC винятки"
 
 #: eeschema/tools/ee_actions.cpp:685
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr ""
+msgstr "Показувати маркери для виключень порушень електричних правил"
 
 #: eeschema/tools/ee_actions.cpp:689 eeschema/tools/ee_actions.cpp:694
 #: eeschema/tools/ee_actions.cpp:699 eeschema/tools/ee_actions.cpp:704
 msgid "Line Mode for Wires and Buses"
-msgstr ""
+msgstr "Лінійний режим для провідників і шин"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Креслення ліній під будь яким кутом"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Lines drawn horizontally and vertically"
-msgstr ""
+msgstr "Креслення вертикальних і горизонтальних ліній"
 
 #: eeschema/tools/ee_actions.cpp:699
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr ""
+msgstr "Горизонтальні, вертикальні лінії і під кутом 45°"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Switch to next line mode"
-msgstr ""
+msgstr "Переключення режиму наступного рядка"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Annotate Automatically"
-msgstr ""
+msgstr "Автоматична нумерація"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Увімкнути автоматичне позначення нових частин символів"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
-msgstr ""
+msgstr "Відновити схему"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Run various diagnostics and attempt to repair schematic"
@@ -21285,174 +21285,181 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:118
 msgid "PrePreg"
-msgstr ""
+msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:177
 #, c-format
 msgid "Enter board thickness in %s:"
-msgstr ""
+msgstr "Введення товщини плати в %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr ""
+msgstr "Введення очікуваної товщини плати (мінімальне значення %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr ""
+msgstr "Під налаштувати товщину незаблокованих діалектичних шарів"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Значення занадто маленьке (мінімальне значення %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:217
 msgid "All dielectric  thickness layers are locked"
-msgstr ""
+msgstr "Товщина всіх діалектичних шарів заблоковано"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:284
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr ""
+msgstr "Шар '%s' (підшар %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:299
 msgid "Add Dielectric Layer"
-msgstr ""
+msgstr "Додати діелектричний шар"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:300
 #: pcbnew/dialogs/panel_setup_layers.cpp:818
 msgid "Select layer to add:"
-msgstr ""
+msgstr "Виберіть шар для додавання:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:345
 #, c-format
 msgid "Layer '%s' sublayer %d/%d"
-msgstr ""
+msgstr "Шар '%s' підшар %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:355
 msgid "Remove Dielectric Layer"
-msgstr ""
+msgstr "Видалити діелектричний шар"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:356
 msgid "Select layer to remove:"
-msgstr ""
+msgstr "Виберіть шар для видалення:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:743
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Copper"
-msgstr ""
+msgstr "Мідь"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1033
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
+"Невірне значення для діалектичної проникності Epsilon R (Epsilon R повинен "
+"бути додатнім або null якщо не використовується)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1054
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
+"Невірне значення для тангенса кута діалектичної проникності Loss tg (Loss tg "
+"повинно бути додатним або null, якщо не використовується)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1101
 msgid "A layer thickness is < 0. Fix it"
-msgstr ""
+msgstr "Товщина слоя менше < 0. Необхідно виправити"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1545
 msgid "Custom..."
-msgstr ""
+msgstr "Власний..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:502
 msgid "Copper layers:"
-msgstr ""
+msgstr "Шари міді:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Виберіть кількість мідних шарів у стеку"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "14"
-msgstr ""
+msgstr "14"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "16"
-msgstr ""
+msgstr "16"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "18"
-msgstr ""
+msgstr "18"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "20"
-msgstr ""
+msgstr "20"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "22"
-msgstr ""
+msgstr "22"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "26"
-msgstr ""
+msgstr "26"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "28"
-msgstr ""
+msgstr "28"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "30"
-msgstr ""
+msgstr "30"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "32"
-msgstr ""
+msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Контрольований імпеданс"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"Якщо опція контроля індепенденту ввімкнена,\n"
+"Втрата кута діалектичних втрат і діалектична проникність буде додано до "
+"обмежень."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 msgid "Add Dielectric Layer..."
-msgstr ""
+msgstr "Додати діелектричний шар..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
 msgid "Remove Dielectric Layer..."
-msgstr ""
+msgstr "Видалити діелектричний шар..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:108
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
 msgid "Loss Tan"
-msgstr ""
+msgstr "Тангенс діалектичних втрат"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
