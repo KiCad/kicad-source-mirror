@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-09 04:01+0000\n"
+"PO-Revision-Date: 2022-06-11 16:15+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -17486,9 +17486,8 @@ msgid "Lines drawn at any angle"
 msgstr "Линии под любым углом"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "Гориз., затем верт."
+msgstr "Черчение горизонтальный и вертикальных линий"
 
 #: eeschema/tools/ee_actions.cpp:699
 #, fuzzy
@@ -17496,9 +17495,8 @@ msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
 msgstr "Располагать рёбра только горизонтально, вертикально или под углом 45°"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Переключиться на следующую секту"
+msgstr "Переключиться на следующей режим линий"
 
 #: eeschema/tools/ee_actions.cpp:709
 #, fuzzy
@@ -17507,7 +17505,7 @@ msgstr "Разместить автоматически"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Включить автоматическую обозначение новых частей символов"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
