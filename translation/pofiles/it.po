@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-06-06 19:11+0200\n"
+"POT-Creation-Date: 2022-06-09 19:40+0200\n"
+"PO-Revision-Date: 2022-06-09 19:41+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -1695,7 +1695,7 @@ msgstr "Conferma"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "Descrizione"
@@ -4968,403 +4968,167 @@ msgstr "Impossibile cambiare lingua in %s"
 msgid "Set Language"
 msgstr "Imposta lingua"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-#: common/layer_id.cpp:42
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-#: common/layer_id.cpp:43
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-#: common/layer_id.cpp:44
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-#: common/layer_id.cpp:45
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-#: common/layer_id.cpp:46
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-#: common/layer_id.cpp:47
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-#: common/layer_id.cpp:48
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-#: common/layer_id.cpp:49
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-#: common/layer_id.cpp:50
-msgid "In18.Cu"
-msgstr "In18.Cu"
-
-#: common/layer_id.cpp:51
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-#: common/layer_id.cpp:52
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-#: common/layer_id.cpp:53
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-#: common/layer_id.cpp:54
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-#: common/layer_id.cpp:55
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-#: common/layer_id.cpp:56
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-#: common/layer_id.cpp:57
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-#: common/layer_id.cpp:58
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-#: common/layer_id.cpp:59
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-#: common/layer_id.cpp:60
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-#: common/layer_id.cpp:61
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-#: common/layer_id.cpp:62
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr "B.Cu"
-
-#: common/layer_id.cpp:66
-msgid "B.Adhesive"
-msgstr "B.Adhesive"
-
-#: common/layer_id.cpp:67
-msgid "F.Adhesive"
-msgstr "F.Adhesive"
-
-#: common/layer_id.cpp:68
-msgid "B.Paste"
-msgstr "B.Paste"
-
-#: common/layer_id.cpp:69
-msgid "F.Paste"
-msgstr "F.Paste"
-
-#: common/layer_id.cpp:70
-msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
-
-#: common/layer_id.cpp:71
-msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr "B.Mask"
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: common/layer_id.cpp:76
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-#: common/layer_id.cpp:77
-msgid "User.Comments"
-msgstr "User.Comments"
-
-#: common/layer_id.cpp:78
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-#: common/layer_id.cpp:79
-msgid "User.Eco2"
-msgstr "User.Eco2"
-
-#: common/layer_id.cpp:80
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-msgid "Margin"
-msgstr "Margin"
-
-#: common/layer_id.cpp:84
-msgid "F.Courtyard"
-msgstr "F.Courtyard"
-
-#: common/layer_id.cpp:85
-msgid "B.Courtyard"
-msgstr "B.Courtyard"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr "F.Fab"
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr "B.Fab"
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr "User.1"
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr "User.2"
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr "User.3"
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr "User.4"
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr "User.5"
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr "User.6"
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr "User.7"
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr "User.8"
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr "User.9"
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 msgid "Rescue"
 msgstr "Recupera"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 msgid "Wires"
 msgstr "Fili"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr "Bus"
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 msgid "Bus junctions"
 msgstr "Giunzioni bus"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 msgid "Junctions"
 msgstr "Giunzioni"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 msgid "Labels"
 msgstr "Etichette"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
 msgstr "Etichette globali"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
 msgstr "Etichette gerarchiche"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 msgid "Pin numbers"
 msgstr "Numeri pin"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 msgid "Pin names"
 msgstr "Nomi pin"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 msgid "Symbol references"
 msgstr "Riferimenti simboli"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 msgid "Symbol values"
 msgstr "Valori simboli"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 msgid "Symbol fields"
 msgstr "Campi simboli"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 msgid "Symbol body outlines"
 msgstr "Profili corpo simbolo"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 msgid "Symbol body fills"
 msgstr "Riempimenti corpi simboli"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
 msgstr "Testi e grafiche schema"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr "Pin"
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 msgid "Sheet borders"
 msgstr "Bordi foglio"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
 msgstr "Sfondi fogli"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 msgid "Sheet names"
 msgstr "Nomi fogli"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 msgid "Sheet fields"
 msgstr "Campi fogli"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 msgid "Sheet file names"
 msgstr "Nomi file fogli"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
 msgstr "Pin fogli"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 msgid "No-connect symbols"
 msgstr "Simboli di non connesso"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 msgid "ERC warnings"
 msgstr "Avvisi ERC"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 msgid "ERC errors"
 msgstr "Errori ERC"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Ancoraggi"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 msgid "Helper items"
 msgstr "Elementi di aiuto"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Griglia"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr "Assi"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "Sfondo"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "Puntatore"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 msgid "Highlighted items"
 msgstr "Elementi evidenziati"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 msgid "Hidden items"
 msgstr "Elementi nascosti"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 msgid "Selection highlight"
 msgstr "Evidenziazione selezione"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 msgid "Drawing sheet"
 msgstr "Foglio di disegno"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 msgid "Footprints front"
 msgstr "Impronte fronte"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 msgid "Footprints back"
 msgstr "Impronte retro"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5373,34 +5137,34 @@ msgstr "Impronte retro"
 msgid "Values"
 msgstr "Valori"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
 msgstr "Riferimenti"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 msgid "Footprint text"
 msgstr "Testo impronta"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 msgid "Hidden text"
 msgstr "Testo nascosto"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 msgid "SMD pads front"
 msgstr "Piazzole SMD fronte"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 msgid "SMD pads back"
 msgstr "Piazzole SMD retro"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 msgid "Through-hole pads"
 msgstr "Piazzole passanti"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5410,66 +5174,66 @@ msgstr "Piazzole passanti"
 msgid "Tracks"
 msgstr "Piste"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 msgid "Through vias"
 msgstr "Via passanti"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 msgid "Bl/Buried vias"
 msgstr "Via coperti/interni"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 msgid "Micro-vias"
 msgstr "Microvia"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 msgid "Via holes"
 msgstr "Fori via"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 msgid "Via hole walls"
 msgstr "Muri di fori via"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 msgid "Plated holes"
 msgstr "Fori metallizzati"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 msgid "Plated hole walls"
 msgstr "Muri di fori metallizzati"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 msgid "Non-plated holes"
 msgstr "Fori non metallizzati"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "Ratsnest"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 msgid "No-connects"
 msgstr "Non connessi"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 msgid "DRC warnings"
 msgstr "Avvisi DRC"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 msgid "DRC errors"
 msgstr "Errori DRC"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 msgid "DRC exclusions"
 msgstr "Esclusioni DRC"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 msgid "DRC marker shadows"
 msgstr "Ombre marcatori DRC"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 msgid "Grid axes"
 msgstr "Assi griglia"
 
@@ -5586,25 +5350,25 @@ msgstr "L'unità \"%s\" non finisce con \"mil\"."
 msgid "Cannot convert '%s' to double."
 msgstr "Impossibile convertire \"%s\" a double."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Impossibile aprire il file \"%s\""
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
 msgstr "Importazione file annullata dall'utente."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "Il file selezionato non è valido o potrebbe essere corrotto!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "Numero di punti non previsto in \"%s\". Trovato %d ma era previsto %d."
@@ -6935,7 +6699,6 @@ msgid "DXF Files"
 msgstr "File DXF"
 
 #: common/wildcards_and_files_ext.cpp:515
-#: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
 msgstr "File di lavoro Gerber"
 
@@ -7061,7 +6824,8 @@ msgstr "\"%s\" non è un'impronta valida."
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Parole chiave"
 
@@ -14070,12 +13834,12 @@ msgstr ""
 "foglio figlio ma non c'è una figura definita."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Impossibile leggere il file \"%s\"."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -14084,7 +13848,7 @@ msgstr ""
 "Errore nell'analisi del file Eagle. Impossibile trovare l'istanza \"%s\" "
 "anche se questa ha un riferimento nello schema."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Impossibile trovare \"%s\" nella libreria importata."
@@ -14208,19 +13972,19 @@ msgid "Library file '%s' not found."
 msgstr "File libreria \"%s\" non trovato."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "la libreria %s non contiene un simbolo di nome %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "La libreria simboli %s esiste già."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "La libreria simboli \"%s\" non può essere cancellata"
@@ -14235,7 +13999,7 @@ msgstr "La libreria simboli \"%s\" non può essere cancellata"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "fine riga non previsto"
 
@@ -15491,7 +15255,7 @@ msgstr "Indefinito!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:495 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "Genitore"
 
@@ -16674,7 +16438,7 @@ msgstr "Salva copia foglio corrente come..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Salva una copia del foglio corrente con altro nome o posizione"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16683,7 +16447,7 @@ msgstr ""
 "<b>Pin duplicato %s</b> \"%s\" in posizione <b>(%.3f, %.3f)</b> in conflitto "
 "con il pin %s%s in posizione <b>(%.3f, %.3f)</b> del convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16693,7 +16457,7 @@ msgstr ""
 "con il pin %s%s in posizione <b>(%.3f, %.3f)</b> in unità %c e %c del "
 "convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16702,7 +16466,7 @@ msgstr ""
 "<b>Pin duplicato %s</b> %s posizione <b>(%s, %s)</b> in conflitto con il pin "
 "%s%s in posizione <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16711,7 +16475,7 @@ msgstr ""
 "<b>Pin duplicato %s</b> %s posizione <b>(%s, %s)</b> in conflitto con il pin "
 "%s%s posizione <b>(%s, %s)</b> in unità %c e %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -16719,7 +16483,7 @@ msgstr ""
 "Info: <b>Pin di potenza nascosto %s</b> %s posizione <b>(%s, %s)</b> del "
 "convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16728,12 +16492,12 @@ msgstr ""
 "Info: <b>Pin di potenza nascosto %s</b> %s posizione <b>(%s, %s)</b> in "
 "unità %c del convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "Info: <b>Pin di potenza nascosto %s</b> %s posizione <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -16741,19 +16505,19 @@ msgstr ""
 "Info: <b>Pin di potenza nascosto %s</b> %s posizione <b>(%s, %s)</b> in "
 "unità %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(I pin di potenza nascosti piloteranno i loro nomi pin su ogni net connessa.)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Pin fuori griglia %s</b> %s posizione <b>(%s, %s)</b> del convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -16762,25 +16526,25 @@ msgstr ""
 "<b>Pin fuori griglia %s</b> %s posizione <b>(%s, %s)</b> in unità %c del "
 "convertito."
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Pin fuori griglia %s</b> %s posizione <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr "<b>Pin fuori griglia %s</b> %s posizione <b>(%s, %s)</b> in unità %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 msgid "No symbol issues found."
 msgstr "Nessun problema trovato sui simboli."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 msgid "Symbol Warnings"
 msgstr "Avvisi simboli"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 msgid "No datasheet defined."
 msgstr "Nessun datasheet definito."
 
@@ -18024,7 +17788,7 @@ msgstr "Evidenzia DCode %d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -21335,7 +21099,7 @@ msgid "Add Dielectric Layer"
 msgstr "Aggiungi strato dielettrico"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 msgid "Select layer to add:"
 msgstr "Selezionare strato da aggiungere:"
 
@@ -21562,6 +21326,8 @@ msgid "Yellow"
 msgstr "Giallo"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 msgid "Not specified"
 msgstr "Non specificato"
 
@@ -28054,25 +27820,25 @@ msgstr ""
 "tutti gli elementi dagli strati rimossi e non può essere annullata.\n"
 "Continuare?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "Lo strato deve avere un nome."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, c-format
 msgid "%s are forbidden in layer names."
 msgstr "%s sono proibiti nei nomi degli strati."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "Il nome strato \"signal\" è riservato."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Il nome strato '%s' è già in uso."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -28085,15 +27851,15 @@ msgstr ""
 "\n"
 "Continuare e cancellare le coppie di strati rame extra dalla scheda corrente?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr "Strati interni da cancellare"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr "Tutti gli strati definiti dall'utente sono già stati aggiunti."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 msgid "Add User-defined Layer"
 msgstr "Aggiungi strato definito dall'utente"
 
@@ -28541,6 +28307,10 @@ msgstr "Pcb_Edges"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "Contorno scheda"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+msgid "Margin"
+msgstr "Margin"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -29810,17 +29580,17 @@ msgid "They have been exported as oval pads."
 msgstr "Sono stati esportati come piazzole ovali."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Il contorno scheda non corretto. Eseguire DRC per un'analisi completa."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "Esportazione VRML fallita: impossibile aggiungere fori ai contorni."
 
@@ -30144,19 +29914,23 @@ msgstr "Scavalcamento distanze"
 msgid "Solderpaste Margin Override"
 msgstr "Scavalcamento margine pastasalda"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Scavalcamento rapporto margine pastasalda"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 msgid "Thermal Relief Width"
 msgstr "Larghezza supporti termici"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 msgid "Thermal Relief Gap"
 msgstr "Vuoto supporti termici"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+msgid "Library ID"
+msgstr "ID Libreria"
+
+#: pcbnew/footprint.h:219
 #, c-format
 msgid "footprint %s"
 msgstr "impronta: %s"
@@ -32472,7 +32246,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Nessun package '%s' presente nella libreria '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Poligono ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
@@ -32483,18 +32257,18 @@ msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Collegamento ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Testo ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Rettangolo ignorato dato poiché strato Eagle \"%s\" (%d) non era mappato"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Cerchio ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
@@ -33013,7 +32787,7 @@ msgstr "Il file \"%s\" non è una libreria obsoleta."
 msgid "Unknown PCad layer %u"
 msgstr "Strato C.S. %u sconosciuto"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:765
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad supporta solamente 32 strati segnale."
 
@@ -33162,28 +32936,28 @@ msgstr "Regolata: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 msgid "existing track"
 msgstr "pista esistente"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 msgid "board minimum width"
 msgstr "larghezza minima scheda"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 msgid "netclass 'Default'"
 msgstr "netclass 'Default'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 msgid "user choice"
 msgstr "scelta utente"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr "%s is malforme."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -33191,7 +32965,7 @@ msgstr ""
 "Questa zona non può essere gestita dallo sbrogliatore.\n"
 "Verificare che non sia un poligono autointersecante."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
@@ -33801,11 +33575,11 @@ msgstr "Alcune zone erano aree di regole e non sono state fuse."
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Alcuni strati zone non hanno riscontro e non sono stati fusi."
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 msgid "Some zones did not intersect and were not merged."
 msgstr "Alcune zone non intersecano e non sono state fuse."
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "Duplica zona"
 
@@ -34298,7 +34072,7 @@ msgstr "Modalità modifica piazzola. Premere %s per uscire."
 msgid "Edit pad shapes"
 msgstr "Modifica forme piazzola"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 msgid "Recombine pads"
 msgstr "Ricombina piazzole"
 
@@ -36673,6 +36447,11 @@ msgstr "Esecuzione riempimento poligoni..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] caricamento fallito: riga in ingresso troppo lunga\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertitore immagini KiCad"
@@ -36681,9 +36460,10 @@ msgstr "Convertitore immagini KiCad"
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Crea un componente da una bitmap per l'uso con KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36697,9 +36477,10 @@ msgstr "Strumento di disegno elettrico"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editor di schemi elettrici indipendente di KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -36709,9 +36490,9 @@ msgstr "Visualizzatore file Gerber"
 msgid "View Gerber files"
 msgstr "Visualizza file Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36726,6 +36507,10 @@ msgstr "Suite EDA"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite per la progettazione di schemi elettrici e circuiti stampati"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calcolatrice per C.S. KiCad"
@@ -36733,6 +36518,11 @@ msgstr "Calcolatrice per C.S. KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calcolatrice per vari calcoli relativi ai circuiti elettrici"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -36745,10 +36535,6 @@ msgstr "Progettazione C.S."
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor di C.S. autonomo di KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36783,22 +36569,191 @@ msgstr "Editor di C.S. KiCad"
 msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-msgid "Gerber file"
-msgstr "File Gerber"
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:26
-msgid "Excellon drill file"
-msgstr "File forature Excellon"
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
 
-#: resources/linux/mime/kicad-kicad.xml.in:5
-msgid "KiCad Project"
-msgstr "Progetto KiCad"
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
 
-#: resources/linux/mime/kicad-kicad.xml.in:12
-msgid "KiCad Schematic"
-msgstr "Schema KiCad"
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
 
-#: resources/linux/mime/kicad-kicad.xml.in:27
-msgid "KiCad Printed Circuit Board"
-msgstr "Circuito stampato KiCad"
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "In18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B.Adhesive"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F.Adhesive"
+
+#~ msgid "B.Paste"
+#~ msgstr "B.Paste"
+
+#~ msgid "F.Paste"
+#~ msgstr "F.Paste"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Silkscreen"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F.Silkscreen"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "User.Comments"
+
+#~ msgid "User.Eco1"
+#~ msgstr "User.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "User.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F.Courtyard"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B.Courtyard"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#~ msgid "User.9"
+#~ msgstr "User.9"
+
+#~ msgid "Gerber file"
+#~ msgstr "File Gerber"
+
+#~ msgid "Excellon drill file"
+#~ msgstr "File forature Excellon"
+
+#~ msgid "KiCad Project"
+#~ msgstr "Progetto KiCad"
+
+#~ msgid "KiCad Schematic"
+#~ msgstr "Schema KiCad"
+
+#~ msgid "KiCad Printed Circuit Board"
+#~ msgstr "Circuito stampato KiCad"
