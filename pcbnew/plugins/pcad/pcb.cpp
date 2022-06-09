@@ -102,6 +102,9 @@ PCB::PCB( BOARD* aBoard ) :
     m_LayersMap[3].KiCadLayer  = Eco2_User;
     m_LayersMap[6].KiCadLayer  = F_SilkS;
     m_LayersMap[7].KiCadLayer  = B_SilkS;
+
+    m_mappedBottom = false;
+    m_mappedTop = false;
 }
 
 
@@ -454,7 +457,7 @@ void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
 
 int PCB::FindLayer( const wxString& aLayerName ) const
 {
-    for( int i = 0; i < (int) m_layersStackup.GetCount(); ++i )
+    for( int i = 0; i < (int) m_layersStackup.size(); ++i )
     {
         if( m_layersStackup[i] == aLayerName )
             return i;
@@ -492,10 +495,12 @@ void PCB::MapLayer( XNODE* aNode )
     else if( lName == wxT( "TOP" ) )
     {
         KiCadLayer = F_Cu;
+        m_mappedTop = true;
     }
     else if( lName == wxT( "BOTTOM" ) )
     {
         KiCadLayer = B_Cu;
+        m_mappedBottom = true;
     }
     else if( lName == wxT( "BOT MASK" ) )
     {
@@ -524,11 +529,15 @@ void PCB::MapLayer( XNODE* aNode )
         if( layernum == -1 )
             KiCadLayer = Dwgs_User;    // default
         else
-#if 0 // was:
-            KiCadLayer = FIRST_COPPER_LAYER + m_layersStackup.GetCount() - 1 - layernum;
-#else
+            // Account for ordering (leave room for F.Cu and B.Cu
+            // TODO: Add layer mapping widget
+            if( !m_mappedTop )
+                ++layernum;
+
+            if( m_mappedBottom )
+                --layernum;
+
             KiCadLayer = ToLAYER_ID( layernum );
-#endif
     }
 
     if( FindNode( aNode, wxT( "layerNum" ) ) )
@@ -749,7 +758,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                     {
                         aNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
-                        m_layersStackup.Add( layerName );
+                        m_layersStackup.emplace_back( layerName );
 
                         if( m_layersStackup.size() > 32 )
                             THROW_IO_ERROR( _( "KiCad only supports 32 signal layers." ) );
@@ -935,7 +944,7 @@ void PCB::AddToBoard()
     int i;
     PCB_NET* net;
 
-    m_board->SetCopperLayerCount( m_layersStackup.GetCount() );
+    m_board->SetCopperLayerCount( m_layersStackup.size() );
 
     for( i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {

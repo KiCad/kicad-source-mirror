@@ -83,7 +83,9 @@ private:
     double GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const;
     void GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
 
-    wxArrayString   m_layersStackup;
+    std::vector<wxString>   m_layersStackup;
+    bool                    m_mappedTop;
+    bool                    m_mappedBottom;
 };
 
 } // namespace PCAD2KICAD
