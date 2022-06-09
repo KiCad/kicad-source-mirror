@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-06-05 23:52+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2022-06-11 16:18+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -24277,7 +24277,7 @@ msgstr "Footprint entsperren"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Lock footprint"
-msgstr "Footprints sperren"
+msgstr "Footprint sperren"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:197
 msgid "Move and Place"
