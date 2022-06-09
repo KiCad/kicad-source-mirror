@@ -123,6 +123,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::restartMove );
             }
         }
+        else
+        {
+            // The tool hotkey is interpreted as a click when already dragging/moving
+            m_toolMgr->RunAction( ACTIONS::cursorClick );
+        }
 
         return 0;
     }
@@ -387,7 +392,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 splitMoves.emplace_back( VECTOR2I( delta.x + m_moveOffset.x, 0 ) );
             }
             else
+            {
                 splitMoves.emplace_back( VECTOR2I( delta.x, 0 ) );
+            }
 
             if( alg::signbit( m_moveOffset.y ) != alg::signbit( ( m_moveOffset + delta ).y ) )
             {
@@ -395,7 +402,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 splitMoves.emplace_back( VECTOR2I( 0, delta.y + m_moveOffset.y ) );
             }
             else
+            {
                 splitMoves.emplace_back( VECTOR2I( 0, delta.y ) );
+            }
 
 
             m_moveOffset += delta;

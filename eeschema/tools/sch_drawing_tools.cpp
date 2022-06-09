@@ -214,6 +214,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = symbol
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -228,7 +233,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( symbol && evt->IsMoveTool() )
             {
@@ -255,7 +260,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             if( !symbol )
             {
@@ -466,6 +471,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         setCursor();
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = image
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -486,7 +496,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( image && evt->IsMoveTool() )
             {
@@ -513,7 +523,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             if( !image )
             {
@@ -1146,6 +1156,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
         controls->ForceCursorPosition( true, cursorPos );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = item
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -1160,7 +1175,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( item && evt->IsMoveTool() )
             {
@@ -1190,7 +1205,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             // First click creates...
             if( !item )
@@ -1457,6 +1472,11 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = item
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             if( item )
@@ -1469,7 +1489,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( item && evt->IsMoveTool() )
             {
@@ -1531,6 +1551,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsClick( BUT_LEFT )
                         || evt->IsDblClick( BUT_LEFT )
+                        || isSyntheticClick
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
             if( evt->IsDblClick( BUT_LEFT )
@@ -1656,6 +1677,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = sheet
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -1670,7 +1696,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( sheet && evt->IsMoveTool() )
             {
@@ -1739,6 +1765,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
         else if( sheet && ( evt->IsClick( BUT_LEFT )
                          || evt->IsDblClick( BUT_LEFT )
+                         || isSyntheticClick
                          || evt->IsAction( &EE_ACTIONS::finishSheet ) ) )
         {
             m_view->ClearPreview();

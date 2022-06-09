@@ -74,6 +74,10 @@ private:
     STROKE_PARAMS     m_lastStroke;
     bool              m_drawSpecificConvert;
     bool              m_drawSpecificUnit;
+
+    ///< Re-entrancy guards
+    bool              m_inDrawShape;
+    bool              m_inTwoClickPlace;
 };
 
 #endif /* SYMBOL_EDITOR_DRAWING_TOOLS_H */

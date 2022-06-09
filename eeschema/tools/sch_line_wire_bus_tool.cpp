@@ -630,7 +630,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     while( TOOL_EVENT* evt = Wait() )
     {
         LINE_MODE currentMode = (LINE_MODE) m_frame->eeconfig()->m_Drawing.line_mode;
-        bool twoSegments = currentMode != LINE_MODE::LINE_MODE_FREE;
+        bool      twoSegments = currentMode != LINE_MODE::LINE_MODE_FREE;
+
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = ( segment || m_busUnfold.in_progress )
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( aTool ) == 0;
 
         setCursor();
         grid.SetMask( GRID_HELPER::ALL );
@@ -656,8 +661,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         if( currentMode != lastMode )
         {
             // Need to delete extra segment if we have one
-            if( currentMode == LINE_MODE::LINE_MODE_FREE && m_wires.size() >= 2
-                && segment != nullptr )
+            if( segment && currentMode == LINE_MODE::LINE_MODE_FREE && m_wires.size() >= 2 )
             {
                 m_wires.pop_back();
                 m_selectionTool->RemoveItemFromSel( segment );
@@ -667,7 +671,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 segment->SetEndPoint( cursorPos );
             }
             // Add a segment so we can move orthogonally/45
-            else if( lastMode == LINE_MODE::LINE_MODE_FREE && segment )
+            else if( segment && lastMode == LINE_MODE::LINE_MODE_FREE )
             {
                 segment->SetEndPoint( cursorPos );
 
@@ -682,7 +686,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
             lastMode = currentMode;
         }
-
 
         //------------------------------------------------------------------------
         // Handle cancel:
@@ -701,7 +704,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( segment || m_busUnfold.in_progress )
             {
@@ -744,7 +747,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         //------------------------------------------------------------------------
         // Handle click:
         //
-        else if( evt->IsClick( BUT_LEFT ) || ( segment && evt->IsDblClick( BUT_LEFT ) ) )
+        else if( evt->IsClick( BUT_LEFT )
+                || ( segment && evt->IsDblClick( BUT_LEFT ) )
+                || isSyntheticClick )
         {
             // First click when unfolding places the label and wire-to-bus entry
             if( m_busUnfold.in_progress && !m_busUnfold.label_placed )

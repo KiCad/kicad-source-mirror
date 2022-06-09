@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <ee_actions.h>
-#include <bitmaps.h>
 #include <eda_item.h>
 #include <wx/log.h>
 #include "symbol_editor_move_tool.h"
@@ -103,8 +102,15 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                                 : m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
-    if( !m_frame->IsSymbolEditable() || selection.Empty() || m_moveInProgress )
+    if( !m_frame->IsSymbolEditable() || selection.Empty() )
         return 0;
+
+    if( m_moveInProgress )
+    {
+        // The tool hotkey is interpreted as a click when already moving
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        return 0;
+    }
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

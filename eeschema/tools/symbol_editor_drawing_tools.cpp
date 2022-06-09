@@ -50,7 +50,9 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
         m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_drawSpecificConvert( true ),
-        m_drawSpecificUnit( false )
+        m_drawSpecificUnit( false ),
+        m_inDrawShape( false ),
+        m_inTwoClickPlace( false )
 {
 }
 
@@ -77,6 +79,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     KICAD_T type = aEvent.Parameter<KICAD_T>();
     auto*   settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     auto*   pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
+
+    if( m_inTwoClickPlace )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inTwoClickPlace );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
@@ -137,6 +144,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         cursorPos = grid.Align( controls->GetMousePosition() );
         controls->ForceCursorPosition( true, cursorPos );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = item
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -151,7 +163,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( item && evt->IsMoveTool() )
             {
@@ -181,7 +193,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
             LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
@@ -318,6 +330,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     LIB_SHAPE*              item = nullptr;
     bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
 
+    if( m_inDrawShape )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawShape );
+
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
@@ -358,6 +375,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = item
+                                && evt->IsActivate() && evt->HasPosition()
+                                && evt->GetCommandStr().get().compare( tool ) == 0;
+
         if( evt->IsCancelInteractive() )
         {
             if( item )
@@ -370,7 +392,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsActivate() )
+        else if( evt->IsActivate() && !isSyntheticClick )
         {
             if( item )
                 cleanup();
@@ -434,7 +456,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_selectionTool->AddItemToSel( item );
         }
-        else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+        else if( item && ( evt->IsClick( BUT_LEFT )
+                        || evt->IsDblClick( BUT_LEFT )
+                        || isSyntheticClick
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
             if( symbol != m_frame->GetCurSymbol() )
