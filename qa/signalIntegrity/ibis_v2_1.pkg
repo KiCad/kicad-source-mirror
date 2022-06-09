@@ -1,0 +1,110 @@
+[IBIS Ver]      2.1  |Let's test a comment      
+[Comment char]  |_char 
+[File name]     ibis_v2_1.pkg
+[File Rev]      1.0  #Let's test a comment  
+[Date]          26/08/2021 
+[Source]        This is the
+                source for the files
+[Notes]         We can have some
+                Notes 
+[Copyright]
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+[Define Package Model]     QFN4
+[Manufacturer]  Kicad
+[OEM]           Kicad Packaging Co.
+[Description]   A 4 pin QFN, really ?
+[Number of Pins]   4
+[Pin Numbers]
+A1
+A2
+A3
+A4
+
+[Model Data]
+|
+| The resistance matrix for this package has no coupling
+|
+[Resistance Matrix]     Banded_matrix
+[Bandwidth]             3
+[Row]   1
+1 2 1
+[Row]   2
+2 3 2
+[Row]   3
+4 5 4
+[Row]   4
+5 6 5
+|
+| The inductance matrix has loads of coupling
+|
+[Inductance Matrix]     Full_matrix
+[Row]   1
+3.04859e-07      4.73185e-08      1.3428e-08
+1.74022e-07 
+[Row]   2
+3.04859e-07      4.73185e-08      1.3428e-08  
+[Row]   3
+3.04859e-07      4.73185e-08 
+[Row]   4
+3.04859e-07 
+|
+| The capacitance matrix has sparse coupling
+|
+[Capacitance Matrix]    Sparse_matrix
+[Row]   1
+1       2.48227e-10
+2       -1.56651e-11
+5       -9.54158e-11
+6       -7.15684e-12
+[Row]   2
+2       2.51798e-10
+3       -1.56552e-11
+5       -6.85199e-12
+6        -9.0486e-11
+7       -6.82003e-12
+[Row]   3
+3       2.51798e-10
+4       -1.56651e-11
+6       -6.82003e-12
+7        -9.0486e-11
+8       -6.85199e-12
+[Row]   4
+4       2.48227e-10
+7       -7.15684e-12
+8       -9.54158e-11
+[Row]   5
+5       1.73542e-10
+6       -3.38247e-11
+[Row]   6
+6       1.86833e-10
+7       -3.27226e-11
+[Row]   7
+7       1.86833e-10
+8       -3.38247e-11
+[Row]   8
+8       1.73542e-10
+|
+[End Model Data]
+[End Package Model]
+[END]

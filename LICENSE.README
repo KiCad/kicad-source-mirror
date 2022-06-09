@@ -34,5 +34,7 @@ Licensed in the public domain:
 - lemon in thirdparty/lemon
 Licensed under CC BY-SA 4.0:
 - All the demo files provided in demos/*
+Licensed under clause-3 BSD:
+- ibis / kibis files in pcbnew/signalIntegrity
 Licensed under GPLv3 (or later):
 - All remaining code not listed above

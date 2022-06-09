@@ -1,0 +1,46 @@
+[IBIS Ver]      3.2  |Let's test a comment      
+[Comment char]  |_char 
+[File name]     ibis_v2_1.pkg
+[File Rev]      1.0  #Let's test a comment  
+[Date]          26/08/2021 
+[Source]        This is the
+                source for the files
+[Notes]         We can have some
+                Notes 
+[Copyright]
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+[Define Package Model]     QFN4
+[Manufacturer]  Kicad
+[OEM]           Kicad Packaging Co.
+[Description]   A 4 pin QFN, really ?
+[Number Of Sections] 2
+[Number of Pins]   4
+[Pin Numbers]
+A1
+A2
+A3
+A4
+
+[End Package Model]
+[END]

@@ -47,3 +47,6 @@ add_subdirectory( unittests )
 # Utility/debugging/profiling programs
 add_subdirectory( tools )
 
+if( KICAD_SIGNAL_INTEGRITY )
+    add_subdirectory( signalIntegrity )
+endif()

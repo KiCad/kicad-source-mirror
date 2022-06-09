@@ -1,0 +1,419 @@
+[IBIS Ver]      3.2  |Let's test a comment      
+[Comment char]  #_char 
+[File name]     ibis_v2_1.pkg
+[File Rev]      1.0  #Let's test a comment  
+[Date]          26/08/2021 
+[Source]        This is the
+                source for the files
+[Notes]         We can have some
+                Notes 
+[Copyright]
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+[Disclaimer] This is NOT a valid component.
+[Component]     Virtual
+[Manufacturer]  KiCad    
+[Package]      
+R_pkg           1m              0.8m            2m 
+L_pkg           1m              0.8m            2m
+C_pkg           1m              0.8m            2m
+
+[Pin]   signal_name     model_name      R_pin   L_pin   C_pin             
+  1     VCC             POWER           1m      0.8m    2m            
+  2     GND             GND             1m      0.8m    2m               
+  3     X               Input           1m      0.8m    2m
+  4     Y               Ouput           1m      0.8m    2m
+  5     YN              Ouput           1m      0.8m    2m
+  6     Y               Ouput           1m      0.8m    2m
+  7     YN              Ouput           1m      0.8m    2m
+
+[Package Model]     QS-SMT-cer-8-pin-pkgs
+[Pin Mapping]  pulldown_ref     pullup_ref   gnd_clamp_ref  power_clamp_ref
+1              GNDBUS           NC
+2              NC               PWRBUS 
+3              GNDBUS           PWRBUS
+4              GNDBUS           PWRBUS       GNDBUS           PWRBUS
+5              GNDBUS           PWRBUS       GNDBUS           PWRBUS
+6              GNDBUS           PWRBUS       GNDBUS           PWRBUS
+7              GNDBUS           PWRBUS       GNDBUS           PWRBUS
+
+[Diff Pin]  inv_pin  vdiff  tdelay_typ tdelay_min tdelay_max
+#
+ 4           5       150mV    -1ns       0ns      -2ns 
+ 6           7       150mV    -1ns       0ns      -2ns 
+
+[Series Pin Mapping]  pin_2    model_name      function_table_group
+|
+  4                    5       PinSeries       1    
+  6                    7       PinSeries       2   
+
+[Series Switch Groups]
+On 4 5 /          
+Off 4 5 /        
+On 4 5 6 7 /          
+Off 4 5 6 7 /            
+
+
+[Model]         Input
+Model_type      Input
+Polarity        Non-Inverting
+Enable          Active-High
+Vinl = 0.8V                            
+Vinh = 2.0V          
+Vmeas= 1.5V  
+Cref =50pF   
+Rref=500   
+Vref = 0         
+
+C_comp          10.0pF          8.0pF          15.0pF 
+
+[Model Spec]
+|   Subparameter          typ        min        max
+Vinh                      3.5        3.15       3.85  
+Vinl                      1.5        1.35       1.65   
+Vinh+                     2.0        NA         NA      | Overrides the
+Vinh-                     1.6        NA         NA      | thresholds
+Vinl+                     1.1        NA         NA 
+Vinl-                     0.6        NA         NA      | All 4 are required
+S_overshoot_high          5.5        5.0        6.0     | Static overshoot
+S_overshoot_low          -0.5        NA         NA
+D_overshoot_high          6.0        5.5        6.5     | Dynamic overshoot
+D_overshoot_low          -1.0       -1.0       -1.0    
+D_overshoot_time          20n        20n        20n     | & static overshoot
+Pulse_high                3V         NA         NA      | Pulse immunity
+Pulse_low                 0          NA         NA      | requires
+Pulse_time                3n         NA         NA      | Pulse_time
+Vmeas                     3.68       3.18       4.68    | A 5 volt PECL
+
+[Add Submodel]     
+| Submodel_name        Mode
+Bus_Hold_1             Non-Driving 
+Dynamic_clamp_1        All 
+
+[Driver Schedule]
+| Model_name     Rise_on_dly  Rise_off_dly  Fall_on_dly  Fall_off_dly
+  MODEL_OUT      0.0ns        NA            0.0ns        NA
+  M_O_SOURCE1     0.5ns        NA            0.5ns        NA
+|              low (high-Z) to high        high to low (high-Z)
+  M_O_SOURCE2    0.5n         1.5n          NA           NA
+|               low to high to low           low (high-Z)
+  M_O_DRAIN1     1.0n         NA            1.5n         NA
+|              low to high (high-Z)        high (high-Z) to low
+  M_O_DRAIN2     NA           NA            1.5n         2.0n
+|                  high (high-Z)           high to low to high 
+
+[Voltage range]         5.0V            4.5V            5.5V 
+[Temperature Range]     27.0            -50             130.0
+[Pullup Reference]      5.0V            4.5V            5.5V
+[Pulldown Reference]    0V              0V              0V
+[POWER Clamp Reference] 5.0V            4.5V            5.5V
+[GND Clamp Reference]   0V              0V              0V
+
+
+[TTgnd]         10n             12n             9n
+[TTpower]       12n             NA              NA
+
+[Pulldown]
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m    -40.0m    -60.0m 
+   0.0V      0         0         0
+   5.0V      50.0m     40.0m     60.0m 
+[Pullup]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     40.0m     60.0m 
+   0.0V      0         0         0
+   5.0V     -50.0m    -40.0m    -60.0m 
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+
+[Rgnd]          1500hm          100Ohm          3600
+[Rpower]        150Ohm          100Ohm          NA
+[Rac]           30Ohm           NA              NA
+[Cac]           50pF            NA              NA
+
+[On]
+| variable      R(typ)          R(min)          R(max) 
+[R Series]      8ohm            6ohm            12ohm 
+| 
+| variable      L(typ)          L(min)          L(max) 
+[L Series]      5nH             NA              NA 
+| variable      R(typ)          R(min)          R(max) 
+[Rl Series]     4ohm            NA              NA 
+| 
+| variable      C(typ)          C(min)          C(max)  | The other elements 
+[C Series]      50pF            NA              NA      | are 0 impedance 
+[Off]
+| variable      R(typ)          R(min)          R(max) 
+[R Series]      8ohm            6ohm            12ohm 
+| 
+| variable      L(typ)          L(min)          L(max) 
+[L Series]      5nH             NA              NA 
+| variable      R(typ)          R(min)          R(max) 
+[Rl Series]     4ohm            NA              NA 
+| 
+| variable      C(typ)          C(min)          C(max)  | The other elements 
+[C Series]      50pF            NA              NA      | are 0 impedance 
+
+[Series Current]
+|  Voltage   I(typ)    I(min)    I(max)
+   -5.0V  -3900.0m  -3800.0m  -4000.0m
+   -0.7V    -80.0m    -75.0m    -85.0m
+   -0.6V    -22.0m    -20.0m    -25.0m
+   -0.5V     -2.4m     -2.0m     -2.9m
+   -0.4V      0.0m      0.0m      0.0m
+    5.0V      0.0m      0.0m      0.0m
+
+[Series MOSFET] 
+Vds = 1.0   
+|  Voltage   I(typ)    I(min)    I(max) 
+    5.0V    257.9m     153.3m    399.5m    | Defines the Ids current as a 
+    4.0V    203.0m     119.4m    317.3m    | function of Vtable, for Vds = 1.0 
+    3.0V    129.8m      74.7m    205.6m  
+    2.0V     31.2m      16.6m     51.0m 
+    1.0V     52.7p      46.7p     56.7p 
+    0.0V      0.0p       0.0p      0.0p
+
+
+[Off]
+| variable      R(typ)          R(min)          R(max) 
+[R Series]      8ohm            6ohm            12ohm 
+| 
+| variable      L(typ)          L(min)          L(max) 
+[L Series]      5nH             NA              NA 
+| variable      R(typ)          R(min)          R(max) 
+[Rl Series]     4ohm            NA              NA 
+| 
+| variable      C(typ)          C(min)          C(max)  | The other elements 
+[C Series]      50pF            NA              NA      | are 0 impedance 
+[Off]
+| variable      R(typ)          R(min)          R(max) 
+[R Series]      8ohm            6ohm            12ohm 
+| 
+| variable      L(typ)          L(min)          L(max) 
+[L Series]      5nH             NA              NA 
+| variable      R(typ)          R(min)          R(max) 
+[Rl Series]     4ohm            NA              NA 
+| 
+| variable      C(typ)          C(min)          C(max)  | The other elements 
+[C Series]      50pF            NA              NA      | are 0 impedance 
+
+[Series Current]
+|  Voltage   I(typ)    I(min)    I(max)
+   -5.0V  -3900.0m  -3800.0m  -4000.0m
+   -0.7V    -80.0m    -75.0m    -85.0m
+   -0.6V    -22.0m    -20.0m    -25.0m
+   -0.5V     -2.4m     -2.0m     -2.9m
+   -0.4V      0.0m      0.0m      0.0m
+    5.0V      0.0m      0.0m      0.0m
+
+[Ramp]
+# variable      typ             min             max 
+dV/dt_r         3.0/2n          2.8/3n          3.2/1n 
+dV/dt_f         3.0/2n          2.8/3n          3.2/1n 
+
+[Rising Waveform]
+R_fixture = 500
+V_fixture = 5.0
+C_fixture = 10p
+L_fixture = 2n
+C_dut = 7p
+R_dut = 1m
+L_dut = 1n
+#Time     V(typ)     V(min)    V(max)
+ 0.0ns     0         0         0
+ 1.0ns     1         0.5       1.5
+ 2.0ns     2         1         3
+#
+[Falling Waveform]
+R_fixture = 50
+V_fixture = 0
+#Time     V(typ)     V(min)    V(max)
+ 0.0ns     2         1         NA
+ 1.0ns     1         0.5       NA
+ 2.0ns     0         0         NA
+
+[Submodel]      DMySubmodel
+
+Submodel_type   Dynamic_clamp
+
+[Pulldown]
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m    -40.0m    -60.0m 
+   0.0V      0         0         0
+   5.0V      50.0m     40.0m     60.0m 
+[Pullup]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     40.0m     60.0m 
+   0.0V      0         0         0
+   5.0V     -50.0m    -40.0m    -60.0m 
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+   
+[Ramp]
+# variable      typ             min             max 
+dV/dt_r         3.0/2n          2.8/3n          3.2/1n 
+dV/dt_f         3.0/2n          2.8/3n          3.2/1n 
+
+[Rising Waveform]
+R_fixture = 500
+V_fixture = 5.0
+C_fixture = 10p
+L_fixture = 2n
+C_dut = 7p
+R_dut = 1m
+L_dut = 1n
+#Time     V(typ)     V(min)    V(max)
+ 0.0ns     0         0         0
+ 1.0ns     1         0.5       1.5
+ 2.0ns     2         1         3
+#
+[Falling Waveform]
+R_fixture = 50
+V_fixture = 0
+#Time     V(typ)     V(min)    V(max)
+ 0.0ns     2         1         NA
+ 1.0ns     1         0.5       NA
+ 2.0ns     0         0         NA
+ 
+
+[Submodel Spec]
+|   Subparameter          typ        min        max
+V_trigger_r               3.1        2.4        3.7 | Low to high transition
+                                                    | triggers the turn on 
+                                                    | process of the pullup
+V_trigger_f             -10.0      -10.0      -10.0 | Not used, so trigger
+                                                    | voltages are set out 
+                                                    | of range
+Off_delay                 5n         6n         4n  | Time from rising edge
+                                                    | trigger at which the
+                                                    | pullup turned off
+
+[GND Pulse Table]                                    | GND Clamp offset table
+|    Time          V(typ)       V(min)        V(max)
+|
+       0             0            0             0
+    1e-9             0            0             0
+    2e-9           0.9          0.8           1.0
+   10e-9           0.9          0.8           1.0
+   11e-9             0            0             0 
+
+[GND Clamp]                                          | Table to be offset
+|
+|  Voltage        I(typ)       I(min)        I(max)
+|
+    -5.000     -3.300e+01    -3.000e+01    -3.500e+01
+    -4.000     -2.300e+01    -2.200e+01    -2.400e+01
+    -3.000     -1.300e+01    -1.200e+01    -1.400e+01
+    -2.000     -3.000e+00    -2.300e+00    -3.700e+00
+    -1.900     -2.100e+00    -1.500e+00    -2.800e+00
+    -1.800     -1.300e+00    -8.600e-01    -1.900e+00
+    -1.700     -6.800e-01    -4.000e-01    -1.100e+00
+    -1.600     -2.800e-01    -1.800e-01    -5.100e-01
+    -1.500     -1.200e-01    -9.800e-02    -1.800e-01
+    -1.400     -7.500e-02    -7.100e-02    -8.300e-02
+    -1.300     -5.750e-02    -5.700e-02    -5.900e-02
+    -1.200     -4.600e-02    -4.650e-02    -4.550e-02
+    -1.100     -3.550e-02    -3.700e-02    -3.450e-02
+    -1.000     -2.650e-02    -2.850e-02    -2.500e-02
+    -0.900     -1.850e-02    -2.100e-02    -1.650e-02
+    -0.800     -1.200e-02    -1.400e-02    -9.750e-03
+    -0.700     -6.700e-03    -8.800e-03    -4.700e-03
+    -0.600     -3.000e-03    -4.650e-03    -1.600e-03
+    -0.500     -9.450e-04    -1.950e-03    -3.650e-04
+    -0.400     -5.700e-05    -2.700e-04    -5.550e-06
+    -0.300     -1.200e-06    -1.200e-05    -5.500e-08
+    -0.200     -3.000e-08    -5.000e-07     0.000e+00
+    -0.100      0.000e+00     0.000e+00     0.000e+00
+     0.000      0.000e+00     0.000e+00     0.000e+00
+     5.000      0.000e+00     0.000e+00     0.000e+00
+|
+[POWER Pulse Table]                                 | POWER Clamp offset table                               |
+|    Time          V(typ)       V(min)        V(max)
+|
+       0             0            0             0
+    1e-9             0            0             0
+    2e-9          -0.9         -1.0          -0.8
+   10e-9          -0.9         -1.0          -0.8
+   11e-9             0            0             0 
+|
+[POWER Clamp]                                       | Table to be offset
+|
+|  Voltage        I(typ)        I(min)        I(max)
+|
+    -5.000      1.150e+01     1.100e+01     1.150e+01
+    -4.000      7.800e+00     7.500e+00     8.150e+00
+    -3.000      4.350e+00     4.100e+00     4.700e+00
+    -2.000      1.100e+00     8.750e-01     1.300e+00
+    -1.900      8.000e-01     6.050e-01     1.000e+00
+    -1.800      5.300e-01     3.700e-01     7.250e-01
+    -1.700      2.900e-01     1.800e-01     4.500e-01
+    -1.600      1.200e-01     6.850e-02     2.200e-01
+    -1.500      3.650e-02     2.400e-02     6.900e-02
+    -1.400      1.200e-02     1.100e-02     1.600e-02
+    -1.300      6.300e-03     6.650e-03     6.100e-03
+    -1.200      4.200e-03     4.750e-03     3.650e-03
+    -1.100      2.900e-03     3.500e-03     2.350e-03
+    -1.000      1.900e-03     2.450e-03     1.400e-03
+    -0.900      1.150e-03     1.600e-03     7.100e-04
+    -0.800      5.500e-04     9.150e-04     2.600e-04
+    -0.700      1.200e-04     4.400e-04     5.600e-05
+    -0.600      5.400e-05     1.550e-04     1.200e-05
+    -0.500      1.350e-05     5.400e-05     1.300e-06
+    -0.400      8.650e-07     7.450e-06     4.950e-08
+    -0.300      6.250e-08     7.550e-07     0.000e+00
+    -0.200      0.000e+00     8.400e-08     0.000e+00
+    -0.100      0.000e+00     0.000e-08     0.000e+00
+     0.000      0.000e+00     0.000e+00     0.000e+00
+
+
+[END]

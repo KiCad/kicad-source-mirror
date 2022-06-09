@@ -1,0 +1,89 @@
+[IBIS Ver]      1.1  |Let's test a comment      
+[Comment char]  #_char 
+[File name]     ibis_v1_1.ibs 
+[File Rev]      1.0  #Let's test a comment  
+[Date]          26/08/2021 
+[Source]        This is the
+                source for the files
+[Notes]         We can have some
+                Notes 
+[Disclaimer]
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+[Component]     Virtual
+[Manufacturer]  KiCad    
+[Package]     
+R_pkg           1m              0.8m            NA 
+L_pkg           1m              NA              NA
+C_pkg           1m              NA            NA
+
+[Pin]   signal_name     model_name      R_pin   L_pin   C_pin             
+  1     VCC             POWER           1m      0.8m    NA            
+  2     GND             GND             1m      NA      2m               
+  3     X               Input           1m      NA      NA
+  4     Y               Ouput           1m      0.8m    2m
+
+[Model]         Input
+Model_type      Input
+Polarity        Non-Inverting
+Enable          Active-High
+Vinl = 0.8V                            
+Vinh = 2.0V                    
+C_comp          10.0pF          8.0pF          15.0pF 
+
+[Voltage range]         5.0V            4.5V            5.5V 
+[Pulldown]
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m    -40.0m    -60.0m 
+   0.0V      0         0         0
+   5.0V      50.0m     40.0m     60.0m 
+[Pullup]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     40.0m     60.0m 
+   0.0V      0         0         0
+   5.0V     -50.0m    -40.0m    -60.0m 
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+
+[Ramp]
+# variable      typ             min             max 
+dV/dt_r         3.0/2n          2.8/3n          NA 
+dV/dt_f         3.0/2n          2.8/3n          3.2/1n 
+
+[END]

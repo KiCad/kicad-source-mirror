@@ -96,6 +96,10 @@ option( KICAD_SANITIZE_THREADS
     "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
+option( KICAD_SIGNAL_INTEGRITY
+    "Build tools for signal integrity analysis ( default ON )"
+    ON )
+
 option( KICAD_STDLIB_DEBUG
     "Build KiCad with libstdc++ debug flags enabled."
     OFF )
@@ -509,6 +513,11 @@ endif()
 if( KICAD_USE_OCC )
     add_definitions( -DKICAD_USE_OCC )
 endif()
+
+if( KICAD_SIGNAL_INTEGRITY )
+    add_definitions( -DKICAD_SIGNAL_INTEGRITY )
+endif()
+
 
 if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
     message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
