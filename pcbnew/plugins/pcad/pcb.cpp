@@ -103,9 +103,6 @@ PCB::PCB( BOARD* aBoard ) :
     m_LayersMap[3].KiCadLayer  = Eco2_User;
     m_LayersMap[6].KiCadLayer  = F_SilkS;
     m_LayersMap[7].KiCadLayer  = B_SilkS;
-
-    m_mappedBottom = false;
-    m_mappedTop = false;
 }
 
 
@@ -460,7 +457,7 @@ int PCB::FindLayer( const wxString& aLayerName ) const
 {
     for( LAYER_NUM i = 0; i < (int)m_layersStackup.size(); ++i )
     {
-        if( m_layersStackup[i] == aLayerName )
+        if( m_layersStackup[i].first == aLayerName )
             return i;
     }
 
@@ -496,12 +493,10 @@ void PCB::MapLayer( XNODE* aNode )
     else if( lName == wxT( "TOP" ) )
     {
         KiCadLayer = F_Cu;
-        m_mappedTop = true;
     }
     else if( lName == wxT( "BOTTOM" ) )
     {
         KiCadLayer = B_Cu;
-        m_mappedBottom = true;
     }
     else if( lName == wxT( "BOT MASK" ) )
     {
@@ -530,14 +525,6 @@ void PCB::MapLayer( XNODE* aNode )
         if( layernum == -1 )
             KiCadLayer = Dwgs_User;    // default
         else
-            // Account for ordering (leave room for F.Cu and B.Cu
-            // TODO: Add layer mapping widget
-            if( !m_mappedTop )
-                ++layernum;
-
-            if( m_mappedBottom )
-                --layernum;
-
             KiCadLayer = ToLAYER_ID( layernum );
     }
 
@@ -751,15 +738,20 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
             {
                 if( FindNode( aNode, wxT( "layerType" ) ) )
                 {
+                    long num = -1;
+
+                    if( FindNode( aNode, wxT( "layerNum" ) ) )
+                        FindNode( aNode, wxT( "layerNum" ) )->GetNodeContent().ToLong( &num );
+
                     layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim(
                             false );
 
-                    if( layerType.IsSameAs( wxT( "Signal" ), false )
-                            || layerType.IsSameAs( wxT( "Plane" ), false ) )
+                    if( num > 0 && ( layerType.IsSameAs( wxT( "Signal" ), false )
+                            || layerType.IsSameAs( wxT( "Plane" ), false ) ) )
                     {
                         aNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
-                        m_layersStackup.emplace_back( layerName );
+                        m_layersStackup.emplace_back( layerName, num );
 
                         if( m_layersStackup.size() > 32 )
                             THROW_IO_ERROR( _( "KiCad only supports 32 signal layers." ) );
@@ -769,6 +761,16 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
             aNode = aNode->GetNext();
         }
+
+        // Ensure that the layers are properly mapped to their order with the bottom
+        // copper (layer 2 in PCAD) at the end
+        std::sort( m_layersStackup.begin(), m_layersStackup.end(),
+        [&]( const std::pair<wxString, long>& a, const std::pair<wxString, long>& b ) {
+            long lhs = a.second == 2 ? std::numeric_limits<long>::max() : a.second;
+            long rhs = b.second == 2 ? std::numeric_limits<long>::max() : b.second;
+
+            return lhs < rhs;
+        } );
     }
 
     // Layers mapping
