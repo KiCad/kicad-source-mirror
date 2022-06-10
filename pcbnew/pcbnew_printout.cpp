@@ -109,7 +109,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
     if( extractLayer == UNDEFINED_LAYER )
         layerName = _( "Multiple Layers" );
     else
-        layerName = LSET::Name( extractLayer );
+        layerName = m_board->GetLayerName( extractLayer );
 
     // In Pcbnew we can want the layer EDGE always printed
     if( m_pcbnewSettings.m_PrintEdgeCutsOnAllPages )

@@ -133,6 +133,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     setupPainter( *painter );
     setupViewLayers( *view, m_settings.m_LayerSet );
 
+    dstSettings->SetLayerName( aLayerName );
+
     VECTOR2I sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
     VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.x ),
                           milsToIU( sheetSizeMils.y ) );
