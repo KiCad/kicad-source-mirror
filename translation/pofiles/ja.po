@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-05-29 07:05+0000\n"
+"PO-Revision-Date: 2022-06-11 16:19+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -6178,7 +6178,7 @@ msgstr "基板 (PCB) で行われた変更で回路図を更新"
 #: common/tool/actions.cpp:608
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
-msgstr "設定パス..."
+msgstr "パスを設定..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit path configuration environment variables"
