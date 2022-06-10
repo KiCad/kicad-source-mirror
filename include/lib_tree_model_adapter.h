@@ -369,7 +369,7 @@ private:
      * Find any results worth highlighting and expand them, according to given criteria
      * The highest-scoring node is written to aHighScore
      */
-    void FindAndExpand( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc,
+    void Find( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc,
                         LIB_TREE_NODE** aHighScore );
 
     /**

@@ -268,7 +268,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
             wxDataViewItem parent = GetParent( item );
 
             if( parent.IsOk() )
-                item = parent;
+                m_widget->EnsureVisible( parent );
         }
 
         m_widget->EnsureVisible( item );
@@ -509,7 +509,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
+void LIB_TREE_MODEL_ADAPTER::Find( LIB_TREE_NODE& aNode,
                                             std::function<bool( const LIB_TREE_NODE* )> aFunc,
                                             LIB_TREE_NODE** aHighScore )
 {
@@ -517,14 +517,11 @@ void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
     {
         if( aFunc( &*node ) )
         {
-            wxDataViewItem item = wxDataViewItem( &*node );
-            m_widget->ExpandAncestors( item );
-
             if( !(*aHighScore) || node->m_Score > (*aHighScore)->m_Score )
                 (*aHighScore) = &*node;
         }
 
-        FindAndExpand( *node, aFunc, aHighScore );
+        Find( *node, aFunc, aHighScore );
     }
 }
 
@@ -533,13 +530,19 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
 {
     LIB_TREE_NODE* highScore = nullptr;
 
-    FindAndExpand( m_tree,
+    Find( m_tree,
                    []( LIB_TREE_NODE const* n )
                    {
                        // return leaf nodes with some level of matching
                        return n->m_Type == LIB_TREE_NODE::TYPE::LIBID && n->m_Score > 1;
                    },
                    &highScore );
+
+    if( highScore)
+    {
+        wxDataViewItem item = wxDataViewItem( highScore );
+        m_widget->ExpandAncestors( item );
+    }
 
     return highScore;
 }
@@ -552,7 +555,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowPreselect()
     if( !m_preselect_lib_id.IsValid() )
         return highScore;
 
-    FindAndExpand( m_tree,
+    Find( m_tree,
             [&]( LIB_TREE_NODE const* n )
             {
                 if( n->m_Type == LIB_TREE_NODE::LIBID && ( n->m_Children.empty() ||
@@ -566,6 +569,12 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowPreselect()
             },
             &highScore );
 
+    if( highScore)
+    {
+        wxDataViewItem item = wxDataViewItem( highScore );
+        m_widget->ExpandAncestors( item );
+    }
+
     return highScore;
 }
 
@@ -574,13 +583,19 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowSingleLibrary()
 {
     LIB_TREE_NODE* highScore = nullptr;
 
-    FindAndExpand( m_tree,
+    Find( m_tree,
                    []( LIB_TREE_NODE const* n )
                    {
                        return n->m_Type == LIB_TREE_NODE::TYPE::LIBID &&
                               n->m_Parent->m_Parent->m_Children.size() == 1;
                    },
                    &highScore );
+
+    if( highScore)
+    {
+        wxDataViewItem item = wxDataViewItem( highScore );
+        m_widget->ExpandAncestors( item );
+    }
 
     return highScore;
 }

@@ -105,9 +105,6 @@ int LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aN
     if( aNode1.m_Type != aNode2.m_Type )
         return 0;
 
-    if( aNode1.m_Score != aNode2.m_Score )
-        return aNode1.m_Score - aNode2.m_Score;
-
     if( aNode1.m_Parent != aNode2.m_Parent )
         return 0;
 
