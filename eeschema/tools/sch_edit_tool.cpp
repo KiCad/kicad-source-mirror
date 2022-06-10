@@ -1752,6 +1752,15 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             TEXT_SPIN_STYLE orientation = text->GetTextSpinStyle();
             wxString        txt         = UnescapeString( text->GetText() );
 
+            if( text->Type() == SCH_DIRECTIVE_LABEL_T )
+            {
+                // a SCH_DIRECTIVE_LABEL has no text, but it has at least one field
+                // containing the net class name
+                SCH_DIRECTIVE_LABEL* dirlabel =
+                            dynamic_cast<SCH_DIRECTIVE_LABEL*>( selection.GetItem( i ) );
+                txt = UnescapeString( dirlabel->GetFields()[0].GetText() );
+            }
+
             // There can be characters in a SCH_TEXT object that can break labels so we have to
             // fix them here.
             if( text->Type() == SCH_TEXT_T )
@@ -1783,12 +1792,33 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             // in the new text item type.
             //
             newtext->SetFlags( text->GetEditFlags() );
-            newtext->SetShape( text->GetShape() );
+
+            if( newtext->Type() == SCH_DIRECTIVE_LABEL_T )
+            {
+                // a SCH_DIRECTIVE_LABEL has at least one field containing the net class name
+                // build it:
+                SCH_DIRECTIVE_LABEL* new_dirlabel = static_cast<SCH_DIRECTIVE_LABEL*>( newtext );
+                SCH_FIELD name( position, 0, new_dirlabel, wxT( "Netclass" ) );
+                name.SetText( txt );
+                name.SetVisible( true );
+                new_dirlabel->GetFields().push_back( name );
+            }
+            else
+            {
+                // We cannot use a shape from SCH_DIRECTIVE_LABEL_T label
+                // It has no meaning for a H or G label
+                if( text->Type() == SCH_DIRECTIVE_LABEL_T )
+                    newtext->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+                else
+                    newtext->SetShape( text->GetShape() );
+            }
+
             newtext->SetTextSpinStyle( orientation );
             newtext->SetTextSize( text->GetTextSize() );
             newtext->SetTextThickness( text->GetTextThickness() );
             newtext->SetItalic( text->IsItalic() );
             newtext->SetBold( text->IsBold() );
+            newtext->AutoplaceFields( m_frame->GetScreen(), false );
 
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, text );
@@ -1988,6 +2018,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toCLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toText.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
