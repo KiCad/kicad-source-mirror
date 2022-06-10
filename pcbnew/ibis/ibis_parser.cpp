@@ -29,7 +29,7 @@
  */
 
 
-#include "ibisParser.h"
+#include "ibis_parser.h"
 #include <sstream>
 #include <iterator>
 #include <locale_io.h> // KiCad header

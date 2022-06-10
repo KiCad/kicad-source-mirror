@@ -32,7 +32,7 @@
 #ifndef KIBIS_H
 #define KIBIS_H
 
-#include "ibisParser.h"
+#include "ibis_parser.h"
 
 class KIBIS_PIN;
 class KIBIS_FILE;

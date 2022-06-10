@@ -1,4 +1,4 @@
-#include "../../pcbnew/signalIntegrity/kibis.h"
+#include "../../pcbnew/ibis/kibis.h"
 #include <wx/textfile.h>
 
 int main( void )

@@ -30,7 +30,7 @@
 
 
 #include "kibis.h"
-#include "ibisParser.h"
+#include "ibis_parser.h"
 #include <sstream>
 
 KIBIS_ANY::KIBIS_ANY( KIBIS* aTopLevel ) : IBIS_ANY( aTopLevel->m_reporter )
