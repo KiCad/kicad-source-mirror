@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-08 14:51+0000\n"
+"PO-Revision-Date: 2022-06-11 16:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5510,9 +5510,8 @@ msgid "Locked item shadow"
 msgstr "ロックされたアイテムの影"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "重複しているラベル"
+msgstr "重複しているアイテムの影"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -6396,7 +6395,7 @@ msgstr "基板 (PCB) で行われた変更で回路図を更新"
 #: common/tool/actions.cpp:613
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
-msgstr "設定パス..."
+msgstr "パスを設定..."
 
 #: common/tool/actions.cpp:613
 msgid "Edit path configuration environment variables"
@@ -7710,9 +7709,8 @@ msgid "Selection"
 msgstr "選択"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "シートの最後まで進みます。"
+msgstr "シートの最後まで進みます"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -9177,9 +9175,8 @@ msgid "Diameter:"
 msgstr "直径:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "直径を0に設定すると、回路図のジャンクションの点のサイズを使用します。"
+msgstr "直径を0に設定すると、回路図のジャンクションに点のサイズを使用します。"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
@@ -12368,13 +12365,12 @@ msgid "Symbol Annotation"
 msgstr "シンボル アノテーション"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
 msgstr "シンボルの自動アノテーション"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "シートの最後までアノテーション"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -16901,9 +16897,8 @@ msgid "Add a net label"
 msgstr "ネット ラベルを追加"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "ネットクラスフラグを追加"
+msgstr "ネットクラス指令を追加"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add a net class directive label"
@@ -17443,7 +17438,6 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "線の描画を水平方向と垂直方向に制限する"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
 msgstr "線の描画を水平、垂直、45 度単位で終わるように制限する"
 
@@ -17452,13 +17446,12 @@ msgid "Switch to next line mode"
 msgstr "次のラインモードに切り替え"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "自動調整"
+msgstr "自動的にアノテーション"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "新しいシンボルのアノテーション自動化オン・オフを切り替える"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
@@ -17498,49 +17491,44 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "回路図エディターに親シートを表示"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Navigate Up"
-msgstr "ページへナビゲート"
+msgstr "上にナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "この階層内でひとつ上のシートにナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Navigate Back"
-msgstr "ページへナビゲート"
+msgstr "後ろにナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "シートナビゲーション履歴内で先に進む"
 
 #: eeschema/tools/ee_actions.cpp:756
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "ナビゲータ"
+msgstr "先にナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:756
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "シートナビゲーション履歴内で後ろに戻る"
 
 #: eeschema/tools/ee_actions.cpp:762
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "前のレイヤー"
+msgstr "前のシート"
 
 #: eeschema/tools/ee_actions.cpp:762
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "番号を指定して前のシートに戻る"
 
 #: eeschema/tools/ee_actions.cpp:768
-#, fuzzy
 msgid "Next Sheet"
-msgstr "シートに入る"
+msgstr "次のシート"
 
 #: eeschema/tools/ee_actions.cpp:768
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "番号を指定して次のシートに移動"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Hierarchy Navigator"
@@ -17589,7 +17577,6 @@ msgid "Undo Last Segment"
 msgstr "一つ前のセグメントを元に戻す"
 
 #: eeschema/tools/ee_actions.cpp:825
-#, fuzzy
 msgid "Walks the current line back one segment."
 msgstr "現在の配線を1セグメント前に戻します。"
 
@@ -31772,9 +31759,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "ハンダペースト マージン比率の上書き値"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "ライブラリー Id:"
+msgstr "ライブラリー ID"
 
 #: pcbnew/footprint.h:232
 #, c-format
