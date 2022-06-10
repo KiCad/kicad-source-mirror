@@ -467,7 +467,7 @@ public:
      */
     void GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const;
 
-    SCH_PIN* GetPin( LIB_PIN* aLibPin );
+    SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
 
     /**
      * Retrieve a list of the SCH_PINs for the given sheet path.

@@ -900,7 +900,7 @@ void SCH_SYMBOL::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
 }
 
 
-SCH_PIN* SCH_SYMBOL::GetPin( LIB_PIN* aLibPin )
+SCH_PIN* SCH_SYMBOL::GetPin( LIB_PIN* aLibPin ) const
 {
     wxASSERT( m_pinMap.count( aLibPin ) );
     return m_pins[ m_pinMap.at( aLibPin ) ].get();
@@ -1908,22 +1908,38 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     if( m_part )
     {
+        LIB_PINS  libPins;
+        m_part->GetPins( libPins, GetUnit(), GetConvert() );
+
+        // Copy the source so we can re-orient and translate it.
+        LIB_SYMBOL tempSymbol( *m_part );
+        LIB_PINS tempPins;
+        tempSymbol.GetPins( tempPins, GetUnit(), GetConvert() );
+
+        // Copy the pin info from the symbol to the temp pins
+        for( unsigned i = 0; i < tempPins.size(); ++ i )
+        {
+            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+            LIB_PIN* tempPin = tempPins[ i ];
+
+            tempPin->SetName( symbolPin->GetShownName() );
+            tempPin->SetType( symbolPin->GetType() );
+            tempPin->SetShape( symbolPin->GetShape() );
+
+            if( symbolPin->IsDangling() )
+                tempPin->SetFlags( IS_DANGLING );
+        }
+
         TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
 
-        bool local_background = true;
+        for( bool local_background : { true, false } )
+        {
+            tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
 
-        m_part->Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
-
-        for( SCH_FIELD field : m_fields )
-            field.Plot( aPlotter, local_background );
-
-        local_background = false;
-
-        m_part->Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
-
-        for( SCH_FIELD field : m_fields )
-            field.Plot( aPlotter, local_background );
+            for( SCH_FIELD field : m_fields )
+                field.Plot( aPlotter, local_background );
+        }
 
         aPlotter->EndBlock( nullptr );
     }
