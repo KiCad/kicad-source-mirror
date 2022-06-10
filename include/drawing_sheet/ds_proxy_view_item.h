@@ -61,6 +61,11 @@ public:
     void SetSheetName( const std::string& aSheetName ) { m_sheetName = aSheetName; }
 
     /**
+     * Set the sheet path displayed in the title block.
+     */
+    void SetSheetPath( const std::string& aSheetPath ) { m_sheetPath = aSheetPath; }
+
+    /**
      * Changes the page number displayed in the title block.
      */
     void SetPageNumber( const std::string& aPageNumber ) { m_pageNumber = aPageNumber; }
@@ -132,6 +137,7 @@ protected:
 
     std::string        m_fileName;
     std::string        m_sheetName;
+    std::string        m_sheetPath;
     const TITLE_BLOCK* m_titleBlock;
     const PAGE_INFO*   m_pageInfo;
     std::string        m_pageNumber;

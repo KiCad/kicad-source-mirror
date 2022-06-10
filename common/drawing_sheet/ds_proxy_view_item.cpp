@@ -83,6 +83,7 @@ void DS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, DS_DRAW_ITEM_LIST* aDrawLis
     aDrawList->SetSheetCount( m_sheetCount );
     aDrawList->SetFileName( fileName );
     aDrawList->SetSheetName( sheetName );
+    aDrawList->SetSheetLayer( settings->GetLayerName() );
     aDrawList->SetProject( m_project );
 
     aDrawList->BuildDrawItemsList( *m_pageInfo, *m_titleBlock );

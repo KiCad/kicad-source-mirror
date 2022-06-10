@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,6 +111,9 @@ public:
 
     PCB_LAYER_ID GetActiveLayer() const { return m_activeLayer; }
     void SetActiveLayer( PCB_LAYER_ID aLayer ) { m_activeLayer = aLayer; }
+
+    const wxString& GetLayerName() const { return m_layerName; }
+    void SetLayerName( const wxString& aLayerName ) { m_layerName = aLayerName; }
 
     /**
      * Clear the list of active layers.
@@ -283,6 +286,7 @@ protected:
     virtual void update();
 
     PCB_LAYER_ID           m_activeLayer;        // The active layer (as shown by appearance mgr)
+    wxString               m_layerName;
     std::set<unsigned int> m_highContrastLayers; // High-contrast layers (both board layers and
                                                  //   synthetic GAL layers)
     COLOR4D m_layerColors[LAYER_ID_COUNT];       // Layer colors

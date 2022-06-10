@@ -84,6 +84,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
     drawList.SetSheetName( aSheetDesc );
+    drawList.SetSheetLayer( plotter->RenderSettings()->GetLayerName() );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
 
