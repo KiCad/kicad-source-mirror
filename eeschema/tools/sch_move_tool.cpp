@@ -637,7 +637,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                     newWire = new SCH_LINE( aPoint, LAYER_BUS );
                 }
                 else
+                {
                     newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                }
 
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
@@ -684,6 +686,26 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                         m_specialCaseLabels[ label ] = info;
                     }
                 }
+            }
+            else if( test->IsConnected( aPoint ) && !newWire )
+            {
+                // Add a new wire between the label and the selected item so the selected item
+                // can be dragged.
+                if( test->GetLayer() == LAYER_BUS_JUNCTION
+                        || aOriginalItem->GetLayer() == LAYER_BUS )
+                {
+                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
+                }
+                else
+                {
+                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                }
+
+                newWire->SetFlags( IS_NEW );
+                m_frame->AddToScreen( newWire, m_frame->GetScreen() );
+
+                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                aList.push_back( newWire );
             }
 
             break;
