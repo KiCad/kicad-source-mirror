@@ -30,6 +30,7 @@
 
 
 #include "ibis_parser.h"
+
 #include <sstream>
 #include <iterator>
 #include <locale_io.h> // KiCad header
@@ -168,10 +169,9 @@ bool IbisComponentPin::Check()
 
     if( !m_dummy )
     {
-        int  size = std::snprintf( nullptr, 0, _( "Checking pin %s" ), m_pinName.c_str() ) + 1;
-        char cstr[size];
-        std::snprintf( cstr, size, _( "Checking pin %s" ), m_pinName.c_str() );
-        Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+        std::stringstream message;
+        message << _( "Checking pin " ) << m_pinName;
+        Report( message.str(), RPT_SEVERITY_ACTION );
 
         if( m_pinName.empty() )
         {
@@ -218,10 +218,9 @@ bool IbisComponent::Check()
         status = false;
     }
 
-    int  size = std::snprintf( nullptr, 0, _( "Checking component %s" ), m_name.c_str() ) + 1;
-    char cstr[size];
-    std::snprintf( cstr, size, _( "Checking component %s" ), m_name.c_str() );
-    Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+    std::stringstream message;
+    message << _( "Checking component " ) << m_name;
+    Report( message.str(), RPT_SEVERITY_ACTION );
 
     if( m_manufacturer.empty() )
     {
@@ -309,7 +308,6 @@ std::string IVtable::Spice( int aN, std::string aPort1, std::string aPort2, std:
 
 double IVtable::InterpolatedI( double aV, IBIS_CORNER aCorner )
 {
-    double result;
     // @TODO change this algorithm
 
     if( m_entries.back().V > m_entries.at( 0 ).V )
@@ -431,10 +429,9 @@ bool IbisModel::Check()
         status = false;
     }
 
-    int  size = std::snprintf( nullptr, 0, _( "Checking model %s" ), m_name.c_str() ) + 1;
-    char cstr[size];
-    std::snprintf( cstr, size, _( "Checking model %s" ), m_name.c_str() );
-    Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+    std::stringstream message;
+    message << _( "Checking model " ) << m_name;
+    Report( message.str(), RPT_SEVERITY_ACTION );
 
     if(m_type == IBIS_MODEL_TYPE::UNDEFINED)
     {
@@ -593,10 +590,9 @@ bool IbisPackageModel::Check()
         status = false;
     }
 
-    int  size = std::snprintf( nullptr, 0, _( "Checking package model %s" ), m_name.c_str() ) + 1;
-    char cstr[size];
-    std::snprintf( cstr, size, _( "Checking package model %s" ), m_name.c_str() );
-    Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+    std::stringstream message;
+    message << _( "Checking package model " ) << m_name;
+    Report( message.str(), RPT_SEVERITY_ACTION );
 
     if( m_manufacturer.empty() )
     {
@@ -610,13 +606,7 @@ bool IbisPackageModel::Check()
         status = false;
     }
 
-    if( isnan( m_numberOfPins ) )
-    {
-        Report( _( "Number of pins is invalid." ), RPT_SEVERITY_ERROR );
-        status = false;
-    }
-
-    if( m_numberOfPins <= 0 )
+    if( m_numberOfPins < 0 )
     {
         Report( _( "Negative number of pins." ), RPT_SEVERITY_ERROR );
         status = false;
@@ -689,24 +679,21 @@ bool IbisPackageModel::Check()
 
 bool IbisParser::ParseFile( std::string& aFileName )
 {
-    std::string err_msg;
+    std::stringstream err_msg;
 
     std::ifstream ibisFile;
     ibisFile.open( aFileName );
 
     if( !ibisFile.is_open() )
     {
-        int  size = std::snprintf( nullptr, 0, _( "Cannot open file %s" ), aFileName.c_str() ) + 1;
-        char cstr[size];
-        std::snprintf( cstr, size, _( "Cannot open file %s" ), aFileName.c_str() );
-        Report( std::string( cstr ), RPT_SEVERITY_ERROR );
+        err_msg << _( "Cannot open file " ) << aFileName;
+        Report( err_msg.str(), RPT_SEVERITY_ERROR );
         return false;
     }
 
-    int  size1 = std::snprintf( nullptr, 0, _( "Reading file %s..." ), aFileName.c_str() ) + 1;
-    char cstr[size1];
-    std::snprintf( cstr, size1, _( "Reading file %s..." ), aFileName.c_str() );
-    Report( std::string( cstr ), RPT_SEVERITY_ERROR );
+    err_msg.clear();
+    err_msg << _( "Reading file " ) << aFileName << wxT( "..." );
+    Report( err_msg.str(), RPT_SEVERITY_ACTION );
 
     std::ostringstream ss;
     ss << ibisFile.rdbuf();
@@ -737,10 +724,9 @@ bool IbisParser::ParseFile( std::string& aFileName )
 
         if( status && !onNewLine() )
         {
-            int  size2 = std::snprintf( nullptr, 0, _( "Error on line %i..." ), m_lineCounter ) + 1;
-            char cstr2[size2];
-            std::snprintf( cstr2, size2, _( "Error on line %i..." ), m_lineCounter );
-            Report( std::string( cstr2 ), RPT_SEVERITY_ACTION );
+            err_msg.clear();
+            err_msg << _( "Error on line " ) << std::to_string( m_lineCounter );
+            Report( err_msg.str(), RPT_SEVERITY_ERROR );
             status = false;
         }
         if( m_context == IBIS_PARSER_CONTEXT::END )
@@ -961,7 +947,6 @@ bool IbisParser::readInt( int& aDest )
 {
     bool     status = true;
     std::string str;
-    double   buffer;
 
     if( readWord( str ) )
     {
@@ -1265,13 +1250,9 @@ bool IbisParser::changeContext( std::string& aKeyword )
             default: context_string += "???"; break;
             }
 
-            int size = std::snprintf( nullptr, 0, _( "Unknown keyword in %s context: %s" ),
-                                      context_string.c_str(), aKeyword.c_str() )
-                       + 1;
-            char cstr[size];
-            std::snprintf( cstr, size, _( "Unknown keyword in %s context: %s" ),
-                           context_string.c_str(), aKeyword.c_str() );
-            Report( std::string( cstr ), RPT_SEVERITY_ERROR );
+            std::stringstream message;
+            message << _( "Unknown keyword in " ) << context_string << _( " context: " ) << aKeyword;
+            Report( message.str(), RPT_SEVERITY_ERROR );
         }
     }
     else
@@ -1881,13 +1862,9 @@ bool IbisParser::readModel()
                         m_currentModel->m_type = IBIS_MODEL_TYPE::SERIES_SWITCH;
                     else
                     {
-                        int size = std::snprintf( nullptr, 0, _( "Unknown Model_type: %s" ),
-                                                  subparam.c_str() )
-                                   + 1;
-                        char cstr[size];
-                        std::snprintf( cstr, size, _( "Unknown Model_type: %s" ),
-                                       subparam.c_str() );
-                        Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+                        std::stringstream message;
+                        message << _( "Unknown Model_type " ) << subparam;
+                        Report( message.str(), RPT_SEVERITY_ERROR );
                         status = false;
                     }
                 }
@@ -1907,12 +1884,9 @@ bool IbisParser::readModel()
                         m_currentModel->m_enable = IBIS_MODEL_ENABLE::ACTIVE_LOW;
                     else
                     {
-                        int size = std::snprintf( nullptr, 0, _( "Unknown Enable: %s" ),
-                                                  subparam.c_str() )
-                                   + 1;
-                        char cstr[size];
-                        std::snprintf( cstr, size, _( "Unknown Enable: %s" ), subparam.c_str() );
-                        Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+                        std::stringstream message;
+                        message << _( "Unknown Enable: " ) << subparam;
+                        Report( message.str(), RPT_SEVERITY_ERROR );
                         status = false;
                     }
                 }
@@ -1932,12 +1906,9 @@ bool IbisParser::readModel()
                         m_currentModel->m_enable = IBIS_MODEL_ENABLE::ACTIVE_LOW;
                     else
                     {
-                        int size = std::snprintf( nullptr, 0, _( "Unknown polarity: %s" ),
-                                                  subparam.c_str() )
-                                   + 1;
-                        char cstr[size];
-                        std::snprintf( cstr, size, _( "Unknown polarity: %s" ), subparam.c_str() );
-                        Report( std::string( cstr ), RPT_SEVERITY_ACTION );
+                        std::stringstream message;
+                        message << _( "Unknown polarity " ) << subparam;
+                        Report( message.str(), RPT_SEVERITY_ERROR );
                         status = false;
                     }
                 }
