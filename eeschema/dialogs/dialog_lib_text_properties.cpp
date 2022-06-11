@@ -24,6 +24,7 @@
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
 #include <symbol_edit_frame.h>
 #include <lib_text.h>
 #include <settings/settings_manager.h>
@@ -36,10 +37,12 @@
 DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                         LIB_TEXT* aText ) :
         DIALOG_LIB_TEXT_PROPERTIES_BASE( aParent ),
+        m_parent( aParent ),
+        m_graphicText( aText ),
         m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
-    m_parent = aParent;
-    m_graphicText = aText;
+    COLOR_SETTINGS* colorSettings = m_parent->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ), false,
             [this]()
@@ -83,6 +86,9 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
 
     m_separator5->SetIsSeparator();
 
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
+
     m_horizontal->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXT_PROPERTIES::onOrientButton, this );
     m_vertical->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXT_PROPERTIES::onOrientButton, this );
 
@@ -122,6 +128,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_StyledTextCtrl->SetValue( m_graphicText->GetText() );
 
         m_fontCtrl->SetFontSelection( m_graphicText->GetFont() );
+        m_textColorSwatch->SetSwatchColor( m_graphicText->GetTextColor(), false );
 
         m_italic->Check( m_graphicText->IsItalic() );
         m_bold->Check( m_graphicText->IsBold() );
@@ -236,6 +243,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
 
         m_graphicText->SetItalic( m_italic->IsChecked() );
         m_graphicText->SetBold( m_bold->IsChecked() );
+        m_graphicText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
         if( m_hAlignLeft->IsChecked() )
             m_graphicText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
