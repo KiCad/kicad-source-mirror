@@ -61,7 +61,7 @@ bool IBIS_MATRIX_BANDED::Check()
 
     for( int i = 0; i < m_bandwidth * m_dim; i++ )
     {
-        if( std::isnan( m_data[i] ) )
+        if( isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -84,7 +84,7 @@ bool IBIS_MATRIX_FULL::Check()
 
     for( int i = 0; i < m_dim * m_dim; i++ )
     {
-        if( std::isnan( m_data[i] ) )
+        if( isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -107,7 +107,7 @@ bool IBIS_MATRIX_SPARSE::Check()
 
     for( int i = 0; i < m_dim * m_dim; i++ )
     {
-        if( std::isnan( m_data[i] ) )
+        if( isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -121,7 +121,7 @@ bool IBIS_MATRIX_SPARSE::Check()
 bool isNumberNA( double aNumber )
 {
     bool result = false;
-    double NA = std::nan( NAN_NA );
+    double NA = nan( NAN_NA );
     return *reinterpret_cast<std::uint64_t*>(&aNumber) == *reinterpret_cast<std::uint64_t*>( &NA );
 }
 
@@ -129,11 +129,11 @@ bool TypMinMaxValue::Check()
 {
     bool status = true;
 
-    if( std::isnan( value[IBIS_CORNER::TYP] ) )
+    if( isnan( value[IBIS_CORNER::TYP] ) )
         status = false;
-    if( std::isnan( value[IBIS_CORNER::MIN] ) && !isNumberNA( value[IBIS_CORNER::MIN] ) )
+    if( isnan( value[IBIS_CORNER::MIN] ) && !isNumberNA( value[IBIS_CORNER::MIN] ) )
         status = false;
-    if( std::isnan( value[IBIS_CORNER::MAX] ) && !isNumberNA( value[IBIS_CORNER::MAX] ) )
+    if( isnan( value[IBIS_CORNER::MAX] ) && !isNumberNA( value[IBIS_CORNER::MAX] ) )
         status = false;
 
     return status;
@@ -188,17 +188,17 @@ bool IbisComponentPin::Check()
             Report( _( "Model name cannot be empty." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( std::isnan( m_Rpin ) && !isNumberNA( m_Rpin ) )
+        if( isnan( m_Rpin ) && !isNumberNA( m_Rpin ) )
         {
             Report( _( "Rpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( std::isnan( m_Lpin )&& !isNumberNA( m_Lpin )  )
+        if( isnan( m_Lpin )&& !isNumberNA( m_Lpin )  )
         {
             Report( _( "Lpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( std::isnan( m_Cpin )&& !isNumberNA( m_Cpin ) )
+        if( isnan( m_Cpin )&& !isNumberNA( m_Cpin ) )
         {
             Report( _( "Cpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -336,12 +336,12 @@ double IVtable::InterpolatedI( double aV, IBIS_CORNER aCorner )
             }
         }
         Report( _( "Cannot interpolate the current based on this IV table." ), RPT_SEVERITY_ERROR );
-        return std::nan( "" );
+        return nan( "" );
     }
     else
     {
         // exiting the function here would mean the IV table is reversed.
-        return std::nan( "" );
+        return nan( "" );
     }
     // @TODO prefer another method such as a dichotomy
 }
@@ -351,7 +351,7 @@ bool IVtable::Check()
     bool status = true;
     for( IVtableEntry& entry : m_entries )
     {
-        if( std::isnan( entry.V ) )
+        if( isnan( entry.V ) )
         {
             Report( _( "There is a Nan voltage in an IV table" ), RPT_SEVERITY_ERROR );
             status = false;
@@ -377,20 +377,20 @@ bool dvdtTypMinMax::Check()
 {
     bool status = true;
 
-    if( std::isnan( value[IBIS_CORNER::TYP].m_dv ) )
+    if( isnan( value[IBIS_CORNER::TYP].m_dv ) )
         status = false;
-    if( std::isnan( value[IBIS_CORNER::TYP].m_dt ) )
-        status = false;
-
-
-    if( std::isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
-        status = false;
-    if( std::isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+    if( isnan( value[IBIS_CORNER::TYP].m_dt ) )
         status = false;
 
-    if( std::isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
+
+    if( isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
         status = false;
-    if( std::isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+    if( isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+        status = false;
+
+    if( isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
+        status = false;
+    if( isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
         status = false;
 
     return status;
@@ -400,7 +400,7 @@ bool IbisRamp::Check()
 {
     bool status = true;
 
-    if( std::isnan( m_Rload ) )
+    if( isnan( m_Rload ) )
     {
         status = false;
         Report( _( "Invalid R_load." ), RPT_SEVERITY_ERROR );
@@ -610,7 +610,7 @@ bool IbisPackageModel::Check()
         status = false;
     }
 
-    if( std::isnan( m_numberOfPins ) )
+    if( isnan( m_numberOfPins ) )
     {
         Report( _( "Number of pins is invalid." ), RPT_SEVERITY_ERROR );
         status = false;
@@ -813,8 +813,8 @@ bool IbisParser::readDvdt( std::string& aString, dvdt& aDest )
 
     else if( aString == "NA" )
     {
-        aDest.m_dv = std::nan( NAN_NA );
-        aDest.m_dt = std::nan( NAN_NA );
+        aDest.m_dv = nan( NAN_NA );
+        aDest.m_dt = nan( NAN_NA );
     }
     else
     {
@@ -848,11 +848,11 @@ bool IbisParser::parseDouble( double& aDest, std::string& aStr, bool aAllowModif
     {
         if( str == "NA" )
         {
-            result = std::nan( NAN_NA );
+            result = nan( NAN_NA );
         }
         else
         {
-            result = std::nan( NAN_INVALID );
+            result = nan( NAN_INVALID );
             status = false;
         }
     }
@@ -976,11 +976,11 @@ bool IbisParser::readInt( int& aDest )
         {
             if( str == "NA" )
             {
-                result = std::nan( NAN_NA );
+                result = nan( NAN_NA );
             }
             else
             {
-                result = std::nan( NAN_INVALID );
+                result = nan( NAN_INVALID );
                 status = false;
             }
         }

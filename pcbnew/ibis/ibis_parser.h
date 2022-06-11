@@ -227,9 +227,9 @@ public:
     std::string m_pinName;
     std::string m_signalName;
     std::string m_modelName;
-    double   m_Rpin = std::nan( NAN_NA );
-    double   m_Lpin = std::nan( NAN_NA );
-    double   m_Cpin = std::nan( NAN_NA );
+    double   m_Rpin = nan( NAN_NA );
+    double   m_Lpin = nan( NAN_NA );
+    double   m_Cpin = nan( NAN_NA );
 
     int m_Rcol = 0;
     int m_Lcol = 0;
