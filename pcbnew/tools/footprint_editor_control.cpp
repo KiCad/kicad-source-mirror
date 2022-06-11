@@ -441,24 +441,27 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
     {
         footprint = m_frame->LoadFootprint( fpID );
 
-        try
+        if( footprint )
         {
-            footprint->SetFPID( LIB_ID( libraryName, newName ) );
+            try
+            {
+                footprint->SetFPID( LIB_ID( libraryName, newName ) );
 
-            if( footprint->GetValue() == oldName )
-                footprint->SetValue( newName );
+                if( footprint->GetValue() == oldName )
+                    footprint->SetValue( newName );
 
-            m_frame->SaveFootprintInLibrary( footprint, libraryName );
+                m_frame->SaveFootprintInLibrary( footprint, libraryName );
 
-            m_frame->Prj().PcbFootprintLibs()->FootprintDelete( libraryName, oldName );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( m_frame, ioe.What() );
-        }
-        catch( ... )
-        {
-            // Best efforts...
+                m_frame->Prj().PcbFootprintLibs()->FootprintDelete( libraryName, oldName );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                DisplayError( m_frame, ioe.What() );
+            }
+            catch( ... )
+            {
+                // Best efforts...
+            }
         }
     }
 

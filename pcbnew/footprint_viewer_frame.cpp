@@ -247,7 +247,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
         id.SetLibNickname( getCurNickname() );
         id.SetLibItemName( getCurFootprintName() );
-        GetBoard()->Add( loadFootprint( id ) );
+
+        FOOTPRINT* footprint = loadFootprint( id );
+
+        if( footprint )
+            GetBoard()->Add( footprint );
     }
 
     drawPanel->DisplayBoard( m_pcb );
