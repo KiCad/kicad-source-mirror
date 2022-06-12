@@ -46,8 +46,11 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_fields( aFields ),
       m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
       m_prevModel( nullptr ),
-      m_firstCategory( nullptr )
+      m_firstCategory( nullptr ),
+      m_prevParamGridSelection( nullptr )
 {
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
@@ -67,7 +70,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
 
-    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onSelectionChange, this );
+    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange,
+                          this );
 
     m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
                                                | wxPG_VFB_BEEP
@@ -81,17 +85,14 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     if( wxPropertyGrid* grid = m_paramGrid->GetGrid() )
     {
+        grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
+
         grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
         grid->DedicateKey( WXK_RETURN );
         grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
 
         grid->DedicateKey( WXK_UP );
         grid->DedicateKey( WXK_DOWN );
-
-        // Doesn't work for some reason.
-        //grid->DedicateKey( WXK_TAB );
-        //grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_TAB );
-        //grid->AddActionTrigger( wxPG_ACTION_PREV_PROPERTY, WXK_TAB, wxMOD_SHIFT );
     }
     else
         wxFAIL;
@@ -191,24 +192,28 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
     if( &curModel() != m_prevModel )
     {
         SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
-        m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
-        
-        m_typeChoice->Clear();
 
-        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+        // Change the Type choice to match the current device type.
+        if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
         {
-            if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+            m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
+
+            m_typeChoice->Clear();
+
+            for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
             {
-                wxString description = SIM_MODEL::TypeInfo( type ).description;
+                if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+                {
+                    wxString description = SIM_MODEL::TypeInfo( type ).description;
 
-                if( !description.IsEmpty() )
-                    m_typeChoice->Append( description );
+                    if( !description.IsEmpty() )
+                        m_typeChoice->Append( description );
 
-                if( type == curModel().GetType() )
-                    m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+                    if( type == curModel().GetType() )
+                        m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+                }
             }
         }
-
 
         // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
         // the constructor.
@@ -224,7 +229,10 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         m_paramGrid->Clear();
 
-        m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
+        m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "AC" ) );
+        m_paramGrid->HideProperty( "AC" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
         m_paramGrid->HideProperty( "DC" );
 
         m_paramGrid->Append( new wxPropertyCategory( "Capacitance" ) );
@@ -251,10 +259,10 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Append( new wxPropertyCategory( "Flags" ) );
         m_paramGrid->HideProperty( "Flags" );
 
+        m_paramGrid->CollapseAll();
+
         for( unsigned i = 0; i < curModel().GetParamCount(); ++i )
             addParamPropertyIfRelevant( i );
-
-        m_paramGrid->CollapseAll();
     }
 
     // Either enable all properties or disable all except the principal ones.
@@ -397,11 +405,15 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 {
     const wxString absolutePath = Prj().AbsolutePath( aFilePath );
 
-    if( !m_library->ReadFile( Prj().AbsolutePath( aFilePath ) ) )
+    try
     {
-        DisplayErrorMessage( this, wxString::Format( _( "Error loading model library '%s'" ),
-                                                     Prj().AbsolutePath( aFilePath ), aFilePath ),
-                             m_library->GetErrorMessage() );
+        m_library->ReadFile( absolutePath );
+    }
+    catch( const IO_ERROR& e )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "Failed reading model library '%s'." ),
+                                                     absolutePath ),
+                             e.What() );
     }
 
     m_libraryPathInput->SetValue( aFilePath );
@@ -427,6 +439,12 @@ void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
 
     switch( curModel().GetParam( aParamIndex ).info.category )
     {
+    case CATEGORY::AC:
+        m_paramGrid->HideProperty( "AC", false );
+        m_paramGrid->AppendIn( "AC", newParamProperty( aParamIndex ) );
+        m_paramGrid->Expand( "AC" );
+        break;
+
     case CATEGORY::DC:
         m_paramGrid->HideProperty( "DC", false );
         m_paramGrid->AppendIn( "DC", newParamProperty( aParamIndex ) );
@@ -790,9 +808,10 @@ void DIALOG_SIM_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::onSelectionChange( wxPropertyGridEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
 {
-    // TODO: Activate also when the whole property grid is selected with tab key.
+    // By default, when a property grid is focused, the textbox is not immediately focused, until
+    // Tab key is pressed. This is inconvenient, so we fix that here.
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
     if( !grid )
@@ -801,35 +820,81 @@ void DIALOG_SIM_MODEL<T>::onSelectionChange( wxPropertyGridEvent& aEvent )
         return;
     }
 
-    wxWindow* editorControl = grid->GetEditorControl();
-    if( !editorControl )
+    wxPGProperty* selected = grid->GetSelection();
+
+    if( !selected )
+        selected = grid->wxPropertyGridInterface::GetFirst();
+
+    if( selected )
+        grid->DoSelectProperty( selected, wxPG_SEL_FOCUS );
+
+    aEvent.Skip();
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEvent )
+{
+    wxPropertyGrid* grid = m_paramGrid->GetGrid();
+    if( !grid )
     {
         wxFAIL;
         return;
     }
-    
-    // Without this, the user had to press tab before they could edit the field.
-    editorControl->SetFocus();
-}
 
-
-/*template <typename T>
-void DIALOG_SPICE_MODEL<T>::onPropertyChanged( wxPropertyGridEvent& aEvent )
-{
-    wxString name = aEvent.GetPropertyName();
-    
-    for( SIM_MODEL::PARAM& param : getCurModel().Params() )
+    // Jump over categories.
+    if( grid->GetSelection() && grid->GetSelection()->IsCategory() )
     {
-        if( param.info.name == name )
+        wxPGProperty* selection = grid->GetSelection();
+
+        // If the new selection is immediately above the previous selection, we jump up. Otherwise
+        // we jump down. We do this by simulating up or down arrow keys.
+
+        wxPropertyGridIterator it = grid->GetIterator( wxPG_ITERATE_VISIBLE, selection );
+        it.Next();
+
+        wxKeyEvent* keyEvent = new wxKeyEvent( wxEVT_KEY_DOWN );
+
+        if( *it == m_prevParamGridSelection )
         {
-            try
+            if( !selection->IsExpanded() )
             {
-                param.value->FromString( m_paramGrid->GetPropertyValueAsString( param.info.name ) );
+                grid->Expand( selection );
+                keyEvent->m_keyCode = WXK_DOWN;
+                wxQueueEvent( grid, keyEvent );
+
+                // Does not work for some reason.
+                /*m_paramGrid->DoSelectProperty( selection->Item( selection->GetChildCount() - 1 ),
+                                               wxPG_SEL_FOCUS );*/
             }
-            catch( KI_PARAM_ERROR& e )
+            else
             {
-                DisplayErrorMessage( this, e.What() );
+                keyEvent->m_keyCode = WXK_UP;
+                wxQueueEvent( grid, keyEvent );
             }
         }
+        else
+        {
+            if( !selection->IsExpanded() )
+                grid->Expand( selection );
+
+            keyEvent->m_keyCode = WXK_DOWN;
+            wxQueueEvent( grid, keyEvent );
+        }
+
+        m_prevParamGridSelection = grid->GetSelection();
+        return;
     }
-}*/
+
+    wxWindow* editorControl = grid->GetEditorControl();
+    if( !editorControl )
+    {
+        wxFAIL;
+        m_prevParamGridSelection = grid->GetSelection();
+        return;
+    }
+    
+    // Without this the user had to press tab before they could edit the field.
+    editorControl->SetFocus();
+    m_prevParamGridSelection = grid->GetSelection();
+}

@@ -82,12 +82,18 @@ public:
     }
 
     /**
-     * Return the simulation command directive.
+     * Return the command directive that is in use (either from the sheet or from m_simCommand)
+     * @return
      */
-    const wxString& GetSimCommand() const
+    wxString GetSimCommand()
     {
-        return m_simCommand;
+        return m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand;
     }
+
+    /**
+     * Return the simulation command directive if stored separately (not as a sheet directive).
+     */
+    wxString GetUnderlyingSimCommand() const { return m_simCommand; }
 
     /**
      * Clear the simulation command directive.
@@ -96,12 +102,6 @@ public:
     {
         m_simCommand.Clear();
     }
-
-    /**
-     * Return the command directive that is in use (either from the sheet or from m_simCommand
-     * @return
-     */
-    wxString GetUsedSimCommand();
 
     /**
      * Return simulation type basing on the simulation command directives.

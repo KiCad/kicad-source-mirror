@@ -1,9 +1,0 @@
-.title KiCad schematic
-.include "chirp.lib"
-.save all
-.probe alli
-.tran 10u 100m
-
-XV1 Net-_V1-E1_ Net-_V1-E2_ chirp bf=1k ef=3k bt=30m et=70m 
-R1 Net-_V1-E1_ Net-_V1-E2_ 10k 
-.end

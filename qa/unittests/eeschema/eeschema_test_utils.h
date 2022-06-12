@@ -60,21 +60,22 @@ wxFileName GetEeschemaTestDataDir();
 class SCHEMATIC_TEST_FIXTURE
 {
 public:
-    SCHEMATIC_TEST_FIXTURE() : m_schematic( nullptr ), m_manager( true )
+    SCHEMATIC_TEST_FIXTURE()
+        : m_schematic( nullptr ),
+          m_pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) ),
+          m_manager( true )
     {
-        m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     }
 
     virtual ~SCHEMATIC_TEST_FIXTURE()
     {
         m_schematic.Reset();
-        delete m_pi;
+        SCH_IO_MGR::ReleasePlugin( m_pi );
     }
 
 protected:
-    virtual void loadSchematic( const wxString& aRelativePath );
-
-    virtual wxFileName getSchematicFile( const wxString& aBaseName );
+    virtual void LoadSchematic( const wxString& aRelativePath );
+    virtual wxFileName GetSchematicPath( const wxString& aBaseName );
 
     ///> Schematic to load
     SCHEMATIC m_schematic;
@@ -89,26 +90,9 @@ protected:
 
 
 template <typename Exporter>
-class TEST_NETLIST_EXPORTER_FIXTURE
+class TEST_NETLIST_EXPORTER_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 public:
-    TEST_NETLIST_EXPORTER_FIXTURE() :
-            m_schematic( nullptr ),
-            m_pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) ),
-            m_manager( true )
-    {
-        
-    }
-
-    virtual ~TEST_NETLIST_EXPORTER_FIXTURE()
-    {
-        m_schematic.Reset();
-        SCH_IO_MGR::ReleasePlugin( m_pi );
-    }
-
-    void LoadSchematic( const wxString& aBaseName );
-
-    virtual wxString GetSchematicPath( const wxString& aBaseName );
     virtual wxString GetNetlistPath( bool aTest = false );
     virtual unsigned GetNetlistOptions() { return 0; }
 
@@ -119,13 +103,6 @@ public:
     void Cleanup();
 
     void TestNetlist( const wxString& aBaseName );
-
-    ///> Schematic to load
-    SCHEMATIC m_schematic;
-
-    SCH_PLUGIN* m_pi;
-
-    SETTINGS_MANAGER m_manager;
 };
 
 template class TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>;

@@ -462,9 +462,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 
     m_simConsole->Clear();
 
-    if( aSimCommand.IsEmpty() )
-        m_circuitModel->SetSimCommand( getCurrentSimCommand() );
-    else
+    if( aSimCommand != "" )
         m_circuitModel->SetSimCommand( aSimCommand );
 
     // Make .save all and .probe alli permanent for now.
@@ -482,6 +480,8 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 
     if( simulatorLock.owns_lock() )
     {
+        wxBusyCursor toggle;
+
         updateTuners();
         applyTuners();
         // Prevents memory leak on succeding simulations by deleting old vectors
@@ -663,7 +663,7 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
     if( !plotPanel || plotPanel->GetType() != simType )
     {
         plotPanel =
-                dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_circuitModel->GetUsedSimCommand() ) );
+                dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_circuitModel->GetSimCommand() ) );
     }
 
     wxASSERT( plotPanel );
@@ -778,8 +778,8 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
     // for each input step
     SPICE_DC_PARAMS source1, source2;
 
-    if( m_circuitModel->GetSimType() == ST_DC &&
-        m_circuitModel->ParseDCCommand( m_circuitModel->GetUsedSimCommand(), &source1, &source2 ) )
+    if( m_circuitModel->GetSimType() == ST_DC
+        && m_circuitModel->ParseDCCommand( m_circuitModel->GetSimCommand(), &source1, &source2 ) )
     {
         if( !source2.m_source.IsEmpty() )
         {
@@ -1151,7 +1151,7 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
     SIM_TYPE type = m_circuitModel->GetSimType();
 
     if( SIM_PANEL_BASE::IsPlottable( type ) )
-        NewPlotPanel( m_circuitModel->GetUsedSimCommand() );
+        NewPlotPanel( m_circuitModel->GetSimCommand() );
 }
 
 
@@ -1739,7 +1739,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     SIM_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
 
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
-        plotPanelWindow = NewPlotPanel( m_circuitModel->GetUsedSimCommand() );
+        plotPanelWindow = NewPlotPanel( m_circuitModel->GetSimCommand() );
 
     if( m_simulator->IsRunning() )
         return;

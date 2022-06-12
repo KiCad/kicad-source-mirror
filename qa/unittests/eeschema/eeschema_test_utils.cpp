@@ -62,47 +62,11 @@ wxFileName KI_TEST::GetEeschemaTestDataDir()
 }
 
 
-std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
+void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
 {
-    auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
+    wxFileName fn = GetSchematicPath( aBaseName );
 
-    schematic->Reset();
-    schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );
-    schematic->CurrentSheet().push_back( &schematic->Root() );
-
-    SCH_SCREENS screens( schematic->Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-        screen->UpdateLocalLibSymbolLinks();
-
-    SCH_SHEET_LIST sheets = schematic->GetSheets();
-
-    // Restore all of the loaded symbol instances from the root sheet screen.
-    sheets.UpdateSymbolInstances( schematic->RootScreen()->GetSymbolInstances() );
-
-    sheets.AnnotatePowerSymbols();
-
-    // NOTE: This is required for multi-unit symbols to be correct
-    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
-    for( SCH_SHEET_PATH& sheet : sheets )
-        sheet.UpdateAllScreenReferences();
-
-    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
-    // SchematicCleanUp must be freed from its UI dependencies.
-
-    schematic->ConnectionGraph()->Recalculate( sheets, true );
-
-    return schematic;
-}
-
-
-template <typename Exporter>
-void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::LoadSchematic( const wxString& aBaseName )
-{
-    wxString fn = GetSchematicPath( aBaseName );
-
-    BOOST_TEST_MESSAGE( fn );
+    BOOST_TEST_MESSAGE( fn.GetFullPath() );
 
     wxFileName pro( fn );
     pro.SetExt( ProjectFileExtension );
@@ -113,7 +77,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::LoadSchematic( const wxString& aBa
 
     m_schematic.Reset();
     m_schematic.SetProject( &m_manager.Prj() );
-    m_schematic.SetRoot( m_pi->Load( fn, &m_schematic ) );
+    m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
 
@@ -128,6 +92,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::LoadSchematic( const wxString& aBa
 
     // Restore all of the loaded symbol instances from the root sheet screen.
     sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
 
     sheets.AnnotatePowerSymbols();
 
@@ -143,8 +108,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::LoadSchematic( const wxString& aBa
 }
 
 
-template <typename Exporter>
-wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetSchematicPath( const wxString& aBaseName )
+wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::GetSchematicPath( const wxString& aBaseName )
 {
     wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
     fn.AppendDir( "netlists" );
@@ -152,7 +116,7 @@ wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetSchematicPath( const wxStri
     fn.SetName( aBaseName );
     fn.SetExt( KiCadSchematicFileExtension );
 
-    return fn.GetFullPath();
+    return fn;
 }
 
 

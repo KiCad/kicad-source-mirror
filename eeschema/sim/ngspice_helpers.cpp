@@ -83,15 +83,9 @@ wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 }
 
 
-wxString NGSPICE_CIRCUIT_MODEL::GetUsedSimCommand()
-{
-    return m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand;
-}
-
-
 SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
 {
-    return CommandToSimType( GetUsedSimCommand() );
+    return CommandToSimType( GetSimCommand() );
 }
 
 
@@ -122,7 +116,7 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 
 
 bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
-                                                  SPICE_DC_PARAMS* aSource2 )
+                                            SPICE_DC_PARAMS* aSource2 )
 {
     if( !aCmd.Lower().StartsWith( ".dc" ) )
         return false;
@@ -157,5 +151,7 @@ void NGSPICE_CIRCUIT_MODEL::WriteDirectives( OUTPUTFORMATTER& aFormatter,
                                              unsigned         aNetlistOptions ) const
 {
     NETLIST_EXPORTER_SPICE::WriteDirectives( aFormatter, aNetlistOptions );
-    aFormatter.Print( 0, "%s\n", TO_UTF8( GetSimCommand() ) );
+
+    if( GetUnderlyingSimCommand() != "" )
+        aFormatter.Print( 0, "%s\n", TO_UTF8( GetUnderlyingSimCommand() ) );
 }

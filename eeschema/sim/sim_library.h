@@ -37,9 +37,30 @@ public:
     virtual ~SIM_LIBRARY() = default;
     SIM_LIBRARY() = default;
 
+    /**
+     * Read library from a source file (e.g. in Spice format), and return a newly constructed
+     * object of an appropriate subclass.
+     *
+     * @param aFilePath Path to the file.
+     * @return The library loaded in a newly constructed object.
+     */
     static std::unique_ptr<SIM_LIBRARY> Create( wxString aFilePath );
 
-    virtual bool ReadFile( const wxString& aFilePath ) = 0;
+    /**
+     * Read library from a source file. Must be in the format appropriate to the subclass, e.g.
+     * Spice for SIM_LIBRARY_SPICE).
+     *
+     * @param aFilePath Path to the file.
+     * @throw IO_ERROR on read or parsing error.
+     */
+    virtual void ReadFile( const wxString& aFilePath ) = 0;
+
+    /**
+     * Write library to a source file (e.g. in Spice format).
+     *
+     * @param aFilePath Path to the file.
+     * @throw IO_ERROR on write error.
+     */
     virtual void WriteFile( const wxString& aFilePath ) = 0;
 
     SIM_MODEL* FindModel( const wxString& aModelName ) const;
@@ -48,14 +69,14 @@ public:
     const std::vector<wxString>& GetModelNames() const { return m_modelNames; }
 
     wxString GetFilePath() const { return m_filePath; }
-    wxString GetErrorMessage() const { return m_errorMessage; }
+    wxString GetError() const { return m_error; }
     
 protected:
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
     std::vector<wxString> m_modelNames;
 
     wxString m_filePath;
-    wxString m_errorMessage;
+    wxString m_error;
 };
 
 

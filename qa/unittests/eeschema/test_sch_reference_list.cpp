@@ -56,7 +56,7 @@ void TEST_SCH_REFERENCE_LIST_FIXTURE::loadTestCase( wxString aSchematicRelativeP
     m_refsToReannotate.Clear();
     m_lockedRefs.clear();
 
-    loadSchematic( aSchematicRelativePath );
+    LoadSchematic( aSchematicRelativePath );
 
     // Create list of references to reannotate
     for( REANNOTATED_REFERENCE ref : aRefs )

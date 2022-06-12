@@ -1,0 +1,13 @@
+.title KiCad schematic
+.include "opamp.lib.spice"
+.save all
+.probe alli
+.tran 10u 10m
+
+R1 GND Net-_U1--_ 10k 
+R2 Net-_U1--_ /out 10k 
+V3 GND Net-_U1-V-_ AC   ( 5 ) 
+VSIN1 /in GND AC   SIN( 0 100m 1k ) 
+V2 Net-_U1-V+_ GND AC   ( 5 ) 
+XU1 /in Net-_U1--_ /out uopamp_lvl1 
+.end

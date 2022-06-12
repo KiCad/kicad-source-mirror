@@ -26,11 +26,11 @@
 class TEST_SCH_SHEET_LIST_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
 protected:
-    wxFileName getSchematicFile( const wxString& aRelativePath ) override;
+    wxFileName GetSchematicPath( const wxString& aRelativePath ) override;
 };
 
 
-wxFileName TEST_SCH_SHEET_LIST_FIXTURE::getSchematicFile( const wxString& aRelativePath )
+wxFileName TEST_SCH_SHEET_LIST_FIXTURE::GetSchematicPath( const wxString& aRelativePath )
 {
     wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
     fn.AppendDir( "netlists" );
@@ -47,7 +47,7 @@ BOOST_FIXTURE_TEST_SUITE( SchSheetList, TEST_SCH_SHEET_LIST_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
 {
-    loadSchematic( "complex_hierarchy/complex_hierarchy" );
+    LoadSchematic( "complex_hierarchy/complex_hierarchy" );
 
     SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     BOOST_TEST_CONTEXT( "Read Sub-Sheet, prior to modification" )
     {
         // Check the Sub Sheet has the expected page numbers
-        loadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+        LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
 
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     BOOST_TEST_CONTEXT( "Read Root Sheet, prior to modification" )
     {
         // Check the parent sheet has the expected page numbers
-        loadSchematic( "complex_hierarchy_shared/complex_hierarchy" );
+        LoadSchematic( "complex_hierarchy_shared/complex_hierarchy" );
 
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
@@ -104,9 +104,9 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
 
         // Save and reload
         wxString   tempName = "complex_hierarchy_shared/complex_hierarchy_modified";
-        wxFileName tempFn = getSchematicFile( tempName );
+        wxFileName tempFn = GetSchematicPath( tempName );
         m_pi->Save( tempFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
-        loadSchematic( tempName );
+        LoadSchematic( tempName );
 
         sheets = m_schematic.GetSheets();
 
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
     {
         // Check the Sub Sheet has the expected page numbers
         // (This should not have been modified after editing the root sheet)
-        loadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
+        LoadSchematic( "complex_hierarchy_shared/ampli_ht/ampli_ht" );
 
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 

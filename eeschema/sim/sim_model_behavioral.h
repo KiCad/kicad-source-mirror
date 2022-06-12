@@ -33,6 +33,14 @@ class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 public:
     SIM_MODEL_BEHAVIORAL( TYPE aType );
 
+    void ReadDataSchFields( unsigned aSymbolPinCount,
+                            const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount,
+                            const std::vector<LIB_FIELD>* aFields ) override;
+
+    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
+    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
+
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
 
     wxString GenerateSpiceItemLine( const wxString& aRefName,
@@ -40,9 +48,17 @@ public:
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
+    template <typename T>
+    void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+
+    template <typename T>
+    void inferredWriteDataFields( std::vector<T>& aFields ) const;
+
     std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParams( wxString aName, wxString aDescription, wxString aUnit );
+
+    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_BEHAVIORAL_H

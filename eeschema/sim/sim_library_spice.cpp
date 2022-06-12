@@ -24,6 +24,7 @@
 
 #include <sim/sim_library_spice.h>
 #include <sim/spice_grammar.h>
+#include <ki_exception.h>
 #include <locale_io.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
@@ -48,12 +49,11 @@ namespace SIM_LIBRARY_SPICE_PARSER
 };
 
 
-bool SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
+void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
 {
     LOCALE_IO toggle;
 
-    if( !SIM_LIBRARY::ReadFile( aFilePath ) )
-        return false;
+    SIM_LIBRARY::ReadFile( aFilePath );
 
     m_models.clear();
     m_modelNames.clear();
@@ -73,11 +73,10 @@ bool SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
             {
                 m_models.push_back( SIM_MODEL::Create( node->string() ) );
 
-                if( node->children.size() != 1 )
+                if( node->children.size() < 1
+                    || !node->children.at( 0 )->is_type<SIM_LIBRARY_SPICE_PARSER::modelName>() )
                 {
-                    m_errorMessage = wxString::Format( 
-                            "Captured %d name tokens, expected one", node->children.size() );
-                    return false;
+                    THROW_IO_ERROR( wxString::Format( "Model name token not found" ) );
                 }
 
                 m_modelNames.emplace_back( node->children.at( 0 )->string() );
@@ -88,27 +87,23 @@ bool SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
             }
             else
             {
-                m_errorMessage = wxString::Format( "Unhandled parse tree node: '%s'", node->string() );
-                return false;
+                THROW_IO_ERROR( wxString::Format( "Unhandled parse tree node: '%s'",
+                                                  node->string() ) );
             }
         }
-
-        return true;
     }
     catch( const std::filesystem::filesystem_error& e )
     {
-        m_errorMessage = wxString::Format( "Parsing failed: %s", e.what() );
-        return false;
+        THROW_IO_ERROR( e.what() );
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        m_errorMessage = wxString::Format( "Parsing failed: %s", e.what() );
-        return false;
+        THROW_IO_ERROR( e.what() );
     }
 }
 
 
 void SIM_LIBRARY_SPICE::WriteFile( const wxString& aFilePath )
 {
-    
+    // Not implemented yet.
 }

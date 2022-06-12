@@ -29,18 +29,15 @@
 std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( wxString aFilePath )
 {
     std::unique_ptr<SIM_LIBRARY> library = std::make_unique<SIM_LIBRARY_SPICE>();
-    
-    if( !library->ReadFile( aFilePath ) )
-        return nullptr;
 
+    library->ReadFile( aFilePath );
     return library;
 }
 
 
-bool SIM_LIBRARY::ReadFile( const wxString& aFilePath )
+void SIM_LIBRARY::ReadFile( const wxString& aFilePath )
 {
     m_filePath = aFilePath;
-    return true;
 }
 
 

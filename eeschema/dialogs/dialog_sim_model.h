@@ -86,8 +86,8 @@ private:
     void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
     void onTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
 
-    virtual void onSelectionChange( wxPropertyGridEvent& aEvent );
-    //void onPropertyChanged( wxPropertyGridEvent& aEvent ) override;
+    void onParamGridSetFocus( wxFocusEvent& aEvent );
+    void onParamGridSelectionChange( wxPropertyGridEvent& aEvent );
 
 
     SCH_SYMBOL& m_symbol;
@@ -101,8 +101,10 @@ private:
     std::vector<std::shared_ptr<SIM_MODEL>> m_libraryModels;
     const SIM_MODEL* m_prevModel;
 
-    wxPGProperty* m_firstCategory; // Used to add principal parameters to root (any better ideas?)
+    wxPGProperty* m_firstCategory; // Used to add principal parameters to root.
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
+
+    wxPGProperty* m_prevParamGridSelection;
 };
 
 #endif /* DIALOG_SPICE_MODEL_H */

@@ -25,7 +25,7 @@
 #ifndef SIM_MODEL_H
 #define SIM_MODEL_H
 
-#include <sim/spice_grammar.h>
+#include <sim/sim_value.h>
 #include <enum_vector.h>
 #include <sch_field.h>
 #include <lib_field.h>
@@ -133,15 +133,15 @@ public:
         NONE,
 
         R,
-        R_ADV,
+        //R_ADV,
         R_BEHAVIORAL,
 
         C,
-        C_ADV,
+        //C_ADV,
         C_BEHAVIORAL,
 
         L,
-        L_ADV,
+        //L_ADV,
         L_BEHAVIORAL,
 
         TLINE_Z0,
@@ -245,8 +245,8 @@ public:
         V_SIN,
         V_PULSE,
         V_EXP,
-        V_SFAM,
-        V_SFFM,
+        /*V_SFAM,
+        V_SFFM,*/
         V_PWL,
         V_WHITENOISE,
         V_PINKNOISE,
@@ -261,8 +261,8 @@ public:
         I_SIN,
         I_PULSE,
         I_EXP,
-        I_SFAM,
-        I_SFFM,
+        /*I_SFAM,
+        I_SFFM,*/
         I_PWL,
         I_WHITENOISE,
         I_PINKNOISE,
@@ -320,6 +320,7 @@ public:
         enum class CATEGORY
         {
             PRINCIPAL,
+            AC,
             DC,
             CAPACITANCE,
             TEMPERATURE,
@@ -373,7 +374,7 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
-    static TYPE InferTypeFromRef( const wxString& aRef );
+    static TYPE InferTypeFromRefAndValue( const wxString& aRef, const wxString& aValue );
 
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );

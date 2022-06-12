@@ -24,9 +24,8 @@
  */
 
 #include "netlist_exporter_spice.h"
-#include <pegtl.hpp>
-#include <pegtl/contrib/parse_tree.hpp>
 #include <sim/sim_model_spice.h>
+#include <sim/spice_grammar.h>
 #include <common.h>
 #include <confirm.h>
 #include <pgm_base.h>
@@ -36,6 +35,8 @@
 #include <sch_text.h>
 #include <sch_textbox.h>
 #include <string_utils.h>
+#include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
@@ -197,8 +198,20 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
                 if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotTitle>() )
                     m_title = node->children.at( 0 )->string();
                 else if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotInclude>() )
-                    m_libraries[node->children.at( 0 )->string()] =
-                        SIM_LIBRARY::Create( node->children.at( 0 )->string() );
+                {
+                    wxString path = node->children.at( 0 )->string();
+
+                    try
+                    {
+                        m_libraries.try_emplace( path, SIM_LIBRARY::Create( path ) );
+                    }
+                    catch( const IO_ERROR& e )
+                    {
+                        DisplayErrorMessage( nullptr,
+                            wxString::Format( "Failed reading model library '%s'.", path ),
+                            e.What() );
+                    }
+                }
                 else
                     m_directives.emplace_back( node->string() );
             }
@@ -219,13 +232,26 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
         // Special case for legacy models.
         unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
         path = model->GetParam( libParamIndex ).value->ToString();
+
+        m_rawIncludes.push_back( path );
+        return;
     }
     
     if( path.IsEmpty() )
         return;
 
-    if( auto library = SIM_LIBRARY::Create( m_schematic->Prj().AbsolutePath( path ) ) )
-        m_libraries.try_emplace( path, std::move( library ) );
+    wxString absolutePath = m_schematic->Prj().AbsolutePath( path );
+
+    try
+    {
+        m_libraries.try_emplace( path, SIM_LIBRARY::Create( absolutePath ) );
+    }
+    catch( const IO_ERROR& e )
+    {
+        DisplayErrorMessage( nullptr, wxString::Format( "Failed reading model library '%s'.",
+                                                        absolutePath ),
+                             e.What() ); 
+    }
 
     aItem.libraryPath = path;
 }
@@ -306,32 +332,41 @@ void NETLIST_EXPORTER_SPICE::readPins( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
 }
 
 
-void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter,
-                                            unsigned aNetlistOptions )
+void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
+                                           const wxString& aPath )
 {
-    for( auto&& [libraryPath, library] : m_libraries )
+    // First, expand env vars, if any.
+    wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
+    wxString fullPath;
+
+    if( aNetlistOptions & OPTION_ADJUST_INCLUDE_PATHS )
     {
-        // First, expand env vars, if any.
-        wxString libName = ExpandEnvVarSubstitutions( libraryPath, &m_schematic->Prj() );
-        wxString fullPath;
-
-        if( aNetlistOptions & OPTION_ADJUST_INCLUDE_PATHS )
+        // Look for the library in known search locations.
+        fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(),
+                                &m_schematic->Prj() );
+        
+        if( fullPath.IsEmpty() )
         {
-            // Look for the library in known search locations.
-            fullPath = ResolveFile( libName, &Pgm().GetLocalEnvVariables(), &m_schematic->Prj() );
-            
-            if( fullPath.IsEmpty() )
-            {
-                DisplayErrorMessage( nullptr,
-                        wxString::Format( _( "Could not find library file '%s'" ), libName ) );
-                fullPath = libName;
-            }
+            DisplayErrorMessage( nullptr,
+                    wxString::Format( _( "Could not find library file '%s'" ),
+                                      expandedPath ) );
+            fullPath = expandedPath;
         }
-        else
-            fullPath = libName;
-
-        aFormatter.Print( 0, ".include \"%s\"\n", TO_UTF8( fullPath ) );
     }
+    else
+        fullPath = expandedPath;
+
+    aFormatter.Print( 0, ".include \"%s\"\n", TO_UTF8( fullPath ) );
+}
+
+
+void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+{
+    for( auto&& [path, library] : m_libraries )
+        writeInclude( aFormatter, aNetlistOptions, path );
+
+    for( const wxString& path : m_rawIncludes )
+        writeInclude( aFormatter, aNetlistOptions, path );
 }
 
 

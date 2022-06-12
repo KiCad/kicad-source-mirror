@@ -28,11 +28,13 @@
 #include <confirm.h>
 #include <wx/combo.h>
 #include <wx/combobox.h>
+#include <wx/gtk/notebook.h>
 
 
 wxBEGIN_EVENT_TABLE( SIM_VALIDATOR, wxValidator )
     EVT_TEXT( wxID_ANY, SIM_VALIDATOR::onText )
     EVT_CHAR( SIM_VALIDATOR::onChar )
+    EVT_KEY_DOWN( SIM_VALIDATOR::onKeyDown )
     EVT_MOUSE_EVENTS( SIM_VALIDATOR::onMouse )
 wxEND_EVENT_TABLE()
 
@@ -80,6 +82,82 @@ bool SIM_VALIDATOR::TransferToWindow()
 bool SIM_VALIDATOR::TransferFromWindow()
 {
     return true;
+}
+
+
+void SIM_VALIDATOR::navigate( int flags )
+{
+    wxWindow* textCtrl = GetWindow();
+    if( !textCtrl )
+        return;
+
+    wxPropertyGrid* paramGrid = dynamic_cast<wxPropertyGrid*>( textCtrl->GetParent() );
+    if( !paramGrid )
+        return;
+
+    wxPropertyGridManager* paramGridMgr =
+        dynamic_cast<wxPropertyGridManager*>( paramGrid->GetParent() );
+    if( !paramGridMgr )
+        return;
+
+#ifdef __WXGTK__
+    // Workaround for wxWindow::Navigate() working differently on GTK. Same workaround is
+    // in the WxWidgets source code.
+    if( flags == wxNavigationKeyEvent::IsBackward )
+    {
+        if( wxWindow* sibling = paramGridMgr->GetPrevSibling() )
+        {
+            sibling->SetFocusFromKbd();
+            return;
+        }
+    }
+    else if( flags == wxNavigationKeyEvent::IsForward )
+    {
+        if( wxWindow* sibling = paramGridMgr->GetNextSibling() )
+        {
+            sibling->SetFocusFromKbd();
+            return;
+        }
+    }
+
+    // We didn't find the sibling, so instead we try another workaround by by finding the notebook
+    // we are in, and jumping out of it.
+    for( wxWindow* window = paramGridMgr; window; window = window->GetParent() )
+    {
+        if( wxNotebook* notebook = dynamic_cast<wxNotebook*>( window ) )
+        {
+            if( flags == wxNavigationKeyEvent::IsBackward )
+            {
+                for( wxWindow* sibling = notebook->GetNextSibling();
+                     sibling;
+                     sibling = sibling->GetNextSibling() )
+                {
+                    if( sibling->IsFocusable() )
+                    {
+                        sibling->SetFocusFromKbd();
+                        return;
+                    }
+                }
+            }
+            else if( flags == wxNavigationKeyEvent::IsForward )
+            {
+                for( wxWindow* sibling = notebook->GetNextSibling();
+                     sibling;
+                     sibling = sibling->GetNextSibling() )
+                {
+                    if( sibling->IsFocusable() )
+                    {
+                        sibling->SetFocusFromKbd();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+#else
+    paramGridMgr->Navigate( flags );
+#endif
 }
 
 
@@ -138,6 +216,65 @@ void SIM_VALIDATOR::onChar( wxKeyEvent& aEvent )
     m_prevInsertionPoint = textEntry->GetInsertionPoint();
 }
 
+
+void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
+{
+    // Because wxPropertyGrid has special handling for the tab key, wxPropertyGrid::DedicateKey()
+    // and wxPropertyGrid::AddActionTrigger() don't work for it. So instead we translate it to an
+    // (up or down) arrow key, which has proper handling (select next or previous property) defined
+    // by the aforementioned functions.
+    
+    if( aEvent.GetKeyCode() == WXK_TAB )
+    {
+        // However, before that, if this is the first or last property, we instead want to navigate
+        // to the next or previous widget.
+        wxWindow* textCtrl = GetWindow();
+        if( !textCtrl )
+        {
+            aEvent.Skip();
+            return;
+        }
+
+        wxPropertyGrid* paramGrid = dynamic_cast<wxPropertyGrid*>( textCtrl->GetParent() );
+        if( !paramGrid )
+        {
+            aEvent.Skip();
+            return;
+        }
+
+        wxPropertyGridIterator it = paramGrid->GetIterator( wxPG_ITERATE_VISIBLE,
+                                                            paramGrid->GetSelection() );
+        if( !it.AtEnd() )
+            it.Next();
+
+        bool isFirst = paramGrid->GetSelection() == paramGrid->wxPropertyGridInterface::GetFirst();
+        bool isLast = it.AtEnd();
+
+        if( isFirst && aEvent.ShiftDown() )
+        {
+            navigate( wxNavigationKeyEvent::IsBackward );
+            return;
+        }
+        
+        if( isLast && !aEvent.ShiftDown() )
+        {
+            navigate( wxNavigationKeyEvent::IsForward );
+            return;
+        }
+
+        if( aEvent.GetModifiers() == wxMOD_SHIFT )
+        {
+            aEvent.m_shiftDown = false;
+            aEvent.m_keyCode = WXK_UP;
+        }
+        else
+            aEvent.m_keyCode = WXK_DOWN;
+    }
+
+    aEvent.Skip();
+}
+
+
 void SIM_VALIDATOR::onMouse( wxMouseEvent& aEvent )
 {
     aEvent.Skip();
@@ -188,9 +325,7 @@ bool SIM_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, in
     }
     else
     {
-        if( !m_model->SetParamValue( m_paramIndex, aText ) )
-            return false;
-
+        m_model->SetParamValue( m_paramIndex, aText );
         aVariant = GetParam().value->ToString();
     }
 

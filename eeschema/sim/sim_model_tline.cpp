@@ -28,7 +28,8 @@ using PARAM = SIM_MODEL::PARAM;
 
 
 SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
-    : SIM_MODEL( aType )
+    : SIM_MODEL( aType ),
+      m_isInferred( false )
 {
     static std::vector<PARAM::INFO> z0 = makeZ0ParamInfo();
     static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfo();
@@ -51,10 +52,70 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
 }
 
 
-/*wxString SIM_MODEL_TLINE::GenerateSpiceItemName( const wxString& aRefName ) const
+void SIM_MODEL_TLINE::ReadDataSchFields( unsigned aSymbolPinCount,
+                                         const std::vector<SCH_FIELD>* aFields )
 {
-    
-}*/
+    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
+        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_TLINE::ReadDataLibFields( unsigned aSymbolPinCount,
+                                         const std::vector<LIB_FIELD>* aFields )
+{
+    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
+        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_TLINE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataSchFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataLibFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+template <typename T>
+void SIM_MODEL_TLINE::inferredReadDataFields( unsigned aSymbolPinCount,
+                                              const std::vector<T>* aFields )
+{
+    ParsePinsField( aSymbolPinCount, PINS_FIELD );
+
+    if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
+                                    GetFieldValue( aFields, VALUE_FIELD ) ) == GetType()
+            && ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) ) )
+        // If Value is device type, this is an empty model
+        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+    {
+        m_isInferred = true;
+    }
+}
+
+template <typename T>
+void SIM_MODEL_TLINE::inferredWriteDataFields( std::vector<T>& aFields ) const
+{
+    wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
+
+    if( value == "" )
+        value = GetDeviceTypeInfo().fieldValue;
+
+    WriteInferredDataFields( aFields, value );
+}
 
 
 std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfo()

@@ -33,7 +33,10 @@ class SIM_LIBRARY_SPICE : public SIM_LIBRARY
     // We'll make SIM_LIBRARY have no subclasses probably.
 
 public:
-    bool ReadFile( const wxString& aFilePath ) override;
+    // @copydoc SIM_LIBRARY::ReadFile()
+    void ReadFile( const wxString& aFilePath ) override;
+
+    // @copydoc SIM_LIBRARY::WriteFile()
     void WriteFile( const wxString& aFilePath ) override;
 };
 

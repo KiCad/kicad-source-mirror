@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_model_subckt.h>
+#include <sim/spice_grammar.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 

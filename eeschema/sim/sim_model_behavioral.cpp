@@ -27,7 +27,8 @@
 
 
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
-    : SIM_MODEL( aType )
+    : SIM_MODEL( aType ),
+      m_isInferred( false )
 {
     static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F"   );
@@ -45,6 +46,44 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
+}
+
+
+void SIM_MODEL_BEHAVIORAL::ReadDataSchFields( unsigned aSymbolPinCount,
+                                              const std::vector<SCH_FIELD>* aFields )
+{
+    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
+        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_BEHAVIORAL::ReadDataLibFields( unsigned aSymbolPinCount,
+                                              const std::vector<LIB_FIELD>* aFields )
+{
+    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
+        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_BEHAVIORAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataSchFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+void SIM_MODEL_BEHAVIORAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataLibFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
 }
 
 
@@ -81,6 +120,35 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_BEHAVIORAL" );
         return "";
     }
+}
+
+
+template <typename T>
+void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
+                                                   const std::vector<T>* aFields )
+{
+    ParsePinsField( aSymbolPinCount, PINS_FIELD );
+
+    if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
+                                    GetFieldValue( aFields, VALUE_FIELD ) ) == GetType()
+            && ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) ) )
+        // If Value is device type, this is an empty model
+        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+    {
+        m_isInferred = true;
+    }
+}
+
+
+template <typename T>
+void SIM_MODEL_BEHAVIORAL::inferredWriteDataFields( std::vector<T>& aFields ) const
+{
+    wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
+
+    if( value == "" )
+        value = GetDeviceTypeInfo().fieldValue;
+
+    WriteInferredDataFields( aFields, value );
 }
 
 

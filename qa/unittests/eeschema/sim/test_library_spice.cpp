@@ -44,7 +44,7 @@ public:
     {
         wxString path = GetLibraryPath( aBaseName );
         m_library = std::make_unique<SIM_LIBRARY_SPICE>();
-        BOOST_CHECK( m_library->ReadFile( path ) );
+        m_library->ReadFile( path );
     }
 
     void CompareToUsualDiodeModel( const SIM_MODEL& aModel, const wxString& aModelName, int aModelIndex )

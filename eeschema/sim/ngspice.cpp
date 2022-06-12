@@ -307,9 +307,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
 bool NGSPICE::Run()
 {
-    wxBusyCursor dummy;
-
-    LOCALE_IO c_locale;                     // ngspice works correctly only with C locale
+    LOCALE_IO toggle;                       // ngspice works correctly only with C locale
     bool success = Command( "bg_run" );     // bg_* commands execute in a separate thread
 
     if( success )

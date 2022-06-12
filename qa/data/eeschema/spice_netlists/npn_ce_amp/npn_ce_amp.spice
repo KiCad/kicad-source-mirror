@@ -1,0 +1,17 @@
+.title KiCad schematic
+.include "npn.lib.spice"
+.save all
+.probe alli
+.tran 1u 1m
+
+Q1 /out Net-_Q1-B_ Net-_Q1-E_ NPN 
+R2 Net-_Q1-B_ GND 1k 
+R1 Net-_R1-Pad1_ Net-_Q1-B_ 1k 
+C1 /in Net-_Q1-B_ 10u 
+V1 Net-_R1-Pad1_ GND 9 
+R3 Net-_R1-Pad1_ /out 100 
+C2 Net-_Q1-E_ Net-_C2-Pad2_ 10u 
+R4 Net-_Q1-E_ Net-_C2-Pad2_ 100 
+R5 Net-_C2-Pad2_ GND 1 
+V2 /in GND SIN( 0 10m 10k ) 
+.end

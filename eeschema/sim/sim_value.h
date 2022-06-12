@@ -163,12 +163,12 @@ namespace SIM_VALUE_GRAMMAR
 
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
-    struct number : seq<significand<ValueType>,
+    struct number : seq<opt<significand<ValueType>>,
                         opt<exponentWithPrefix>,
                         sor<metricSuffix<ValueType, Notation>, not_at<alnum>>> {};
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
-    struct numberGrammar : must<opt<number<ValueType, Notation>>, eof> {};
+    struct numberGrammar : must<number<ValueType, Notation>, eof> {};
 
 
     bool IsValid( const wxString& aString,

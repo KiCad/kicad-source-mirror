@@ -33,8 +33,10 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
-    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
+    void ReadDataSchFields( unsigned aSymbolPinCount,
+                            const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount,
+                            const std::vector<LIB_FIELD>* aFields ) override;
 
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
@@ -67,8 +69,8 @@ private:
     static std::vector<PARAM::INFO> makeSinParamInfos( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makePulseParamInfos( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeExpParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSfamParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSffmParamInfos( wxString aPrefix, wxString aUnit );
+    //static std::vector<PARAM::INFO> makeSfamParamInfos( wxString aPrefix, wxString aUnit );
+    //static std::vector<PARAM::INFO> makeSffmParamInfos( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makePwlParamInfos( wxString aPrefix, wxString aQuantity,
                                                        wxString aUnit );
     static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( wxString aPrefix, wxString aUnit );
@@ -78,6 +80,8 @@ private:
     static std::vector<PARAM::INFO> makeRandomNormalParamInfos( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeRandomExpParamInfos( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( wxString aPrefix, wxString aUnit );
+
+    static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, wxString aUnit );
 
     bool m_isInferred;
 };

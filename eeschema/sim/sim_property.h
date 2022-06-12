@@ -27,6 +27,9 @@
 
 #include <sim/sim_model.h>
 #include <wx/window.h>
+#include <wx/notebook.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/manager.h>
 #include <wx/propgrid/props.h>
 
 
@@ -43,12 +46,15 @@ public:
     bool TransferFromWindow() override;
 
 private:
+    void navigate( int flags );
+
     bool isValid( const wxString& aString );
 
     wxTextEntry* getTextEntry();
 
     void onText( wxCommandEvent& aEvent );
     void onChar( wxKeyEvent& aEvent );
+    void onKeyDown( wxKeyEvent& aEvent );
     void onMouse( wxMouseEvent& aEvent );
 
     SIM_VALUE::TYPE       m_valueType;

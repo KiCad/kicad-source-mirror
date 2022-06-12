@@ -130,6 +130,9 @@ private:
                       std::set<wxString>& aRefNames );
     void readPins( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem, int& notConnectedCounter );
 
+    void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
+                       const wxString& aPath );
+
     void writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
@@ -137,6 +140,7 @@ private:
     wxString                m_title;       ///< Spice simulation title found in the schematic sheet
     std::vector<wxString>   m_directives;  ///< Spice directives found in the schematic sheet
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
+    std::vector<wxString>   m_rawIncludes;
     std::set<wxString>      m_nets;
     std::list<SPICE_ITEM>   m_items;  ///< Items representing schematic symbols in Spice world
 };

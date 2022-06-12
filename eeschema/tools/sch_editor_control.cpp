@@ -791,9 +791,20 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     if( libraryField )
                     {
                         wxString path = m_frame->Prj().AbsolutePath( libraryField->GetShownText() );
-                        library = SIM_LIBRARY::Create( path );
 
-                        if( !library || !nameField )
+                        try
+                        {
+                            library = SIM_LIBRARY::Create( path );
+                        }
+                        catch( const IO_ERROR& e )
+                        {
+                            DisplayErrorMessage( m_frame,
+                                wxString::Format( "Failed reading model library '%s'", path ),
+                                e.What() );
+                            return true;
+                        }
+
+                        if( !nameField )
                             return true;
 
                         SIM_MODEL* baseModel = library->FindModel( nameField->GetShownText() );
