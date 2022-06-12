@@ -111,17 +111,17 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
 
     m_separator2->SetIsSeparator();
 
-    m_spin0->SetIsCheckButton();
+    m_spin0->SetIsRadioButton();
     m_spin0->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-    m_spin1->SetIsCheckButton();
+    m_spin1->SetIsRadioButton();
     m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
-    m_spin2->SetIsCheckButton();
+    m_spin2->SetIsRadioButton();
     m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
-    m_spin3->SetIsCheckButton();
+    m_spin3->SetIsRadioButton();
     m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
-    m_spin4->SetIsCheckButton();
+    m_spin4->SetIsRadioButton();
     m_spin4->SetBitmap( KiBitmap( BITMAPS::text_align_middle ) );
-    m_spin5->SetIsCheckButton();
+    m_spin5->SetIsRadioButton();
     m_spin5->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
 
     m_separator3->SetIsSeparator();

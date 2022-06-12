@@ -35,6 +35,7 @@
 BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
                               const wxSize& aSize, int aStyles ) :
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
+        m_isRadioButton( false ),
         m_buttonState( 0 ),
         m_padding( 0 ),
         m_acceptDraggedInClicks( false )
@@ -49,6 +50,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
 BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap& aDummyBitmap,
                               const wxPoint& aPos, const wxSize& aSize, int aStyles ) :
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
+        m_isRadioButton( false ),
         m_buttonState( 0 ),
         m_padding( 5 ),
         m_acceptDraggedInClicks( false )
@@ -165,7 +167,7 @@ void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
 {
     if( hasFlag( wxCONTROL_CHECKABLE ) )
     {
-        if( hasFlag( wxCONTROL_CHECKED ) )
+        if( hasFlag( wxCONTROL_CHECKED ) && !m_isRadioButton )
         {
             clearFlag( wxCONTROL_CHECKED );
 
@@ -277,6 +279,13 @@ bool BITMAP_BUTTON::Enable( bool aEnable )
 void BITMAP_BUTTON::SetIsCheckButton()
 {
     setFlag( wxCONTROL_CHECKABLE );
+}
+
+
+void BITMAP_BUTTON::SetIsRadioButton()
+{
+    setFlag( wxCONTROL_CHECKABLE );
+    m_isRadioButton = true;
 }
 
 

@@ -54,9 +54,9 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
 
     m_separator1->SetIsSeparator();
 
-    m_horizontal->SetIsCheckButton();
+    m_horizontal->SetIsRadioButton();
     m_horizontal->SetBitmap( KiBitmap( BITMAPS::text_horizontal ) );
-    m_vertical->SetIsCheckButton();
+    m_vertical->SetIsRadioButton();
     m_vertical->SetBitmap( KiBitmap( BITMAPS::text_vertical ) );
 
     m_separator2->SetIsSeparator();
@@ -68,20 +68,20 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
 
     m_separator3->SetIsSeparator();
 
-    m_hAlignLeft->SetIsCheckButton();
+    m_hAlignLeft->SetIsRadioButton();
     m_hAlignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-    m_hAlignCenter->SetIsCheckButton();
+    m_hAlignCenter->SetIsRadioButton();
     m_hAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
-    m_hAlignRight->SetIsCheckButton();
+    m_hAlignRight->SetIsRadioButton();
     m_hAlignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
 
     m_separator4->SetIsSeparator();
 
-    m_vAlignTop->SetIsCheckButton();
+    m_vAlignTop->SetIsRadioButton();
     m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
-    m_vAlignCenter->SetIsCheckButton();
+    m_vAlignCenter->SetIsRadioButton();
     m_vAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
-    m_vAlignBottom->SetIsCheckButton();
+    m_vAlignBottom->SetIsRadioButton();
     m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
 
     m_separator5->SetIsSeparator();

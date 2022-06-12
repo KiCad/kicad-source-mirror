@@ -81,6 +81,8 @@ public:
      */
     void SetIsCheckButton();
 
+    void SetIsRadioButton();
+
     /**
      * Check the control. This is the equivalent to toggling a toolbar button.
      */
@@ -132,6 +134,7 @@ private:
     wxBitmap  m_normalBitmap;
     wxBitmap  m_disabledBitmap;
 
+    bool      m_isRadioButton;
     int       m_buttonState;
     int       m_padding;
     wxSize    m_unadjustedMinSize;

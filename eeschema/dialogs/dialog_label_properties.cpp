@@ -139,10 +139,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
     m_separator2->SetIsSeparator();
 
-    m_spin0->SetIsCheckButton();
-    m_spin1->SetIsCheckButton();
-    m_spin2->SetIsCheckButton();
-    m_spin3->SetIsCheckButton();
+    m_spin0->SetIsRadioButton();
+    m_spin1->SetIsRadioButton();
+    m_spin2->SetIsRadioButton();
+    m_spin3->SetIsRadioButton();
 
     m_separator3->SetIsSeparator();
 

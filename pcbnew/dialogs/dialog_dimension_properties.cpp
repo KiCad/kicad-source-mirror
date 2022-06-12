@@ -101,11 +101,11 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
     m_separator1->SetIsSeparator();
 
-    m_alignLeft->SetIsCheckButton();
+    m_alignLeft->SetIsRadioButton();
     m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-    m_alignCenter->SetIsCheckButton();
+    m_alignCenter->SetIsRadioButton();
     m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
-    m_alignRight->SetIsCheckButton();
+    m_alignRight->SetIsRadioButton();
     m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
 
     m_separator2->SetIsSeparator();

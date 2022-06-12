@@ -81,20 +81,20 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 
     m_separator2->SetIsSeparator();
 
-    m_alignLeft->SetIsCheckButton();
+    m_alignLeft->SetIsRadioButton();
     m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-    m_alignCenter->SetIsCheckButton();
+    m_alignCenter->SetIsRadioButton();
     m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
-    m_alignRight->SetIsCheckButton();
+    m_alignRight->SetIsRadioButton();
     m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
 
     m_separator3->SetIsSeparator();
 
-    m_vAlignTop->SetIsCheckButton();
+    m_vAlignTop->SetIsRadioButton();
     m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
-    m_vAlignMiddle->SetIsCheckButton();
+    m_vAlignMiddle->SetIsRadioButton();
     m_vAlignMiddle->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
-    m_vAlignBottom->SetIsCheckButton();
+    m_vAlignBottom->SetIsRadioButton();
     m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
 
     m_separator4->SetIsSeparator();
