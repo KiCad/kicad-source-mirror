@@ -302,8 +302,27 @@ public:
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
-        return aItem->Type() == SCH_LINE_T &&
-                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
+        switch( aItem->Type() )
+        {
+        case SCH_LINE_T:
+            return aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS;
+
+        case SCH_BUS_WIRE_ENTRY_T:
+            return true;
+
+        case SCH_SYMBOL_T:
+            return true;
+
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_DIRECTIVE_LABEL_T:
+        case SCH_SHEET_PIN_T:
+            return true;
+
+        default:
+            return false;
+        }
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
