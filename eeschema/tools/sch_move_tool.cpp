@@ -544,6 +544,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
     EE_RTREE&         items = m_frame->GetScreen()->Items();
     EE_RTREE::EE_TYPE itemsOverlapping = items.Overlapping( aOriginalItem->GetBoundingBox() );
     bool              ptHasUnselectedJunction = false;
+    SCH_LINE*         newWire = nullptr;
 
     for( SCH_ITEM* item : itemsOverlapping )
     {
@@ -625,14 +626,12 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
         case SCH_SHEET_T:
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
-            if( test->IsConnected( aPoint ) )
+            if( test->IsConnected( aPoint ) && !newWire )
             {
                 // Add a new wire between the symbol or junction and the selected item so
                 // the selected item can be dragged.
-                SCH_LINE* newWire = nullptr;
-
-                if( test->GetLayer() == LAYER_BUS_JUNCTION ||
-                    aOriginalItem->GetLayer() == LAYER_BUS )
+                if( test->GetLayer() == LAYER_BUS_JUNCTION
+                        || aOriginalItem->GetLayer() == LAYER_BUS )
                 {
                     newWire = new SCH_LINE( aPoint, LAYER_BUS );
                 }
@@ -704,7 +703,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
-                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                newWire->SetFlags( TEMP_SELECTED | STARTPOINT );
                 aList.push_back( newWire );
             }
 
