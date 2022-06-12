@@ -17,15 +17,15 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FILEDLG_HOOK_NEW_PROJECT_H
-#define FILEDLG_HOOK_NEW_PROJECT_H
+#ifndef FILEDLG_NEW_PROJECT_H_
+#define FILEDLG_NEW_PROJECT_H_
 
 #include <wx/filedlgcustomize.h>
 
-class FILEDLG_HOOK_NEW_PROJECT : public wxFileDialogCustomizeHook
+class FILEDLG_NEW_PROJECT : public wxFileDialogCustomizeHook
 {
 public:
-    FILEDLG_HOOK_NEW_PROJECT(){};
+    FILEDLG_NEW_PROJECT(){};
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
@@ -46,7 +46,7 @@ private:
 
     wxFileDialogCheckBox* m_cb;
 
-    wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_NEW_PROJECT );
+    wxDECLARE_NO_COPY_CLASS( FILEDLG_NEW_PROJECT );
 };
 
 #endif

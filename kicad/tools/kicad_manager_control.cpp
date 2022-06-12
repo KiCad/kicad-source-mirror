@@ -42,9 +42,9 @@
 #include "dialog_pcm.h"
 
 #if wxCHECK_VERSION( 3, 1, 7 )
-#include "widgets/filedlg_hook_new_project.h"
+#include "widgets/filedlg_new_project.h"
 #else
-#include "widgets/legacy_dir_checkbox.h"
+#include "widgets/legacyfiledlg_new_project.h"
 #endif
 
 KICAD_MANAGER_CONTROL::KICAD_MANAGER_CONTROL() :
@@ -68,10 +68,10 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     // Add a "Create a new directory" checkbox
 #if wxCHECK_VERSION( 3, 1, 7 )
-    FILEDLG_HOOK_NEW_PROJECT newProjectHook;
+    FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
 #else
-    dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
+    dlg.SetExtraControlCreator( &LEGACYFILEDLG_NEW_PROJECT::Create );
 #endif
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -95,7 +95,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 #if wxCHECK_VERSION( 3, 1, 7 )
     createNewDir = newProjectHook.GetCreateNewDir();
 #else
-    createNewDir = static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir();
+    createNewDir = static_cast<LEGACYFILEDLG_NEW_PROJECT*>( dlg.GetExtraControl() )->CreateNewDir();
 #endif
 
     if( createNewDir )
@@ -178,10 +178,10 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     // Add a "Create a new directory" checkbox
 #if wxCHECK_VERSION( 3, 1, 7 )
-    FILEDLG_HOOK_NEW_PROJECT newProjectHook;
+    FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
 #else
-    dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
+    dlg.SetExtraControlCreator( &LEGACYFILEDLG_NEW_PROJECT::Create );
 #endif
 
 
@@ -204,7 +204,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 #if wxCHECK_VERSION( 3, 1, 7 )
     createNewDir = newProjectHook.GetCreateNewDir();
 #else
-    createNewDir = static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir();
+    createNewDir = static_cast<LEGACYFILEDLG_NEW_PROJECT*>( dlg.GetExtraControl() )->CreateNewDir();
 #endif
 
     // Append a new directory with the same name of the project file.

@@ -17,18 +17,18 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LEGACY_DIR_CHECKBOX_H
-#define LEGACY_DIR_CHECKBOX_H
+#ifndef LEGACY_DIR_CHECKBOX_H_
+#define LEGACY_DIR_CHECKBOX_H_
 
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 
 ///> Helper widget to select whether a new directory should be created for a project.
-class DIR_CHECKBOX : public wxPanel
+class LEGACYFILEDLG_NEW_PROJECT : public wxPanel
 {
 public:
-    DIR_CHECKBOX( wxWindow* aParent ) : wxPanel( aParent )
+    LEGACYFILEDLG_NEW_PROJECT( wxWindow* aParent ) : wxPanel( aParent )
     {
         m_cbCreateDir =
                 new wxCheckBox( this, wxID_ANY, _( "Create a new folder for the project" ) );
