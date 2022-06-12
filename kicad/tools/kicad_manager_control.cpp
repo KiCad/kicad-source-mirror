@@ -41,38 +41,11 @@
 #include <wx/filedlg.h>
 #include "dialog_pcm.h"
 
-
-///> Helper widget to select whether a new directory should be created for a project.
-class DIR_CHECKBOX : public wxPanel
-{
-public:
-    DIR_CHECKBOX( wxWindow* aParent )
-            : wxPanel( aParent )
-    {
-        m_cbCreateDir = new wxCheckBox( this, wxID_ANY,
-                                        _( "Create a new folder for the project" ) );
-        m_cbCreateDir->SetValue( true );
-
-        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_cbCreateDir, 0, wxALL, 8 );
-
-        SetSizerAndFit( sizer );
-    }
-
-    bool CreateNewDir() const
-    {
-        return m_cbCreateDir->GetValue();
-    }
-
-    static wxWindow* Create( wxWindow* aParent )
-    {
-        return new DIR_CHECKBOX( aParent );
-    }
-
-protected:
-    wxCheckBox* m_cbCreateDir;
-};
-
+#if wxCHECK_VERSION( 3, 1, 7 )
+#include "widgets/filedlg_hook_new_project.h"
+#else
+#include "widgets/legacy_dir_checkbox.h"
+#endif
 
 KICAD_MANAGER_CONTROL::KICAD_MANAGER_CONTROL() :
         TOOL_INTERACTIVE( "kicad.Control" ),
@@ -94,7 +67,12 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
                          ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
+#if wxCHECK_VERSION( 3, 1, 7 )
+    FILEDLG_HOOK_NEW_PROJECT newProjectHook;
+    dlg.SetCustomizeHook( newProjectHook );
+#else
     dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
+#endif
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -112,7 +90,15 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
         pro.MakeAbsolute();
 
     // Append a new directory with the same name of the project file.
-    if( static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir() )
+    bool createNewDir = false;
+
+#if wxCHECK_VERSION( 3, 1, 7 )
+    createNewDir = newProjectHook.GetCreateNewDir();
+#else
+    createNewDir = static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir();
+#endif
+
+    if( createNewDir )
         pro.AppendDir( pro.GetName() );
 
     // Check if the project directory is empty if it already exists.
@@ -191,7 +177,13 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
+#if wxCHECK_VERSION( 3, 1, 7 )
+    FILEDLG_HOOK_NEW_PROJECT newProjectHook;
+    dlg.SetCustomizeHook( newProjectHook );
+#else
     dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
+#endif
+
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -208,8 +200,15 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     if( !fn.IsAbsolute() )
         fn.MakeAbsolute();
 
+    bool createNewDir = false;
+#if wxCHECK_VERSION( 3, 1, 7 )
+    createNewDir = newProjectHook.GetCreateNewDir();
+#else
+    createNewDir = static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir();
+#endif
+
     // Append a new directory with the same name of the project file.
-    if( static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir() )
+    if( createNewDir )
         fn.AppendDir( fn.GetName() );
 
     // Check if the project directory is empty if it already exists.
