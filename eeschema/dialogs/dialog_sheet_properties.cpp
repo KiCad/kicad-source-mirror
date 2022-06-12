@@ -431,10 +431,13 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         return false;
     }
 
-    SCH_SHEET_LIST fullHierarchy = m_frame->Schematic().GetFullHierarchy();
-    std::vector<SCH_SHEET_INSTANCE> sheetInstances = fullHierarchy.GetSheetInstances();
-    wxFileName screenFileName( sheetFileName );
-    wxFileName tmp( sheetFileName );
+    SCHEMATIC&                             schematic = m_frame->Schematic();
+    SCH_SCREEN*                            rootScreen = schematic.RootScreen();
+    SCH_SHEET_LIST                         fullHierarchy = schematic.GetFullHierarchy();
+    std::vector<SCH_SHEET_INSTANCE>        sheetInstances = fullHierarchy.GetSheetInstances();
+    std::vector<SYMBOL_INSTANCE_REFERENCE> symbolInstances = rootScreen->GetSymbolInstances();
+    wxFileName                             screenFileName( sheetFileName );
+    wxFileName                             tmp( sheetFileName );
 
     SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
 
@@ -469,7 +472,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
     // Search for a schematic file having the same filename already in use in the hierarchy
     // or on disk, in order to reuse it.
-    if( !m_frame->Schematic().Root().SearchHierarchy( newAbsoluteFilename, &useScreen ) )
+    if( !schematic.Root().SearchHierarchy( newAbsoluteFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newAbsoluteFilename );
 
@@ -581,7 +584,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
             try
             {
-                pi->Save( newAbsoluteFilename, m_sheet, &m_frame->Schematic() );
+                pi->Save( newAbsoluteFilename, m_sheet, &schematic );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -612,7 +615,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     if( useScreen )
     {
         // Create a temporary sheet for recursion testing to prevent a possible recursion error.
-        std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &m_frame->Schematic() );
+        std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &schematic );
         tmpSheet->GetFields()[SHEETNAME] = m_fields->at( SHEETNAME );
         tmpSheet->GetFields()[SHEETFILENAME].SetText( sheetFileName.GetFullPath() );
         tmpSheet->SetScreen( useScreen );
@@ -656,8 +659,9 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             currentSheet.LastScreen()->Append( m_sheet );
 
         // The full hierarchy needs to be reloaded because due to the addition of a new sheet.
-        fullHierarchy = m_frame->Schematic().GetFullHierarchy();
+        fullHierarchy = schematic.GetFullHierarchy();
         fullHierarchy.UpdateSheetInstances( sheetInstances );
+        fullHierarchy.UpdateSymbolInstances( symbolInstances );
     }
 
     if( m_clearAnnotationNewItems )
