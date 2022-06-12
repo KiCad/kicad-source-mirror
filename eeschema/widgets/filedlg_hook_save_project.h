@@ -17,36 +17,36 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FILEDLG_HOOK_NEW_PROJECT_H
-#define FILEDLG_HOOK_NEW_PROJECT_H
+#ifndef FILEDLG_HOOK_SAVE_PROJECT_H
+#define FILEDLG_HOOK_SAVE_PROJECT_H
 
 #include <wx/filedlgcustomize.h>
 
-class FILEDLG_HOOK_NEW_PROJECT : public wxFileDialogCustomizeHook
+class FILEDLG_HOOK_SAVE_PROJECT : public wxFileDialogCustomizeHook
 {
 public:
-    FILEDLG_HOOK_NEW_PROJECT(){};
+    FILEDLG_HOOK_SAVE_PROJECT(){};
 
     virtual void AddCustomControls( wxFileDialogCustomize& customizer ) override
     {
-        m_cb = customizer.AddCheckBox( _( "Create a new folder for the project" ) );
+        m_cb = customizer.AddCheckBox( _( "Create a new project for this schematic" ) );
         m_cb->SetValue( true );
     }
 
     virtual void TransferDataFromCustomControls() override
     {
-        m_createNewDir = m_cb->GetValue();
+        m_createNewProject = m_cb->GetValue();
     }
 
-    ///< Gets the selected state of the create new directory checkbox
-    bool GetCreateNewDir() const { return m_createNewDir; }
+    ///< Gets the selected state of the create new project option
+    bool GetCreateNewProject() const { return m_createNewProject; }
 
 private:
-    bool m_createNewDir;
+    bool m_createNewProject;
 
     wxFileDialogCheckBox* m_cb;
 
-    wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_NEW_PROJECT );
+    wxDECLARE_NO_COPY_CLASS( FILEDLG_HOOK_SAVE_PROJECT );
 };
 
 #endif

@@ -69,40 +69,11 @@
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
 #include <widgets/wx_progress_reporters.h>
 
-
-///< Helper widget to select whether a new project should be created for a file when saving
-class CREATE_PROJECT_CHECKBOX : public wxPanel
-{
-public:
-    CREATE_PROJECT_CHECKBOX( wxWindow* aParent )
-            : wxPanel( aParent )
-    {
-        m_cbCreateProject = new wxCheckBox( this, wxID_ANY,
-                                            _( "Create a new project for this schematic" ) );
-        m_cbCreateProject->SetValue( true );
-        m_cbCreateProject->SetToolTip( _( "Creating a project will enable features such as "
-                                          "text variables, net classes, and ERC exclusions" ) );
-
-        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_cbCreateProject, 0, wxALL, 8 );
-
-        SetSizerAndFit( sizer );
-    }
-
-    bool GetValue() const
-    {
-        return m_cbCreateProject->GetValue();
-    }
-
-    static wxWindow* Create( wxWindow* aParent )
-    {
-        return new CREATE_PROJECT_CHECKBOX( aParent );
-    }
-
-protected:
-    wxCheckBox* m_cbCreateProject;
-};
-
+#if wxCHECK_VERSION( 3, 1, 7 )
+#include "widgets/filedlg_hook_save_project.h"
+#else
+#include "widgets/legacyfiledlg_save_project.h"
+#endif
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
@@ -823,10 +794,20 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
                           savePath.GetFullName(), KiCadSchematicFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+#if wxCHECK_VERSION( 3, 1, 7 )
+        FILEDLG_HOOK_SAVE_PROJECT newProjectHook;
+        bool                     checkHook = false;
+#endif
+
         if( Kiface().IsSingle() || aSaveAs )
         {
+#if wxCHECK_VERSION( 3, 1, 7 )
+            dlg.SetCustomizeHook( newProjectHook );
+            checkHook = true;
+#else
             // Add a "Create a project" checkbox in standalone mode and one isn't loaded
-            dlg.SetExtraControlCreator( &CREATE_PROJECT_CHECKBOX::Create );
+            dlg.SetExtraControlCreator( &LEGACYFILEDLG_SAVE_PROJECT::Create );
+#endif
         }
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -849,8 +830,15 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             return false;
         }
 
+        bool createNewProject = false;
+
+#if wxCHECK_VERSION( 3, 1, 7 )
+        if( checkHook )
+            createNewProject = newProjectHook.GetCreateNewProject();
+#else
         if( wxWindow* ec = dlg.GetExtraControl() )
-            createNewProject = static_cast<CREATE_PROJECT_CHECKBOX*>( ec )->GetValue();
+            createNewProject = static_cast<LEGACYFILEDLG_SAVE_PROJECT*>( ec )->GetValue();
+#endif
 
         if( !saveCopy )
         {
