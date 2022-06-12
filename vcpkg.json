@@ -33,6 +33,10 @@
     {
       "name": "wxpython",
       "version": "4.1.1#9"
+    },
+    {
+      "name": "ngspice",
+      "version": "37"
     }
   ]
 }
