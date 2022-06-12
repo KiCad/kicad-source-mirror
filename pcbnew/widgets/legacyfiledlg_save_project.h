@@ -17,8 +17,8 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LEGACYFILEDLG_SAVE_PROJ_H
-#define LEGACYFILEDLG_SVE_PROJ_H
+#ifndef LEGACYFILEDLG_SAVE_PROJ_H_
+#define LEGACYFILEDLG_SAVE_PROJ_H_
 
 #include <wx/checkbox.h>
 #include <wx/panel.h>

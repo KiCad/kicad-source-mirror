@@ -69,6 +69,8 @@
 #include <wx/filedlg.h>
 #include <wx/log.h>
 
+#include <widgets/legacyfiledlg_netlist_options.h>
+
 using namespace std::placeholders;
 
 
@@ -121,56 +123,6 @@ public:
     {
         return new LOCK_CONTEXT_MENU();
     }
-};
-
-
-/**
- * Helper widget to add controls to a wxFileDialog to set netlist configuration options.
- */
-class NETLIST_OPTIONS_HELPER : public wxPanel
-{
-public:
-    NETLIST_OPTIONS_HELPER( wxWindow* aParent )
-            : wxPanel( aParent )
-    {
-        m_cbOmitExtras = new wxCheckBox( this, wxID_ANY, _( "Omit extra information" ) );
-        m_cbOmitNets = new wxCheckBox( this, wxID_ANY, _( "Omit nets" ) );
-        m_cbOmitFpUuids = new wxCheckBox( this, wxID_ANY,
-                                          _( "Do not prefix path with footprint UUID." ) );
-
-        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_cbOmitExtras, 0, wxALL, 5 );
-        sizer->Add( m_cbOmitNets, 0, wxALL, 5 );
-        sizer->Add( m_cbOmitFpUuids, 0, wxALL, 5 );
-
-        SetSizerAndFit( sizer );
-    }
-
-    int GetNetlistOptions() const
-    {
-        int options = 0;
-
-        if( m_cbOmitExtras->GetValue() )
-            options |= CTL_OMIT_EXTRA;
-
-        if( m_cbOmitNets->GetValue() )
-            options |= CTL_OMIT_NETS;
-
-        if( m_cbOmitFpUuids->GetValue() )
-            options |= CTL_OMIT_FP_UUID;
-
-        return options;
-    }
-
-    static wxWindow* Create( wxWindow* aParent )
-    {
-        return new NETLIST_OPTIONS_HELPER( aParent );
-    }
-
-protected:
-    wxCheckBox* m_cbOmitExtras;
-    wxCheckBox* m_cbOmitNets;
-    wxCheckBox* m_cbOmitFpUuids;
 };
 
 
@@ -478,7 +430,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
                       _( "KiCad board netlist files" ) + AddFileExtListToFilter( { "pcb_net" } ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    dlg.SetExtraControlCreator( &NETLIST_OPTIONS_HELPER::Create );
+    dlg.SetExtraControlCreator( &LEGACYFILEDLG_NETLIST_OPTIONS::Create );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;
@@ -494,8 +446,8 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    const NETLIST_OPTIONS_HELPER* noh =
-            dynamic_cast<const NETLIST_OPTIONS_HELPER*>( dlg.GetExtraControl() );
+    const LEGACYFILEDLG_NETLIST_OPTIONS* noh =
+            dynamic_cast<const LEGACYFILEDLG_NETLIST_OPTIONS*>( dlg.GetExtraControl() );
     wxCHECK( noh, 0 );
 
     NETLIST netlist;
