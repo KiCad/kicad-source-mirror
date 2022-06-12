@@ -42,7 +42,10 @@ public:
 
     bool CreateNewDir() const { return m_cbCreateDir->GetValue(); }
 
-    static wxWindow* Create( wxWindow* aParent ) { return new DIR_CHECKBOX( aParent ); }
+    static wxWindow* Create( wxWindow* aParent )
+    {
+        return new LEGACYFILEDLG_NEW_PROJECT( aParent );
+    }
 
 protected:
     wxCheckBox* m_cbCreateDir;
