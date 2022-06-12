@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:30-0700\n"
-"PO-Revision-Date: 2022-06-07 22:35+0000\n"
+"PO-Revision-Date: 2022-06-12 08:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -833,10 +833,12 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
+#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Okluze okolního prostoru obrazovky a odrazy globálního osvětlení (pomalé)"
+"Použít okolní okluzi obrazovky a odrazy globálního osvětlení na konečné "
+"vykreslení (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -13607,9 +13609,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, c-format
+#, c-format, fuzzy
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Vlastník zaobleného obdélníku (%d) nenalezen."
+msgstr "Reference '%s' nenalezena."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 msgid "Arcs on schematic not currently supported."
@@ -14631,6 +14633,7 @@ msgid "Cancel Load"
 msgstr "Zrušit načtení"
 
 #: eeschema/sheet.cpp:225
+#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14638,11 +14641,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ve vybraném schématu jsou názvy knihoven, které v aktuální tabulce knihoven "
-"projektu chybí.     To může mít za následek porušené odkazy na knihovnu "
-"symbolů pro načtené schéma.\n"
-"\n"
-"Chcete pokračovat?"
+"V načteném schématu jsou názvy knihoven, které chybí v tabulce knihoven "
+"projektu. To může mít za následek nefunkční odkazy na knihovnu symbolů pro "
+"načtené schéma. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15055,8 +15056,9 @@ msgid "Library changes are unsaved"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
+#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Načtení knihovny symbolů bylo zrušeno uživatelem."
+msgstr "Knihovna symbolů '%s' již existuje."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -16651,6 +16653,8 @@ msgstr ""
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Skryté napájecí vývody přenášejí své názvy vývodů do všech připojených "
+"sítí.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:402
 #, c-format
@@ -17110,8 +17114,9 @@ msgid "Drawing Mode"
 msgstr "Režim kreslení"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:40
+#, fuzzy
 msgid "Sketch flashed items"
-msgstr "Nákresy blikajících položek"
+msgstr "Bliká jako obrys"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch lines"
@@ -24352,9 +24357,9 @@ msgstr ""
 "desky)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "Nelze zapisovat soubory vrtání a/nebo map vrtání do složky \"%s\"."
+msgstr "Nelze zapisovat soubory vrtání a/nebo map vrtání do složky '%s'."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:455
 msgid "Save Drill Report File"
@@ -25230,9 +25235,8 @@ msgid "Delete footprints with no components in netlist"
 msgstr "Smazat všechna pouzdra bez komponentů v netlistu"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
-#, fuzzy
 msgid "Delete tracks shorting multiple nets"
-msgstr "Smazat segmenty &spoje spojující různé sítě"
+msgstr "Smazat spoje spojující různé sítě"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
@@ -25890,9 +25894,8 @@ msgid "Custom Shape Primitives"
 msgstr "Jednotlivé základní formy"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:961
-#, fuzzy
 msgid "Preview pad in sketch mode"
-msgstr "Zobrazit plošky jako obrys"
+msgstr "Náhled plošky jako obrys"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1119
 msgid "Start point"
@@ -26008,9 +26011,8 @@ msgid "Plot the contents of the PCB edge layer on all layers"
 msgstr "Vykreslit obsah vrstvy okrajů DPS na všech vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Mnohoúhelníky v režimu obrysů"
+msgstr "Obrys plošek na výrobních vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -26804,9 +26806,8 @@ msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr "Kreslit pouze horizontální a vertikální spoje a sběrnice"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
-#, fuzzy
 msgid "Rule Area Properties"
-msgstr "Vlastnosti zakázané oblasti"
+msgstr "Vlastnosti pravidel oblasti"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -26842,14 +26843,12 @@ msgid "Target Properties"
 msgstr "Vlastnosti značky"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Vlastnosti pouzdra"
+msgstr "Vlastnosti reference pouzdra"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "Vlastnosti pouzdra"
+msgstr "Vlastnosti hodnoty pouzdra"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -26886,9 +26885,8 @@ msgid "Keep text upright"
 msgstr "Přesunout vpravo"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:228
-#, fuzzy
 msgid "Parent footprint description"
-msgstr "Orientace pouzdra zdoje"
+msgstr "Popis nadřazeného pouzdra"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:447
 #, c-format
@@ -26910,9 +26908,8 @@ msgid "Change Nets"
 msgstr "Změnit sítě"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:471
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "Nechat beze změny"
+msgstr "Nechat sítě beze změny"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:492
 msgid "Via hole size must be smaller than via diameter"
@@ -27018,18 +27015,16 @@ msgid "Annular rings:"
 msgstr "Kroužky prstence:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s,%s a spojené vrstvy"
+msgstr "Počátek, konec a spojení vrstev"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
 msgstr "Spoje & prokovy Vlastnosti"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
-msgstr "Velikost vrtáku prokovu musí být menší než průměr prokovu"
+msgstr "Velikost vrtání prokovu musí být menší než jeho průměr"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
@@ -27040,9 +27035,8 @@ msgid "Track Width and Via Size"
 msgstr "Šířka spoje a velikosti prokovu"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
-#, fuzzy
 msgid "Set Unused Pad Properties"
-msgstr "Vlastnosti plošky"
+msgstr "Nastavit nepoužité vlastnosti plošky"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
@@ -27057,18 +27051,16 @@ msgid "&Remove unused layers"
 msgstr "&Odstranit nepoužívané vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "&Odstranit nepoužité"
+msgstr "&Obnovit nepoužité vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
 msgstr "Pouze &výběr"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "Bez prokovů"
+msgstr "Ponechte si vnější vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
@@ -31810,9 +31802,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nelze najít index podložky '%d' v pouzdře '%s'."
+msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -32837,11 +32829,11 @@ msgstr "Nelze spustit routování uvnitř zakázané oblasti nebo obrysu desky."
 #: pcbnew/router/pns_router.cpp:243
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "Pravidlo oblasti '%s' nepovoluje vedení spojů."
 
 #: pcbnew/router/pns_router.cpp:248
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "Pravidlo oblasti nepovoluje vedení spojů."
 
 #: pcbnew/router/pns_router.cpp:255
 #, fuzzy
@@ -32962,7 +32954,7 @@ msgstr "Spoj blízko plošky"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr ""
+msgstr "Přepíná mezi ostrými/zaoblenými rohy a 45°/90° při vedení spojů."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33429,7 +33421,7 @@ msgstr "[třída spojů %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:132
 msgid "Report incomplete: could not compile custom design rules.  "
-msgstr ""
+msgstr "Neúplná zpráva: Vlastní pravidla návrhu nemohla být sestavena.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:170
 #: pcbnew/tools/board_inspection_tool.cpp:481
@@ -33599,11 +33591,11 @@ msgstr "Spusťte DRC pro úplnou analýzu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "Položka <b>není povolena</b> v aktuálním umístění."
 
 #: pcbnew/tools/board_inspection_tool.cpp:839
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "Položka je povolena v aktuálním umístění."
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
@@ -33875,7 +33867,7 @@ msgstr ""
 
 #: pcbnew/tools/group_tool.cpp:148
 msgid "Click on new member..."
-msgstr ""
+msgstr "Klikněte na nového člena..."
 
 #: pcbnew/tools/pad_tool.cpp:153
 #, fuzzy
@@ -34757,8 +34749,9 @@ msgid "Ungroup"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:704
+#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "Zrušit seskupení všech vybraných skupin"
+msgstr "vybraných skupin"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Remove Items"
