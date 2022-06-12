@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:55-0700\n"
-"PO-Revision-Date: 2022-06-11 16:15+0000\n"
+"PO-Revision-Date: 2022-06-13 16:56+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -14448,15 +14448,15 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:1447
 msgid "Missing parent"
-msgstr ""
+msgstr "Відсутнє джерело"
 
 #: eeschema/sch_symbol.cpp:1462
 msgid "Undefined!!!"
-msgstr ""
+msgstr "Невизначено!!!"
 
 #: eeschema/sch_symbol.cpp:1469
 msgid "<Unknown>"
-msgstr ""
+msgstr "<Невідомо>"
 
 #: eeschema/sch_symbol.cpp:1488
 msgid "No library defined!"
@@ -21872,19 +21872,21 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"Позначення: %s Посадкове місце: %s:%s позиції %s на PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "Позначити все одно?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
 #, c-format
 msgid "Duplicate instances of %s"
-msgstr ""
+msgstr "Повторення елементів %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
-msgstr ""
+msgstr "Перервано: занадто багато помилок"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:850
 msgid ""
@@ -21892,6 +21894,9 @@ msgid ""
 "\n"
 "Front Footprints"
 msgstr ""
+"\n"
+"\n"
+"Посадкові місця на верхній стороні"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:851
 msgid ""
@@ -21899,58 +21904,61 @@ msgid ""
 "\n"
 "Back Footprints"
 msgstr ""
+"\n"
+"\n"
+"Посадкові місця на нижній стороні"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:916
 msgid "Footprint not found in changelist"
-msgstr ""
+msgstr "Посадкове місце не знайдено в списку змін"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
 msgid "Footprint Order"
-msgstr ""
+msgstr "Порядок розташування посадкового місця"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "Горизонтально: з зверху зліва до правого нижнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "Горизонтально: з зверху справа до лівого нижнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "Горизонтально: з знизу зліва до правого верхнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "Горизонтально: з знизу справа до верхнього лівого"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "Вертикально: з зверху зліва до правого нижнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "Вертикально: з зверху справа до лівого нижнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "Вертикально: з знизу зліва до правого верхнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "Вертикально: з знизу справа до лівого верхнього"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
-msgstr ""
+msgstr "На основі розташування:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
 msgid "Reference Designator"
-msgstr ""
+msgstr "Позначення"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 msgid "Round locations to:"
-msgstr ""
+msgstr "Приблизне розташування до:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -21962,27 +21970,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr ""
+msgstr "Діапазон повторного позначення"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr ""
+msgstr "Повторне позначення:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/footprint.cpp:982
 msgid "Front"
-msgstr ""
+msgstr "Верх"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:560
 msgid "Back"
-msgstr ""
+msgstr "Низ"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr ""
+msgstr "Початок для верхнього позначення:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
@@ -26697,31 +26705,31 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr ""
+msgstr "Не змінювати посадкові сліди, що містяться різних шарах"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr ""
+msgstr "Не змінювати посадкові сліди, що мають іншу орієнтацію"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr ""
+msgstr "Не змінювати посадкові сліди, що мають різні типи"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr ""
+msgstr "Використовувати властивості посадкової ніжки"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:160
 msgid "No layers selected."
-msgstr ""
+msgstr "Шари не вибрані."
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
 msgid "Layers:"
-msgstr ""
+msgstr "Шари:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:44
 msgid "Area name:"
-msgstr ""
+msgstr "Ім'я області:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:46
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
@@ -26731,11 +26739,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
-msgstr ""
+msgstr "Основні правила:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Keep out tracks"
-msgstr ""
+msgstr "Утримувати доріжки"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
@@ -26743,23 +26751,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
-msgstr ""
+msgstr "Утримувати перехідні отвори"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Prevent vias from being placed in this area"
-msgstr ""
+msgstr "Заборонити розміщення перехідних отворів в цій області"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
-msgstr ""
+msgstr "Заборонити контактні ніжки"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Додати помилку в DRC, якщо контактна ніжка перетинає цю область"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
-msgstr ""
+msgstr "Заборонити заповнення міддю"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
@@ -32280,21 +32288,24 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:251
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Невідома секція FABMASTER %s:%s в рядку %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:268
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
+"Некоректний розмірJ рядка %zu. Має відповідати 11 елементів, але знайдено "
+"%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:291
 msgid "Could not find units value, defaulting to mils."
 msgstr ""
+"Не вдалося визначити одиниці значення, по замовчуванні використано милі."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:315
 #, c-format
 msgid "Could not find column label %s."
-msgstr ""
+msgstr "Не вдалося знайти мітку стовпця %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:359
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:442
@@ -34685,59 +34696,61 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
-msgstr ""
+msgstr "Видалити посадкове місце з бібліотеки"
 
 #: pcbnew/tools/pcb_actions.cpp:389
 msgid "Cut Footprint"
-msgstr ""
+msgstr "Вирізати посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Copy Footprint"
-msgstr ""
+msgstr "Копіювати посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:399
 msgid "Paste Footprint"
-msgstr ""
+msgstr "Вставити посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:404
 msgid "Import Footprint..."
-msgstr ""
+msgstr "Імпортувати посадкове місце"
 
 #: pcbnew/tools/pcb_actions.cpp:404
 msgid "Import footprint from file"
-msgstr ""
+msgstr "Імпортувати посадкове місце з файлу"
 
 #: pcbnew/tools/pcb_actions.cpp:409
 msgid "Export Footprint..."
-msgstr ""
+msgstr "Експортувати посадкове місце..."
 
 #: pcbnew/tools/pcb_actions.cpp:409
 msgid "Export footprint to file"
-msgstr ""
+msgstr "Експортувати посадкове місце в файл"
 
 #: pcbnew/tools/pcb_actions.cpp:414
 msgid "Footprint Properties..."
-msgstr ""
+msgstr "Властивості посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:414
 msgid "Edit footprint properties"
-msgstr ""
+msgstr "Редагувати властивості посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:419
 msgid "Show the footprint checker window"
-msgstr ""
+msgstr "Показувати вікно перевірки посадкового місця"
 
 #: pcbnew/tools/pcb_actions.cpp:426
 msgid "Update Footprint..."
-msgstr ""
+msgstr "Оновити посадкове місце..."
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Update footprint to include any changes from the library"
 msgstr ""
+"Оновити посадкове місце розташування для включення будь-яких змін з "
+"бібліотеки"
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Update Footprints from Library..."
-msgstr ""
+msgstr "Оновити посадкове місце з бібліотеки..."
 
 #: pcbnew/tools/pcb_actions.cpp:433
 msgid "Update footprints to include any changes from the library"
