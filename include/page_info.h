@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
 #include <base_units.h>     // for IU_PER_MILS
 
 /// Min and max page sizes for clamping, in mils.
-#define MIN_PAGE_SIZE_MILS          100
+#define MIN_PAGE_SIZE_MILS          1000
 #define MAX_PAGE_SIZE_PCBNEW_MILS   48000
 #define MAX_PAGE_SIZE_EESCHEMA_MILS 120000
 

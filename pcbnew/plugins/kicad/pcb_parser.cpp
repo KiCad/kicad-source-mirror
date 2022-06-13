@@ -1196,18 +1196,20 @@ void PCB_PARSER::parsePAGE_INFO()
     {
         double width = parseDouble( "width" );      // width in mm
 
+        const double Mils2mm = 0.0254;
+
         // Perform some controls to avoid crashes if the size is edited by hands
-        if( width < 100.0 )
-            width = 100.0;
-        else if( width > 1200.0 )
-            width = 1200.0;
+        if( width < MIN_PAGE_SIZE_MILS*Mils2mm )
+            width = MIN_PAGE_SIZE_MILS*Mils2mm;
+        else if( width > MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm )
+            width = MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm;
 
         double height = parseDouble( "height" );    // height in mm
 
-        if( height < 100.0 )
-            height = 100.0;
-        else if( height > 1200.0 )
-            height = 1200.0;
+        if( height < MIN_PAGE_SIZE_MILS*Mils2mm )
+            height = MIN_PAGE_SIZE_MILS*Mils2mm;
+        else if( height > MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm )
+            height = MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm;
 
         pageInfo.SetWidthMils( Mm2mils( width ) );
         pageInfo.SetHeightMils( Mm2mils( height ) );
