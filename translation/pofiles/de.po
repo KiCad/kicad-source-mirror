@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-05 23:52+0000\n"
+"PO-Revision-Date: 2022-06-14 23:14+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -32320,9 +32320,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Überschreibung des Lötpasten-Rand-Verhältnisses"
 
 #: pcbnew/footprint.cpp:2641
-#, fuzzy
 msgid "Library ID"
-msgstr "Bibliothek:"
+msgstr "Bibliothek-ID"
 
 #: pcbnew/footprint.h:232
 #, c-format
