@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-13 09:56-0700\n"
-"PO-Revision-Date: 2022-05-12 20:18+0000\n"
+"PO-Revision-Date: 2022-06-15 21:14+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -30285,9 +30285,8 @@ msgid "Thermal Relief Gap"
 msgstr "Espacio del alivio térmico"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "Biblioteca <"
+msgstr "ID de biblioteca"
 
 #: pcbnew/footprint.h:219
 #, c-format
