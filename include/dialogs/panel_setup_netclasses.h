@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,6 +75,7 @@ private:
 
     EDA_DRAW_FRAME*       m_frame;
     PAGED_DIALOG*         m_parent;
+    bool                  m_isEEschema;
     NETCLASSES*           m_netclasses;
     std::vector<wxString> m_netNames;
 
