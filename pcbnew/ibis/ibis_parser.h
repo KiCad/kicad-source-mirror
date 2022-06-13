@@ -205,15 +205,16 @@ public:
 class IbisComponentPackage : public IBIS_INPUT
 {
 public:
-    IbisComponentPackage( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        m_Rpkg = new TypMinMaxValue( m_reporter );
-        m_Lpkg = new TypMinMaxValue( m_reporter );
-        m_Cpkg = new TypMinMaxValue( m_reporter );
-    };
-    TypMinMaxValue* m_Rpkg;
-    TypMinMaxValue* m_Lpkg;
-    TypMinMaxValue* m_Cpkg;
+    IbisComponentPackage( IBIS_REPORTER* aReporter ) :
+        IBIS_INPUT( aReporter ),
+        m_Rpkg( aReporter ),
+        m_Lpkg( aReporter ),
+        m_Cpkg( aReporter )
+        {};
+
+    TypMinMaxValue m_Rpkg;
+    TypMinMaxValue m_Lpkg;
+    TypMinMaxValue m_Cpkg;
 
     bool Check() override;
 };
@@ -252,22 +253,19 @@ public:
     std::string m_POWERClampRef;
     std::string m_extRef;
 
-    bool m_virtual;
+    bool m_virtual = false;
 };
 
 
 class IbisDiffPinEntry : public IBIS_INPUT
 {
 public:
-    IbisDiffPinEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        tdelay = new TypMinMaxValue( aReporter );
-    };
+    IbisDiffPinEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), tdelay( aReporter ){};
 
     std::string     pinA;
     std::string     pinB;
     double          Vdiff = 0.2; // ignored for input
-    TypMinMaxValue* tdelay;      // ignored for outputs
+    TypMinMaxValue  tdelay;      // ignored for outputs
 };
 
 
@@ -281,10 +279,11 @@ public:
 class IbisComponent : public IBIS_INPUT
 {
 public:
-    IbisComponent( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_package( aReporter )
-    {
-        m_diffPin = new IbisDiffPin( m_reporter );
-    };
+    IbisComponent( IBIS_REPORTER* aReporter ) :
+        IBIS_INPUT( aReporter ),
+        m_package( aReporter ),
+        m_diffPin( aReporter )
+        {};
 
     std::string                             m_name = "";
     std::string                             m_manufacturer = "";
@@ -294,7 +293,7 @@ public:
     std::string                             m_packageModel;
     std::string                             m_busLabel;
     std::string                             m_dieSupplyPads;
-    IbisDiffPin*                            m_diffPin;
+    IbisDiffPin                             m_diffPin;
 
     bool Check() override;
 };
@@ -322,12 +321,9 @@ public:
 class IVtableEntry : public IBIS_INPUT
 {
 public:
-    IVtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        I = new TypMinMaxValue( m_reporter );
-    };
-    double         V;
-    TypMinMaxValue* I;
+    IVtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), I( aReporter ){};
+    double         V = 0;
+    TypMinMaxValue I;
 };
 
 
@@ -370,12 +366,9 @@ private:
 class VTtableEntry : public IBIS_INPUT
 {
 public:
-    VTtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        V = new TypMinMaxValue( m_reporter );
-    };
-    double         t;
-    TypMinMaxValue* V;
+    VTtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), V( aReporter ){};
+    double         t = 0;
+    TypMinMaxValue V;
 };
 
 class VTtable : public IBIS_INPUT
@@ -424,8 +417,8 @@ enum class IBIS_MODEL_ENABLE
 class dvdt
 {
 public:
-    double m_dv;
-    double m_dt;
+    double m_dv = 1;
+    double m_dt = 1;
 };
 
 class dvdtTypMinMax : public IBIS_INPUT
@@ -441,14 +434,14 @@ public:
 class IbisRamp : public IBIS_INPUT
 {
 public:
-    IbisRamp( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        m_falling = new dvdtTypMinMax( m_reporter );
-        m_rising = new dvdtTypMinMax( m_reporter );
-    };
+    IbisRamp( IBIS_REPORTER* aReporter ) :
+        IBIS_INPUT( aReporter ),
+        m_falling( aReporter ),
+        m_rising( aReporter )
+        {};
 
-    dvdtTypMinMax* m_falling;
-    dvdtTypMinMax* m_rising;
+    dvdtTypMinMax m_falling;
+    dvdtTypMinMax m_rising;
     double m_Rload = 50; // The R_load subparameter is optional if the default 50 ohm load is used
 
     bool Check() override;
@@ -463,15 +456,13 @@ enum class IBIS_WAVEFORM_TYPE
 class IbisWaveform : public IBIS_INPUT
 {
 public:
-    IbisWaveform( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        m_table = new VTtable( m_reporter );
-    };
-    VTtable*           m_table;
-    IBIS_WAVEFORM_TYPE m_type;
-    double             m_R_dut;
-    double             m_C_dut;
-    double             m_L_dut;
+    IbisWaveform( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_table( aReporter ){};
+
+    VTtable            m_table;
+    IBIS_WAVEFORM_TYPE m_type = IBIS_WAVEFORM_TYPE::RISING;
+    double             m_R_dut = 0;
+    double             m_C_dut = 0;
+    double             m_L_dut = 0;
     double             m_R_fixture = 0;
     double             m_C_fixture = 0;
     double             m_L_fixture = 0;
@@ -490,25 +481,24 @@ enum class IBIS_MODEL_POLARITY
 class IbisModel : IBIS_INPUT
 {
 public:
-    IbisModel( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        m_C_comp = new TypMinMaxValue( m_reporter );
-        m_voltageRange = new TypMinMaxValue( m_reporter );
-        m_temperatureRange = new TypMinMaxValue( m_reporter );
-        m_pullupReference = new TypMinMaxValue( m_reporter );
-        m_pulldownReference = new TypMinMaxValue( m_reporter );
-        m_GNDClampReference = new TypMinMaxValue( m_reporter );
-        m_POWERClampReference = new TypMinMaxValue( m_reporter );
-        m_Rgnd = new TypMinMaxValue( m_reporter );
-        m_Rpower = new TypMinMaxValue( m_reporter );
-        m_Rac = new TypMinMaxValue( m_reporter );
-        m_Cac = new TypMinMaxValue( m_reporter );
-        m_GNDClamp = new IVtable( m_reporter );
-        m_POWERClamp = new IVtable( m_reporter );
-        m_pullup = new IVtable( m_reporter );
-        m_pulldown = new IVtable( m_reporter );
-        m_ramp = new IbisRamp( m_reporter );
-    };
+    IbisModel( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ),
+    m_C_comp( aReporter ),
+    m_voltageRange( aReporter ),
+    m_temperatureRange( aReporter ),
+    m_pullupReference( aReporter ),
+    m_pulldownReference( aReporter ),
+    m_GNDClampReference( aReporter ),
+    m_POWERClampReference( aReporter ),
+    m_Rgnd( aReporter ),
+    m_Rpower( aReporter ),
+    m_Rac( aReporter ),
+    m_Cac( aReporter ),
+    m_GNDClamp( aReporter ),
+    m_POWERClamp( aReporter ),
+    m_pullup( aReporter ),
+    m_pulldown( aReporter ),
+    m_ramp( aReporter )
+    {};
 
     std::string        m_name;
     IBIS_MODEL_TYPE m_type = IBIS_MODEL_TYPE::UNDEFINED;
@@ -524,24 +514,24 @@ public:
     IBIS_MODEL_POLARITY m_polarity = IBIS_MODEL_POLARITY::UNDEFINED;
     // End of optional subparameters
 
-    TypMinMaxValue*            m_C_comp;
-    TypMinMaxValue*            m_voltageRange;
-    TypMinMaxValue*            m_temperatureRange;
-    TypMinMaxValue*            m_pullupReference;
-    TypMinMaxValue*            m_pulldownReference;
-    TypMinMaxValue*            m_GNDClampReference;
-    TypMinMaxValue*            m_POWERClampReference;
-    TypMinMaxValue*            m_Rgnd;
-    TypMinMaxValue*            m_Rpower;
-    TypMinMaxValue*            m_Rac;
-    TypMinMaxValue*            m_Cac;
-    IVtable*                   m_GNDClamp;
-    IVtable*                   m_POWERClamp;
-    IVtable*                   m_pullup;
-    IVtable*                   m_pulldown;
+    TypMinMaxValue             m_C_comp;
+    TypMinMaxValue             m_voltageRange;
+    TypMinMaxValue             m_temperatureRange;
+    TypMinMaxValue             m_pullupReference;
+    TypMinMaxValue             m_pulldownReference;
+    TypMinMaxValue             m_GNDClampReference;
+    TypMinMaxValue             m_POWERClampReference;
+    TypMinMaxValue             m_Rgnd;
+    TypMinMaxValue             m_Rpower;
+    TypMinMaxValue             m_Rac;
+    TypMinMaxValue             m_Cac;
+    IVtable                    m_GNDClamp;
+    IVtable                    m_POWERClamp;
+    IVtable                    m_pullup;
+    IVtable                    m_pulldown;
     std::vector<IbisWaveform*> m_risingWaveforms;
     std::vector<IbisWaveform*> m_fallingWaveforms;
-    IbisRamp*                  m_ramp;
+    IbisRamp                   m_ramp;
 
     bool Check() override;
 };
@@ -556,7 +546,7 @@ public:
     std::string              m_manufacturer;
     std::string              m_OEM;
     std::string              m_description;
-    int                   m_numberOfPins;
+    int                      m_numberOfPins = 0;
     std::vector<std::string> m_pins;
 
     std::shared_ptr<IBIS_MATRIX> m_resistanceMatrix;
@@ -569,12 +559,9 @@ public:
 class IbisFile : public IBIS_INPUT
 {
 public:
-    IbisFile( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter )
-    {
-        m_header = new IbisHeader( m_reporter );
-    };
+    IbisFile( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_header( aReporter ){};
 
-    IbisHeader*                     m_header;
+    IbisHeader                      m_header;
     std::vector<IbisComponent>      m_components;
     std::vector<IbisModelSelector>  m_modelSelectors;
     std::vector<IbisModel>          m_models;
@@ -619,25 +606,25 @@ public:
 
     bool m_parrot = true; // Write back all lines.
 
-    long  m_lineCounter;
+    long  m_lineCounter = 0;
     char  m_commentChar = '|';
     std::vector<char> m_buffer;
-    int   m_bufferIndex;
-    int   m_lineOffset;
-    int   m_lineIndex;
-    int   m_lineLength;
+    int   m_bufferIndex = 0;
+    int   m_lineOffset = 0;
+    int   m_lineIndex = 0;
+    int   m_lineLength = 0;
 
     IbisFile           m_ibisFile;
-    IbisComponent*     m_currentComponent;
-    IbisModelSelector* m_currentModelSelector;
-    IbisModel*         m_currentModel;
-    IbisPackageModel*  m_currentPackageModel;
+    IbisComponent*     m_currentComponent = nullptr;
+    IbisModelSelector* m_currentModelSelector = nullptr;
+    IbisModel*         m_currentModel = nullptr;
+    IbisPackageModel*  m_currentPackageModel = nullptr;
     std::shared_ptr<IBIS_MATRIX> m_currentMatrix;
     int                m_currentMatrixRow;
     int                m_currentMatrixRowIndex;
-    IVtable*           m_currentIVtable;
-    VTtable*           m_currentVTtable;
-    IbisWaveform*      m_currentWaveform;
+    IVtable*           m_currentIVtable = nullptr;
+    VTtable*           m_currentVTtable = nullptr;
+    IbisWaveform*      m_currentWaveform = nullptr;
 
     /** @brief Parse a file
      * 

@@ -73,9 +73,9 @@ class KIBIS_WAVEFORM_RECTANGULAR : public KIBIS_WAVEFORM
 {
 public:
     KIBIS_WAVEFORM_RECTANGULAR() : KIBIS_WAVEFORM() { m_type = KIBIS_WAVEFORM_TYPE::RECTANGULAR; };
-    double m_ton;
-    double m_toff;
-    int    m_cycles;
+    double m_ton = 1;
+    double m_toff = 1;
+    int    m_cycles = 1;
     double m_delay = 0;
 };
 
@@ -171,24 +171,24 @@ public:
     IBIS_MODEL_POLARITY m_polarity = IBIS_MODEL_POLARITY::UNDEFINED;
     // End of optional subparameters
 
-    TypMinMaxValue*            m_C_comp;
-    TypMinMaxValue*            m_voltageRange;
-    TypMinMaxValue*            m_temperatureRange;
-    TypMinMaxValue*            m_pullupReference;
-    TypMinMaxValue*            m_pulldownReference;
-    TypMinMaxValue*            m_GNDClampReference;
-    TypMinMaxValue*            m_POWERClampReference;
-    TypMinMaxValue*            m_Rgnd;
-    TypMinMaxValue*            m_Rpower;
-    TypMinMaxValue*            m_Rac;
-    TypMinMaxValue*            m_Cac;
-    IVtable*                   m_GNDClamp;
-    IVtable*                   m_POWERClamp;
-    IVtable*                   m_pullup;
-    IVtable*                   m_pulldown;
+    TypMinMaxValue             m_C_comp;
+    TypMinMaxValue             m_voltageRange;
+    TypMinMaxValue             m_temperatureRange;
+    TypMinMaxValue             m_pullupReference;
+    TypMinMaxValue             m_pulldownReference;
+    TypMinMaxValue             m_GNDClampReference;
+    TypMinMaxValue             m_POWERClampReference;
+    TypMinMaxValue             m_Rgnd;
+    TypMinMaxValue             m_Rpower;
+    TypMinMaxValue             m_Rac;
+    TypMinMaxValue             m_Cac;
+    IVtable                    m_GNDClamp;
+    IVtable                    m_POWERClamp;
+    IVtable                    m_pullup;
+    IVtable                    m_pulldown;
     std::vector<IbisWaveform*> m_risingWaveforms;
     std::vector<IbisWaveform*> m_fallingWaveforms;
-    IbisRamp*                  m_ramp;
+    IbisRamp                   m_ramp;
 
     /** @brief Return true if the model has a pulldown transistor */
     bool HasPulldown();
@@ -262,11 +262,11 @@ public:
     std::string m_pinNumber;
 
     /** @brief Resistance from die to pin */
-    TypMinMaxValue* R_pin;
+    TypMinMaxValue m_Rpin;
     /** @brief Inductance from die to pin */
-    TypMinMaxValue* L_pin;
+    TypMinMaxValue m_Lpin;
     /** @brief Capacitance from pin to GND */
-    TypMinMaxValue* C_pin;
+    TypMinMaxValue m_Cpin;
 
     KIBIS_COMPONENT* m_parent;
 
