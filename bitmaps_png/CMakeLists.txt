@@ -388,6 +388,7 @@ set( BMAPS_MID
     pagelayout_special_view_mode
     part_properties
     paste
+    paste_special
     pin2pin
     pin_size_to
     pin_show_etype

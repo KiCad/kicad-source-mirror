@@ -385,6 +385,7 @@ enum class BITMAPS : unsigned int
     pagelayout_special_view_mode,
     part_properties,
     paste,
+    paste_special,
     path,
     pcb_target,
     pcbnew,

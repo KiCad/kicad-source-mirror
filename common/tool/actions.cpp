@@ -172,7 +172,8 @@ TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
 
 TOOL_ACTION ACTIONS::pasteSpecial( "common.Interactive.pasteSpecial",
         AS_GLOBAL, 0, "",
-        _( "Paste Special..." ), _( "Paste item(s) from clipboard with options" ) );
+        _( "Paste Special..." ), _( "Paste item(s) from clipboard with annotation options" ),
+        BITMAPS::paste_special );
 
 TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
         AS_GLOBAL,
