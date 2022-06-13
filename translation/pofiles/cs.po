@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
+"POT-Creation-Date: 2022-06-13 09:56-0700\n"
 "PO-Revision-Date: 2022-06-12 08:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
@@ -197,7 +197,7 @@ msgstr "Exportovat aktuální pohled jako JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:954
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D prohlížeč"
@@ -1584,7 +1584,7 @@ msgstr "Potvrzení"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "Popis"
@@ -4829,403 +4829,167 @@ msgstr "Nelze přepnout jazyk na %s"
 msgid "Set Language"
 msgstr "Nastavit jazyk"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-#: common/layer_id.cpp:42
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-#: common/layer_id.cpp:43
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-#: common/layer_id.cpp:44
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-#: common/layer_id.cpp:45
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-#: common/layer_id.cpp:46
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-#: common/layer_id.cpp:47
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-#: common/layer_id.cpp:48
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-#: common/layer_id.cpp:49
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-#: common/layer_id.cpp:50
-msgid "In18.Cu"
-msgstr "In18.Cu"
-
-#: common/layer_id.cpp:51
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-#: common/layer_id.cpp:52
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-#: common/layer_id.cpp:53
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-#: common/layer_id.cpp:54
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-#: common/layer_id.cpp:55
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-#: common/layer_id.cpp:56
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-#: common/layer_id.cpp:57
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-#: common/layer_id.cpp:58
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-#: common/layer_id.cpp:59
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-#: common/layer_id.cpp:60
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-#: common/layer_id.cpp:61
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-#: common/layer_id.cpp:62
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr "B.Cu"
-
-#: common/layer_id.cpp:66
-msgid "B.Adhesive"
-msgstr "B.Adhesive"
-
-#: common/layer_id.cpp:67
-msgid "F.Adhesive"
-msgstr "F.Adhesive"
-
-#: common/layer_id.cpp:68
-msgid "B.Paste"
-msgstr "B.Paste"
-
-#: common/layer_id.cpp:69
-msgid "F.Paste"
-msgstr "F.Paste"
-
-#: common/layer_id.cpp:70
-msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
-
-#: common/layer_id.cpp:71
-msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr "B.Mask"
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: common/layer_id.cpp:76
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-#: common/layer_id.cpp:77
-msgid "User.Comments"
-msgstr "User.Comments"
-
-#: common/layer_id.cpp:78
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-#: common/layer_id.cpp:79
-msgid "User.Eco2"
-msgstr "User.Eco2"
-
-#: common/layer_id.cpp:80
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-msgid "Margin"
-msgstr "Margin"
-
-#: common/layer_id.cpp:84
-msgid "F.Courtyard"
-msgstr "F.Courtyard"
-
-#: common/layer_id.cpp:85
-msgid "B.Courtyard"
-msgstr "B.Courtyard"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr "F.Fab"
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr "B.Fab"
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr "Uživatel.1"
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr "Uživatel.2"
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr "Uživatel.3"
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr "Uživatel.4"
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr "Uživatel.5"
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr "Uživatel.6"
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr "Uživatel.7"
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr "Uživatel.8"
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr "Uživatel.9"
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 msgid "Rescue"
 msgstr "Záchrana"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 msgid "Wires"
 msgstr "Dráty"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr "Sbernice"
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 msgid "Bus junctions"
 msgstr "Propojení sběrnice"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 msgid "Junctions"
 msgstr "Propojení"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 msgid "Labels"
 msgstr "Označení"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
 msgstr "Globální označení"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
 msgstr "Hierarchická označení"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 msgid "Pin numbers"
 msgstr "Číslo vývodů"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 msgid "Pin names"
 msgstr "Názvy vývodů"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 msgid "Symbol references"
 msgstr "Reference symbolů"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 msgid "Symbol values"
 msgstr "Hodnoty symbolu"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 msgid "Symbol fields"
 msgstr "Pole symbolu"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 msgid "Symbol body outlines"
 msgstr "Obrysy těla symbolu"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 msgid "Symbol body fills"
 msgstr "Výplň těla symbolu"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
 msgstr "Text schématu && grafika"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr "Špendlíky"
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 msgid "Sheet borders"
 msgstr "Okraje listu"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
 msgstr "Pozadí listu"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 msgid "Sheet names"
 msgstr "Názvy listů"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 msgid "Sheet fields"
 msgstr "Pole listu"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 msgid "Sheet file names"
 msgstr "Názvy souborů listu"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
 msgstr "Vývody listu"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 msgid "No-connect symbols"
 msgstr "Symbol Nezapojeno"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 msgid "ERC warnings"
 msgstr "ERC varování"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 msgid "ERC errors"
 msgstr "Chyby ERC"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Ukotvení"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 msgid "Helper items"
 msgstr "Položky nápovědy"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Mřížka"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr "Osy"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "Pozadí"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "Kurzor"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 msgid "Highlighted items"
 msgstr "Zvýrazněné položky"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 msgid "Hidden items"
 msgstr "Skryté položky"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 msgid "Selection highlight"
 msgstr "Výběr Zvýraznit"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 msgid "Drawing sheet"
 msgstr "List kreslení"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 msgid "Footprints front"
 msgstr "Pouzdra nahoře"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 msgid "Footprints back"
 msgstr "Pouzdra dole"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5234,34 +4998,34 @@ msgstr "Pouzdra dole"
 msgid "Values"
 msgstr "Hodnoty"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
 msgstr "Označení reference"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 msgid "Footprint text"
 msgstr "Text pouzdra"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 msgid "Hidden text"
 msgstr "Skrytý text"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 msgid "SMD pads front"
 msgstr "SMD plošky nahoře"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 msgid "SMD pads back"
 msgstr "SMD plošky dole"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 msgid "Through-hole pads"
 msgstr "Průchozí díra plošek"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5271,66 +5035,66 @@ msgstr "Průchozí díra plošek"
 msgid "Tracks"
 msgstr "Spoje"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 msgid "Through vias"
 msgstr "Průchozí prokovy"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 msgid "Bl/Buried vias"
 msgstr "Slepé/Vnořené prokovy"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 msgid "Micro-vias"
 msgstr "Mikro-prokovy"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 msgid "Via holes"
 msgstr "Díry prokovu"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 msgid "Via hole walls"
 msgstr "Stěny otvorů prokovu"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 msgid "Plated holes"
 msgstr "Pokovené otvory"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 msgid "Plated hole walls"
 msgstr "Pokovené stěny otvorů"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 msgid "Non-plated holes"
 msgstr "Nepokovené díry"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "Naznačené spoje"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 msgid "No-connects"
 msgstr "Nezapojené"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 msgid "DRC warnings"
 msgstr "DRC Varování"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 msgid "DRC errors"
 msgstr "Chyby DRC"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 msgid "DRC exclusions"
 msgstr "DRC vyloučení"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 msgid "DRC marker shadows"
 msgstr "Značka DRC stíny"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 msgid "Grid axes"
 msgstr "Osy mřížky"
 
@@ -5447,25 +5211,25 @@ msgstr "Jednotka '%s' nekončí na \"mil\"."
 msgid "Cannot convert '%s' to double."
 msgstr "Nelze převést '%s' na dvojnásobek."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Nelze otevřít soubor '%s'"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
 msgstr "Import souborů zrušen uživatelem."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "Vybraný soubor není platný nebo může být poškozen!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "Neočekávaný počet bodů v „%s“. Nalezeno %d, ale očekáváno %d."
@@ -6142,7 +5906,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Vytvoření, odstranění a úprava symbolů"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1000
+#: pcbnew/footprint_viewer_frame.cpp:1004
 msgid "Footprint Library Browser"
 msgstr "Prohlížeč knihoven pouzder"
 
@@ -6917,7 +6681,8 @@ msgstr "'%s' není platné pouzdro."
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Klíčová slova"
 
@@ -13609,7 +13374,7 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Rounded rectangle's owner (%d) not found."
 msgstr "Reference '%s' nenalezena."
 
@@ -13868,12 +13633,12 @@ msgstr ""
 "nedefinoval výkres."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Nelze číst soubor '%s'."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -13882,7 +13647,7 @@ msgstr ""
 "Chyba při analýze souboru Eagle. Nelze najít instanci '%s', i když je ve "
 "schématu na ni odkazováno."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Nelze najít '%s' v importované knihovně."
@@ -14007,19 +13772,19 @@ msgid "Library file '%s' not found."
 msgstr "Soubor knihovny '%s' nenalezen."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "knihovna %s neobsahuje symbol s názvem %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Knihovna symbolů '%s' již existuje."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Knihovnu symbolů '%s' nelze odstranit."
@@ -14034,7 +13799,7 @@ msgstr "Knihovnu symbolů '%s' nelze odstranit."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "neočekávaný konec řádku"
 
@@ -15414,7 +15179,7 @@ msgstr "Nedefinováno!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "Původ"
 
@@ -15539,7 +15304,7 @@ msgstr "KiCad prohlížeč knihoven symbolů"
 msgid "Unit %c"
 msgstr "Jednotka %c"
 
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:997
+#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
 msgid "[no library selected]"
 msgstr "[nevybrána žádná knihovna]"
 
@@ -16584,7 +16349,7 @@ msgstr "Uložit kopii aktuálního listu jako..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Uloží kopii aktuálního listu na jiném místě nebo pod jiným jménem"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16593,7 +16358,7 @@ msgstr ""
 "<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
 "vývodem %s%s na místě <b>(%.3f, %.3f)</b> převedených."
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16602,7 +16367,7 @@ msgstr ""
 "<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
 "vývodem %s%s na místě <b>(%.3f, %.3f)</b> v jednotkách %c a %c převedených."
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16611,7 +16376,7 @@ msgstr ""
 "<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem %s"
 "%s na místě <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16620,14 +16385,14 @@ msgstr ""
 "<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem %s"
 "%s na místě <b>(%s, %s)</b> v jednotkách %c a %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> převeden."
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16636,12 +16401,12 @@ msgstr ""
 "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b>v jednotce "
 "%c převeden."
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -16649,19 +16414,19 @@ msgstr ""
 "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> v "
 "jednotce %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Skryté napájecí vývody přenášejí své názvy vývodů do všech připojených "
 "sítí.)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> převedeno."
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -16670,26 +16435,26 @@ msgstr ""
 "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3s, %.3s)</b> v jednotce %c "
 "převedeno."
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 msgid "No symbol issues found."
 msgstr "Nenalezeny problémy se symbolem."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 msgid "Symbol Warnings"
 msgstr "Varování symbolu"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 msgid "No datasheet defined."
 msgstr "Nedefinován žádný datasheet."
 
@@ -17928,7 +17693,7 @@ msgstr "Zvýraznit D-kód D%d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -21199,7 +20964,7 @@ msgid "Add Dielectric Layer"
 msgstr "Přidat dielektrickou vrstvu"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 msgid "Select layer to add:"
 msgstr "Vybrat vrstvu pro přidání:"
 
@@ -21424,6 +21189,8 @@ msgid "Yellow"
 msgstr "Žlutá"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 msgid "Not specified"
 msgstr "Nespecifikováno"
 
@@ -27743,25 +27510,25 @@ msgstr ""
 "položky z odstraněných vrstev a nelze ji vrátit zpět. \n"
 "Chcete pokračovat?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "Vrstva musí mít název."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, c-format
 msgid "%s are forbidden in layer names."
 msgstr "%s jsou v názvech vrstev zakázány."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "Název vrstvy \"signál\" je vyhrazen."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Název vrstvy '%s' se již používá."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -27770,15 +27537,15 @@ msgid ""
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr "Vnitřní vrstvy k odstranění"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 msgid "Add User-defined Layer"
 msgstr "Přidat uživatelem definovanou vrstvu"
 
@@ -28222,6 +27989,10 @@ msgstr "Pcb_Edges"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "Obrys desky"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+msgid "Margin"
+msgstr "Margin"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -29506,17 +29277,17 @@ msgid "They have been exported as oval pads."
 msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Obrys desky je nesprávně tvarovaný. Spusťte DRC pro úplnou analýzu."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "IDF Export selhal:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "Export do VRML selhal: Nelze přidat otvory na obrysy."
 
@@ -29828,20 +29599,25 @@ msgstr "Izolační mezera přepsání"
 msgid "Solderpaste Margin Override"
 msgstr "Zobrazit vrstvy pájecí pasty"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Zobrazit vrstvy pájecí pasty"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 msgid "Thermal Relief Width"
 msgstr "Šířka tepelného reliefu"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 msgid "Thermal Relief Gap"
 msgstr "Teplotní profil Mezera"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+#, fuzzy
+msgid "Library ID"
+msgstr "Knihovna <"
+
+#: pcbnew/footprint.h:219
 #, c-format
 msgid "footprint %s"
 msgstr "pouzdro %s"
@@ -29915,7 +29691,7 @@ msgstr ""
 "Knihovna '%s' není povolena v aktuální konfiguraci. \n"
 "K úpravě konfigurace použijte Spravovat knihovny pouzder."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:924
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:928
 msgid "Footprint library not enabled."
 msgstr "Knihovna pouzdra není povolena."
 
@@ -30015,7 +29791,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Aktualizovat pouzdra na desce, aby se odkazoval na novou knihovnu?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:719
+#: pcbnew/footprint_viewer_frame.cpp:723
 msgid "No board currently open."
 msgstr "Není otevřená žádná deska."
 
@@ -30028,7 +29804,7 @@ msgstr ""
 "Nelze uložit."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:727
+#: pcbnew/footprint_viewer_frame.cpp:731
 msgid "Previous footprint placement still in progress."
 msgstr ""
 
@@ -30083,7 +29859,7 @@ msgid ""
 "A term which is a number will also match against the pad count."
 msgstr ""
 
-#: pcbnew/footprint_viewer_frame.cpp:676
+#: pcbnew/footprint_viewer_frame.cpp:680
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30094,7 +29870,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:914
+#: pcbnew/footprint_viewer_frame.cpp:918
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30103,11 +29879,11 @@ msgstr ""
 "Aktuální konfigurace neobsahuje knihovnu '%s'.  K úpravě konfigurace "
 "použijte Spravovat knihovny pouzder."
 
-#: pcbnew/footprint_viewer_frame.cpp:917
+#: pcbnew/footprint_viewer_frame.cpp:921
 msgid "Footprint library not found."
 msgstr "Knihovna pouzdra nenalezena."
 
-#: pcbnew/footprint_viewer_frame.cpp:921
+#: pcbnew/footprint_viewer_frame.cpp:925
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -31802,7 +31578,7 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
 msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
@@ -32086,7 +31862,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Žádný '%s' balíček v knihovně '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -32097,17 +31873,17 @@ msgstr ""
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorovat drát, protože vrstva Eagle '%s' (%d) nebyla přidružena"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorovat text, protože vrstva Eagle '%s' (%d) nebyla přidružena"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorovat obdélník, protože vrstva Eagle '%s' (%d) nebyla přidružena"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorovat kruh, protože vrstva Eagle '%s' (%d) nebyla přidružena"
@@ -32609,7 +32385,7 @@ msgstr "Soubor '%s' není legacy knihovna."
 msgid "Unknown PCad layer %u"
 msgstr "Neznámá vrstva PCad %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:757
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad podporuje pouze 32 signálních vrstev."
 
@@ -32756,28 +32532,28 @@ msgstr "Vyladěné: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 msgid "existing track"
 msgstr "existující spoj"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 msgid "board minimum width"
 msgstr "deska minimální šířka"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 msgid "netclass 'Default'"
 msgstr "třída spojů 'Výchozí'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 msgid "user choice"
 msgstr "zvolený uživatelem"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr "%s je deformováno."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
@@ -32786,7 +32562,7 @@ msgstr ""
 "Tuto zónu nelze zpracovat pomocí nástroje pro kreslení cest.\n"
 "Zkontrolujte, zda se nejedná o zónu překrývající jinou zónu."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Interaktivní router"
 
@@ -33401,12 +33177,12 @@ msgstr "Některé položky selhaly v DRC a nebyly změněny."
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Pravidlo vrstvy \"%s\" neodpovídá."
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 #, fuzzy
 msgid "Some zones did not intersect and were not merged."
 msgstr "Některé položky selhaly v DRC a nebyly změněny."
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "Duplikovat zónu"
 
@@ -33910,7 +33686,7 @@ msgstr "Režim úprav plošky.  Stiskněte %s pro ukončení."
 msgid "Edit pad shapes"
 msgstr "Upravit tvary plošky"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 #, fuzzy
 msgid "Recombine pads"
 msgstr "Přečíslovat plošky"
@@ -36462,6 +36238,180 @@ msgstr "KiCad schéma"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad deska plošných spojů"
+
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
+
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
+
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
+
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
+
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "In18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B.Adhesive"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F.Adhesive"
+
+#~ msgid "B.Paste"
+#~ msgstr "B.Paste"
+
+#~ msgid "F.Paste"
+#~ msgstr "F.Paste"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Silkscreen"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F.Silkscreen"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "User.Comments"
+
+#~ msgid "User.Eco1"
+#~ msgstr "User.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "User.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F.Courtyard"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B.Courtyard"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "Uživatel.1"
+
+#~ msgid "User.2"
+#~ msgstr "Uživatel.2"
+
+#~ msgid "User.3"
+#~ msgstr "Uživatel.3"
+
+#~ msgid "User.4"
+#~ msgstr "Uživatel.4"
+
+#~ msgid "User.5"
+#~ msgstr "Uživatel.5"
+
+#~ msgid "User.6"
+#~ msgstr "Uživatel.6"
+
+#~ msgid "User.7"
+#~ msgstr "Uživatel.7"
+
+#~ msgid "User.8"
+#~ msgstr "Uživatel.8"
+
+#~ msgid "User.9"
+#~ msgstr "Uživatel.9"
 
 #, c-format
 #~ msgid ""
@@ -51879,9 +51829,6 @@ msgstr "KiCad deska plošných spojů"
 
 #~ msgid "> is empty!"
 #~ msgstr "> je prázdný!"
-
-#~ msgid "Library <"
-#~ msgstr "Knihovna <"
 
 #~ msgid "> header read error"
 #~ msgstr "> chyba při čtení hlavičky"

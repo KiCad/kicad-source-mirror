@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
+"POT-Creation-Date: 2022-06-13 09:56-0700\n"
 "PO-Revision-Date: 2021-11-21 21:17+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
@@ -202,7 +202,7 @@ msgstr "Εξαγωγή Τρέχουσας Προβολής ως JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:954
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3Δ Προβολή"
@@ -1599,7 +1599,7 @@ msgstr "Επιβεβαίωση"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "Περιγραφή"
@@ -4889,403 +4889,167 @@ msgstr "Αδυναμία αλλαγής σε %s γλώσσα"
 msgid "Set Language"
 msgstr "Ορισμός Γλώσσας"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-#: common/layer_id.cpp:42
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-#: common/layer_id.cpp:43
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-#: common/layer_id.cpp:44
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-#: common/layer_id.cpp:45
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-#: common/layer_id.cpp:46
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-#: common/layer_id.cpp:47
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-#: common/layer_id.cpp:48
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-#: common/layer_id.cpp:49
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-#: common/layer_id.cpp:50
-msgid "In18.Cu"
-msgstr "In18.Cu"
-
-#: common/layer_id.cpp:51
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-#: common/layer_id.cpp:52
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-#: common/layer_id.cpp:53
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-#: common/layer_id.cpp:54
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-#: common/layer_id.cpp:55
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-#: common/layer_id.cpp:56
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-#: common/layer_id.cpp:57
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-#: common/layer_id.cpp:58
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-#: common/layer_id.cpp:59
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-#: common/layer_id.cpp:60
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-#: common/layer_id.cpp:61
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-#: common/layer_id.cpp:62
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr "B.Cu"
-
-#: common/layer_id.cpp:66
-msgid "B.Adhesive"
-msgstr "B.Adhesive"
-
-#: common/layer_id.cpp:67
-msgid "F.Adhesive"
-msgstr "F.Adhesive"
-
-#: common/layer_id.cpp:68
-msgid "B.Paste"
-msgstr "B.Paste"
-
-#: common/layer_id.cpp:69
-msgid "F.Paste"
-msgstr "F.Paste"
-
-#: common/layer_id.cpp:70
-msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
-
-#: common/layer_id.cpp:71
-msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr "B.Mask"
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: common/layer_id.cpp:76
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-#: common/layer_id.cpp:77
-msgid "User.Comments"
-msgstr "User.Comments"
-
-#: common/layer_id.cpp:78
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-#: common/layer_id.cpp:79
-msgid "User.Eco2"
-msgstr "User.Eco2"
-
-#: common/layer_id.cpp:80
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-msgid "Margin"
-msgstr "Περιθώριο"
-
-#: common/layer_id.cpp:84
-msgid "F.Courtyard"
-msgstr "F.Courtyard"
-
-#: common/layer_id.cpp:85
-msgid "B.Courtyard"
-msgstr "B.Courtyard"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr "F.Fab"
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr "B.Fab"
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr "User.1"
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr "User.2"
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr "User.3"
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr "User.4"
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr "User.5"
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr "User.6"
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr "User.7"
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr "User.8"
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr "User.9"
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 msgid "Rescue"
 msgstr "Διάσωση"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 msgid "Wires"
 msgstr "Καλώδια"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr "Δίαυλοι"
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 msgid "Bus junctions"
 msgstr "Κόμβοι Διαύλου"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 msgid "Junctions"
 msgstr "Κόμβοι"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 msgid "Labels"
 msgstr "Ετικέτες"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
 msgstr "Καθολικές ετικέτες"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
 msgstr "Ιεραρχικές ετικέτες"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 msgid "Pin numbers"
 msgstr "Αριθμοί pin"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 msgid "Pin names"
 msgstr "Ονόματα pin"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 msgid "Symbol references"
 msgstr "Αναφορές συμβόλου"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 msgid "Symbol values"
 msgstr "Τιμές συμβόλου"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 msgid "Symbol fields"
 msgstr "Πεδία συμβόλων"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 msgid "Symbol body outlines"
 msgstr "Περιγράμματα σώματος συμβόλου"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 msgid "Symbol body fills"
 msgstr "Γεμίσματα σώματος συμβόλου"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
 msgstr "Κείμενο && γραφικά σχηματικού"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr "Pins"
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 msgid "Sheet borders"
 msgstr "Περίγραμμα φύλλου"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
 msgstr "Παρασκήνια φύλλου"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 msgid "Sheet names"
 msgstr "Ονόματα φύλλου"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 msgid "Sheet fields"
 msgstr "Πεδία φύλλου"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 msgid "Sheet file names"
 msgstr "Ονόματα αρχείου φύλλου"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
 msgstr "Ακροδέκτες φύλλου"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 msgid "No-connect symbols"
 msgstr "Ασύνδετα σύμβολα"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 msgid "ERC warnings"
 msgstr "Προειδοποιήσεις ERC"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 msgid "ERC errors"
 msgstr "Σφάλματα ERC"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Αγκιστρώσεις"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 msgid "Helper items"
 msgstr "Αντικείμενα βοηθού"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Πλέγμα"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr "Άξονες"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "Παρασκήνιο"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "Κέρσορας"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 msgid "Highlighted items"
 msgstr "Τονισμένα αντικείμενα"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 msgid "Hidden items"
 msgstr "Κρυφά αντικείμενα"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 msgid "Selection highlight"
 msgstr "Τονισμός επιλογής"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 msgid "Drawing sheet"
 msgstr "Φύλλο σχεδίασης"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 msgid "Footprints front"
 msgstr "Αποτυπώματα μπροστά"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 msgid "Footprints back"
 msgstr "Αποτυπώματα πίσω"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5294,34 +5058,34 @@ msgstr "Αποτυπώματα πίσω"
 msgid "Values"
 msgstr "Τιμές"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
 msgstr "Προσδιορισμοί αναφοράς"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 msgid "Footprint text"
 msgstr "Κείμενο Αποτυπώματος"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 msgid "Hidden text"
 msgstr "Κρυφό κείμενο"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 msgid "SMD pads front"
 msgstr "Μπροστινές έδρες"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 msgid "SMD pads back"
 msgstr "Πίσω έδρες"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 msgid "Through-hole pads"
 msgstr "Διαμπερής οπής έδρες"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5331,66 +5095,66 @@ msgstr "Διαμπερής οπής έδρες"
 msgid "Tracks"
 msgstr "Διάδρομοι"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 msgid "Through vias"
 msgstr "Διαμπερές διελεύσεις"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 msgid "Bl/Buried vias"
 msgstr "Τυφλές/Ενταφιασμένες διελεύσεις"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 msgid "Micro-vias"
 msgstr "Μίκρο-διελεύσεις"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 msgid "Via holes"
 msgstr "Οπές διελεύσεων"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 msgid "Via hole walls"
 msgstr "Τοίχωμα οπής διέλευσης"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 msgid "Plated holes"
 msgstr "Επιμεταλλωμένες οπές"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 msgid "Plated hole walls"
 msgstr "Τοίχωμα επιμεταλλωμένων οπών"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 msgid "Non-plated holes"
 msgstr "Χωρίς Επιμετάλλωση οπές"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "Φωλιά Συνδέσεων"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 msgid "No-connects"
 msgstr "Χωρίς-Συνδέσεις"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 msgid "DRC warnings"
 msgstr "Προειδοποιήσεις ΕΚΣ"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 msgid "DRC errors"
 msgstr "Σφάλματα ΕΚΣ"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 msgid "DRC exclusions"
 msgstr "Εξαιρέσεις ΕΚΣ"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 msgid "DRC marker shadows"
 msgstr "Σκιές δεικτών ΕΚΣ"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 msgid "Grid axes"
 msgstr "Άξονες πλέγματος"
 
@@ -5508,26 +5272,26 @@ msgstr "Η μονάδα '%s' δεν τελειώνει με 'mil'."
 msgid "Cannot convert '%s' to double."
 msgstr "Αδυναμία μετατροπής '%s' σε διπλό ακέραιο."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Αδυναμία ανοίγματος αρχείου '%s'"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
 msgstr "Η εισαγωγή αρχείου ακυρώθηκε από τον χρήστη."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr ""
 "Το επιλεγμένο αρχείο δεν είναι έγκυρο ή ενδέχεται να είναι κατεστραμμένο!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr ""
@@ -6206,7 +5970,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Δημιουργία, διαγραφή και επεξεργασία συμβόλων"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1000
+#: pcbnew/footprint_viewer_frame.cpp:1004
 msgid "Footprint Library Browser"
 msgstr "Πλοηγός Βιβλιοθήκης Αποτυπωμάτων"
 
@@ -6992,7 +6756,8 @@ msgstr "Το '%s' δεν είναι έγκυρο αποτύπωμα."
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Λέξεις-κλειδιά"
 
@@ -14044,12 +13809,12 @@ msgstr ""
 "ένα θυγατρικό φύλλο αλλά δεν έχει καθοριστεί Figure."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Αδυναμία ανάγνωσης αρχείου '%s'."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -14058,7 +13823,7 @@ msgstr ""
 "Σφάλμα ανάλυσης αρχείου Eagle. Δεν ήταν δυνατή η εύρεση του \"%s\", αλλά "
 "αναφέρεται στο σχηματικό."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Αδυναμία εύρεσης '%s' στην εισηγμένη βιβλιοθήκη."
@@ -14182,19 +13947,19 @@ msgid "Library file '%s' not found."
 msgstr "Το αρχείο βιβλιοθήκης \"%s\" δεν βρέθηκε."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "η βιβλιοθήκη %s δεν περιέχει σύμβολο με όνομα %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Η βιοβλιοθήκη \"%s\" υπάρχει ήδη."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Αδυναμία διαγραφής βιβλιοθήκης '%s'."
@@ -14209,7 +13974,7 @@ msgstr "Αδυναμία διαγραφής βιβλιοθήκης '%s'."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "με αναμενόμενο τέλος γραμμής"
 
@@ -15609,7 +15374,7 @@ msgstr "Μη καθορισμένο!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "Γονέας"
 
@@ -15735,7 +15500,7 @@ msgstr "Πρόγραμμα Προβολής Βιβλιοθήκης Συμβόλ�
 msgid "Unit %c"
 msgstr "Μονάδα %c"
 
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:997
+#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
 msgid "[no library selected]"
 msgstr "[δεν επιλέχθηκε βιβλιοθήκη]"
 
@@ -16800,7 +16565,7 @@ msgstr "Αποθήκευση Αντιγράφου Τρέχοντος Φύλλο�
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Αποθήκευση αντίγραφου του τρέχοντος φύλλου σε άλλη τοποθεσία ή όνομα"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16809,7 +16574,7 @@ msgstr ""
 "<b>Διπλότυπο pin %s</b> %s στην τοποθεσία <b>(%.3f, %.3f)</b> συγκρούεται με "
 "το pin %s%s στην τοποθεσία <b>(%.3f, %.3f)</b> μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16819,7 +16584,7 @@ msgstr ""
 "το pin %s%s στην τοποθεσία <b>(%.3f, %.3f)</b> στις ενότητες %c και %c "
 "μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16828,7 +16593,7 @@ msgstr ""
 "<b>Διπλός ακροδέκτης %s</b> %s στη θέση <b>(%s, %s)</b> που συγκρούεται με "
 "τον ακροδέκτη %s%s στη θέση <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16837,7 +16602,7 @@ msgstr ""
 "<b>Διπλός ακροδέκτης %s</b> %s στη θέση <b>(%s, %s)</b> που συγκρούεται με "
 "τον ακροδέκτη %s%s στη θέση <b>(%s, %s)</b> σε μονάδες %c και %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -16845,7 +16610,7 @@ msgstr ""
 "Πληροφορίες: <b>Ο κρυφός ακροδέκτης ισχύος %s</b> %s στη θέση <b>(%s, %s)</"
 "b> της μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16854,13 +16619,13 @@ msgstr ""
 "Πληροφορία: <b>Κρυφός ακροδέκτης ισχύος %s</b> %s στη θέση <b>(%s, %s)</b> "
 "στο μέρος %c της μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "Πληροφορίες: <b>Κρυφός ακροδέκτης ισχύος %s</b> %s στη θέση <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -16868,21 +16633,21 @@ msgstr ""
 "Πληροφορίες: <b> Κρυφός ακροδέκτης ισχύος %s</b> %s στη θέση <b>(%s, %s)</b> "
 "στο %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Τα κρυμμένα power pin θα οδηγήσουν τα ονόματά τους σε οποιαδήποτε "
 "συνδεδεμένα nets.)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Το pin %s είναι εκτός πλέγματος</b> %s στην τοποθεσία <b>(%s, %s)</b> "
 "μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -16891,27 +16656,27 @@ msgstr ""
 "<b>Το pin %s είναι εκτός πλέγματος</b> %s στην τοποθεσία <b>(%.3s, %.3s)</b> "
 "στη μονάδα %c μετατροπής."
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Ακροδέκτης εκτός πλέγματος %s</b> %s στη θέση <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Ακροδέκτης εκτός πλέγματος %s</b> %s στη θέση <b>(%s, %s)</b> στη μονάδα "
 "%c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 msgid "No symbol issues found."
 msgstr "Δεν βρέθηκαν προβλήματα με το σύμβολο."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 msgid "Symbol Warnings"
 msgstr "Προειδοποιήσεις Συμβόλου"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 msgid "No datasheet defined."
 msgstr "Δεν έχει οριστεί κάποιο εγχειρίδιο-φύλλο δεδομένων."
 
@@ -18163,7 +17928,7 @@ msgstr "Επισήμανση DCode D%d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -21485,7 +21250,7 @@ msgid "Add Dielectric Layer"
 msgstr "Προσθήκη Διηλεκτρικού Υλικού"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 msgid "Select layer to add:"
 msgstr "Επιλέξτε βιβλιοθήκες του Github για προσθήκη:"
 
@@ -21710,6 +21475,8 @@ msgid "Yellow"
 msgstr "Κίτρινο"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 msgid "Not specified"
 msgstr "Δεν έχει οριστεί"
 
@@ -28269,25 +28036,25 @@ msgstr ""
 "αναιρεθεί.\n"
 "Συνέχεια;"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "Το επίπεδο πρέπει να έχει όνομα."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, c-format
 msgid "%s are forbidden in layer names."
 msgstr "δεν επιτρέπονται %s στα ονόματα επιπέδων."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "Το 'signal' είναι ένα δεσμευμένο όνομα επιπέδου."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Το όνομα επιπέδου \"%s\" χρησιμοποιείται ήδη."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -28301,15 +28068,15 @@ msgstr ""
 "Συνέχεια και διαγραφή των επιπλέων εσωτερικών επιπέδων χαλκού από την "
 "τρέχουσα πλακέτα;"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr "Διαγραφή Εσωτερικών Επιπέδων"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr "Όλα τα επίπεδα που ορίζονται από τον χρήστη έχουν ήδη προστεθεί."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 msgid "Add User-defined Layer"
 msgstr "Προσθήκη Επιπέδου Ορισμένο για το Χρήστη"
 
@@ -28757,6 +28524,10 @@ msgstr "Pcb_Edges"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "Περίγραμμα πλακέτας"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+msgid "Margin"
+msgstr "Περιθώριο"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -30244,7 +30015,7 @@ msgid "They have been exported as oval pads."
 msgstr "Έχουν εξαχθεί ως οβάλ έδρες."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
@@ -30252,11 +30023,11 @@ msgstr ""
 "πλήρη ανάλυση."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "Αποτυχία Εξαγωγής DXF:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "Αποτυχία Εξαγωγής VRML: Αδυναμία προσθήκης τρυπών σε περιγράμματα."
 
@@ -30577,19 +30348,24 @@ msgstr "Περιγράμματα Διάκενου"
 msgid "Solderpaste Margin Override"
 msgstr "Παράκαμψη Περιθωρίου Πάστας Συγκόλλησης"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Τοπική αναλογία περιθωρίου Solderpaste"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 msgid "Thermal Relief Width"
 msgstr "Πλάτος Ακτίνων Θερμικής Εκτόνωσης"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 msgid "Thermal Relief Gap"
 msgstr "Θερμικές Εκτονώσεις"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+#, fuzzy
+msgid "Library ID"
+msgstr "Βιβλιοθήκη"
+
+#: pcbnew/footprint.h:219
 #, c-format
 msgid "footprint %s"
 msgstr "αποτύπωμα %s"
@@ -30666,7 +30442,7 @@ msgstr ""
 "Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της "
 "διαμόρφωσης."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:924
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:928
 msgid "Footprint library not enabled."
 msgstr "Βιβλιοθήκη Αποτυπωμάτων απενεργοποιημένη."
 
@@ -30767,7 +30543,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Ανανέωση αποτυπωμάτων πλακέτας για να αναφέρονται στη νέα βιβλιοθήκη;"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:719
+#: pcbnew/footprint_viewer_frame.cpp:723
 msgid "No board currently open."
 msgstr "Δεν υπάρχει ανοιγμένη πλακέτα."
 
@@ -30780,7 +30556,7 @@ msgstr ""
 "Δεν θα γίνει αποθήκευση."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:727
+#: pcbnew/footprint_viewer_frame.cpp:731
 msgid "Previous footprint placement still in progress."
 msgstr "Η προηγούμενη τοποθέτηση του αποτυπώματος βρίσκεται ακόμη σε εξέλιξη."
 
@@ -30840,7 +30616,7 @@ msgstr ""
 "ταιριάζουν.\n"
 "Ένας όρος που είναι ένας αριθμός θα ταιριάζει επίσης με τον αριθμό των εδρών."
 
-#: pcbnew/footprint_viewer_frame.cpp:676
+#: pcbnew/footprint_viewer_frame.cpp:680
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30851,7 +30627,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:914
+#: pcbnew/footprint_viewer_frame.cpp:918
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30860,11 +30636,11 @@ msgstr ""
 "Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη «%s». Χρησιμοποιήστε τη "
 "Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της διαμόρφωσης."
 
-#: pcbnew/footprint_viewer_frame.cpp:917
+#: pcbnew/footprint_viewer_frame.cpp:921
 msgid "Footprint library not found."
 msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
 
-#: pcbnew/footprint_viewer_frame.cpp:921
+#: pcbnew/footprint_viewer_frame.cpp:925
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -32922,7 +32698,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Δεν υπάρχει πακέτο '%s' στη βιβλιοθήκη '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -32935,20 +32711,20 @@ msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός καλωδίου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός κειμένου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός ορθογωνίου παραλληλογράμμου αφού δεν ήταν χαρτογραφημένο το "
 "επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -33472,7 +33248,7 @@ msgstr "Το αρχείο '%s' δεν είναι βιβλιοθήκη παλαι
 msgid "Unknown PCad layer %u"
 msgstr "Άγνωστο επίπεδο PCad %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:757
 msgid "KiCad only supports 32 signal layers."
 msgstr "Το KiCad υποστηρίζει μόνο 32 επίπεδα σημάτων."
 
@@ -33619,28 +33395,28 @@ msgstr "Ρυθμισμένο: "
 msgid "?"
 msgstr ";"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 msgid "existing track"
 msgstr "υπάρχον διάδρομος"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 msgid "board minimum width"
 msgstr "ελάχιστο πλάτος πλακέτας"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 msgid "netclass 'Default'"
 msgstr "netclass '%s'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 msgid "user choice"
 msgstr "επιλογή χρήστη"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr "Το %s έχει λανθασμένη μορφή."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -33648,7 +33424,7 @@ msgstr ""
 "Το εργαλείο διαδρόμων δεν μπορεί να χειριστεί αυτή τη ζώνη.\n"
 "Επιβεβαιώστε ότι δεν είναι πολύγωνο που τέμνει τον εαυτό του."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Διαδραστικός Δρομολογητής"
 
@@ -34265,12 +34041,12 @@ msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δ
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Κανόνας επιπέδου \"%s\" δεν ταιριάζει."
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 #, fuzzy
 msgid "Some zones did not intersect and were not merged."
 msgstr "Κάποια στοιχεία απέτυχαν στον ΕΚΣ και δεν μεταβλήθηκαν."
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "Πολλαπλή ζώνη"
 
@@ -34764,7 +34540,7 @@ msgstr "Λειτουργία επεξεργασίας Pad.  Πατήστε %s γ
 msgid "Edit pad shapes"
 msgstr "Επεξεργασία σχήματος pad"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 msgid "Recombine pads"
 msgstr "Ανασυνδυασμός pads"
 
@@ -37276,6 +37052,180 @@ msgstr "Σχηματικό KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
+
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
+
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
+
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
+
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
+
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "In18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B.Adhesive"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F.Adhesive"
+
+#~ msgid "B.Paste"
+#~ msgstr "B.Paste"
+
+#~ msgid "F.Paste"
+#~ msgstr "F.Paste"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Silkscreen"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F.Silkscreen"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "User.Comments"
+
+#~ msgid "User.Eco1"
+#~ msgstr "User.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "User.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F.Courtyard"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B.Courtyard"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#~ msgid "User.9"
+#~ msgstr "User.9"
 
 #, c-format
 #~ msgid ""

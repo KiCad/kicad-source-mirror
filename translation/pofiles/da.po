@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
+"POT-Creation-Date: 2022-06-13 09:56-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -192,7 +192,7 @@ msgstr "Eksporter aktuel visning som JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:954
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D-fremviser"
@@ -1645,7 +1645,7 @@ msgstr "Bekræftelse"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "Beskrivelse"
@@ -4961,404 +4961,168 @@ msgstr "Kunne ikke skifte sprog til %s"
 msgid "Set Language"
 msgstr "Angiv sprog"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-#: common/layer_id.cpp:42
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-#: common/layer_id.cpp:43
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-#: common/layer_id.cpp:44
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-#: common/layer_id.cpp:45
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-#: common/layer_id.cpp:46
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-#: common/layer_id.cpp:47
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-#: common/layer_id.cpp:48
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-#: common/layer_id.cpp:49
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-#: common/layer_id.cpp:50
-msgid "In18.Cu"
-msgstr "I18.Cu"
-
-#: common/layer_id.cpp:51
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-#: common/layer_id.cpp:52
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-#: common/layer_id.cpp:53
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-#: common/layer_id.cpp:54
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-#: common/layer_id.cpp:55
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-#: common/layer_id.cpp:56
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-#: common/layer_id.cpp:57
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-#: common/layer_id.cpp:58
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-#: common/layer_id.cpp:59
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-#: common/layer_id.cpp:60
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-#: common/layer_id.cpp:61
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-#: common/layer_id.cpp:62
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr "B.Cu"
-
-#: common/layer_id.cpp:66
-msgid "B.Adhesive"
-msgstr "B. klæbemiddel"
-
-#: common/layer_id.cpp:67
-msgid "F.Adhesive"
-msgstr "F. Lim"
-
-#: common/layer_id.cpp:68
-msgid "B.Paste"
-msgstr "B. Indsæt"
-
-#: common/layer_id.cpp:69
-msgid "F.Paste"
-msgstr "F. Indsæt"
-
-#: common/layer_id.cpp:70
-msgid "B.Silkscreen"
-msgstr "B.Silketryk"
-
-#: common/layer_id.cpp:71
-msgid "F.Silkscreen"
-msgstr "F. Silketryk"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr "B.Mask"
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: common/layer_id.cpp:76
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-#: common/layer_id.cpp:77
-msgid "User.Comments"
-msgstr "Brugerkommentarer"
-
-#: common/layer_id.cpp:78
-msgid "User.Eco1"
-msgstr "Bruger.Eco1"
-
-#: common/layer_id.cpp:79
-msgid "User.Eco2"
-msgstr "Bruger.Eco2"
-
-#: common/layer_id.cpp:80
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-msgid "Margin"
-msgstr "Margen"
-
-#: common/layer_id.cpp:84
-msgid "F.Courtyard"
-msgstr "F. gårdsplads"
-
-#: common/layer_id.cpp:85
-msgid "B.Courtyard"
-msgstr "B. gårdsplads"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr "F.Fab"
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr "B.Fab"
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr "Bruger.1"
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr "Bruger.2"
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr "Bruger.3"
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr "Bruger.4"
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr "Bruger.5"
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr "Bruger.6"
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr "Bruger.7"
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr "Bruger.8"
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr "Bruger.9"
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 msgid "Rescue"
 msgstr "Redde"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 msgid "Wires"
 msgstr "Ledninger"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr "Busser"
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 msgid "Bus junctions"
 msgstr "Buskryds"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 msgid "Junctions"
 msgstr "Kryds"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 msgid "Labels"
 msgstr "Etiketter"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
 msgstr "Globale mærker"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
 msgstr "Hierarkiske etiketter"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 msgid "Pin numbers"
 msgstr "Pin numre"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 msgid "Pin names"
 msgstr "Pin navne"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 msgid "Symbol references"
 msgstr "Symbolreferencer"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 msgid "Symbol values"
 msgstr "Symbolværdier"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 msgid "Symbol fields"
 msgstr "Symbolfelter"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 msgid "Symbol body outlines"
 msgstr "Symbol kropskonturer"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 msgid "Symbol body fills"
 msgstr "Symbollegeme fyldes"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
 msgstr "Skematisk tekst && grafik"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr "Pins"
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 msgid "Sheet borders"
 msgstr "Ark grænser op"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
 msgstr "Ark baggrunde"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 msgid "Sheet names"
 msgstr "Arknavne"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 msgid "Sheet fields"
 msgstr "Arkfelter"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 msgid "Sheet file names"
 msgstr "Arknavne"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
 msgstr "Arkstifter"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 msgid "No-connect symbols"
 msgstr "No-connect symboler"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 msgid "ERC warnings"
 msgstr "ERC advarsler"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 msgid "ERC errors"
 msgstr "ERC-fejl"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Ankre"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 msgid "Helper items"
 msgstr "Hjælpeartikler"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Gitter"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr "Akser"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "Baggrund"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "cursoren"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 msgid "Highlighted items"
 msgstr "Fremhævede emner"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 msgid "Hidden items"
 msgstr "Skjulte genstande"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 msgid "Selection highlight"
 msgstr "Valg af markering"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 #, fuzzy
 msgid "Drawing sheet"
 msgstr "Tegninger"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 msgid "Footprints front"
 msgstr "Fodspor foran"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 msgid "Footprints back"
 msgstr "Fodspor tilbage"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5367,37 +5131,37 @@ msgstr "Fodspor tilbage"
 msgid "Values"
 msgstr "Værdier"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
 msgstr "Referencebetegnere"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 #, fuzzy
 msgid "Footprint text"
 msgstr "Fodaftrykstekst"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 msgid "Hidden text"
 msgstr "Skjult tekst"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 #, fuzzy
 msgid "SMD pads front"
 msgstr "Pads foran"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 #, fuzzy
 msgid "SMD pads back"
 msgstr "Pads tilbage"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 msgid "Through-hole pads"
 msgstr "Gennemgående hulpuder"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5407,69 +5171,69 @@ msgstr "Gennemgående hulpuder"
 msgid "Tracks"
 msgstr "Spor"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 msgid "Through vias"
 msgstr "Gennem vias"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 msgid "Bl/Buried vias"
 msgstr "Bl / Begravede vias"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 msgid "Micro-vias"
 msgstr "Micro-vias"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 msgid "Via holes"
 msgstr "Via huller"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 #, fuzzy
 msgid "Via hole walls"
 msgstr "Via huller"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 #, fuzzy
 msgid "Plated holes"
 msgstr "Ikke-belagte huller"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 #, fuzzy
 msgid "Plated hole walls"
 msgstr "Ikke-belagte huller"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 msgid "Non-plated holes"
 msgstr "Ikke-belagte huller"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "Ratsnest"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 msgid "No-connects"
 msgstr "Ingen forbindelser"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 msgid "DRC warnings"
 msgstr "DRC-advarsler"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 msgid "DRC errors"
 msgstr "DRC-fejl"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 msgid "DRC exclusions"
 msgstr "DRC-udelukkelser"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 msgid "DRC marker shadows"
 msgstr "DRC markørskygger"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 msgid "Grid axes"
 msgstr "Gitterakser"
 
@@ -5587,26 +5351,26 @@ msgstr ""
 msgid "Cannot convert '%s' to double."
 msgstr "Kan ikke konvertere \"%s\" til et heltal"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Kan ikke åbne filen '%s'"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 #, fuzzy
 msgid "File import cancelled by user."
 msgstr "-------- ERC annulleret af brugeren. <br> <br>"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "Den valgte fil er ikke gyldig eller er muligvis korrupt!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "Uventet antal point i '%s'. Fundet %d men forventet %d."
@@ -6294,7 +6058,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Opret, slet og rediger symboler"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1000
+#: pcbnew/footprint_viewer_frame.cpp:1004
 msgid "Footprint Library Browser"
 msgstr "Footprint Library Browser"
 
@@ -7079,7 +6843,8 @@ msgstr "\"%s\" er ikke et gyldigt fodaftryk."
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Nøgleord"
 
@@ -14136,12 +13901,12 @@ msgstr ""
 "men har ingen figur defineret."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, fuzzy, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kunne ikke læse filen \"%s\""
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, fuzzy, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -14150,7 +13915,7 @@ msgstr ""
 "Fejl ved analyse af Eagle-filen. Kunne ikke finde \"%s\" instans, men der "
 "henvises til det i skematisk."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, fuzzy, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Kunne ikke finde %s i det importerede bibliotek"
@@ -14314,19 +14079,19 @@ msgid "Library file '%s' not found."
 msgstr "Biblioteksfil \"%s\" blev ikke fundet."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotek %s indeholder ikke et symbol med navnet %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, fuzzy, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Bibliotek %s findes allerede."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, fuzzy, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "biblioteket \"%s\" kan ikke slettes"
@@ -14341,7 +14106,7 @@ msgstr "biblioteket \"%s\" kan ikke slettes"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "uventet slutning af linjen"
 
@@ -15736,7 +15501,7 @@ msgstr "Ikke defineret!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "Forælder"
 
@@ -15871,7 +15636,7 @@ msgstr "KiCad-symbolbiblioteksfiler"
 msgid "Unit %c"
 msgstr "Enhed %c"
 
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:997
+#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
 #, fuzzy
 msgid "[no library selected]"
 msgstr "intet bibliotek er valgt"
@@ -16947,7 +16712,7 @@ msgstr "Gem kopi som ..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Gem en kopi af det aktuelle dokument et andet sted"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16956,7 +16721,7 @@ msgstr ""
 "<b> Duplikatstift %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> er i "
 "konflikt med pin %s \"%s\" på placering <b> ( %.3f, %.3f) </b> af konverteret"
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16966,7 +16731,7 @@ msgstr ""
 "konflikt med pin %s \"%s\" på placering <b> ( %.3f, %.3f) </b> i enheder %c "
 "og %c konverteret"
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16975,7 +16740,7 @@ msgstr ""
 "<b> Duplikatstift %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> er i "
 "konflikt med pin %s \"%s\" på placering <b> ( %.3f, %.3f) </b>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16985,7 +16750,7 @@ msgstr ""
 "konflikt med pin %s \"%s\" på placering <b> ( %.3f, %.3f) </b> i enheder %c "
 "og %c"
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -16993,7 +16758,7 @@ msgstr ""
 "<b> Fra gitterstiften %s </b> \"%s\" på stedet <b> (%.3f, %.3f) </b> for "
 "konverteret. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -17002,13 +16767,13 @@ msgstr ""
 "<b> Off grid pin %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> i symbol "
 "%c for konverteret. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, fuzzy, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b> Fra gitterpind %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b>. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -17016,19 +16781,19 @@ msgstr ""
 "<b> Off grid pin %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> i symbol "
 "%c. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b> Fra gitterstiften %s </b> \"%s\" på stedet <b> (%.3f, %.3f) </b> for "
 "konverteret. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, fuzzy, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -17037,30 +16802,30 @@ msgstr ""
 "<b> Off grid pin %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> i symbol "
 "%c for konverteret. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b> Fra gitterpind %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b>. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b> Off grid pin %s </b> \"%s\" på placering <b> (%.3f, %.3f) </b> i symbol "
 "%c. <br>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 #, fuzzy
 msgid "No symbol issues found."
 msgstr "Symbol ikke fundet."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 #, fuzzy
 msgid "Symbol Warnings"
 msgstr "Symbolbiblioteker"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 #, fuzzy
 msgid "No datasheet defined."
 msgstr "Ingen via drill defineret."
@@ -18329,7 +18094,7 @@ msgstr "Fremhæv %s"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -21777,7 +21542,7 @@ msgid "Add Dielectric Layer"
 msgstr "Tilføj dielektrisk lag"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 #, fuzzy
 msgid "Select layer to add:"
 msgstr "Vælg lag"
@@ -22012,6 +21777,8 @@ msgid "Yellow"
 msgstr "Gul"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 msgid "Not specified"
 msgstr "Ikke specificeret"
 
@@ -28523,25 +28290,25 @@ msgstr ""
 "fra fjernede lag og kan ikke fortrydes.\n"
 "Ønsker du at fortsætte?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "Lag skal have et navn."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, fuzzy, c-format
 msgid "%s are forbidden in layer names."
 msgstr "\"%s\" er forbudt i lagnavne."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "Lagnavnet \"signal\" er reserveret."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, fuzzy, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Lagnavnet \"%s\" er allerede i brug."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -28554,15 +28321,15 @@ msgstr ""
 "\n"
 "Fortsætte og slette de ekstra indre kobberlag fra det aktuelle bord?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr "Indvendige lag, der skal slettes"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 #, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Tilføj brugerdefineret lag"
@@ -29008,6 +28775,10 @@ msgstr "Pcb_Edges"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "Board kontur"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+msgid "Margin"
+msgstr "Margen"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -30298,17 +30069,17 @@ msgid "They have been exported as oval pads."
 msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Board skitse er misdannet. Kør DRC for en komplet analyse."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "IDF-eksport mislykkedes:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML-eksport mislykkedes: Kunne ikke tilføje huller til konturer."
 
@@ -30648,22 +30419,27 @@ msgstr "Clearance konturer"
 msgid "Solderpaste Margin Override"
 msgstr "Lokal loddepasta Margin"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal loddepasta margenforhold"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 #, fuzzy
 msgid "Thermal Relief Width"
 msgstr "Bredde på termisk aflastning"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Termisk lindring"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+#, fuzzy
+msgid "Library ID"
+msgstr "Bibliotek"
+
+#: pcbnew/footprint.h:219
 #, c-format
 msgid "footprint %s"
 msgstr "fodaftryk %s"
@@ -30739,7 +30515,7 @@ msgstr ""
 "Biblioteket '%s' er ikke aktiveret i den aktuelle konfiguration.\n"
 "Brug Manage Footprint Libraries til at redigere konfigurationen."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:924
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:928
 msgid "Footprint library not enabled."
 msgstr "Footprint-bibliotek er ikke aktiveret."
 
@@ -30843,7 +30619,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Opdater fodspor, så de inkluderer ændringer fra biblioteket"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:719
+#: pcbnew/footprint_viewer_frame.cpp:723
 msgid "No board currently open."
 msgstr "Der er i øjeblikket ikke noget bord åbent."
 
@@ -30856,7 +30632,7 @@ msgstr ""
 "Kan ikke gemme."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:727
+#: pcbnew/footprint_viewer_frame.cpp:731
 msgid "Previous footprint placement still in progress."
 msgstr ""
 
@@ -30915,7 +30691,7 @@ msgstr ""
 "Søgeudtryk er adskilt af mellemrum. Alle søgeudtryk skal matche.\n"
 "Et udtryk, der er et tal, vil også matche mod antallet af pad."
 
-#: pcbnew/footprint_viewer_frame.cpp:676
+#: pcbnew/footprint_viewer_frame.cpp:680
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30926,7 +30702,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:914
+#: pcbnew/footprint_viewer_frame.cpp:918
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30935,11 +30711,11 @@ msgstr ""
 "Den aktuelle konfiguration inkluderer ikke biblioteket '%s'. Brug Manage "
 "Footprint Libraries til at redigere konfigurationen."
 
-#: pcbnew/footprint_viewer_frame.cpp:917
+#: pcbnew/footprint_viewer_frame.cpp:921
 msgid "Footprint library not found."
 msgstr "Fodaftrykbibliotek ikke fundet."
 
-#: pcbnew/footprint_viewer_frame.cpp:921
+#: pcbnew/footprint_viewer_frame.cpp:925
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -32991,7 +32767,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Ingen \"%s\" pakke i biblioteket \"%s\""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en polygon, da Eagle-laget '%s' (%d) ikke blev kortlagt"
@@ -33001,17 +32777,17 @@ msgstr "Ignorerer en polygon, da Eagle-laget '%s' (%d) ikke blev kortlagt"
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en ledning, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en tekst, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, fuzzy, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en rektange, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en cirkel, da Eagle-laget '%s' (%d) ikke var kortlagt"
@@ -33528,7 +33304,7 @@ msgstr "Fil '%s' er ikke et ældre bibliotek."
 msgid "Unknown PCad layer %u"
 msgstr "Ukendt PCad-lag %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:757
 #, fuzzy
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad understøtter kun 32 signallag"
@@ -33677,32 +33453,32 @@ msgstr "Tunet: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 #, fuzzy
 msgid "existing track"
 msgstr "Når du opretter spor"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 #, fuzzy
 msgid "board minimum width"
 msgstr "Minimum bredde:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 #, fuzzy
 msgid "netclass 'Default'"
 msgstr "netklasse '%s'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 #, fuzzy
 msgid "user choice"
 msgstr "Store valg"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr "%s er forkert formet."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
@@ -33711,7 +33487,7 @@ msgstr ""
 "Denne zone kan ikke håndteres af sporlayoutværktøjet.\n"
 "Kontroller, at det ikke er en selvskærende polygon."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Interaktiv router"
 
@@ -34338,11 +34114,11 @@ msgstr ""
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Regellaget \"%s\" matchede ikke."
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 msgid "Some zones did not intersect and were not merged."
 msgstr ""
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "Kopier zone"
 
@@ -34862,7 +34638,7 @@ msgstr "Pad Edit Mode. Tryk på %s for at afslutte."
 msgid "Edit pad shapes"
 msgstr "Rediger padformer"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 msgid "Recombine pads"
 msgstr "Rekombiner puder"
 
@@ -37420,6 +37196,180 @@ msgstr "Rediger skematisk"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-printkortfiler"
+
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
+
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
+
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
+
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
+
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "I18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B. klæbemiddel"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F. Lim"
+
+#~ msgid "B.Paste"
+#~ msgstr "B. Indsæt"
+
+#~ msgid "F.Paste"
+#~ msgstr "F. Indsæt"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Silketryk"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F. Silketryk"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "Brugerkommentarer"
+
+#~ msgid "User.Eco1"
+#~ msgstr "Bruger.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "Bruger.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F. gårdsplads"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B. gårdsplads"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "Bruger.1"
+
+#~ msgid "User.2"
+#~ msgstr "Bruger.2"
+
+#~ msgid "User.3"
+#~ msgstr "Bruger.3"
+
+#~ msgid "User.4"
+#~ msgstr "Bruger.4"
+
+#~ msgid "User.5"
+#~ msgstr "Bruger.5"
+
+#~ msgid "User.6"
+#~ msgstr "Bruger.6"
+
+#~ msgid "User.7"
+#~ msgstr "Bruger.7"
+
+#~ msgid "User.8"
+#~ msgstr "Bruger.8"
+
+#~ msgid "User.9"
+#~ msgstr "Bruger.9"
 
 #, fuzzy, c-format
 #~ msgid ""

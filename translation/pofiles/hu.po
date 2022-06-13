@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
+"POT-Creation-Date: 2022-06-13 09:56-0700\n"
 "PO-Revision-Date: 2022-04-28 11:12+0000\n"
 "Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v6/hu/>\n"
@@ -189,7 +189,7 @@ msgstr "Aktuális nézet exportálása JPEG-ként..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:954
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D megjelenítő"
@@ -1687,7 +1687,7 @@ msgstr "Megerősítés"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "Leírás"
@@ -5073,469 +5073,198 @@ msgstr "A(z) \"%s\" fájlt nem lehet írni"
 msgid "Set Language"
 msgstr "Nyelv beállítása"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:42
-#, fuzzy
-msgid "In10.Cu"
-msgstr "In10"
-
-#: common/layer_id.cpp:43
-#, fuzzy
-msgid "In11.Cu"
-msgstr "In11"
-
-#: common/layer_id.cpp:44
-#, fuzzy
-msgid "In12.Cu"
-msgstr "In12"
-
-#: common/layer_id.cpp:45
-#, fuzzy
-msgid "In13.Cu"
-msgstr "In13"
-
-#: common/layer_id.cpp:46
-#, fuzzy
-msgid "In14.Cu"
-msgstr "In14"
-
-#: common/layer_id.cpp:47
-#, fuzzy
-msgid "In15.Cu"
-msgstr "In15"
-
-#: common/layer_id.cpp:48
-#, fuzzy
-msgid "In16.Cu"
-msgstr "In16"
-
-#: common/layer_id.cpp:49
-#, fuzzy
-msgid "In17.Cu"
-msgstr "In17"
-
-#: common/layer_id.cpp:50
-#, fuzzy
-msgid "In18.Cu"
-msgstr "In18"
-
-#: common/layer_id.cpp:51
-#, fuzzy
-msgid "In19.Cu"
-msgstr "In19"
-
-#: common/layer_id.cpp:52
-#, fuzzy
-msgid "In20.Cu"
-msgstr "In20"
-
-#: common/layer_id.cpp:53
-#, fuzzy
-msgid "In21.Cu"
-msgstr "In21"
-
-#: common/layer_id.cpp:54
-#, fuzzy
-msgid "In22.Cu"
-msgstr "In22"
-
-#: common/layer_id.cpp:55
-#, fuzzy
-msgid "In23.Cu"
-msgstr "In23"
-
-#: common/layer_id.cpp:56
-#, fuzzy
-msgid "In24.Cu"
-msgstr "In24"
-
-#: common/layer_id.cpp:57
-#, fuzzy
-msgid "In25.Cu"
-msgstr "In25"
-
-#: common/layer_id.cpp:58
-#, fuzzy
-msgid "In26.Cu"
-msgstr "In26"
-
-#: common/layer_id.cpp:59
-#, fuzzy
-msgid "In27.Cu"
-msgstr "In27"
-
-#: common/layer_id.cpp:60
-#, fuzzy
-msgid "In28.Cu"
-msgstr "In28"
-
-#: common/layer_id.cpp:61
-#, fuzzy
-msgid "In29.Cu"
-msgstr "In29"
-
-#: common/layer_id.cpp:62
-#, fuzzy
-msgid "In30.Cu"
-msgstr "In30"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr ""
-
-#: common/layer_id.cpp:66
-#, fuzzy
-msgid "B.Adhesive"
-msgstr "Alsó ragasztó"
-
-#: common/layer_id.cpp:67
-#, fuzzy
-msgid "F.Adhesive"
-msgstr "Felső ragasztó"
-
-#: common/layer_id.cpp:68
-#, fuzzy
-msgid "B.Paste"
-msgstr "Beillesztés"
-
-#: common/layer_id.cpp:69
-#, fuzzy
-msgid "F.Paste"
-msgstr "Beillesztés"
-
-#: common/layer_id.cpp:70
-#, fuzzy
-msgid "B.Silkscreen"
-msgstr "Szitanyomat"
-
-#: common/layer_id.cpp:71
-#, fuzzy
-msgid "F.Silkscreen"
-msgstr "Szitanyomat"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr ""
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr ""
-
-#: common/layer_id.cpp:76
-#, fuzzy
-msgid "User.Drawings"
-msgstr "Rajzok"
-
-#: common/layer_id.cpp:77
-#, fuzzy
-msgid "User.Comments"
-msgstr "Megjegyzés"
-
-#: common/layer_id.cpp:78
-#, fuzzy
-msgid "User.Eco1"
-msgstr "Felhasználói Eco1 réteg"
-
-#: common/layer_id.cpp:79
-#, fuzzy
-msgid "User.Eco2"
-msgstr "Felhasználói Eco2 réteg"
-
-#: common/layer_id.cpp:80
-#, fuzzy
-msgid "Edge.Cuts"
-msgstr "Kontúrmarás"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-#, fuzzy
-msgid "Margin"
-msgstr "Margin_layer"
-
-#: common/layer_id.cpp:84
-#, fuzzy
-msgid "F.Courtyard"
-msgstr "Határolódobozok"
-
-#: common/layer_id.cpp:85
-#, fuzzy
-msgid "B.Courtyard"
-msgstr "Határolódobozok"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr ""
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr ""
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr ""
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr ""
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr ""
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr ""
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr ""
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr ""
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr ""
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr ""
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr ""
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 #, fuzzy
 msgid "Rescue"
 msgstr "Átmentés"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 #, fuzzy
 msgid "Wires"
 msgstr "Vezeték"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr ""
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 #, fuzzy
 msgid "Bus junctions"
 msgstr "Csomópont"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 #, fuzzy
 msgid "Junctions"
 msgstr "Csomópont"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 #, fuzzy
 msgid "Labels"
 msgstr "Címke"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 #, fuzzy
 msgid "Global labels"
 msgstr "Globális címke"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 #, fuzzy
 msgid "Hierarchical labels"
 msgstr "Hierarchikus címke"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 #, fuzzy
 msgid "Pin numbers"
 msgstr "Lábszámozások:"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 #, fuzzy
 msgid "Pin names"
 msgstr "Lábnév"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 #, fuzzy
 msgid "Symbol references"
 msgstr "A rajzjel referenciájának szerkesztése"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 #, fuzzy
 msgid "Symbol values"
 msgstr "Rajzjel név"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 #, fuzzy
 msgid "Symbol fields"
 msgstr "Rajzjel mezők"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 #, fuzzy
 msgid "Symbol body outlines"
 msgstr "Rajzjel-törzs körvonal"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 #, fuzzy
 msgid "Symbol body fills"
 msgstr "Rajzjelek"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #, fuzzy
 msgid "Schematic text && graphics"
 msgstr "Kapcsolási rajzlap tulajdonságok"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr ""
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 #, fuzzy
 msgid "Sheet borders"
 msgstr "Lap címke"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 #, fuzzy
 msgid "Sheet backgrounds"
 msgstr "Rajzjel-törzs háttér"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 #, fuzzy
 msgid "Sheet names"
 msgstr "Lap név"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 #, fuzzy
 msgid "Sheet fields"
 msgstr "Mező törlése"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 #, fuzzy
 msgid "Sheet file names"
 msgstr "Lap fájlnév"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 #, fuzzy
 msgid "Sheet pins"
 msgstr "Lap kivezető láb hozzáadása"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 #, fuzzy
 msgid "No-connect symbols"
 msgstr "Nem csatlakoztatott rajzjel"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 #, fuzzy
 msgid "ERC warnings"
 msgstr "ERC figyelmeztetés"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 #, fuzzy
 msgid "ERC errors"
 msgstr "ERC hiba"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Horgony"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 #, fuzzy
 msgid "Helper items"
 msgstr "Elemek törlése"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Rácsméretek"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr ""
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "Háttér"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "Kurzor"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 #, fuzzy
 msgid "Highlighted items"
 msgstr "Kiemelt vezeték: %s"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 #, fuzzy
 msgid "Hidden items"
 msgstr "Rejtett elemek"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 #, fuzzy
 msgid "Selection highlight"
 msgstr "Kiemelés megszüntetése"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 #, fuzzy
 msgid "Drawing sheet"
 msgstr "Rajzok"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 #, fuzzy
 msgid "Footprints front"
 msgstr "Felső alkatrészrajzolatok"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 #, fuzzy
 msgid "Footprints back"
 msgstr "Alsó alkatrészrajzolatok"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5544,7 +5273,7 @@ msgstr "Alsó alkatrészrajzolatok"
 msgid "Values"
 msgstr "Értékek"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
@@ -5552,32 +5281,32 @@ msgstr "Értékek"
 msgid "Reference designators"
 msgstr "referencia jelölés"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 #, fuzzy
 msgid "Footprint text"
 msgstr "Alsó alkatrészrajzolat szövegek"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 #, fuzzy
 msgid "Hidden text"
 msgstr "Rejtett szövegek"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 #, fuzzy
 msgid "SMD pads front"
 msgstr "Felső forrszemek"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 #, fuzzy
 msgid "SMD pads back"
 msgstr "Alsó forrszemek"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 #, fuzzy
 msgid "Through-hole pads"
 msgstr "Furatszerelt forrszemek"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5587,79 +5316,79 @@ msgstr "Furatszerelt forrszemek"
 msgid "Tracks"
 msgstr "Vezetősávok"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 #, fuzzy
 msgid "Through vias"
 msgstr "Átmenő viák:"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 #, fuzzy
 msgid "Bl/Buried vias"
 msgstr "Zsák/eltemetett viák"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 #, fuzzy
 msgid "Micro-vias"
 msgstr "μViák:"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 #, fuzzy
 msgid "Via holes"
 msgstr "Via: %s"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 #, fuzzy
 msgid "Via hole walls"
 msgstr "Via: %s"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 #, fuzzy
 msgid "Plated holes"
 msgstr "Nem furatfémezett furatok"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 #, fuzzy
 msgid "Plated hole walls"
 msgstr "Nem furatfémezett furatok"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 #, fuzzy
 msgid "Non-plated holes"
 msgstr "Nem furatfémezett furatok"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "Légvezetékek"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 #, fuzzy
 msgid "No-connects"
 msgstr "Nem csatlakoztatott"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 #, fuzzy
 msgid "DRC warnings"
 msgstr "Figyelmeztések"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 #, fuzzy
 msgid "DRC errors"
 msgstr "Hibák"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 #, fuzzy
 msgid "DRC exclusions"
 msgstr "Kijelölések törlése"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 #, fuzzy
 msgid "DRC marker shadows"
 msgstr "Árnyékok megjelenítése"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 #, fuzzy
 msgid "Grid axes"
 msgstr "Rács beállítások"
@@ -5780,25 +5509,25 @@ msgstr ""
 msgid "Cannot convert '%s' to double."
 msgstr "A(z) \"%s\" nem konvertálható egész számra."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, fuzzy, c-format
 msgid "Cannot open file '%s'"
 msgstr "A(z) \"%s\" fájl nem másolható."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
 msgstr ""
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr ""
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr ""
@@ -6529,7 +6258,7 @@ msgid "Create, delete and edit symbols"
 msgstr "Rajzjelek létrehozása, törlése vagy szerkesztése"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1000
+#: pcbnew/footprint_viewer_frame.cpp:1004
 msgid "Footprint Library Browser"
 msgstr "Alkatrészrajzolat könyvtár böngésző"
 
@@ -7347,7 +7076,8 @@ msgstr "A(z) \"%s\" nem érvényes LIB_ID."
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Kulcsszavak:"
 
@@ -14348,12 +14078,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, fuzzy, c-format
 msgid "Unable to read file '%s'."
 msgstr "A(z) \"%s\" fájt nem lehet olvasni."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, fuzzy, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -14362,7 +14092,7 @@ msgstr ""
 "Hiba az Eagle fájl értelmezése során. Nem található a(z) \"%s\" példány, "
 "miközben a kapcsolási rajzban hivatkozva van arra."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, fuzzy, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "\"%s\" nem található az importált könyvtárban"
@@ -14521,19 +14251,19 @@ msgid "Library file '%s' not found."
 msgstr "\"%s\"  könyvtár nem  található."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, fuzzy, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "a(z) \"%s\" könyvtár nem tartalmazza a(z) \"%s\" megnevezést"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, fuzzy, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "A(z) \"%s\" könyvtár már létezik"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, fuzzy, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "a(z) \"%s\" könyvtár nem törölhető"
@@ -14548,7 +14278,7 @@ msgstr "a(z) \"%s\" könyvtár nem törölhető"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "váratlan sorvég"
 
@@ -15805,7 +15535,7 @@ msgstr "Meghatározatlan!!!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1753
 #, fuzzy
 msgid "Parent"
 msgstr "Áram"
@@ -15939,7 +15669,7 @@ msgstr "KiCad rajzjel könyvtár fájl (*.lib)"
 msgid "Unit %c"
 msgstr "%c. részegység"
 
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:997
+#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
 #, fuzzy
 msgid "[no library selected]"
 msgstr "nincs könyvtár kiválasztva"
@@ -17072,7 +16802,7 @@ msgstr "Aktuális lap mentése más néven..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Dokumentum másolatának mentése egy másik helyre"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -17081,7 +16811,7 @@ msgstr ""
 "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba "
 "került a(z) %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -17090,7 +16820,7 @@ msgstr ""
 "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba "
 "került a(z) %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17099,7 +16829,7 @@ msgstr ""
 "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba "
 "került a(z) %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, fuzzy, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17108,14 +16838,14 @@ msgstr ""
 "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba "
 "került a(z) %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -17123,31 +16853,31 @@ msgid ""
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, fuzzy, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, fuzzy, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -17155,29 +16885,29 @@ msgid ""
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, fuzzy, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Rácshoz nem illeszkedő láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban"
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 #, fuzzy
 msgid "No symbol issues found."
 msgstr "A rajzjel nem található."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 #, fuzzy
 msgid "Symbol Warnings"
 msgstr "Rajzjel megnevezése:"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 #, fuzzy
 msgid "No datasheet defined."
 msgstr "Nincs megadva via furat"
@@ -18504,7 +18234,7 @@ msgstr "Kiemelés"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -21972,7 +21702,7 @@ msgid "Add Dielectric Layer"
 msgstr "Réteg kiválasztása"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 #, fuzzy
 msgid "Select layer to add:"
 msgstr "Válassza ki a hozzáadni kívánt könyvtárakat:"
@@ -22209,6 +21939,8 @@ msgid "Yellow"
 msgstr "Világossárga"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 #, fuzzy
 msgid "Not specified"
 msgstr "Meghatározatlan"
@@ -28928,25 +28660,25 @@ msgstr ""
 "művelet nem vonható vissza.\n"
 "Folytatja?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "A rétegnek nevet kell adni."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, fuzzy, c-format
 msgid "%s are forbidden in layer names."
 msgstr "Réteg név nem tartalmazhatja a(z) \"%s\"-t-"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "A \"signal\" réteg név fenntartott."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, fuzzy, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Már létezik egy \"%s\" nevű réteg."
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -28955,15 +28687,15 @@ msgid ""
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 #, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Egyedi rács méret"
@@ -29422,6 +29154,11 @@ msgstr "Él hozzáadása"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "Panel körvonal"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+#, fuzzy
+msgid "Margin"
+msgstr "Margin_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -30783,17 +30520,17 @@ msgid "They have been exported as oval pads."
 msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "IDF exportálás nem sikerült:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
 "VRML exportálás nem sikerült:\n"
@@ -31141,22 +30878,27 @@ msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 msgid "Solderpaste Margin Override"
 msgstr "Forrasztópaszta réteg távolságtartás:"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Forrasztópaszta réteg távolságtartás:"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 #, fuzzy
 msgid "Thermal Relief Width"
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Hőcsillapítók:"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+#, fuzzy
+msgid "Library ID"
+msgstr "Könyvtár"
+
+#: pcbnew/footprint.h:219
 #, fuzzy, c-format
 msgid "footprint %s"
 msgstr "Alkatrészrajzolat: %s"
@@ -31242,7 +30984,7 @@ msgstr ""
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció "
 "szerkesztéséhez."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:924
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:928
 msgid "Footprint library not enabled."
 msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
 
@@ -31349,7 +31091,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:719
+#: pcbnew/footprint_viewer_frame.cpp:723
 msgid "No board currently open."
 msgstr "Jelenleg nincs nyitva panel."
 
@@ -31362,7 +31104,7 @@ msgstr ""
 "Nem menthető."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:727
+#: pcbnew/footprint_viewer_frame.cpp:731
 msgid "Previous footprint placement still in progress."
 msgstr ""
 
@@ -31421,7 +31163,7 @@ msgid ""
 "A term which is a number will also match against the pad count."
 msgstr ""
 
-#: pcbnew/footprint_viewer_frame.cpp:676
+#: pcbnew/footprint_viewer_frame.cpp:680
 #, fuzzy, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -31432,7 +31174,7 @@ msgstr ""
 "\n"
 "Hiba %s."
 
-#: pcbnew/footprint_viewer_frame.cpp:914
+#: pcbnew/footprint_viewer_frame.cpp:918
 #, fuzzy, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -31444,11 +31186,11 @@ msgstr ""
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció "
 "szerkesztéséhez."
 
-#: pcbnew/footprint_viewer_frame.cpp:917
+#: pcbnew/footprint_viewer_frame.cpp:921
 msgid "Footprint library not found."
 msgstr "Az alkatrészrajzolat könyvtár nem található!"
 
-#: pcbnew/footprint_viewer_frame.cpp:921
+#: pcbnew/footprint_viewer_frame.cpp:925
 #, fuzzy, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -33441,7 +33183,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Nincs \"%s\" csomag a(z) \"%s\" könyvtárban"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -33451,17 +33193,17 @@ msgstr ""
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -33970,7 +33712,7 @@ msgstr "A(z) \"%s\" fájl üres vagy nem örökölt könyvtár"
 msgid "Unknown PCad layer %u"
 msgstr "ismeretlen forrszem típus (%d)"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:757
 msgid "KiCad only supports 32 signal layers."
 msgstr ""
 
@@ -34116,32 +33858,32 @@ msgstr "Behangolva: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 #, fuzzy
 msgid "existing track"
 msgstr "Vezetősáv létrehozásakor"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 #, fuzzy
 msgid "board minimum width"
 msgstr "Minimális szélesség:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 #, fuzzy
 msgid "netclass 'Default'"
 msgstr "vezetékosztály méret"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 #, fuzzy
 msgid "user choice"
 msgstr "Választás megjegyzése"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
@@ -34151,7 +33893,7 @@ msgstr ""
 "Ez a zóna nem kezelhető a huzalozás során.\n"
 "Ellenőrizze, hogy a zónakörvonal nem egy önmagát metsző sokszög."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Interaktív huzalozás"
 
@@ -34797,12 +34539,12 @@ msgstr "Néhány elem megbukott a DRC teszten, ezért nem lettek módosítva."
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Ismétlődő rétegnevek nem engedélyezettek."
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 #, fuzzy
 msgid "Some zones did not intersect and were not merged."
 msgstr "Néhány elem megbukott a DRC teszten, ezért nem lettek módosítva."
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "Zóna duplikálása"
 
@@ -35353,7 +35095,7 @@ msgstr ""
 msgid "Edit pad shapes"
 msgstr "Forrszem felbontása részalakokra"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 #, fuzzy
 msgid "Recombine pads"
 msgstr "Forrszemek újraszámozása"
@@ -38109,6 +37851,142 @@ msgstr "Kapcsolási rajz szerkesztése"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad nyákterv fájl (*.brd)"
+
+#, fuzzy
+#~ msgid "In10.Cu"
+#~ msgstr "In10"
+
+#, fuzzy
+#~ msgid "In11.Cu"
+#~ msgstr "In11"
+
+#, fuzzy
+#~ msgid "In12.Cu"
+#~ msgstr "In12"
+
+#, fuzzy
+#~ msgid "In13.Cu"
+#~ msgstr "In13"
+
+#, fuzzy
+#~ msgid "In14.Cu"
+#~ msgstr "In14"
+
+#, fuzzy
+#~ msgid "In15.Cu"
+#~ msgstr "In15"
+
+#, fuzzy
+#~ msgid "In16.Cu"
+#~ msgstr "In16"
+
+#, fuzzy
+#~ msgid "In17.Cu"
+#~ msgstr "In17"
+
+#, fuzzy
+#~ msgid "In18.Cu"
+#~ msgstr "In18"
+
+#, fuzzy
+#~ msgid "In19.Cu"
+#~ msgstr "In19"
+
+#, fuzzy
+#~ msgid "In20.Cu"
+#~ msgstr "In20"
+
+#, fuzzy
+#~ msgid "In21.Cu"
+#~ msgstr "In21"
+
+#, fuzzy
+#~ msgid "In22.Cu"
+#~ msgstr "In22"
+
+#, fuzzy
+#~ msgid "In23.Cu"
+#~ msgstr "In23"
+
+#, fuzzy
+#~ msgid "In24.Cu"
+#~ msgstr "In24"
+
+#, fuzzy
+#~ msgid "In25.Cu"
+#~ msgstr "In25"
+
+#, fuzzy
+#~ msgid "In26.Cu"
+#~ msgstr "In26"
+
+#, fuzzy
+#~ msgid "In27.Cu"
+#~ msgstr "In27"
+
+#, fuzzy
+#~ msgid "In28.Cu"
+#~ msgstr "In28"
+
+#, fuzzy
+#~ msgid "In29.Cu"
+#~ msgstr "In29"
+
+#, fuzzy
+#~ msgid "In30.Cu"
+#~ msgstr "In30"
+
+#, fuzzy
+#~ msgid "B.Adhesive"
+#~ msgstr "Alsó ragasztó"
+
+#, fuzzy
+#~ msgid "F.Adhesive"
+#~ msgstr "Felső ragasztó"
+
+#, fuzzy
+#~ msgid "B.Paste"
+#~ msgstr "Beillesztés"
+
+#, fuzzy
+#~ msgid "F.Paste"
+#~ msgstr "Beillesztés"
+
+#, fuzzy
+#~ msgid "B.Silkscreen"
+#~ msgstr "Szitanyomat"
+
+#, fuzzy
+#~ msgid "F.Silkscreen"
+#~ msgstr "Szitanyomat"
+
+#, fuzzy
+#~ msgid "User.Drawings"
+#~ msgstr "Rajzok"
+
+#, fuzzy
+#~ msgid "User.Comments"
+#~ msgstr "Megjegyzés"
+
+#, fuzzy
+#~ msgid "User.Eco1"
+#~ msgstr "Felhasználói Eco1 réteg"
+
+#, fuzzy
+#~ msgid "User.Eco2"
+#~ msgstr "Felhasználói Eco2 réteg"
+
+#, fuzzy
+#~ msgid "Edge.Cuts"
+#~ msgstr "Kontúrmarás"
+
+#, fuzzy
+#~ msgid "F.Courtyard"
+#~ msgstr "Határolódobozok"
+
+#, fuzzy
+#~ msgid "B.Courtyard"
+#~ msgstr "Határolódobozok"
 
 #~ msgid "Corner Count"
 #~ msgstr "Sarokszám"

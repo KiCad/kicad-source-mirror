@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:30-0700\n"
+"POT-Creation-Date: 2022-06-13 09:56-0700\n"
 "PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
@@ -181,7 +181,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:954
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
@@ -1558,7 +1558,7 @@ msgstr "คำยืนยัน"
 #: kicad/pcm/dialogs/panel_package_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
-#: pcbnew/footprint_libraries_utils.cpp:997
+#: pcbnew/footprint.cpp:2387 pcbnew/footprint_libraries_utils.cpp:997
 #: pcbnew/footprint_libraries_utils.cpp:1254
 msgid "Description"
 msgstr "คำอธิบาย"
@@ -4757,403 +4757,167 @@ msgstr "ไม่สามารถเปลี่ยนภาษาเป็น
 msgid "Set Language"
 msgstr "ตั้งภาษา"
 
-#: common/layer_id.cpp:32
-msgid "F.Cu"
-msgstr "F.Cu"
-
-#: common/layer_id.cpp:33
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-#: common/layer_id.cpp:34
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-#: common/layer_id.cpp:35
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-#: common/layer_id.cpp:36
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-#: common/layer_id.cpp:37
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-#: common/layer_id.cpp:38
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-#: common/layer_id.cpp:39
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-#: common/layer_id.cpp:40
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-#: common/layer_id.cpp:41
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-#: common/layer_id.cpp:42
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-#: common/layer_id.cpp:43
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-#: common/layer_id.cpp:44
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-#: common/layer_id.cpp:45
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-#: common/layer_id.cpp:46
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-#: common/layer_id.cpp:47
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-#: common/layer_id.cpp:48
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-#: common/layer_id.cpp:49
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-#: common/layer_id.cpp:50
-msgid "In18.Cu"
-msgstr "In18.Cu"
-
-#: common/layer_id.cpp:51
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-#: common/layer_id.cpp:52
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-#: common/layer_id.cpp:53
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-#: common/layer_id.cpp:54
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-#: common/layer_id.cpp:55
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-#: common/layer_id.cpp:56
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-#: common/layer_id.cpp:57
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-#: common/layer_id.cpp:58
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-#: common/layer_id.cpp:59
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-#: common/layer_id.cpp:60
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-#: common/layer_id.cpp:61
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-#: common/layer_id.cpp:62
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-#: common/layer_id.cpp:63
-msgid "B.Cu"
-msgstr "B.Cu"
-
-#: common/layer_id.cpp:66
-msgid "B.Adhesive"
-msgstr "B.Adhesive"
-
-#: common/layer_id.cpp:67
-msgid "F.Adhesive"
-msgstr "F.Adhesive"
-
-#: common/layer_id.cpp:68
-msgid "B.Paste"
-msgstr "B.Paste"
-
-#: common/layer_id.cpp:69
-msgid "F.Paste"
-msgstr "F.Paste"
-
-#: common/layer_id.cpp:70
-msgid "B.Silkscreen"
-msgstr "B. Silkscreen"
-
-#: common/layer_id.cpp:71
-msgid "F.Silkscreen"
-msgstr "F. Silkscreen"
-
-#: common/layer_id.cpp:72
-msgid "B.Mask"
-msgstr "B.Mask"
-
-#: common/layer_id.cpp:73
-msgid "F.Mask"
-msgstr "F.Mask"
-
-#: common/layer_id.cpp:76
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-#: common/layer_id.cpp:77
-msgid "User.Comments"
-msgstr "User.Comments"
-
-#: common/layer_id.cpp:78
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-#: common/layer_id.cpp:79
-msgid "User.Eco2"
-msgstr "User.Eco2"
-
-#: common/layer_id.cpp:80
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-#: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
-msgid "Margin"
-msgstr "Margin"
-
-#: common/layer_id.cpp:84
-msgid "F.Courtyard"
-msgstr "F. Courtyard"
-
-#: common/layer_id.cpp:85
-msgid "B.Courtyard"
-msgstr "B. Courtyard"
-
-#: common/layer_id.cpp:86
-msgid "F.Fab"
-msgstr "F.Fab"
-
-#: common/layer_id.cpp:87
-msgid "B.Fab"
-msgstr "B.Fab"
-
-#: common/layer_id.cpp:90
-msgid "User.1"
-msgstr "User.1"
-
-#: common/layer_id.cpp:91
-msgid "User.2"
-msgstr "User.2"
-
-#: common/layer_id.cpp:92
-msgid "User.3"
-msgstr "User.3"
-
-#: common/layer_id.cpp:93
-msgid "User.4"
-msgstr "User.4"
-
-#: common/layer_id.cpp:94
-msgid "User.5"
-msgstr "User.5"
-
-#: common/layer_id.cpp:95
-msgid "User.6"
-msgstr "User.6"
-
-#: common/layer_id.cpp:96
-msgid "User.7"
-msgstr "User.7"
-
-#: common/layer_id.cpp:97
-msgid "User.8"
-msgstr "User.8"
-
-#: common/layer_id.cpp:98
-msgid "User.9"
-msgstr "User.9"
-
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:857
+#: common/layer_id.cpp:104 pcbnew/plugins/kicad/pcb_parser.cpp:857
 msgid "Rescue"
 msgstr "กู้ภัย"
 
-#: common/layer_id.cpp:105
+#: common/layer_id.cpp:108
 msgid "Wires"
 msgstr "เส้นลวด"
 
-#: common/layer_id.cpp:106
+#: common/layer_id.cpp:109
 msgid "Buses"
 msgstr "บัส"
 
-#: common/layer_id.cpp:107
+#: common/layer_id.cpp:110
 msgid "Bus junctions"
 msgstr "จุดเชื่อมต่อบัส"
 
-#: common/layer_id.cpp:108
+#: common/layer_id.cpp:111
 msgid "Junctions"
 msgstr "จุดเชื่อมต่อ"
 
-#: common/layer_id.cpp:109
+#: common/layer_id.cpp:112
 msgid "Labels"
 msgstr "ป้ายชื่อ"
 
-#: common/layer_id.cpp:110
+#: common/layer_id.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
 msgstr "ป้ายชื่อส่วนกลาง"
 
-#: common/layer_id.cpp:111
+#: common/layer_id.cpp:114
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
 msgstr "ป้ายชื่อลำดับขั้น"
 
-#: common/layer_id.cpp:112
+#: common/layer_id.cpp:115
 msgid "Pin numbers"
 msgstr "หมายเลขขา"
 
-#: common/layer_id.cpp:113
+#: common/layer_id.cpp:116
 msgid "Pin names"
 msgstr "ชื่อขา"
 
-#: common/layer_id.cpp:114
+#: common/layer_id.cpp:117
 msgid "Symbol references"
 msgstr "สัญลักษณ์อ้างอิง"
 
-#: common/layer_id.cpp:115
+#: common/layer_id.cpp:118
 msgid "Symbol values"
 msgstr "ค่าของสัญลักษณ์"
 
-#: common/layer_id.cpp:116
+#: common/layer_id.cpp:119
 msgid "Symbol fields"
 msgstr "ช่องสัญลักษณ์"
 
-#: common/layer_id.cpp:117
+#: common/layer_id.cpp:120
 msgid "Symbol body outlines"
 msgstr "เค้าโครงตัวสัญลักษณ์"
 
-#: common/layer_id.cpp:118
+#: common/layer_id.cpp:121
 msgid "Symbol body fills"
 msgstr "ระบายทึบในสัญลักษณ์"
 
-#: common/layer_id.cpp:119
+#: common/layer_id.cpp:122
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
 msgstr "ข้อความในวงจรและกราฟิก"
 
-#: common/layer_id.cpp:120
+#: common/layer_id.cpp:123
 msgid "Pins"
 msgstr "ขา"
 
-#: common/layer_id.cpp:121
+#: common/layer_id.cpp:124
 msgid "Sheet borders"
 msgstr "ขอบนอกกระดาษ"
 
-#: common/layer_id.cpp:122
+#: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
 msgstr "พื้นหลังกระดาษ"
 
-#: common/layer_id.cpp:123
+#: common/layer_id.cpp:126
 msgid "Sheet names"
 msgstr "ชื่อกระดาษ"
 
-#: common/layer_id.cpp:124
+#: common/layer_id.cpp:127
 msgid "Sheet fields"
 msgstr "ช่องกระดาษ"
 
-#: common/layer_id.cpp:125
+#: common/layer_id.cpp:128
 msgid "Sheet file names"
 msgstr "ชื่อไฟล์กระดาษ"
 
-#: common/layer_id.cpp:126
+#: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
 msgstr "ขาชีต"
 
-#: common/layer_id.cpp:127
+#: common/layer_id.cpp:130
 msgid "No-connect symbols"
 msgstr "สัญลักษณ์ไม่เชื่อมต่อ"
 
-#: common/layer_id.cpp:128
+#: common/layer_id.cpp:131
 msgid "ERC warnings"
 msgstr "ระวัง ERC"
 
-#: common/layer_id.cpp:129
+#: common/layer_id.cpp:132
 msgid "ERC errors"
 msgstr "ผิดพลาด ERC"
 
-#: common/layer_id.cpp:130 common/layer_id.cpp:167
+#: common/layer_id.cpp:133 common/layer_id.cpp:170
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "สมอ"
 
-#: common/layer_id.cpp:131 common/layer_id.cpp:170
+#: common/layer_id.cpp:134 common/layer_id.cpp:173
 msgid "Helper items"
 msgstr "ชิ้นส่วนผู้ช่วย"
 
-#: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:135 common/layer_id.cpp:174 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "กริด"
 
-#: common/layer_id.cpp:133
+#: common/layer_id.cpp:136
 msgid "Axes"
 msgstr "แกน"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:173
+#: common/layer_id.cpp:137 common/layer_id.cpp:176
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Background"
 msgstr "พื้นหลัง"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:169
+#: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Cursor"
 msgstr "เคอร์เซอร์"
 
-#: common/layer_id.cpp:136
+#: common/layer_id.cpp:139
 msgid "Highlighted items"
 msgstr "เน้นสีชิ้นส่วน"
 
-#: common/layer_id.cpp:137
+#: common/layer_id.cpp:140
 msgid "Hidden items"
 msgstr "ชิ้นส่วนถูกซ่อน"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:174
+#: common/layer_id.cpp:141 common/layer_id.cpp:177
 msgid "Selection highlight"
 msgstr "เน้นสีการเลือก"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:168
+#: common/layer_id.cpp:142 common/layer_id.cpp:171
 msgid "Drawing sheet"
 msgstr "กระดาษเขียนแบบ"
 
-#: common/layer_id.cpp:143
+#: common/layer_id.cpp:146
 msgid "Footprints front"
 msgstr "ฟุ้ทพรินท์ด้านหน้า"
 
-#: common/layer_id.cpp:144
+#: common/layer_id.cpp:147
 msgid "Footprints back"
 msgstr "ฟุ้ทพรินท์ด้านหลัง"
 
-#: common/layer_id.cpp:145
+#: common/layer_id.cpp:148
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5162,34 +4926,34 @@ msgstr "ฟุ้ทพรินท์ด้านหลัง"
 msgid "Values"
 msgstr "ค่า"
 
-#: common/layer_id.cpp:146
+#: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
 msgstr "อักษรอ้างอิง"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:150
 msgid "Footprint text"
 msgstr "ข้อความของฟุ้ทพรินท์"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:151
 msgid "Hidden text"
 msgstr "ข้อความถูกซ่อน"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:152
 msgid "SMD pads front"
 msgstr "แพ็ด SMD ด้านหน้า"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:153
 msgid "SMD pads back"
 msgstr "แพ็ด SMD ด้านหลัง"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:154
 msgid "Through-hole pads"
 msgstr "แพ็ดเจาะทะลุ"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5199,66 +4963,66 @@ msgstr "แพ็ดเจาะทะลุ"
 msgid "Tracks"
 msgstr "แทร็ก"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:156
 msgid "Through vias"
 msgstr "เวียเจาะทะลุ"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:157
 msgid "Bl/Buried vias"
 msgstr "เวียตาบอด/ฝัง"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:158
 msgid "Micro-vias"
 msgstr "ไมโครเวีย"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:159
 msgid "Via holes"
 msgstr "รูเจาะในเวีย"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:160
 msgid "Via hole walls"
 msgstr "ผนังรูเจาะเวีย"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:161
 msgid "Plated holes"
 msgstr "รูเจาะเคลือบ"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:162
 msgid "Plated hole walls"
 msgstr "ผนังรูเจาะเคลือบ"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:163
 msgid "Non-plated holes"
 msgstr "รูเจาะไม่เคลือบ"
 
-#: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:164 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:692
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
 msgstr "แร็ทเน็ต"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:165
 msgid "No-connects"
 msgstr "ไม่เชื่อมต่อ"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:166
 msgid "DRC warnings"
 msgstr "ระวัง DRC"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:167
 msgid "DRC errors"
 msgstr "ผิดพลาดดีอาร์ซี"
 
-#: common/layer_id.cpp:165
+#: common/layer_id.cpp:168
 msgid "DRC exclusions"
 msgstr "ยกเว้น DRC"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:169
 msgid "DRC marker shadows"
 msgstr "แสดงเงามาร์คเกอร์ DRC"
 
-#: common/layer_id.cpp:172
+#: common/layer_id.cpp:175
 msgid "Grid axes"
 msgstr "แกนกริด"
 
@@ -5373,25 +5137,25 @@ msgstr "หน่วย '%s' ไม่สิ้นสุดด้วย 'มิ�
 msgid "Cannot convert '%s' to double."
 msgstr "ไม่สามารถเปลี่ยน '%s' เป็น double"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2338
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "ไม่สามารถเปิดไฟล์ '%s'"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
 msgstr "การนำเข้าถูกยกเลิกโดยผู้ใช้"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2408
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2414
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2420
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "ไฟล์ที่เลือกไม่สมบูรณ์หรืออาจจะมีข้อมูลเสีย!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2519
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "จำนวนจุดที่ไม่คาดหวังใน '%s' พบ %d แต่คาดหวัง %d"
@@ -6068,7 +5832,7 @@ msgid "Create, delete and edit symbols"
 msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1000
+#: pcbnew/footprint_viewer_frame.cpp:1004
 msgid "Footprint Library Browser"
 msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
@@ -6837,7 +6601,8 @@ msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
 #: cvpcb/cvpcb_mainframe.cpp:706 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1448 eeschema/symbol_editor/symbol_editor.cpp:1282
-#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
+#: eeschema/symbol_viewer_frame.cpp:369 pcbnew/footprint.cpp:2389
+#: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "คำสำคัญ"
 
@@ -13686,12 +13451,12 @@ msgid ""
 msgstr "วงจร CADSTAR อาจเสียหาย: บล็อก %s อ้างอิงไปชีตย่อย แต่ไม่มีการกำหนดตัวเลข"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3121
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "ไม่สามารถอ่านไฟล์ '%s'"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -13699,7 +13464,7 @@ msgid ""
 msgstr ""
 "เกิดข้อผิดพลาดในการแยกวิเคราะห์ไฟล์ Eagle ไม่พบอินสแตนซ์ '%s' แต่มีการอ้างอิงอยู่ในวงจร"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "ไม่พบ '%s' ในไลบรารีที่นำเข้า"
@@ -13823,19 +13588,19 @@ msgid "Library file '%s' not found."
 msgstr "ไม่พบไฟล์ไลบรารี '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2119
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4287
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "ไลบรารี %s ไม่มีสัญลักษณ์ชื่อ %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2287
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4467
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "ไลบรารีสัญลักษณ์ '%s' มีอยู่แล้ว"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2313
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4487
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4493
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สามารถลบ"
@@ -13850,7 +13615,7 @@ msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สา�
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:401
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:420
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3076
 msgid "unexpected end of line"
 msgstr "จุดสิ้นสุดของบรรทัดที่ไม่คาดคิด"
 
@@ -15210,7 +14975,7 @@ msgstr "ไม่ได้กําหนด!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "ต้นกำเนิด"
 
@@ -15333,7 +15098,7 @@ msgstr "โปรแกรมดูไลบรารีสัญลักษณ
 msgid "Unit %c"
 msgstr "หน่วย %c"
 
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:997
+#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
 msgid "[no library selected]"
 msgstr "[ไม่ได้เลือกไลบรารี]"
 
@@ -16371,7 +16136,7 @@ msgstr "บันทึกแผ่นปัจจุบันเป็นสำ
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "บันทึกสำเนาแผ่นวงจรปัจจุบันไปที่ตำแหน่งอื่นหรือชื่ออื่น"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:272
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16380,7 +16145,7 @@ msgstr ""
 "<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%.3f, %.3f)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่ง "
 "<b>(%.3f, %.3f)</b> ของการแปลง"
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:286
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16389,7 +16154,7 @@ msgstr ""
 "<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%.3f, %.3f)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่ง "
 "<b>(%.3f, %.3f)</b> ในหน่วย %c และ %c ของการแปลง"
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:305
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16398,7 +16163,7 @@ msgstr ""
 "<b> ขาซ้ำ %s</b> %s ที่ตำแหน่ง <b>(%s,%s)</b> ขัดแย้งกับขา %s%s ที่ตำแหน่ง <b>(%s, "
 "%s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:318
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16407,13 +16172,13 @@ msgstr ""
 "<b> ขาซ้ำ %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ขัดแย้งกับขา %s%s ที่ตําแหน่ง <b>(%s, "
 "%s)</b> ในหน่วย %c และ %c"
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:356
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr "ข้อมูล:<b> ขาเพาวเวอร์ที่ซ่อน %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ของการแปลง"
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:365
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16422,53 +16187,53 @@ msgstr ""
 "ข้อมูล:<b> ขาเพาวเวอร์ที่ซ่อน %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ในหน่วย %c "
 "ของการแปลง"
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "ข้อมูล:<b> ขาเพาวเวอร์ที่ซ่อน %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:386
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr "ข้อมูล:<b> ขาเพาวเวอร์ที่ซ่อน %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ในหน่วย %c"
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:397
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr "(ขาเพาวเวอร์ที่ซ่อนอยู่จะขับดันชื่อขา ไปยังเน็ตใดๆ ที่เชื่อมต่อถึง)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:410
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr "<b> ขานอกกริด %s</b> %s ที่ตำแหน่ง <b>(%s, %s)</b> หลังแปลงแล้ว"
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:419
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr "<b>ขานอกกริด %s</b> %s ที่ตำแหน่ง <b>(%.3s, %.3s)</b> ในหน่วย %c หลังแปลงแล้ว"
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>ขานอกกริด %s</b> %s ที่ตำแหน่ง <b>(%s, %s)</b>"
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:440
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr "<b> ขานอกกริด %s</b> %s ที่ตําแหน่ง <b>(%s, %s)</b> ในหน่วย %c"
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:457
 msgid "No symbol issues found."
 msgstr "ไม่พบปัญหาสัญลักษณ์"
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:466
 msgid "Symbol Warnings"
 msgstr "คำเตือนสัญลักษณ์"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:534
 msgid "No datasheet defined."
 msgstr "ไม่ได้กำหนดดาต้าชีต"
 
@@ -17700,7 +17465,7 @@ msgstr "เน้นสีที่ D-code D%d"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:273
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
-#: pcbnew/dialogs/panel_setup_layers.cpp:792
+#: pcbnew/dialogs/panel_setup_layers.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:978
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
@@ -20974,7 +20739,7 @@ msgid "Add Dielectric Layer"
 msgstr "เพิ่มเลเยอร์ไดอิเล็กทริก"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:311
-#: pcbnew/dialogs/panel_setup_layers.cpp:818
+#: pcbnew/dialogs/panel_setup_layers.cpp:822
 msgid "Select layer to add:"
 msgstr "เลือกเลเยอร์จะเพิ่ม:"
 
@@ -21197,6 +20962,8 @@ msgid "Yellow"
 msgstr "เหลือง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
+#: pcbnew/exporters/exporter_vrml.cpp:103
+#: pcbnew/exporters/exporter_vrml.cpp:112
 msgid "Not specified"
 msgstr "ไม่ระบุ"
 
@@ -27508,25 +27275,25 @@ msgstr ""
 "การดำเนินการนี้จะลบชิ้นส่วนทั้งหมดออกจากเลเยอร์ที่ถูกลบและไม่สามารถยกเลิกได้\n"
 "คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:650
+#: pcbnew/dialogs/panel_setup_layers.cpp:654
 msgid "Layer must have a name."
 msgstr "เลเยอร์ต้องมีชื่อ"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:656
+#: pcbnew/dialogs/panel_setup_layers.cpp:660
 #, c-format
 msgid "%s are forbidden in layer names."
 msgstr "%s เป็นสิ่งต้องห้ามในชื่อเลเยอร์"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:663
+#: pcbnew/dialogs/panel_setup_layers.cpp:667
 msgid "Layer name \"signal\" is reserved."
 msgstr "ชื่อเลเยอร์ \"Signal\" ถูกสงวนไว้"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:671
+#: pcbnew/dialogs/panel_setup_layers.cpp:675
 #, c-format
 msgid "Layer name '%s' already in use."
 msgstr "ชื่อเลเยอร์ '%s' ถูกใช้ไปแล้ว"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:771
+#: pcbnew/dialogs/panel_setup_layers.cpp:775
 #, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
@@ -27538,15 +27305,15 @@ msgstr ""
 "\n"
 "ดำเนินการต่อและลบเลเยอร์ทองแดงภายในพิเศษออกจากบอร์ดปัจจุบันหรือไม่?"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:778
+#: pcbnew/dialogs/panel_setup_layers.cpp:782
 msgid "Inner Layers To Be Deleted"
 msgstr "เลเยอร์ภายในที่จะลบ"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:813
+#: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "All user-defined layers have already been added."
 msgstr "เพิ่มเลเยอร์ที่ผู้ใช้กำหนดทั้งหมดแล้ว"
 
-#: pcbnew/dialogs/panel_setup_layers.cpp:817
+#: pcbnew/dialogs/panel_setup_layers.cpp:821
 msgid "Add User-defined Layer"
 msgstr "เพิ่มเลเยอร์ผู้ใช้กําหนดเอง"
 
@@ -27989,6 +27756,10 @@ msgstr "Pcb_Edges"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
 msgstr "รูปร่างของบอร์ด"
+
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:656
+msgid "Margin"
+msgstr "Margin"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -29441,17 +29212,17 @@ msgid "They have been exported as oval pads."
 msgstr "ทั้งหมดส่งออกเป็นแพ็ดรูปวงรี"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:580
+#: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "เค้าโครงบอร์ดผิดรูปแบบ สั่ง DRC สำหรับการวิเคราะห์สมบูรณ์แบบ"
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221
 msgid "IDF Export Failed:\n"
 msgstr "การส่งออก IDF ล้มเหลว:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:609
+#: pcbnew/exporters/exporter_vrml.cpp:782
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "การส่งออก VRML ล้มเหลว: ไม่สามารถเพิ่มรูให้กับเส้นขอบ"
 
@@ -29767,19 +29538,24 @@ msgstr "การทับค่าระยะห่าง"
 msgid "Solderpaste Margin Override"
 msgstr "ทับค่าขอบโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
+#: pcbnew/footprint.cpp:2376 pcbnew/pad.cpp:1730
 msgid "Solderpaste Margin Ratio Override"
 msgstr "ทับค่าอัตราส่วนโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2379 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1440
 msgid "Thermal Relief Width"
 msgstr "ความกว้างของบรรเทาความร้อน"
 
-#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2382 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1437
 msgid "Thermal Relief Gap"
 msgstr "ช่องว่างบรรเทาความร้อน"
 
-#: pcbnew/footprint.h:216
+#: pcbnew/footprint.cpp:2385
+#, fuzzy
+msgid "Library ID"
+msgstr "ไลบรารี"
+
+#: pcbnew/footprint.h:219
 #, c-format
 msgid "footprint %s"
 msgstr "ฟุ้ทพรินท์:%s"
@@ -29853,7 +29629,7 @@ msgstr ""
 "ไลบรารี '%s' ไม่ได้เปิดใช้งานในการกําหนดค่าปรับแต่ง\n"
 "ใช้ 'จัดการไลบรารีสัญลักษณ์' เพื่อแก้ไขการปรับแต่ง"
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:924
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:928
 msgid "Footprint library not enabled."
 msgstr "ไม่ได้เปิดใช้งานไลบรารีฟุ้ทพรินท์"
 
@@ -29953,7 +29729,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "ปรับปรุงฟุ้ทพรินท์บนบอร์ดให้อ้างถึงไลบรารีใหม่?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:719
+#: pcbnew/footprint_viewer_frame.cpp:723
 msgid "No board currently open."
 msgstr "ไม่มีไฟล์บอร์ดเปิดไว้"
 
@@ -29966,7 +29742,7 @@ msgstr ""
 "ไม่สามารถบันทึก"
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:727
+#: pcbnew/footprint_viewer_frame.cpp:731
 msgid "Previous footprint placement still in progress."
 msgstr "ยังคงอยู่ในกระบวนการจัดวางฟุ้ทพรินท์ตัวก่อนหน้า"
 
@@ -30023,7 +29799,7 @@ msgstr ""
 "คําค้นหาจะถูกคั่นด้วยช่องว่าง  คําค้นหาทั้งหมดต้องตรงกัน\n"
 "คําที่เป็นตัวเลขจะตรงกับจํานวนแพ็ดด้วย"
 
-#: pcbnew/footprint_viewer_frame.cpp:676
+#: pcbnew/footprint_viewer_frame.cpp:680
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30034,7 +29810,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:914
+#: pcbnew/footprint_viewer_frame.cpp:918
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30042,11 +29818,11 @@ msgid ""
 msgstr ""
 "การปรับแต่งค่าปัจจุบันไม่รวมไลบรารี '%s'  ใช้จัดการไลบรารีฟุ้ทพรินท์เพื่อแก้ไขการปรับแต่งค่า"
 
-#: pcbnew/footprint_viewer_frame.cpp:917
+#: pcbnew/footprint_viewer_frame.cpp:921
 msgid "Footprint library not found."
 msgstr "ไม่พบไลบรารีฟุ้ทพรินท์"
 
-#: pcbnew/footprint_viewer_frame.cpp:921
+#: pcbnew/footprint_viewer_frame.cpp:925
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -32013,7 +31789,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "ไม่มีแพคเกจ '%s' ในไลบรารี '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2257
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "การเพิกเฉยต่อรูปหลายเหลี่ยม เนื่องจากเลเยอร์ของ Eagle '%s' (%d) ไม่ได้ถูกจัดคู่"
@@ -32023,17 +31799,17 @@ msgstr "การเพิกเฉยต่อรูปหลายเหลี
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "ละเว้นลวดเนื่องจากเลเยอร์ของ Eagle '%s' (%d) ไม่ได้รับการจัดคู่"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1998
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "ละเว้นข้อความเนื่องจากไม่ได้จับคู่เลเยอร์ Eagle '%s' (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2143
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "ละเว้นสี่เหลี่ยมผืนผ้าเนื่องจากไม่ได้แมปเลเยอร์ Eagle '%s' (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2330
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "ละเว้นวงกลมเนื่องจากไม่ได้แมปเลเยอร์ Eagle '%s' (%d)"
@@ -32537,7 +32313,7 @@ msgstr "ไฟล์ '%s' ไม่ใช่ไลบรารีดั้งเ
 msgid "Unknown PCad layer %u"
 msgstr "ไม่รู้จักเลเยอร์ของ PCad %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:757
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad รองรับเพียง 32 เลเยอร์สัญญาณเท่านั้น"
 
@@ -32678,28 +32454,28 @@ msgstr "ปรับแล้ว: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:474
+#: pcbnew/router/pns_kicad_iface.cpp:492
 msgid "existing track"
 msgstr "แทร็กที่มีอยู่แล้ว"
 
-#: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
+#: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 msgid "board minimum width"
 msgstr "ความกว้างบอร์ดขั้นต่ำ"
 
-#: pcbnew/router/pns_kicad_iface.cpp:497
+#: pcbnew/router/pns_kicad_iface.cpp:515
 msgid "netclass 'Default'"
 msgstr "เน็ตคลาส 'ค่าปริยาย'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:499
+#: pcbnew/router/pns_kicad_iface.cpp:517
 msgid "user choice"
 msgstr "ตัวเลือกผู้ใช้"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1051
+#: pcbnew/router/pns_kicad_iface.cpp:1069
 #, c-format
 msgid "%s is malformed."
 msgstr "%s มีรูปแบบผิดเพี้ยน"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1054
+#: pcbnew/router/pns_kicad_iface.cpp:1072
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -32707,7 +32483,7 @@ msgstr ""
 "เร้าท์เตอร์ไม่สามารถจัดการโซนนี้\n"
 "โปรดตรวจสอบว่าไม่ใช่รูปหลายเหลี่ยมที่ตัดกันเอง"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1683 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "เร้าท์เตอร์แบบโต้ตอบ"
 
@@ -33297,11 +33073,11 @@ msgstr ""
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
 
-#: pcbnew/tools/board_editor_control.cpp:1463
+#: pcbnew/tools/board_editor_control.cpp:1474
 msgid "Some zones did not intersect and were not merged."
 msgstr ""
 
-#: pcbnew/tools/board_editor_control.cpp:1529
+#: pcbnew/tools/board_editor_control.cpp:1543
 msgid "Duplicate zone"
 msgstr "ทำซ้ำโซน"
 
@@ -33790,7 +33566,7 @@ msgstr "โหมดแก้ไขแพ็ด  กด %s เพื่อออ
 msgid "Edit pad shapes"
 msgstr "แก้ไขรูปร่างแพ็ด"
 
-#: pcbnew/tools/pad_tool.cpp:823
+#: pcbnew/tools/pad_tool.cpp:827
 msgid "Recombine pads"
 msgstr "รวมแพ็ดใหม่"
 
@@ -36245,6 +36021,180 @@ msgstr "แผนผังวงจร KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "แผ่นวงจรพิมพ์ KiCad"
+
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
+
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
+
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
+
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
+
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "In18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B.Adhesive"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F.Adhesive"
+
+#~ msgid "B.Paste"
+#~ msgstr "B.Paste"
+
+#~ msgid "F.Paste"
+#~ msgstr "F.Paste"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B. Silkscreen"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F. Silkscreen"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "User.Comments"
+
+#~ msgid "User.Eco1"
+#~ msgstr "User.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "User.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F. Courtyard"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B. Courtyard"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#~ msgid "User.9"
+#~ msgstr "User.9"
 
 #, c-format
 #~ msgid ""
