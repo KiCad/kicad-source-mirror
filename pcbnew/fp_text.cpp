@@ -476,7 +476,16 @@ void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffe
                                                     bool aIgnoreLineWidth ) const
 {
     SHAPE_POLY_SET buffer;
-    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
+    FP_TEXT dummy( *this );
+
+    // Take parent footprint in account:
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
+
+    if( parentFootprint )
+        dummy.SetTextAngle( GetTextAngle() + parentFootprint->GetOrientation() );
+
+    dummy.EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
+
     aCornerBuffer.Append( buffer );
 }
 
