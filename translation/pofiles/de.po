@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-13 09:56-0700\n"
-"PO-Revision-Date: 2022-06-11 16:18+0000\n"
+"PO-Revision-Date: 2022-06-15 21:14+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -30399,9 +30399,8 @@ msgid "Thermal Relief Gap"
 msgstr "Thermische Entlastung Spalt"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "Bibliothek:"
+msgstr "Bibliothek-ID"
 
 #: pcbnew/footprint.h:219
 #, c-format
