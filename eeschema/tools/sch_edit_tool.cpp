@@ -365,9 +365,16 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::mirrorH,         orientCondition );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
-        moveMenu.AddItem( EE_ACTIONS::editReference,   E_C::SingleSymbol );
-        moveMenu.AddItem( EE_ACTIONS::editValue,       E_C::SingleSymbol );
-        moveMenu.AddItem( EE_ACTIONS::editFootprint,   E_C::SingleSymbol );
+
+        CONDITIONAL_MENU* editMoveItemSubMenu = new CONDITIONAL_MENU(moveTool);
+        editMoveItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
+        editMoveItemSubMenu->SetIcon( BITMAPS::right );
+        moveMenu.AddMenu( editMoveItemSubMenu, E_C::SingleSymbol );
+
+        editMoveItemSubMenu->AddItem( EE_ACTIONS::editReference,   E_C::SingleSymbol );
+        editMoveItemSubMenu->AddItem( EE_ACTIONS::editValue,       E_C::SingleSymbol );
+        editMoveItemSubMenu->AddItem( EE_ACTIONS::editFootprint,   E_C::SingleSymbol );
+
         moveMenu.AddItem( EE_ACTIONS::toggleDeMorgan,  E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -380,9 +387,6 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
         moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
-
-        moveMenu.AddSeparator();
-        moveMenu.AddItem( ACTIONS::selectAll,          hasElements );
     }
 
     //
@@ -399,11 +403,19 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
+
+    CONDITIONAL_MENU* editDrawItemSubMenu = new CONDITIONAL_MENU(drawingTools);
+    editDrawItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
+    editDrawItemSubMenu->SetIcon( BITMAPS::right );
+    drawMenu.AddMenu( editDrawItemSubMenu, E_C::SingleSymbol, 200 );
+
+    editDrawItemSubMenu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
+    editDrawItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
+    editDrawItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
+
     drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
+
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
@@ -428,9 +440,16 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
+
+    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU(moveTool);
+    editSelItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
+    editSelItemSubMenu->SetIcon( BITMAPS::right );
+    selToolMenu.AddMenu( editSelItemSubMenu, E_C::SingleSymbol, 200 );
+
+    editSelItemSubMenu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
+    editSelItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
+    editSelItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
+
     selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
 
