@@ -453,6 +453,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 {
     CVPCB_MAINFRAME*      parentframe = (CVPCB_MAINFRAME *) GetParent();
+    COMPONENT*            comp = parentframe->GetSelectedComponent();
     FOOTPRINT*            footprint = nullptr;
     const FOOTPRINT_INFO* fpInfo = nullptr;
 
@@ -480,6 +481,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     }
 
     if( footprint )
+    {
         GetBoard()->Add( footprint );
         m_currentFootprint = footprintName;
         m_currentComp = comp;
