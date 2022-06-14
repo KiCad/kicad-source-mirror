@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-13 09:56-0700\n"
-"PO-Revision-Date: 2022-06-11 16:19+0000\n"
+"PO-Revision-Date: 2022-06-15 21:14+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -29985,9 +29985,8 @@ msgid "Thermal Relief Gap"
 msgstr "サーマルリリーフギャップ"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "ライブラリー Id:"
+msgstr "ライブラリー ID"
 
 #: pcbnew/footprint.h:219
 #, c-format
