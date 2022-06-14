@@ -2383,6 +2383,11 @@ bool IbisParser::readWaveform( IbisWaveform* aDest, IBIS_WAVEFORM_TYPE aType )
         {
             wf = aDest;
         }
+        else
+        {
+            Report( _( "Internal error detected, a waveform should exist" ), RPT_SEVERITY_ERROR );
+            return false;
+        }
     }
 
 

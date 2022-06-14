@@ -127,6 +127,8 @@ class IBIS_MATRIX : public IBIS_INPUT
 {
 public:
     IBIS_MATRIX( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    virtual ~IBIS_MATRIX(){};
+
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::UNDEFINED;
     int              m_dim = -5;
     std::vector<double> m_data;
@@ -196,7 +198,7 @@ class TypMinMaxValue : public IBIS_INPUT
 {
 public:
     TypMinMaxValue( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
-    double value[3];
+    double value[3] = { -1, -1, -1 };
 
     bool Check() override;
 };
@@ -265,7 +267,7 @@ public:
     std::string     pinA;
     std::string     pinB;
     double          Vdiff = 0.2; // ignored for input
-    TypMinMaxValue  tdelay;      // ignored for outputs
+    TypMinMaxValue  tdelay = 0;  // ignored for outputs
 };
 
 
@@ -368,7 +370,7 @@ class VTtableEntry : public IBIS_INPUT
 public:
     VTtableEntry( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), V( aReporter ){};
     double         t = 0;
-    TypMinMaxValue V;
+    TypMinMaxValue V = 0;
 };
 
 class VTtable : public IBIS_INPUT
@@ -619,9 +621,9 @@ public:
     IbisModelSelector* m_currentModelSelector = nullptr;
     IbisModel*         m_currentModel = nullptr;
     IbisPackageModel*  m_currentPackageModel = nullptr;
-    std::shared_ptr<IBIS_MATRIX> m_currentMatrix;
-    int                m_currentMatrixRow;
-    int                m_currentMatrixRowIndex;
+    std::shared_ptr<IBIS_MATRIX> m_currentMatrix = nullptr;
+    int                m_currentMatrixRow = 0;
+    int                m_currentMatrixRowIndex = 0;
     IVtable*           m_currentIVtable = nullptr;
     VTtable*           m_currentVTtable = nullptr;
     IbisWaveform*      m_currentWaveform = nullptr;
@@ -636,7 +638,7 @@ public:
     bool ParseFile( std::string& aFileName );
 
 private:
-    std::string* m_continuingString;
+    std::string* m_continuingString = nullptr;
 
     /** @brief compare two strings without being case sensitive
      * 
