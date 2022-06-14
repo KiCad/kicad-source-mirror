@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-13 09:56-0700\n"
-"PO-Revision-Date: 2022-05-12 20:18+0000\n"
+"PO-Revision-Date: 2022-06-15 21:14+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
@@ -29566,9 +29566,8 @@ msgid "Thermal Relief Gap"
 msgstr "防散热 (花焊盘) 间距"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "库 ID："
+msgstr "库 ID"
 
 #: pcbnew/footprint.h:219
 #, c-format
