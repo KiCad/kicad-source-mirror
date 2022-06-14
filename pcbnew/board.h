@@ -1071,16 +1071,16 @@ public:
     };
 
     // ------------ Run-time caches -------------
-    std::mutex                                            m_CachesMutex;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideFCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideBCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
-    std::map< wxString, LSET >                            m_LayerExpressionCache;
+    std::mutex                                                           m_CachesMutex;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideFCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideBCourtyardCache;
+    std::map< std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID>, bool > m_InsideAreaCache;
+    std::map< wxString, LSET >                                           m_LayerExpressionCache;
 
-    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >         m_CopperZoneRTrees;
+    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >                        m_CopperZoneRTrees;
 
-    ZONE*                                                 m_SolderMask;
+    ZONE*                                                                m_SolderMask;
 
 private:
     // The default copy constructor & operator= are inadequate,

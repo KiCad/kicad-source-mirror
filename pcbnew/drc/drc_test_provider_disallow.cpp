@@ -154,11 +154,15 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                         if( m_drcEngine->IsCancelled() )
                             break;
 
-                        std::pair<BOARD_ITEM*, BOARD_ITEM*> key( ruleArea, copperZone );
+                        std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID> key( ruleArea,
+                                                                                copperZone,
+                                                                                UNDEFINED_LAYER );
+
                         {
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                             board->m_InsideAreaCache[ key ] = isInside;
                         }
+
                         done.fetch_add( 1 );
                     }
 
