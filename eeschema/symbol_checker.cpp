@@ -35,6 +35,7 @@ static bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst );
  * Pins duplicated
  * Conflict with pins at same location
  * Incorrect Power Symbols
+ * illegal reference prefix (cannot ends by a digit or a '?')
  * @param aSymbol is the library symbol to check
  * @param aMessages is a room to store error messages
  * @param aGridForPins (in IU) is the grid to test pin positions ( >= 25 mils )
@@ -46,6 +47,21 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 {
     if( !aSymbol )
         return;
+
+    wxString msg;
+
+    // Test reference prefix validity:
+    wxString reference_base = aSymbol->GetReferenceField().GetText();
+    wxString illegal_end( wxT( "0123456789?" ) );
+    wxUniChar last_char = reference_base.Last();
+
+    if( illegal_end.Find( last_char ) != wxNOT_FOUND )
+    {
+        msg.Printf( _( "<b>Illegal Reference prefix:</b><br>Reference Prefix cannot ends by '%s'" ),
+                    illegal_end );
+        msg += wxT( "<br><br>" );
+        aMessages.push_back( msg );
+    }
 
     LIB_PINS pinList;
     aSymbol->GetPins( pinList );
@@ -62,8 +78,6 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     // So raise an error if a pin is not on a 25 (or bigger :50 or 100) mils grid
     const int min_grid_size = Mils2iu( 25 );
     const int clamped_grid_size = ( aGridForPins < min_grid_size ) ? min_grid_size : aGridForPins;
-
-    wxString              msg;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
