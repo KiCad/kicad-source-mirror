@@ -1,0 +1,34 @@
+(version 1)
+
+(rule "ViaToVia_SameNet"
+  (condition "A.Type == 'via' && A.Net == B.Net")
+  (constraint hole_to_hole (min 0.254mm))
+  (constraint hole_clearance (min 0.254mm)))
+
+(rule "ViaToTrack"
+  (condition "A.Type == 'via' && B.Type == 'track'")
+  (constraint hole_clearance (min 0.254mm)))
+
+(rule "NpthToTrack"
+  (condition "A.Type == 'hole' && !A.isPlated() && B.Type == 'track'")
+  (constraint hole_clearance (min 0.254mm)))
+
+(rule "PadToTrack"
+  (condition "A.Type == 'pad' && B.Type == 'track'")
+  (constraint clearance (min 0.2mm)))
+
+(rule "PadToEdge"
+  (condition "A.Type == 'pad' && !A.insideArea('PadsNearEdge*')")
+  (constraint edge_clearance (min 0.6mm)))
+
+(rule "SilkZoneOverPads"
+  (condition "A.Type == 'zone' && A.existsOnLayer('*.Silkscreen') && B.existsOnLayer('*.Mask')")
+  (constraint silk_clearance (min -0.1mm)))
+
+(rule "HvUnderConformal"
+  (condition "A.NetClass == 'HV' && A.insideArea('Conformal*')")
+  (constraint clearance (min 0.4mm)))
+
+(rule "TightWSON"
+  (condition "A.insideCourtyard('U4') || A.insideCourtyard('CW*')")
+  (constraint clearance (min 0.15mm)))
