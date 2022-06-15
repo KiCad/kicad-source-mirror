@@ -307,13 +307,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+            msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), clearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( track, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -353,14 +354,16 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                                                       std::max( 0, clearance - m_drcEpsilon ),
                                                       &actual, &pos ) )
             {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                wxString msg;
+
+                msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), clearance ),
                               MessageTextFromValue( userUnits(), actual ) );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( track, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -441,13 +444,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                                                           &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                    wxString msg;
 
-                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                    msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), clearance ),
                                   MessageTextFromValue( userUnits(), actual ) );
 
-                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aItem, zone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -486,13 +490,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                                                               &actual, &pos ) )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                        wxString msg;
 
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), clearance ),
                                       MessageTextFromValue( userUnits(), actual ) );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                         drce->SetItems( aItem, zone );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -650,12 +655,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 && testShorting )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+            wxString msg;
 
-            m_msg.Printf( _( "(nets %s and %s)" ),
+            msg.Printf( _( "(nets %s and %s)" ),
                           pad->GetNetname(),
                           otherPad->GetNetname() );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, otherPad );
 
             reportViolation( drce, otherPad->GetPosition() );
@@ -674,13 +680,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                 &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+            msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), clearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -702,13 +709,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                 &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+            msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), clearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -724,13 +732,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                    &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+            msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), clearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -749,13 +758,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                 &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+            msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), clearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, otherVia );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
@@ -986,13 +996,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     else
                     {
                         drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                        wxString msg;
 
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), zone2zoneClearance ),
                                       MessageTextFromValue( userUnits(), conflict.second ) );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     }
 
                     drce->SetItems( zoneRef, zoneToTest );

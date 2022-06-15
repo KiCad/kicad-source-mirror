@@ -228,12 +228,14 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                     if( minClearance > 0 )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        wxString msg;
+
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetParentRule()->m_Name,
                                       MessageTextFromValue( userUnits(), minClearance ),
                                       MessageTextFromValue( userUnits(), actual ) );
 
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     }
 
                     drcItem->SetItems( aRefItem->parent, aTestItem->parent );

@@ -128,23 +128,24 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 if( fail_min || fail_max )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
+                    wxString msg;
 
                     if( fail_min )
                     {
-                        m_msg.Printf( _( "(%s min width %s; actual %s)" ),
+                        msg.Printf( _( "(%s min width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), constraintWidth ),
                                       MessageTextFromValue( userUnits(), actual ) );
                     }
                     else
                     {
-                        m_msg.Printf( _( "(%s max width %s; actual %s)" ),
+                        msg.Printf( _( "(%s max width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), constraintWidth ),
                                       MessageTextFromValue( userUnits(), actual ) );
                     }
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

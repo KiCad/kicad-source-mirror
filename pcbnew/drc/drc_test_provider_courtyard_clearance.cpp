@@ -210,12 +210,13 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                     if( clearance > 0 )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        wxString msg;
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), clearance ),
                                       MessageTextFromValue( userUnits(), actual ) );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                         drce->SetViolatingRule( constraint.GetParentRule() );
                     }
 
@@ -237,12 +238,13 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                     if( clearance > 0 )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        wxString msg;
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), clearance ),
                                       MessageTextFromValue( userUnits(), actual ) );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                         drce->SetViolatingRule( constraint.GetParentRule() );
                     }
 

@@ -459,13 +459,14 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             if ( val.HasMax() && totalUncoupled > val.Max() )
             {
                 auto drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
+                wxString msg;
 
-                m_msg = wxString::Format( _( "(%s maximum uncoupled length: %s; actual: %s)" ),
+                msg = wxString::Format( _( "(%s maximum uncoupled length: %s; actual: %s)" ),
                                           maxUncoupledConstraint->GetParentRule()->m_Name,
                                           MessageTextFromValue( userUnits(), val.Max() ),
                                           MessageTextFromValue( userUnits(), totalUncoupled ) );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
 
                 auto pit = it.second.itemsP.begin();
                 auto nit = it.second.itemsN.begin();
@@ -495,22 +496,23 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 {
                     auto val = gapConstraint->GetValue();
                     auto drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
+                    wxString msg;
 
-                    m_msg = drcItem->GetErrorText() + wxT( " (" ) +
+                    msg = drcItem->GetErrorText() + wxT( " (" ) +
                             gapConstraint->GetParentRule()->m_Name + wxS( " " );
 
                     if( val.HasMin() )
-                        m_msg += wxString::Format( _( "minimum gap: %s; " ),
+                        msg += wxString::Format( _( "minimum gap: %s; " ),
                                                    MessageTextFromValue( userUnits(), val.Min() ) );
 
                     if( val.HasMax() )
-                        m_msg += wxString::Format( _( "maximum gap: %s; " ),
+                        msg += wxString::Format( _( "maximum gap: %s; " ),
                                                    MessageTextFromValue( userUnits(), val.Max() ) );
 
-                    m_msg += wxString::Format( _( "actual: %s)" ),
+                    msg += wxString::Format( _( "actual: %s)" ),
                         MessageTextFromValue( userUnits(), cpair.computedGap ) );
 
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
 
                     drcItem->AddItem( cpair.parentP );
                     drcItem->AddItem( cpair.parentN );

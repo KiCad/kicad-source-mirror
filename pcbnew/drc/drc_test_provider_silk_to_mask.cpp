@@ -157,12 +157,14 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 
                     if( minClearance > 0 )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                        wxString msg;
+
+                        msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), minClearance ),
                                       MessageTextFromValue( userUnits(), actual ) );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     }
 
                     drce->SetItems( aRefItem->parent, aTestItem->parent );

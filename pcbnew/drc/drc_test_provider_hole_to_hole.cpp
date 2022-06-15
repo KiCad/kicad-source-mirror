@@ -309,13 +309,14 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
         if( minClearance >= 0 && actual < minClearance )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s min %s; actual %s)" ),
+            msg.Printf( _( "(%s min %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), minClearance ),
                           MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, aOther );
             drce->SetViolatingRule( constraint.GetParentRule() );
 

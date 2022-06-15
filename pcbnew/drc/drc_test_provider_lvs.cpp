@@ -116,13 +116,14 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
                 break;
 
-            m_msg.Printf( _( "Missing footprint %s (%s)" ),
+            wxString msg;
+            msg.Printf( _( "Missing footprint %s (%s)" ),
                           component->GetReference(),
                           component->GetValue() );
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
-            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetErrorMessage( msg );
             reportViolation( drcItem, wxPoint() );
         }
         else
@@ -140,31 +141,34 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
                 if( !pcb_netname.IsEmpty() && sch_net.GetPinName().IsEmpty() )
                 {
-                    m_msg.Printf( _( "No corresponding pin found in schematic." ) );
+                    wxString msg;
+                    msg.Printf( _( "No corresponding pin found in schematic." ) );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( pad );
                     reportViolation( drcItem, footprint->GetPosition() );
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
-                    m_msg.Printf( _( "Pad missing net given by schematic (%s)." ),
+                    wxString msg;
+                    msg.Printf( _( "Pad missing net given by schematic (%s)." ),
                                   sch_net.GetNetName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( pad );
                     reportViolation( drcItem, footprint->GetPosition() );
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
-                    m_msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
+                    wxString msg;
+                    msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
                                   pcb_netname,
                                   sch_net.GetNetName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( pad );
                     reportViolation( drcItem, footprint->GetPosition() );
                 }
@@ -179,11 +183,12 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
                 if( !footprint->FindPadByNumber( sch_net.GetPinName() ) )
                 {
-                    m_msg.Printf( _( "No pad found for pin %s in schematic." ),
+                    wxString msg;
+                    msg.Printf( _( "No pad found for pin %s in schematic." ),
                                   sch_net.GetPinName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( footprint );
                     reportViolation( drcItem, footprint->GetPosition() );
                 }

@@ -132,8 +132,6 @@ protected:
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
     bool        m_enabled = true;
-
-    wxString    m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
 
 #endif // DRC_TEST_PROVIDER__H

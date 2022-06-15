@@ -233,7 +233,6 @@ protected:
     REPORTER*                        m_reporter;
     PROGRESS_REPORTER*               m_progressReporter;
 
-    wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;
 };
 

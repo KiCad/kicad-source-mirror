@@ -112,10 +112,11 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
         else
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+            wxString msg;
 
-            m_msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
+            msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
             drcItem->SetItems( m_board );
 
             reportViolation( drcItem, m_board->GetBoundingBox().Centre() );
@@ -199,10 +200,11 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 if( badLayer != UNDEFINED_LAYER )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
+                    wxString msg;
 
-                    m_msg.Printf( _( "(layer %s)" ), LayerName( badLayer ) );
+                    msg.Printf( _( "(layer %s)" ), LayerName( badLayer ) );
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
 
                     reportViolation( drcItem, item->GetPosition() );
