@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -355,8 +355,10 @@ SCH_ITEM* SCH_SCREEN::GetItem( const VECTOR2I& aPosition, int aAccuracy, KICAD_T
 }
 
 
-std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aIgnorePins )
+std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aSecondPass )
 {
+#define PROCESSED CANDIDATE     // Don't use SKIP_STRUCT; IsConnected() returns false if it's set.
+
     std::set<SCH_ITEM*>   retval;
     std::stack<SCH_LINE*> to_search;
 
@@ -366,35 +368,54 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aIgnor
 
     while( !to_search.empty() )
     {
-        SCH_LINE* test_item = to_search.top();
+        SCH_ITEM* item = to_search.top();
         to_search.pop();
 
-        for( SCH_ITEM* item : Items().Overlapping( SCH_JUNCTION_T, test_item->GetBoundingBox() ) )
-        {
-            if( test_item->IsEndPoint( item->GetPosition() ) )
-                retval.insert( item );
-        }
+        if( item->HasFlag( PROCESSED ) )
+            continue;
 
-        for( SCH_ITEM* item : Items().Overlapping( SCH_LINE_T, test_item->GetBoundingBox() ) )
+        item->SetFlags( PROCESSED );
+
+        for( SCH_ITEM* candidate : Items().Overlapping( SCH_LINE_T, item->GetBoundingBox() ) )
         {
-            // Skip connecting lines on different layers (e.g. buses)
-            if( test_item->GetLayer() != item->GetLayer() )
+            SCH_LINE* line = static_cast<SCH_LINE*>( candidate );
+
+            if( line->HasFlag( PROCESSED ) )
                 continue;
 
-            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+            // Skip connecting lines on different layers (e.g. buses)
+            if( item->GetLayer() != line->GetLayer() )
+                break;
 
-            if( ( test_item->IsEndPoint( line->GetStartPoint() )
-                        && ( aIgnorePins || !GetPin( line->GetStartPoint(), nullptr, true ) ) )
-             || ( test_item->IsEndPoint( line->GetEndPoint() )
-                        && ( aIgnorePins || !GetPin( line->GetEndPoint(), nullptr, true ) ) ) )
+            for( VECTOR2I pt : { line->GetStartPoint(), line->GetEndPoint() } )
             {
-                auto result = retval.insert( line );
+                if( item->IsConnected( pt ) )
+                {
+                    SCH_ITEM* junction = GetItem( pt, 0, SCH_JUNCTION_T );
+                    SCH_ITEM*      pin = GetItem( pt, 0, SCH_PIN_T );
 
-                if( result.second )
-                    to_search.push( line );
+                    if( item->IsSelected() && aSecondPass )
+                    {
+                        if( junction )
+                            retval.insert( junction );
+
+                        retval.insert( line );
+                        to_search.push( line );
+                    }
+                    else if( !junction && !pin )
+                    {
+                        retval.insert( line );
+                        to_search.push( line );
+                    }
+
+                    break;
+                }
             }
         }
     }
+
+    for( SCH_ITEM* item : Items() )
+        item->ClearTempFlags();
 
     return retval;
 }
