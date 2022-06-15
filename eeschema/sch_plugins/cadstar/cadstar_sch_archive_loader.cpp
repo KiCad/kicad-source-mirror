@@ -369,9 +369,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         PART_ID partID  = partPair.first;
         PART    part = partPair.second;
 
-        if( part.Definition.GateSymbols.size() == 0 )
-            continue;
-
         wxString    escapedPartName = EscapeString( part.Name, CTX_LIBID );
         LIB_SYMBOL* kiPart = new LIB_SYMBOL( escapedPartName );
 
@@ -383,7 +380,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
             GATE_ID                gateID   = gatePair.first;
             PART::DEFINITION::GATE gate     = gatePair.second;
             SYMDEF_ID              symbolID = getSymDefFromName( gate.Name, gate.Alternate );
-            m_partSymbolsMap.insert( { { partID, gateID }, symbolID } );
 
             if( symbolID.IsEmpty() )
             {
@@ -400,10 +396,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
                 break;
             }
 
+            m_partSymbolsMap.insert( { { partID, gateID }, symbolID } );
             loadSymDefIntoLibrary( symbolID, &part, gateID, kiPart );
         }
 
-        if( ok )
+        if( ok && part.Definition.GateSymbols.size() != 0 )
         {
             ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
 
@@ -414,8 +411,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         }
         else
         {
+            if( part.Definition.GateSymbols.size() == 0 )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Part definition '%s' has an incomplete definition (no"
+                                             " symbol definitions are associated with it). The part"
+                                             " has not been loaded into the KiCad library." ),
+                                          part.Name ),
+                        RPT_SEVERITY_WARNING );
+            }
+
             // Don't save in the library, but still keep it cached as some of the units might have
-            // been loaded correctly (saving us time later on)
+            // been loaded correctly (saving us time later on), plus the part definition contains
+            // the part name, which is important to load
             m_partMap.insert( { partID, kiPart } );
         }
 
@@ -1602,17 +1610,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             loadLibraryField( attrVal );
         }
 
-        wxString      fpNameInLibrary = generateLibName( footprintRefName, footprintAlternateName );
-        wxArrayString fpFilters;
-        fpFilters.Add( fpNameInLibrary );
+        wxString fpNameInLibrary = generateLibName( footprintRefName, footprintAlternateName );
 
-        aSymbol->SetFPFilters( fpFilters );
+        if( !fpNameInLibrary.IsEmpty() )
+        {
+            wxArrayString fpFilters;
+            fpFilters.Add( fpNameInLibrary );
+            aSymbol->SetFPFilters( fpFilters );
 
-        // Assume that the PCB footprint library name will be the same as the schematic filename
-        wxFileName schFilename( Filename );
-        wxString   libName = schFilename.GetName();
-
-        aSymbol->GetFootprintField().SetText( libName + wxT( ":" ) + fpNameInLibrary );
+            // Assume that the PCB footprint library name will be the same as the schematic filename
+            wxFileName schFilename( Filename );
+            wxString   libName = schFilename.GetName();
+            aSymbol->GetFootprintField().SetText( libName + wxT( ":" ) + fpNameInLibrary );
+        }
     }
 
     if( aCadstarPart && aCadstarPart->Definition.HidePinNames )
