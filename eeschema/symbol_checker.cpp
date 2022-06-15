@@ -51,13 +51,16 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     wxString msg;
 
     // Test reference prefix validity:
+    // if the symbol is saved in a library, the prefix should not ends by a digit or a '?'
+    // but it is acceptable if the symbol is saved to aschematic
     wxString reference_base = aSymbol->GetReferenceField().GetText();
     wxString illegal_end( wxT( "0123456789?" ) );
     wxUniChar last_char = reference_base.Last();
 
     if( illegal_end.Find( last_char ) != wxNOT_FOUND )
     {
-        msg.Printf( _( "<b>Illegal Reference prefix:</b><br>Reference Prefix cannot ends by '%s'" ),
+        msg.Printf( _( "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create"
+                       " issues if saved in a symbol library" ),
                     illegal_end );
         msg += wxT( "<br><br>" );
         aMessages.push_back( msg );
