@@ -857,7 +857,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             switch( step )
             {
@@ -987,11 +987,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 break;
             }
 
-            if( ++step == FINISHED )
+            if( ++step >= FINISHED )
             {
                 step = SET_ORIGIN;
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
+            }
+            else if( evt->IsDblClick( BUT_LEFT ) )
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::cursorClick, false );
             }
         }
         else if( evt->IsMotion() )
