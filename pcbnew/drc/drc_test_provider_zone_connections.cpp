@@ -175,13 +175,14 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     if( spokes < minCount )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
+                        wxString msg;
 
-                        m_msg.Printf( _( "(%s min spoke count %d; actual %d)" ),
+                        msg.Printf( _( "(%s min spoke count %d; actual %d)" ),
                                       constraint.GetName(),
                                       minCount,
                                       spokes );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                         drce->SetItems( zone, pad );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 

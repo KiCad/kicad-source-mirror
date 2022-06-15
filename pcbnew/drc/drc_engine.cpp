@@ -753,7 +753,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     // Local overrides take precedence over everything *except* board min clearance
     if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {
-        int override = 0;
+        int override_val = 0;
+        wxString msg;
 
         if( ac && !b_is_non_copper )
         {
@@ -766,7 +767,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                           EscapeHTML( a->GetSelectMenuText( UNITS ) ),
                                           REPORT_VALUE( overrideA ) ) )
 
-                override = ac->GetLocalClearanceOverrides( &m_msg );
+                override_val = ac->GetLocalClearanceOverrides( &msg );
             }
         }
 
@@ -781,40 +782,40 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                           EscapeHTML( b->GetSelectMenuText( UNITS ) ),
                                           EscapeHTML( REPORT_VALUE( overrideB ) ) ) )
 
-                if( overrideB > override )
-                    override = bc->GetLocalClearanceOverrides( &m_msg );
+                if( overrideB > override_val )
+                    override_val = bc->GetLocalClearanceOverrides( &msg );
             }
         }
 
-        if( override )
+        if( override_val )
         {
             if( aConstraintType == CLEARANCE_CONSTRAINT )
             {
-                if( override < m_designSettings->m_MinClearance )
+                if( override_val < m_designSettings->m_MinClearance )
                 {
-                    override = m_designSettings->m_MinClearance;
-                    m_msg = _( "board minimum" );
+                    override_val = m_designSettings->m_MinClearance;
+                    msg = _( "board minimum" );
 
                     REPORT( "" )
                     REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                              REPORT_VALUE( override ) ) )
+                                              REPORT_VALUE( override_val ) ) )
                 }
             }
             else
             {
-                if( override < m_designSettings->m_HoleClearance )
+                if( override_val < m_designSettings->m_HoleClearance )
                 {
-                    override = m_designSettings->m_HoleClearance;
-                    m_msg = _( "board minimum hole" );
+                    override_val = m_designSettings->m_HoleClearance;
+                    msg = _( "board minimum hole" );
 
                     REPORT( "" )
                     REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
-                                              REPORT_VALUE( override ) ) )
+                                              REPORT_VALUE( override_val ) ) )
                 }
             }
 
-            constraint.SetName( m_msg );
-            constraint.m_Value.SetMin( override );
+            constraint.SetName( msg );
+            constraint.m_Value.SetMin( override_val );
             return constraint;
         }
     }
@@ -822,14 +823,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && pad->GetLocalZoneConnectionOverride( nullptr ) != ZONE_CONNECTION::INHERITED )
         {
-            ZONE_CONNECTION override = pad->GetLocalZoneConnectionOverride( &m_msg );
+            wxString msg;
+            ZONE_CONNECTION override = pad->GetLocalZoneConnectionOverride( &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; zone connection: %s." ),
                                       EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( PrintZoneConnection( override ) ) ) )
 
-            constraint.SetName( m_msg );
+            constraint.SetName( msg );
             constraint.m_ZoneConnection = override;
             return constraint;
         }
@@ -838,14 +840,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && pad->GetLocalThermalGapOverride( nullptr ) > 0 )
         {
-            int gap_override = pad->GetLocalThermalGapOverride( &m_msg );
+            wxString msg;
+            int gap_override = pad->GetLocalThermalGapOverride( &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal relief gap: %s." ),
                                       EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( REPORT_VALUE( gap_override ) ) ) )
 
-            constraint.SetName( m_msg );
+            constraint.SetName( msg );
             constraint.m_Value.SetMin( gap_override );
             return constraint;
         }
@@ -854,7 +857,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && pad->GetLocalSpokeWidthOverride( nullptr ) > 0 )
         {
-            int spoke_override = pad->GetLocalSpokeWidthOverride( &m_msg );
+            wxString msg;
+            int spoke_override = pad->GetLocalSpokeWidthOverride( &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal spoke width: %s." ),
@@ -871,7 +875,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                           EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
             }
 
-            constraint.SetName( m_msg );
+            constraint.SetName( msg );
             constraint.m_Value.SetMin( spoke_override );
             return constraint;
         }
@@ -1312,9 +1316,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             if( localA > clearance )
             {
-                clearance = ac->GetLocalClearance( &m_msg );
+                wxString msg;
+                clearance = ac->GetLocalClearance( &msg );
                 constraint.SetParentRule( nullptr );
-                constraint.SetName( m_msg );
+                constraint.SetName( msg );
                 constraint.m_Value.SetMin( clearance );
             }
         }
@@ -1328,9 +1333,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             if( localB > clearance )
             {
-                clearance = bc->GetLocalClearance( &m_msg );
+                wxString msg;
+                clearance = bc->GetLocalClearance( &msg );
                 constraint.SetParentRule( nullptr );
-                constraint.SetName( m_msg );
+                constraint.SetName( msg );
                 constraint.m_Value.SetMin( clearance );
             }
         }

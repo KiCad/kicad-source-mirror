@@ -211,10 +211,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+                    wxString msg;
 
-                    m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
+                    msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
 
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

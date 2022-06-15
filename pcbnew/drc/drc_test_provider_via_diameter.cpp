@@ -113,26 +113,27 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     }
                 }
 
-                if( fail_min )
-                {
-                    m_msg.Printf( _( "(%s min diameter %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), constraintDiameter ),
-                                  MessageTextFromValue( userUnits(), actual ) );
-                }
-                else if( fail_max )
-                {
-                    m_msg.Printf( _( "(%s max diameter %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), constraintDiameter ),
-                                  MessageTextFromValue( userUnits(), actual ) );
-                }
-
                 if( fail_min || fail_max )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
+                    wxString msg;
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    if( fail_min )
+                    {
+                        msg.Printf( _( "(%s min diameter %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraintDiameter ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+                    }
+                    else if( fail_max )
+                    {
+                        msg.Printf( _( "(%s max diameter %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraintDiameter ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+                    }
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

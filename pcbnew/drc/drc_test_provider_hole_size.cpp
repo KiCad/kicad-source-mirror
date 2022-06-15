@@ -169,23 +169,24 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
     if( fail_min || fail_max )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILL_OUT_OF_RANGE );
+        wxString msg;
 
         if( fail_min )
         {
-            m_msg.Printf( _( "(%s min width %s; actual %s)" ),
+            msg.Printf( _( "(%s min width %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), constraintValue ),
                           MessageTextFromValue( userUnits(), holeMinor ) );
         }
         else
         {
-            m_msg.Printf( _( "(%s max width %s; actual %s)" ),
+            msg.Printf( _( "(%s max width %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), constraintValue ),
                           MessageTextFromValue( userUnits(), holeMajor ) );
         }
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -237,23 +238,24 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
     if( fail_min || fail_max )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
+        wxString msg;
 
         if( fail_min )
         {
-            m_msg.Printf( _( "(%s min width %s; actual %s)" ),
+            msg.Printf( _( "(%s min width %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), constraintValue ),
                           MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
         }
         else
         {
-            m_msg.Printf( _( "(%s max width %s; actual %s)" ),
+            msg.Printf( _( "(%s max width %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), constraintValue ),
                           MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
         }
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 

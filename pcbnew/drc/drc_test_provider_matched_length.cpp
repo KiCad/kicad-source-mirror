@@ -109,23 +109,24 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
         if( ( minViolation || maxViolation ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LENGTH_OUT_OF_RANGE );
+            wxString msg;
 
             if( minViolation )
             {
-                m_msg.Printf( _( "(%s min length: %s; actual: %s)" ),
+                msg.Printf( _( "(%s min length: %s; actual: %s)" ),
                               aConstraint.GetName(),
                               MessageTextFromValue( userUnits(), minLen ),
                               MessageTextFromValue( userUnits(), ent.total ) );
             }
             else if( maxViolation )
             {
-                m_msg.Printf( _( "(%s max length: %s; actual: %s)" ),
+                msg.Printf( _( "(%s max length: %s; actual: %s)" ),
                               aConstraint.GetName(),
                               MessageTextFromValue( userUnits(), maxLen ),
                               MessageTextFromValue( userUnits(), ent.total ) );
             }
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
 
             for( auto offendingTrack : ent.items )
                 drcItem->AddItem( offendingTrack );
@@ -154,15 +155,16 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
         if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SKEW_OUT_OF_RANGE );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)" ),
+            msg.Printf( _( "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)" ),
                           aConstraint.GetName(),
                           MessageTextFromValue( userUnits(), aConstraint.GetValue().Max() ),
                           MessageTextFromValue( userUnits(), skew ),
                           MessageTextFromValue( userUnits(), avgLength ),
                           MessageTextFromValue( userUnits(), ent.total ) );
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + m_msg );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + msg );
 
             for( BOARD_CONNECTED_ITEM* offendingTrack : ent.items )
                 drcItem->SetItems( offendingTrack );
@@ -184,13 +186,14 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( const DRC_CONSTRAINT& aCo
         if( aConstraint.GetValue().HasMax() && ent.viaCount > aConstraint.GetValue().Max() )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_MANY_VIAS );
+            wxString msg;
 
-            m_msg.Printf( _( "(%s max count: %d; actual: %d)" ),
+            msg.Printf( _( "(%s max count: %d; actual: %d)" ),
                           aConstraint.GetName(),
                           aConstraint.GetValue().Max(),
                           ent.viaCount );
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
 
             for( auto offendingTrack : ent.items )
                 drcItem->SetItems( offendingTrack );
