@@ -176,4 +176,21 @@ public:
     }
 };
 
+/**
+ * RAII class to safely set/reset nil KIIDs for use in footprint/symbol loading
+ */
+class KIID_NIL_SET_RESET
+{
+public:
+    KIID_NIL_SET_RESET()
+    {
+        KIID::CreateNilUuids( true );
+    };
+
+    ~KIID_NIL_SET_RESET()
+    {
+        KIID::CreateNilUuids( false );
+    }
+};
+
 #endif // KIID_H

@@ -24,17 +24,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
+#include <algorithm>
+#include <future>
+#include <mutex>
+
 #include <connectivity/connectivity_algo.h>
 #include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
+#include <thread_pool.h>
 
 #include <wx/log.h>
-
-#include <thread>
-#include <mutex>
-#include <algorithm>
-#include <future>
 
 #ifdef PROFILE
 #include <profile.h>
@@ -221,6 +222,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     PROF_COUNTER search_basic( "search-basic" );
 #endif
 
+    thread_pool& tp = GetKiCadThreadPool();
     std::vector<CN_ITEM*> dirtyItems;
     std::copy_if( m_itemList.begin(), m_itemList.end(), std::back_inserter( dirtyItems ),
                   [] ( CN_ITEM* aItem )
@@ -238,57 +240,39 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     if( m_itemList.IsDirty() )
     {
-        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                                                       ( dirtyItems.size() + 7 ) / 8 );
 
-        std::atomic<size_t> nextItem( 0 );
-        std::vector<std::future<size_t>> returns( parallelThreadCount );
+        std::vector<std::future<size_t>> returns( dirtyItems.size() );
 
         auto conn_lambda =
-                [&nextItem, &dirtyItems]( CN_LIST* aItemList,
+                [&dirtyItems]( size_t aItem, CN_LIST* aItemList,
                                           PROGRESS_REPORTER* aReporter) -> size_t
                 {
-                    for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
-                    {
-                        CN_VISITOR visitor( dirtyItems[i] );
-                        aItemList->FindNearby( dirtyItems[i], visitor );
+                    if( aReporter && aReporter->IsCancelled() )
+                        return 0;
 
-                        if( aReporter )
-                        {
-                            if( aReporter->IsCancelled() )
-                                break;
-                            else
-                                aReporter->AdvanceProgress();
-                        }
-                    }
+                    CN_VISITOR visitor( dirtyItems[aItem] );
+                    aItemList->FindNearby( dirtyItems[aItem], visitor );
+
+                    if( aReporter )
+                        aReporter->AdvanceProgress();
 
                     return 1;
                 };
 
-        if( parallelThreadCount <= 1 )
-        {
-            conn_lambda( &m_itemList, m_progressReporter );
-        }
-        else
-        {
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            {
-                returns[ii] = std::async( std::launch::async, conn_lambda, &m_itemList,
-                                          m_progressReporter );
-            }
+        for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
+            returns[ii] = tp.submit( conn_lambda, ii, &m_itemList, m_progressReporter );
 
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        for( auto& retval : returns )
+        {
+            // Here we balance returns with a 100ms timeout to allow UI updating
+            std::future_status status;
+            do
             {
-                // Here we balance returns with a 100ms timeout to allow UI updating
-                std::future_status status;
-                do
-                {
-                    if( m_progressReporter )
-                        m_progressReporter->KeepRefreshing();
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
 
-                    status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
-                } while( status != std::future_status::ready );
-            }
+                status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+            } while( status != std::future_status::ready );
         }
 
         if( m_progressReporter )
@@ -470,37 +454,37 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     // Generate RTrees for CN_ZONE_LAYER items (in parallel)
     //
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> zitems_done( 0 );
-    std::atomic<size_t> threads_done( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    thread_pool& tp = GetKiCadThreadPool();
+    std::vector<std::future<size_t>> returns( zitems.size() );
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    auto cache_zones = [aReporter]( CN_ZONE_LAYER* aZone ) -> size_t
+            {
+                if( aReporter && aReporter->IsCancelled() )
+                    return 0;
+
+                aZone->BuildRTree();
+
+                if( aReporter )
+                    aReporter->AdvanceProgress();
+
+                return 1;
+            };
+
+    for( size_t ii = 0; ii < zitems.size(); ++ii )
+        returns[ii] = tp.submit( cache_zones, zitems[ii] );
+
+    for( auto& retval : returns )
     {
-        std::thread t = std::thread(
-                [ &zitems, &zitems_done, &threads_done, &next ]( )
-                {
-                    for( size_t i = next.fetch_add( 1 ); i < zitems.size(); i = next.fetch_add( 1 ) )
-                    {
-                        zitems[i]->BuildRTree();
-                        zitems_done.fetch_add( 1 );
-                    }
+        std::future_status status;
 
-                    threads_done.fetch_add( 1 );
-                } );
-
-        t.detach();
-    }
-
-    while( threads_done < parallelThreadCount )
-    {
-        if( aReporter )
+        do
         {
-            aReporter->SetCurrentProgress( zitems_done / size );
-            aReporter->KeepRefreshing();
-        }
+            if( aReporter )
+                aReporter->KeepRefreshing();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
+
     }
 
     // Add CN_ZONE_LAYERS, tracks, and pads to connectivity

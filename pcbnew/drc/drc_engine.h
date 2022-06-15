@@ -167,6 +167,9 @@ public:
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                           PCB_LAYER_ID aMarkerLayer );
 
+    bool KeepRefreshing( bool aWait = false );
+    void AdvanceProgress();
+    void SetMaxProgress( int aSize );
     bool ReportProgress( double aProgress );
     bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );

@@ -85,7 +85,7 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
 {
 public:
     FOOTPRINT_LIST_IMPL();
-    virtual ~FOOTPRINT_LIST_IMPL();
+    virtual ~FOOTPRINT_LIST_IMPL() {};
 
     void WriteCacheToFile( const wxString& aFilePath ) override;
     void ReadCacheFromFile( const wxString& aFilePath ) override;
@@ -94,16 +94,8 @@ public:
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
 protected:
-    void startWorkers( FP_LIB_TABLE* aTable, const wxString* aNickname,
-                       FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) override;
-    bool joinWorkers() override;
-
-    void stopWorkers() override;
-
-    /**
-     * Load footprints from m_queue_in.
-     */
-    void loader_job();
+    void loadLibs();
+    void loadFootprints();
 
 private:
     /**
@@ -113,11 +105,8 @@ private:
      */
     bool CatchErrors( const std::function<void()>& aFunc );
 
-    FOOTPRINT_ASYNC_LOADER*  m_loader;
-    std::vector<std::thread> m_threads;
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
-    std::atomic_size_t       m_count_finished;
     long long                m_list_timestamp;
     PROGRESS_REPORTER*       m_progress_reporter;
     std::atomic_bool         m_cancelled;

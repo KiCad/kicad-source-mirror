@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <thread>
 #include <future>
 #include <core/kicad_algo.h>
 #include <advanced_config.h>
@@ -48,6 +47,7 @@
 #include <geometry/geometry_utils.h>
 #include <confirm.h>
 #include <convert_to_biu.h>
+#include <thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
 
@@ -174,8 +174,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         zone->UnFill();
     }
 
-    size_t cores = std::thread::hardware_concurrency();
-    std::atomic<size_t> nextItem;
 
     auto check_fill_dependency =
             [&]( ZONE* aZone, PCB_LAYER_ID aLayer, ZONE* aOtherZone ) -> bool
@@ -212,84 +210,75 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             };
 
     auto fill_lambda =
-            [&]( PROGRESS_REPORTER* aReporter )
+            [&]( std::pair<ZONE*, PCB_LAYER_ID> aFillItem ) -> int
             {
-                size_t num = 0;
+                PCB_LAYER_ID layer = aFillItem.second;
+                ZONE*        zone = aFillItem.first;
+                bool         canFill = true;
 
-                for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
+                // Check for any fill dependencies.  If our zone needs to be clipped by
+                // another zone then we can't fill until that zone is filled.
+                for( ZONE* otherZone : aZones )
                 {
-                    PCB_LAYER_ID layer = toFill[i].second;
-                    ZONE*        zone = toFill[i].first;
-                    bool         canFill = true;
-
-                    // Check for any fill dependencies.  If our zone needs to be clipped by
-                    // another zone then we can't fill until that zone is filled.
-                    for( ZONE* otherZone : aZones )
-                    {
-                        if( otherZone == zone )
-                            continue;
-
-                        if( check_fill_dependency( zone, layer, otherZone ) )
-                        {
-                            canFill = false;
-                            break;
-                        }
-                    }
-
-                    if( m_progressReporter && m_progressReporter->IsCancelled() )
-                        break;
-
-                    if( !canFill )
+                    if( otherZone == zone )
                         continue;
 
-                    // Now we're ready to fill.
-                    SHAPE_POLY_SET fillPolys;
-                    fillSingleZone( zone, layer, fillPolys );
+                    if( check_fill_dependency( zone, layer, otherZone ) )
+                    {
+                        canFill = false;
+                        break;
+                    }
+                }
 
-                    std::unique_lock<std::mutex> zoneLock( zone->GetLock() );
+                if( m_progressReporter && m_progressReporter->IsCancelled() )
+                    return 0;
+
+                if( !canFill )
+                    return 0;
+
+
+                // Now we're ready to fill.
+                std::unique_lock<std::mutex> zoneLock( zone->GetLock(), std::try_to_lock );
+
+                if( zoneLock.owns_lock() )
+                {
+                    SHAPE_POLY_SET fillPolys;
+                    if( !fillSingleZone( zone, layer, fillPolys ) )
+                        return 0;
 
                     zone->SetFilledPolysList( layer, fillPolys );
                     zone->SetFillFlag( layer, true );
 
                     if( m_progressReporter )
                         m_progressReporter->AdvanceProgress();
-
-                    num++;
                 }
 
-                return num;
+                return 0;
             };
 
     // Calculate the copper fills (NB: this is multi-threaded)
     //
     while( !toFill.empty() )
     {
-        size_t parallelThreadCount = std::min( cores, toFill.size() );
-        std::vector<std::future<size_t>> returns( parallelThreadCount );
+        std::vector<std::future<int>> returns;
+        returns.reserve( toFill.size() );
 
-        nextItem = 0;
+        thread_pool& tp = GetKiCadThreadPool();
 
-        if( parallelThreadCount <= 1 )
+        for( auto& fillItem : toFill )
+            returns.emplace_back( tp.submit( fill_lambda, fillItem ) );
+
+        for( auto& ret : returns )
         {
-            fill_lambda( m_progressReporter );
-        }
-        else
-        {
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                returns[ii] = std::async( std::launch::async, fill_lambda, m_progressReporter );
+            std::future_status status;
 
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            do
             {
-                // Here we balance returns with a 100ms timeout to allow UI updating
-                std::future_status status;
-                do
-                {
-                    if( m_progressReporter )
-                        m_progressReporter->KeepRefreshing();
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
 
-                    status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
-                } while( status != std::future_status::ready );
-            }
+                status = ret.wait_for( std::chrono::milliseconds( 100 ) );
+            } while( status != std::future_status::ready );
         }
 
         alg::delete_if( toFill, [&]( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool

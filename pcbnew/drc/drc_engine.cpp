@@ -24,7 +24,6 @@
  */
 
 #include <atomic>
-#include <thread>
 #include <reporter.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -40,6 +39,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <thread_pool.h>
 #include <zone.h>
 
 
@@ -1511,6 +1511,29 @@ void DRC_ENGINE::ReportAux ( const wxString& aStr )
         return;
 
     m_reporter->Report( aStr, RPT_SEVERITY_INFO );
+}
+
+
+bool DRC_ENGINE::KeepRefreshing( bool aWait )
+{
+    if( !m_progressReporter )
+        return true;
+
+    return m_progressReporter->KeepRefreshing( aWait );
+}
+
+
+void DRC_ENGINE::AdvanceProgress()
+{
+    if( m_progressReporter )
+        m_progressReporter->AdvanceProgress();
+}
+
+
+void DRC_ENGINE::SetMaxProgress( int aSize )
+{
+    if( m_progressReporter )
+        m_progressReporter->SetMaxProgress( aSize );
 }
 
 

@@ -43,7 +43,6 @@
 class FP_LIB_TABLE;
 class FOOTPRINT_LIST;
 class FOOTPRINT_LIST_IMPL;
-class FOOTPRINT_ASYNC_LOADER;
 class PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
@@ -269,103 +268,12 @@ public:
     static FOOTPRINT_LIST* GetInstance( KIWAY& aKiway );
 
 protected:
-    /**
-     * Launch worker threads to load footprints. Part of the #FOOTPRINT_ASYNC_LOADER
-     * implementation.
-     */
-    virtual void startWorkers( FP_LIB_TABLE* aTable, const wxString* aNickname,
-                               FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) = 0;
-
-    /**
-     * Join worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
-     */
-    virtual bool joinWorkers() = 0;
-
-    /**
-     * Stop worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
-     */
-    virtual void stopWorkers() = 0;
-
-private:
-    friend class FOOTPRINT_ASYNC_LOADER;
-
-protected:
     FP_LIB_TABLE* m_lib_table; ///< no ownership
 
     FPILIST m_list;
     ERRLIST m_errors; ///< some can be PARSE_ERRORs also
 };
 
-
-/**
- * Object used to populate a #FOOTPRINT_LIST asynchronously.
- *
- * Construct one, calling #Start(), and then waiting until it reports completion.  This is
- * equivalent to calling #FOOTPRINT_LIST::ReadFootprintFiles().
- */
-class APIEXPORT FOOTPRINT_ASYNC_LOADER
-{
-public:
-    /**
-     * Construct an asynchronous loader.
-     */
-    FOOTPRINT_ASYNC_LOADER();
-
-    ~FOOTPRINT_ASYNC_LOADER();
-
-    /**
-     * Assign a FOOTPRINT_LIST to the loader. This does not take ownership of
-     * the list.
-     */
-    void SetList( FOOTPRINT_LIST* aList );
-
-    /**
-     * Launch the worker threads.
-     *
-     * @param aTable defines all the libraries.
-     * @param aNickname is the library to read from, or if NULL means read all footprints from
-     *                  all known libraries in \a aTable.
-     * @param aNThreads is the number of worker threads.
-     */
-    void Start( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
-                unsigned aNThreads = DEFAULT_THREADS );
-
-    /**
-     * Wait until the worker threads are finished, and then perform any required
-     * single-threaded finishing on the list. This must be called before using
-     * the list, even if the completion callback was used!
-     *
-     * It is safe to call this method from a thread, but it is not safe to use
-     * the list from ANY thread until it completes. It is recommended to call
-     * this from the main thread because of this.
-     *
-     * It is safe to call this multiple times, but after the first it will
-     * always return true.
-     *
-     * @return true if no errors occurred
-     */
-    bool Join();
-
-    /**
-     * Safely stop the current process.
-     */
-    void Abort();
-
-private:
-    /**
-     * Default number of worker threads. Determined empirically (by dickelbeck):
-     * More than 6 is not significantly faster, less than 6 is likely slower.
-     */
-    static constexpr unsigned DEFAULT_THREADS = 6;
-
-    friend class FOOTPRINT_LIST;
-    friend class FOOTPRINT_LIST_IMPL;
-
-    FOOTPRINT_LIST*  m_list;
-    std::string      m_last_table;
-
-    int              m_total_libs;
-};
 
 
 #endif // FOOTPRINT_INFO_H_

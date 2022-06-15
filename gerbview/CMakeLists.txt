@@ -120,6 +120,10 @@ target_link_libraries( gerbview
     ${wxWidgets_LIBRARIES}
     )
 
+target_include_directories( gerbview PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 if( MAKE_LINK_MAPS )
     set_target_properties( gerbview PROPERTIES
         LINK_FLAGS "-Wl,-cref,-Map=gerbview.map" )

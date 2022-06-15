@@ -65,6 +65,16 @@ install( TARGETS lib_kicad
     )
 endif()
 
+# Build a single library for the thread pool that we can link around
+
+add_library( threadpool STATIC
+    thread_pool.cpp
+    )
+
+target_include_directories( threadpool PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create
@@ -433,7 +443,7 @@ set( COMMON_SRCS
 add_library( common STATIC
     ${COMMON_SRCS}
     )
-
+    
 add_dependencies( common version_header )
 add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 
@@ -443,6 +453,7 @@ target_link_libraries( common
     kiplatform
     gal
     scripting
+    threadpool
     pybind11::embed
     compoundfilereader
     ${Boost_LIBRARIES}
@@ -464,6 +475,7 @@ target_include_directories( common
     PUBLIC
         .
         ${CMAKE_BINARY_DIR}
+        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 # text markup support
@@ -559,11 +571,16 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
+target_include_directories( pcbcommon PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+    
 target_link_libraries( pcbcommon PUBLIC
     common
     delaunator
     kimath
     kiplatform
+    threadpool
 )
 
 if( KICAD_USE_3DCONNEXION )

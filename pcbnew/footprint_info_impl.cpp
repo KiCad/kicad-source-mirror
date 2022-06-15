@@ -22,21 +22,21 @@
 
 #include <footprint_info_impl.h>
 
+#include <dialogs/html_message_box.h>
 #include <footprint.h>
 #include <footprint_info.h>
 #include <fp_lib_table.h>
-#include <dialogs/html_message_box.h>
-#include <string_utils.h>
-#include <locale_io.h>
 #include <kiway.h>
+#include <locale_io.h>
 #include <lib_id.h>
-#include <wildcards_and_files_ext.h>
 #include <progress_reporter.h>
+#include <string_utils.h>
+#include <thread_pool.h>
+#include <wildcards_and_files_ext.h>
+
 #include <wx/textfile.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
-
-#include <thread>
 
 
 void FOOTPRINT_INFO_IMPL::load()
@@ -95,26 +95,6 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 }
 
 
-void FOOTPRINT_LIST_IMPL::loader_job()
-{
-    wxString nickname;
-
-    while( m_queue_in.pop( nickname ) && !m_cancelled )
-    {
-        CatchErrors( [this, &nickname]()
-                     {
-                         m_lib_table->PrefetchLib( nickname );
-                         m_queue_out.push( nickname );
-                     } );
-
-        m_count_finished.fetch_add( 1 );
-
-        if( m_progress_reporter )
-            m_progress_reporter->AdvanceProgress();
-    }
-}
-
-
 bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                               PROGRESS_REPORTER* aProgressReporter )
 {
@@ -122,6 +102,9 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 
     if( generatedTimestamp == m_list_timestamp )
         return true;
+
+    // Disable KIID generation: not needed for library parts; sometimes very slow
+    KIID_NIL_SET_RESET reset_kiid;
 
     m_progress_reporter = aProgressReporter;
 
@@ -132,25 +115,28 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     }
 
     m_cancelled = false;
+    m_lib_table = aTable;
 
-    FOOTPRINT_ASYNC_LOADER loader;
+    // Clear data before reading files
+    m_errors.clear();
+    m_list.clear();
+    m_queue_in.clear();
+    m_queue_out.clear();
 
-    loader.SetList( this );
-    loader.Start( aTable, aNickname );
-
-    while( !m_cancelled && (int)m_count_finished.load() < m_loader->m_total_libs )
+    if( aNickname )
     {
-        if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
-            m_cancelled = true;
-
-        wxMilliSleep( 33 /* 30 FPS refresh rate */);
-    }
-
-    if( m_cancelled )
-    {
-        loader.Abort();
+        m_queue_in.push( *aNickname );
     }
     else
+    {
+        for( auto const& nickname : aTable->GetLogicalLibs() )
+            m_queue_in.push( nickname );
+    }
+
+
+    loadLibs();
+
+    if( !m_cancelled )
     {
         if( m_progress_reporter )
         {
@@ -159,7 +145,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
             m_progress_reporter->Report( _( "Loading footprints..." ) );
         }
 
-        loader.Join();
+        loadFootprints();
 
         if( m_progress_reporter )
             m_progress_reporter->AdvancePhase();
@@ -174,75 +160,54 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 }
 
 
-void FOOTPRINT_LIST_IMPL::startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
-                                        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads )
+void FOOTPRINT_LIST_IMPL::loadLibs()
 {
-    m_loader = aLoader;
-    m_lib_table = aTable;
+    thread_pool& tp = GetKiCadThreadPool();
+    size_t num_returns = m_queue_in.size();
+    std::vector<std::future<size_t>> returns( num_returns );
 
-    // Clear data before reading files
-    m_count_finished.store( 0 );
-    m_errors.clear();
-    m_list.clear();
-    m_threads.clear();
-    m_queue_in.clear();
-    m_queue_out.clear();
+    auto loader_job = [this]() -> size_t
+        {
+            wxString nickname;
+            size_t retval = 0;
 
-    if( aNickname )
+            if( !m_cancelled && m_queue_in.pop( nickname ) )
+            {
+                if( CatchErrors( [this, &nickname]()
+                             {
+                                 m_lib_table->PrefetchLib( nickname );
+                                 m_queue_out.push( nickname );
+                             } ) && m_progress_reporter )
+                {
+                    m_progress_reporter->AdvanceProgress();
+                }
+
+                ++retval;
+            }
+
+            return retval;
+        };
+
+    for( size_t ii = 0; ii < num_returns; ++ii )
+        returns[ii] = tp.submit( loader_job );
+
+    for( auto& retval : returns )
     {
-        m_queue_in.push( *aNickname );
-    }
-    else
-    {
-        for( auto const& nickname : aTable->GetLogicalLibs() )
-            m_queue_in.push( nickname );
-    }
+        std::future_status status;
 
-    m_loader->m_total_libs = m_queue_in.size();
+        do
+        {
+            if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
+                m_cancelled = true;
 
-    for( unsigned i = 0; i < aNThreads; ++i )
-    {
-        m_threads.emplace_back( &FOOTPRINT_LIST_IMPL::loader_job, this );
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
 }
 
 
-void FOOTPRINT_LIST_IMPL::stopWorkers()
+void FOOTPRINT_LIST_IMPL::loadFootprints()
 {
-    std::lock_guard<std::mutex> lock1( m_join );
-
-    // To safely stop our workers, we set the cancellation flag (they will each
-    // exit on their next safe loop location when this is set).  Then we need to wait
-    // for all threads to finish as closing the implementation will free the queues
-    // that the threads write to.
-    for( auto& i : m_threads )
-        i.join();
-
-    m_threads.clear();
-    m_queue_in.clear();
-    m_count_finished.store( 0 );
-
-    // If we have canceled in the middle of a load, clear our timestamp to re-load next time
-    if( m_cancelled )
-        m_list_timestamp = 0;
-}
-
-
-bool FOOTPRINT_LIST_IMPL::joinWorkers()
-{
-    {
-        std::lock_guard<std::mutex> lock1( m_join );
-
-        for( auto& i : m_threads )
-            i.join();
-
-        m_threads.clear();
-        m_queue_in.clear();
-        m_count_finished.store( 0 );
-    }
-
-    size_t total_count = m_queue_out.size();
-
     LOCALE_IO toggle_locale;
 
     // Parse the footprints in parallel. WARNING! This requires changing the locale, which is
@@ -253,84 +218,57 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
     // TODO: blast LOCALE_IO into the sun
 
     SYNC_QUEUE<std::unique_ptr<FOOTPRINT_INFO>> queue_parsed;
-    std::vector<std::thread>                    threads;
+    thread_pool& tp = GetKiCadThreadPool();
+    size_t num_elements = m_queue_out.size();
+    std::vector<std::future<size_t>> returns( num_elements );
 
-    for( size_t ii = 0; ii < std::thread::hardware_concurrency() + 1; ++ii )
+    auto fp_thread = [ this, &queue_parsed ]() -> size_t
     {
-        threads.emplace_back( [this, &queue_parsed]() {
-            wxString nickname;
+        wxString nickname;
 
-            while( m_queue_out.pop( nickname ) && !m_cancelled )
+        if( m_queue_out.pop( nickname ) && !m_cancelled )
+        {
+            wxArrayString fpnames;
+
+            if( !CatchErrors( [&]()
+                    {   m_lib_table->FootprintEnumerate( fpnames, nickname, false ); } ) )
             {
-                wxArrayString fpnames;
-
-                try
-                {
-                    m_lib_table->FootprintEnumerate( fpnames, nickname, false );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
-                }
-                catch( const std::exception& se )
-                {
-                    // This is a round about way to do this, but who knows what THROW_IO_ERROR()
-                    // may be tricked out to do someday, keep it in the game.
-                    try
-                    {
-                        THROW_IO_ERROR( se.what() );
-                    }
-                    catch( const IO_ERROR& ioe )
-                    {
-                        m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
-                    }
-                }
-
-                for( unsigned jj = 0; jj < fpnames.size() && !m_cancelled; ++jj )
-                {
-                    try
-                    {
-                        wxString fpname = fpnames[jj];
-                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
-                        queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
-                    }
-                    catch( const IO_ERROR& ioe )
-                    {
-                        m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
-                    }
-                    catch( const std::exception& se )
-                    {
-                        // This is a round about way to do this, but who knows what THROW_IO_ERROR()
-                        // may be tricked out to do someday, keep it in the game.
-                        try
-                        {
-                            THROW_IO_ERROR( se.what() );
-                        }
-                        catch( const IO_ERROR& ioe )
-                        {
-                            m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
-                        }
-                    }
-                }
-
-                if( m_progress_reporter )
-                    m_progress_reporter->AdvanceProgress();
-
-                m_count_finished.fetch_add( 1 );
+                return 0;
             }
-        } );
-    }
 
-    while( !m_cancelled && (size_t)m_count_finished.load() < total_count )
+            for( unsigned jj = 0; jj < fpnames.size() && !m_cancelled; ++jj )
+            {
+                CatchErrors( [&]()
+                    {
+                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpnames[jj] );
+                        queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                    });
+            }
+
+            if( m_progress_reporter )
+                m_progress_reporter->AdvanceProgress();
+
+            return 1;
+        }
+
+        return 0;
+    };
+
+    for( size_t ii = 0; ii < num_elements; ++ii )
+        returns[ii] = tp.submit( fp_thread );
+
+    for( auto& retval : returns )
     {
-        if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
-            m_cancelled = true;
+        std::future_status status;
 
-        wxMilliSleep( 33 /* 30 FPS refresh rate */ );
+        do
+        {
+            if( m_progress_reporter )
+                m_progress_reporter->KeepRefreshing();
+
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
-
-    for( auto& thr : threads )
-        thr.join();
 
     std::unique_ptr<FOOTPRINT_INFO> fpi;
 
@@ -343,24 +281,14 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
                {
                    return *lhs < *rhs;
                } );
-
-    return m_errors.empty();
 }
 
 
 FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
-    m_loader( nullptr ),
-    m_count_finished( 0 ),
     m_list_timestamp( 0 ),
     m_progress_reporter( nullptr ),
     m_cancelled( false )
 {
-}
-
-
-FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
-{
-    stopWorkers();
 }
 
 

@@ -83,6 +83,10 @@ target_link_libraries( cvpcb_kiface
 # Must follow github_plugin
 target_link_libraries( cvpcb_kiface ${Boost_LIBRARIES} )
 
+target_include_directories( cvpcb_kiface PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+    
 if( UNIX AND NOT APPLE )
     # -lrt must follow Boost
     target_link_libraries( cvpcb_kiface rt )

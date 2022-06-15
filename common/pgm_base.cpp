@@ -53,14 +53,15 @@
 #include <kiplatform/policy.h>
 #include <lockfile.h>
 #include <menus_helpers.h>
+#include <paths.h>
 #include <pgm_base.h>
+#include <policy_keys.h>
 #include <python_scripting.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
+#include <thread_pool.h>
 #include <trace_helpers.h>
-#include <paths.h>
-#include <policy_keys.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <boost/uuid/uuid_io.hpp>
@@ -391,6 +392,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
         return false;
     }
 #endif
+
+    GetKiCadThreadPool();
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:

@@ -666,6 +666,10 @@ target_link_libraries( pcbnew_kiface_objects
         nlohmann_json
     )
 
+target_include_directories( pcbnew_kiface_objects PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+    
 if( KICAD_STEP_EXPORT_LIB )
     add_definitions( -DKICAD_STEP_EXPORT_LIB )
 endif()
@@ -720,7 +724,7 @@ target_link_libraries( pcbnew_kiface
     PRIVATE
         ${PCBNEW_KIFACE_LIBRARIES}
     )
-
+    
 set_source_files_properties( pcbnew.cpp PROPERTIES
     # The KIFACE is in pcbnew.cpp, export it:
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"

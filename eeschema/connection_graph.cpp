@@ -21,7 +21,6 @@
  */
 
 #include <list>
-#include <thread>
 #include <future>
 #include <vector>
 #include <unordered_map>
@@ -44,6 +43,7 @@
 #include <connection_graph.h>
 #include <widgets/ui_common.h>
 #include <string_utils.h>
+#include <thread_pool.h>
 #include <wx/log.h>
 
 #include <advanced_config.h> // for realtime connectivity switch in release builds
@@ -600,141 +600,125 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         // Pre-scan to see if we have a bus at this location
         SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
 
-        // We don't want to spin up a new thread for fewer than 4 items (overhead costs)
-        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                ( connection_vec.size() + 3 ) / 4 );
-
-        std::atomic<size_t> nextItem( 0 );
         std::mutex update_mutex;
-        std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-        auto update_lambda = [&]() -> size_t
+        auto update_lambda = [&]( SCH_ITEM* connected_item ) -> size_t
         {
-            for( size_t ii = nextItem++; ii < connection_vec.size(); ii = nextItem++ )
+            // Bus entries are special: they can have connection points in the
+            // middle of a wire segment, because the junction algo doesn't split
+            // the segment in two where you place a bus entry.  This means that
+            // bus entries that don't land on the end of a line segment need to
+            // have "virtual" connection points to the segments they graphically
+            // touch.
+            if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
             {
-                SCH_ITEM* connected_item = connection_vec[ii];
-                // Bus entries are special: they can have connection points in the
-                // middle of a wire segment, because the junction algo doesn't split
-                // the segment in two where you place a bus entry.  This means that
-                // bus entries that don't land on the end of a line segment need to
-                // have "virtual" connection points to the segments they graphically
-                // touch.
+                // If this location only has the connection point of the bus
+                // entry itself, this means that either the bus entry is not
+                // connected to anything graphically, or that it is connected to
+                // a segment at some point other than at one of the endpoints.
+                if( connection_vec.size() == 1 )
+                {
+                    if( busLine )
+                    {
+                        auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+                        bus_entry->m_connected_bus_item = busLine;
+                    }
+                }
+            }
+
+            // Bus-to-bus entries are treated just like bus wires
+            else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
+            {
+                if( connection_vec.size() < 2 )
+                {
+                    if( busLine )
+                    {
+                        auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
+
+                        if( it.first == bus_entry->GetPosition() )
+                            bus_entry->m_connected_bus_items[0] = busLine;
+                        else
+                            bus_entry->m_connected_bus_items[1] = busLine;
+
+                        std::lock_guard<std::mutex> lock( update_mutex );
+                        bus_entry->AddConnectionTo( aSheet, busLine );
+                        busLine->AddConnectionTo( aSheet, bus_entry );
+                    }
+                }
+            }
+
+            // Change junctions to be on bus junction layer if they are touching a bus
+            else if( connected_item->Type() == SCH_JUNCTION_T )
+            {
+                connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
+            }
+
+            SCH_ITEM_SET& connected_set = connected_item->ConnectedItems( aSheet );
+            connected_set.reserve( connection_vec.size() );
+
+            for( SCH_ITEM* test_item : connection_vec )
+            {
+                bool      bus_connection_ok = true;
+
+                if( test_item == connected_item )
+                    continue;
+
+                // Set up the link between the bus entry net and the bus
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
-                    // If this location only has the connection point of the bus
-                    // entry itself, this means that either the bus entry is not
-                    // connected to anything graphically, or that it is connected to
-                    // a segment at some point other than at one of the endpoints.
-                    if( connection_vec.size() == 1 )
+                    if( test_item->GetLayer() == LAYER_BUS )
                     {
-                        if( busLine )
-                        {
-                            auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
-                            bus_entry->m_connected_bus_item = busLine;
-                        }
+                        auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+                        bus_entry->m_connected_bus_item = test_item;
                     }
                 }
 
-                // Bus-to-bus entries are treated just like bus wires
-                else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
-                {
-                    if( connection_vec.size() < 2 )
-                    {
-                        if( busLine )
-                        {
-                            auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
-
-                            if( it.first == bus_entry->GetPosition() )
-                                bus_entry->m_connected_bus_items[0] = busLine;
-                            else
-                                bus_entry->m_connected_bus_items[1] = busLine;
-
-                            std::lock_guard<std::mutex> lock( update_mutex );
-                            bus_entry->AddConnectionTo( aSheet, busLine );
-                            busLine->AddConnectionTo( aSheet, bus_entry );
-                        }
-                    }
-                }
-
-                // Change junctions to be on bus junction layer if they are touching a bus
-                else if( connected_item->Type() == SCH_JUNCTION_T )
-                {
-                    connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
-                }
-
-                SCH_ITEM_SET& connected_set = connected_item->ConnectedItems( aSheet );
-                connected_set.reserve( connection_vec.size() );
-
-                for( SCH_ITEM* test_item : connection_vec )
-                {
-                    bool      bus_connection_ok = true;
-
-                    if( test_item == connected_item )
-                        continue;
-
-                    // Set up the link between the bus entry net and the bus
-                    if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
-                    {
-                        if( test_item->GetLayer() == LAYER_BUS )
-                        {
-                            auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
-                            bus_entry->m_connected_bus_item = test_item;
-                        }
-                    }
-
-                    // Bus entries only connect to bus lines on the end that is touching a bus line.
-                    // If the user has overlapped another net line with the endpoint of the bus entry
-                    // where the entry connects to a bus, we don't want to short-circuit it.
-                    if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
-                    {
-                        bus_connection_ok = !busLine || test_item->GetLayer() == LAYER_BUS;
-                    }
-                    else if( test_item->Type() == SCH_BUS_WIRE_ENTRY_T )
-                    {
-                        bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
-                    }
-
-                    if( connected_item->ConnectionPropagatesTo( test_item ) &&
-                        test_item->ConnectionPropagatesTo( connected_item ) &&
-                        bus_connection_ok )
-                    {
-                        connected_set.push_back( test_item );
-                    }
-                }
-
-                // If we got this far and did not find a connected bus item for a bus entry,
-                // we should do a manual scan in case there is a bus item on this connection
-                // point but we didn't pick it up earlier because there is *also* a net item here.
+                // Bus entries only connect to bus lines on the end that is touching a bus line.
+                // If the user has overlapped another net line with the endpoint of the bus entry
+                // where the entry connects to a bus, we don't want to short-circuit it.
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
-                    auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+                    bus_connection_ok = !busLine || test_item->GetLayer() == LAYER_BUS;
+                }
+                else if( test_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                {
+                    bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
+                }
 
-                    if( !bus_entry->m_connected_bus_item )
-                    {
-                        SCH_SCREEN* screen = aSheet.LastScreen();
-                        SCH_LINE*   bus = screen->GetBus( it.first );
+                if( connected_item->ConnectionPropagatesTo( test_item ) &&
+                    test_item->ConnectionPropagatesTo( connected_item ) &&
+                    bus_connection_ok )
+                {
+                    connected_set.push_back( test_item );
+                }
+            }
 
-                        if( bus )
-                            bus_entry->m_connected_bus_item = bus;
-                    }
+            // If we got this far and did not find a connected bus item for a bus entry,
+            // we should do a manual scan in case there is a bus item on this connection
+            // point but we didn't pick it up earlier because there is *also* a net item here.
+            if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            {
+                auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+
+                if( !bus_entry->m_connected_bus_item )
+                {
+                    SCH_SCREEN* screen = aSheet.LastScreen();
+                    SCH_LINE*   bus = screen->GetBus( it.first );
+
+                    if( bus )
+                        bus_entry->m_connected_bus_item = bus;
                 }
             }
 
             return 1;
         };
 
-
-        if( parallelThreadCount == 1 )
-            update_lambda();
-        else
-        {
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                returns[ii] = std::async( std::launch::async, update_lambda );
-
-            // Finalize the threads
-            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                returns[ii].wait();
-        }
+        GetKiCadThreadPool().parallelize_loop( 0, connection_vec.size(),
+                [&]( const int a, const int b)
+                {
+                    for( int ii = a; ii < b; ++ii )
+                        update_lambda( connection_vec[ii] );
+                }).wait();
     }
 }
 
@@ -832,13 +816,6 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 void CONNECTION_GRAPH::resolveAllDrivers()
 {
     // Resolve drivers for subgraphs and propagate connectivity info
-
-    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-            ( m_subgraphs.size() + 3 ) / 4 );
-
-    std::atomic<size_t> nextSubgraph( 0 );
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
     std::vector<CONNECTION_SUBGRAPH*> dirty_graphs;
 
     std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( dirty_graphs ),
@@ -847,61 +824,53 @@ void CONNECTION_GRAPH::resolveAllDrivers()
                       return candidate->m_dirty;
                   } );
 
-    auto update_lambda = [&nextSubgraph, &dirty_graphs]() -> size_t
+    std::vector<std::future<size_t>> returns( dirty_graphs.size() );
+
+    auto update_lambda = []( CONNECTION_SUBGRAPH* subgraph ) -> size_t
     {
-        for( size_t subgraphId = nextSubgraph++; subgraphId < dirty_graphs.size(); subgraphId = nextSubgraph++ )
+        if( !subgraph->m_dirty )
+            return 0;
+
+        // Special processing for some items
+        for( auto item : subgraph->m_items )
         {
-            auto subgraph = dirty_graphs[subgraphId];
-
-            if( !subgraph->m_dirty )
-                continue;
-
-            // Special processing for some items
-            for( auto item : subgraph->m_items )
+            switch( item->Type() )
             {
-                switch( item->Type() )
-                {
-                case SCH_NO_CONNECT_T:
+            case SCH_NO_CONNECT_T:
+                subgraph->m_no_connect = item;
+                break;
+
+            case SCH_BUS_WIRE_ENTRY_T:
+                subgraph->m_bus_entry = item;
+                break;
+
+            case SCH_PIN_T:
+            {
+                auto pin = static_cast<SCH_PIN*>( item );
+
+                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                     subgraph->m_no_connect = item;
-                    break;
 
-                case SCH_BUS_WIRE_ENTRY_T:
-                    subgraph->m_bus_entry = item;
-                    break;
-
-                case SCH_PIN_T:
-                {
-                    auto pin = static_cast<SCH_PIN*>( item );
-
-                    if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
-                        subgraph->m_no_connect = item;
-
-                    break;
-                }
-
-                default:
-                    break;
-                }
+                break;
             }
 
-            subgraph->ResolveDrivers( true );
-            subgraph->m_dirty = false;
+            default:
+                break;
+            }
         }
+
+        subgraph->ResolveDrivers( true );
+        subgraph->m_dirty = false;
 
         return 1;
     };
 
-    if( parallelThreadCount == 1 )
-        update_lambda();
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, update_lambda );
-
-        // Finalize the threads
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii].wait();
-    }
+    GetKiCadThreadPool().parallelize_loop( 0, dirty_graphs.size(),
+            [&]( const int a, const int b)
+            {
+                for( int ii = a; ii < b; ++ii )
+                    update_lambda( dirty_graphs[ii] );
+            }).wait();
 
     // Now discard any non-driven subgraphs from further consideration
 
@@ -1434,39 +1403,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
         m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
 
-    // Update item connections at this point so that neighbor propagation works
-    std::atomic<size_t> nextSubgraph( 0 );
-
-    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-            ( m_subgraphs.size() + 3 ) / 4 );
-
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
-
-    auto preliminaryUpdateTask =
-            [&]() -> size_t
+    GetKiCadThreadPool().parallelize_loop( 0, m_driver_subgraphs.size(),
+            [&]( const int a, const int b)
             {
-                for( size_t subgraphId = nextSubgraph++;
-                     subgraphId < m_driver_subgraphs.size();
-                     subgraphId = nextSubgraph++ )
-                {
-                    m_driver_subgraphs[subgraphId]->UpdateItemConnections();
-                }
-
-                return 1;
-            };
-
-    if( parallelThreadCount == 1 )
-        preliminaryUpdateTask();
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, preliminaryUpdateTask );
-
-        // Finalize the threads
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii].wait();
-    }
+                for( int ii = a; ii < b; ++ii )
+                    m_driver_subgraphs[ii]->UpdateItemConnections();
+            }).wait();
 
     // Next time through the subgraphs, we do some post-processing to handle things like
     // connecting bus members to their neighboring subgraphs, and then propagate connections
@@ -1595,84 +1537,71 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
     }
 
-    nextSubgraph.store( 0 );
 
     auto updateItemConnectionsTask =
-        [&]() -> size_t
+        [&]( CONNECTION_SUBGRAPH* subgraph ) -> size_t
         {
-            for( size_t subgraphId = nextSubgraph++;
-                 subgraphId < m_driver_subgraphs.size();
-                 subgraphId = nextSubgraph++ )
+            // Make sure weakly-driven single-pin nets get the unconnected_ prefix
+            if( !subgraph->m_strong_driver && subgraph->m_drivers.size() == 1 &&
+                subgraph->m_driver->Type() == SCH_PIN_T )
             {
-                CONNECTION_SUBGRAPH* subgraph = m_driver_subgraphs[subgraphId];
+                SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
+                wxString name = pin->GetDefaultNetName( subgraph->m_sheet, true );
 
-                // Make sure weakly-driven single-pin nets get the unconnected_ prefix
-                if( !subgraph->m_strong_driver && subgraph->m_drivers.size() == 1 &&
-                    subgraph->m_driver->Type() == SCH_PIN_T )
+                subgraph->m_driver_connection->ConfigureFromLabel( name );
+            }
+
+            subgraph->m_dirty = false;
+            subgraph->UpdateItemConnections();
+
+            // No other processing to do on buses
+            if( subgraph->m_driver_connection->IsBus() )
+                return 0;
+
+            // As a visual aid, we can check sheet pins that are driven by themselves to see
+            // if they should be promoted to buses
+
+            if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
+            {
+                SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
+
+                if( SCH_SHEET* sheet = pin->GetParent() )
                 {
-                    SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
-                    wxString name = pin->GetDefaultNetName( subgraph->m_sheet, true );
+                    wxString    pinText = pin->GetText();
+                    SCH_SCREEN* screen  = sheet->GetScreen();
 
-                    subgraph->m_driver_connection->ConfigureFromLabel( name );
-                }
-
-                subgraph->m_dirty = false;
-                subgraph->UpdateItemConnections();
-
-                // No other processing to do on buses
-                if( subgraph->m_driver_connection->IsBus() )
-                    continue;
-
-                // As a visual aid, we can check sheet pins that are driven by themselves to see
-                // if they should be promoted to buses
-
-                if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
-                {
-                    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
-
-                    if( SCH_SHEET* sheet = pin->GetParent() )
+                    for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
                     {
-                        wxString    pinText = pin->GetText();
-                        SCH_SCREEN* screen  = sheet->GetScreen();
+                        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
 
-                        for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+                        if( label->GetText() == pinText )
                         {
-                            SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+                            SCH_SHEET_PATH path = subgraph->m_sheet;
+                            path.push_back( sheet );
 
-                            if( label->GetText() == pinText )
-                            {
-                                SCH_SHEET_PATH path = subgraph->m_sheet;
-                                path.push_back( sheet );
+                            SCH_CONNECTION* parent_conn = label->Connection( &path );
 
-                                SCH_CONNECTION* parent_conn = label->Connection( &path );
+                            if( parent_conn && parent_conn->IsBus() )
+                                subgraph->m_driver_connection->SetType( CONNECTION_TYPE::BUS );
 
-                                if( parent_conn && parent_conn->IsBus() )
-                                    subgraph->m_driver_connection->SetType( CONNECTION_TYPE::BUS );
-
-                                break;
-                            }
+                            break;
                         }
-
-                        if( subgraph->m_driver_connection->IsBus() )
-                            continue;
                     }
+
+                    if( subgraph->m_driver_connection->IsBus() )
+                        return 0;
                 }
             }
 
             return 1;
         };
 
-    if( parallelThreadCount == 1 )
-        updateItemConnectionsTask();
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, updateItemConnectionsTask );
-
-        // Finalize the threads
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii].wait();
-    }
+    GetKiCadThreadPool().parallelize_loop( 0, m_driver_subgraphs.size(),
+            [&]( const int a, const int b)
+            {
+                for( int ii = a; ii < b; ++ii )
+                    updateItemConnectionsTask( m_driver_subgraphs[ii] );
+            }).wait();
 
     m_net_code_to_subgraphs_map.clear();
     m_net_name_to_subgraphs_map.clear();

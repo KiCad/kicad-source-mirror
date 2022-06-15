@@ -22,7 +22,6 @@
  */
 
 #include <atomic>
-#include <thread>
 #include <board.h>
 #include <board_design_settings.h>
 #include <zone.h>
@@ -33,6 +32,8 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <advanced_config.h>
+#include <progress_reporter.h>
+#include <thread_pool.h>
 
 /*
     Checks for slivers in copper layers
@@ -92,6 +93,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
     // Report progress on board zones only.  Everything else is in the noise.
     int    zoneLayerCount = 0;
+    std::atomic<size_t> done( 1 );
 
     for( PCB_LAYER_ID layer : copperLayers )
     {
@@ -102,85 +104,90 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         }
     }
 
-    // The first completion may be a long time coming, so this one gets us started.
-    zoneLayerCount++;
+    PROGRESS_REPORTER* reporter = m_drcEngine->GetProgressReporter();
 
-    if( !m_drcEngine->ReportProgress( 1.0 / (double) zoneLayerCount ) )
+    if( reporter && reporter->IsCancelled() )
         return false;   // DRC cancelled
 
-    std::vector<SHAPE_POLY_SET> layerPolys;
-    layerPolys.resize( layerCount );
+    std::vector<SHAPE_POLY_SET> layerPolys( layerCount );
 
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 1 );
-    std::atomic<size_t> threads_finished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread(
-                [&]( )
+    auto sliver_checker =
+                [&]( int aItem ) -> size_t
                 {
-                    for( int i = next.fetch_add( 1 ); i < layerCount; i = next.fetch_add( 1 ) )
-                    {
-                        PCB_LAYER_ID    layer = copperLayers[i];
-                        SHAPE_POLY_SET& poly = layerPolys[i];
-                        SHAPE_POLY_SET  fill;
+                    PCB_LAYER_ID    layer = copperLayers[aItem];
+                    SHAPE_POLY_SET& poly = layerPolys[aItem];
 
-                        forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
-                                [&]( BOARD_ITEM* item ) -> bool
+                    if( m_drcEngine->IsCancelled() )
+                        return 0;
+
+                    SHAPE_POLY_SET  fill;
+
+                    forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
+                            [&]( BOARD_ITEM* item ) -> bool
+                            {
+                                if( dynamic_cast<ZONE*>( item) )
                                 {
-                                    if( dynamic_cast<ZONE*>( item) )
+                                    ZONE* zone = static_cast<ZONE*>( item );
+
+                                    if( !zone->GetIsRuleArea() )
                                     {
-                                        ZONE* zone = static_cast<ZONE*>( item );
+                                        fill = zone->GetFill( layer )->CloneDropTriangulation();
+                                        fill.Unfracture( SHAPE_POLY_SET::PM_FAST );
 
-                                        if( !zone->GetIsRuleArea() )
-                                        {
-                                            fill = zone->GetFill( layer )->CloneDropTriangulation();
-                                            fill.Unfracture( SHAPE_POLY_SET::PM_FAST );
+                                        for( int jj = 0; jj < fill.OutlineCount(); ++jj )
+                                            poly.AddOutline( fill.Outline( jj ) );
 
-                                            for( int jj = 0; jj < fill.OutlineCount(); ++jj )
-                                                poly.AddOutline( fill.Outline( jj ) );
-
-                                            // Report progress on board zones only.  Everything
-                                            // else is in the noise.
-                                            done.fetch_add( 1 );
-                                        }
+                                        // Report progress on board zones only.  Everything
+                                        // else is in the noise.
+                                        done.fetch_add( 1 );
                                     }
-                                    else
-                                    {
-                                        item->TransformShapeWithClearanceToPolygon( poly, layer, 0,
-                                                                                    ARC_LOW_DEF,
-                                                                                    ERROR_OUTSIDE );
-                                    }
+                                }
+                                else
+                                {
+                                    item->TransformShapeWithClearanceToPolygon( poly, layer, 0,
+                                                                                ARC_LOW_DEF,
+                                                                                ERROR_OUTSIDE );
+                                }
 
-                                    if( m_drcEngine->IsCancelled() )
-                                        return false;
+                                if( m_drcEngine->IsCancelled() )
+                                    return false;
 
-                                    return true;
-                                } );
+                                return true;
+                            } );
 
-                        poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-                        // Sharpen corners
-                        poly.Deflate( widthTolerance / 2, ARC_LOW_DEF,
-                                      SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+                    if( m_drcEngine->IsCancelled() )
+                        return 0;
 
-                        if( m_drcEngine->IsCancelled() )
-                            break;
-                    }
+                    poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-                    threads_finished.fetch_add( 1 );
-                } );
+                    // Sharpen corners
+                    poly.Deflate( widthTolerance / 2, ARC_LOW_DEF,
+                                  SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
-            t.detach();
-    }
+                    return 1;
+                };
 
-    while( threads_finished < parallelThreadCount )
+    thread_pool& tp = GetKiCadThreadPool();
+    std::vector<std::future<size_t>> returns;
+
+    returns.reserve( copperLayers.size() );
+
+    for( size_t ii = 0; ii < copperLayers.size(); ++ii )
+        returns.emplace_back( tp.submit( sliver_checker, ii ) );
+
+    for( auto& retval : returns )
     {
-        m_drcEngine->ReportProgress( (double) done / (double) zoneLayerCount );
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        std::future_status status;
+
+        do
+        {
+            m_drcEngine->ReportProgress( static_cast<double>( zoneLayerCount ) / done );
+
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
+
 
     for( int ii = 0; ii < layerCount; ++ii )
     {

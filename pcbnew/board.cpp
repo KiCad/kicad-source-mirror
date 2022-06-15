@@ -26,37 +26,39 @@
  */
 
 #include <iterator>
-#include <thread>
+
+#include <wx/log.h>
+
 #include <drc/drc_rtree.h>
-#include <pcb_base_frame.h>
 #include <board_design_settings.h>
-#include <reporter.h>
 #include <board_commit.h>
 #include <board.h>
+#include <core/arraydim.h>
+#include <core/kicad_algo.h>
+#include <connectivity/connectivity_data.h>
+#include <convert_shape_list_to_polygon.h>
 #include <footprint.h>
+#include <pcb_base_frame.h>
 #include <pcb_track.h>
-#include <zone.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <core/arraydim.h>
-#include <core/kicad_algo.h>
-#include <connectivity/connectivity_data.h>
-#include <string_utils.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
+#include <progress_reporter.h>
 #include <project.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <ratsnest/ratsnest_data.h>
+#include <reporter.h>
 #include <tool/selection_conditions.h>
-#include <convert_shape_list_to_polygon.h>
-#include <wx/log.h>
-#include <progress_reporter.h>
+#include <string_utils.h>
+#include <thread_pool.h>
+#include <zone.h>
 
 // This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
 // tried it.
@@ -639,40 +641,40 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
     if( aReporter )
         aReporter->Report( _( "Tessellating copper zones..." ) );
 
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> zones_done( 0 );
-    std::atomic<size_t> threads_done( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    thread_pool& tp = GetKiCadThreadPool();
+    std::vector<std::future<size_t>> returns;
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread(
-                [ &zones, &zones_done, &threads_done, &next ]( )
-                {
-                    for( size_t i = next.fetch_add( 1 ); i < zones.size(); i = next.fetch_add( 1 ) )
-                    {
-                        zones[i]->CacheTriangulation();
-                        zones_done.fetch_add( 1 );
-                    }
+    returns.reserve( zones.size() );
 
-                    threads_done.fetch_add( 1 );
-                } );
+    auto cache_zones = [aReporter]( ZONE* aZone ) -> size_t
+            {
+                if( aReporter && aReporter->IsCancelled() )
+                    return 0;
 
-        t.detach();
-    }
+                aZone->CacheTriangulation();
+
+                if( aReporter )
+                    aReporter->AdvanceProgress();
+
+                return 1;
+            };
+
+    for( ZONE* zone : zones )
+        returns.emplace_back( tp.submit( cache_zones, zone ) );
 
     // Finalize the triangulation threads
-    while( threads_done < parallelThreadCount )
+    for( auto& retval : returns )
     {
-        if( aReporter )
+        std::future_status status;
+
+        do
         {
-            aReporter->SetCurrentProgress( (double) zones_done / (double) zones.size() );
-            aReporter->KeepRefreshing();
-        }
+            if( aReporter )
+                aReporter->KeepRefreshing();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
-
 }
 
 

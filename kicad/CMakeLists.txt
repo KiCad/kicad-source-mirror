@@ -94,6 +94,10 @@ endif()
 
 target_link_libraries( kicad pcm )
 
+target_include_directories( kicad PRIVATE
+    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 install( TARGETS kicad
     DESTINATION ${KICAD_BIN}
     COMPONENT binary

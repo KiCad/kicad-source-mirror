@@ -22,7 +22,6 @@
  */
 
 #include <atomic>
-#include <thread>
 #include <common.h>
 #include <board_design_settings.h>
 #include <drc/drc_rtree.h>
@@ -31,6 +30,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <pad.h>
+#include <progress_reporter.h>
+#include <thread_pool.h>
 #include <zone.h>
 
 
@@ -106,86 +107,92 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         }
     }
 
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 0 );
-    std::atomic<size_t> threads_finished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    PROGRESS_REPORTER* reporter = m_drcEngine->GetProgressReporter();
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread(
-                [&]()
+    auto query_areas = [&]( std::pair<ZONE*, ZONE*> aCache ) -> size_t
+            {
+                if( m_drcEngine->IsCancelled() )
+                    return 0;
+
+                ZONE*    ruleArea = aCache.first;
+                ZONE*    copperZone = aCache.second;
+                EDA_RECT areaBBox = ruleArea->GetCachedBoundingBox();
+                EDA_RECT copperBBox = copperZone->GetCachedBoundingBox();
+                bool     isInside = false;
+
+                if( copperZone->IsFilled() && areaBBox.Intersects( copperBBox ) )
                 {
-                    for( size_t i = next.fetch_add( 1 ); i < toCache.size(); i = next.fetch_add( 1 ) )
+                    // Collisions include touching, so we need to deflate outline by
+                    // enough to exclude it.  This is particularly important for detecting
+                    // copper fills as they will be exactly touching along the entire
+                    // exclusion border.
+                    SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
+                    areaPoly.Deflate( epsilon, 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+
+                    DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
+
+                    if( zoneRTree )
                     {
-                        ZONE*    ruleArea = toCache[i].first;
-                        ZONE*    copperZone = toCache[i].second;
-                        EDA_RECT areaBBox = ruleArea->GetCachedBoundingBox();
-                        EDA_RECT copperBBox = copperZone->GetCachedBoundingBox();
-                        bool     isInside = false;
-
-                        if( copperZone->IsFilled() && areaBBox.Intersects( copperBBox ) )
+                        for( PCB_LAYER_ID layer : ruleArea->GetLayerSet().Seq() )
                         {
-                            // Collisions include touching, so we need to deflate outline by
-                            // enough to exclude it.  This is particularly important for detecting
-                            // copper fills as they will be exactly touching along the entire
-                            // exclusion border.
-                            SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
-                            areaPoly.Deflate( epsilon, 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
-
-                            DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
-
-                            if( zoneRTree )
+                            if( zoneRTree->QueryColliding( areaBBox, &areaPoly, layer ) )
                             {
-                                for( PCB_LAYER_ID layer : ruleArea->GetLayerSet().Seq() )
-                                {
-                                    if( zoneRTree->QueryColliding( areaBBox, &areaPoly, layer ) )
-                                    {
-                                        isInside = true;
-                                        break;
-                                    }
-
-                                    if( m_drcEngine->IsCancelled() )
-                                        break;
-                                }
+                                isInside = true;
+                                return 0;
                             }
+
+                            if( m_drcEngine->IsCancelled() )
+                                return 0;
                         }
-
-                        if( m_drcEngine->IsCancelled() )
-                            break;
-
-                        std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID> key( ruleArea,
-                                                                                copperZone,
-                                                                                UNDEFINED_LAYER );
-
-                        {
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
-                            board->m_InsideAreaCache[ key ] = isInside;
-                        }
-
-                        done.fetch_add( 1 );
                     }
+                }
 
-                    threads_finished.fetch_add( 1 );
-                } );
+                if( m_drcEngine->IsCancelled() )
+                    return 0;
 
-        t.detach();
-    }
+                std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID> key( ruleArea,
+                                                                        copperZone,
+                                                                        UNDEFINED_LAYER );
 
-    while( threads_finished < parallelThreadCount )
+                {
+                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                    board->m_InsideAreaCache[ key ] = isInside;
+                }
+
+                m_drcEngine->AdvanceProgress();
+
+                return 1;
+            };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    std::vector<std::future<size_t>> returns;
+
+    returns.reserve( toCache.size() );
+
+    for( auto& cache : toCache )
+        returns.emplace_back( tp.submit( query_areas, cache ) );
+
+    for( auto& retval : returns )
     {
-        m_drcEngine->ReportProgress( (double) done / (double) totalCount );
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        std::future_status status;
+
+        do
+        {
+            if( reporter )
+                reporter->KeepRefreshing();
+
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
 
     if( m_drcEngine->IsCancelled() )
         return false;
 
-    // Now go through all the board objects calling the DRC_ENGINE to run the actual dissallow
+    // Now go through all the board objects calling the DRC_ENGINE to run the actual disallow
     // tests.  These should be reasonably quick using the caches generated above.
     //
     int    delta = 100;
-    int    ii = done;
+    int    ii = static_cast<int>( toCache.size() );
 
     auto checkTextOnEdgeCuts =
             [&]( BOARD_ITEM* item )

@@ -22,10 +22,9 @@
  */
 
 #include <common.h>
-#include <atomic>
-#include <thread>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <thread_pool.h>
 #include <zone.h>
 
 #include <drc/drc_engine.h>
@@ -149,58 +148,60 @@ bool DRC_CACHE_GENERATOR::Run()
 
     // Cache zone bounding boxes, triangulation, copper zone rtrees, and footprint courtyards
     // before we start.
-    //
+
+    m_drcEngine->SetMaxProgress( allZones.size() );
+
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        footprint->BuildPolyCourtyards();
-
-    count = allZones.size();
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 0 );
-    std::atomic<size_t> threads_finished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-    for( ii = 0; ii < parallelThreadCount; ++ii )
     {
-        std::thread t = std::thread(
-                [ this, &allZones, &done, &threads_finished, &next, count ]( )
-                {
-                    for( size_t i = next.fetch_add( 1 ); i < count; i = next.fetch_add( 1 ) )
-                    {
-                        ZONE* zone = allZones[ i ];
+        for( ZONE* zone : footprint->Zones() )
+            allZones.push_back( zone );
 
-                        zone->CacheBoundingBox();
-                        zone->CacheTriangulation();
-
-                        if( !zone->GetIsRuleArea() && zone->IsOnCopperLayer() )
-                        {
-                            std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
-
-                            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-                            {
-                                if( IsCopperLayer( layer ) )
-                                    rtree->Insert( zone, layer );
-                            }
-
-                            std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
-                            m_board->m_CopperZoneRTreeCache[ zone ] = std::move( rtree );
-                        }
-
-                        if( m_drcEngine->IsCancelled() )
-                            break;
-
-                        done.fetch_add( 1 );
-                    }
-
-                    threads_finished.fetch_add( 1 );
-                } );
-
-        t.detach();
+        footprint->BuildPolyCourtyards();
     }
 
-    while( threads_finished < parallelThreadCount )
+    thread_pool&                     tp = GetKiCadThreadPool();
+    std::vector<std::future<size_t>> returns;
+
+    returns.reserve( allZones.size() );
+
+    auto cache_zones = [this]( ZONE* aZone ) -> size_t
+            {
+                if( m_drcEngine->IsCancelled() )
+                    return 0;
+
+                aZone->CacheBoundingBox();
+                aZone->CacheTriangulation();
+
+                if( !aZone->GetIsRuleArea() && aZone->IsOnCopperLayer() )
+                {
+                   std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
+
+                   for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
+                   {
+                       if( IsCopperLayer( layer ) )
+                           rtree->Insert( aZone, layer );
+                   }
+
+                   std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
+                   m_board->m_CopperZoneRTreeCache[ aZone ] = std::move( rtree );
+                   m_drcEngine->AdvanceProgress();
+                }
+
+                return 1;
+            };
+
+    for( ZONE* zone : allZones )
+        returns.emplace_back( tp.submit( cache_zones, zone ) );
+
+    for( auto& retval : returns )
     {
-        reportProgress( done, count, 1 );
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        std::future_status status;
+
+        do
+        {
+            m_drcEngine->KeepRefreshing();
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
 
     return !m_drcEngine->IsCancelled();

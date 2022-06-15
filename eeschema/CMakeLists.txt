@@ -396,7 +396,7 @@ target_link_libraries( eeschema
     common
     ${wxWidgets_LIBRARIES}
     )
-
+    
 # the main Eeschema program, in DSO form.
 add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_SRCS}
@@ -406,12 +406,14 @@ add_library( eeschema_kiface_objects OBJECT
 target_include_directories( eeschema_kiface_objects
     PUBLIC
         .
-        netlist_exporters )
+        netlist_exporters
+        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+     )
 
 target_link_libraries( eeschema_kiface_objects
     PUBLIC
         common )
-
+    
 # Since we're not using target_link_libraries, we need to explicitly
 # declare the dependency
 add_dependencies( eeschema_kiface_objects common )

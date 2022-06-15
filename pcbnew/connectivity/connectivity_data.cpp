@@ -27,7 +27,6 @@
 #include <profile.h>
 #endif
 
-#include <thread>
 #include <algorithm>
 #include <future>
 #include <initializer_list>
@@ -40,6 +39,7 @@
 #include <geometry/shape_circle.h>
 #include <ratsnest/ratsnest_data.h>
 #include <progress_reporter.h>
+#include <thread_pool.h>
 #include <trigo.h>
 #include <drc/drc_rtree.h>
 
@@ -169,35 +169,12 @@ void CONNECTIVITY_DATA::updateRatsnest()
                 return aNet->IsDirty() && aNet->GetNodeCount() > 0;
             } );
 
-    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                                                   ( dirty_nets.size() + 7 ) / 8 );
-
-    std::atomic<size_t> nextNet( 0 );
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
-
-    auto update_lambda =
-            [this, &nextNet, &dirty_nets]() -> size_t
+    GetKiCadThreadPool().parallelize_loop( 0, dirty_nets.size(),
+            [&]( const int a, const int b)
             {
-                for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
-                    dirty_nets[i]->Update( m_exclusions );
-
-                return 1;
-            };
-
-    if( parallelThreadCount <= 1 )
-    {
-        update_lambda();
-    }
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, update_lambda );
-
-        // Finalize the ratsnest threads
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii].wait();
-    }
+                for( int ii = a; ii < b; ++ii )
+                    dirty_nets[ii]->Update( m_exclusions );
+            }).wait();
 
 #ifdef PROFILE
     rnUpdate.Show();

@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <atomic>
-#include <thread>
 #include <board.h>
 #include <board_design_settings.h>
 #include <connectivity/connectivity_data.h>
@@ -30,6 +28,8 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <thread_pool.h>
+
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <drc/drc_rule.h>
@@ -193,36 +193,33 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
             zoneLayers.push_back( { zone, layer } );
     }
 
-    int                 zoneLayerCount = zoneLayers.size();
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 1 );
-    std::atomic<size_t> threads_finished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    thread_pool& tp = GetKiCadThreadPool();
+    std::vector<std::future<int>> returns;
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    returns.reserve( zoneLayers.size() );
+
+    for( auto& zonelayer : zoneLayers )
     {
-        std::thread t = std::thread(
-                [&]( )
+        returns.emplace_back( tp.submit([&]( ZONE* aZone, PCB_LAYER_ID aLayer ) -> int
                 {
-                    for( int i = next.fetch_add( 1 ); i < zoneLayerCount; i = next.fetch_add( 1 ) )
+                    if( !m_drcEngine->IsCancelled() )
                     {
-                        testZoneLayer( zoneLayers[i].first, zoneLayers[i].second );
-                        done.fetch_add( 1 );
-
-                        if( m_drcEngine->IsCancelled() )
-                            break;
+                        testZoneLayer( aZone, aLayer );
+                        m_drcEngine->AdvanceProgress();
                     }
-
-                    threads_finished.fetch_add( 1 );
-                } );
-
-        t.detach();
+                    return 0;
+                }, zonelayer.first, zonelayer.second ) );
     }
 
-    while( threads_finished < parallelThreadCount )
+    for( auto& retval : returns )
     {
-        m_drcEngine->ReportProgress( (double) done / (double) zoneLayerCount );
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+        std::future_status status;
+
+        do
+        {
+            m_drcEngine->KeepRefreshing();
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
     }
 
     return !m_drcEngine->IsCancelled();
