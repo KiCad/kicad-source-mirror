@@ -67,6 +67,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintWizard(),
           m_Display(),
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
+          m_CtrlClickHighlight( false ),
           m_Use45DegreeLimit( false ),
           m_FlipLeftRight( false ),
           m_PolarCoords( false ),
@@ -123,6 +124,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "editing.track_drag_action",
             reinterpret_cast<int*>( &m_TrackDragAction ),
             static_cast<int>( TRACK_DRAG_ACTION::DRAG ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.ctrl_click_highlight",
+            &m_CtrlClickHighlight, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.pcb_use_45_degree_limit",
             &m_Use45DegreeLimit, false ) );

@@ -657,6 +657,13 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
 }
 
 
+bool PCB_SELECTION_TOOL::ctrlClickHighlights()
+{
+    return m_frame && m_frame->Settings().m_CtrlClickHighlight
+           && !m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
+}
+
+
 bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
                                       bool* aSelectionCancelledFlag,
                                       CLIENT_SELECTION_FILTER aClientFilter )

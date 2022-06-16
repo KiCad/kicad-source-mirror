@@ -46,8 +46,17 @@ void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool 
 
     m_subtractive        = aCtrlState && aShiftState;
     m_additive           = !aCtrlState && aShiftState;
-    m_exclusive_or       = false;
-    m_highlight_modifier = aCtrlState && !aShiftState;
+
+    if( ctrlClickHighlights() )
+    {
+        m_exclusive_or = false;
+        m_highlight_modifier = aCtrlState && !aShiftState;
+    }
+    else
+    {
+        m_exclusive_or = aCtrlState && !aShiftState;
+        m_highlight_modifier = false;
+    }
 
     // Drag is more forgiving and allows either Ctrl+Drag or Shift+Drag to add to the selection
     // Note, however that we cannot provide disambiguation at the same time as the box selection

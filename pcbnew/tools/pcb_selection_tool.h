@@ -217,6 +217,9 @@ public:
     ///< Apply the SELECTION_FILTER_OPTIONS to a collection of items
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
 
+protected:
+    virtual bool ctrlClickHighlights() override;
+
 private:
 
     /**

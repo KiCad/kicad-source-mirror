@@ -326,6 +326,8 @@ public:
 
     TRACK_DRAG_ACTION m_TrackDragAction;
 
+    bool m_CtrlClickHighlight;
+
     bool m_Use45DegreeLimit;            // True to constrain tool actions to horizontal,
                                         // vertical and 45deg
     bool m_FlipLeftRight;               // True: Flip footprints across Y axis

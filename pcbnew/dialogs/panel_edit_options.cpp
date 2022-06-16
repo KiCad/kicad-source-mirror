@@ -47,9 +47,13 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnit
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
     m_mouseCmdsWinLin->Show( false );
+    // Disable highlight net option for footprint editor
+    m_rbCtrlClickActionMac->Enable( 1, !m_isFootprintEditor );
 #else
     m_mouseCmdsWinLin->Show( true );
     m_mouseCmdsOSX->Show( false );
+    // Disable highlight net option for footprint editor
+    m_rbCtrlClickAction->Enable( 1, !m_isFootprintEditor );
 #endif
 
     m_optionsBook->SetSelection( isFootprintEditor ? 0 : 1 );
@@ -75,6 +79,12 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
     case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
     }
+
+#ifdef __WXOSX_MAC__
+    m_rbCtrlClickActionMac->SetSelection( aCfg->m_CtrlClickHighlight );
+#else
+    m_rbCtrlClickAction->SetSelection( aCfg->m_CtrlClickHighlight );
+#endif
 
     m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
@@ -152,6 +162,12 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
             cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
         else if( m_rbTrackDragFree->GetValue() )
             cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+
+#ifdef __WXOSX_MAC__
+        cfg->m_CtrlClickHighlight = m_rbCtrlClickActionMac->GetSelection();
+#else
+        cfg->m_CtrlClickHighlight = m_rbCtrlClickAction->GetSelection();
+#endif
 
         cfg->m_Use45DegreeLimit = m_cbPcbGraphic45Mode->GetValue();
     }

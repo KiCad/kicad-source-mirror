@@ -43,6 +43,11 @@ protected:
      */
     void setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState );
 
+    /**
+     * Determines if ctrl-click is highlight net or XOR selection.
+     */
+    virtual bool ctrlClickHighlights() { return false; }
+
     bool            m_additive;          // Items should be added to sel (instead of replacing)
     bool            m_subtractive;       // Items should be removed from sel
     bool            m_exclusive_or;      // Items' selection state should be toggled

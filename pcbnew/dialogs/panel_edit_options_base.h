@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,6 +22,7 @@
 #include <wx/textctrl.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
+#include <wx/radiobox.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/radiobut.h>
@@ -46,8 +47,10 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_allowFreePads;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
+		wxRadioBox* m_rbCtrlClickAction;
 		wxStaticBoxSizer* m_mouseCmdsOSX;
 		wxStaticText* m_staticText1811;
+		wxRadioBox* m_rbCtrlClickActionMac;
 		wxSimplebook* m_optionsBook;
 		wxCheckBox* m_cbFpGraphic45Mode;
 		wxStaticText* m_staticText2;
@@ -69,6 +72,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_EDIT_OPTIONS_BASE();
 
 };

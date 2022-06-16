@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -138,10 +138,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText161->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText161, 0, wxALL, 5 );
 
-	wxStaticText* staticText171;
-	staticText171 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText171->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText171, 0, wxALL, 5 );
+	wxString m_rbCtrlClickActionChoices[] = { _("Toggle selection."), _("Highlight net (for pads or tracks).") };
+	int m_rbCtrlClickActionNChoices = sizeof( m_rbCtrlClickActionChoices ) / sizeof( wxString );
+	m_rbCtrlClickAction = new wxRadioBox( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Action"), wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionNChoices, m_rbCtrlClickActionChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCtrlClickAction->SetSelection( 0 );
+	fgSizerCmdsWinLin->Add( m_rbCtrlClickAction, 0, wxALL, 5 );
 
 
 	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND, 5 );
@@ -209,10 +210,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText142->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText142, 0, wxALL, 5 );
 
-	wxStaticText* staticText152;
-	staticText152 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText152->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText152, 0, wxALL, 5 );
+	wxString m_rbCtrlClickActionMacChoices[] = { _("Toggle selection."), _("Highlight net (for pads or tracks).") };
+	int m_rbCtrlClickActionMacNChoices = sizeof( m_rbCtrlClickActionMacChoices ) / sizeof( wxString );
+	m_rbCtrlClickActionMac = new wxRadioBox( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Action"), wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionMacNChoices, m_rbCtrlClickActionMacChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCtrlClickActionMac->SetSelection( 0 );
+	fgSizerCmdsOSX->Add( m_rbCtrlClickActionMac, 0, wxALL, 5 );
 
 	wxStaticText* staticText102;
 	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Option"), wxDefaultPosition, wxDefaultSize, 0 );
