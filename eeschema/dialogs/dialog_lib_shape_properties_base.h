@@ -22,8 +22,10 @@ class COLOR_SWATCH;
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/radiobut.h>
+#include <wx/panel.h>
+#include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
+#include <wx/radiobut.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -54,15 +56,20 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		};
 
 		wxCheckBox* m_checkBorder;
-		wxStaticText* m_widthLabel;
-		wxTextCtrl* m_widthCtrl;
-		wxStaticText* m_widthUnits;
+		wxStaticText* m_borderWidthLabel;
+		wxTextCtrl* m_borderWidthCtrl;
+		wxStaticText* m_borderWidthUnits;
+		wxStaticText* m_borderColorLabel;
+		wxPanel* m_panelBorderColor;
+		COLOR_SWATCH* m_borderColorSwatch;
+		wxStaticText* m_borderStyleLabel;
+		wxBitmapComboBox* m_borderStyleCombo;
 		wxStaticText* m_helpLabel;
 		wxRadioButton* m_rbFillNone;
 		wxRadioButton* m_rbFillOutline;
 		wxRadioButton* m_rbFillBackground;
 		wxRadioButton* m_rbFillCustom;
-		COLOR_SWATCH* m_colorSwatch;
+		COLOR_SWATCH* m_fillColorSwatch;
 		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;

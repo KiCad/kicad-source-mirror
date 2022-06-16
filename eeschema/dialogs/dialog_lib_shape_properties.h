@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #define DIALOG_LIB_SHAPE_PROPERTIES_H
 
 
-class LIB_ITEM;
+class LIB_SHAPE;
 class SYMBOL_EDIT_FRAME;
 
 
@@ -40,7 +40,8 @@ class DIALOG_LIB_SHAPE_PROPERTIES : public DIALOG_LIB_SHAPE_PROPERTIES_BASE
 {
 public:
     /** Constructor */
-    DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_ITEM* aItem );
+    DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_SHAPE* aShape );
+    ~DIALOG_LIB_SHAPE_PROPERTIES();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -49,14 +50,15 @@ public:
     bool GetApplyToAllUnits();
 
 private:
-    void onFill(wxCommandEvent &event) override;
-    void onBorderChecked( wxCommandEvent& event ) override;
-    void onSwatch( wxCommandEvent& aEvent );
+    void onBorderChecked( wxCommandEvent& aEvent ) override;
+    void onBorderSwatch( wxCommandEvent& aEvent );
+    void onFill(wxCommandEvent &aEvent) override;
+    void onFillSwatch( wxCommandEvent& aEvent );
 
 private:
     SYMBOL_EDIT_FRAME* m_frame;
-    LIB_ITEM*          m_item;
-    UNIT_BINDER        m_lineWidth;
+    LIB_SHAPE*         m_shape;
+    UNIT_BINDER        m_borderWidth;
 };
 
 #endif // DIALOG_LIB_SHAPE_PROPERTIES_H

@@ -64,7 +64,7 @@ public:
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
-    void editShapeProperties( LIB_ITEM* aItem );
+    void editShapeProperties( LIB_SHAPE* aShape );
     void editTextProperties( LIB_ITEM* aItem );
     void editTextBoxProperties( LIB_ITEM* aItem );
     void editFieldProperties( LIB_FIELD* aField );
