@@ -783,11 +783,18 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {
         int override_val = 0;
-        wxString msg;
+        int overrideA = 0;
+        int overrideB = 0;
 
         if( ac && !b_is_non_copper )
+            overrideA = ac->GetLocalClearanceOverrides( nullptr );
+
+        if( bc && !a_is_non_copper )
+            overrideB = bc->GetLocalClearanceOverrides( nullptr );
+
+        if( overrideA > 0 || overrideB > 0 )
         {
-            int overrideA = ac->GetLocalClearanceOverrides( nullptr );
+            wxString msg;
 
             if( overrideA > 0 )
             {
@@ -798,11 +805,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 override_val = ac->GetLocalClearanceOverrides( &msg );
             }
-        }
-
-        if( bc && !a_is_non_copper )
-        {
-            int overrideB = bc->GetLocalClearanceOverrides( nullptr );
 
             if( overrideB > 0 )
             {
@@ -814,38 +816,38 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 if( overrideB > override_val )
                     override_val = bc->GetLocalClearanceOverrides( &msg );
             }
-        }
 
-        if( override_val )
-        {
-            if( aConstraintType == CLEARANCE_CONSTRAINT )
+            if( override_val )
             {
-                if( override_val < m_designSettings->m_MinClearance )
+                if( aConstraintType == CLEARANCE_CONSTRAINT )
                 {
-                    override_val = m_designSettings->m_MinClearance;
-                    msg = _( "board minimum" );
+                    if( override_val < m_designSettings->m_MinClearance )
+                    {
+                        override_val = m_designSettings->m_MinClearance;
+                        msg = _( "board minimum" );
 
-                    REPORT( "" )
-                    REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                              REPORT_VALUE( override_val ) ) )
+                        REPORT( "" )
+                        REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                                  REPORT_VALUE( override_val ) ) )
+                    }
                 }
-            }
-            else
-            {
-                if( override_val < m_designSettings->m_HoleClearance )
+                else
                 {
-                    override_val = m_designSettings->m_HoleClearance;
-                    msg = _( "board minimum hole" );
+                    if( override_val < m_designSettings->m_HoleClearance )
+                    {
+                        override_val = m_designSettings->m_HoleClearance;
+                        msg = _( "board minimum hole" );
 
-                    REPORT( "" )
-                    REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
-                                              REPORT_VALUE( override_val ) ) )
+                        REPORT( "" )
+                        REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
+                                                  REPORT_VALUE( override_val ) ) )
+                    }
                 }
-            }
 
-            constraint.SetName( msg );
-            constraint.m_Value.SetMin( override_val );
-            return constraint;
+                constraint.SetName( msg );
+                constraint.m_Value.SetMin( override_val );
+                return constraint;
+            }
         }
     }
 
@@ -880,10 +882,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         wxString min = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
                         wxString opt = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
                         wxString max = wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-                        wxString msg;
 
                         if( implicit )
                         {
+                            wxString msg;
                             opt = StringFromValue( UNITS, c->constraint.m_Value.Opt(), true );
 
                             switch( c->constraint.m_Type )
