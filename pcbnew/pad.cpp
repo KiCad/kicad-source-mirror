@@ -209,10 +209,11 @@ PCB_LAYER_ID PAD::GetLayer() const
 
 PCB_LAYER_ID PAD::GetPrincipalLayer() const
 {
-    if( m_attribute == PAD_ATTRIB::SMD || m_attribute == PAD_ATTRIB::CONN )
+    if( m_attribute == PAD_ATTRIB::SMD || m_attribute == PAD_ATTRIB::CONN || GetLayerSet().none() )
         return m_layer;
     else
         return GetLayerSet().Seq().front();
+
 }
 
 
