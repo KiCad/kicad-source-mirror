@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-05-20 14:23+0000\n"
+"PO-Revision-Date: 2022-06-17 08:17+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4031,9 +4031,8 @@ msgid "Schematic Editor"
 msgstr "Editor d'esquemes"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Anotacions"
+msgstr "Opcions d'anotació"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -5559,9 +5558,8 @@ msgid "Locked item shadow"
 msgstr "Ombra de l'element bloquejat"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Etiquetes en conflicte"
+msgstr "Ombres de les etiquetes en conflicte"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -30782,14 +30780,14 @@ msgid "Checking %s max uncoupled length: %s."
 msgstr "S'està verificant la longitud màxima desacoblada de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:925
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "S'està comprovant %s %s: %s."
+msgstr "S'està comprovant l'inclinació màxima de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:931
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "S'està comprovant %s %s: %s."
+msgstr "S'està comprovant el marge de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:937
 #, fuzzy, c-format
