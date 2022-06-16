@@ -34,16 +34,9 @@ const int pcbCalculatorSchemaVersion = 0;
 
 
 PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
-        APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion ),
-        m_Attenuators(),
-        m_BoardClassUnits( 0 ),
-        m_ColorCodeTolerance( 0 ),
-        m_Electrical(),
-        m_LastPage( 0 ),
-        m_Regulators(),
-        m_TrackWidth(),
-        m_TransLine(),
-        m_ViaSize()
+        APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion ), m_Attenuators(),
+        m_BoardClassUnits( 0 ), m_ColorCodeTolerance( 0 ), m_Electrical(), m_LastPage( 0 ),
+        m_Regulators(), m_cableSize(), m_TrackWidth(), m_TransLine(), m_ViaSize()
 {
     // Build settings:
     m_params.emplace_back( new PARAM<int>( "board_class_units", &m_BoardClassUnits, 0 ) );
@@ -93,6 +86,16 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "cable_size.diameterUnit", &m_cableSize.diameterUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "cable_size.linResUnit", &m_cableSize.linResUnit, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "cable_size.frequencyUnit", &m_cableSize.frequencyUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "cable_size.lengthUnit", &m_cableSize.lengthUnit, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "track_width.current",
             &m_TrackWidth.current, "1.0" ) );

@@ -129,5 +129,35 @@ public:
     double GetUnitScale() override;
 };
 
+class UNIT_SELECTOR_LINEAR_RESISTANCE : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_LINEAR_RESISTANCE( wxWindow *parent, wxWindowID id,
+                  const wxPoint& pos, const wxSize& size,
+                  const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( ohm/m )
+     */
+    double GetUnitScale() override;
+};
+
+class UNIT_SELECTOR_LEN_CABLE : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_LEN_CABLE( wxWindow *parent, wxWindowID id,
+                  const wxPoint& pos, const wxSize& size,
+                  const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( ohm/m )
+     */
+    double GetUnitScale() override;
+};
+
 #endif  // UNIT_SELECTOR_H
 

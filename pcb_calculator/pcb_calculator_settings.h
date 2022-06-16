@@ -62,6 +62,14 @@ public:
         int last_param;
     };
 
+    struct CABLE_SIZE
+    {
+        int diameterUnit;
+        int linResUnit;
+        int frequencyUnit;
+        int lengthUnit;
+    };
+
     struct TRACK_WIDTH
     {
         wxString current;
@@ -138,6 +146,8 @@ public:
     int m_LastPage;
 
     REGULATORS m_Regulators;
+
+    CABLE_SIZE m_cableSize;
 
     TRACK_WIDTH m_TrackWidth;
 

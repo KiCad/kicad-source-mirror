@@ -18,6 +18,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_attenuators_base.cpp
     calculator_panels/panel_board_class.cpp
     calculator_panels/panel_board_class_base.cpp
+    calculator_panels/panel_cable_size.cpp
+    calculator_panels/panel_cable_size_base.cpp
     calculator_panels/panel_color_code.cpp
     calculator_panels/panel_color_code_base.cpp
     calculator_panels/panel_electrical_spacing.cpp
