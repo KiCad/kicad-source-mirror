@@ -221,11 +221,6 @@ public:
     bool m_AllowManualCanvasScale;
 
     /**
-     * Allows creating / deleting teardrops
-     */
-    bool m_AllowTeardrops;
-
-    /**
      * 3D-Viewer, Raytracing
      * Bevel height of layer items. Controls the start of curvature normal on the edge.
      * Value is in micrometre. Good values should be arround or less than the copper thickness.

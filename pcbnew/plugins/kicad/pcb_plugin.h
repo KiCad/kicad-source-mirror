@@ -121,7 +121,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20220308  // Knockout text and Locked graphic text property saved
 //#define SEXPR_BOARD_FILE_VERSION    20220331  // Plot on all layers selection setting
 //#define SEXPR_BOARD_FILE_VERSION    20220417  // Automatic dimension precisions
-#define SEXPR_BOARD_FILE_VERSION      20220427  // Exclude Edge.Cuts & Margin from fp private layers
+//#define SEXPR_BOARD_FILE_VERSION    20220427  // Exclude Edge.Cuts & Margin from fp private layers
+#define SEXPR_BOARD_FILE_VERSION      20220609  // Add teardrop keywords to identify teardrop zones
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

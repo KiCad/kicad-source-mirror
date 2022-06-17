@@ -318,7 +318,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
 
-    m_AllowTeardrops            = false;
     m_ShowRepairSchematic       = false;
 
     m_3DRT_BevelHeight_um       = 30;
@@ -452,9 +451,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
                                                 &m_AllowManualCanvasScale, m_AllowManualCanvasScale ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowTeardrops,
-                                                &m_AllowTeardrops, m_AllowTeardrops ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::V3DRT_BevelHeight_um,
                                                &m_3DRT_BevelHeight_um, m_3DRT_BevelHeight_um,
