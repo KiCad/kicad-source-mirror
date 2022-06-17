@@ -50,7 +50,8 @@ class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
     DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            m_largestEdgeClearance( 0 )
     {
     }
 
@@ -76,6 +77,7 @@ private:
 
 private:
     std::vector<PAD*> m_castellatedPads;
+    int               m_largestEdgeClearance;
 };
 
 
@@ -160,9 +162,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     DRC_CONSTRAINT worstClearanceConstraint;
 
     if( m_drcEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
-        m_largestClearance = worstClearanceConstraint.GetValue().Min();
+        m_largestEdgeClearance = worstClearanceConstraint.GetValue().Min();
 
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestEdgeClearance );
 
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;
     DRC_RTREE                               edgesTree;
@@ -222,7 +224,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         for( PCB_LAYER_ID layer : { Edge_Cuts, Margin } )
         {
             if( edge->IsOnLayer( layer ) )
-                edgesTree.Insert( edge.get(), layer, m_largestClearance );
+                edgesTree.Insert( edge.get(), layer, m_largestEdgeClearance );
         }
     }
 
@@ -231,7 +233,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                edgesTree.Insert( pad, Edge_Cuts, m_largestClearance );
+                edgesTree.Insert( pad, Edge_Cuts, m_largestEdgeClearance );
 
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
                 m_castellatedPads.push_back( pad );
@@ -278,25 +280,25 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     if( testCopper && item->IsOnCopperLayer() )
                     {
                         edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                                [&]( BOARD_ITEM* edge ) -> bool
+                                                  [&]( BOARD_ITEM* edge ) -> bool
                                 {
                                     return testAgainstEdge( item, itemShape.get(), edge,
                                                             EDGE_CLEARANCE_CONSTRAINT,
                                                             DRCE_EDGE_CLEARANCE );
                                 },
-                                m_largestClearance );
+                                                  m_largestEdgeClearance );
                     }
 
                     if( testSilk && ( item->IsOnLayer( F_SilkS ) || item->IsOnLayer( B_SilkS ) ) )
                     {
                         if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                                [&]( BOARD_ITEM* edge ) -> bool
+                                                      [&]( BOARD_ITEM* edge ) -> bool
                                 {
                                     return testAgainstEdge( item, itemShape.get(), edge,
                                                             SILK_CLEARANCE_CONSTRAINT,
                                                             DRCE_SILK_EDGE_CLEARANCE );
                                 },
-                                m_largestClearance ) )
+                                                      m_largestEdgeClearance ) )
                         {
                             // violations reported during QueryColliding
                         }

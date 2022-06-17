@@ -74,8 +74,18 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 // Do not wrap internal-only structures
 %ignore BOARD::m_CachesMutex;
 %ignore BOARD::m_InsideCourtyardCache;
+%ignore BOARD::m_InsideFCourtyardCache;
+%ignore BOARD::m_InsideBCourtyardCache;
 %ignore BOARD::m_InsideAreaCache;
-%ignore BOARD::m_CopperZoneRTrees;
+%ignore BOARD::m_LayerExpressionCache;
+%ignore BOARD::m_CopperZoneRTreeCache;
+%ignore BOARD::m_CopperItemRTreeCache;
+%ignore BOARD::m_DRCZones;
+%ignore BOARD::m_DRCCopperZones;
+%ignore BOARD::m_DRCMaxClearance;
+%ignore BOARD::m_DRCMaxPhysicalClearance;
+%ignore BOARD::m_SolderMask;
+
 
 %include board.h
 %{

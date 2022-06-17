@@ -77,7 +77,9 @@ using namespace std::placeholders;
 class DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE()
+    DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE() :
+        DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+        m_largestCourtyardClearance( 0 )
     {
         m_isRuleDriven = false;
     }
@@ -108,6 +110,9 @@ public:
 
 private:
     void testCourtyardClearances();
+
+private:
+    int m_largestCourtyardClearance;
 };
 
 
@@ -129,8 +134,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
         BOX2I frontBBox = frontA.BBoxFromCaches();
         BOX2I backBBox = backA.BBoxFromCaches();
 
-        frontBBox.Inflate( m_largestClearance );
-        backBBox.Inflate( m_largestClearance );
+        frontBBox.Inflate( m_largestCourtyardClearance );
+        backBBox.Inflate( m_largestCourtyardClearance );
 
         EDA_RECT fpABBox = fpA->GetBoundingBox();
 
@@ -256,15 +261,12 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Init( BOARD* aBoard )
 bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Run()
 {
     m_FpInConflict.clear();
-    m_largestClearance = 0;
+    m_largestCourtyardClearance = 0;
 
-    // Currently, do not use DRC engine for calculation time reasons
-#if 0
     DRC_CONSTRAINT constraint;
 
     if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
-        m_largestClearance = constraint.GetValue().Min();
-#endif
+        m_largestCourtyardClearance = constraint.GetValue().Min();
 
     testCourtyardClearances();
 

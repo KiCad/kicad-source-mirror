@@ -547,7 +547,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
         if( !zone->IsFilled() )
             return false;
 
-        DRC_RTREE* zoneRTree = board->m_CopperZoneRTrees[ zone ].get();
+        DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ zone ].get();
 
         if( zoneRTree )
         {

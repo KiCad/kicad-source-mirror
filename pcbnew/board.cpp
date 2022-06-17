@@ -216,9 +216,14 @@ void BOARD::IncrementTimeStamp()
         m_InsideFCourtyardCache.clear();
         m_InsideBCourtyardCache.clear();
         m_LayerExpressionCache.clear();
-    }
 
-    m_CopperZoneRTrees.clear();
+        m_DRCMaxClearance = 0;
+        m_DRCMaxPhysicalClearance = 0;
+        m_DRCZones.clear();
+        m_DRCCopperZones.clear();
+        m_CopperZoneRTreeCache.clear();
+        m_CopperItemRTreeCache = std::make_unique<DRC_RTREE>();
+    }
 }
 
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()

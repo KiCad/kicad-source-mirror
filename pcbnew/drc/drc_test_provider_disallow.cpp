@@ -133,7 +133,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                             SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
                             areaPoly.Deflate( epsilon, 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
-                            DRC_RTREE* zoneRTree = board->m_CopperZoneRTrees[ copperZone ].get();
+                            DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
 
                             if( zoneRTree )
                             {

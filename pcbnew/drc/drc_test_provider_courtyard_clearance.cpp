@@ -43,7 +43,9 @@
 class DRC_TEST_PROVIDER_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_COURTYARD_CLEARANCE ()
+    DRC_TEST_PROVIDER_COURTYARD_CLEARANCE () :
+        DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+        m_largestCourtyardClearance( 0 )
     {
         m_isRuleDriven = false;
     }
@@ -68,6 +70,9 @@ private:
     bool testFootprintCourtyardDefinitions();
 
     bool testCourtyardClearances();
+
+private:
+    int  m_largestCourtyardClearance;
 };
 
 
@@ -177,8 +182,8 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
         BOX2I frontBBox = frontA.BBoxFromCaches();
         BOX2I backBBox = backA.BBoxFromCaches();
 
-        frontBBox.Inflate( m_largestClearance );
-        backBBox.Inflate( m_largestClearance );
+        frontBBox.Inflate( m_largestCourtyardClearance );
+        backBBox.Inflate( m_largestCourtyardClearance );
 
         EDA_RECT fpABBox = fpA->GetBoundingBox();
 
@@ -315,9 +320,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
     DRC_CONSTRAINT constraint;
 
     if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
-        m_largestClearance = constraint.GetValue().Min();
+        m_largestCourtyardClearance = constraint.GetValue().Min();
 
-    reportAux( wxT( "Worst courtyard clearance : %d nm" ), m_largestClearance );
+    reportAux( wxT( "Worst courtyard clearance : %d nm" ), m_largestCourtyardClearance );
 
     if( !testFootprintCourtyardDefinitions() )
         return false;

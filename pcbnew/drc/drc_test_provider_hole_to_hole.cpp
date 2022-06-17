@@ -45,8 +45,9 @@ class DRC_TEST_PROVIDER_HOLE_TO_HOLE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
     DRC_TEST_PROVIDER_HOLE_TO_HOLE () :
-        DRC_TEST_PROVIDER_CLEARANCE_BASE(),
-        m_board( nullptr )
+            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            m_board( nullptr ),
+            m_largestHoleToHoleClearance( 0 )
     {
     }
 
@@ -71,6 +72,7 @@ private:
 
     BOARD*    m_board;
     DRC_RTREE m_holeTree;
+    int       m_largestHoleToHoleClearance;
 };
 
 
@@ -106,8 +108,8 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
     if( m_drcEngine->QueryWorstConstraint( HOLE_TO_HOLE_CONSTRAINT, worstClearanceConstraint ) )
     {
-        m_largestClearance = worstClearanceConstraint.GetValue().Min();
-        reportAux( wxT( "Worst hole to hole : %d nm" ), m_largestClearance );
+        m_largestHoleToHoleClearance = worstClearanceConstraint.GetValue().Min();
+        reportAux( wxT( "Worst hole to hole : %d nm" ), m_largestHoleToHoleClearance );
     }
     else
     {
@@ -146,7 +148,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about drilled (ie: round) holes
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
-                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
+                        m_holeTree.Insert( item, F_Cu, m_largestHoleToHoleClearance );
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
@@ -154,7 +156,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about mechanically drilled (ie: non-laser) holes
                     if( via->GetViaType() == VIATYPE::THROUGH )
-                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
+                        m_holeTree.Insert( item, F_Cu, m_largestHoleToHoleClearance );
                 }
 
                 return true;
@@ -204,7 +206,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                     {
                         return testHoleAgainstHole( via, holeShape.get(), other );
                     },
-                    m_largestClearance );
+                    m_largestHoleToHoleClearance );
         }
     }
 
@@ -249,7 +251,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                         {
                             return testHoleAgainstHole( pad, holeShape.get(), other );
                         },
-                        m_largestClearance );
+                        m_largestHoleToHoleClearance );
             }
         }
 

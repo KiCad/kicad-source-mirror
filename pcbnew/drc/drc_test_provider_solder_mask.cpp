@@ -512,7 +512,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
         if( aItem->GetBoundingBox().Intersects( zone->GetCachedBoundingBox() ) )
         {
-            DRC_RTREE* zoneTree = m_board->m_CopperZoneRTrees[ zone ].get();
+            DRC_RTREE* zoneTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
             int        clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
             int        actual;
             VECTOR2I   pos;
@@ -659,7 +659,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
             m_largestClearance = std::max( m_largestClearance, pad->GetSolderMaskExpansion() );
     }
 
-    // Order is important here: m_webWidth must be added in before m_largestClearance is maxed
+    // Order is important here: m_webWidth must be added in before m_largestCourtyardClearance is maxed
     // with the various SILK_CLEARANCE_CONSTRAINTS.
     m_largestClearance += m_largestClearance + m_webWidth;
 

@@ -83,7 +83,6 @@ private:
 
 private:
     DRC_RTREE          m_itemTree;
-    std::vector<ZONE*> m_zones;
 };
 
 
@@ -91,56 +90,23 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
     m_itemTree.clear();
-    m_zones.clear();
-    m_zones.reserve( m_board->Zones().size() );
 
-    int            errorMax = m_board->GetDesignSettings().m_MaxError;
-    DRC_CONSTRAINT worstConstraint;
+    int errorMax = m_board->GetDesignSettings().m_MaxError;
 
-    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = worstConstraint.GetValue().Min();
-
-    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
-
-    if( m_largestClearance <= 0 )
+    if( m_board->m_DRCMaxPhysicalClearance <= 0 )
     {
-        reportAux( wxT( "No Clearance constraints found. Tests not run." ) );
+        reportAux( wxT( "No physical clearance constraints found. Tests not run." ) );
         return true;   // continue with other tests
     }
 
-    for( ZONE* zone : m_board->Zones() )
-    {
-        if( !zone->GetIsRuleArea() )
-        {
-            m_zones.push_back( zone );
-            m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
-        }
-    }
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
-            m_largestClearance = std::max( m_largestClearance, pad->GetLocalClearance() );
-
-        for( ZONE* zone : footprint->Zones() )
-        {
-            if( !zone->GetIsRuleArea() )
-            {
-                m_zones.push_back( zone );
-                m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
-            }
-        }
-    }
-
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
+    reportAux( wxT( "Largest physical clearance : %d nm" ), m_board->m_DRCMaxPhysicalClearance );
 
     // This is the number of tests between 2 calls to the progress bar
     size_t delta = 100;
     size_t count = 0;
     size_t ii = 0;
 
-    if( !reportPhase( _( "Gathering items..." ) ) )
+    if( !reportPhase( _( "Gathering physical items..." ) ) )
         return false;   // DRC cancelled
 
     static const std::vector<KICAD_T> itemTypes = {
@@ -194,7 +160,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 }
 
                 for( PCB_LAYER_ID layer : layers.Seq() )
-                    m_itemTree.Insert( item, layer, m_largestClearance );
+                    m_itemTree.Insert( item, layer, m_board->m_DRCMaxPhysicalClearance );
 
                 return true;
             } );
@@ -251,7 +217,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                     return testItemAgainstItem( item, itemShape.get(), layer,
                                                                 other );
                                 },
-                                m_largestClearance );
+                                m_board->m_DRCMaxPhysicalClearance );
 
                         testItemAgainstZones( item, layer );
                     }
@@ -391,6 +357,9 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
     int    count = aOutline.SegmentCount();
     int    clearance = aConstraint.GetValue().Min();
 
+    if( aConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance - epsilon <= 0 )
+        return;
+
     // Trigonometry is not cheap; cache seg angles
     std::vector<double> angles;
     angles.reserve( count );
@@ -508,17 +477,21 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
         wxString msg;
+        VECTOR2I pt = collision.first;
 
-        msg.Printf( _( "(%s clearance %s; actual %s)" ),
+        if( aParentItem->GetParentFootprint() )
+            pt += aParentItem->GetParentFootprint()->GetPosition();
+
+        msg.Printf( _( "Internal clearance violation (%s clearance %s; actual %s)" ),
                       aConstraint.GetName(),
                       MessageTextFromValue( userUnits(), clearance ),
                       MessageTextFromValue( userUnits(), collision.second ) );
 
-        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+        drce->SetErrorMessage( msg );
         drce->SetItems( aParentItem );
         drce->SetViolatingRule( aConstraint.GetParentRule() );
 
-        reportViolation( drce, collision.first, aLayer );
+        reportViolation( drce, pt, aLayer );
     }
 }
 
@@ -526,12 +499,13 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
 void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer,
                                                           DRC_CONSTRAINT& aConstraint )
 {
-    int            epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
-    int            clearance = aConstraint.GetValue().Min();
-    SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer )->CloneDropTriangulation();
+    int epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    int clearance = aConstraint.GetValue().Min();
 
     if( aConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance - epsilon <= 0 )
         return;
+
+    SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer )->CloneDropTriangulation();
 
     // Turn fractured fill into outlines and holes
     fill.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -717,7 +691,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* item
 void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
                                                                  PCB_LAYER_ID aLayer )
 {
-    for( ZONE* zone : m_zones )
+    for( ZONE* zone : m_board->m_DRCZones )
     {
         if( !zone->GetLayerSet().test( aLayer ) )
             continue;
@@ -730,7 +704,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
             if( !testClearance && !testHoles )
                 return;
 
-            DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTrees[ zone ].get();
+            DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
             EDA_RECT       itemBBox = aItem->GetBoundingBox();
             DRC_CONSTRAINT constraint;
             bool           colliding;

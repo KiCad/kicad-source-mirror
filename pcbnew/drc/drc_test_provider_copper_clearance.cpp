@@ -93,115 +93,21 @@ private:
     void testItemAgainstZone( BOARD_ITEM* aItem, ZONE* aZone, PCB_LAYER_ID aLayer );
 
 private:
-    DRC_RTREE          m_copperTree;
-    int                m_drcEpsilon;
-
-    std::vector<ZONE*> m_copperZones;
+    int m_drcEpsilon;
 };
 
 
 bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
-    DRC_CONSTRAINT worstConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = worstConstraint.GetValue().Min();
-
-    if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
-
-    if( m_largestClearance <= 0 )
+    if( m_board->m_DRCMaxClearance <= 0 )
     {
         reportAux( wxT( "No Clearance constraints found. Tests not run." ) );
         return true;   // continue with other tests
     }
 
     m_drcEpsilon = m_board->GetDesignSettings().GetDRCEpsilon();
-
-    m_copperZones.clear();
-
-    for( ZONE* zone : m_board->Zones() )
-    {
-        if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
-        {
-            m_copperZones.push_back( zone );
-            m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
-        }
-    }
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
-            m_largestClearance = std::max( m_largestClearance, pad->GetLocalClearance() );
-
-        for( ZONE* zone : footprint->Zones() )
-        {
-            if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
-            {
-                m_copperZones.push_back( zone );
-                m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
-            }
-        }
-    }
-
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
-
-    // This is the number of tests between 2 calls to the progress bar
-    size_t delta = 50;
-    size_t count = 0;
-    size_t ii = 0;
-
-    m_copperTree.clear();
-
-    auto countItems =
-            [&]( BOARD_ITEM* item ) -> bool
-            {
-                ++count;
-                return true;
-            };
-
-    auto addToCopperTree =
-            [&]( BOARD_ITEM* item ) -> bool
-            {
-                if( !reportProgress( ii++, count, delta ) )
-                    return false;
-
-                LSET layers = item->GetLayerSet();
-
-                // Special-case pad holes which pierce all the copper layers
-                if( item->Type() == PCB_PAD_T )
-                {
-                    PAD* pad = static_cast<PAD*>( item );
-
-                    if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                        layers |= LSET::AllCuMask();
-                }
-
-                for( PCB_LAYER_ID layer : layers.Seq() )
-                {
-                    if( IsCopperLayer( layer ) )
-                        m_copperTree.Insert( item, layer, m_largestClearance );
-                }
-
-                return true;
-            };
-
-    if( !reportPhase( _( "Gathering copper items..." ) ) )
-        return false;   // DRC cancelled
-
-    static const std::vector<KICAD_T> itemTypes = {
-        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
-        PCB_PAD_T,
-        PCB_SHAPE_T, PCB_FP_SHAPE_T,
-        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
-        PCB_DIMENSION_T
-    };
-
-    forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
-    forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
-
-    reportAux( wxT( "Testing %d copper items and %d zones..." ), count, m_copperZones.size() );
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
     {
@@ -399,7 +305,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     if( !testClearance && !testHoles )
         return;
 
-    DRC_RTREE*       zoneTree = m_board->m_CopperZoneRTrees[ aZone ].get();
+    DRC_RTREE*       zoneTree = m_board->m_CopperZoneRTreeCache[ aZone ].get();
     EDA_RECT         itemBBox = aItem->GetBoundingBox();
     DRC_CONSTRAINT   constraint;
     DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
@@ -538,7 +444,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
         {
             std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
-            m_copperTree.QueryColliding( track, layer, layer,
+            m_board->m_CopperItemRTreeCache->QueryColliding( track, layer, layer,
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
@@ -575,9 +481,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     {
                         return testTrackAgainstItem( track, trackShape.get(), layer, other );
                     },
-                    m_largestClearance );
+                    m_board->m_DRCMaxClearance );
 
-            for( ZONE* zone : m_copperZones )
+            for( ZONE* zone : m_board->m_DRCCopperZones )
             {
                 testItemAgainstZone( track, zone, layer );
 
@@ -819,7 +725,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
             {
                 std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
 
-                m_copperTree.QueryColliding( pad, layer, layer,
+                m_board->m_CopperItemRTreeCache->QueryColliding( pad, layer, layer,
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
@@ -846,9 +752,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                         {
                             return testPadAgainstItem( pad, padShape.get(), layer, other );
                         },
-                        m_largestClearance );
+                        m_board->m_DRCMaxClearance );
 
-                for( ZONE* zone : m_copperZones )
+                for( ZONE* zone : m_board->m_DRCCopperZones )
                 {
                     testItemAgainstZone( pad, zone, layer );
 
@@ -883,32 +789,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     {
         PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
         std::vector<SHAPE_POLY_SET> smoothed_polys;
-        smoothed_polys.resize( m_copperZones.size() );
+        smoothed_polys.resize( m_board->m_DRCCopperZones.size() );
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        for( size_t ii = 0; ii < m_copperZones.size(); ii++ )
+        for( size_t ii = 0; ii < m_board->m_DRCCopperZones.size(); ii++ )
         {
-            if( m_copperZones[ii]->IsOnLayer( layer ) )
-                m_copperZones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
+            if( m_board->m_DRCCopperZones[ii]->IsOnLayer( layer ) )
+            {
+                m_board->m_DRCCopperZones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer,
+                                                                  boardOutline );
+            }
         }
 
         // iterate through all areas
-        for( size_t ia = 0; ia < m_copperZones.size(); ia++ )
+        for( size_t ia = 0; ia < m_board->m_DRCCopperZones.size(); ia++ )
         {
-            if( !reportProgress( layer_id * m_copperZones.size() + ia, B_Cu * m_copperZones.size(), delta ) )
+            if( !reportProgress( layer_id * m_board->m_DRCCopperZones.size() + ia,
+                                 B_Cu * m_board->m_DRCCopperZones.size(), delta ) )
+            {
                 return;     // DRC cancelled
+            }
 
-            ZONE* zoneA = m_copperZones[ia];
+            ZONE* zoneA = m_board->m_DRCCopperZones[ia];
 
             if( !zoneA->IsOnLayer( layer ) )
                 continue;
 
-            for( size_t ia2 = ia + 1; ia2 < m_copperZones.size(); ia2++ )
+            for( size_t ia2 = ia + 1; ia2 < m_board->m_DRCCopperZones.size(); ia2++ )
             {
-                ZONE* zoneB = m_copperZones[ia2];
+                ZONE* zoneB = m_board->m_DRCCopperZones[ia2];
 
                 // test for same layer
                 if( !zoneB->IsOnLayer( layer ) )

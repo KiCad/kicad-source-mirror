@@ -24,32 +24,27 @@
  */
 
 
-#ifndef DRC_TEST_PROVIDER_CLEARANCE_BASE__H
-#define DRC_TEST_PROVIDER_CLEARANCE_BASE__H
+#ifndef DRC_CACHE_GENERATOR__H
+#define DRC_CACHE_GENERATOR__H
 
-#include <drc/drc_test_provider.h>
-
-class BOARD;
+#include <drc/drc_test_provider_clearance_base.h>
 
 
-class DRC_TEST_PROVIDER_CLEARANCE_BASE : public DRC_TEST_PROVIDER
+class DRC_CACHE_GENERATOR : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_CLEARANCE_BASE () :
-            DRC_TEST_PROVIDER(),
-            m_board( nullptr ),
-            m_boardOutlineValid( false )
+    DRC_CACHE_GENERATOR() :
+            DRC_TEST_PROVIDER_CLEARANCE_BASE()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_CLEARANCE_BASE()
+    virtual ~DRC_CACHE_GENERATOR()
     {
     }
 
-protected:
-    BOARD* m_board;
-    bool   m_boardOutlineValid;
+    virtual bool Run() override;
 };
 
 
-#endif // DRC_TEST_PROVIDER_CLEARANCE_BASE__H
+
+#endif // DRC_CACHE_GENERATOR__H

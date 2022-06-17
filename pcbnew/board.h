@@ -1077,10 +1077,15 @@ public:
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideBCourtyardCache;
     std::map< std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID>, bool > m_InsideAreaCache;
     std::map< wxString, LSET >                                           m_LayerExpressionCache;
+    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >                        m_CopperZoneRTreeCache;
+    std::unique_ptr<DRC_RTREE>                                           m_CopperItemRTreeCache;
 
-    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >                        m_CopperZoneRTrees;
-
-    ZONE*                                                                m_SolderMask;
+    // ------------ DRC caches -------------
+    std::vector<ZONE*>    m_DRCZones;
+    std::vector<ZONE*>    m_DRCCopperZones;
+    int                   m_DRCMaxClearance;
+    int                   m_DRCMaxPhysicalClearance;
+    ZONE*                 m_SolderMask;
 
 private:
     // The default copy constructor & operator= are inadequate,

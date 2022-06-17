@@ -36,6 +36,7 @@
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_item.h>
+#include <drc/drc_cache_generator.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -594,76 +595,14 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     DRC_TEST_PROVIDER::Init();
 
-    m_board->IncrementTimeStamp();      // Invalidate all caches
+    m_board->IncrementTimeStamp();      // Invalidate all caches...
 
-    if( !ReportPhase( _( "Tessellating copper zones..." ) ) )
+    DRC_CACHE_GENERATOR cacheGenerator;
+    cacheGenerator.SetDRCEngine( this );
+
+    if( !cacheGenerator.Run() )         // ... and regenerate them.
         return;
 
-    // Cache zone bounding boxes, triangulation, copper zone rtrees, and footprint courtyards
-    // before we start.
-    //
-    std::vector<ZONE*> allZones = m_board->Zones();
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        for( ZONE* zone : footprint->Zones() )
-            allZones.push_back( zone );
-
-        footprint->BuildPolyCourtyards();
-    }
-
-    size_t              count = allZones.size();
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 0 );
-    std::atomic<size_t> threads_finished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread(
-                [ this, &allZones, &done, &threads_finished, &next, count ]( )
-                {
-                    for( size_t i = next.fetch_add( 1 ); i < count; i = next.fetch_add( 1 ) )
-                    {
-                        ZONE* zone = allZones[ i ];
-
-                        zone->CacheBoundingBox();
-                        zone->CacheTriangulation();
-
-                        if( !zone->GetIsRuleArea() && zone->IsOnCopperLayer() )
-                        {
-                            std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
-
-                            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-                            {
-                                if( IsCopperLayer( layer ) )
-                                    rtree->Insert( zone, layer );
-                            }
-
-                            std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
-                            m_board->m_CopperZoneRTrees[ zone ] = std::move( rtree );
-                        }
-
-                        if( IsCancelled() )
-                            break;
-
-                        done.fetch_add( 1 );
-                    }
-
-                    threads_finished.fetch_add( 1 );
-                } );
-
-        t.detach();
-    }
-
-    while( threads_finished < parallelThreadCount )
-    {
-        ReportProgress( (double) done / (double) count );
-        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
-    }
-
-    // Now run the tests.
-    //
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
