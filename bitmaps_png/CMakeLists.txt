@@ -337,6 +337,9 @@ set( BMAPS_MID
     load_module_board
     lock_unlock
     locked
+    marker_exclude
+    marker_next
+    marker_previous
     measurement
     pcb_target
     mirror_h
