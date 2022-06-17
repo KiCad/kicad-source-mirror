@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
     SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
+    m_layer = LAYER_PIN;
     m_alt = wxEmptyString;
     m_number = aLibPin->GetNumber();
     m_libPin = aLibPin;
@@ -46,6 +47,7 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
 SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt ) :
     SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
+    m_layer = LAYER_PIN;
     m_alt = aAlt;
     m_number = aNumber;
     m_libPin = nullptr;
@@ -56,6 +58,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
 SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         SCH_ITEM( aPin )
 {
+    m_layer = aPin.m_layer;
     m_alt = aPin.m_alt;
     m_number = aPin.m_number;
     m_libPin = aPin.m_libPin;
