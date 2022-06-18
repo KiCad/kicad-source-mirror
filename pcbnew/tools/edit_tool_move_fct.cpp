@@ -47,6 +47,7 @@
 #include <tools/tool_event_utils.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
+#include <tools/drc_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
@@ -405,6 +406,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Used to test courtyard overlaps
     DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE drc_on_move;
     drc_on_move.Init( editFrame->GetBoard() );
+    drc_on_move.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
