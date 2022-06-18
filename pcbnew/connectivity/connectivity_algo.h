@@ -224,7 +224,8 @@ public:
      *
      * @param: aZones is the set of zones to search for islands.
      */
-    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
+    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
+                                    bool aConnectivityAlreadyRebuilt );
 
     const CLUSTERS& GetClusters();
 

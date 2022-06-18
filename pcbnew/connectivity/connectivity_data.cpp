@@ -41,6 +41,7 @@
 #include <ratsnest/ratsnest_data.h>
 #include <progress_reporter.h>
 #include <trigo.h>
+#include <drc/drc_rtree.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {
@@ -312,9 +313,10 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( ZONE* aZone, std::vector<int>
 #endif
 }
 
-void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )
+void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
+                                                   bool aConnectivityAlreadyRebuilt )
 {
-    m_connAlgo->FindIsolatedCopperIslands( aZones );
+    m_connAlgo->FindIsolatedCopperIslands( aZones, aConnectivityAlreadyRebuilt );
 }
 
 
@@ -740,14 +742,32 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* 
         for( CN_ITEM* connected : citem->ConnectedItems() )
         {
             BOARD_CONNECTED_ITEM* item = connected->Parent();
+            ZONE*                 zone = dynamic_cast<ZONE*>( item );
+            DRC_RTREE*            rtree = nullptr;
+            bool                  hitStart = false;
+            bool                  hitEnd = false;
 
             if( item->GetFlags() & IS_DELETED )
                 continue;
 
-            std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
+            if( zone )
+                rtree = zone->GetBoard()->m_CopperZoneRTreeCache[ zone ].get();
 
-            bool hitStart = shape->Collide( aTrack->GetStart(), accuracy );
-            bool hitEnd = shape->Collide( aTrack->GetEnd(), accuracy );
+            if( rtree )
+            {
+                SHAPE_CIRCLE start( aTrack->GetStart(), accuracy );
+                SHAPE_CIRCLE end( aTrack->GetEnd(), accuracy );
+
+                hitStart = rtree->QueryColliding( start.BBox(), &start, layer );
+                hitEnd = rtree->QueryColliding( end.BBox(), &end, layer );
+            }
+            else
+            {
+                std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
+
+                hitStart = shape->Collide( aTrack->GetStart(), accuracy );
+                hitEnd = shape->Collide( aTrack->GetEnd(), accuracy );
+            }
 
             if( hitStart && hitEnd )
             {

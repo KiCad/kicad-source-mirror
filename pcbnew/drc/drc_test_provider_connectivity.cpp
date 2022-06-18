@@ -85,7 +85,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     // Rebuild just in case. This really needs to be reliable.
     connectivity->Clear();
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
-    connectivity->FindIsolatedCopperIslands( islandsList );
+    connectivity->FindIsolatedCopperIslands( islandsList, true );
 
     int delta = 100;  // This is the number of tests between 2 calls to the progress bar
     int ii = 0;

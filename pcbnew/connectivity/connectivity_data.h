@@ -185,7 +185,8 @@ public:
      * @param aIslands list of islands that have no connections (outline indices in the polygon set)
      */
     void FindIsolatedCopperIslands( ZONE* aZone, std::vector<int>& aIslands );
-    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
+    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
+                                    bool aConnectivityAlreadyRebuilt = false );
 
     /**
      * Function RecalculateRatsnest()

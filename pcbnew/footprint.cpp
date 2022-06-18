@@ -2343,13 +2343,17 @@ void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, cons
             {
                 checkedPairs[ { a, b } ] = 1;
 
-                VECTOR2I pos;
-                SHAPE*   padShape = pad->GetEffectiveShape().get();
-                SHAPE*   otherShape = other->GetEffectiveShape().get();
-
-                if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+                if( pad->GetBoundingBox().Intersects( other->GetBoundingBox() ) )
                 {
-                    (aErrorHandler)( pad, other, pos );
+
+                    VECTOR2I pos;
+                    SHAPE*   padShape = pad->GetEffectiveShape().get();
+                    SHAPE*   otherShape = other->GetEffectiveShape().get();
+
+                    if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+                    {
+                        (aErrorHandler)( pad, other, pos );
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,10 +26,11 @@
 
 #include <geometry/shape_rect.h>
 
-bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
-                          VECTOR2I* aLocation ) const
+bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
-    if( BBox( 0 ).Contains( aSeg.A ) )
+    BOX2I bbox( BBox() );
+
+    if( bbox.Contains( aSeg.A ) )
     {
         if( aLocation )
             *aLocation = aSeg.A;
@@ -39,7 +41,7 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
         return true;
     }
 
-    if( BBox( 0 ).Contains( aSeg.B ) )
+    if( bbox.Contains( aSeg.B ) )
     {
         if( aLocation )
             *aLocation = aSeg.B;

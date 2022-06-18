@@ -476,7 +476,17 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    return Collide( aA.Outline(), aB.Outline(), aClearance, aActual, aLocation, aMTV );
+    if( aClearance || aActual || aLocation || aMTV )
+    {
+        return Collide( aA.Outline(), aB.Outline(), aClearance, aActual, aLocation, aMTV );
+    }
+    else
+    {
+        BOX2I bboxa = aA.BBox();
+        BOX2I bboxb = aB.BBox();
+
+        return bboxa.Intersects( bboxb );
+    }
 }
 
 

@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <atomic>
+#include <thread>
 #include <board.h>
 #include <board_design_settings.h>
 #include <connectivity/connectivity_data.h>
@@ -65,132 +67,163 @@ public:
     {
         return wxT( "Checks thermal reliefs for a sufficient number of connecting spokes" );
     }
+
+private:
+    void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer );
 };
 
-bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
-{
-    const int delta = 5;  // This is the number of tests between 2 calls to the progress bar
-    int       ii = 0;
 
+void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer )
+{
     BOARD*                             board = m_drcEngine->GetBoard();
     BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
-    std::vector<ZONE*>                 zones;
+
+    const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
+                return;
+
+            if( m_drcEngine->IsCancelled() )
+                return;
+
+            // Quick tests for "connected":
+            //
+            if( !pad->FlashLayer( aLayer ) )
+                continue;
+
+            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
+                continue;
+
+            EDA_RECT item_boundingbox = pad->GetBoundingBox();
+
+            if( !item_boundingbox.Intersects( aZone->GetCachedBoundingBox() ) )
+                continue;
+
+            // If those passed, do a thorough test:
+            //
+            constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
+            ZONE_CONNECTION conn = constraint.m_ZoneConnection;
+
+            if( conn != ZONE_CONNECTION::THERMAL )
+                continue;
+
+            constraint = bds.m_DRCEngine->EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, aZone,
+                                                     aLayer );
+            int minCount = constraint.m_Value.Min();
+
+            if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || minCount <= 0 )
+                continue;
+
+            SHAPE_POLY_SET padPoly;
+            pad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF,
+                                                       ERROR_OUTSIDE );
+
+            SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
+            std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
+            int spokes = 0;
+
+            for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
+                padOutline.Intersect( zoneFill->Outline( jj ), intersections, true );
+
+            spokes += intersections.size() / 2;
+
+            if( spokes <= 0 )
+                continue;
+
+            // Now we know we're connected, so see if there are any other manual spokes
+            // added:
+            //
+            for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
+            {
+                if( padOutline.PointInside( track->GetStart() ) )
+                {
+                    if( aZone->GetFilledPolysList( aLayer )->Collide( track->GetEnd() ) )
+                        spokes++;
+                }
+                else if( padOutline.PointInside( track->GetEnd() ) )
+                {
+                    if( aZone->GetFilledPolysList( aLayer )->Collide( track->GetStart() ) )
+                        spokes++;
+                }
+            }
+
+            // And finally report it if there aren't enough:
+            //
+            if( spokes < minCount )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
+                wxString msg;
+
+                msg.Printf( _( "(%s min spoke count %d; actual %d)" ),
+                              constraint.GetName(),
+                              minCount,
+                              spokes );
+
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                drce->SetItems( aZone, pad );
+                drce->SetViolatingRule( constraint.GetParentRule() );
+
+                reportViolation( drce, pad->GetPosition(), UNDEFINED_LAYER );
+            }
+        }
+    }
+}
+
+
+bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
+{
+    BOARD*                             board = m_drcEngine->GetBoard();
+    BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
+    DRC_CONSTRAINT                     constraint;
 
     if( !reportPhase( _( "Checking thermal reliefs..." ) ) )
         return false;   // DRC cancelled
 
-    for( ZONE* zone : board->Zones() )
-        zones.push_back( zone );
+    std::vector< std::pair<ZONE*, PCB_LAYER_ID> > zoneLayers;
 
-    for( FOOTPRINT* footprint : board->Footprints() )
+    for( ZONE* zone : board->m_DRCCopperZones )
     {
-        for( ZONE* zone : footprint->Zones() )
-            zones.push_back( zone );
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            zoneLayers.push_back( { zone, layer } );
     }
 
-    for( ZONE* zone : zones )
+    int                 zoneLayerCount = zoneLayers.size();
+    std::atomic<size_t> next( 0 );
+    std::atomic<size_t> done( 1 );
+    std::atomic<size_t> threads_finished( 0 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        if( !reportProgress( ii++, zones.size(), delta ) )
-            return false;
-
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-        {
-            const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = zone->GetFilledPolysList( layer );
-
-            for( FOOTPRINT* footprint : board->Footprints() )
-            {
-                for( PAD* pad : footprint->Pads() )
+        std::thread t = std::thread(
+                [&]( )
                 {
-                    if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
-                        return true;
-
-                    if( m_drcEngine->IsCancelled() )
-                        return false;
-
-                    // Quick tests for "connected":
-                    //
-                    if( !pad->FlashLayer( layer ) )
-                        continue;
-
-                    if( pad->GetNetCode() != zone->GetNetCode() || pad->GetNetCode() <= 0 )
-                        continue;
-
-                    EDA_RECT item_boundingbox = pad->GetBoundingBox();
-
-                    if( !item_boundingbox.Intersects( zone->GetCachedBoundingBox() ) )
-                        continue;
-
-                    // If those passed, do a thorough test:
-                    //
-                    constraint = bds.m_DRCEngine->EvalZoneConnection( pad, zone, layer );
-                    ZONE_CONNECTION conn = constraint.m_ZoneConnection;
-
-                    if( conn != ZONE_CONNECTION::THERMAL )
-                        continue;
-
-                    constraint = bds.m_DRCEngine->EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT,
-                                                             pad, zone, layer );
-                    int minCount = constraint.m_Value.Min();
-
-                    if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || minCount <= 0 )
-                        continue;
-
-                    SHAPE_POLY_SET padPoly;
-                    pad->TransformShapeWithClearanceToPolygon( padPoly, layer, 0, ARC_LOW_DEF,
-                                                               ERROR_OUTSIDE );
-
-                    SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
-                    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
-                    int spokes = 0;
-
-                    for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
-                        padOutline.Intersect( zoneFill->Outline( jj ), intersections, true );
-
-                    spokes += intersections.size() / 2;
-
-                    if( spokes <= 0 )
-                        continue;
-
-                    // Now we know we're connected, so see if there are any other manual spokes
-                    // added:
-                    //
-                    for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
+                    for( int i = next.fetch_add( 1 ); i < zoneLayerCount; i = next.fetch_add( 1 ) )
                     {
-                        if( padOutline.PointInside( track->GetStart() ) )
-                        {
-                            if( zone->GetFilledPolysList( layer )->Collide( track->GetEnd() ) )
-                                spokes++;
-                        }
-                        else if( padOutline.PointInside( track->GetEnd() ) )
-                        {
-                            if( zone->GetFilledPolysList( layer )->Collide( track->GetStart() ) )
-                                spokes++;
-                        }
+                        testZoneLayer( zoneLayers[i].first, zoneLayers[i].second );
+                        done.fetch_add( 1 );
+
+                        if( m_drcEngine->IsCancelled() )
+                            break;
                     }
 
-                    // And finally report it if there aren't enough:
-                    //
-                    if( spokes < minCount )
-                    {
-                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
-                        wxString msg;
+                    threads_finished.fetch_add( 1 );
+                } );
 
-                        msg.Printf( _( "(%s min spoke count %d; actual %d)" ),
-                                      constraint.GetName(),
-                                      minCount,
-                                      spokes );
+        t.detach();
+    }
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                        drce->SetItems( zone, pad );
-                        drce->SetViolatingRule( constraint.GetParentRule() );
-
-                        reportViolation( drce, pad->GetPosition(), UNDEFINED_LAYER );
-                    }
-                }
-            }
-        }
+    while( threads_finished < parallelThreadCount )
+    {
+        m_drcEngine->ReportProgress( (double) done / (double) zoneLayerCount );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
     }
 
     return !m_drcEngine->IsCancelled();

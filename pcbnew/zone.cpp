@@ -1284,18 +1284,10 @@ double FP_ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    std::shared_ptr<SHAPE> shape;
-
     if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
-    {
-        shape = std::make_shared<SHAPE_NULL>();
-    }
+        return std::make_shared<SHAPE_NULL>();
     else
-    {
-        shape.reset( m_FilledPolysList.at( aLayer )->Clone() );
-    }
-
-    return shape;
+        return m_FilledPolysList.at( aLayer );
 }
 
 
