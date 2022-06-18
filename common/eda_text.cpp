@@ -742,7 +742,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
                                    const wxString& aText, const VECTOR2I& aPos )
 {
     wxDC* DC = aSettings->GetPrintDC();
-    int   penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
+    int   penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
     if( aFillMode == SKETCH )
         penWidth = -penWidth;
