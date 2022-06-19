@@ -193,13 +193,6 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
-    if( m_libPin->GetUnit() == 0 )
-        msg = _( "All" );
-    else
-        msg.Printf( wxT( "%d" ), m_libPin->GetUnit() );
-
-    aList.emplace_back( _( "Unit" ), msg );
-
     if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
     else if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
