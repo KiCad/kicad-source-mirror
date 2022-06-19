@@ -344,6 +344,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
             else if( aLayer == LAYER_NOTES_BACKGROUND )
                 color = shape->GetFillColor();
 
+            // A filled shape means filled; if they didn't specify a fill colour then use the
+            // border colour.
             if( color == COLOR4D::UNSPECIFIED )
                 color = m_schSettings.GetLayerColor( LAYER_NOTES );
         }

@@ -513,7 +513,9 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
         subRef << wxChar( m_subpartIdSeparator );
 
     if( m_subpartFirstId >= '0' && m_subpartFirstId <= '9' )
+    {
         subRef << aUnit;
+    }
     else
     {
         // use letters as notation. To allow more than 26 units, the sub ref
