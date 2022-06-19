@@ -198,7 +198,7 @@ void DIALOG_LIB_TEXT_PROPERTIES::onHAlignButton( wxCommandEvent& aEvent )
 
 void DIALOG_LIB_TEXT_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
 {
-    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignTop, m_vAlignBottom } )
+    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignCenter, m_vAlignBottom } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
