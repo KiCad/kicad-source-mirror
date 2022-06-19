@@ -260,9 +260,6 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
         painter.GetSettings()->SetLayerColor( LAYER_VIA_HOLES, COLOR4D::BLACK );
         break;
     }
-
-    painter.GetSettings()->m_DrawIndividualViaLayers =
-                        m_pcbnewSettings.m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE;
 }
 
 

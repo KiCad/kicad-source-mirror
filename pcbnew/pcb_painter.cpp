@@ -71,7 +71,6 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
-    m_DrawIndividualViaLayers = false;
 
     m_trackOpacity = 1.0;
     m_viaOpacity   = 1.0;
@@ -840,10 +839,14 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsFill( true );
         m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
     }
-    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.m_DrawIndividualViaLayers )
+    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
         int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
+        bool   draw = aLayer == LAYER_VIA_THROUGH;
+
+        if( m_pcbSettings.IsPrinting() )
+            draw = aVia->FlashLayer( m_pcbSettings.GetPrintLayers() );
 
         if( !outline_mode )
         {
@@ -851,7 +854,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             radius -= annular_width / 2.0;
         }
 
-        m_gal->DrawCircle( center, radius );
+        if( draw )
+            m_gal->DrawCircle( center, radius );
     }
     else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
     {

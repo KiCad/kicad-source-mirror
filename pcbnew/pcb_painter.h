@@ -120,7 +120,6 @@ public:
 
     ZONE_DISPLAY_MODE  m_ZoneDisplayMode;
     HIGH_CONTRAST_MODE m_ContrastModeDisplay;
-    bool               m_DrawIndividualViaLayers;
 
 protected:
     ///< Maximum font size for netnames (and other dynamically shown strings)

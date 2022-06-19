@@ -132,6 +132,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
     setupPainter( *painter );
     setupViewLayers( *view, m_settings.m_LayerSet );
+    dstSettings->SetPrintLayers( m_settings.m_LayerSet );
 
     dstSettings->SetLayerName( aLayerName );
 
