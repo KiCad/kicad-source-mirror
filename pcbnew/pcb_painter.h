@@ -171,9 +171,6 @@ public:
 
     inline bool GetGlobalRatsnestLinesEnabled() const { return m_globalRatsnestlines; }
 
-    bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
-    void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
-
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
 
@@ -206,8 +203,6 @@ protected:
 
     bool               m_curvedRatsnestlines = true;
     bool               m_globalRatsnestlines = true;
-
-    bool               m_drawIndividualViaLayers = false;
 
     ZONE_DISPLAY_MODE  m_zoneDisplayMode;
     HIGH_CONTRAST_MODE m_contrastModeDisplay;

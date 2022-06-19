@@ -115,6 +115,9 @@ public:
     const wxString& GetLayerName() const { return m_layerName; }
     void SetLayerName( const wxString& aLayerName ) { m_layerName = aLayerName; }
 
+    LSET GetPrintLayers() const { return m_printLayers; }
+    void SetPrintLayers( LSET aLayerSet ) { m_printLayers = aLayerSet; }
+
     /**
      * Clear the list of active layers.
      */
@@ -315,6 +318,7 @@ protected:
                                           // lines.  This sets an absolute minimum.
     bool          m_showPageLimits;
     bool          m_isPrinting;
+    LSET          m_printLayers;
 
     wxDC*         m_printDC;              // This can go away once the drawing sheet is moved to
                                           // Cairo-based printing.

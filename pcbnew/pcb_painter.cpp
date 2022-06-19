@@ -847,9 +847,23 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
     }
-    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.GetDrawIndividualViaLayers() )
+    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
-        m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 );
+        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
+        double radius = aVia->GetWidth() / 2.0;
+        bool   draw = aLayer == LAYER_VIA_THROUGH;
+
+        if( m_pcbSettings.IsPrinting() )
+            draw = aVia->FlashLayer( m_pcbSettings.GetPrintLayers() );
+
+        if( !sketchMode )
+        {
+            m_gal->SetLineWidth( annular_width );
+            radius -= annular_width / 2.0;
+        }
+
+        if( draw )
+            m_gal->DrawCircle( center, radius );
     }
     else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
     {
