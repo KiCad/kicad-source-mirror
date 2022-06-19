@@ -2527,16 +2527,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             if( ( aOther->Type() == PCB_ZONE_T || aOther->Type() == PCB_FP_ZONE_T )
                     && static_cast<ZONE*>( aOther )->GetIsRuleArea() )
             {
-                ZONE* zone = static_cast<ZONE*>( aOther );
+                ZONE* ruleArea = static_cast<ZONE*>( aOther );
 
-                if( zone->GetDoNotAllowVias() )
-                    return true;
-
-                constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, aVia, nullptr,
-                                                     UNDEFINED_LAYER );
-
-                if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                    return true;
+                if( ruleArea->GetDoNotAllowVias() )
+                    return ruleArea->Outline()->Collide( aVia->GetPosition(), aVia->GetWidth() / 2 );
 
                 return false;
             }
@@ -2641,6 +2635,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                 checkedItems.insert( item );
             }
+
+            DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, aVia, nullptr,
+                                                                UNDEFINED_LAYER );
+
+            if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                return true;
 
             return false;
         }
