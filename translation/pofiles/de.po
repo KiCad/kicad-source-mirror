@@ -13,13 +13,14 @@
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022.
 # Ettore Atalan <atalanttore@googlemail.com>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
+# magical-obama <maschwaerzler@a1.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-14 23:14+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2022-06-20 05:31+0000\n"
+"Last-Translator: magical-obama <maschwaerzler@a1.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -27,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3243,6 +3244,7 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -3258,6 +3260,19 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad kann Abstürze und spezielle Ereignisse anonym an die Entwickler "
+"schicken, damit sie schwerwiegende Bugs von allen Benutzern effizienter "
+"identifizieren können.\n"
+"\n"
+"Um automatische Berichte von derselben KiCad-Installation zu verbinden, wird "
+"eine zufällige Identifikationsnummer (ID) generiert, die nur für Crash-"
+"Reports verwendet wird. Es werden keine personenbezogenen Daten oder IP-"
+"Adressen gespeichert oder mit der ID in Verbindung gebracht. Mit dem Button "
+"kann diese ID jederzeit zurückgesetzt werden.\n"
+"\n"
+"Wenn Sie freiwillig teilnehmen, dann wird KiCad automatisch diese Reports "
+"schicken, wenn ein Absturz oder ein unbekanntes Event passiert. Ihre "
+"Projektdateien wie Schaltpläne oder PCBs werden dabei nicht geteilt"
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
@@ -15825,9 +15840,8 @@ msgstr ""
 "abgebrochen."
 
 #: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1837
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "%s wurde bereits gestartet. Fortfahren?"
+msgstr "Eine andere Simulation wurde bereits gestartet."
 
 #: eeschema/sim/sim_plot_frame.cpp:516
 #, c-format
@@ -16072,13 +16086,13 @@ msgstr ""
 "mit Pin %s%s an Position <b>(%.3f, %.3f)</b> des konvertierten."
 
 #: eeschema/symbol_checker.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>Pin-Duplikat %s</b> %s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
-"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c des "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %s und %s des "
 "konvertierten."
 
 #: eeschema/symbol_checker.cpp:130
@@ -16091,13 +16105,13 @@ msgstr ""
 "Pin %s%s an Position <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Pin-Duplikat %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
-"Pin %s%s an Position <b>(%s, %s)</b> in Einheiten %c und %c."
+"Pin %s%s an Position <b>(%s, %s)</b> in Einheiten %s und %s."
 
 #: eeschema/symbol_checker.cpp:171
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -18703,18 +18717,14 @@ msgstr ""
 "In GerbView sind <b>keine freien Lagen mehr vorhanden</b> um Dateien zu laden"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Nicht geladen:</b> <i>%s</i>"
+msgstr "<b>Nicht geladen:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Speicher erschöpft beim Laden von:</b> <i>%s</i>"
+msgstr "<b>Speicher erschöpft beim Laden von:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -24842,24 +24852,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Platine und Schaltplan auf Parität prüfen"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Verstöße (%d)"
+msgstr "Verstöße (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Nicht verbundene Elemente (%d)"
+msgstr "Nicht verbundene Elemente (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Schaltplanparität (%d)"
+msgstr "Schaltplanparität (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Ignorierte Tests (%d)"
+msgstr "Ignorierte Tests (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -25831,17 +25841,19 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Dies ist das lokale Freiraumverhältnis in Prozent zwischen Pads und "
-"Lötpaste\n"
+"Dies ist das lokale Freiraumverhältnis in Prozent zwischen Pads und Lötpaste "
 "für diesen Footprint.\n"
+"\n"
 "Ein Wert von 10 bedeutet, dass der Freiraum 10 Prozent der Padgröße "
 "entspricht.\n"
+"\n"
 "Der endgültige Freiraum ist die Summe aus diesem Wert und dem Freiraumwert.\n"
+"\n"
 "Ein negativer Wert bedeutet, dass die Maskengröße kleiner als die Padgröße "
 "ist.\n"
+"\n"
 "Dieser Wert kann durch den Wert im Reiter 'Freiraum-Überschreibungen und -"
-"Einstellungen'\n"
-"im Dialog 'Pad-Eigenschaften' überschrieben werden."
+"Einstellungen' im Dialog 'Pad-Eigenschaften' überschrieben werden."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
