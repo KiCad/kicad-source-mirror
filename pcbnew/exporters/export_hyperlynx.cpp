@@ -477,12 +477,17 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
         else if( PCB_ARC* arc = dyn_cast<PCB_ARC*>( item ) )
         {
             const wxString layerName = m_board->GetLayerName( arc->GetLayer() );
+            VECTOR2I       start = arc->GetStart();
+            VECTOR2I       end = arc->GetEnd();
+
+            if( arc->GetArcAngleStart() < arc->GetArcAngleEnd() )
+                std::swap( start, end );
 
             m_out->Print( 1, "(ARC X1=%.10f Y1=%.10f X2=%.10f Y2=%.10f XC=%.10f YC=%.10f R=%.10f W=%.10f L=\"%s\")\n",
-                          iu2hyp( arc->GetStart().x ),
-                          iu2hyp( arc->GetStart().y ),
-                          iu2hyp( arc->GetEnd().x ),
-                          iu2hyp( arc->GetEnd().y ),
+                          iu2hyp( start.x ),
+                          iu2hyp( start.y ),
+                          iu2hyp( end.x ),
+                          iu2hyp( end.y ),
                           iu2hyp( arc->GetCenter().x ),
                           iu2hyp( arc->GetCenter().y ),
                           iu2hyp( arc->GetRadius() ),
