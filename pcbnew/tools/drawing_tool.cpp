@@ -268,8 +268,8 @@ void DRAWING_TOOL::updateStatusBar() const
         else
             constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 
-        m_frame->DisplayConstraintsMsg(
-                constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
+        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
+                                                    : wxT( "" ) );
     }
 }
 
@@ -300,7 +300,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, &line, startingPoint ) )
+    while( drawShape( tool, &line, startingPoint ) )
     {
         if( line )
         {
@@ -374,7 +374,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, &rect, startingPoint ) )
+    while( drawShape( tool, &rect, startingPoint ) )
     {
         if( rect )
         {
@@ -433,7 +433,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, &circle, startingPoint ) )
+    while( drawShape( tool, &circle, startingPoint ) )
     {
         if( circle )
         {
@@ -626,6 +626,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 textAttrs.m_Italic = bds.GetTextItalic( layer );
                 textAttrs.m_KeepUpright = bds.GetTextUpright( layer );
                 textAttrs.m_Mirrored = IsBackLayer( layer );
+                textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+                textAttrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
 
                 // Init the new item attributes
                 if( m_isFootprintEditor )
@@ -1507,8 +1509,8 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 }
 
 
-bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
-                                OPT<VECTOR2D> aStartingPoint )
+bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
+                              OPT<VECTOR2D> aStartingPoint )
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
 
@@ -1533,6 +1535,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
         m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
         m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+        m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+        m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
     }
 
     // geometric construction manager
@@ -1644,6 +1648,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
                 m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
                 m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+                m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+                m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
             }
 
             if( graphic )

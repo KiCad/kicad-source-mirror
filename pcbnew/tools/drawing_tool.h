@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -220,8 +220,7 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
-                      OPT<VECTOR2D> aStartingPoint );
+    bool drawShape( const std::string& aTool, PCB_SHAPE** aGraphic, OPT<VECTOR2D> aStartingPoint );
 
     /**
      * Start drawing an arc.
