@@ -3321,8 +3321,10 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
                 case T_text_frame:
                 {
-                    wxCHECK_MSG( dim->Type() == PCB_DIM_LEADER_T, nullptr,
+                    KICAD_T expected_type = aInFP ? PCB_FP_DIM_LEADER_T : PCB_DIM_LEADER_T;
+                    wxCHECK_MSG( dim->Type() == expected_type, nullptr,
                                  wxT( "Invalid text_frame token" ) );
+
                     PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dim.get() );
 
                     int textFrame = parseInt( "dim text frame mode" );
