@@ -583,6 +583,14 @@ void PCB_DIM_ALIGNED::SwapData( BOARD_ITEM* aImage )
 }
 
 
+void PCB_DIM_ALIGNED::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
+{
+    PCB_DIMENSION_BASE::Mirror( axis_pos, aMirrorLeftRight );
+
+    m_height = -m_height;
+}
+
+
 BITMAPS PCB_DIM_ALIGNED::GetMenuImage() const
 {
     return BITMAPS::add_aligned_dimension;

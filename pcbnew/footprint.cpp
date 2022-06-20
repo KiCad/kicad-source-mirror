@@ -1622,19 +1622,11 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
             break;
 
         case PCB_FP_DIM_ALIGNED_T:
-            static_cast<PCB_DIM_ALIGNED*>( item )->Flip( m_pos, false );
-            break;
-
         case PCB_FP_DIM_ORTHOGONAL_T:
-            static_cast<PCB_DIM_ORTHOGONAL*>( item )->Flip( m_pos, false );
-            break;
-
         case PCB_FP_DIM_RADIAL_T:
-            static_cast<PCB_DIM_RADIAL*>( item )->Flip( m_pos, false );
-            break;
-
+        case PCB_FP_DIM_CENTER_T:
         case PCB_FP_DIM_LEADER_T:
-            static_cast<PCB_DIM_LEADER*>( item )->Flip( m_pos, false );
+            static_cast<PCB_DIMENSION_BASE*>( item )->Flip( m_pos, false );
             break;
 
         default:
@@ -1802,6 +1794,12 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
 
     for( ZONE* zone : m_fp_zones )
         zone->Rotate( GetPosition(), angleChange );
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+            dimension->Rotate( GetPosition(), angleChange );
+    }
 
     // Update of the reference and value.
     m_reference->SetDrawCoord();

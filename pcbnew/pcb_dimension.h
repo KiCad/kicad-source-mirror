@@ -233,7 +233,7 @@ public:
      *
      * @param axis_pos is the vertical axis position to mirror around.
      */
-    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false );
+    virtual void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false );
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -359,6 +359,8 @@ public:
     EDA_ITEM* Clone() const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false ) override;
 
     BITMAPS GetMenuImage() const override;
 
