@@ -120,7 +120,7 @@ targeted arguments can be passed through the :class:`cpp_function` constructor:
 .. code-block:: cpp
 
     class_<MyClass>(m, "MyClass")
-        .def_property("data"
+        .def_property("data",
             py::cpp_function(&MyClass::getData, py::return_value_policy::copy),
             py::cpp_function(&MyClass::setData)
         );
@@ -232,7 +232,7 @@ is equivalent to the following pseudocode:
     });
 
 The only requirement is that ``T`` is default-constructible, but otherwise any
-scope guard will work. This is very useful in combination with `gil_scoped_release`.
+scope guard will work. This is very useful in combination with ``gil_scoped_release``.
 See :ref:`gil`.
 
 Multiple guards can also be specified as ``py::call_guard<T1, T2, T3...>``. The
@@ -272,7 +272,7 @@ And used in Python as usual:
 
 .. code-block:: pycon
 
-    >>> print_dict({'foo': 123, 'bar': 'hello'})
+    >>> print_dict({"foo": 123, "bar": "hello"})
     key=foo, value=123
     key=bar, value=hello
 
@@ -306,8 +306,9 @@ The class ``py::args`` derives from ``py::tuple`` and ``py::kwargs`` derives
 from ``py::dict``.
 
 You may also use just one or the other, and may combine these with other
-arguments as long as the ``py::args`` and ``py::kwargs`` arguments are the last
-arguments accepted by the function.
+arguments.  Note, however, that ``py::kwargs`` must always be the last argument
+of the function, and ``py::args`` implies that any further arguments are
+keyword-only (see :ref:`keyword_only_arguments`).
 
 Please refer to the other examples for details on how to iterate over these,
 and on how to cast their entries into C++ objects. A demonstration is also
@@ -366,6 +367,8 @@ like so:
     py::class_<MyClass>("MyClass")
         .def("myFunction", py::arg("arg") = static_cast<SomeType *>(nullptr));
 
+.. _keyword_only_arguments:
+
 Keyword-only arguments
 ======================
 
@@ -377,10 +380,11 @@ argument in a function definition:
     def f(a, *, b):  # a can be positional or via keyword; b must be via keyword
         pass
 
+
     f(a=1, b=2)  # good
     f(b=2, a=1)  # good
-    f(1, b=2)    # good
-    f(1, 2)      # TypeError: f() takes 1 positional argument but 2 were given
+    f(1, b=2)  # good
+    f(1, 2)  # TypeError: f() takes 1 positional argument but 2 were given
 
 Pybind11 provides a ``py::kw_only`` object that allows you to implement
 the same behaviour by specifying the object between positional and keyword-only
@@ -395,6 +399,15 @@ Note that you currently cannot combine this with a ``py::args`` argument.  This
 feature does *not* require Python 3 to work.
 
 .. versionadded:: 2.6
+
+As of pybind11 2.9, a ``py::args`` argument implies that any following arguments
+are keyword-only, as if ``py::kw_only()`` had been specified in the same
+relative location of the argument list as the ``py::args`` argument.  The
+``py::kw_only()`` may be included to be explicit about this, but is not
+required.  (Prior to 2.9 ``py::args`` may only occur at the end of the argument
+list, or immediately before a ``py::kwargs`` argument at the end).
+
+.. versionadded:: 2.9
 
 Positional-only arguments
 =========================
@@ -565,3 +578,38 @@ prefers earlier-defined overloads to later-defined ones.
 .. versionadded:: 2.6
 
     The ``py::prepend()`` tag.
+
+Binding functions with template parameters
+==========================================
+
+You can bind functions that have template parameters. Here's a function:
+
+.. code-block:: cpp
+
+    template <typename T>
+    void set(T t);
+
+C++ templates cannot be instantiated at runtime, so you cannot bind the
+non-instantiated function:
+
+.. code-block:: cpp
+
+    // BROKEN (this will not compile)
+    m.def("set", &set);
+
+You must bind each instantiated function template separately. You may bind
+each instantiation with the same name, which will be treated the same as
+an overloaded function:
+
+.. code-block:: cpp
+
+    m.def("set", &set<int>);
+    m.def("set", &set<std::string>);
+
+Sometimes it's more clear to bind them with separate names, which is also
+an option:
+
+.. code-block:: cpp
+
+    m.def("setInt", &set<int>);
+    m.def("setString", &set<std::string>);

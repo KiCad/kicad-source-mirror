@@ -5,6 +5,12 @@
 # All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+if(CMAKE_VERSION VERSION_LESS 3.12)
+  message(FATAL_ERROR "You cannot use the new FindPython module with CMake < 3.12")
+endif()
+
+include_guard(GLOBAL)
+
 get_property(
   is_config
   TARGET pybind11::headers
@@ -14,10 +20,6 @@ if(pybind11_FIND_QUIETLY)
   set(_pybind11_quiet QUIET)
 else()
   set(_pybind11_quiet "")
-endif()
-
-if(CMAKE_VERSION VERSION_LESS 3.12)
-  message(FATAL_ERROR "You cannot use the new FindPython module with CMake < 3.12")
 endif()
 
 if(NOT Python_FOUND
@@ -82,6 +84,15 @@ if(NOT DEFINED ${_Python}_EXECUTABLE)
 
 endif()
 
+if(NOT ${_Python}_EXECUTABLE STREQUAL PYBIND11_PYTHON_EXECUTABLE_LAST)
+  # Detect changes to the Python version/binary in subsequent CMake runs, and refresh config if needed
+  unset(PYTHON_IS_DEBUG CACHE)
+  unset(PYTHON_MODULE_EXTENSION CACHE)
+  set(PYBIND11_PYTHON_EXECUTABLE_LAST
+      "${${_Python}_EXECUTABLE}"
+      CACHE INTERNAL "Python executable during the last CMake run")
+endif()
+
 if(NOT DEFINED PYTHON_IS_DEBUG)
   # Debug check - see https://stackoverflow.com/questions/646518/python-how-to-detect-debug-Interpreter
   execute_process(
@@ -99,7 +110,7 @@ if(NOT DEFINED PYTHON_MODULE_EXTENSION)
   execute_process(
     COMMAND
       "${${_Python}_EXECUTABLE}" "-c"
-      "from distutils import sysconfig as s;print(s.get_config_var('EXT_SUFFIX') or s.get_config_var('SO'))"
+      "import sys, importlib; s = importlib.import_module('distutils.sysconfig' if sys.version_info < (3, 10) else 'sysconfig'); print(s.get_config_var('EXT_SUFFIX') or s.get_config_var('SO'))"
     OUTPUT_VARIABLE _PYTHON_MODULE_EXTENSION
     ERROR_VARIABLE _PYTHON_MODULE_EXTENSION_ERR
     OUTPUT_STRIP_TRAILING_WHITESPACE)

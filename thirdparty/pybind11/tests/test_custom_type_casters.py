@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+
 from pybind11_tests import custom_type_casters as m
 
 
@@ -114,3 +115,7 @@ def test_custom_caster_destruction():
 
     # Make sure we still only have the original object (from ..._no_destroy()) alive:
     assert cstats.alive() == 1
+
+
+def test_custom_caster_other_lib():
+    assert m.other_lib_type(True)

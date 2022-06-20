@@ -3,10 +3,9 @@ import sys
 
 import pytest
 
-import env  # noqa: F401
-
-from pybind11_tests import exceptions as m
+import env
 import pybind11_cross_module_tests as cm
+from pybind11_tests import exceptions as m
 
 
 def test_std_exception(msg):
@@ -25,7 +24,23 @@ def test_error_already_set(msg):
     assert msg(excinfo.value) == "foo"
 
 
-def test_cross_module_exceptions():
+@pytest.mark.skipif("env.PY2")
+def test_raise_from(msg):
+    with pytest.raises(ValueError) as excinfo:
+        m.raise_from()
+    assert msg(excinfo.value) == "outer"
+    assert msg(excinfo.value.__cause__) == "inner"
+
+
+@pytest.mark.skipif("env.PY2")
+def test_raise_from_already_set(msg):
+    with pytest.raises(ValueError) as excinfo:
+        m.raise_from_already_set()
+    assert msg(excinfo.value) == "outer"
+    assert msg(excinfo.value.__cause__) == "inner"
+
+
+def test_cross_module_exceptions(msg):
     with pytest.raises(RuntimeError) as excinfo:
         cm.raise_runtime_error()
     assert str(excinfo.value) == "My runtime error"
@@ -44,6 +59,15 @@ def test_cross_module_exceptions():
 
     with pytest.raises(StopIteration) as excinfo:
         cm.throw_stop_iteration()
+
+    with pytest.raises(cm.LocalSimpleException) as excinfo:
+        cm.throw_local_simple_error()
+    assert msg(excinfo.value) == "external mod"
+
+    with pytest.raises(KeyError) as excinfo:
+        cm.throw_local_error()
+    # KeyError is a repr of the key, so it has an extra set of quotes
+    assert str(excinfo.value) == "'just local'"
 
 
 # TODO: FIXME
@@ -73,6 +97,8 @@ def ignore_pytest_unraisable_warning(f):
         return f
 
 
+# TODO: find out why this fails on PyPy, https://foss.heptapod.net/pypy/pypy/-/issues/3583
+@pytest.mark.xfail(env.PYPY, reason="Failure on PyPy 3.8 (7.3.7)", strict=False)
 @ignore_pytest_unraisable_warning
 def test_python_alreadyset_in_destructor(monkeypatch, capsys):
     hooked = False
@@ -213,6 +239,14 @@ def test_nested_throws(capture):
     assert str(excinfo.value) == "this is a helper-defined translated exception"
 
 
+@pytest.mark.skipif("env.PY2")
+def test_throw_nested_exception():
+    with pytest.raises(RuntimeError) as excinfo:
+        m.throw_nested_exception()
+    assert str(excinfo.value) == "Outer Exception"
+    assert str(excinfo.value.__cause__) == "Inner Exception"
+
+
 # This can often happen if you wrap a pybind11 class in a Python wrapper
 def test_invalid_repr():
     class MyRepr(object):
@@ -221,3 +255,21 @@ def test_invalid_repr():
 
     with pytest.raises(TypeError):
         m.simple_bool_passthrough(MyRepr())
+
+
+def test_local_translator(msg):
+    """Tests that a local translator works and that the local translator from
+    the cross module is not applied"""
+    with pytest.raises(RuntimeError) as excinfo:
+        m.throws6()
+    assert msg(excinfo.value) == "MyException6 only handled in this module"
+
+    with pytest.raises(RuntimeError) as excinfo:
+        m.throws_local_error()
+    assert not isinstance(excinfo.value, KeyError)
+    assert msg(excinfo.value) == "never caught"
+
+    with pytest.raises(Exception) as excinfo:
+        m.throws_local_simple_error()
+    assert not isinstance(excinfo.value, cm.LocalSimpleException)
+    assert msg(excinfo.value) == "this mod"
