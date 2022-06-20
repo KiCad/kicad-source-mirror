@@ -1621,8 +1621,25 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
             static_cast<FP_TEXTBOX*>( item )->Flip( m_pos, false );
             break;
 
+        case PCB_FP_DIM_ALIGNED_T:
+            static_cast<PCB_DIM_ALIGNED*>( item )->Flip( m_pos, false );
+            break;
+
+        case PCB_FP_DIM_ORTHOGONAL_T:
+            static_cast<PCB_DIM_ORTHOGONAL*>( item )->Flip( m_pos, false );
+            break;
+
+        case PCB_FP_DIM_RADIAL_T:
+            static_cast<PCB_DIM_RADIAL*>( item )->Flip( m_pos, false );
+            break;
+
+        case PCB_FP_DIM_LEADER_T:
+            static_cast<PCB_DIM_LEADER*>( item )->Flip( m_pos, false );
+            break;
+
         default:
-            wxMessageBox( wxT( "FOOTPRINT::Flip() error: Unknown Draw Type" ) );
+            wxMessageBox( wxString::Format( wxT( "FOOTPRINT::Flip() error: Unknown Draw Type %d" ),
+                          (int)item->Type() ) );
             break;
         }
     }
