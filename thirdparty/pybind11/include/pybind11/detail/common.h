@@ -153,7 +153,6 @@
 #    define HAVE_SNPRINTF 1
 #endif
 
-/// Include Python header, disable linking to pythonX_d.lib on Windows in debug mode
 #if defined(_MSC_VER)
 #    pragma warning(push)
 // C4505: 'PySlice_GetIndicesEx': unreferenced local function has been removed (PyPy only)
@@ -170,6 +169,7 @@
 #        define PYBIND11_DEBUG_MARKER
 #        undef _DEBUG
 #    endif
+#    pragma warning(disable: 4510 4610 4512 4005)
 #endif
 
 // https://en.cppreference.com/w/c/chrono/localtime
