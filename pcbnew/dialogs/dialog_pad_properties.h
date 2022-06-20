@@ -167,6 +167,14 @@ private:
     UNIT_BINDER m_spokeWidth;
     UNIT_BINDER m_spokeAngle;
     UNIT_BINDER m_pad_orientation;
+
+    // Show/hide the hole size Y widgets
+    // Setting the X/Diameter label according to the selected hole type
+    void updateHoleControls();
+
+    // Show/hide the pad size Y widgets
+    // Setting the X/Diameter label according to the selected hole type
+    void updatePadSizeControls();
 };
 
 /**

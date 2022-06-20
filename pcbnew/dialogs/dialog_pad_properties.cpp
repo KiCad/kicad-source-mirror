@@ -218,6 +218,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     // Do not allow locking items in the footprint editor
     m_locked->Show( !m_isFpEditor );
 
+    updateHoleControls();
+    updatePadSizeControls();
+
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
     TransferDataToWindow();
@@ -907,14 +910,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     if( m_MainSizer->GetSize().y < m_MainSizer->GetMinSize().y )
         m_MainSizer->SetSizeHints( this );
 
-    m_sizeXLabel->SetLabel( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE
-                                            || m_PadShapeSelector->GetSelection()
-                                                       == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
-                                    ? _( "Diameter:" )
-                                    : _( "Pad size X:" ) );
-    m_sizeY.Show( m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CIRCLE
-                  && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
-    m_sizeXLabel->GetParent()->Layout();
+    updatePadSizeControls();
     redraw();
 }
 
@@ -922,12 +918,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    m_holeXLabel->SetLabel( ( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
-                                    ? _( "Diameter:" )
-                                    : _( "Hole size X:" ) );
-    m_holeY.Show( m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CIRCLE
-                  && m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
-    m_holeXLabel->GetParent()->Layout();
+    updateHoleControls();
     redraw();
 }
 
@@ -1715,6 +1706,28 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
     }
 
     return prop;
+}
+
+void DIALOG_PAD_PROPERTIES::updateHoleControls()
+{
+    m_holeXLabel->SetLabel( ( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
+                                    ? _( "Diameter:" )
+                                    : _( "Hole size X:" ) );
+    m_holeY.Show( m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CIRCLE
+                  && m_holeShapeCtrl->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+    m_holeXLabel->GetParent()->Layout();
+}
+
+void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
+{
+    m_sizeXLabel->SetLabel( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE
+                                            || m_PadShapeSelector->GetSelection()
+                                                       == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+                                    ? _( "Diameter:" )
+                                    : _( "Pad size X:" ) );
+    m_sizeY.Show( m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CIRCLE
+                  && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+    m_sizeXLabel->GetParent()->Layout();
 }
 
 

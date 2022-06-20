@@ -333,14 +333,20 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	gbSizerPadOrientation->Add( m_shapePropsBook, wxGBPosition( 1, 0 ), wxGBSpan( 1, 6 ), wxEXPAND | wxALL, 5 );
 
+	wxBoxSizer* bSizer39;
+	bSizer39 = new wxBoxSizer( wxVERTICAL );
+
 	m_shapeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_shapeLabel->Wrap( -1 );
-	gbSizerPadOrientation->Add( m_shapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	bSizer39->Add( m_shapeLabel, 0, wxALL, 5 );
+
+
+	gbSizerPadOrientation->Add( bSizer39, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_PadShapeSelectorChoices[] = { _("Circular"), _("Oval"), _("Rectangular"), _("Trapezoidal"), _("Rounded rectangle"), _("Chamfered rectangle"), _("Chamfered with other corners rounded"), _("Custom (circular base)"), _("Custom (rectangular base)") };
 	int m_PadShapeSelectorNChoices = sizeof( m_PadShapeSelectorChoices ) / sizeof( wxString );
 	m_PadShapeSelector = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadShapeSelectorNChoices, m_PadShapeSelectorChoices, 0 );
-	m_PadShapeSelector->SetSelection( 2 );
+	m_PadShapeSelector->SetSelection( 4 );
 	gbSizerPadOrientation->Add( m_PadShapeSelector, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxALL, 5 );
 
 
