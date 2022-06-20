@@ -573,11 +573,11 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             break;
         }
 
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
+        case PCB_FP_DIM_LEADER_T:
         {
             const PCB_DIMENSION_BASE* dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
 
