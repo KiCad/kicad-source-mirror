@@ -7,11 +7,12 @@
     BSD-style license that can be found in the LICENSE file.
 */
 
-#include "pybind11_tests.h"
-#include "constructor_stats.h"
 #include <pybind11/functional.h>
-#include <thread>
 
+#include "constructor_stats.h"
+#include "pybind11_tests.h"
+
+#include <thread>
 
 int dummy_function(int i) { return i + 1; }
 
@@ -20,11 +21,12 @@ TEST_SUBMODULE(callbacks, m) {
     m.def("test_callback1", [](const py::object &func) { return func(); });
     m.def("test_callback2", [](const py::object &func) { return func("Hello", 'x', true, 5); });
     m.def("test_callback3", [](const std::function<int(int)> &func) {
-        return "func(43) = " + std::to_string(func(43)); });
-    m.def("test_callback4", []() -> std::function<int(int)> { return [](int i) { return i+1; }; });
-    m.def("test_callback5", []() {
-        return py::cpp_function([](int i) { return i+1; }, py::arg("number"));
+        return "func(43) = " + std::to_string(func(43));
     });
+    m.def("test_callback4",
+          []() -> std::function<int(int)> { return [](int i) { return i + 1; }; });
+    m.def("test_callback5",
+          []() { return py::cpp_function([](int i) { return i + 1; }, py::arg("number")); });
 
     // test_keyword_args_and_generalized_unpacking
     m.def("test_tuple_unpacking", [](const py::function &f) {
@@ -34,9 +36,9 @@ TEST_SUBMODULE(callbacks, m) {
     });
 
     m.def("test_dict_unpacking", [](const py::function &f) {
-        auto d1 = py::dict("key"_a="value", "a"_a=1);
+        auto d1 = py::dict("key"_a = "value", "a"_a = 1);
         auto d2 = py::dict();
-        auto d3 = py::dict("b"_a=2);
+        auto d3 = py::dict("b"_a = 2);
         return f("positional", 1, **d1, **d2, **d3);
     });
 
@@ -44,32 +46,40 @@ TEST_SUBMODULE(callbacks, m) {
 
     m.def("test_unpacking_and_keywords1", [](const py::function &f) {
         auto args = py::make_tuple(2);
-        auto kwargs = py::dict("d"_a=4);
-        return f(1, *args, "c"_a=3, **kwargs);
+        auto kwargs = py::dict("d"_a = 4);
+        return f(1, *args, "c"_a = 3, **kwargs);
     });
 
     m.def("test_unpacking_and_keywords2", [](const py::function &f) {
-        auto kwargs1 = py::dict("a"_a=1);
-        auto kwargs2 = py::dict("c"_a=3, "d"_a=4);
-        return f("positional", *py::make_tuple(1), 2, *py::make_tuple(3, 4), 5,
-                 "key"_a="value", **kwargs1, "b"_a=2, **kwargs2, "e"_a=5);
+        auto kwargs1 = py::dict("a"_a = 1);
+        auto kwargs2 = py::dict("c"_a = 3, "d"_a = 4);
+        return f("positional",
+                 *py::make_tuple(1),
+                 2,
+                 *py::make_tuple(3, 4),
+                 5,
+                 "key"_a = "value",
+                 **kwargs1,
+                 "b"_a = 2,
+                 **kwargs2,
+                 "e"_a = 5);
     });
 
     m.def("test_unpacking_error1", [](const py::function &f) {
-        auto kwargs = py::dict("x"_a=3);
-        return f("x"_a=1, "y"_a=2, **kwargs); // duplicate ** after keyword
+        auto kwargs = py::dict("x"_a = 3);
+        return f("x"_a = 1, "y"_a = 2, **kwargs); // duplicate ** after keyword
     });
 
     m.def("test_unpacking_error2", [](const py::function &f) {
-        auto kwargs = py::dict("x"_a=3);
-        return f(**kwargs, "x"_a=1); // duplicate keyword after **
+        auto kwargs = py::dict("x"_a = 3);
+        return f(**kwargs, "x"_a = 1); // duplicate keyword after **
     });
 
     m.def("test_arg_conversion_error1",
           [](const py::function &f) { f(234, UnregisteredType(), "kw"_a = 567); });
 
     m.def("test_arg_conversion_error2", [](const py::function &f) {
-        f(234, "expected_name"_a=UnregisteredType(), "kw"_a=567);
+        f(234, "expected_name"_a = UnregisteredType(), "kw"_a = 567);
     });
 
     // test_lambda_closure_cleanup
@@ -81,14 +91,53 @@ TEST_SUBMODULE(callbacks, m) {
     };
     // Export the payload constructor statistics for testing purposes:
     m.def("payload_cstats", &ConstructorStats::get<Payload>);
-    /* Test cleanup of lambda closure */
-    m.def("test_cleanup", []() -> std::function<void()> {
+    m.def("test_lambda_closure_cleanup", []() -> std::function<void()> {
         Payload p;
 
+        // In this situation, `Func` in the implementation of
+        // `cpp_function::initialize` is NOT trivially destructible.
         return [p]() {
             /* p should be cleaned up when the returned function is garbage collected */
             (void) p;
         };
+    });
+
+    class CppCallable {
+    public:
+        CppCallable() { track_default_created(this); }
+        ~CppCallable() { track_destroyed(this); }
+        CppCallable(const CppCallable &) { track_copy_created(this); }
+        CppCallable(CppCallable &&) noexcept { track_move_created(this); }
+        void operator()() {}
+    };
+
+    m.def("test_cpp_callable_cleanup", []() {
+        // Related issue: https://github.com/pybind/pybind11/issues/3228
+        // Related PR: https://github.com/pybind/pybind11/pull/3229
+        py::list alive_counts;
+        ConstructorStats &stat = ConstructorStats::get<CppCallable>();
+        alive_counts.append(stat.alive());
+        {
+            CppCallable cpp_callable;
+            alive_counts.append(stat.alive());
+            {
+                // In this situation, `Func` in the implementation of
+                // `cpp_function::initialize` IS trivially destructible,
+                // only `capture` is not.
+                py::cpp_function py_func(cpp_callable);
+                py::detail::silence_unused_warnings(py_func);
+                alive_counts.append(stat.alive());
+            }
+            alive_counts.append(stat.alive());
+            {
+                py::cpp_function py_func(std::move(cpp_callable));
+                py::detail::silence_unused_warnings(py_func);
+                alive_counts.append(stat.alive());
+            }
+            alive_counts.append(stat.alive());
+        }
+        alive_counts.append(stat.alive());
+        return alive_counts;
     });
 
     // test_cpp_function_roundtrip
@@ -97,14 +146,19 @@ TEST_SUBMODULE(callbacks, m) {
     m.def("dummy_function_overloaded", [](int i, int j) { return i + j; });
     m.def("dummy_function_overloaded", &dummy_function);
     m.def("dummy_function2", [](int i, int j) { return i + j; });
-    m.def("roundtrip", [](std::function<int(int)> f, bool expect_none = false) {
-        if (expect_none && f)
-            throw std::runtime_error("Expected None to be converted to empty std::function");
-        return f;
-    }, py::arg("f"), py::arg("expect_none")=false);
+    m.def(
+        "roundtrip",
+        [](std::function<int(int)> f, bool expect_none = false) {
+            if (expect_none && f) {
+                throw std::runtime_error("Expected None to be converted to empty std::function");
+            }
+            return f;
+        },
+        py::arg("f"),
+        py::arg("expect_none") = false);
     m.def("test_dummy_function", [](const std::function<int(int)> &f) -> std::string {
         using fn_type = int (*)(int);
-        auto result = f.target<fn_type>();
+        const auto *result = f.target<fn_type>();
         if (!result) {
             auto r = f(1);
             return "can't convert to function pointer: eval(1) = " + std::to_string(r);
@@ -114,7 +168,6 @@ TEST_SUBMODULE(callbacks, m) {
             return "matches dummy_function: eval(1) = " + std::to_string(r);
         }
         return "argument does NOT match dummy_function. This should never happen!";
-
     });
 
     class AbstractBase {
@@ -146,7 +199,7 @@ TEST_SUBMODULE(callbacks, m) {
     // test_movable_object
     m.def("callback_with_movable", [](const std::function<void(MovableObject &)> &f) {
         auto x = MovableObject();
-        f(x); // lvalue reference shouldn't move out object
+        f(x);           // lvalue reference shouldn't move out object
         return x.valid; // must still return `true`
     });
 
@@ -158,9 +211,10 @@ TEST_SUBMODULE(callbacks, m) {
 
     // This checks that builtin functions can be passed as callbacks
     // rather than throwing RuntimeError due to trying to extract as capsule
-    m.def("test_sum_builtin", [](const std::function<double(py::iterable)> &sum_builtin, const py::iterable &i) {
-      return sum_builtin(i);
-    });
+    m.def("test_sum_builtin",
+          [](const std::function<double(py::iterable)> &sum_builtin, const py::iterable &i) {
+              return sum_builtin(i);
+          });
 
     // test async Python callbacks
     using callback_f = std::function<void(int)>;
@@ -176,8 +230,9 @@ TEST_SUBMODULE(callbacks, m) {
         };
 
         // spawn worker threads
-        for (auto i : work)
+        for (auto i : work) {
             start_f(py::cast<int>(i));
+        }
     });
 
     m.def("callback_num_times", [](const py::function &f, std::size_t num) {
