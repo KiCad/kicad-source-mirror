@@ -902,7 +902,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = -1;
 
         // Restore cursor settings
-        for( auto cursorSetting : m_cursorSettings )
+        for( auto const& cursorSetting : m_cursorSettings )
         {
             auto it = m_toolIdIndex.find( cursorSetting.first );
             wxASSERT( it != m_toolIdIndex.end() );
