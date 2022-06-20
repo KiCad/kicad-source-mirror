@@ -53,6 +53,8 @@
 static int DEFAULT_SINGLE_COL_WIDTH = 660;
 
 static BOARD*                g_lastDRCBoard = nullptr;
+static bool                  g_lastDRCRun = false;
+static bool                  g_lastFootprintTestsRun = false;
 static std::vector<wxString> g_lastIgnored;
 
 
@@ -92,7 +94,8 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     if( m_currentBoard == g_lastDRCBoard )
     {
-        m_drcRun = true;
+        m_drcRun = g_lastDRCRun;
+        m_footprintTestsRun = g_lastFootprintTestsRun;
 
         for( const wxString& str : g_lastIgnored )
             m_ignoredList->InsertItem( m_ignoredList->GetItemCount(), str );
@@ -119,15 +122,14 @@ DIALOG_DRC::~DIALOG_DRC()
 {
     m_frame->FocusOnItem( nullptr );
 
-    if( m_drcRun )
-    {
-        g_lastDRCBoard = m_currentBoard;
+    g_lastDRCBoard = m_currentBoard;
+    g_lastDRCRun = m_drcRun;
+    g_lastFootprintTestsRun = m_footprintTestsRun;
 
-        g_lastIgnored.clear();
+    g_lastIgnored.clear();
 
-        for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
-            g_lastIgnored.push_back( m_ignoredList->GetItemText( ii ) );
-    }
+    for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
+        g_lastIgnored.push_back( m_ignoredList->GetItemText( ii ) );
 
     PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
