@@ -304,6 +304,7 @@ int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD*                board = editFrame->GetBoard();
     KIGFX::VIEW_CONTROLS* controls  = getViewControls();
     VECTOR2I              originalCursorPos = controls->GetCursorPosition();
 
@@ -317,7 +318,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
-            frame()->Settings().m_AllowFreePads && !m_isFootprintEditor );
+            editFrame->Settings().m_AllowFreePads && !m_isFootprintEditor );
 
     if( m_dragging || selection.Empty() )
         return 0;
@@ -329,7 +330,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     // Now filter out pads if not in free pads mode.  We cannot do this in the first
     // RequestSelection() as we need the item_layers when a pad is the selection front.
-    if( !m_isFootprintEditor && !frame()->Settings().m_AllowFreePads )
+    if( !m_isFootprintEditor && !editFrame->Settings().m_AllowFreePads )
     {
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -401,12 +402,17 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool hasRedrawn3D    = false;
     bool allowRedraw3D   = editFrame->Settings().m_Display.m_Live3DRefresh;
     // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
-    bool showCourtyardConflicts = editFrame->GetBoard()->IsElementVisible( LAYER_CONFLICTS_SHADOW );
+    bool showCourtyardConflicts = !m_isFootprintEditor
+                                    && board->IsElementVisible( LAYER_CONFLICTS_SHADOW );
 
     // Used to test courtyard overlaps
     DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE drc_on_move;
-    drc_on_move.Init( editFrame->GetBoard() );
-    drc_on_move.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
+
+    if( showCourtyardConflicts )
+    {
+        drc_on_move.Init( board );
+        drc_on_move.SetDRCEngine( m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine().get() );
+    }
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -632,8 +638,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
 
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false,
-                                  new VECTOR2I( movement ) );
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
