@@ -70,8 +70,8 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         shl_from_top    = p["Shield"]["from_top"]
 
         offsetX         = pad_pitch * ( pad_count-1 ) / 2
-        size_pad = pcbnew.wxSize( pad_width, pad_height )
-        size_shld = pcbnew.wxSize(shl_width, shl_height)
+        size_pad = pcbnew.VECTOR2I( int(pad_width), int(pad_height) )
+        size_shld = pcbnew.VECTOR2I(shl_width, shl_height)
         size_text = self.GetTextSize()  # IPC nominal
 
         # Gives a position and size to ref and value texts:
@@ -90,11 +90,11 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
 
         # Mechanical shield pads: left pad and right pad
-        xpos = (int)(-shl_to_pad-offsetX)
-        pad_s0_pos = pcbnew.VECTOR2I( xpos, (int)shl_from_top )
+        xpos = -shl_to_pad-offsetX
+        pad_s0_pos = pcbnew.VECTOR2I( int(xpos), int(shl_from_top) )
         pad_s0 = self.smdRectPad(self.module, size_shld, pad_s0_pos, "0")
         xpos = (pad_count-1) * pad_pitch+shl_to_pad - offsetX
-        pad_s1_pos = pcbnew.VECTOR2I( xpos, (int)shl_from_top )
+        pad_s1_pos = pcbnew.VECTOR2I( int(xpos), int(shl_from_top) )
         pad_s1 = self.smdRectPad(self.module, size_shld, pad_s1_pos, "0")
 
         self.module.Add(pad_s0)

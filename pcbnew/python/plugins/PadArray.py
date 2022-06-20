@@ -89,7 +89,7 @@ class PadMaker(object):
         @param rot_degree: the pad rotation, in degrees
         """
         pad = pcbnew.PAD(self.module)
-        pad.SetSize(pcbnew.VECTOR2I(Hsize, Vsize))
+        pad.SetSize(pcbnew.VECTOR2I( int(Hsize), int(Vsize) ) )
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.SMDMask())

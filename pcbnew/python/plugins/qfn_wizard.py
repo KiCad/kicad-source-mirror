@@ -103,7 +103,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         v_pitch = (int)(v_pitch / 2 - pad_length +pad_offset + pad_length/2)
 
         #left row
-        pin1Pos = pcbnew.VECTOR2I( -h_pitch), 0)
+        pin1Pos = pcbnew.VECTOR2I( -h_pitch, 0)
         array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
