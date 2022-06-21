@@ -46,19 +46,19 @@ public:
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override{};
 
-    void OnSizeChange( wxCommandEvent& aEvent );
-    void OnUpdateUnit( wxCommandEvent& aEvent );
+    void OnSizeChange( wxCommandEvent& aEvent ) override;
+    void OnUpdateUnit( wxCommandEvent& aEvent ) override;
 
-    void OnDiameterChange( wxCommandEvent& aEvent );
-    void OnAreaChange( wxCommandEvent& aEvent );
-    void OnLinResistanceChange( wxCommandEvent& aEvent );
-    void OnFrequencyChange( wxCommandEvent& aEvent );
-    void OnAmpacityChange( wxCommandEvent& aEvent );
-    void OnCurrentChange( wxCommandEvent& aEvent );
-    void OnLengthChange( wxCommandEvent& aEvent );
-    void OnResistanceChange( wxCommandEvent& aEvent );
-    void OnVDropChange( wxCommandEvent& aEvent );
-    void OnPowerChange( wxCommandEvent& aEvent );
+    void OnDiameterChange( wxCommandEvent& aEvent ) override;
+    void OnAreaChange( wxCommandEvent& aEvent ) override;
+    void OnLinResistanceChange( wxCommandEvent& aEvent ) override;
+    void OnFrequencyChange( wxCommandEvent& aEvent ) override;
+    void OnAmpacityChange( wxCommandEvent& aEvent ) override;
+    void OnCurrentChange( wxCommandEvent& aEvent ) override;
+    void OnLengthChange( wxCommandEvent& aEvent ) override;
+    void OnResistanceChange( wxCommandEvent& aEvent ) override;
+    void OnVDropChange( wxCommandEvent& aEvent ) override;
+    void OnPowerChange( wxCommandEvent& aEvent ) override;
 
 private:
     bool m_updatingUI;
