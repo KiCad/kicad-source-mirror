@@ -26,6 +26,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_electrical_spacing_base.cpp
     calculator_panels/panel_eserie.cpp
     calculator_panels/panel_eserie_base.cpp
+    calculator_panels/panel_fusing_current.cpp
+    calculator_panels/panel_fusing_current_base.cpp
     calculator_panels/panel_regulator.cpp
     calculator_panels/panel_regulator_base.cpp
     calculator_panels/panel_track_width.cpp
@@ -214,6 +216,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
@@ -222,6 +225,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp

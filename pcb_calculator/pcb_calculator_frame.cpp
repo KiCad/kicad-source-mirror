@@ -39,6 +39,7 @@
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
 #include <calculator_panels/panel_eserie.h>
+#include <calculator_panels/panel_fusing_current.h>
 #include <calculator_panels/panel_regulator.h>
 #include <calculator_panels/panel_track_width.h>
 #include <calculator_panels/panel_transline.h>
@@ -87,6 +88,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                    _( "Via Size" ) );
     AddCalculator( new PANEL_TRACK_WIDTH( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "Track Width" ) );
+    AddCalculator( new PANEL_FUSING_CURRENT( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxTAB_TRAVERSAL ),
+                   _( "Fusing Current" ) );
     AddCalculator( new PANEL_CABLE_SIZE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxTAB_TRAVERSAL ),
                    _( "Cable Size" ) );
