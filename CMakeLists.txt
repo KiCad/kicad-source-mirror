@@ -367,6 +367,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3" )
     endif()
 
+    # Clang needs this flag or wxStrings, etc. won't be viewable in the debugger
+    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstandalone-debug" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstandalone-debug" )
+    endif()
+
     if( KICAD_SANITIZE_ADDRESS )
         add_definitions( -DKICAD_SANITIZE_ADDRESS )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
