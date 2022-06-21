@@ -2414,22 +2414,31 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 
     m_cbLayerPresets->Clear();
 
+    // Build the layers preset list.
+    // By default, the presetAllLayers will be selected
+    int idx = 0;
+    int default_idx = 0;
+
     for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
     {
         m_cbLayerPresets->Append( wxGetTranslation( pair.first ),
                                   static_cast<void*>( &pair.second ) );
+
+        if( pair.first == presetAllLayers.name )
+            default_idx = idx;
+
+        idx++;
     }
 
     m_cbLayerPresets->Append( wxT( "-----" ) );
     m_cbLayerPresets->Append( _( "Save preset..." ) );
     m_cbLayerPresets->Append( _( "Delete preset..." ) );
 
-    m_cbLayerPresets->SetSelection( 0 );
-
     // At least the built-in presets should always be present
     wxASSERT( !m_layerPresets.empty() );
 
     // Default preset: all layers
+    m_cbLayerPresets->SetSelection( default_idx );
     m_currentPreset = &m_layerPresets[presetAllLayers.name];
 }
 
@@ -2447,7 +2456,14 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
                             } );
 
     if( it != m_layerPresets.end() )
-        m_cbLayerPresets->SetStringSelection( it->first );
+    {
+        // Select the right m_cbLayersPresets item.
+        // but these items are translated if they are predefined items.
+        bool do_translate = it->second.readOnly;
+        wxString text = do_translate ? wxGetTranslation( it->first ) : it->first;
+
+        m_cbLayerPresets->SetStringSelection( text );
+    }
     else
         m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 ); // separator
 
@@ -2458,7 +2474,24 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
 
 void APPEARANCE_CONTROLS::updateLayerPresetSelection( const wxString& aName )
 {
-    int idx = m_cbLayerPresets->FindString( aName );
+    // look at m_layerPresets to know if aName is a read only preset, or a user preset.
+    // Read only presets have translated names in UI, so we have to use
+    // a translated name in UI selection.
+    // But for a user preset name we should search for aName (not translated)
+    wxString ui_label = aName;
+
+    for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
+    {
+        if( pair.first != aName )
+            continue;
+
+        if( pair.second.readOnly == true )
+            ui_label = wxGetTranslation( aName );
+
+        break;
+    }
+
+    int idx = m_cbLayerPresets->FindString( ui_label );
 
     if( idx >= 0 && m_cbLayerPresets->GetSelection() != idx )
     {
