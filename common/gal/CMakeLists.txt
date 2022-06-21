@@ -12,6 +12,7 @@ set( GAL_SRCS
     gal_display_options.cpp
     graphics_abstraction_layer.cpp
     hidpi_gl_canvas.cpp
+    hidpi_gl_3D_canvas.cpp
 
     ../view/view_controls.cpp
     ../view/view_overlay.cpp
