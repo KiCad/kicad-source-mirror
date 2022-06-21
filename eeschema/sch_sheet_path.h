@@ -611,6 +611,11 @@ public:
      */
     void SetInitialPageNumbers();
 
+    /**
+     * Migrate V6 simulator models to V7. Must be called only after UpdateSymbolInstances().
+     */
+    void MigrateSimModelNameFields();
+
 private:
     SCH_SHEET_PATH  m_currentSheetPath;
 };

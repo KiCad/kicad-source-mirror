@@ -106,16 +106,21 @@ wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
 template <typename T>
 void SIM_MODEL_IDEAL::inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
-    ParsePinsField( aSymbolPinCount, PINS_FIELD );
+    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
-    if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                    GetFieldValue( aFields, VALUE_FIELD ) ) == GetType()
-            && SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) ) )
-        // If Value is device type, this is an empty model
-        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+    if( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
+                                  GetFieldValue( aFields, VALUE_FIELD ) ) == GetType() )
     {
+        if( !SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) ) )
+            THROW_IO_ERROR( wxString::Format( _( "Failed to infer model from Value '%s'" ),
+                                              GetFieldValue( aFields, VALUE_FIELD ) ) );
+
         m_isInferred = true;
+        return;
     }
+
+    if( GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+        m_isInferred = true;
 }
 
 
@@ -136,7 +141,7 @@ PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( wxString aName, wxString aDescriptio
     SIM_MODEL::PARAM::INFO paramInfo = {};
 
     paramInfo.name = aName;
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.description = aDescription;

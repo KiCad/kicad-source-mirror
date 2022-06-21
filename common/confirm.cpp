@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/app.h>
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
 #include <wx/choicdlg.h>
@@ -278,6 +279,12 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
 // DisplayError should be deprecated, use DisplayErrorMessage instead
 void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
 {
+    if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
+    {
+        wxLogDebug( "%s: %s", aDisplayTime, aText );
+        return;
+    }
+
     wxMessageDialog* dlg;
     int              icon = aDisplayTime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
@@ -291,6 +298,12 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
 
 void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString& aExtraInfo )
 {
+    if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
+    {
+        wxLogDebug( "%s %s", aText, aExtraInfo );
+        return;
+    }
+
     wxMessageDialog* dlg;
 
     dlg = new wxMessageDialog( aParent, aText, _( "Error" ),
@@ -306,6 +319,12 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 
 void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo )
 {
+    if( !wxTheApp || !wxTheApp->GetTopWindow() )
+    {
+        wxLogDebug( "%s %s", aMessage, aExtraInfo );
+        return;
+    }
+
     wxMessageDialog* dlg;
     int              icon = wxICON_INFORMATION;
 

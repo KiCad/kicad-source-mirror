@@ -47,15 +47,18 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
       m_prevModel( nullptr ),
       m_firstCategory( nullptr ),
-      m_prevParamGridSelection( nullptr )
+      m_prevParamGridSelection( nullptr ),
+      m_wasCodePreviewUpdated( true )
 {
+    m_modelNameCombobox->SetValidator( m_modelNameValidator );
+    auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
 
-        SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
         
         if( !m_curModelTypeOfDeviceType.count( deviceType ) )
             m_curModelTypeOfDeviceType[deviceType] = type;
@@ -64,14 +67,13 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     m_typeChoice->Clear();
 
-    for( SIM_MODEL::DEVICE_TYPE deviceType : SIM_MODEL::DEVICE_TYPE_ITERATOR() )
+    for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
         m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
 
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
 
-    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange,
-                          this );
+    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
     m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
                                                | wxPG_VFB_BEEP
@@ -85,6 +87,12 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     if( wxPropertyGrid* grid = m_paramGrid->GetGrid() )
     {
+        //grid->SetCellBackgroundColour( grid->GetPropertyDefaultCell().GetBgCol() );
+        //grid->SetCellTextColour( grid->GetPropertyDefaultCell().GetFgCol();
+
+        // In wx 3.0 the color will be wrong sometimes.
+        grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
         grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
 
         grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
@@ -107,7 +115,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
     wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields,
                                                          SIM_LIBRARY_SPICE::LIBRARY_FIELD );
 
-    if( !libraryFilename.IsEmpty() )
+    if( libraryFilename != "" )
     {
         // The model is sourced from a library, optionally with instance overrides.
         loadLibrary( libraryFilename );
@@ -116,7 +124,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         m_modelNameCombobox->SetStringSelection(
                 SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) );
 
-        m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+        m_excludeSymbolCheckbox->SetValue( !curModel().IsEnabled() );
     }
     else
     {
@@ -128,7 +136,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
                 = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
         }
-        catch( const KI_PARAM_ERROR& e )
+        catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( this, e.What() );
             return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
@@ -146,6 +154,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 template <typename T>
 bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
+    m_pinAssignmentsGrid->CommitPendingChanges();
+
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
@@ -191,7 +201,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
     if( &curModel() != m_prevModel )
     {
-        SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
+        SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
 
         // Change the Type choice to match the current device type.
         if( !m_prevModel || deviceType != m_prevModel->GetDeviceType() )
@@ -229,7 +239,10 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         m_paramGrid->Clear();
 
-        m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "AC" ) );
+        m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "Geometry" ) );
+        m_paramGrid->HideProperty( "Geometry" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "AC" ) );
         m_paramGrid->HideProperty( "AC" );
 
         m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
@@ -247,9 +260,6 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Append( new wxPropertyCategory( "Distributed Quantities" ) );
         m_paramGrid->HideProperty( "Distributed Quantities" );
 
-        m_paramGrid->Append( new wxPropertyCategory( "Geometry" ) );
-        m_paramGrid->HideProperty( "Geometry" );
-
         m_paramGrid->Append( new wxPropertyCategory( "Limiting Values" ) );
         m_paramGrid->HideProperty( "Limiting Values" );
 
@@ -263,15 +273,28 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         for( unsigned i = 0; i < curModel().GetParamCount(); ++i )
             addParamPropertyIfRelevant( i );
+
+        m_paramGrid->CollapseAll();
+        m_paramGrid->Expand( "AC" );
     }
 
     // Either enable all properties or disable all except the principal ones.
+    // Set all properties to default colors.
     for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
     {
-        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
+        SIM_STRING_PROPERTY* prop = dynamic_cast<SIM_STRING_PROPERTY*>( *it );
 
         if( !prop ) // Not all properties are SIM_PROPERTY yet. TODO.
             continue;
+
+        wxColour bgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetBgCol();
+        wxColour fgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetFgCol();
+
+        for( int i = 0; i < m_paramGridMgr->GetColumnCount(); ++i )
+        {
+            prop->GetCell( i ).SetBgCol( bgCol );
+            prop->GetCell( i ).SetFgCol( fgCol );
+        }
 
         // Model values other than the currently edited value may have changed. Update them.
         // This feature is called "autofill" and present only in certain models. Don't do it for
@@ -279,9 +302,12 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         if( curModel().HasAutofill() )
             prop->SetValueFromString( prop->GetParam().value->ToString() );
 
+        m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+
         // Most of the values are disabled when the override checkbox is unchecked.
         prop->Enable( m_useInstanceModelRadioButton->GetValue()
-            || prop->GetParam().info.isInstanceParam
+            || ( prop->GetParam().info.isInstanceParam
+                 && prop->GetParam().info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
             || m_overrideCheckbox->GetValue() );
     }
 }
@@ -295,15 +321,17 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
     if( m_useInstanceModelRadioButton->GetValue() || modelName.IsEmpty() )
         modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
+    m_codePreview->SetEditable( true );
     m_codePreview->SetText( curModel().GenerateSpicePreview( modelName ) );
+    m_codePreview->SetEditable( false );
+    m_wasCodePreviewUpdated = true;
 }
 
 
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
 {
-    if( &curModel() == m_prevModel )
-        return;
+    // First reset the grid.
 
     m_pinAssignmentsGrid->ClearRows();
     std::vector<SCH_PIN*> pinList = m_symbol.GetAllPins();
@@ -312,20 +340,11 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
 
     for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
     {
-        wxString symbolPinString = getSymbolPinString( i + 1 );
-
-        m_pinAssignmentsGrid->SetReadOnly( i, static_cast<int>( PIN_COLUMN::SYMBOL ) );
-        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::SYMBOL ),
-                                            symbolPinString );
-
-        // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
-        // `DecRef()` on its last editor.
-        m_pinAssignmentsGrid->SetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ),
-                                             new wxGridCellChoiceEditor() );
         m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::MODEL ),
                                             "Not Connected" );
     }
 
+    // Now set the grid values.
     for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
     {
         unsigned symbolPinNumber = curModel().GetPin( i ).symbolPinNumber;
@@ -341,62 +360,33 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
                                             modelPinString );
     }
 
-    updatePinAssignmentsGridEditors();
+    wxArrayString modelPinChoices = getModelPinChoices();
 
-    // TODO: Show a preview of the symbol with the pin numbers shown.
-    // TODO: Maybe show a preview of the code for subcircuits and code models.
-}
-
-
-template <typename T>
-void DIALOG_SIM_MODEL<T>::updatePinAssignmentsGridEditors()
-{
-    wxString modelPinChoicesString = "";
-    bool isFirst = true;
-
-    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
-    {
-        const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
-        int modelPinNumber = static_cast<int>( i + 1 );
-
-        if( modelPin.symbolPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
-            continue;
-
-        if( isFirst )
-        {
-            modelPinChoicesString << getModelPinString( modelPinNumber );
-            isFirst = false;
-        }
-        else
-            modelPinChoicesString << "," << getModelPinString( modelPinNumber );
-    }
-
-    if( !isFirst )
-        modelPinChoicesString << ",";
-
-    modelPinChoicesString << "Not Connected";
-
+    // Now set up cell editors, including dropdown options.
     for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
     {
-        wxGridCellChoiceEditor* editor = static_cast<wxGridCellChoiceEditor*>(
-            m_pinAssignmentsGrid->GetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ) ) );
+        wxString symbolPinString = getSymbolPinString( i + 1 );
 
-        if( !editor )
-        {
-            // Shouldn't happen.
-            wxFAIL_MSG( "Grid cell editor is null" );
-            return;
-        }
+        m_pinAssignmentsGrid->SetReadOnly( i, static_cast<int>( PIN_COLUMN::SYMBOL ) );
+        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::SYMBOL ),
+                                            symbolPinString );
 
         wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue(
                 i, static_cast<int>( PIN_COLUMN::MODEL ) );
 
-        if( curModelPinString == "Not Connected" )
-            editor->SetParameters( modelPinChoicesString );
-        else
-            editor->SetParameters( curModelPinString + "," + modelPinChoicesString );
+        wxArrayString actualModelPinChoices( modelPinChoices );
 
+        if( curModelPinString != "Not Connected" )
+            actualModelPinChoices.Insert( curModelPinString, 0 );
+
+        // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
+        // `DecRef()` on its last editor.
+        m_pinAssignmentsGrid->SetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ),
+                                             new wxGridCellChoiceEditor( actualModelPinChoices ) );
     }
+
+    // TODO: Show a preview of the symbol with the pin numbers shown.
+    // TODO: Maybe show a preview of the code for subcircuits and code models.
 }
 
 
@@ -414,18 +404,51 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         DisplayErrorMessage( this, wxString::Format( _( "Failed reading model library '%s'." ),
                                                      absolutePath ),
                              e.What() );
+        return;
     }
 
-    m_libraryPathInput->SetValue( aFilePath );
+    m_libraryPathLabel->SetLabel( aFilePath );
 
     m_libraryModels.clear();
-    for( const SIM_MODEL& baseModel : m_library->GetModels() )
-        m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size(),
-                                                      m_fields ) );
 
-    m_modelNameCombobox->Clear();
+    try
+    {
+        for( unsigned i = 0; i < m_library->GetModels().size(); ++i )
+        {
+            const SIM_MODEL& baseModel = m_library->GetModels().at( i );
+            wxString         baseModelName = m_library->GetModelNames().at( i );
+
+            // Only the current model is initialized from fields. Others have default
+            // initialization.
+            if( baseModelName
+                == SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) )
+            {
+                //TODO: it's not cur model.
+
+                m_libraryModels.push_back(
+                        SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size(), m_fields ) );
+            }
+            else
+            {
+                m_libraryModels.push_back(
+                        SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size() ) );
+            }
+        }
+    }
+    catch( const IO_ERROR& e )
+    {
+        DisplayErrorMessage( this, e.What() );
+    }
+
+    wxArrayString modelNames;
     for( const wxString& name : m_library->GetModelNames() )
-        m_modelNameCombobox->Append( name );
+        modelNames.Add( name );
+
+    auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
+    if( validator )
+        validator->SetIncludes( modelNames );
+
+    m_modelNameCombobox->Set( modelNames );
 
     m_useLibraryModelRadioButton->SetValue( true );
 }
@@ -434,7 +457,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
 {
-    if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR::OUT )
+    if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR_OUT )
         return;
 
     switch( curModel().GetParam( aParamIndex ).info.category )
@@ -442,7 +465,6 @@ void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
     case CATEGORY::AC:
         m_paramGrid->HideProperty( "AC", false );
         m_paramGrid->AppendIn( "AC", newParamProperty( aParamIndex ) );
-        m_paramGrid->Expand( "AC" );
         break;
 
     case CATEGORY::DC:
@@ -517,28 +539,29 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     switch( param.info.type )
     {
-    case TYPE::BOOL:
+    case SIM_VALUE::TYPE_BOOL:
         // TODO.
-        prop = new wxBoolProperty( paramDescription, param.info.name );
+        prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, m_library,
+                                      curModelSharedPtr(), aParamIndex );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
 
-    case TYPE::INT:
-        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE::TYPE::INT );
+    case SIM_VALUE::TYPE_INT:
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
+                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_INT );
         break;
 
-    case TYPE::FLOAT:
-        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE::TYPE::FLOAT );
+    case SIM_VALUE::TYPE_FLOAT:
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
+                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_FLOAT );
         break;
 
-    //case TYPE::COMPLEX:
+    //case TYPE_COMPLEX:
     //  break;
 
-    case TYPE::STRING:
-        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE::TYPE::STRING );
+    case SIM_VALUE::TYPE_STRING:
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
+                                 aParamIndex, SIM_VALUE::TYPE_STRING );
         break;
 
     default:
@@ -558,15 +581,15 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     switch( param.info.type )
     {
-    case TYPE::BOOL:           typeStr = wxString( "Bool"           ); break;
-    case TYPE::INT:            typeStr = wxString( "Int"            ); break;
-    case TYPE::FLOAT:          typeStr = wxString( "Float"          ); break;
-    case TYPE::COMPLEX:        typeStr = wxString( "Complex"        ); break;
-    case TYPE::STRING:         typeStr = wxString( "String"         ); break;
-    case TYPE::BOOL_VECTOR:    typeStr = wxString( "Bool Vector"    ); break;
-    case TYPE::INT_VECTOR:     typeStr = wxString( "Int Vector"     ); break;
-    case TYPE::FLOAT_VECTOR:   typeStr = wxString( "Float Vector"   ); break;
-    case TYPE::COMPLEX_VECTOR: typeStr = wxString( "Complex Vector" ); break;
+    case SIM_VALUE::TYPE_BOOL:           typeStr = wxString( "Bool"           ); break;
+    case SIM_VALUE::TYPE_INT:            typeStr = wxString( "Int"            ); break;
+    case SIM_VALUE::TYPE_FLOAT:          typeStr = wxString( "Float"          ); break;
+    case SIM_VALUE::TYPE_COMPLEX:        typeStr = wxString( "Complex"        ); break;
+    case SIM_VALUE::TYPE_STRING:         typeStr = wxString( "String"         ); break;
+    case SIM_VALUE::TYPE_BOOL_VECTOR:    typeStr = wxString( "Bool Vector"    ); break;
+    case SIM_VALUE::TYPE_INT_VECTOR:     typeStr = wxString( "Int Vector"     ); break;
+    case SIM_VALUE::TYPE_FLOAT_VECTOR:   typeStr = wxString( "Float Vector"   ); break;
+    case SIM_VALUE::TYPE_COMPLEX_VECTOR: typeStr = wxString( "Complex Vector" ); break;
     }
 
     prop->SetCell( static_cast<int>( PARAM_COLUMN::TYPE ), typeStr );
@@ -653,6 +676,34 @@ unsigned DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString
 
 
 template <typename T>
+wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
+{
+    wxArrayString modelPinChoices;
+    bool          isFirst = true;
+
+    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
+    {
+        const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
+        int                   modelPinNumber = static_cast<int>( i + 1 );
+
+        if( modelPin.symbolPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
+            continue;
+
+        if( isFirst )
+        {
+            modelPinChoices.Add( getModelPinString( modelPinNumber ) );
+            isFirst = false;
+        }
+        else
+            modelPinChoices.Add( getModelPinString( modelPinNumber ) );
+    }
+
+    modelPinChoices.Add( "Not Connected" );
+    return modelPinChoices;
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 {
     updateWidgets();
@@ -685,6 +736,24 @@ void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::onModelNameComboboxKillFocus( wxFocusEvent& aEvent )
+{
+    m_modelNameCombobox->SetSelection(
+        m_modelNameCombobox->FindString( m_modelNameCombobox->GetValue() ) );
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onModelNameComboboxTextEnter( wxCommandEvent& aEvent )
+{
+    m_modelNameCombobox->SetSelection(
+        m_modelNameCombobox->FindString( m_modelNameCombobox->GetValue() ) );
+    updateWidgets();
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
 {
     updateWidgets();
@@ -694,8 +763,8 @@ void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_TYPE deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_TYPE_ deviceType =
+        static_cast<SIM_MODEL::DEVICE_TYPE_>( m_deviceTypeChoice->GetSelection() );
 
     m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
 
@@ -706,8 +775,8 @@ void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_TYPE deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_TYPE_ deviceType =
+        static_cast<SIM_MODEL::DEVICE_TYPE_>( m_deviceTypeChoice->GetSelection() );
     wxString typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -733,6 +802,17 @@ void DIALOG_SIM_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
 
 
 template <typename T>
+void DIALOG_SIM_MODEL<T>::onCodePreviewSetFocus( wxFocusEvent& aEvent )
+{
+    // For some reason all text gets selected for me -Mikolaj
+    if( m_wasCodePreviewUpdated )
+        m_codePreview->SelectNone();
+
+    m_wasCodePreviewUpdated = false;
+}
+
+
+template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
     int symbolPinNumber = aEvent.GetRow() + 1;
@@ -746,7 +826,7 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     if( modelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
         curModel().SetPinSymbolPinNumber( modelPinNumber - 1, symbolPinNumber );
 
-    updatePinAssignmentsGridEditors();
+    updatePinAssignmentsTab();
 
     aEvent.Skip();
 }
@@ -766,7 +846,14 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::onLibraryFilenameInputUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onExcludeSymbolCheckbox( wxCommandEvent& aEvent )
+{
+    curModel().SetIsEnabled( !m_excludeSymbolCheckbox->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onLibraryPathUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
 }
@@ -810,7 +897,7 @@ void DIALOG_SIM_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onParamGridSetFocus( wxFocusEvent& aEvent )
 {
-    // By default, when a property grid is focused, the textbox is not immediately focused, until
+    // By default, when a property grid is focused, the textbox is not immediately focused until
     // Tab key is pressed. This is inconvenient, so we fix that here.
 
     wxPropertyGrid* grid = m_paramGrid->GetGrid();
@@ -889,7 +976,6 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
     wxWindow* editorControl = grid->GetEditorControl();
     if( !editorControl )
     {
-        wxFAIL;
         m_prevParamGridSelection = grid->GetSelection();
         return;
     }

@@ -544,14 +544,14 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
         return;
 
     SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( aSymbol->GetFields() );
-    SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+    SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
     switch( deviceType )
     {
-    case SIM_MODEL::DEVICE_TYPE::R:
-    case SIM_MODEL::DEVICE_TYPE::C:
-    case SIM_MODEL::DEVICE_TYPE::L:
-    case SIM_MODEL::DEVICE_TYPE::XSPICE:
+    case SIM_MODEL::DEVICE_TYPE_::R:
+    case SIM_MODEL::DEVICE_TYPE_::C:
+    case SIM_MODEL::DEVICE_TYPE_::L:
+    case SIM_MODEL::DEVICE_TYPE_::XSPICE:
         break;
 
     default:

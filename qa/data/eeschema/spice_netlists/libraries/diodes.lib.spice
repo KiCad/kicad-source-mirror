@@ -128,5 +128,9 @@
 (),= 	* Comment 9
 + N=6.6G
 
+* Garbage suffixes.
+*.model D20_Usual D(BV=1.1uV CJ=2.2MF IBV=3.3A JS=4.4KA MJ=5.5MEG N=6.6Ggarbage)
+.model D20_Usual D(BV=1.1uV CJ=2.2MF IBV=3.3A JS=4.4K MJ=5.5MEG N=6.6G)
+
 * No newline at the end of file.
-.model D20_Usual D(BV=1.1U CJ=2.2M IBV=3.3 JS=4.4K MJ=5.5MEG N=6.6G)
+.model D21_Usual D(BV=1.1U CJ=2.2M IBV=3.3 JS=4.4K MJ=5.5MEG N=6.6G)

@@ -57,7 +57,7 @@ public:
         BOOST_CHECK_EQUAL( aModel.FindParam( "cjo" )->value->ToString(), "2.2m" );
         BOOST_CHECK_EQUAL( aModel.FindParam( "ibv" )->value->ToString(), "3.3" );
         BOOST_CHECK_EQUAL( aModel.FindParam( "is" )->value->ToString(), "4.4k" );
-        BOOST_CHECK_EQUAL( aModel.FindParam( "m" )->value->ToString(), "5.5M" );
+        BOOST_CHECK_EQUAL( aModel.FindParam( "m_" )->value->ToString(), "5.5M" );
         BOOST_CHECK_EQUAL( aModel.FindParam( "n" )->value->ToString(), "6.6G" );
     }
 
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
     const std::vector<wxString>& modelNames = m_library->GetModelNames();
 
-    BOOST_CHECK_EQUAL( models.size(), 21 );
+    BOOST_CHECK_EQUAL( models.size(), 22 );
 
     for( int i = 0; i < models.size(); ++i )
     {
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
                 BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "4p" );
                 BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "100u" );
                 BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "4n" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m" )->value->ToString(), "330m" );
+                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "330m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "2" );
                 BOOST_CHECK_EQUAL( model.FindParam( "rs" )->value->ToString(), "500m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "tt" )->value->ToString(), "10n" );
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
                 BOOST_CHECK_EQUAL( model.FindParam( "xti" )->value->ToString(), "3" );
                 BOOST_CHECK_EQUAL( model.FindParam( "eg" )->value->ToString(), "1.23" );
                 BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "900f" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m" )->value->ToString(), "560m" );
+                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "560m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "vj" )->value->ToString(), "780m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "fc" )->value->ToString(), "900m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "isr" )->value->ToString(), "12.34n" );
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
             case 18:
                 BOOST_CHECK_EQUAL( modelName, "D18" );
                 BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
-                BOOST_CHECK_EQUAL( model.FindParam( "m" )->value->ToString(), "2.2" );
+                BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "2.2" );
                 BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "-3.3m" );
                 BOOST_CHECK_EQUAL( model.FindParam( "ibv" )->value->ToString(), "44k" );
                 BOOST_CHECK_EQUAL( model.FindParam( "cjo" )->value->ToString(), "55u" );
@@ -214,6 +214,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
 
             case 19:
             case 20:
+            case 21:
                 CompareToUsualDiodeModel( model, modelName, i );
                 break;
 
@@ -263,13 +264,13 @@ BOOST_AUTO_TEST_CASE( Bjts )
             break;
 
         case 4:
-            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_HICUML2,
+            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::NPN_HICUM2,
                             { "c10", "qp0", "ich", "hf0", "hfe", "hfc", "hjei", "ahjei", "rhjei",
                               "hjci" } );
             break;
 
         case 5:
-            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_HICUML2,
+            TestTransistor( model, modelName, i, SIM_MODEL::TYPE::PNP_HICUM2,
                             { "c10", "qp0", "ich", "hf0", "hfe", "hfc", "hjei", "ahjei", "rhjei",
                               "hjci" } );
             break;

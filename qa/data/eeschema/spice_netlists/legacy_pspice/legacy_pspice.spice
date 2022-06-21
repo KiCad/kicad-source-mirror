@@ -1,0 +1,31 @@
+.title KiCad schematic
+.save all
+.probe alli
+.model Q2N2222 npn (bf=200)
+
+.ac dec 100 10 1Meg
+
+C4 VOUT Net-_C4-Pad2_ 10nF
+L1 Net-_C4-Pad2_ VOUT 100mH
+R1 +12V Net-_C4-Pad2_ 10 
+R2 VOUT Net-_C4-Pad2_ 22K
+Q2 Net-_Q2-C_ /VIN Net-_Q2-E_ Q2N2222
+R8 Net-_Q1-E_ 0 2.2K
+R11 Net-_Q3-B_ 0 10K
+R6 +12V Net-_Q3-B_ 22K
+R5 +12V /VBASE 1K
+R3 +12V /VIN 22K
+R4 +12V Net-_Q2-C_ 1K
+Q3 /VBASE Net-_Q3-B_ Net-_Q2-E_ Q2N2222
+R10 Net-_Q2-E_ 0 470 
+R9 /VIN 0 10K
+Q1 VOUT /VBASE Net-_Q1-E_ Q2N2222
+C2 /VBASE 0 220pF
+V2 Net-_V2-E1_ 0 dc 0 ac 1
+C1 /VIN Net-_V2-E1_ 1UF
+V1 +12V 0 DC 12
+R12 Net-_L2-Pad1_ Net-_Q1-E_ 100 
+R7 Net-_C3-Pad1_ Net-_L2-Pad1_ 22K
+L2 Net-_L2-Pad1_ Net-_C3-Pad1_ 100mH
+C3 Net-_C3-Pad1_ 0 10nF
+.end

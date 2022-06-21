@@ -48,18 +48,20 @@ class SIM_VALUE
 public:
     using NOTATION = SIM_VALUE_GRAMMAR::NOTATION;
 
-    enum class TYPE
+    // Names like BOOL, INT, FLOAT need to be prefixed or MS Windows compilers will complain (enum
+    // class doesn't help).
+    enum TYPE
     {
-        BOOL,
-        INT,
-        FLOAT,
-        COMPLEX,
-        STRING,
+        TYPE_BOOL,
+        TYPE_INT,
+        TYPE_FLOAT,
+        TYPE_COMPLEX,
+        TYPE_STRING,
 
-        BOOL_VECTOR,
-        INT_VECTOR,
-        FLOAT_VECTOR,
-        COMPLEX_VECTOR
+        TYPE_BOOL_VECTOR,
+        TYPE_INT_VECTOR,
+        TYPE_FLOAT_VECTOR,
+        TYPE_COMPLEX_VECTOR
     };
 
     static std::unique_ptr<SIM_VALUE> Create( TYPE aType, wxString aString );
@@ -70,9 +72,11 @@ public:
 
     void operator=( const wxString& aString );
     virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
+    bool operator!=( const SIM_VALUE& aOther ) const;
 
     virtual bool FromString( const wxString& aString, NOTATION aNotation = NOTATION::SI ) = 0;
     virtual wxString ToString( NOTATION aNotation = NOTATION::SI ) const = 0;
+    wxString ToSpiceString() const { return ToString( NOTATION::SPICE ); }
 
     // For parsers that don't accept strings with our suffixes.
     virtual wxString ToSimpleString() const = 0;
@@ -80,11 +84,11 @@ public:
 
 
 template <typename T>
-class SIM_VALUE_INSTANCE : public SIM_VALUE
+class SIM_VALUE_INST : public SIM_VALUE
 {
 public:
-    SIM_VALUE_INSTANCE() = default;
-    SIM_VALUE_INSTANCE( const T& aValue );
+    SIM_VALUE_INST() = default;
+    SIM_VALUE_INST( const T& aValue );
 
     // TODO: Don't pass aNotation. Make a FromSpiceString() function instead.
     bool FromString( const wxString& aString, NOTATION aNotation = NOTATION::SI ) override;
@@ -92,13 +96,35 @@ public:
     wxString ToSimpleString() const override;
 
     void operator=( const T& aValue );
+    bool operator==( const T& aOther ) const;
     bool operator==( const SIM_VALUE& aOther ) const override;
+
+    template <typename Type>
+    friend SIM_VALUE_INST<Type> operator+( const SIM_VALUE_INST<Type>& aLeft,
+                                           const SIM_VALUE_INST<Type>& aRight );
+
+    template <typename Type>
+    friend SIM_VALUE_INST<Type> operator-( const SIM_VALUE_INST<Type>& aLeft,
+                                           const SIM_VALUE_INST<Type>& aRight );
+
+    template <typename Type>
+    friend SIM_VALUE_INST<Type> operator*( const SIM_VALUE_INST<Type>& aLeft,
+                                           const SIM_VALUE_INST<Type>& aRight );
+
+    template <typename Type>
+    friend SIM_VALUE_INST<Type> operator/( const SIM_VALUE_INST<Type>& aLeft,
+                                           const SIM_VALUE_INST<Type>& aRight );
 
 private:
     wxString getMetricSuffix();
 
     OPT<T> m_value = NULLOPT;
 };
+
+typedef SIM_VALUE_INST<bool> SIM_VALUE_BOOL;
+typedef SIM_VALUE_INST<long> SIM_VALUE_LONG;
+typedef SIM_VALUE_INST<double> SIM_VALUE_FLOAT;
+typedef SIM_VALUE_INST<wxString> SIM_VALUE_STRING;
 
 
 namespace SIM_VALUE_GRAMMAR
@@ -121,14 +147,15 @@ namespace SIM_VALUE_GRAMMAR
     template <SIM_VALUE::TYPE ValueType>
     struct significand;
     
-    template <> struct significand<SIM_VALUE::TYPE::FLOAT> :
+    template <> struct significand<SIM_VALUE::TYPE_FLOAT> :
         sor<seq<intPart, one<'.'>, fracPart>,
             seq<intPart, one<'.'>>,
             intPart,
             seq<one<'.'>, fracPart>,
-            one<'.'>> {};
+            one<'.'>,
+            one<'-'>> {};
 
-    template <> struct significand<SIM_VALUE::TYPE::INT> : intPart {};
+    template <> struct significand<SIM_VALUE::TYPE_INT> : intPart {};
 
 
     struct exponentPrefix : one<'e', 'E'> {};
@@ -139,17 +166,17 @@ namespace SIM_VALUE_GRAMMAR
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
     struct metricSuffix;
 
-    template <> struct metricSuffix<SIM_VALUE::TYPE::INT, NOTATION::SI>
+    template <> struct metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SI>
         : one<'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
-    template <> struct metricSuffix<SIM_VALUE::TYPE::INT, NOTATION::SPICE>
+    template <> struct metricSuffix<SIM_VALUE::TYPE_INT, NOTATION::SPICE>
         : sor<TAO_PEGTL_ISTRING( "k" ),
               TAO_PEGTL_ISTRING( "Meg" ),
               TAO_PEGTL_ISTRING( "G" ),
               TAO_PEGTL_ISTRING( "T" )> {};
 
-    template <> struct metricSuffix<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>
+    template <> struct metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>
         : one<'a', 'f', 'p', 'n', 'u', 'm', 'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
-    template <> struct metricSuffix<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>
+    template <> struct metricSuffix<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>
         : sor<TAO_PEGTL_ISTRING( "f" ),
               TAO_PEGTL_ISTRING( "p" ),
               TAO_PEGTL_ISTRING( "n" ),
@@ -162,17 +189,25 @@ namespace SIM_VALUE_GRAMMAR
               TAO_PEGTL_ISTRING( "T" )> {};
 
 
+    template <NOTATION Notation>
+    struct garbageSuffix;
+
+    template <> struct garbageSuffix<NOTATION::SI> : seq<> {};
+    template <> struct garbageSuffix<NOTATION::SPICE> : star<alnum> {};
+
+
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
     struct number : seq<opt<significand<ValueType>>,
                         opt<exponentWithPrefix>,
-                        sor<metricSuffix<ValueType, Notation>, not_at<alnum>>> {};
+                        opt<metricSuffix<ValueType, Notation>>,
+                        garbageSuffix<Notation>> {};
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
-    struct numberGrammar : must<number<ValueType, Notation>, eof> {};
+    struct numberGrammar : must<number<ValueType, Notation>, tao::pegtl::eof> {};
 
 
     bool IsValid( const wxString& aString,
-                  SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE::FLOAT,
+                  SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
                   NOTATION aNotation = NOTATION::SI );
 }
 

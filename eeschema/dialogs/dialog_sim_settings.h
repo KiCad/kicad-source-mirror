@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_SIM_SETTINGS_BASE_H
-#define DIALOG_SIM_SETTINGS_BASE_H
+#ifndef DIALOG_SIM_SETTINGS_H
+#define DIALOG_SIM_SETTINGS_H
 
 #include "dialog_sim_settings_base.h"
 #include <sim/spice_value.h>
@@ -185,4 +185,4 @@ private:
     wxIntegerValidator<int> m_posIntValidator;
 };
 
-#endif /* DIALOG_SIM_SETTINGS_BASE_H */
+#endif /* DIALOG_SIM_SETTINGS_H */

@@ -48,6 +48,8 @@ public:
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
+    bool parseValueField( const wxString& aValueField );
+
     template <typename T>
     void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 

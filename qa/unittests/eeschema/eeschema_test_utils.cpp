@@ -159,3 +159,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::TestNetlist( const wxString& aBase
     CompareNetlists();
     Cleanup();
 }
+
+
+template class TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>;
+template class TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>;

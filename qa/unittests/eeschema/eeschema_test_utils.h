@@ -105,7 +105,4 @@ public:
     void TestNetlist( const wxString& aBaseName );
 };
 
-template class TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>;
-template class TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>;
-
 #endif // QA_EESCHEMA_EESCHEMA_TEST_UTILS__H

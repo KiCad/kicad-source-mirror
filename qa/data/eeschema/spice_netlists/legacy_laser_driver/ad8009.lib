@@ -1,0 +1,123 @@
+* Node assignments
+*                non-inverting input
+*                | inverting input
+*                | | positive supply
+*                | | |  negative supply
+*                | | |  |  output
+*                | | |  |  |
+.SUBCKT AD8009 1 2 99 50 28
+
+* input stage *
+
+q1 50 3 5 qp1
+q2 99 5 4 qn1
+q3 99 3 6 qn2
+q4 50 6 4 qp2
+i1 99 5 1.625e-3
+i2 6 50 1.625e-3
+cin1 1 98 2.6e-12
+cin2 2 98 1e-12
+v1 4 2 0
+
+* input error sources *
+
+eos 3 1 poly(1) 20 98 2e-3 1
+fbn 2 98 poly(1) vnoise3 50e-6 1e-3
+fbp 1 98 poly(1) vnoise3 50e-6 1e-3
+
+* slew limiting stage *
+
+fsl 98 16 v1 1
+dsl1 98 16 d1
+dsl2 16 98 d1
+dsl3 16 17 d1
+dsl4 17 16 d1
+rsl  17 18 0.22
+vsl  18 98 0
+
+* gain stage *
+
+f1 98 7 vsl 2
+rgain 7 98 2.5e5
+cgain 7 98 1.25e-12
+dcl1 7 8 d1
+dcl2 9 7 d1
+vcl1 99 8 1.83
+vcl2 9 50 1.83
+
+gcm 98 7 poly(2) 98 0 30 0 0 1e-5 1e-5
+
+* second pole *
+
+epole 14 98 7 98 1
+rpole 14 15 1
+cpole 15 98 2e-10
+
+* reference stage *
+
+eref 98 0 poly(2) 99 0 50 0 0 0.5 0.5 
+
+ecmref 30 0 poly(2) 1 0 2 0 0 0.5 0.5
+
+* vnoise stage *
+
+rnoise1 19 98 4.6e-3
+vnoise1 19 98 0
+vnoise2 21 98 0.53
+dnoise1 21 19 dn
+
+fnoise1 20 98 vnoise1 1
+rnoise2 20 98 1
+
+* inoise stage *
+
+rnoise3 22 98 8.18e-6
+vnoise3 22 98 0
+vnoise4 24 98 0.575
+dnoise2 24 22 dn
+
+fnoise2 23 98 vnoise3 1
+rnoise4 23 98 1
+
+* buffer stage *
+
+gbuf 98 13 15 98 1e-2
+rbuf 98 13 1e2
+
+* output current reflected to supplies *
+
+fcurr 98 40 voc 1
+vcur1 26 98 0
+vcur2 98 27 0
+dcur1 40 26 d1
+dcur2 27 40 d1
+
+* output stage *
+
+vo1 99 90 0
+vo2 91 50 0
+fout1 0 99 poly(2) vo1 vcur1 -9.27e-3 1 -1
+fout2 50 0 poly(2) vo2 vcur2 -9.27e-3 1 -1 
+gout1 90 10 13 99 0.5
+gout2 91 10 13 50 0.5
+rout1 10 90 2
+rout2 10 91 2
+voc 10 28 0
+rout3 28 98 1e6
+dcl3 13 11 d1
+dcl4 12 13 d1
+vcl3 11 10 -0.445
+vcl4 10 12 -0.445
+
+.model qp1 pnp()
+.model qp2 pnp()
+.model qn1 npn()
+.model qn2 npn()
+.model d1  d()
+.model dn  d(af=1 kf=1e-8)
+.ends
+
+
+
+
+

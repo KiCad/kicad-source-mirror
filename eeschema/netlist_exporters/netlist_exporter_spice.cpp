@@ -98,36 +98,35 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     m_nets.clear();
     m_items.clear();
 
-    for( unsigned int sheetIndex = 0; sheetIndex < m_schematic->GetSheets().size(); ++sheetIndex )
+    for( unsigned sheetIndex = 0; sheetIndex < m_schematic->GetSheets().size(); ++sheetIndex )
     {
         SCH_SHEET_PATH sheet = m_schematic->GetSheets().at( sheetIndex );
 
-        for( SCH_ITEM* schItem : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( schItem, &sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
             if( !symbol )
                 continue;
 
             CreatePinList( symbol, &sheet, true );
 
-            SPICE_ITEM item;
+            SPICE_ITEM spiceItem;
 
-            item.model = SIM_MODEL::Create(
-                    static_cast<int>( m_sortedSymbolPinList.size() ), symbol->GetFields() );
-
-            if( !readRefName( sheet, *symbol, item, refNames ) )
+            if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
                 return false;
 
-            readLibraryField( *symbol, item );
-            readNameField( *symbol, item );
-            readEnabledField( *symbol, item );
+            readLibraryField( *symbol, spiceItem );
+            readNameField( *symbol, spiceItem );
 
-            readPins( *symbol, item, notConnectedCounter );
+            if( !readModel( *symbol, spiceItem ) )
+                continue;
+
+            readPins( *symbol, spiceItem, notConnectedCounter );
 
             // TODO: transmission line handling?
 
-            m_items.push_back( std::move( item ) );
+            m_items.push_back( std::move( spiceItem ) );
         }
     }
 
@@ -227,15 +226,6 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
 
     if( field )
         path = field->GetShownText();
-    else if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
-    {
-        // Special case for legacy models.
-        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
-        path = model->GetParam( libParamIndex ).value->ToString();
-
-        m_rawIncludes.push_back( path );
-        return;
-    }
     
     if( path.IsEmpty() )
         return;
@@ -272,26 +262,26 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aIt
 
         if( baseModel )
         {
-            aItem.model = SIM_MODEL::Create( *baseModel,
-                                             m_sortedSymbolPinList.size(),
-                                             aSymbol.GetFields() );
+            try
+            {
+                aItem.model = SIM_MODEL::Create( *baseModel,
+                                                 m_sortedSymbolPinList.size(),
+                                                 aSymbol.GetFields() );
+            }
+            catch( const IO_ERROR& e )
+            {
+                DisplayErrorMessage( nullptr,
+                    wxString::Format( "Failed reading %s simulation model.", aItem.refName ),
+                    e.What() );
+                return;
+            }
+
             aItem.modelName = modelName;
             return;
         }
     }
     else
-        aItem.modelName = "__" + aItem.model->GenerateSpiceItemName( aItem.refName );
-}
-
-
-void NETLIST_EXPORTER_SPICE::readEnabledField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
-{
-    SCH_FIELD* field = aSymbol.FindField( ENABLED_FIELD );
-
-    if( !field )
-        return;
-
-    aItem.enabled = StringToBool( field->GetShownText() );
+        aItem.modelName = "__" + aItem.refName;
 }
 
 
@@ -310,6 +300,38 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
     }
 
     aRefNames.insert( aItem.refName );
+    return true;
+}
+
+
+bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+{
+    if( !aItem.model.get() )
+    {
+        try
+        {
+            aItem.model = SIM_MODEL::Create(
+                    static_cast<int>( m_sortedSymbolPinList.size() ), aSymbol.GetFields() );
+        }
+        catch( const IO_ERROR& e )
+        {
+            DisplayErrorMessage( nullptr,
+                wxString::Format( "Failed reading %s simulation model.", aItem.refName ),
+                e.What() );
+            return false;
+        }
+    }
+
+    if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
+    {
+        // Special case for legacy models.
+        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
+        wxString path = model->GetParam( libParamIndex ).value->ToString();
+
+        if( path != "" )
+            m_rawIncludes.push_back( path );
+    }
+
     return true;
 }
 
@@ -374,7 +396,7 @@ void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
 {
     for( const SPICE_ITEM& item : m_items )
     {
-        if( !item.enabled )
+        if( !item.model->IsEnabled() )
             continue;
 
         aFormatter.Print( 0, "%s", TO_UTF8( item.model->GenerateSpiceModelLine( item.modelName ) ) );
@@ -386,7 +408,7 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 {
     for( const SPICE_ITEM& item : m_items )
     {
-        if( !item.enabled )
+        if( !item.model->IsEnabled() )
             continue;
 
         aFormatter.Print( 0, "%s", TO_UTF8( item.model->GenerateSpiceItemLine( item.refName,

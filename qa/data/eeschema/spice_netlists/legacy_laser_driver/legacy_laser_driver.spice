@@ -1,0 +1,22 @@
+.title KiCad schematic
+.include "ad8009.lib"
+.include "laser.lib"
+.include "fzt1049a.lib"
+.save all
+.probe alli
+.tran 10p 150n
+
+XU1 Net-_U1-+_ Net-_U1--_ VDD VSS Net-_Q1-B_ ad8009
+R1 Net-_U1--_ GND 220 
+R2 Net-_U1-+_ /in 160 
+V1 /in GND pulse(0 3 100n 1n 1n 20n 100n )
+D1 /out GND laser
+R5 /out Net-_Q1-E_ 2.5 
+R3 Net-_Q1-E_ Net-_U1--_ 220 
+C1 Net-_U1--_ Net-_Q1-E_ 1p 
+R4 /out Net-_U1-+_ 220 
+Q1 VDD Net-_Q1-B_ Net-_Q1-E_ fzt1049a
+C2 /out Net-_Q1-E_ 1p 
+V3 GND VSS DC 10
+V2 VDD GND DC 10
+.end

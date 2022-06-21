@@ -37,10 +37,11 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
     template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
     template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotSubcktPinName> : std::true_type {};
+    template <> struct spiceUnitSelector<paramValuePairs> : std::true_type {};
     template <> struct spiceUnitSelector<param> : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
+    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE_INT, NOTATION::SPICE>>
         : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
+    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SPICE>>
         : std::true_type {};
 }
 
@@ -51,7 +52,7 @@ SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType )
 }
 
 
-bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
+void SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
 {
     tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -64,7 +65,7 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        return false;
+        THROW_IO_ERROR( e.what() );
     }
 
     wxASSERT( root );
@@ -73,6 +74,8 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
     {
         if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )
         {
+            bool hadParamValuePairs = false;
+
             for( const auto& subnode : node->children )
             {
                 if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::modelName>() )
@@ -82,20 +85,33 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
                 {
                     AddPin( { subnode->string(), GetPinCount() + 1 } );
                 }
-                else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::param>() )
+                else if( !hadParamValuePairs
+                    && subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::paramValuePairs>() )
                 {
-                    m_paramInfos.push_back( std::make_unique<PARAM::INFO>() );
-                    m_paramInfos.back()->name = subnode->string();
-                    m_paramInfos.back()->isInstanceParam = true;
-                    m_paramInfos.back()->isSpiceInstanceParam = true;
+                    for( const auto& subsubnode : subnode->children )
+                    {
+                        if( subsubnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::param>() )
+                        {
+                            m_paramInfos.push_back( std::make_unique<PARAM::INFO>() );
+                            m_paramInfos.back()->name = subsubnode->string();
+                            m_paramInfos.back()->isInstanceParam = true;
+                            m_paramInfos.back()->isSpiceInstanceParam = true;
 
-                    AddParam( *m_paramInfos.back() );
+                            AddParam( *m_paramInfos.back() );
+                        }
+                        else
+                        {
+                            wxFAIL_MSG( "Unhandled parse tree subsubnode" );
+                        }
+                    }
+
+                    hadParamValuePairs = true;
                 }
                 else if( subnode->is_type<
-                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE::INT,
+                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_INT,
                                                         SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>()
                     || subnode->is_type<
-                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE::FLOAT,
+                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
                                                         SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
                 {
                     wxASSERT( m_paramInfos.size() > 0 );
@@ -106,12 +122,10 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
         else
         {
             wxFAIL_MSG( "Unhandled parse tree node" );
-            return false;
         }
     }
 
     m_spiceCode = aSpiceCode;
-    return true;
 }
 
 
@@ -125,10 +139,12 @@ std::vector<wxString> SIM_MODEL_SUBCKT::GenerateSpiceCurrentNames( const wxStrin
 {
     std::vector<wxString> currentNames;
 
-    for( unsigned i = 0; i < GetPinCount(); ++i )
+    for( const PIN& pin : GetPins() )
+    {
         currentNames.push_back( wxString::Format( "I(%s:%s)",
                                                   GenerateSpiceItemName( aRefName ),
-                                                  GetPin( i ).name ) );
+                                                  pin.name ) );
+    }
 
     return currentNames;
 }
@@ -139,10 +155,10 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
     SIM_MODEL::SetBaseModel( aBaseModel );
 
     // Pins aren't constant for subcircuits, so they need to be copied from the base model.
-    for( unsigned i = 0; i < GetBaseModel()->GetPinCount(); ++i )
-        AddPin( GetBaseModel()->GetPin( i ) );
+    for( const PIN& pin : GetBaseModel()->GetPins() )
+        AddPin( pin );
 
     // Same for parameters.
-    for( unsigned i = 0; i < GetBaseModel()->GetParamCount(); ++i )
-        AddParam( GetBaseModel()->GetParam( i ).info );
+    for( const PARAM& param : GetBaseModel()->GetParams() )
+        AddParam( param.info );
 }

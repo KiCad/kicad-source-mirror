@@ -1,0 +1,20 @@
+.title KiCad schematic
+.include "instance_params.lib.spice"
+.save all
+.probe alli
+.dc V1 0 1 0.1
+
+*Q3 +5V Net-_Q3-B_ GND NPN_HICUM2 
+R3 /in Net-_Q3-B_ 1k 
+R6 /in Net-_Q6-B_ 1k 
+V1 /in GND 0 
+*Q6 +5V Net-_Q6-B_ GND PNP_HICUM2 
+R5 /in Net-_Q5-B_ 1k 
+Q5 +5V Net-_Q5-B_ GND PNP_VBIC 
+Q4 +5V Net-_Q4-B_ GND PNP_GUMMELPOON 
+R4 /in Net-_Q4-B_ 1k 
+Q1 +5V Net-_Q1-B_ GND NPN_GUMMELPOON 
+R1 /in Net-_Q1-B_ 1k 
+Q2 +5V Net-_Q2-B_ GND NPN_VBIC 
+R2 /in Net-_Q2-B_ 1k 
+.end

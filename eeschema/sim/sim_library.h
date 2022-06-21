@@ -31,8 +31,8 @@
 class SIM_LIBRARY
 {
 public:
-    static constexpr auto LIBRARY_FIELD = "Model_Library";
-    static constexpr auto NAME_FIELD = "Model_Name";
+    static constexpr auto LIBRARY_FIELD = "Sim_Library";
+    static constexpr auto NAME_FIELD = "Sim_Name";
 
     virtual ~SIM_LIBRARY() = default;
     SIM_LIBRARY() = default;

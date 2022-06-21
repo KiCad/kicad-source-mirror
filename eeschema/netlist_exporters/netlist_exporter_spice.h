@@ -35,7 +35,6 @@ struct SPICE_ITEM
 {
     wxString refName;
     wxString libraryPath;
-    bool enabled;
     std::vector<wxString> pins;
     std::unique_ptr<const SIM_MODEL> model;
     wxString modelName;
@@ -45,8 +44,6 @@ struct SPICE_ITEM
 class NETLIST_EXPORTER_SPICE : public NETLIST_EXPORTER_BASE
 {
 public:
-    static constexpr auto ENABLED_FIELD = "Model_Enabled";
-
     enum OPTIONS
     {
         OPTION_ADJUST_INCLUDE_PATHS = 8,
@@ -102,20 +99,6 @@ public:
      */
     const std::list<SPICE_ITEM>& GetItems() const { return m_items; }
 
-    /**
-     * Convert typical boolean string values (no/yes, true/false, 1/0) to a boolean value.
-     */
-    static bool StringToBool( const wxString& aStr )
-    {
-        if( aStr.IsEmpty() )
-            return false;
-
-        char c = aStr.Lower()[0];
-
-        // Different ways of saying false (no/false/0)
-        return !( c == 'n' || c == 'f' || c == '0' );
-    }
-
     const std::vector<wxString>& GetDirectives() { return m_directives; }
 
 protected:
@@ -128,6 +111,7 @@ private:
     void readEnabledField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
     bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                       std::set<wxString>& aRefNames );
+    bool readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
     void readPins( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem, int& notConnectedCounter );
 
     void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,

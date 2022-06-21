@@ -139,7 +139,7 @@ bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
         std::unique_ptr<PARAM::INFO> paramInfo = std::make_unique<PARAM::INFO>();
 
         paramInfo->name = aParamName.Lower();
-        paramInfo->type = SIM_VALUE::TYPE::STRING;
+        paramInfo->type = SIM_VALUE::TYPE_STRING;
         m_paramInfos.push_back( std::move( paramInfo ) );
 
         AddParam( *m_paramInfos.back() );
@@ -161,7 +161,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
         {
         case SPICE_PARAM::TYPE:
             paramInfo.name = "type";
-            paramInfo.type = SIM_VALUE::TYPE::STRING;
+            paramInfo.type = SIM_VALUE::TYPE_STRING;
             paramInfo.unit = "";
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
@@ -172,7 +172,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
 
         case SPICE_PARAM::MODEL:
             paramInfo.name = "model";
-            paramInfo.type = SIM_VALUE::TYPE::STRING;
+            paramInfo.type = SIM_VALUE::TYPE_STRING;
             paramInfo.unit = "";
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
@@ -183,7 +183,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
 
         case SPICE_PARAM::LIB:
             paramInfo.name = "lib";
-            paramInfo.type = SIM_VALUE::TYPE::STRING;
+            paramInfo.type = SIM_VALUE::TYPE_STRING;
             paramInfo.unit = "";
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
@@ -212,7 +212,7 @@ void SIM_MODEL_SPICE::readLegacyDataFields( unsigned aSymbolPinCount, const std:
                        GetFieldValue( aFields, LEGACY_TYPE_FIELD ) );
     }
 
-    if( GetFieldValue( aFields, PINS_FIELD ).IsEmpty() )
+    if( GetFieldValue( aFields, PINS_FIELD ) == "" )
         ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, LEGACY_PINS_FIELD ) );
 
     if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString().IsEmpty() )

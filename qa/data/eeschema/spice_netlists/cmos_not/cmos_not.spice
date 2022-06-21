@@ -1,0 +1,18 @@
+.title KiCad schematic
+.include "cmos.lib.spice"
+.model nmos nmos(
++ vto=500m kp=36u gamma=900m pb=950m
++ cgso=200p cgdo=200p cj=450u cjsw=215p tox=50n ld=300n )
+.model pmos pmos(
++ vto=500m kp=12u gamma=600m pb=900m
++ cgso=200p cgdo=200p cj=250u cjsw=115p tox=50n ld=300n )
+.save all
+.probe alli
+.tran 1u 5m
+
+M2 /out /in GND GND nmos l=1u w=1u 
+V_PWR1 +5V GND 5 
+M1 /out /in +5V +5V pmos l=1u w=1.4u 
+R1 /out GND 10Meg 
+VSIN_IN1 /in GND SIN( 2.5 2.5 1k ) 
+.end

@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "laser_driver_schlib")(type "KiCad")(uri "${KIPRJMOD}/laser_driver_schlib.kicad_sym")(options "")(descr ""))
+)

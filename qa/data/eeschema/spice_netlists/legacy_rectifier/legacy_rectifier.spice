@@ -1,0 +1,12 @@
+.title KiCad schematic
+.include "diode.mod"
+.save all
+.probe alli
+.tran 1u 10m
+
+D1 Net-_D1-A_ /rect_out 1N4148
+R1 /signal_in Net-_D1-A_ 1k
+V1 GND /signal_in SINE(0 1.5 1k 0 0 0 0)
+C1 /rect_out GND 100n
+R2 /rect_out GND 100k
+.end

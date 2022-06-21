@@ -13,7 +13,7 @@
 
 DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 600,800 ), wxDefaultSize );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -38,8 +38,9 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_useLibraryModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer15->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_libraryPathInput = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_libraryPathInput, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_libraryPathLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryPathLabel->Wrap( -1 );
+	fgSizer15->Add( m_libraryPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_browseButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	fgSizer15->Add( m_browseButton, 0, wxALL, 5 );
@@ -51,7 +52,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_modelNameLabel->Wrap( -1 );
 	fgSizer15->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_modelNameCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_modelNameCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	fgSizer15->Add( m_modelNameCombobox, 0, wxALL|wxEXPAND, 5 );
 
 	m_overrideCheckbox = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Override"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -211,8 +212,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
-	m_excludeSymbol = new wxCheckBox( this, wxID_ANY, wxT("Exclude symbol from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_excludeSymbol, 0, wxALL, 5 );
+	m_excludeSymbolCheckbox = new wxCheckBox( this, wxID_ANY, wxT("Exclude symbol from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_excludeSymbolCheckbox, 0, wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -226,16 +227,19 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	this->SetSizer( bSizer8 );
 	this->Layout();
+	bSizer8->Fit( this );
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
 	m_useInstanceModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_useLibraryModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
-	m_libraryPathInput->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryFilenameInputUpdate ), NULL, this );
+	m_libraryPathLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameCombobox->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameCombobox ), NULL, this );
+	m_modelNameCombobox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
+	m_modelNameCombobox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxTextEnter ), NULL, this );
 	m_modelNameCombobox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
 	m_overrideCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckbox ), NULL, this );
 	m_overrideCheckbox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
@@ -244,8 +248,10 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_typeChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoiceUpdate ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SIM_MODEL_BASE::onParamGridChanged ), NULL, this );
+	m_codePreview->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onCodePreviewSetFocus ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
+	m_excludeSymbolCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onExcludeSymbolCheckbox ), NULL, this );
 }
 
 DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
@@ -253,10 +259,12 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	// Disconnect Events
 	m_useInstanceModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_useLibraryModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
-	m_libraryPathInput->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryFilenameInputUpdate ), NULL, this );
+	m_libraryPathLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameCombobox->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameCombobox ), NULL, this );
+	m_modelNameCombobox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
+	m_modelNameCombobox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxTextEnter ), NULL, this );
 	m_modelNameCombobox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
 	m_overrideCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckbox ), NULL, this );
 	m_overrideCheckbox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
@@ -265,7 +273,9 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_typeChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoiceUpdate ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SIM_MODEL_BASE::onParamGridChanged ), NULL, this );
+	m_codePreview->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onCodePreviewSetFocus ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
+	m_excludeSymbolCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onExcludeSymbolCheckbox ), NULL, this );
 
 }

@@ -18,13 +18,12 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
+#include <wx/stattext.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/stattext.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
@@ -55,7 +54,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxPanel* m_modelPanel;
 		wxRadioButton* m_useInstanceModelRadioButton;
 		wxRadioButton* m_useLibraryModelRadioButton;
-		wxTextCtrl* m_libraryPathInput;
+		wxStaticText* m_libraryPathLabel;
 		wxBitmapButton* m_browseButton;
 		wxStaticText* m_modelNameLabel;
 		wxComboBox* m_modelNameCombobox;
@@ -73,17 +72,19 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxPanel* m_pinAssignmentsPanel;
 		WX_GRID* m_pinAssignmentsGrid;
 		wxStaticLine* m_staticline1;
-		wxCheckBox* m_excludeSymbol;
+		wxCheckBox* m_excludeSymbolCheckbox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onLibraryFilenameInputUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onLibraryPathUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModelNameCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void onModelNameComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -92,13 +93,15 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onParamGridChanged( wxPropertyGridEvent& event ) { event.Skip(); }
+		virtual void onCodePreviewSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void onExcludeSymbolCheckbox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,800 ), long style = wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP );
+		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_SIM_MODEL_BASE();
 

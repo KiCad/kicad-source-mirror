@@ -28,61 +28,12 @@
 #include <confirm.h>
 #include <wx/combo.h>
 #include <wx/combobox.h>
-#include <wx/gtk/notebook.h>
+#include <wx/notebook.h>
 
 
 wxBEGIN_EVENT_TABLE( SIM_VALIDATOR, wxValidator )
-    EVT_TEXT( wxID_ANY, SIM_VALIDATOR::onText )
-    EVT_CHAR( SIM_VALIDATOR::onChar )
     EVT_KEY_DOWN( SIM_VALIDATOR::onKeyDown )
-    EVT_MOUSE_EVENTS( SIM_VALIDATOR::onMouse )
 wxEND_EVENT_TABLE()
-
-
-SIM_VALIDATOR::SIM_VALIDATOR( SIM_VALUE::TYPE aValueType,
-                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
-    : wxValidator(),
-      m_valueType( aValueType ),
-      m_notation( aNotation )
-{
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    m_prevText = textEntry->GetValue();
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
-}
-
-
-wxObject* SIM_VALIDATOR::Clone() const
-{
-    return new SIM_VALIDATOR( *this );
-}
-
-
-bool SIM_VALIDATOR::Validate( wxWindow* aParent )
-{
-    if( !m_validatorWindow->IsEnabled() )
-        return true;
-
-    wxTextEntry* const textEntry = getTextEntry();
-    if( !textEntry )
-        return false;
-
-    return isValid( textEntry->GetValue() );
-}
-
-
-bool SIM_VALIDATOR::TransferToWindow()
-{
-    return true;
-}
-
-
-bool SIM_VALIDATOR::TransferFromWindow()
-{
-    return true;
-}
 
 
 void SIM_VALIDATOR::navigate( int flags )
@@ -161,62 +112,6 @@ void SIM_VALIDATOR::navigate( int flags )
 }
 
 
-bool SIM_VALIDATOR::isValid( const wxString& aString )
-{
-    return SIM_VALUE_GRAMMAR::IsValid( aString, m_valueType, m_notation );
-}
-
-
-wxTextEntry* SIM_VALIDATOR::getTextEntry()
-{
-    // Taken from wxTextValidator.
-
-    if( wxDynamicCast( m_validatorWindow, wxTextCtrl ) )
-        return ( wxTextCtrl* ) m_validatorWindow;
-
-    if( wxDynamicCast( m_validatorWindow, wxComboBox ) )
-        return ( wxComboBox* ) m_validatorWindow;
-
-    if( wxDynamicCast( m_validatorWindow, wxComboCtrl ) )
-        return ( wxComboCtrl* ) m_validatorWindow;
-
-    wxFAIL_MSG(
-        "SIM_VALIDATOR can only be used with wxTextCtrl, wxComboBox, or wxComboCtrl"
-    );
-
-    return nullptr;
-}
-
-
-void SIM_VALIDATOR::onText( wxCommandEvent& aEvent )
-{
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    if( !isValid( textEntry->GetValue() ) )
-    {
-        textEntry->ChangeValue( m_prevText );
-        textEntry->SetInsertionPoint( m_prevInsertionPoint );
-    }
-
-    m_prevText = textEntry->GetValue();
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
-}
-
-
-void SIM_VALIDATOR::onChar( wxKeyEvent& aEvent )
-{
-    aEvent.Skip();
-
-    wxTextEntry* textEntry = getTextEntry();
-    if( !textEntry )
-        return;
-
-    m_prevInsertionPoint = textEntry->GetInsertionPoint();
-}
-
-
 void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
 {
     // Because wxPropertyGrid has special handling for the tab key, wxPropertyGrid::DedicateKey()
@@ -275,7 +170,117 @@ void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
 }
 
 
-void SIM_VALIDATOR::onMouse( wxMouseEvent& aEvent )
+wxBEGIN_EVENT_TABLE( SIM_BOOL_VALIDATOR, SIM_VALIDATOR )
+wxEND_EVENT_TABLE()
+
+
+bool SIM_BOOL_VALIDATOR::Validate( wxWindow* aParent )
+{
+    return true;
+}
+
+
+wxBEGIN_EVENT_TABLE( SIM_STRING_VALIDATOR, SIM_VALIDATOR )
+    EVT_TEXT( wxID_ANY, SIM_STRING_VALIDATOR::onText )
+    EVT_CHAR( SIM_STRING_VALIDATOR::onChar )
+    EVT_MOUSE_EVENTS( SIM_STRING_VALIDATOR::onMouse )
+wxEND_EVENT_TABLE()
+
+
+SIM_STRING_VALIDATOR::SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType,
+                                            SIM_VALUE_GRAMMAR::NOTATION aNotation )
+    : SIM_VALIDATOR(),
+      m_valueType( aValueType ),
+      m_notation( aNotation )
+{
+    wxTextEntry* textEntry = getTextEntry();
+    if( !textEntry )
+        return;
+
+    m_prevText = textEntry->GetValue();
+    m_prevInsertionPoint = textEntry->GetInsertionPoint();
+}
+
+
+wxObject* SIM_STRING_VALIDATOR::Clone() const
+{
+    return new SIM_STRING_VALIDATOR( *this );
+}
+
+
+bool SIM_STRING_VALIDATOR::Validate( wxWindow* aParent )
+{
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const textEntry = getTextEntry();
+    if( !textEntry )
+        return false;
+
+    return isValid( textEntry->GetValue() );
+}
+
+
+bool SIM_STRING_VALIDATOR::TransferToWindow()
+{
+    return true;
+}
+
+
+bool SIM_STRING_VALIDATOR::TransferFromWindow()
+{
+    return true;
+}
+
+
+bool SIM_STRING_VALIDATOR::isValid( const wxString& aString )
+{
+    return SIM_VALUE_GRAMMAR::IsValid( aString, m_valueType, m_notation );
+}
+
+
+wxTextEntry* SIM_STRING_VALIDATOR::getTextEntry()
+{
+    if( !m_validatorWindow )
+        return nullptr;
+
+    // Taken from wxTextValidator.
+
+    if( wxDynamicCast( m_validatorWindow, wxTextCtrl ) )
+        return ( wxTextCtrl* ) m_validatorWindow;
+
+    if( wxDynamicCast( m_validatorWindow, wxComboBox ) )
+        return ( wxComboBox* ) m_validatorWindow;
+
+    if( wxDynamicCast( m_validatorWindow, wxComboCtrl ) )
+        return ( wxComboCtrl* ) m_validatorWindow;
+
+    wxFAIL_MSG(
+        "SIM_STRING_VALIDATOR can only be used with wxTextCtrl, wxComboBox, or wxComboCtrl"
+    );
+
+    return nullptr;
+}
+
+
+void SIM_STRING_VALIDATOR::onText( wxCommandEvent& aEvent )
+{
+    wxTextEntry* textEntry = getTextEntry();
+    if( !textEntry )
+        return;
+
+    if( !isValid( textEntry->GetValue() ) )
+    {
+        textEntry->ChangeValue( m_prevText );
+        textEntry->SetInsertionPoint( m_prevInsertionPoint );
+    }
+
+    m_prevText = textEntry->GetValue();
+    m_prevInsertionPoint = textEntry->GetInsertionPoint();
+}
+
+
+void SIM_STRING_VALIDATOR::onChar( wxKeyEvent& aEvent )
 {
     aEvent.Skip();
 
@@ -287,12 +292,64 @@ void SIM_VALIDATOR::onMouse( wxMouseEvent& aEvent )
 }
 
 
-SIM_PROPERTY::SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                            std::shared_ptr<SIM_LIBRARY> aLibrary,
-                            std::shared_ptr<SIM_MODEL> aModel,
-                            int aParamIndex,
-                            SIM_VALUE::TYPE aValueType,
-                            SIM_VALUE_GRAMMAR::NOTATION aNotation )
+void SIM_STRING_VALIDATOR::onMouse( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxTextEntry* textEntry = getTextEntry();
+    if( !textEntry )
+        return;
+
+    m_prevInsertionPoint = textEntry->GetInsertionPoint();
+}
+
+
+SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                      std::shared_ptr<SIM_LIBRARY> aLibrary,
+                                      std::shared_ptr<SIM_MODEL> aModel,
+                                      int aParamIndex )
+    : wxBoolProperty( aLabel, aName ),
+      m_library( aLibrary ),
+      m_model( aModel ),
+      m_paramIndex( aParamIndex )
+{
+    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
+        m_model->GetParam( m_paramIndex ).value.get() );
+
+    wxCHECK( simValue, /*void*/ );
+
+    SetValue( *simValue == true );
+}
+
+
+wxValidator* SIM_BOOL_PROPERTY::DoGetValidator() const
+{
+    return new SIM_BOOL_VALIDATOR();
+}
+
+
+void SIM_BOOL_PROPERTY::OnSetValue()
+{
+    wxPGProperty::OnSetValue();
+
+    auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
+        m_model->GetParam( m_paramIndex ).value.get() );
+
+    wxCHECK( simValue, /*void*/ );
+
+    if( m_model->GetBaseModel() && *simValue == m_value.GetBool() )
+        m_model->SetParamValue( m_paramIndex, "" );
+    else
+        m_model->SetParamValue( m_paramIndex, m_value.GetBool() ? "1" : "0" );
+}
+
+
+SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                          std::shared_ptr<SIM_LIBRARY> aLibrary,
+                                          std::shared_ptr<SIM_MODEL> aModel,
+                                          int aParamIndex,
+                                          SIM_VALUE::TYPE aValueType,
+                                          SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxStringProperty( aLabel, aName ),
       m_valueType( aValueType ),
       m_notation( aNotation ),
@@ -304,19 +361,19 @@ SIM_PROPERTY::SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
 }
 
 
-wxValidator* SIM_PROPERTY::DoGetValidator() const
+wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 {
-    return new SIM_VALIDATOR( m_valueType, m_notation );
+    return new SIM_STRING_VALIDATOR( m_valueType, m_notation );
 }
 
 
-bool SIM_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
 {
     wxString paramValueStr = m_model->GetBaseParam( m_paramIndex ).value->ToString();
     aVariant = aText;
 
     // TODO: Don't use string comparison.
-    if( m_model->GetBaseModel() && ( aText.IsEmpty() || aText == paramValueStr ) )
+    if( m_model->GetBaseModel() && ( aText == "" || aText == paramValueStr ) )
     {
         if( !m_model->SetParamValue( m_paramIndex, "" ) ) // Nullify.
             return false;

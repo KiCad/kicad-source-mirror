@@ -1,0 +1,63 @@
+*
+* instance_params.lib.spice
+*
+
+* We don't expose all instance parameters to the user because some of them are too niche or
+* technical.
+
+.model NPN_GUMMELPOON NPN(level=1)
+.model PNP_GUMMELPOON PNP(level=1)
+
+.model NPN_VBIC NPN(level=4)
+.model PNP_VBIC PNP(level=4)
+
+.model NPN_HICUM2 NPN(level=8)
+.model PNP_HICUM2 PNP(level=8)
+
+.model NMOS_MOS1 NMOS(level=1)
+.model PMOS_MOS1 PMOS(level=1)
+
+.model NMOS_MOS2 NMOS(level=2)
+.model PMOS_MOS2 PMOS(level=2)
+
+.model NMOS_MOS3 NMOS(level=3)
+.model PMOS_MOS3 PMOS(level=3)
+
+.model NMOS_BSIM1 NMOS(level=4)
+.model PMOS_BSIM1 PMOS(level=4)
+
+.model NMOS_BSIM2 NMOS(level=5)
+.model PMOS_BSIM2 PMOS(level=5)
+
+.model NMOS_MOS6 NMOS(level=6)
+.model PMOS_MOS6 PMOS(level=6)
+
+.model NMOS_BSIM3 NMOS(level=8)
+.model PMOS_BSIM3 PMOS(level=8)
+
+.model NMOS_MOS9 NMOS(level=9)
+.model PMOS_MOS9 PMOS(level=9)
+
+.model NMOS_B4SOI NMOS(level=10)
+.model PMOS_B4SOI PMOS(level=10)
+
+.model NMOS_BSIM4 NMOS(level=14)
+.model PMOS_BSIM4 PMOS(level=14)
+
+.model NMOS_B3SOIFD NMOS(level=55)
+.model PMOS_B3SOIFD PMOS(level=55)
+
+.model NMOS_B3SOIDD NMOS(level=56)
+.model PMOS_B3SOIDD PMOS(level=56)
+
+.model NMOS_B3SOIPD NMOS(level=57)
+.model PMOS_B3SOIPD PMOS(level=57)
+
+.model NMOS_HISIM2 NMOS(level=68)
+.model PMOS_HISIM2 PMOS(level=68)
+
+.model NMOS_HISIMHV1 NMOS(level=73 version=1.2.4)
+.model PMOS_HISIMHV1 PMOS(level=73 version=1.2.4)
+
+.model NMOS_HISIMHV2 NMOS(level=73 version=2.2.0)
+.model PMOS_HISIMHV2 PMOS(level=73 version=2.2.0)

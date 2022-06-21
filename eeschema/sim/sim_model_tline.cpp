@@ -58,7 +58,7 @@ void SIM_MODEL_TLINE::ReadDataSchFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
     else
-        inferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields );
 }
 
 
@@ -68,7 +68,7 @@ void SIM_MODEL_TLINE::ReadDataLibFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
     else
-        inferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields );
 }
 
 
@@ -91,22 +91,6 @@ void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 
 
 template <typename T>
-void SIM_MODEL_TLINE::inferredReadDataFields( unsigned aSymbolPinCount,
-                                              const std::vector<T>* aFields )
-{
-    ParsePinsField( aSymbolPinCount, PINS_FIELD );
-
-    if( ( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                    GetFieldValue( aFields, VALUE_FIELD ) ) == GetType()
-            && ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) ) )
-        // If Value is device type, this is an empty model
-        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
-    {
-        m_isInferred = true;
-    }
-}
-
-template <typename T>
 void SIM_MODEL_TLINE::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
     wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
@@ -124,23 +108,23 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfo()
     PARAM::INFO paramInfo = {};
 
     paramInfo.name = "z0";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Ω";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Characteristic impedance";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = true;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Transmission delay";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = true;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
@@ -153,53 +137,53 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfo()
     PARAM::INFO paramInfo = {};
 
     paramInfo.name = "len";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "m";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Length";
-    paramInfo.isInstanceParam = true;
     paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = true;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "r";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Ω/m";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Resistance per length";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "l";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "H/m";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Inductance per length";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "g";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "1/(Ω m)";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Conductance per length";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "c";
-    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "C/m";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Capacitance per length";
-    paramInfo.isInstanceParam = false;
     paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = false;
     paramInfos.push_back( paramInfo );
 
     return paramInfos;

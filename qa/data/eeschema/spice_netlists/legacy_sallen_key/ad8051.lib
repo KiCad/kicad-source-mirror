@@ -1,0 +1,112 @@
+* AD8051 SPICE Macro-model
+* Description: Amplifier
+* Generic Desc: Single 110 MHz rail-to-rail op amp - 3V
+* Developed by: JCH / ADI
+* Revision History: 08/10/2012 - Updated to new header style
+* 0.0 (09/1998)
+* Copyright 1998, 2012 by Analog Devices, Inc.
+*
+* Refer to http://www.analog.com/Analog_Root/static/techSupport/designTools/spiceModels/license/spice_general.html for License Statement.  Use of this model
+* indicates your acceptance with the terms and provisions in the License Statement.
+*
+* BEGIN Notes:
+*
+* Not Modeled:
+* CMRR IS NOT MODELED
+*    
+* Parameters modeled include:
+* THIS MODEL IS FOR SINGLE SUPPLY OPERATION (+5V)
+*
+* END Notes
+*	
+* Node assignments
+*                 noninverting input
+*                 |       inverting input  
+*                 |       |       positive supply
+*                 |       |       |       negative supply
+*                 |       |       |       |       output
+*                 |       |       |       |       |
+*                 |       |       |       |       |
+.SUBCKT AD8051  1       2       99      50      45
+*
+* INPUT STAGE
+*
+Q1  4  3  5 QPI
+Q2  6  2  7 QPI
+RC1   50  4 20.5k
+RC2   50  6 20.5k
+RE1    5  8 5k
+RE2    7  8 5k 
+EOS    3  1 POLY(1) 53 98 1.7E-3 1 
+IOS    1  2 0.1u
+FNOI1  1  0 VMEAS2 1E-4
+FNOI2  2  0 VMEAS2 1E-4
+
+CPAR1  3 50 1.7p
+CPAR2  2 50 1.7p
+VCMH1 99  9 1
+VCMH2 99 10 1
+D1     5  9  DX
+D2     7 10 DX
+IBIAS 99  8 73u
+*
+* INTERNAL VOLTAGE REFERENCE
+*
+EREF1 98  0 POLY(2) 99 0 50 0 0 0.5 0.5
+EREF2 97  0 POLY(2)  1 0 2 0 0 0.5 0.5
+GREF2 97 0 97 0 1E-6
+*
+*VOLTAGE NOISE STAGE
+*
+DN1 51 52 DNOI1
+VN1 51 98 0.61
+VMEAS 52 98 0
+RNOI1 52 98 6.5E-3
+
+H1 53 98 VMEAS 1
+RNOI2 53 98 1
+*
+*CURRENT NOISE STAGE
+*
+DN2 61 62 DNOI2
+VN2 61 98 0.545
+VMEAS2 62 98 0
+RNOI3  62 98 2E-4
+*
+* INTERMEDIATE GAIN STAGE WITH POLE = 96MHz
+*
+G1   98 20 4 6 1E-3 
+RP1  98 20 550
+CP1  98 20 3p
+*
+* GAIN STAGE WITH DOMINANT POLE
+*
+G4   98 30 20 98 2.6E-3
+RG1 30 98 155k
+CF1  30 45 13.5p
+D5 31 99 DX
+D6 50 32 DX
+V1 31 30 0.6
+V2 30 32 0.6
+*
+* OUTPUT STAGE
+*
+Q3  45 42 99 QPOX
+Q4  45 44 50 QNOX
+EO3 99 42 POLY(1) 98 30 0.7175 0.5
+EO4 44 50 POLY(1) 30 98 0.7355 0.5
+*
+* MODELS
+*
+.MODEL QPI PNP (IS=8.6E-18,BF=91,VAF=30.6)
+.MODEL QNOX NPN(IS=6.37E-16,BF=100,VAF=90,RC=3)
+.MODEL QPOX PNP(IS=1.19E-15,BF=112,VAF=19.2,RC=6)
+.MODEL DX D(IS=1E-16)
+.MODEL DZ D(IS=1E-14,BV=6.6)
+.MODEL DNOI1 D(KF=9E-10)
+.MODEL DNOI2 D(KF=1E-8)
+.ENDS AD8051
+
+
+
+

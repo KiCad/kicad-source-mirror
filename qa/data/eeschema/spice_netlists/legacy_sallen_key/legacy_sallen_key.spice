@@ -1,0 +1,15 @@
+.title KiCad schematic
+.include "ad8051.lib"
+.save all
+.probe alli
+.ac dec 10 1 1Meg
+
+V2 VDD GND DC 10
+V3 GND VSS DC 10
+V1 Net-_R1-Pad2_ GND AC 1
+C1 /lowpass Net-_C1-Pad2_ 100n 
+R1 Net-_C1-Pad2_ Net-_R1-Pad2_ 1k
+R2 Net-_U1-+_ Net-_C1-Pad2_ 1k
+C2 Net-_U1-+_ GND 100n
+XU1 Net-_U1-+_ /lowpass VDD VSS /lowpass AD8051
+.end

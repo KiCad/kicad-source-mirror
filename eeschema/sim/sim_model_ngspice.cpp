@@ -33,11 +33,18 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
 {
     const NGSPICE::MODEL_INFO& modelInfo = NGSPICE::ModelInfo( getModelType() );
 
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
+    {
+        // For now, only the geometry parameters.
+        if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
+            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
+        {
+            AddParam( paramInfo, getIsOtherVariant() );
+        }
+    }
+
     for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
         AddParam( paramInfo, getIsOtherVariant() );
-
-    /*for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
-        AddParam( paramInfo, getIsOtherVariant() );*/
 }
 
 
@@ -47,26 +54,26 @@ std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxStri
 
     switch( TypeInfo( GetType() ).deviceType )
     {
-        case DEVICE_TYPE::NPN:
-        case DEVICE_TYPE::PNP:
+        case DEVICE_TYPE_::NPN:
+        case DEVICE_TYPE_::PNP:
             return { wxString::Format( "I(%s:c)", aRefName ),
                      wxString::Format( "I(%s:b)", aRefName ),
                      wxString::Format( "I(%s:e)", aRefName ) };
 
-        case DEVICE_TYPE::NJFET:
-        case DEVICE_TYPE::PJFET:
-        case DEVICE_TYPE::NMES:
-        case DEVICE_TYPE::PMES:
-        case DEVICE_TYPE::NMOS:
-        case DEVICE_TYPE::PMOS:
+        case DEVICE_TYPE_::NJFET:
+        case DEVICE_TYPE_::PJFET:
+        case DEVICE_TYPE_::NMES:
+        case DEVICE_TYPE_::PMES:
+        case DEVICE_TYPE_::NMOS:
+        case DEVICE_TYPE_::PMOS:
             return { wxString::Format( "I(%s:d)", aRefName ),
                      wxString::Format( "I(%s:g)", aRefName ),
                      wxString::Format( "I(%s:s)", aRefName ) };
 
-        case DEVICE_TYPE::R:
-        case DEVICE_TYPE::C:
-        case DEVICE_TYPE::L:
-        case DEVICE_TYPE::D:
+        case DEVICE_TYPE_::R:
+        case DEVICE_TYPE_::C:
+        case DEVICE_TYPE_::L:
+        case DEVICE_TYPE_::D:
             return SIM_MODEL::GenerateSpiceCurrentNames( aRefName );
 
         default:
@@ -84,19 +91,26 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
     if( aParamName == "level" || aParamName == "version" )
         return true;
 
-    // One Spice param can have multiple names, we need to take this into account.
+
+    // First we try to use the name as is. Note that you can't set instance parameters from this
+    // function, it's generally for ".model" cards, not for instantiations.
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     auto paramIt = std::find_if( params.begin(), params.end(),
                                  [aParamName]( const PARAM& param )
                                  {
-                                      return param.info.category != PARAM::CATEGORY::SUPERFLUOUS
-                                          && param.info.name == aParamName.Lower();
+                                      return !param.info.isSpiceInstanceParam
+                                          && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
+                                          && ( param.info.name == aParamName.Lower()
+                                               || param.info.name == aParamName.Lower() + "_" );
                                  } );
 
     if( paramIt != params.end() )
         return SetParamValue( paramIt - params.begin(), aParamValue, aNotation );
+
+
+    // One Spice param can have multiple names, we need to take this into account.
     
     std::vector<PARAM::INFO> ngspiceParams = NGSPICE::ModelInfo( getModelType() ).modelParams;
 
@@ -108,6 +122,7 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
 
     if( ngspiceParamIt == ngspiceParams.end() )
         return false;
+
 
     // We obtain the id of the Ngspice param that is to be set.
     unsigned id = ngspiceParamIt->id;
@@ -145,8 +160,8 @@ NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     case TYPE::PNP_GUMMELPOON:       return NGSPICE::MODEL_TYPE::BJT;
     case TYPE::NPN_VBIC:
     case TYPE::PNP_VBIC:             return NGSPICE::MODEL_TYPE::VBIC;
-    case TYPE::NPN_HICUML2:
-    case TYPE::PNP_HICUML2:          return NGSPICE::MODEL_TYPE::HICUM2;
+    case TYPE::NPN_HICUM2:
+    case TYPE::PNP_HICUM2:           return NGSPICE::MODEL_TYPE::HICUM2;
 
     case TYPE::NJFET_SHICHMANHODGES:
     case TYPE::PJFET_SHICHMANHODGES: return NGSPICE::MODEL_TYPE::JFET;
@@ -208,7 +223,7 @@ bool SIM_MODEL_NGSPICE::getIsOtherVariant()
     {
     case TYPE::PNP_GUMMELPOON:
     case TYPE::PNP_VBIC:
-    case TYPE::PNP_HICUML2:
+    case TYPE::PNP_HICUM2:
     case TYPE::PJFET_SHICHMANHODGES:
     case TYPE::PJFET_PARKERSKELLERN:
     case TYPE::PMES_STATZ:

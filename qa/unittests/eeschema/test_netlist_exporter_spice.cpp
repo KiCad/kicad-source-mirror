@@ -38,6 +38,7 @@ public:
         REPORTER& Report( const wxString& aText,
                           SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
         {
+            // You can add a debug trace here.
             return *this;
         }
 
@@ -90,10 +91,11 @@ public:
         file.ReadAll( &netlist );
         //ngspice->Init();
         ngspice->Command( "set ngbehavior=ps" );
+        ngspice->Command( "setseed 1" );
+        ngspice->Command( "set filetype=ascii" );
         ngspice->LoadNetlist( netlist.ToStdString() );
         ngspice->Run();
 
-        ngspice->Command( "set filetype=ascii" );
 
         wxString vectors;
         for( const wxString& vector : m_plottedVectors )
@@ -166,12 +168,11 @@ BOOST_AUTO_TEST_CASE( Rectifier )
     TestNetlist( "rectifier", { "V(/in)", "V(/out)" } );
 }
 
-
 // FIXME: Fails due to some nondeterminism, seems related to convergence problems.
 
 /*BOOST_AUTO_TEST_CASE( Chirp )
 {
-    TestNetlist( "chirp", { "V(/out)" } );
+    TestNetlist( "chirp", { "V(/out)", "I(R1)" } );
 }*/
 
 
@@ -180,7 +181,7 @@ BOOST_AUTO_TEST_CASE( Opamp )
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
-    TestNetlist( "opamp", { "V(/in)", "V(/out)" } );
+    TestNetlist( "opamp", { "V(/in)", "V(/out)", "I(XU1:+IN)", "I(XU1:-IN)", "I(XU1:OUT)" } );
 }
 
 
@@ -189,7 +190,7 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
     TestNetlist( "npn_ce_amp", { "V(/in)", "V(/out)" } );
 }
 
-// Incomplete.
+// Incomplete. TODO.
 
 /*BOOST_AUTO_TEST_CASE( Passives )
 {
@@ -200,6 +201,76 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 BOOST_AUTO_TEST_CASE( Tlines )
 {
     TestNetlist( "tlines", { "V(/z0_in)", "V(/z0_out)", "V(/rlgc_in)", "V(/rlgc_out)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( Sources )
+{
+    TestNetlist( "sources", { "V(/vdc)", "V(/idc)",
+                              "V(/vsin)", "V(/isin)",
+                              "V(/vpulse)", "V(/ipulse)",
+                              "V(/vexp)", "V(/iexp)",
+                              "V(/vpwl)", "V(/ipwl)",
+                              "V(/vbehavioral)", "V(/ibehavioral)" } );
+
+    // TODO: Make some tests for random and noise sources, e.g. check their RMS or spectra.
+    //"V(/vwhitenoise)", "V(/iwhitenoise)",
+    //"V(/vpinknoise)", "V(/ipinknoise)",
+    //"V(/vburstnoise)", "V(/iburstnoise)",
+    //"V(/vranduniform)", "V(/iranduniform)",
+    //"V(/vrandnormal)", "V(/iranduniform)",
+    //"V(/vrandexp)", "V(/irandexp)",
+}
+
+
+BOOST_AUTO_TEST_CASE( CmosNot )
+{
+    TestNetlist( "cmos_not", { "V(/in)", "V(/out)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( InstanceParams )
+{
+    // TODO.
+    //TestNetlist( "instance_params", {} );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
+{
+    TestNetlist( "legacy_laser_driver", { "V(/out)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyPspice )
+{
+    TestNetlist( "legacy_pspice", { "V(/VIN)", "V(VOUT)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyRectifier )
+{
+    TestNetlist( "legacy_rectifier", { "V(/signal_in)", "V(/rect_out)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacySallenKey )
+{
+    TestNetlist( "legacy_sallen_key", { "V(/lowpass)" } );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacySources )
+{
+    TestNetlist( "legacy_sources", { "V(/vam)", "V(/iam)",
+                                     "V(/vdc)", "V(/idc)",
+                                     "V(/vexp)", "V(/iexp)",
+                                     "V(/vpulse)", "V(/ipulse)",
+                                     "V(/vpwl)", "V(/ipwl)",
+                                     "V(/vsffm)", "V(/isffm)",
+                                     "V(/vsin)", "V(/isin)" } );
+                                     //"V(/vtrnoise)", "V(/itrnoise)",
+                                     //"V(/vtrrandom)", "V(/itrrandom)" } );
 }
 
 

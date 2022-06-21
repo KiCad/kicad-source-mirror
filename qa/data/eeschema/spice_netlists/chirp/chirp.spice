@@ -1,9 +1,9 @@
 .title KiCad schematic
-.include "/home/mikolaj/my/src/kicad/qa/data/eeschema/spice_netlists/chirp/chirp.lib.spice"
+.include "chirp.lib.spice"
 .save all
 .probe alli
 .tran 10u 100m
 
-XV1 /out Net-_V1-E2_ chirp bf=1k ef=3k bt=30m et=70m 
 R1 /out Net-_V1-E2_ 10k 
+XV1 /out Net-_V1-E2_ chirp bf=1k ef=3k bt=30m et=70m 
 .end

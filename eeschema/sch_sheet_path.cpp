@@ -40,6 +40,10 @@
 #include <wx/log.h>
 #include "erc_item.h"
 
+#include <sim/sim_model.h> // For V6 to V7 simulation model migration.
+#include <sim/sim_value.h> //
+#include <locale_io.h>
+
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.
@@ -1008,6 +1012,9 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
                                           it->m_Footprint );
         symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
     }
+    
+    if( size() >= 1 && at( 0 ).LastScreen()->GetFileFormatVersionAtLoad() < 20220622 )
+        MigrateSimModelNameFields();
 }
 
 
@@ -1108,5 +1115,130 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
         tmp.Printf( "%d", pageNumber );
         sheet->SetPageNumber( instance, tmp );
         pageNumber += 1;
+    }
+}
+
+
+void SCH_SHEET_LIST::MigrateSimModelNameFields()
+{
+    LOCALE_IO toggle;
+
+    for( unsigned sheetIndex = 0; sheetIndex < size(); ++sheetIndex )
+    {
+        SCH_SCREEN* screen = at( sheetIndex ).LastScreen();
+
+        // V6 schematics may specify model names in Value fields, which we don't do in V7. Migrate by
+        // adding an equivalent model for these symbols.
+
+        bool mayHaveModelsInValues = false;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_TEXT_T ) )
+        {
+            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
+
+            if( text.StartsWith( ".inc" ) || text.StartsWith( ".lib" )
+                || text.StartsWith( ".model" ) || text.StartsWith( ".subckt" ) )
+            {
+                mayHaveModelsInValues = true;
+            }
+        }
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_TEXTBOX_T ) )
+        {
+            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
+
+            if( text.StartsWith( ".inc" ) || text.StartsWith( ".lib" )
+                || text.StartsWith( ".model" ) || text.StartsWith( ".subckt" ) )
+            {
+                mayHaveModelsInValues = true;
+            }
+        }
+
+        if( mayHaveModelsInValues )
+        {
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                if( !symbol )
+                {
+                    // Shouldn't happen.
+                    wxFAIL;
+                    continue;
+                }
+
+                if( symbol->FindField( "Spice_Primitive" )
+                    || symbol->FindField( "Spice_Node_Sequence" )
+                    || symbol->FindField( "Spice_Model" )
+                    || symbol->FindField( "Spice_Netlist_Enabled" )
+                    || symbol->FindField( "Spice_Lib_File" ) )
+                {
+                    // Has a legacy raw (plaintext) model -- this is handled in the SIM_MODEL class.
+                    continue;
+                }
+
+                if( symbol->FindField( SIM_MODEL::DEVICE_TYPE_FIELD )
+                    || symbol->FindField( SIM_MODEL::TYPE_FIELD )
+                    || symbol->FindField( SIM_MODEL::PINS_FIELD )
+                    || symbol->FindField( SIM_MODEL::PARAMS_FIELD ) )
+                {
+                    // Has a V7 model field - skip.
+                    continue;
+                }
+
+                // Insert a plaintext model as a substitute.
+
+                wxString refdes = symbol->GetRef( &at( sheetIndex ), true );
+
+                if( refdes.Length() == 0 )
+                    continue; // No refdes? We need the first character to determine type. Skip.
+
+                wxString value = symbol->GetValue( &at( sheetIndex ), true );
+
+                if( refdes.StartsWith( "R" )
+                    || refdes.StartsWith( "C" )
+                    || refdes.StartsWith( "L" ) )
+                {
+                    // This is taken from the former Spice exporter.
+                    wxRegEx passiveVal(
+                        wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
+
+                    if( passiveVal.Matches( value ) )
+                    {
+                        wxString prefix( passiveVal.GetMatch( value, 1 ) );
+                        wxString unit( passiveVal.GetMatch( value, 2 ) );
+                        wxString suffix( passiveVal.GetMatch( value, 6 ) );
+
+                        prefix.Trim(); prefix.Trim( false );
+                        unit.Trim(); unit.Trim( false );
+                        suffix.Trim(); suffix.Trim( false );
+
+                        // Make 'mega' units comply with the Spice expectations
+                        if( unit == "M" )
+                            unit = "Meg";
+
+                        std::unique_ptr<SIM_VALUE> simValue =
+                            SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT );
+                        simValue->FromString( prefix + unit + suffix, SIM_VALUE::NOTATION::SPICE );
+
+                        if( value == simValue->ToString() )
+                            continue; // Can stay the same.
+                    }
+                }
+
+                SCH_FIELD deviceTypeField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                           SIM_MODEL::DEVICE_TYPE_FIELD );
+                deviceTypeField.SetText(
+                    SIM_MODEL::DeviceTypeInfo( SIM_MODEL::DEVICE_TYPE_::SPICE ).fieldValue );
+                symbol->AddField( deviceTypeField );
+
+                SCH_FIELD modelParamsField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                            SIM_MODEL::PARAMS_FIELD );
+                modelParamsField.SetText( wxString::Format( "type=%s model=\"%s\"",
+                                                            refdes.Left( 1 ),
+                                                            value ) );
+                symbol->AddField( modelParamsField );
+            }
+        }
     }
 }

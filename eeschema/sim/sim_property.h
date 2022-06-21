@@ -35,9 +35,20 @@
 
 class SIM_VALIDATOR : public wxValidator
 {
+private:
+    void navigate( int flags );
+
+    void onKeyDown( wxKeyEvent& aEvent );
+
+    wxDECLARE_EVENT_TABLE();
+};
+
+
+class SIM_STRING_VALIDATOR : public SIM_VALIDATOR
+{
 public:
-    SIM_VALIDATOR( SIM_VALUE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
-    SIM_VALIDATOR( const SIM_VALIDATOR& aValidator ) = default;
+    SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
+    SIM_STRING_VALIDATOR( const SIM_STRING_VALIDATOR& aValidator ) = default;
 
     wxObject* Clone() const override;
 
@@ -46,37 +57,68 @@ public:
     bool TransferFromWindow() override;
 
 private:
-    void navigate( int flags );
-
     bool isValid( const wxString& aString );
 
     wxTextEntry* getTextEntry();
 
     void onText( wxCommandEvent& aEvent );
     void onChar( wxKeyEvent& aEvent );
-    void onKeyDown( wxKeyEvent& aEvent );
     void onMouse( wxMouseEvent& aEvent );
 
-    SIM_VALUE::TYPE       m_valueType;
+    SIM_VALUE::TYPE             m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION m_notation;
-    wxString                   m_prevText;
-    long                       m_prevInsertionPoint;
+    wxString                    m_prevText;
+    long                        m_prevInsertionPoint;
     
     wxDECLARE_EVENT_TABLE();
 };
 
 
-class SIM_PROPERTY : public wxStringProperty
+class SIM_BOOL_VALIDATOR : public SIM_VALIDATOR
+{
+public:
+    SIM_BOOL_VALIDATOR() : SIM_VALIDATOR() {}
+    SIM_BOOL_VALIDATOR( const SIM_BOOL_VALIDATOR& aValidator ) = default;
+
+    bool Validate( wxWindow* aParent ) override;
+
+private:
+    wxDECLARE_EVENT_TABLE();
+};
+
+
+class SIM_BOOL_PROPERTY : public wxBoolProperty
+{
+public:
+    SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
+                       std::shared_ptr<SIM_LIBRARY> aLibrary,
+                       std::shared_ptr<SIM_MODEL> aModel,
+                       int aParamIndex );
+
+    wxValidator* DoGetValidator() const override;
+    
+    void OnSetValue() override;
+
+    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
+
+protected:
+    std::shared_ptr<SIM_LIBRARY> m_library;
+    std::shared_ptr<SIM_MODEL>   m_model;
+    int                          m_paramIndex;
+};
+
+
+class SIM_STRING_PROPERTY : public wxStringProperty
 {
 public:
     // We pass shared_ptrs because we need to make sure they are destroyed only after the last time
     // SIM_PROPERTY uses them.
-    SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                  std::shared_ptr<SIM_LIBRARY> aLibrary,
-                  std::shared_ptr<SIM_MODEL> aModel,
-                  int aParamIndex,
-                  SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE::FLOAT,
-                  SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
+    SIM_STRING_PROPERTY( const wxString& aLabel, const wxString& aName,
+                         std::shared_ptr<SIM_LIBRARY> aLibrary,
+                         std::shared_ptr<SIM_MODEL> aModel,
+                         int aParamIndex,
+                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
+                         SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     wxValidator* DoGetValidator() const override;
 
@@ -86,7 +128,7 @@ public:
     const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
 
 protected:
-    SIM_VALUE::TYPE         m_valueType;
+    SIM_VALUE::TYPE              m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION  m_notation;
     std::shared_ptr<SIM_LIBRARY> m_library;
     std::shared_ptr<SIM_MODEL>   m_model;

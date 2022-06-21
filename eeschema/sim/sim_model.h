@@ -43,20 +43,20 @@ namespace SIM_MODEL_GRAMMAR
 
 
     struct pinNumber : sor<digits, one<'X'>> {};
-    struct pinSequence : seq<opt<pinNumber,
-                                 star<sep,
-                                      pinNumber>>> {};
+    struct pinSequence : opt<pinNumber,
+                             star<sep,
+                                  pinNumber>> {};
 
     struct pinSequenceGrammar : must<opt<sep>,
                                      pinSequence,
                                      opt<sep>,
-                                     eof> {};
+                                     tao::pegtl::eof> {};
 
     struct unquotedString : plus<not_at<space>, any> {};
+    struct quotedStringContent : star<not_at<one<'"'>>, any> {}; // TODO: Allow escaping '"'.
     struct quotedString : seq<one<'"'>,
-                              until<seq<not_at<string<'\\',
-                                                      '"'>>,
-                                        one<'"'>>>> {};
+                              quotedStringContent,
+                              one<'"'>> {};
 
     struct param : plus<alnum> {};
 
@@ -64,8 +64,8 @@ namespace SIM_MODEL_GRAMMAR
                                      opt<sep>,
                                      one<'='>,
                                      opt<sep>,
-                                     sor<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>,
-                                         number<SIM_VALUE::TYPE::INT, NOTATION::SI>,
+                                     sor<//number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
+                                         //number<SIM_VALUE::TYPE_INT, NOTATION::SI>,
                                          quotedString,
                                          unquotedString>> {};
 
@@ -76,7 +76,7 @@ namespace SIM_MODEL_GRAMMAR
     struct fieldParamValuePairsGrammar : must<opt<sep>,
                                               fieldParamValuePairs,
                                               opt<sep>,
-                                              eof> {};
+                                              tao::pegtl::eof> {};
 }
 
 
@@ -86,13 +86,15 @@ public:
     static constexpr auto REFERENCE_FIELD = "Reference";
     static constexpr auto VALUE_FIELD = "Value";
 
-    static constexpr auto DEVICE_TYPE_FIELD = "Model_Device";
-    static constexpr auto TYPE_FIELD = "Model_Type";
-    static constexpr auto PINS_FIELD = "Model_Pins";
-    static constexpr auto PARAMS_FIELD = "Model_Params";
+    static constexpr auto DEVICE_TYPE_FIELD = "Sim_Device";
+    static constexpr auto TYPE_FIELD = "Sim_Type";
+    static constexpr auto PINS_FIELD = "Sim_Pins";
+    static constexpr auto PARAMS_FIELD = "Sim_Params";
+    static constexpr auto DISABLED_FIELD = "Sim_Disabled";
 
 
-    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE, 
+    // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE_, 
         NONE,
 
         R,
@@ -158,8 +160,8 @@ public:
         PNP_VBIC,
         //NPN_MEXTRAM,
         //PNP_MEXTRAM,
-        NPN_HICUML2,
-        PNP_HICUML2,
+        NPN_HICUM2,
+        PNP_HICUM2,
         //NPN_HICUM_L0,
         //PNP_HICUM_L0,
 
@@ -241,7 +243,7 @@ public:
         PMOS_HISIMHV2,
 
 
-        V_DC,
+        V,
         V_SIN,
         V_PULSE,
         V_EXP,
@@ -254,10 +256,10 @@ public:
         V_RANDUNIFORM,
         V_RANDNORMAL,
         V_RANDEXP,
-        V_RANDPOISSON,
+        //V_RANDPOISSON,
         V_BEHAVIORAL,
 
-        I_DC,
+        I,
         I_SIN,
         I_PULSE,
         I_EXP,
@@ -270,7 +272,7 @@ public:
         I_RANDUNIFORM,
         I_RANDNORMAL,
         I_RANDEXP,
-        I_RANDPOISSON,
+        //I_RANDPOISSON,
         I_BEHAVIORAL,
 
 
@@ -281,7 +283,7 @@ public:
 
     struct INFO
     {
-        DEVICE_TYPE deviceType;
+        DEVICE_TYPE_ deviceType;
         wxString fieldValue;
         wxString description;
     };
@@ -310,23 +312,24 @@ public:
 
     struct PARAM
     {
-        enum class DIR
+        // MS Windows compilers complain about the names IN and OUT, so we prefix them.
+        enum DIR
         {
-            IN,
-            OUT,
-            INOUT
+            DIR_IN,
+            DIR_OUT,
+            DIR_INOUT
         };
 
         enum class CATEGORY
         {
             PRINCIPAL,
+            GEOMETRY,
             AC,
             DC,
             CAPACITANCE,
             TEMPERATURE,
             NOISE,
             DISTRIBUTED_QUANTITIES,
-            GEOMETRY,
             LIMITING_VALUES,
             ADVANCED,
             FLAGS,
@@ -340,16 +343,17 @@ public:
         {
             wxString name;
             unsigned id = 0; // Legacy (don't remove).
-            DIR dir = DIR::INOUT;
-            SIM_VALUE::TYPE type = SIM_VALUE::TYPE::FLOAT;
+            DIR dir = DIR_INOUT;
+            SIM_VALUE::TYPE type = SIM_VALUE::TYPE_FLOAT;
             FLAGS flags = {}; // Legacy (don't remove).
             wxString unit = "";
             CATEGORY category = CATEGORY::PRINCIPAL;
             wxString defaultValue = "";
             wxString defaultValueOfOtherVariant = ""; // Legacy (don't remove).
             wxString description = "";
-            bool isInstanceParam = false;
             bool isSpiceInstanceParam = false;
+            bool isInstanceParam = false;
+            wxString spiceInstanceName = "";
         };
 
         std::unique_ptr<SIM_VALUE> value;
@@ -364,7 +368,7 @@ public:
     };
 
 
-    static DEVICE_INFO DeviceTypeInfo( DEVICE_TYPE aDeviceType );
+    static DEVICE_INFO DeviceTypeInfo( DEVICE_TYPE_ aDeviceType );
     static INFO TypeInfo( TYPE aType );
     static SPICE_INFO SpiceInfo( TYPE aType );
 
@@ -382,6 +386,8 @@ public:
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount = 0 );
     static std::unique_ptr<SIM_MODEL> Create( const std::string& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
+                                              unsigned         aSymbolPinCount );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
@@ -408,7 +414,7 @@ public:
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
 
-    virtual bool ReadSpiceCode( const std::string& aSpiceCode );
+    virtual void ReadSpiceCode( const std::string& aSpiceCode );
 
     template <typename T>
     void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
@@ -450,7 +456,7 @@ public:
     DEVICE_INFO GetDeviceTypeInfo() const { return DeviceTypeInfo( GetDeviceType() ); }
     INFO GetTypeInfo() const { return TypeInfo( GetType() ); }
 
-    DEVICE_TYPE GetDeviceType() const { return GetTypeInfo().deviceType; }
+    DEVICE_TYPE_ GetDeviceType() const { return GetTypeInfo().deviceType; }
     TYPE GetType() const { return m_type; }
 
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
@@ -476,17 +482,23 @@ public:
 
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
+
     virtual bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
                                     = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
+    bool SetParamValue( const wxString& aParamName, const wxString& aValue,
+                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
+
     bool HasOverrides() const;
     bool HasNonInstanceOverrides() const;
+    bool HasSpiceNonInstanceOverrides() const;
 
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
 
-    wxString GetErrorMessage() const { return m_errorMessage; }
+    void SetIsEnabled( bool aIsEnabled ) { m_isEnabled = aIsEnabled; }
+    bool IsEnabled() const { return m_isEnabled; }
 
 protected:
     SIM_MODEL( TYPE aType );
@@ -497,17 +509,19 @@ protected:
     virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
     wxString GenerateParamsField( const wxString& aPairSeparator ) const;
-    bool ParseParamsField( const wxString& aParamsField );
+    void ParseParamsField( const wxString& aParamsField );
 
-    bool ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
+    void ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
+    void ParseDisabledField( const wxString& aDisabledField );
 
-    // TODO: Rename.
     virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                         SIM_VALUE_GRAMMAR::NOTATION aNotation
                                             = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
+    template <typename T>
+    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+
     wxString m_spiceCode;
-    wxString m_errorMessage;
 
 private:
     static std::unique_ptr<SIM_MODEL> create( TYPE aType );
@@ -530,6 +544,7 @@ private:
     wxString generateTypeField() const;
 
     wxString generatePinsField() const;
+    wxString generateDisabledField() const;
 
     virtual bool requiresSpiceModel() const;
 
@@ -539,6 +554,8 @@ private:
     const TYPE m_type;
     std::vector<PIN> m_pins;
     std::vector<PARAM> m_params;
+    bool m_isEnabled;
+    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_H

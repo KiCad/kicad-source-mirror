@@ -401,9 +401,9 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
     {
         for( const auto& item : m_circuitModel->GetItems() )
         {
-            if( ( aType == 'R' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::R )
-            ||  ( aType == 'C' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::C )
-            ||  ( aType == 'L' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::L ) )
+            if( ( aType == 'R' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE_::R )
+            ||  ( aType == 'C' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE_::C )
+            ||  ( aType == 'L' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE_::L ) )
             {
                 // TODO: VSOURCE, ISOURCE.
                 sourcesList.insert( item.refName );

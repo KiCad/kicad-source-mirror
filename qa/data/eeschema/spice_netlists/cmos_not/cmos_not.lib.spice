@@ -1,0 +1,11 @@
+*
+
+* NMOS
+.model nmos	nmos(level=1 vto=0.5 kp=36e-6 gamma=0.9
++		cgso=200pF cgdo=200pF cj=4.5e-4 cjsw=215pF ld=3e-7 pb=0.95
++		tox=50n)
+
+* PMOS
+.model pmos	pmos(level=1 vto=0.5 kp=12e-6 gamma=0.6
++		cgso=200pF cgdo=200pF cj=2.5e-4 cjsw=115pF ld=3e-7 pb=0.90
++		tox=50n)

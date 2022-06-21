@@ -36,7 +36,7 @@ namespace SIM_LIBRARY_SPICE_PARSER
 
     // TODO: unknownLine is already handled in spiceUnit.
     struct library : spiceSource {};
-    struct libraryGrammar : must<library, eof> {};
+    struct libraryGrammar : must<library, tao::pegtl::eof> {};
 
 
     template <typename Rule> struct librarySelector : std::false_type {};
@@ -53,11 +53,6 @@ void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
 {
     LOCALE_IO toggle;
 
-    SIM_LIBRARY::ReadFile( aFilePath );
-
-    m_models.clear();
-    m_modelNames.clear();
-
     try
     {
         tao::pegtl::file_input in( aFilePath.ToStdString() );
@@ -65,7 +60,10 @@ void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
                                                   SIM_LIBRARY_SPICE_PARSER::librarySelector>
             ( in );
 
-        wxASSERT( root );
+        SIM_LIBRARY::ReadFile( aFilePath );
+
+        m_models.clear();
+        m_modelNames.clear();
 
         for( const auto& node : root->children )
         {
@@ -87,8 +85,7 @@ void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
             }
             else
             {
-                THROW_IO_ERROR( wxString::Format( "Unhandled parse tree node: '%s'",
-                                                  node->string() ) );
+                wxFAIL_MSG( "Unhandled parse tree node" );
             }
         }
     }

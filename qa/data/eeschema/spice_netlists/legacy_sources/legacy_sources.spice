@@ -1,0 +1,42 @@
+.title KiCad schematic
+.save all
+.probe alli
+.tran 1n 300n
+
+R4 /vpulse GND 10k 
+V3 /vexp GND exp(-4 -1 2n 30n 60n 40n)
+I2 /idc GND dc 2.345
+I1 /iam GND am(0.5 1 10meg 50meg 20n)
+R11 /idc GND 10k 
+R10 /iam GND 10k 
+R8 /vtrnoise GND 10k 
+R6 /vsffm GND 10k 
+R7 /vsin GND 10k 
+R5 /vpwl GND 10k 
+V4 /vpulse GND pulse(-1 1 2n 30n 2n 50n 100n)
+R13 /ipulse GND 10k 
+R12 /iexp GND 10k 
+R14 /ipwl GND 10k 
+R16 /isin GND 10k 
+R15 /isffm GND 10k 
+V5 /vpwl GND pwl(0 -7 50n -7 51n -3 97n -4 171n -6.5 200n -6.5)
+R9 /vtrrandom GND 10k 
+V9 /vtrrandom GND trrandom(2 100n 0 1)
+V8 /vtrnoise GND trnoise(0.1 0.5n 0 0)
+V2 /vdc GND dc 2.345
+V1 /vam GND am(0.5 1 10meg 50meg 20n)
+R2 /vdc GND 10k 
+R3 /vexp GND 10k 
+R1 /vam GND 10k 
+V6 /vsffm GND sffm(-5 1 100meg 5 10meg)
+V7 /vsin GND sin(0 1 100meg 1n 1e10)
+R18 /itrrandom GND 10k 
+R17 /itrnoise GND 10k 
+I9 /itrrandom GND trrandom(2 100n 0 1)
+I8 /itrnoise GND trnoise(0.1 0.5n 0 0)
+I7 /isin GND sin(0 1 100meg 1n 1e10)
+I6 /isffm GND sffm(-5 1 100meg 5 10meg)
+I4 /ipulse GND pulse(-1 1 2n 30n 2n 50n 100n)
+I5 /ipwl GND pwl(0 -7 50n -7 51n -3 97n -4 171n -6.5 200n -6.5)
+I3 /iexp GND exp(-4 -1 2n 30n 60n 40n)
+.end
