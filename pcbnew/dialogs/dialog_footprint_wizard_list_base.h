@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_FOOTPRINT_WIZARD_LIST_BASE_H__
-#define __DIALOG_FOOTPRINT_WIZARD_LIST_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -38,7 +37,7 @@
 class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_panelGenerators;
@@ -53,19 +52,20 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
-		// Virtual event handlers, overide them in your derived class
+
+		// Virtual event handlers, override them in your derived class
 		virtual void OnCellFpGeneratorClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnCellFpGeneratorDoubleClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onShowTrace( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdatePythonModulesClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 525,374 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 525,374 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FOOTPRINT_WIZARD_LIST_BASE();
-	
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,17 +74,17 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 class DIALOG_FOOTPRINT_WIZARD_LOG : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-	
+
 	public:
 		wxTextCtrl* m_Message;
-		
-		DIALOG_FOOTPRINT_WIZARD_LOG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Traceback of Python Script Errors"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 646,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_FOOTPRINT_WIZARD_LOG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Traceback of Python Script Errors"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 646,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FOOTPRINT_WIZARD_LOG();
-	
+
 };
 
-#endif //__DIALOG_FOOTPRINT_WIZARD_LIST_BASE_H__
