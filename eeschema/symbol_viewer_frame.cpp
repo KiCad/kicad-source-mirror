@@ -458,7 +458,11 @@ void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
             m_unitChoice->Clear();
 
             for( int ii = 0; ii < unit_count; ii++ )
-                m_unitChoice->Append( wxString::Format( _( "Unit %c" ), 'A' + ii ) );
+            {
+                wxString sub  = LIB_SYMBOL::SubReference( ii + 1, false );
+                wxString unit = wxString::Format( _( "Unit %s" ), sub );
+                m_unitChoice->Append( unit );
+            }
 
         }
 
