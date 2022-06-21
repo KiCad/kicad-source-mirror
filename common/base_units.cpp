@@ -229,22 +229,17 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol,
 
     if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
     {
-        int len = sprintf( buf, "%.10f", value_to_print );
+        int len = snprintf( buf, sizeof( buf ) - 1, "%.10f", value_to_print );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
 
-        if( buf[len]=='.' || buf[len]==',' )
+        if( len >= 0 && ( buf[len]=='.' || buf[len]==',' ) )
             buf[len] = '\0';
-        else
-            ++len;
     }
     else
     {
-        if( aUnits == EDA_UNITS::MILS )
-            sprintf( buf, "%.7g", value_to_print );
-        else
-            sprintf( buf, "%.10g", value_to_print );
+        snprintf( buf, sizeof( buf ) - 1, "%.10g", value_to_print );
     }
 
     wxString stringValue( buf, wxConvUTF8 );
