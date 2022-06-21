@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-20 20:20+0000\n"
+"PO-Revision-Date: 2022-06-22 07:41+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -31723,14 +31723,14 @@ msgid "Footprint %s"
 msgstr "フットプリント %s"
 
 #: pcbnew/footprint.cpp:2252
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr " (基板の最小スルーホール %s; 現状 %s)"
+msgstr "(期待値は 'Through hole'; 現状 '%s')"
 
 #: pcbnew/footprint.cpp:2255
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s 最大直径 %s; 現状 %s)"
+msgstr "(期待値は 'SMD'; 現状 '%s')"
 
 #: pcbnew/footprint.cpp:2258
 #, c-format
