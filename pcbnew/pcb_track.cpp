@@ -315,6 +315,15 @@ void PCB_ARC::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
+bool PCB_ARC::IsCCW() const
+{
+    VECTOR2I start_end = m_End - m_Start;
+    VECTOR2I start_mid = m_Mid - m_Start;
+
+    return start_end.Cross( start_mid ) < 0;
+}
+
+
 void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )

@@ -480,7 +480,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
             VECTOR2I       start = arc->GetStart();
             VECTOR2I       end = arc->GetEnd();
 
-            if( arc->GetArcAngleStart() < arc->GetArcAngleEnd() )
+            if( arc->IsCCW() )
                 std::swap( start, end );
 
             m_out->Print( 1, "(ARC X1=%.10f Y1=%.10f X2=%.10f Y2=%.10f XC=%.10f YC=%.10f R=%.10f W=%.10f L=\"%s\")\n",
