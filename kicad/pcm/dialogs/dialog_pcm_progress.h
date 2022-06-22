@@ -49,7 +49,7 @@ public:
     DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSection = true );
 
     ///< Safe to call from non-UI thread. Adds a message to detailed report window.
-    void Report( const wxString& aText, SEVERITY aSeverity );
+    void PCMReport( const wxString& aText, SEVERITY aSeverity );
 
     ///< Safe to call from non-UI thread. Sets the download progress of the current zip entry.
     void SetDownloadProgress( uint64_t aDownloaded, uint64_t aTotal );

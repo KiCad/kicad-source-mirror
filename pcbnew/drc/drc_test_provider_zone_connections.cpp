@@ -179,7 +179,6 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 {
     BOARD*                             board = m_drcEngine->GetBoard();
-    BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
 

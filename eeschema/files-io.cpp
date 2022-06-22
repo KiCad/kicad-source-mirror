@@ -830,8 +830,6 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             return false;
         }
 
-        bool createNewProject = false;
-
 #if wxCHECK_VERSION( 3, 1, 7 )
         if( checkHook )
             createNewProject = newProjectHook.GetCreateNewProject();

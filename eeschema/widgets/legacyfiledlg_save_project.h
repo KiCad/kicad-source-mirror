@@ -18,7 +18,7 @@
 */
 
 #ifndef LEGACYFILEDLG_SAVE_PROJ_H
-#define LEGACYFILEDLG_SVE_PROJ_H
+#define LEGACYFILEDLG_SAVE_PROJ_H
 
 #include <wx/checkbox.h>
 #include <wx/panel.h>

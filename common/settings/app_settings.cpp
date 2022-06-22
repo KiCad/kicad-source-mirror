@@ -28,9 +28,6 @@
 #include <settings/parameters.h>
 #include <base_units.h>
 
-///! Update the schema version whenever a migration is required
-const int appSettingsSchemaVersion = 0;
-
 
 APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::USER, aSchemaVersion ),

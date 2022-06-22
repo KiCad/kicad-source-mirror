@@ -201,7 +201,10 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
 
     default:
         assert( false );
+        // Can't fall through if the assert fires, so quiet our warning
+#ifdef NDEBUG
         KI_FALLTHROUGH;
+#endif
 
     case UNDO_REDO::CHANGED:
         return CHT_MODIFY;

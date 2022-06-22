@@ -67,7 +67,7 @@ void DIALOG_PCM_PROGRESS::OnCloseClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_PCM_PROGRESS::Report( const wxString& aText, SEVERITY aSeverity )
+void DIALOG_PCM_PROGRESS::PCMReport( const wxString& aText, SEVERITY aSeverity )
 {
     std::lock_guard<std::mutex> guard( m_mutex );
     m_reports.push_back( std::make_pair( aText, aSeverity ) );
