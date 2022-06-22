@@ -50,7 +50,12 @@ private:
     // The locale in use before switching to the "C" locale
     // (the locale can be set by user, and is not always the system locale)
     std::string m_user_locale;
+    #ifdef __GNUC__
+    // [[maybe_unused]] attribute is ignored by Gcc but generates a warning.
+    wxLocale*   m_wxLocale;
+    #else
     [[maybe_unused]] wxLocale*   m_wxLocale;
+    #endif
 };
 
 #endif
