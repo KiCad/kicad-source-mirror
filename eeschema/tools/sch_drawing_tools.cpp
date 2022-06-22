@@ -193,6 +193,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     if( symbol )
     {
         addSymbol( symbol );
+        annotate();
         getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ));
     }
     else if( aEvent.HasPosition() )
