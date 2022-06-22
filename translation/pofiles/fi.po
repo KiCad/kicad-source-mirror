@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-13 09:56-0700\n"
-"PO-Revision-Date: 2022-05-29 05:10+0000\n"
+"PO-Revision-Date: 2022-06-23 17:20+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -859,7 +859,7 @@ msgstr "Leviämiskerroin %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr "Rekursion taso"
+msgstr "Rekursion Taso"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
@@ -7783,7 +7783,7 @@ msgstr "Väylämääritelmät"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:55
 msgid "Bus Aliases"
-msgstr "Bussi-aliakset"
+msgstr "Väylä aliakset"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:65
 msgid "Alias Name"
@@ -7804,7 +7804,7 @@ msgstr "Jäsen nimi"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:180
 msgid "Bus Alias Name"
-msgstr "Bussi-aliaksen nimi"
+msgstr "Väylä Aliaksen Nimi"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
@@ -9237,7 +9237,7 @@ msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
-"Valitse jokaiselle alla olevalle bussille uusi nimi.\n"
+"Valitse jokaiselle alla olevalle väylälle uusi nimi.\n"
 "Nimeä on ehdotettu sinulle väylään kiinnitettyjen tarrojen perusteella."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
@@ -9250,7 +9250,7 @@ msgstr "Hyväksy nimi"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr "Siirrä bussit"
+msgstr "Siirrä Väylät"
 
 #: eeschema/dialogs/dialog_netlist.cpp:261
 #: eeschema/dialogs/dialog_netlist_base.h:69
@@ -9279,9 +9279,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
-"Suorita mauste kirjoittamalla komentorivi\n"
-"Yleensä <polku spinaaribinaariin>% I\n"
-"% I korvataan varsinaisella spice netlist -nimellä"
+"Suorita spice kirjoittamalla komentorivi\n"
+"Yleensä <polku spice binaariin>% I\n"
+"% I korvataan varsinaisella spice netlist-nimellä"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Create Netlist and Run Simulator Command"
@@ -9988,11 +9988,11 @@ msgstr "&Etsi"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "&Replace"
-msgstr "&Vaihda"
+msgstr "&Korvaa"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
-msgstr "&Korvaa kaikki"
+msgstr "Korvaa &Kaikki"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -12403,7 +12403,7 @@ msgstr "Päällekkäiset viitteet"
 
 #: eeschema/erc_item.cpp:154
 msgid "Bus Entry needed"
-msgstr "Bussiyhteys tarvitaan"
+msgstr "Väylämerkintä tarvitaan"
 
 #: eeschema/fields_grid_table.cpp:136 eeschema/files-io.cpp:820
 #: eeschema/tools/sch_editor_control.cpp:101
@@ -12922,7 +12922,7 @@ msgstr "& Yksiköt"
 #: pagelayout_editor/menubar.cpp:172 pcbnew/menubar_footprint_editor.cpp:245
 #: pcbnew/menubar_pcb_editor.cpp:462
 msgid "&Place"
-msgstr "&Paikka"
+msgstr "&Aseta"
 
 #: eeschema/menubar.cpp:300
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
@@ -16692,7 +16692,7 @@ msgstr "Ei virheitä."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:116
 msgid "No bus selected"
-msgstr "Ei bussia valittu"
+msgstr "Ei väylää valittu"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:125
 msgid "Bus has no members"
@@ -22205,7 +22205,7 @@ msgstr "Sovellettavat muutokset:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
 msgid "Cleanup Graphics"
-msgstr "Siivousgrafiikka"
+msgstr "Siivoa Grafiikat"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Board cleanup"
@@ -30057,9 +30057,8 @@ msgid "Thermal Relief Gap"
 msgstr "Lämmönpoistoväli"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "Kirjasto"
+msgstr "Kirjastotunnus"
 
 #: pcbnew/footprint.h:219
 #, c-format
@@ -30516,7 +30515,7 @@ msgstr ""
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
-msgstr "Virheellinen spline-viivan määritys löydetty"
+msgstr "Virheellinen spline määritys kohdattu"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1387
 msgid "Invalid Bezier curve created"
@@ -30535,7 +30534,7 @@ msgstr "Nykyistä jalanjälkeä on muutettu. Tallenna muutokset?"
 #: pcbnew/io_mgr.cpp:89
 #, c-format
 msgid "UNKNOWN (%d)"
-msgstr "Tuntematon (%d)"
+msgstr "TUNTEMATON (%d)"
 
 #: pcbnew/kicad_clipboard.cpp:434
 msgid "Clipboard content is not KiCad compatible"
@@ -30580,15 +30579,15 @@ msgstr "Luo PNG-tiedosto nykyisestä näkymästä"
 
 #: pcbnew/menubar_footprint_editor.cpp:149 pcbnew/menubar_pcb_editor.cpp:263
 msgid "&Drawing Mode"
-msgstr "& Piirustustila"
+msgstr "&Piirustustila"
 
 #: pcbnew/menubar_footprint_editor.cpp:159 pcbnew/menubar_pcb_editor.cpp:288
 msgid "&Contrast Mode"
-msgstr "& Kontrasti-tila"
+msgstr "&Kontrastitila"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
 msgid "&Load Footprint from PCB..."
-msgstr "& Lataa jalanjälki piirilevyltä ..."
+msgstr "&Lataa Jalanjälki Piirilevyltä..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 msgid "Load a footprint from the current board into the editor"
@@ -30604,12 +30603,13 @@ msgstr "Aseta jalanjälki nykyiselle levylle"
 
 #: pcbnew/menubar_pcb_editor.cpp:103
 msgid "Resc&ue"
-msgstr "Pelastaa"
+msgstr "Pelas&ta"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Tyhjennä piirilevy ja hae piirilevyeditorin viimeksi tallentama turvatiedosto"
+"Tyhjennä piirilevy ja hae piirilevyeditorin viimeksi tallentama "
+"pelastustiedosto"
 
 #: pcbnew/menubar_pcb_editor.cpp:114
 msgid "Specctra Session..."
@@ -30702,12 +30702,13 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Luo uusi jalanjäljekirjasto, joka sisältää aluksella käytetyt jalanjäljet\n"
+"Luo uusi jalanjälkikirjasto, joka sisältää piirilevyllä käytetyt "
+"jalanjäljet\n"
 "(jos kirjasto on jo olemassa, se korvataan)"
 
 #: pcbnew/menubar_pcb_editor.cpp:167
 msgid "Fabrication Outputs"
-msgstr "Valmistusulostulot"
+msgstr "Valmistusmuodot"
 
 #: pcbnew/menubar_pcb_editor.cpp:312
 msgid "Add Microwave Shape"
@@ -30719,7 +30720,7 @@ msgstr "Aseta jalanjäljet automaattisesti"
 
 #: pcbnew/menubar_pcb_editor.cpp:425
 msgid "External Plugins"
-msgstr "Ulkoiset laajennukset"
+msgstr "Ulkoiset Laajennukset"
 
 #: pcbnew/menubar_pcb_editor.cpp:463
 msgid "Ro&ute"
@@ -30756,7 +30757,7 @@ msgstr "Lisää mikroaaltokela"
 
 #: pcbnew/microwave/microwave_inductor.cpp:372
 msgid "Length of Trace:"
-msgstr "Jäljen pituus:"
+msgstr "Johtimen Pituus:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:383
 msgid "Requested length < minimum length"
@@ -30796,11 +30797,11 @@ msgstr "Muodon määrittelytiedosto"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
-msgstr "Hahmolla ei ole kokoa."
+msgstr "Muodolla ei ole kokoa."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
 msgid "Shape has no points."
-msgstr "Hahmo ei sisällä yhtään pistettä."
+msgstr "Muoto ei sisällä yhtään pistettä."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -34628,7 +34629,7 @@ msgstr "Poista jäljet, jalanjäljet ja graafiset esineet taululta"
 
 #: pcbnew/tools/pcb_actions.cpp:457
 msgid "Cleanup Tracks & Vias..."
-msgstr "Siivousraiteet ja viikset ..."
+msgstr "Siisti Johtimet & Läpiviennit..."
 
 #: pcbnew/tools/pcb_actions.cpp:458
 msgid "Cleanup redundant items, shorting items, etc."
@@ -34636,7 +34637,7 @@ msgstr "Siivoa tarpeettomat kohteet, oikosulkuosat jne."
 
 #: pcbnew/tools/pcb_actions.cpp:463
 msgid "Cleanup Graphics..."
-msgstr "Siivousgrafiikka ..."
+msgstr "Siivoa Grafiikat..."
 
 #: pcbnew/tools/pcb_actions.cpp:464
 msgid "Cleanup redundant items, etc."
@@ -35029,7 +35030,7 @@ msgstr "Näytä valitun verkon kytkentärisukko"
 
 #: pcbnew/tools/pcb_actions.cpp:769
 msgid "Switch to Schematic Editor"
-msgstr "Vaihda Kaavioeditoriin"
+msgstr "Vaihda Kytkentäkaavioeditoriin"
 
 #: pcbnew/tools/pcb_actions.cpp:769
 msgid "Open schematic in Eeschema"
