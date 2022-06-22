@@ -829,13 +829,7 @@ elseif( APPLE )
     add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingPythonDirectoryCreation )
     set( PYMOD_EXT "so" )
 else()  # only linux remains among supported platforms
-    install( TARGETS pcbnew_kiface DESTINATION ${PYTHON_DEST} COMPONENT binary )
-    cmake_policy(SET CMP0087 NEW)
-    install( CODE
-        "file( RENAME
-         \$ENV{DESTDIR}${PYTHON_DEST}/\$<TARGET_FILE_NAME:pcbnew_kiface>
-         \$ENV{DESTDIR}${PYTHON_DEST}/_pcbnew.so
-       )" )
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.kiface DESTINATION ${PYTHON_DEST} COMPONENT binary RENAME "_pcbnew.so" )
     set( PYMOD_EXT "so" )
 endif()
 
