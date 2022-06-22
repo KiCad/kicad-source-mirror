@@ -849,10 +849,6 @@ if( APPLE )
         COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
         COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
         )
-    add_custom_target(
-        pcbnew_python_module ALL
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-        )
 elseif( WIN32 )
     # For phase 1, copy _pcbnew.kiface to the python module.
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
@@ -860,11 +856,21 @@ elseif( WIN32 )
         COMMAND ${CMAKE_COMMAND} -E copy _pcbnew${KIFACE_SUFFIX} _pcbnew.${PYMOD_EXT}
         COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
         )
-    add_custom_target(
-        pcbnew_python_module ALL
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+else()
+    # For linux, just create a symlink in the build directory to ensure the unit tests can find the library
+    # We don't actually do anything with this symlink though, since the install process will create the proper
+    # one for the install tree.
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+        DEPENDS pcbnew_kiface
+        COMMAND ${CMAKE_COMMAND} -E create_symlink _pcbnew${KIFACE_SUFFIX} _pcbnew.${PYMOD_EXT}
+        COMMENT "Symlinking _pcbnew.${PYMOD_EXT} to _pcbnew${KIFACE_SUFFIX}."
         )
 endif()
+
+add_custom_target(
+    pcbnew_python_module ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+    )
 
 
 if( APPLE )
