@@ -137,7 +137,14 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             switch( GetShape() )
             {
             case SHAPE_T::ARC:
-                aPlotter->Arc( getCenter(), GetStart(), GetEnd(), m_fill, 0, ARC_HIGH_DEF );
+            {
+                EDA_ANGLE start;
+                EDA_ANGLE end;
+                CalcArcAngles( start, end );
+
+                aPlotter->Arc( getCenter(), -end, -start, GetRadius(), m_fill, 0 );
+            }
+
                 break;
 
             case SHAPE_T::CIRCLE:
@@ -174,8 +181,14 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            aPlotter->Arc( getCenter(), GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size,
-                           ARC_HIGH_DEF );
+        {
+            EDA_ANGLE start;
+            EDA_ANGLE end;
+            CalcArcAngles( start, end );
+
+            aPlotter->Arc( getCenter(), -end, -start, GetRadius(), FILL_T::NO_FILL, pen_size );
+        }
+
             break;
 
         case SHAPE_T::CIRCLE:

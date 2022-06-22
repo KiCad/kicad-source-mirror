@@ -224,7 +224,13 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        aPlotter->Arc( center, start, end, fill, penWidth, ARC_HIGH_DEF );
+    {
+        EDA_ANGLE t1, t2;
+
+        CalcArcAngles( t1, t2 );
+        aTransform.MapAngles( &t1, &t2 );
+        aPlotter->Arc( center, -t2, -t1, GetRadius(), fill, penWidth );
+    }
         break;
 
     case SHAPE_T::CIRCLE:

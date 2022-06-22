@@ -154,44 +154,6 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     EDA_ANGLE endAngle( aEnd - aCenter );
     int       radius = ( aStart - aCenter ).EuclideanNorm();
 
-    #if 0
-    // Approximate arc by segments:
-    int       numSegs = GetArcToSegmentCount( radius, aMaxError, FULL_CIRCLE );
-    EDA_ANGLE delta = ANGLE_360 / std::max( 8, numSegs );
-    VECTOR2I  start( aStart );
-    VECTOR2I  end( aEnd );
-    VECTOR2I  pt;
-
-    if( startAngle > endAngle )
-    {
-        if( endAngle < ANGLE_0 )
-            endAngle.Normalize();
-        else
-            startAngle = startAngle.Normalize() - ANGLE_360;
-    }
-
-    SetCurrentLineWidth( aWidth );
-    MoveTo( start );
-
-    for( EDA_ANGLE ii = delta; startAngle + ii < endAngle; ii += delta )
-    {
-        pt = start;
-        RotatePoint( pt, aCenter, -ii );
-
-        LineTo( pt );
-    }
-
-    if( aFill == FILL_T::NO_FILL )
-    {
-        FinishTo( end );
-    }
-    else
-    {
-        LineTo( end );
-        FinishTo( aCenter );
-    }
-
-    #else
     if( startAngle > endAngle )
     {
         if( endAngle < ANGLE_0 )
@@ -208,7 +170,6 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     }
 
     Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
-    #endif
 }
 
 
