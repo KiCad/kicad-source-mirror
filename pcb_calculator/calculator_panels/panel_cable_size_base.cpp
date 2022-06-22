@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,152 +25,158 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Wire properties") ), wxVERTICAL );
 
-	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 0, 3, 0, 0 );
+	wxFlexGridSizer* fgSizerLeft;
+	fgSizerLeft = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerLeft->AddGrowableCol( 1 );
+	fgSizerLeft->SetFlexibleDirection( wxBOTH );
+	fgSizerLeft->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText162 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Standard Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText162->Wrap( -1 );
-	gSizer1->Add( m_staticText162, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText162, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	wxArrayString m_sizeChoiceChoices;
 	m_sizeChoice = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_sizeChoiceChoices, 0 );
 	m_sizeChoice->SetSelection( 0 );
-	gSizer1->Add( m_sizeChoice, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_sizeChoice, 0, wxALL|wxEXPAND, 5 );
 
 
-	gSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizerLeft->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticText16 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	gSizer1->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_diameterCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_diameterCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_diameterCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_diameterUnitChoices;
 	m_diameterUnit = new UNIT_SELECTOR_LEN( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_diameterUnitChoices, 0 );
 	m_diameterUnit->SetSelection( 0 );
-	gSizer1->Add( m_diameterUnit, 0, wxALL, 5 );
+	fgSizerLeft->Add( m_diameterUnit, 0, wxALL, 5 );
 
 	m_staticText161 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Area:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
-	gSizer1->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_areaCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_areaCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_areaCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText1641 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("mm^2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1641->Wrap( -1 );
-	gSizer1->Add( m_staticText1641, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText1641, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
 
 	m_staticText16411 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Linear resistance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16411->Wrap( -1 );
-	gSizer1->Add( m_staticText16411, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText16411, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_linResistanceCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_linResistanceCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_linResistanceCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_linResistanceUnitChoices;
 	m_linResistanceUnit = new UNIT_SELECTOR_LINEAR_RESISTANCE( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_linResistanceUnitChoices, 0 );
 	m_linResistanceUnit->SetSelection( 0 );
-	gSizer1->Add( m_linResistanceUnit, 0, wxALL, 5 );
+	fgSizerLeft->Add( m_linResistanceUnit, 0, wxALL, 5 );
 
 	m_staticText164 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Frequency for 100% skin depth:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText164->Wrap( -1 );
-	gSizer1->Add( m_staticText164, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText164, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_frequencyCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_frequencyCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_frequencyCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_frequencyUnitChoices;
 	m_frequencyUnit = new UNIT_SELECTOR_FREQUENCY( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_frequencyUnitChoices, 0 );
 	m_frequencyUnit->SetSelection( 0 );
-	gSizer1->Add( m_frequencyUnit, 0, wxALL, 5 );
+	fgSizerLeft->Add( m_frequencyUnit, 0, wxALL, 5 );
 
 	m_staticText1642 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Ampacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1642->Wrap( -1 );
-	gSizer1->Add( m_staticText1642, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText1642, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_AmpacityCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_AmpacityCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerLeft->Add( m_AmpacityCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText16421 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16421->Wrap( -1 );
-	gSizer1->Add( m_staticText16421, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerLeft->Add( m_staticText16421, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	sbSizer1->Add( gSizer1, 0, wxALL, 5 );
+	sbSizer1->Add( fgSizerLeft, 1, wxEXPAND, 5 );
 
 
-	bSizer4->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer12;
 	sbSizer12 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Application") ), wxVERTICAL );
 
-	wxGridSizer* gSizer12;
-	gSizer12 = new wxGridSizer( 0, 3, 0, 0 );
+	wxFlexGridSizer* fgSizerRight;
+	fgSizerRight = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerRight->AddGrowableCol( 1 );
+	fgSizerRight->SetFlexibleDirection( wxBOTH );
+	fgSizerRight->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText163 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Current:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText163->Wrap( -1 );
-	gSizer12->Add( m_staticText163, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText163, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_currentCtrl = new wxTextCtrl( sbSizer12->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer12->Add( m_currentCtrl, 1, wxALL|wxEXPAND, 5 );
+	fgSizerRight->Add( m_currentCtrl, 1, wxALL|wxEXPAND, 5 );
 
 	m_staticText = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText->Wrap( -1 );
-	gSizer12->Add( m_staticText, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
 
 	m_staticText1612 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1612->Wrap( -1 );
-	gSizer12->Add( m_staticText1612, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText1612, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_lengthCtrl = new wxTextCtrl( sbSizer12->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer12->Add( m_lengthCtrl, 1, wxALL|wxEXPAND, 5 );
+	fgSizerRight->Add( m_lengthCtrl, 1, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_lengthUnitChoices;
 	m_lengthUnit = new UNIT_SELECTOR_LEN_CABLE( sbSizer12->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_lengthUnitChoices, 0 );
 	m_lengthUnit->SetSelection( 0 );
-	gSizer12->Add( m_lengthUnit, 0, wxALL, 5 );
+	fgSizerRight->Add( m_lengthUnit, 0, wxALL, 5 );
 
 	m_staticText16121 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Resistance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16121->Wrap( -1 );
-	gSizer12->Add( m_staticText16121, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText16121, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_resistanceCtrl = new wxTextCtrl( sbSizer12->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer12->Add( m_resistanceCtrl, 1, wxALL|wxEXPAND, 5 );
+	fgSizerRight->Add( m_resistanceCtrl, 1, wxALL|wxEXPAND, 5 );
 
 	m_staticText161211 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("ohm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161211->Wrap( -1 );
-	gSizer12->Add( m_staticText161211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerRight->Add( m_staticText161211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText161212 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Voltage drop:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161212->Wrap( -1 );
-	gSizer12->Add( m_staticText161212, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText161212, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_vDropCtrl = new wxTextCtrl( sbSizer12->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer12->Add( m_vDropCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerRight->Add( m_vDropCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText1612121 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("mV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1612121->Wrap( -1 );
-	gSizer12->Add( m_staticText1612121, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerRight->Add( m_staticText1612121, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText1612122 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("Dissipated power:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1612122->Wrap( -1 );
-	gSizer12->Add( m_staticText1612122, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizerRight->Add( m_staticText1612122, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_powerCtrl = new wxTextCtrl( sbSizer12->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer12->Add( m_powerCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizerRight->Add( m_powerCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText16121211 = new wxStaticText( sbSizer12->GetStaticBox(), wxID_ANY, _("mW"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16121211->Wrap( -1 );
-	gSizer12->Add( m_staticText16121211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerRight->Add( m_staticText16121211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	sbSizer12->Add( gSizer12, 0, wxALL, 5 );
+	sbSizer12->Add( fgSizerRight, 1, wxEXPAND, 5 );
 
 
-	bSizer4->Add( sbSizer12, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( sbSizer12, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer9->Add( bSizer4, 1, wxEXPAND, 5 );
