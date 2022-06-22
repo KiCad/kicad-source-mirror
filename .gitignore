@@ -23,10 +23,8 @@ eeschema/dialogs/dialog_bom_cfg_lexer.h
 common/template_fieldnames_keywords.cpp
 common/template_fieldnames_lexer.h
 eeschema/schematic_keywords.*
-eeschema/sch_text_help_md.h
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
-pcbnew/dialogs/panel_setup_rules_help_md.h
 Makefile
 CMakeCache.txt
 auto_renamed_to_cpp
