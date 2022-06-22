@@ -828,9 +828,19 @@ elseif( APPLE )
         )
     add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingPythonDirectoryCreation )
     set( PYMOD_EXT "so" )
-else()  # only linux remains among supported platforms
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.kiface DESTINATION ${PYTHON_DEST} COMPONENT binary RENAME "_pcbnew.so" )
+else()
+    # Linux is the remaining platform, and we will create a symlink for the kiface from the python site-packages directory.
     set( PYMOD_EXT "so" )
+
+    if( IS_ABSOLUTE ${KICAD_KIFACE} )
+        file( RELATIVE_PATH PCBNEW_PYTHON_SYMLINK ${PYTHON_FULL_DEST} ${KICAD_KIFACE}/_pcbnew${KIFACE_SUFFIX} )
+    else()
+        file( RELATIVE_PATH PCBNEW_PYTHON_SYMLINK ${PYTHON_FULL_DEST} ${CMAKE_INSTALL_PREFIX}/${KICAD_KIFACE}/_pcbnew${KIFACE_SUFFIX} )
+    endif()
+
+    install( CODE "message( STATUS \"Symlinking ${PYTHON_FULL_DEST}/_pcbnew.${PYMOD_EXT} to _pcbnew${KIFACE_SUFFIX}\")
+                   execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink \"${PCBNEW_PYTHON_SYMLINK}\" \"${PYTHON_FULL_DEST}/_pcbnew.${PYMOD_EXT}\" )"
+            )
 endif()
 
 if( APPLE )
@@ -843,7 +853,7 @@ if( APPLE )
         pcbnew_python_module ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
         )
-else()
+elseif( WIN32 )
     # For phase 1, copy _pcbnew.kiface to the python module.
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface

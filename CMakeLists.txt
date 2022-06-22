@@ -869,6 +869,16 @@ else()
     set( PYTHON_DEST "${PYTHON_SITE_PACKAGE_PATH}"
         CACHE PATH "Python module install path."
         )
+
+    if( IS_ABSOLUTE ${PYTHON_SITE_PACKAGE_PATH} )
+        set( PYTHON_FULL_DEST "${PYTHON_SITE_PACKAGE_PATH}"
+            CACHE PATH "Python module full install path."
+            )
+    else()
+        set( PYTHON_FULL_DEST "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGE_PATH}"
+            CACHE PATH "Python module full install path."
+            )
+    endif()
 endif()
 message( STATUS "Python module install path: ${PYTHON_DEST}" )
 
