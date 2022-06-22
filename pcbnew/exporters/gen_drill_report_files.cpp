@@ -89,27 +89,20 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     EDA_RECT bbbox = m_pcb->GetBoardEdgesBoundingBox();
     m_pcb->SetVisibleLayers( visibleLayers );
 
+    // Some formats cannot be used to generate a document like the map files
+    // - HPGL (old format not very used)
+    // - GERBER because a map file is not a fabrication file usable by board house
+    // (in fact such a file usually create problems when sent to a board house)
+
+    if( aFormat == PLOT_FORMAT::HPGL || aFormat == PLOT_FORMAT::GERBER )
+        aFormat = PLOT_FORMAT::PDF;
+
     // Calculate the scale for the format type, scale 1 in HPGL, drawing on
     // an A4 sheet in PS, + text description of symbols
     switch( aFormat )
     {
     case PLOT_FORMAT::GERBER:
-        plotter = new GERBER_PLOTTER();
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
-        plotter->SetGerberCoordinatesFormat( 5 ); // format x.5 unit = mm
-        break;
-
     case PLOT_FORMAT::HPGL: // Scale for HPGL format.
-    {
-        HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
-        plotter                    = hpgl_plotter;
-        hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
-        hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
-        plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
-    }
-        break;
-
     default:
         wxASSERT( false );
         KI_FALLTHROUGH;
