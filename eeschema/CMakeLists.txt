@@ -527,7 +527,7 @@ else()
     install( TARGETS eeschema_kiface
         # actual filename subject to change at milestone C)
         # modular-kicad blueprint.
-        DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_KIFACE}
         COMPONENT binary
         )
 endif()
@@ -536,7 +536,7 @@ endif()
 if( KICAD_WIN32_INSTALL_PDBS )
     # Get the PDBs to copy over for MSVC
     install(FILES $<TARGET_PDB_FILE:eeschema> DESTINATION ${KICAD_BIN})
-    install(FILES $<TARGET_PDB_FILE:eeschema_kiface> DESTINATION ${KICAD_BIN})
+    install(FILES $<TARGET_PDB_FILE:eeschema_kiface> DESTINATION ${KICAD_KIFACE})
 endif()
 
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component

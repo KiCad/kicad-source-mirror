@@ -550,8 +550,17 @@ set( KIFACE_PREFIX  "_" )
 #================================================
 if( NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set( KICAD_BIN bin
-        CACHE PATH "Location of KiCad binaries." )
+    if( WIN32 )
+        set( KICAD_BIN bin
+            CACHE PATH "Location of KiCad binaries." )
+    else()
+        set( KICAD_BIN ${CMAKE_INSTALL_BINDIR}
+            CACHE PATH "Location of KiCad binaries." )
+    endif()
+
+    # For now, the kifaces are just in the normal bin folder
+    set( KICAD_KIFACE ${KICAD_BIN}
+        CACHE PATH "Location of KiCad kifaces." )
 
     # Do not make these variables "PATH" b/c cmake will truncate them and we need the full path
     if( NOT IS_ABSOLUTE ${CMAKE_INSTALL_DATADIR} )
@@ -663,6 +672,7 @@ else()
 endif()
 
 mark_as_advanced( KICAD_BIN
+    KICAD_KIFACE
     KICAD_PLUGINS
     KICAD_USER_PLUGIN
     KICAD_LIB

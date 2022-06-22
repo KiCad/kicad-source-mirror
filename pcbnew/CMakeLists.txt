@@ -783,7 +783,7 @@ else()
         COMPONENT binary
         )
     install( TARGETS pcbnew_kiface
-        DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_KIFACE}
         COMPONENT binary
         )
 endif()
@@ -791,7 +791,7 @@ endif()
 if( KICAD_WIN32_INSTALL_PDBS )
     # Get the PDBs to copy over for MSVC
     install(FILES $<TARGET_PDB_FILE:pcbnew> DESTINATION ${KICAD_BIN})
-    install(FILES $<TARGET_PDB_FILE:pcbnew_kiface> DESTINATION ${KICAD_BIN})
+    install(FILES $<TARGET_PDB_FILE:pcbnew_kiface> DESTINATION ${KICAD_KIFACE})
 endif()
 
 if( NOT APPLE )
