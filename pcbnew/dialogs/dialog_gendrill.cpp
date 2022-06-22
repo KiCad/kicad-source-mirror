@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
-int DIALOG_GENDRILL::m_mapFileType      = 1;
+int DIALOG_GENDRILL::m_mapFileType      = 3;
 int DIALOG_GENDRILL::m_drillFileType    = 0;
 bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
 
@@ -115,6 +115,10 @@ void DIALOG_GENDRILL::initDialog()
     m_ZerosFormat              = cfg->m_GenDrill.zeros_format;
 
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
+
+    // Ensure validity of m_mapFileType
+    if( m_mapFileType < 0 || m_mapFileType > 3 )
+        m_mapFileType = 3;  // default = PDF
 
     InitDisplayParams();
 }
@@ -368,11 +372,9 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     m_pcbEditFrame->ClearMsgPanel();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    const PLOT_FORMAT filefmt[6] = {
+    const PLOT_FORMAT filefmt[] = {
         // Keep these format ids in the same order than m_Choice_Drill_Map choices
-        PLOT_FORMAT::HPGL,
         PLOT_FORMAT::POST,
-        PLOT_FORMAT::GERBER,
         PLOT_FORMAT::DXF,
         PLOT_FORMAT::SVG,
         PLOT_FORMAT::PDF
@@ -381,7 +383,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
 
     if( choice >= arrayDim( filefmt ) )
-        choice = 1;
+        choice = arrayDim( filefmt )-1;     // Last choice = PDF
 
     // Create output directory if it does not exist (also transform it in absolute form).
     // Bail if it fails.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,10 +79,10 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	bMiddleSizer->Add( sbSizer6, 1, wxEXPAND|wxALL, 5 );
 
-	wxString m_Choice_Drill_MapChoices[] = { _("HPGL"), _("PostScript"), _("Gerber"), _("DXF"), _("SVG"), _("PDF") };
+	wxString m_Choice_Drill_MapChoices[] = { _("PostScript"), _("DXF"), _("SVG"), _("PDF") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
 	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Map File Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Map->SetSelection( 1 );
+	m_Choice_Drill_Map->SetSelection( 5 );
 	m_Choice_Drill_Map->SetToolTip( _("Creates a drill map in PS, HPGL or other formats") );
 
 	bMiddleSizer->Add( m_Choice_Drill_Map, 0, wxALL|wxEXPAND, 5 );
