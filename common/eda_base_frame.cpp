@@ -34,6 +34,7 @@
 #include <id.h>
 #include <kiface_base.h>
 #include <menus_helpers.h>
+#include <hotkeys_basic.h>
 #include <panel_hotkeys_editor.h>
 #include <paths.h>
 #include <confirm.h>
@@ -1076,6 +1077,11 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_DS_COLORS ), _( "Colors" ) );
+
+
+    // Update all of the action hotkeys. The process of loading the actions through
+    // the KiFACE will only get us the default hotkeys
+    ReadHotKeyConfigIntoActions( wxEmptyString, hotkeysPanel->ActionsList() );
 
     for( size_t i = 0; i < book->GetPageCount(); ++i )
         book->GetPage( i )->Layout();

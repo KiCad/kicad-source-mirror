@@ -104,6 +104,13 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame );
 void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aHotKeys );
 
 /**
+ * Reads a hotkey config file into a list of actions
+ *
+ * If \a aFileName is empty it will read in the default hotkeys file.
+ */
+void ReadHotKeyConfigIntoActions( const wxString& aFileName, std::vector<TOOL_ACTION*>& aActions );
+
+/**
  * Update the hotkeys config file with the hotkeys from the given actions map.
  */
 int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions );

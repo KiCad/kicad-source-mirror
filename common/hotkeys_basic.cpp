@@ -377,6 +377,20 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 }
 
 
+void ReadHotKeyConfigIntoActions( const wxString& aFileName, std::vector<TOOL_ACTION*>& aActions )
+{
+    std::map<std::string, int> hotkeys;
+
+    // Read the existing config (all hotkeys)
+    ReadHotKeyConfig( aFileName, hotkeys );
+
+    // Set each tool action hotkey to the config file hotkey if present
+    for( TOOL_ACTION* action : aActions )
+        if( hotkeys.find( action->GetName() ) != hotkeys.end() )
+            action->SetHotKey( hotkeys[action->GetName()] );
+}
+
+
 int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 {
     std::map<std::string, int> hotkeys;

@@ -52,6 +52,10 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
     kiface->GetActions( m_hk_list->ActionsList() );
 
+    // Update all of the action hotkeys. The process of loading the actions through
+    // the KiFACE will only get us the default hotkeys
+    ReadHotKeyConfigIntoActions( wxEmptyString, m_hk_list->ActionsList() );
+
     main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 
     wxStdDialogButtonSizer* sdb_sizer = new wxStdDialogButtonSizer;
