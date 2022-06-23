@@ -79,11 +79,19 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	bMiddleSizer->Add( sbSizer6, 1, wxEXPAND|wxALL, 5 );
 
-	wxString m_Choice_Drill_MapChoices[] = { _("PostScript"), _("DXF"), _("SVG"), _("PDF") };
+	m_staticTextInfo1 = new wxStaticText( this, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo1->Wrap( -1 );
+	bMiddleSizer->Add( m_staticTextInfo1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("A drill map is a doc. file, not a fab. file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	bMiddleSizer->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxString m_Choice_Drill_MapChoices[] = { _("PostScript"), _("Gerber X2"), _("DXF"), _("SVG"), _("PDF") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
 	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Map File Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Map->SetSelection( 5 );
-	m_Choice_Drill_Map->SetToolTip( _("Creates a drill map in PS, HPGL or other formats") );
+	m_Choice_Drill_Map->SetSelection( 4 );
+	m_Choice_Drill_Map->SetToolTip( _("Creates a drill map in PDF or other formats") );
 
 	bMiddleSizer->Add( m_Choice_Drill_Map, 0, wxALL|wxEXPAND, 5 );
 
@@ -133,7 +141,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bLeftSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
 
 
-	bmiddlerSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bmiddlerSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bRightBoxSizer;
 	bRightBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -193,7 +201,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bRightBoxSizer->Add( sbSizerHoles, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bmiddlerSizer->Add( bRightBoxSizer, 1, wxEXPAND|wxTOP, 5 );
+	bmiddlerSizer->Add( bRightBoxSizer, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bMainSizer->Add( bmiddlerSizer, 0, wxEXPAND|wxTOP, 2 );
@@ -231,7 +239,6 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
