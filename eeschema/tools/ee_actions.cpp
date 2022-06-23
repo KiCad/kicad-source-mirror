@@ -646,7 +646,8 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFi
         _( "Show Hidden Fields" ), _( "Toggle display of hidden text fields" ) );
 
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
-        AS_GLOBAL, 0, "",
+        AS_GLOBAL,
+        MD_SHIFT + ' ', "",
         _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),
         BITMAPS::lines90 );
 
