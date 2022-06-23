@@ -416,7 +416,12 @@ protected:
     wxString m_workFilename;
     FILE* m_workFile;               ///< Temporary file to construct the stream before zipping
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table
-    std::vector<std::pair<BOX2I, wxString>> m_urlHyperlinks; ///< List of loaded URLs so far
+
+    ///< List of loaded URLs in current page
+    std::vector<std::pair<BOX2I, wxString>> m_urlHyperlinksInPage;
+
+    ///< Handles for all the hyperlink objects that will be deferred
+    std::map<int, std::pair<BOX2D, wxString>> m_urlHyperlinksHandles;
 };
 
 

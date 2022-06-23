@@ -720,6 +720,7 @@ void PDF_PLOTTER::ClosePage()
     std::vector<int> hyperlinkHandles;
 
     // Write out all hyperlinks for the page as annotation links
+    /*
     for( const std::pair<BOX2I, wxString>& linkPair : m_urlHyperlinks )
     {
         const BOX2I&    box = linkPair.first;
@@ -738,8 +739,27 @@ void PDF_PLOTTER::ClosePage()
                  bottomLeft.x, bottomLeft.y, topRight.x, topRight.y,
                  encodeStringForPlotter( url ).c_str() );
         closePdfObject();
-    }
+    }*/
 
+    // Write out all "goto" hyperlinks for the page as link annotations (compatible with pdf 1.0)
+    for( const std::pair<BOX2I, wxString>& linkPair : m_urlHyperlinksInPage )
+    {
+        const BOX2I&    box = linkPair.first;
+        const wxString& url = linkPair.second;
+
+        VECTOR2D bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+        VECTOR2D topRight = iuToPdfUserSpace( box.GetEnd() );
+
+        BOX2D userSpaceBox;
+        userSpaceBox.SetOrigin( bottomLeft );
+        userSpaceBox.SetEnd( topRight );
+
+        hyperlinkHandles.push_back( startPdfObject() );
+
+        m_urlHyperlinksHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, url } } );
+    }
+    //
+    // TODO use allocPdfObject()  !!
     int hyperLinkArrayHandle = -1;
 
     // If we have added any annotation links, create an array containing all the objects
@@ -786,6 +806,9 @@ void PDF_PLOTTER::ClosePage()
 
     // Mark the page stream as idle
     m_pageStreamHandle = 0;
+
+    //
+    m_urlHyperlinksInPage.clear();
 }
 
 
@@ -796,6 +819,8 @@ bool PDF_PLOTTER::StartPlot()
     // First things first: the customary null object
     m_xrefTable.clear();
     m_xrefTable.push_back( 0 );
+    m_urlHyperlinksInPage.clear();
+    m_urlHyperlinksHandles.clear();
 
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
@@ -869,6 +894,25 @@ bool PDF_PLOTTER::EndPlot()
 
     fputs( ">>\n", m_outputFile );
     closePdfObject();
+
+    for( const std::pair<int,std::pair<BOX2D, wxString>>& handlePair : m_urlHyperlinksHandles )
+    {
+        const int& linkhandle = handlePair.first;
+        const std::pair<BOX2D, wxString>& linkpair = handlePair.second;
+        const BOX2D&                      box = linkpair.first;
+        const wxString&                   url = linkpair.second;
+
+        startPdfObject( linkhandle );
+
+        fprintf( m_outputFile,
+                 "<< /Type /Annot\n"
+                 "   /Subtype /Link\n"
+                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n"
+                 "   /Dest [%d 0 R] >>\n" // /D [3 0 R /FitR –4 399 199 533]
+                 ">>\n",
+                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop(), m_pageHandles[0] );
+        closePdfObject();
+    }
 
     /* The page tree: it's a B-tree but luckily we only have few pages!
        So we use just an array... The handle was allocated at the beginning,
@@ -1014,6 +1058,6 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
 
 void PDF_PLOTTER::HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL )
 {
-    m_urlHyperlinks.push_back( std::make_pair( aBox, aDestinationURL ) );
+    m_urlHyperlinksInPage.push_back( std::make_pair( aBox, aDestinationURL ) );
 }
 
