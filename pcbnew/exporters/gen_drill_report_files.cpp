@@ -90,11 +90,9 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     m_pcb->SetVisibleLayers( visibleLayers );
 
     // Some formats cannot be used to generate a document like the map files
-    // - HPGL (old format not very used)
-    // - GERBER because a map file is not a fabrication file usable by board house
-    // (in fact such a file usually create problems when sent to a board house)
+    // Currently HPGL (old format not very used)
 
-    if( aFormat == PLOT_FORMAT::HPGL || aFormat == PLOT_FORMAT::GERBER )
+    if( aFormat == PLOT_FORMAT::HPGL  )
         aFormat = PLOT_FORMAT::PDF;
 
     // Calculate the scale for the format type, scale 1 in HPGL, drawing on
@@ -102,7 +100,11 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     switch( aFormat )
     {
     case PLOT_FORMAT::GERBER:
-    case PLOT_FORMAT::HPGL: // Scale for HPGL format.
+        plotter = new GERBER_PLOTTER();
+        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        plotter->SetGerberCoordinatesFormat( 5 ); // format x.5 unit = mm
+        break;
+
     default:
         wxASSERT( false );
         KI_FALLTHROUGH;
@@ -182,42 +184,55 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         return false;
     }
 
+    plotter->ClearHeaderLinesList();
+
+    // For the Gerber X2 format we need to set the  "FileFunction" to Drillmap
+    // and set a few other options.
+    if( plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+    {
+        GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
+        gbrplotter->DisableApertMacros( false );
+        gbrplotter->UseX2format( true );            // Mandatory
+        gbrplotter->UseX2NetAttributes( false );    // net attributes hace no meaning here
+
+        // Attributes are added using X2 format
+        AddGerberX2Header( gbrplotter, m_pcb, false );
+
+        wxString text;
+
+        // Add the TF.FileFunction
+        text = "%TF.FileFunction,Drillmap*%";
+        gbrplotter->AddLineToHeader( text );
+
+        // Add the TF.FilePolarity
+        text = wxT( "%TF.FilePolarity,Positive*%" );
+        gbrplotter->AddLineToHeader( text );
+    }
+
     plotter->StartPlot();
 
-    // Draw items on edge layer (not all, only items useful for drill map
+    // Draw items on edge layer.
+    // Not all, only items useful for drill map, i.e. board outlines.
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );
-    itemplotter.SetLayerSet( Edge_Cuts );
+
+    // Use attributes of a drawing layer (we are not really draw the Edge.Cuts layer)
+    itemplotter.SetLayerSet( Dwgs_User );
 
     for( BOARD_ITEM* item : m_pcb->Drawings() )
     {
+        if( item->GetLayer() != Edge_Cuts )
+            continue;
+
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            itemplotter.PlotPcbShape( static_cast<PCB_SHAPE*>( item ) );
+            {
+            PCB_SHAPE dummy_shape( *static_cast<PCB_SHAPE*>( item ) );
+            dummy_shape.SetLayer( Dwgs_User );
+            itemplotter.PlotPcbShape( &dummy_shape );
+            }
             break;
 
-        case PCB_TEXT_T:
-        {
-            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-            itemplotter.PlotPcbText( text, text->GetLayer(), text->IsKnockout() );
-            break;
-        }
-
-        case PCB_TEXTBOX_T:
-        {
-            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
-            itemplotter.PlotPcbText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
-            itemplotter.PlotPcbShape( textbox );
-            break;
-        }
-
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_TARGET_T:
-        case PCB_MARKER_T: // do not draw
         default:
             break;
         }

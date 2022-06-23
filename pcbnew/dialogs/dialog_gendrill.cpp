@@ -90,7 +90,7 @@ int DIALOG_GENDRILL::m_ZerosFormat      = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Mirror          = false;    // Only for Excellon format
 bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
-int DIALOG_GENDRILL::m_mapFileType      = 3;
+int DIALOG_GENDRILL::m_mapFileType      = 4;        // The last choice in m_Choice_Drill_Map
 int DIALOG_GENDRILL::m_drillFileType    = 0;
 bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
 
@@ -115,8 +115,8 @@ void DIALOG_GENDRILL::initDialog()
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
 
     // Ensure validity of m_mapFileType
-    if( m_mapFileType < 0 || m_mapFileType > 3 )
-        m_mapFileType = 3;  // default = PDF
+    if( m_mapFileType < 0 || m_mapFileType >= (int)m_Choice_Drill_Map->GetCount() )
+        m_mapFileType = m_Choice_Drill_Map->GetCount() - 1;  // last item in list = default = PDF
 
     InitDisplayParams();
 }
@@ -373,6 +373,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     const PLOT_FORMAT filefmt[] = {
         // Keep these format ids in the same order than m_Choice_Drill_Map choices
         PLOT_FORMAT::POST,
+        PLOT_FORMAT::GERBER,    // Only X2 format because we need the .FileFunction attribute
         PLOT_FORMAT::DXF,
         PLOT_FORMAT::SVG,
         PLOT_FORMAT::PDF

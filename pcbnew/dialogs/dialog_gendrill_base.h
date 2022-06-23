@@ -50,6 +50,8 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Check_Merge_PTH_NPTH;
 		wxRadioBox* m_radioBoxOvalHoleMode;
 		wxRadioButton* m_rbGerberX2;
+		wxStaticText* m_staticTextInfo1;
+		wxStaticText* m_staticTextInfo;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxRadioBox* m_Choice_Unit;
@@ -88,7 +90,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Drill Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Drill Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 643,558 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_GENDRILL_BASE();
 
