@@ -47,6 +47,7 @@
     paths:
       - build/linux/3d-viewer/
       - build/linux/pcbnew/pcbnew.py
+      - build/linux/pcbnew/_pcbnew.kiface
       - build/linux/pcbnew/_pcbnew.so
       - build/linux/qa/
       - build/linux/compilation_log.txt
