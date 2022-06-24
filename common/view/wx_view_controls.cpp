@@ -248,7 +248,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             {
                 if( !justWarped )
                 {
-                    m_parentPanel->WarpPointer( x + warpX, y + warpY );
+                    KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY );
                     m_dragStartPoint += VECTOR2D( warpX, warpY );
                     justWarped = true;
                 }
@@ -288,7 +288,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             {
                 if( !justWarped )
                 {
-                    m_parentPanel->WarpPointer( x, y + warpY );
+                    KIPLATFORM::UI::WarpPointer( m_parentPanel, x, y + warpY );
                     m_dragStartPoint += VECTOR2D( 0, warpY );
                     justWarped = true;
                 }
@@ -741,17 +741,17 @@ void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordin
             if( aWarpView )
             {
                 m_view->SetCenter( clampedPosition );
-                m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
+                KIPLATFORM::UI::WarpPointer( m_parentPanel, screenSize.x / 2, screenSize.y / 2 );
             }
         }
         else
         {
-            m_parentPanel->WarpPointer( screenPos.x, screenPos.y );
+            KIPLATFORM::UI::WarpPointer( m_parentPanel, screenPos.x, screenPos.y );
         }
     }
     else
     {
-        m_parentPanel->WarpPointer( aPosition.x, aPosition.y );
+        KIPLATFORM::UI::WarpPointer( m_parentPanel, aPosition.x, aPosition.y );
     }
 
     refreshMouse();
@@ -766,7 +766,7 @@ void WX_VIEW_CONTROLS::CenterOnCursor() const
     if( GetMousePosition( false ) != screenCenter )
     {
         m_view->SetCenter( GetCursorPosition() );
-        m_parentPanel->WarpPointer( KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );
+        KIPLATFORM::UI::WarpPointer( m_parentPanel, KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );
     }
 }
 
@@ -877,7 +877,7 @@ void WX_VIEW_CONTROLS::handleCursorCapture( int x, int y )
         }
 
         if( warp )
-            m_parentPanel->WarpPointer( x, y );
+            KIPLATFORM::UI::WarpPointer( m_parentPanel, x, y );
     }
 }
 

@@ -132,3 +132,9 @@ void KIPLATFORM::UI::SetOverlayScrolling( const wxWindow* aWindow, bool overlay 
 {
     // Not implemented
 }
+
+
+void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
+{
+    aWindow->WarpPointer( aX, aY );
+}

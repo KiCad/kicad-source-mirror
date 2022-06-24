@@ -116,6 +116,14 @@ namespace KIPLATFORM
          * Implemented only on GTK.
          */
         void SetOverlayScrolling( const wxWindow* aWindow, bool overlay );
+
+        /**
+         * Move the mouse cursor to a specific position relative to the window
+         * @param aWindow Window in which to position to mouse cursor
+         * @param aX destination x position
+         * @param aY destination y position
+         */
+        void WarpPointer( wxWindow* aWindow, int aX, int aY );
     }
 }
 

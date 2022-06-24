@@ -26,7 +26,7 @@
 #include <wx/window.h>
 
 #include <gtk/gtk.h>
-
+#include <gdk/gdk.h>
 
 bool KIPLATFORM::UI::IsDarkTheme()
 {
@@ -81,6 +81,7 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
     case wxCURSOR_BULLSEYE:
     case wxCURSOR_HAND:
     case wxCURSOR_ARROW:
+    case wxCURSOR_BLANK:
         return true;
     default:
         return false;
@@ -133,4 +134,27 @@ void KIPLATFORM::UI::SetOverlayScrolling( const wxWindow* aWindow, bool overlay 
 {
     gtk_scrolled_window_set_overlay_scrolling( GTK_SCROLLED_WINDOW( aWindow->GetHandle() ),
                                                overlay );
+}
+
+
+void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
+{
+    if( !wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+    {
+        aWindow->WarpPointer( aX, aY );
+    }
+    else
+    {
+        GdkDisplay* disp = gtk_widget_get_display( static_cast<GtkWidget*>( aWindow->GetHandle() ) );
+        GdkWindow* win = gdk_display_get_window_at_pointer( disp, nullptr, nullptr );
+        GdkCursor* blank_cursor = gdk_cursor_new_for_display( disp, GDK_BLANK_CURSOR );
+        GdkCursor* cur_cursor = gdk_window_get_cursor( win );
+
+        if( cur_cursor )
+            g_object_ref( cur_cursor );
+
+        gdk_window_set_cursor( win, blank_cursor );
+        aWindow->WarpPointer( aX, aY );
+        gdk_window_set_cursor( win, cur_cursor );
+    }
 }
