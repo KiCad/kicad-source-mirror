@@ -67,9 +67,11 @@ BOARD* CreateEmptyBoard();
  * Boards can only be saved in KiCad native format.
  * @param aFileName is the full path to save a copy to.
  * @param aBoard is a pointer to a loaded BOARD to save.
+ * @param aSkipSettings if true, only save the board file.  This will lose settings changes
+ * that are saved in the project file
  * @return true if the save was completed.
  */
-bool SaveBoard( wxString& aFileName, BOARD* aBoard );
+bool SaveBoard( wxString& aFileName, BOARD* aBoard, bool aSkipSettings = false );
 
 /**
  * Get the nicknames of all of the footprint libraries configured in
