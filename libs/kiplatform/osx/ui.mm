@@ -138,3 +138,9 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 {
     return true;
 }
+
+
+void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
+{
+    aWindow->WarpPointer( aX, aY );
+}

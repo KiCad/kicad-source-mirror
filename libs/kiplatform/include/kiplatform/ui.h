@@ -120,6 +120,14 @@ namespace KIPLATFORM
          * If the user has disabled icons system-wide, we check that here
          */
         bool AllowIconsInMenus();
+
+        /**
+         * Move the mouse cursor to a specific position relative to the window
+         * @param aWindow Window in which to position to mouse cursor
+         * @param aX destination x position
+         * @param aY destination y position
+         */
+        void WarpPointer( wxWindow* aWindow, int aX, int aY );
     }
 }
 
