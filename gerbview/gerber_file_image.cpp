@@ -162,7 +162,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_InUse         = false;
     m_GBRLayerParams.ResetDefaultValues();
     m_FileName.Empty();
-    m_ImageName     = wxT( "no name" );             // Image name from the IN command
+    m_ImageName     = wxEmptyString;                // Image name from the IN command (deprecated)
     m_ImageNegative = false;                        // true = Negative image
     m_IsX2_file     = false;                        // true only if a %TF, %TA or %TD command
     delete m_FileFunction;                          // file function parameters
@@ -327,6 +327,7 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
  * Display info about Image Parameters.
  * These parameters are valid for the entire file, and must set only once
  * (If more than once, only the last value is used)
+ * Some are deprecated
  */
 void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
 {
@@ -334,8 +335,13 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
 
     aMainFrame->ClearMsgPanel();
 
-    // Display Image name (Image specific)
-    aMainFrame->AppendMsgPanel( _( "Image name" ), m_ImageName );
+    // Display the Gerber variant (X1 / X2
+    aMainFrame->AppendMsgPanel( _( "Format" ), m_IsX2_file ? wxT( "X2" ) : wxT( "X1" ) );
+
+    // Display Image name (Image specific). IM command (Image Name) is deprecated
+    // So non empty image name is very rare, probably never found
+    if( !m_ImageName.IsEmpty() )
+        aMainFrame->AppendMsgPanel( _( "Image name" ), m_ImageName );
 
     // Display graphic layer number used to draw this Image
     // (not a Gerber parameter but is also image specific)
@@ -377,7 +383,6 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     default:
         wxASSERT_MSG( false, wxT( "Invalid unit" ) );
     }
-
 
     aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg );
 }

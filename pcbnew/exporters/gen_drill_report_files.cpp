@@ -40,8 +40,6 @@
 #include <gendrill_file_writer_base.h>
 #include <pcb_painter.h>
 #include <pcb_shape.h>
-#include <pcb_text.h>
-#include <pcb_textbox.h>
 
 
 /* Conversion utilities - these will be used often in there... */
