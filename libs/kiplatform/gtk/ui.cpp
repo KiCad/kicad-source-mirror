@@ -156,7 +156,9 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
     else
     {
         GdkDisplay* disp = gtk_widget_get_display( static_cast<GtkWidget*>( aWindow->GetHandle() ) );
-        GdkWindow* win = gdk_display_get_window_at_pointer( disp, nullptr, nullptr );
+        GdkSeat* seat = gdk_display_get_default_seat( disp );
+        GdkDevice* dev = gdk_seat_get_pointer( seat );
+        GdkWindow* win = gdk_device_get_window_at_position( dev, nullptr, nullptr );
         GdkCursor* blank_cursor = gdk_cursor_new_for_display( disp, GDK_BLANK_CURSOR );
         GdkCursor* cur_cursor = gdk_window_get_cursor( win );
 
