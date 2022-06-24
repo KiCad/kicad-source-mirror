@@ -277,7 +277,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtValueActual->SetValue( m_dimension->GetValueText() );
     }
 
-    if( m_dimension->Type() == PCB_DIM_LEADER_T )
+    if( m_dimension->Type() == PCB_DIM_LEADER_T || m_dimension->Type() == PCB_FP_DIM_LEADER_T )
     {
         PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension );
         m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextBorder() ) );
@@ -444,7 +444,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     aTarget->SetArrowLength( m_arrowLength.GetValue() );
     aTarget->SetExtensionOffset( m_extensionOffset.GetValue() );
 
-    if( aTarget->Type() == PCB_DIM_LEADER_T )
+    if( aTarget->Type() == PCB_DIM_LEADER_T || m_dimension->Type() == PCB_FP_DIM_LEADER_T )
     {
         PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( aTarget );
         leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( m_cbTextFrame->GetSelection()));
