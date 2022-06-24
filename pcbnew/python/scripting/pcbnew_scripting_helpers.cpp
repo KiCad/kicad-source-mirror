@@ -241,7 +241,7 @@ BOARD* CreateEmptyBoard()
 }
 
 
-bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
+bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, bool aSkipSettings )
 {
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
@@ -255,20 +255,23 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
         return false;
     }
 
-    wxFileName pro = aFileName;
-    pro.SetExt( ProjectFileExtension );
-    pro.MakeAbsolute();
-    wxString projectPath = pro.GetFullPath();
+    if( !aSkipSettings )
+    {
+        wxFileName pro = aFileName;
+        pro.SetExt( ProjectFileExtension );
+        pro.MakeAbsolute();
+        wxString projectPath = pro.GetFullPath();
 
-    GetSettingsManager()->SaveProjectAs( pro.GetFullPath(), aBoard->GetProject() );
+        GetSettingsManager()->SaveProjectAs( pro.GetFullPath(), aBoard->GetProject() );
+    }
 
     return true;
 }
 
 
-bool SaveBoard( wxString& aFileName, BOARD* aBoard )
+bool SaveBoard( wxString& aFileName, BOARD* aBoard, bool aSkipSettings )
 {
-    return SaveBoard( aFileName, aBoard, IO_MGR::KICAD_SEXP );
+    return SaveBoard( aFileName, aBoard, IO_MGR::KICAD_SEXP, aSkipSettings );
 }
 
 
