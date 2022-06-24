@@ -463,7 +463,6 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colorSettings );
     GetCanvas()->GetGAL()->SetAxesColor( colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
-    GetCanvas()->GetGAL()->DrawGrid();
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->GetView()->RecacheAllItems();
