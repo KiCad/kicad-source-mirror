@@ -229,7 +229,9 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
                 STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
                                        [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
-                                           GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                            VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
+                                            VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
+                                            GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
                                        } );
             }
 
