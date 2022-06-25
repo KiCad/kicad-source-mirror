@@ -55,7 +55,11 @@ wxString GetPlatformGetBitnessName()
 {
     wxPlatformInfo platform;
 // TODO (ISM): Read conditional once our wx fork and flatpaks are running released 3.1.5
-#if 0 && wxCHECK_VERSION( 3, 1, 5 )
+// On Windows, use GetBitnessName if exists
+// I (J-PC) hope 3.1.6 has no problem
+#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 1, 5 )
+    return platform.GetBitnessName();
+#elif wxCHECK_VERSION( 3, 1, 6 )
     return platform.GetBitnessName();
 #else
     return platform.GetArchName();
