@@ -872,6 +872,8 @@ else()
         file( RELATIVE_PATH PCBNEW_PYTHON_SYMLINK ${PYTHON_FULL_DEST} ${CMAKE_INSTALL_PREFIX}/${KICAD_KIFACE}/_pcbnew${KIFACE_SUFFIX} )
     endif()
 
+    file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python )
+
     # This is the symlink we use in the installation directory, so it will not resolve in the build directory.
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/python/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
