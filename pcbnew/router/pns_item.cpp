@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -129,7 +129,19 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
         return false;
 
     int clearance = aOverrideClearance >= 0 ? aOverrideClearance : aNode->GetClearance( this, aOther );
-    return shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB );
+
+    if( m_parent && m_parent->GetLayer() == Edge_Cuts )
+    {
+        int      actual;
+        VECTOR2I pos;
+
+        return( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos )
+                    && !aNode->QueryEdgeExclusions( pos ) );
+    }
+    else
+    {
+        return shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB );
+    }
 }
 
 
