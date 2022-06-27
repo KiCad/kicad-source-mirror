@@ -1077,12 +1077,14 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
     EDA_ANGLE angle = aText->GetTextAngle();
 
-    if( aText->Type() == SCH_GLOBAL_LABEL_T
-            || aText->Type() == SCH_HIER_LABEL_T
-            || aText->Type() == SCH_DIRECTIVE_LABEL_T )
+    if( label )
     {
-        if( label )     // Should be always the case
+        if( aText->Type() == SCH_GLOBAL_LABEL_T
+                || aText->Type() == SCH_HIER_LABEL_T
+                || aText->Type() == SCH_DIRECTIVE_LABEL_T )
+        {
             m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( label->GetShape() ) );
+        }
 
         // The angle of the text is always 0 or 90 degrees for readibility reasons,
         // but the item itself can have more rotation (-90 and 180 deg)
