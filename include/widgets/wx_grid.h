@@ -122,7 +122,7 @@ protected:
     void onGridColMove( wxGridEvent& aEvent );
     void onGridCellSelect( wxGridEvent& aEvent );
 
-#if wxCHECK_VERSION( 3, 1, 0 )
+#if wxCHECK_VERSION( 3, 1, 3 )
     void onDPIChanged(wxDPIChangedEvent& event);
 #endif
 
