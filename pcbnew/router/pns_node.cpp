@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -709,6 +709,24 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
     default:
         assert( false );
     }
+}
+
+
+void NODE::AddEdgeExclusion( std::unique_ptr<SHAPE> aShape )
+{
+    m_edgeExclusions.push_back( std::move( aShape ) );
+}
+
+
+bool NODE::QueryEdgeExclusions( const VECTOR2I& aPos ) const
+{
+    for( const std::unique_ptr<SHAPE>& edgeExclusion : m_edgeExclusions )
+    {
+        if( edgeExclusion->Collide( aPos ) )
+            return true;
+    }
+
+    return false;
 }
 
 

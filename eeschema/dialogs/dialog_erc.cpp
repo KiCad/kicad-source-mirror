@@ -223,7 +223,7 @@ void DIALOG_ERC::updateDisplayedCounts()
         msg.Replace( wxT( "(%s)" ), wxEmptyString );
     }
 
-    m_notebook->SetPageText( 0, msg );
+    m_notebook->SetPageText( 1, msg );
 
     if( !m_ercRun && numErrors == 0 )
         numErrors = -1;

@@ -1343,6 +1343,13 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
                 aWorld->Add( std::move( solid ) );
 
             worstClearance = std::max( worstClearance, pad->GetLocalClearance() );
+
+            if( pad->GetProperty() == PAD_PROP::CASTELLATED )
+            {
+                std::unique_ptr<SHAPE> hole;
+                hole.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+                aWorld->AddEdgeExclusion( std::move( hole ) );
+            }
         }
 
         syncTextItem( aWorld, &footprint->Reference(), footprint->Reference().GetLayer() );
