@@ -41,7 +41,8 @@
 class PCB_BITMAP : public BOARD_ITEM
 {
 public:
-    PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
+    PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos = VECTOR2I( 0, 0 ),
+                PCB_LAYER_ID aLayer = F_Cu );
 
     PCB_BITMAP( const PCB_BITMAP& aPcbBitmap );
 
@@ -76,6 +77,8 @@ public:
      * @return the actual size (in user units, not in pixels) of the image.
      */
     const VECTOR2I GetSize() const;
+
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 

@@ -1639,6 +1639,4 @@ void VIEW::ShowPreview( bool aShow )
 }
 
 
-const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
-
 } // namespace KIGFX

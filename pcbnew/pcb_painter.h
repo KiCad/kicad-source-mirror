@@ -143,7 +143,7 @@ protected:
     double m_viaOpacity;       ///< Opacity override for all types of via
     double m_padOpacity;       ///< Opacity override for SMD pads and PTHs
     double m_zoneOpacity;      ///< Opacity override for filled zones
-    double m_bgImageOpacity;   ///< Opacity override for background images
+    double m_imageOpacity;     ///< Opacity override for user images
 };
 
 

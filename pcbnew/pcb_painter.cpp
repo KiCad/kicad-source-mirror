@@ -77,7 +77,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_viaOpacity      = 1.0;
     m_padOpacity      = 1.0;
     m_zoneOpacity     = 1.0;
-    m_bgImageOpacity  = 1.0;
+    m_imageOpacity    = 1.0;
 
     m_ForcePadSketchModeOff    = false;
     m_ForcePadSketchModeOn     = false;
@@ -149,7 +149,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_viaOpacity      = aOptions.m_ViaOpacity;
     m_padOpacity      = aOptions.m_PadOpacity;
     m_zoneOpacity     = aOptions.m_ZoneOpacity;
-    m_bgImageOpacity  = aOptions.m_BgImageOpacity;
+    m_imageOpacity    = aOptions.m_ImageOpacity;
 }
 
 
@@ -345,7 +345,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     else if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
         color.a *= m_zoneOpacity;
     else if( item->Type() == PCB_BITMAP_T )
-        color.a *= m_bgImageOpacity;
+        color.a *= m_imageOpacity;
 
     // No special modifiers enabled
     return color;
@@ -1657,8 +1657,6 @@ void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
-    m_gal->DrawBitmap( *aBitmap->GetImage(), m_pcbSettings.m_bgImageOpacity );
-
     if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
     {
         COLOR4D color = m_pcbSettings.GetColor( aBitmap, LAYER_ANCHOR );
@@ -1678,7 +1676,16 @@ void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
         VECTOR2D end = origin + bm_size;
 
         m_gal->DrawRectangle( origin, end );
+
+        // Hard code bitmaps as opaque when selected. Otherwise cached layers
+        // will not be rendered under the selected bitmap because cached layers
+        // are rendered after non-cached layers (e.g. bitmaps), which will have
+        // a closer Z order.
+        m_gal->DrawBitmap( *aBitmap->GetImage(), 1.0 );
     }
+    else
+        m_gal->DrawBitmap( *aBitmap->GetImage(), m_pcbSettings.m_imageOpacity );
+
 
     m_gal->Restore();
 }

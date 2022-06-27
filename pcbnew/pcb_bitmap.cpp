@@ -35,6 +35,7 @@
 #include <common.h>
 #include <eda_draw_frame.h>
 #include <core/mirror.h>
+#include <board.h>
 #include <pcb_bitmap.h>
 #include <trigo.h>
 #include <geometry/shape_rect.h>
@@ -43,12 +44,10 @@
 #include <wx/mstream.h>
 
 
-PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos ) :
-        BOARD_ITEM( aParent, PCB_BITMAP_T )
+PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID aLayer ) :
+        BOARD_ITEM( aParent, PCB_BITMAP_T, aLayer )
 {
     m_pos = pos;
-    m_layer = PCB_LAYER_ID::Dwgs_User; // used only to draw/plot a rectangle,
-                                       // when a bitmap cannot be drawn or plotted
     m_image = new BITMAP_BASE();
     m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
 }
@@ -57,7 +56,6 @@ PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos ) :
 PCB_BITMAP::PCB_BITMAP( const PCB_BITMAP& aPCBBitmap ) : BOARD_ITEM( aPCBBitmap )
 {
     m_pos = aPCBBitmap.m_pos;
-    m_layer = aPCBBitmap.m_layer;
     m_image = new BITMAP_BASE( *aPCBBitmap.m_image );
     m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
 }
@@ -106,6 +104,19 @@ void PCB_BITMAP::SwapData( BOARD_ITEM* aItem )
     PCB_BITMAP* item = (PCB_BITMAP*) aItem;
     std::swap( m_pos, item->m_pos );
     std::swap( m_image, item->m_image );
+}
+
+
+double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+
+    // All bitmaps are drawn on LAYER_DRAW_BITMAPS, but their
+    // associated board layer controls their visibility.
+    if( !GetBoard()->IsLayerVisible( m_layer ) )
+        return HIDE;
+
+    return aView->IsLayerVisible( LAYER_DRAW_BITMAPS ) ? 0.0 : HIDE;
 }
 
 
@@ -201,11 +212,12 @@ void PCB_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Width" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().x ) );
     aList.emplace_back( _( "Height" ),
                         MessageTextFromValue( aFrame->GetUserUnits(), GetSize().y ) );
+    aList.emplace_back( _( "Layer" ), LayerName( m_layer ) );
 }
 
 
 void PCB_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = LAYER_DRAW_BITMAPS;
+    aLayers[0] = BITMAP_LAYER_FOR( m_layer );
 }

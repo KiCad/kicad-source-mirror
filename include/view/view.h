@@ -716,7 +716,11 @@ public:
      */
     std::unique_ptr<VIEW> DataReference() const;
 
-    static constexpr int VIEW_MAX_LAYERS = 512;  ///< maximum number of layers that may be shown
+    ///< Maximum number of layers that may be shown
+    static constexpr int VIEW_MAX_LAYERS = 512;
+
+    ///< Rendering order modifier for layers that are marked as top layers.
+    static constexpr int TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 
 protected:
     struct VIEW_LAYER
@@ -861,9 +865,6 @@ protected:
 
     ///< Flag to mark targets as dirty so they have to be redrawn on the next refresh event.
     bool m_dirtyTargets[TARGETS_NUMBER];
-
-    ///< Rendering order modifier for layers that are marked as top layers.
-    static const int TOP_LAYER_MODIFIER;
 
     ///< Flag to respect draw priority when drawing items.
     bool m_useDrawPriority;

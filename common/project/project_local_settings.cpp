@@ -157,7 +157,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM<double>( "board.opacity.vias", &m_ViaOpacity, 1.0 ) );
     m_params.emplace_back( new PARAM<double>( "board.opacity.pads", &m_PadOpacity, 1.0 ) );
     m_params.emplace_back( new PARAM<double>( "board.opacity.zones", &m_ZoneOpacity, 0.6 ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.background_images", &m_BgImageOpacity, 0.6 ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.images", &m_ImageOpacity, 0.6 ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "board.hidden_nets", &m_HiddenNets, {} ) );
 

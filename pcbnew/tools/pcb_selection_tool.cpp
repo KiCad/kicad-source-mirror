@@ -2029,6 +2029,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     case PCB_FP_SHAPE_T:
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
+    case PCB_BITMAP_T:
         if( !m_filter.graphics )
             return false;
 

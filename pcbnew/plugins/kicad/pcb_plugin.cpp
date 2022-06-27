@@ -1020,6 +1020,8 @@ void PCB_PLUGIN::format( const PCB_BITMAP* aBitmap, int aNestLevel ) const
                   FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
                   FormatInternalUnits( aBitmap->GetPosition().y ).c_str() );
 
+    formatLayer( aBitmap->GetLayer() );
+
     if( aBitmap->GetImage()->GetScale() != 1.0 )
         m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
 

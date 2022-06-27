@@ -2876,6 +2876,11 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             break;
         }
 
+        case T_layer:
+            bitmap->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
         case T_scale:
             bitmap->GetImage()->SetScale( parseDouble( "image scale factor" ) );
 
@@ -2915,7 +2920,7 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
         }
 
         default:
-            Expecting( "at, scale, data" );
+            Expecting( "at, layer, scale, data" );
         }
     }
 

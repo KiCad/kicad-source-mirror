@@ -123,7 +123,7 @@ public:
     double m_ViaOpacity;       ///< Opacity override for all types of via
     double m_PadOpacity;       ///< Opacity override for SMD pads and PTH
     double m_ZoneOpacity;      ///< Opacity override for filled zones
-    double m_BgImageOpacity;   ///< Opacity override for filled zones
+    double m_ImageOpacity;     ///< Opacity override for user images
 
     /**
      * A list of netnames that have been manually hidden in the board editor.

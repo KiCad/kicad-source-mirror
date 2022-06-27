@@ -253,14 +253,19 @@ enum GAL_LAYER_ID: int
     LAYER_ZONE_START,
     LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
 
+    /// Virtual layers for background images per board layer
+    LAYER_BITMAP_START,
+    LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
+
     GAL_LAYER_ID_END
 };
 
 /// Use this macro to convert a GAL layer to a 0-indexed offset from LAYER_VIAS
 #define GAL_LAYER_INDEX( x ) ( x - GAL_LAYER_ID_START )
 
-/// Macro for getting the zone layer for a given copper layer
-#define ZONE_LAYER_FOR( copperLayer ) ( LAYER_ZONE_START + copperLayer )
+/// Macros for getting the extra layers for a given board layer
+#define BITMAP_LAYER_FOR( boardLayer ) ( LAYER_BITMAP_START + boardLayer )
+#define ZONE_LAYER_FOR( boardLayer ) ( LAYER_ZONE_START + boardLayer )
 
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
 
