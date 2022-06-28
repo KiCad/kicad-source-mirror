@@ -59,16 +59,6 @@
 using namespace std::placeholders;
 using namespace KIGFX;
 
-// A ugly workaround to avoid serious issues (crashes) when using bitmaps cache
-// to speedup redraw.
-// issues arise when using bitmaps in page layout, when the page layout containd bitmaps,
-// and is common to schematic and board editor,
-// and the schematic is a hierarchy and when using cross-probing
-// When the cross probing from pcbnew to eeschema switches to a sheet, the bitmaps cache
-// becomes broken (in fact the associated texture).
-// I hope (JPC) it will be fixed later, but a slightly slower refresh is better than a crash
-#define DISABLE_BITMAP_CACHE
-
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include "gl_resources.h"
@@ -186,9 +176,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
     bmp.id = textureID;
 
-#ifndef DISABLE_BITMAP_CACHE
     m_bitmaps[aBitmap] = bmp;
-#endif
 
     return textureID;
 }
