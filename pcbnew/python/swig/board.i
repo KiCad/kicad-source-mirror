@@ -153,10 +153,10 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         return SaveBoard(filename,self)
 
     def GetNetClasses(self):
-        return self.GetDesignSettings().m_NetClasses
+        return self.GetDesignSettings().GetNetClasses()
 
     def GetCurrentNetClassName(self):
-        return self.GetDesignSettings().m_CurrentNetClassName
+        return self.GetDesignSettings().GetCurrentNetClassName()
 
     def GetViasDimensionsList(self):
         return self.GetDesignSettings().m_ViasDimensionsList
