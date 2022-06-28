@@ -1119,6 +1119,9 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
     GetCanvas()->GetGAL()->DrawGrid();
 
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
+
     RecreateToolbars();
 
     if( aEnvVarsChanged )
@@ -1166,6 +1169,7 @@ void SYMBOL_EDIT_FRAME::RebuildView()
     GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();
 }
 
