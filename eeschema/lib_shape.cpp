@@ -316,10 +316,51 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             std::swap( pt1, pt2 );
     }
 
-    if( forceNoFill || GetFillMode() == FILL_T::NO_FILL )
-    {
-        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
+    COLOR4D fillColor = COLOR4D::UNSPECIFIED;
 
+    if( !forceNoFill )
+    {
+        if( GetFillMode() == FILL_T::FILLED_SHAPE )
+            fillColor = color;
+        else if( GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+            fillColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+        else if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+            fillColor = GetFillColor();
+    }
+
+    if( fillColor != COLOR4D::UNSPECIFIED )
+    {
+        switch( GetShape() )
+        {
+        case SHAPE_T::ARC:
+            GRFilledArc( DC, pt1, pt2, c, 0, fillColor, fillColor );
+            break;
+
+        case SHAPE_T::CIRCLE:
+            GRFilledCircle( DC, pt1, GetRadius(), 0, fillColor, fillColor );
+            break;
+
+        case SHAPE_T::RECT:
+            GRFilledRect( DC, pt1, pt2, 0, fillColor, fillColor );
+            break;
+
+        case SHAPE_T::POLY:
+            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
+            break;
+
+        case SHAPE_T::BEZIER:
+            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        }
+    }
+
+    penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
+
+    if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
+    {
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
@@ -348,60 +389,21 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     }
     else
     {
-        COLOR4D  fillColor = color;
+        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
 
-        if( GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-            fillColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
-        else if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-            fillColor = GetFillColor();
-
-        switch( GetShape() )
+        for( SHAPE* shape : shapes )
         {
-        case SHAPE_T::ARC:
-            // If we stroke in GRFilledArc it will stroke the two radials too, so we have to
-            // fill and stroke separately
-
-            GRFilledArc( DC, pt1, pt2, c, 0, fillColor, fillColor );
-
-            if( penWidth > 0 )
-                GRArc( DC, pt1, pt2, c, penWidth, color );
-
-            break;
-
-        case SHAPE_T::CIRCLE:
-            GRFilledCircle( DC, pt1, GetRadius(), penWidth, color, fillColor );
-            break;
-
-        case SHAPE_T::RECT:
-            // GRFilledRect seems to have issues printing a border over the background colour,
-            // so we fill and stroke separately
-
-            GRFilledRect( DC, pt1, pt2, 0, color, fillColor );
-
-            if( penWidth > 0 )
-                GRRect( DC, pt1, pt2, penWidth, color );
-
-            break;
-
-        case SHAPE_T::POLY:
-
-            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
-
-            if( penWidth > 0 )
-                GRPoly( DC, ptCount, buffer, false, penWidth, color, fillColor );
-
-            break;
-
-        case SHAPE_T::BEZIER:
-            if( penWidth > 0 )
-                GRPoly( DC, ptCount, buffer, true, penWidth, color, fillColor );
-            else
-                GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+            STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                   {
+                                       VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
+                                       VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
+                                       GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
+                                   } );
         }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
     }
 
     delete[] buffer;

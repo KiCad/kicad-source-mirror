@@ -57,6 +57,14 @@ public:
 
     int GetPenWidth() const override;
 
+    PLOT_DASH_TYPE GetEffectiveLineStyle() const
+    {
+        if( m_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
+            return PLOT_DASH_TYPE::SOLID;
+        else
+            return m_stroke.GetPlotStyle();
+    }
+
     const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
