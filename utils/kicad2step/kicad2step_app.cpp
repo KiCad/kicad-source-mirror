@@ -30,12 +30,15 @@
 #include <wx/filename.h>
 #include <sstream>
 #include <iostream>
-#include <sstream>
+#include <regex>
 
 #include "kicad2step.h"
 #include "kicad2step_frame_base.h"
 #include <Standard_Failure.hxx> // In open cascade
 
+#define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
+#define REGEX_DELIMITER "(?:[\\s]*x)"
+#define REGEX_UNIT "([m]{2}|(?:in))"
 
 class KICAD2MCAD_APP : public wxApp
 {
@@ -48,8 +51,8 @@ public:
     virtual bool OnCmdLineParsed( wxCmdLineParser& parser ) override;
 
 private:
-    KICAD2STEP*      m_converter;
-    KICAD2MCAD_PRMS  m_params;
+    KICAD2STEP*     m_converter;
+    KICAD2MCAD_PRMS m_params;
 };
 
 
@@ -146,48 +149,30 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 
     if( parser.Found( wxT( "user-origin" ), &tstr ) )
     {
-        std::istringstream istr;
-        istr.str( std::string( tstr.ToUTF8() ) );
-        istr >> m_params.m_xOrigin;
+        std::regex  re_pattern( REGEX_QUANTITY REGEX_DELIMITER REGEX_QUANTITY REGEX_UNIT,
+                                std::regex_constants::icase );
+        std::smatch sm;
+        std::string str( tstr.ToUTF8() );
+        std::regex_search( str, sm, re_pattern );
+        m_params.m_xOrigin = atof( sm.str( 1 ).c_str() );
+        m_params.m_yOrigin = atof( sm.str( 2 ).c_str() );
+        std::string tunit( sm[3] );
 
-        if( istr.fail() )
+        if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) ) || ( sm.size() != 4 ) )
         {
             parser.Usage();
             return false;
         }
 
-        char tmpc;
-        istr >> tmpc;
-
-        if( istr.fail() || ( tmpc != 'x' && tmpc != 'X' ) )
+        if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+        {
+            m_params.m_xOrigin *= 25.4;
+            m_params.m_yOrigin *= 25.4;
+        }
+        else if( tunit.compare( "mm" ) )
         {
             parser.Usage();
             return false;
-        }
-
-        istr >> m_params.m_yOrigin;
-
-        if( istr.fail() )
-        {
-            parser.Usage();
-            return false;
-        }
-
-        if( !istr.eof() )
-        {
-            std::string tunit;
-            istr >> tunit;
-
-            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
-            {
-                m_params.m_xOrigin *= 25.4;
-                m_params.m_yOrigin *= 25.4;
-            }
-            else if( tunit.compare( "mm" ) )
-            {
-                parser.Usage();
-                return false;
-            }
         }
     }
 
