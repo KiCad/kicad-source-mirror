@@ -1005,7 +1005,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
             for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
             {
                 if( BaseType( dwg->Type() ) == PCB_DIMENSION_T )
-                    updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( item ) );
+                    updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( dwg ) );
             }
         }
 
