@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-22 07:41+0000\n"
+"PO-Revision-Date: 2022-06-29 16:19+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -30442,9 +30442,9 @@ msgid "%s min thickness: %s."
 msgstr "%s の最小幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "ルールの条件 \"%s\" をチェックしています。"
+msgstr "アサーション \"%s\" をチェックしています。"
 
 #: pcbnew/drc/drc_engine.cpp:889 pcbnew/drc/drc_engine.cpp:1465
 msgid "Assertion passed."
@@ -30652,9 +30652,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s のサーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "ルールの条件 \"%s\" をチェックしています。"
+msgstr "ルールのアサーション \"%s\" をチェックしています。"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Electrical"
@@ -30989,9 +30989,8 @@ msgid "Expecting number."
 msgstr "期待する番号。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:452
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "条件式がありません。"
+msgstr "アサーションの式がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:489
 msgid "Missing min value."
