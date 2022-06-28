@@ -183,18 +183,18 @@ protected:
 
     /// The units on these parameters is Internal Units (1 nm)
 
-    OPT<int>         m_Clearance;            ///< clearance when routing
+    OPT<int>    m_Clearance;            ///< clearance when routing
 
-    OPT<int>         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    OPT<int>         m_ViaDia;               ///< via diameter
-    OPT<int>         m_ViaDrill;             ///< via drill hole diameter
+    OPT<int>    m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    OPT<int>    m_ViaDia;               ///< via diameter
+    OPT<int>    m_ViaDrill;             ///< via drill hole diameter
 
-    OPT<int>         m_uViaDia;              ///< microvia diameter
-    OPT<int>         m_uViaDrill;            ///< microvia drill hole diameter
+    OPT<int>    m_uViaDia;              ///< microvia diameter
+    OPT<int>    m_uViaDrill;            ///< microvia drill hole diameter
 
-    OPT<int>         m_diffPairWidth;
-    OPT<int>         m_diffPairGap;
-    OPT<int>         m_diffPairViaGap;
+    OPT<int>    m_diffPairWidth;
+    OPT<int>    m_diffPairGap;
+    OPT<int>    m_diffPairViaGap;
 
     int         m_wireWidth;
     int         m_busWidth;
