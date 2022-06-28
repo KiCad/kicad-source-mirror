@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-03 16:53-0700\n"
-"PO-Revision-Date: 2022-06-20 09:52+0000\n"
+"PO-Revision-Date: 2022-06-29 16:19+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -27882,7 +27882,7 @@ msgstr "Gerber-Optionen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:195
 msgid "Use Protel filename extensions"
-msgstr "Verwende Protel-Endung für Dateinamen"
+msgstr "Protel-Dateinamen-Endungen verwenden"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
 msgid ""
@@ -27894,7 +27894,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:201
 msgid "Generate Gerber job file"
-msgstr "Erstellung Gerber-Job Dateien"
+msgstr "Gerber-Job-Datei erstellen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:203
 msgid ""
@@ -27926,7 +27926,7 @@ msgstr "4.6 (Einheit mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:222
 msgid "Use extended X2 format (recommended)"
-msgstr "Benutze erweitertes X2 Format (empfohlen)"
+msgstr "Erweitertes X2-Format verwenden (empfohlen)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
 msgid ""
@@ -27942,7 +27942,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Include netlist attributes"
-msgstr "Inklusive Netzlisten Attribute"
+msgstr "Netzlisten-Attribute einbeziehen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid ""
