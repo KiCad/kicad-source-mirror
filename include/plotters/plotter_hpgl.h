@@ -53,10 +53,10 @@ public:
     void SetTargetChordLength( double chord_len );
 
     /// Switch to the user coordinate system
-    void SetUserCoords( bool user_coords ) { useUserCoords = user_coords; }
+    void SetUserCoords( bool user_coords ) { m_useUserCoords = user_coords; }
 
     /// Set whether the user coordinate system is fit to content
-    void SetUserCoordsFit( bool user_coords_fit ) { fitUserCoords = user_coords_fit; }
+    void SetUserCoordsFit( bool user_coords_fit ) { m_fitUserCoords = user_coords_fit; }
 
     /**
      * At the start of the HPGL plot pen speed and number are requested.
@@ -72,7 +72,7 @@ public:
     virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override
     {
         // This is the truth
-        m_currentPenWidth = userToDeviceSize( penDiameter );
+        m_currentPenWidth = userToDeviceSize( m_penDiameter );
     }
 
     /**
@@ -84,12 +84,12 @@ public:
 
     virtual void SetPenSpeed( int speed )
     {
-        penSpeed = speed;
+        m_penSpeed = speed;
     }
 
     virtual void SetPenNumber( int number )
     {
-        penNumber = number;
+        m_penNumber = number;
     }
 
     virtual void SetPenDiameter( double diameter );
@@ -212,17 +212,17 @@ protected:
     static void sortItems( std::list<HPGL_ITEM>& items );
 
     /// Return the plot command corresponding to a line type
-    static const char* lineTypeCommand( PLOT_DASH_TYPE linetype );
+    static const char* lineStyleCommand( PLOT_DASH_TYPE aLineStyle );
 
 protected:
-    int                  penSpeed;
-    int                  penNumber;
-    double               penDiameter;
-    double               arcTargetChordLength;
-    EDA_ANGLE            arcMinChordDegrees;
+    int                  m_penSpeed;
+    int                  m_penNumber;
+    double               m_penDiameter;
+    double               m_arcTargetChordLength;
+    EDA_ANGLE            m_arcMinChordDegrees;
     PLOT_DASH_TYPE       m_lineStyle;
-    bool                 useUserCoords;
-    bool                 fitUserCoords;
+    bool                 m_useUserCoords;
+    bool                 m_fitUserCoords;
 
     std::list<HPGL_ITEM> m_items;
     HPGL_ITEM*           m_current_item;
