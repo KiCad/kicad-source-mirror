@@ -47,15 +47,9 @@
 #include <tools/board_inspection_tool.h>
 #include <kiplatform/ui.h>
 
-// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
-// not, in repeatedly creating/destroying a wxDC to do the measurement in).
-// Use default column widths instead.
-static int DEFAULT_SINGLE_COL_WIDTH = 660;
-
 static BOARD*                g_lastDRCBoard = nullptr;
 static bool                  g_lastDRCRun = false;
 static bool                  g_lastFootprintTestsRun = false;
-static std::vector<wxString> g_lastIgnored;
 
 
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
@@ -90,15 +84,10 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintWarningsTreeModel );
 
-    m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
-
     if( m_currentBoard == g_lastDRCBoard )
     {
         m_drcRun = g_lastDRCRun;
         m_footprintTestsRun = g_lastFootprintTestsRun;
-
-        for( const wxString& str : g_lastIgnored )
-            m_ignoredList->InsertItem( m_ignoredList->GetItemCount(), str );
     }
 
     if( Kiface().IsSingle() )
@@ -125,11 +114,6 @@ DIALOG_DRC::~DIALOG_DRC()
     g_lastDRCBoard = m_currentBoard;
     g_lastDRCRun = m_drcRun;
     g_lastFootprintTestsRun = m_footprintTestsRun;
-
-    g_lastIgnored.clear();
-
-    for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
-        g_lastIgnored.push_back( m_ignoredList->GetItemText( ii ) );
 
     PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
@@ -993,6 +977,10 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::updateDisplayedCounts()
 {
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+    DRC_TOOL*              drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_ENGINE*            drcEngine = drcTool->GetDRCEngine().get();
+
     // Collect counts:
 
     int numMarkers = 0;
@@ -1122,10 +1110,12 @@ void DIALOG_DRC::updateDisplayedCounts()
         numWarnings = -1;
 
     m_errorsBadge->SetMaximumNumber( numErrors );
-    m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+    m_errorsBadge->UpdateNumber( errorsOverflowed ? numErrors + 1 : numErrors,
+                                 RPT_SEVERITY_ERROR );
 
     m_warningsBadge->SetMaximumNumber( numWarnings );
-    m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+    m_warningsBadge->UpdateNumber( warningsOverflowed ? numWarnings + 1 : numWarnings,
+                                   RPT_SEVERITY_WARNING );
 
     m_exclusionsBadge->SetMaximumNumber( numExcluded );
     m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );

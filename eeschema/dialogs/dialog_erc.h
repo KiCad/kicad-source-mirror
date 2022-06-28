@@ -91,6 +91,9 @@ private:
 
 private:
     SCH_EDIT_FRAME*    m_parent;
+    SCHEMATIC*         m_currentSchematic;
+
+    wxString           m_violationsTitleTemplate;
 
     RC_ITEMS_PROVIDER* m_markerProvider;
     RC_TREE_MODEL*     m_markerTreeModel;

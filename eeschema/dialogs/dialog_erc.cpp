@@ -49,6 +49,10 @@
 #include <string_utils.h>
 #include <kiplatform/ui.h>
 
+static SCHEMATIC*            g_lastERCSchematic = nullptr;
+static bool                  g_lastERCRun = false;
+
+
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
@@ -57,6 +61,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_ercRun( false ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
+    m_currentSchematic = &parent->Schematic();
+
     SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
 
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -70,8 +76,9 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_markerTreeModel->SetSeverities( m_severities );
     m_markerTreeModel->SetProvider( m_markerProvider );
-    syncCheckboxes();
-    updateDisplayedCounts();
+
+    if( m_currentSchematic == g_lastERCSchematic )
+        m_ercRun = g_lastERCRun;
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -81,11 +88,20 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_sdbSizer1OK->SetDefault();
 
+    m_violationsTitleTemplate = m_notebook->GetPageText( 1 );
+
     m_errorsBadge->SetMaximumNumber( 999 );
     m_warningsBadge->SetMaximumNumber( 999 );
     m_exclusionsBadge->SetMaximumNumber( 999 );
 
     UpdateAnnotationWarning();
+
+    Layout();
+
+    SetFocus();
+
+    syncCheckboxes();
+    updateDisplayedCounts();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -94,6 +110,9 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_ERC::~DIALOG_ERC()
 {
+    g_lastERCSchematic = m_currentSchematic;
+    g_lastERCRun = m_ercRun;
+
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( settings );
 
@@ -176,18 +195,41 @@ void DIALOG_ERC::updateDisplayedCounts()
     int numWarnings = 0;
     int numExcluded = 0;
 
+    int numMarkers = 0;
+
     if( m_markerProvider )
     {
+        numMarkers += m_markerProvider->GetCount();
         numErrors += m_markerProvider->GetCount( RPT_SEVERITY_ERROR );
         numWarnings += m_markerProvider->GetCount( RPT_SEVERITY_WARNING );
         numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( !m_ercRun )
+    bool markersOverflowed = false;
+
+    // We don't currently have a limit on ERC violations, so the above is always false.
+
+    wxString num;
+    wxString msg;
+
+    if( m_ercRun )
     {
-        numErrors = -1;
-        numWarnings = -1;
+        num.Printf( markersOverflowed ? wxT( "%d+" ) : wxT( "%d" ), numMarkers );
+        msg.Printf( m_violationsTitleTemplate, num );
     }
+    else
+    {
+        msg = m_violationsTitleTemplate;
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
+    }
+
+    m_notebook->SetPageText( 0, msg );
+
+    if( !m_ercRun && numErrors == 0 )
+        numErrors = -1;
+
+    if( !m_ercRun && numWarnings == 0 )
+        numWarnings = -1;
 
     m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
     m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
@@ -221,9 +263,9 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 
     deleteAllMarkers( includeExclusions );
 
-    m_ercRun = false;
+    // redraw the schematic
+    redrawDrawPanel();
     updateDisplayedCounts();
-    m_parent->GetCanvas()->Refresh();
 }
 
 
