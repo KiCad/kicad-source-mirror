@@ -1263,12 +1263,9 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     if( !glIsTexture( texture_id ) ) // ensure the bitmap texture is still valid
         return;
 
-    auto oldTarget = GetTarget();
-
     glPushMatrix();
     glTranslated( trans.x, trans.y, trans.z );
 
-    SetTarget( TARGET_NONCACHED );
     glEnable( GL_TEXTURE_2D );
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, texture_id );
@@ -1288,7 +1285,6 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glVertex3f( v0.x, v1.y, m_layerDepth );
     glEnd();
 
-    SetTarget( oldTarget );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
 #ifdef DISABLE_BITMAP_CACHE
