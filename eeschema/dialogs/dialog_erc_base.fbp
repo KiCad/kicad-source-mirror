@@ -619,7 +619,7 @@
                                                     <property name="window_style"></property>
                                                     <object class="notebookpage" expanded="1">
                                                         <property name="bitmap"></property>
-                                                        <property name="label">Violations (%d)</property>
+                                                        <property name="label">Violations (%s)</property>
                                                         <property name="select">0</property>
                                                         <object class="wxPanel" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -712,7 +712,7 @@
                                                     </object>
                                                     <object class="notebookpage" expanded="1">
                                                         <property name="bitmap"></property>
-                                                        <property name="label">Ignored Tests (%d)</property>
+                                                        <property name="label">Ignored Tests (%s)</property>
                                                         <property name="select">0</property>
                                                         <object class="wxPanel" expanded="1">
                                                             <property name="BottomDockable">1</property>

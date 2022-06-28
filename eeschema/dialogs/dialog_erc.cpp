@@ -55,6 +55,11 @@
 static int DEFAULT_SINGLE_COL_WIDTH = 660;
 
 
+static SCHEMATIC*            g_lastERCSchematic = nullptr;
+static bool                  g_lastERCRun = false;
+static std::vector<wxString> g_lastERCIgnored;
+
+
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
@@ -64,6 +69,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
+    m_currentSchematic = &parent->Schematic();
+
     SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
 
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -79,6 +86,14 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_markerTreeModel->SetProvider( m_markerProvider );
 
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
+
+    if( m_currentSchematic == g_lastERCSchematic )
+    {
+        m_ercRun = g_lastERCRun;
+
+        for( const wxString& str : g_lastERCIgnored )
+            m_ignoredList->InsertItem( m_ignoredList->GetItemCount(), str );
+    }
 
     m_notebook->SetSelection( 0 );
 
@@ -108,6 +123,14 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_ERC::~DIALOG_ERC()
 {
+    g_lastERCSchematic = m_currentSchematic;
+    g_lastERCRun = m_ercRun;
+
+    g_lastERCIgnored.clear();
+
+    for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
+        g_lastERCIgnored.push_back( m_ignoredList->GetItemText( ii ) );
+
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( settings );
 
@@ -190,33 +213,48 @@ void DIALOG_ERC::updateDisplayedCounts()
     int numWarnings = 0;
     int numExcluded = 0;
 
+    int numMarkers = 0;
+
     if( m_markerProvider )
     {
+        numMarkers += m_markerProvider->GetCount();
         numErrors += m_markerProvider->GetCount( RPT_SEVERITY_ERROR );
         numWarnings += m_markerProvider->GetCount( RPT_SEVERITY_WARNING );
         numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
+    bool markersOverflowed = false;
+
+    // We don't currently have a limit on ERC violations, so the above is always false.
+
+    wxString num;
     wxString msg;
 
-    if( m_ercRun && m_markerProvider && m_ignoredList )
+    if( m_ercRun )
     {
-        msg.sprintf( m_violationsTitleTemplate, m_markerProvider->GetCount() );
-        m_notebook->SetPageText( 0, msg );
-
-        msg.sprintf( m_ignoredTitleTemplate, m_ignoredList->GetItemCount() );
-        m_notebook->SetPageText( 1, msg );
+        num.Printf( markersOverflowed ? wxT( "%d+" ) : wxT( "%d" ), numMarkers );
+        msg.Printf( m_violationsTitleTemplate, num );
     }
     else
     {
         msg = m_violationsTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_notebook->SetPageText( 0, msg );
-
-        msg = m_ignoredTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_notebook->SetPageText( 1, msg );
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
     }
+
+    m_notebook->SetPageText( 0, msg );
+
+    if( m_ercRun )
+    {
+        num.Printf( wxT( "%d" ), m_ignoredList->GetItemCount() );
+        msg.sprintf( m_ignoredTitleTemplate, num );
+    }
+    else
+    {
+        msg = m_ignoredTitleTemplate;
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
+    }
+
+    m_notebook->SetPageText( 1, msg );
 
     if( !m_ercRun && numErrors == 0 )
         numErrors = -1;
@@ -275,8 +313,6 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 
     // redraw the schematic
     redrawDrawPanel();
-
-    m_ercRun = false;
     updateDisplayedCounts();
 }
 

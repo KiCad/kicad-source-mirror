@@ -97,6 +97,7 @@ private:
 
 private:
     SCH_EDIT_FRAME*    m_parent;
+    SCHEMATIC*         m_currentSchematic;
 
     wxString           m_violationsTitleTemplate;
     wxString           m_ignoredTitleTemplate;
