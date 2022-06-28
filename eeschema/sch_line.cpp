@@ -36,7 +36,6 @@
 #include <project/net_settings.h>
 #include <trigo.h>
 #include <board_item.h>
-#include <advanced_config.h>
 
 
 SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
@@ -67,7 +66,7 @@ SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
     else
         m_lastResolvedWidth = Mils2iu( DEFAULT_LINE_WIDTH_MILS );
 
-    m_lastResolvedLineStyle = GetDefaultStyle();
+    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -93,7 +92,8 @@ wxString SCH_LINE::GetNetname( const SCH_SHEET_PATH& aSheet )
     return FindWireSegmentNetNameRecursive( this, checkedLines, aSheet );
 }
 
-wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line, std::list<const SCH_LINE *> &checkedLines,
+wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line,
+                                                    std::list<const SCH_LINE *> &checkedLines,
                                                     const SCH_SHEET_PATH& aSheet ) const
 {
     for ( auto connected : line->ConnectedItems( aSheet ) )
@@ -102,10 +102,13 @@ wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line, std::list<co
         {
             if( std::find(checkedLines.begin(), checkedLines.end(), connected ) == checkedLines.end() )
             {
-                auto connectedLine = static_cast<SCH_LINE*>( connected );
+                SCH_LINE* connectedLine = static_cast<SCH_LINE*>( connected );
                 checkedLines.push_back( connectedLine );
-                auto netName = FindWireSegmentNetNameRecursive( connectedLine, checkedLines, aSheet );
-                if (!netName.IsEmpty())
+
+                wxString netName = FindWireSegmentNetNameRecursive( connectedLine, checkedLines,
+                                                                    aSheet );
+
+                if( !netName.IsEmpty() )
                     return netName;
             }
         }
@@ -255,15 +258,6 @@ COLOR4D SCH_LINE::GetLineColor() const
 }
 
 
-PLOT_DASH_TYPE SCH_LINE::GetDefaultStyle() const
-{
-    if( IsGraphicLine() )
-        return PLOT_DASH_TYPE::DASH;
-
-    return PLOT_DASH_TYPE::SOLID;
-}
-
-
 void SCH_LINE::SetLineStyle( const int aStyleId )
 {
     SetLineStyle( static_cast<PLOT_DASH_TYPE>( aStyleId ) );
@@ -282,7 +276,7 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
         return m_stroke.GetPlotStyle();
 
-    return GetDefaultStyle();
+    return PLOT_DASH_TYPE::SOLID;
 }
 
 
@@ -304,7 +298,7 @@ PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
     }
     else
     {
-        m_lastResolvedLineStyle = PLOT_DASH_TYPE::DASH;
+        m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     }
 
     return m_lastResolvedLineStyle;
@@ -958,14 +952,9 @@ bool SCH_LINE::IsWire() const
     return ( GetLayer() == LAYER_WIRE );
 }
 
+
 bool SCH_LINE::IsBus() const
 {
     return ( GetLayer() == LAYER_BUS );
 }
 
-bool SCH_LINE::UsesDefaultStroke() const
-{
-    return m_stroke.GetWidth() == 0 && m_stroke.GetColor() == COLOR4D::UNSPECIFIED
-            && ( m_stroke.GetPlotStyle() == GetDefaultStyle()
-            || m_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT );
-}

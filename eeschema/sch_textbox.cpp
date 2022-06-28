@@ -210,7 +210,7 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             color = aSettings->GetLayerColor( m_layer );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+            lineStyle = PLOT_DASH_TYPE::SOLID;
 
         if( lineStyle == PLOT_DASH_TYPE::SOLID )
         {
@@ -352,7 +352,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
             color = settings->GetLayerColor( m_layer );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+            lineStyle = PLOT_DASH_TYPE::SOLID;
 
         aPlotter->SetColor( color );
         aPlotter->SetDash( lineStyle );

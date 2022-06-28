@@ -1859,13 +1859,14 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
         if( aLine->GetLineSize() != 0 )
             m_out->Print( 0, " %s %d", T_WIDTH, Iu2Mils( aLine->GetLineSize() ) );
 
-        if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )
-            m_out->Print( 0, " %s %s", T_STYLE,
-                          TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );
+        m_out->Print( 0, " %s %s", T_STYLE,
+                      TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );
 
         if( aLine->GetLineColor() != COLOR4D::UNSPECIFIED )
+        {
             m_out->Print( 0, " %s",
                 TO_UTF8( aLine->GetLineColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) ) );
+        }
     }
 
     m_out->Print( 0, "\n" );

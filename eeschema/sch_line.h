@@ -147,8 +147,6 @@ public:
         }
     }
 
-    PLOT_DASH_TYPE GetDefaultStyle() const;
-
     void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
     void           SetLineStyle( const int aStyleId );
     PLOT_DASH_TYPE GetLineStyle() const;
@@ -185,15 +183,6 @@ public:
                || ( style_a == PLOT_DASH_TYPE::DEFAULT && style_b == PLOT_DASH_TYPE::SOLID )
                || ( style_a == PLOT_DASH_TYPE::SOLID   && style_b == PLOT_DASH_TYPE::DEFAULT );
     }
-
-    /**
-     * Test if the #SCH_LINE object uses the default stroke settings.
-     *
-     * The stroke settings include the line width, style, and color.
-     *
-     * @return True if the #SCH_LINE object uses the default stroke settings.
-     */
-    bool UsesDefaultStroke() const;
 
     int GetLineSize() const { return m_stroke.GetWidth(); }
 

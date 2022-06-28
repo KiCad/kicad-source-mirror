@@ -114,18 +114,6 @@ public:
     void SetBackgroundColor( KIGFX::COLOR4D aColor ) { m_backgroundColor = aColor; }
 
     /**
-     * Test this sheet to see if the default stroke is used to draw the outline.
-     *
-     * The default stroke is defined as follows:
-     * * The outline width is the default line width or 0.
-     * * The outline style is set to #PLOT_DASH_TYPE::DEFAULT or #PLOT_DASH_TYPE::SOLID.
-     * * The outline color is set to #COLOR4D::UNSPECIFIED.
-     *
-     * @return True if the outline stroke meets the default criteria.
-     */
-    bool UsesDefaultStroke() const;
-
-    /**
      * @return true if this sheet is the root sheet.
      */
     bool IsRootSheet() const;

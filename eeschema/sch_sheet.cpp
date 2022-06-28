@@ -268,12 +268,6 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-bool SCH_SHEET::UsesDefaultStroke() const
-{
-    return m_borderWidth == 0 && m_borderColor == COLOR4D::UNSPECIFIED;
-}
-
-
 void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_T,

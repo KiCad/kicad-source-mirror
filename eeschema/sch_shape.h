@@ -67,7 +67,7 @@ public:
     PLOT_DASH_TYPE GetEffectiveLineStyle() const
     {
         if( m_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
-            return PLOT_DASH_TYPE::DASH;
+            return PLOT_DASH_TYPE::SOLID;
         else
             return m_stroke.GetPlotStyle();
     }
