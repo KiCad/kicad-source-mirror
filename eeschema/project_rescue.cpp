@@ -669,13 +669,13 @@ void LEGACY_RESCUER::OpenRescueLibrary()
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
     std::unique_ptr<SYMBOL_LIB> rescue_lib = std::make_unique<SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
-                                                                       fn.GetFullPath() );
+                                                                           fn.GetFullPath() );
 
     m_rescue_lib = std::move( rescue_lib );
     m_rescue_lib->EnableBuffering();
 
     // If a rescue library already exists copy the contents of that library so we do not
-    // lose an previous rescues.
+    // lose any previous rescues.
     SYMBOL_LIB* rescueLib = m_prj->SchLibs()->FindLibrary( fn.GetName() );
 
     if( rescueLib )
@@ -810,6 +810,27 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
 {
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
     (*m_properties)[ SCH_LEGACY_PLUGIN::PropBuffering ] = "";
+
+    wxFileName fn = GetRescueLibraryFileName( m_schematic );
+
+    // If a rescue library already exists copy the contents of that library so we do not
+    // lose any previous rescues.
+    if( m_prj->SchSymbolLibTable()->HasLibrary( fn.GetName() ) )
+    {
+        std::vector<LIB_SYMBOL*> symbols;
+
+        try
+        {
+            m_prj->SchSymbolLibTable()->LoadSymbolLib( symbols, fn.GetName() );
+        }
+        catch( ... /* IO_ERROR */ )
+        {
+            return;
+        }
+
+        for( LIB_SYMBOL* symbol : symbols )
+            AddSymbol( symbol );
+    }
 }
 
 
@@ -818,21 +839,21 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxString msg;
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
+    try
+    {
+        m_pi->SaveLibrary( fn.GetFullPath() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        msg.Printf( _( "Failed to save rescue library %s." ), fn.GetFullPath() );
+        DisplayErrorMessage( aParent, msg, ioe.What() );
+        return false;
+    }
+
     // If the rescue library already exists in the symbol library table no need save it to add
     // it to the table.
     if( !m_prj->SchSymbolLibTable()->HasLibrary( fn.GetName() ) )
     {
-        try
-        {
-            m_pi->SaveLibrary( fn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Failed to save rescue library %s." ), fn.GetFullPath() );
-            DisplayErrorMessage( aParent, msg, ioe.What() );
-            return false;
-        }
-
         wxString uri = wxT( "${KIPRJMOD}/" ) + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
@@ -880,10 +901,7 @@ void SYMBOL_LIB_TABLE_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 
     try
     {
-        if( !m_prj->SchSymbolLibTable()->HasLibrary( fn.GetName() ) )
-            m_pi->SaveSymbol( fn.GetFullPath(), new LIB_SYMBOL( *aNewSymbol ), m_properties.get() );
-        else
-            m_prj->SchSymbolLibTable()->SaveSymbol( fn.GetName(), new LIB_SYMBOL( *aNewSymbol ) );
+        m_pi->SaveSymbol( fn.GetFullPath(), new LIB_SYMBOL( *aNewSymbol ), m_properties.get() );
     }
     catch( ... /* IO_ERROR */ )
     {
