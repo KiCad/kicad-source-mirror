@@ -153,7 +153,7 @@ public:
 
     virtual void SetColor( const COLOR4D& color ) = 0;
 
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) = 0;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) = 0;
 
     virtual void SetCreator( const wxString& aCreator ) { m_creator = aCreator; }
 
@@ -570,11 +570,11 @@ protected:
      */
     virtual double userToDeviceSize( double size ) const;
 
-    double GetDotMarkLenIU() const;
+    double GetDotMarkLenIU( int aLineWidth ) const;
 
-    double GetDashMarkLenIU() const;
+    double GetDashMarkLenIU( int aLineWidth ) const;
 
-    double GetDashGapLenIU() const;
+    double GetDashGapLenIU( int aLineWidth ) const;
 
 protected:      // variables used in most of plotters:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')

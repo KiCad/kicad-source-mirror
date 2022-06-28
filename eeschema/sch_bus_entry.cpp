@@ -506,11 +506,11 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );
-    aPlotter->SetDash( GetLineStyle() );
+    aPlotter->SetDash( penWidth, GetLineStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( GetEnd() );
 
-    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
 }
 
 

@@ -78,7 +78,7 @@ public:
     /**
      * HPGL supports dashed lines.
      */
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
 
     virtual void SetColor( const COLOR4D& color ) override {}
 
@@ -170,15 +170,6 @@ protected:
      */
     bool startOrAppendItem( const VECTOR2D& location, const wxString& content );
 
-    int            penSpeed;
-    int            penNumber;
-    double         penDiameter;
-    double         arcTargetChordLength;
-    EDA_ANGLE      arcMinChordDegrees;
-    PLOT_DASH_TYPE dashType;
-    bool           useUserCoords;
-    bool           fitUserCoords;
-
     struct HPGL_ITEM
     {
         HPGL_ITEM() :
@@ -222,6 +213,16 @@ protected:
 
     /// Return the plot command corresponding to a line type
     static const char* lineTypeCommand( PLOT_DASH_TYPE linetype );
+
+protected:
+    int                  penSpeed;
+    int                  penNumber;
+    double               penDiameter;
+    double               arcTargetChordLength;
+    EDA_ANGLE            arcMinChordDegrees;
+    PLOT_DASH_TYPE       m_lineStyle;
+    bool                 useUserCoords;
+    bool                 fitUserCoords;
 
     std::list<HPGL_ITEM> m_items;
     HPGL_ITEM*           m_current_item;

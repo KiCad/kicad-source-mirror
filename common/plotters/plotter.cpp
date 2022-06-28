@@ -129,21 +129,21 @@ double PLOTTER::userToDeviceSize( double size ) const
 #define IU_PER_MILS ( m_IUsPerDecimil * 10 )
 
 
-double PLOTTER::GetDotMarkLenIU() const
+double PLOTTER::GetDotMarkLenIU( int aLineWidth ) const
 {
-    return userToDeviceSize( m_renderSettings->GetDotLength( GetCurrentLineWidth() ) );
+    return userToDeviceSize( m_renderSettings->GetDotLength( aLineWidth ) );
 }
 
 
-double PLOTTER::GetDashMarkLenIU() const
+double PLOTTER::GetDashMarkLenIU( int aLineWidth ) const
 {
-    return userToDeviceSize( m_renderSettings->GetDashLength( GetCurrentLineWidth() ) );
+    return userToDeviceSize( m_renderSettings->GetDashLength( aLineWidth ) );
 }
 
 
-double PLOTTER::GetDashGapLenIU() const
+double PLOTTER::GetDashGapLenIU( int aLineWidth ) const
 {
-    return userToDeviceSize( m_renderSettings->GetGapLength( GetCurrentLineWidth() ) );
+    return userToDeviceSize( m_renderSettings->GetGapLength( aLineWidth ) );
 }
 
 

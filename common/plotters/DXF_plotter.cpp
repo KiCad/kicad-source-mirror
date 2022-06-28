@@ -587,10 +587,12 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-void DXF_PLOTTER::SetDash( PLOT_DASH_TYPE aDashed )
+void DXF_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 {
-    wxASSERT( aDashed >= PLOT_DASH_TYPE::FIRST_TYPE && aDashed <= PLOT_DASH_TYPE::LAST_TYPE );
-    m_currentLineType = aDashed;
+    wxASSERT( aLineStyle >= PLOT_DASH_TYPE::FIRST_TYPE
+                && aLineStyle <= PLOT_DASH_TYPE::LAST_TYPE );
+
+    m_currentLineType = aLineStyle;
 }
 
 

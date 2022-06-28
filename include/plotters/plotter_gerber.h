@@ -51,14 +51,14 @@ public:
      */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
-    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override;
+    virtual void SetCurrentLineWidth( int aLineWidth, void* aData = nullptr ) override;
 
     // RS274X has no dashing, nor colors
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override
     {
     }
 
-    virtual void SetColor( const COLOR4D& color ) override {}
+    virtual void SetColor( const COLOR4D& aColor ) override {}
 
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,

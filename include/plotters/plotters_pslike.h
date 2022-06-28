@@ -196,7 +196,7 @@ public:
     /**
      * PostScript supports dashed lines.
      */
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
@@ -299,7 +299,7 @@ public:
     /**
      * PDF supports dashed lines
      */
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
 
     /**
      * PDF can have multiple pages, so SetPageSettings can be called
@@ -448,7 +448,7 @@ public:
     /**
      * SVG supports dashed lines.
      */
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
@@ -529,7 +529,8 @@ protected:
      * @param aIsGroup If false, do not form a new group for the style.
      * @param aExtraStyle If given, the string will be added into the style string before closing
      */
-    void setSVGPlotStyle( bool aIsGroup = true, const std::string& aExtraStyle = {} );
+    void setSVGPlotStyle( int aLineWidth, bool aIsGroup = true,
+                          const std::string& aExtraStyle = {} );
 
     /**
      * Prepare parameters for setSVGPlotStyle()

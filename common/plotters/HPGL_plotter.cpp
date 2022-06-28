@@ -222,7 +222,7 @@ static const double PLUsPERDECIMIL = 0.1016;
 HPGL_PLOTTER::HPGL_PLOTTER()
         : arcTargetChordLength( 0 ),
           arcMinChordDegrees( 5.0, DEGREES_T ),
-          dashType( PLOT_DASH_TYPE::SOLID ),
+          m_lineStyle( PLOT_DASH_TYPE::SOLID ),
           useUserCoords( false ),
           fitUserCoords( false ),
           m_current_item( nullptr )
@@ -542,9 +542,9 @@ void HPGL_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
+void HPGL_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 {
-    dashType = dashed;
+    m_lineStyle = aLineStyle;
     flushItem();
 }
 
@@ -854,7 +854,7 @@ bool HPGL_PLOTTER::startOrAppendItem( const VECTOR2D& location, wxString const& 
         item.loc_end = location;
         item.bbox = BOX2D( location );
         item.pen = penNumber;
-        item.dashType = dashType;
+        item.dashType = m_lineStyle;
         item.content = content;
         m_items.push_back( item );
         m_current_item = &m_items.back();

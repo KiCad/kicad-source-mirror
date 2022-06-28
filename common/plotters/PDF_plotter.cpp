@@ -176,30 +176,35 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 }
 
 
-void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
+void PDF_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 {
     wxASSERT( workFile );
-    switch( dashed )
+
+    switch( aLineStyle )
     {
     case PLOT_DASH_TYPE::DASH:
         fprintf( workFile, "[%d %d] 0 d\n",
-                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
+                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DOT:
         fprintf( workFile, "[%d %d] 0 d\n",
-                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOT:
         fprintf( workFile, "[%d %d %d %d] 0 d\n",
-                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
-                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOTDOT:
         fprintf( workFile, "[%d %d %d %d %d %d] 0 d\n",
-                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
-                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU(),
-                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     default:
         fputs( "[] 0 d\n", workFile );
     }

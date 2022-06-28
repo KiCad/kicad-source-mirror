@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -70,7 +70,7 @@ public:
         m_currentPenWidth = 0;
     }
 
-    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
+    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
 
     /**
      * The DXF exporter handles 'colors' as layers...

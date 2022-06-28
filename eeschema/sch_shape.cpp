@@ -176,7 +176,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOTES ) );
 
         aPlotter->SetCurrentLineWidth( pen_size );
-        aPlotter->SetDash( GetEffectiveLineStyle() );
+        aPlotter->SetDash( pen_size, GetEffectiveLineStyle() );
 
         switch( GetShape() )
         {
@@ -226,7 +226,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
 
-        aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
+        aPlotter->SetDash( pen_size, PLOT_DASH_TYPE::SOLID );
     }
 }
 

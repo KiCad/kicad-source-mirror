@@ -355,9 +355,9 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
             lineStyle = PLOT_DASH_TYPE::SOLID;
 
         aPlotter->SetColor( color );
-        aPlotter->SetDash( lineStyle );
+        aPlotter->SetDash( penWidth, lineStyle );
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
-        aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
+        aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
     }
 
     color = GetTextColor();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -510,29 +510,33 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 }
 
 
-void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
+void PS_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 {
-    switch( dashed )
+    switch( aLineStyle )
     {
     case PLOT_DASH_TYPE::DASH:
         fprintf( m_outputFile, "[%d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
+                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DOT:
         fprintf( m_outputFile, "[%d %d] 0 setdash\n",
-                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOT:
         fprintf( m_outputFile, "[%d %d %d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
-                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOTDOT:
         fprintf( m_outputFile, "[%d %d %d %d %d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
-                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU(),
-                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+                 (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                 (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
+
     default:
         fputs( "solidline\n", m_outputFile );
     }

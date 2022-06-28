@@ -219,7 +219,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     }
 
     aPlotter->SetColor( color );
-    aPlotter->SetDash( lineStyle );
+    aPlotter->SetDash( penWidth, lineStyle );
 
     switch( GetShape() )
     {
@@ -250,7 +250,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
-    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
 }
 
 

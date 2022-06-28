@@ -881,12 +881,12 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     aPlotter->SetColor( color );
 
     aPlotter->SetCurrentLineWidth( penWidth );
-    aPlotter->SetDash( GetEffectiveLineStyle() );
+    aPlotter->SetDash( penWidth, GetEffectiveLineStyle() );
 
     aPlotter->MoveTo( m_start );
     aPlotter->FinishTo( m_end );
 
-    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
 }
 
 

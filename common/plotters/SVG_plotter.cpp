@@ -210,7 +210,7 @@ void SVG_PLOTTER::SetColor( const COLOR4D& color )
     PSLIKE_PLOTTER::SetColor( color );
 
     if( m_graphics_changed )
-        setSVGPlotStyle();
+        setSVGPlotStyle( GetCurrentLineWidth() );
 }
 
 
@@ -224,7 +224,7 @@ void SVG_PLOTTER::setFillMode( FILL_T fill )
 }
 
 
-void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle )
+void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::string& aExtraStyle )
 {
     if( aIsGroup )
         fputs( "</g>\n<g ", m_outputFile );
@@ -237,6 +237,7 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     case FILL_T::NO_FILL:
         fputs( "fill-opacity:0.0; ", m_outputFile );
         break;
+
     case FILL_T::FILLED_SHAPE:
     case FILL_T::FILLED_WITH_BG_BODYCOLOR:
     case FILL_T::FILLED_WITH_COLOR:
@@ -244,7 +245,7 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
         break;
     }
 
-    double pen_w = userToDeviceSize( GetCurrentLineWidth() );
+    double pen_w = userToDeviceSize( aLineWidth );
 
     if( pen_w < 0.0 )   // Ensure pen width validity
         pen_w = 0.0;
@@ -263,23 +264,28 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     {
     case PLOT_DASH_TYPE::DASH:
         fprintf( m_outputFile, "stroke-dasharray:%.*f,%.*f;",
-                 m_precision, GetDashMarkLenIU(), m_precision, GetDashGapLenIU() );
+                 m_precision, GetDashMarkLenIU( aLineWidth ),
+                 m_precision, GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DOT:
         fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
-                 GetDotMarkLenIU(), GetDashGapLenIU() );
+                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOT:
         fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;",
-                 GetDashMarkLenIU(), GetDashGapLenIU(),
-                 GetDotMarkLenIU(), GetDashGapLenIU() );
+                 GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
+                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DASHDOTDOT:
         fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f,%f,%f;",
-                 GetDashMarkLenIU(), GetDashGapLenIU(),
-                 GetDotMarkLenIU(), GetDashGapLenIU(),
-                 GetDotMarkLenIU(), GetDashGapLenIU() );
+                 GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
+                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
+                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
         break;
+
     case PLOT_DASH_TYPE::DEFAULT:
     case PLOT_DASH_TYPE::SOLID:
     default:
@@ -288,9 +294,7 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     }
 
     if( aExtraStyle.length() )
-    {
         fputs( aExtraStyle.c_str(), m_outputFile );
-    }
 
     fputs( "\"", m_outputFile );
 
@@ -322,7 +326,7 @@ void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     }
 
     if( m_graphics_changed )
-        setSVGPlotStyle();
+        setSVGPlotStyle( aWidth );
 }
 
 
@@ -366,16 +370,16 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 }
 
 
-void SVG_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
+void SVG_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 {
-    if( m_dashed != dashed )
+    if( m_dashed != aLineStyle )
     {
         m_graphics_changed = true;
-        m_dashed = dashed;
+        m_dashed = aLineStyle;
     }
 
     if( m_graphics_changed )
-        setSVGPlotStyle();
+        setSVGPlotStyle( aLineWidth );
 }
 
 
@@ -584,13 +588,13 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     switch( aFill )
     {
     case FILL_T::NO_FILL:
-        setSVGPlotStyle( false, "fill:none" );
+        setSVGPlotStyle( aWidth, false, "fill:none" );
         break;
 
     case FILL_T::FILLED_WITH_BG_BODYCOLOR:
     case FILL_T::FILLED_SHAPE:
     case FILL_T::FILLED_WITH_COLOR:
-        setSVGPlotStyle( false, "fill-rule:evenodd;" );
+        setSVGPlotStyle( aWidth, false, "fill-rule:evenodd;" );
         break;
     }
 
@@ -686,15 +690,20 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         if( m_fillMode != FILL_T::NO_FILL )
         {
             setFillMode( FILL_T::NO_FILL );
-            setSVGPlotStyle();
+            setSVGPlotStyle( GetCurrentLineWidth() );
         }
 
-        fprintf( m_outputFile, "<path d=\"M%.*f %.*f\n", m_precision, pos_dev.x, m_precision, pos_dev.y );
+        fprintf( m_outputFile, "<path d=\"M%.*f %.*f\n",
+                 m_precision, pos_dev.x,
+                 m_precision, pos_dev.y );
     }
     else if( m_penState != plume || pos != m_penLastpos )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_outputFile, "L%.*f %.*f\n", m_precision, pos_dev.x, m_precision, pos_dev.y );
+
+        fprintf( m_outputFile, "L%.*f %.*f\n",
+                 m_precision, pos_dev.x,
+                 m_precision, pos_dev.y );
     }
 
     m_penState    = plume;
