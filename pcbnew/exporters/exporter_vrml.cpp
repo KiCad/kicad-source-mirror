@@ -6,22 +6,18 @@
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <exception>
@@ -54,33 +50,58 @@
 
 #include <exporter_vrml.h>
 
+EXPORTER_VRML::EXPORTER_VRML( BOARD* aBoard )
+{
+    pcb_exporter = new EXPORTER_PCB_VRML( aBoard );
+}
+
+
+bool EXPORTER_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
+                              const wxString& aFullFileName, double aMMtoWRMLunit,
+                              bool aExport3DFiles, bool aUseRelativePaths,
+                              const wxString& a3D_Subdir,
+                              double aXRef, double aYRef )
+{
+    return pcb_exporter->ExportVRML_File( aProject, aMessages,
+                                          aFullFileName, aMMtoWRMLunit,
+                                          aExport3DFiles, aUseRelativePaths,
+                                          a3D_Subdir, aXRef, aYRef );
+}
+
+
+EXPORTER_VRML::~EXPORTER_VRML()
+{
+    delete pcb_exporter;
+}
+
+
 // The max error (in mm) to approximate arcs to segments:
 #define ERR_APPROX_MAX_MM 0.005
 
 
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_SilkscreenColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_MaskColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_PasteColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_FinishColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_BoardColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_SilkscreenColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_MaskColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_PasteColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_FinishColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_BoardColors;
 
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSilkscreen;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSolderMask;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSolderPaste;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSurfaceFinish;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultBoardBody;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSilkscreen;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSolderMask;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSolderPaste;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSurfaceFinish;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultBoardBody;
 
 static bool          g_ColorsLoaded = false;
 
 
-EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aPCB ) :
+EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
         m_OutputPCB( nullptr )
 {
+    m_board = aBoard;
     m_ReuseDef = true;
     m_precision = 6;
     m_WorldScale = 1.0;
     m_Cache3Dmodels = nullptr;
-    m_Pcb = aPCB;
     m_UseInlineModelsInBrdfile = false;
     m_UseRelPathIn3DModelFilename = false;
     m_BoardToVrmlScale = MM_PER_IU;
@@ -92,78 +113,20 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aPCB ) :
         m_layer_z[i] = 0;
 
     // this default only makes sense if the output is in mm
-    m_brd_thickness = Iu2Millimeter( m_Pcb->GetDesignSettings().GetBoardThickness() );
+    m_brd_thickness = Iu2Millimeter( m_board->GetDesignSettings().GetBoardThickness() );
 
-    // TODO: figure out a way to share all these stackup color definitions....
-    if( !g_ColorsLoaded )
-    {
-#define ADD_COLOR( list, r, g, b, a, name ) \
-    list.emplace_back( r/255.0, g/255.0, b/255.0, a, name )
+    // TODO: figure out a way to share all these stackup color definitions...
+    initStaticColorList();
 
-        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, _HKI( "Not specified" ) ); // White
-        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );
-        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, wxT( "Red" ) );
-        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
-        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, wxT( "Black" ) );
-        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, wxT( "White" ) );
-        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
-        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
-
-        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, _HKI( "Not specified" ) ); // Green
-        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, wxT( "Green" ) );
-        ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, wxT( "Light Green" ) );
-        ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, wxT( "Saturated Green" ) );
-        ADD_COLOR( g_MaskColors, 181,  19,  21, 0.83, wxT( "Red" ) );
-        ADD_COLOR( g_MaskColors, 210,  40,  14, 0.83, wxT( "Light Red" ) );
-        ADD_COLOR( g_MaskColors, 239,  53,  41, 0.83, wxT( "Red/Orange" ) );
-        ADD_COLOR( g_MaskColors,   2,  59, 162, 0.83, wxT( "Blue" ) );
-        ADD_COLOR( g_MaskColors,  54,  79, 116, 0.83, wxT( "Light Blue 1" ) );
-        ADD_COLOR( g_MaskColors,  61,  85, 130, 0.83, wxT( "Light Blue 2" ) );
-        ADD_COLOR( g_MaskColors,  21,  70,  80, 0.83, wxT( "Green/Blue" ) );
-        ADD_COLOR( g_MaskColors,  11,  11,  11, 0.83, wxT( "Black" ) );
-        ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, wxT( "White" ) );
-        ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, wxT( "Purple" ) );
-        ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, wxT( "Light Purple" ) );
-        ADD_COLOR( g_MaskColors, 194,  195,  0, 0.83, wxT( "Yellow" ) );
-
-        ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, wxT( "Grey" ) );
-        ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, wxT( "Dark Grey" ) );
-        ADD_COLOR( g_PasteColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
-
-        ADD_COLOR( g_FinishColors, 184, 115,  50, 1.0, wxT( "Copper" ) );
-        ADD_COLOR( g_FinishColors, 178, 156,   0, 1.0, wxT( "Gold" ) );
-        ADD_COLOR( g_FinishColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
-        ADD_COLOR( g_FinishColors, 160, 160, 160, 1.0, wxT( "Tin" ) );
-
-        ADD_COLOR( g_BoardColors,  51,  43,  22, 0.83, wxT( "FR4 natural, dark" ) );
-        ADD_COLOR( g_BoardColors, 109, 116,  75, 0.83, wxT( "FR4 natural" ) );
-        ADD_COLOR( g_BoardColors, 252, 252, 250, 0.90, wxT( "PTFE natural" ) );
-        ADD_COLOR( g_BoardColors, 205, 130,   0, 0.68, wxT( "Polyimide" ) );
-        ADD_COLOR( g_BoardColors,  92,  17,   6, 0.90, wxT( "Phenolic natural" ) );
-        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 1" ) );
-        ADD_COLOR( g_BoardColors, 160, 123,  54, 0.83, wxT( "Brown 2" ) );
-        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 3" ) );
-        ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, wxT( "Aluminum" ) );
-
-        g_DefaultSilkscreen =    COLOR4D( 0.94, 0.94, 0.94,  1.0 );
-        g_DefaultSolderMask =    COLOR4D( 0.08, 0.20, 0.14, 0.83 );
-        g_DefaultSolderPaste =   COLOR4D( 0.50, 0.50, 0.50,  1.0 );
-        g_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
-        g_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
-
-        g_ColorsLoaded = true;
-    }
-#undef ADD_COLOR
-
-    COLOR4D topSilk = g_DefaultSilkscreen;
-    COLOR4D botSilk = g_DefaultSilkscreen;
-    COLOR4D topMask = g_DefaultSolderMask;
-    COLOR4D botMask = g_DefaultSolderMask;
-    COLOR4D paste   = g_DefaultSolderPaste;
-    COLOR4D finish  = g_DefaultSurfaceFinish;
+    COLOR4D topSilk = m_DefaultSilkscreen;
+    COLOR4D botSilk = m_DefaultSilkscreen;
+    COLOR4D topMask = m_DefaultSolderMask;
+    COLOR4D botMask = m_DefaultSolderMask;
+    COLOR4D paste   = m_DefaultSolderPaste;
+    COLOR4D finish  = m_DefaultSurfaceFinish;
     COLOR4D boardBody( 0, 0, 0, 0 );
 
-    const BOARD_STACKUP& stackup = m_Pcb->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
     auto findColor =
             []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
@@ -192,22 +155,22 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aPCB ) :
         {
         case BS_ITEM_TYPE_SILKSCREEN:
             if( stackupItem->GetBrdLayerId() == F_SilkS )
-                topSilk = findColor( colorName, g_SilkscreenColors );
+                topSilk = findColor( colorName, m_SilkscreenColors );
             else
-                botSilk = findColor( colorName, g_SilkscreenColors );
+                botSilk = findColor( colorName, m_SilkscreenColors );
             break;
 
         case BS_ITEM_TYPE_SOLDERMASK:
             if( stackupItem->GetBrdLayerId() == F_Mask )
-                topMask = findColor( colorName, g_MaskColors );
+                topMask = findColor( colorName, m_MaskColors );
             else
-                botMask = findColor( colorName, g_MaskColors );
+                botMask = findColor( colorName, m_MaskColors );
 
             break;
 
         case BS_ITEM_TYPE_DIELECTRIC:
         {
-            KIGFX::COLOR4D layerColor = findColor( colorName, g_BoardColors );
+            KIGFX::COLOR4D layerColor = findColor( colorName, m_BoardColors );
 
             if( boardBody == COLOR4D( 0, 0, 0, 0 ) )
                 boardBody = layerColor;
@@ -224,29 +187,29 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aPCB ) :
     }
 
     if( boardBody == COLOR4D( 0, 0, 0, 0 ) )
-        boardBody = g_DefaultBoardBody;
+        boardBody = m_DefaultBoardBody;
 
     const wxString& finishName = stackup.m_FinishType;
 
     if( finishName.EndsWith( wxT( "OSP" ) ) )
     {
-        finish = findColor( wxT( "Copper" ), g_FinishColors );
+        finish = findColor( wxT( "Copper" ), m_FinishColors );
     }
     else if( finishName.EndsWith( wxT( "IG" ) )
           || finishName.EndsWith( wxT( "gold" ) ) )
     {
-        finish = findColor( wxT( "Gold" ), g_FinishColors );
+        finish = findColor( wxT( "Gold" ), m_FinishColors );
     }
     else if( finishName.StartsWith( wxT( "HAL" ) )
           || finishName.StartsWith( wxT( "HASL" ) )
           || finishName.EndsWith( wxT( "tin" ) )
           || finishName.EndsWith( wxT( "nickel" ) ) )
     {
-        finish = findColor( wxT( "Tin" ), g_FinishColors );
+        finish = findColor( wxT( "Tin" ), m_FinishColors );
     }
     else if( finishName.EndsWith( wxT( "silver" ) ) )
     {
-        finish = findColor( wxT( "Silver" ), g_FinishColors );
+        finish = findColor( wxT( "Silver" ), m_FinishColors );
     }
 
     auto toVRMLColor =
@@ -296,6 +259,71 @@ EXPORTER_PCB_VRML::~EXPORTER_PCB_VRML()
         m_components.clear();
         m_OutputPCB.Destroy();
     }
+}
+
+void EXPORTER_PCB_VRML::initStaticColorList()
+{
+    // Initialize the list of colors used in VRML export, but only once.
+    // (The list is stati
+    if( g_ColorsLoaded )
+        return;
+
+#define ADD_COLOR( list, r, g, b, a, name ) \
+    list.emplace_back( r/255.0, g/255.0, b/255.0, a, name )
+
+    ADD_COLOR( m_SilkscreenColors, 245, 245, 245, 1.0, _HKI( "Not specified" ) ); // White
+    ADD_COLOR( m_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );
+    ADD_COLOR( m_SilkscreenColors, 181,  19,  21, 1.0, wxT( "Red" ) );
+    ADD_COLOR( m_SilkscreenColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
+    ADD_COLOR( m_SilkscreenColors,  11,  11,  11, 1.0, wxT( "Black" ) );
+    ADD_COLOR( m_SilkscreenColors, 245, 245, 245, 1.0, wxT( "White" ) );
+    ADD_COLOR( m_SilkscreenColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
+    ADD_COLOR( m_SilkscreenColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
+
+    ADD_COLOR( m_MaskColors,  20,  51,  36, 0.83, _HKI( "Not specified" ) ); // Green
+    ADD_COLOR( m_MaskColors,  20,  51,  36, 0.83, wxT( "Green" ) );
+    ADD_COLOR( m_MaskColors,  91, 168,  12, 0.83, wxT( "Light Green" ) );
+    ADD_COLOR( m_MaskColors,  13, 104,  11, 0.83, wxT( "Saturated Green" ) );
+    ADD_COLOR( m_MaskColors, 181,  19,  21, 0.83, wxT( "Red" ) );
+    ADD_COLOR( m_MaskColors, 210,  40,  14, 0.83, wxT( "Light Red" ) );
+    ADD_COLOR( m_MaskColors, 239,  53,  41, 0.83, wxT( "Red/Orange" ) );
+    ADD_COLOR( m_MaskColors,   2,  59, 162, 0.83, wxT( "Blue" ) );
+    ADD_COLOR( m_MaskColors,  54,  79, 116, 0.83, wxT( "Light Blue 1" ) );
+    ADD_COLOR( m_MaskColors,  61,  85, 130, 0.83, wxT( "Light Blue 2" ) );
+    ADD_COLOR( m_MaskColors,  21,  70,  80, 0.83, wxT( "Green/Blue" ) );
+    ADD_COLOR( m_MaskColors,  11,  11,  11, 0.83, wxT( "Black" ) );
+    ADD_COLOR( m_MaskColors, 245, 245, 245, 0.83, wxT( "White" ) );
+    ADD_COLOR( m_MaskColors,  32,   2,  53, 0.83, wxT( "Purple" ) );
+    ADD_COLOR( m_MaskColors, 119,  31,  91, 0.83, wxT( "Light Purple" ) );
+    ADD_COLOR( m_MaskColors, 194,  195,  0, 0.83, wxT( "Yellow" ) );
+
+    ADD_COLOR( m_PasteColors, 128, 128, 128, 1.0, wxT( "Grey" ) );
+    ADD_COLOR( m_PasteColors,  90,  90,  90, 1.0, wxT( "Dark Grey" ) );
+    ADD_COLOR( m_PasteColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
+
+    ADD_COLOR( m_FinishColors, 184, 115,  50, 1.0, wxT( "Copper" ) );
+    ADD_COLOR( m_FinishColors, 178, 156,   0, 1.0, wxT( "Gold" ) );
+    ADD_COLOR( m_FinishColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
+    ADD_COLOR( m_FinishColors, 160, 160, 160, 1.0, wxT( "Tin" ) );
+
+    ADD_COLOR( m_BoardColors,  51,  43,  22, 0.83, wxT( "FR4 natural, dark" ) );
+    ADD_COLOR( m_BoardColors, 109, 116,  75, 0.83, wxT( "FR4 natural" ) );
+    ADD_COLOR( m_BoardColors, 252, 252, 250, 0.90, wxT( "PTFE natural" ) );
+    ADD_COLOR( m_BoardColors, 205, 130,   0, 0.68, wxT( "Polyimide" ) );
+    ADD_COLOR( m_BoardColors,  92,  17,   6, 0.90, wxT( "Phenolic natural" ) );
+    ADD_COLOR( m_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 1" ) );
+    ADD_COLOR( m_BoardColors, 160, 123,  54, 0.83, wxT( "Brown 2" ) );
+    ADD_COLOR( m_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 3" ) );
+    ADD_COLOR( m_BoardColors, 213, 213, 213,  1.0, wxT( "Aluminum" ) );
+
+    m_DefaultSilkscreen =    COLOR4D( 0.94, 0.94, 0.94,  1.0 );
+    m_DefaultSolderMask =    COLOR4D( 0.08, 0.20, 0.14, 0.83 );
+    m_DefaultSolderPaste =   COLOR4D( 0.50, 0.50, 0.50,  1.0 );
+    m_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
+    m_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
+#undef ADD_COLOR
+
+    g_ColorsLoaded = true;
 }
 
 
@@ -363,7 +391,7 @@ void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
         holes.RemoveAllContours();
         outlines.RemoveAllContours();
         outlines = m_pcbOutlines;
-        m_Pcb->ConvertBrdLayerToPolygonalContours( pcb_layer, holes );
+        m_board->ConvertBrdLayerToPolygonalContours( pcb_layer, holes );
 
         outlines.BooleanSubtract( holes, SHAPE_POLY_SET::PM_FAST );
         outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
@@ -396,15 +424,12 @@ void EXPORTER_PCB_VRML::ExportStandardLayers()
             break;
 
         outlines.RemoveAllContours();
-        m_Pcb->ConvertBrdLayerToPolygonalContours( pcb_layer[lcnt], outlines );
+        m_board->ConvertBrdLayerToPolygonalContours( pcb_layer[lcnt], outlines );
         outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         ExportVrmlPolygonSet( vrmllayer[lcnt], outlines );
     }
 }
-
-
-static EXPORTER_PCB_VRML* model_vrml;
 
 
 void EXPORTER_PCB_VRML::write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
@@ -689,10 +714,10 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
 
 void EXPORTER_PCB_VRML::ComputeLayer3D_Zpos()
 {
-    int copper_layers = m_Pcb->GetCopperLayerCount();
+    int copper_layers = m_board->GetCopperLayerCount();
 
     // We call it 'layer' thickness, but it's the whole board thickness!
-    m_brd_thickness = m_Pcb->GetDesignSettings().GetBoardThickness() * m_BoardToVrmlScale;
+    m_brd_thickness = m_board->GetDesignSettings().GetBoardThickness() * m_BoardToVrmlScale;
     double half_thickness = m_brd_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
@@ -748,7 +773,7 @@ void EXPORTER_PCB_VRML::ExportVrmlPolygonSet( VRML_LAYER* aVlayer, const SHAPE_P
 
 void EXPORTER_PCB_VRML::ExportVrmlBoard()
 {
-    if( !m_Pcb->GetBoardPolygonOutlines( m_pcbOutlines ) )
+    if( !m_board->GetBoardPolygonOutlines( m_pcbOutlines ) )
     {
         wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
     }
@@ -800,7 +825,7 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
     PCB_LAYER_ID top_layer, bottom_layer;
 
-    for( PCB_TRACK* track : m_Pcb->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( track->Type() != PCB_VIA_T )
             continue;
@@ -1152,86 +1177,103 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 }
 
 
-bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
-                                      bool aExport3DFiles, bool aUseRelativePaths,
-                                      const wxString& a3D_Subdir,
-                                      double aXRef, double aYRef )
-{
-    bool              success  = true;
-    EXPORTER_PCB_VRML model3d( GetBoard() );
 
-    model_vrml = &model3d;
-    model3d.SetScale( aMMtoWRMLunit );
-    model3d.m_UseInlineModelsInBrdfile = aExport3DFiles;
-    model3d.m_Subdir3DFpModels = a3D_Subdir;
-    model3d.m_UseRelPathIn3DModelFilename = aUseRelativePaths;
-    model3d.m_Cache3Dmodels = Prj().Get3DCacheManager();
+bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
+                                         const wxString& aFullFileName, double aMMtoWRMLunit,
+                                         bool aExport3DFiles, bool aUseRelativePaths,
+                                         const wxString& a3D_Subdir,
+                                         double aXRef, double aYRef )
+{
+    if( aProject == nullptr )
+    {
+        if( aMessages )
+            *aMessages = _( "No project when exporting the VRML file");
+
+        return false;
+    }
+
+    SetScale( aMMtoWRMLunit );
+    m_UseInlineModelsInBrdfile = aExport3DFiles;
+    m_Subdir3DFpModels = a3D_Subdir;
+    m_UseRelPathIn3DModelFilename = aUseRelativePaths;
+    m_Cache3Dmodels = aProject->Get3DCacheManager();
 
     // When 3D models are separate files, for historical reasons the VRML unit
     // is expected to be 0.1 inch (2.54mm) instead of 1mm, so we adjust the m_BoardToVrmlScale
     // to match the VRML scale of these external files.
     // Otherwise we use 1mm as VRML unit
-    if( model3d.m_UseInlineModelsInBrdfile )
+    if( m_UseInlineModelsInBrdfile )
     {
-        model3d.m_BoardToVrmlScale = MM_PER_IU / 2.54;
-        model3d.SetOffset( -aXRef / 2.54, aYRef / 2.54 );
+        m_BoardToVrmlScale = MM_PER_IU / 2.54;
+        SetOffset( -aXRef / 2.54, aYRef / 2.54 );
     }
     else
     {
-        model3d.m_BoardToVrmlScale = MM_PER_IU;
-        model3d.SetOffset( -aXRef, aYRef );
+        m_BoardToVrmlScale = MM_PER_IU;
+        SetOffset( -aXRef, aYRef );
     }
+
+    bool              success  = true;
 
     try
     {
         // Preliminary computation: the z value for each layer
-        model3d.ComputeLayer3D_Zpos();
+        ComputeLayer3D_Zpos();
 
         // board edges and cutouts
-        model3d.ExportVrmlBoard();
+        ExportVrmlBoard();
 
         // Draw solder mask layer (negative layer)
-        model3d.ExportVrmlSolderMask();
-#if 1
-        model3d.ExportVrmlViaHoles();
-        model3d.ExportStandardLayers();
-#else
-        // Drawing and text on the board
-        model3d.ExportVrmlDrawings();
+        ExportVrmlSolderMask();
+        ExportVrmlViaHoles();
+        ExportStandardLayers();
 
-        // Export vias and trackage
-        model3d.ExportVrmlTracks();
-
-        // Export zone fills
-        model3d.ExportVrmlZones();
-#endif
-        if( model3d.m_UseInlineModelsInBrdfile )
+        if( m_UseInlineModelsInBrdfile )
         {
             // Copy fp 3D models in a folder, and link these files in
             // the board .vrml file
-            model3d.ExportFp3DModelsAsLinkedFile( aFullFileName );
+            ExportFp3DModelsAsLinkedFile( aFullFileName );
         }
         else
         {
             // merge footprints in the .vrml board file
-            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
-                model3d.ExportVrmlFootprint( footprint, nullptr );
+            for( FOOTPRINT* footprint : m_board->Footprints() )
+                ExportVrmlFootprint( footprint, nullptr );
 
             // write out the board and all layers
-            model3d.writeLayers( TO_UTF8( aFullFileName ), nullptr );
+            writeLayers( TO_UTF8( aFullFileName ), nullptr );
         }
     }
     catch( const std::exception& e )
     {
-        wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << FROM_UTF8( e.what() );
-        wxMessageBox( msg );
+        if( aMessages )
+            *aMessages << _( "VRML Export Failed:\n" ) << FROM_UTF8( e.what() );
 
         success = false;
     }
 
     return success;
 }
+
+bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
+                                      bool aExport3DFiles, bool aUseRelativePaths,
+                                      const wxString& a3D_Subdir,
+                                      double aXRef, double aYRef )
+{
+    bool     success;
+    wxString msgs;
+    EXPORTER_VRML model3d( GetBoard() );
+
+    success = model3d.ExportVRML_File( &Prj(), &msgs, aFullFileName, aMMtoWRMLunit,
+                                       aExport3DFiles, aUseRelativePaths,
+                                       a3D_Subdir, aXRef, aYRef );
+
+    if( !msgs.IsEmpty() )
+        wxMessageBox( msgs );
+
+    return success;
+}
+
 
 void EXPORTER_PCB_VRML::ExportFp3DModelsAsLinkedFile( const wxString& aFullFileName )
 {
@@ -1270,7 +1312,7 @@ void EXPORTER_PCB_VRML::ExportFp3DModelsAsLinkedFile( const wxString& aFullFileN
     output_file << "  children [\n";
 
     // Export footprints
-    for( FOOTPRINT* footprint : m_Pcb->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
         ExportVrmlFootprint( footprint, &output_file );
 
     // write out the board and all layers
