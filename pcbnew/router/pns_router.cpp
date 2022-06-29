@@ -227,6 +227,12 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
     for( ITEM* item : candidates.Items() )
     {
+        if( item->Parent() && item->Parent()->GetLayer() == Edge_Cuts )
+        {
+            // Edge cuts are put on all layers, but they're not *really* on all layers
+            continue;
+        }
+
         if( !item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
         {
             BOARD_ITEM* parent = item->Parent();
