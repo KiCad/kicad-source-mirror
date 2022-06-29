@@ -118,7 +118,7 @@ enum class IBIS_MATRIX_TYPE
 {
     // All matrices are supposed to be symmetrical, only upper right triangle is given
     UNDEFINED,
-    BANDED, // Give the main diagonal + [bandwith] elements on the right
+    BANDED, // Give the main diagonal + [bandwidth] elements on the right
     SPARSE, // Only give non-zero values.
     FULL,   // Give the whole upper triangle.
 };

@@ -748,7 +748,7 @@ bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplicatio
 
     // If aHoleIdx >= 0, the corner musty be added to the hole, index aHoleIdx.
     // (remember: the index of the first hole is 0)
-    // Return error if if does dot exist.
+    // Return error if it does not exist.
     if( aHoleIdx >= m_Poly->HoleCount( 0 ) )
         return false;
 

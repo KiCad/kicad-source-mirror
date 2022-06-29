@@ -839,7 +839,7 @@ protected:
     bool m_isRuleArea;
 
     /* A zone outline can be a teardrop zone with different rules for priority
-     * (alway bigger priority than copper zones) and never removed from a
+     * (always bigger priority than copper zones) and never removed from a
      * copper zone having the same netcode
      */
     TEARDROP_TYPE m_teardropType;

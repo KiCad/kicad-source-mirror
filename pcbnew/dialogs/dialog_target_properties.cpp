@@ -94,7 +94,7 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_Parent );
     commit.Modify( m_Target );
 
-    // Save old item in undo list, if is is not currently edited (will be later if so)
+    // Save old item in undo list, if it's not currently edited (will be later if so)
     bool pushCommit = ( m_Target->GetEditFlags() == 0 );
 
     if( m_Target->GetEditFlags() != 0 )         // other edit in progress (MOVE, NEW ..)

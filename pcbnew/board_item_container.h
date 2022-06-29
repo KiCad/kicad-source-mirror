@@ -60,7 +60,7 @@ public:
     /**
      * @brief Adds an item to the container.
      * @param aMode decides whether the item is added in the beginning or at the end of the list.
-     * @param aSkipConnectivity skip connectivity update (usefull for file loading, when
+     * @param aSkipConnectivity skip connectivity update (useful for file loading, when
      * the connectivity is updated after end of loading).
      */
     virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,

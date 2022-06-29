@@ -37,7 +37,7 @@
         elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(ToMM,iu))
         else:
-            raise TypeError("ToMM() excpects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
+            raise TypeError("ToMM() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
 
     def FromMM(mm):
         if type(mm) in [int,float]:
@@ -53,7 +53,7 @@
         elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(ToMils,iu))
         else:
-            raise TypeError("ToMils() excpects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
+            raise TypeError("ToMils() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
 
     def FromMils(mils):
         if type(mils) in [int,float]:
@@ -61,7 +61,7 @@
         elif type(mils) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(FromMils,mils))
         else:
-            raise TypeError("FromMils() excpects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(mils)))
+            raise TypeError("FromMils() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(mils)))
 
     def PutOnGridMM(value, gridSizeMM):
         thresh = FromMM(gridSizeMM)

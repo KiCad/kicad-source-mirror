@@ -77,7 +77,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     for( VECTOR2I pt: aPoints )
         outline->Append(pt.x, pt.y);
 
-    // Can be usefull:
+    // Can be useful:
     teardrop->CalculateFilledArea();
 
     return teardrop;
@@ -335,7 +335,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
 
             for( unsigned jj = ii+1; jj < sublist->size(); jj++ )
             {
-                // Seach candidates with thickness > curr thickness
+                // Search candidates with thickness > curr thickness
                 PCB_TRACK* candidate = (*sublist)[jj];
 
                 if( min_width >= candidate->GetWidth() )

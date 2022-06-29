@@ -105,7 +105,7 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
     double maxY = maxX;
 
     // as Clipper/SHAPE_POLY_SET uses ints we first need to upscale to a reasonably large size (in integer coordinates)
-    // to avoid loosing accuracy
+    // to avoid losing accuracy
     const double convert_scale = 1000000000.0;
 
     for( IMPORTED_POLYGON* path : aPaths )

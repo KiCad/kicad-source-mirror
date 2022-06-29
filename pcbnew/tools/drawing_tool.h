@@ -195,7 +195,7 @@ public:
     int SetAnchor( const TOOL_EVENT& aEvent );
 
     /**
-     * Toggle the horizontal/veritcal/45-degree constraint for drawing tools.
+     * Toggle the horizontal/vertical/45-degree constraint for drawing tools.
      */
     int ToggleHV45Mode( const TOOL_EVENT& toolEvent );
 

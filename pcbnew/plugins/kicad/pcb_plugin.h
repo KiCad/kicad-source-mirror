@@ -132,7 +132,7 @@ class SHAPE_LINE_CHAIN;
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit FOOTPRINT initial comments
 #define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation. (always saved
-                                                ///< with potion 0,0 and rotation = 0 in library).
+                                                ///< with position 0,0 and rotation = 0 in library).
 //#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
 #define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for
                                                 ///< board/not library).

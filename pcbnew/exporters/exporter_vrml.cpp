@@ -264,7 +264,7 @@ EXPORTER_PCB_VRML::~EXPORTER_PCB_VRML()
 void EXPORTER_PCB_VRML::initStaticColorList()
 {
     // Initialize the list of colors used in VRML export, but only once.
-    // (The list is stati
+    // (The list is static)
     if( g_ColorsLoaded )
         return;
 

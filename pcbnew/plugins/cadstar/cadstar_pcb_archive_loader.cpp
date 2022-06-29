@@ -3759,7 +3759,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             {
                 // Test if this zone were lower priority than other zone, what is the error?
                 double areaThis = errorArea( thisZone, otherZone );
-                // Viceversa
+                // Vice-versa
                 double areaOther = errorArea( otherZone, thisZone );
 
                 if( areaThis > areaOther )

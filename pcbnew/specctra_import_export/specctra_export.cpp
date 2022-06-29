@@ -1696,7 +1696,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wire->net_id = netname;
 
                 if( track->IsLocked() )
-                    wire->wire_type = T_fix;    // tracks with fix property are not returnned in .ses files
+                    wire->wire_type = T_fix;    // tracks with fix property are not returned in .ses files
                 else
                     wire->wire_type = T_route;  // could be T_protect
 
@@ -1758,7 +1758,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             dsnVia->net_id = TO_UTF8( net->GetNetname() );
 
             if( via->IsLocked() )
-                dsnVia->via_type = T_fix;    // vias with fix property are not returnned in .ses files
+                dsnVia->via_type = T_fix;    // vias with fix property are not returned in .ses files
             else
                 dsnVia->via_type = T_route;  // could be T_protect
         }

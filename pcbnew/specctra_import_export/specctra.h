@@ -1127,7 +1127,7 @@ class CLASS_CLASS : public ELEM_HOLDER
 public:
 
     /**
-     * @param aParent is the arent element of the object.
+     * @param aParent is the parent element of the object.
      * @param aType May be either T_class_class or T_region_class_class
      */
     CLASS_CLASS( ELEM* aParent, DSN_T aType ) :

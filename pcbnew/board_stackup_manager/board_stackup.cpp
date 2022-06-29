@@ -466,7 +466,7 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
         }
     }
 
-    // Transfert layer settings:
+    // Transfer layer settings:
     *this = stackup;
 
     // Transfer other stackup settings from aSettings

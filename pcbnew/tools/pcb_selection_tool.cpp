@@ -1845,7 +1845,7 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
             m_frame->FocusOnLocation( aItem->GetPosition() );
         }
 
-        // If the item has a bouding box, then zoom out if needed
+        // If the item has a bounding box, then zoom out if needed
         if( aItem->GetBoundingBox().GetHeight() > 0 && aItem->GetBoundingBox().GetWidth() > 0 )
         {
             // This adds some margin
@@ -1876,7 +1876,7 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
                 {
                     pcbView->SetScale( pcbView->GetScale() * ( scale ) );
 
-                    //Let's refocus because there is an algortihm to avoid dialogs in there.
+                    //Let's refocus because there is an algorithm to avoid dialogs in there.
                     m_frame->FocusOnLocation( aItem->GetCenter() );
                 }
             }

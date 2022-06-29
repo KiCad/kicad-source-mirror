@@ -114,7 +114,7 @@ public:
 
 private:
     ///< Convert net code using the mapping table if available,
-    ///< otherwise returns unchanged net code if < 0 or if is is out of range
+    ///< otherwise returns unchanged net code if < 0 or if it's out of range
     inline int getNetCode( int aNetCode )
     {
         if( ( aNetCode >= 0 ) && ( aNetCode < (int) m_netCodes.size() ) )

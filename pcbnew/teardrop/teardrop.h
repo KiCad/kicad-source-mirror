@@ -247,7 +247,7 @@ private:
     int     m_tolerance;                // max distance between a track end point and a pad/via center to
                                         // see them connected to ut a teardrop
     BOARD*  m_board;
-    TEARDROP_PARAMETERS_LIST* m_prmsList; // the teardrop parameters list, from the board desing settings
+    TEARDROP_PARAMETERS_LIST* m_prmsList; // the teardrop parameters list, from the board design settings
     std::vector<ZONE*> m_createdTdList; // list of new created teardrops
 };
 

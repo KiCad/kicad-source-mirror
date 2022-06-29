@@ -93,7 +93,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         // Update footprint positions
         GetCanvas()->GetView()->RecacheAllItems();
 
-        // add imported tracks (previous tracks are removed, therfore all are new)
+        // add imported tracks (previous tracks are removed, therefore all are new)
         for( auto track : GetBoard()->Tracks() )
             GetCanvas()->GetView()->Add( track );
    }

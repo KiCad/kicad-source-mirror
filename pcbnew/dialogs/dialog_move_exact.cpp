@@ -235,7 +235,7 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
         m_rotate.SetAngleValue( ANGLE_0 );
     }
 
-    // Keep m_stdButtonsOK focused to allow enter key actiavte the OK button
+    // Keep m_stdButtonsOK focused to allow enter key activate the OK button
     m_stdButtonsOK->SetFocus();
 }
 

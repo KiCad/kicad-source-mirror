@@ -481,7 +481,7 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
     m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
 
     PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
-    // Ensure item UUIDs are valide
+    // Ensure item UUIDs are valid
     // ("old" footprints can have null uuids that create issues in fp editor)
     aFootprint->FixUuids();
 

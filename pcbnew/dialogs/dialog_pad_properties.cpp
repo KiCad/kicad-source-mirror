@@ -2130,7 +2130,7 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
 void DIALOG_PAD_PROPERTIES::OnPrimitiveSelection( wxListEvent& event )
 {
     // Called on a double click on the basic shapes list
-    // To Do: highligth the primitive(s) currently selected.
+    // To Do: highlight the primitive(s) currently selected.
     redraw();
 }
 

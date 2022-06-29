@@ -37,7 +37,7 @@ class ARRAY_PAD_NUMBER_PROVIDER
 public:
     /**
      * @param aFootprint the footprint to gather existing numbers from (nullptr for no footprint)
-     * @oaram aArrayOpts the array options that provide the candidate numbers
+     * @param aArrayOpts the array options that provide the candidate numbers
      */
     ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprint, const ARRAY_OPTIONS& aArrayOpts );
 

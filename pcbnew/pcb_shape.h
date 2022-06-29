@@ -138,7 +138,7 @@ public:
      * @param aCornerBuffer is a buffer to store the polygon.
      * @param aClearanceValue is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
-     * @param aErrorLoc whether any approximation error shoule be placed inside or outside
+     * @param aErrorLoc whether any approximation error should be placed inside or outside
      * @param ignoreLineWidth is used for edge cut items where the line width is only
      *        for visualization
      */

@@ -410,7 +410,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
                                                          : nullptr;
     SHAPE_POLY_SET c_buffer;
 
-    // aHeightRatio is the factor to calculate the aViaPad teardrop prefered height
+    // aHeightRatio is the factor to calculate the aViaPad teardrop preferred height
     // teardrop height = aViaPad size * aHeightRatio (aHeightRatio <= 1.0)
     // For rectangular (and similar) shapes, the preferred_height is calculated from the min
     // dim of the rectangle = aViaPad.m_Width
@@ -418,7 +418,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
     int preferred_height = aViaPad.m_Width * aCurrParams->m_HeightRatio;
 
     // force_clip_shape = true to force the via/pad polygon to be clipped to follow
-    // contraints
+    // constraints
     // Clipping is also needed for rectangular shapes, because the teardrop shape is
     // restricted to a polygonal area smaller than the pad area (the teardrop height
     // use the smaller value of X and Y sizes).
@@ -543,7 +543,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         }
     }
 
-    if( found_start < 0 )   // PointE was not initalized, because start point does not exit
+    if( found_start < 0 )   // PointE was not initialized, because start point does not exit
     {
         int ii = found_end-1;
 
@@ -553,7 +553,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         PointE = hull[ii];
     }
 
-    if( found_end < 0 )   // PointC was not initalized, because end point does not exit
+    if( found_end < 0 )   // PointC was not initialized, because end point does not exit
     {
         int ii = found_start-1;
 
@@ -692,7 +692,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrP
     int track_stub_len;     // the dist between the start point and the anchor point
                             // on the track
 
-    // Note: aTrack can be modified if the inital track is too short
+    // Note: aTrack can be modified if the initial track is too short
     if( !findAnchorPointsOnTrack( aCurrParams, start, end, aTrack, aViaPad, &track_stub_len,
                                   aFollowTracks, aTrackLookupList ) )
         return false;

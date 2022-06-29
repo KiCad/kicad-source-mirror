@@ -454,7 +454,7 @@ class FootprintWizardDrawingAids:
     def SetLineTickness(self, lineThickness):
         """!
         Old version of SetLineThickness.
-        Does the same thing, but is is only here for compatibility with old
+        Does the same thing, but is only here for compatibility with old
         scripts.
         Set the current pen lineThickness used for subsequent drawing
         operations

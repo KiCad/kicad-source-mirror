@@ -362,7 +362,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     // changed for instances on the board.  Or they might want to be tested for equality.
     // Currently we punt and ignore all the text items.
 
-    // Drawings and pads are also somewhat problematic as there's no gaurantee that they'll be
+    // Drawings and pads are also somewhat problematic as there's no guarantee that they'll be
     // in the same order in the two footprints.  Rather than building some sophisticated hashing
     // algorithm we use the footprint sorting functions to attempt to sort them in the same order.
 

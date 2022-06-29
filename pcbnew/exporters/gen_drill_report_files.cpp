@@ -191,7 +191,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
         gbrplotter->DisableApertMacros( false );
         gbrplotter->UseX2format( true );            // Mandatory
-        gbrplotter->UseX2NetAttributes( false );    // net attributes hace no meaning here
+        gbrplotter->UseX2NetAttributes( false );    // net attributes have no meaning here
 
         // Attributes are added using X2 format
         AddGerberX2Header( gbrplotter, m_pcb, false );

@@ -56,7 +56,7 @@ bool IBIS_MATRIX_BANDED::Check()
 
     if( m_bandwidth < 1 )
     {
-        Report( _( "Bandwith of banded matrices should be >= 1." ), RPT_SEVERITY_ERROR );
+        Report( _( "Bandwidth of banded matrices should be >= 1." ), RPT_SEVERITY_ERROR );
         status = false;
     }
 

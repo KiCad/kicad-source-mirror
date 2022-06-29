@@ -101,7 +101,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
-    // Option to run Zoom automatique on footprint selection changge
+    // Option to run Zoom automatique on footprint selection change
     m_mainToolBar->AddTool( ID_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
                             KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
                             _( "Automatic Zoom on footprint change" ),

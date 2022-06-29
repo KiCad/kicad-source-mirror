@@ -243,7 +243,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
     m_PriorityLevelCtrl->SetValue( m_settings.m_ZonePriority );
 
-    if( m_isTeardrop )  // outlines are never smoothed: they have alreay the right shape
+    if( m_isTeardrop )  // outlines are never smoothed: they have already the right shape
     {
         m_cornerSmoothingChoice->SetSelection( 0 );
         m_cornerSmoothingChoice->Enable( false );
@@ -640,7 +640,7 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::storePersistentNetSortConfigurations()
 {
-    // These configurations are persistent across multiple invokations of
+    // These configurations are persistent across multiple invocations of
     // this dialog
     int newConfig{ NO_PERSISTENT_SORT_MODE };
 
