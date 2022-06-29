@@ -378,6 +378,12 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 }
 
 
+bool PCB_SELECTION_TOOL::ctrlClickHighlights()
+{
+    return false;
+}
+
+
 /**
  * Function itemIsIncludedByFilter()
  *
