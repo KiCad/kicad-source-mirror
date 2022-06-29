@@ -119,9 +119,9 @@
         plug = GetPluginForPath(libname)
         return plug.FootprintEnumerate(libname)
 
-    def FootprintLoad(libname,name):
+    def FootprintLoad(libname,name,preserveUUID=False):
         plug = GetPluginForPath(libname)
-        return plug.FootprintLoad(libname,name)
+        return plug.FootprintLoad(libname,name,preserveUUID)
 
     def FootprintSave(libname,module):
         plug = GetPluginForPath(libname)
