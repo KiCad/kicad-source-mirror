@@ -284,6 +284,7 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
+    bitmap_info.cpp
     bitmap_store.cpp
     board_printout.cpp
     build_version.cpp
@@ -443,7 +444,7 @@ set( COMMON_SRCS
 add_library( common STATIC
     ${COMMON_SRCS}
     )
-    
+
 add_dependencies( common version_header )
 add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 
@@ -574,7 +575,7 @@ add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 target_include_directories( pcbcommon PRIVATE
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
-    
+
 target_link_libraries( pcbcommon PUBLIC
     common
     delaunator

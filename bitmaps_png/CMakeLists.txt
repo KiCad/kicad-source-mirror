@@ -656,8 +656,9 @@ set( TMP_DIR   "${CMAKE_CURRENT_BINARY_DIR}/tmp" )
 # generate logs is useful only if you have problems
 set( CREATE_LOG_FILES false )
 
-set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h" )
-set( BITMAP_INFO_TEMPLATE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h.in" )
+#set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h" )
+set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/common/bitmap_info.cpp" )
+set( BITMAP_INFO_TEMPLATE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.cpp.in" )
 set( BITMAP_INFO_LIST "" )
 
 set( ALL_PNGS "" )
