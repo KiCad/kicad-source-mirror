@@ -1507,6 +1507,8 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 
         if( symbolPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );
+        else
+            tempPin->ClearFlags( IS_DANGLING );
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
