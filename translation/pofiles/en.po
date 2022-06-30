@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 09:56-0700\n"
+"POT-Creation-Date: 2022-06-30 11:10-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10608,10 +10608,6 @@ msgstr "(failed to load)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad Symbol Library Viewer"
 
-#, c-format
-msgid "Unit %c"
-msgstr "Unit %c"
-
 msgid "[no library selected]"
 msgstr "[no library selected]"
 
@@ -17158,14 +17154,11 @@ msgstr "Gerber X2"
 msgid "PostScript"
 msgstr "PostScript"
 
-msgid "Gerber"
-msgstr "Gerber"
-
 msgid "Map File Format"
 msgstr "Map File Format"
 
-msgid "Creates a drill map in PS, HPGL or other formats"
-msgstr "Creates a drill map in PS, HPGL or other formats"
+msgid "Creates a drill map in PDF or other formats"
+msgstr "Creates a drill map in PDF or other formats"
 
 msgid "Drill Origin"
 msgstr "Drill Origin"
@@ -18287,6 +18280,9 @@ msgstr "Warning: Scale option set to a very large value"
 
 msgid "Plot format:"
 msgstr "Plot format:"
+
+msgid "Gerber"
+msgstr "Gerber"
 
 msgid "Include Layers"
 msgstr "Include Layers"
@@ -26414,6 +26410,13 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid "Unit %c"
+#~ msgstr "Unit %c"
+
+#~ msgid "Creates a drill map in PDF or other formats"
+#~ msgstr "Creates a drill map in PDF or other formats"
 
 #~ msgid "F.Cu"
 #~ msgstr "F.Cu"

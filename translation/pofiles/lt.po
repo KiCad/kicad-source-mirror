@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 09:56-0700\n"
+"POT-Creation-Date: 2022-06-30 11:10-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -785,7 +785,7 @@ msgid "Rotation increment:"
 msgstr "Sukimo kampinis žingsnis:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
-#: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
+#: common/base_units.cpp:472 pcb_calculator/widgets/unit_selector.cpp:130
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:289
 #: pcbnew/dialogs/dialog_create_array_base.cpp:259
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:152
@@ -1113,7 +1113,7 @@ msgstr "Peržiūra"
 msgid "Reload board and 3D models"
 msgstr "Atnaujinti plokštę ir 3D modelius"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:435
+#: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:430
 #: common/dialogs/dialog_grid_settings_base.cpp:41
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
@@ -1435,15 +1435,15 @@ msgstr ""
 msgid "Bitmap to Component Converter"
 msgstr "Bitų žemėlapis į komponentų keitiklį"
 
-#: common/base_units.cpp:437
+#: common/base_units.cpp:432
 msgid "sq. mm"
 msgstr "kv. mm"
 
-#: common/base_units.cpp:439
+#: common/base_units.cpp:434
 msgid "cu. mm"
 msgstr "kub. mm"
 
-#: common/base_units.cpp:449 common/eda_draw_frame.cpp:543
+#: common/base_units.cpp:444 common/eda_draw_frame.cpp:543
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:228
@@ -1462,27 +1462,27 @@ msgstr "kub. mm"
 msgid "mils"
 msgstr "mils"
 
-#: common/base_units.cpp:451
+#: common/base_units.cpp:446
 msgid "sq. mils"
 msgstr "kv"
 
-#: common/base_units.cpp:453
+#: common/base_units.cpp:448
 msgid "cu. mils"
 msgstr "kub. mils"
 
-#: common/base_units.cpp:463
+#: common/base_units.cpp:458
 msgid "in"
 msgstr "coliai"
 
-#: common/base_units.cpp:465
+#: common/base_units.cpp:460
 msgid "sq. in"
 msgstr "kv"
 
-#: common/base_units.cpp:467
+#: common/base_units.cpp:462
 msgid "cu. in"
 msgstr "kub. į"
 
-#: common/base_units.cpp:471
+#: common/base_units.cpp:466
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:88
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:118
@@ -5474,7 +5474,7 @@ msgstr "Gaunant failą įvyko klaida!\n"
 #: pcbnew/dialogs/dialog_drc.cpp:695 pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/dialogs/dialog_export_svg.cpp:307
 #: pcbnew/dialogs/dialog_export_vrml.cpp:264
-#: pcbnew/dialogs/dialog_gendrill.cpp:481 pcbnew/dialogs/dialog_plot.cpp:924
+#: pcbnew/dialogs/dialog_gendrill.cpp:484 pcbnew/dialogs/dialog_plot.cpp:924
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:257
 #: pcbnew/exporters/gen_footprints_placefile.cpp:313
@@ -6059,7 +6059,7 @@ msgid "Show 3D viewer window"
 msgstr "Rodyti 3D peržiūros priemonės langą"
 
 #: common/tool/actions.cpp:572 eeschema/symbol_viewer_frame.cpp:101
-#: eeschema/symbol_viewer_frame.cpp:927
+#: eeschema/symbol_viewer_frame.cpp:931
 msgid "Symbol Library Browser"
 msgstr "Simbolių bibliotekos naršyklė"
 
@@ -7344,12 +7344,12 @@ msgstr ""
 "Tinklas %s yra grafiškai prijungtas prie magistralės %s, tačiau nėra tos "
 "magistralės narys"
 
-#: eeschema/connection_graph.cpp:3050
+#: eeschema/connection_graph.cpp:3051
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Lapo smeigtukas %s neturi atitikimo hierarchinės etiketės lapo viduje"
 
-#: eeschema/connection_graph.cpp:3067
+#: eeschema/connection_graph.cpp:3068
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Иерархическая метка %s не соединена с меткой листа."
@@ -8435,7 +8435,7 @@ msgstr "Prisiminti konfliktų žemėlapį"
 msgid "Violation Severity"
 msgstr "Pažeidimo sunkumas"
 
-#: eeschema/dialogs/dialog_erc.cpp:777 pcbnew/dialogs/dialog_gendrill.cpp:486
+#: eeschema/dialogs/dialog_erc.cpp:777 pcbnew/dialogs/dialog_gendrill.cpp:489
 #, fuzzy, c-format
 msgid "Report file '%s' created."
 msgstr "Ataskaitos failas „%s“ sukurtas\n"
@@ -9661,14 +9661,14 @@ msgstr "Išvesti šį puslapį"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:215
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
-#: pcbnew/dialogs/dialog_gendrill.cpp:298 pcbnew/dialogs/dialog_plot.cpp:379
+#: pcbnew/dialogs/dialog_gendrill.cpp:302 pcbnew/dialogs/dialog_plot.cpp:379
 #: pcbnew/exporters/gen_footprints_placefile.cpp:209
 #: pcbnew/exporters/gen_footprints_placefile.cpp:567
 msgid "Select Output Directory"
 msgstr "Pasirinkite Išvesties katalogas"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:232
-#: pcbnew/dialogs/dialog_gendrill.cpp:307 pcbnew/dialogs/dialog_plot.cpp:396
+#: pcbnew/dialogs/dialog_gendrill.cpp:311 pcbnew/dialogs/dialog_plot.cpp:396
 #, fuzzy, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -9680,8 +9680,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:234
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
 #: pcbnew/dialogs/dialog_export_svg.cpp:225
-#: pcbnew/dialogs/dialog_gendrill.cpp:309
-#: pcbnew/dialogs/dialog_gendrill.cpp:317 pcbnew/dialogs/dialog_plot.cpp:398
+#: pcbnew/dialogs/dialog_gendrill.cpp:313
+#: pcbnew/dialogs/dialog_gendrill.cpp:321 pcbnew/dialogs/dialog_plot.cpp:398
 #: pcbnew/exporters/gen_footprints_placefile.cpp:217
 #: pcbnew/exporters/gen_footprints_placefile.cpp:227
 msgid "Plot Output Directory"
@@ -9838,7 +9838,6 @@ msgid "DXF"
 msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "HPGL"
 msgstr "HPGL"
@@ -11435,7 +11434,7 @@ msgstr ""
 "lentelės."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
-#: eeschema/dialogs/panel_sym_lib_table.cpp:765
+#: eeschema/dialogs/panel_sym_lib_table.cpp:764
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Biblioteka „%s“ nerasta."
@@ -12235,19 +12234,19 @@ msgstr "Jau yra biblioteka, pravarde „%s“."
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Pridėjus šią biblioteką, reikės pakeisti vieną iš slapyvardžių."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:529
+#: eeschema/dialogs/panel_sym_lib_table.cpp:528
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1047
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Skip"
 msgstr "Praleisti"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:529
+#: eeschema/dialogs/panel_sym_lib_table.cpp:528
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 msgid "Add Anyway"
 msgstr "Pridėti vis tiek"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:733
+#: eeschema/dialogs/panel_sym_lib_table.cpp:732
 #, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
@@ -12256,7 +12255,7 @@ msgstr ""
 "Pasirinkite vieną ar daugiau lentelių eilučių, kuriose yra senų bibliotekų, "
 "kurias norite išsaugoti kaip dabartinį formatą (* .kicad_sym)."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:741
+#: eeschema/dialogs/panel_sym_lib_table.cpp:740
 #, fuzzy, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
@@ -12265,7 +12264,7 @@ msgstr ""
 "Išsaugoti „%s“ kaip dabartinį formatą (* .kicad_sym) ir pakeisti seną įrašą "
 "lentelėje?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:747
+#: eeschema/dialogs/panel_sym_lib_table.cpp:746
 #, fuzzy, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
@@ -12274,24 +12273,24 @@ msgstr ""
 "Išsaugoti %d senas bibliotekas dabartiniu formatu (* .kicad_sym) ir pakeisti "
 "senus įrašus lentelėje?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:775
+#: eeschema/dialogs/panel_sym_lib_table.cpp:774
 #: pcbnew/dialogs/dialog_export_step.cpp:350
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Failas „%s“ jau yra. Ar norite perrašyti šį failą?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:778
+#: eeschema/dialogs/panel_sym_lib_table.cpp:777
 #, fuzzy
 msgid "Migrate Library"
 msgstr "Perkelti bibliotekas ..."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:802 eeschema/libarch.cpp:153
+#: eeschema/dialogs/panel_sym_lib_table.cpp:801 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
 #, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Nepavyko išsaugoti simbolių bibliotekos failo „%s“."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1038
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1037
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
@@ -12301,11 +12300,11 @@ msgstr ""
 "Pakeitimai turi būti išsaugoti arba išmesti, kad būtų galima modifikuoti "
 "simbolių bibliotekos lentelę."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1052
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1051
 msgid "Symbol Libraries"
 msgstr "Simbolių bibliotekos"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1074
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1073
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
 #, c-format
 msgid ""
@@ -12317,17 +12316,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1075
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1088
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1074
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1087
 #: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:235
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1433
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1485
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1437
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1489
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
 msgstr "Failo išsaugojimo klaida"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1087
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1086
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1117
 #, c-format
 msgid ""
@@ -13212,7 +13211,7 @@ msgstr "Neseniai naudojamas"
 msgid "Choose Power Symbol (%d items loaded)"
 msgstr "Pasirinkite maitinimo simbolį (%d elementas įkeltas)"
 
-#: eeschema/picksymbol.cpp:169 eeschema/symbol_viewer_frame.cpp:860
+#: eeschema/picksymbol.cpp:169 eeschema/symbol_viewer_frame.cpp:864
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
 msgstr "Pasirinkite simbolį (%d elementai įkelti)"
@@ -13319,12 +13318,12 @@ msgstr "Jokių simbolių nepavyko išgelbėti."
 msgid "Failed to create symbol library file '%s'."
 msgstr "Nepavyko sukurti simbolių bibliotekos failo „%s“"
 
-#: eeschema/project_rescue.cpp:831
+#: eeschema/project_rescue.cpp:848
 #, c-format
 msgid "Failed to save rescue library %s."
 msgstr "Nepavyko išsaugoti gelbėjimo bibliotekos %s."
 
-#: eeschema/project_rescue.cpp:855
+#: eeschema/project_rescue.cpp:876
 msgid "Error occurred saving project specific symbol library table."
 msgstr "Įrašant konkretaus projekto simbolių bibliotekos lentelę įvyko klaida."
 
@@ -15183,7 +15182,7 @@ msgid "Symbol library loading was cancelled by user."
 msgstr "Biblioteka %s jau yra."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
-#: eeschema/tools/sch_edit_tool.cpp:117
+#: eeschema/symbol_viewer_frame.cpp:465 eeschema/tools/sch_edit_tool.cpp:117
 #, c-format
 msgid "Unit %s"
 msgstr "Vienetas %s"
@@ -15270,7 +15269,7 @@ msgstr "Pridėti prie bibliotekos lentelės"
 msgid "Failed to save backup to '%s'."
 msgstr "Nepavyko išsaugoti atsarginės kopijos aplanke „%s“"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1229
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1233
 #: eeschema/symbol_viewer_frame.cpp:393
 #, c-format
 msgid ""
@@ -15280,12 +15279,12 @@ msgstr ""
 "Dabartinėje konfigūracijoje nėra bibliotekos „%s“.\n"
 "Norėdami redaguoti konfigūraciją, naudokite „Tvarkyti simbolių bibliotekas“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1232
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1236
 #: eeschema/symbol_viewer_frame.cpp:396
 msgid "Library not found in symbol library table."
 msgstr "Biblioteka nerasta simbolių bibliotekos lentelėje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1240
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1244
 #: eeschema/symbol_viewer_frame.cpp:400
 #, c-format
 msgid ""
@@ -15295,13 +15294,13 @@ msgstr ""
 "Biblioteka „%s“ nėra įgalinta dabartinėje konfigūracijoje.\n"
 "Norėdami redaguoti konfigūraciją, naudokite „Tvarkyti simbolių bibliotekas“."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1243
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1247
 #: eeschema/symbol_viewer_frame.cpp:403
 msgid "Symbol library not enabled."
 msgstr "Simbolių biblioteka neįgalinta."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1430
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1482
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1434
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1486
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -15309,8 +15308,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1431
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1483
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1435
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1487
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -15668,12 +15667,7 @@ msgstr "(nepavyko užkrauti)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad simbolių bibliotekos failai"
 
-#: eeschema/symbol_viewer_frame.cpp:463
-#, c-format
-msgid "Unit %c"
-msgstr "Vienetas %c"
-
-#: eeschema/symbol_viewer_frame.cpp:925 pcbnew/footprint_viewer_frame.cpp:1001
+#: eeschema/symbol_viewer_frame.cpp:929 pcbnew/footprint_viewer_frame.cpp:1001
 #, fuzzy
 msgid "[no library selected]"
 msgstr "nepasirinkta biblioteka"
@@ -16030,11 +16024,11 @@ msgstr "Pridėti lanką"
 msgid "Add an arc"
 msgstr "Pridėkite lanką"
 
-#: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:725
+#: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:726
 msgid "Add Lines"
 msgstr "Pridėti eilutes"
 
-#: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:725
+#: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:726
 msgid "Add connected graphic lines"
 msgstr "Pridėti sujungtas grafines linijas"
 
@@ -16591,161 +16585,161 @@ msgstr "Rodyti paslėptus laukus"
 msgid "Toggle display of hidden text fields"
 msgstr "Perjungti paslėptų teksto laukų rodymą"
 
-#: eeschema/tools/ee_actions.cpp:650
+#: eeschema/tools/ee_actions.cpp:651
 msgid "Force H/V Wires and Buses"
 msgstr "Priverstiniai H / V laidai ir autobusai"
 
-#: eeschema/tools/ee_actions.cpp:650
+#: eeschema/tools/ee_actions.cpp:651
 msgid "Switch H & V only mode for new wires and buses"
 msgstr "Perjunkite tik laidų ir magistralių režimą „H & V“"
 
-#: eeschema/tools/ee_actions.cpp:655
+#: eeschema/tools/ee_actions.cpp:656
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Spaudinio schemą"
 
-#: eeschema/tools/ee_actions.cpp:656
+#: eeschema/tools/ee_actions.cpp:657
 #, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "Vykdykite įvairią diagnostiką ir bandykite suremontuoti lentą"
 
-#: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:794
+#: eeschema/tools/ee_actions.cpp:663 pcbnew/tools/pcb_actions.cpp:794
 msgid "Scripting Console"
 msgstr "Scenarijų pultas"
 
-#: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:794
+#: eeschema/tools/ee_actions.cpp:663 pcbnew/tools/pcb_actions.cpp:794
 msgid "Show the Python scripting console"
 msgstr "Rodyti „Python“ scenarijų konsolę"
 
-#: eeschema/tools/ee_actions.cpp:669
+#: eeschema/tools/ee_actions.cpp:670
 msgid "Enter Sheet"
 msgstr "Įveskite lapą"
 
-#: eeschema/tools/ee_actions.cpp:669
+#: eeschema/tools/ee_actions.cpp:670
 #, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Eeschema lange rodykite pasirinkto lapo turinį"
 
-#: eeschema/tools/ee_actions.cpp:675
+#: eeschema/tools/ee_actions.cpp:676
 msgid "Leave Sheet"
 msgstr "Užverti lapą"
 
-#: eeschema/tools/ee_actions.cpp:675
+#: eeschema/tools/ee_actions.cpp:676
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Eeschema lange rodykite tėvų lapą"
 
-#: eeschema/tools/ee_actions.cpp:680
+#: eeschema/tools/ee_actions.cpp:681
 msgid "Hierarchy Navigator"
 msgstr "„Hierarchijos navigatorius“"
 
-#: eeschema/tools/ee_actions.cpp:680
+#: eeschema/tools/ee_actions.cpp:681
 msgid "Show schematic sheet hierarchy"
 msgstr "Rodyti scheminę lapų hierarchiją"
 
-#: eeschema/tools/ee_actions.cpp:685
+#: eeschema/tools/ee_actions.cpp:686
 msgid "Navigate to page"
 msgstr "Eikite į puslapį"
 
-#: eeschema/tools/ee_actions.cpp:692
+#: eeschema/tools/ee_actions.cpp:693
 msgid "Add Junctions to Selection where needed"
 msgstr "Pridėkite jungčių prie pasirinkimo, kur reikia"
 
-#: eeschema/tools/ee_actions.cpp:705
+#: eeschema/tools/ee_actions.cpp:706
 msgid "Add Wire"
 msgstr "Pridėti laidą"
 
-#: eeschema/tools/ee_actions.cpp:705
+#: eeschema/tools/ee_actions.cpp:706
 msgid "Add a wire"
 msgstr "Pridėkite laidą"
 
-#: eeschema/tools/ee_actions.cpp:712
+#: eeschema/tools/ee_actions.cpp:713
 msgid "Add Bus"
 msgstr "Pridėti autobusą"
 
-#: eeschema/tools/ee_actions.cpp:712
+#: eeschema/tools/ee_actions.cpp:713
 msgid "Add a bus"
 msgstr "Pridėkite autobusą"
 
-#: eeschema/tools/ee_actions.cpp:718
+#: eeschema/tools/ee_actions.cpp:719
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:77
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:134
 msgid "Unfold from Bus"
 msgstr "Išskleiskite iš autobuso"
 
-#: eeschema/tools/ee_actions.cpp:718
+#: eeschema/tools/ee_actions.cpp:719
 msgid "Break a wire out of a bus"
 msgstr "Nutraukti laidą iš autobuso"
 
-#: eeschema/tools/ee_actions.cpp:731
+#: eeschema/tools/ee_actions.cpp:732
 msgid "Finish Wire or Bus"
 msgstr "Baigti laidą arba autobusą"
 
-#: eeschema/tools/ee_actions.cpp:731
+#: eeschema/tools/ee_actions.cpp:732
 msgid "Complete drawing at current segment"
 msgstr "Užbaigti brėžinį dabartiniame segmente"
 
-#: eeschema/tools/ee_actions.cpp:736
+#: eeschema/tools/ee_actions.cpp:737
 msgid "Finish Wire"
 msgstr "Baigti laidą"
 
-#: eeschema/tools/ee_actions.cpp:736
+#: eeschema/tools/ee_actions.cpp:737
 msgid "Complete wire with current segment"
 msgstr "Visas laidas su dabartiniu segmentu"
 
-#: eeschema/tools/ee_actions.cpp:741
+#: eeschema/tools/ee_actions.cpp:742
 msgid "Finish Bus"
 msgstr "Baigti autobusą"
 
-#: eeschema/tools/ee_actions.cpp:741
+#: eeschema/tools/ee_actions.cpp:742
 msgid "Complete bus with current segment"
 msgstr "Visas autobusas su dabartiniu segmentu"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:747
 msgid "Finish Lines"
 msgstr "Baigti linijas"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:747
 msgid "Complete connected lines with current segment"
 msgstr "Užbaigti sujungtas linijas su dabartiniu segmentu"
 
-#: eeschema/tools/ee_actions.cpp:755 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:756 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 #: pcbnew/tools/pcb_actions.cpp:255
 msgid "Move"
 msgstr "Perkelti"
 
-#: eeschema/tools/ee_actions.cpp:755 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:756 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:255
 msgid "Moves the selected item(s)"
 msgstr "Perkelia pasirinktą (-us) elementą (-us)"
 
-#: eeschema/tools/ee_actions.cpp:760 pcbnew/tools/edit_tool.cpp:1076
+#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1076
 msgid "Drag"
 msgstr "Tempti"
 
-#: eeschema/tools/ee_actions.cpp:760
+#: eeschema/tools/ee_actions.cpp:761
 msgid "Drags the selected item(s)"
 msgstr "Vilkia pasirinktą (-us) elementą (-us)"
 
-#: eeschema/tools/ee_actions.cpp:764
+#: eeschema/tools/ee_actions.cpp:765
 msgid "Move Activate"
 msgstr "Perkelti suaktyvinti"
 
-#: eeschema/tools/ee_actions.cpp:768
+#: eeschema/tools/ee_actions.cpp:769
 msgid "Symbol Move Activate"
 msgstr "Simbolis Perkelti Suaktyvinti"
 
-#: eeschema/tools/ee_actions.cpp:772
+#: eeschema/tools/ee_actions.cpp:773
 msgid "Align Elements to Grid"
 msgstr "Sulygiuokite elementus su tinkleliu"
 
-#: eeschema/tools/ee_actions.cpp:778
+#: eeschema/tools/ee_actions.cpp:779
 #, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Išsaugoti šį lapą kitu pavadinimu"
 
-#: eeschema/tools/ee_actions.cpp:778
+#: eeschema/tools/ee_actions.cpp:779
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Išsaugokite dabartinio dokumento kopiją kitoje vietoje"
@@ -24859,18 +24853,18 @@ msgstr "Gręžimų failas"
 msgid "Generate Map File"
 msgstr "Generuoti žemėlapio failą"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:316
+#: pcbnew/dialogs/dialog_gendrill.cpp:320
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Negalima nustatyti kelio santykinio (tikslinė apimtis skiriasi nuo failo "
 "tūrio)!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:406
+#: pcbnew/dialogs/dialog_gendrill.cpp:409
 #, fuzzy, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr "Nepavyko parašyti gręžimo ir (arba) susieti failų į aplanką „%s“."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:455
+#: pcbnew/dialogs/dialog_gendrill.cpp:458
 msgid "Save Drill Report File"
 msgstr "Išsaugoti gręžimo ataskaitos failą"
 
@@ -24950,6 +24944,7 @@ msgstr ""
 "(Naudokite jį tik tuo atveju, jei rekomenduojama komanda neveikia)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 msgid "Gerber X2"
 msgstr "„Gerber X2“"
 
@@ -24957,18 +24952,13 @@ msgstr "„Gerber X2“"
 msgid "PostScript"
 msgstr "PostScript"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
-#: pcbnew/dialogs/dialog_plot_base.cpp:27
-msgid "Gerber"
-msgstr "Gerber"
-
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
 msgstr "Žemėlapio failo formatas"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-msgid "Creates a drill map in PS, HPGL or other formats"
-msgstr "Sukuria gręžimo žemėlapį PS, HPGL ar kitais formatais"
+msgid "Creates a drill map in PDF or other formats"
+msgstr "Sukuria gręžimo žemėlapį PDF ar kitais formatais"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -26528,6 +26518,10 @@ msgstr "Įspėjimas: skalės parinktis nustatyta labai didele verte"
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
 msgstr "Išvedimo formatas:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:27
+msgid "Gerber"
+msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 #, fuzzy
@@ -29413,135 +29407,135 @@ msgstr "saugojimo zona „%s“"
 msgid "Tessellating copper zones..."
 msgstr "Vario zonų išardymas ..."
 
-#: pcbnew/drc/drc_engine.cpp:794 pcbnew/drc/drc_engine.cpp:809
+#: pcbnew/drc/drc_engine.cpp:802 pcbnew/drc/drc_engine.cpp:812
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Vietinis nepaisymas %s; klirensas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:825
+#: pcbnew/drc/drc_engine.cpp:827
 #, fuzzy
 msgid "board minimum"
 msgstr "Mažiausias plotis:"
 
-#: pcbnew/drc/drc_engine.cpp:828
+#: pcbnew/drc/drc_engine.cpp:830
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Minimalus atstumas:"
 
-#: pcbnew/drc/drc_engine.cpp:837
+#: pcbnew/drc/drc_engine.cpp:839
 #, fuzzy
 msgid "board minimum hole"
 msgstr "Mažiausias plotis:"
 
-#: pcbnew/drc/drc_engine.cpp:840
+#: pcbnew/drc/drc_engine.cpp:842
 #, fuzzy, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Minimalus atstumas:"
 
-#: pcbnew/drc/drc_engine.cpp:867
+#: pcbnew/drc/drc_engine.cpp:870
 #, fuzzy, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Tikrinimas %s; klirensas: %s."
 
-#: pcbnew/drc/drc_engine.cpp:879 pcbnew/drc/drc_engine.cpp:880
-#: pcbnew/drc/drc_engine.cpp:881 pcbnew/tools/board_inspection_tool.cpp:647
+#: pcbnew/drc/drc_engine.cpp:882 pcbnew/drc/drc_engine.cpp:883
+#: pcbnew/drc/drc_engine.cpp:884 pcbnew/tools/board_inspection_tool.cpp:647
 #: pcbnew/tools/board_inspection_tool.cpp:656
 #: pcbnew/tools/board_inspection_tool.cpp:665
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "undefined"
 msgstr "neapibrėžtas"
 
-#: pcbnew/drc/drc_engine.cpp:890
+#: pcbnew/drc/drc_engine.cpp:893
 #, fuzzy
 msgid "track width"
 msgstr "Takelio plotis"
 
-#: pcbnew/drc/drc_engine.cpp:891
+#: pcbnew/drc/drc_engine.cpp:894
 #, fuzzy
 msgid "annular width"
 msgstr "Žiedinis plotis"
 
-#: pcbnew/drc/drc_engine.cpp:892
+#: pcbnew/drc/drc_engine.cpp:895
 #, fuzzy
 msgid "via diameter"
 msgstr "Perėjimo diametras"
 
-#: pcbnew/drc/drc_engine.cpp:893
+#: pcbnew/drc/drc_engine.cpp:896
 #, fuzzy
 msgid "constraint"
 msgstr "Jokio suvaržymo"
 
-#: pcbnew/drc/drc_engine.cpp:896
+#: pcbnew/drc/drc_engine.cpp:899
 #, fuzzy, c-format
 msgid "Checking %s %s: %s."
 msgstr "Tikrinama %s."
 
-#: pcbnew/drc/drc_engine.cpp:912
+#: pcbnew/drc/drc_engine.cpp:915
 #, fuzzy, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Vėl prijunkite %s kaištį %s iš %s į %s."
 
-#: pcbnew/drc/drc_engine.cpp:923
+#: pcbnew/drc/drc_engine.cpp:926
 #, c-format
 msgid "Checking %s."
 msgstr "Tikrinama %s."
 
-#: pcbnew/drc/drc_engine.cpp:931
+#: pcbnew/drc/drc_engine.cpp:934
 msgid "Board and netclass clearances apply only between copper items."
 msgstr "Lentos ir tinklo klasės tarpai galioja tik tarp varinių gaminių."
 
-#: pcbnew/drc/drc_engine.cpp:977
+#: pcbnew/drc/drc_engine.cpp:980
 msgid "Keepout constraint not met."
 msgstr "Išlaikymo apribojimas netenkinamas."
 
-#: pcbnew/drc/drc_engine.cpp:979
+#: pcbnew/drc/drc_engine.cpp:982
 msgid "Disallow constraint not met."
 msgstr "Neleisti apribojimo nesilaikoma."
 
-#: pcbnew/drc/drc_engine.cpp:1001
+#: pcbnew/drc/drc_engine.cpp:1004
 msgid "Keepout layer(s) not matched."
 msgstr "Išlaikymo sluoksnis (-iai) neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:1005 pcbnew/drc/drc_engine.cpp:1027
+#: pcbnew/drc/drc_engine.cpp:1008 pcbnew/drc/drc_engine.cpp:1030
 #, fuzzy, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Taisyklės sluoksnis „%s“ neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:1011 pcbnew/drc/drc_engine.cpp:1032
+#: pcbnew/drc/drc_engine.cpp:1014 pcbnew/drc/drc_engine.cpp:1035
 #, fuzzy
 msgid "Rule layer not matched; rule ignored."
 msgstr "Taisyklės sluoksnis neatitinka."
 
-#: pcbnew/drc/drc_engine.cpp:1040
+#: pcbnew/drc/drc_engine.cpp:1043
 msgid "Unconditional constraint applied."
 msgstr "Taikytas besąlyginis suvaržymas."
 
-#: pcbnew/drc/drc_engine.cpp:1041
+#: pcbnew/drc/drc_engine.cpp:1044
 msgid "Unconditional rule applied."
 msgstr "Taikyta besąlyginė taisyklė."
 
-#: pcbnew/drc/drc_engine.cpp:1054
+#: pcbnew/drc/drc_engine.cpp:1057
 #, fuzzy, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Tikrinama taisyklės sąlyga \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1060
+#: pcbnew/drc/drc_engine.cpp:1063
 msgid "Constraint applied."
 msgstr "Taikytas apribojimas."
 
-#: pcbnew/drc/drc_engine.cpp:1061
+#: pcbnew/drc/drc_engine.cpp:1064
 msgid "Rule applied; overrides previous constraints."
 msgstr "Taikoma taisyklė; viršija ankstesnius apribojimus."
 
-#: pcbnew/drc/drc_engine.cpp:1083
+#: pcbnew/drc/drc_engine.cpp:1086
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Narystė nepatenkinta; apribojimas ignoruojamas."
 
-#: pcbnew/drc/drc_engine.cpp:1084
+#: pcbnew/drc/drc_engine.cpp:1087
 msgid "Condition not satisfied; rule ignored."
 msgstr "Sąlyga netenkinama; taisyklė ignoruota."
 
-#: pcbnew/drc/drc_engine.cpp:1115 pcbnew/drc/drc_engine.cpp:1126
+#: pcbnew/drc/drc_engine.cpp:1119 pcbnew/drc/drc_engine.cpp:1130
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Vietinis klirensas %s; klirensas: %s."
@@ -29850,12 +29844,12 @@ msgstr "Neatpažintas sluoksnis „%s“."
 msgid "Checking via annular rings..."
 msgstr "Tikrinama per žiedinius žiedus ..."
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:128
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:129
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s min. Žiedinis plotis %s; faktinis %s)"
 
-#: pcbnew/drc/drc_test_provider_annular_width.cpp:134
+#: pcbnew/drc/drc_test_provider_annular_width.cpp:135
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s maksimalus žiedinis plotis %s; tikrasis %s)"
@@ -29899,25 +29893,25 @@ msgstr "Tikrinamas vario zonos tarpas ..."
 msgid "Checking zones..."
 msgstr "Tikrinama zonos užpildymas ..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:445
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:490
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:678
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:706
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:753
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:990
-#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:213
-#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:240
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:231
-#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:312
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:361
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:449
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:495
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:685
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:714
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:737
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:763
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1001
+#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:214
+#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:242
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:101
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:233
+#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:162
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s leidimas %s; faktinis %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:654
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:660
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(tinklai %s ir %s)"
@@ -29939,22 +29933,22 @@ msgstr "Tikrinami vidinių kiemų pėdsakai ..."
 msgid "DPs evaluated:"
 msgstr "Įvertinti VB:"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:463
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:464
 #, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr "(%s didžiausias nesusietas ilgis: %s; faktinis: %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:503
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:505
 #, c-format
 msgid "minimum gap: %s; "
 msgstr "minimalus tarpas: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:507
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:509
 #, c-format
 msgid "maximum gap: %s; "
 msgstr "didžiausias tarpas: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:510
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:512
 #, c-format
 msgid "actual: %s)"
 msgstr "faktinis: %s)"
@@ -29963,12 +29957,12 @@ msgstr "faktinis: %s)"
 msgid "Checking keepouts & disallow constraints..."
 msgstr "Tikrinamas išlaikymas ir neleidžiami apribojimai ..."
 
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:123
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
 #, fuzzy
 msgid "Checking copper to board edge clearances..."
 msgstr "Tikrinamas lentos kraštų tarpas ..."
 
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:128
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:129
 #, fuzzy
 msgid "Checking silk to board edge clearances..."
 msgstr "Tikrinamas lentos kraštų tarpas ..."
@@ -29986,16 +29980,16 @@ msgstr "Tikrinama per skylutes ..."
 msgid "Checking micro-via holes..."
 msgstr "Tikrinama per skylutes ..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:162
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:227
-#: pcbnew/drc/drc_test_provider_track_width.cpp:134
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:163
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:229
+#: pcbnew/drc/drc_test_provider_track_width.cpp:135
 #, c-format
 msgid "(%s min width %s; actual %s)"
 msgstr "(%s min. Plotis %s; faktinis %s)"
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:169
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:234
-#: pcbnew/drc/drc_test_provider_track_width.cpp:141
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:170
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:236
+#: pcbnew/drc/drc_test_provider_track_width.cpp:142
 #, c-format
 msgid "(%s max width %s; actual %s)"
 msgstr "(%s maksimalus plotis %s; faktinis %s)"
@@ -30004,87 +29998,87 @@ msgstr "(%s maksimalus plotis %s; faktinis %s)"
 msgid "Checking hole to hole clearances..."
 msgstr "Tikrinama skylių ir skylių tarpai ..."
 
-#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
+#: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:314
 #, c-format
 msgid "(%s min %s; actual %s)"
 msgstr "(%s min. %s; tikrasis %s)"
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:119
+#: pcbnew/drc/drc_test_provider_lvs.cpp:120
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Trūksta pėdsako %s (%s)"
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:143
+#: pcbnew/drc/drc_test_provider_lvs.cpp:145
 msgid "No corresponding pin found in schematic."
 msgstr "Schemoje nerastas atitinkamas kaištis."
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:152
+#: pcbnew/drc/drc_test_provider_lvs.cpp:155
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
 msgstr "Trinkelėmis trūksta tinklo, pateiktas schematiškai (%s)."
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:162
+#: pcbnew/drc/drc_test_provider_lvs.cpp:166
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
 msgstr "Pad tinklas (%s) neatitinka schematiškai pateikto tinklo (%s)."
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:182
+#: pcbnew/drc/drc_test_provider_lvs.cpp:187
 #, c-format
 msgid "No pad found for pin %s in schematic."
 msgstr "Schemoje nerasta kaiščio %s pagalvėlės."
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:218
+#: pcbnew/drc/drc_test_provider_lvs.cpp:223
 msgid "Checking PCB to schematic parity..."
 msgstr "Tikrinamas scheminis pariteto PCB ..."
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:120
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:121
 #, c-format
 msgid "(%s min length: %s; actual: %s)"
 msgstr "(%s min. Trukmė: %s; faktinė: %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:127
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:128
 #, c-format
 msgid "(%s max length: %s; actual: %s)"
 msgstr "(%s maksimalus ilgis: %s; tikrasis: %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:162
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:164
 #, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
 "(%s maks. Iškreipimas: %s; faktinis: %s; vidutinis neto ilgis: %s; faktinis: "
 "%s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:191
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:194
 #, c-format
 msgid "(%s max count: %d; actual: %d)"
 msgstr "(%s maksimalus skaičius: %d; faktinis: %d)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:222
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:225
 msgid "Gathering length-constrained connections..."
 msgstr "Surenkami riboto ilgio ryšiai ..."
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:327
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:330
 msgid "<unconstrained>"
 msgstr "<nevaržoma>"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:116
+#: pcbnew/drc/drc_test_provider_misc.cpp:117
 msgid "(no edges found on Edge.Cuts layer)"
 msgstr "(„Edge.Cuts“ sluoksnyje nerasta kraštų)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:203
+#: pcbnew/drc/drc_test_provider_misc.cpp:205
 #, c-format
 msgid "(layer %s)"
 msgstr "(sluoksnis %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:300
+#: pcbnew/drc/drc_test_provider_misc.cpp:302
 msgid "Checking board outline..."
 msgstr "Tikrinamas lentos kontūras ..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:308
+#: pcbnew/drc/drc_test_provider_misc.cpp:310
 msgid "Checking disabled layers..."
 msgstr "Tikrinami išjungti sluoksniai ..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:316
+#: pcbnew/drc/drc_test_provider_misc.cpp:318
 msgid "Checking text variables..."
 msgstr "Tikrinami teksto kintamieji ..."
 
@@ -30096,7 +30090,7 @@ msgstr "Tikrinama, ar šilkografijoje nėra sutampančių daiktų ..."
 msgid "Checking silkscreen for potential soldermask clipping..."
 msgstr "Tikrinama, ar šilkografija nėra iškirpta litavimo kaukės..."
 
-#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
+#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:184
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr "Tikrinamas %d kaukės angas pagal %d šilkografijos ypatybes."
@@ -30109,12 +30103,12 @@ msgstr "Tikrinamas vėžės plotis ..."
 msgid "Checking via diameters..."
 msgstr "Tikrinamas skersmuo ..."
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:124
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min. Skersmuo %s; faktinis %s)"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:126
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:131
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maksimalus skersmuo %s; faktinis %s)"
@@ -30136,7 +30130,7 @@ msgstr "Eksportuoti D-356 bandymo failą"
 msgid "Save Footprint Association File"
 msgstr "Išsaugoti pėdsakų asociacijos failą"
 
-#: pcbnew/exporters/export_hyperlynx.cpp:190
+#: pcbnew/exporters/export_hyperlynx.cpp:197
 #, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
@@ -30146,11 +30140,11 @@ msgstr ""
 "(Palaikomos formos yra ovalo formos, stačiakampis, apskritimas.)\n"
 "Jie buvo eksportuoti kaip ovalios pagalvėlės."
 
-#: pcbnew/exporters/export_hyperlynx.cpp:194
+#: pcbnew/exporters/export_hyperlynx.cpp:201
 msgid "They have been exported as oval pads."
 msgstr ""
 
-#: pcbnew/exporters/export_hyperlynx.cpp:307
+#: pcbnew/exporters/export_hyperlynx.cpp:316
 #: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
@@ -30887,7 +30881,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/generate_footprint_info.cpp:121
+#: pcbnew/generate_footprint_info.cpp:122
 msgid "doc url"
 msgstr ""
 
@@ -37297,6 +37291,10 @@ msgstr "Redaguoti schemą"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad spausdintinių plokščių failai"
+
+#, c-format
+#~ msgid "Unit %c"
+#~ msgstr "Vienetas %c"
 
 #~ msgid "F.Cu"
 #~ msgstr "F.Cu"
