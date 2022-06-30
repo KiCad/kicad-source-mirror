@@ -314,13 +314,24 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 {
-    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    std::vector<SCH_ITEM*> symbols;
+
+    std::copy_if( LastScreen()->Items().begin(),
+                  LastScreen()->Items().end(),
+                  std::back_inserter( symbols ),
+            []( SCH_ITEM* aItem )
+            {
+                return ( aItem->Type() == SCH_SYMBOL_T );
+            } );
+
+    for( SCH_ITEM* item : symbols )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
         symbol->GetField( VALUE_FIELD )->SetText( symbol->GetValue( this, false ) );
         symbol->GetField( FOOTPRINT_FIELD )->SetText( symbol->GetFootprint( this, false ) );
         symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
+        LastScreen()->Update( item );
     }
 }
 
