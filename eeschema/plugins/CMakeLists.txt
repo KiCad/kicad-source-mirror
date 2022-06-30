@@ -1,17 +1,4 @@
-# Install the *.xsl file(s), user will need to install 'xsltproc' and setup
-# EESCHEMA's netlist plugins
-# See chapter 14 of eeschema.pdf
-
-
-set( XSL_SCRIPTS_LIST
-    xsl_scripts/bom2csv.xsl
-    xsl_scripts/bom2grouped_csv.xsl
-    xsl_scripts/netlist_form_cadstar-RINF.xsl
-    xsl_scripts/netlist_form_cadstar.xsl
-    xsl_scripts/netlist_form_OrcadPcb2.xsl
-    xsl_scripts/netlist_form_pads-pcb.asc.xsl
-    xsl_scripts/bom_with_title_block_2_csv.xsl
-    )
+# EESCHEMA's netlist and bom sample scripts
 
 set( PYTHON_SCRIPTS_LIST
     python_scripts/README-bom.txt
@@ -25,7 +12,7 @@ set( PYTHON_SCRIPTS_LIST
     python_scripts/bom_txt_sorted_by_ref.py
     )
 
-install( FILES ${XSL_SCRIPTS_LIST} ${PYTHON_SCRIPTS_LIST}
+install( FILES ${PYTHON_SCRIPTS_LIST}
     DESTINATION ${KICAD_PLUGINS}
     COMPONENT binary
     )

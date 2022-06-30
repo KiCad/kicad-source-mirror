@@ -12,7 +12,6 @@
     "gettext",
     "harfbuzz",
     "glm",
-    "libxslt",
     "opencascade",
     "opengl",
     "python3",
