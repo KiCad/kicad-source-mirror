@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,8 +50,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Check_Merge_PTH_NPTH;
 		wxRadioBox* m_radioBoxOvalHoleMode;
 		wxRadioButton* m_rbGerberX2;
-		wxStaticText* m_staticTextInfo1;
-		wxStaticText* m_staticTextInfo;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxRadioBox* m_Choice_Unit;

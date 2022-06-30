@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,14 +78,6 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 
 	bMiddleSizer->Add( sbSizer6, 1, wxEXPAND|wxALL, 5 );
-
-	m_staticTextInfo1 = new wxStaticText( this, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo1->Wrap( -1 );
-	bMiddleSizer->Add( m_staticTextInfo1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("A drill map is a doc. file, not a fab. file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo->Wrap( -1 );
-	bMiddleSizer->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_Choice_Drill_MapChoices[] = { _("PostScript"), _("Gerber X2"), _("DXF"), _("SVG"), _("PDF") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
