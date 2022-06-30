@@ -26415,9 +26415,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Unit %c"
 #~ msgstr "Unit %c"
 
-#~ msgid "Creates a drill map in PDF or other formats"
-#~ msgstr "Creates a drill map in PDF or other formats"
-
 #~ msgid "F.Cu"
 #~ msgstr "F.Cu"
 
