@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-03 16:53-0700\n"
+"POT-Creation-Date: 2022-06-30 11:26-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -164,6 +164,15 @@ msgstr "&View"
 msgid "&Preferences"
 msgstr "&Preferences"
 
+msgid "Viewports (Alt+Tab):"
+msgstr "Viewports (Alt+Tab):"
+
+msgid "Save viewport..."
+msgstr "Save viewport..."
+
+msgid "Delete viewport..."
+msgstr "Delete viewport..."
+
 msgid "Reload board"
 msgstr "Reload board"
 
@@ -175,6 +184,21 @@ msgstr "Render current view using Raytracing"
 
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D Viewer"
+
+msgid "Viewport name:"
+msgstr "Viewport name:"
+
+msgid "Save Viewport"
+msgstr "Save Viewport"
+
+msgid "Viewports"
+msgstr "Viewports"
+
+msgid "Delete Viewport"
+msgstr "Delete Viewport"
+
+msgid "Select viewport:"
+msgstr "Select viewport:"
 
 msgid "3D Image File Name"
 msgstr "3D Image File Name"
@@ -3045,183 +3069,6 @@ msgstr "Unable to switch language to %s"
 msgid "Set Language"
 msgstr "Set Language"
 
-msgid "F.Cu"
-msgstr "F.Cu"
-
-msgid "In1.Cu"
-msgstr "In1.Cu"
-
-msgid "In2.Cu"
-msgstr "In2.Cu"
-
-msgid "In3.Cu"
-msgstr "In3.Cu"
-
-msgid "In4.Cu"
-msgstr "In4.Cu"
-
-msgid "In5.Cu"
-msgstr "In5.Cu"
-
-msgid "In6.Cu"
-msgstr "In6.Cu"
-
-msgid "In7.Cu"
-msgstr "In7.Cu"
-
-msgid "In8.Cu"
-msgstr "In8.Cu"
-
-msgid "In9.Cu"
-msgstr "In9.Cu"
-
-msgid "In10.Cu"
-msgstr "In10.Cu"
-
-msgid "In11.Cu"
-msgstr "In11.Cu"
-
-msgid "In12.Cu"
-msgstr "In12.Cu"
-
-msgid "In13.Cu"
-msgstr "In13.Cu"
-
-msgid "In14.Cu"
-msgstr "In14.Cu"
-
-msgid "In15.Cu"
-msgstr "In15.Cu"
-
-msgid "In16.Cu"
-msgstr "In16.Cu"
-
-msgid "In17.Cu"
-msgstr "In17.Cu"
-
-msgid "In18.Cu"
-msgstr "In18.Cu"
-
-msgid "In19.Cu"
-msgstr "In19.Cu"
-
-msgid "In20.Cu"
-msgstr "In20.Cu"
-
-msgid "In21.Cu"
-msgstr "In21.Cu"
-
-msgid "In22.Cu"
-msgstr "In22.Cu"
-
-msgid "In23.Cu"
-msgstr "In23.Cu"
-
-msgid "In24.Cu"
-msgstr "In24.Cu"
-
-msgid "In25.Cu"
-msgstr "In25.Cu"
-
-msgid "In26.Cu"
-msgstr "In26.Cu"
-
-msgid "In27.Cu"
-msgstr "In27.Cu"
-
-msgid "In28.Cu"
-msgstr "In28.Cu"
-
-msgid "In29.Cu"
-msgstr "In29.Cu"
-
-msgid "In30.Cu"
-msgstr "In30.Cu"
-
-msgid "B.Cu"
-msgstr "B.Cu"
-
-msgid "B.Adhesive"
-msgstr "B.Adhesive"
-
-msgid "F.Adhesive"
-msgstr "F.Adhesive"
-
-msgid "B.Paste"
-msgstr "B.Paste"
-
-msgid "F.Paste"
-msgstr "F.Paste"
-
-msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
-
-msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
-
-msgid "B.Mask"
-msgstr "B.Mask"
-
-msgid "F.Mask"
-msgstr "F.Mask"
-
-msgid "User.Drawings"
-msgstr "User.Drawings"
-
-msgid "User.Comments"
-msgstr "User.Comments"
-
-msgid "User.Eco1"
-msgstr "User.Eco1"
-
-msgid "User.Eco2"
-msgstr "User.Eco2"
-
-msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
-
-msgid "Margin"
-msgstr "Margin"
-
-msgid "F.Courtyard"
-msgstr "F.Courtyard"
-
-msgid "B.Courtyard"
-msgstr "B.Courtyard"
-
-msgid "F.Fab"
-msgstr "F.Fab"
-
-msgid "B.Fab"
-msgstr "B.Fab"
-
-msgid "User.1"
-msgstr "User.1"
-
-msgid "User.2"
-msgstr "User.2"
-
-msgid "User.3"
-msgstr "User.3"
-
-msgid "User.4"
-msgstr "User.4"
-
-msgid "User.5"
-msgstr "User.5"
-
-msgid "User.6"
-msgstr "User.6"
-
-msgid "User.7"
-msgstr "User.7"
-
-msgid "User.8"
-msgstr "User.8"
-
-msgid "User.9"
-msgstr "User.9"
-
 msgid "Rescue"
 msgstr "Rescue"
 
@@ -3428,6 +3275,12 @@ msgstr "Conflicting items shadow"
 
 msgid "Illegal character found in logical library name"
 msgstr "Illegal character found in logical library name"
+
+msgid "Activate selected"
+msgstr "Activate selected"
+
+msgid "Deactivate selected"
+msgstr "Deactivate selected"
 
 msgid "Unit"
 msgstr "Unit"
@@ -3752,8 +3605,8 @@ msgstr "Select all items on screen"
 msgid "Paste Special..."
 msgstr "Paste Special..."
 
-msgid "Paste item(s) from clipboard with options"
-msgstr "Paste item(s) from clipboard with options"
+msgid "Paste item(s) from clipboard with annotation options"
+msgstr "Paste item(s) from clipboard with annotation options"
 
 msgid "Duplicate"
 msgstr "Duplicate"
@@ -5875,12 +5728,12 @@ msgid "Click on items to highlight them on the board."
 msgstr "Click on items to highlight them on the board."
 
 #, c-format
-msgid "Violations (%d)"
-msgstr "Violations (%d)"
+msgid "Violations (%s)"
+msgstr "Violations (%s)"
 
 #, c-format
-msgid "Ignored Tests (%d)"
-msgstr "Ignored Tests (%d)"
+msgid "Ignored Tests (%s)"
+msgstr "Ignored Tests (%s)"
 
 msgid "Exclusions"
 msgstr "Exclusions"
@@ -6342,8 +6195,8 @@ msgstr "New Symbol"
 msgid "Border"
 msgstr "Border"
 
-msgid "Border width:"
-msgstr "Border width:"
+msgid "Style:"
+msgstr "Style:"
 
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr "Set border width to 0 to use schematic's default symbol line width."
@@ -6528,9 +6381,6 @@ msgstr "Edit Spice Model…"
 
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
-
-msgid "Style:"
-msgstr "Style:"
 
 msgid "Background fill"
 msgstr "Background fill"
@@ -7227,6 +7077,9 @@ msgstr "A sheet must have a file specified."
 
 msgid "Style"
 msgstr "Style"
+
+msgid "Border width:"
+msgstr "Border width:"
 
 msgid "Border color:"
 msgstr "Border color:"
@@ -8292,9 +8145,6 @@ msgstr "90 deg Angle"
 msgid "45 deg Angle"
 msgstr "45 deg Angle"
 
-msgid "135 deg Angle"
-msgstr "135 deg Angle"
-
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Mouse drag performs Drag (G) operation"
 
@@ -8430,8 +8280,8 @@ msgstr "Text offset ratio:"
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr "Percentage of the text size to offset text above or below wire or bus"
 
-msgid "Global label size:"
-msgstr "Global label size:"
+msgid "Global label margin:"
+msgstr "Global label margin:"
 
 msgid "Percentage of the text size to use as space around a global label"
 msgstr "Percentage of the text size to use as space around a global label"
@@ -8897,16 +8747,6 @@ msgstr "Horizontal"
 
 msgid "Vertical"
 msgstr "Vertical"
-
-msgid "Create a new project for this schematic"
-msgstr "Create a new project for this schematic"
-
-msgid ""
-"Creating a project will enable features such as text variables, net classes, "
-"and ERC exclusions"
-msgstr ""
-"Creating a project will enable features such as text variables, net classes, "
-"and ERC exclusions"
 
 #, c-format
 msgid "Schematic '%s' is already open."
@@ -9416,6 +9256,12 @@ msgstr "Failed to save rescue library %s."
 msgid "Error occurred saving project specific symbol library table."
 msgstr "Error occurred saving project specific symbol library table."
 
+msgid "Not Found"
+msgstr "Not Found"
+
+msgid "The following libraries were not found:"
+msgstr "The following libraries were not found:"
+
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -9456,12 +9302,6 @@ msgstr "Connection Name"
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Bus Alias %s Members"
-
-msgid "Not Found"
-msgstr "Not Found"
-
-msgid "The following libraries were not found:"
-msgstr "The following libraries were not found:"
 
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schematic Editor"
@@ -9810,6 +9650,14 @@ msgstr ""
 "Part definition '%s' references symbol '%s' (alternate '%s') which could not "
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
+
+#, c-format
+msgid ""
+"Part definition '%s' has an incomplete definition (no symbol definitions are "
+"associated with it). The part has not been loaded into the KiCad library."
+msgstr ""
+"Part definition '%s' has an incomplete definition (no symbol definitions are "
+"associated with it). The part has not been loaded into the KiCad library."
 
 #, c-format
 msgid ""
@@ -10828,6 +10676,14 @@ msgstr ""
 
 #, c-format
 msgid ""
+"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
+"if saved in a symbol library"
+msgstr ""
+"<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
+"if saved in a symbol library"
+
+#, c-format
+msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
@@ -11058,52 +10914,6 @@ msgstr "Error saving global library table."
 msgid "Error saving project library table."
 msgstr "Error saving project library table."
 
-msgid "Do not update library tables"
-msgstr "Do not update library tables"
-
-msgid "Do not perform any additional operations after saving library."
-msgstr "Do not perform any additional operations after saving library."
-
-msgid "Update existing library table entry"
-msgstr "Update existing library table entry"
-
-msgid ""
-"Update symbol library table entry to point to new library.\n"
-"\n"
-"The original library will no longer be available for use."
-msgstr ""
-"Update symbol library table entry to point to new library.\n"
-"\n"
-"The original library will no longer be available for use."
-
-msgid "Add new global library table entry"
-msgstr "Add new global library table entry"
-
-msgid ""
-"Add new entry to the global symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-msgstr ""
-"Add new entry to the global symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-
-msgid "Add new project library table entry"
-msgstr "Add new project library table entry"
-
-msgid ""
-"Add new entry to the project symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-msgstr ""
-"Add new entry to the project symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-
 msgid "[from schematic]"
 msgstr "[from schematic]"
 
@@ -11312,10 +11122,6 @@ msgstr "(failed to load)"
 
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad Symbol Library Viewer"
-
-#, c-format
-msgid "Unit %c"
-msgstr "Unit %c"
 
 msgid "[no library selected]"
 msgstr "[no library selected]"
@@ -12115,8 +11921,8 @@ msgstr "Move to next sheet by number"
 msgid "Hierarchy Navigator"
 msgstr "Hierarchy Navigator"
 
-msgid "Show schematic sheet hierarchy"
-msgstr "Show schematic sheet hierarchy"
+msgid "Show or hide the schematic sheet hierarchy navigator"
+msgstr "Show or hide the schematic sheet hierarchy navigator"
 
 msgid "Navigate to page"
 msgstr "Navigate to page"
@@ -12254,6 +12060,12 @@ msgstr "no symbol selected"
 msgid "symbol is not multi-unit"
 msgstr "symbol is not multi-unit"
 
+msgid "Edit Main Fields"
+msgstr "Edit Main Fields"
+
+msgid "Change To"
+msgstr "Change To"
+
 msgid "Label value cannot go below zero"
 msgstr "Label value cannot go below zero"
 
@@ -12379,6 +12191,62 @@ msgstr "This position is already occupied by another pin, in unit %d."
 
 msgid "Place Pin Anyway"
 msgstr "Place Pin Anyway"
+
+msgid "Create a new project for this schematic"
+msgstr "Create a new project for this schematic"
+
+msgid ""
+"Creating a project will enable features such as text variables, net classes, "
+"and ERC exclusions"
+msgstr ""
+"Creating a project will enable features such as text variables, net classes, "
+"and ERC exclusions"
+
+msgid "Do not update library tables"
+msgstr "Do not update library tables"
+
+msgid "Update existing library table entry"
+msgstr "Update existing library table entry"
+
+msgid "Add new global library table entry"
+msgstr "Add new global library table entry"
+
+msgid "Add new project library table entry"
+msgstr "Add new project library table entry"
+
+msgid "Do not perform any additional operations after saving library."
+msgstr "Do not perform any additional operations after saving library."
+
+msgid ""
+"Update symbol library table entry to point to new library.\n"
+"\n"
+"The original library will no longer be available for use."
+msgstr ""
+"Update symbol library table entry to point to new library.\n"
+"\n"
+"The original library will no longer be available for use."
+
+msgid ""
+"Add new entry to the global symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to prevent duplicate table entries."
+msgstr ""
+"Add new entry to the global symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to prevent duplicate table entries."
+
+msgid ""
+"Add new entry to the project symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to prevent duplicate table entries."
+msgstr ""
+"Add new entry to the project symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to prevent duplicate table entries."
 
 msgid " X "
 msgstr " X "
@@ -12824,6 +12692,9 @@ msgstr "Cmp:"
 #, c-format
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) on layer %d: %s"
+
+msgid "Format"
+msgstr "Format"
 
 msgid "Image name"
 msgstr "Image name"
@@ -13938,9 +13809,6 @@ msgstr "Open Text Editor"
 msgid "Launch preferred text editor"
 msgstr "Launch preferred text editor"
 
-msgid "Create a new folder for the project"
-msgstr "Create a new folder for the project"
-
 msgid "Create New Project"
 msgstr "Create New Project"
 
@@ -14017,6 +13885,9 @@ msgstr "KiCad Error"
 
 msgid "Application failed to load."
 msgstr "Application failed to load."
+
+msgid "Create a new folder for the project"
+msgstr "Create a new folder for the project"
 
 #, c-format
 msgid "Error code: %d"
@@ -14524,6 +14395,154 @@ msgstr "Plated Pad: (diam - drill)"
 msgid "NP Pad: (diam - drill)"
 msgstr "NP Pad: (diam - drill)"
 
+msgid "AWG0000"
+msgstr "AWG0000"
+
+msgid "AWG000"
+msgstr "AWG000"
+
+msgid "AWG00"
+msgstr "AWG00"
+
+msgid "AWG0"
+msgstr "AWG0"
+
+msgid "AWG1"
+msgstr "AWG1"
+
+msgid "AWG2"
+msgstr "AWG2"
+
+msgid "AWG3"
+msgstr "AWG3"
+
+msgid "AWG4"
+msgstr "AWG4"
+
+msgid "AWG5"
+msgstr "AWG5"
+
+msgid "AWG6"
+msgstr "AWG6"
+
+msgid "AWG7"
+msgstr "AWG7"
+
+msgid "AWG8"
+msgstr "AWG8"
+
+msgid "AWG9"
+msgstr "AWG9"
+
+msgid "AWG10"
+msgstr "AWG10"
+
+msgid "AWG11"
+msgstr "AWG11"
+
+msgid "AWG12"
+msgstr "AWG12"
+
+msgid "AWG13"
+msgstr "AWG13"
+
+msgid "AWG14"
+msgstr "AWG14"
+
+msgid "AWG15"
+msgstr "AWG15"
+
+msgid "AWG16"
+msgstr "AWG16"
+
+msgid "AWG17"
+msgstr "AWG17"
+
+msgid "AWG18"
+msgstr "AWG18"
+
+msgid "AWG19"
+msgstr "AWG19"
+
+msgid "AWG20"
+msgstr "AWG20"
+
+msgid "AWG21"
+msgstr "AWG21"
+
+msgid "AWG22"
+msgstr "AWG22"
+
+msgid "AWG23"
+msgstr "AWG23"
+
+msgid "AWG24"
+msgstr "AWG24"
+
+msgid "AWG25"
+msgstr "AWG25"
+
+msgid "AWG26"
+msgstr "AWG26"
+
+msgid "AWG27"
+msgstr "AWG27"
+
+msgid "AWG28"
+msgstr "AWG28"
+
+msgid "AWG29"
+msgstr "AWG29"
+
+msgid "AWG30"
+msgstr "AWG30"
+
+msgid "Wire properties"
+msgstr "Wire properties"
+
+msgid "Standard Size:"
+msgstr "Standard Size:"
+
+msgid "Area:"
+msgstr "Area:"
+
+msgid "mm^2"
+msgstr "mm^2"
+
+msgid "Linear resistance:"
+msgstr "Linear resistance:"
+
+#, c-format
+msgid "Frequency for 100% skin depth:"
+msgstr "Frequency for 100% skin depth:"
+
+msgid "Ampacity:"
+msgstr "Ampacity:"
+
+msgid "Application"
+msgstr "Application"
+
+msgid "Current:"
+msgstr "Current:"
+
+msgid "Length:"
+msgstr "Length:"
+
+msgid "Resistance:"
+msgstr "Resistance:"
+
+msgid "Voltage drop:"
+msgstr "Voltage drop:"
+
+msgid "mV"
+msgstr "mV"
+
+msgid "Dissipated power:"
+msgstr "Dissipated power:"
+
+msgid "mW"
+msgstr "mW"
+
 msgid "10% / 5%"
 msgstr "10% / 5%"
 
@@ -14671,6 +14690,27 @@ msgstr "3R solution:"
 msgid "4R solution:"
 msgstr "4R solution:"
 
+msgid "Current calculation is underestimated due to long fusing time."
+msgstr "Current calculation is underestimated due to long fusing time."
+
+msgid "Ambient temperature:"
+msgstr "Ambient temperature:"
+
+msgid "deg C"
+msgstr "deg C"
+
+msgid "Melting point:"
+msgstr "Melting point:"
+
+msgid "Track width:"
+msgstr "Track width:"
+
+msgid "Track thickness:"
+msgstr "Track thickness:"
+
+msgid "Time to fuse:"
+msgstr "Time to fuse:"
+
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
 
@@ -14774,9 +14814,6 @@ msgstr "Current (I):"
 msgid "Temperature rise:"
 msgstr "Temperature rise:"
 
-msgid "deg C"
-msgstr "deg C"
-
 msgid "Conductor length:"
 msgstr "Conductor length:"
 
@@ -14800,12 +14837,6 @@ msgstr "Cross-section area:"
 
 msgid "mm ^ 2"
 msgstr "mm²"
-
-msgid "Resistance:"
-msgstr "Resistance:"
-
-msgid "Voltage drop:"
-msgstr "Voltage drop:"
 
 msgid "Power loss:"
 msgstr "Power loss:"
@@ -15097,6 +15128,27 @@ msgstr ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
+msgid ""
+"You can use the this calculator to check if a small track can handle a large "
+"current for a short period of time.<br>\n"
+"This tool allows you to design a track fuse but should be used as an "
+"estimate only.\n"
+"\n"
+"The calculator estimates the energy required to heat the wire up<br>\n"
+"to its melting point as well as the energy required for the change of phase."
+"<br>\n"
+"This energy is then compared to the one dissipated by the wire resistance."
+msgstr ""
+"You can use the this calculator to check if a small track can handle a large "
+"current for a short period of time.<br>\n"
+"This tool allows you to design a track fuse but should be used as an "
+"estimate only.\n"
+"\n"
+"The calculator estimates the energy required to heat the wire up<br>\n"
+"to its melting point as well as the energy required for the change of phase."
+"<br>\n"
+"This energy is then compared to the one dissipated by the wire resistance."
+
 msgid "General system design"
 msgstr "General system design"
 
@@ -15108,6 +15160,12 @@ msgstr "Power, current and isolation"
 
 msgid "Electrical Spacing"
 msgstr "Electrical Spacing"
+
+msgid "Fusing Current"
+msgstr "Fusing Current"
+
+msgid "Cable Size"
+msgstr "Cable Size"
 
 msgid "High speed"
 msgstr "High speed"
@@ -15381,6 +15439,15 @@ msgstr "kHz"
 
 msgid "rad"
 msgstr "rad"
+
+msgid "m"
+msgstr "m"
+
+msgid "km"
+msgstr "km"
+
+msgid "feet"
+msgstr "feet"
 
 msgid "Create an array"
 msgstr "Create an array"
@@ -16258,9 +16325,6 @@ msgstr "Back Side"
 msgid "Total"
 msgstr "Total"
 
-msgid "Area:"
-msgstr "Area:"
-
 msgid "THT:"
 msgstr "THT:"
 
@@ -17085,20 +17149,12 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Test for parity between PCB and schematic"
 
 #, c-format
-msgid "Violations (%s)"
-msgstr "Violations (%s)"
-
-#, c-format
 msgid "Unconnected Items (%s)"
 msgstr "Unconnected Items (%s)"
 
 #, c-format
 msgid "Schematic Parity (%s)"
 msgstr "Schematic Parity (%s)"
-
-#, c-format
-msgid "Ignored Tests (%s)"
-msgstr "Ignored Tests (%s)"
 
 msgid "Design Rules Checker"
 msgstr "Design Rules Checker"
@@ -17855,9 +17911,6 @@ msgstr "CSV"
 msgid "Gerber (experimental)"
 msgstr "Gerber (experimental)"
 
-msgid "Format"
-msgstr "Format"
-
 msgid "Separate files for front, back"
 msgstr "Separate files for front, back"
 
@@ -17993,14 +18046,11 @@ msgstr "Gerber X2"
 msgid "PostScript"
 msgstr "PostScript"
 
-msgid "Gerber"
-msgstr "Gerber"
-
 msgid "Map File Format"
 msgstr "Map File Format"
 
-msgid "Creates a drill map in PS, HPGL or other formats"
-msgstr "Creates a drill map in PS, HPGL or other formats"
+msgid "Creates a drill map in PDF or other formats"
+msgstr "Creates a drill map in PDF or other formats"
 
 msgid "Drill Origin"
 msgstr "Drill Origin"
@@ -18761,6 +18811,12 @@ msgstr "Pad Properties Warnings"
 msgid "Modify pad"
 msgstr "Modify pad"
 
+msgid "Hole size X:"
+msgstr "Hole size X:"
+
+msgid "Pad size X:"
+msgstr "Pad size X:"
+
 msgid "No shape selected"
 msgstr "No shape selected"
 
@@ -18794,36 +18850,6 @@ msgstr "Pad number:"
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
 "Do not allow position of pad relative to parent footprint to be changed"
-
-msgid "Pad shape:"
-msgstr "Pad shape:"
-
-msgid "Circular"
-msgstr "Circular"
-
-msgid "Oval"
-msgstr "Oval"
-
-msgid "Rectangular"
-msgstr "Rectangular"
-
-msgid "Trapezoidal"
-msgstr "Trapezoidal"
-
-msgid "Rounded rectangle"
-msgstr "Rounded rectangle"
-
-msgid "Chamfered rectangle"
-msgstr "Chamfered rectangle"
-
-msgid "Chamfered with other corners rounded"
-msgstr "Chamfered with other corners rounded"
-
-msgid "Custom (circular base)"
-msgstr "Custom (circular base)"
-
-msgid "Custom (rectangular base)"
-msgstr "Custom (rectangular base)"
 
 msgid "Trapezoid delta:"
 msgstr "Trapezoid delta:"
@@ -18889,14 +18915,38 @@ msgstr "Bottom left"
 msgid "Bottom right"
 msgstr "Bottom right"
 
-msgid "Pad size X:"
-msgstr "Pad size X:"
+msgid "Pad shape:"
+msgstr "Pad shape:"
+
+msgid "Circular"
+msgstr "Circular"
+
+msgid "Oval"
+msgstr "Oval"
+
+msgid "Rectangular"
+msgstr "Rectangular"
+
+msgid "Trapezoidal"
+msgstr "Trapezoidal"
+
+msgid "Rounded rectangle"
+msgstr "Rounded rectangle"
+
+msgid "Chamfered rectangle"
+msgstr "Chamfered rectangle"
+
+msgid "Chamfered with other corners rounded"
+msgstr "Chamfered with other corners rounded"
+
+msgid "Custom (circular base)"
+msgstr "Custom (circular base)"
+
+msgid "Custom (rectangular base)"
+msgstr "Custom (rectangular base)"
 
 msgid "Hole shape:"
 msgstr "Hole shape:"
-
-msgid "Hole size X:"
-msgstr "Hole size X:"
 
 msgid "Offset shape from hole"
 msgstr "Offset shape from hole"
@@ -19161,6 +19211,9 @@ msgstr "Warning: Scale option set to a very large value"
 
 msgid "Plot format:"
 msgstr "Plot format:"
+
+msgid "Gerber"
+msgstr "Gerber"
 
 msgid "Include Layers"
 msgstr "Include Layers"
@@ -19921,9 +19974,6 @@ msgstr "End point Y:"
 msgid "Pre-defined widths:"
 msgstr "Pre-defined widths:"
 
-msgid "Track width:"
-msgstr "Track width:"
-
 msgid "Use net class widths"
 msgstr "Use net class widths"
 
@@ -20114,6 +20164,9 @@ msgstr "No modifier"
 
 msgid "Select item(s)."
 msgstr "Select item(s)."
+
+msgid "Toggle selection."
+msgstr "Toggle selection."
 
 msgid "Highlight net (for pads or tracks)."
 msgstr "Highlight net (for pads or tracks)."
@@ -20778,6 +20831,9 @@ msgstr "Pcb_Edges"
 
 msgid "Board contour"
 msgstr "Board contour"
+
+msgid "Margin"
+msgstr "Margin"
 
 msgid "Edge_Cuts setback"
 msgstr "Edge_Cuts setback"
@@ -21562,6 +21618,9 @@ msgstr "Gap"
 msgid "Via Gap"
 msgstr "Via Gap"
 
+msgid "Gathering copper items..."
+msgstr "Gathering copper items..."
+
 msgid "board setup constraints"
 msgstr "board setup constraints"
 
@@ -22087,9 +22146,6 @@ msgstr "Checking pad, via and zone connections..."
 msgid "Checking net connections..."
 msgstr "Checking net connections..."
 
-msgid "Gathering copper items..."
-msgstr "Gathering copper items..."
-
 msgid "Checking track & via clearances..."
 msgstr "Checking track & via clearances..."
 
@@ -22121,9 +22177,6 @@ msgstr "Gathering footprint courtyards..."
 
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Checking footprints for overlapping courtyards..."
-
-msgid "DPs evaluated:"
-msgstr "DPs evaluated:"
 
 #, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
@@ -22235,11 +22288,15 @@ msgstr "Checking text variables..."
 msgid "Checking assertions..."
 msgstr "Checking assertions..."
 
-msgid "Gathering items..."
-msgstr "Gathering items..."
+msgid "Gathering physical items..."
+msgstr "Gathering physical items..."
 
 msgid "Checking physical clearances..."
 msgstr "Checking physical clearances..."
+
+#, c-format
+msgid "Internal clearance violation (%s clearance %s; actual %s)"
+msgstr "Internal clearance violation (%s clearance %s; actual %s)"
 
 #, c-format
 msgid "Missing footprint %s (%s)"
@@ -22323,12 +22380,12 @@ msgstr "(%s min diameter %s; actual %s)"
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; actual %s)"
 
-msgid "Checking thermal reliefs..."
-msgstr "Checking thermal reliefs..."
-
 #, c-format
 msgid "(%s min spoke count %d; actual %d)"
 msgstr "(%s min spoke count %d; actual %d)"
+
+msgid "Checking thermal reliefs..."
+msgstr "Checking thermal reliefs..."
 
 msgid "Modify zone properties"
 msgstr "Modify zone properties"
@@ -22357,6 +22414,12 @@ msgstr "IDF Export Failed:\n"
 
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML Export Failed: Could not add holes to contours."
+
+msgid "No project when exporting the VRML file"
+msgstr "No project when exporting the VRML file"
+
+msgid "VRML Export Failed:\n"
+msgstr "VRML Export Failed:\n"
 
 msgid "Generate Position File"
 msgstr "Generate Position File"
@@ -22421,16 +22484,6 @@ msgstr "Open Board File"
 
 msgid "Import Non KiCad Board File"
 msgstr "Import Non KiCad Board File"
-
-msgid "Create a new project for this board"
-msgstr "Create a new project for this board"
-
-msgid ""
-"Creating a project will enable features such as design rules, net classes, "
-"and layer presets"
-msgstr ""
-"Creating a project will enable features such as design rules, net classes, "
-"and layer presets"
 
 msgid "Save Board File As"
 msgstr "Save Board File As"
@@ -22896,6 +22949,374 @@ msgstr "Error loading footprint %s from library '%s'."
 
 msgid "doc url"
 msgstr "doc url"
+
+msgid "Dimension of matrices should be >= 1."
+msgstr "Dimension of matrices should be >= 1."
+
+msgid "Bandwidth of banded matrices should be >= 1."
+msgstr "Bandwidth of banded matrices should be >= 1."
+
+msgid "There are NaN elements in a matrix."
+msgstr "There are NaN elements in a matrix."
+
+msgid "Invalid R_pkg value."
+msgstr "Invalid R_pkg value."
+
+msgid "Invalid L_pkg value."
+msgstr "Invalid L_pkg value."
+
+msgid "Invalid C_pkg value."
+msgstr "Invalid C_pkg value."
+
+msgid "Checking pin "
+msgstr "Checking pin "
+
+msgid "Pin name cannot be empty."
+msgstr "Pin name cannot be empty."
+
+msgid "Signal name cannot be empty."
+msgstr "Signal name cannot be empty."
+
+msgid "Model name cannot be empty."
+msgstr "Model name cannot be empty."
+
+msgid "Rpin is not valid."
+msgstr "Rpin is not valid."
+
+msgid "Lpin is not valid."
+msgstr "Lpin is not valid."
+
+msgid "Cpin is not valid."
+msgstr "Cpin is not valid."
+
+msgid "Component name cannot be empty."
+msgstr "Component name cannot be empty."
+
+msgid "Checking component "
+msgstr "Checking component "
+
+msgid "Component: manufacturer cannot be empty."
+msgstr "Component: manufacturer cannot be empty."
+
+msgid "Component: Invalid Package."
+msgstr "Component: Invalid Package."
+
+msgid "Component: no pin"
+msgstr "Component: no pin"
+
+msgid "Cannot interpolate the current based on this IV table."
+msgstr "Cannot interpolate the current based on this IV table."
+
+msgid "There is a Nan voltage in an IV table"
+msgstr "There is a Nan voltage in an IV table"
+
+msgid "There is an invalid current in an IV table"
+msgstr "There is an invalid current in an IV table"
+
+msgid "Invalid R_load."
+msgstr "Invalid R_load."
+
+msgid "Invalid falling dv/dt."
+msgstr "Invalid falling dv/dt."
+
+msgid "Invalid rising dv/dt."
+msgstr "Invalid rising dv/dt."
+
+msgid "Model name cannot be empty"
+msgstr "Model name cannot be empty"
+
+msgid "Checking model "
+msgstr "Checking model "
+
+msgid "Undefined model type"
+msgstr "Undefined model type"
+
+msgid "Invalid Vinh value."
+msgstr "Invalid Vinh value."
+
+msgid "Invalid Vinl value."
+msgstr "Invalid Vinl value."
+
+msgid "Invalid R_ref value."
+msgstr "Invalid R_ref value."
+
+msgid "Invalid C_ref value."
+msgstr "Invalid C_ref value."
+
+msgid "invalid V_ref value."
+msgstr "invalid V_ref value."
+
+msgid "Invalid V_meas value."
+msgstr "Invalid V_meas value."
+
+msgid "C_comp is invalid."
+msgstr "C_comp is invalid."
+
+msgid "Temperature Range is invalid."
+msgstr "Temperature Range is invalid."
+
+msgid "Voltage Range is invalid."
+msgstr "Voltage Range is invalid."
+
+msgid "Invalid pulldown."
+msgstr "Invalid pulldown."
+
+msgid "Invalid pullup."
+msgstr "Invalid pullup."
+
+msgid "Invalid POWER clamp."
+msgstr "Invalid POWER clamp."
+
+msgid "Invalid GND clamp."
+msgstr "Invalid GND clamp."
+
+msgid "Invalid Ramp"
+msgstr "Invalid Ramp"
+
+msgid "Checking Header..."
+msgstr "Checking Header..."
+
+msgid "Missing [IBIS Ver]"
+msgstr "Missing [IBIS Ver]"
+
+msgid "The parser does not handle this IBIS version"
+msgstr "The parser does not handle this IBIS version"
+
+msgid "Missing [File Rev]"
+msgstr "Missing [File Rev]"
+
+msgid "Missing [File Name]"
+msgstr "Missing [File Name]"
+
+msgid "Package model name cannot be empty."
+msgstr "Package model name cannot be empty."
+
+msgid "Checking package model "
+msgstr "Checking package model "
+
+msgid "Manufacturer cannot be empty."
+msgstr "Manufacturer cannot be empty."
+
+msgid "OEM cannot be empty."
+msgstr "OEM cannot be empty."
+
+msgid "Negative number of pins."
+msgstr "Negative number of pins."
+
+msgid "Empty pin number"
+msgstr "Empty pin number"
+
+msgid "Resistance matrix is incorrect"
+msgstr "Resistance matrix is incorrect"
+
+msgid "Capacitance matrix is undefined"
+msgstr "Capacitance matrix is undefined"
+
+msgid "Capacitance matrix is incorrect"
+msgstr "Capacitance matrix is incorrect"
+
+msgid "Capacitance matrix is nullptr"
+msgstr "Capacitance matrix is nullptr"
+
+msgid "Inductance matrix is undefined"
+msgstr "Inductance matrix is undefined"
+
+msgid "Inductance matrix is incorrect"
+msgstr "Inductance matrix is incorrect"
+
+msgid "Inductance matrix is nullptr"
+msgstr "Inductance matrix is nullptr"
+
+msgid "Cannot open file "
+msgstr "Cannot open file "
+
+msgid "Reading file "
+msgstr "Reading file "
+
+msgid "Unexpected end of file. Missing [END] ?"
+msgstr "Unexpected end of file. Missing [END] ?"
+
+msgid "Error on line "
+msgstr "Error on line "
+
+msgid "A line did not end properly.."
+msgstr "A line did not end properly.."
+
+msgid "Line exceeds maximum length."
+msgstr "Line exceeds maximum length."
+
+msgid "Failed to read a double."
+msgstr "Failed to read a double."
+
+msgid "Failed to read a word."
+msgstr "Failed to read a word."
+
+msgid "Number is not an integer"
+msgstr "Number is not an integer"
+
+msgid "Unable to read string, input is empty."
+msgstr "Unable to read string, input is empty."
+
+msgid "New comment character is invalid."
+msgstr "New comment character is invalid."
+
+msgid "Invalid syntax. Should be |_char or &_char, etc..."
+msgstr "Invalid syntax. Should be |_char or &_char, etc..."
+
+msgid "No extra argument was expected"
+msgstr "No extra argument was expected"
+
+msgid "Unknown keyword in "
+msgstr "Unknown keyword in "
+
+msgid " context: "
+msgstr " context: "
+
+msgid "Invalid ramp data"
+msgstr "Invalid ramp data"
+
+msgid "Cannot specify a bandwidth for that kind of matrix"
+msgstr "Cannot specify a bandwidth for that kind of matrix"
+
+msgid "Invalid row in matrix"
+msgstr "Invalid row in matrix"
+
+msgid "Too much data for this matrix row."
+msgstr "Too much data for this matrix row."
+
+msgid "Too much data for this matrix."
+msgstr "Too much data for this matrix."
+
+msgid "Can't read a matrix element"
+msgstr "Can't read a matrix element"
+
+msgid "Can't read a matrix index"
+msgstr "Can't read a matrix index"
+
+msgid "Unknown matrix type"
+msgstr "Unknown matrix type"
+
+msgid "Missing matrix type"
+msgstr "Missing matrix type"
+
+msgid " Matrix is already init. But m_continue was not set ( internal error )"
+msgstr " Matrix is already init. But m_continue was not set ( internal error )"
+
+msgid "Tried to read a row from an undefined matrix"
+msgstr "Tried to read a row from an undefined matrix"
+
+msgid "matrix pointer is null"
+msgstr "matrix pointer is null"
+
+msgid "Typ-Min-Max Values requires at least Typ."
+msgstr "Typ-Min-Max Values requires at least Typ."
+
+msgid "Unknown Model_type "
+msgstr "Unknown Model_type "
+
+msgid "Internal Error while reading model_type"
+msgstr "Internal Error while reading model_type"
+
+msgid "Unknown Enable: "
+msgstr "Unknown Enable: "
+
+msgid "Internal Error while reading Enable"
+msgstr "Internal Error while reading Enable"
+
+msgid "Unknown polarity "
+msgstr "Unknown polarity "
+
+msgid "Continued reading a model that did not begin. ( internal error )"
+msgstr "Continued reading a model that did not begin. ( internal error )"
+
+msgid "A [Package] line requires exactly 4 elements."
+msgstr "A [Package] line requires exactly 4 elements."
+
+msgid "Invalid pin entry: 6 values from a table with only 3."
+msgstr "Invalid pin entry: 6 values from a table with only 3."
+
+msgid "Can't read a R, L or C value for a pin."
+msgstr "Can't read a R, L or C value for a pin."
+
+msgid "Invalid field name in [Pin]"
+msgstr "Invalid field name in [Pin]"
+
+msgid "Missing argument in [Pin]"
+msgstr "Missing argument in [Pin]"
+
+msgid "Wrong number of columns for pin mapping."
+msgstr "Wrong number of columns for pin mapping."
+
+msgid "Incorrect diff pin name"
+msgstr "Incorrect diff pin name"
+
+msgid "Incorrect inv_pin name"
+msgstr "Incorrect inv_pin name"
+
+msgid "Unknown waveform type"
+msgstr "Unknown waveform type"
+
+msgid "Internal error detected, a waveform should exist"
+msgstr "Internal error detected, a waveform should exist"
+
+msgid "Internal error: Bad parser context."
+msgstr "Internal error: Bad parser context."
+
+msgid "Missing keyword."
+msgstr "Missing keyword."
+
+msgid "waveform has less than two points"
+msgstr "waveform has less than two points"
+
+msgid "Cannot remove temporary input file"
+msgstr "Cannot remove temporary input file"
+
+msgid "Cannot remove temporary output file"
+msgstr "Cannot remove temporary output file"
+
+msgid "Error while reading temporary file"
+msgstr "Error while reading temporary file"
+
+msgid "Error while creating temporary file"
+msgstr "Error while creating temporary file"
+
+msgid ""
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
+msgstr ""
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
+
+msgid "Rising edge is longer than on time."
+msgstr "Rising edge is longer than on time."
+
+msgid "Falling edge is longer than off time."
+msgstr "Falling edge is longer than off time."
+
+msgid "Model has only one waveform pair, reduced accuracy"
+msgstr "Model has only one waveform pair, reduced accuracy"
+
+msgid "Driver needs at least a pullup or a pulldown"
+msgstr "Driver needs at least a pullup or a pulldown"
+
+msgid ""
+"There are two waveform pairs, but only one transistor. More equations than "
+"unknowns."
+msgstr ""
+"There are two waveform pairs, but only one transistor. More equations than "
+"unknowns."
+
+msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
+msgstr "Model has no waveform pair, using [Ramp] instead, poor accuracy"
+
+msgid "Model has more than 2 waveform pairs, using the first two."
+msgstr "Model has more than 2 waveform pairs, using the first two."
+
+msgid "Invalid model type for a driver."
+msgstr "Invalid model type for a driver."
+
+msgid "Invalid model type for a device"
+msgstr "Invalid model type for a device"
 
 msgid "Centimeter"
 msgstr "Centimeter"
@@ -25499,15 +25920,6 @@ msgstr "Via: %s (%s)"
 msgid "Locking"
 msgstr "Locking"
 
-msgid "Omit extra information"
-msgstr "Omit extra information"
-
-msgid "Omit nets"
-msgstr "Omit nets"
-
-msgid "Do not prefix path with footprint UUID."
-msgstr "Do not prefix path with footprint UUID."
-
 msgid "Specctra Session File"
 msgstr "Specctra Session File"
 
@@ -27724,30 +28136,6 @@ msgstr "Delete Preset"
 msgid "Select preset:"
 msgstr "Select preset:"
 
-msgid "Viewports (Alt+Tab):"
-msgstr "Viewports (Alt+Tab):"
-
-msgid "Save viewport..."
-msgstr "Save viewport..."
-
-msgid "Delete viewport..."
-msgstr "Delete viewport..."
-
-msgid "Viewport name:"
-msgstr "Viewport name:"
-
-msgid "Save Viewport"
-msgstr "Save Viewport"
-
-msgid "Viewports"
-msgstr "Viewports"
-
-msgid "Delete Viewport"
-msgstr "Delete Viewport"
-
-msgid "Select viewport:"
-msgstr "Select viewport:"
-
 msgid "Open Preferences"
 msgstr "Open Preferences"
 
@@ -27769,6 +28157,25 @@ msgstr "(unsaved)"
 
 msgid "Layer presets"
 msgstr "Layer presets"
+
+msgid "Create a new project for this board"
+msgstr "Create a new project for this board"
+
+msgid "Omit extra information"
+msgstr "Omit extra information"
+
+msgid "Omit nets"
+msgstr "Omit nets"
+
+msgid "Do not prefix path with footprint UUID."
+msgstr "Do not prefix path with footprint UUID."
+
+msgid ""
+"Creating a project will enable features such as design rules, net classes, "
+"and layer presets"
+msgstr ""
+"Creating a project will enable features such as design rules, net classes, "
+"and layer presets"
 
 #, c-format
 msgid "Only %s"
@@ -28003,6 +28410,213 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "F.Cu"
+#~ msgstr "F.Cu"
+
+#~ msgid "In1.Cu"
+#~ msgstr "In1.Cu"
+
+#~ msgid "In2.Cu"
+#~ msgstr "In2.Cu"
+
+#~ msgid "In3.Cu"
+#~ msgstr "In3.Cu"
+
+#~ msgid "In4.Cu"
+#~ msgstr "In4.Cu"
+
+#~ msgid "In5.Cu"
+#~ msgstr "In5.Cu"
+
+#~ msgid "In6.Cu"
+#~ msgstr "In6.Cu"
+
+#~ msgid "In7.Cu"
+#~ msgstr "In7.Cu"
+
+#~ msgid "In8.Cu"
+#~ msgstr "In8.Cu"
+
+#~ msgid "In9.Cu"
+#~ msgstr "In9.Cu"
+
+#~ msgid "In10.Cu"
+#~ msgstr "In10.Cu"
+
+#~ msgid "In11.Cu"
+#~ msgstr "In11.Cu"
+
+#~ msgid "In12.Cu"
+#~ msgstr "In12.Cu"
+
+#~ msgid "In13.Cu"
+#~ msgstr "In13.Cu"
+
+#~ msgid "In14.Cu"
+#~ msgstr "In14.Cu"
+
+#~ msgid "In15.Cu"
+#~ msgstr "In15.Cu"
+
+#~ msgid "In16.Cu"
+#~ msgstr "In16.Cu"
+
+#~ msgid "In17.Cu"
+#~ msgstr "In17.Cu"
+
+#~ msgid "In18.Cu"
+#~ msgstr "In18.Cu"
+
+#~ msgid "In19.Cu"
+#~ msgstr "In19.Cu"
+
+#~ msgid "In20.Cu"
+#~ msgstr "In20.Cu"
+
+#~ msgid "In21.Cu"
+#~ msgstr "In21.Cu"
+
+#~ msgid "In22.Cu"
+#~ msgstr "In22.Cu"
+
+#~ msgid "In23.Cu"
+#~ msgstr "In23.Cu"
+
+#~ msgid "In24.Cu"
+#~ msgstr "In24.Cu"
+
+#~ msgid "In25.Cu"
+#~ msgstr "In25.Cu"
+
+#~ msgid "In26.Cu"
+#~ msgstr "In26.Cu"
+
+#~ msgid "In27.Cu"
+#~ msgstr "In27.Cu"
+
+#~ msgid "In28.Cu"
+#~ msgstr "In28.Cu"
+
+#~ msgid "In29.Cu"
+#~ msgstr "In29.Cu"
+
+#~ msgid "In30.Cu"
+#~ msgstr "In30.Cu"
+
+#~ msgid "B.Cu"
+#~ msgstr "B.Cu"
+
+#~ msgid "B.Adhesive"
+#~ msgstr "B.Adhesive"
+
+#~ msgid "F.Adhesive"
+#~ msgstr "F.Adhesive"
+
+#~ msgid "B.Paste"
+#~ msgstr "B.Paste"
+
+#~ msgid "F.Paste"
+#~ msgstr "F.Paste"
+
+#~ msgid "B.Silkscreen"
+#~ msgstr "B.Silkscreen"
+
+#~ msgid "F.Silkscreen"
+#~ msgstr "F.Silkscreen"
+
+#~ msgid "B.Mask"
+#~ msgstr "B.Mask"
+
+#~ msgid "F.Mask"
+#~ msgstr "F.Mask"
+
+#~ msgid "User.Drawings"
+#~ msgstr "User.Drawings"
+
+#~ msgid "User.Comments"
+#~ msgstr "User.Comments"
+
+#~ msgid "User.Eco1"
+#~ msgstr "User.Eco1"
+
+#~ msgid "User.Eco2"
+#~ msgstr "User.Eco2"
+
+#~ msgid "Edge.Cuts"
+#~ msgstr "Edge.Cuts"
+
+#~ msgid "F.Courtyard"
+#~ msgstr "F.Courtyard"
+
+#~ msgid "B.Courtyard"
+#~ msgstr "B.Courtyard"
+
+#~ msgid "F.Fab"
+#~ msgstr "F.Fab"
+
+#~ msgid "B.Fab"
+#~ msgstr "B.Fab"
+
+#~ msgid "User.1"
+#~ msgstr "User.1"
+
+#~ msgid "User.2"
+#~ msgstr "User.2"
+
+#~ msgid "User.3"
+#~ msgstr "User.3"
+
+#~ msgid "User.4"
+#~ msgstr "User.4"
+
+#~ msgid "User.5"
+#~ msgstr "User.5"
+
+#~ msgid "User.6"
+#~ msgstr "User.6"
+
+#~ msgid "User.7"
+#~ msgstr "User.7"
+
+#~ msgid "User.8"
+#~ msgstr "User.8"
+
+#~ msgid "User.9"
+#~ msgstr "User.9"
+
+#~ msgid "Paste item(s) from clipboard with options"
+#~ msgstr "Paste item(s) from clipboard with options"
+
+#, c-format
+#~ msgid "Violations (%d)"
+#~ msgstr "Violations (%d)"
+
+#, c-format
+#~ msgid "Ignored Tests (%d)"
+#~ msgstr "Ignored Tests (%d)"
+
+#~ msgid "135 deg Angle"
+#~ msgstr "135 deg Angle"
+
+#~ msgid "Global label size:"
+#~ msgstr "Global label size:"
+
+#, c-format
+#~ msgid "Unit %c"
+#~ msgstr "Unit %c"
+
+#~ msgid "Show schematic sheet hierarchy"
+#~ msgstr "Show schematic sheet hierarchy"
+
+#~ msgid "Creates a drill map in PS, HPGL or other formats"
+#~ msgstr "Creates a drill map in PS, HPGL or other formats"
+
+#~ msgid "DPs evaluated:"
+#~ msgstr "DPs evaluated:"
+
+#~ msgid "Gathering items..."
+#~ msgstr "Gathering items..."
 
 #~ msgid "Keep hierarchy navigator open"
 #~ msgstr "Keep hierarchy navigator open"
@@ -32065,9 +32679,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Attenuation:"
 #~ msgstr "Attenuation:"
-
-#~ msgid "Current:"
-#~ msgstr "Current:"
 
 #~ msgid "Trace width:"
 #~ msgstr "Trace width:"
@@ -43088,9 +43699,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "1e-6"
 #~ msgstr "1e-6"
-
-#~ msgid "m"
-#~ msgstr "m"
 
 #~ msgid "milli"
 #~ msgstr "milli"
