@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-08 23:13+0000\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4054,9 +4054,8 @@ msgid "Schematic Editor"
 msgstr "Kretsschemaredigerare"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Anteckningar"
+msgstr "Numreringsinställningar"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -5352,14 +5351,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Olagligt tecken hittades i det logiska biblioteksnamnet"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "Ingen fil vald"
+msgstr "Aktivera vald"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Radera markerade celler"
+msgstr "Deaktivera vald"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5837,9 +5834,8 @@ msgid "Paste Special..."
 msgstr "Klistra in Special..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Klistra in objekt från urklipp med alternativ"
+msgstr "Klistra in objekt från urklipp med numreringsalternativ"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -12583,9 +12579,8 @@ msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr "Avstånd mellan text och tråd eller buss i procent av textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Storlek för globala etiketter:"
+msgstr "Marginal för globala etiketter:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -14006,9 +14001,8 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCads kretsschemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:169
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "Schematisk paritet"
+msgstr "Schematisk hierarki"
 
 #: eeschema/sch_edit_frame.cpp:240
 msgid "New schematic file is unsaved"
@@ -14455,14 +14449,13 @@ msgstr ""
 "biblioteket."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"Deldefinition '%s' hänvisar till symbol '%s' (alternativ '%s') som inte "
-"kunde hittas i symbolbiblioteket. Delen har inte laddats in i KiCad-"
-"biblioteket."
+"Deldefinition '%s' har en ofullständig definition (inga symboldefinitioner "
+"är associerade med den). Delen har inte laddats till KiCad-biblioteket."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
 #, c-format
@@ -15690,6 +15683,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Varning: referensprefix</b><br>prefix som slutar med '%s' kan orsaka "
+"problem om de sparas i ett symbolbibliotek"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -17272,10 +17267,8 @@ msgid "Lines drawn horizontally and vertically"
 msgstr "Linjer ritas horisontellt och vertikalt"
 
 #: eeschema/tools/ee_actions.cpp:701
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr ""
-"Linjer ritas horisontellt och vertikalt, med 45 graders vinkel i slutet"
+msgstr "Linjer ritas horisontellt, vertikalt och i 45 graders vinkel"
 
 #: eeschema/tools/ee_actions.cpp:706
 msgid "Switch to next line mode"
@@ -17310,9 +17303,8 @@ msgid "Enter Sheet"
 msgstr "Ange ark"
 
 #: eeschema/tools/ee_actions.cpp:730
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "Visa det valda arkets innehåll i kretsschemaredigeraren"
+msgstr "Byt till det valda arkets innehåll i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17327,45 +17319,40 @@ msgid "Display the parent sheet in the schematic editor"
 msgstr "Visa det överordnade arket i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Navigate Up"
-msgstr "Navigera till sidan"
+msgstr "Gå uppåt"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Navigate up one sheet in the hierarchy"
 msgstr "Gå upp ett ark i hierarkin"
 
 #: eeschema/tools/ee_actions.cpp:752
-#, fuzzy
 msgid "Navigate Back"
-msgstr "Navigera till sidan"
+msgstr "Gå tillbaka"
 
 #: eeschema/tools/ee_actions.cpp:752
 msgid "Move forward in sheet navigation history"
 msgstr "Gå framåt ett ark i historiken"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "Navigatör"
+msgstr "Gå framåt"
 
 #: eeschema/tools/ee_actions.cpp:758
 msgid "Move backward in sheet navigation history"
 msgstr "Gå bakåt ett ark i historiken"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Previous Sheet"
-msgstr "Föregående lager"
+msgstr "Föregående ark"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Move to previous sheet by number"
 msgstr "Flytta till föregående ark enligt numrering"
 
 #: eeschema/tools/ee_actions.cpp:770
-#, fuzzy
 msgid "Next Sheet"
-msgstr "Ange ark"
+msgstr "Nästa ark"
 
 #: eeschema/tools/ee_actions.cpp:770
 msgid "Move to next sheet by number"
@@ -17376,9 +17363,8 @@ msgid "Hierarchy Navigator"
 msgstr "Hierarki Navigator"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Visa schematisk arkhierarki"
+msgstr "Visa eller göm navigator för kretsschema-arkens hierarki"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17578,14 +17564,12 @@ msgstr "symbolen innehåller inte flera enheter"
 
 #: eeschema/tools/sch_edit_tool.cpp:370 eeschema/tools/sch_edit_tool.cpp:408
 #: eeschema/tools/sch_edit_tool.cpp:445
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Redigera %s fält"
+msgstr "Redigera huvudfält"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
-#, fuzzy
 msgid "Change To"
-msgstr "Ändra"
+msgstr "Ändra till"
 
 #: eeschema/tools/sch_edit_tool.cpp:994
 msgid "Label value cannot go below zero"
@@ -19311,7 +19295,7 @@ msgstr "Öppna projektkatalogen i filutforskaren"
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
 #, fuzzy
 msgid "Add Default Repository"
-msgstr "Lägg till repository"
+msgstr "Lägg till förvalt repository"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -19400,9 +19384,8 @@ msgid "Installed (%d)"
 msgstr "Installerad (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Hantera"
+msgstr "Hantera..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19430,9 +19413,8 @@ msgid "Install from File..."
 msgstr "Installera från fil..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Öppna Plugin Directory"
+msgstr "Öppna paketbibliotek"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -20780,151 +20762,148 @@ msgid "NP Pad: (diam - drill)"
 msgstr "NP Pad: (diam - borr)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Cirkelegenskaper"
+msgstr "Ledningsegenskaper"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Standardtyp"
+msgstr "Standardstorlek:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -20933,38 +20912,33 @@ msgstr "Area:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Termisk resistans:"
+msgstr "Linjär resistans:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Frekvens för 100% skinndjup:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "Opacitet:"
+msgstr "Märkström:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "Hjälpapplikationer"
+msgstr "Applikation"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Nuvarande"
+msgstr "Ström:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
-#, fuzzy
 msgid "Length:"
-msgstr "Längd"
+msgstr "Längd:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
@@ -20987,7 +20961,7 @@ msgstr "V"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Avgiven effekt:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #, fuzzy
@@ -21178,9 +21152,8 @@ msgstr "Enkel lösning:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "X-position:"
+msgstr "Approximation:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -21192,12 +21165,11 @@ msgstr "4R-lösning:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:229
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Nuvarande beräkning är i underkant på grund av lång utlöstningstid."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Omgivande kameraljus:"
+msgstr "Omgivningstemperatur:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21207,9 +21179,8 @@ msgid "deg C"
 msgstr "grad C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Driftpunkt"
+msgstr "Smältpunkt:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21218,14 +21189,12 @@ msgid "Track width:"
 msgstr "Ledarbredd:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Ledartjocklek (H):"
+msgstr "Ledartjocklek:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Tidssteg:"
+msgstr "Utlösningstid:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
@@ -21806,6 +21775,16 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Du kan använda detta beräkningsverktyg för att kontrollera om en liten "
+"ledare kan hantera en hög ström under ett kort tidsintervall.<br>\n"
+"Detta verktyg låter dig designa en ledare som säkring, men skall endast "
+"användas som en uppskattning.\n"
+"\n"
+"Beräkningsverktyget uppskattar energin som behövs för att hetta upp "
+"ledaren<br>\n"
+"till smältpunkten, såväl som energin som behövs för tillståndsförändring.<br>"
+"\n"
+"Denna energi jämförs sedan med den avgivna energin i ledarresistansen."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 msgid "General system design"
@@ -21824,14 +21803,12 @@ msgid "Electrical Spacing"
 msgstr "Elektriskt isolationsavstånd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
-#, fuzzy
 msgid "Fusing Current"
-msgstr "Nuvarande"
+msgstr "Utlösningsström"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Cable Size"
-msgstr "Hålstorlek"
+msgstr "Kabelstorlek"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "High speed"
@@ -22143,7 +22120,7 @@ msgstr "Inre diameter (ledare)"
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
 msgid "Dout"
-msgstr "Dout"
+msgstr "D-ut"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:407
@@ -22261,18 +22238,16 @@ msgid "rad"
 msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:211
-#, fuzzy
 msgid "m"
-msgstr "mm"
+msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "mm"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "fot"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -23684,9 +23659,8 @@ msgid "Checking zones..."
 msgstr "Kontrollerar zoner..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "Återskapa anslutningar..."
+msgstr "Återskapar anslutningar..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -25887,9 +25861,8 @@ msgid "Map File Format"
 msgstr "Kartfilformat"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Skapar en borrkarta i PS, HPGL eller andra format"
+msgstr "Skapar en borrkarta i PDF eller andra format"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -26698,7 +26671,6 @@ msgid "degree"
 msgstr "grad"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "Egenskaper för icke-kopparzoner"
 
@@ -28744,9 +28716,8 @@ msgstr "Välj objekt."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Växla Markeringstillstånd"
+msgstr "Växla markeringstillstånd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -31587,19 +31558,17 @@ msgid "Checking assertions..."
 msgstr "Kontrollerar villkor..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:109
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Samlar element..."
+msgstr "Samlar fysiska objekt..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:174
-#, fuzzy
 msgid "Checking physical clearances..."
-msgstr "Kontrollera vadderingsavstånd ..."
+msgstr "Kontrollerar fysisk frigång..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Lokalt avstånd på %s; avstånd: %s."
+msgstr "Intern frigångsöverträdelse (%s frigång %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -31731,13 +31700,12 @@ msgid "Save Footprint Association File"
 msgstr "Spara Footprint Association-fil"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
 "Filen innehåller lödyteformer som inte stöds av Hyperlynx-exportören (former "
-"som stöds är ovala, rektangel och cirkel)."
+"som stöds är oval, rektangel, rundad rektangel och cirkel)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
@@ -31761,12 +31729,11 @@ msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Inget projekt vid export av VRML-fil"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "IDF-export misslyckades:\n"
+msgstr "VRML-export misslyckades:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32054,9 +32021,9 @@ msgid "Footprint %s"
 msgstr "Fotavtryck: %s"
 
 #: pcbnew/footprint.cpp:2267
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "Förväntad typ är \"hålmonteringshål\" men är satt till \"%s\""
+msgstr "(förväntad typ är 'hålmonteringshål' men är satt till '%s')"
 
 #: pcbnew/footprint.cpp:2270
 #, c-format
@@ -32089,9 +32056,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal proportion för lodpastemarginal"
 
 #: pcbnew/footprint.cpp:2660
-#, fuzzy
 msgid "Library ID"
-msgstr "Bibliotek"
+msgstr "Biblioteks-ID"
 
 #: pcbnew/footprint.h:232
 #, c-format
@@ -32458,568 +32424,494 @@ msgstr "doc url"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Matrisernas dimension skall vara >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Bandbredd för bandmatriser skall vara >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Det finns element i en matris som är NaN."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Ogiltigt längdvärde"
+msgstr "Ogiltigt R_pkg-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Ogiltigt längdvärde"
+msgstr "Ogiltigt L_pkg-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Ogiltigt längdvärde"
+msgstr "Ogiltigt C_pkg-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "Kontrollerar stift ..."
+msgstr "Kontrollerar stift "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Stiftnamnet kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Variabelnamn kan inte utelämnas."
+msgstr "Signalnamn kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Modellnamnet kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Rpin är inte giltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Lpin är inte giltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Cpin är inte giltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Komponentnamnet kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Kontrollerar zoner"
+msgstr "Kontrollerar komponent "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Komponent: tillverkare kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Komponentvärde:"
+msgstr "Komponent: Ogiltig kapslingstyp."
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Komponenter:"
+msgstr "Komponent: inget stift"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Kan inte interpolera strömmen baserat på denna IV-tabell."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "Det finns ett spänningsvärde i en IV-tabell som är NaN (ej nummer)"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Det finns ett ogiltigt strömvärde i en IV-tabell"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Ogiltigt"
+msgstr "Ogiltigt R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Ogiltigt längdvärde"
+msgstr "Ogiltigt fallande dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Ogiltigt resistansvärde"
+msgstr "Ogiltigt stigande dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Modellnamnet kan inte utelämnas"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Kontrollerar zoner"
+msgstr "Kontrollerar modell "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Odefinierade lager:"
+msgstr "Odefinierad modelltyp"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Ogiltigt längdvärde"
+msgstr "Ogiltigt Vinh-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltigt Vinl-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltigt R_ref-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltigt C_ref-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltigt V_ref-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltigt V_meas-värde."
 
 #: pcbnew/ibis/ibis_parser.cpp:474
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "C_comp är ogiltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Temperaturstegring"
+msgstr "Temperaturområde är ogiltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Spänningsintervall är ogiltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Ogiltigt stiftnamn"
+msgstr "Ogiltig pull-down."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltig pull-up."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Ogiltigt stiftnamn"
+msgstr "Ogiltig POWER clamp."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Ogiltigt stiftnamn"
+msgstr "Ogiltig GND clamp."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Ogiltigt"
+msgstr "Ogiltig ramp"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Kontrollerar lödytor..."
+msgstr "Kontrollerar header..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Saknad [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Tolken kan inte hanera denna IBIS-version"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Regelnamn saknas."
+msgstr "Saknad [File Rev]"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Regelnamn saknas."
+msgstr "Saknat [File Name]"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "Symbolnamnet kan inte vara tomt."
+msgstr "Kapslingsmodellnamnet kan inte vara tomt."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "Kontrollera dynhål ..."
+msgstr "Kontrollerar kapslingsmodell "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Tillverkare kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Text kan inte utelämnas."
+msgstr "OEM kan inte utelämnas."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Antal poäng"
+msgstr "Negativt antal stift."
 
 #: pcbnew/ibis/ibis_parser.cpp:625
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Förväntar nummer."
+msgstr "Tomt stiftnummer"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Resistans per enhetslängd"
+msgstr "Resistansmatrisen är felaktig"
 
 #: pcbnew/ibis/ibis_parser.cpp:641
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Kapacitans per enhetslängd"
+msgstr "Kapacitansmatrisen är odefinierad"
 
 #: pcbnew/ibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Kapacitans per enhetslängd"
+msgstr "Kapacitansmatrisen är felaktig"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Kapacitans per enhetslängd"
+msgstr "Kapacitansmatrisen är nullptr"
 
 #: pcbnew/ibis/ibis_parser.cpp:661
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Induktans per enhetslängd"
+msgstr "Induktansmatrisen är odefinierad"
 
 #: pcbnew/ibis/ibis_parser.cpp:667
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Induktans per enhetslängd"
+msgstr "Induktansmatrisen är felaktig"
 
 #: pcbnew/ibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Induktans per enhetslängd"
+msgstr "Induktansmatrisen är nullptr"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Kan inte öppna filen '%s'"
+msgstr "Kan inte öppna filen "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "Läser in filer..."
+msgstr "Läser in fil "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Oväntat slut på filen."
+msgstr "Oväntat slut på filen. Saknat [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "Fel Init Skrivarinfo"
+msgstr "Fel på rad "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
-#, fuzzy
 msgid "A line did not end properly.."
-msgstr "Objekt i den importerade filen kunde inte hanteras ordentligt."
+msgstr "En rad slutade inte korrekt.."
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Raden överstiger maximal längd."
 
 #: pcbnew/ibis/ibis_parser.cpp:933
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Det gick inte att skapa mappen '%s'."
+msgstr "Det gick inte att läsa en double."
 
 #: pcbnew/ibis/ibis_parser.cpp:939 pcbnew/ibis/ibis_parser.cpp:983
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Det gick inte att ladda '%s'."
+msgstr "Det gick inte att läsa ett ord."
 
 #: pcbnew/ibis/ibis_parser.cpp:976
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Symbolen är inte annoterad"
+msgstr "Numret är inte en integer"
 
 #: pcbnew/ibis/ibis_parser.cpp:1020
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Kunde inte läsa datafil '%s'."
+msgstr "Kunde inte läsa sträng, inmatningen är tom."
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "Nytt kommentarstecken är ogiltigt."
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Felaktigt syntax. Skall vara |_char eller &_char, etc..."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Inget extra argument förväntades"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Okänt Record-id: %d."
+msgstr "Okänt nyckelord i "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "Stegtext:"
+msgstr " kontext: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Ogiltigt stiftnamn"
+msgstr "Ogiltigt rampdata"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Kan inte specificera en bandbredd för den typen av matris"
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Ogiltig raddefinition"
+msgstr "Ogiltig rad i matris"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "För mycket data för denna matrisrad."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
 msgid "Too much data for this matrix."
-msgstr ""
+msgstr "För mycket data för denna matris."
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Kan inte läsa ett matriselement"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Kan inte läsa ett matrisindex"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "okänd via typ %d"
+msgstr "Okänd matristyp"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Maxvärde saknas."
+msgstr "Saknad matristyp"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Matrisen är redan initialiserad, men m_continue blev inte satt ( internt "
+"fel )"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Försökte läsa en rad från en odefinierad matris"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "matrispekare är null"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max-värden kräver åtminstone Typ."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Okänd metod"
+msgstr "Okänd Model_type "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Internt fel vid läsning av model_type"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Okänt PCad-lager %u"
+msgstr "Okänt Enable: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Internt fel vid läsning av Enable"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Okänd primitiv form"
+msgstr "Okänd polaritet "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Fortsatte att läsa en modell som inte började. ( internt fel )"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "En [Paket] rad behöver exakt 4 element."
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Ogiltigt stiftfält: 6 värden från en tabell med endast 3."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Kan inte läsa ett R, L eller C-värde för ett stift."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "Ogiltig definition på stiftnamn"
+msgstr "Ogiltigt fältnamn i [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Saknad förälder"
+msgstr "Saknat argument i [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Fel antal kolumner för stiftmappning."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Felaktig skalfaktor"
+msgstr "Felaktigt differentialstiftnamn"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Felaktig skalfaktor"
+msgstr "Felaktigt inv_pin namn"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "okänd via typ %d"
+msgstr "Okänd vågformstyp"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Internt fel detekterat, en vågform borde existera"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Internt fel: Felaktigt tolk-kontext."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Nyckelord:"
+msgstr "Saknat nyckelord."
 
 #: pcbnew/ibis/kibis.cpp:396
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Form har inga punkter."
+msgstr "vågform nar mindre än två punkter"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
-#, fuzzy
 msgid "Cannot remove temporary input file"
-msgstr "Kunde inte döpa om temporär fil '%s' till '%s'"
+msgstr "Kan inte ta bort temporär inmatningsfil"
 
 #: pcbnew/ibis/kibis.cpp:600 pcbnew/ibis/kibis.cpp:662
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Kunde inte döpa om temporär fil '%s' till '%s'"
+msgstr "Kan inte ta bort temporär utmatningsfil"
 
 #: pcbnew/ibis/kibis.cpp:644
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Fel vid läsning av fil."
+msgstr "Fel vid läsning av temporär fil"
 
 #: pcbnew/ibis/kibis.cpp:652
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "Det gick inte att skapa temporär fil \"%s\""
+msgstr "Det gick inte att skapa temporär fil"
 
 #: pcbnew/ibis/kibis.cpp:705
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis stöder inte ännu DUT-värden. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Stigtiden är längre än till-tiden."
 
 #: pcbnew/ibis/kibis.cpp:731
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Falltiden är längre än från-tiden."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Modellen har endast ett vågformspar, reducerad noggrannhet"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Utgången kräver åtminstone en pull-up eller en pull-down"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Det finns två vågformspar, men endast en transistor. Fler ekvationer än "
+"okända."
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Modellen saknar vågformspar, använder [Ramp] istället, dålig noggrannhet"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Modellen har fler än 2 vågformspar, använder de två första."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Ogiltig modelltyp för en drivutgång."
 
 #: pcbnew/ibis/kibis.cpp:1209
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Ogiltigt fördröjningsvärde"
+msgstr "Ogiltig modelltyp för en komponent"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
@@ -33949,7 +33841,7 @@ msgstr "Åsidosätt text"
 
 #: pcbnew/pcb_dimension.cpp:330
 msgid "Suffix"
-msgstr "Suffix"
+msgstr "Postfix"
 
 #: pcbnew/pcb_dimension.cpp:460
 #, c-format
@@ -38944,9 +38836,8 @@ msgid "Show a shadow marker on locked items"
 msgstr "Visa en skuggad markör på låsta objekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Skugga på låsta objekt"
+msgstr "Skugga på konflikter"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
