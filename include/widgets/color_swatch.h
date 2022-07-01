@@ -40,10 +40,7 @@ enum SWATCH_SIZE
     SWATCH_SMALL,
     SWATCH_MEDIUM,
     SWATCH_LARGE,
-    SWATCH_EXPAND,
-    SWATCH_FIXED_SMALL,
-    SWATCH_FIXED_MEDIUM,
-    SWATCH_FIXED_LARGE
+    SWATCH_EXPAND
 };
 
 
@@ -51,11 +48,6 @@ const static wxSize SWATCH_SIZE_SMALL_DU( 8, 6 );
 const static wxSize SWATCH_SIZE_MEDIUM_DU( 24, 10 );
 const static wxSize SWATCH_SIZE_LARGE_DU( 24, 16 );
 const static wxSize CHECKERBOARD_SIZE_DU( 3, 3 );
-
-const static wxSize SWATCH_SIZE_SMALL_PX( 24, 24 );
-const static wxSize SWATCH_SIZE_MEDIUM_PX( 48, 48 );
-const static wxSize SWATCH_SIZE_LARGE_PX( 64, 64 );
-const static wxSize CHECKERBOARD_SIZE_PX( 9, 12 );
 
 
 /**

@@ -1461,7 +1461,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
                 COLOR_SWATCH* swatch = new COLOR_SWATCH( panel, COLOR4D::UNSPECIFIED, layer,
                                                          bgColor, theme->GetColor( layer ),
-                                                         SWATCH_FIXED_SMALL );
+                                                         SWATCH_SMALL );
                 swatch->SetToolTip( _( "Double click or middle click for color change, "
                                        "right click for menu" ) );
 
