@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-04 19:05+0000\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5377,14 +5377,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería lógica"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "no se ha seleccionado archivo"
+msgstr "Activar la selección"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Red no seleccionada"
+msgstr "Desactivar seleccionado"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5863,9 +5861,8 @@ msgid "Paste Special..."
 msgstr "Pegado especial..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Pegar elementos desde el portapapeles con opciones"
+msgstr "Pegar elemento(s) desde el portapapeles con opciones de anotación"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -12642,9 +12639,8 @@ msgstr ""
 "debajo del cable o bus"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Tamaño de etiquetas globales:"
+msgstr "Margen de etiqueta global:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -17471,9 +17467,8 @@ msgid "Hierarchy Navigator"
 msgstr "Navegador de jerarquía"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Mostrar la jerarquía de hojas de esquema"
+msgstr "Mostrar u ocultar el navegador de jerarquía de hojas esquemáticas"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17670,14 +17665,12 @@ msgstr "el símbolo no es multi-unidad"
 
 #: eeschema/tools/sch_edit_tool.cpp:370 eeschema/tools/sch_edit_tool.cpp:408
 #: eeschema/tools/sch_edit_tool.cpp:445
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Editar el campo %s"
+msgstr "Editar campos principales"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
-#, fuzzy
 msgid "Change To"
-msgstr "Cambiar tipo"
+msgstr "Cambiar a"
 
 #: eeschema/tools/sch_edit_tool.cpp:994
 msgid "Label value cannot go below zero"
@@ -20889,151 +20882,148 @@ msgid "NP Pad: (diam - drill)"
 msgstr "Pad NP: (diam - taladro)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Propiedades de los Pins"
+msgstr "Propiedades del alambre"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Tipos estándar"
+msgstr "Tamaño estándar:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -21042,12 +21032,11 @@ msgstr "Área:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Resistencia térmica:"
+msgstr "Resistencia lineal:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, c-format
@@ -21055,20 +21044,17 @@ msgid "Frequency for 100% skin depth:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "Opacidad:"
+msgstr "Corriente admisible:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "Aplicaciones de apoyo"
+msgstr "Aplicación"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Intensidad"
+msgstr "Corriente:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 msgid "Length:"
@@ -21089,18 +21075,16 @@ msgid "Voltage drop:"
 msgstr "Caída de voltaje:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Potencia disipada:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
-#, fuzzy
 msgid "mW"
-msgstr "W"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -21305,9 +21289,8 @@ msgid "Current calculation is underestimated due to long fusing time."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Luz de cámara ambiental:"
+msgstr "Temperatura ambiente:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21317,9 +21300,8 @@ msgid "deg C"
 msgstr "grados C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Punto de operación"
+msgstr "Punto de fusión:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21328,9 +21310,8 @@ msgid "Track width:"
 msgstr "Ancho de pista:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Grosor de pista (H):"
+msgstr "Grosor de pista:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
 #, fuzzy
@@ -21940,9 +21921,8 @@ msgid "Fusing Current"
 msgstr "Intensidad"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Cable Size"
-msgstr "Tamaño de orificio"
+msgstr "Tamaño del cable"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "High speed"
@@ -22376,13 +22356,12 @@ msgid "m"
 msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "m"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "pies"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -26024,9 +26003,8 @@ msgid "Map File Format"
 msgstr "Formato de archivo Map"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Crea un archivo de mapa de taladrado en PS, HPGL u otros formatos"
+msgstr "Crea un mapa de perforación en PDF u otros formatos"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -28915,9 +28893,8 @@ msgstr "Seleccionar elemento(s)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Alternar delección"
+msgstr "Alternar selección."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -31772,9 +31749,8 @@ msgid "Checking assertions..."
 msgstr "Comprobando aserciones..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:109
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Reuniendo elementos..."
+msgstr "Reuniendo elementos físicos..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:174
 msgid "Checking physical clearances..."
