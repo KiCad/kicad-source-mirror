@@ -38,6 +38,7 @@ enum MAIL_T
 {
     MAIL_CROSS_PROBE,              // PCB<->SCH, CVPCB->SCH cross-probing.
     MAIL_SELECTION,                // SCH->PCB selection synchronization.
+    MAIL_SELECTION_FORCE,          // Explicit selection of SCH->PCB selection synchronization.
     MAIL_ASSIGN_FOOTPRINTS,        // CVPCB->SCH footprint stuffing
     MAIL_SCH_SAVE,                 // CVPCB->SCH save the schematic
     MAIL_EESCHEMA_NETLIST,         // SCH->CVPCB netlist immediately after launching CVPCB

@@ -722,14 +722,11 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     if( m_probingPcbToSch )
         return;
 
-    if( !aForce && !m_frame->eeconfig()->m_CrossProbing.on_selection )
-        return;
-
     EE_SELECTION_TOOL*      selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     EE_SELECTION& selection = aForce ? selTool->RequestSelection() : selTool->GetSelection();
 
-    m_frame->SendSelectItems( false, selection.GetItems() );
+    m_frame->SendSelectItems( selection.GetItems(), aForce );
 }
 
 

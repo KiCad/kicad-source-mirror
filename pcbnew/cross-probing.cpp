@@ -471,7 +471,14 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ExecuteRemoteCommand( payload.c_str() );
         break;
 
+
     case MAIL_SELECTION:
+        if( !Settings().m_CrossProbing.on_selection )
+            break;
+
+        KI_FALLTHROUGH;
+
+    case MAIL_SELECTION_FORCE:
     {
         // $SELECT: <mode 0 - only footprints, 1 - with connections>,<spec1>,<spec2>,<spec3>
         std::string prefix = "$SELECT: ";

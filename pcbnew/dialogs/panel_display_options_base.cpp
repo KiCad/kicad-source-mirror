@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,12 +73,16 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Cross-probing") ), wxVERTICAL );
 
-	m_checkCrossProbeOnSelection = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Cross-probe on selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeOnSelection = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Highlight footprints when symbols selected"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeOnSelection->SetValue(true);
+	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight footprints corresponding to selected symbols") );
+
 	sbSizer3->Add( m_checkCrossProbeOnSelection, 0, wxALL, 5 );
 
-	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Scroll cross-probed items into view"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
+	m_checkCrossProbeCenter->SetToolTip( _("Ensures that cross-probed footprints are visible in the current view") );
+
 	sbSizer3->Add( m_checkCrossProbeCenter, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCrossProbeZoom = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Zoom to fit cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );

@@ -1221,9 +1221,6 @@ int BOARD_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     if( m_probingSchToPcb || m_frame->m_syncingSchToPcbSelection )
         return 0;
 
-    if( !frame()->Settings().m_CrossProbing.on_selection )
-        return 0;
-
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
 

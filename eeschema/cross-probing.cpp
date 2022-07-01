@@ -331,6 +331,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         return;
     }
 
+    if( !crossProbingSettings.on_selection )
+        return;
+
     if( text == nullptr )
         return;
 
@@ -379,7 +382,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
+void SCH_EDIT_FRAME::SendSelectItems( const std::deque<EDA_ITEM*>& aItems, bool aForce )
 {
     std::set<wxString> parts;
 
@@ -432,10 +435,7 @@ void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<
         return;
     }
 
-    std::string command = "$SELECT: ";
-
-    command += aSelectConnections ? "1" : "0";
-    command += ",";
+    std::string command = "$SELECT: 0,";
 
     for( wxString part : parts )
     {
@@ -454,7 +454,8 @@ void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<
         // Typically ExpressMail is going to be s-expression packets, but since
         // we have existing interpreter of the selection packet on the other
         // side in place, we use that here.
-        Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, this );
+        Kiway().ExpressMail( FRAME_PCB_EDITOR, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION,
+                command, this );
     }
 }
 

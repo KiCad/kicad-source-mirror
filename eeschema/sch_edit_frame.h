@@ -290,10 +290,11 @@ public:
     /**
      * Sends items to Pcbnew for selection
      *
-     * @param aSelectConnections - set to select connected tracks/vias too
      * @param aElements are the items to select
+     * @param aForce select the element in pcbnew whether or not the user has the select option chosen
+     * This is used for when the eeschema user is using the cross-probe tool
      */
-    void SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aElements );
+    void SendSelectItems( const std::deque<EDA_ITEM*>& aElements, bool aForce );
 
     /**
      * Sends a net name to Pcbnew for highlighting
