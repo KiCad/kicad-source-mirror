@@ -13,17 +13,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-11 16:15+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1673,7 +1673,7 @@ msgstr "О программе"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Version"
-msgstr "Информация о версии"
+msgstr "Версия"
 
 #: common/dialog_about/dialog_about.cpp:131
 msgid "Developers"
@@ -6923,7 +6923,7 @@ msgstr "Файл горячих клавиш"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Эквивалентный файл '%s' не найден."
+msgstr "Файл эквивалентности '%s' не найден."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7646,7 +7646,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Искали:\n"
+"Искали в:\n"
 "\t%s\n"
 "\t%s"
 
@@ -12321,7 +12321,7 @@ msgstr "Выделение и подсветка"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected child items"
-msgstr "Начертить дочерние элементы"
+msgstr "Выделять дочерние элементы"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Fill selected shapes"
@@ -12342,7 +12342,7 @@ msgstr "Толщина подсветки:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:110
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "Двухстороння связь"
+msgstr "Сквозное выделение"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
@@ -12508,7 +12508,7 @@ msgstr "Автоматически размещать поля символов"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:207
 msgid "A&llow field autoplace to change justification"
-msgstr "Разрешить авто-размещении при изменения выравнивания"
+msgstr "Разрешить при авто-размещении изменять выравнивание поля"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -15337,9 +15337,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"В добавляемой схеме используются библиотеки, отсутствующие в библиотеке "
+"В выбранной схеме используются библиотеки, отсутствующие в таблице библиотек "
 "проекта. Это может привести к появлению символов с неверными ссылками на "
-"библиотеки. \n"
+"библиотеки.\n"
 "\n"
 "Вы хотите продолжить?"
 
@@ -15351,9 +15351,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"В текущей библиотеке найдены одинаковые идентификаторы ссылающиеся на разные "
+"В текущей таблице библиотек найдены одинаковые имена, ссылающиеся на разные "
 "библиотеки. Эта проблема не может быть решена автоматически и может привести "
-"к образованию неверных ссылок на библиотеки. \n"
+"к образованию неверных ссылок на библиотеки.\n"
 "\n"
 "Вы хотите продолжить?"
 
@@ -15368,11 +15368,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Имя файла '%s' может вызвать проблемы с существующим именем файла\n"
-"определенного на схеме в системах, поддерживающих регистр\n"
-"нечувствительные имена файлов. Это вызовет проблемы, если вы скопируете \n"
-"проект в операционную систему, которая поддерживает файл без учета регистра\n"
-"имен.\n"
+"Имя файла '%s' может вызвать проблемы с уже определёнными в схеме\n"
+"именами файлов на системах, которые не различают регистр в именах файлов.\n"
+"Такая проблема может возникнуть при копировании проекта в систему,\n"
+"файловая система которой не различает регистр в именах файлов.\n"
 "\n"
 "Вы хотите продолжить?"
 
@@ -17277,7 +17276,7 @@ msgstr "Располагать рёбра только горизонтальн�
 
 #: eeschema/tools/ee_actions.cpp:706
 msgid "Switch to next line mode"
-msgstr "Переключиться на следующей режим линий"
+msgstr "Переключиться на следующий режим линий"
 
 #: eeschema/tools/ee_actions.cpp:711
 #, fuzzy
@@ -19108,7 +19107,7 @@ msgstr "Редактировать схему"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Редактировать таблицы библиотек символов (глобальную и/или проекта)"
+msgstr "Редактировать библиотеки символов (глобальные и/или проекта)"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit the project PCB design"
@@ -19116,7 +19115,7 @@ msgstr "Редактировать печатную плату"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "Редактировать таблицы библиотек посад.мест (глобальную и/или проекта)"
+msgstr "Редактировать библиотеки посад.мест (глобальные и/или проекта)"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Preview Gerber files"
@@ -19570,7 +19569,7 @@ msgstr "Размер установки"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 msgid "Compatible"
-msgstr "Совместимость"
+msgstr "Совместим"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -19713,7 +19712,7 @@ msgstr "Прерывание установки пакета."
 
 #: kicad/pcm/pcm_task_manager.cpp:257
 msgid "Extracted package\n"
-msgstr "Распакованный пакет\n"
+msgstr "Пакет распакован\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:301
 #, c-format
@@ -34355,7 +34354,8 @@ msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Altium слой (%d) не имеет аналога в KiCad. Размещен на KiCad слое Eco1_User."
+"Слой Altium (%d) не имеет аналога в KiCad. Он был размещен на KiCad слое "
+"Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:364
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:344
