@@ -86,7 +86,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] = {
       _( "Substitute STEP or IGS models with the same name in place of VRML models" ).mb_str(),
       wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_OPTION, NULL, "min-distance",
-      _( "Minimum distance between points to treat them as separate ones (default 0.01 mm)" )
+      _( "Minimum distance between points to treat them as separate ones (default 0.01mm)" )
               .mb_str(),
       wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ).mb_str(), wxCMD_LINE_VAL_NONE,
@@ -156,23 +156,28 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
         std::regex_search( str, sm, re_pattern );
         m_params.m_xOrigin = atof( sm.str( 1 ).c_str() );
         m_params.m_yOrigin = atof( sm.str( 2 ).c_str() );
+
         std::string tunit( sm[3] );
 
-        if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) ) || ( sm.size() != 4 ) )
+        if( tunit.size() > 0 ) // No unit accepted ( default = mm )
         {
-            parser.Usage();
-            return false;
-        }
+            if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) ) || ( sm.size() != 4 ) )
+            {
+                parser.Usage();
+                return false;
+            }
 
-        if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
-        {
-            m_params.m_xOrigin *= 25.4;
-            m_params.m_yOrigin *= 25.4;
-        }
-        else if( tunit.compare( "mm" ) )
-        {
-            parser.Usage();
-            return false;
+            // only in, inch and mm are valid:
+            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+            {
+                m_params.m_xOrigin *= 25.4;
+                m_params.m_yOrigin *= 25.4;
+            }
+            else if( tunit.compare( "mm" ) )
+            {
+                parser.Usage();
+                return false;
+            }
         }
     }
 

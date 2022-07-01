@@ -68,6 +68,7 @@ private:
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
     wxString m_boardPath;   // path to the exported board file
+    static int      m_toleranceLastChoice;  // Store m_tolerance option during a session
 
 protected:
     void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
@@ -112,6 +113,7 @@ public:
     ~DIALOG_EXPORT_STEP();
 };
 
+int DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -220,6 +222,9 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
         if( msgDlg.DoNotShowAgain() )
             Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning = true;
     }
+    if( m_toleranceLastChoice >= 0 )
+        m_tolerance->SetSelection( m_toleranceLastChoice );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -245,6 +250,8 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     cfg->m_ExportStep.origin_y = val;
 
     cfg->m_ExportStep.no_virtual = m_cbRemoveVirtual->GetValue();
+
+    m_toleranceLastChoice = m_tolerance->GetSelection();
 }
 
 
@@ -310,6 +317,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
 
     double tolerance = 0.01;   // default value in mm
+    m_toleranceLastChoice = m_tolerance->GetSelection();
 
     switch( m_tolerance->GetSelection() )
     {
@@ -420,7 +428,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             }
 
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6f x %.6f%c" ),
+            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                              quote, xOrg, yOrg, quote ) );
         }
             break;
@@ -431,7 +439,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6f x %.6f%c" ),
+            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                              quote, xOrg, yOrg, quote ) );
         }
             break;
@@ -439,7 +447,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     {
         LOCALE_IO dummy;
-        cmdK2S.Append( wxString::Format( wxT( " --min-distance=%c%.3f mm%c" ),
+        cmdK2S.Append( wxString::Format( wxT( " --min-distance=%c%.3fmm%c" ),
                                          quote, tolerance, quote ) );
     }
 
