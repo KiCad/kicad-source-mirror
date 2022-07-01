@@ -19,7 +19,7 @@
  */
 // kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
-#include <kicad_curl/kicad_curl.h>
+#include "kicad_curl/kicad_curl.h"
 #include "kicad_curl/kicad_curl_easy.h"
 
 #include "pcm_task_manager.h"
@@ -37,92 +37,62 @@
 #include <wx/zipstrm.h>
 
 
-void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
-                                           const wxString& aRepositoryId )
+void compile_keep_on_update_regex( const PCM_PACKAGE& pkg, const PACKAGE_VERSION& ver,
+                                   std::forward_list<wxRegEx>& aKeepOnUpdate )
 {
-    PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, this]()
+    auto compile_regex = [&]( const wxString& regex )
+    {
+        aKeepOnUpdate.emplace_front( regex, wxRE_DEFAULT );
+
+        if( !aKeepOnUpdate.front().IsValid() )
+            aKeepOnUpdate.pop_front();
+    };
+
+    std::for_each( pkg.keep_on_update.begin(), pkg.keep_on_update.end(), compile_regex );
+    std::for_each( ver.keep_on_update.begin(), ver.keep_on_update.end(), compile_regex );
+}
+
+
+void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
+                                           const wxString& aRepositoryId, const bool isUpdate )
+{
+    PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, isUpdate, this]()
     {
         wxFileName file_path( m_pcm->Get3rdPartyPath(), "" );
         file_path.AppendDir( "cache" );
         file_path.SetFullName( wxString::Format( "%s_v%s.zip", aPackage.identifier, aVersion ) );
 
         auto find_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
-                                    [&aVersion]( const PACKAGE_VERSION& pv )
-                                    {
-                                        return pv.version == aVersion;
-                                    } );
+                                         [&aVersion]( const PACKAGE_VERSION& pv )
+                                         {
+                                             return pv.version == aVersion;
+                                         } );
 
         wxASSERT_MSG( find_pkgver != aPackage.versions.end(), "Package version not found" );
 
         if( !wxDirExists( file_path.GetPath() )
             && !wxFileName::Mkdir( file_path.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
-            m_reporter->PCMReport( _( "Unable to create download directory!" ), RPT_SEVERITY_ERROR );
+            m_reporter->PCMReport( _( "Unable to create download directory!" ),
+                                   RPT_SEVERITY_ERROR );
             return;
         }
 
         int code = downloadFile( file_path.GetFullPath(), find_pkgver->download_url.get() );
 
-        if( code == CURLE_OK )
+        if( code != CURLE_OK )
         {
-            PCM_TASK install_task = [aPackage, aVersion, aRepositoryId, file_path, this]()
-            {
-                auto get_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
-                                            [&aVersion]( const PACKAGE_VERSION& pv )
-                                            {
-                                                return pv.version == aVersion;
-                                            } );
-
-                const boost::optional<wxString>& hash = get_pkgver->download_sha256;
-                bool                             hash_match = true;
-
-                if( hash )
-                {
-                    std::ifstream stream( file_path.GetFullPath().ToUTF8(), std::ios::binary );
-                    hash_match = m_pcm->VerifyHash( stream, hash.get() );
-                }
-
-                if( !hash_match )
-                {
-                    m_reporter->PCMReport( wxString::Format( _( "Downloaded archive hash for package "
-                                                             "%s does not match repository entry. "
-                                                             "This may indicate a problem with the "
-                                                             "package, if the issue persists "
-                                                             "report this to repository maintainers." ),
-                                                          aPackage.identifier ),
-                                        RPT_SEVERITY_ERROR );
-                }
-                else
-                {
-                    m_reporter->PCMReport( wxString::Format( _( "Extracting package '%s'." ),
-                                                          aPackage.identifier ),
-                                        RPT_SEVERITY_INFO );
-
-                    if( extract( file_path.GetFullPath(), aPackage.identifier, true ) )
-                    {
-                        m_pcm->MarkInstalled( aPackage, get_pkgver->version, aRepositoryId );
-                        // TODO register libraries.
-                    }
-                    else
-                    {
-                        // Cleanup possibly partially extracted package
-                        deletePackageDirectories( aPackage.identifier );
-                    }
-                }
-
-                m_reporter->PCMReport( wxString::Format( _( "Removing downloaded archive '%s'." ),
-                                                      file_path.GetFullName() ),
-                                    RPT_SEVERITY_INFO );
-                wxRemoveFile( file_path.GetFullPath() );
-            };
-
-            m_install_queue.push( install_task );
-        }
-        else
-        {
-            // Cleanup after ourselves.
+            // Cleanup after ourselves and exit
             wxRemoveFile( file_path.GetFullPath() );
+            return;
         }
+
+        PCM_TASK install_task = [aPackage, aVersion, aRepositoryId, file_path, isUpdate, this]()
+        {
+            installDownloadedPackage( aPackage, aVersion, aRepositoryId, file_path, isUpdate );
+        };
+
+        m_install_queue.push( install_task );
     };
 
     m_download_queue.push( download_task );
@@ -150,7 +120,7 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
     curl.SetTransferCallback( callback, 250000L );
 
     m_reporter->PCMReport( wxString::Format( _( "Downloading package url: '%s'" ), url ),
-                        RPT_SEVERITY_INFO );
+                           RPT_SEVERITY_INFO );
 
     int code = curl.Perform();
 
@@ -164,11 +134,85 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
     if( code != CURLE_OK && code != CURLE_ABORTED_BY_CALLBACK )
     {
         m_reporter->PCMReport( wxString::Format( _( "Failed to download url %s\n%s" ), url,
-                                              curl.GetErrorText( code ) ),
-                            RPT_SEVERITY_ERROR );
+                                                 curl.GetErrorText( code ) ),
+                               RPT_SEVERITY_ERROR );
     }
 
     return code;
+}
+
+
+void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
+                                                 const wxString&    aVersion,
+                                                 const wxString&    aRepositoryId,
+                                                 const wxFileName& aFilePath, const bool isUpdate )
+{
+    auto pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
+                                [&aVersion]( const PACKAGE_VERSION& pv )
+                                {
+                                    return pv.version == aVersion;
+                                } );
+
+    wxASSERT_MSG( pkgver != aPackage.versions.end(), "Package version not found" );
+
+    // wxRegEx is not CopyConstructible hence the weird choice of forward_list
+    std::forward_list<wxRegEx> keep_on_update;
+
+    if( isUpdate )
+        compile_keep_on_update_regex( aPackage, *pkgver, keep_on_update );
+
+    const boost::optional<wxString>& hash = pkgver->download_sha256;
+    bool                             hash_match = true;
+
+    if( hash )
+    {
+        std::ifstream stream( aFilePath.GetFullPath().ToUTF8(), std::ios::binary );
+        hash_match = m_pcm->VerifyHash( stream, hash.get() );
+    }
+
+    if( !hash_match )
+    {
+        m_reporter->PCMReport( wxString::Format( _( "Downloaded archive hash for package "
+                                                    "%s does not match repository entry. "
+                                                    "This may indicate a problem with the "
+                                                    "package, if the issue persists "
+                                                    "report this to repository maintainers." ),
+                                                 aPackage.identifier ),
+                               RPT_SEVERITY_ERROR );
+    }
+    else
+    {
+        if( isUpdate )
+        {
+            m_reporter->PCMReport(
+                    wxString::Format( _( "Removing previous version of package '%s'." ),
+                                      aPackage.identifier ),
+                    RPT_SEVERITY_INFO );
+
+            deletePackageDirectories( aPackage.identifier, keep_on_update );
+        }
+
+        m_reporter->PCMReport(
+                wxString::Format( _( "Extracting package '%s'." ), aPackage.identifier ),
+                RPT_SEVERITY_INFO );
+
+        if( extract( aFilePath.GetFullPath(), aPackage.identifier, true ) )
+        {
+            m_pcm->MarkInstalled( aPackage, pkgver->version, aRepositoryId );
+            // TODO register libraries.
+        }
+        else
+        {
+            // Cleanup possibly partially extracted package
+            deletePackageDirectories( aPackage.identifier );
+        }
+    }
+
+    m_reporter->PCMReport(
+            wxString::Format( _( "Removing downloaded archive '%s'." ), aFilePath.GetFullName() ),
+            RPT_SEVERITY_INFO );
+
+    wxRemoveFile( aFilePath.GetFullPath() );
 }
 
 
@@ -319,7 +363,11 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
         return;
     }
 
-    const auto installed_packages = m_pcm->GetInstalledPackages();
+    bool isUpdate = false;
+    // wxRegEx is not CopyConstructible hence the weird choice of forward_list
+    std::forward_list<wxRegEx>                keep_on_update;
+    const std::vector<PCM_INSTALLATION_ENTRY> installed_packages = m_pcm->GetInstalledPackages();
+
     if( std::find_if( installed_packages.begin(), installed_packages.end(),
                       [&]( const PCM_INSTALLATION_ENTRY& entry )
                       {
@@ -327,14 +375,31 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
                       } )
         != installed_packages.end() )
     {
-        wxLogError( wxString::Format( _( "Package with identifier %s is already installed, you "
-                                         "must first uninstall this package." ),
-                                      package.identifier ) );
-        return;
+        if( wxMessageBox(
+                    wxString::Format(
+                            _( "Package with identifier %s is already installed. "
+                               "Would you like to update it to the version from selected file?" ),
+                            package.identifier ),
+                    _( "Update package" ), wxICON_EXCLAMATION | wxYES_NO, aParent )
+            == wxNO )
+            return;
+
+        isUpdate = true;
+
+        compile_keep_on_update_regex( package, package.versions[0], keep_on_update );
     }
 
     m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent, false );
     m_reporter->Show();
+
+    if( isUpdate )
+    {
+        m_reporter->PCMReport( wxString::Format( _( "Removing previous version of package '%s'." ),
+                                                 package.identifier ),
+                               RPT_SEVERITY_INFO );
+
+        deletePackageDirectories( package.identifier, keep_on_update );
+    }
 
     if( extract( aFilePath, package.identifier, false ) )
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
@@ -346,11 +411,53 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
 }
 
 
-void PCM_TASK_MANAGER::deletePackageDirectories( const wxString& aPackageId )
+class PATH_COLLECTOR : public wxDirTraverser
+{
+private:
+    std::vector<wxString>& m_files;
+    std::vector<wxString>& m_dirs;
+
+public:
+    explicit PATH_COLLECTOR( std::vector<wxString>& aFiles, std::vector<wxString>& aDirs ) :
+            m_files( aFiles ), m_dirs( aDirs )
+    {
+    }
+
+    wxDirTraverseResult OnFile( const wxString& aFilePath ) override
+    {
+        m_files.push_back( aFilePath );
+        return wxDIR_CONTINUE;
+    }
+
+    wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    {
+        m_dirs.push_back( dirPath );
+        return wxDIR_CONTINUE;
+    }
+};
+
+
+void PCM_TASK_MANAGER::deletePackageDirectories( const wxString&                   aPackageId,
+                                                 const std::forward_list<wxRegEx>& aKeep )
 {
     // Namespace delimiter changed on disk to allow flat loading of Python modules
     wxString clean_package_id = aPackageId;
     clean_package_id.Replace( '.', '_' );
+
+    int path_prefix_len = m_pcm->Get3rdPartyPath().Length();
+
+    auto sort_func = []( const wxString& a, const wxString& b )
+    {
+        if( a.length() > b.length() )
+            return true;
+        if( a.length() < b.length() )
+            return false;
+
+        if( a != b )
+            return a < b;
+
+        return false;
+    };
 
     for( const wxString& dir : PCM_PACKAGE_DIRECTORIES )
     {
@@ -358,16 +465,63 @@ void PCM_TASK_MANAGER::deletePackageDirectories( const wxString& aPackageId )
         d.AppendDir( dir );
         d.AppendDir( clean_package_id );
 
-        if( d.DirExists() )
-        {
-            m_reporter->PCMReport( wxString::Format( _( "Removing directory %s" ), d.GetPath() ),
-                                RPT_SEVERITY_INFO );
+        if( !d.DirExists() )
+            continue;
 
+        m_reporter->PCMReport( wxString::Format( _( "Removing directory %s" ), d.GetPath() ),
+                               RPT_SEVERITY_INFO );
+
+        if( aKeep.empty() )
+        {
             if( !d.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
             {
                 m_reporter->PCMReport(
                         wxString::Format( _( "Failed to remove directory %s" ), d.GetPath() ),
                         RPT_SEVERITY_ERROR );
+            }
+        }
+        else
+        {
+            std::vector<wxString> files;
+            std::vector<wxString> dirs;
+            PATH_COLLECTOR        collector( files, dirs );
+
+            wxDir( d.GetFullPath() )
+                    .Traverse( collector, wxEmptyString, wxDIR_DEFAULT | wxDIR_NO_FOLLOW );
+
+            // Do a poor mans post order traversal by sorting paths in reverse length order
+            std::sort( files.begin(), files.end(), sort_func );
+            std::sort( dirs.begin(), dirs.end(), sort_func );
+
+            // Delete files that don't match any of the aKeep regexs
+            for( const wxString& file : files )
+            {
+                bool del = true;
+
+                for( const wxRegEx& re : aKeep )
+                {
+                    wxString tmp = file.Mid( path_prefix_len );
+                    tmp.Replace( "\\", "/" );
+
+                    if( re.Matches( tmp ) )
+                    {
+                        // m_reporter->PCMReport( wxString::Format( _( "Keeping file '%s'." ), tmp ),
+                        //                        RPT_SEVERITY_INFO );
+
+                        del = false;
+                        break;
+                    }
+                }
+
+                if( del )
+                    wxRemoveFile( file );
+            }
+
+            // Delete any empty dirs
+            for( const wxString& dir : dirs )
+            {
+                wxFileName d( dir, "" );
+                d.Rmdir(); // not passing any flags here will only remove empty directories
             }
         }
     }
@@ -382,8 +536,9 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
         m_pcm->MarkUninstalled( aPackage );
 
-        m_reporter->PCMReport( wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
-                            RPT_SEVERITY_INFO );
+        m_reporter->PCMReport(
+                wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
+                RPT_SEVERITY_INFO );
     };
 
     m_install_queue.push( task );

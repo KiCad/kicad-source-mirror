@@ -616,6 +616,9 @@ void PLUGIN_CONTENT_MANAGER::DiscardRepositoryCache( const wxString& aRepository
 void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const wxString& aVersion,
                                             const wxString& aRepositoryId )
 {
+    // In case of package update remove old data
+    MarkUninstalled( aPackage );
+
     PCM_INSTALLATION_ENTRY entry;
     entry.package = aPackage;
     entry.current_version = aVersion;
@@ -641,11 +644,10 @@ void PLUGIN_CONTENT_MANAGER::MarkUninstalled( const PCM_PACKAGE& aPackage )
 PCM_PACKAGE_STATE PLUGIN_CONTENT_MANAGER::GetPackageState( const wxString& aRepositoryId,
                                                            const wxString& aPackageId )
 {
-    if( m_installed.find( aPackageId ) != m_installed.end() )
-        return PPS_INSTALLED;
+    bool installed = m_installed.find( aPackageId ) != m_installed.end();
 
     if( aRepositoryId.IsEmpty() || !CacheRepository( aRepositoryId ) )
-        return PPS_UNAVAILABLE;
+        return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
 
     const PCM_REPOSITORY& repo = getCachedRepository( aRepositoryId );
 
@@ -656,22 +658,58 @@ PCM_PACKAGE_STATE PLUGIN_CONTENT_MANAGER::GetPackageState( const wxString& aRepo
                                 } );
 
     if( pkg_it == repo.package_list.end() )
-        return PPS_UNAVAILABLE;
+        return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
 
     const PCM_PACKAGE& pkg = *pkg_it;
 
-    auto ver_it = std::find_if( pkg.versions.begin(), pkg.versions.end(),
-                                []( const PACKAGE_VERSION& ver )
-                                {
-                                    return ver.compatible;
-                                } );
+    if( installed )
+    {
+        // Package is installed, check for available updates at the same or
+        // higher (numerically lower) version stability level
+        wxString update_version = GetPackageUpdateVersion( pkg );
 
-    if( ver_it == pkg.versions.end() )
-        return PPS_UNAVAILABLE;
+        return update_version.IsEmpty() ? PPS_INSTALLED : PPS_UPDATE_AVAILABLE;
+    }
     else
-        return PPS_AVAILABLE;
+    {
+        // Find any compatible version
+        auto ver_it = std::find_if( pkg.versions.begin(), pkg.versions.end(),
+                                    []( const PACKAGE_VERSION& ver )
+                                    {
+                                        return ver.compatible;
+                                    } );
+
+        return ver_it == pkg.versions.end() ? PPS_UNAVAILABLE : PPS_AVAILABLE;
+    }
 }
 
+
+const wxString PLUGIN_CONTENT_MANAGER::GetPackageUpdateVersion( const PCM_PACKAGE& aPackage )
+{
+    wxASSERT_MSG( m_installed.find( aPackage.identifier ) != m_installed.end(),
+                  "GetPackageUpdateVersion called on a not installed package" );
+
+    const PCM_INSTALLATION_ENTRY& installation_entry = m_installed.at( aPackage.identifier );
+
+    auto installed_ver_it = std::find_if(
+            installation_entry.package.versions.begin(), installation_entry.package.versions.end(),
+            [&]( const PACKAGE_VERSION& ver )
+            {
+                return ver.version == installation_entry.current_version;
+            } );
+
+    wxASSERT_MSG( installed_ver_it != installation_entry.package.versions.end(),
+                  "Installed package version not found" );
+
+    auto ver_it = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
+                                [&]( const PACKAGE_VERSION& ver )
+                                {
+                                    return ver.compatible && installed_ver_it->status >= ver.status
+                                           && installed_ver_it->parsed_version < ver.parsed_version;
+                                } );
+
+    return ver_it == aPackage.versions.end() ? wxT( "" ) : ver_it->version;
+}
 
 time_t PLUGIN_CONTENT_MANAGER::getCurrentTimestamp() const
 {

@@ -32,6 +32,7 @@
 #include <mutex>
 #include <nlohmann/json-schema.hpp>
 #include <widgets/wx_progress_reporters.h>
+#include <wx/regex.h>
 #include <wx/string.h>
 
 
@@ -67,7 +68,7 @@ public:
      * @param aRepositoryId id of the source repository
      */
     void DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
-                             const wxString& aRepositoryId );
+                             const wxString& aRepositoryId, const bool isUpdate );
 
     /**
      * @brief Enqueue package uninstallation
@@ -114,6 +115,19 @@ private:
     int downloadFile( const wxString& aFilePath, const wxString& aUrl );
 
     /**
+     * @brief Installs downloaded package archive
+     *
+     * @param aPackage package metadata
+     * @param aVersion version to be installed
+     * @param aRepositoryId id of the source repository
+     * @param aFilePath path to the archive
+     * @param isUpdate true if this is an update operation
+     */
+    void installDownloadedPackage( const PCM_PACKAGE& aPackage, const wxString& aVersion,
+                                   const wxString& aRepositoryId, const wxFileName& aFilePath,
+                                   const bool isUpdate );
+
+    /**
      * @brief Extract package archive
      *
      * @param aFilePath path to the archive
@@ -127,8 +141,10 @@ private:
      * @brief Delete all package files
      *
      * @param aPackageId id of the package
+     * @param aKeep list of regex indicating which files should not be deleted
      */
-    void deletePackageDirectories( const wxString& aPackageId );
+    void deletePackageDirectories( const wxString&                   aPackageId,
+                                   const std::forward_list<wxRegEx>& aKeep = {} );
 
     std::unique_ptr<DIALOG_PCM_PROGRESS>    m_reporter;
     SYNC_QUEUE<PCM_TASK>                    m_download_queue;

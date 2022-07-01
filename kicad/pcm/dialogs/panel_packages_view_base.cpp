@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,12 +78,12 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_gridVersions->AutoSizeColumns();
 	m_gridVersions->EnableDragColMove( false );
 	m_gridVersions->EnableDragColSize( true );
-	m_gridVersions->SetColLabelSize( 22 );
 	m_gridVersions->SetColLabelValue( 0, _("Version") );
 	m_gridVersions->SetColLabelValue( 1, _("Download Size") );
 	m_gridVersions->SetColLabelValue( 2, _("Install Size") );
 	m_gridVersions->SetColLabelValue( 3, _("Compatible") );
 	m_gridVersions->SetColLabelValue( 4, _("Status") );
+	m_gridVersions->SetColLabelSize( 22 );
 	m_gridVersions->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -109,8 +109,8 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_buttonDownload = new wxButton( m_infoScrollWindow, wxID_ANY, _("Download"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerVersionButtons->Add( m_buttonDownload, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_buttonInstall = new wxButton( m_infoScrollWindow, wxID_ANY, _("Install"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerVersionButtons->Add( m_buttonInstall, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_buttonAction = new wxButton( m_infoScrollWindow, wxID_ANY, _("Install"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerVersionButtons->Add( m_buttonAction, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_sizerVersions->Add( bSizerVersionButtons, 0, wxEXPAND|wxRIGHT, 5 );
@@ -143,7 +143,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_gridVersions->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );
-	m_buttonInstall->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInstallVersionClicked ), NULL, this );
+	m_buttonAction->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionActionClicked ), NULL, this );
 }
 
 PANEL_PACKAGES_VIEW_BASE::~PANEL_PACKAGES_VIEW_BASE()
@@ -155,6 +155,6 @@ PANEL_PACKAGES_VIEW_BASE::~PANEL_PACKAGES_VIEW_BASE()
 	m_gridVersions->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );
-	m_buttonInstall->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInstallVersionClicked ), NULL, this );
+	m_buttonAction->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionActionClicked ), NULL, this );
 
 }

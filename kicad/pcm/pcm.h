@@ -55,7 +55,9 @@ enum PCM_PACKAGE_STATE
     PPS_UNAVAILABLE = 1,
     PPS_INSTALLED = 2,
     PPS_PENDING_INSTALL = 3,
-    PPS_PENDING_UNINSTALL = 4
+    PPS_PENDING_UNINSTALL = 4,
+    PPS_UPDATE_AVAILABLE = 5,
+    PPS_PENDING_UPDATE = 6,
 };
 
 
@@ -63,7 +65,8 @@ enum PCM_PACKAGE_STATE
 enum PCM_PACKAGE_ACTION
 {
     PPA_INSTALL = 0,
-    PPA_UNINSTALL = 1
+    PPA_UNINSTALL = 1,
+    PPA_UPDATE = 2,
 };
 
 
@@ -223,6 +226,18 @@ public:
      * @return PCM_PACKAGE_STATE
      */
     PCM_PACKAGE_STATE GetPackageState( const wxString& aRepositoryId, const wxString& aPackageId );
+
+    /**
+     * @brief Get the preferred package update version or empty string if there is none
+     *
+     * Works only for installed packages and returns highest compatible version greater
+     * than currently installed that is at the same or higher (numerically lower)
+     * version stability level.
+     *
+     * @param aPackage package
+     * @return package version string
+     */
+    const wxString GetPackageUpdateVersion( const PCM_PACKAGE& aPackage );
 
     /**
      * @brief Downloads url to an output stream

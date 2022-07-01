@@ -22,9 +22,9 @@
 // at least on Windows/msys2
 #include "kicad_curl/kicad_curl_easy.h"
 
-#include "dialog_pcm.h"
 #include "bitmaps.h"
 #include "dialog_manage_repositories.h"
+#include "dialog_pcm.h"
 #include "grid_tricks.h"
 #include "ki_exception.h"
 #include "kicad_settings.h"
@@ -35,11 +35,11 @@
 #include "widgets/wx_grid.h"
 
 #include <fstream>
+#include <launch_ext.h>
 #include <sstream>
 #include <vector>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
-#include <launch_ext.h>
 
 
 #define GRID_CELL_MARGIN 4
@@ -71,7 +71,7 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     for( const std::pair<PCM_PACKAGE_TYPE, wxString>& entry : PACKAGE_TYPE_LIST )
     {
         PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm );
-        wxString label = wxGetTranslation( entry.second );
+        wxString             label = wxGetTranslation( entry.second );
         m_contentNotebook->AddPage( panel, wxString::Format( label, 0 ) );
         m_repositoryContentPanels.insert( { entry.first, panel } );
     }
@@ -91,26 +91,30 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
         m_gridPendingActions->SetCellValue( row, PENDING_COL_NAME, aData.package.name );
         m_gridPendingActions->SetCellValue( row, PENDING_COL_REPOSITORY, aData.repository_name );
 
-        if( aAction == PPA_INSTALL )
+        switch( aAction )
         {
+        case PPA_INSTALL:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Install" ) );
             m_gridPendingActions->SetCellValue( row, PENDING_COL_VERSION, aVersion );
-
-            m_pendingActions.emplace_back( aAction, aData.repository_id, aData.package, aVersion );
-
             new_state = PPS_PENDING_INSTALL;
-        }
-        else
-        {
+            break;
+        case PPA_UPDATE:
+            m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Update" ) );
+            m_gridPendingActions->SetCellValue(
+                    row, PENDING_COL_VERSION,
+                    wxString::Format( wxT( "%s \u279C %s" ), aData.current_version, aVersion ) );
+            new_state = PPS_PENDING_UPDATE;
+            break;
+        case PPA_UNINSTALL:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Uninstall" ) );
             m_gridPendingActions->SetCellValue(
                     row, PENDING_COL_VERSION,
                     m_pcm->GetInstalledPackageVersion( aData.package.identifier ) );
-
-            m_pendingActions.emplace_back( aAction, aData.repository_id, aData.package, aVersion );
-
             new_state = PPS_PENDING_UNINSTALL;
+            break;
         }
+
+        m_pendingActions.emplace_back( aAction, aData.repository_id, aData.package, aVersion );
 
         m_gridPendingActions->Thaw();
 
@@ -127,8 +131,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
     m_dialogNotebook->SetSelection( 0 );
 
-    SetupStandardButtons( { { wxID_OK,     _( "Close" )                   },
-                            { wxID_APPLY,  _( "Apply Pending Changes" )   },
+    SetupStandardButtons( { { wxID_OK, _( "Close" ) },
+                            { wxID_APPLY, _( "Apply Pending Changes" ) },
                             { wxID_CANCEL, _( "Discard Pending Changes" ) } } );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
@@ -303,15 +307,24 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 
             package_data.state = m_pcm->GetPackageState( aRepositoryId, pkg.identifier );
 
+            if( package_data.state == PPS_INSTALLED || package_data.state == PPS_UPDATE_AVAILABLE )
+                package_data.current_version = m_pcm->GetInstalledPackageVersion( pkg.identifier );
+
+            if( package_data.state == PPS_UPDATE_AVAILABLE )
+                package_data.update_version = m_pcm->GetPackageUpdateVersion( pkg );
+
+
             for( const PENDING_ACTION& action : m_pendingActions )
             {
                 if( action.package.identifier != pkg.identifier )
                     continue;
 
-                if( action.action == PPA_INSTALL )
-                    package_data.state = PPS_PENDING_INSTALL;
-                else
-                    package_data.state = PPS_PENDING_UNINSTALL;
+                switch( action.action )
+                {
+                case PPA_INSTALL: package_data.state = PPS_PENDING_INSTALL; break;
+                case PPA_UPDATE: package_data.state = PPS_PENDING_UPDATE; break;
+                case PPA_UNINSTALL: package_data.state = PPS_PENDING_UNINSTALL; break;
+                }
 
                 break;
             }
@@ -327,12 +340,12 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
             PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
             const wxString&  label = PACKAGE_TYPE_LIST[i].second;
             m_repositoryContentPanels[type]->SetData( data[type], m_callback );
-            m_contentNotebook->SetPageText( i, wxString::Format( wxGetTranslation( label ),
-                                                                 (int) data[type].size() ) );
+            m_contentNotebook->SetPageText(
+                    i, wxString::Format( wxGetTranslation( label ), (int) data[type].size() ) );
         }
 
-        m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ),
-                                                            (int) packages.size() ) );
+        m_dialogNotebook->SetPageText(
+                0, wxString::Format( _( "Repository (%d)" ), (int) packages.size() ) );
     }
 }
 
@@ -381,8 +394,8 @@ void DIALOG_PCM::setInstalledPackages()
 
     m_installedPanel->SetData( package_list, m_callback );
 
-    m_dialogNotebook->SetPageText( 1, wxString::Format( _( "Installed (%d)" ),
-                                                        (int) package_list.size() ) );
+    m_dialogNotebook->SetPageText(
+            1, wxString::Format( _( "Installed (%d)" ), (int) package_list.size() ) );
 }
 
 
@@ -400,9 +413,15 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
     for( const PENDING_ACTION& action : m_pendingActions )
     {
         if( action.action == PPA_UNINSTALL )
+        {
             task_manager.Uninstall( action.package );
+        }
         else
-            task_manager.DownloadAndInstall( action.package, action.version, action.repository_id );
+        {
+            bool isUpdate = action.action == PPA_UPDATE;
+            task_manager.DownloadAndInstall( action.package, action.version, action.repository_id,
+                                             isUpdate );
+        }
     }
 
     task_manager.RunQueue( this );
@@ -458,8 +477,8 @@ void DIALOG_PCM::discardAction( int aIndex )
 
     PENDING_ACTION action = m_pendingActions[aIndex];
 
-    PCM_PACKAGE_STATE state = m_pcm->GetPackageState( action.repository_id,
-                                                      action.package.identifier );
+    PCM_PACKAGE_STATE state =
+            m_pcm->GetPackageState( action.repository_id, action.package.identifier );
 
     m_installedPanel->SetPackageState( action.package.identifier, state );
 

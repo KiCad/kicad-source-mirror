@@ -20,14 +20,14 @@
 
 #include "panel_packages_view.h"
 #include <grid_tricks.h>
+#include <html_window.h>
 #include <kicad_settings.h>
 #include <pgm_base.h>
-#include <settings/settings_manager.h>
 #include <settings/common_settings.h>
-#include <widgets/wx_splitter_window.h>
-#include <widgets/wx_panel.h>
+#include <settings/settings_manager.h>
 #include <string_utils.h>
-#include <html_window.h>
+#include <widgets/wx_panel.h>
+#include <widgets/wx_splitter_window.h>
 
 #include <cmath>
 #include <fstream>
@@ -82,8 +82,8 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
         // Set the minimal width to the column label size.
         m_gridVersions->SetColMinimalWidth( col, headingWidth );
-        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col, true, true,
-                                                                          false ) );
+        m_gridVersions->SetColSize( col,
+                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
     }
 
     // Most likely should be changed to wxGridSelectNone once WxWidgets>=3.1.5 is mandatory.
@@ -163,48 +163,47 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     details << "<h5>" + package.name + "</h5>";
 
-    auto format_desc =
-            []( const wxString& text ) -> wxString
+    auto format_desc = []( const wxString& text ) -> wxString
+    {
+        wxString result;
+        bool     inURL = false;
+        wxString url;
+
+        for( unsigned i = 0; i < text.length(); ++i )
+        {
+            wxUniChar c = text[i];
+
+            if( inURL )
             {
-                wxString result;
-                bool     inURL = false;
-                wxString url;
-
-                for( unsigned i = 0; i < text.length(); ++i )
+                if( c == ' ' )
                 {
-                    wxUniChar c = text[i];
+                    result += wxString::Format( "<a href='%s'>%s</a>", url, url );
+                    inURL = false;
 
-                    if( inURL )
-                    {
-                        if( c == ' ' )
-                        {
-                            result += wxString::Format( "<a href='%s'>%s</a>", url, url );
-                            inURL = false;
-
-                            result += c;
-                        }
-                        else
-                        {
-                            url += c;
-                        }
-                    }
-                    else if( text.Mid( i, 5 ) == "http:" || text.Mid( i, 6 ) == "https:" )
-                    {
-                        url = c;
-                        inURL = true;
-                    }
-                    else if( c == '\n' )
-                    {
-                        result += "</p><p>";
-                    }
-                    else
-                    {
-                        result += c;
-                    }
+                    result += c;
                 }
+                else
+                {
+                    url += c;
+                }
+            }
+            else if( text.Mid( i, 5 ) == "http:" || text.Mid( i, 6 ) == "https:" )
+            {
+                url = c;
+                inURL = true;
+            }
+            else if( c == '\n' )
+            {
+                result += "</p><p>";
+            }
+            else
+            {
+                result += c;
+            }
+        }
 
-                return result;
-            };
+        return result;
+    };
 
     wxString desc = package.description_full;
     details << "<p>" + format_desc( desc ) + "</p>";
@@ -229,30 +228,28 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         details << "<li>" + _( "Tags: " ) + tags_str + "</li>";
     }
 
-    auto format_entry =
-            []( const std::pair<const std::string, wxString>& entry ) -> wxString
-            {
-                wxString name = entry.first;
-                wxString url = EscapeHTML( entry.second );
+    auto format_entry = []( const std::pair<const std::string, wxString>& entry ) -> wxString
+    {
+        wxString name = entry.first;
+        wxString url = EscapeHTML( entry.second );
 
-                if( name == "email" )
-                    return wxString::Format( "<a href='mailto:%s'>%s</a>", url, url );
-                else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
-                    return wxString::Format( "<a href='%s'>%s</a>", url, url );
-                else
-                    return entry.second;
-            };
+        if( name == "email" )
+            return wxString::Format( "<a href='mailto:%s'>%s</a>", url, url );
+        else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
+            return wxString::Format( "<a href='%s'>%s</a>", url, url );
+        else
+            return entry.second;
+    };
 
-    auto write_contact =
-            [&]( const wxString& type, const PCM_CONTACT& contact )
-            {
-                details << "<li>" + type + ": " + contact.name + "<ul>";
+    auto write_contact = [&]( const wxString& type, const PCM_CONTACT& contact )
+    {
+        details << "<li>" + type + ": " + contact.name + "<ul>";
 
-                for( const std::pair<const std::string, wxString>& entry : contact.contact )
-                    details << "<li>" + entry.first + ": " + format_entry( entry ) + "</li>";
+        for( const std::pair<const std::string, wxString>& entry : contact.contact )
+            details << "<li>" + entry.first + ": " + format_entry( entry ) + "</li>";
 
-                details << "</ul>";
-            };
+        details << "</ul>";
+    };
 
     write_contact( _( "Author" ), package.author );
 
@@ -285,7 +282,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     int      row = 0;
     wxString current_version;
 
-    if( aPackageData.state == PPS_INSTALLED )
+    if( aPackageData.state == PPS_INSTALLED || aPackageData.state == PPS_UPDATE_AVAILABLE )
         current_version = m_pcm->GetInstalledPackageVersion( package.identifier );
 
     wxFont bold_font = m_gridVersions->GetDefaultCellFont().Bold();
@@ -320,13 +317,17 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     for( int col = 0; col < m_gridVersions->GetNumberCols(); col++ )
     {
         // Set the width to see the full contents
-        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col, true, true,
-                                                                          false ) );
+        m_gridVersions->SetColSize( col,
+                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
     }
 
+    // Autoselect preferred or installed version
     if( m_gridVersions->GetNumberRows() >= 1 )
     {
-        wxString version = m_currentSelected->GetPreferredVersion();
+        wxString version = m_currentSelected->GetPackageData().current_version;
+
+        if( version.IsEmpty() )
+            version = m_currentSelected->GetPreferredVersion();
 
         if( !version.IsEmpty() )
         {
@@ -335,6 +336,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                 if( m_gridVersions->GetCellValue( i, COL_VERSION ) == version )
                 {
                     m_gridVersions->SelectRow( i );
+                    m_gridVersions->SetGridCursor( i, COL_VERSION );
                     break;
                 }
             }
@@ -404,15 +406,20 @@ bool PANEL_PACKAGES_VIEW::canDownload() const
 }
 
 
-bool PANEL_PACKAGES_VIEW::canInstall() const
+bool PANEL_PACKAGES_VIEW::canRunAction() const
 {
     if( !m_currentSelected )
         return false;
 
     const PACKAGE_VIEW_DATA& packageData = m_currentSelected->GetPackageData();
 
-    if( packageData.state != PPS_AVAILABLE && packageData.state != PPS_UNAVAILABLE )
-        return false;
+    switch( packageData.state )
+    {
+    case PPS_PENDING_INSTALL:
+    case PPS_PENDING_UNINSTALL:
+    case PPS_PENDING_UPDATE: return false;
+    default: break;
+    }
 
     return m_gridVersions->GetNumberRows() == 1 || m_gridVersions->GetSelectedRows().size() == 1;
 }
@@ -529,11 +536,20 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 }
 
 
-void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
+void PANEL_PACKAGES_VIEW::OnVersionActionClicked( wxCommandEvent& event )
 {
-    if( !canInstall() )
+    if( !canRunAction() )
     {
         wxBell();
+        return;
+    }
+
+    PCM_PACKAGE_ACTION action = getAction();
+
+    if( action == PPA_UNINSTALL )
+    {
+        m_actionCallback( m_currentSelected->GetPackageData(), PPA_UNINSTALL,
+                          m_currentSelected->GetPackageData().current_version );
         return;
     }
 
@@ -562,7 +578,7 @@ void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
         return;
     }
 
-    m_actionCallback( m_currentSelected->GetPackageData(), PPA_INSTALL, version );
+    m_actionCallback( m_currentSelected->GetPackageData(), action, version );
 }
 
 
@@ -648,7 +664,56 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
 void PANEL_PACKAGES_VIEW::updateDetailsButtons()
 {
     m_buttonDownload->Enable( canDownload() );
-    m_buttonInstall->Enable( canInstall() );
+
+    if( canRunAction() )
+    {
+        m_buttonAction->Enable();
+
+        PCM_PACKAGE_ACTION action = getAction();
+
+        switch( action )
+        {
+        case PPA_INSTALL: m_buttonAction->SetLabel( _( "Install" ) ); break;
+        case PPA_UNINSTALL: m_buttonAction->SetLabel( _( "Uninstall" ) ); break;
+        case PPA_UPDATE: m_buttonAction->SetLabel( _( "Update" ) ); break;
+        }
+    }
+    else
+    {
+        m_buttonAction->Disable();
+        m_buttonAction->SetLabel( _( "Pending" ) );
+    }
+}
+
+
+PCM_PACKAGE_ACTION PANEL_PACKAGES_VIEW::getAction() const
+{
+    wxASSERT_MSG( m_gridVersions->GetNumberRows() == 1
+                          || m_gridVersions->GetSelectedRows().size() == 1,
+                  "getAction() called with ambiguous version selection" );
+
+    int selected_row = 0;
+
+    if( m_gridVersions->GetSelectedRows().size() == 1 )
+        selected_row = m_gridVersions->GetSelectedRows()[0];
+
+    wxString                 version = m_gridVersions->GetCellValue( selected_row, COL_VERSION );
+    const PACKAGE_VIEW_DATA& package = m_currentSelected->GetPackageData();
+
+    switch( package.state )
+    {
+    case PPS_AVAILABLE:
+    case PPS_UNAVAILABLE:
+        return PPA_INSTALL; // Only action for not installed package is to install it
+    case PPS_INSTALLED:
+    case PPS_UPDATE_AVAILABLE:
+        if( version == package.current_version )
+            return PPA_UNINSTALL;
+        else
+            return PPA_UPDATE;
+    default:
+        return PPA_INSTALL; // For pending states return value does not matter as button will be disabled
+    }
 }
 
 
@@ -692,6 +757,6 @@ void PANEL_PACKAGES_VIEW::SetSashOnIdle( wxIdleEvent& aEvent )
 
     m_packageListWindow->FitInside();
 
-	m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
+    m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
                              NULL, this );
 }

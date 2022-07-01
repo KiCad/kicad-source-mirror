@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,10 +27,10 @@ class WX_PANEL;
 #include <wx/html/htmlwin.h>
 #include <wx/grid.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -55,21 +55,22 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		WX_GRID* m_gridVersions;
 		wxCheckBox* m_showAllVersions;
 		wxButton* m_buttonDownload;
-		wxButton* m_buttonInstall;
+		wxButton* m_buttonAction;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnSizeInfoBox( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnURLClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnInfoMouseWheel( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnVersionsCellClicked( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnShowAllVersionsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDownloadVersionClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnInstallVersionClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnVersionActionClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_PACKAGES_VIEW_BASE();
 
 		void m_splitter1OnIdle( wxIdleEvent& )

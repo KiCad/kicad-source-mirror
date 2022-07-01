@@ -35,6 +35,7 @@ struct PACKAGE_VIEW_DATA
     wxString          repository_id;
     wxString          repository_name;
     wxString          current_version;
+    wxString          update_version;
     PACKAGE_VIEW_DATA( const PCM_PACKAGE aPackage ) :
             package( std::move( aPackage ) ), bitmap( nullptr ), state( PPS_INSTALLED ){};
     PACKAGE_VIEW_DATA( const PCM_INSTALLATION_ENTRY& aEntry ) :
@@ -72,6 +73,8 @@ public:
 
     ///< Called when anywhere on the panel is clicked (except install button)
     void OnClick( wxMouseEvent& event ) override;
+
+    void OnUninstallClick( wxCommandEvent& event );
 
     void OnSize( wxSizeEvent& event ) override;
 

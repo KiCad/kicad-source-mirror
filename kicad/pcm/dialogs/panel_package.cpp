@@ -18,16 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/dcclient.h>
 #include <math/util.h>
+#include <wx/dcclient.h>
 
 #include "panel_package.h"
 
 PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
                               const PACKAGE_VIEW_DATA& aData ) :
         PANEL_PACKAGE_BASE( parent ),
-        m_actionCallback( aCallback ),
-        m_data( aData )
+        m_actionCallback( aCallback ), m_data( aData )
 {
     // Propagate clicks on static elements to the panel handler.
     m_name->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
@@ -53,20 +52,26 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     m_desc->SetLabel( m_data.package.description );
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
-    int nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
+    int    nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
     wxSize minSize = GetMinSize();
     minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
     SetMinSize( minSize );
 
-    wxSizeEvent dummy;
-    OnSize( dummy );
+    m_splitButton->SetLabel( _( "Update" ) );
+    m_splitButton->Bind( wxEVT_BUTTON, &PANEL_PACKAGE::OnButtonClicked, this );
+
+    wxMenu*     splitMenu = m_splitButton->GetSplitButtonMenu();
+    wxMenuItem* menuItem = splitMenu->Append( wxID_ANY, _( "Uninstall" ) );
+
+    splitMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_PACKAGE::OnUninstallClick, this,
+                     menuItem->GetId() );
 
     SetState( m_data.state );
 }
 
 
 void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
-{ 
+{
     Layout();
 }
 
@@ -78,30 +83,50 @@ void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
     switch( aState )
     {
     case PCM_PACKAGE_STATE::PPS_AVAILABLE:
+        m_splitButton->Hide();
+        m_button->Show();
         m_button->SetLabel( _( "Install" ) );
         m_button->Enable();
         break;
     case PCM_PACKAGE_STATE::PPS_UNAVAILABLE:
+        m_splitButton->Hide();
+        m_button->Show();
         m_button->SetLabel( _( "Install" ) );
         m_button->Disable();
         break;
     case PCM_PACKAGE_STATE::PPS_INSTALLED:
+        m_splitButton->Hide();
+        m_button->Show();
         m_button->SetLabel( _( "Uninstall" ) );
         m_button->Enable();
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_INSTALL:
+        m_splitButton->Hide();
+        m_button->Show();
         m_button->SetLabel( _( "Install Pending" ) );
         m_button->Disable();
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_UNINSTALL:
+        m_splitButton->Hide();
+        m_button->Show();
         m_button->SetLabel( _( "Uninstall Pending" ) );
+        m_button->Disable();
+        break;
+    case PCM_PACKAGE_STATE::PPS_UPDATE_AVAILABLE:
+        // The only state where the split button is shown instead of the normal one
+        m_button->Hide();
+        m_splitButton->Show();
+        break;
+    case PCM_PACKAGE_STATE::PPS_PENDING_UPDATE:
+        m_splitButton->Hide();
+        m_button->Show();
+        m_button->SetLabel( _( "Update Pending" ) );
         m_button->Disable();
         break;
     }
 
     // Relayout to change button size to fit the label.
-    wxSizeEvent dummy;
-    OnSize( dummy );
+    Layout();
 }
 
 
@@ -116,9 +141,28 @@ void PANEL_PACKAGE::OnButtonClicked( wxCommandEvent& event )
 
         m_actionCallback( m_data, PPA_INSTALL, version );
     }
+    else if( m_data.state == PPS_UPDATE_AVAILABLE )
+    {
+        m_actionCallback( m_data, PPA_UPDATE, m_data.update_version );
+    }
     else
     {
         m_actionCallback( m_data, PPA_UNINSTALL, m_data.current_version );
+    }
+}
+
+
+void PANEL_PACKAGE::OnUninstallClick( wxCommandEvent& event )
+{
+    if( m_data.state == PPS_UPDATE_AVAILABLE )
+    {
+        m_actionCallback( m_data, PPA_UNINSTALL, m_data.current_version );
+    }
+    else
+    {
+        // Clicking uninstall menu item of the split button should not be possible
+        // for any state other than UPDATE_AVAILABLE
+        wxLogError( wxT( "Uninstall clicked in unexpected state" ) );
     }
 }
 
@@ -185,5 +229,3 @@ wxString PANEL_PACKAGE::GetPreferredVersion() const
 
     return ver_it->version;
 }
-
-

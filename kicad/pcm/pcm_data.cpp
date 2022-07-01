@@ -59,6 +59,9 @@ void to_json( json& j, const PACKAGE_VERSION& v )
 
     if( v.kicad_version_max )
         j["kicad_version_max"] = v.kicad_version_max.get();
+
+    if( v.keep_on_update.size() > 0 )
+        nlohmann::to_json( j["keep_on_update"], v.keep_on_update );
 }
 
 
@@ -77,6 +80,9 @@ void from_json( const json& j, PACKAGE_VERSION& v )
 
     if( j.contains( "platforms" ) )
         j.at( "platforms" ).get_to( v.platforms );
+
+    if( j.contains( "keep_on_update" ) )
+        j.at( "keep_on_update" ).get_to( v.keep_on_update );
 }
 
 
@@ -97,6 +103,9 @@ void to_json( json& j, const PCM_PACKAGE& p )
 
     if( p.tags.size() > 0 )
         j["tags"] = p.tags;
+
+    if( p.keep_on_update.size() > 0 )
+        j["keep_on_update"] = p.keep_on_update;
 }
 
 
@@ -116,6 +125,9 @@ void from_json( const json& j, PCM_PACKAGE& p )
 
     if( j.contains( "tags" ) )
         j.at( "tags" ).get_to( p.tags );
+
+    if( j.contains( "keep_on_update" ) )
+        j.at( "keep_on_update" ).get_to( p.keep_on_update );
 }
 
 
@@ -133,7 +145,7 @@ void from_json( const json& j, PCM_RESOURCE_REFERENCE& r )
     j.at( "url" ).get_to( r.url );
     j.at( "update_timestamp" ).get_to( r.update_timestamp );
 
-    to_optional(j, "sha256", r.sha256 );
+    to_optional( j, "sha256", r.sha256 );
 }
 
 
@@ -157,7 +169,7 @@ void from_json( const json& j, PCM_REPOSITORY& r )
     j.at( "name" ).get_to( r.name );
     j.at( "packages" ).get_to( r.packages );
 
-    to_optional(j, "resources", r.resources );
-    to_optional(j, "manifests", r.manifests );
-    to_optional(j, "maintainer", r.maintainer );
+    to_optional( j, "resources", r.resources );
+    to_optional( j, "manifests", r.manifests );
+    to_optional( j, "maintainer", r.maintainer );
 }

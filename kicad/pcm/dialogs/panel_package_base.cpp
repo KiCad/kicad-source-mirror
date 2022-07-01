@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,6 +66,9 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_button = new wxButton( this, wxID_ANY, _("Install"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_splitButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Update" ) );
+	bSizer4->Add( m_splitButton, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
 	bSizer3->Add( bSizer4, 0, wxEXPAND, 5 );

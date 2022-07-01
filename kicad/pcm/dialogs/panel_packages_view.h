@@ -63,8 +63,8 @@ public:
     ///< Opens file chooser dialog and downloads selected package version archive
     void OnDownloadVersionClicked( wxCommandEvent& event ) override;
 
-    ///< Schedules installation of selected package version
-    void OnInstallVersionClicked( wxCommandEvent& event ) override;
+    ///< Schedules relevant action for selected package version
+    void OnVersionActionClicked( wxCommandEvent& event ) override;
 
     ///< Shows all versions including incompatible ones
     void OnShowAllVersionsClicked( wxCommandEvent& event ) override;
@@ -102,8 +102,11 @@ private:
     ///< Returns true if it the download operation can be performed
     bool canDownload() const;
 
-    ///< Returns true if the install operation can be performed
-    bool canInstall() const;
+    ///< Returns true if the package action can be performed
+    bool canRunAction() const;
+
+    ///< Returns implied action for the action button
+    PCM_PACKAGE_ACTION getAction() const;
 
 private:
     ActionCallback                               m_actionCallback;

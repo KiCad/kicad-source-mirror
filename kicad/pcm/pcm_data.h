@@ -82,6 +82,7 @@ struct PACKAGE_VERSION
     std::vector<std::string>   platforms;
     wxString                   kicad_version;
     boost::optional<wxString>  kicad_version_max;
+    std::vector<std::string>   keep_on_update;
 
     // Not serialized fields
     std::tuple<int, int, int, int> parsed_version; // Full version tuple for sorting
@@ -102,6 +103,7 @@ struct PCM_PACKAGE
     wxString                     license;
     STRING_MAP                   resources;
     std::vector<std::string>     tags;
+    std::vector<std::string>     keep_on_update;
     std::vector<PACKAGE_VERSION> versions;
 };
 

@@ -70,6 +70,14 @@
                     "minItems": 1,
                     "uniqueItems": true
                 },
+                "keep_on_update": {
+                    "type": "array",
+                    "description": "List of regular expressions describing which files should be kept on package update",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
                 "versions": {
                     "type": "array",
                     "description": "Package versions",
@@ -183,6 +191,14 @@
                     "type": "string",
                     "description": "Maximum supported KiCad version",
                     "pattern": "^\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?$"
+                },
+                "keep_on_update": {
+                    "type": "array",
+                    "description": "List of regular expressions describing which files should be kept on package update",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
                 }
             },
             "required": [
