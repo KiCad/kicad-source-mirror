@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-04 19:05+0000\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -5398,14 +5398,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Um caractere ilegal foi encontrado no nome da biblioteca lógica"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "nenhum ficheiro selecionado"
+msgstr "Ativos selecionados"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Rede não selecionada"
+msgstr "Desative os selecionados"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5886,9 +5884,8 @@ msgid "Paste Special..."
 msgstr "Cole Especial..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Cole o(s) item(s) da área de transferência com opções"
+msgstr "Cole o(s) item(s) da área de transferência com as opções de anotação"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -12662,9 +12659,8 @@ msgstr ""
 "do fio ou do barramento"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "O tamanho global do rótulo:"
+msgstr "Margem global do rótulo:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -14570,14 +14566,14 @@ msgstr ""
 "na biblioteca KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"A definição da peça '%s' faz referência ao símbolo '%s' ('%s' alternativo) "
-"que não foi encontrado nos símbolos da biblioteca. A parte não foi carregada "
-"na biblioteca KiCad."
+"A definição da peça '%s' possui uma definição incompleta (nenhuma definição "
+"do símbolo está associada a ela). A peça não foi carregada na biblioteca "
+"KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
 #, c-format
@@ -15823,6 +15819,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Aviso: prefixo de referência</b><br>o prefixo terminando por '%s' pode "
+"criar problemas caso seja salvo numa biblioteca de símbolos"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -17514,9 +17512,8 @@ msgid "Hierarchy Navigator"
 msgstr "Navegador hierárquico"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Mostrar a hierarquia da folha do esquema"
+msgstr "Mostra ou oculta o navegador de hierarquia da folha esquemática"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17713,14 +17710,12 @@ msgstr "o símbolo não é multi-unidade"
 
 #: eeschema/tools/sch_edit_tool.cpp:370 eeschema/tools/sch_edit_tool.cpp:408
 #: eeschema/tools/sch_edit_tool.cpp:445
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Edite %s campo"
+msgstr "Edita os campos principais"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
-#, fuzzy
 msgid "Change To"
-msgstr "Troque"
+msgstr "Alterar para"
 
 #: eeschema/tools/sch_edit_tool.cpp:994
 msgid "Label value cannot go below zero"
@@ -20925,151 +20920,148 @@ msgid "NP Pad: (diam - drill)"
 msgstr "Ilha não laminada: (diam - furo)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Propriedades do círculo"
+msgstr "Propriedades do fio"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Tipo padrão"
+msgstr "Tamanho padrão:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -21078,38 +21070,33 @@ msgstr "Área:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Resistência térmica:"
+msgstr "Resistência linear:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Frequência para 100% da profundidade da pele:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "Opacidade:"
+msgstr "Ampacidade:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "Aplicações auxiliares"
+msgstr "Aplicação"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Corrente"
+msgstr "Atual:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
-#, fuzzy
 msgid "Length:"
-msgstr "Comprimento"
+msgstr "Comprimento:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
@@ -21126,18 +21113,16 @@ msgid "Voltage drop:"
 msgstr "Queda da tensão:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Potência dissipada:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
-#, fuzzy
 msgid "mW"
-msgstr "W"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -21339,12 +21324,11 @@ msgstr "Solução 4R:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:229
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "O cálculo atual é subestimado devido ao longo tempo de fusão."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Luz ambiente da câmera:"
+msgstr "Temperatura ambiente:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21354,9 +21338,8 @@ msgid "deg C"
 msgstr "°C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Ponto de operação"
+msgstr "Ponto de fusão:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21365,14 +21348,12 @@ msgid "Track width:"
 msgstr "Largura da trilha:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Espessura da trilha (H):"
+msgstr "Espessura da trilha:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Intervalo de tempo:"
+msgstr "Tempo para fusão:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
@@ -21955,6 +21936,16 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Você pode usar esta calculadora para verificar se uma pequena trilha pode "
+"suportar uma grande corrente por um curto período de tempo.<br>\n"
+"Esta ferramenta permite projetar um fusível, mas deve ser usada apenas como "
+"uma estimativa.\n"
+"\n"
+"A calculadora estima a energia necessária para aquecer o fio<br>\n"
+"ao seu ponto de fusão, bem como a energia necessária para a alteração da "
+"fase.<br>\n"
+"Esta energia é então comparada com a energia dissipada pela resistência do "
+"fio."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 msgid "General system design"
@@ -21973,14 +21964,12 @@ msgid "Electrical Spacing"
 msgstr "Espaçamento elétrico"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
-#, fuzzy
 msgid "Fusing Current"
-msgstr "Corrente"
+msgstr "Corrente de fusão"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Cable Size"
-msgstr "Tamanho do furo"
+msgstr "Tamanho do cabo"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "High speed"
@@ -22413,13 +22402,12 @@ msgid "m"
 msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "m"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "pés"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -26054,9 +26042,8 @@ msgid "Map File Format"
 msgstr "Formato do arquivo de mapeamento"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Criar um mapa de furação no formato PS ou HPGL ou outros formatos"
+msgstr "Cria um mapa de perfuração em PDF ou em outros formatos"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -28940,9 +28927,8 @@ msgstr "Seleciona item(ns)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Alternar Estado da Seleção"
+msgstr "Alterna a seleção."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -31787,18 +31773,17 @@ msgid "Checking assertions..."
 msgstr "Verificando as asserções..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:109
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Reunindo os itens..."
+msgstr "Reunindo os itens físicos..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:174
 msgid "Checking physical clearances..."
 msgstr "Verificando os isolamentos físicos..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Isolamento local na%s; isolamento: %s."
+msgstr "Violação do isolamento interno (%s isolamento %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -31966,12 +31951,11 @@ msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Não há nenhum projeto ao exportar para o arquivo VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "Falha ao Exportar IDF:\n"
+msgstr "Houve uma falha na exportação do VRML:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32670,571 +32654,498 @@ msgstr "url doc"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "A dimensão das matrizes deve ser >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "A largura de banda das matrizes com bandas deve ser >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Existem elementos NaN numa matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "O valor do comprimento é inválido"
+msgstr "Valor R_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "O valor do comprimento é inválido"
+msgstr "Valor L_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "O valor do comprimento é inválido"
+msgstr "Valor C_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "Verificando os pinos..."
+msgstr "Verificando o pino "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O nome do pino não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "O nome da variável não pode estar vazio."
+msgstr "O nome do sinal não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O nome do modelo não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Nome de arquivo inválido!"
+msgstr "Rpin não é válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Nome de arquivo inválido!"
+msgstr "Lpin não é válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Nome de arquivo inválido!"
+msgstr "Cpin não é válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O nome do componente não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Verificando zonas"
+msgstr "Verificando o componente "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "O nome da rede não pode estar vazio."
+msgstr "Componente: o fabricante não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Valor do componente:"
+msgstr "Componente: Pacote inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Componente"
+msgstr "Componente: sem pino"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Não é possível interpolar a corrente com a base nesta tabela IV."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "Existe uma tensão NaN numa tabela IV"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Há uma corrente inválida numa tabela IV"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Inválido"
+msgstr "R_load inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "O valor do comprimento é inválido"
+msgstr "Queda dv/dt inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "O valor da resistência é inválido"
+msgstr "Crescente dv/dt inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O nome do modelo não pode estar vazio"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Verificando zonas"
+msgstr "Verificando o modelo "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Camadas indefinidas:"
+msgstr "Tipo indefinido do modelo"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "O valor do comprimento é inválido"
+msgstr "Valor de Vinh inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "O valor do atraso é inválido"
+msgstr "Valor de Vinl inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "O valor do atraso é inválido"
+msgstr "Valor R_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "O valor do atraso é inválido"
+msgstr "Valor C_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "O valor do atraso é inválido"
+msgstr "valor V_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "O valor do atraso é inválido"
+msgstr "Valor V_meas inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:474
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Atalho é inválido"
+msgstr "C_comp é inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Aumento da temperatura"
+msgstr "A faixa de temperatura é inválida."
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Nome de arquivo inválido!"
+msgstr "A faixa de tensão é inválida."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "O nome do pino é inválido"
+msgstr "Pulldown inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "O valor do atraso é inválido"
+msgstr "Pullup inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "O nome do pino é inválido"
+msgstr "Clamp ENERGIA Inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "O nome do pino é inválido"
+msgstr "Clamp GND inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Inválido"
+msgstr "Rampa inválida"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Verificando as ilhas..."
+msgstr "Verificando o cabeçalho..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Falta [Ver IBIS]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "O analisador não lida com esta versão do IBIS"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Falta o nome da regra."
+msgstr "Faltando [Arquivo Rev]"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Falta o nome da regra."
+msgstr "Faltando [Nome do arquivo]"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "O nome do símbolo não pode estar vazio."
+msgstr "O nome do modelo do pacote não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "Verificando os furos das ilhas..."
+msgstr "Verificando o modelo do pacote "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "O nome da rede não pode estar vazio."
+msgstr "O fabricante não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "O texto não pode estar vazio."
+msgstr "O OEM não pode estar vazio."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Quantidade de pontos"
+msgstr "Quantidade negativa dos pinos."
 
 #: pcbnew/ibis/ibis_parser.cpp:625
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Esperando o número."
+msgstr "Quantidade dos pinos vazios"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Resistência por unidade de comprimento"
+msgstr "A matriz da resistência está incorreta"
 
 #: pcbnew/ibis/ibis_parser.cpp:641
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Capacitância por unidade de comprimento"
+msgstr "A matriz da capacitância não está definida"
 
 #: pcbnew/ibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Capacitância por unidade de comprimento"
+msgstr "A matriz da capacitância está incorreta"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Capacitância por unidade de comprimento"
+msgstr "A matriz da capacitância é nullptr"
 
 #: pcbnew/ibis/ibis_parser.cpp:661
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Indutância por unidade de comprimento"
+msgstr "A matriz da indutância é indefinida"
 
 #: pcbnew/ibis/ibis_parser.cpp:667
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Indutância por unidade de comprimento"
+msgstr "A matriz da indutância está incorreta"
 
 #: pcbnew/ibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Indutância por unidade de comprimento"
+msgstr "A matriz da indutância é nullptr"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Não é possível abrir o arquivo '%s'"
+msgstr "Não é possível abrir o arquivo "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "Carregando os arquivos..."
+msgstr "Lendo o arquivo "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Não era esperado o fim do arquivo."
+msgstr "Fim inesperado do arquivo. Falta [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "Houve um erro na inicialização da informação da impressora"
+msgstr "Erro na linha "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
-#, fuzzy
 msgid "A line did not end properly.."
-msgstr "Os itens importados no arquivo não puderam ser tratados adequadamente."
+msgstr "Uma linha não terminou corretamente.."
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "A linha excede o comprimento máximo."
 
 #: pcbnew/ibis/ibis_parser.cpp:933
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Houve uma falha ao criar a pasta '%s'."
+msgstr "Houve uma falha ao ler um duplo."
 
 #: pcbnew/ibis/ibis_parser.cpp:939 pcbnew/ibis/ibis_parser.cpp:983
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Houve uma falha ao carregar '%s'."
+msgstr "Houve uma falha ao ler uma palavra."
 
 #: pcbnew/ibis/ibis_parser.cpp:976
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "O símbolo não é anotado"
+msgstr "O número não é um número inteiro"
 
 #: pcbnew/ibis/ibis_parser.cpp:1020
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Não foi possível ler o arquivo de dados '%s'."
+msgstr "Não foi possível ler a string, a entrada está vazia."
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "O novo caractere de comentário é inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Sintaxe inválida. Deve ser |_char ou &_char, etc..."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
-#, fuzzy
 msgid "No extra argument was expected"
-msgstr "Rede não selecionada"
+msgstr "Nenhum argumento extra era esperado"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Registro ID desconhecido: %d."
+msgstr "Palavra-chave desconhecida em "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "Texto do passo:"
+msgstr " contexto: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "O nome do pino é inválido"
+msgstr "Dados de rampa inválidos"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
 msgstr ""
+"Não é possível especificar uma largura de banda para esse tipo de matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Definição inválida da linha"
+msgstr "Linha inválida na matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Dados excedentes nesta linha da matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "Nenhuma ilha para este footprint."
+msgstr "Dados excedentes nesta matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Não é possível ler um elemento na matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Não é possível ler um índice da matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "tipo de via desconhecido %d"
+msgstr "Tipo desconhecido da matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Falta o valor máximo."
+msgstr "Tipo ausente da matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" A matrix já está inicializada. Mas m_continue não foi definido ( erro "
+"interno )"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Tentativa de leitura de uma linha a partir de uma matriz indefinida"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "ponteiro da matriz é nulo"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Os valores Typ-Min-Max requerem pelo menos Typ."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Método Desconhecido"
+msgstr "Model_type desconhecido "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Houve um erro interno ao ler o model_type"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Camada PCad %u desconhecida"
+msgstr "Ativar Desconhecido: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Houve um erro interno ao ler Ativar"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Primitivo desconhecido"
+msgstr "Polaridade desconhecida "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Continuação da leitura de um modelo que não começou. ( erro interno )"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Uma linha do [pacote] requer exatamente 4 elementos."
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Entrada inválida do pino: 6 valores de uma tabela com apenas 3."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Não é possível ler um valor R, L ou C para um pino."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "A definição dos nomes do pin é inválido"
+msgstr "Nome do campo inválido em [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Faltando relacionados"
+msgstr "Argumento ausente em [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Quantidade incorreta das colunas para o mapeamento dos pinos."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Número da escala incorreto"
+msgstr "Nome incorreto do pino diferencial"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Número da escala incorreto"
+msgstr "Nome inv_pin incorreto"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "tipo de via desconhecido %d"
+msgstr "Tipo desconhecido da forma de onda"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Foi detectado um erro interno, uma forma de onda deve existir"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Erro interno: contexto incorreto do analisador."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Palavras-chave do alias:"
+msgstr "Falta palavra-chave."
 
 #: pcbnew/ibis/kibis.cpp:396
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "A forma não tem pontos."
+msgstr "a forma de onda tem menos de dois pontos"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
-#, fuzzy
 msgid "Cannot remove temporary input file"
-msgstr "Não é possível renomear o arquivo temporário '%s' para '%s'"
+msgstr "Não é possível remover o arquivo temporário de entrada"
 
 #: pcbnew/ibis/kibis.cpp:600 pcbnew/ibis/kibis.cpp:662
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Não é possível renomear o arquivo temporário '%s' para '%s'"
+msgstr "Não é possível remover o arquivo temporário de saída"
 
 #: pcbnew/ibis/kibis.cpp:644
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Houve um erro ao ler o arquivo."
+msgstr "Houve um erro ao ler o arquivo temporário"
 
 #: pcbnew/ibis/kibis.cpp:652
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "Falhou ao criar ficheiro de biblioteca de símbolos \"%s\""
+msgstr "Houve um erro ao criar o arquivo temporário"
 
 #: pcbnew/ibis/kibis.cpp:705
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"O Kibis ainda não é compatível com valores DUT. https://ibis.org/summits/"
+"nov16a/chen.pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "A borda de subida é mais longa do que o tempo."
 
 #: pcbnew/ibis/kibis.cpp:731
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "A borda de queda é mais longa do que o tempo desligado."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "O modelo possui apenas um par de formas de onda, precisão reduzida"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "O controlador precisa de pelo menos um pullup ou de um pulldown"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Existem dois pares de formas de onda, mas apenas um transistor. Mais "
+"equações do que incógnitas."
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"O modelo não possui um par das formas de onda, em vez disso, vamos usar "
+"[Ramp], baixa precisão"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr ""
+"O modelo possui mais de 2 pares de formas de onda, usando os dois primeiros."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Tipo inválido do modelo para o controlador."
 
 #: pcbnew/ibis/kibis.cpp:1209
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "O valor do atraso é inválido"
+msgstr "Tipo inválido do modelo para um dispositivo"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
