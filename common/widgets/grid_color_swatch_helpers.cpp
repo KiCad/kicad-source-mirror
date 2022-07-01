@@ -43,7 +43,7 @@ GRID_CELL_COLOR_RENDERER::GRID_CELL_COLOR_RENDERER( wxWindow* aParent, SWATCH_SI
     case SWATCH_MEDIUM: m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU ); break;
     case SWATCH_SMALL:  m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );  break;
     case SWATCH_LARGE:  m_size = m_parent->ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
-    case SWATCH_EXPAND: m_size = wxDefaultSize; break;
+    default:            m_size = wxDefaultSize; break;
     }
 
     m_checkerboardSize = m_parent->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );

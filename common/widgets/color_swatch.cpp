@@ -124,13 +124,36 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
 
     switch( aSwatchSize )
     {
-    case SWATCH_MEDIUM: m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU ); break;
-    case SWATCH_SMALL:  m_size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );  break;
-    case SWATCH_LARGE:  m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
-    case SWATCH_EXPAND: m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );  break;
+    case SWATCH_MEDIUM:
+        m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU );
+        m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+        break;
+    case SWATCH_SMALL:
+        m_size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
+        m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+        break;
+    case SWATCH_LARGE:
+        m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
+        m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+        break;
+    case SWATCH_EXPAND:
+        m_size = ConvertDialogToPixels( SWATCH_SIZE_LARGE_DU );
+        m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
+        break;
+    case SWATCH_FIXED_SMALL:
+        m_size = SWATCH_SIZE_SMALL_PX;
+        m_checkerboardSize = CHECKERBOARD_SIZE_PX;
+        break;
+    case SWATCH_FIXED_MEDIUM:
+        m_size = SWATCH_SIZE_MEDIUM_PX;
+        m_checkerboardSize = CHECKERBOARD_SIZE_PX;
+        break;
+    case SWATCH_FIXED_LARGE:
+        m_size = SWATCH_SIZE_LARGE_PX;
+        m_checkerboardSize = CHECKERBOARD_SIZE_PX;
+        break;
     }
 
-    m_checkerboardSize = ConvertDialogToPixels( CHECKERBOARD_SIZE_DU );
     m_checkerboardBg = aParent->GetBackgroundColour();
 
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
