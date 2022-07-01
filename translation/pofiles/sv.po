@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:10-0700\n"
-"PO-Revision-Date: 2022-06-08 23:13+0000\n"
+"PO-Revision-Date: 2022-07-04 20:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -20706,7 +20706,7 @@ msgstr "Inre diameter (ledare)"
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
 msgid "Dout"
-msgstr "Dout"
+msgstr "D-ut"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:407
@@ -29847,9 +29847,8 @@ msgid "Thermal Relief Gap"
 msgstr "Gap i termisk avlastning"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "Bibliotek"
+msgstr "Biblioteks-ID"
 
 #: pcbnew/footprint.h:219
 #, c-format
@@ -31119,7 +31118,7 @@ msgstr "Åsidosätt text"
 
 #: pcbnew/pcb_dimension.cpp:317
 msgid "Suffix"
-msgstr "Suffix"
+msgstr "Postfix"
 
 #: pcbnew/pcb_dimension.cpp:441
 #, c-format
