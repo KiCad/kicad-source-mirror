@@ -166,7 +166,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     int right = std::min( me.m_pos.x + me.m_size.x, rect.m_pos.x + rect.m_size.x );
 
     // calculate the upper common area coordinate:
-    int top = std::max( me.m_pos.y, aRect.m_pos.y );
+    int top = std::max( me.m_pos.y, rect.m_pos.y );
 
     // calculate the lower common area coordinate:
     int bottom = std::min( me.m_pos.y + me.m_size.y, rect.m_pos.y + rect.m_size.y );
