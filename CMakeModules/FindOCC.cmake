@@ -124,6 +124,7 @@ else(WIN32)
     ${OCC_LIBRARY_DIR}
     /usr
     /usr/local
+    /usr/local/opencascade
     /opt/opencascade
     /opt/opencascade/lin64/gcc
     PATH_SUFFIXES lib
