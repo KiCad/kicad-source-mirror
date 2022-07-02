@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-29 16:19+0000\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17517,7 +17517,6 @@ msgid "Edit Main Fields"
 msgstr "フィールドを編集"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
-#, fuzzy
 msgid "Change To"
 msgstr "変更"
 
@@ -20712,141 +20711,140 @@ msgid "NP Pad: (diam - drill)"
 msgstr "メッキなしパッド: (直径 - ドリル)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -20854,9 +20852,8 @@ msgid "Wire properties"
 msgstr "円のプロパティ"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "標準タイプ"
+msgstr "標準サイズ:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -20865,7 +20862,7 @@ msgstr "面積:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
@@ -20883,9 +20880,8 @@ msgid "Ampacity:"
 msgstr "不透明度:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "ヘルパー アプリケーション"
+msgstr "アプリケーション"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
@@ -20894,9 +20890,8 @@ msgid "Current:"
 msgstr "電流"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
-#, fuzzy
 msgid "Length:"
-msgstr "長さ (&L):"
+msgstr "長さ:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
@@ -20913,18 +20908,16 @@ msgid "Voltage drop:"
 msgstr "電圧降下:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
-#, fuzzy
 msgid "mW"
-msgstr "W"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -22180,13 +22173,12 @@ msgid "m"
 msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "m"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "フィート"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -25784,9 +25776,8 @@ msgid "Map File Format"
 msgstr "マップ ファイル フォーマット"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "PostScript、HPGL、その他の形式でドリル マップを作成"
+msgstr "PDF、その他の形式でドリル マップを作成"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -28637,9 +28628,8 @@ msgstr "アイテムを選択します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "選択状態を切り替え"
+msgstr "選択状態を切り替える。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -31561,12 +31551,11 @@ msgstr "VRML エクスポート エラー: 外形へ穴を追加できません�
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "VRMLファイルのエクスポート時にプロジェクトが存在しない"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "IDF出力エラー:\n"
+msgstr "VRML エクスポート 失敗:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32270,64 +32259,52 @@ msgid "There are NaN elements in a matrix."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "不正な長さ"
+msgstr "不正な R_pkg 値."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "不正な長さ"
+msgstr "不正な L_pkg 値."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "不正な長さ"
+msgstr "不正な C_pkg 値."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "ピンをチェック..."
+msgstr "ピンをチェック中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "ピン名を空欄にはできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "変数名は空欄にできません。"
+msgstr "信号名は空欄にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "モデル名は空欄にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "ファイル名が不正です！"
+msgstr "Rpinが不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "ファイル名が不正です！"
+msgstr "Lpinが不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "ファイル名が不正です！"
+msgstr "Cpinが不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "コンポーネント名は空欄にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "ゾーンをチェック中"
+msgstr "コンポーネントをチェック中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
 #, fuzzy
@@ -32357,9 +32334,8 @@ msgid "There is an invalid current in an IV table"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "不正"
+msgstr "不正な R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
 #, fuzzy
@@ -32372,19 +32348,16 @@ msgid "Invalid rising dv/dt."
 msgstr "不正な抵抗値"
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "ネット名は空にできません。"
+msgstr "モデル名は空欄にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "ゾーンをチェック中"
+msgstr "モデルをチェック中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "未定義レイヤー:"
+msgstr "未定義モデルタイプ"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
 #, fuzzy
@@ -32397,28 +32370,24 @@ msgid "Invalid Vinl value."
 msgstr "不正な遅延値"
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "不正な遅延値"
+msgstr "不正な R_ref 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "不正な遅延値"
+msgstr "不正な C_ref 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "不正な遅延値"
+msgstr "不正な V_ref 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "不正な遅延値"
+msgstr "不正な V_meas 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:474
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "不正な C_comp 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:479
 #, fuzzy
