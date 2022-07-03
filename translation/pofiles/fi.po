@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:10-0700\n"
-"PO-Revision-Date: 2022-06-23 17:20+0000\n"
+"PO-Revision-Date: 2022-07-04 20:18+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -3774,7 +3774,7 @@ msgstr "OpenGL: ää ei voitu käyttää"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:896
 #, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Piirustuskaaviota '%s' ei löydy."
+msgstr "Piirustuslehteä '%s' ei löydy."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:906
 #, c-format
@@ -3784,7 +3784,7 @@ msgstr "Piirustuslehteä '%s' ei voi avata."
 #: common/drawing_sheet/drawing_sheet_parser.cpp:919
 #, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Piirroslehteä '%s' ei luettu kokonaan."
+msgstr "Piirustuslehteä '%s' ei luettu kokonaan."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
@@ -3857,11 +3857,11 @@ msgstr "Toista Laskenta"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "Toista tarran lisäys"
+msgstr "Toista Etiketin Lisäys"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr "Toista sijainnin lisäys"
+msgstr "Toista Sijainnin Lisäys"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -3899,7 +3899,7 @@ msgstr "Odottaa %s"
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr "Odottaa \"%s\""
+msgstr "Odottaa '%s'"
 
 #: common/dsnlexer.cpp:352
 #, c-format
@@ -5437,7 +5437,7 @@ msgstr "Luo uusi asiakirja editorissa"
 
 #: common/tool/actions.cpp:49
 msgid "New Library..."
-msgstr "Uusi kirjasto ..."
+msgstr "Uusi Kirjasto..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
@@ -10907,7 +10907,7 @@ msgstr "astetta"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:743
 msgid "Signal phase:"
-msgstr "Signaalin vaihe:"
+msgstr "Signaalivaihe:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:758
 msgid "FM"
@@ -14694,7 +14694,7 @@ msgstr "Lisää Signaaleja ..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Probe from schematics"
-msgstr "Koetin kaaviosta"
+msgstr "Testaa kaaviosta"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
@@ -16750,7 +16750,7 @@ msgstr " X "
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
-msgstr "Hukataanko nykyiset tiedot?"
+msgstr "Nykyiset tiedot katoaa?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, c-format
@@ -20823,7 +20823,7 @@ msgstr "Radiaani"
 
 #: pcbnew/array_creator.cpp:211
 msgid "Create an array"
-msgstr "Luo taulukko"
+msgstr "Luo ryhmä"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:923
 msgid "Autoplacing components..."
@@ -21018,7 +21018,7 @@ msgstr "Pinnoitettu piirilevyn reuna"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Kuparin pinnoite:"
+msgstr "Kuparipinnoite:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -22172,13 +22172,13 @@ msgstr "Mitään jalanjälkeä ei ole valittu"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 msgid "Update Footprint"
-msgstr "Päivitä jalanjälki"
+msgstr "Päivitä Jalanjälki"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:55
 #: pcbnew/dialogs/dialog_netlist.cpp:81 pcbnew/dialogs/dialog_update_pcb.cpp:61
 msgid "Update PCB"
-msgstr "Päivitä piirilevy"
+msgstr "Päivitä PIIRILEVY"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 msgid "Graphics cleanup"
@@ -22466,7 +22466,7 @@ msgstr "Täyttöviivan väli:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
 msgid "Smoothing effort:"
-msgstr "Tasoitusponnistus:"
+msgstr "Tasoituksen taso:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:317
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:164
@@ -22477,7 +22477,7 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
-"Tasoitusponnistuksen arvo\n"
+"Tasoitusmuodon arvo\n"
 "0 = ei tasoitusta\n"
 "1 = viiste\n"
 "2 = pyöreät kulmat\n"
@@ -24273,7 +24273,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr "Käytä alkuperänä pora / paikka-tiedoston alkuperää"
+msgstr "Käytä pora/paikka-tiedostoa alkupisteenä"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -24391,9 +24391,8 @@ msgid "Map File Format"
 msgstr "Karttatiedoston muoto"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Luo porauskaavion halutussa muodossa"
+msgstr "Luo porauskaavion PDF tai muissa muodossa"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -25185,7 +25184,7 @@ msgstr "Reunaviivan tyyli:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
 msgid "degree"
-msgstr "tutkinto"
+msgstr "asteet"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zones Properties"
@@ -25276,7 +25275,7 @@ msgstr "keskitä"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:717
 msgid "start"
-msgstr "alkaa"
+msgstr "alku"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:718
 msgid "angle"
@@ -27816,7 +27815,7 @@ msgstr "Jos haluat valmistuskerroksen levyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:62
 msgid "Fab_Front"
-msgstr "Fab_Front()"
+msgstr "Fab_Etu()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
@@ -27829,7 +27828,7 @@ msgstr "Jos haluat sidosainepohjan piirilevyn etupuolle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
-msgstr "Adhes_Front()"
+msgstr "Adhes_Etu()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:77
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:89
@@ -27856,7 +27855,7 @@ msgstr "Haluttaessa etupuolen silkkipainokerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr "SilkkiS_Front"
+msgstr "SilkkiS_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
@@ -27981,7 +27980,7 @@ msgstr "voimataso"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "mixed"
-msgstr "seka"
+msgstr "sekoitettu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -28191,7 +28190,7 @@ msgstr "Jos sinä haluat juotosmaskikerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
-msgstr "MyytyM_Takaisin"
+msgstr "JuotosM_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
@@ -28199,7 +28198,7 @@ msgstr "Haluttaessa takapuolen silkkipainokerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr "SilkkiS_Takaisin"
+msgstr "SilkkiS_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
@@ -28207,7 +28206,7 @@ msgstr "Haluttaessa takapuolen juotospastakerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
-msgstr "MyytyP_Back"
+msgstr "JuotosP_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
@@ -28215,7 +28214,7 @@ msgstr "Jos haluat sidosainekerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
-msgstr "Adhes_Back()"
+msgstr "Adhes_Taka()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:622
 msgid "If you want a fabrication layer for the back side of the board"
@@ -30562,7 +30561,7 @@ msgstr "Jalanjälki..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:115
 msgid "Graphics..."
-msgstr "&Grafiikka..."
+msgstr "Grafiikka..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
@@ -30744,7 +30743,7 @@ msgstr "Kulma asteina:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:104
 msgid "Incorrect number, abort"
-msgstr "Epäkelpo numero, keskeytys"
+msgstr "Väärä numero, keskeytä"
 
 #: pcbnew/microwave/microwave_inductor.cpp:320
 msgid "Add microwave inductor"
@@ -33795,7 +33794,7 @@ msgstr "Läpiviennin halkaisija"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Via diameter resolution for:"
-msgstr "Halkaisijan tarkkuuden kautta:"
+msgstr "Läpiviennin halkaisijan tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
 #, c-format
