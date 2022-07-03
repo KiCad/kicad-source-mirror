@@ -385,7 +385,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
 
     if( HasHyperlink() )
-        aPlotter->HyperlinkBoxURL( GetBoundingBox(), GetHyperlink() );
+        aPlotter->HyperlinkBox( GetBoundingBox(), GetHyperlink() );
 }
 
 

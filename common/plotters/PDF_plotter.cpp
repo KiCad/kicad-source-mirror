@@ -34,6 +34,7 @@
 #include <wx/zstream.h>
 
 #include <advanced_config.h>
+#include <eda_text.h> // for IsGotoPageHyperlink
 #include <ignore.h>
 #include <macros.h>
 #include <trigo.h>
@@ -741,8 +742,8 @@ void PDF_PLOTTER::ClosePage()
         closePdfObject();
     }*/
 
-    // Write out all "goto" hyperlinks for the page as link annotations (compatible with pdf 1.0)
-    for( const std::pair<BOX2I, wxString>& linkPair : m_urlHyperlinksInPage )
+    // Allocate all hyperlink objects for the page and calculate their position in user space coordinates
+    for( const std::pair<BOX2I, wxString>& linkPair : m_hyperlinksInPage )
     {
         const BOX2I&    box = linkPair.first;
         const wxString& url = linkPair.second;
@@ -754,12 +755,11 @@ void PDF_PLOTTER::ClosePage()
         userSpaceBox.SetOrigin( bottomLeft );
         userSpaceBox.SetEnd( topRight );
 
-        hyperlinkHandles.push_back( startPdfObject() );
+        hyperlinkHandles.push_back( allocPdfObject() );
 
-        m_urlHyperlinksHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, url } } );
+        m_hyperlinkHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, url } } );
     }
-    //
-    // TODO use allocPdfObject()  !!
+
     int hyperLinkArrayHandle = -1;
 
     // If we have added any annotation links, create an array containing all the objects
@@ -807,8 +807,8 @@ void PDF_PLOTTER::ClosePage()
     // Mark the page stream as idle
     m_pageStreamHandle = 0;
 
-    //
-    m_urlHyperlinksInPage.clear();
+    // Clean up
+    m_hyperlinksInPage.clear();
 }
 
 
@@ -819,8 +819,8 @@ bool PDF_PLOTTER::StartPlot()
     // First things first: the customary null object
     m_xrefTable.clear();
     m_xrefTable.push_back( 0 );
-    m_urlHyperlinksInPage.clear();
-    m_urlHyperlinksHandles.clear();
+    m_hyperlinksInPage.clear();
+    m_hyperlinkHandles.clear();
 
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
@@ -895,7 +895,7 @@ bool PDF_PLOTTER::EndPlot()
     fputs( ">>\n", m_outputFile );
     closePdfObject();
 
-    for( const std::pair<int,std::pair<BOX2D, wxString>>& handlePair : m_urlHyperlinksHandles )
+    for( const std::pair<int,std::pair<BOX2D, wxString>>& handlePair : m_hyperlinkHandles )
     {
         const int& linkhandle = handlePair.first;
         const std::pair<BOX2D, wxString>& linkpair = handlePair.second;
@@ -907,10 +907,37 @@ bool PDF_PLOTTER::EndPlot()
         fprintf( m_outputFile,
                  "<< /Type /Annot\n"
                  "   /Subtype /Link\n"
-                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n"
-                 "   /Dest [%d 0 R] >>\n" // /D [3 0 R /FitR –4 399 199 533]
-                 ">>\n",
-                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop(), m_pageHandles[0] );
+                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n",
+                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+
+        int pageIdx = -1;
+
+        if( EDA_TEXT::IsGotoPageHyperlink( url, &pageIdx ) )
+        {
+            if( pageIdx <= m_pageHandles.size() && pageIdx > 0 )
+            {
+                fprintf( m_outputFile,
+                         "   /Dest [%d 0 R] >>\n"
+                         ">>\n",
+                         m_pageHandles[pageIdx - 1] );
+                //todo: do we want to support specifying zoom factor/ position? e.g. /FitR
+            }
+            else
+            {
+                // destination page is not being plotted, assign the NOP action to the link
+                fprintf( m_outputFile,
+                         "   /A << /Type /Action /S /NOP >>\n"
+                         ">>\n" );
+            }
+        }
+        else
+        {
+            fprintf( m_outputFile,
+                     "   /A << /Type /Action /S /URI /URI %s >>\n"
+                     ">>\n",
+                     encodeStringForPlotter( url ).c_str() );
+        }
+
         closePdfObject();
     }
 
@@ -1056,8 +1083,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
 }
 
 
-void PDF_PLOTTER::HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL )
+void PDF_PLOTTER::HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL )
 {
-    m_urlHyperlinksInPage.push_back( std::make_pair( aBox, aDestinationURL ) );
+    m_hyperlinksInPage.push_back( std::make_pair( aBox, aDestinationURL ) );
 }
 

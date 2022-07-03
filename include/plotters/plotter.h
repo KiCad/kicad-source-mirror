@@ -440,9 +440,9 @@ public:
      * Create a clickable hyperlink with a rectangular click area
      *
      * @aBox is the rectangular click target
-     * @aDestinationURL is the target
+     * @aDestinationURL is the target URL
      */
-    virtual void HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL )
+    virtual void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL )
     {
         // NOP for most plotters.
     }
