@@ -702,6 +702,24 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
     buildInitialLine( aP, m_head );
     m_head.SetBlockingObstacle( nullptr );
 
+    auto obs = m_currentNode->NearestObstacle( &m_head );
+
+    // If the head is in colliding state, snap to the hull of the first obstacle. 
+    // This way, one can route tracks as tightly as possible without enabling 
+    // the shove/walk mode that certain users find too intrusive.
+    if( obs )
+    {
+        int cl = m_currentNode->GetClearance( obs->m_item, &m_head, false );
+        auto hull = obs->m_item->Hull( cl, m_head.Width() );
+
+        auto nearest = hull.NearestPoint( aP );
+
+        if( ( nearest - aP ).EuclideanNorm() < m_head.Width() / 2 )
+        {
+            buildInitialLine( nearest, m_head );
+        }
+    }
+
     // Note: Something like the below could be used to implement a "stop at first obstacle" mode,
     // but we don't have one right now and there isn't a lot of demand for one.  If we do end up
     // doing that, put it in a new routing mode as "highlight collisions" mode should not have
