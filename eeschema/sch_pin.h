@@ -81,8 +81,17 @@ public:
     const VECTOR2I GetLocalPosition() const { return m_position; }
     void           SetPosition( const VECTOR2I& aPosition ) override { m_position = aPosition; }
 
-    const EDA_RECT GetBoundingBox() const override;
-    bool           HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
+    /* Cannot use a default parameter here as it will not be compatible with the virtual. */
+    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
+
+    /**
+     * @param aIncludeInvisibles - if false, do not include labels for invisible pins
+     *      in the calculation.
+     */
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly = false ) const;
+
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     EDA_ITEM* Clone() const override;
 

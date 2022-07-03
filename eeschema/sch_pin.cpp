@@ -305,10 +305,10 @@ VECTOR2I SCH_PIN::GetTransformedPosition() const
 }
 
 
-const EDA_RECT SCH_PIN::GetBoundingBox() const
+const EDA_RECT SCH_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
     TRANSFORM t = GetParentSymbol()->GetTransform();
-    EDA_RECT  r = m_libPin->GetBoundingBox();
+    EDA_RECT  r = m_libPin->GetBoundingBox( aIncludeInvisibles, aPinOnly );
 
     r.RevertYAxis();
 
@@ -328,6 +328,20 @@ bool SCH_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     EDA_RECT rect = GetBoundingBox();
     return rect.Inflate( aAccuracy ).Contains( aPosition );
+}
+
+
+bool SCH_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT sel = aRect;
+
+    if( aAccuracy )
+        sel.Inflate( aAccuracy );
+
+    if( aContained )
+        return sel.Contains( GetBoundingBox( false, true ) );
+
+    return sel.Intersects( GetBoundingBox( false, true ) );
 }
 
 
