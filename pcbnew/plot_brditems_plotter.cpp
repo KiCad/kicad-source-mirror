@@ -741,7 +741,9 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
                         SHAPE_LINE_CHAIN &poly = tmpPoly.Outline( jj );
-                        m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, thickness, &gbr_metadata );
+                        m_plotter->PlotPoly( poly, aShape->IsFilled() ?
+                                                   FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
+                                             thickness, &gbr_metadata );
                     }
                 }
             }
