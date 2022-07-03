@@ -908,6 +908,48 @@ void SCH_SHEET::renumberPins()
 }
 
 
+int SCH_SHEET::guessPageFromParentScreen() const
+{
+    SCH_SCREEN*    parentScreen = static_cast<SCH_SCREEN*>( m_parent );
+    int            vPageNumParent = parentScreen->GetVirtualPageNumber();
+    SCH_SHEET_LIST sheets = parentScreen->Schematic()->GetSheets();
+
+    wxCHECK( sheets.size() >= vPageNumParent && vPageNumParent > 0, m_screen->GetVirtualPageNumber() );
+
+    // We can use the virtual page number as an index to find the instance
+    SCH_SHEET_PATH parentSheetPath = sheets.at( vPageNumParent - 1 );
+
+    // Make sure our asumption about the virtual page number being the index-1 is correct
+    wxCHECK( parentSheetPath.LastScreen()->GetFileName() == parentScreen->GetFileName(),
+             m_screen->GetVirtualPageNumber() );
+
+    KIID_PATH parentSheetKIIDPath = parentSheetPath.PathWithoutRootUuid();
+
+    for( const SCH_SHEET_INSTANCE& instance : m_instances )
+    {
+        KIID_PATH instancePath = instance.m_Path;
+
+        if( instancePath.MakeRelativeTo( parentSheetKIIDPath ) && instancePath.size() == 1 )
+        {
+            // find the virtual page number of this path
+            auto isThePath = [&]( const SCH_SHEET_PATH& aPath ) -> bool
+                             {
+                                return aPath.PathWithoutRootUuid() == instance.m_Path;
+                             };
+
+            auto result = std::find_if( sheets.begin(), sheets.end(), isThePath );
+
+            wxCHECK( result != sheets.end(), m_screen->GetVirtualPageNumber() );
+
+            return result - sheets.begin() + 1;
+        }
+    }
+
+    wxFAIL_MSG( "Couldn't find a valid path?" );
+    return m_screen->GetVirtualPageNumber();
+}
+
+
 void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
     for( SCH_SHEET_PIN* sheetPin : m_pins )
@@ -1054,6 +1096,15 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
         aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::NO_FILL, penWidth );
+    }
+
+    // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
+    if( !aBackground )
+    {
+        BOX2I    rect( m_pos, m_size );
+        int      virtualPage = guessPageFromParentScreen();
+        wxString hyperlinkDestination = EDA_TEXT::GotoPageHyperlinkString( virtualPage );
+        aPlotter->HyperlinkBox( rect, hyperlinkDestination );
     }
 
     // Plot sheet pins

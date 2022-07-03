@@ -450,6 +450,14 @@ protected:
      */
     void renumberPins();
 
+    /**
+     * Guess the virtual page number of this sheet based on the virtual page number currently set
+     * on the parent screen. (Useful helper function for plotting)
+     *
+     * @return the instance corresponding to this sheet
+     */
+    int guessPageFromParentScreen() const;
+
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
