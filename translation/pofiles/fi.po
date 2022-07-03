@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-06-23 17:16+0000\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3853,7 +3853,7 @@ msgstr "OpenGL: ää ei voitu käyttää"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:925
 #, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Piirustuskaaviota '%s' ei löydy."
+msgstr "Piirustuslehteä '%s' ei löydy."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:935
 #, c-format
@@ -3863,7 +3863,7 @@ msgstr "Piirustuslehteä '%s' ei voi avata."
 #: common/drawing_sheet/drawing_sheet_parser.cpp:948
 #, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Piirroslehteä '%s' ei luettu kokonaan."
+msgstr "Piirustuslehteä '%s' ei luettu kokonaan."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
@@ -3937,11 +3937,11 @@ msgstr "Toista Laskenta"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "Toista tarran lisäys"
+msgstr "Toista Etiketin Lisäys"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr "Toista sijainnin lisäys"
+msgstr "Toista Sijainnin Lisäys"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -3981,7 +3981,7 @@ msgstr "Odottaa %s"
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr "Odottaa \"%s\""
+msgstr "Odottaa '%s'"
 
 #: common/dsnlexer.cpp:352
 #, c-format
@@ -5369,14 +5369,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Laiton merkki löytyi loogisesta kirjastonimestä"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "Tiedostoa ei ole valittu"
+msgstr "Aktivoi valittu"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Poista valintoja"
+msgstr "Poista valinta"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5726,7 +5724,7 @@ msgstr "Luo uusi asiakirja editorissa"
 #: common/tool/actions.cpp:49 eeschema/symbol_editor/symbol_editor.cpp:592
 #: pcbnew/footprint_libraries_utils.cpp:1052
 msgid "New Library..."
-msgstr "Uusi kirjasto ..."
+msgstr "Uusi Kirjasto..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
@@ -5855,9 +5853,8 @@ msgid "Paste Special..."
 msgstr "Liitä Erityiset..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Liitä kohde leikepöydältä vaihtoehdoilla"
+msgstr "Liitä kohde leikepöydältä huomautusvaihtoehdoilla"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -11550,7 +11547,7 @@ msgstr "astetta"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:743
 msgid "Signal phase:"
-msgstr "Signaalin vaihe:"
+msgstr "Signaalivaihe:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:758
 msgid "FM"
@@ -12583,9 +12580,8 @@ msgstr ""
 "ylä- tai alapuolelle"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Globaalin nimiön koko:"
+msgstr "Globaalin nimiön marginaali:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -14455,13 +14451,13 @@ msgstr ""
 "symbolikirjastosta. Osaa ei ole ladattu KiCad-kirjastoon."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"Osamääritelmä %s viittaa symboliin %s (vaihtoehtoinen %s '), jota ei löydy "
-"symbolikirjastosta. Osaa ei ole ladattu KiCad-kirjastoon."
+"Osamäärittelyssä '%s' on keskeneräinen määritelmä (siihen ei liity "
+"symbolimäärityksiä). Osaa ei ole ladattu KiCad-kirjastoon."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
 #, c-format
@@ -15544,7 +15540,7 @@ msgstr "Lisää Signaaleja ..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Probe from schematics"
-msgstr "Koetin kaaviosta"
+msgstr "Testaa kaaviosta"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
@@ -15691,6 +15687,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Varoitus: viite-etuliite</b><br>etuliite, joka päättyy '%s', voi "
+"aiheuttaa ongelmia, jos se tallennetaan symbolikirjastoon"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -17363,9 +17361,8 @@ msgid "Hierarchy Navigator"
 msgstr "Hierarkia Navigaattori"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Näytä kytkentäkaavion hierarkia"
+msgstr "Näytä tai piilota kytkentäkaavionsivun hierarkiaselain"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17562,14 +17559,12 @@ msgstr "symboli ei ole moniyksikkö"
 
 #: eeschema/tools/sch_edit_tool.cpp:370 eeschema/tools/sch_edit_tool.cpp:408
 #: eeschema/tools/sch_edit_tool.cpp:445
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Muokkaa %s kenttää"
+msgstr "Muokkaa Pääkenttiä"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
-#, fuzzy
 msgid "Change To"
-msgstr "Vaihda"
+msgstr "Muuta"
 
 #: eeschema/tools/sch_edit_tool.cpp:994
 msgid "Label value cannot go below zero"
@@ -17866,7 +17861,7 @@ msgstr "Tyypillinen Kaari"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
-msgstr "Hukataanko nykyiset tiedot?"
+msgstr "Nykyiset tiedot katoaa?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, c-format
@@ -20756,151 +20751,148 @@ msgid "NP Pad: (diam - drill)"
 msgstr "NP Antura: (halkaisija - pora)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Ympyrän ominaisuudet"
+msgstr "Johdon ominaisuudet"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Vakiotyyppi"
+msgstr "Vakiokoko:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -20909,33 +20901,29 @@ msgstr "Pinta-ala:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Lämmönkestävyys:"
+msgstr "Lineaarinen vastus:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Taajuus 100% ihon syvyydelle:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "Peittävyys:"
+msgstr "Ampeerikapasiteetti:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "Helper-sovellukset"
+msgstr "Sovellus"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Nykyinen"
+msgstr "Virta:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 msgid "Length:"
@@ -20956,18 +20944,16 @@ msgid "Voltage drop:"
 msgstr "Jännitteen putoaminen:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Hajautunut teho:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
-#, fuzzy
 msgid "mW"
-msgstr "W"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -21169,12 +21155,11 @@ msgstr "4R ratkaisu:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:229
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Nykyinen laskenta on aliarvioitu pitkän sulatusajan vuoksi."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Ympäristön kameravalo:"
+msgstr "Ympäristön lämpötila:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21184,9 +21169,8 @@ msgid "deg C"
 msgstr "° C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Toimintapiste"
+msgstr "Sulamispiste:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21195,14 +21179,12 @@ msgid "Track width:"
 msgstr "Johtimen leveys:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Johtimen paksuus (H):"
+msgstr "Johtimen paksuus:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Aikaväli:"
+msgstr "Sulamisaika:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
@@ -21776,6 +21758,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Tämän laskimen avulla voit tarkistaa, kestääkö pieni johdin suuren virran "
+"lyhyen ajan.<br>\n"
+"Tämän työkalun avulla voit suunnitella kiskosulakkeen, mutta sitä tulee "
+"käyttää vain arviona.\n"
+"\n"
+"Laskin arvioi johtimen lämmittämiseen tarvittavan energian<br>\n"
+"sulamispisteeseensä sekä vaiheen muutokseen tarvittava energia.<br>\n"
+"Tätä energiaa verrataan sitten johtimen vastuksen hajottamaan energiaan."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 msgid "General system design"
@@ -21794,14 +21784,12 @@ msgid "Electrical Spacing"
 msgstr "Sähkömitoitukset"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
-#, fuzzy
 msgid "Fusing Current"
-msgstr "Tulosta nykyinen"
+msgstr "Sulamisvirta"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Cable Size"
-msgstr "Reiän Koko"
+msgstr "Kaapelin Koko"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "High speed"
@@ -22227,22 +22215,20 @@ msgid "rad"
 msgstr "Radiaani"
 
 #: pcb_calculator/widgets/unit_selector.cpp:211
-#, fuzzy
 msgid "m"
-msgstr "mm"
+msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "mm"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "jalka"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
-msgstr "Luo taulukko"
+msgstr "Luo ryhmä"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:889
 msgid "Autoplacing components..."
@@ -22442,7 +22428,7 @@ msgstr "Pinnoitettu piirilevyn reuna"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Kuparin pinnoite:"
+msgstr "Kuparipinnoite:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -23607,13 +23593,13 @@ msgstr "Mitään jalanjälkeä ei ole valittu"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:45
 msgid "Update Footprint"
-msgstr "Päivitä jalanjälki"
+msgstr "Päivitä Jalanjälki"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:47
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:83
 #: pcbnew/dialogs/dialog_netlist.cpp:83 pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Päivitä piirilevy"
+msgstr "Päivitä PIIRILEVY"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 msgid "Graphics cleanup"
@@ -23926,7 +23912,7 @@ msgstr "Täyttöviivan väli:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:329
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
 msgid "Smoothing effort:"
-msgstr "Tasoitusponnistus:"
+msgstr "Tasoituksen taso:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:331
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:173
@@ -23937,7 +23923,7 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
-"Tasoitusponnistuksen arvo\n"
+"Tasoitusmuodon arvo\n"
 "0 = ei tasoitusta\n"
 "1 = viiste\n"
 "2 = pyöreät kulmat\n"
@@ -25731,7 +25717,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr "Käytä alkuperänä pora / paikka-tiedoston alkuperää"
+msgstr "Käytä pora/paikka-tiedostoa alkupisteenä"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -25849,9 +25835,8 @@ msgid "Map File Format"
 msgstr "Karttatiedoston muoto"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Luo porauskaavion halutussa muodossa"
+msgstr "Luo porauskaavion PDF tai muissa muodossa"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -26662,7 +26647,7 @@ msgstr "Reunaviivan tyyli:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
-msgstr "tutkinto"
+msgstr "asteet"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
 msgid "Non Copper Zone Properties"
@@ -26753,7 +26738,7 @@ msgstr "keskitä"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:727
 msgid "start"
-msgstr "alkaa"
+msgstr "alku"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
 msgid "angle"
@@ -28709,9 +28694,8 @@ msgstr "Valitse kohde/kohteet."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Vaihda valinnan tila"
+msgstr "Vaihda valinnan tila."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -29315,7 +29299,7 @@ msgstr "Jos haluat valmistuskerroksen levyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:62
 msgid "Fab_Front"
-msgstr "Fab_Front()"
+msgstr "Fab_Etu()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
@@ -29328,7 +29312,7 @@ msgstr "Jos haluat sidosainepohjan piirilevyn etupuolle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
-msgstr "Adhes_Front()"
+msgstr "Adhes_Etu()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:77
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:89
@@ -29355,7 +29339,7 @@ msgstr "Haluttaessa etupuolen silkkipainokerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr "SilkkiS_Front"
+msgstr "SilkkiS_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
@@ -29480,7 +29464,7 @@ msgstr "voimataso"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "mixed"
-msgstr "seka"
+msgstr "sekoitettu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29690,7 +29674,7 @@ msgstr "Jos sinä haluat juotosmaskikerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
-msgstr "MyytyM_Takaisin"
+msgstr "JuotosM_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
@@ -29698,7 +29682,7 @@ msgstr "Haluttaessa takapuolen silkkipainokerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr "SilkkiS_Takaisin"
+msgstr "SilkkiS_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
@@ -29706,7 +29690,7 @@ msgstr "Haluttaessa takapuolen juotospastakerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
-msgstr "MyytyP_Back"
+msgstr "JuotosP_Taka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
@@ -29714,7 +29698,7 @@ msgstr "Jos haluat sidosainekerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
-msgstr "Adhes_Back()"
+msgstr "Adhes_Taka()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:622
 msgid "If you want a fabrication layer for the back side of the board"
@@ -29957,7 +29941,6 @@ msgid "Check rule syntax"
 msgstr "Tarkista säännön syntaksit"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31524,18 +31507,17 @@ msgid "Checking assertions..."
 msgstr "Tarkistetaan väitteitä..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:109
-#, fuzzy
 msgid "Gathering physical items..."
-msgstr "Kerätään kohteita..."
+msgstr "Kerätään fyysisiä kohteita..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:174
 msgid "Checking physical clearances..."
 msgstr "Tarkistetaan fyysiset välykset..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Paikallinen välys päällä %s; välys: %s."
+msgstr "Sisäisen välyksen rikkomus (%s välys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -31697,12 +31679,11 @@ msgstr "VRML-vienti epäonnistui: reikiä ei voitu lisätä muotoihin."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Ei projektia vietäessä VRML tiedostoa"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "IDF-vienti epäonnistui:\n"
+msgstr "VRML Vienti Epäonnistui:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32393,571 +32374,493 @@ msgstr "Ohje-verkkosivu"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Matriisien mittojen tulee olla >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Vuorotettujen matriisien kaistanleveyden tulee olla >= 1.."
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Matriisissa on NaN-elementtejä."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Virheellinen pituusarvo"
+msgstr "Virheellinen R_pkg arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Virheellinen pituusarvo"
+msgstr "Virheellinen L_pkg arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Virheellinen pituusarvo"
+msgstr "Virheellinen C_pkg arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "Tarkastetaan nastoja ..."
+msgstr "Tarkastetaan nastaa "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Nastan nimi ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "Muuttujan nimi ei voi olla tyhjä."
+msgstr "Signaalin nimi ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Mallin nimi ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Tiedostonimi ei kelpaa!"
+msgstr "Rpin ei ole kelpaava."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Tiedostonimi ei kelpaa!"
+msgstr "Lpin ei ole kelpaava."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Tiedostonimi ei kelpaa!"
+msgstr "Cpin ei ole kelpaava."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Komponentin nimi ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Vyöhykkeiden tarkistaminen"
+msgstr "Tarkistetaan komponenttia "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Komponentti: valmistaja ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Komponentit arvon mukaan"
+msgstr "Komponentti: Virheellinen paketti."
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Komponentit"
+msgstr "Komponentti: ei nastaa"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "Virtaa ei voi interpoloida tämän IV-taulukon perusteella."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "IV-taulukossa on Nan-jännite"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "IV-taulukossa on virheellinen virta"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Virheellinen"
+msgstr "Virheellinen R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Virheellinen pituusarvo"
+msgstr "Virhellinen laskeva dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Virheellinen vastusarvo"
+msgstr "Virheellinen nouseva dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Mallin nimi ei voi olla tyhjä"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Vyöhykkeiden tarkistaminen"
+msgstr "Tarkistetaan mallia "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Määrittelemättömät kerrokset:"
+msgstr "Määrittelemätön mallityyppi"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Virheellinen pituusarvo"
+msgstr "Virheellinen Vinh arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen Vinl arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen R_ref arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen C_ref arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen V_ref arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen V_meas arvo."
 
 #: pcbnew/ibis/ibis_parser.cpp:474
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Jotkut tiedostot eivät ole kelvollisia!"
+msgstr "C_comp ei kelpaa."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Lämpötilan nousu"
+msgstr "Lämpötila-alue on virheellinen."
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Tiedostonimi ei kelpaa!"
+msgstr "Jännitealue ei kelpaa."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Virheellinen nastan nimi"
+msgstr "Virheellinen alasveto."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen ylösveto."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Y-mittakaava"
+msgstr "Virhellinen VIRTA kiinnitin."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Y-mittakaava"
+msgstr "Virhellinen GND kiinnitin."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Virheellinen"
+msgstr "Virheellinen Ramp"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Tarkistetaan anturat..."
+msgstr "Tarkistetaan Otsikko..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Puuttuu [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Jäsentäjä ei käsittele tätä IBIS-versiota"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "Säännön nimi puuttuu."
+msgstr "Puuttuva [Tiedosto Versio]"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "Säännön nimi puuttuu."
+msgstr "Puuttuva [Tiedostonimi]"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "Symbolin nimi ei voi olla tyhjä."
+msgstr "Paketin mallin nimi ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "Tarkastetaan anturareikiä ..."
+msgstr "Tarkastetaan paketin mallia "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Valmistaja ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "Teksti ei voi olla tyhjä."
+msgstr "OEM ei voi olla tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "Pisteiden lukumäärä"
+msgstr "Nastojen määrä negatiivinen."
 
 #: pcbnew/ibis/ibis_parser.cpp:625
-#, fuzzy
 msgid "Empty pin number"
-msgstr "Odottaa numeroa."
+msgstr "Tyhjä nastan numero"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "Vastus pituusyksikköä kohti"
+msgstr "Vastusmatriisi on väärä"
 
 #: pcbnew/ibis/ibis_parser.cpp:641
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "Kapasitanssi pituusyksikköä kohti"
+msgstr "Kapasitanssimatriisia ei ole määritelty"
 
 #: pcbnew/ibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "Kapasitanssi pituusyksikköä kohti"
+msgstr "Kapasitanssimatriisi on väärä"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "Kapasitanssi pituusyksikköä kohti"
+msgstr "Kapasitanssimatriisi on nollaosoitin"
 
 #: pcbnew/ibis/ibis_parser.cpp:661
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "Induktanssi pituusyksikköä kohti"
+msgstr "Induktanssimatriisia ei ole määritelty"
 
 #: pcbnew/ibis/ibis_parser.cpp:667
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "Induktanssi pituusyksikköä kohti"
+msgstr "Induktanssimatriisi on väärää"
 
 #: pcbnew/ibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "Induktanssi pituusyksikköä kohti"
+msgstr "Induktanssimatriisi on nollaosoitin"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Tiedostoa %s ei voi avata"
+msgstr "Tiedostoa ei voi avata "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "Ladataan tiedostoja..."
+msgstr "Luetaan tiedostoa "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Odottamaton tiedoston loppu."
+msgstr "Odottamaton tiedoston loppu. Puuttuva [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "Virhe asetettaessa tulostimen tietoja"
+msgstr "Virhe rivillä "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
-#, fuzzy
 msgid "A line did not end properly.."
-msgstr "Tuodun tiedoston kohteita ei voitu käsitellä oikein."
+msgstr "Viiva ei pääty oikein.."
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Viiva ylittää enimmäispituuden."
 
 #: pcbnew/ibis/ibis_parser.cpp:933
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Epäonnistui luoda kansiota '%s'."
+msgstr "Epäonnistui lukea kopiota."
 
 #: pcbnew/ibis/ibis_parser.cpp:939 pcbnew/ibis/ibis_parser.cpp:983
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "'%s' lataaminen epäonnistui."
+msgstr "Epäonnistui lukea sanaa."
 
 #: pcbnew/ibis/ibis_parser.cpp:976
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "Symbolia ei ole yksilöity"
+msgstr "Numero ei ole kokonaisluku"
 
 #: pcbnew/ibis/ibis_parser.cpp:1020
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "Ei voida lukea datatiedostoa '%s'."
+msgstr "Merkkijonoa ei voi lukea, syöte on tyhjä."
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
-#, fuzzy
 msgid "New comment character is invalid."
-msgstr "Bézier-määräparametri %d on epäkelpo"
+msgstr "Uuden kommentin merkki on virheellinen."
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Virheellinen syntaksi. Pitäisi olla |_char tai &_char jne..."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "Mitään ylimääräistä argumenttia ei odotettu"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Tuntematon Record id: %d."
+msgstr "Tuntematon avainsana kohteessa "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "Tekstiaskel:"
+msgstr " konteksti: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "Liuskan minimileveys"
+msgstr "Virheellinen ramp data"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "Ei voida määrittää kaistanleveyttä tällaiselle matriisille"
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "Virheellinen rivimääritys"
+msgstr "Virheellinen rivi matriisissa"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Liian paljon dataa tälle matriisiriville."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "Ei anturaa tälle osalle"
+msgstr "Liian paljon dataa tälle matriisille."
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "Matriisielementtiä ei voi lukea"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "Matriisihakemistoa ei voi lukea"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "tuntematon läpiviennin tyyppi %d"
+msgstr "Tuntematon matriisityyppi"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "Suurin arvo puuttuu."
+msgstr "Puuttuva matriisityyppi"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" Matrix on jo alustettu. Mutta m_continue ei ole asetettu (sisäinen virhe)"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Yritti lukea riviä määrittelemättömästä matriisista"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "matriisiosoitin on nolla"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max-arvot edellyttävät vähintään Typ."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Tuntematon Menetelmä"
+msgstr "Tuntematon Malli_tyyppi "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Sisäinen virhe luettaessa model_type"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Tuntematon PCad-kerros %u"
+msgstr "Tuntematon Kytke: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Sisäinen virhe luettaessa Ota käyttöön"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Tuntematon perusta"
+msgstr "Tuntematon polariteetti "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "Jatkettiin mallin lukemista, joka ei alkanut. ( sisäinen virhe )"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "[Paketti] rivi vaatii täsmälleen 4 elementtiä."
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Virheellinen nastamerkintä: 6 arvoa taulukosta, jossa on vain 3."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "Nastan R-, L- tai C-arvoa ei voi lukea."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "määritelty kentän numero on epäkelpo"
+msgstr "Virheellinen kentän nimi [Nasta]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "Lähde puuttuu"
+msgstr "Puuttuva argumentti [Nasta]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Väärä sarakkeiden määrä nastakartoituksessa."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "Väärä mittakaavan numero"
+msgstr "Väärä diff nastanimi"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "Väärä mittakaavan numero"
+msgstr "Väärä inv_pin nimi"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "tuntematon läpiviennin tyyppi %d"
+msgstr "Tuntematon aaltomuototyyppi"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Sisäinen virhe havaittu, aaltomuodon pitäisi olla olemassa"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Sisäinen virhe: Virheellinen jäsennyskonteksti."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
-#, fuzzy
 msgid "Missing keyword."
-msgstr "Avainsanat:"
+msgstr "Puuttuva avainsana."
 
 #: pcbnew/ibis/kibis.cpp:396
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Muoto ei sisällä yhtään pistettä."
+msgstr "aaltomuodossa on vähemmän, kuin kaksi pistettä"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
-#, fuzzy
 msgid "Cannot remove temporary input file"
-msgstr "Väliaikaista tiedostoa '%s' ei voi nimetä uudelleen '%s'"
+msgstr "Väliaikaista syöttötiedostoa ei voi poistaa"
 
 #: pcbnew/ibis/kibis.cpp:600 pcbnew/ibis/kibis.cpp:662
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "Väliaikaista tiedostoa '%s' ei voi nimetä uudelleen '%s'"
+msgstr "Väliaikaista tulostustiedostoa ei voi poistaa"
 
 #: pcbnew/ibis/kibis.cpp:644
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Virhe luettaessa tiedostoa."
+msgstr "Virhe luettaessa väliaikaista tiedostoa"
 
 #: pcbnew/ibis/kibis.cpp:652
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "Väliaikaisen tiedoston \"%s\" luominen epäonnistui"
+msgstr "Virhe luotaessa väliaikaista tiedostoa"
 
 #: pcbnew/ibis/kibis.cpp:705
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr ""
+msgstr "Kibis ei vielä tue DUT-arvoja. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Nouseva reuna on pidempi kuin aloitusaika."
 
 #: pcbnew/ibis/kibis.cpp:731
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Laskeva reuna on pidempi kuin lopetusaika."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "Mallissa on vain yksi aaltomuotopari, alennettu tarkkuus"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "Ohjain tarvitsee vähintään ylösvedon tai alavedon"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Aaltomuotopareja on kaksi, mutta vain yksi transistori. Enemmän yhtälöitä "
+"kuin tuntemattomia."
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"Mallissa ei ole aaltomuotoparia, sen sijaan käytetään [Ramp]-toimintoa, "
+"huono tarkkuus"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Mallissa on enemmän kuin 2 aaltomuotoparia käyttäen kahta ensimmäistä."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Virheellinen mallityyppi ohjaimelle."
 
 #: pcbnew/ibis/kibis.cpp:1209
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "Virheellinen viivearvo"
+msgstr "Virheellinen mallityyppi laitteelle"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
@@ -33107,7 +33010,7 @@ msgstr "Jalanjälki..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:117
 msgid "Graphics..."
-msgstr "&Grafiikka..."
+msgstr "Grafiikka..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
@@ -33297,7 +33200,7 @@ msgstr "Kulma asteina:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:105
 msgid "Incorrect number, abort"
-msgstr "Epäkelpo numero, keskeytys"
+msgstr "Väärä numero, keskeytä"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
 msgid "Add microwave inductor"
@@ -36465,7 +36368,7 @@ msgstr "Ratkaistu leveysrajoitukset: min %s; max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1079
 msgid "Via diameter resolution for:"
-msgstr "Halkaisijan tarkkuuden kautta:"
+msgstr "Läpiviennin halkaisijan tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
