@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-04-15 19:59+0000\n"
-"Last-Translator: prometheus <181903185@ogrenci.ibu.edu.tr>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -2402,7 +2402,7 @@ msgstr "Sayfa"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "Başlık bloğu"
+msgstr "Başlık Bloğu"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -5251,7 +5251,7 @@ msgstr "İzler"
 
 #: common/layer_id.cpp:161
 msgid "Through vias"
-msgstr "Tam Geçiş(via)"
+msgstr "Tam geçiş"
 
 #: common/layer_id.cpp:162
 #, fuzzy
@@ -15701,7 +15701,7 @@ msgstr "Gövde"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1248
 msgid "Power Symbol"
-msgstr "Güç Simgesi"
+msgstr "Güç Sembolü"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -21930,7 +21930,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Empedans kontrollü"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -29918,7 +29918,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Copper sliver"
-msgstr "Bakır dilim"
+msgstr "Bakır şerit"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
