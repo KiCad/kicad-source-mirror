@@ -1136,6 +1136,7 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
     else        // Trim an existing selection by aFilterList
     {
         bool isMoving = false;
+        bool anyUnselected = false;
 
         for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
         {
@@ -1145,9 +1146,12 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
             if( !item->IsType( aFilterList ) )
             {
                 unselect( item );
-                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+                anyUnselected = true;
             }
         }
+
+        if( anyUnselected )
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
         if( !isMoving )
             updateReferencePoint();
