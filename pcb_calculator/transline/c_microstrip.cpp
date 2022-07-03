@@ -500,14 +500,14 @@ void C_MICROSTRIP::conductor_losses()
         /* even-mode strip inductive quality factor */
         Q_c_e = ( M_PI * Z0_h_e * m_parameters[PHYS_WIDTH_PRM] * m_parameters[FREQUENCY_PRM] )
                 / ( R_s * C0 * K );
-        /* even-mode losses per unith length */
+        /* even-mode losses per unit length */
         alpha_c_e = ( 20.0 * M_PI / log( 10.0 ) ) * m_parameters[FREQUENCY_PRM]
                     * sqrt( e_r_eff_e_0 ) / ( C0 * Q_c_e );
 
         /* odd-mode strip inductive quality factor */
         Q_c_o = ( M_PI * Z0_h_o * m_parameters[PHYS_WIDTH_PRM] * m_parameters[FREQUENCY_PRM] )
                 / ( R_s * C0 * K );
-        /* odd-mode losses per unith length */
+        /* odd-mode losses per unit length */
         alpha_c_o = ( 20.0 * M_PI / log( 10.0 ) ) * m_parameters[FREQUENCY_PRM]
                     * sqrt( e_r_eff_o_0 ) / ( C0 * Q_c_o );
     }

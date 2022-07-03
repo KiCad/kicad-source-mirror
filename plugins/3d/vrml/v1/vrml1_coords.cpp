@@ -179,7 +179,7 @@ void WRL1COORDS::GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize )
 
 SGNODE* WRL1COORDS::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-    wxCHECK_MSG( sp, nullptr, wxT( "Inalid base data." ) );
+    wxCHECK_MSG( sp, nullptr, wxT( "Invalid base data." ) );
 
     sp->coord = this;
 

@@ -123,7 +123,7 @@ public:
     void ResetArcParams();
 
     /**
-     * Rrase all data except for arc parameters.
+     * Erase all data except for arc parameters.
      */
     void Clear( void );
 

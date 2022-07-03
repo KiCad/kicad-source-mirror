@@ -1154,8 +1154,8 @@
 
   (module Measurement_Points:Measurement_Point_Round-TH_Small (layer F.Cu) (tedit 56C35F63) (tstamp 5BFC373F)
     (at 133.993082 125.51875)
-    (descr "Mesurement Point, Square, Trough Hole,  DM 1.5mm, Drill 0.8mm,")
-    (tags "Mesurement Point Round Trough Hole 1.5mm Drill 0.8mm")
+    (descr "Measurement Point, Square, Trough Hole,  DM 1.5mm, Drill 0.8mm,")
+    (tags "Measurement Point Round Trough Hole 1.5mm Drill 0.8mm")
     (path /5BF7786D)
     (attr virtual)
     (fp_text reference TP1 (at 0 -2) (layer F.SilkS)

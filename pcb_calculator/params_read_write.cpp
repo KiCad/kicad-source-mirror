@@ -216,7 +216,7 @@ void PANEL_TRANSLINE::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* 
 /**
  * Function SetResult
  * Puts the text into the given result line.
- * @param aLineNumber = the line (0 to MSG_CNT_MAX-1) wher to display the text
+ * @param aLineNumber = the line (0 to MSG_CNT_MAX-1) where to display the text
  * @param aText = the text to display
  */
 void PANEL_TRANSLINE::SetResult( int aLineNumber, const wxString& aText )

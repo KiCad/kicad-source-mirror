@@ -88,7 +88,7 @@ int main( int argc, char** argv )
 
     // printf( "sizeof(long double): %zd\n", sizeof( long double ) );
 
-    // Emperically prove that we can round trip all 4 billion 32 bit integers representative
+    // Empirically prove that we can round trip all 4 billion 32 bit integers representative
     // of nanometers out to textual floating point millimeters, and back without error using
     // the above two functions.
 //    for( int i = INT_MIN;  int64_t( i ) <= int64_t( INT_MAX );  ++i )

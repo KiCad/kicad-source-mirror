@@ -988,7 +988,7 @@ public:
                                                           ///< that this could be empty in earlier
                                                           ///< versions of CADSTAR
                 wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
-                                                          ///< displayed wil be Identifier
+                                                          ///< displayed will be Identifier
                                                           ///< (subnode="PINNAME")
                                                           ///< This seems to be equivalent to "Pin
                                                           ///< Number" in KiCad.

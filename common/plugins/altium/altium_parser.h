@@ -43,7 +43,7 @@ struct COMPOUND_FILE_ENTRY;
 /**
  * Helper for debug logging (vector -> string)
  * @param aVectorPath path
- * @return path formated as string
+ * @return path formatted as string
  */
 std::string FormatPath( const std::vector<std::string>& aVectorPath );
 

@@ -263,7 +263,7 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 
 bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
-    if( m_IsPreviewer )     // In panel Preview, footprints are always shown, of cource
+    if( m_IsPreviewer )     // In panel Preview, footprints are always shown, of course
         return true;
 
     if( aFPAttributes & FP_SMD )

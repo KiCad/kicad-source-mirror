@@ -81,7 +81,7 @@
     (tedit 620FF1C8) (tstamp 2e642b3e-a476-4c54-9a52-dcea955640cd)
     (at 136.84 58.35)
     (descr "Wire Pad, Square, SMD Pad,  5mm x 10mm,")
-    (tags "MesurementPoint Square SMDPad 5mmx10mm ")
+    (tags "MeasurementPoint Square SMDPad 5mmx10mm ")
     (attr exclude_from_pos_files exclude_from_bom)
     (fp_text reference "REF**" (at 0 -2.54) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))

@@ -53,7 +53,7 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		wxButton* m_sdbSizerHelp;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddEnvVar( wxCommandEvent& event ) { event.Skip(); }

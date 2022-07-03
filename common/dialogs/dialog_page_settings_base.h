@@ -116,7 +116,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnPaperSizeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageOrientationChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }

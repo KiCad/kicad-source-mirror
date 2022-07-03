@@ -165,7 +165,7 @@
 This library contains GPS modules, GPS antennas, etc. 
 &lt;br&gt;
 &lt;br&gt;
-We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given component or application. 
 &lt;br&gt;
 &lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
 &lt;br&gt;
@@ -1128,7 +1128,7 @@ the 3 V variant.&lt;/p&gt;
 </package>
 <package name="SAM-M8Q">
 <description>&lt;h3&gt;SAM-M8Q-0-10&lt;/h3&gt;
-Physcial Characteristics
+Physical Characteristics
 &lt;ul&gt;
 &lt;li&gt;15x15x6.3mm&lt;/li&gt;
 &lt;li&gt;Module is a Chip Antenna/GPS Unit combined&lt;/li&gt;
@@ -2819,7 +2819,7 @@ Dedicated massive-correlator signal parameter search engine within the baseband 
 &lt;p&gt;u-blox ZOE-M8 standard precision GNSS SiP (System in Package) modules feature the high performance u-blox M8
 GNSS engine. ZOE-M8’s ultra-miniature form factor integrates a complete GNSS receiver including SAW filter, LNA
 and TCXO.&lt;/p&gt;
-&lt;p&gt;Handles  all &lt;b&gt;GNSS systems&lt;/b&gt;  and can simulatenously use up to three of them, with accuracy ranging from 2.5m to 4m.&lt;/p&gt;
+&lt;p&gt;Handles  all &lt;b&gt;GNSS systems&lt;/b&gt;  and can simultaneously use up to three of them, with accuracy ranging from 2.5m to 4m.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;GPS&lt;/li&gt;
 &lt;li&gt;GLONASS&lt;/li&gt;

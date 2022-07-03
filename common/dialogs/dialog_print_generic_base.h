@@ -65,7 +65,7 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onSetCustomScale( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPageSetup( wxCommandEvent& event ) { event.Skip(); }

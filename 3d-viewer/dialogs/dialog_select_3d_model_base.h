@@ -51,7 +51,7 @@ class DIALOG_SELECT_3D_MODEL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnFileActivated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectionChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SetRootDir( wxCommandEvent& event ) { event.Skip(); }

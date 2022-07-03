@@ -98,7 +98,7 @@ protected:
      */
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
 
-    ///< the canvas to disply the scene
+    ///< the canvas to display the scene
     EDA_3D_CANVAS* m_canvas;
 
     ///< Settings reference in use for this render.

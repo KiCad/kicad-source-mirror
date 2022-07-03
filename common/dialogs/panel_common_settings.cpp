@@ -77,7 +77,7 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
      * uniformly enough to exclude the explicit controls there.
      */
 #if defined( __WXGTK__ ) || defined( __WXMSW__ )
-    // Sadly wxSlider is poorly implemented and adds its legends as sibiling windows (so that
+    // Sadly wxSlider is poorly implemented and adds its legends as sibling windows (so that
     // showing/hiding the control doesn't work).  So we have to create it conditionally.
     wxWindow*       parent = m_sbUserInterface->GetStaticBox();
     wxGridBagSizer* gb = m_gbUserInterface;

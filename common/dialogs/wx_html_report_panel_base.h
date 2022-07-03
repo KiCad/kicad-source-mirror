@@ -52,7 +52,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxCheckBox* m_checkBoxShowInfos;
 		wxButton* m_btnSaveReportToFile;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }

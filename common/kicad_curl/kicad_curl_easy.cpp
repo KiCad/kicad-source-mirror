@@ -214,7 +214,7 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
     {
         KIPLATFORM::ENV::PROXY_CONFIG cfg;
 
-        // Unforunately on Windows land, proxies can be configured depending on destination url
+        // Unfortunately on Windows land, proxies can be configured depending on destination url
         // So we also check and set any proxy config here
         if( KIPLATFORM::ENV::GetSystemProxyConfig( aURL, cfg ) )
         {

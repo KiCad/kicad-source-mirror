@@ -75,7 +75,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onRGBMouseClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onRGBMouseDrag( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnChangeEditRed( wxSpinEvent& event ) { event.Skip(); }

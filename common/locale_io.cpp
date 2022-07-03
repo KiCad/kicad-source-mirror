@@ -25,15 +25,15 @@
 #include <wx/intl.h>
 #include <clocale>
 
-// When reading/writing files, we need to swtich to setlocale( LC_NUMERIC, "C" ).
+// When reading/writing files, we need to switch to setlocale( LC_NUMERIC, "C" ).
 // Works fine to read/write files with floating point numbers.
 // We can call setlocale( LC_NUMERIC, "C" ) or wxLocale( "C", "C", "C", false )
 // wxWidgets discourage a direct call to setlocale
 // However, for us, calling wxLocale( "C", "C", "C", false ) has a unwanted effect:
 // The I18N translations are no longer active, because the English dictionary is selected.
-// To read files, this is not a major issues, but the resul can differ
+// To read files, this is not a major issues, but the result can differ
 // from using setlocale(xx, "C").
-// Previouly, we used only setlocale( LC_NUMERIC, "C" )
+// Previously, we used only setlocale( LC_NUMERIC, "C" )
 //
 // Known issues are
 // on MSW

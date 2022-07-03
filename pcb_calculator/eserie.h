@@ -56,7 +56,7 @@
  * List of handled E series values:
  * Note: series bigger than E24 have no interest because
  *  - probably the user will fing the needed value inside these series
- *  - the calcuation time can be *very high* for series > E24
+ *  - the calculation time can be *very high* for series > E24
  */
 enum { E1, E3, E6, E12, E24 };
 
@@ -65,7 +65,7 @@ enum { E1, E3, E6, E12, E24 };
  */
 enum { S2R, S3R, S4R };
 
-// R_DATA handles a resitor: string value, value and allowed to use
+// R_DATA handles a resistor: string value, value and allowed to use
 struct R_DATA
 {
     R_DATA() :

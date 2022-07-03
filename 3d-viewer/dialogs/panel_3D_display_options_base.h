@@ -59,7 +59,7 @@ class PANEL_3D_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticAnimationSpeed;
 		wxSlider* m_sliderAnimationSpeed;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnCheckRealisticMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckEnableAnimation( wxCommandEvent& event ) { event.Skip(); }
 

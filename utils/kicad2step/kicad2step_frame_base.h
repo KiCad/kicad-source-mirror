@@ -35,7 +35,7 @@ class KICAD2STEP_FRAME_BASE : public wxFrame
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -54,7 +54,7 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 		wxButton* m_standardButtonsOK;
 		wxButton* m_standardButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnPrevVerSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPathChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPathDefocused( wxFocusEvent& event ) { event.Skip(); }

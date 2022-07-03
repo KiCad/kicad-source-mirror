@@ -40,7 +40,7 @@ class PANEL_TEXT_VARIABLES_BASE : public wxPanel
 		wxBitmapButton* m_btnAddTextVar;
 		wxBitmapButton* m_btnDeleteTextVar;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }

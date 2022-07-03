@@ -79,7 +79,7 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxRadioBox* m_rbPCBLayer;
 		wxStatusBar* m_statusBar;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }

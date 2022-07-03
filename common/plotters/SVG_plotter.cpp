@@ -253,7 +253,7 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
     // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping objects
     // So we use only 4 digits in mantissa for stroke-width.
     // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
-    // issues were previouly reported reported when using nm as integer units
+    // issues were previously reported reported when using nm as integer units
 
     fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%.*f; stroke-opacity:1; \n",
              m_pen_rgb_color, m_precision, pen_w  );

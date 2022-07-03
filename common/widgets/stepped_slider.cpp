@@ -50,7 +50,7 @@ void STEPPED_SLIDER::SetStep( int aSize )
     // configure pg up/down to increment by our steps
     SetPageSize( aSize );
 
-    //configure arrows to incrment by our steps
+    //configure arrows to increment by our steps
     SetLineSize( aSize );
 
 #ifdef __WXMSW__

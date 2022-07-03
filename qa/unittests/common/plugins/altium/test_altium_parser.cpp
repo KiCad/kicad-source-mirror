@@ -49,8 +49,8 @@ struct ALTIUM_TO_KICAD_UNIT_CASE
 
 /**
  * A list of valid internal unit conversation factors
- * Rem: altium to kicad importer rounds cordinates to the near 10 nm value when
- * converting altium values in 0.01 mil to pcbnew units (1 nm)
+ * Rem: altium to kicad importer rounds coordinates to the near 10 nm value
+ * when converting altium values in 0.01 mil to pcbnew units (1 nm)
  */
 static const std::vector<ALTIUM_TO_KICAD_UNIT_CASE> altium_to_kicad_unit = {
     // Some simple values

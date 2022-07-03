@@ -46,7 +46,7 @@ class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onUpdateDefaultSelection( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateFilePicker( wxUpdateUIEvent& event ) { event.Skip(); }
 

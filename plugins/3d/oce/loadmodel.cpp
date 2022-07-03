@@ -907,7 +907,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
     if( wxLog::IsAllowedTraceMask( MASK_OCE ) )
     {
-        // can be expensive, guard it if we arent logging
+        // can be expensive, guard it if we aren't logging
         getTag( aLabel, labelTag );
     }
 

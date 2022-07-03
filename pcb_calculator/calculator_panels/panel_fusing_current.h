@@ -34,7 +34,7 @@ public:
                           const wxString& name = wxEmptyString );
     ~PANEL_FUSING_CURRENT();
 
-    // Methods from CALCULATOR_PANEL that must be overriden
+    // Methods from CALCULATOR_PANEL that must be overridden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override {};
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override {};
     void ThemeChanged() override;

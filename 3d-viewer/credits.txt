@@ -1,7 +1,8 @@
 ﻿Credits
 =======
 
-The 3D-viewer contains parts, source code or adaptations or implementations that should give the following aknowledge:
+The 3D-viewer contains parts, source code or adaptations or implementations that should give the following
+aknowledgments:
 
 
 cbvh_packet_traversal.cpp

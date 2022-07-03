@@ -52,7 +52,7 @@ BEGIN
     BEGIN
         BLOCK "040904E4"
         BEGIN
-            // this gets dispalyed in the windows 10 task manager
+            // this gets displayed in the windows 10 task manager
             VALUE "FileDescription", RC_VER_FILE_DESCRIPTION
             VALUE "FileVersion", KICAD_WIN32_RC_FILEVER_STR
             //original filename without extension

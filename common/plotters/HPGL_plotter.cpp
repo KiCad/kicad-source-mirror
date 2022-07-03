@@ -55,8 +55,8 @@
  *
  *  CP (Character Plot):
  *  CP {h, v};
- *  h         [-127.9999 .. 127.9999]  Anzahl der Zeichen horizontal
- *  v         [-127.9999 .. 127.9999]  Anzahl der Zeichen vertikal
+ *  h         [-127.9999 .. 127.9999]  Number of characters horizontally
+ *  v         [-127.9999 .. 127.9999]  Number of characters vertically
  *
  *  CS (Standard Character Set):
  *  CS {n};

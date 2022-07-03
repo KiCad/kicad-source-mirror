@@ -120,7 +120,7 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
             if( !specialString.IsEmpty() )
             {
                 // Note: Altium variable references are case-insensitive.  KiCad matches
-                // case-senstive OR to all-upper-case, so make the references all-upper-case.
+                // case-sensitive OR to all-upper-case, so make the references all-upper-case.
                 specialString.UpperCase();
 
                 auto overrideIt = aOverrides.find( specialString );

@@ -1,6 +1,6 @@
 (footprint "SAM-M8Q" (version 20220308) (generator pcbnew)
   (layer "F.Cu")
-  (descr "<h3>SAM-M8Q-0-10</h3>\nPhyscial Characteristics\n<ul>\n<li>15x15x6.3mm</li>\n<li>Module is a Chip Antenna/GPS Unit combined</li>\n<li></li>\n</ul>")
+  (descr "<h3>SAM-M8Q-0-10</h3>\nPhysical Characteristics\n<ul>\n<li>15x15x6.3mm</li>\n<li>Module is a Chip Antenna/GPS Unit combined</li>\n<li></li>\n</ul>")
   (fp_text reference "REF**" (at -7.75 -8.25) (layer "F.SilkS")
       (effects (font (size 0.46736 0.46736) (thickness 0.04064)) (justify left bottom))
     (tstamp 862f4113-a97c-4e19-b737-89e520642e0b)
