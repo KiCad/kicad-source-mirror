@@ -1175,6 +1175,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
+    // Set the mirroring options. We are mirroring here Left to Right.
+    // Unfortunately, the mirror function do not have the same parameter for all items
+    // So we need these 2 parameters to avoid mistakes
+    const bool mirrorLeftRight = true;
+    const bool mirrorAroundXaxis = false;
+
     for( EDA_ITEM* item : selection )
     {
         // only modify items we can mirror
@@ -1200,28 +1206,28 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_FP_SHAPE_T:
         {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-            shape->Mirror( mirrorPoint, false );
+            shape->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
         }
 
         case PCB_FP_ZONE_T:
         {
             FP_ZONE* zone = static_cast<FP_ZONE*>( item );
-            zone->Mirror( mirrorPoint, false );
+            zone->Mirror( mirrorPoint, mirrorLeftRight );
             break;
         }
 
         case PCB_FP_TEXT_T:
         {
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
-            text->Mirror( mirrorPoint, false );
+            text->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
         }
 
         case PCB_FP_TEXTBOX_T:
         {
             FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
-            textbox->Mirror( mirrorPoint, false );
+            textbox->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
         }
 
