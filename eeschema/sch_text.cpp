@@ -43,6 +43,8 @@
 #include <project/net_settings.h>
 #include <core/mirror.h>
 #include <core/kicad_algo.h>
+#include <tools/ee_actions.h>
+#include <tools/sch_navigate_tool.h>
 #include <trigo.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
@@ -388,12 +390,42 @@ void SCH_TEXT::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
     wxCHECK_MSG( IsHypertext(), /* void */,
                  "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" );
 
+    int    destPage = -1;
     wxMenu menu;
-    menu.Append( 1, wxString::Format( _( "Open %s" ), m_hyperlink ) );
-    int sel = aFrame->GetPopupMenuSelectionFromUser( menu );
 
-    if( sel == 1 )
-        GetAssociatedDocument( aFrame, m_hyperlink, &aFrame->Prj() );
+    if( IsGotoPageHyperlink( m_hyperlink, &destPage ) && destPage > 0 )
+    {
+        std::map<int, wxString> sheetNames;
+        std::map<int, wxString> sheetPages;
+
+        for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
+        {
+            sheetPages[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
+
+            if( sheet.size() == 1 )
+                sheetNames[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
+            else
+                sheetNames[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
+        }
+
+        menu.Append( 0, wxString::Format( _( "Go to Page %s (%s)" ),
+                                          sheetPages[destPage],
+                                          sheetNames[destPage] ) );
+
+        int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
+        void* param = &sheetPages[destPage];
+
+        if( param )
+            aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
+    }
+    else
+    {
+        menu.Append( 1, wxString::Format( _( "Open %s" ), m_hyperlink ) );
+        int sel = aFrame->GetPopupMenuSelectionFromUser( menu );
+
+        if( sel == 1 )
+            GetAssociatedDocument( aFrame, m_hyperlink, &aFrame->Prj() );
+    }
 }
 
 
