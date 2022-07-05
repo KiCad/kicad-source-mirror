@@ -225,6 +225,11 @@ public:
         {
             return type_tree->end( m_rect );
         }
+
+        bool empty()
+        {
+            return type_tree->Count() == 0;
+        }
     };
 
     EE_TYPE OfType( KICAD_T aType ) const

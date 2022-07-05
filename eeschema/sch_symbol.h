@@ -662,6 +662,14 @@ public:
 
     void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
 
+    /**
+     * Plot just the symbol pins.  This is separated to match the GAL display order.  The pins are
+     * ALSO plotted with the symbol group.  This replotting allows us to ensure that they are shown above
+     * other elements in the schematic
+     * @param aPlotter
+     */
+    void PlotPins( PLOTTER* aPlotter ) const;
+
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)

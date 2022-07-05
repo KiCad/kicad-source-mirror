@@ -1076,9 +1076,10 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
-    std::vector< SCH_ITEM* > junctions;
-    std::vector< SCH_ITEM* > bitmaps;
-    std::vector< SCH_ITEM* > other;
+    std::vector<SCH_ITEM*>   junctions;
+    std::vector<SCH_ITEM*>   bitmaps;
+    std::vector<SCH_SYMBOL*> symbols;
+    std::vector<SCH_ITEM*>   other;
 
     for( SCH_ITEM* item : Items() )
     {
@@ -1091,6 +1092,21 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
             bitmaps.push_back( item );
         else
             other.push_back( item );
+
+        // Where the symbols overlap each other, we need to plot the text items a second
+        // time to get them on top of the overlapping element.  This collection is in addition
+        // to the symbols already collected in `other`
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            for( SCH_ITEM* sym : m_rtree.Overlapping( SCH_SYMBOL_T, item->GetBoundingBox() ) )
+            {
+                if( sym != item )
+                {
+                    symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
+                    break;
+                }
+            }
+        }
     }
 
     /// Sort to ensure plot-order consistency with screen drawing
@@ -1125,6 +1141,18 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter, !background );
+    }
+
+    // After plotting the symbols as a group above (in `other`), we need to overplot the pins
+    // and symbols to ensure that they are always visible
+    for( const SCH_SYMBOL* sym :symbols )
+    {
+        aPlotter->SetCurrentLineWidth( std::max( sym->GetPenWidth(), defaultPenWidth ) );
+
+        for( SCH_FIELD field : sym->GetFields() )
+            field.Plot( aPlotter, false );
+
+        sym->PlotPins( aPlotter );
     }
 
     for( const SCH_ITEM* item : junctions )

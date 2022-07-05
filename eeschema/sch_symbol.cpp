@@ -1946,6 +1946,35 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 }
 
 
+void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
+{
+    if( m_part )
+    {
+        LIB_PINS  libPins;
+        m_part->GetPins( libPins, GetUnit(), GetConvert() );
+
+        // Copy the source to stay const
+        LIB_SYMBOL tempSymbol( *m_part );
+        LIB_PINS tempPins;
+        tempSymbol.GetPins( tempPins, GetUnit(), GetConvert() );
+
+        TRANSFORM transform = GetTransform();
+
+        // Copy the pin info from the symbol to the temp pins
+        for( unsigned i = 0; i < tempPins.size(); ++ i )
+        {
+            SCH_PIN* symbolPin = GetPin( libPins[ i ] );
+            LIB_PIN* tempPin = tempPins[ i ];
+
+            tempPin->SetName( symbolPin->GetShownName() );
+            tempPin->SetType( symbolPin->GetType() );
+            tempPin->SetShape( symbolPin->GetShape() );
+            tempPin->Plot( aPlotter, false, m_pos, transform);
+        }
+    }
+}
+
+
 bool SCH_SYMBOL::HasBrightenedPins()
 {
     for( const auto& pin : m_pins )
