@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright  2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright  2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,11 +290,16 @@ bool KICADFOOTPRINT::parseAttribute( SEXPR::SEXPR* data )
     else if( child->IsString() )
         text = child->GetString();
 
+    // The "virtual" attribute token is obsolete but kicad2step can still be run against older
+    // board files.  It has been replaced with "exclude_from_bom" so any footprint with this
+    // attribute will behave the same as the "virtual" attribute.
     if( text == "smd" )
         m_smd = true;
     else if( text == "through_hole" )
         m_tht = true;
     else if( text == "virtual" )
+        m_virtual = true;
+    else if( text == "exclude_from_bom" )
         m_virtual = true;
 
     return true;
@@ -396,7 +401,6 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
         if( aPCB->AddOutlineSegment( &lcurve ) )
             hasdata = true;
-
     }
 
     for( KICADPAD* i : m_pads )
@@ -420,7 +424,6 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
         if( aPCB->AddPadHole( &lpad ) )
             hasdata = true;
-
     }
 
     if( m_virtual && !aComposeVirtual )
@@ -470,7 +473,7 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         {
             ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
                                                   "OpenCASCADE error: %s\n" ),
-                                             m_refdes, 
+                                             m_refdes,
                                              e.GetMessageString() ) );
         }
     }
