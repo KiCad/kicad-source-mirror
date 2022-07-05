@@ -22,9 +22,10 @@
 #define KICAD_BITMAP_INFO_H
 
 #include <vector>
+#include <unordered_map>
 #include <bitmaps/bitmaps_list.h>
 
-#include <wx/string.h> // wxT
+#include <wx/string.h>
 
 struct BITMAP_INFO
 {
@@ -32,9 +33,18 @@ struct BITMAP_INFO
     wxString filename;
     int      height;
     wxString theme;
+
+    BITMAP_INFO( BITMAPS aId, const wxString& aFilename, int aHeight, const wxString& aTheme ) :
+        id( aId ),
+        filename( aFilename ),
+        height( aHeight ),
+        theme( aTheme )
+    {};
+
 };
 
 
-extern const std::vector<BITMAP_INFO> g_BitmapInfo;
+extern void BuildBitmapInfo( std::unordered_map<BITMAPS,
+                             std::vector<BITMAP_INFO>>& aBitmapInfoCache );
 
 #endif // KICAD_BITMAP_INFO_H

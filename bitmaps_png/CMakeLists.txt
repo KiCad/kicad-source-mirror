@@ -786,7 +786,7 @@ function( bitmap_dir pngWidth pngHeight bmapList )
             png2png( ${tmpFile} ${pngPath} )
 
             set( bitmapInfo
-            "    { BITMAPS::${bmn}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) },\n"
+            "    aBitmapInfoCache[BITMAPS::${bmn}].emplace_back( BITMAPS::${bmn}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) );\n"
             )
 
             set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )

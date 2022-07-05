@@ -24,6 +24,7 @@
 #include <bitmaps/bitmaps_list.h>
 #include <bitmaps/bitmap_info.h>
 
-const std::vector<BITMAP_INFO> g_BitmapInfo = {
+void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBitmapInfoCache )
+{
 ${BITMAP_INFO_LIST}
 };

@@ -235,6 +235,5 @@ wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 
 void BITMAP_STORE::buildBitmapInfoCache()
 {
-    for( const BITMAP_INFO& entry : g_BitmapInfo )
-        m_bitmapInfoCache[entry.id].emplace_back( entry );
+    BuildBitmapInfo( m_bitmapInfoCache );
 }
