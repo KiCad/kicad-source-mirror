@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"PO-Revision-Date: 2022-07-05 23:51+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -15777,6 +15777,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Advertencia: prefijo de referencia</b><br>el prefijo que termina en '%s' "
+"puede crear problemas si se guarda en una biblioteca de símbolos"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -21039,9 +21041,9 @@ msgid "Linear resistance:"
 msgstr "Resistencia lineal:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Frecuencia para una profundidad pelicular de 100%:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
@@ -21287,6 +21289,7 @@ msgstr "Solución 4R:"
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:229
 msgid "Current calculation is underestimated due to long fusing time."
 msgstr ""
+"El cálculo de la corriente está subestimado debido al largo tiempo de fusión."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 msgid "Ambient temperature:"
@@ -21898,6 +21901,15 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Puede utilizar esta calculadora para comprobar si una pista pequeña puede "
+"soportar una gran corriente durante un corto periodo de tiempo.<br>\n"
+"Esta herramienta le permite diseñar un fusible de pista, pero debe "
+"utilizarse sólo como una estimación.\n"
+"\n"
+"La calculadora estima la energía necesaria para calentar el cable<br>\n"
+"hasta su punto de fusión, así como la energía necesaria para el cambio de "
+"fase<br>\n"
+"Esta energía se compara con la disipada por la resistencia del cable."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 msgid "General system design"
@@ -31929,7 +31941,7 @@ msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "No hay proyecto al exportar el archivo VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
 #, fuzzy
@@ -32631,16 +32643,16 @@ msgstr "URL de documentación"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "La dimensión de las matrices debe ser >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "El ancho de banda de las matrices con bandas debe ser >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "Hay elementos NaN en una matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
 #, fuzzy
@@ -32719,15 +32731,15 @@ msgstr "Componente no encontrado"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "No se puede interpolar la corriente en base a esta tabla IV."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "Hay un voltaje Nan en una tabla IV"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Hay una corriente inválida en una tabla IV"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
 #, fuzzy
@@ -32791,7 +32803,7 @@ msgstr "Valor de retraso inválido"
 
 #: pcbnew/ibis/ibis_parser.cpp:474
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "C_comp no es válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
 #, fuzzy
@@ -32835,11 +32847,11 @@ msgstr "Comprobando pads..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "Falta [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "El analizador sintáctico no maneja esta versión de IBIS"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
 #, fuzzy
@@ -32944,7 +32956,7 @@ msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "La línea excede la longitud máxima."
 
 #: pcbnew/ibis/ibis_parser.cpp:933
 #, fuzzy
@@ -32973,7 +32985,7 @@ msgstr "El número de parámetros, %d, de la curva de Bézier es inválido"
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "Sintaxis inválida. Debería ser |_char o &_char, etc..."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
 #, fuzzy
@@ -32997,7 +33009,7 @@ msgstr "Ancho de pista inválido"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "No se puede especificar un ancho de banda para ese tipo de matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
 #, fuzzy
@@ -33006,7 +33018,7 @@ msgstr "Definición inválida de fila"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "Demasiados datos para esta fila de la matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
 #, fuzzy
@@ -33015,11 +33027,11 @@ msgstr "Esta huella no tiene pads"
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "No se puede leer un elemento de la matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "No se puede leer un índice de matriz"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
 #, fuzzy
@@ -33034,18 +33046,20 @@ msgstr "Valor max faltante."
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" La matriz ya está inicializada. Pero m_continue no fue establecido ( error "
+"interno )"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "Se intentó leer una fila de una matriz indefinida"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "el puntero de la matriz es nulo"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Los valores Typ-Min-Max requieren al menos Typ."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
 #, fuzzy
@@ -33054,7 +33068,7 @@ msgstr "Método desconocido"
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "Error interno al leer model_type"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
 #, fuzzy
@@ -33074,18 +33088,19 @@ msgstr "Primitiva desconocida"
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr ""
+"Continuación de la lectura de un modelo que no comenzó. ( error interno )"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "Una línea del [Paquete] requiere exactamente 4 elementos."
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "Entrada de pin inválida: 6 valores de una tabla con sólo 3."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "No se puede leer un valor R, L o C para un pin."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
 #, fuzzy
@@ -33099,7 +33114,7 @@ msgstr "No se encuentra el elemento principal"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "Número incorrecto de columnas para el mapeo de pines."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
 #, fuzzy
@@ -33118,11 +33133,11 @@ msgstr "tipo de vía desconocido %d"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "Error interno detectado, debería existir una forma de onda"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "Error interno: Contexto de analizador malo."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
 #, fuzzy
@@ -33159,40 +33174,49 @@ msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis aún no soporta los valores del DUT. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "El flanco ascendente es más largo que el tiempo de encendido."
 
 #: pcbnew/ibis/kibis.cpp:731
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "El flanco descendente es más largo que el tiempo de inactividad."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
 msgstr ""
+"El modelo sólo tiene un par de formas de onda, lo que reduce la exactitud"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "El controlador necesita al menos un pullup o un pulldown"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Hay dos pares de formas de onda, pero solo un transistor. Más ecuaciones que "
+"incógnitas."
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"El modelo no tiene un par de formas de onda, en su lugar se utiliza [Ramp], "
+"poca exactitud"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr ""
+"El modelo tiene más de 2 pares de formas de onda, utilizando las dos "
+"primeras."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "Tipo de modelo inválido para un controlador."
 
 #: pcbnew/ibis/kibis.cpp:1209
 #, fuzzy
