@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"PO-Revision-Date: 2022-07-07 12:47+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5329,14 +5329,12 @@ msgid "Illegal character found in logical library name"
 msgstr "論理的なライブラリー名の中に不正な文字があります"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "ファイルが未選択です"
+msgstr "選択対象を有効化"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "ネットが未選択です"
+msgstr "選択対象を無効化"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5814,9 +5812,8 @@ msgid "Paste Special..."
 msgstr "特殊な貼り付け..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "オプションを指定してクリップボードからアイテムを貼り付け"
+msgstr "アノテーションオプションを指定してクリップボードからアイテムを貼り付ける"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -32513,19 +32510,16 @@ msgid "Inductance matrix is nullptr"
 msgstr "単位長さあたりのインダクタンス"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "ファイル '%s' を開くことができません"
+msgstr "ファイルを開くことができません "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "ファイルをロードしています..."
+msgstr "ファイルを読み込み中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "予期しないファイルの終端です。"
+msgstr "予期しないファイルの終端です。 [END] が無いのては?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
 #, fuzzy
@@ -32539,7 +32533,7 @@ msgstr "インポートされたファイルにあるアイテムは正しく扱
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "行の長さが最大値を超えています。"
 
 #: pcbnew/ibis/ibis_parser.cpp:933
 #, fuzzy
@@ -32552,14 +32546,12 @@ msgid "Failed to read a word."
 msgstr "'%s' のロードに失敗しました。"
 
 #: pcbnew/ibis/ibis_parser.cpp:976
-#, fuzzy
 msgid "Number is not an integer"
-msgstr "シンボルがアノテーションされていない"
+msgstr "数値が整数ではない"
 
 #: pcbnew/ibis/ibis_parser.cpp:1020
-#, fuzzy
 msgid "Unable to read string, input is empty."
-msgstr "データ ファイル '%s' を読み込めません。"
+msgstr "文字列が読めません。入力が空です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
