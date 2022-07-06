@@ -668,8 +668,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     bool a_is_non_copper = a && ( !a->IsOnCopperLayer() || isKeepoutZone( a, false ) );
     bool b_is_non_copper = b && ( !b->IsOnCopperLayer() || isKeepoutZone( b, false ) );
 
-    const PAD*  pad  = nullptr;
-    const ZONE* zone = nullptr;
+    const PAD*       pad  = nullptr;
+    const ZONE*      zone = nullptr;
+    const FOOTPRINT* parentFootprint = nullptr;
 
     if( aConstraintType == ZONE_CONNECTION_CONSTRAINT
      || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
@@ -684,6 +685,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             pad = static_cast<const PAD*>( b );
         else if( b && ( b->Type() == PCB_ZONE_T || b->Type() == PCB_FP_ZONE_T ) )
             zone = static_cast<const ZONE*>( b );
+
+        if( pad )
+            parentFootprint = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
     }
 
     DRC_CONSTRAINT constraint;
@@ -1237,6 +1241,31 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
         return constraint;
 
+    // Special case for pad zone connections which can iherit from their parent footprints.
+    // We've already checked for local overrides, and there were no rules targetting the pad
+    // itself, so we know we're inheriting and need to see if there are any rules targetting
+    // the parent footprint.
+    if( pad && parentFootprint && (   aConstraintType == ZONE_CONNECTION_CONSTRAINT
+                                   || aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT
+                                   || aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT ) )
+    {
+        if( a == pad )
+            a = parentFootprint;
+        else
+            b = parentFootprint;
+
+        if( m_constraintMap.count( aConstraintType ) )
+        {
+            std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
+
+            for( int ii = 0; ii < (int) ruleset->size(); ++ii )
+                processConstraint( ruleset->at( ii ) );
+
+            if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
+                return constraint;
+        }
+    }
+
     // Unfortunately implicit rules don't work for local clearances (such as zones) because
     // they have to be max'ed with netclass values (which are already implicit rules), and our
     // rule selection paradigm is "winner takes all".
@@ -1311,16 +1340,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
     else if( aConstraintType == ZONE_CONNECTION_CONSTRAINT )
     {
-        if( pad && pad->GetParent() )
+        if( pad && parentFootprint )
         {
-            FOOTPRINT*      footprint = static_cast<FOOTPRINT*>( pad->GetParent() );
-            ZONE_CONNECTION local = footprint->GetZoneConnection();
+            ZONE_CONNECTION local = parentFootprint->GetZoneConnection();
 
             if( local != ZONE_CONNECTION::INHERITED )
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "%s zone connection: %s." ),
-                                          EscapeHTML( footprint->GetSelectMenuText( UNITS ) ),
+                                          EscapeHTML( parentFootprint->GetSelectMenuText( UNITS ) ),
                                           EscapeHTML( PrintZoneConnection( local ) ) ) )
 
                 constraint.SetParentRule( nullptr );
