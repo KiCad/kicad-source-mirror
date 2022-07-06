@@ -518,10 +518,10 @@ void PCM_TASK_MANAGER::deletePackageDirectories( const wxString&                
             }
 
             // Delete any empty dirs
-            for( const wxString& dir : dirs )
+            for( const wxString& empty_dir : dirs )
             {
-                wxFileName d( dir, "" );
-                d.Rmdir(); // not passing any flags here will only remove empty directories
+                wxFileName dname( empty_dir, "" );
+                dname.Rmdir(); // not passing any flags here will only remove empty directories
             }
         }
     }
