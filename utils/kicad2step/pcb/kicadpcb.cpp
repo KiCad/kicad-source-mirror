@@ -150,7 +150,7 @@ bool KICADPCB::WriteIGES( const wxString& aFileName )
 
 bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
 {
-    if( NULL == data )
+    if( nullptr == data )
         return false;
 
     if( data->IsList() )
@@ -209,7 +209,7 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
 bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
 {
     size_t nc = data->GetNumberOfChildren();
-    SEXPR::SEXPR* child = NULL;
+    SEXPR::SEXPR* child = nullptr;
 
     for( size_t i = 1; i < nc; ++i )
     {
@@ -240,7 +240,7 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
 bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
 {
     size_t nc = data->GetNumberOfChildren();
-    SEXPR::SEXPR* child = NULL;
+    SEXPR::SEXPR* child = nullptr;
 
     // Read the layername and the corresponding layer id list:
     for( size_t i = 1; i < nc; ++i )
@@ -273,7 +273,7 @@ bool KICADPCB::parseStackupLayer( SEXPR::SEXPR* data )
     if( data->IsList() && data->GetNumberOfChildren() >= 3 )
     {
         size_t nc = data->GetNumberOfChildren();
-        SEXPR::SEXPR* child = NULL;
+        SEXPR::SEXPR* child = nullptr;
         std::string   ref;
         std::string   value;
 
@@ -353,7 +353,7 @@ bool KICADPCB::parseStackupLayer( SEXPR::SEXPR* data )
 bool KICADPCB::parseStackup( SEXPR::SEXPR* data )
 {
     size_t nc = data->GetNumberOfChildren();
-    SEXPR::SEXPR* child = NULL;
+    SEXPR::SEXPR* child = nullptr;
 
     for( size_t i = 1; i < nc; ++i )
     {
@@ -423,7 +423,7 @@ int KICADPCB::GetLayerId( std::string& aLayerName )
 bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 {
     size_t nc = data->GetNumberOfChildren();
-    SEXPR::SEXPR* child = NULL;
+    SEXPR::SEXPR* child = nullptr;
 
     for( size_t i = 1; i < nc; ++i )
     {
@@ -632,6 +632,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
         lcurve.m_end.y = -( lcurve.m_end.y - origin.y );
         lcurve.m_start.x -= origin.x;
         lcurve.m_end.x -= origin.x;
+
         // used in bezier curves:
         lcurve.m_bezierctrl1.y = -( lcurve.m_bezierctrl1.y - origin.y );
         lcurve.m_bezierctrl1.x -= origin.x;
@@ -653,7 +654,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
     {
         ReportMessage( wxT( "could not create PCB solid model\n" ) );
         delete m_pcb_model;
-        m_pcb_model = NULL;
+        m_pcb_model = nullptr;
         return false;
     }
 

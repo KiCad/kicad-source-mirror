@@ -2,7 +2,7 @@
  * This program source code file is part kicad2mcad
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
 #ifdef _WIN32
         while( tpath.m_Pathexp.EndsWith( wxT( "\\" ) ) )
-        tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
+            tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #else
         while( tpath.m_Pathexp.EndsWith( wxT( "/" ) ) && tpath.m_Pathexp.length() > 1 )
             tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
@@ -566,7 +566,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
         idx = fname.find( fps );
 
-        if( std::string::npos != idx && 0 == idx  )
+        if( std::string::npos != idx && 0 == idx )
         {
             fname = fname.substr( fps.size() );
 
@@ -607,7 +607,6 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
     return fname;
 }
-
 
 
 const std::list< SEARCH_PATH >* S3D_RESOLVER::GetPaths( void )
@@ -691,7 +690,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     size_t nchars;
     istr >> nchars;
 
-    if( (i2 + nchars) >= aString.size() )
+    if( ( i2 + nchars ) >= aString.size() )
     {
         wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * unexpected end of line in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );

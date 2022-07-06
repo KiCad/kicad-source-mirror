@@ -272,7 +272,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
     if( NULL == aCurve || LAYER_EDGE != aCurve->m_layer || CURVE_NONE == aCurve->m_form )
         return false;
 
-    if( CURVE_LINE == aCurve->m_form  || CURVE_BEZIER == aCurve->m_form )
+    if( CURVE_LINE == aCurve->m_form || CURVE_BEZIER == aCurve->m_form )
     {
         // reject zero - length lines
         double dx = aCurve->m_end.x - aCurve->m_start.x;
@@ -364,74 +364,71 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         break;
 
     case CURVE_CIRCLE:
-        do
-        {
-            double dx = aCurve->m_start.x - aCurve->m_radius;
+    {
+        double dx = aCurve->m_start.x - aCurve->m_radius;
 
-            if( dx < m_minx )
-            {
-                m_minx = dx;
-                m_mincurve = --( m_curves.end() );
-            }
-        } while( 0 );
+        if( dx < m_minx )
+        {
+            m_minx = dx;
+            m_mincurve = --( m_curves.end() );
+        }
 
         break;
+    }
 
     case CURVE_ARC:
-        do
+    {
+        double dx0 = aCurve->m_end.x - aCurve->m_start.x;
+        double dy0 = aCurve->m_end.y - aCurve->m_start.y;
+        int    q0; // quadrant of start point
+
+        if( dx0 > 0.0 && dy0 >= 0.0 )
+            q0 = 1;
+        else if( dx0 <= 0.0 && dy0 > 0.0 )
+            q0 = 2;
+        else if( dx0 < 0.0 && dy0 <= 0.0 )
+            q0 = 3;
+        else
+            q0 = 4;
+
+        double dx1 = aCurve->m_ep.x - aCurve->m_start.x;
+        double dy1 = aCurve->m_ep.y - aCurve->m_start.y;
+        int    q1; // quadrant of end point
+
+        if( dx1 > 0.0 && dy1 >= 0.0 )
+            q1 = 1;
+        else if( dx1 <= 0.0 && dy1 > 0.0 )
+            q1 = 2;
+        else if( dx1 < 0.0 && dy1 <= 0.0 )
+            q1 = 3;
+        else
+            q1 = 4;
+
+        // calculate x0, y0 for the start point on a CCW arc
+        double x0 = aCurve->m_end.x;
+        double x1 = aCurve->m_ep.x;
+
+        if( aCurve->m_angle < 0.0 )
         {
-            double dx0 = aCurve->m_end.x - aCurve->m_start.x;
-            double dy0 = aCurve->m_end.y - aCurve->m_start.y;
-            int    q0; // quadrant of start point
+            std::swap( q0, q1 );
+            std::swap( x0, x1 );
+        }
 
-            if( dx0 > 0.0 && dy0 >= 0.0 )
-                q0 = 1;
-            else if( dx0 <= 0.0 && dy0 > 0.0 )
-                q0 = 2;
-            else if( dx0 < 0.0 && dy0 <= 0.0 )
-                q0 = 3;
-            else
-                q0 = 4;
+        double minx;
 
-            double dx1 = aCurve->m_ep.x - aCurve->m_start.x;
-            double dy1 = aCurve->m_ep.y - aCurve->m_start.y;
-            int    q1; // quadrant of end point
+        if( ( q0 <= 2 && q1 >= 3 ) || ( q0 >= 3 && x0 > x1 ) )
+            minx = aCurve->m_start.x - aCurve->m_radius;
+        else
+            minx = std::min( x0, x1 );
 
-            if( dx1 > 0.0 && dy1 >= 0.0 )
-                q1 = 1;
-            else if( dx1 <= 0.0 && dy1 > 0.0 )
-                q1 = 2;
-            else if( dx1 < 0.0 && dy1 <= 0.0 )
-                q1 = 3;
-            else
-                q1 = 4;
-
-            // calculate x0, y0 for the start point on a CCW arc
-            double x0 = aCurve->m_end.x;
-            double x1 = aCurve->m_ep.x;
-
-            if( aCurve->m_angle < 0.0 )
-            {
-                std::swap( q0, q1 );
-                std::swap( x0, x1 );
-            }
-
-            double minx;
-
-            if( ( q0 <= 2 && q1 >= 3 ) || ( q0 >= 3 && x0 > x1 ) )
-                minx = aCurve->m_start.x - aCurve->m_radius;
-            else
-                minx = std::min( x0, x1 );
-
-            if( minx < m_minx )
-            {
-                m_minx = minx;
-                m_mincurve = --( m_curves.end() );
-            }
-
-        } while( 0 );
+        if( minx < m_minx )
+        {
+            m_minx = minx;
+            m_mincurve = --( m_curves.end() );
+        }
 
         break;
+    }
 
     case CURVE_BEZIER:
         if( aCurve->m_start.x < m_minx )
@@ -448,15 +445,13 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
         break;
 
-    default:
-        // unexpected curve type
-        do
-        {
-            wxString msg;
-            msg.Printf( wxT( "  * AddOutlineSegment() unsupported curve type: %d\n" ),
-                        aCurve->m_form );
-            ReportMessage( msg );
-        } while( 0 );
+    default:     // unexpected curve type
+    {
+        wxString msg;
+        msg.Printf( wxT( "  * AddOutlineSegment() unsupported curve type: %d\n" ),
+                    aCurve->m_form );
+        ReportMessage( msg );
+    }
 
         return false;
     }
@@ -841,7 +836,9 @@ bool PCBMODEL::CreatePCB()
         char_count++;
 
         if( char_count < 80 )
+        {
             ReportMessage( wxT( "." ) );
+        }
         else
         {
             char_count = 0;
@@ -876,16 +873,18 @@ bool PCBMODEL::CreatePCB()
     if( m_pcb_label.IsNull() )
         return false;
 
-    // AddComponent adds a label that has a reference (not a parent/child relation) to the real label
-    // We need to extract that real label to name it for the STEP output cleanly
+    // AddComponent adds a label that has a reference (not a parent/child relation) to the real
+    // label.  We need to extract that real label to name it for the STEP output cleanly
     // Why are we trying to name the bare board? Because CAD tools like SolidWorks do fun things
-    // like "deduplicate" imported STEPs by swapping STEP assembly components with already identically named assemblies
-    // So we want to avoid having the PCB be generally defaulted to "Component" or "Assembly".
+    // like "deduplicate" imported STEPs by swapping STEP assembly components with already
+    // identically named assemblies.  So we want to avoid having the PCB be generally defaulted
+    // to "Component" or "Assembly".
     Handle( TDataStd_TreeNode ) node;
 
     if( m_pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
     {
         TDF_Label label = node->Father()->Label();
+
         if( !label.IsNull() )
         {
             wxString                   pcbName = wxString::Format( wxT( "%s PCB" ), m_pcbName );
@@ -894,7 +893,6 @@ bool PCBMODEL::CreatePCB()
             TDataStd_Name::Set( label, partname );
         }
     }
-
 
     // color the PCB
     Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );
@@ -914,6 +912,7 @@ bool PCBMODEL::CreatePCB()
 #if ( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();
 #endif
+
     return true;
 }
 
@@ -938,8 +937,10 @@ bool PCBMODEL::WriteIGES( const wxString& aFileName )
     IGESData_GlobalSection header = writer.Model()->GlobalSection();
     header.SetFileName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
     header.SetSendName( new TCollection_HAsciiString( "KiCad electronic assembly" ) );
-    header.SetAuthorName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.author" ) ) );
-    header.SetCompanyName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
+    header.SetAuthorName(
+            new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.author" ) ) );
+    header.SetCompanyName(
+            new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
     writer.Model()->SetGlobalSection( header );
 
     if( Standard_False == writer.Perform( m_doc, aFileName.c_str() ) )
@@ -959,6 +960,7 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
                                          aFileName ) );
         return false;
     }
+
     wxFileName fn( aFileName );
 
     STEPCAFControl_Writer writer;
@@ -1314,11 +1316,11 @@ bool PCBMODEL::readIGES( Handle( TDocStd_Document )& doc, const char* fname )
         return false;
 
     // set other translation options
-    reader.SetColorMode(true);  // use model colors
-    reader.SetNameMode(false);  // don't use IGES label names
-    reader.SetLayerMode(false); // ignore LAYER data
+    reader.SetColorMode( true );  // use model colors
+    reader.SetNameMode( false );  // don't use IGES label names
+    reader.SetLayerMode( false ); // ignore LAYER data
 
-    if ( !reader.Transfer( doc ) )
+    if( !reader.Transfer( doc ) )
     {
         doc->Close();
         return false;
@@ -1335,7 +1337,7 @@ bool PCBMODEL::readIGES( Handle( TDocStd_Document )& doc, const char* fname )
 }
 
 
-bool PCBMODEL::readSTEP( Handle(TDocStd_Document)& doc, const char* fname )
+bool PCBMODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fname )
 {
     STEPCAFControl_Reader reader;
     IFSelect_ReturnStatus stat  = reader.ReadFile( fname );
@@ -1352,11 +1354,11 @@ bool PCBMODEL::readSTEP( Handle(TDocStd_Document)& doc, const char* fname )
         return false;
 
     // set other translation options
-    reader.SetColorMode(true);  // use model colors
-    reader.SetNameMode(false);  // don't use label names
-    reader.SetLayerMode(false); // ignore LAYER data
+    reader.SetColorMode( true );  // use model colors
+    reader.SetNameMode( false );  // don't use label names
+    reader.SetLayerMode( false ); // ignore LAYER data
 
-    if ( !reader.Transfer( doc ) )
+    if( !reader.Transfer( doc ) )
     {
         doc->Close();
         return false;
@@ -1385,14 +1387,14 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
     BRepBuilderAPI_GTransform brep( scale_transform );
 
     // s_assy = shape tool for the source
-    Handle(XCAFDoc_ShapeTool) s_assy = XCAFDoc_DocumentTool::ShapeTool ( source->Main() );
+    Handle(XCAFDoc_ShapeTool) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
 
     // retrieve all free shapes within the assembly
     TDF_LabelSequence frshapes;
     s_assy->GetFreeShapes( frshapes );
 
     // d_assy = shape tool for the destination
-    Handle(XCAFDoc_ShapeTool) d_assy = XCAFDoc_DocumentTool::ShapeTool ( dest->Main() );
+    Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool ( dest->Main() );
 
     // create a new shape within the destination and set the assembly tool to point to it
     TDF_Label component = d_assy->NewShape();
@@ -1406,14 +1408,14 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
 
     while( id <= nshapes )
     {
-        TopoDS_Shape shape = s_assy->GetShape( frshapes.Value(id) );
+        TopoDS_Shape shape = s_assy->GetShape( frshapes.Value( id ) );
 
-        if ( !shape.IsNull() )
+        if( !shape.IsNull() )
         {
             brep.Perform( shape, Standard_False );
             TopoDS_Shape scaled_shape;
 
-            if ( brep.IsDone() )
+            if( brep.IsDone() )
             {
                 scaled_shape = brep.Shape();
             }
@@ -1446,9 +1448,9 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                         dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
                     }
                 }
-                else  if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
-                          || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
-                          || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
+                else if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
                 {
                     dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
                 }
@@ -1477,9 +1479,9 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                         dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorGen );
                     }
                 }
-                else  if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
-                          || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
-                          || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
+                else if( scolor->GetColor( stop.Current(), XCAFDoc_ColorSurf, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
+                         || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
                 {
                     dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
                 }

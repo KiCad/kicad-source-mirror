@@ -2,7 +2,7 @@
  * This program source code file is part of kicad2mcad
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
 #define REGEX_UNIT "([m]{2}|(?:in))"
+
 
 class KICAD2MCAD_APP : public wxApp
 {
@@ -161,7 +162,8 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 
         if( tunit.size() > 0 ) // No unit accepted ( default = mm )
         {
-            if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) ) || ( sm.size() != 4 ) )
+            if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) ) ||
+                ( sm.size() != 4 ) )
             {
                 parser.Usage();
                 return false;
@@ -212,7 +214,6 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 
     if( parser.Found( wxT( "o" ), &tstr ) )
         m_params.m_outputFile = tstr;
-
 
     if( parser.GetParamCount() < 1 )
     {

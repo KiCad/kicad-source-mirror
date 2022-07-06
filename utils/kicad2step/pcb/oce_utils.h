@@ -97,9 +97,9 @@ public:
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes,
-        bool aBottom, DOUBLET aPosition, double aRotation,
-        TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
-        bool aSubstituteModels = true );
+                       bool aBottom, DOUBLET aPosition, double aRotation,
+                       TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
+                       bool aSubstituteModels = true );
 
     void SetBoardColor( double r, double g, double b );
 
@@ -167,7 +167,9 @@ private:
 
     std::list<KICADCURVE>           m_curves;
     std::vector<TopoDS_Shape>       m_cutouts;
-    wxString                        m_pcbName; // name of the PCB, which will most likely be the file name of the path
+
+    /// Name of the PCB, which will most likely be the file name of the path.
+    wxString                        m_pcbName;
 };
 
 #endif // OCE_VIS_OCE_UTILS_H

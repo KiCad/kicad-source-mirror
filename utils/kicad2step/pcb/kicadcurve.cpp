@@ -32,6 +32,8 @@
 #include <iostream>
 #include <sstream>
 #include <../../../libs/kimath/include/geometry/shape_arc.h>
+#include <sexpr/sexpr_parser.h>
+#include <geometry/shape_line_chain.h>
 
 
 KICADCURVE::KICADCURVE()
@@ -53,8 +55,6 @@ KICADCURVE::~KICADCURVE()
     return;
 }
 
-#include <sexpr/sexpr_parser.h>
-#include <geometry/shape_line_chain.h>
 
 bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 {
@@ -112,7 +112,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                 SEXPR::SEXPR* sub_child = ( *list )[ii];
                 text = sub_child->GetChild( 0 )->GetSymbol();
 
-                // inside pts list, parmeters are xy point coord
+                // inside pts list, parameters are xy point coord
                 // or a arc (start, middle, end) points
                 if( text == "xy" )
                 {
@@ -125,16 +125,18 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     {
                         switch( ii )
                         {
-                        case 1: m_start = coord; break;
+                        case 1: m_start = coord;       break;
                         case 2: m_bezierctrl1 = coord; break;
                         case 3: m_bezierctrl2 = coord; break;
-                        case 4:  m_end = coord; break;
+                        case 4: m_end = coord;         break;
                         default:
                             break;
                         }
                     }
                     else
+                    {
                         m_poly.push_back( coord );
+                    }
                 }
                 else if( text == "arc" )
                 {
@@ -164,7 +166,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     }
 
                     // To convert arc edge to segments, we are using SHAPE_ARC, but SHAPE_ARC use
-                    // integer coords. So to avoid truncations, use a scaling factor.
+                    // integer coords. So to avoid truncation, use a scaling factor.
                     // 1e5 is enough.
                     const double scale = 1e5;
                     SHAPE_ARC new_arc( VECTOR2I( arc_start.x*scale, arc_start.y*scale ),
@@ -176,8 +178,8 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 
                     // Add segments to STEP polygon
                     for( int ll = 0; ll < segs_from_arc.PointCount(); ll++ )
-                        m_poly.emplace_back( segs_from_arc.CPoint(ll).x/scale,
-                                             segs_from_arc.CPoint(ll).y/scale );
+                        m_poly.emplace_back( segs_from_arc.CPoint( ll ).x / scale,
+                                             segs_from_arc.CPoint( ll ).y / scale );
                 }
             }
         }
@@ -237,8 +239,8 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
     // So convert new params to old params
     if( CURVE_ARC == aCurveType && m_arcHasMiddlePoint )
     {
-        // To caculate old params, we are using SHAPE_ARC, but SHAPE_ARC use
-        // integer coords. So to avoid truncations, use a scaling factor.
+        // To calculate old params, we are using SHAPE_ARC, but SHAPE_ARC use
+        // integer coords. So to avoid truncation, use a scaling factor.
         // 1e5 is enough.
         const double scale = 1e5;
         SHAPE_ARC new_arc( VECTOR2I( m_start.x*scale, m_start.y*scale ),
@@ -248,10 +250,10 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         VECTOR2I center = new_arc.GetCenter();
         m_start.x = center.x/scale;
         m_start.y = center.y/scale;
-        m_end.x = new_arc.GetP0().x/scale;
-        m_end.y = new_arc.GetP0().y/scale;
-        m_ep.x = new_arc.GetP1().x/scale;
-        m_ep.y = new_arc.GetP1().y/scale;
+        m_end.x = new_arc.GetP0().x / scale;
+        m_end.y = new_arc.GetP0().y / scale;
+        m_ep.x = new_arc.GetP1().x / scale;
+        m_ep.y = new_arc.GetP1().y / scale;
         m_angle = new_arc.GetCentralAngle().AsRadians();
     }
 
@@ -265,28 +267,28 @@ std::string KICADCURVE::Describe() const
 
     switch( m_form )
     {
-        case CURVE_LINE:
-            desc << "line start: " << m_start << " end: " << m_end;
-            break;
+    case CURVE_LINE:
+        desc << "line start: " << m_start << " end: " << m_end;
+        break;
 
-        case CURVE_ARC:
-            desc << "arc center: " << m_start << " radius: " << m_radius
-                 << " angle: " << 180.0 * m_angle / M_PI
-                 << " arc start: " << m_end << " arc end: " << m_ep;
-            break;
+    case CURVE_ARC:
+        desc << "arc center: " << m_start << " radius: " << m_radius
+             << " angle: " << 180.0 * m_angle / M_PI
+             << " arc start: " << m_end << " arc end: " << m_ep;
+        break;
 
-        case CURVE_CIRCLE:
-            desc << "circle center: " << m_start << " radius: " << m_radius;
-            break;
+    case CURVE_CIRCLE:
+        desc << "circle center: " << m_start << " radius: " << m_radius;
+        break;
 
-        case CURVE_BEZIER:
-            desc << "bezier start: " << m_start << " end: " << m_end
-                 << " ctrl1: " << m_bezierctrl1 << " ctrl2: " << m_bezierctrl2 ;
-            break;
+    case CURVE_BEZIER:
+        desc << "bezier start: " << m_start << " end: " << m_end
+             << " ctrl1: " << m_bezierctrl1 << " ctrl2: " << m_bezierctrl2 ;
+        break;
 
-        default:
-            desc << "<invalid curve type>";
-            break;
+    default:
+        desc << "<invalid curve type>";
+        break;
     }
 
     return desc.str();

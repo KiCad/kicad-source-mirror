@@ -2,7 +2,7 @@
  * This program source code file is part of kicad2mcad
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,8 +58,11 @@ protected:
     virtual void OnOKButtonClick( wxCommandEvent& aEvent ) override;
 };
 
+
 // Horrible hack until we decouple things more
 static PANEL_KICAD2STEP* openPanel = nullptr;
+
+
 void ReportMessage( const wxString& aMessage )
 {
     if( openPanel != nullptr )
@@ -75,33 +78,35 @@ protected:
                        const Message_Gravity theGravity,
                        const Standard_Boolean theToPutEol ) const override
     {
-        Send (TCollection_AsciiString (theString), theGravity, theToPutEol);
+        Send( TCollection_AsciiString( theString ), theGravity, theToPutEol );
     }
 
-  virtual void Send( const TCollection_AsciiString& theString,
-                     const Message_Gravity theGravity,
-                     const Standard_Boolean theToPutEol) const override
+    virtual void Send( const TCollection_AsciiString& theString,
+                       const Message_Gravity theGravity,
+                       const Standard_Boolean theToPutEol ) const override
 #else
-  virtual void send( const TCollection_AsciiString& theString,
-                     const Message_Gravity theGravity ) const override
+        virtual void send( const TCollection_AsciiString& theString,
+                           const Message_Gravity theGravity ) const override
 #endif
-  {
+    {
       if( theGravity >= Message_Info )
       {
-            ReportMessage( theString.ToCString() );
+          ReportMessage( theString.ToCString() );
+
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
           if( theToPutEol )
-            ReportMessage( wxT( "\n" ) );
+              ReportMessage( wxT( "\n" ) );
 #else
           ReportMessage( wxT( "\n" ) );
 #endif
       }
+
       if( theGravity >= Message_Alarm )
           openPanel->m_error = true;
 
       if( theGravity == Message_Fail )
           openPanel->m_fail = true;
-  }
+    }
 };
 
 KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
@@ -122,7 +127,7 @@ KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
 
 
 KICAD2STEP_FRAME::KICAD2STEP_FRAME( const wxString& title ) :
-        KICAD2STEP_FRAME_BASE( NULL, wxID_ANY, title )
+        KICAD2STEP_FRAME_BASE( nullptr, wxID_ANY, title )
 {
 }
 
@@ -177,8 +182,7 @@ int PANEL_KICAD2STEP::RunConverter()
     {
         out_fname.Assign( m_params.m_outputFile );
 
-        // Set the file extension if the user's requested
-        // file name does not have an extension.
+        // Set the file extension if the user's requested file name does not have an extension.
         if( !out_fname.HasExt() )
             out_fname.SetExt( m_params.getOutputExt() );
     }
@@ -197,7 +201,6 @@ int PANEL_KICAD2STEP::RunConverter()
     pcb.SetOrigin( m_params.m_xOrigin, m_params.m_yOrigin );
     pcb.SetMinDistance( m_params.m_minDistance );
     ReportMessage( wxString::Format( _( "Read file: '%s'\n" ), m_params.m_filename ) );
-
 
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
     Message::DefaultMessenger()->AddPrinter( new KiCadPrinter );
@@ -272,7 +275,6 @@ int PANEL_KICAD2STEP::RunConverter()
     {
         msg = _( "STEP file has been created, but there are warnings." );
     }
-
 
     ReportMessage( msg );
 
