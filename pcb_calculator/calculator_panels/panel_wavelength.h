@@ -37,17 +37,17 @@ public:
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override{};
 
-    void OnFrequencyChange( wxCommandEvent& event );
-    void OnPeriodChange( wxCommandEvent& event );
-    void OnWavelengthVacuumChange( wxCommandEvent& event );
-    void OnWavelengthMediumChange( wxCommandEvent& event );
-    void OnPermittivityChange( wxCommandEvent& event );
-    void OnPermeabilityChange( wxCommandEvent& event );
-    void OnButtonPermittivity( wxCommandEvent& event );
+    void OnFrequencyChange( wxCommandEvent& event ) override;
+    void OnPeriodChange( wxCommandEvent& event ) override;
+    void OnWavelengthVacuumChange( wxCommandEvent& event ) override;
+    void OnWavelengthMediumChange( wxCommandEvent& event ) override;
+    void OnPermittivityChange( wxCommandEvent& event ) override;
+    void OnPermeabilityChange( wxCommandEvent& event ) override;
+    void OnButtonPermittivity( wxCommandEvent& event ) override;
 
 private:
     void update( double aFrequency );
-    void updateUnits( wxCommandEvent& aEvent );
+    void updateUnits( wxCommandEvent& aEvent ) override;
 
     double m_permittivity = 1;
     double m_permeability = 1;
