@@ -51,11 +51,11 @@ bool DRC_CACHE_GENERATOR::Run()
     if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
         m_largestPhysicalClearance = std::max( m_largestPhysicalClearance, worstConstraint.GetValue().Min() );
 
-    std::vector<ZONE*> allZones;
+    std::set<ZONE*> allZones;
 
     for( ZONE* zone : m_board->Zones() )
     {
-        allZones.push_back( zone );
+        allZones.insert( zone );
 
         if( !zone->GetIsRuleArea() )
         {
@@ -76,7 +76,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
         for( ZONE* zone : footprint->Zones() )
         {
-            allZones.push_back( zone );
+            allZones.insert( zone );
 
             if( !zone->GetIsRuleArea() )
             {
@@ -152,12 +152,7 @@ bool DRC_CACHE_GENERATOR::Run()
     m_drcEngine->SetMaxProgress( allZones.size() );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        for( ZONE* zone : footprint->Zones() )
-            allZones.push_back( zone );
-
         footprint->BuildPolyCourtyards();
-    }
 
     thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
