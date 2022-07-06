@@ -163,6 +163,15 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetDrillShape(), b->GetDrillShape() );
     TEST( a->GetDrillSize(), b->GetDrillSize() );
 
+    // Clearance and zone connection overrides are as likely to be set at the board level as in
+    // the library.
+    //
+    // If we ignore them and someone *does* change one of them in the library, then stale
+    // footprints won't be caught.
+    //
+    // On the other hand, if we report them then boards that override at the board level are
+    // going to be VERY noisy.
+#if 0
     TEST( a->GetLocalClearance(), b->GetLocalClearance() );
     TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin() );
     TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin() );
@@ -173,6 +182,7 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
     TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees() );
     TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
+#endif
 
     TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );
 
@@ -349,22 +359,37 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES );
     TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_MISSING_COURTYARD );
 
+    // Clearance and zone connection overrides are as likely to be set at the board level as in
+    // the library.
+    //
+    // If we ignore them and someone *does* change one of them in the library, then stale
+    // footprints won't be caught.
+    //
+    // On the other hand, if we report them then boards that override at the board level are
+    // going to be VERY noisy.
+#if 0
     TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance() );
     TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin() );
     TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin() );
     TEST_D( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio() );
 
     TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection() );
+#endif
 
     // Text items are really problematic.  We don't want to test the reference, but after that
-    // it gets messy.  What about the value?  Depends on whether or not it's a singleton part.
+    // it gets messy.
+    //
+    // What about the value?  Depends on whether or not it's a singleton part.
+    //
     // And what about other texts?  They might be added only to instances on the board, or even
     // changed for instances on the board.  Or they might want to be tested for equality.
+    //
     // Currently we punt and ignore all the text items.
 
     // Drawings and pads are also somewhat problematic as there's no guarantee that they'll be
     // in the same order in the two footprints.  Rather than building some sophisticated hashing
-    // algorithm we use the footprint sorting functions to attempt to sort them in the same order.
+    // algorithm we use the footprint sorting functions to attempt to sort them in the same
+    // order.
 
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> aShapes;
     std::copy_if( GraphicalItems().begin(), GraphicalItems().end(),
