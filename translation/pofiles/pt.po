@@ -6,21 +6,22 @@
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 # Rafael Silva <perigoso@riseup.net>, 2021, 2022.
+# leonardokr <leo@ziondev.us>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-01-03 10:45+0000\n"
-"Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2022-07-07 12:47+0000\n"
+"Last-Translator: leonardokr <leo@ziondev.us>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -4819,11 +4820,11 @@ msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
 msgid "This path:"
-msgstr "Este caminho:"
+msgstr "Este local:"
 
 #: common/filename_resolver.cpp:471
 msgid "Existing path:"
-msgstr "Caminho existente:"
+msgstr "Local existente:"
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
@@ -5025,9 +5026,9 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Houve uma falha ao carregar a biblioteca kiface '%s'."
+msgstr "Houve uma falha na verificação da assinatura '%s' da biblioteca kiface."
 
 #: common/kiway.cpp:268
 #, c-format
@@ -6944,11 +6945,9 @@ msgid "Hotkey file"
 msgstr "Arquivo da lista das teclas de atalho"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"O arquivo de equivalência '%s' não pôde ser encontrado nos caminhos de "
-"pesquisa predefinido."
+msgstr "O arquivo de equivalência '%s' não pôde ser encontrado."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7361,17 +7360,15 @@ msgstr ""
 "esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Salvar no Esquema"
+msgstr "Salvar no Esquema e no Arquivo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Salvar associações de footprint nos campos de footprint de símbolos de "
+"Salvar associações de footprint no símbolo do esquema e nos arquivos do "
 "esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
@@ -12915,15 +12912,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Remove itens"
+msgstr "Remover Células Inválidas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:355
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Diâmetro do furo de folga:"
+msgstr "Cancelar Atualização da Tabela"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:368
 #, c-format
