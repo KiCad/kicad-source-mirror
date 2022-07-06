@@ -75,12 +75,12 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_lastTextboxStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
+        m_lastAutoLabelRotateOnPlacement( false ),
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
         m_inPlaceImage( false ),
         m_inSingleClickPlace( false ),
         m_inTwoClickPlace( false ),
-        m_lastAutoLabelRotateOnPlacement( false ),
         m_inDrawSheet( false )
 {
 }
