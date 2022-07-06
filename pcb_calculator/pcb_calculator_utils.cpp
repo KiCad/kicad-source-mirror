@@ -18,6 +18,7 @@
  */
 
 #include <pcb_calculator_utils.h>
+#include <locale.h>
 
 bool findMatch( wxArrayString& aList, const wxString& aValue, int& aIdx )
 {
