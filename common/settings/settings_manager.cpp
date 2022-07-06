@@ -55,8 +55,6 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
         m_migration_source(),
         m_migrateLibraryTables( true )
 {
-    PATHS::EnsureUserPathsExist();
-
     // Check if the settings directory already exists, and if not, perform a migration if possible
     if( !MigrateIfNeeded() )
     {

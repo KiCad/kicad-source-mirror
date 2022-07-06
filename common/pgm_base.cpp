@@ -367,6 +367,10 @@ void PGM_BASE::sentryPrompt()
 
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
 {
+    // Just make sure we init precreate any folders early for later code
+    // In particular, the user cache path is the most likely to be hit by startup code
+    PATHS::EnsureUserPathsExist();
+
 #ifdef KICAD_USE_SENTRY
     sentryInit();
 #endif

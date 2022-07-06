@@ -341,7 +341,7 @@ wxString PATHS::GetDocumentationPath()
 bool PATHS::EnsurePathExists( const wxString& aPath )
 {
     wxFileName path( aPath );
-    if( !path.Normalize() )
+    if( !path.MakeAbsolute() )
     {
         return false;
     }
@@ -360,6 +360,7 @@ bool PATHS::EnsurePathExists( const wxString& aPath )
 
 void PATHS::EnsureUserPathsExist()
 {
+    EnsurePathExists( GetUserCachePath() );
     EnsurePathExists( GetUserPluginsPath() );
     EnsurePathExists( GetUserPlugins3DPath() );
     EnsurePathExists( GetUserScriptingPath() );
@@ -428,7 +429,7 @@ wxString PATHS::GetOSXKicadDataDir()
 wxString PATHS::getWindowsKiCadRoot()
 {
     wxFileName root( Pgm().GetExecutablePath() +  wxT( "/../" ) );
-    root.Normalize();
+    root.MakeAbsolute();
 
     return root.GetPathWithSep();
 }
