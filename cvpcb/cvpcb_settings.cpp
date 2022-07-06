@@ -33,7 +33,7 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
         APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
         m_FootprintViewerZoom( 1.0 ),
         m_FootprintViewerAutoZoomOnSelect( true ),
-        m_FilterFootprint( 0 ),
+        m_FilterFlags( 0 ),
         m_LibrariesWidth( 0 ),
         m_FootprintsWidth( 0 )
 {
@@ -43,7 +43,8 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
     m_FootprintViewerMagneticSettings.graphics = true;
 
     // Init settings:
-    m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFootprint, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFlags, 0 ) );
+    m_params.emplace_back( new PARAM<wxString>( "filter_footprint_text", &m_FilterString, "" ) );
 
     m_params.emplace_back( new PARAM<int>( "libraries_pane_width", &m_LibrariesWidth, 0 ) );
     m_params.emplace_back( new PARAM<int>( "footprints_pane_width", &m_FootprintsWidth, 0 ) );

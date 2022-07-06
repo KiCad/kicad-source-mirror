@@ -37,18 +37,19 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    WINDOW_SETTINGS m_FootprintViewer;
+    WINDOW_SETTINGS     m_FootprintViewer;
 
     PCB_DISPLAY_OPTIONS m_FootprintViewerDisplayOptions;
 
-    MAGNETIC_SETTINGS m_FootprintViewerMagneticSettings;
+    MAGNETIC_SETTINGS   m_FootprintViewerMagneticSettings;
 
-    double m_FootprintViewerZoom;
-    bool   m_FootprintViewerAutoZoomOnSelect;
+    double              m_FootprintViewerZoom;
+    bool                m_FootprintViewerAutoZoomOnSelect;
 
-    int m_FilterFootprint;
-    int m_LibrariesWidth;
-    int m_FootprintsWidth;
+    int                 m_FilterFlags;
+    wxString            m_FilterString;
+    int                 m_LibrariesWidth;
+    int                 m_FootprintsWidth;
 
 protected:
 

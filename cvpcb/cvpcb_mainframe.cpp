@@ -455,7 +455,8 @@ void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
 
-    m_filteringOptions = cfg->m_FilterFootprint;
+    m_filteringOptions = cfg->m_FilterFlags;
+    m_tcFilterString->ChangeValue( cfg->m_FilterString );
 }
 
 
@@ -464,7 +465,8 @@ void CVPCB_MAINFRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
     CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
-    cfg->m_FilterFootprint = m_filteringOptions;
+    cfg->m_FilterFlags = m_filteringOptions;
+    cfg->m_FilterString = m_tcFilterString->GetValue();
 
     cfg->m_LibrariesWidth = m_librariesListBox->GetSize().x;
     cfg->m_FootprintsWidth = m_footprintListBox->GetSize().x;
