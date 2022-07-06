@@ -159,5 +159,33 @@ public:
     double GetUnitScale() override;
 };
 
+class UNIT_SELECTOR_SPEED : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_SPEED( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                         const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( ohm/m )
+     */
+    double GetUnitScale() override;
+};
+
+class UNIT_SELECTOR_TIME : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_TIME( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                        const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( ohm/m )
+     */
+    double GetUnitScale() override;
+};
+
 #endif  // UNIT_SELECTOR_H
 

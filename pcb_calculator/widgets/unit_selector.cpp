@@ -232,3 +232,55 @@ double UNIT_SELECTOR_LEN_CABLE::GetUnitScale()
     }
     return 1.0;
 }
+
+UNIT_SELECTOR_SPEED::UNIT_SELECTOR_SPEED( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                          const wxSize& size, const wxArrayString& choices,
+                                          long style ) :
+        UNIT_SELECTOR( parent, id, pos, size, choices, style )
+{
+    Append( _( "m/s" ) );
+    Append( _( "ft/s" ) );
+    Append( _( "km/h" ) );
+    Append( _( "mi/h" ) );
+}
+
+/*
+ * Function GetUnitScale
+ * return the scaling factor to convert users units
+ * to normalized units (meter per second)
+ */
+double UNIT_SELECTOR_SPEED::GetUnitScale()
+{
+    switch( GetCurrentSelection() )
+    {
+    case 0: return UNIT_METER_PER_SECOND; break;
+    case 1: return UNIT_FEET_PER_SECOND; break;
+    case 2: return UNIT_KILOMETER_PER_HOUR; break;
+    case 3: return UNIT_MILES_PER_HOUR; break;
+    }
+    return 1.0;
+}
+
+UNIT_SELECTOR_TIME::UNIT_SELECTOR_TIME( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                        const wxSize& size, const wxArrayString& choices,
+                                        long style ) :
+        UNIT_SELECTOR( parent, id, pos, size, choices, style )
+{
+    Append( _( "ns" ) );
+    Append( _( "ps" ) );
+}
+
+/*
+ * Function GetUnitScale
+ * return the scaling factor to convert users units
+ * to normalized units (second)
+ */
+double UNIT_SELECTOR_TIME::GetUnitScale()
+{
+    switch( GetCurrentSelection() )
+    {
+    case 0: return UNIT_NSECOND; break;
+    case 1: return UNIT_PSECOND; break;
+    }
+    return 1.0;
+}

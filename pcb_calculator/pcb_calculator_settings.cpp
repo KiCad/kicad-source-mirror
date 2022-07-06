@@ -36,7 +36,7 @@ const int pcbCalculatorSchemaVersion = 0;
 PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion ), m_Attenuators(),
         m_BoardClassUnits( 0 ), m_ColorCodeTolerance( 0 ), m_Electrical(), m_LastPage( 0 ),
-        m_Regulators(), m_cableSize(), m_TrackWidth(), m_TransLine(), m_ViaSize()
+        m_Regulators(), m_cableSize(), m_wavelength(), m_TrackWidth(), m_TransLine(), m_ViaSize()
 {
     // Build settings:
     m_params.emplace_back( new PARAM<int>( "board_class_units", &m_BoardClassUnits, 0 ) );
@@ -96,6 +96,28 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             new PARAM<int>( "cable_size.frequencyUnit", &m_cableSize.frequencyUnit, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "cable_size.lengthUnit", &m_cableSize.lengthUnit, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "wavelength.frequency", &m_wavelength.frequency, 1e9 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "wavelength.permeability", &m_wavelength.permeability, 1 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "wavelength.permittivity", &m_wavelength.permittivity, 4.6 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "wavelength.frequencyUnit", &m_wavelength.frequencyUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "wavelength.periodUnit", &m_wavelength.periodUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "wavelength.wavelengthVacuumUnit",
+                                           &m_wavelength.wavelengthVacuumUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "wavelength.wavelengthMediumUnit",
+                                           &m_wavelength.wavelengthMediumUnit, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "wavelength.speedUnit", &m_wavelength.speedUnit, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "track_width.current",
             &m_TrackWidth.current, "1.0" ) );

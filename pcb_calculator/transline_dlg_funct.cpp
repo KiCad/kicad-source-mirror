@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,89 +25,10 @@
 #include <calculator_panels/panel_transline.h>
 #include <common_data.h>
 #include <widgets/unit_selector.h>
+#include <pcb_calculator_utils.h>
 
 
 extern double DoubleFromString( const wxString& TextValue );
-
-
-// Display a selection of usual Er, TanD, Rho values
-// List format is <value><space><comment>
-
-
-// A helper function to find the choice in a list of values
-// return true if a index in aList that matches aValue is found.
-static bool findMatch( wxArrayString& aList, const wxString& aValue, int& aIdx )
-{
-    bool success = false;
-    // Find the previous choice index:
-    aIdx = 0;
-
-    // Some countries use comma instead of point as separator.
-    // The value can be enter with pint or comma
-    // use point for string comparisons:
-    wxString cvalue = aValue;
-    cvalue.Replace( ',', '.' );
-
-    // First compare strings:
-    for( wxString& text: aList )
-    {
-        if( text.IsEmpty() )    // No match found: select the empty line choice
-            break;
-
-        wxString val_str = text.BeforeFirst( ' ' );
-        val_str.Replace( ',', '.' );
-
-        // compare string values
-        if( val_str == cvalue )
-        {
-            success = true;
-            break;
-        }
-
-        aIdx++;
-    }
-
-    // Due to multiple ways to write a double, if string values
-    // do not match, compare double values
-    if( !success )
-    {
-        struct lconv* lc = localeconv();
-        char localeDecimalSeparator = *lc->decimal_point;
-
-        if( localeDecimalSeparator == ',' )
-            cvalue.Replace( '.', ',' );
-
-        double curr_value;
-        cvalue.ToDouble( &curr_value );
-
-        aIdx = 0;
-
-        for( wxString& text: aList )
-        {
-            if( text.IsEmpty() )    // No match found: select the empty line choice
-                break;
-
-            double val;
-            wxString val_str = text.BeforeFirst( ' ' );
-
-            if( localeDecimalSeparator == ',' )
-                val_str.Replace( '.', ',' );
-
-            val_str.ToDouble( &val );;
-
-            if( curr_value == val )
-            {
-                success = true;
-                break;
-            }
-
-            aIdx++;
-        }
-    }
-
-    return success;
-}
-
 
 void PANEL_TRANSLINE::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {

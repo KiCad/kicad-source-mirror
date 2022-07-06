@@ -36,6 +36,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_transline_base.cpp
     calculator_panels/panel_via_size.cpp
     calculator_panels/panel_via_size_base.cpp
+    calculator_panels/panel_wavelength.cpp
+    calculator_panels/panel_wavelength_base.cpp
     transline_ident.cpp
     widgets/unit_selector.cpp
     transline/transline.cpp
@@ -50,6 +52,7 @@ set( PCB_CALCULATOR_SRCS
     attenuators/attenuator_classes.cpp
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
+    pcb_calculator_utils.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 

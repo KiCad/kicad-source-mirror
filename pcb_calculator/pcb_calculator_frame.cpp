@@ -44,6 +44,7 @@
 #include <calculator_panels/panel_track_width.h>
 #include <calculator_panels/panel_transline.h>
 #include <calculator_panels/panel_via_size.h>
+#include <calculator_panels/panel_wavelength.h>
 
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -97,7 +98,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_treebook->AddPage( nullptr, _( "High speed" ) );
 
-
+    AddCalculator( new PANEL_WAVELENGTH( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxTAB_TRAVERSAL ),
+                   _( "Wavelength" ) );
     AddCalculator( new PANEL_ATTENUATORS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "RF Attenuators" ) );
     AddCalculator( new PANEL_TRANSLINE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),

@@ -70,6 +70,18 @@ public:
         int lengthUnit;
     };
 
+    struct WAVELENGTH
+    {
+        double permittivity;
+        double permeability;
+        double frequency;
+        int    frequencyUnit;
+        int    periodUnit;
+        int    wavelengthVacuumUnit;
+        int    wavelengthMediumUnit;
+        int    speedUnit;
+    };
+
     struct TRACK_WIDTH
     {
         wxString current;
@@ -148,6 +160,8 @@ public:
     REGULATORS m_Regulators;
 
     CABLE_SIZE m_cableSize;
+
+    WAVELENGTH m_wavelength;
 
     TRACK_WIDTH m_TrackWidth;
 

@@ -53,4 +53,15 @@
 #define UNIT_OHM_PER_FEET 3.28084     // Ohm per feet to Ohm per meter
 #define UNIT_OHM_PER_1000FEET 3280.84 // Ohm per feet to Ohm per meter
 
+#define UNIT_METER_PER_SECOND 1.0           // meter per second to meter per second
+#define UNIT_KILOMETER_PER_HOUR ( 1 / 3.6 ) // km/h to m/s
+#define UNIT_FEET_PER_SECOND 0.3048         // ft/s to m/s
+#define UNIT_MILES_PER_HOUR 1609.34         // mi/h to m/s
+
+#define UNIT_SECOND 1.0   // second to second
+#define UNIT_MSECOND 1e-3 // millisecond to second
+#define UNIT_USECOND 1e-6 // microsecond to second
+#define UNIT_NSECOND 1e-9 // nanosecond to second
+#define UNIT_PSECOND 1e-12 // picosecond to second
+
 #endif  // UNITS_SCALES_H
