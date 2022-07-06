@@ -386,6 +386,8 @@ function(gp_resolve_item context item exepath dirs resolved_item_var)
         set(resolved 1)
         set(resolved_item "${ri}")
         set(ri "ri-NOTFOUND")
+      else()
+        message(STATUS "warning: '${norpath_item}' not found under exepath (${exepath}), dirs (${dirs}), or rpaths (${rpaths})")
       endif()
 
     endif()
@@ -450,8 +452,7 @@ function(gp_resolve_item context item exepath dirs resolved_item_var)
   endif()
 
   if(NOT resolved)
-    message(STATUS "
-warning: cannot resolve item '${item}'
+    message(STATUS "warning: cannot resolve item '${item}'
 
   possible problems:
     need more directories?
