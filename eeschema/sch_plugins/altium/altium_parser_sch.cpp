@@ -27,6 +27,7 @@
 
 #include <convert_to_biu.h>
 #include <ki_exception.h>
+#include <math/util.h>
 
 #include <wx/log.h>
 
