@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-07-07 12:47+0000\n"
+"PO-Revision-Date: 2022-07-08 15:57+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -12533,9 +12533,8 @@ msgstr ""
 "サイズのパーセンテージ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "グローバル ラベル サイズ:"
+msgstr "グローバル ラベルのマージン:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -17309,9 +17308,8 @@ msgid "Hierarchy Navigator"
 msgstr "階層ナビゲーター"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "回路図の階層を表示"
+msgstr "回路図の階層ナビゲーターを表示または非表示"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17509,9 +17507,8 @@ msgstr "シンボルは複数ユニットではありません"
 
 #: eeschema/tools/sch_edit_tool.cpp:370 eeschema/tools/sch_edit_tool.cpp:408
 #: eeschema/tools/sch_edit_tool.cpp:445
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "フィールドを編集"
+msgstr "メインフィールドを編集"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
 msgid "Change To"
@@ -20844,9 +20841,8 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "円のプロパティ"
+msgstr "ワイヤーのプロパティ"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 msgid "Standard Size:"
@@ -20862,9 +20858,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "熱抵抗:"
+msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, c-format
@@ -20872,9 +20867,8 @@ msgid "Frequency for 100% skin depth:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "不透明度:"
+msgstr "電流容量:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
 msgid "Application"
@@ -20882,9 +20876,8 @@ msgstr "アプリケーション"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "電流"
+msgstr "電流:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 msgid "Length:"
@@ -20910,7 +20903,7 @@ msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
-msgstr ""
+msgstr "消費電力:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 msgid "mW"
@@ -21116,9 +21109,8 @@ msgid "Current calculation is underestimated due to long fusing time."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "カメラ環境光:"
+msgstr "周囲の温度:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21128,9 +21120,8 @@ msgid "deg C"
 msgstr "℃"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "動作点"
+msgstr "融点:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21139,9 +21130,8 @@ msgid "Track width:"
 msgstr "配線幅:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "配線の銅箔厚"
+msgstr "配線の銅箔厚:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
 #, fuzzy
@@ -29651,7 +29641,7 @@ msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "Margin"
+msgstr "マージン"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -32304,19 +32294,16 @@ msgid "Checking component "
 msgstr "コンポーネントをチェック中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "コンポーネント:製造者の欄は空にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "コンポーネント定数:"
+msgstr "コンポーネント:不正なパッケージ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "コンポーネント:"
+msgstr "コンポーネント:ピンがありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
@@ -32357,9 +32344,8 @@ msgid "Undefined model type"
 msgstr "未定義モデルタイプ"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "不正な長さ"
+msgstr "不正な Vinh 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:449
 #, fuzzy
@@ -32387,24 +32373,20 @@ msgid "C_comp is invalid."
 msgstr "不正な C_comp 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "温度上昇"
+msgstr "温度の範囲が不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "ファイル名が不正です！"
+msgstr "電圧の範囲が不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "不正なピン名"
+msgstr "不正なプルダウン。"
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "不正な遅延値"
+msgstr "不正なプルアップ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:520
 #, fuzzy
@@ -32422,57 +32404,48 @@ msgid "Invalid Ramp"
 msgstr "不正"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "パッドをチェック中..."
+msgstr "ヘッダーをチェック中..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "[IBIS Ver] がありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "ルール名がありません。"
+msgstr "[File Rev] がありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
-#, fuzzy
 msgid "Missing [File Name]"
-msgstr "ルール名がありません。"
+msgstr "[File Name] がありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
-#, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "シンボル名は空にできません。"
+msgstr "パッケージモデル名は空にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "パッドの穴をチェック..."
+msgstr "パッケージモデルをチェック中 "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "製造者名の欄は空にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "テキストは空にできません。"
+msgstr "OEMの欄は空にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "ポイント数"
+msgstr "ピンの数が負です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:625
-#, fuzzy
 msgid "Empty pin number"
-msgstr "期待する番号。"
+msgstr "ピン番号が空です"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
 #, fuzzy
