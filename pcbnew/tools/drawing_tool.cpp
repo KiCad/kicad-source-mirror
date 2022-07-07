@@ -388,6 +388,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             }
             else
             {
+                rect->NormalizeRect();
                 commit.Add( rect );
                 commit.Push( isTextBox ? _( "Draw a text box" ) : _( "Draw a rectangle" ) );
 

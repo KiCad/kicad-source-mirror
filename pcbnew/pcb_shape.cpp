@@ -132,6 +132,22 @@ void PCB_SHAPE::Scale( double aScale )
 }
 
 
+void PCB_SHAPE::NormalizeRect()
+{
+    if( m_shape == SHAPE_T::RECT )
+    {
+        VECTOR2I start = GetStart();
+        VECTOR2I end = GetEnd();
+
+        EDA_RECT rect( start, end - start );
+        rect.Normalize();
+
+        SetStart( rect.GetPosition() );
+        SetEnd( rect.GetEnd() );
+    }
+}
+
+
 void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     rotate( aRotCentre, aAngle );
