@@ -536,7 +536,6 @@ bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
 
     if( doClose )
     {
-        GetInfoBar()->ShowMessageFor( wxEmptyString, 1 );
         SetCurSymbol( nullptr, false );
         updateTitle();
     }
