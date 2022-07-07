@@ -798,9 +798,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
 
-    // wxGrid's column moving is buggy with native headers and this is one dialog where you'd
-    // really like to be able to rearrange columns.
-    m_grid->UseNativeColHeader( false );
     m_grid->SetTable( m_dataModel, true );
 
     // must be done after SetTable(), which appears to re-set it
@@ -1306,8 +1303,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x - m_showColWidth
-                       - m_groupByColWidth;
+#ifdef __WXMAC__
+    // I'm not sure why KIPLATFORM::UI::GetUnobscuredSize() doesn't give us the correct size
+    // on Mac, but I do know the old code worked.
+    int nameColWidth = event.GetSize().GetX() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+#else
+    int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x;
+#endif
+    nameColWidth -= m_showColWidth + m_groupByColWidth;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
