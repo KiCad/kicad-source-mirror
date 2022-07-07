@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-30 11:26-0700\n"
-"PO-Revision-Date: 2022-07-05 23:51+0000\n"
+"PO-Revision-Date: 2022-07-08 15:57+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -14530,14 +14530,14 @@ msgstr ""
 "no se ha cargado en la biblioteca de KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
 msgstr ""
-"La definición del componente '%s' hace referencia al símbolo '%s' (alterno "
-"'%s') que no se pudo encontrar en la biblioteca de símbolos. El componente "
-"no se ha cargado en la biblioteca de KiCad."
+"La definición de parte '%s' tiene una definición incompleta (no hay "
+"definiciones de símbolos asociadas a ella). La parte no ha sido cargada en "
+"la biblioteca de KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
 #, c-format
@@ -21317,9 +21317,8 @@ msgid "Track thickness:"
 msgstr "Grosor de pista:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Paso de tiempo:"
+msgstr "Tiempo de fusión:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
@@ -21928,9 +21927,8 @@ msgid "Electrical Spacing"
 msgstr "Espaciado eléctrico"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
-#, fuzzy
 msgid "Fusing Current"
-msgstr "Intensidad"
+msgstr "Corriente de fusión"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
 msgid "Cable Size"
@@ -31769,9 +31767,9 @@ msgid "Checking physical clearances..."
 msgstr "Comprobando holguras físicas..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Margen local en %s; margen: %s."
+msgstr "Violación de la holgura interna (%s holgura %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -31944,9 +31942,8 @@ msgid "No project when exporting the VRML file"
 msgstr "No hay proyecto al exportar el archivo VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "No se ha podido exportar el archivo IDF\n"
+msgstr "Fallo en la exportación de VRML:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32655,79 +32652,64 @@ msgid "There are NaN elements in a matrix."
 msgstr "Hay elementos NaN en una matriz."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "Valor de longitud inválido"
+msgstr "Valor R_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "Valor de longitud inválido"
+msgstr "Valor L_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "Valor de longitud inválido"
+msgstr "Valor C_pkg inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "Comprobando pines..."
+msgstr "Comprobando pin "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre de pin no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "El nombre de la variable puede estar vacío."
+msgstr "El nombre de señal no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre de modelo no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "¡El nombre de archivo no es válido!"
+msgstr "Rpin no es válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "¡El nombre de archivo no es válido!"
+msgstr "Lpin no es válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "¡El nombre de archivo no es válido!"
+msgstr "Cpin no es válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre de componente no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Comprobando zonas"
+msgstr "Comprobando componente "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "Componente: el fabricante no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "Valor del componente"
+msgstr "Componente: Paquete inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "Componente no encontrado"
+msgstr "Componente: sin pin"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
@@ -32742,108 +32724,88 @@ msgid "There is an invalid current in an IV table"
 msgstr "Hay una corriente inválida en una tabla IV"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "Inválido"
+msgstr "R_load inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "Valor de longitud inválido"
+msgstr "dv/dt descendente inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "Valor de resistencia inválido"
+msgstr "dv/dt ascendente inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre de modelo no puede estar vacío."
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Comprobando zonas"
+msgstr "Comprobando modelo "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "Capas no definidas:"
+msgstr "Tipo de modelo indefinido"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "Valor de longitud inválido"
+msgstr "Valor Vinh inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "Valor de retraso inválido"
+msgstr "Valor Vinl inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "Valor de retraso inválido"
+msgstr "Valor R_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "Valor de retraso inválido"
+msgstr "Valor C_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "Valor de retraso inválido"
+msgstr "valor V_ref inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "Valor de retraso inválido"
+msgstr "Valor V_meas inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:474
 msgid "C_comp is invalid."
 msgstr "C_comp no es válido."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Aumento de temperatura"
+msgstr "El rango de temperatura es inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "¡El nombre de archivo no es válido!"
+msgstr "El rango de tensión es inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "Nombre de pin inválido"
+msgstr "Pulldown inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "Valor de retraso inválido"
+msgstr "Pullup inválido."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Escala X no válida"
+msgstr "Abrazadera POWER inválida."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Escala X no válida"
+msgstr "Abrazadera GND inválida."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "Inválido"
+msgstr "Rampa inválida"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "Comprobando pads..."
+msgstr "Comprobando cabecera..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
