@@ -93,11 +93,13 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
         switch( aAction )
         {
+        default:
         case PPA_INSTALL:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Install" ) );
             m_gridPendingActions->SetCellValue( row, PENDING_COL_VERSION, aVersion );
             new_state = PPS_PENDING_INSTALL;
             break;
+
         case PPA_UPDATE:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Update" ) );
             m_gridPendingActions->SetCellValue(
@@ -105,6 +107,7 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
                     wxString::Format( wxT( "%s \u279C %s" ), aData.current_version, aVersion ) );
             new_state = PPS_PENDING_UPDATE;
             break;
+
         case PPA_UNINSTALL:
             m_gridPendingActions->SetCellValue( row, PENDING_COL_ACTION, _( "Uninstall" ) );
             m_gridPendingActions->SetCellValue(

@@ -567,7 +567,7 @@ void PANEL_PACKAGES_VIEW::OnVersionActionClicked( wxCommandEvent& event )
                                     return ver.version == version;
                                 } );
 
-    wxASSERT_MSG( ver_it != package.versions.end(), "Could not find package version" );
+    wxCHECK_RET( ver_it != package.versions.end(), "Could not find package version" );
 
     if( !ver_it->compatible
         && wxMessageBox( _( "This package version is incompatible with your kicad version or "

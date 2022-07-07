@@ -235,7 +235,7 @@ BOM_GENERATOR_HANDLER* DIALOG_BOM::addGenerator( const wxString& aPath, const wx
     BOM_GENERATOR_HANDLER* ret = nullptr;
     auto plugin = std::make_unique<BOM_GENERATOR_HANDLER>( aPath );
 
-    if( !plugin )
+    if( !plugin->IsOk() )
         return nullptr;
 
     if( !aName.IsEmpty() )
