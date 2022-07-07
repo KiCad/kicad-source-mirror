@@ -2251,11 +2251,12 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         footprint->TransformPadsWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                         ERROR_INSIDE );
 
-        // Micro-wave footprints may have items on copper layers
+        // Microwave footprints may have items on copper layers
         footprint->TransformFPShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                             ERROR_INSIDE,
                                                             true, /* include text */
-                                                            true  /* include shapes */ );
+                                                            true, /* include shapes */
+                                                            false /* include private items */ );
 
         for( const ZONE* zone : footprint->Zones() )
         {

@@ -353,7 +353,7 @@ public:
     VIATYPE GetViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
-    bool IsTented() const;
+    bool IsTented() const override;
     int GetSolderMaskExpansion() const;
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
@@ -495,7 +495,7 @@ public:
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
 protected:
     wxString layerMaskDescribe() const override;

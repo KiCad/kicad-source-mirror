@@ -800,13 +800,38 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         }
     }
 
+    auto isOnCorrespondingLayer=
+            [&]( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, wxString* aWarning )
+            {
+                if( aItem->IsOnLayer( aLayer ) )
+                    return true;
+
+                PCB_LAYER_ID correspondingMask =   IsFrontLayer( aLayer ) ? F_Mask : B_Mask;
+                PCB_LAYER_ID correspondingCopper = IsFrontLayer( aLayer ) ? F_Cu   : B_Cu;
+
+                if( aItem->IsOnLayer( aLayer ) )
+                    return true;
+
+                if( aItem->IsOnLayer( correspondingMask ) )
+                    return true;
+
+                if( aItem->IsTented() && aItem->IsOnLayer( correspondingCopper ) )
+                {
+                    *aWarning = wxString::Format( _( "Note: %s is tented; clearance will only be "
+                                                     "applied to holes." ),
+                                                  getItemDescription( aItem ) );
+                    return true;
+                }
+
+                return false;
+            };
+
     for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
     {
-        PCB_LAYER_ID correspondingMask = IsFrontLayer( layer ) ? F_Mask : B_Mask;
+        wxString warning;
 
-        if( ( a->IsOnLayer( layer ) && b->IsOnLayer( layer ) )
-                || ( a->IsOnLayer( layer ) && b->IsOnLayer( correspondingMask ) )
-                || ( b->IsOnLayer( layer ) && a->IsOnLayer( correspondingMask ) ) )
+        if( ( a->IsOnLayer( layer ) && isOnCorrespondingLayer( b, layer, &warning ) )
+            || ( b->IsOnLayer( layer ) && isOnCorrespondingLayer( a, layer, &warning ) ) )
         {
             r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Silkscreen clearance resolution for:" ), a, b, layer, r );
@@ -818,6 +843,10 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
+
+            if( !warning.IsEmpty() )
+                r->Report( warning );
+
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
                                          StringFromValue( units, clearance, true ) ) );
 

@@ -117,6 +117,11 @@ public:
         return IsCopperLayer( GetLayer() );
     }
 
+    virtual bool IsTented() const
+    {
+        return false;
+    }
+
     /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */

@@ -400,9 +400,9 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
     if( !IsTented() )
     {
-        if( m_layer == F_Mask )
+        if( aLayer == F_Mask )
             return IsOnLayer( F_Cu );
-        else if( m_layer == B_Mask )
+        else if( aLayer == B_Mask )
             return IsOnLayer( B_Cu );
     }
 

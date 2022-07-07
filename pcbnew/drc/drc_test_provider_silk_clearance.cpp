@@ -25,6 +25,9 @@
 #include <board.h>
 #include <footprint.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
+#include <pad.h>
+#include <geometry/shape_segment.h>
 #include <geometry/seg.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -176,20 +179,49 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItemShape,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItemShape, bool* aCollisionDetected ) -> bool
             {
-                BOARD_ITEM* aRefItem = aRefItemShape->parent;
-                SHAPE*      aRefShape = aRefItemShape->shape;
-                BOARD_ITEM* aTestItem = aTestItemShape->parent;
-                SHAPE*      aTestShape = aTestItemShape->shape;
+                BOARD_ITEM*  refItem = aRefItemShape->parent;
+                const SHAPE* refShape = aRefItemShape->shape;
+                BOARD_ITEM*  testItem = aTestItemShape->parent;
+                const SHAPE* testShape = aTestItemShape->shape;
 
+                std::unique_ptr<SHAPE> hole;
 
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
                     return false;
 
-                if( isInvisibleText( aRefItem ) || isInvisibleText( aTestItem ) )
+                if( isInvisibleText( refItem ) || isInvisibleText( testItem ) )
                     return true;
 
+                if( testItem->IsTented() )
+                {
+                    switch( testItem->Type() )
+                    {
+                    case PCB_VIA_T:
+                    {
+                        PCB_VIA* via = static_cast<PCB_VIA*>( testItem );
+                        hole.reset( via->GetEffectiveShape( UNDEFINED_LAYER,
+                                                            FLASHING::NEVER_FLASHED )->Clone() );
+                        testShape = hole.get();
+                        break;
+                    }
+                    case PCB_PAD_T:
+                    {
+                        PAD* pad = static_cast<PAD*>( testItem );
+
+                        if( pad->GetDrillSize().x || pad->GetDrillSize().y )
+                            return true;
+
+                        hole.reset( pad->GetEffectiveHoleShape()->Clone() );
+                        testShape = hole.get();
+                        break;
+                    }
+                    default:
+                        return true;
+                    }
+                }
+
                 DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
-                                                                    aRefItem, aTestItem,
+                                                                    refItem, testItem,
                                                                     aLayers.second );
 
                 if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
@@ -205,17 +237,17 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 // Graphics are often compound shapes so ignore collisions between shapes in a
                 // single footprint or on the board.
-                if( aRefItem->Type() == PCB_SHAPE_T && aTestItem->Type() == PCB_SHAPE_T )
+                if( refItem->Type() == PCB_SHAPE_T && testItem->Type() == PCB_SHAPE_T )
                 {
                     return true;
                 }
-                else if( aRefItem->Type() == PCB_FP_SHAPE_T && aTestItem->Type() == PCB_FP_SHAPE_T
-                        &&  aRefItem->GetParentFootprint() == aTestItem->GetParentFootprint() )
+                else if( refItem->Type() == PCB_FP_SHAPE_T && testItem->Type() == PCB_FP_SHAPE_T
+                         && refItem->GetParentFootprint() == testItem->GetParentFootprint() )
                 {
                     return true;
                 }
 
-                if( aRefShape->Collide( aTestShape, minClearance, &actual, &pos ) )
+                if( refShape->Collide( testShape, minClearance, &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_SILK );
 
@@ -231,7 +263,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     }
 
-                    drcItem->SetItems( aRefItem, aTestItem );
+                    drcItem->SetItems( refItem, testItem );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     reportViolation( drcItem, pos, aLayers.second );

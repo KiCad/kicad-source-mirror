@@ -417,7 +417,8 @@ public:
                                                   PCB_LAYER_ID aLayer, int aClearance,
                                                   int aError, ERROR_LOC aErrorLoc,
                                                   bool aIncludeText = true,
-                                                  bool aIncludeShapes = true ) const;
+                                                  bool aIncludeShapes = true,
+                                                  bool aIncludePrivateItems = false ) const;
 
     /**
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet

@@ -2103,8 +2103,9 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
     TransformFPShapesWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, textMargin,
                                              ARC_LOW_DEF, ERROR_OUTSIDE,
-                                             true, /* include text */
-                                             false /* include shapes */ );
+                                             true,  /* include text */
+                                             false, /* include shapes */
+                                             false  /* include private items */ );
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
@@ -2557,12 +2558,16 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
                                                          PCB_LAYER_ID aLayer, int aClearance,
                                                          int aError, ERROR_LOC aErrorLoc,
                                                          bool aIncludeText,
-                                                         bool aIncludeShapes ) const
+                                                         bool aIncludeShapes,
+                                                         bool aIncludePrivateItems ) const
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
+        if( GetPrivateLayers().test( item->GetLayer() ) && !aIncludePrivateItems )
+            continue;
+
         if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
         {
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
