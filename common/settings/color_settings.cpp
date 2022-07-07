@@ -96,6 +96,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.netclass_flag",     LAYER_NETCLASS_REFS          );
     CLR( "schematic.no_connect",        LAYER_NOCONNECT              );
     CLR( "schematic.note",              LAYER_NOTES                  );
+    CLR( "schematic.private_note",      LAYER_PRIVATE_NOTES          );
     CLR( "schematic.note_background",   LAYER_NOTES_BACKGROUND       );
     CLR( "schematic.pin",               LAYER_PIN                    );
     CLR( "schematic.pin_name",          LAYER_PINNAM                 );

@@ -330,19 +330,19 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         {
             const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
 
-            if( aLayer == LAYER_SHEET )
-                color = sheet->GetBorderColor();
-            else if( aLayer == LAYER_SHEET_BACKGROUND )
+            if( aLayer == LAYER_SHEET_BACKGROUND )
                 color = sheet->GetBackgroundColor();
+            else
+                color = sheet->GetBorderColor();
         }
         else if( aItem->Type() == SCH_SHAPE_T )
         {
             const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
-            if( aLayer == LAYER_NOTES )
-                color = shape->GetStroke().GetColor();
-            else if( aLayer == LAYER_NOTES_BACKGROUND )
+            if( aLayer == LAYER_NOTES_BACKGROUND )
                 color = shape->GetFillColor();
+            else
+                color = shape->GetStroke().GetColor();
 
             // A filled shape means filled; if they didn't specify a fill colour then use the
             // border colour.
@@ -353,10 +353,10 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         {
             const LIB_SHAPE* shape = static_cast<const LIB_SHAPE*>( aItem );
 
-            if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES )
-                color = shape->GetStroke().GetColor();
-            else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
                 color = shape->GetFillColor();
+            else
+                color = shape->GetStroke().GetColor();
         }
         else if( aItem->Type() == SCH_TEXTBOX_T )
         {
@@ -666,6 +666,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         return false;
 
     case LAYER_NOTES:
+    case LAYER_PRIVATE_NOTES:
     case LAYER_DEVICE:
         m_gal->SetIsFill( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE );
         m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
@@ -790,7 +791,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
             drawShape( aShape );
         }
     }
-    else if( aLayer == LAYER_DEVICE || ( m_schSettings.m_IsSymbolEditor && aLayer == LAYER_NOTES ) )
+    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_PRIVATE_NOTES )
     {
         if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
         {
@@ -1033,7 +1034,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
                                   mapCoords( aTextBox->GetEnd() ) );
         }
     }
-    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES )
+    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_PRIVATE_NOTES )
     {
         drawText();
 
@@ -1370,7 +1371,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
         size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
         thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0F;
-        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_NOTES, drawingShadows );
+        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
 

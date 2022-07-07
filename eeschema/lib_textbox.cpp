@@ -415,7 +415,7 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 void LIB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 3;
-    aLayers[0] = IsPrivate() ? LAYER_NOTES            : LAYER_DEVICE;
+    aLayers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES    : LAYER_DEVICE;
     aLayers[1] = IsPrivate() ? LAYER_NOTES_BACKGROUND : LAYER_DEVICE_BACKGROUND;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
 }

@@ -525,7 +525,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
     int pensize = textSize/6;
 
     // Get a suitable color
-    COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_NOTES : LAYER_HIDDEN );
+    COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PRIVATE_NOTES : LAYER_HIDDEN );
 
     VECTOR2I txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
