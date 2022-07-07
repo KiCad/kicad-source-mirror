@@ -55,7 +55,7 @@
 #include <status_popup.h>
 #include <wx/gdicmn.h>
 #include <dialogs/dialog_change_symbols.h>
-#include <dialogs/dialog_image_editor.h>
+#include <dialogs/dialog_image_properties.h>
 #include <dialogs/dialog_line_properties.h>
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_symbol_properties.h>
@@ -1657,17 +1657,11 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP*         bitmap = static_cast<SCH_BITMAP*>( curr_item );
-        DIALOG_IMAGE_EDITOR dlg( m_frame, bitmap->GetImage() );
+        SCH_BITMAP*             bitmap = static_cast<SCH_BITMAP*>( curr_item );
+        DIALOG_IMAGE_PROPERTIES dlg( m_frame, bitmap );
 
         if( dlg.ShowModal() == wxID_OK )
         {
-            // save old image in undo list if not already in edit
-            if( bitmap->GetEditFlags() == 0 )
-                saveCopyInUndoList( bitmap, UNDO_REDO::CHANGED, false, false );
-
-            dlg.TransferToImage( bitmap->GetImage() );
-
             // The bitmap is cached in Opengl: clear the cache in case it has become invalid
             getView()->RecacheAllItems();
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );

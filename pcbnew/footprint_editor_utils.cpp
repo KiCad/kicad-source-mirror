@@ -182,6 +182,10 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
+    case PCB_BITMAP_T:
+        ShowBitmapPropertiesDialog( aItem );
+        break;
+
     case PCB_PAD_T:
         ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );
         break;

@@ -30,26 +30,22 @@
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 
-#include <dialogs/dialog_image_editor.h>
+#include <dialogs/panel_image_editor.h>
 
 #include <algorithm>
 
 
-DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem )
-    : DIALOG_IMAGE_EDITOR_BASE( aParent )
+PANEL_IMAGE_EDITOR::PANEL_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem ) :
+        PANEL_IMAGE_EDITOR_BASE( aParent )
 {
     m_workingImage = new BITMAP_BASE( *aItem );
     wxString msg;
     msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
-
-    SetupStandardButtons();
-
-    finishDialogSettings();
 }
 
 
-void DIALOG_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
+void PANEL_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
 {
     wxImage& image = *m_workingImage->GetImageData();
     image = image.ConvertToGreyscale();
@@ -64,11 +60,11 @@ void DIALOG_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
  * see the image) and < MAX_SIZE pixels (if bigger, a confirmation will be asked)
  * Note: The image definition is 300ppi in drawing routines.
  */
-bool DIALOG_IMAGE_EDITOR::CheckValues()
+bool PANEL_IMAGE_EDITOR::CheckValues()
 {
-    #define MIN_SIZE 15     // Min size in pixels after scaling (50 mils)
-    #define MAX_SIZE 6000   // Max size in pixels after scaling (20 inches)
-    double tmp;
+#define MIN_SIZE 15   // Min size in pixels after scaling (50 mils)
+#define MAX_SIZE 6000 // Max size in pixels after scaling (20 inches)
+    double   tmp;
     wxString msg = m_textCtrlScale->GetValue();
 
     // Test number correctness
@@ -80,24 +76,24 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
 
     // Test value correctness
     wxSize psize = m_workingImage->GetSizePixels();
-    int size_min = (int)std::min( (psize.x * tmp), (psize.y * tmp) );
+    int    size_min = (int) std::min( ( psize.x * tmp ), ( psize.y * tmp ) );
 
-    if( size_min < MIN_SIZE )   // if the size is too small, the image will be hard to locate
+    if( size_min < MIN_SIZE ) // if the size is too small, the image will be hard to locate
     {
         wxMessageBox( wxString::Format( _( "This scale results in an image which is too small "
                                            "(%.2f mm or %.1f mil)." ),
-                                        25.4 / 300 * size_min, 1000.0/300.0 * size_min ) );
+                                        25.4 / 300 * size_min, 1000.0 / 300.0 * size_min ) );
         return false;
     }
 
-    int size_max = (int)std::max( (psize.x * tmp), (psize.y * tmp) );
+    int size_max = (int) std::max( ( psize.x * tmp ), ( psize.y * tmp ) );
 
     if( size_max > MAX_SIZE )
     {
         // the actual size is 25.4/300 * size_max in mm
         if( !IsOK( this, wxString::Format( _( "This scale results in an image which is very large "
                                               "(%.1f mm or %.2f in). Are you sure?" ),
-                                           25.4 / 300 * size_max, size_max /300.0 ) ) )
+                                           25.4 / 300 * size_max, size_max / 300.0 ) ) )
         {
             return false;
         }
@@ -107,17 +103,17 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
 }
 
 
-bool DIALOG_IMAGE_EDITOR::TransferDataFromWindow()
+bool PANEL_IMAGE_EDITOR::TransferDataFromWindow()
 {
     return CheckValues();
 }
 
 
-void DIALOG_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
+void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelDraw );
-    wxSize size = m_panelDraw->GetClientSize();
-    dc.SetDeviceOrigin( size.x/2, size.y/2 );
+    wxSize    size = m_panelDraw->GetClientSize();
+    dc.SetDeviceOrigin( size.x / 2, size.y / 2 );
 
     double scale = 1.0 / m_workingImage->GetScalingFactor();
     dc.SetUserScale( scale, scale );
@@ -125,32 +121,11 @@ void DIALOG_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 }
 
 
-void DIALOG_IMAGE_EDITOR::TransferToImage( BITMAP_BASE* aItem )
+void PANEL_IMAGE_EDITOR::TransferToImage( BITMAP_BASE* aItem )
 {
     wxString msg = m_textCtrlScale->GetValue();
-    double scale = 1.0;
+    double   scale = 1.0;
     msg.ToDouble( &scale );
     m_workingImage->SetScale( scale );
     aItem->ImportData( m_workingImage );
-}
-
-
-void PCB_BASE_EDIT_FRAME::ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap )
-{
-    PCB_BITMAP*         bitmap = static_cast<PCB_BITMAP*>( aBitmap );
-    DIALOG_IMAGE_EDITOR dlg( this, bitmap->GetImage() );
-
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        // save old image in undo list if not already in edit
-        if( bitmap->GetEditFlags() == 0 )
-            SaveCopyInUndoList( bitmap, UNDO_REDO::CHANGED );
-
-        dlg.TransferToImage( bitmap->GetImage() );
-
-        // The bitmap is cached in Opengl: clear the cache in case it has become invalid
-        GetCanvas()->GetView()->RecacheAllItems();
-        m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
-        this->OnModify();
-    }
 }

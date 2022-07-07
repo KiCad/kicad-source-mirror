@@ -63,6 +63,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
+    dialogs/dialog_image_properties.cpp
+    dialogs/dialog_image_properties_base.cpp
     dialogs/dialog_junction_props.cpp
     dialogs/dialog_junction_props_base.cpp
     dialogs/dialog_label_properties.cpp
@@ -396,7 +398,7 @@ target_link_libraries( eeschema
     common
     ${wxWidgets_LIBRARIES}
     )
-    
+
 # the main Eeschema program, in DSO form.
 add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_SRCS}
@@ -413,7 +415,7 @@ target_include_directories( eeschema_kiface_objects
 target_link_libraries( eeschema_kiface_objects
     PUBLIC
         common )
-    
+
 # Since we're not using target_link_libraries, we need to explicitly
 # declare the dependency
 add_dependencies( eeschema_kiface_objects common )
