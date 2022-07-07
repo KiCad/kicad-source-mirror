@@ -56,7 +56,7 @@ void kimathLogDebug( const char* aFormatString, ... );
  * result is:  lower <= value <= upper
  *</p>
  */
-template <typename T> inline const T& Clamp( const T& lower, const T& value, const T& upper )
+template <typename T> inline constexpr T Clamp( const T& lower, const T& value, const T& upper )
 {
     if( value < lower )
         return lower;
