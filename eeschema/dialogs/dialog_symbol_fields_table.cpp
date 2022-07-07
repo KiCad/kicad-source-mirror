@@ -1331,6 +1331,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 {
+    int last_col = m_grid->GetNumberCols() - 1;
+
     if( m_dataModel->IsEdited() )
         if( OKOrCancelDialog( nullptr, _( "Unsaved data" ),
                               _( "Changes are unsaved. Export unsaved data?" ), "", _( "OK" ),
@@ -1354,6 +1356,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     if( !out.IsOpened() )
         return;
 
+    // Find the location for the line terminator
+    for( int col = m_grid->GetNumberCols() - 1; col <=0 ; --col )
+    {
+        if( m_grid->IsColShown( col ) )
+        {
+            last_col = col;
+            break;
+        }
+    }
+
     // Column names
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
     {
@@ -1363,7 +1375,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         wxString escapedValue = m_grid->GetColLabelValue( col );
         escapedValue.Replace( "\"", "\"\"" );
 
-        wxString format = col == m_grid->GetNumberCols() - 1 ? "\"%s\"\r\n" : "\"%s\",";
+        wxString format = col == last_col ? "\"%s\"\r\n" : "\"%s\",";
 
         out.Write( wxString::Format( format, escapedValue ) );
     }
@@ -1384,7 +1396,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
             wxString escapedValue = m_dataModel->GetRawValue( row, col );
             escapedValue.Replace( "\"", "\"\"" );
 
-            wxString format = col == m_grid->GetNumberCols() - 1 ? "\"%s\"\r\n" : "\"%s\",";
+            wxString format = col == last_col ? "\"%s\"\r\n" : "\"%s\",";
 
             out.Write( wxString::Format( format, escapedValue ) );
         }
