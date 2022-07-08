@@ -85,24 +85,6 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         }
     }
 
-    for( FOOTPRINT* footprint : m_drcEngine->GetBoard()->Footprints() )
-    {
-        footprint->CheckPads(
-                [&]( const PAD* pad, int errorCode, const wxString& msg )
-                {
-                    if( m_drcEngine->IsErrorLimitExceeded( errorCode ) )
-                        return;
-
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
-
-                    if( !msg.IsEmpty() )
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
-
-                    drcItem->SetItems( pad );
-                    reportViolation( drcItem, pad->GetPosition(), UNDEFINED_LAYER );
-                } );
-    }
-
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE )
             || !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
     {
