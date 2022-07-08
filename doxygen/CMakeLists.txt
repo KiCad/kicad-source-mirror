@@ -23,10 +23,10 @@
 
 if( DOXYGEN_FOUND )
     add_custom_target( doxygen-docs
-        ${CMAKE_COMMAND} -E remove_directory Documentation/doxygen
+        ${CMAKE_COMMAND} -E remove_directory out
         COMMAND ${DOXYGEN_EXECUTABLE}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "building doxygen docs into directory Documentation/doxygen/html"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doxygen
+        COMMENT "building doxygen docs into directory doxygen/out"
         )
 
     # Add the docset targets

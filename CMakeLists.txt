@@ -995,11 +995,11 @@ if( KICAD_USE_SENTRY )
 endif()
 
 #================================================
-# Add the documentation
+# Add the doxygen target
 #================================================
 find_package( Doxygen )
 
-add_subdirectory( Documentation )
+add_subdirectory( doxygen )
 
 # Generate config.h.
 configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake

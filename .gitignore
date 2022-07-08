@@ -32,8 +32,7 @@ Testing
 version.h
 config.h
 install_manifest.txt
-Documentation/doxygen
-Documentation/development/doxygen
+doxygen/out
 *.bak
 *.pyc
 common/pcb_plot_params_keywords.cpp

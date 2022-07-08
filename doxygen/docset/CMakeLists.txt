@@ -38,10 +38,10 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
     set(DOCSET_BUNDLE_ID KiCad)
 
     # The source for the doxygen config
-    set(SRC_DOXYFILE ${CMAKE_SOURCE_DIR}/Doxyfile)
+    set(SRC_DOXYFILE ${CMAKE_SOURCE_DIR}/doxygen/Doxyfile)
 
     # A new doxyfile with the original, plus some extra config
-    set(DOCSET_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+    set(DOCSET_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}}/doxygen/Doxyfile)
 
     # Various pieces of the docset
     set(DOCSET_LOC ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html/${DOCSET_BUNDLE_ID}.docset)
