@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 11:10-0700\n"
+"POT-Creation-Date: 2022-07-08 08:59-0700\n"
 "PO-Revision-Date: 2022-07-04 20:18+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -1149,13 +1149,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:497
+#: eeschema/tools/sch_drawing_tools.cpp:498
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr "选择图片"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:498
+#: eeschema/tools/sch_drawing_tools.cpp:499
 #: pagelayout_editor/pl_editor_frame.cpp:854
 msgid "Image Files"
 msgstr "图片文件"
@@ -16230,36 +16230,36 @@ msgstr "展开选定内容 (&E)\tE"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "按 <ESC> 键取消符号创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:464
+#: eeschema/tools/sch_drawing_tools.cpp:465
 msgid "Press <ESC> to cancel image creation."
 msgstr "按 <ESC> 取消图片创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:525
+#: eeschema/tools/sch_drawing_tools.cpp:526
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "无法从 \"%s\" 加载图片。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:654
-#: eeschema/tools/sch_drawing_tools.cpp:1169
+#: eeschema/tools/sch_drawing_tools.cpp:656
+#: eeschema/tools/sch_drawing_tools.cpp:1173
 msgid "No new hierarchical labels found."
 msgstr "没有找到新的层次标签。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:738
+#: eeschema/tools/sch_drawing_tools.cpp:740
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "结点位置不包含可连接的电线和/或引脚。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1101
+#: eeschema/tools/sch_drawing_tools.cpp:1105
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr "按下 <ESC> 取消项目创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1157
+#: eeschema/tools/sch_drawing_tools.cpp:1161
 msgid "Click over a sheet."
 msgstr "单击图框。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1336
+#: eeschema/tools/sch_drawing_tools.cpp:1340
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消图框创建。"
 
@@ -33359,7 +33359,7 @@ msgstr "是，斜面"
 msgid "Select Via Size"
 msgstr "选择过孔尺寸"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1649
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1653
 msgid "Draw a line segment"
 msgstr "绘制线段"
 
@@ -33379,35 +33379,35 @@ msgstr "绘制圆弧"
 msgid "Place a text"
 msgstr "放置文本"
 
-#: pcbnew/tools/drawing_tool.cpp:967
+#: pcbnew/tools/drawing_tool.cpp:969
 msgid "Draw a leader"
 msgstr "绘制引线"
 
-#: pcbnew/tools/drawing_tool.cpp:980
+#: pcbnew/tools/drawing_tool.cpp:982
 msgid "Draw a dimension"
 msgstr "绘制标注"
 
-#: pcbnew/tools/drawing_tool.cpp:1183
+#: pcbnew/tools/drawing_tool.cpp:1187
 msgid "No graphic items found in file."
 msgstr "在文件中没找到图形项。"
 
-#: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
+#: pcbnew/tools/drawing_tool.cpp:1237 pcbnew/tools/drawing_tool.cpp:1308
 msgid "Place a DXF_SVG drawing"
 msgstr "放置 DXF_SVG 图形"
 
-#: pcbnew/tools/drawing_tool.cpp:1378
+#: pcbnew/tools/drawing_tool.cpp:1382
 msgid "Move the footprint reference anchor"
 msgstr "移动封装位号锚点"
 
-#: pcbnew/tools/drawing_tool.cpp:2092
+#: pcbnew/tools/drawing_tool.cpp:2100
 msgid "Self-intersecting polygons are not allowed"
 msgstr "不允许自相交多边形"
 
-#: pcbnew/tools/drawing_tool.cpp:2623
+#: pcbnew/tools/drawing_tool.cpp:2631
 msgid "Via location violates DRC."
 msgstr "通孔位置违反 DRC。"
 
-#: pcbnew/tools/drawing_tool.cpp:2727
+#: pcbnew/tools/drawing_tool.cpp:2735
 msgid "Place via"
 msgstr "放置过孔"
 
@@ -35081,15 +35081,15 @@ msgstr "不允许自相交多边形。"
 msgid "Drag a corner"
 msgstr "拖动拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2058
+#: pcbnew/tools/pcb_point_editor.cpp:2060
 msgid "Add a zone corner"
 msgstr "添加敷铜拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2095
+#: pcbnew/tools/pcb_point_editor.cpp:2097
 msgid "Split segment"
 msgstr "分割线段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2166
+#: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
 msgstr "删除敷铜或多边形的拐角"
 

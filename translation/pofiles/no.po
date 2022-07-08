@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 11:10-0700\n"
+"POT-Creation-Date: 2022-07-08 08:59-0700\n"
 "PO-Revision-Date: 2022-06-27 00:52+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -1205,13 +1205,13 @@ msgid "DPI"
 msgstr "DPI (skjermoppløsning)"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:497
+#: eeschema/tools/sch_drawing_tools.cpp:498
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr "Velg bilde"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:498
+#: eeschema/tools/sch_drawing_tools.cpp:499
 #: pagelayout_editor/pl_editor_frame.cpp:854
 msgid "Image Files"
 msgstr "Bildefiler"
@@ -16901,36 +16901,36 @@ msgstr "& Utvid valg E"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:464
+#: eeschema/tools/sch_drawing_tools.cpp:465
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:525
+#: eeschema/tools/sch_drawing_tools.cpp:526
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Kunne ikke laste inn bildet fra \"%s\""
 
-#: eeschema/tools/sch_drawing_tools.cpp:654
-#: eeschema/tools/sch_drawing_tools.cpp:1169
+#: eeschema/tools/sch_drawing_tools.cpp:656
+#: eeschema/tools/sch_drawing_tools.cpp:1173
 msgid "No new hierarchical labels found."
 msgstr "Ingen nye hierarkiske etiketter funnet."
 
-#: eeschema/tools/sch_drawing_tools.cpp:738
+#: eeschema/tools/sch_drawing_tools.cpp:740
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1101
+#: eeschema/tools/sch_drawing_tools.cpp:1105
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1157
+#: eeschema/tools/sch_drawing_tools.cpp:1161
 msgid "Click over a sheet."
 msgstr "Klikk over et ark."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1336
+#: eeschema/tools/sch_drawing_tools.cpp:1340
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -34507,7 +34507,7 @@ msgstr "Ja, faset"
 msgid "Select Via Size"
 msgstr "Velg Via størrelse"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1649
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1653
 msgid "Draw a line segment"
 msgstr "Tegn et linjesegment"
 
@@ -34527,37 +34527,37 @@ msgstr "Tegn en bue"
 msgid "Place a text"
 msgstr "Plasser en tekst"
 
-#: pcbnew/tools/drawing_tool.cpp:967
+#: pcbnew/tools/drawing_tool.cpp:969
 msgid "Draw a leader"
 msgstr "Tegn en leder"
 
-#: pcbnew/tools/drawing_tool.cpp:980
+#: pcbnew/tools/drawing_tool.cpp:982
 msgid "Draw a dimension"
 msgstr "Tegn en dimensjon"
 
-#: pcbnew/tools/drawing_tool.cpp:1183
+#: pcbnew/tools/drawing_tool.cpp:1187
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Ingen grafiske elementer funnet i filen å importere"
 
-#: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
+#: pcbnew/tools/drawing_tool.cpp:1237 pcbnew/tools/drawing_tool.cpp:1308
 msgid "Place a DXF_SVG drawing"
 msgstr "Plasser en DXF_SVG-tegning"
 
-#: pcbnew/tools/drawing_tool.cpp:1378
+#: pcbnew/tools/drawing_tool.cpp:1382
 msgid "Move the footprint reference anchor"
 msgstr "Flytt fotavtrykkets referanseanker"
 
-#: pcbnew/tools/drawing_tool.cpp:2092
+#: pcbnew/tools/drawing_tool.cpp:2100
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Selvkryssende polygoner er ikke tillatt"
 
-#: pcbnew/tools/drawing_tool.cpp:2623
+#: pcbnew/tools/drawing_tool.cpp:2631
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Ruteplanets startpunkt bryter med DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2727
+#: pcbnew/tools/drawing_tool.cpp:2735
 msgid "Place via"
 msgstr "Plasser via"
 
@@ -36301,15 +36301,15 @@ msgstr "Selvkryssende polygoner er ikke tillatt."
 msgid "Drag a corner"
 msgstr "Dra et hjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2058
+#: pcbnew/tools/pcb_point_editor.cpp:2060
 msgid "Add a zone corner"
 msgstr "Legg til et sonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2095
+#: pcbnew/tools/pcb_point_editor.cpp:2097
 msgid "Split segment"
 msgstr "Delt segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2166
+#: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
 msgstr "Fjern et sone / polygonhjørne"
 

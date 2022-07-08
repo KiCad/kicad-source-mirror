@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 11:10-0700\n"
+"POT-Creation-Date: 2022-07-08 08:59-0700\n"
 "PO-Revision-Date: 2021-01-13 14:21+0000\n"
 "Last-Translator: Rihards Skuja <rhssk@posteo.eu>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1166,13 +1166,13 @@ msgid "DPI"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:497
+#: eeschema/tools/sch_drawing_tools.cpp:498
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:498
+#: eeschema/tools/sch_drawing_tools.cpp:499
 #: pagelayout_editor/pl_editor_frame.cpp:854
 msgid "Image Files"
 msgstr ""
@@ -15624,36 +15624,36 @@ msgstr ""
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:464
+#: eeschema/tools/sch_drawing_tools.cpp:465
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:525
+#: eeschema/tools/sch_drawing_tools.cpp:526
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:654
-#: eeschema/tools/sch_drawing_tools.cpp:1169
+#: eeschema/tools/sch_drawing_tools.cpp:656
+#: eeschema/tools/sch_drawing_tools.cpp:1173
 msgid "No new hierarchical labels found."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:738
+#: eeschema/tools/sch_drawing_tools.cpp:740
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1101
+#: eeschema/tools/sch_drawing_tools.cpp:1105
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1157
+#: eeschema/tools/sch_drawing_tools.cpp:1161
 msgid "Click over a sheet."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1336
+#: eeschema/tools/sch_drawing_tools.cpp:1340
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -31927,7 +31927,7 @@ msgstr ""
 msgid "Select Via Size"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1649
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1653
 msgid "Draw a line segment"
 msgstr ""
 
@@ -31947,35 +31947,35 @@ msgstr ""
 msgid "Place a text"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:967
+#: pcbnew/tools/drawing_tool.cpp:969
 msgid "Draw a leader"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:980
+#: pcbnew/tools/drawing_tool.cpp:982
 msgid "Draw a dimension"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:1183
+#: pcbnew/tools/drawing_tool.cpp:1187
 msgid "No graphic items found in file."
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
+#: pcbnew/tools/drawing_tool.cpp:1237 pcbnew/tools/drawing_tool.cpp:1308
 msgid "Place a DXF_SVG drawing"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:1378
+#: pcbnew/tools/drawing_tool.cpp:1382
 msgid "Move the footprint reference anchor"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:2092
+#: pcbnew/tools/drawing_tool.cpp:2100
 msgid "Self-intersecting polygons are not allowed"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:2623
+#: pcbnew/tools/drawing_tool.cpp:2631
 msgid "Via location violates DRC."
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:2727
+#: pcbnew/tools/drawing_tool.cpp:2735
 msgid "Place via"
 msgstr ""
 
@@ -33643,15 +33643,15 @@ msgstr ""
 msgid "Drag a corner"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2058
+#: pcbnew/tools/pcb_point_editor.cpp:2060
 msgid "Add a zone corner"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2095
+#: pcbnew/tools/pcb_point_editor.cpp:2097
 msgid "Split segment"
 msgstr ""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2166
+#: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 11:10-0700\n"
+"POT-Creation-Date: 2022-07-08 08:59-0700\n"
 "PO-Revision-Date: 2011-11-29 21:48+0200\n"
 "Last-Translator: Evgeniy Ivanov <evgeniy_p_ivanov@yahoo.ca>\n"
 "Language-Team: KiCad Team <evgeniy_p_ivanov@yahoo.ca>\n"
@@ -1277,13 +1277,13 @@ msgid "DPI"
 msgstr "Пи-образен"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:497
+#: eeschema/tools/sch_drawing_tools.cpp:498
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr "Избор на изображение"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:498
+#: eeschema/tools/sch_drawing_tools.cpp:499
 #: pagelayout_editor/pl_editor_frame.cpp:854
 #, fuzzy
 msgid "Image Files"
@@ -17285,36 +17285,36 @@ msgstr "Изтрий връзка"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:464
+#: eeschema/tools/sch_drawing_tools.cpp:465
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:525
+#: eeschema/tools/sch_drawing_tools.cpp:526
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Неуспешно зареждане на изображение от <%s>"
 
-#: eeschema/tools/sch_drawing_tools.cpp:654
-#: eeschema/tools/sch_drawing_tools.cpp:1169
+#: eeschema/tools/sch_drawing_tools.cpp:656
+#: eeschema/tools/sch_drawing_tools.cpp:1173
 msgid "No new hierarchical labels found."
 msgstr "Не са намерени нови йерархични етикети."
 
-#: eeschema/tools/sch_drawing_tools.cpp:738
+#: eeschema/tools/sch_drawing_tools.cpp:740
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1101
+#: eeschema/tools/sch_drawing_tools.cpp:1105
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1157
+#: eeschema/tools/sch_drawing_tools.cpp:1161
 msgid "Click over a sheet."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1336
+#: eeschema/tools/sch_drawing_tools.cpp:1340
 msgid "Press <ESC> to cancel sheet creation."
 msgstr ""
 
@@ -35415,7 +35415,7 @@ msgstr ""
 msgid "Select Via Size"
 msgstr "Избор на клавиш"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1649
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1653
 #, fuzzy
 msgid "Draw a line segment"
 msgstr "Изтегли контура на сегмента"
@@ -35439,41 +35439,41 @@ msgstr ""
 msgid "Place a text"
 msgstr "Постави проводник"
 
-#: pcbnew/tools/drawing_tool.cpp:967
+#: pcbnew/tools/drawing_tool.cpp:969
 #, fuzzy
 msgid "Draw a leader"
 msgstr "Чертежи"
 
-#: pcbnew/tools/drawing_tool.cpp:980
+#: pcbnew/tools/drawing_tool.cpp:982
 #, fuzzy
 msgid "Draw a dimension"
 msgstr "Размер"
 
-#: pcbnew/tools/drawing_tool.cpp:1183
+#: pcbnew/tools/drawing_tool.cpp:1187
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Покажи пътечките в контурен режим"
 
-#: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
+#: pcbnew/tools/drawing_tool.cpp:1237 pcbnew/tools/drawing_tool.cpp:1308
 #, fuzzy
 msgid "Place a DXF_SVG drawing"
 msgstr "Постави проводник"
 
-#: pcbnew/tools/drawing_tool.cpp:1378
+#: pcbnew/tools/drawing_tool.cpp:1382
 #, fuzzy
 msgid "Move the footprint reference anchor"
 msgstr "Постави точка на закотвяне в комп.отп."
 
-#: pcbnew/tools/drawing_tool.cpp:2092
+#: pcbnew/tools/drawing_tool.cpp:2100
 msgid "Self-intersecting polygons are not allowed"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:2623
+#: pcbnew/tools/drawing_tool.cpp:2631
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Настройки на конт.пл."
 
-#: pcbnew/tools/drawing_tool.cpp:2727
+#: pcbnew/tools/drawing_tool.cpp:2735
 #, fuzzy
 msgid "Place via"
 msgstr "Постави прох.отв."
@@ -37440,17 +37440,17 @@ msgstr ""
 msgid "Drag a corner"
 msgstr "Плъзни проводник"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2058
+#: pcbnew/tools/pcb_point_editor.cpp:2060
 #, fuzzy
 msgid "Add a zone corner"
 msgstr "Добави \"Несвързан\""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2095
+#: pcbnew/tools/pcb_point_editor.cpp:2097
 #, fuzzy
 msgid "Split segment"
 msgstr "Сегмент"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2166
+#: pcbnew/tools/pcb_point_editor.cpp:2168
 msgid "Remove a zone/polygon corner"
 msgstr ""
 
