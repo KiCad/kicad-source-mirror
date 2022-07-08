@@ -24,10 +24,14 @@
 
 #include <thread_pool.h>
 
+// Under mingw, there is a problem with the destructor when creating a static instance
+// of a thread_pool: probably the DTOR is called too late, and the application hangs.
+// so we create it on the heap.
+static thread_pool* tp = nullptr;
 
 thread_pool& GetKiCadThreadPool()
 {
-    static thread_pool tp;
-    return tp;
-}
+    if( !tp ) tp = new thread_pool;
 
+    return *tp;
+}

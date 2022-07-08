@@ -397,8 +397,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     }
 #endif
 
-    GetKiCadThreadPool();
-
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
     // something like set KICAD=d:\kicad
