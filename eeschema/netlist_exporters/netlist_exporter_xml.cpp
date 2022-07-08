@@ -319,14 +319,22 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), fields[jj].GetCanonicalName() );
-                xproperty->AddAttribute( wxT( "value" ), fields[jj].GetText() );
+
+                if( m_resolveTextVars )
+                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetShownText() );
+                else
+                    xproperty->AddAttribute( wxT( "value" ), fields[jj].GetText() );
             }
 
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), sheetField.GetCanonicalName() );
-                xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
+
+                if( m_resolveTextVars )
+                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText() );
+                else
+                    xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
             if( !symbol->GetIncludeInBom() )
@@ -367,12 +375,13 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             XNODE* xunits; // Node for extra units
             xcomp->AddChild( xunits = node( wxT( "tstamps" ) ) );
 
-            auto range = extra_units.equal_range( symbol );
+            auto     range = extra_units.equal_range( symbol );
+            wxString uuid;
 
             // Output a series of children with all UUIDs associated with the REFDES
             for( auto it = range.first; it != range.second; ++it )
             {
-                wxString uuid = ( *it )->m_Uuid.AsString();
+                uuid = ( *it )->m_Uuid.AsString();
 
                 // Add a space between UUIDs, if not in KICAD mode (i.e.
                 // using wxXmlDocument::Save()).  KICAD MODE has its own XNODE::Format function.
@@ -383,8 +392,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             }
 
             // Output the primary UUID
-            xunits->AddChild(
-                    new XNODE( wxXML_TEXT_NODE, wxEmptyString, symbol->m_Uuid.AsString() ) );
+            uuid = symbol->m_Uuid.AsString();
+            xunits->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, uuid ) );
         }
     }
 
