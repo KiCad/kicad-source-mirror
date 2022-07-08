@@ -173,9 +173,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             [&]( BOARD_ITEM *item ) -> bool
             {
                 PCB_SHAPE*    shape = static_cast<PCB_SHAPE*>( item );
-                STROKE_PARAMS stroke( 0 );
+                STROKE_PARAMS stroke = shape->GetStroke();
 
-                if( shape->GetShape() == SHAPE_T::RECT )
+                if( item->IsOnLayer( Edge_Cuts ) )
+                    stroke.SetWidth( 0 );
+
+                if( shape->GetShape() == SHAPE_T::RECT && !shape->IsFilled() )
                 {
                     // A single rectangle for the board would make the RTree useless, so convert
                     // to 4 edges
@@ -195,9 +198,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetStartY( shape->GetEndY() );
                     edges.back()->SetStroke( stroke );
-                    return true;
                 }
-                else if( shape->GetShape() == SHAPE_T::POLY )
+                else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsFilled() )
                 {
                     // A single polygon for the board would make the RTree useless, so convert
                     // to n edges.
@@ -213,9 +215,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetStroke( stroke );
                     }
                 }
+                else
+                {
+                    edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                    edges.back()->SetStroke( stroke );
+                }
 
-                edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
-                edges.back()->SetStroke( stroke );
                 return true;
             } );
 
@@ -280,25 +285,25 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     if( testCopper && item->IsOnCopperLayer() )
                     {
                         edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                                                  [&]( BOARD_ITEM* edge ) -> bool
+                                [&]( BOARD_ITEM* edge ) -> bool
                                 {
                                     return testAgainstEdge( item, itemShape.get(), edge,
                                                             EDGE_CLEARANCE_CONSTRAINT,
                                                             DRCE_EDGE_CLEARANCE );
                                 },
-                                                  m_largestEdgeClearance );
+                                m_largestEdgeClearance );
                     }
 
                     if( testSilk && ( item->IsOnLayer( F_SilkS ) || item->IsOnLayer( B_SilkS ) ) )
                     {
                         if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                                                      [&]( BOARD_ITEM* edge ) -> bool
+                                [&]( BOARD_ITEM* edge ) -> bool
                                 {
                                     return testAgainstEdge( item, itemShape.get(), edge,
                                                             SILK_CLEARANCE_CONSTRAINT,
                                                             DRCE_SILK_EDGE_CLEARANCE );
                                 },
-                                                      m_largestEdgeClearance ) )
+                                m_largestEdgeClearance ) )
                         {
                             // violations reported during QueryColliding
                         }
