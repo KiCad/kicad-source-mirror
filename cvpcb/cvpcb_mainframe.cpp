@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,6 +166,8 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() ) )
     {
+        m_tcFilterString->ChangeValue( cfg->m_FilterString );
+
         if( cfg->m_LibrariesWidth > 0 )
         {
             wxAuiPaneInfo& librariesPane = m_auimgr.GetPane( "Libraries" );
@@ -456,7 +458,6 @@ void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
 
     m_filteringOptions = cfg->m_FilterFlags;
-    m_tcFilterString->ChangeValue( cfg->m_FilterString );
 }
 
 
