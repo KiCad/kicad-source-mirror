@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 11:26-0700\n"
+"POT-Creation-Date: 2022-07-08 08:58-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6059,6 +6059,9 @@ msgstr "Diamond"
 msgid "Formatting"
 msgstr "Formatting"
 
+msgid "Auto"
+msgstr "Auto"
+
 msgid "ALL"
 msgstr "ALL"
 
@@ -8118,11 +8121,17 @@ msgstr "Highlight thickness:"
 msgid "Cross-probing"
 msgstr "Cross-probing"
 
-msgid "Cross-probe on selection"
-msgstr "Cross-probe on selection"
+msgid "Highlight symbols when footprints selected"
+msgstr "Highlight symbols when footprints selected"
+
+msgid "Highlight symbols corresponding to selected footprints"
+msgstr "Highlight symbols corresponding to selected footprints"
 
 msgid "Center view on cross-probed items"
 msgstr "Center view on cross-probed items"
+
+msgid "Ensures that cross-probed symbols are visible in the current view"
+msgstr "Ensures that cross-probed symbols are visible in the current view"
 
 msgid "Zoom to fit cross-probed items"
 msgstr "Zoom to fit cross-probed items"
@@ -13406,6 +13415,9 @@ msgstr "Install Pending"
 msgid "Uninstall Pending"
 msgstr "Uninstall Pending"
 
+msgid "Update Pending"
+msgstr "Update Pending"
+
 msgid "Metadata"
 msgstr "Metadata"
 
@@ -13458,6 +13470,9 @@ msgstr ""
 
 msgid "Install package"
 msgstr "Install package"
+
+msgid "Pending"
+msgstr "Pending"
 
 msgid "Download Size"
 msgstr "Download Size"
@@ -13550,24 +13565,6 @@ msgid "Unable to create download directory!"
 msgstr "Unable to create download directory!"
 
 #, c-format
-msgid ""
-"Downloaded archive hash for package %s does not match repository entry. This "
-"may indicate a problem with the package, if the issue persists report this "
-"to repository maintainers."
-msgstr ""
-"Downloaded archive hash for package %s does not match repository entry. This "
-"may indicate a problem with the package, if the issue persists report this "
-"to repository maintainers."
-
-#, c-format
-msgid "Extracting package '%s'."
-msgstr "Extracting package '%s'."
-
-#, c-format
-msgid "Removing downloaded archive '%s'."
-msgstr "Removing downloaded archive '%s'."
-
-#, c-format
 msgid "Downloading package url: '%s'"
 msgstr "Downloading package url: '%s'"
 
@@ -13578,6 +13575,28 @@ msgid ""
 msgstr ""
 "Failed to download url %s\n"
 "%s"
+
+#, c-format
+msgid ""
+"Downloaded archive hash for package %s does not match repository entry. This "
+"may indicate a problem with the package, if the issue persists report this "
+"to repository maintainers."
+msgstr ""
+"Downloaded archive hash for package %s does not match repository entry. This "
+"may indicate a problem with the package, if the issue persists report this "
+"to repository maintainers."
+
+#, c-format
+msgid "Removing previous version of package '%s'."
+msgstr "Removing previous version of package '%s'."
+
+#, c-format
+msgid "Extracting package '%s'."
+msgstr "Extracting package '%s'."
+
+#, c-format
+msgid "Removing downloaded archive '%s'."
+msgstr "Removing downloaded archive '%s'."
 
 msgid "Aborting package installation."
 msgstr "Aborting package installation."
@@ -13603,11 +13622,14 @@ msgstr "Archive metadata must have a single version defined"
 
 #, c-format
 msgid ""
-"Package with identifier %s is already installed, you must first uninstall "
-"this package."
+"Package with identifier %s is already installed. Would you like to update it "
+"to the version from selected file?"
 msgstr ""
-"Package with identifier %s is already installed, you must first uninstall "
-"this package."
+"Package with identifier %s is already installed. Would you like to update it "
+"to the version from selected file?"
+
+msgid "Update package"
+msgstr "Update package"
 
 #, c-format
 msgid "Removing directory %s"
@@ -15054,6 +15076,27 @@ msgstr "Inductive reactance for given rise time and calculated inductance"
 msgid "Top view of via"
 msgstr "Top view of via"
 
+msgid "Wavelength in vacuum:"
+msgstr "Wavelength in vacuum:"
+
+msgid "Wavelength in medium:"
+msgstr "Wavelength in medium:"
+
+msgid "Speed in medium:"
+msgstr "Speed in medium:"
+
+msgid "er:"
+msgstr "er:"
+
+msgid "relative permittivity (dielectric constant)"
+msgstr "relative permittivity (dielectric constant)"
+
+msgid "mur:"
+msgstr "mur:"
+
+msgid "relative permeability"
+msgstr "relative permeability"
+
 msgid "Data file error."
 msgstr "Data file error."
 
@@ -15169,6 +15212,9 @@ msgstr "Cable Size"
 
 msgid "High speed"
 msgstr "High speed"
+
+msgid "Wavelength"
+msgstr "Wavelength"
 
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
@@ -15448,6 +15494,18 @@ msgstr "km"
 
 msgid "feet"
 msgstr "feet"
+
+msgid "m/s"
+msgstr "m/s"
+
+msgid "ft/s"
+msgstr "ft/s"
+
+msgid "km/h"
+msgstr "km/h"
+
+msgid "mi/h"
+msgstr "mi/h"
 
 msgid "Create an array"
 msgstr "Create an array"
@@ -19259,9 +19317,6 @@ msgstr "Actual size"
 msgid "Scaling:"
 msgstr "Scaling:"
 
-msgid "Auto"
-msgstr "Auto"
-
 msgid "3:2"
 msgstr "3:2"
 
@@ -20120,8 +20175,14 @@ msgstr ""
 msgid "Show pad clearance"
 msgstr "Show pad clearance"
 
-msgid "Scroll cross-probed items into view"
-msgstr "Scroll cross-probed items into view"
+msgid "Highlight footprints when symbols selected"
+msgstr "Highlight footprints when symbols selected"
+
+msgid "Highlight footprints corresponding to selected symbols"
+msgstr "Highlight footprints corresponding to selected symbols"
+
+msgid "Ensures that cross-probed footprints are visible in the current view"
+msgstr "Ensures that cross-probed footprints are visible in the current view"
 
 msgid "Highlight nets when they are highlighted in the schematic editor"
 msgstr "Highlight nets when they are highlighted in the schematic editor"
@@ -22168,6 +22229,9 @@ msgstr "(%s clearance %s; actual %s)"
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(nets %s and %s)"
+
+msgid "Checking nets for minimum connection width..."
+msgstr "Checking nets for minimum connection width..."
 
 msgid "Checking footprint courtyard definitions..."
 msgstr "Checking footprint courtyard definitions..."
@@ -28410,6 +28474,20 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Cross-probe on selection"
+#~ msgstr "Cross-probe on selection"
+
+#, c-format
+#~ msgid ""
+#~ "Package with identifier %s is already installed, you must first uninstall "
+#~ "this package."
+#~ msgstr ""
+#~ "Package with identifier %s is already installed, you must first uninstall "
+#~ "this package."
+
+#~ msgid "Scroll cross-probed items into view"
+#~ msgstr "Scroll cross-probed items into view"
 
 #~ msgid "F.Cu"
 #~ msgstr "F.Cu"
