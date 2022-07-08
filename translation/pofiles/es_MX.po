@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-08 15:57+0000\n"
+"PO-Revision-Date: 2022-07-09 21:10+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -12418,6 +12418,7 @@ msgstr "Centrar la vista en los elementos de sondeo cruzado"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
 msgstr ""
+"Garantiza que los símbolos de sondeo cruzado sean visibles en la vista actual"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -19817,7 +19818,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "Eliminando la versión anterior del paquete '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -21853,15 +21854,15 @@ msgstr "Vista superior de la vía"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "Longitud de onda en el vacío:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Longitud de onda en el medio:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Velocidad en el medio:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 #, fuzzy
@@ -21875,7 +21876,7 @@ msgstr "Permitividad relativa del sustrato (constante dieléctrica)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
 #, fuzzy
@@ -22458,19 +22459,19 @@ msgstr "pies"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "pies/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "millas/h"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -28945,6 +28946,7 @@ msgstr "Asignar huellas a los símbolos seleccionados"
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
+"Garantiza que las huellas de sondeo cruzado sean visibles en la vista actual"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
