@@ -246,10 +246,18 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     int checkColSize = 22;
     int layerColSize = textWidth + LAYER_BITMAP_SIZE.x + 15;
 
+#ifdef __WXMAC__
+    // TODO: something in wxWidgets 3.1.x makes checkbox padding really large...
+    int checkColMargins = 40;
+#else
+    int checkColMargins = 0;
+#endif
+
     // You'd think the fact that m_layers is a list would encourage wxWidgets not to save room
     // for the tree expanders... but you'd be wrong.  Force indent to 0.
     aList->SetIndent( 0 );
-    aList->SetMinClientSize( wxSize( checkColSize + layerColSize, aList->GetMinClientSize().y ) );
+    aList->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+                                     aList->GetMinClientSize().y ) );
 
     checkColumn->SetWidth( checkColSize );
     layerColumn->SetWidth( layerColSize );

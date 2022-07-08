@@ -88,17 +88,22 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
-    int order = 0;
-    LSET plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
-    wxArrayInt plotAllLayersOrder;
-    wxArrayString plotAllLayersChoicesStrings;
+    int                       order = 0;
+    LSET                      plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
+    wxArrayInt                plotAllLayersOrder;
+    wxArrayString             plotAllLayersChoicesStrings;
     std::vector<PCB_LAYER_ID> layersIdChoiceList;
+    int                       textWidth = 0;
 
     for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
         PCB_LAYER_ID id = *seq;
+        wxString     layerName = board->GetLayerName( id );
 
-        plotAllLayersChoicesStrings.Add( board->GetLayerName( id ) );
+        // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
+        textWidth = std::max( textWidth, KIUI::GetTextSize( layerName, m_layerCheckListBox ).x );
+
+        plotAllLayersChoicesStrings.Add( layerName );
         layersIdChoiceList.push_back( id );
 
         size_t size = plotOnAllLayersSelection.size();
@@ -111,13 +116,28 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
         order += 1;
     }
 
-	wxStaticBoxSizer* sbSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY,
-                                                                       _("Plot on All Layers") ),
-                                                      wxVERTICAL );
+    int checkColSize = 22;
+    int layerColSize = textWidth + 15;
+
+#ifdef __WXMAC__
+    // TODO: something in wxWidgets 3.1.x makes checkbox padding really large...
+    int checkColMargins = 40;
+#else
+    int checkColMargins = 0;
+#endif
+
+    m_layerCheckListBox->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+                                                   m_layerCheckListBox->GetMinClientSize().y ) );
+
+    wxStaticBox*      allLayersLabel = new wxStaticBox( this, wxID_ANY, _( "Plot on All Layers" ) );
+	wxStaticBoxSizer* sbSizer = new wxStaticBoxSizer( allLayersLabel, wxVERTICAL );
 
 	m_plotAllLayersList = new wxRearrangeList( sbSizer->GetStaticBox(), wxID_ANY,
                                                wxDefaultPosition, wxDefaultSize,
                                                plotAllLayersOrder, plotAllLayersChoicesStrings, 0 );
+
+    m_plotAllLayersList->SetMinClientSize( wxSize( checkColSize + checkColMargins + layerColSize,
+                                                   m_plotAllLayersList->GetMinClientSize().y ) );
 
     // Attach the LAYER_ID to each item in m_plotAllLayersList
     // plotAllLayersChoicesStrings and layersIdChoiceList are in the same order,

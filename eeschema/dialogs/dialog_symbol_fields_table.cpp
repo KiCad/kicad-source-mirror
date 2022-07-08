@@ -737,6 +737,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         m_parent( parent )
 {
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
+    int    nameColWidthMargin = 44;
 
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
@@ -785,6 +786,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
     }
 
+    nameColWidth += nameColWidthMargin;
+
     int fieldsMinWidth = nameColWidth + m_groupByColWidth + m_showColWidth;
 
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
@@ -798,6 +801,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
 
+    m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
     // must be done after SetTable(), which appears to re-set it
@@ -1303,14 +1307,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-#ifdef __WXMAC__
-    // I'm not sure why KIPLATFORM::UI::GetUnobscuredSize() doesn't give us the correct size
-    // on Mac, but I do know the old code worked.
-    int nameColWidth = event.GetSize().GetX() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
-#else
     int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x;
-#endif
     nameColWidth -= m_showColWidth + m_groupByColWidth;
+#ifdef __WXMAC__
+    // TODO: something in wxWidgets 3.1.x makes checkboxes really wide...
+    nameColWidth -= 40;
+#endif
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
