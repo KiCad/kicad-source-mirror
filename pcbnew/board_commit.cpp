@@ -230,6 +230,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
             case CHT_ADD:
             {
+                if( selTool->GetEnteredGroup() && !boardItem->GetParentGroup() )
+                    selTool->GetEnteredGroup()->AddItem( boardItem );
+
                 if( m_isFootprintEditor )
                 {
                     // footprints inside footprints are not supported yet

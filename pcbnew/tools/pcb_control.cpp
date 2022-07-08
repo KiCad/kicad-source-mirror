@@ -985,6 +985,9 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         {
             const_cast<KIID&>( item->m_Uuid ) = KIID();
 
+            // Even though BOARD_COMMIT::Push() will add any new items to the group, we're
+            // going to run PCB_ACTIONS::move first, and the move tool will throw out any
+            // items that aren't in the entered group.
             if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
                 selectionTool->GetEnteredGroup()->AddItem( item );
         }
