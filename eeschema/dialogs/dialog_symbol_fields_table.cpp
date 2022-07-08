@@ -1357,7 +1357,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         return;
 
     // Find the location for the line terminator
-    for( int col = m_grid->GetNumberCols() - 1; col <=0 ; --col )
+    for( int col = m_grid->GetNumberCols() - 1; col >=0 ; --col )
     {
         if( m_grid->IsColShown( col ) )
         {
