@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-08 15:57+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2022-07-09 21:11+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -28170,7 +28170,7 @@ msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "マージン"
+msgstr "まー"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
