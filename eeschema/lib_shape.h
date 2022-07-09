@@ -93,7 +93,7 @@ public:
      * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
      *                  shapes.
      */
-    virtual std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const
+    virtual std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const override
     {
         return makeEffectiveShapes( aEdgeOnly, true );
     }

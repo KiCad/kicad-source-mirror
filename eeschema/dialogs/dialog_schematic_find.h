@@ -75,6 +75,9 @@ protected:
     void OnFind( wxCommandEvent& aEvent ) override;
     void OnReplace( wxCommandEvent& aEvent ) override;
 
+    // Rebuild the search flags from dialog settings
+    void updateFlags();
+
     SCH_EDIT_FRAME*     m_frame;
     SCH_EDITOR_CONTROL* m_editorControl;
     wxFindReplaceData*  m_findReplaceData;
