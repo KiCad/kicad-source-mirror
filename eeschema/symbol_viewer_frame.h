@@ -31,7 +31,8 @@
 #include <sch_screen.h>
 #include <tool/selection.h>
 
-class wxListBox;
+class WX_LISTBOX;
+class wxSearchCtrl;
 class SYMBOL_LIBRARY_FILTER;
 class LIB_SYMBOL;
 class SYMBOL_LIB_TABLE_ROW;
@@ -95,7 +96,7 @@ public:
     void ReCreateMenuBar() override;
 
     void ClickOnLibList( wxCommandEvent& event );
-    void ClickOnCmpList( wxCommandEvent& event );
+    void ClickOnSymbolList( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -154,9 +155,13 @@ private:
      */
     void OnActivate( wxActivateEvent& event );
 
-    void DClickOnCmpList( wxCommandEvent& event );
+    void DClickOnSymbolList( wxCommandEvent& event );
 
     void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
+
+    void OnLibFilter( wxCommandEvent& aEvent );
+    void OnSymFilter( wxCommandEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvent ) override;
 
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
@@ -167,10 +172,12 @@ private:
 private:
     wxChoice*           m_unitChoice;
 
-    wxListBox*          m_libList;             // The list of libraries.
+    wxSearchCtrl*       m_libFilter;
+    WX_LISTBOX*         m_libList;             // The list of libraries.
     int                 m_libListWidth;        // Last width of the window.
 
-    wxListBox*          m_symbolList;          // The list of symbols.
+    wxSearchCtrl*       m_symbolFilter;
+    WX_LISTBOX*         m_symbolList;          // The list of symbols.
     int                 m_symbolListWidth;     // Last width of the window.
 
     // Filters to build list of libs/list of symbols.

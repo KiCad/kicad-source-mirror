@@ -35,11 +35,13 @@
 #include <fp_lib_table.h>
 #include <kiway.h>
 #include <widgets/msgpanel.h>
+#include <widgets/wx_listbox.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>
 #include <footprint_editor_settings.h>
 #include <pgm_base.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -56,7 +58,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/board_editor_control.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/listbox.h>
+#include <lib_tree_model_adapter.h>
 #include <wx/srchctrl.h>
 #include <wx/tokenzr.h>
 #include <wx/choice.h>
@@ -143,8 +145,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_libFilter->SetDescriptiveText( _( "Filter" ) );
     libSizer->Add( m_libFilter, 0, wxEXPAND, 5 );
 
-    m_libList = new wxListBox( libPanel, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
-                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
+    m_libList = new WX_LISTBOX( libPanel, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
+                                0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
     libSizer->Add( m_libList, 1, wxEXPAND, 5 );
 
     libPanel->SetSizer( libSizer );
@@ -169,8 +171,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_fpFilter->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
 #endif
 
-    m_fpList = new wxListBox( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
-                              0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
+    m_fpList = new WX_LISTBOX( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
+                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
 
     m_fpList->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
     fpSizer->Add( m_fpList, 1, wxEXPAND, 5 );
@@ -266,7 +268,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Vertical items; layers 1 - 3
     m_auimgr.AddPane( libPanel, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(2)
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 200, -1 ) );
-    m_auimgr.AddPane( fpPanel, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer( 1)
+    m_auimgr.AddPane( fpPanel, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
@@ -398,10 +400,26 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 {
     m_libList->Clear();
 
+    PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
     std::vector<wxString> nicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
-    std::set<wxString>    excludes;
+    std::set<wxString>    pinnedMatches;
+    std::set<wxString>    otherMatches;
 
-    if( !m_libFilter->GetValue().IsEmpty() )
+    auto process =
+            [&]( const wxString& aNickname )
+            {
+                if( alg::contains( project.m_PinnedFootprintLibs, aNickname ) )
+                    pinnedMatches.insert( aNickname );
+                else
+                    otherMatches.insert( aNickname );
+            };
+
+    if( m_libFilter->GetValue().IsEmpty() )
+    {
+        for( const wxString& nickname : nicknames )
+            process( nickname );
+    }
+    else
     {
         wxStringTokenizer tokenizer( m_libFilter->GetValue() );
 
@@ -413,17 +431,17 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 
             for( const wxString& nickname : nicknames )
             {
-                if( !matcher.Find( nickname.Lower(), matches, position ) )
-                    excludes.insert( nickname );
+                if( matcher.Find( nickname.Lower(), matches, position ) )
+                    process( nickname );
             }
         }
     }
 
-    for( const wxString& nickname : nicknames )
-    {
-        if( !excludes.count( nickname ) )
-            m_libList->Append( nickname );
-    }
+    for( const wxString& nickname : pinnedMatches )
+        m_libList->Append( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+
+    for( const wxString& nickname : otherMatches )
+        m_libList->Append( nickname );
 
     // Search for a previous selection:
     int index =  m_libList->FindString( getCurNickname(), true );
@@ -595,7 +613,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::selectPrev( wxListBox* aListBox )
+void FOOTPRINT_VIEWER_FRAME::selectPrev( WX_LISTBOX* aListBox )
 {
     int prev = aListBox->GetSelection() - 1;
 
@@ -614,7 +632,7 @@ void FOOTPRINT_VIEWER_FRAME::selectPrev( wxListBox* aListBox )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::selectNext( wxListBox* aListBox )
+void FOOTPRINT_VIEWER_FRAME::selectNext( WX_LISTBOX* aListBox )
 {
     int next = aListBox->GetSelection() + 1;
 
@@ -640,7 +658,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
     if( ii < 0 )
         return;
 
-    wxString name = m_libList->GetString( ii );
+    wxString name = m_libList->GetBaseString( ii );
 
     if( getCurNickname() == name )
         return;
@@ -662,7 +680,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
     if( ii < 0 )
         return;
 
-    wxString name = m_fpList->GetString( ii );
+    wxString name = m_fpList->GetBaseString( ii );
 
     if( getCurFootprintName().CmpNoCase( name ) != 0 )
     {
@@ -888,7 +906,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
         {
             for( unsigned ii = 0;  ii < libNicknames.size();  ii++ )
             {
-                if( libNicknames[ii] != m_libList->GetString( ii ) )
+                if( libNicknames[ii] != m_libList->GetBaseString( ii ) )
                 {
                     stale = true;
                     break;
@@ -1002,13 +1020,17 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 
     if( !getCurNickname().IsEmpty() )
     {
-        title = getCurNickname();
+        try
+        {
+            FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
+            const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
 
-        FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
-        const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
-
-        if( row )
-            title += wxT( " \u2014 " ) + row->GetFullURI( true );
+            title = getCurNickname() + wxT( " \u2014 " ) + row->GetFullURI( true );
+        }
+        catch( ... )
+        {
+            title = _( "[no library selected]" );
+        }
     }
     else
     {
@@ -1045,7 +1067,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         m_fpList->SetSelection( selection );
         m_fpList->EnsureVisible( selection );
 
-        setCurFootprintName( m_fpList->GetString((unsigned) selection ) );
+        setCurFootprintName( m_fpList->GetBaseString( selection ) );
 
         // Delete the current footprint
         GetBoard()->DeleteAllFootprints();

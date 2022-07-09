@@ -98,6 +98,16 @@ class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {
 public:
     /**
+     * @return a unicode string to mark a node name like a pinned library name.
+     * This is not an ASCII7 char, but a unicode char.
+     */
+    static const wxString GetPinningSymbol()
+    {
+        return wxString::FromUTF8( "☆ " );
+    }
+
+public:
+    /**
      * Destructor. Do NOT delete this class manually; it is reference-counted
      * by wxObject.
      */
@@ -353,16 +363,6 @@ protected:
     bool GetAttr( const wxDataViewItem&   aItem,
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
-
-    /**
-     * @return a unicode string to mark a node name like
-     * a pinned library name
-     * This is not an ASCII7 char, but a unicode char
-     */
-    const wxString GetPinningSymbol() const
-    {
-        return wxString::FromUTF8( "☆ " );
-    }
 
 private:
     /**

@@ -31,7 +31,7 @@
 #include <pcbnew_settings.h>
 
 class wxSashLayoutWindow;
-class wxListBox;
+class WX_LISTBOX;
 class wxSearchCtrl;
 class FP_LIB_TABLE;
 class BOARD_ITEM;
@@ -118,8 +118,8 @@ private:
     void OnFPFilter( wxCommandEvent& aEvent );
     void OnCharHook( wxKeyEvent& aEvent ) override;
 
-    void selectPrev( wxListBox* aListBox );
-    void selectNext( wxListBox* aListBox );
+    void selectPrev( WX_LISTBOX* aListBox );
+    void selectNext( WX_LISTBOX* aListBox );
     void ClickOnLibList( wxCommandEvent& aEvent );
     void ClickOnFootprintList( wxCommandEvent& aEvent );
     void DClickOnFootprintList( wxMouseEvent& aEvent );
@@ -166,9 +166,9 @@ private:
     friend struct PCB::IFACE;       // constructor called from here only
 
     wxSearchCtrl*       m_libFilter;
-    wxListBox*          m_libList;        // The list of library names.
+    WX_LISTBOX*         m_libList;        // The list of library names.
     wxSearchCtrl*       m_fpFilter;
-    wxListBox*          m_fpList;         // The list of footprint names.
+    WX_LISTBOX*         m_fpList;         // The list of footprint names.
 
     bool                m_autoZoom;
     double              m_lastZoom;
