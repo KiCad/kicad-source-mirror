@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"PO-Revision-Date: 2022-07-11 09:15+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -12348,14 +12348,12 @@ msgid "Cross-probing"
 msgstr "Korsreferenser"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Alias-symbolen måste ha en förälder vald"
+msgstr "Framhäv symboler när fotavtryck väljs"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Markera alla kopparobjekt i markerade nät"
+msgstr "Framhäver symboler som motsvarar valda fotavtryck"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -12364,7 +12362,7 @@ msgstr "Centrera vy på korsrefererade objekt"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Säkerställer att korsprobade symboler är synliga i den aktuella vyn"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -19480,9 +19478,8 @@ msgid "Uninstall Pending"
 msgstr "Kommer att avinstalleras"
 
 #: kicad/pcm/dialogs/panel_package.cpp:123
-#, fuzzy
 msgid "Update Pending"
-msgstr "Uppdatera PCB"
+msgstr "Uppdatera väntande"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:211
 msgid "Metadata"
@@ -19553,9 +19550,8 @@ msgid "Install package"
 msgstr "Installera paket"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:684
-#, fuzzy
 msgid "Pending"
-msgstr "Förestående (%d)"
+msgstr "Väntande"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Download Size"
@@ -19698,7 +19694,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "Tar bort föregående version av paket '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -19738,18 +19734,17 @@ msgid "Archive metadata must have a single version defined"
 msgstr "Arkivets metadata måste ha en enda version definierad"
 
 #: kicad/pcm/pcm_task_manager.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Ett paket med identifierare %s är redan installerat. Du måste avinstallera "
-"detta först."
+"Ett paket med identifierare %s är redan installerat. Vill du uppdatera det "
+"till versionen i den valda filen?"
 
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid "Update package"
-msgstr "Spara paket"
+msgstr "Uppdatera paket"
 
 #: kicad/pcm/pcm_task_manager.cpp:471
 #, c-format
@@ -21728,15 +21723,15 @@ msgstr "Ovanifrån av via"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "Våglängd i vacuum:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Våglängd i medium:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Hastighet i medium:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 #, fuzzy
@@ -21744,18 +21739,16 @@ msgid "er:"
 msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr "Substratets permittivitetstal (dielektrisk konstant)"
+msgstr "permittivitetstal (dielektrisk konstant)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
-#, fuzzy
 msgid "relative permeability"
-msgstr "Relativ permeabilitet (mu) för substrat"
+msgstr "relativ permeabilitet"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21892,9 +21885,8 @@ msgid "High speed"
 msgstr "Högfrekvens"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
-msgstr "Vågledarens längd"
+msgstr "Våglängd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
@@ -22333,19 +22325,19 @@ msgstr "fot"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "fot/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "miles/h"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -28748,18 +28740,16 @@ msgid "Show pad clearance"
 msgstr "Visa vadderingsavstånd"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Ta bort fotavtryck utan symboler"
+msgstr "Framhäv fotavtryck när symboler väljs"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Tilldela fotavtryck till valda symboler"
+msgstr "Framhäv fotavtryck som motsvarar valda symboler"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr ""
+msgstr "Säkerställer att korsprobade fotavtryck är synliga i den aktuella vyn"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -31501,9 +31491,8 @@ msgid "(nets %s and %s)"
 msgstr "(nät %s och %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_width.cpp:501
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Kontrollerar nätanslutningar ..."
+msgstr "Kontrollerar nät med avseende på minsta bredd för anslutningar..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:87
 msgid "Checking footprint courtyard definitions..."
