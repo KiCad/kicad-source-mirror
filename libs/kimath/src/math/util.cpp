@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,6 +29,11 @@
 #include <climits>
 #include <math/util.h>
 #include <wx/log.h>
+
+#ifdef _MSC_VER
+#include <windows.h>
+#include <intrin.h>
+#endif
 
 // Fix compatibility with wxWidgets version < 3.1.4
 #ifndef wxASCII_STR
@@ -65,13 +71,42 @@ int rescale( int aNumerator, int aValue, int aDenominator )
 template<>
 int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator )
 {
-#ifdef __SIZEOF_INT128__
+#if defined( _M_X64 ) && ( _MSC_VER >= 1920 )
+    int64_t  productHi;
+    uint64_t productLo = static_cast<uint64_t>( _mul128( aNumerator, aValue, &productHi ) );
+
+    int64_t r = ( ( productHi < 0 ) ^ ( aDenominator < 0 ) ) ? -aDenominator / 2 : aDenominator / 2;
+
+    uint64_t rLo = static_cast<uint64_t>( r );
+    int64_t  rHi = r < 0 ? -1ll : 0ll;
+
+    productLo += rLo;
+    productHi += rHi + ( productLo < rLo );
+
+    __try
+    {
+        int64_t remainder;
+        int64_t result = _div128( productHi, productLo, aDenominator, &remainder );
+
+        return result;
+    }
+    __except( ( GetExceptionCode() == EXCEPTION_INT_OVERFLOW ) ? EXCEPTION_EXECUTE_HANDLER
+                                                               : EXCEPTION_CONTINUE_SEARCH )
+    {
+        kimathLogDebug( "Overflow in rescale (%lld * %lld + %lld) / %lld", aNumerator, aValue, r,
+                        aDenominator );
+    }
+
+    return 0;
+
+#elif defined( __SIZEOF_INT128__ )
     __int128_t numerator = (__int128_t) aNumerator * (__int128_t) aValue;
 
     if( ( numerator < 0 ) ^ ( aDenominator < 0 ) )
         return ( numerator - aDenominator / 2 ) / aDenominator;
     else
         return ( numerator + aDenominator / 2 ) / aDenominator;
+
 #else
     int64_t r = 0;
     int64_t sign = ( ( aNumerator < 0 ) ? -1 : 1 ) * ( aDenominator < 0 ? -1 : 1 ) *
