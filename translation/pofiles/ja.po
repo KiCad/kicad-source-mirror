@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-08 15:57+0000\n"
+"PO-Revision-Date: 2022-07-09 21:10+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29747,7 +29747,7 @@ msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "マージン"
+msgstr "まー"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -32536,7 +32536,7 @@ msgstr "[File Name] がありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
 msgid "Package model name cannot be empty."
-msgstr "パッケージモデル名は空にできません。"
+msgstr "ぱ名は空にできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:594
 msgid "Checking package model "
