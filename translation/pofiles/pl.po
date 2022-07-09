@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-03 08:21+0000\n"
+"PO-Revision-Date: 2022-07-09 21:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12376,14 +12376,12 @@ msgid "Cross-probing"
 msgstr "Ustawienia zaznaczania"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Symbol pochodny musi mieć wybrany symbol nadrzędny"
+msgstr "Podświetlaj symbole gdy wybrane są ich footprinty"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Podświetla wszystkie elementy należące do wybranej sieci"
+msgstr "Podświetla symbole odpowiadające wybranym footprintom"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -12392,7 +12390,7 @@ msgstr "Skoncentruj widok na zaznaczonych elementach"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Zapewnia, że symbole sondowane krzyżowo są widoczne w bieżącym widoku"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -19553,9 +19551,8 @@ msgid "Uninstall Pending"
 msgstr "Oczekujące deinstalacje"
 
 #: kicad/pcm/dialogs/panel_package.cpp:123
-#, fuzzy
 msgid "Update Pending"
-msgstr "Uaktualnij PCB"
+msgstr "Aktualizacja w trakcie"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:211
 msgid "Metadata"
@@ -19626,9 +19623,8 @@ msgid "Install package"
 msgstr "Instaluj pakiet"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:684
-#, fuzzy
 msgid "Pending"
-msgstr "Oczekujące (%d)"
+msgstr "Oczekujące"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Download Size"
@@ -19771,7 +19767,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "Usuwanie poprzednich wersji pakietów '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -19811,18 +19807,17 @@ msgid "Archive metadata must have a single version defined"
 msgstr "Metadane archiwum muszą mieć zdefiniowaną jedną wersję"
 
 #: kicad/pcm/pcm_task_manager.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Pakiet z identyfikatorem %s jest już zainstalowany, musisz najpierw "
-"odinstalować ten pakiet."
+"Pakiet z identyfikatorem %s jest już zainstalowany. Czy chcesz zaktualizować "
+"go do wersji z zaznaczonego pliku?"
 
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid "Update package"
-msgstr "Zapisz pakiet"
+msgstr "Aktualizacja pakietu"
 
 #: kicad/pcm/pcm_task_manager.cpp:471
 #, c-format
@@ -21798,34 +21793,31 @@ msgstr "Widok przelotki z góry"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "Długość fali w próżni:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Długość fali w ośrodku:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Szybkość w ośrodku:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
-#, fuzzy
 msgid "er:"
-msgstr "Er:"
+msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr "Względna przenikalność elektryczna podłoża (stała dielektryczna)"
+msgstr "względna przenikalność (stała dielektryczna)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
-#, fuzzy
 msgid "relative permeability"
-msgstr "Względna przenikalność (mu) podłoża"
+msgstr "względna przenikalność"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21963,9 +21955,8 @@ msgid "High speed"
 msgstr "Wysoka prędkość"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
-msgstr "Długość falowodu"
+msgstr "Długość fali"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
@@ -22401,19 +22392,19 @@ msgstr "stóp"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "stóp/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "mil/h"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -28868,18 +28859,17 @@ msgid "Show pad clearance"
 msgstr "Pokaż prześwit pola lutowniczego"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Usuń footprinty nie mające dopowiadających symboli"
+msgstr "Podświetla footprinty gdy wybrano ich symbole"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Przypisuje footprint do wybranego symbolu"
+msgstr "Podświetla footprinty należące do wybranych symboli"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
+"Zapewnia, że footprinty sondowane krzyżowo są widoczne w bieżącym widoku"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -31628,9 +31618,8 @@ msgid "(nets %s and %s)"
 msgstr "(sieci %s oraz %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_width.cpp:501
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Sprawdzenie połączeń poszczególnych sieci..."
+msgstr "Sprawdzenie połączeń pod względem szerokości połączeń..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:87
 msgid "Checking footprint courtyard definitions..."
