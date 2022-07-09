@@ -105,6 +105,18 @@ int LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aN
     if( aNode1.m_Type != aNode2.m_Type )
         return 0;
 
+    // Recently used sorts at top
+    if( aNode1.m_Name.StartsWith( wxT( "-- " ) ) )
+        return 1;
+    else if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
+        return 0;
+
+    // Pinned nodes go next
+    if( aNode1.m_Pinned && !aNode2.m_Pinned )
+        return 1;
+    else if( aNode2.m_Pinned && !aNode1.m_Pinned )
+        return -1;
+
     if( aNode1.m_Parent != aNode2.m_Parent )
         return 0;
 

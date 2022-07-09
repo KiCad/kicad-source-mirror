@@ -214,12 +214,6 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
 
         m_tree.ResetScore();
 
-        for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.m_Children )
-        {
-            if( child->m_Pinned )
-                child->m_Score *= 2;
-        }
-
         wxStringTokenizer tokenizer( aSearch );
 
         while( tokenizer.HasMoreTokens() )
