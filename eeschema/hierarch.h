@@ -112,6 +112,8 @@ private:
     SCH_SHEET_PATH  m_list;
     SCH_EDIT_FRAME* m_frame;
     HIERARCHY_TREE* m_tree;
+
+    bool m_events_bound;
 };
 
 #endif // HIERARCH_H

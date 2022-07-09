@@ -350,7 +350,8 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::recacheName()
 {
-    m_cached_name = m_name.IsEmpty() ? "<NO NET>" : m_prefix + m_name + m_suffix;
+    m_cached_name =
+            m_name.IsEmpty() ? wxT( "<NO NET>" ) : wxString( m_prefix ) << m_name << m_suffix;
 
     bool prepend_path = true;
 
@@ -374,7 +375,7 @@ void SCH_CONNECTION::recacheName()
     }
 
     m_cached_name_with_path =
-            prepend_path ? m_sheet.PathHumanReadable() + m_cached_name : m_cached_name;
+            prepend_path ? m_sheet.PathHumanReadable() << m_cached_name : m_cached_name;
 }
 
 

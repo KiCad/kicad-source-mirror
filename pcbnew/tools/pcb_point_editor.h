@@ -162,9 +162,9 @@ private:
     ///< Change the edit method to an alternative method ( currently, arcs only )
     int changeEditMethod( const TOOL_EVENT& aEvent );
 
-    PCB_SELECTION_TOOL*                m_selectionTool;
-    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
-    std::shared_ptr<EDIT_POINTS>       m_editPoints;
+    PCB_SELECTION_TOOL*                        m_selectionTool;
+    mutable std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+    std::shared_ptr<EDIT_POINTS>               m_editPoints;
 
     EDIT_POINT*         m_editedPoint;
     EDIT_POINT*         m_hoveredPoint;

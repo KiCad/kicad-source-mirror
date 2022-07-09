@@ -297,16 +297,20 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
     if( !empty() && at( 0 )->GetScreen() )
         fileName = at( 0 )->GetScreen()->GetFileName();
 
-    wxFileName  fn = fileName;
-
     if( aUseShortRootName )
-        s = wxT( "/" );  // Use only the short name in netlists
+    {
+        s = wxT( "/" ); // Use only the short name in netlists
+    }
     else
+    {
+        wxFileName fn = fileName;
+
         s = fn.GetName() + wxT( "/" );
+    }
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
-        s = s + at( i )->GetFields()[ SHEETNAME ].GetShownText() + wxT( "/" );
+        s << at( i )->GetFields()[SHEETNAME].GetShownText() << wxT( "/" );
 
     return s;
 }

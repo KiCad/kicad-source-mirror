@@ -315,7 +315,7 @@ const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
     if( it != m_driver_name_cache.end() )
         return it->second;
 
-    m_driver_name_cache[aItem] = driverName( aItem );
+    m_driver_name_cache.emplace( aItem, driverName( aItem ) );
 
     return m_driver_name_cache.at( aItem );
 }
@@ -1029,6 +1029,7 @@ void CONNECTION_GRAPH::processSubGraphs()
                 [&suffix]( SCH_CONNECTION* aConn ) -> wxString
                 {
                     wxString newName;
+                    wxString suffixStr = std::to_wstring( suffix );
 
                     // For group buses with a prefix, we can add the suffix to the prefix.
                     // If they don't have a prefix, we force the creation of a prefix so that
@@ -1042,14 +1043,14 @@ void CONNECTION_GRAPH::processSubGraphs()
 
                         wxString oldName = aConn->Name().AfterFirst( '{' );
 
-                        newName = wxString::Format( "%s_%u{%s", prefix, suffix, oldName );
+                        newName << prefix << wxT( "_" ) << suffixStr << wxT( "{" ) << oldName;
 
                         aConn->ConfigureFromLabel( newName );
                     }
                     else
                     {
-                        newName = wxString::Format( "%s_%u", aConn->Name(), suffix );
-                        aConn->SetSuffix( wxString::Format( "_%u", suffix ) );
+                        newName << aConn->Name() << wxT( "_" ) << suffixStr;
+                        aConn->SetSuffix( wxString( wxT( "_" ) ) << suffixStr );
                     }
 
                     suffix++;
@@ -1724,8 +1725,14 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                     continue;
                 }
 
+                const KIID& last_parent_uuid = aParent->m_sheet.Last()->m_Uuid;
+
                 for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
                 {
+                    // If the last sheet UUIDs won't match, no need to check the full path
+                    if( pin->GetParent()->m_Uuid != last_parent_uuid )
+                        continue;
+
                     SCH_SHEET_PATH pin_path = path;
                     pin_path.push_back( pin->GetParent() );
 

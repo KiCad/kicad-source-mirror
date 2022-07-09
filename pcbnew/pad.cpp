@@ -194,10 +194,9 @@ LSET PAD::ApertureMask()
 
 bool PAD::IsFlipped() const
 {
-    if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
-        return true;
+    FOOTPRINT* parent = GetParent();
 
-    return false;
+    return ( parent && parent->GetLayer() == B_Cu );
 }
 
 
@@ -1437,7 +1436,7 @@ const BOX2I PAD::ViewBBox() const
 
 FOOTPRINT* PAD::GetParent() const
 {
-    return dynamic_cast<FOOTPRINT*>( m_parent );
+    return dyn_cast<FOOTPRINT*>( m_parent );
 }
 
 

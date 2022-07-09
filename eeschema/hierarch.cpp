@@ -91,7 +91,15 @@ HIERARCHY_NAVIG_PANEL::HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent ) : WX_PAN
 
     sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE, 0 );
 
+    m_events_bound = false;
+
     UpdateHierarchyTree();
+
+    // Enable selection events
+    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+
+    m_events_bound = true;
 }
 
 
@@ -127,6 +135,17 @@ void HIERARCHY_NAVIG_PANEL::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxT
 
 void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
 {
+    bool eventsWereBound = m_events_bound;
+
+    if( eventsWereBound )
+    {
+        // Disable selection events
+        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+
+        m_events_bound = false;
+    }
+
     std::function<void( const wxTreeItemId& )> selectSheet = [&]( const wxTreeItemId& id )
     {
         wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
@@ -148,6 +167,15 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchySelection()
     };
 
     selectSheet( m_tree->GetRootItem() );
+
+    if( eventsWereBound )
+    {
+        // Enable selection events
+        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+
+        m_events_bound = true;
+    }
 }
 
 
@@ -155,9 +183,16 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 {
     Freeze();
 
-    // Disable selection events
-    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+    bool eventsWereBound = m_events_bound;
+
+    if( eventsWereBound )
+    {
+        // Disable selection events
+        Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+
+        m_events_bound = false;
+    }
 
     m_list.clear();
     m_list.push_back( &m_frame->Schematic().Root() );
@@ -173,9 +208,14 @@ void HIERARCHY_NAVIG_PANEL::UpdateHierarchyTree()
 
     m_tree->ExpandAll();
 
-    // Enable selection events
-    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
-    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+    if( eventsWereBound )
+    {
+        // Enable selection events
+        Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+        Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_PANEL::onSelectSheetPath, this );
+
+        m_events_bound = true;
+    }
 
     Thaw();
 }
