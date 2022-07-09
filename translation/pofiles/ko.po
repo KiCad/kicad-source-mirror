@@ -10,15 +10,16 @@
 # hokim <teamgoodaloe@gmail.com>, 2021.
 # 강명구 <mg_@kakao.com>, 2021.
 # 서범기 <joonhoflow@naver.com>, 2021.
+# 박세훈 <helloworld4327@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2022-07-09 21:10+0000\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31962,9 +31963,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "솔더 페이스트 간격 비율 재정의"
 
 #: pcbnew/footprint.cpp:2660
-#, fuzzy
 msgid "Library ID"
-msgstr "<"
+msgstr "라이브러리 ID"
 
 #: pcbnew/footprint.h:232
 #, c-format
