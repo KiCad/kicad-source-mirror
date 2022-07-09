@@ -280,6 +280,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     if( hostConstraint.IsNull() )
         return false;
 
+    if( hostConstraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+    {
+        aConstraint->m_Value.SetMin( -1 );
+        aConstraint->m_RuleName = hostConstraint.GetName();
+        aConstraint->m_Type = aType;
+        return true;
+    }
+
     switch ( aType )
     {
         case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:

@@ -97,13 +97,13 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     {
         int holeClearance = aNode->GetHoleClearance( this, aOther );
 
-        if( holeA && holeA->Collide( shapeB, holeClearance + lineWidthB ) )
+        if( holeClearance >= 0 && holeA && holeA->Collide( shapeB, holeClearance + lineWidthB ) )
         {
             Mark( Marker() | MK_HOLE );
             return true;
         }
 
-        if( holeB && holeB->Collide( shapeA, holeClearance + lineWidthA ) )
+        if( holeB && holeClearance >= 0 && holeB->Collide( shapeA, holeClearance + lineWidthA ) )
         {
             aOther->Mark( aOther->Marker() | MK_HOLE );
             return true;
@@ -113,7 +113,7 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
         {
             int holeToHoleClearance = aNode->GetHoleToHoleClearance( this, aOther );
 
-            if( holeA->Collide( holeB, holeToHoleClearance ) )
+            if( holeToHoleClearance >= 0 && holeA->Collide( holeB, holeToHoleClearance ) )
             {
                 Mark( Marker() | MK_HOLE );
                 aOther->Mark( aOther->Marker() | MK_HOLE );
@@ -130,18 +130,27 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
 
     int clearance = aOverrideClearance >= 0 ? aOverrideClearance : aNode->GetClearance( this, aOther );
 
-    if( m_parent && m_parent->GetLayer() == Edge_Cuts )
+    if( clearance >= 0 )
     {
-        int      actual;
-        VECTOR2I pos;
+        if( m_parent && m_parent->GetLayer() == Edge_Cuts )
+        {
+            int      actual;
+            VECTOR2I pos;
 
-        return( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos )
-                    && !aNode->QueryEdgeExclusions( pos ) );
+            if( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos )
+                        && !aNode->QueryEdgeExclusions( pos ) )
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if( shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB ) )
+                return true;
+        }
     }
-    else
-    {
-        return shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB );
-    }
+
+    return false;
 }
 
 
