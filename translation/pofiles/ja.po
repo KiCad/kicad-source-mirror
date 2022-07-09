@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
 "PO-Revision-Date: 2022-07-09 21:10+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -19643,7 +19643,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "パッケージ '%s' の以前のバージョンを削除します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -19692,9 +19692,8 @@ msgstr ""
 "ジをアンインストールする必要があります。"
 
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid "Update package"
-msgstr "パッケージを保存"
+msgstr "パッケージを更新"
 
 #: kicad/pcm/pcm_task_manager.cpp:471
 #, c-format
@@ -21675,9 +21674,8 @@ msgid "Speed in medium:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
-#, fuzzy
 msgid "er:"
-msgstr "εr:"
+msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
 #, fuzzy
