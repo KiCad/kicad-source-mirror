@@ -1899,13 +1899,16 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     m_frame->StartNewUndo();
 
     for( SCH_LINE* line : lines )
-        m_frame->BreakSegment( line,  cursorPos );
+    {
+        m_frame->BreakSegment( line, cursorPos );
+
+        VECTOR2I v = line->GetEndPoint() - line->GetStartPoint();
+        v = v.Resize( v.EuclideanNorm() - 10 );
+        line->SetEndPoint( line->GetStartPoint() + v );
+    }
 
     if( !lines.empty() )
     {
-        if( m_frame->GetScreen()->IsExplicitJunctionNeeded( cursorPos ) )
-            m_frame->AddJunction( m_frame->GetScreen(), cursorPos, true, false );
-
         m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
