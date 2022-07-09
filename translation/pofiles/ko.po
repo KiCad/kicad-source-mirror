@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-04 20:18+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2022-07-09 21:11+0000\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -29814,9 +29814,8 @@ msgid "Thermal Relief Gap"
 msgstr "단열판 간격"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "<"
+msgstr "라이브러리 ID"
 
 #: pcbnew/footprint.h:219
 #, c-format
