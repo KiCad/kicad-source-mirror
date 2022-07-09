@@ -1083,7 +1083,7 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 }
 
 
-std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
+std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly ) const
 {
     std::vector<SHAPE*> effectiveShapes;
     int                 width = GetEffectiveWidth();
@@ -1147,6 +1147,9 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
             break;
 
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
+
+        if( aLineChainOnly )
+            l.SetClosed( false );
 
         l.Rotate( getParentOrientation() );
         l.Move( getParentPosition() );

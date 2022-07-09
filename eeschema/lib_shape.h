@@ -87,6 +87,17 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
+    /**
+     * Make a set of SHAPE objects representing the LIB_SHAPE.  Caller owns the objects.
+     *
+     * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
+     *                  shapes.
+     */
+    virtual std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const
+    {
+        return makeEffectiveShapes( aEdgeOnly, true );
+    }
+
     void Normalize();
 
     void MirrorHorizontal( const VECTOR2I& aCenter ) override;

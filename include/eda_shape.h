@@ -269,8 +269,10 @@ public:
      * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
      *                  shapes.
      */
-    // fixme: move to shape_compound
-    std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const;
+    virtual std::vector<SHAPE*> MakeEffectiveShapes( bool aEdgeOnly = false ) const
+    {
+        return makeEffectiveShapes( aEdgeOnly );
+    }
 
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
@@ -331,6 +333,17 @@ protected:
      */
     void endEdit( bool aClosed = true );
     void setEditState( int aState ) { m_editState = aState; }
+
+    /**
+     * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
+     *
+     * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill
+     *                  shapes.
+     * @param aLineChainOnly indicates SHAPE_POLY_SET is being abused slightly to represent a
+     *                       lineChain rather than a closed polygon
+     */
+    // fixme: move to shape_compound
+    std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false ) const;
 
 protected:
     bool                  m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd

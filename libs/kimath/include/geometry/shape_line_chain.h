@@ -291,6 +291,7 @@ public:
     int SegmentCount() const
     {
         int c = m_points.size() - 1;
+
         if( m_closed )
             c++;
 
