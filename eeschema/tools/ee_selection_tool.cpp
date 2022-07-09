@@ -56,6 +56,7 @@
 #include <tools/ee_grid_helper.h>
 #include <tools/ee_point_editor.h>
 #include <tools/sch_line_wire_bus_tool.h>
+#include <tools/sch_editor_control.h>
 #include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -571,7 +572,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            ClearSelection();
+            if( !GetSelection().Empty() )
+            {
+                ClearSelection();
+            }
+            else if( evt->FirstResponder() == this )
+            {
+                SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
+
+                if( editor )
+                    editor->ClearHighlight( *evt );
+            }
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
@@ -580,7 +591,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             ClearSelection();
         }
-        else if( evt->IsMotion() && !m_isSymbolEditor && m_frame->ToolStackIsEmpty() )
+        else if( evt->IsMotion() && !m_isSymbolEditor && evt->FirstResponder() == this )
         {
             // Update cursor and rollover item
             rolloverItem = niluuid;
