@@ -11,13 +11,14 @@
 # 강명구 <mg_@kakao.com>, 2021.
 # 서범기 <joonhoflow@naver.com>, 2021.
 # 박세훈 <helloworld4327@gmail.com>, 2022.
+# gurqja3810 <gurqja3810@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-09 21:10+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"PO-Revision-Date: 2022-07-11 09:15+0000\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -25,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -3240,7 +3241,7 @@ msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "익명으로 보고서를 제공하는 데 동의합니다"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
 #, fuzzy
@@ -3984,7 +3985,7 @@ msgstr "단축키"
 #: common/eda_base_frame.cpp:1000
 #, fuzzy
 msgid "Data Collection"
-msgstr "패드 연결"
+msgstr "데이터 수집"
 
 #: common/eda_base_frame.cpp:1012 common/tool/actions.cpp:586
 #: eeschema/symbol_editor/symbol_editor.cpp:85
@@ -4019,7 +4020,7 @@ msgstr "회로도 편집기"
 #: common/eda_base_frame.cpp:1023
 #, fuzzy
 msgid "Annotation Options"
-msgstr "주석"
+msgstr "주석 옵션"
 
 #: common/eda_base_frame.cpp:1025
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -5402,6 +5403,7 @@ msgid "Select Preferred Editor"
 msgstr "선호하는 편집기 선택"
 
 #: common/pgm_base.cpp:341
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5410,6 +5412,12 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad는 충돌 및 특별 이벤트 데이터를 개발자에게 익명으로 보고하여 사용자 "
+"기반 전반에서 중요한 버그를 보다 효과적으로 식별하고 개선 사항을 안내하는 "
+"기능을 프로파일링하는 데 도움을 줄 수 있습니다. \n"
+"자발적으로 참여하기로 선택한 경우, KiCad는 충돌이나 이벤트가 발생할 때 해당 "
+"보고서 전송을 자동으로 처리합니다. \n"
+"회로도 또는 PCB와 같은 설계 파일은 이 프로세스에서 공유되지 않습니다."
 
 #: common/pgm_base.cpp:348
 msgid "Data collection opt in request"
@@ -5697,9 +5705,8 @@ msgid "Save current document to another location"
 msgstr "현재 문서를 다른 위치에 저장"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "복사본 저장..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -6854,7 +6861,7 @@ msgstr "단축키 파일"
 #: cvpcb/auto_associate.cpp:108
 #, fuzzy, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "기본 검색 경로에서 %s 파일을 찾을 수 없습니다."
+msgstr "등가 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7261,7 +7268,7 @@ msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저
 #: cvpcb/tools/cvpcb_actions.cpp:74
 #, fuzzy
 msgid "Save to Schematic and File"
-msgstr "회로도로 저장"
+msgstr "Schematic 및 파일 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -8435,7 +8442,7 @@ msgstr "라이브러리 심볼 문제 확인 중..."
 #: eeschema/dialogs/dialog_erc.cpp:537
 #, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
+msgstr "그리드 핀과 와이어가 꺼져 있는지 확인하는 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:537
 msgid "errors"
@@ -8833,7 +8840,7 @@ msgstr "설정"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #, fuzzy
 msgid "Text color:"
-msgstr "네트 색상:"
+msgstr "텍스트 색상:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9132,9 +9139,8 @@ msgstr "Y 위치"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:316
 #: pcbnew/pcb_dimension.cpp:337 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:310
-#, fuzzy
 msgid "Font"
-msgstr "폰트:"
+msgstr "폰트"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9962,9 +9968,8 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "동기화된 핀 편집 모드"
+msgstr "동기화된 핀 편집 모드."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -17251,26 +17256,28 @@ msgid "Navigate Forward"
 msgstr "네비게이터"
 
 #: eeschema/tools/ee_actions.cpp:758
+#, fuzzy
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "시트 탐색 기록에서 뒤로 이동"
 
 #: eeschema/tools/ee_actions.cpp:764
 #, fuzzy
 msgid "Previous Sheet"
-msgstr "이전 레이어"
+msgstr "이전 시트"
 
 #: eeschema/tools/ee_actions.cpp:764
+#, fuzzy
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "번호로 이전 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:770
 #, fuzzy
 msgid "Next Sheet"
-msgstr "시트 이동"
+msgstr "다음 시트"
 
 #: eeschema/tools/ee_actions.cpp:770
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "번호로 다음 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:776
 msgid "Hierarchy Navigator"
@@ -17481,7 +17488,7 @@ msgstr "심볼은 다중 단위가 아닙니다"
 #: eeschema/tools/sch_edit_tool.cpp:445
 #, fuzzy
 msgid "Edit Main Fields"
-msgstr "편집 %s 필드"
+msgstr "기본 필드 편집"
 
 #: eeschema/tools/sch_edit_tool.cpp:466
 #, fuzzy
