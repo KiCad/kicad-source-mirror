@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-09 21:11+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"PO-Revision-Date: 2022-07-11 08:19+0000\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -6576,7 +6576,7 @@ msgstr "단축키 파일"
 #: cvpcb/auto_associate.cpp:108
 #, fuzzy, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "기본 검색 경로에서 %s 파일을 찾을 수 없습니다."
+msgstr "등가 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -6976,7 +6976,7 @@ msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저
 #: cvpcb/tools/cvpcb_actions.cpp:74
 #, fuzzy
 msgid "Save to Schematic and File"
-msgstr "회로도로 저장"
+msgstr "Schematic 및 파일 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -28801,7 +28801,7 @@ msgstr "배선 두께"
 
 #: pcbnew/drc/drc_engine.cpp:894
 msgid "annular width"
-msgstr "환형 폭"
+msgstr "랜드 폭"
 
 #: pcbnew/drc/drc_engine.cpp:895
 msgid "via diameter"
