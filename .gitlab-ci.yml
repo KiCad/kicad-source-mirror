@@ -43,3 +43,4 @@ include:
   #- local: '/.gitlab/Windows-CI.yml'
   - local: '/.gitlab/coverity.yml'
   - local: '/.gitlab/linux-metadata-validate.yml'
+  - local: '/.gitlab/doxygen.yml'

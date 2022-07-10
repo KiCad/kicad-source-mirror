@@ -1,0 +1,16 @@
+build_doxygen_docker:
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
+  script:
+    - docker build -t "${CI_REGISTRY_IMAGE}-doxygen:$CI_COMMIT_BRANCH" -f ./doxygen/doxygen.Dockerfile .
+    - docker push "${CI_REGISTRY_IMAGE}-doxygen:$CI_COMMIT_BRANCH"
+  only:
+    refs:
+      - schedules
+    variables:
+      - $SCHEDULED_JOB_NAME == "doxygen"
