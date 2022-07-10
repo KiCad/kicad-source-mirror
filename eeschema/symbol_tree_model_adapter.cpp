@@ -31,6 +31,7 @@
 #include <symbol_async_loader.h>
 #include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
+#include <string_utils.h>
 
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
@@ -167,3 +168,24 @@ wxString SYMBOL_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUni
 {
     return GenerateAliasInfo( m_libs, aLibId, aUnit );
 }
+
+
+void SYMBOL_TREE_MODEL_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                                          unsigned int aCol ) const
+{
+    if( IsFrozen() )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
+
+    LIB_TREE_NODE* node = ToNode( aItem );
+    wxASSERT( node );
+
+    if( aCol == 0 && node->m_Pinned )
+        aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
+    else
+        aVariant = UnescapeString( node->m_Name );
+}
+
+

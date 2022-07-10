@@ -132,8 +132,6 @@ void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
             entries.push_back( child->m_LibId.GetLibNickname() );
         }
     }
-
-
 }
 
 
