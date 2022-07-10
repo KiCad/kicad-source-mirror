@@ -181,42 +181,57 @@ DRAWING_TOOL::~DRAWING_TOOL()
 
 bool DRAWING_TOOL::Init()
 {
-    auto activeToolFunctor = [this]( const SELECTION& aSel )
-                             {
-                                 return m_mode != MODE::NONE;
-                             };
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
+
+                return !cfg->GetHighlightNetCodes().empty();
+            };
+
+    auto activeToolFunctor =
+            [this]( const SELECTION& aSel )
+            {
+                return m_mode != MODE::NONE;
+            };
 
     // some interactive drawing tools can undo the last point
-    auto canUndoPoint = [this]( const SELECTION& aSel )
-                        {
-                            return (   m_mode == MODE::ARC
-                                    || m_mode == MODE::ZONE
-                                    || m_mode == MODE::KEEPOUT
-                                    || m_mode == MODE::GRAPHIC_POLYGON );
-                        };
+    auto canUndoPoint =
+            [this]( const SELECTION& aSel )
+            {
+                return (   m_mode == MODE::ARC
+                        || m_mode == MODE::ZONE
+                        || m_mode == MODE::KEEPOUT
+                        || m_mode == MODE::GRAPHIC_POLYGON );
+            };
 
     // functor for tools that can automatically close the outline
-    auto canCloseOutline = [this]( const SELECTION& aSel )
-                           {
-                                return (   m_mode == MODE::ZONE
-                                        || m_mode == MODE::KEEPOUT
-                                        || m_mode == MODE::GRAPHIC_POLYGON );
-                           };
+    auto canCloseOutline =
+            [this]( const SELECTION& aSel )
+            {
+                 return (   m_mode == MODE::ZONE
+                         || m_mode == MODE::KEEPOUT
+                         || m_mode == MODE::GRAPHIC_POLYGON );
+            };
 
-    auto viaToolActive = [this]( const SELECTION& aSel )
-                         {
-                             return m_mode == MODE::VIA;
-                         };
+    auto viaToolActive =
+            [this]( const SELECTION& aSel )
+            {
+                return m_mode == MODE::VIA;
+            };
 
     auto& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive,       activeToolFunctor, 1 );
     ctxMenu.AddSeparator( 1 );
 
+    ctxMenu.AddItem( PCB_ACTIONS::clearHighlight,      haveHighlight, 2 );
+    ctxMenu.AddSeparator(                              haveHighlight, 2 );
+
     // tool-specific actions
-    ctxMenu.AddItem( PCB_ACTIONS::closeOutline,    canCloseOutline, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::closeOutline,        canCloseOutline, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,     canUndoPoint, 200 );
 
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, SELECTION_CONDITIONS::ShowAlways, 250 );
     ctxMenu.AddSeparator( 500 );
@@ -224,7 +239,7 @@ bool DRAWING_TOOL::Init()
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
     viaSizeMenu->SetTool( this );
     m_menu.AddSubMenu( viaSizeMenu );
-    ctxMenu.AddMenu( viaSizeMenu.get(),            viaToolActive, 500 );
+    ctxMenu.AddMenu( viaSizeMenu.get(),                viaToolActive, 500 );
 
     ctxMenu.AddSeparator( 500 );
 

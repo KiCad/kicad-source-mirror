@@ -178,6 +178,14 @@ bool SCH_EDIT_TOOL::Init()
 
     auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
 
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+                return editFrame && editFrame->GetHighlightedConnection() != nullptr;
+            };
+
     auto anyTextTool =
             [this]( const SELECTION& aSel )
             {
@@ -394,8 +402,11 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                            sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( EE_ACTIONS::clearHighlight,   haveHighlight && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                          haveHighlight && EE_CONDITIONS::Idle, 1 );
+
+    drawMenu.AddItem( EE_ACTIONS::enterSheet,       sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                          sheetSelection && EE_CONDITIONS::Idle, 1 );
 
     drawMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
@@ -404,7 +415,7 @@ bool SCH_EDIT_TOOL::Init()
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
 
-    CONDITIONAL_MENU* editDrawItemSubMenu = new CONDITIONAL_MENU(drawingTools);
+    CONDITIONAL_MENU* editDrawItemSubMenu = new CONDITIONAL_MENU( drawingTools );
     editDrawItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
     editDrawItemSubMenu->SetIcon( BITMAPS::right );
     drawMenu.AddMenu( editDrawItemSubMenu, E_C::SingleSymbol, 200 );
@@ -413,9 +424,9 @@ bool SCH_EDIT_TOOL::Init()
     editDrawItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     editDrawItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,               E_C::SingleDeMorganSymbol, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,              autoplaceCondition, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
@@ -441,7 +452,7 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
 
-    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU(moveTool);
+    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU( moveTool );
     editSelItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
     editSelItemSubMenu->SetIcon( BITMAPS::right );
     selToolMenu.AddMenu( editSelItemSubMenu, E_C::SingleSymbol, 200 );
@@ -450,8 +461,8 @@ bool SCH_EDIT_TOOL::Init()
     editSelItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     editSelItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,          autoplaceCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,           E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
@@ -462,16 +473,17 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
 
-    CONDITIONAL_MENU* convertToSelSubMenu = new CONDITIONAL_MENU(m_selectionTool);
-    convertToSelSubMenu->SetTitle( _( "Change To" ) );
-    convertToSelSubMenu->SetIcon( BITMAPS::right );
-    selToolMenu.AddMenu( convertToSelSubMenu, toChangeCondition, 200 );
+    CONDITIONAL_MENU* convertToSubMenu = new CONDITIONAL_MENU( m_selectionTool );
+    convertToSubMenu->SetTitle( _( "Change To" ) );
+    convertToSubMenu->SetIcon( BITMAPS::right );
+    selToolMenu.AddMenu( convertToSubMenu,             toChangeCondition, 200 );
 
-    convertToSelSubMenu->AddItem( EE_ACTIONS::toLabel,  toLabelCondition, 200 );
-    convertToSelSubMenu->AddItem( EE_ACTIONS::toCLabel, toCLabelCondition, 200 );
-    convertToSelSubMenu->AddItem( EE_ACTIONS::toHLabel, toHLabelCondition, 200 );
-    convertToSelSubMenu->AddItem( EE_ACTIONS::toGLabel, toGLabelCondition, 200 );
-    convertToSelSubMenu->AddItem( EE_ACTIONS::toText,   toTextCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toLabel,    toLabelCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toCLabel,   toCLabelCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toHLabel,   toHLabelCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toGLabel,   toGLabelCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toText,     toTextCondition, 200 );
+
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
     selToolMenu.AddSeparator( 300 );

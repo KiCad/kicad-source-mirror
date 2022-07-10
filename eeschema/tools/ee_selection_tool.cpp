@@ -206,7 +206,15 @@ bool EE_SELECTION_TOOL::Init()
                         && editFrame->GetCurrentSheet().Last() != &editFrame->Schematic().Root();
             };
 
-    auto haveSymbolCondition =
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+                return editFrame && editFrame->GetHighlightedConnection() != nullptr;
+            };
+
+    auto haveSymbol =
             [&]( const SELECTION& sel )
             {
                 return m_isSymbolEditor &&
@@ -215,9 +223,12 @@ bool EE_SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
-    menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
-    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 1 );
-    menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
+    menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
+    menu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
+
+    menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 2 );
 
     menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
@@ -243,10 +254,8 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::editPageNumber,     schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );
-    menu.AddItem( EE_ACTIONS::symbolProperties,
-                  haveSymbolCondition && EE_CONDITIONS::Empty, 400 );
-    menu.AddItem( EE_ACTIONS::pinTable,
-                  haveSymbolCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::symbolProperties,   haveSymbol && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::pinTable,           haveSymbol && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
@@ -576,7 +585,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 ClearSelection();
             }
-            else if( evt->FirstResponder() == this )
+            else if( evt->FirstResponder() == this && evt->GetCommandId() != (int) ID_SEL_TOOL )
             {
                 SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
 

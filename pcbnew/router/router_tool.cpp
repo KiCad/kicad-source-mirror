@@ -43,6 +43,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_algo.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <painter.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_menu.h>
@@ -445,15 +446,25 @@ bool ROUTER_TOOL::Init()
     m_diffPairMenu->SetTool( this );
     m_menu.AddSubMenu( m_diffPairMenu );
 
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
+
+                return !cfg->GetHighlightNetCodes().empty();
+            };
+
     auto notRoutingCond =
             [this]( const SELECTION& )
             {
                 return !m_router->RoutingInProgress();
             };
 
-    menu.AddItem( ACTIONS::cancelInteractive,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACTIONS::cancelInteractive,         SELECTION_CONDITIONS::ShowAlways, 1 );
+    menu.AddSeparator( 1 );
 
-    menu.AddSeparator();
+    menu.AddItem( PCB_ACTIONS::clearHighlight,        haveHighlight, 2 );
+    menu.AddSeparator(                                haveHighlight, 2 );
 
     menu.AddItem( PCB_ACTIONS::routeSingleTrack,      notRoutingCond );
     menu.AddItem( PCB_ACTIONS::routeDiffPair,         notRoutingCond );

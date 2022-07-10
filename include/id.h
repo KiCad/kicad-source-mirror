@@ -71,9 +71,7 @@
 
 enum main_id
 {
-    ID_RUN_PCB                  = wxID_HIGHEST,
-
-    ID_APPEND_PROJECT,
+    ID_APPEND_PROJECT         = wxID_HIGHEST,
     ID_LOAD_FILE,
     ID_NEW_BOARD,
     ID_SAVE_BOARD,
@@ -88,11 +86,7 @@ enum main_id
     ID_FILE_LIST_EMPTY,
     ID_FILE_LIST_CLEAR,
 
-    ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-    ID_PREFERENCES_CONFIGURE_PATHS,
     ID_PREFERENCES_RESET_PANEL,
-    ID_EDIT_SYMBOL_LIBRARY_TABLE,
-    ID_EDIT_FOOTPRINT_LIBRARY_TABLE,
 
     ID_GEN_PLOT,
     ID_GEN_PLOT_PS,
@@ -102,17 +96,13 @@ enum main_id
     ID_GEN_PLOT_DXF,
     ID_GEN_PLOT_PDF,
 
-    ID_GEN_EXPORT_FILE,
-    ID_GEN_IMPORT_FILE,
-
     // id for toolbars
     ID_H_TOOLBAR,
     ID_V_TOOLBAR,
     ID_OPT_TOOLBAR,
     ID_AUX_TOOLBAR,
 
-    ID_EDIT_HOTKEY,
-    ID_NO_TOOL_SELECTED,
+    ID_SEL_TOOL,
 
     ID_LANGUAGE_CHOICE,
     ID_LANGUAGE_DANISH,
@@ -152,17 +142,12 @@ enum main_id
     ID_LANGUAGE_UKRANIAN,
     ID_LANGUAGE_CHOICE_END,
 
-    // Popup Menu (mouse Right button) (id consecutifs)
-
     ID_ON_ZOOM_SELECT,
-    ID_POPUP_ZOOM_START_RANGE,       // first zoom id
-    ID_POPUP_CANCEL,
-    ID_POPUP_ZOOM_IN,
-    ID_POPUP_ZOOM_OUT,
-    ID_POPUP_ZOOM_SELECT,
-    ID_POPUP_ZOOM_CENTER,
-    ID_POPUP_ZOOM_PAGE,
-    ID_POPUP_ZOOM_REDRAW,
+
+    ID_ON_GRID_SELECT,
+    ID_GRID_SETTINGS,
+
+    // Popup Menu (mouse Right button) (id consecutifs)
 
     /* Reserve IDs for popup menu zoom levels.  If you need more
      * levels of zoom, change ID_POPUP_ZOOM_LEVEL_END.  Note that more
@@ -175,19 +160,6 @@ enum main_id
 
     ID_POPUP_GRID_START,
     ID_POPUP_GRID_END = ID_POPUP_ZOOM_LEVEL_START + 99,
-
-    ID_ON_GRID_SELECT,
-    ID_GRID_SETTINGS,
-
-    ID_ZOOM_BEGIN,
-    ID_VIEWER_ZOOM_IN = ID_ZOOM_BEGIN,
-    ID_VIEWER_ZOOM_OUT,
-    ID_VIEWER_ZOOM_PAGE,
-    ID_VIEWER_ZOOM_REDRAW,
-    // zoom commands for non center zooming
-    ID_OFFCENTER_ZOOM_IN,
-    ID_OFFCENTER_ZOOM_OUT,
-    ID_ZOOM_END,
 
     // KiFace server for standalone operation
     ID_EDA_SOCKET_EVENT_SERV,

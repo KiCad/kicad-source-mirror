@@ -202,41 +202,52 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     auto busSelection = EE_CONDITIONS::MoreThan( 0 )
                             && EE_CONDITIONS::OnlyType( SCH_ITEM_LOCATE_BUS_T );
 
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+                return editFrame && editFrame->GetHighlightedConnection() != nullptr;
+            };
+
     auto& ctxMenu = m_menu.GetMenu();
 
     // Build the tool menu
     //
-    ctxMenu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 2 );
+    ctxMenu.AddItem( EE_ACTIONS::clearHighlight,       haveHighlight && EE_CONDITIONS::Idle, 1 );
+    ctxMenu.AddSeparator(                              haveHighlight && EE_CONDITIONS::Idle, 1 );
+
+    ctxMenu.AddItem( EE_ACTIONS::leaveSheet,           belowRootSheetCondition, 2 );
 
     ctxMenu.AddSeparator( 10 );
-    ctxMenu.AddItem( EE_ACTIONS::drawWire,           wireOrBusTool && EE_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::drawBus,            wireOrBusTool && EE_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::drawLines,          lineTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::drawWire,             wireOrBusTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::drawBus,              wireOrBusTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::drawLines,            lineTool && EE_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddItem( EE_ACTIONS::undoLastSegment,      EE_CONDITIONS::ShowAlways, 10 );
     ctxMenu.AddItem( EE_ACTIONS::switchSegmentPosture, EE_CONDITIONS::ShowAlways, 10 );
 
-    ctxMenu.AddItem( EE_ACTIONS::finishWire,         IsDrawingWire, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::finishBus,          IsDrawingBus, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::finishLine,         IsDrawingLine, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishWire,           IsDrawingWire, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishBus,            IsDrawingBus, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishLine,           IsDrawingLine, 10 );
 
     std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     busUnfoldMenu->SetTool( this );
     m_menu.AddSubMenu( busUnfoldMenu );
-    ctxMenu.AddMenu( busUnfoldMenu.get(),            EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddMenu( busUnfoldMenu.get(),              EE_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddSeparator( 100 );
-    ctxMenu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::placeClassLabel,    wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::placeHierLabel,     wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::breakWire,          wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::breakBus,           wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeJunction,        wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeLabel,           wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeClassLabel,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeGlobalLabel,     wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeHierLabel,       wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakWire,            wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakBus,             wireOrBusTool && EE_CONDITIONS::Idle, 100 );
 
     ctxMenu.AddSeparator( 200 );
-    ctxMenu.AddItem( EE_ACTIONS::selectNode,         wireOrBusTool && EE_CONDITIONS::Idle, 200 );
-    ctxMenu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectNode,           wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectConnection,     wireOrBusTool && EE_CONDITIONS::Idle, 200 );
 
     // Add bus unfolding to the selection tool
     //
@@ -245,7 +256,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     selBusUnfoldMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( selBusUnfoldMenu );
-    selToolMenu.AddMenu( selBusUnfoldMenu.get(),     busSelection && EE_CONDITIONS::Idle, 100 );
+    selToolMenu.AddMenu( selBusUnfoldMenu.get(),       busSelection && EE_CONDITIONS::Idle, 100 );
 
     return true;
 }

@@ -159,6 +159,14 @@ bool PCB_SELECTION_TOOL::Init()
                 return !frame->ToolStackIsEmpty();
             };
 
+    auto haveHighlight =
+            [&]( const SELECTION& sel )
+            {
+                KIGFX::RENDER_SETTINGS* cfg = m_toolMgr->GetView()->GetPainter()->GetSettings();
+
+                return !cfg->GetHighlightNetCodes().empty();
+            };
+
     auto inGroupCondition =
             [this] ( const SELECTION& )
             {
@@ -172,8 +180,10 @@ bool PCB_SELECTION_TOOL::Init()
     }
 
     // "Cancel" goes at the top of the context menu when a tool is active
-    menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    menu.AddItem( PCB_ACTIONS::groupLeave,    inGroupCondition,    1 );
+    menu.AddItem( ACTIONS::cancelInteractive,  activeToolCondition, 1 );
+    menu.AddItem( PCB_ACTIONS::groupLeave,     inGroupCondition,    1 );
+    menu.AddItem( PCB_ACTIONS::clearHighlight, haveHighlight,       1 );
+
     menu.AddSeparator( 1 );
 
     if( frame )
