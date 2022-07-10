@@ -32,6 +32,7 @@
 #include <listboxes.h>
 #include <cvpcb_id.h>
 #include <wx/log.h>
+#include "lib_tree_model_adapter.h"
 
 
 /***************************************/
@@ -62,6 +63,7 @@ void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
     {
         if( linecount >= count )
             linecount = count - 1;
+
         m_libraryList[linecount] = text;
         UpdateWidth( linecount );
     }
@@ -70,24 +72,27 @@ void LIBRARY_LISTBOX::SetString( unsigned linecount, const wxString& text )
 
 wxString LIBRARY_LISTBOX::GetSelectedLibrary()
 {
-    wxString libraryName;
+    wxString libName;
     int      ii = GetFirstSelected();
 
     if( ii >= 0 )
     {
-        libraryName = m_libraryList[ii];
+        libName = m_libraryList[ii];
+        libName.Trim( false );
+
+        if( libName.StartsWith( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() ) )
+            libName = libName.substr( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol().length() );
     }
 
-    return libraryName;
+    return libName;
 }
 
 
 void LIBRARY_LISTBOX::AppendLine( const wxString& text )
 {
-    m_libraryList.Add( text );
+    m_libraryList.Add( wxT( " " ) + text );
     int lines = m_libraryList.Count();
     SetItemCount( lines );
-    UpdateWidth( lines - 1 );
 }
 
 
@@ -115,17 +120,8 @@ void LIBRARY_LISTBOX::SetSelection( int index, bool State )
 }
 
 
-void LIBRARY_LISTBOX::SetLibraryList( const wxArrayString& aList )
+void LIBRARY_LISTBOX::Finish()
 {
-    int oldSelection = GetSelection();
-
-    m_libraryList = aList;
-
-    SetItemCount( m_libraryList.GetCount() );
-
-    if(  GetCount() == 0 || oldSelection < 0 || oldSelection >= GetCount() )
-        SetSelection( 0, true );
-
     if( m_libraryList.Count() )
     {
         RefreshItems( 0L, m_libraryList.Count()-1 );
@@ -201,8 +197,8 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
 void LIBRARY_LISTBOX::OnSelectLibrary( wxListEvent& event )
 {
     // Apply the filter
-    GetParent()->SetFootprintFilter(
-            FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY, CVPCB_MAINFRAME::FILTER_ENABLE );
+    GetParent()->SetFootprintFilter( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY,
+                                     CVPCB_MAINFRAME::FILTER_ENABLE );
 
     SetFocus();
     GetParent()->OnSelectComponent( event );

@@ -30,8 +30,10 @@
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
+#include <project/project_file.h>
 #include <macros.h>
 #include <netlist_reader/netlist_reader.h>
+#include <lib_tree_model_adapter.h>
 #include <numeric>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -93,7 +95,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Create list of available footprints and symbols of the schematic
     BuildSymbolsListBox();
     BuildFootprintsListBox();
-    BuildLibrariesListBox();
+
+    m_librariesListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST );
+    m_librariesListBox->SetFont( KIUI::GetMonospacedUIFont() );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -957,15 +961,20 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
 
 void CVPCB_MAINFRAME::BuildLibrariesListBox()
 {
-    wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
+    FP_LIB_TABLE*      tbl = Prj().PcbFootprintLibs();
+    std::set<wxString> pinnedMatches;
+    std::set<wxString> otherMatches;
 
-    if( m_librariesListBox == nullptr )
-    {
-        m_librariesListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST );
-        m_librariesListBox->SetFont( KIUI::GetMonospacedUIFont() );
-    }
+    auto process =
+            [&]( const wxString& aNickname )
+            {
+                if( alg::contains( project.m_PinnedFootprintLibs, aNickname ) )
+                    pinnedMatches.insert( aNickname );
+                else
+                    otherMatches.insert( aNickname );
+            };
 
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
 
     if( tbl )
     {
@@ -974,10 +983,16 @@ void CVPCB_MAINFRAME::BuildLibrariesListBox()
         std::vector< wxString > libNickNames = tbl->GetLogicalLibs();
 
         for( const wxString& libNickName : libNickNames )
-            libNames.Add( libNickName );
-
-        m_librariesListBox->SetLibraryList( libNames );
+            process( libNickName );
     }
+
+    for( const wxString& nickname : pinnedMatches )
+        m_librariesListBox->AppendLine( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+
+    for( const wxString& nickname : otherMatches )
+        m_librariesListBox->AppendLine( nickname );
+
+    m_librariesListBox->Finish();
 }
 
 

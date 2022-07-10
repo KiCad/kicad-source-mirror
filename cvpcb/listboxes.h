@@ -149,7 +149,7 @@ public:
     void     SetSelection( int index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
-    void     SetLibraryList( const wxArrayString& aList );
+    void     Finish();
 
     wxString GetSelectedLibrary();
     wxString OnGetItemText( long item, long column ) const override;
