@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
 "PO-Revision-Date: 2022-07-11 09:15+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -31036,7 +31036,7 @@ msgstr "규칙 실패"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Copper sliver"
-msgstr "구리 조각"
+msgstr "구리 슬리버"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
@@ -32994,7 +32994,7 @@ msgstr "벡터 그래픽 파일 불러오기"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "메모리가 부족하여 DXF 파일을 로드할 수 없습니다. 파일이 너무 클 수 있습니다."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
