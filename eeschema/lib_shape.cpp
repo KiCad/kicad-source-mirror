@@ -276,7 +276,10 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I c;
-    COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D  color = GetStroke().GetColor();
+
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;
