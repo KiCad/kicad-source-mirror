@@ -40,13 +40,13 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
 
 	m_rbScope_Schematic = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Entire schematic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	sbSizer3->Add( m_rbScope_Schematic, 0, wxALL, 5 );
+	sbSizer3->Add( m_rbScope_Schematic, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_rbScope_Sheet = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Current sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer3->Add( m_rbScope_Sheet, 0, wxALL, 5 );
+	sbSizer3->Add( m_rbScope_Sheet, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_rbScope_Selection = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer3->Add( m_rbScope_Selection, 0, wxALL, 5 );
+	sbSizer3->Add( m_rbScope_Selection, 0, wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
 	m_checkRecursive = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Recurse into subsheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_checkRecursive, 0, wxALL, 5 );
@@ -64,8 +64,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerXpos->Add( m_rbSortBy_X_Position, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	bSizerXpos->Add( 0, 0, 1, 0, 5 );
-
 	annotate_down_right_bitmap = new wxStaticBitmap( sbSizer1->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerXpos->Add( annotate_down_right_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -81,8 +79,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	m_rbSortBy_Y_Position = new wxRadioButton( sbSizer1->GetStaticBox(), ID_SORT_BY_Y_POSITION, _("Sort symbols by &Y position"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
-
-	bSizerYpos->Add( 0, 0, 1, 0, 5 );
 
 	annotate_right_down_bitmap = new wxStaticBitmap( sbSizer1->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( annotate_right_down_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
@@ -114,7 +110,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	gbSizer1->Add( m_textNumberAfter, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 2 );
 
 	m_rbSheetX100 = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_SHEET_X_100, _("First free after sheet number X 100"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_rbSheetX100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 4 );
+	gbSizer1->Add( m_rbSheetX100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 2 );
 
 	m_rbSheetX1000 = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_SHEET_X_1000, _("First free after sheet number X 1000"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_rbSheetX1000, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxTOP, 2 );
