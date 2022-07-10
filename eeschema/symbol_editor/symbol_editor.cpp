@@ -35,6 +35,7 @@
 #include <symbol_lib_table.h>
 #include <symbol_library_manager.h>
 #include <symbol_tree_pane.h>
+#include <project/project_file.h>
 #include <widgets/lib_tree.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
@@ -118,22 +119,40 @@ wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
     std::vector< wxArrayString > itemsToDisplay;
     std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
 
-    // Conversion from wxArrayString to vector of ArrayString
     for( const wxString& name : libNicknames )
     {
-        wxArrayString item;
-
         // Exclude read only libraries.
         if( m_libMgr->IsLibraryReadOnly( name ) )
             continue;
 
-        item.Add( name );
-        itemsToDisplay.push_back( item );
+        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name ) )
+        {
+            wxArrayString item;
+
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + name );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    for( const wxString& name : libNicknames )
+    {
+        // Exclude read only libraries.
+        if( m_libMgr->IsLibraryReadOnly( name ) )
+            continue;
+
+        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name ) )
+        {
+            wxArrayString item;
+
+            item.Add( name );
+            itemsToDisplay.push_back( item );
+        }
     }
 
     wxString oldLibName = prj.GetRString( PROJECT::SCH_LIB_SELECT );
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName );
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName,
+                         false );
 
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
@@ -559,6 +578,7 @@ static int ID_MAKE_NEW_LIBRARY = 4173;
 EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolName,
                                                        const wxString& aLibraryPreselect )
 {
+    PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
     SYMBOL_LIB_TABLE*          tbl = Prj().SchSymbolLibTable();
     std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
     wxArrayString              headers;
@@ -569,14 +589,28 @@ EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolNa
 
     for( const wxString& nickname : libNicknames )
     {
-        wxArrayString item;
-        item.Add( nickname );
-        item.Add( tbl->GetDescription( nickname ) );
-        itemsToDisplay.push_back( item );
+        if( alg::contains( project.m_PinnedSymbolLibs, nickname ) )
+        {
+            wxArrayString item;
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    for( const wxString& nickname : libNicknames )
+    {
+        if( !alg::contains( project.m_PinnedSymbolLibs, nickname ) )
+        {
+            wxArrayString item;
+            item.Add( nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
     }
 
     EDA_LIST_DIALOG* dlg = new EDA_LIST_DIALOG( this, _( "Save Symbol As" ), headers,
-                                                itemsToDisplay, aLibraryPreselect );
+                                                itemsToDisplay, aLibraryPreselect, false );
 
     dlg->SetListLabel( _( "Save in library:" ) );
     dlg->SetOKLabel( _( "Save" ) );

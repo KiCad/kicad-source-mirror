@@ -46,6 +46,7 @@
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
+#include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
 #include "tools/pad_tool.h"
@@ -1015,6 +1016,7 @@ static int ID_MAKE_NEW_LIBRARY = 4173;
 EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootprintName,
                                                           const wxString& aLibraryPreselect )
 {
+    PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
     FP_LIB_TABLE*              tbl = Prj().PcbFootprintLibs();
     std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
     wxArrayString              headers;
@@ -1025,14 +1027,30 @@ EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootp
 
     for( const wxString& nickname : nicknames )
     {
-        wxArrayString item;
-        item.Add( nickname );
-        item.Add( tbl->GetDescription( nickname ) );
-        itemsToDisplay.push_back( item );
+        if( alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        {
+            wxArrayString item;
+
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    for( const wxString& nickname : nicknames )
+    {
+        if( !alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        {
+            wxArrayString item;
+
+            item.Add( nickname );
+            item.Add( tbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
     }
 
     EDA_LIST_DIALOG* dlg = new EDA_LIST_DIALOG( this, _( "Save Footprint As" ), headers,
-                                                itemsToDisplay, aLibraryPreselect );
+                                                itemsToDisplay, aLibraryPreselect, false );
 
     dlg->SetListLabel( _( "Save in library:" ) );
     dlg->SetOKLabel( _( "Save" ) );
@@ -1322,22 +1340,37 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
     headers.Add( _( "Nickname" ) );
     headers.Add( _( "Description" ) );
 
-    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
-
+    PROJECT_FILE&                project = Kiway().Prj().GetProjectFile();
+    FP_LIB_TABLE*                fptbl = Prj().PcbFootprintLibs();
     std::vector< wxArrayString > itemsToDisplay;
     std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();
 
     for( const wxString& nickname : nicknames )
     {
-        wxArrayString item;
+        if( alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        {
+            wxArrayString item;
 
-        item.Add( nickname );
-        item.Add( fptbl->GetDescription( nickname ) );
-
-        itemsToDisplay.push_back( item );
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+            item.Add( fptbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
     }
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, aNicknameExisting );
+    for( const wxString& nickname : nicknames )
+    {
+        if( !alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        {
+            wxArrayString item;
+
+            item.Add( nickname );
+            item.Add( fptbl->GetDescription( nickname ) );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, aNicknameExisting,
+                         false );
 
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;

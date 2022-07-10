@@ -27,7 +27,7 @@
 #include <eda_draw_frame.h>
 #include <string_utils.h>
 #include <macros.h>
-
+#include "lib_tree_model_adapter.h"
 
 // wxWidgets spends *far* too long calculating column widths (most of it, believe it or
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
@@ -39,11 +39,11 @@ static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
-                                  const wxString& aPreselectText ) :
-    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
+                                  const wxString& aPreselectText, bool aSortList ) :
+    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
+    m_itemsList( aItemList ),
+    m_sortList( aSortList )
 {
-    m_itemsList = aItemList;
-
     m_filterBox->SetHint( _( "Filter" ) );
 
     initDialog( aItemHeaders, aPreselectText );
@@ -149,7 +149,8 @@ wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
     wxCHECK_MSG( unsigned( aColumn ) < unsigned( m_listBox->GetColumnCount() ), wxEmptyString,
                  wxT( "Invalid list control column." ) );
 
-    long    item = m_listBox->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    long     item = m_listBox->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    wxString text;
 
     if( item >= 0 )     // if something is selected.
     {
@@ -160,10 +161,13 @@ wxString EDA_LIST_DIALOG::GetTextSelection( int aColumn )
         info.m_col = aColumn;
 
         if( m_listBox->GetItem( info ) )
-            return info.m_text;
+            text = info.m_text;
+
+        if( text.StartsWith( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() ) )
+            text = text.substr( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol().length() );
     }
 
-    return wxEmptyString;
+    return text;
 }
 
 
@@ -233,5 +237,6 @@ static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
 
 void EDA_LIST_DIALOG::sortList()
 {
-    m_listBox->SortItems( myCompareFunction, 0 );
+    if( m_sortList )
+        m_listBox->SortItems( myCompareFunction, 0 );
 }
