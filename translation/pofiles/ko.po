@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
 "PO-Revision-Date: 2022-07-11 08:19+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -30266,7 +30266,7 @@ msgstr "벡터 그래픽 파일 불러오기"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "메모리가 부족하여 DXF 파일을 로드할 수 없습니다. 파일이 너무 클 수 있습니다."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
