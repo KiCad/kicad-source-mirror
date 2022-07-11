@@ -770,7 +770,8 @@ int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 
 void EE_SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
 {
-    m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
+    if( m_selection.GetSize() < 2 )
+        m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
 }
 
 
