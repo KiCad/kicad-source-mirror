@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:34 as build-doxygen-env
+FROM registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:36 as build-doxygen-env
 USER root
 
 WORKDIR /src

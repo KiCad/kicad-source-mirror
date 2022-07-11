@@ -6,7 +6,7 @@
 # Don't tag until we have separate CI for MRs
 #  tags:
 #    - kicad-fedora
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:34
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:36
   extends: .only_code
   interruptible: false
   cache:
