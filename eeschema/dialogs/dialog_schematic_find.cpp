@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,6 +196,14 @@ void DIALOG_SCH_FIND::OnReplaceWithEnter( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
 {
+    updateFlags();
+    m_findDirty = true;
+}
+
+
+void DIALOG_SCH_FIND::updateFlags()
+{
+    // Rebuild the search flags in m_findReplaceData from dialog settings
     int flags = 0;
 
     if( m_radioForward->GetValue() )
@@ -223,12 +231,13 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
         flags |= FR_REPLACE_REFERENCES;
 
     m_findReplaceData->SetFlags( flags );
-    m_findDirty = true;
 }
 
 
 void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
 {
+    updateFlags();      // Ensure search flags are up to date
+
     int index = m_comboFind->FindString( m_comboFind->GetValue(), true );
 
     if( index == wxNOT_FOUND )
@@ -250,6 +259,8 @@ void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
 {
+    updateFlags();      // Ensure search flags are up to date
+
     int index = m_comboReplace->FindString( m_comboReplace->GetValue(), true );
 
     if( index == wxNOT_FOUND )
