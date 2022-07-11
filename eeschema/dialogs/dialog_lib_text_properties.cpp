@@ -32,7 +32,7 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <scintilla_tricks.h>
-
+#include "confirm.h"
 
 DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                         LIB_TEXT* aText ) :
@@ -211,9 +211,15 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_graphicText )
     {
         if( m_StyledTextCtrl->GetValue().IsEmpty() )
-            m_graphicText->SetText( wxT( "[null]" ) );
+        {
+            // Other text items do not have defined extents, and so will disappear if empty
+            DisplayError( this, _( "Text can not be empty." ) );
+            return false;
+        }
         else
+        {
             m_graphicText->SetText( m_StyledTextCtrl->GetValue() );
+        }
 
         if( m_fontCtrl->HaveFontSelection() )
         {
