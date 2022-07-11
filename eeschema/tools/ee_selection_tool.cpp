@@ -1674,16 +1674,28 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 
         expandSelection = false;
 
-        int         limit = std::min( 9, aCollector->GetCount() );
+        int         limit = std::min( 100, aCollector->GetCount() );
         ACTION_MENU menu( true );
 
         for( int i = 0; i < limit; ++i )
         {
-            wxString  text;
             EDA_ITEM* item = ( *aCollector )[i];
-            text           = item->GetSelectMenuText( m_frame->GetUserUnits() );
+            wxString  text = item->GetSelectMenuText( m_frame->GetUserUnits() );
+            wxString  menuText;
 
-            wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
+            if( i < 9 )
+            {
+#ifdef __WXMAC__
+                menuText = wxString::Format( "%s\t%d", text, i + 1 );
+#else
+                menuText = wxString::Format( "&%d  %s\t%d", i + 1, text, i + 1 );
+#endif
+            }
+            else
+            {
+                menuText = text;
+            }
+
             menu.Add( menuText, i + 1, item->GetMenuImage() );
         }
 
