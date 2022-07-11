@@ -133,6 +133,9 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
         EDA_RECT          bbox = item->GetBoundingBox();
         LSET              layers = item->GetLayerSet();
 
+        if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
+            layers = LSET::PhysicalLayersMask();
+
         for( ZONE* zone : board->Zones() )
         {
             if( zone->GetIsRuleArea() )
@@ -169,8 +172,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         return;
 
     if( m_isBoardEditor
-      && !( aCommitFlags & ZONE_FILL_OP )
-      && ( frame && frame->GetPcbNewSettings()->m_AutoRefillZones ) )
+            && !( aCommitFlags & ZONE_FILL_OP )
+            && ( frame && frame->GetPcbNewSettings()->m_AutoRefillZones ) )
     {
         autofillZones = true;
 
