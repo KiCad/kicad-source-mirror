@@ -299,7 +299,9 @@ public:
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
-    double m_FootprintViewerZoom;       ///< The last zoom level used (0 for auto)
+    double m_FootprintViewerZoom;               ///< The last zoom level used (0 for auto)
+    int    m_FootprintViewerLibListWidth;
+    int    m_FootprintViewerFPListWidth;
 
     wxString m_lastFootprintLibDir;
 

@@ -135,6 +135,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_footprint_browser ) );
     SetIcon( icon );
 
+    m_libListWidth = 200;
+    m_fpListWidth = 300;
+
     wxPanel* libPanel = new wxPanel( this );
     wxSizer* libSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -273,6 +276,44 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // after changing something to the aui manager call Update() to reflect the changes
     m_auimgr.Update();
+
+    if( m_libListWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Libraries" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( m_libListWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 100, -1 );
+    }
+
+    if( m_fpListWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( m_fpListWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 100, -1 );
+    }
 
     // The canvas should not steal the focus from the list boxes
     GetCanvas()->SetCanFocus( false );
@@ -794,6 +835,18 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
     m_displayOptions = fpedit->m_Display;
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
+
+    m_libListWidth = cfg->m_FootprintViewerLibListWidth;
+    m_fpListWidth = cfg->m_FootprintViewerFPListWidth;
+
+    // Set parameters to a reasonable value.
+    int maxWidth = cfg->m_FootprintViewer.state.size_x - 80;
+
+    if( m_libListWidth + m_fpListWidth > maxWidth )
+    {
+        m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_fpListWidth ) );
+        m_fpListWidth = maxWidth - m_libListWidth;
+    }
 }
 
 
@@ -809,6 +862,15 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( GetCanvas() && GetCanvas()->GetView() )
         cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
+
+    if( m_libListWidth && m_libList )
+        m_libListWidth = m_libList->GetSize().x;
+
+    m_fpListWidth = m_fpList->GetSize().x;
+
+    cfg->m_FootprintViewerLibListWidth = m_libListWidth;
+    cfg->m_FootprintViewerFPListWidth = m_fpListWidth;
+
 }
 
 

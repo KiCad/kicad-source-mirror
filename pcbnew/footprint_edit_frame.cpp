@@ -225,7 +225,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
                       .Left().Layer(2)
                       .Caption( _( "Libraries" ) )
-                      .MinSize( 250, 400 ).Resizable() );
+                      .MinSize( 250, -1 ).BestSize( 250, -1 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer(2) );
