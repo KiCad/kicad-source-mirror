@@ -2040,7 +2040,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     if( aZone->GetIsRuleArea() )
     {
         m_out->Print( aNestLevel + 1,
-                      "(keepout (tracks %s) (vias %s) (pads %s ) (copperpour %s) "
+                      "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
                       "(footprints %s))\n",
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
