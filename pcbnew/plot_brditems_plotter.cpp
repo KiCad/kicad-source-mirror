@@ -600,9 +600,6 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
 void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 {
-    if( aShape->Type() != PCB_FP_SHAPE_T )
-        return;
-
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
     bool sketch = GetPlotMode() == SKETCH;
