@@ -25,7 +25,7 @@
   tar cfz cov-int.tar.gz cov-int
   echo "Submitting scan results"
   export KICAD_VERSION=$(sed 's/[()]//g' kicad_build_version.txt)
-  curl -v https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
+  curl https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
        --form token=$COVERITY_SCAN_TOKEN \
        --form email=$GITLAB_USER_EMAIL \
        --form file=@cov-int.tar.gz \
