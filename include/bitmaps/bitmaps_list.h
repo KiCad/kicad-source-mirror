@@ -596,6 +596,7 @@ enum class BITMAPS : unsigned int
     viewlibs_icon,
     visibility,
     visibility_off,
+    width_conn,
     width_track,
     width_track_via,
     wizard_add_fplib_icon,

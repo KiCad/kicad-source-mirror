@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -207,6 +207,23 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_TrackMinWidthUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_TrackMinWidthUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+
+	m_bitmapMinConn = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_bitmapMinConn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_MinConnTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum connection width:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_MinConnTitle->Wrap( -1 );
+	fgFeatureConstraints->Add( m_MinConnTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+
+	m_MinConnCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinConnCtrl->SetToolTip( _("The minimum track width.  If set, this is an absolute minimum and cannot be reduced by netclasses, custom rules, or other settings.") );
+	m_MinConnCtrl->SetMinSize( wxSize( 120,-1 ) );
+
+	fgFeatureConstraints->Add( m_MinConnCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_MinConnUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_MinConnUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_MinConnUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_bitmapMinViaAnnulus = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaAnnulus, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );

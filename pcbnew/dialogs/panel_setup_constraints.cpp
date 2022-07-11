@@ -36,6 +36,7 @@
 PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_CONSTRAINTS_BASE( aParent->GetTreebook() ),
         m_minClearance( aFrame, m_clearanceTitle, m_clearanceCtrl, m_clearanceUnits ),
+        m_minConn( aFrame, m_MinConnTitle, m_MinConnCtrl, m_MinConnUnits ),
         m_trackMinWidth( aFrame, m_TrackMinWidthTitle, m_TrackMinWidthCtrl, m_TrackMinWidthUnits ),
         m_viaMinAnnulus( aFrame, m_ViaMinAnnulusTitle, m_ViaMinAnnulusCtrl, m_ViaMinAnnulusUnits ),
         m_viaMinSize( aFrame, m_ViaMinTitle, m_SetViasMinSizeCtrl, m_ViaMinUnits ),
@@ -78,6 +79,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
     m_minResolvedSpokeCountCtrl->SetValue( m_BrdSettings->m_MinResolvedSpokes );
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
+    m_minConn.SetValue( m_BrdSettings->m_MinConn );
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
     m_viaMinAnnulus.SetValue( m_BrdSettings->m_ViasMinAnnularWidth );
     m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
@@ -101,6 +103,9 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
     if( !m_minClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
+        return false;
+
+    if( !m_minConn.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
     if( !m_trackMinWidth.Validate( 0, 10, EDA_UNITS::INCHES ) )
@@ -138,6 +143,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
+    m_BrdSettings->m_MinConn = m_minConn.GetValue();
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
     m_BrdSettings->m_ViasMinAnnularWidth = m_viaMinAnnulus.GetValue();
     m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
@@ -171,6 +177,7 @@ bool PANEL_SETUP_CONSTRAINTS::Show( bool aShow )
         m_spokeBitmap->SetBitmap( KiBitmap( BITMAPS::thermal_spokes ) );
         m_bitmapClearance->SetBitmap( KiBitmap( BITMAPS::ps_diff_pair_gap ) );
         m_bitmapMinTrackWidth->SetBitmap( KiBitmap( BITMAPS::width_track ) );
+        m_bitmapMinConn->SetBitmap( KiBitmap( BITMAPS::width_conn ) );
         m_bitmapMinViaAnnulus->SetBitmap( KiBitmap( BITMAPS::via_annulus ) );
         m_bitmapMinViaDiameter->SetBitmap( KiBitmap( BITMAPS::via_diameter ) );
         m_bitmapMinViaDrill->SetBitmap( KiBitmap( BITMAPS::via_hole_diameter ) );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -525,6 +525,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::via_sketch, wxT( "via_sketch_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::via_diameter, wxT( "via_diameter_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::via_hole_diameter, wxT( "via_hole_diameter_24.png" ), 24, wxT( "light" ) },
+    { BITMAPS::width_conn, wxT( "width_conn_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::width_track_via, wxT( "width_track_via_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::width_track, wxT( "width_track_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::zip, wxT( "zip_24.png" ), 24, wxT( "light" ) },
@@ -900,6 +901,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::via_sketch, wxT( "via_sketch_dark_24.png" ), 24, wxT( "dark" ) },
     { BITMAPS::via_diameter, wxT( "via_diameter_dark_24.png" ), 24, wxT( "dark" ) },
     { BITMAPS::via_hole_diameter, wxT( "via_hole_diameter_dark_24.png" ), 24, wxT( "dark" ) },
+    { BITMAPS::width_conn, wxT( "width_conn_dark_24.png" ), 24, wxT( "dark" ) },
     { BITMAPS::width_track_via, wxT( "width_track_via_dark_24.png" ), 24, wxT( "dark" ) },
     { BITMAPS::width_track, wxT( "width_track_dark_24.png" ), 24, wxT( "dark" ) },
     { BITMAPS::zip, wxT( "zip_dark_24.png" ), 24, wxT( "dark" ) },

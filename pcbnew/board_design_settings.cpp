@@ -141,6 +141,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_customDiffPair.m_ViaGap = Millimeter2iu( DEFAULT_CUSTOMDPAIRVIAGAP );
 
     m_MinClearance        = Millimeter2iu( DEFAULT_MINCLEARANCE );
+    m_MinConn             = Millimeter2iu( DEFAULT_MINCONNECTION );
     m_TrackMinWidth       = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
     m_ViasMinAnnularWidth = Millimeter2iu( DEFAULT_VIASMINSIZE - DEFAULT_MINTHROUGHDRILL ) / 2;
     m_ViasMinSize         = Millimeter2iu( DEFAULT_VIASMINSIZE );
@@ -188,6 +189,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = RPT_SEVERITY_WARNING;
 
+    // TODO: Change to warning after testing
+    m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = RPT_SEVERITY_IGNORE;
+
     m_MaxError = ARC_HIGH_DEF;
     m_ZoneKeepExternalFillets = false;
     m_UseHeightForLengthCalcs = true;
@@ -230,6 +234,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance",
             &m_MinClearance, Millimeter2iu( DEFAULT_MINCLEARANCE ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_connection",
+            &m_MinConn, Millimeter2iu( DEFAULT_MINCONNECTION ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_track_width",
             &m_TrackMinWidth, Millimeter2iu( DEFAULT_TRACKMINWIDTH ),
@@ -818,6 +826,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_CurrentViaType         = aOther.m_CurrentViaType;
     m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
     m_MinClearance           = aOther.m_MinClearance;
+    m_MinConn                = aOther.m_MinConn;
     m_TrackMinWidth          = aOther.m_TrackMinWidth;
     m_ViasMinAnnularWidth    = aOther.m_ViasMinAnnularWidth;
     m_ViasMinSize            = aOther.m_ViasMinSize;

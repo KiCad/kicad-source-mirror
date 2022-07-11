@@ -108,6 +108,10 @@ DRC_ITEM DRC_ITEM::holesCoLocated( DRCE_DRILLED_HOLES_COLOCATED,
         _( "Drilled holes co-located" ),
         wxT( "holes_co_located" ) );
 
+DRC_ITEM DRC_ITEM::connectionWidth( DRCE_CONNECTION_WIDTH,
+        _( "Copper connection too narrow" ),
+        wxT( "connection_width" ) );
+
 DRC_ITEM DRC_ITEM::trackWidth( DRCE_TRACK_WIDTH,
         _( "Track width" ),
         wxT( "track_width" ) );
@@ -276,6 +280,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::invalidOutline,
             DRC_ITEM::copperSliver,
             DRC_ITEM::solderMaskBridge,
+            DRC_ITEM::connectionWidth,
 
             DRC_ITEM::heading_schematic_parity,
             DRC_ITEM::duplicateFootprints,
@@ -335,6 +340,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );
     case DRCE_DRILLED_HOLES_COLOCATED:  return std::make_shared<DRC_ITEM>( holesCoLocated );
     case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
+    case DRCE_CONNECTION_WIDTH:         return std::make_shared<DRC_ITEM>( connectionWidth );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
     case DRCE_ANNULAR_WIDTH:            return std::make_shared<DRC_ITEM>( annularWidth );
     case DRCE_DRILL_OUT_OF_RANGE:       return std::make_shared<DRC_ITEM>( drillTooSmall );

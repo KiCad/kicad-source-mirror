@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,6 +70,10 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_TrackMinWidthCtrl;
 		wxStaticText* m_TrackMinWidthUnits;
+		wxStaticBitmap* m_bitmapMinConn;
+		wxStaticText* m_MinConnTitle;
+		wxTextCtrl* m_MinConnCtrl;
+		wxStaticText* m_MinConnUnits;
 		wxStaticBitmap* m_bitmapMinViaAnnulus;
 		wxStaticText* m_ViaMinAnnulusTitle;
 		wxTextCtrl* m_ViaMinAnnulusCtrl;
@@ -131,6 +135,7 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxScrolledWindow* m_scrolledWindow;
 
 		PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_CONSTRAINTS_BASE();
 
 };

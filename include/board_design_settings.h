@@ -76,6 +76,7 @@
 #define DEFAULT_CUSTOMDPAIRVIAGAP     0.18
 
 #define DEFAULT_MINCLEARANCE          0.0     // overall min clearance
+#define DEFAULT_MINCONNECTION         0.0     // overall min connection width
 #define DEFAULT_TRACKMINWIDTH         0.2     // track width min value
 #define DEFAULT_VIASMINSIZE           0.4     // vias (not micro vias) min diameter
 #define DEFAULT_MINTHROUGHDRILL       0.3     // through holes (not micro vias) min drill diameter
@@ -682,6 +683,7 @@ public:
     bool       m_TempOverrideTrackWidth;    // use selected track width temporarily even when
                                             // using connected track width
     int        m_MinClearance;              // overall min clearance
+    int        m_MinConn;                   // overall min connection width
     int        m_TrackMinWidth;             // overall min track width
     int        m_ViasMinAnnularWidth;       // overall minimum width of the via copper ring
     int        m_ViasMinSize;               // overall vias (not micro vias) min diameter

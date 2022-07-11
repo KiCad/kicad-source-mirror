@@ -50,6 +50,7 @@ private:
 
 public:
     UNIT_BINDER             m_minClearance;
+    UNIT_BINDER             m_minConn;
     UNIT_BINDER             m_trackMinWidth;
     UNIT_BINDER             m_viaMinAnnulus;
     UNIT_BINDER             m_viaMinSize;

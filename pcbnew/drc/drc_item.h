@@ -53,6 +53,7 @@ enum PCB_DRC_CODE {
     DRCE_HOLE_CLEARANCE,                 //
     DRCE_TRACK_WIDTH,                    // Track width is too small or too large
     DRCE_ANNULAR_WIDTH,                  // Via size and drill leave annular ring too small
+    DRCE_CONNECTION_WIDTH,               // Net connection too small
     DRCE_DRILL_OUT_OF_RANGE,             // Too small via or pad drill
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
@@ -168,6 +169,7 @@ private:
     static DRC_ITEM holeNearHole;
     static DRC_ITEM holesCoLocated;
     static DRC_ITEM holeClearance;
+    static DRC_ITEM connectionWidth;
     static DRC_ITEM trackWidth;
     static DRC_ITEM annularWidth;
     static DRC_ITEM drillTooSmall;

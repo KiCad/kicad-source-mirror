@@ -191,8 +191,6 @@ static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 
-static const wxChar AllowTeardrops[] = wxT( "AllowTeardrops" );
-
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );

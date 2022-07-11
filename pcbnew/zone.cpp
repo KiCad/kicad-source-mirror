@@ -1300,18 +1300,23 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     if( !m_FilledPolysList.count( aLayer ) )
         return;
 
-    aCornerBuffer = *m_FilledPolysList.at( aLayer );
+    if( !aClearance )
+    {
+        aCornerBuffer.Append( *m_FilledPolysList.at( aLayer ) );
+        return;
+    }
+    
+    SHAPE_POLY_SET temp_buf = m_FilledPolysList.at( aLayer )->CloneDropTriangulation();
 
     // Rebuild filled areas only if clearance is not 0
-    if( aClearance )
-    {
-        int numSegs = GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE );
+    int numSegs = GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE );
 
-        if( aErrorLoc == ERROR_OUTSIDE )
-            aClearance += aError;
+    if( aErrorLoc == ERROR_OUTSIDE )
+        aClearance += aError;
 
-        aCornerBuffer.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
-    }
+    temp_buf.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
+
+    aCornerBuffer.Append( temp_buf );
 }
 
 
