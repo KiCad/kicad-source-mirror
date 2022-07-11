@@ -456,7 +456,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                                         _( "Error Loading Library" ) );
                 errdlg.ShowModal();
 
-                return false;
+                return true;
             }
         }
     }
