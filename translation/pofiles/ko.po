@@ -1,7 +1,7 @@
 # 킴슨김랑기 <korearf@gmail.com>, 2021, 2022.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021.
-# 이상수 <kku1818@gmail.com>, 2021.
+# 이상수 <kku1818@gmail.com>, 2021, 2022.
 # jehunseo <benbot591@gmail.com>, 2021.
 # Uibeom Jung <wjddmlqja17@gmail.com>, 2021.
 # 박준언 <joonun1696@pusan.ac.kr>, 2021.
@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-11 09:15+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"PO-Revision-Date: 2022-07-12 01:11+0000\n"
+"Last-Translator: 이상수 <kku1818@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -2824,9 +2824,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "정밀 스케일 플롯용 X 스케일 설정"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "문자열 찾기"
+msgstr "정보 텍스트"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -3238,15 +3237,26 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad는 충돌 및 특별 이벤트 데이터를 개발자에게 익명으로 보고하여 사용자 "
+"기반 전반에서 중요한 버그를 보다 효과적으로 식별하고 프로필 기능을 통해 개선 "
+"사항을 안내할 수 있습니다.\n"
+"\n"
+"동일한 KiCad 설치에서 자동 보고서를 연결하기 위해 완전히 임의의 고유 "
+"식별자가 생성되며 충돌 보고 목적으로만 사용됩니다. IP 주소를 포함한 개인 "
+"식별 정보(PII)는 이 식별자에 저장되거나 연결되지 않습니다. 제공된 버튼을 "
+"사용하여 언제든지 이 ID를 재설정할 수 있습니다.\n"
+"\n"
+"자발적으로 참여하기로 선택하면 충돌이나 이벤트가 발생할 때 KiCad가 자동으로 "
+"해당 보고서 전송을 처리합니다. 이 과정에서 회로도 또는 PCB와 같은 설계 "
+"파일은 공유되지 않습니다."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
 msgstr "익명으로 보고서를 제공하는 데 동의합니다"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "초기화"
+msgstr "고유 ID 재설정"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3983,7 +3993,6 @@ msgid "Hotkeys"
 msgstr "단축키"
 
 #: common/eda_base_frame.cpp:1000
-#, fuzzy
 msgid "Data Collection"
 msgstr "데이터 수집"
 
@@ -4018,7 +4027,6 @@ msgid "Schematic Editor"
 msgstr "회로도 편집기"
 
 #: common/eda_base_frame.cpp:1023
-#, fuzzy
 msgid "Annotation Options"
 msgstr "주석 옵션"
 
@@ -4951,9 +4959,9 @@ msgid "Gestures"
 msgstr "제스처"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "kiface 라이브러리 '%s'을(를) 불러오기 실패하였습니다."
+msgstr "kiface 라이브러리 '%s' 서명을 확인하지 못했습니다."
 
 #: common/kiway.cpp:268
 #, c-format
@@ -5174,7 +5182,6 @@ msgid "Drawing sheet"
 msgstr "도면 시트"
 
 #: common/layer_id.cpp:147 common/layer_id.cpp:177
-#, fuzzy
 msgid "Page limits"
 msgstr "페이지 제한"
 
@@ -5238,9 +5245,8 @@ msgid "Through vias"
 msgstr "관통 비아"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "숨겨진 비아"
+msgstr "블라인드/ 매립 비아"
 
 #: common/layer_id.cpp:163
 msgid "Micro-vias"
@@ -5298,28 +5304,24 @@ msgid "Grid axes"
 msgstr "그리드 축"
 
 #: common/layer_id.cpp:184
-#, fuzzy
 msgid "Locked item shadow"
 msgstr "잠긴 항목"
 
 #: common/layer_id.cpp:185
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "충돌하는 라벨"
+msgstr "충돌하는 항목의 그림자"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
 msgstr "논리 라이브러리 이름에 잘못된 문자가 있음"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "레이어가 선택되지 않았습니다."
+msgstr "선택 활성화"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "삭제 선택"
+msgstr "선택 비활성화"
 
 #: common/lib_tree_model.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5403,7 +5405,6 @@ msgid "Select Preferred Editor"
 msgstr "선호하는 편집기 선택"
 
 #: common/pgm_base.cpp:341
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5421,7 +5422,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:348
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "데이터 수집 동의 요청"
 
 #: common/pgm_base.cpp:394
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5798,9 +5799,8 @@ msgid "Paste Special..."
 msgstr "특수 붙여넣기..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "옵션을 지정하여 클립보드로부터 항목 붙여넣기"
+msgstr "클립보드에서 주석 옵션을 사용하여 항목 붙여넣기"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -7146,9 +7146,8 @@ msgstr "풋프린트 보기"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "자동으로 풋프린트 할당"
+msgstr "자동 확대/축소 설치 공간 변경"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -7266,16 +7265,14 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Schematic 및 파일 저장"
+msgstr "도식 및 파일에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
+msgstr "도식 기호 표시 공간 필드 및 도식 파일에 설치 공간 연결 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -7503,9 +7500,8 @@ msgid "Selection"
 msgstr "선택"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "시트의 끝."
+msgstr "하위 시트로 반복"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -8440,9 +8436,8 @@ msgid "Checking for library symbol issues..."
 msgstr "라이브러리 심볼 문제 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:537
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "그리드 핀과 와이어가 꺼져 있는지 확인하는 중..."
+msgstr "오프 그리드 핀 및 와이어 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:537
 msgid "errors"
@@ -8838,7 +8833,6 @@ msgid "Set To"
 msgstr "설정"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
 msgstr "텍스트 색상:"
 
@@ -8970,16 +8964,14 @@ msgid "Diameter:"
 msgstr "직경:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "회로도 접합 점 크기를 사용하도록 직경을 0으로 설정합니다."
+msgstr "회로도의 접합점 크기를 사용하려면 직경을 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "회로도 편집기 색상을 사용할 수 있도록 색상을 투명하게 설정합니다."
+msgstr "회로도의 편집기 색상을 사용하려면 색상을 지웁니다."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9233,14 +9225,12 @@ msgid "ALL"
 msgstr "모두"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
-#, fuzzy
 msgid "Standard"
-msgstr "표준 비아"
+msgstr "표준"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
-msgstr "대체 핀 이름"
+msgstr "대체"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:113
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9355,14 +9345,12 @@ msgid "Group by name"
 msgstr "이름으로 그룹화"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "그리드 선택"
+msgstr "그룹 선택됨"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "핀 개수로 필터링"
+msgstr "단위별로 필터링:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9492,9 +9480,8 @@ msgid "Style:"
 msgstr "스타일:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
-msgstr "테두리 너비를 0으로 설정하여 회로도 기본 기호 선 너비를 사용합니다."
+msgstr "회로드의 기본 기호 선 너비를 사용하려면 테두리 너비를 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 msgid "Fill Style"
