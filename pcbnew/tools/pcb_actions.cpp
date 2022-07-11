@@ -755,7 +755,7 @@ TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
 
 TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( "pcbnew.EditorControl.toggleNetHighlight",
         AS_GLOBAL,
-        MD_CTRL + '`', "",
+        MD_ALT + '`', "",
         _( "Toggle Net Highlight" ), _( "Toggle net highlighting" ),
         BITMAPS::net_highlight );
 
