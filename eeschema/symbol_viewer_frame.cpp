@@ -219,15 +219,53 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ) .Bottom().Layer(6) );
 
     m_auimgr.AddPane( libPanel, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(2)
-                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( m_libListWidth, -1 ) );
+                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 200, -1 ) );
     m_auimgr.AddPane( symbolPanel, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
-                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( m_symbolListWidth, -1 ) );
+                      .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( libPanel ).Show( aLibraryName.empty() );
 
     m_auimgr.Update();
+
+    if( m_libListWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Libraries" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( m_libListWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 100, -1 );
+    }
+
+    if( m_symbolListWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Symbols" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( m_symbolListWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 100, -1 );
+    }
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
@@ -791,11 +829,13 @@ void SYMBOL_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
 
     // Set parameters to a reasonable value.
-    if( m_libListWidth > m_frameSize.x / 2 )
-        m_libListWidth = m_frameSize.x / 2;
+    int maxWidth = cfg->m_LibViewPanel.window.state.size_x - 80;
 
-    if( m_symbolListWidth > m_frameSize.x / 2 )
-        m_symbolListWidth = m_frameSize.x / 2;
+    if( m_libListWidth + m_symbolListWidth > maxWidth )
+    {
+        m_libListWidth = maxWidth * ( m_libListWidth / ( m_libListWidth + m_symbolListWidth ) );
+        m_symbolListWidth = maxWidth - m_libListWidth;
+    }
 }
 
 

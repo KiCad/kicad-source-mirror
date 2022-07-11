@@ -167,8 +167,11 @@ private:
 
     wxSearchCtrl*       m_libFilter;
     WX_LISTBOX*         m_libList;        // The list of library names.
+    int                 m_libListWidth;   // Last width of the window.
+
     wxSearchCtrl*       m_fpFilter;
     WX_LISTBOX*         m_fpList;         // The list of footprint names.
+    int                 m_fpListWidth;    // Last width of the window.
 
     bool                m_autoZoom;
     double              m_lastZoom;

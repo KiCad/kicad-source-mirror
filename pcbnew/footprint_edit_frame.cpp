@@ -217,7 +217,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
                       .Left().Layer(2)
                       .Caption( _( "Libraries" ) )
-                      .MinSize( 250, 400 ).Resizable() );
+                      .MinSize( 250, -1 ).BestSize( 250, -1 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer(2) );
@@ -244,6 +244,25 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ActivateGalCanvas();
 
     FinishAUIInitialization();
+
+    if( GetSettings()->m_LibWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( GetSettings()->m_LibWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 250, -1 );
+    }
 
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
 

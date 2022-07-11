@@ -351,6 +351,8 @@ public:
 
     double m_FootprintViewerZoom;               ///< The last zoom level used (0 for auto)
     bool   m_FootprintViewerAutoZoomOnSelect;   ///< true to use automatic zoom on fp selection
+    int    m_FootprintViewerLibListWidth;
+    int    m_FootprintViewerFPListWidth;
 
     wxString m_lastFootprintLibDir;
 
