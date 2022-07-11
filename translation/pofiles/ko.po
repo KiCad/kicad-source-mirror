@@ -15,15 +15,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-11 08:19+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"PO-Revision-Date: 2022-07-12 01:11+0000\n"
+"Last-Translator: 이상수 <kku1818@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4757,9 +4757,9 @@ msgid "Gestures"
 msgstr "제스처"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "kiface 라이브러리 '%s'을(를) 불러오기 실패하였습니다."
+msgstr "kiface 라이브러리 '%s' 서명을 확인하지 못했습니다."
 
 #: common/kiway.cpp:267
 #, c-format
@@ -6974,16 +6974,14 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Schematic 및 파일 저장"
+msgstr "도식 및 파일에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
+msgstr "도식 기호 표시 공간 필드 및 도식 파일에 설치 공간 연결 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
