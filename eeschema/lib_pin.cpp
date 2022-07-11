@@ -963,6 +963,33 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
     return 0;
 }
 
+void LIB_PIN::ChangeLength( int aLength )
+{
+    int lengthChange = m_length - aLength;
+    int offsetX = 0;
+    int offsetY = 0;
+
+    switch( m_orientation )
+    {
+    case PIN_RIGHT:
+        offsetX = lengthChange;
+        break;
+    case PIN_LEFT:
+        offsetX = -1 * lengthChange;
+        break;
+    case PIN_UP:
+        offsetY = lengthChange;
+        break;
+    case PIN_DOWN:
+        offsetY = -1 * lengthChange;
+        break;
+    }
+
+    wxPoint offset = wxPoint( offsetX, offsetY );
+    Offset( offset );
+
+    m_length = aLength;
+}
 
 void LIB_PIN::Offset( const VECTOR2I& aOffset )
 {

@@ -355,7 +355,7 @@ public:
                 break;
 
             case COL_LENGTH:
-                pin->SetLength( ValueFromString( m_frame->GetUserUnits(), aValue ) );
+                pin->ChangeLength( ValueFromString( m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_POSX:

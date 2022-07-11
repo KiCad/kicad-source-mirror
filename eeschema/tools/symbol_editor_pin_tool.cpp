@@ -171,7 +171,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 else if( other->GetConvert() == aPin->GetConvert() )
                 {
                     other->SetPosition( aPin->GetPosition() );
-                    other->SetLength( aPin->GetLength() );
+                    other->ChangeLength( aPin->GetLength() );
                     other->SetShape( aPin->GetShape() );
                 }
 
@@ -392,7 +392,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
         if( aEvent.IsAction( &EE_ACTIONS::pushPinLength ) )
         {
             if( !pin->GetConvert() || pin->GetConvert() == m_frame->GetConvert() )
-                pin->SetLength( sourcePin->GetLength() );
+                pin->ChangeLength( sourcePin->GetLength() );
         }
         else if( aEvent.IsAction( &EE_ACTIONS::pushPinNameSize ) )
         {

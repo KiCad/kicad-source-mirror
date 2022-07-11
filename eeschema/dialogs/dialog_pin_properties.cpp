@@ -345,8 +345,8 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     m_pin->SetNameTextSize( m_nameSize.GetValue() );
     m_pin->SetNumberTextSize( m_numberSize.GetValue() );
     m_pin->SetOrientation( PinOrientationCode( m_choiceOrientation->GetSelection() ) );
-    m_pin->SetLength( m_pinLength.GetValue() );
     m_pin->SetPosition( newPos );
+    m_pin->ChangeLength( m_pinLength.GetValue() );
     m_pin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
     m_pin->SetShape( m_choiceStyle->GetPinShapeSelection() );
     m_pin->SetConvert( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );

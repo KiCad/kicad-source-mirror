@@ -81,6 +81,13 @@ public:
     int GetLength() const { return m_length; }
     void SetLength( int aLength ) { m_length = aLength; }
 
+    /**
+     * Change the length of a pin and adjust its position based on orientation.
+     *
+     * @param aLength New length of pin
+     */
+    void ChangeLength( int aLength );
+
     ELECTRICAL_PINTYPE GetType() const { return m_type; }
     void SetType( ELECTRICAL_PINTYPE aType ) { m_type = aType; }
 
