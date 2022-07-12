@@ -747,6 +747,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     if( !simFrame )     // Defensive coding; shouldn't happen.
         return 0;
 
+    if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
+        blocking_win->Close( true );
+
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
@@ -894,7 +897,12 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 KIWAY_PLAYER* simFrame = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
                 if( simFrame )
+                {
+                    if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
+                        blocking_win->Close( true );
+
                     static_cast<SIM_PLOT_FRAME*>( simFrame )->AddTuner( symbol );
+                }
 
                 // We do not really want to keep a symbol selected in schematic,
                 // so clear the current selection
@@ -1992,6 +2000,9 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 
     if( symbolEditor )
     {
+        if( wxWindow* blocking_win = symbolEditor->Kiway().GetBlockingDialog() )
+            blocking_win->Close( true );
+
         if( aEvent.IsAction( &EE_ACTIONS::editWithLibEdit ) )
             symbolEditor->LoadSymbolFromSchematic( symbol );
         else if( aEvent.IsAction( &EE_ACTIONS::editLibSymbolWithLibEdit ) )

@@ -25,6 +25,7 @@
 #include <dialog_shim.h>
 #include <ignore.h>
 #include <kiway_player.h>
+#include <kiway.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <kiplatform/ui.h>
@@ -122,6 +123,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     if( kiwayHolder )
         SetKiway( this, &kiwayHolder->Kiway() );
 
+    Kiway().SetBlockingDialog( this );
+
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
 
@@ -142,6 +145,8 @@ DIALOG_SHIM::~DIALOG_SHIM()
     // if the dialog is quasi-modal, this will end its event loop
     if( IsQuasiModal() )
         EndQuasiModal( wxID_CANCEL );
+
+    Kiway().SetBlockingDialog( nullptr );
 
     if( m_qmodal_parent_disabler )
         delete m_qmodal_parent_disabler;    // usually NULL by now

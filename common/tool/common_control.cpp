@@ -177,6 +177,13 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     if( wxWindow::FindFocus() != editor )
         editor->SetFocus();
 
+    // If the player is currently blocked, focus the user attention on the correct window
+    if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+    {
+        blocking_win->Raise();
+        blocking_win->SetFocus();
+    }
+
     return 0;
 }
 

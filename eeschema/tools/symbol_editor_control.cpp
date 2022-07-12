@@ -610,6 +610,11 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             return 0;
         }
 
+        wxWindow* blocking_dialog = schframe->Kiway().GetBlockingDialog();
+
+        if( blocking_dialog )
+            blocking_dialog->Close( true );
+
         wxCHECK( libSymbol->GetLibId().IsValid(), 0 );
 
         SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schframe->GetCurrentSheet(),

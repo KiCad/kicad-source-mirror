@@ -96,7 +96,12 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
             KIWAY_PLAYER* frame = (KIWAY_PLAYER*) App().GetTopWindow();
     #endif
             if( frame )
+            {
+                if( wxWindow* blocking_win = frame->Kiway().GetBlockingDialog() )
+                    blocking_win->Close( true );
+
                 frame->OpenProjectFiles( std::vector<wxString>( 1, aFileName ) );
+            }
         }
     }
 

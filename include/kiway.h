@@ -403,6 +403,13 @@ public:
 
     bool ProcessEvent( wxEvent& aEvent ) override;
 
+    /**
+     * Gets the window pointer to the blocking dialog (to send it signals)
+     * @return Pointer to blocking dialog window or null if none
+     */
+    wxWindow* GetBlockingDialog();
+    void SetBlockingDialog( wxWindow* aWin );
+
 private:
     /// Get the [path &] name of the DSO holding the requested FACE_T.
     const wxString dso_search_path( FACE_T aFaceId );
@@ -436,6 +443,8 @@ private:
     int             m_ctl;
 
     wxFrame*        m_top;      // Usually m_top is the Project manager
+
+    wxWindowID      m_blockingDialog;
 
     // An array to store the window ID of PLAYER frames which were run.
     // A non empty name means only a PLAYER was run at least one time.

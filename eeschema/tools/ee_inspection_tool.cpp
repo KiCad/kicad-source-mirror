@@ -244,6 +244,9 @@ int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
     if( !simFrame )
         return -1;
 
+    if( wxWindow* blocking_win = simFrame->Kiway().GetBlockingDialog() )
+        blocking_win->Close( true );
+
     simFrame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
