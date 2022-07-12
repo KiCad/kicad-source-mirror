@@ -816,12 +816,12 @@ bool PCB_SELECTION_TOOL::selectMultiple()
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool windowSelection = width >= 0 ? true : false;
+        bool greedySelection = width >= 0 ? false : true;
 
         if( view->IsMirroredX() )
-            windowSelection = !windowSelection;
+            greedySelection = !greedySelection;
 
-        m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
+        m_frame->GetCanvas()->SetCurrentCursor( !greedySelection ? KICURSOR::SELECT_WINDOW
                                                                 : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -872,13 +872,37 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             selectionRect.Normalize();
 
             GENERAL_COLLECTOR collector;
+            std::set<BOARD_ITEM*> group_items;
+
+            for( PCB_GROUP* group : board()->Groups() )
+            {
+                // The currently entered group does not get limited
+                if( m_enteredGroup == group )
+                    continue;
+
+                std::unordered_set<BOARD_ITEM*>& newset = group->GetItems();
+
+                // If we are not greedy and have selected the whole group, add just one item
+                // to allow it to be promoted to the group later
+                if( !greedySelection && selectionRect.Contains( group->GetBoundingBox() )
+                        && newset.size() )
+                {
+                    collector.Append( *newset.begin() );
+                }
+
+                for( BOARD_ITEM* group_item : newset )
+                    group_items.emplace( group_item );
+            }
 
             for( auto it = candidates.begin(), it_end = candidates.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                if( item && Selectable( item ) && item->HitTest( selectionRect, windowSelection ) )
+                if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
+                        && ( greedySelection || !group_items.count( item ) ) )
+                {
                     collector.Append( item );
+                }
             }
 
             // Apply the stateful filter
