@@ -619,8 +619,8 @@ set( TMP_DIR   "${CMAKE_CURRENT_BINARY_DIR}/tmp" )
 # generate logs is useful only if you have problems
 set( CREATE_LOG_FILES true )
 
-set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h" )
-set( BITMAP_INFO_TEMPLATE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h.in" )
+set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/common/bitmap_info.cpp" )
+set( BITMAP_INFO_TEMPLATE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.cpp.in" )
 set( BITMAP_INFO_LIST "" )
 
 set( ALL_PNGS "" )
@@ -739,7 +739,7 @@ function( bitmap_dir pngWidth pngHeight bmapList )
             png2png( ${tmpFile} ${pngPath} )
 
             set( bitmapInfo
-            "    { BITMAPS::${bmn}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) },\n"
+            "    aBitmapInfoCache[BITMAPS::${bmn}].emplace_back( BITMAPS::${bmn}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) );\n"
             )
 
             set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )

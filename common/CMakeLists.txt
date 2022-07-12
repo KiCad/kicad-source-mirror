@@ -315,6 +315,7 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
+    bitmap_info.cpp
     bitmap_store.cpp
     board_printout.cpp
     build_version.cpp
