@@ -30,6 +30,7 @@
 
 #include <wx/string.h>
 #include <wx/xml/xml.h>
+#include <wx/wxcrt.h>          // for wxFopen
 
 namespace PCAD2KICAD {
 

@@ -2546,7 +2546,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
         BOARD_ITEM* item = aCollector[i];
-        double      area;
+        double      area = 0.0;
 
         if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                 && static_cast<ZONE*>( item )->HitTestForEdge( where, MAX_SLOP * pixel / 2 ) )
