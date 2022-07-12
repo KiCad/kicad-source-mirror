@@ -310,7 +310,7 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
             if( dlg.ShowModal() != wxID_OK )
                 return 0;   // canceled by user
 
-            newName = dlg.GetValue();
+            newName = EscapeString( dlg.GetValue(), CTX_LIBID );
             newName.Trim( true ).Trim( false );
 
             if( newName.IsEmpty() )
