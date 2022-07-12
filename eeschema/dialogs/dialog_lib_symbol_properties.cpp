@@ -308,7 +308,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
 
     // We need to keep the name and the value the same at the moment!
-    wxString   newName = m_fields->at( VALUE_FIELD ).GetText();
+    wxString   newName = EscapeString( m_fields->at( VALUE_FIELD ).GetText(), CTX_LIBID );
     wxString   oldName = m_libEntry->GetName();
 
     if( oldName != newName )
