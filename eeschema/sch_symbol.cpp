@@ -1430,17 +1430,20 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     {
         if( m_part.get() != dummy() )
         {
-            aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
-
-            msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
-            aList.emplace_back( msg, GetValue( currentSheet, true ) );
+            if( m_part->IsPower() )
+            {
+                aList.emplace_back( _( "Power symbol" ), GetValue( currentSheet, true ) );
+            }
+            else
+            {
+                aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
+                aList.emplace_back( _( "Value" ), GetValue( currentSheet, true ) );
+                aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
+            }
 
 #if 0       // Display symbol flags, for debug only
             aList.emplace_back( _( "flags" ), wxString::Format( "%X", GetEditFlags() ) );
 #endif
-
-            // Display symbol reference in library and library
-            aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
 
             if( !m_part->IsRoot() )
             {

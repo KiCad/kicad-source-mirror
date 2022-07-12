@@ -159,7 +159,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             };
 
     auto cleanup =
-            [&] ()
+            [&]()
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_frame->RollbackSchematicFromUndo();
@@ -167,20 +167,25 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             };
 
     auto annotate =
-            [&] ()
+            [&]()
             {
-                EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate_panel   = m_frame->eeconfig()->m_AnnotatePanel;
-                SCHEMATIC_SETTINGS&                projSettings     = m_frame->Schematic().Settings();
-                int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+                EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
-                if( annotate_panel.automatic )
+                if( symbol->GetLibSymbolRef()->IsPower() )
+                {
+                    NULL_REPORTER reporter;
+                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION, UNSORTED, INCREMENTAL_BY_REF,
+                                              false, 1, false, false, reporter, true );
+                }
+                else if( cfg->m_AnnotatePanel.automatic )
                 {
                     NULL_REPORTER reporter;
                     m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
-                                              (ANNOTATE_ORDER_T) annotate_panel.sort_order,
-                                              (ANNOTATE_ALGO_T) annotate_panel.method,
-                                              annotate_panel.recursive,
-                                              annotateStartNum, false, false, reporter, true );
+                                              (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
+                                              (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
+                                              cfg->m_AnnotatePanel.recursive,
+                                              m_frame->Schematic().Settings().m_AnnotateStartNum,
+                                              false, false, reporter, true );
                 }
             };
 

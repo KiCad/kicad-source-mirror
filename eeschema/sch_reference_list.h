@@ -281,10 +281,13 @@ public:
      * symbols.
      * @see SCH_REFERENCE_LIST::UpdateAnnotation
      */
-    void RemoveAnnotation()
+    void RemoveAnnotation( bool aIncludePowerSymbols )
     {
         for( unsigned ii = 0; ii < GetCount(); ii++ )
-            flatList[ii].m_isNew = true;
+        {
+            if( !flatList[ii].m_libPart->IsPower() || aIncludePowerSymbols )
+                flatList[ii].m_isNew = true;
+        }
     }
 
     /**

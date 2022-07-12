@@ -185,7 +185,9 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // Store the selected sheets relative to the full hierarchy so we
     // get the correct sheet numbers
     SCH_SHEET_LIST selectedSheets;
+
     for( EDA_ITEM* item : selection )
+    {
         if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET_PATH subSheetPath = currentSheet;
@@ -193,6 +195,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
 
             sheets.GetSheetsWithinPath( selectedSheets, subSheetPath );
         }
+    }
 
 
     // Like above, store subsheets relative to full hierarchy for
@@ -282,7 +285,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // that these references must be reannotated, but keeps the original reference
     // so that we can reannotate multi-unit symbols together.
     if( aResetAnnotation )
-        references.RemoveAnnotation();
+        references.RemoveAnnotation( false );
 
     // Build additional list of references to be used during reannotation
     // to avoid duplicate designators (no additional references when annotating

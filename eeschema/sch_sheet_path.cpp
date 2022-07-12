@@ -867,7 +867,7 @@ void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList
     for( SCH_SHEET_PATHS::const_iterator it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
-        ( *it ).GetMultiUnitSymbols( tempMap );
+        ( *it ).GetMultiUnitSymbols( tempMap, aIncludePowerSymbols );
 
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : tempMap )
         {

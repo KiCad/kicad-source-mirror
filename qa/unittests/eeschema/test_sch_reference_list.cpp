@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE( Reannotate )
 
         loadTestCase( c.m_SchematicRelativePath, c.m_ExpectedReannotations );
 
-        m_refsToReannotate.RemoveAnnotation();
+        m_refsToReannotate.RemoveAnnotation( true );
         m_refsToReannotate.SplitReferences();
         m_refsToReannotate.Annotate( false, 0, c.m_StartNumber, m_lockedRefs, getAdditionalRefs() );
         m_refsToReannotate.UpdateAnnotation();
