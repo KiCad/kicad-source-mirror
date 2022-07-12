@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:58-0700\n"
-"PO-Revision-Date: 2022-07-12 01:11+0000\n"
-"Last-Translator: YunJiSang <js_7744@naver.com>\n"
+"PO-Revision-Date: 2022-07-13 13:29+0000\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17611,17 +17611,15 @@ msgstr "선택한 심볼 라이브러리가 없습니다."
 #: pcbnew/tools/footprint_editor_control.cpp:397
 #, fuzzy
 msgid "New name:"
-msgstr "네트 이름:"
+msgstr "새 이름:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "심볼 바꾸기"
+msgstr "심볼 이름 변경"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "심볼 이름은 비워둘 수 없습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -17675,7 +17673,7 @@ msgstr ""
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:37
 #, fuzzy
 msgid "Do not update library tables"
-msgstr "라이브러리 테이블 경로 '%s'을(를) 생성할 수 없습니다."
+msgstr "라이브러리 테이블을 업데이트하지 마십시오."
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:42
@@ -17698,15 +17696,14 @@ msgid "Do not perform any additional operations after saving library."
 msgstr "라이브러리를 저장한 후 추가적인 작업을 수행하지 않습니다."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:43
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"새로운 라이브러리로 심볼 라이브러리 테이블 항목을 교체합니다.\n"
+"새로운 라이브러리로 심볼 라이브러리 테이블 항목을 업데이트합니다.\n"
 "\n"
-"기존 라이브러리는 더이상 쓸 수 없게 됩니다."
+"기존 라이브러리는 더이상 사용할 수 없게 됩니다."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
 #, fuzzy
@@ -18845,9 +18842,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "도면 시트 여백 및 제목 블록 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "페이지 경계 표시"
+msgstr "드로잉 시트 페이지 제한 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -19204,9 +19200,8 @@ msgid "Open project directory in file explorer"
 msgstr "파일 탐색기에서 프로젝트 디렉토리 열기"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "레포지토리 추가"
+msgstr "기본 저장소 추가"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -19296,9 +19291,8 @@ msgid "Installed (%d)"
 msgstr "설치됨 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "관리"
+msgstr "관리..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19326,9 +19320,8 @@ msgid "Install from File..."
 msgstr "파일에서 설치..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "플러그인 디렉토리 열기"
+msgstr "패키지 디렉토리 열기"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -19372,9 +19365,8 @@ msgid "Uninstall Pending"
 msgstr "제거 보류 중"
 
 #: kicad/pcm/dialogs/panel_package.cpp:123
-#, fuzzy
 msgid "Update Pending"
-msgstr "PCB 업데이트"
+msgstr "업데이트 보류 중"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:211
 msgid "Metadata"
@@ -19445,9 +19437,8 @@ msgid "Install package"
 msgstr "패키지 설치"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:684
-#, fuzzy
 msgid "Pending"
-msgstr "대기 중 (%d)"
+msgstr "대기 중"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Download Size"
@@ -19588,7 +19579,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "이전 버전의 패키지 '%s'를 제거합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -19637,9 +19628,8 @@ msgstr ""
 "시도하세요."
 
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid "Update package"
-msgstr "패키지 저장"
+msgstr "패키지 업데이트"
 
 #: kicad/pcm/pcm_task_manager.cpp:471
 #, c-format
@@ -20830,9 +20820,8 @@ msgid "AWG30"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "원 속성"
+msgstr "와이어 속성"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 #, fuzzy
@@ -20849,9 +20838,8 @@ msgid "mm^2"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "열 저항:"
+msgstr "선형 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, c-format
@@ -20870,14 +20858,12 @@ msgstr "도우미 응용 프로그램"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "전류"
+msgstr "전류:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
-#, fuzzy
 msgid "Length:"
-msgstr "길이"
+msgstr "길이:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
@@ -20899,8 +20885,9 @@ msgid "mV"
 msgstr "V"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
+#, fuzzy
 msgid "Dissipated power:"
-msgstr ""
+msgstr "소비 전력:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #, fuzzy
@@ -21093,7 +21080,7 @@ msgstr "간단한 해답:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
 #, fuzzy
 msgid "Approximation:"
-msgstr "근사 스케일"
+msgstr "근사치:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
