@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,14 +29,87 @@
 #include <tool/tool_interactive.h>
 #include <wx/timer.h>
 
-class SELECTION_TOOL : public wxEvtHandler
+class COLLECTOR;
+
+
+class SELECTION_TOOL : public TOOL_INTERACTIVE, public wxEvtHandler
 {
 public:
-    SELECTION_TOOL();
+    SELECTION_TOOL( const std::string& aName );
     ~SELECTION_TOOL(){};
 
+    /**
+     * Update a menu's state based on the current selection.  The menu is passed in aEvent's
+     * parameter.
+     */
+    int UpdateMenu( const TOOL_EVENT& aEvent );
+
+    int AddItemToSel( const TOOL_EVENT& aEvent );
+    void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
+    int AddItemsToSel( const TOOL_EVENT& aEvent );
+    void AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode = false );
+
+    int RemoveItemFromSel( const TOOL_EVENT& aEvent );
+    void RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode = false );
+    int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
+    void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
+
+    /**
+     * A safer version of RemoveItemsFromSel( EDA_ITEMS ) which doesn't require the items to
+     * still exist.
+     */
+    void RemoveItemsFromSel( std::vector<KIID>* aList, bool aQuietMode = false );
+
+    void BrightenItem( EDA_ITEM* aItem );
+    void UnbrightenItem( EDA_ITEM* aItem );
+
+    /**
+     * Show a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
+     * item.
+     *
+     * @note This routine **does not** modify the selection.
+     */
+    int SelectionMenu( const TOOL_EVENT& aEvent );
 
 protected:
+    /**
+     * Return a reference to the selection.
+     */
+    virtual SELECTION& selection() = 0;
+
+    /**
+     * Start the process to show our disambiguation menu once the user has kept the mouse down
+     * for the minimum time.
+     * @param aEvent
+     */
+   void onDisambiguationExpire( wxTimerEvent& aEvent );
+
+    /**
+     * Take necessary action mark an item as selected.
+     */
+    virtual void select( EDA_ITEM* aItem ) = 0;
+
+    /**
+     * Take necessary action mark an item as unselected.
+     */
+    virtual void unselect( EDA_ITEM* aItem ) = 0;
+
+    /**
+     * Highlight the item visually.
+     *
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to add the item to in the BRIGHTENED mode.
+     */
+    virtual void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) = 0;
+
+    /**
+     * Unhighlight the item visually.
+     *
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to remove the item from.
+     */
+    virtual void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) = 0;
+
     /**
      * Set the configuration of m_additive, m_subtractive, m_exclusive_or, m_skip_heuristics
      * from the state of modifier keys SHIFT, CTRL, ALT and depending on the OS
@@ -48,6 +121,9 @@ protected:
      */
     virtual bool ctrlClickHighlights() { return false; }
 
+    bool doSelectionMenu( COLLECTOR* aCollector );
+
+protected:
     bool            m_additive;          // Items should be added to sel (instead of replacing)
     bool            m_subtractive;       // Items should be removed from sel
     bool            m_exclusive_or;      // Items' selection state should be toggled

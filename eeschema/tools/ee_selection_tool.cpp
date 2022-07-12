@@ -22,14 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <core/kicad_algo.h>
 #include <geometry/shape_compound.h>
 #include <ee_actions.h>
 #include <ee_collectors.h>
 #include <ee_selection_tool.h>
-#include <eeschema_id.h> // For MAX_SELECT_ITEM_IDS
+#include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <lib_item.h>
 #include <symbol_viewer_frame.h>
@@ -61,6 +60,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <wx/log.h>
+
 
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
 {
@@ -123,7 +123,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleNonExcludedMarker = []( const SELECTION
 
 
 EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "eeschema.InteractiveSelection" ),
+        SELECTION_TOOL( "eeschema.InteractiveSelection" ),
         m_frame( nullptr ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_isSymbolEditor( false ),
@@ -288,7 +288,9 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
             m_convert = symbolEditFrame->GetConvert();
         }
         else
+        {
             m_isSymbolViewer = symbolViewerFrame != nullptr;
+        }
     }
     else
     {
@@ -299,21 +301,6 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( &m_selection );
     getView()->Add( &m_selection );
-}
-
-
-int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
-{
-    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
-    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
-
-    if( conditionalMenu )
-        conditionalMenu->Evaluate( m_selection );
-
-    if( actionMenu )
-        actionMenu->UpdateAll();
-
-    return 0;
 }
 
 
@@ -768,13 +755,6 @@ int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
-{
-    if( m_selection.GetSize() < 2 )
-        m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
-}
-
-
 void EE_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
 {
     if( m_frame->ToolStackIsEmpty() && !m_multiple )
@@ -847,9 +827,7 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
-    {
         GuessSelectionCandidates( collector, aWhere );
-    }
 }
 
 
@@ -908,6 +886,7 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
             if( aSubtract || ( aExclusiveOr && aCollector[i]->IsSelected() ) )
             {
                 aCollector[i]->ClearFlags( flags );
+
                 if( !aCollector[i]->HasFlag( STARTPOINT ) && !aCollector[i]->HasFlag( ENDPOINT ) )
                 {
                     unselect( aCollector[i] );
@@ -1325,6 +1304,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
                 {
                     aItem->ClearFlags( flags );
+
                     if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
                     {
                         unselect( aItem );
@@ -1487,118 +1467,6 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
-{
-    AddItemToSel( aEvent.Parameter<EDA_ITEM*>() );
-    m_selection.SetIsHover( false );
-    return 0;
-}
-
-
-void EE_SELECTION_TOOL::AddItemToSel( EDA_ITEM* aItem, bool aQuietMode )
-{
-    if( aItem )
-    {
-        select( aItem );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-}
-
-
-int EE_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
-{
-    AddItemsToSel( aEvent.Parameter<EDA_ITEMS*>(), false );
-    m_selection.SetIsHover( false );
-    return 0;
-}
-
-
-void EE_SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
-{
-    if( aList )
-    {
-        for( EDA_ITEM* item : *aList )
-            select( item );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-}
-
-
-int EE_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
-{
-    RemoveItemFromSel( aEvent.Parameter<EDA_ITEM*>() );
-    m_selection.SetIsHover( false );
-    return 0;
-}
-
-
-void EE_SELECTION_TOOL::RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode )
-{
-    if( aItem )
-    {
-        unselect( aItem );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-}
-
-
-int EE_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
-{
-    RemoveItemsFromSel( aEvent.Parameter<EDA_ITEMS*>(), false );
-    m_selection.SetIsHover( false );
-    return 0;
-}
-
-
-void EE_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
-{
-    if( aList )
-    {
-        for( EDA_ITEM* item : *aList )
-            unselect( item );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-}
-
-
-void EE_SELECTION_TOOL::RemoveItemsFromSel( std::vector<KIID>* aList, bool aQuietMode )
-{
-    EDA_ITEMS removeItems;
-
-    for( EDA_ITEM* item : m_selection )
-    {
-        if( alg::contains( *aList, item->m_Uuid ) )
-            removeItems.push_back( item );
-    }
-
-    RemoveItemsFromSel( &removeItems, aQuietMode );
-}
-
-
-void EE_SELECTION_TOOL::BrightenItem( EDA_ITEM* aItem )
-{
-    highlight( aItem, BRIGHTENED );
-}
-
-
-void EE_SELECTION_TOOL::UnbrightenItem( EDA_ITEM* aItem )
-{
-    unhighlight( aItem, BRIGHTENED );
-}
-
-
 int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();
@@ -1618,7 +1486,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
         for( LIB_ITEM& item : start->GetDrawItems() )
         {
             if( item.IsSelected() )
-                select( static_cast<EDA_ITEM*>( &item ) );
+                select( &item );
         }
     }
     else
@@ -1646,182 +1514,6 @@ void EE_SELECTION_TOOL::RebuildSelection()
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-}
-
-
-int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
-{
-    EE_COLLECTOR* collector = aEvent.Parameter<EE_COLLECTOR*>();
-
-    if( !doSelectionMenu( collector ) )
-        collector->m_MenuCancelled = true;
-
-    return 0;
-}
-
-
-bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
-{
-    EDA_ITEM*   current = nullptr;
-    bool        selectAll = false;
-    bool        expandSelection = false;
-
-    do
-    {
-        /// The user has requested the full, non-limited list of selection items
-        if( expandSelection )
-            aCollector->Combine();
-
-        expandSelection = false;
-
-        int         limit = std::min( 100, aCollector->GetCount() );
-        ACTION_MENU menu( true );
-
-        for( int i = 0; i < limit; ++i )
-        {
-            EDA_ITEM* item = ( *aCollector )[i];
-            wxString  text = item->GetSelectMenuText( m_frame->GetUserUnits() );
-            wxString  menuText;
-
-            if( i < 9 )
-            {
-#ifdef __WXMAC__
-                menuText = wxString::Format( "%s\t%d", text, i + 1 );
-#else
-                menuText = wxString::Format( "&%d  %s\t%d", i + 1, text, i + 1 );
-#endif
-            }
-            else
-            {
-                menuText = text;
-            }
-
-            menu.Add( menuText, i + 1, item->GetMenuImage() );
-        }
-
-        menu.AppendSeparator();
-        menu.Add( _( "Select &All\tA" ), limit + 1, BITMAPS::INVALID_BITMAP );
-
-        if( !expandSelection && aCollector->HasAdditionalItems() )
-            menu.Add( _( "&Expand Selection\tE" ), limit + 2, BITMAPS::INVALID_BITMAP );
-
-        if( aCollector->m_MenuTitle.Length() )
-        {
-            menu.SetTitle( aCollector->m_MenuTitle );
-            menu.SetIcon( BITMAPS::info );
-            menu.DisplayTitle( true );
-        }
-        else
-        {
-            menu.DisplayTitle( false );
-        }
-
-        SetContextMenu( &menu, CMENU_NOW );
-
-        while( TOOL_EVENT* evt = Wait() )
-        {
-            if( evt->Action() == TA_CHOICE_MENU_UPDATE )
-            {
-                if( selectAll )
-                {
-                    for( int i = 0; i < aCollector->GetCount(); ++i )
-                        unhighlight( ( *aCollector )[i], BRIGHTENED );
-                }
-                else if( current )
-                {
-                    unhighlight( current, BRIGHTENED );
-                }
-
-                int id = *evt->GetCommandId();
-
-                // User has pointed an item, so show it in a different way
-                if( id > 0 && id <= limit )
-                {
-                    current = ( *aCollector )[id - 1];
-                    highlight( current, BRIGHTENED );
-                }
-                else
-                {
-                    current = nullptr;
-                }
-
-                // User has pointed on the "Select All" option
-                if( id == limit + 1 )
-                {
-                    for( int i = 0; i < aCollector->GetCount(); ++i )
-                        highlight( ( *aCollector )[i], BRIGHTENED );
-
-                    selectAll = true;
-                }
-                else
-                {
-                    selectAll = false;
-                }
-            }
-            else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
-            {
-                if( selectAll )
-                {
-                    for( int i = 0; i < aCollector->GetCount(); ++i )
-                        unhighlight( ( *aCollector )[i], BRIGHTENED );
-                }
-                else if( current )
-                {
-                    unhighlight( current, BRIGHTENED );
-                }
-
-                OPT<int> id = evt->GetCommandId();
-
-                // User has selected the "Select All" option
-                if( id == limit + 1 )
-                {
-                    selectAll = true;
-                    current   = nullptr;
-                }
-                else if( id == limit + 2 )
-                {
-                    selectAll       = false;
-                    current         = nullptr;
-                    expandSelection = true;
-                }
-                // User has selected an item, so this one will be returned
-                else if( id && ( *id > 0 ) && ( *id <= limit ) )
-                {
-                    selectAll = false;
-                    current   = ( *aCollector )[*id - 1];
-                }
-                // User has cancelled the menu (either by <esc> or clicking out of it)
-                else
-                {
-                    selectAll = false;
-                    current   = nullptr;
-                }
-            }
-            else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
-            {
-                break;
-            }
-
-            getView()->UpdateItems();
-            m_frame->GetCanvas()->Refresh();
-        }
-    } while( expandSelection );
-
-    if( selectAll )
-        return true;
-    else if( current )
-    {
-        unhighlight( current, BRIGHTENED );
-
-        getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
-
-        aCollector->Empty();
-        aCollector->Append( current );
-        return true;
-    }
-
-    return false;
 }
 
 
@@ -1902,7 +1594,7 @@ void EE_SELECTION_TOOL::ClearSelection()
         return;
 
     while( m_selection.GetSize() )
-        unhighlight( (EDA_ITEM*) m_selection.Front(), SELECTED, &m_selection );
+        unhighlight( m_selection.Front(), SELECTED, &m_selection );
 
     getView()->Update( &m_selection );
 
@@ -1926,7 +1618,7 @@ void EE_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 }
 
 
-void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGroup )
+void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     KICAD_T itemType = aItem->Type();
 
@@ -1959,7 +1651,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
 }
 
 
-void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGroup )
+void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     KICAD_T itemType = aItem->Type();
 
@@ -1981,13 +1673,13 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
     {
         sch_item->RunOnChildren(
-            [&]( SCH_ITEM* aChild )
-            {
-                if( aMode == SELECTED )
-                    aChild->ClearSelected();
-                else if( aMode == BRIGHTENED )
-                    aChild->ClearBrightened();
-            } );
+                [&]( SCH_ITEM* aChild )
+                {
+                    if( aMode == SELECTED )
+                        aChild->ClearSelected();
+                    else if( aMode == BRIGHTENED )
+                        aChild->ClearBrightened();
+                } );
     }
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )

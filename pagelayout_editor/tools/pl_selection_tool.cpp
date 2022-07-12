@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
  */
 
 
-#include <bitmaps.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
@@ -41,16 +40,12 @@
 
 #include "pl_editor_frame.h"
 
-/**
- * The maximum number of items in the clarify selection context menu.  The current
- * setting of 40 is arbitrary.
- */
-#define MAX_SELECT_ITEM_IDS 40
+
 #define HITTEST_THRESHOLD_PIXELS 3
 
 
 PL_SELECTION_TOOL::PL_SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "plEditor.InteractiveSelection" ),
+        SELECTION_TOOL( "plEditor.InteractiveSelection" ),
         m_frame( nullptr )
 {
 }
@@ -82,21 +77,6 @@ void PL_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == MODEL_RELOAD )
         m_frame = getEditFrame<PL_EDITOR_FRAME>();
-}
-
-
-int PL_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
-{
-    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
-    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
-
-    if( conditionalMenu )
-        conditionalMenu->Evaluate( m_selection );
-
-    if( actionMenu )
-        actionMenu->UpdateAll();
-
-    return 0;
 }
 
 
@@ -248,12 +228,6 @@ int PL_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void PL_SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
-{
-    m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
-}
-
-
 PL_SELECTION& PL_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
@@ -280,9 +254,7 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
-    {
         guessSelectionCandidates( collector, aWhere );
-    }
 
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
@@ -386,8 +358,8 @@ bool PL_SELECTION_TOOL::selectMultiple()
          */
         bool windowSelection = width >= 0 ? true : false;
 
-        m_frame->GetCanvas()->SetCurrentCursor(
-                windowSelection ? KICURSOR::SELECT_WINDOW : KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
+                                                                : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -473,100 +445,6 @@ bool PL_SELECTION_TOOL::selectMultiple()
 }
 
 
-int PL_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
-{
-    AddItemToSel( aEvent.Parameter<EDA_ITEM*>() );
-    return 0;
-}
-
-
-void PL_SELECTION_TOOL::AddItemToSel( EDA_ITEM* aItem, bool aQuietMode )
-{
-    if( aItem )
-    {
-        select( aItem );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-}
-
-
-int PL_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
-{
-    AddItemsToSel( aEvent.Parameter<EDA_ITEMS*>(), false );
-    return 0;
-}
-
-
-void PL_SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
-{
-    if( aList )
-    {
-        for( EDA_ITEM* item : *aList )
-            select( item );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-}
-
-
-int PL_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
-{
-    RemoveItemFromSel( aEvent.Parameter<EDA_ITEM*>() );
-    return 0;
-}
-
-
-void PL_SELECTION_TOOL::RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode )
-{
-    if( aItem )
-    {
-        unselect( aItem );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-}
-
-
-int PL_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
-{
-    RemoveItemsFromSel( aEvent.Parameter<EDA_ITEMS*>(), false );
-    return 0;
-}
-
-
-void PL_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
-{
-    if( aList )
-    {
-        for( EDA_ITEM* item : *aList )
-            unselect( item );
-
-        // Inform other potentially interested tools
-        if( !aQuietMode )
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-}
-
-
-void PL_SELECTION_TOOL::BrightenItem( EDA_ITEM* aItem )
-{
-    highlight( aItem, BRIGHTENED );
-}
-
-
-void PL_SELECTION_TOOL::UnbrightenItem( EDA_ITEM* aItem )
-{
-    unhighlight( aItem, BRIGHTENED );
-}
-
-
 int PL_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();
@@ -589,160 +467,13 @@ void PL_SELECTION_TOOL::RebuildSelection()
 }
 
 
-int PL_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
-{
-    COLLECTOR* collector = aEvent.Parameter<COLLECTOR*>();
-
-    if( !doSelectionMenu( collector ) )
-        collector->m_MenuCancelled = true;
-
-    return 0;
-}
-
-
-bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
-{
-    EDA_ITEM*   current = nullptr;
-    ACTION_MENU menu( true );
-
-    // ID limit is `MAX_SELECT_ITEM_IDS+1` because the last item is "select all"
-    // and the first item has ID of 1.
-    int limit = std::min( MAX_SELECT_ITEM_IDS + 1, aCollector->GetCount() );
-
-    for( int i = 0; i < limit; ++i )
-    {
-        wxString text;
-        EDA_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText( m_frame->GetUserUnits() );
-
-        wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
-        menu.Add( menuText, i + 1, item->GetMenuImage() );
-    }
-
-    menu.AppendSeparator();
-    menu.Add( _( "Select &All\tA" ), limit + 1, BITMAPS::INVALID_BITMAP );
-
-    if( aCollector->m_MenuTitle.Length() )
-    {
-        menu.SetTitle( aCollector->m_MenuTitle );
-        menu.SetIcon( BITMAPS::info );
-        menu.DisplayTitle( true );
-    }
-    else
-    {
-        menu.DisplayTitle( false );
-    }
-
-    SetContextMenu( &menu, CMENU_NOW );
-
-    bool selectAll = false;
-
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
-        {
-            if( selectAll )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    unhighlight( ( *aCollector )[i], BRIGHTENED );
-            }
-            else if( current )
-            {
-                unhighlight( current, BRIGHTENED );
-            }
-
-            int id = *evt->GetCommandId();
-
-            // User has pointed an item, so show it in a different way
-            if( id > 0 && id <= limit )
-            {
-                current = ( *aCollector )[id - 1];
-                highlight( current, BRIGHTENED );
-            }
-            else
-            {
-                current = nullptr;
-            }
-
-            if( id == limit + 1 )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    highlight( ( *aCollector )[i], BRIGHTENED );
-
-                selectAll = true;
-            }
-            else
-            {
-                selectAll = false;
-            }
-        }
-        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
-        {
-            if( selectAll )
-            {
-                for( int i = 0; i < aCollector->GetCount(); ++i )
-                    unhighlight( ( *aCollector )[i], BRIGHTENED );
-            }
-            else if( current )
-            {
-                unhighlight( current, BRIGHTENED );
-            }
-
-            OPT<int> id = evt->GetCommandId();
-
-            // User has selected an item, so this one will be returned
-            if( id == limit + 1 )
-            {
-                selectAll = true;
-                current   = nullptr;
-            }
-            else if( id && ( *id > 0 ) && ( *id <= limit ) )
-            {
-                selectAll = false;
-                current = ( *aCollector )[*id - 1];
-            }
-            else
-            {
-                selectAll = false;
-                current   = nullptr;
-            }
-        }
-        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
-        {
-            break;
-        }
-
-        getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
-    }
-
-    if( selectAll )
-    {
-        return true;
-    }
-    else if( current )
-    {
-        unhighlight( current, BRIGHTENED );
-
-        getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
-
-        aCollector->Empty();
-        aCollector->Append( current );
-        return true;
-    }
-
-    return false;
-}
-
-
 void PL_SELECTION_TOOL::ClearSelection()
 {
     if( m_selection.Empty() )
         return;
 
     while( m_selection.GetSize() )
-        unhighlight( (EDA_ITEM*) m_selection.Front(), SELECTED, &m_selection );
+        unhighlight( m_selection.Front(), SELECTED, &m_selection );
 
     getView()->Update( &m_selection );
 
@@ -766,7 +497,7 @@ void PL_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 }
 
 
-void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, PL_SELECTION* aGroup )
+void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -780,7 +511,7 @@ void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, PL_SELECTION* aGr
 }
 
 
-void PL_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, PL_SELECTION* aGroup )
+void PL_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();
@@ -800,7 +531,7 @@ bool PL_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    for( auto item : m_selection )
+    for( EDA_ITEM* item : m_selection )
     {
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item

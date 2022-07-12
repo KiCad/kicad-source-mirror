@@ -61,7 +61,7 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, PC
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class PCB_SELECTION_TOOL : public SELECTION_TOOL, public PCB_TOOL_BASE
+class PCB_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
     PCB_SELECTION_TOOL();
@@ -74,6 +74,11 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     void OnIdle( wxIdleEvent& aEvent );
+
+    bool IsFootprintEditor()
+    {
+        return m_isFootprintEditor;
+    }
 
     /**
      * The main loop.
@@ -103,25 +108,8 @@ public:
     int ClearSelection( const TOOL_EVENT& aEvent );
     void ClearSelection( bool aQuietMode = false );
 
-    ///< Item selection event handler.
-    int SelectItem( const TOOL_EVENT& aEvent );
-    void AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode = false );
-
     ///< Select all items on the board
     int SelectAll( const TOOL_EVENT& aEvent );
-
-    ///< Multiple item selection event handler
-    int SelectItems( const TOOL_EVENT& aEvent );
-
-    ///< Item unselection event handler.
-    int UnselectItem( const TOOL_EVENT& aEvent );
-    void RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode = false );
-
-    ///< Multiple item unselection event handler
-    int UnselectItems( const TOOL_EVENT& aEvent );
-
-    void BrightenItem( BOARD_ITEM* aItem );
-    void UnbrightenItem( BOARD_ITEM* aItem );
 
     /**
      * Handle finding an item. Does not do the actual searching, is called
@@ -136,7 +124,7 @@ public:
      *
      * @param aItem is an item to be selected.
      */
-    void select( BOARD_ITEM* aItem );
+    void select( EDA_ITEM* aItem ) override;
 
     /**
      * Check conditions for an item to be selected.
@@ -153,14 +141,6 @@ public:
      * @param aWhere is the selection point to consider
      */
     void GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const;
-
-    /**
-     * Show a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
-     * item.
-     *
-     * @note This routine **does not** modify the selection.
-     */
-    int SelectionMenu( const TOOL_EVENT& aEvent );
 
     /**
      * Rebuild the selection from the EDA_ITEMs' selection flags.
@@ -183,11 +163,6 @@ public:
 
     ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
     void zoomFitCrossProbeBBox( EDA_RECT bbox );
-
-    BOARD* GetBoard() const
-    {
-        return board();
-    }
 
     void EnterGroup();
 
@@ -218,7 +193,34 @@ public:
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
 
 protected:
+    KIGFX::PCB_VIEW* view() const
+    {
+        return static_cast<KIGFX::PCB_VIEW*>( getView() );
+    }
+
+    KIGFX::VIEW_CONTROLS* controls() const
+    {
+        return getViewControls();
+    }
+
+    PCB_BASE_EDIT_FRAME* frame() const
+    {
+        return getEditFrame<PCB_BASE_EDIT_FRAME>();
+    }
+
+    BOARD* board() const
+    {
+        return getModel<BOARD>();
+    }
+
+    PCB_DRAW_PANEL_GAL* canvas() const
+    {
+        return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetCanvas() );
+    }
+
     virtual bool ctrlClickHighlights() override;
+
+    SELECTION& selection() override { return m_selection; }
 
 private:
 
@@ -257,23 +259,6 @@ private:
      * @return true if the function was canceled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
-
-    /**
-     * Allow the selection of a single item from a list via pop-up menu.
-     *
-     * The items are highlighted on the canvas when hovered in the menu.  The collector is
-     * trimmed to the picked item.
-     *
-     * @return true if an item was picked
-     */
-    bool doSelectionMenu( GENERAL_COLLECTOR* aItems );
-
-    /**
-     * Start the process to show our disambiguation menu once the user has kept
-     * the mouse down for the minimum time
-     * @param aEvent
-     */
-    void onDisambiguationExpire( wxTimerEvent& aEvent );
 
     /**
      * Handle disambiguation actions including displaying the menu.
@@ -357,7 +342,7 @@ private:
      *
      * @param aItem is an item to be unselected.
      */
-    void unselect( BOARD_ITEM* aItem );
+    void unselect( EDA_ITEM* aItem ) override;
 
     /**
      * Highlight the item visually.
@@ -366,7 +351,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCB_SELECTION* aGroup = nullptr );
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * Unhighlight the item visually.
@@ -375,7 +360,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCB_SELECTION* aGroup = nullptr );
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * @return True if the given point is contained in any of selected items' bounding box.
@@ -389,20 +374,17 @@ private:
      */
     int updateSelection( const TOOL_EVENT& aEvent );
 
-    /**
-     * Pass the selection to a conditional menu for updating.
-     */
-    int UpdateMenu( const TOOL_EVENT& aEvent );
-
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
-    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
+    void highlightInternal( EDA_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
 
-    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
+    void unhighlightInternal( EDA_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
 
 private:
     PCB_BASE_FRAME*          m_frame;                // Pointer to the parent frame
+    bool                     m_isFootprintEditor;
+
     PCB_SELECTION            m_selection;            // Current state of selection
 
     SELECTION_FILTER_OPTIONS m_filter;

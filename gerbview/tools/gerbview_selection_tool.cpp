@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,6 @@
 #include <limits>
 #include <functional>
 using namespace std::placeholders;
-
 #include <bitmaps.h>
 #include <eda_item.h>
 #include <gerber_collectors.h>
@@ -112,25 +111,9 @@ private:
 
 
 GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "gerbview.InteractiveSelection" ),
+        SELECTION_TOOL( "gerbview.InteractiveSelection" ),
         m_frame( nullptr )
 {
-    m_preliminary = true;
-}
-
-
-int GERBVIEW_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
-{
-    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
-    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
-
-    if( conditionalMenu )
-        conditionalMenu->Evaluate( m_selection );
-
-    if( actionMenu )
-        actionMenu->UpdateAll();
-
-    return 0;
 }
 
 
@@ -160,7 +143,6 @@ bool GERBVIEW_SELECTION_TOOL::Init()
 void GERBVIEW_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<GERBVIEW_FRAME>();
-    m_preliminary = true;
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -235,11 +217,11 @@ GERBVIEW_SELECTION& GERBVIEW_SELECTION_TOOL::GetSelection()
 }
 
 
-bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
+bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere )
 {
-    EDA_ITEM* item = nullptr;
+    EDA_ITEM*        item = nullptr;
     GERBER_COLLECTOR collector;
-    EDA_ITEM* model = getModel<EDA_ITEM>();
+    EDA_ITEM*        model = getModel<EDA_ITEM>();
 
     collector.Collect( model, GERBER_COLLECTOR::AllItems, wxPoint( aWhere.x, aWhere.y ) );
 
@@ -252,16 +234,10 @@ bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag 
 
     if( collector.GetCount() > 1 )
     {
-        if( aOnDrag )
-            Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+        doSelectionMenu( &collector );
 
-        item = disambiguationMenu( &collector );
-
-        if( item )
-        {
-            collector.Empty();
-            collector.Append( item );
-        }
+        if( collector.m_MenuCancelled )
+            return false;
     }
 
     if( !m_additive && !m_subtractive && !m_exclusive_or )
@@ -286,18 +262,6 @@ bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag 
     }
 
     return false;
-}
-
-
-bool GERBVIEW_SELECTION_TOOL::selectCursor( bool aSelectAlways )
-{
-    if( aSelectAlways || m_selection.Empty() )
-    {
-        clearSelection();
-        selectPoint( getViewControls()->GetCursorPosition( false ) );
-    }
-
-    return !m_selection.Empty();
 }
 
 
@@ -399,93 +363,6 @@ void GERBVIEW_SELECTION_TOOL::clearSelection()
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-}
-
-
-EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollector )
-{
-    EDA_ITEM* current = nullptr;
-    KIGFX::VIEW_GROUP highlightGroup;
-    ACTION_MENU menu( true );
-
-    highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
-    getView()->Add( &highlightGroup );
-
-    int limit = std::min( 10, aCollector->GetCount() );
-
-    for( int i = 0; i < limit; ++i )
-    {
-        wxString text;
-        EDA_ITEM* item = ( *aCollector )[i];
-        text = item->GetSelectMenuText( m_frame->GetUserUnits() );
-        menu.Add( text, i + 1, item->GetMenuImage() );
-    }
-
-    if( aCollector->m_MenuTitle.Length() )
-    {
-        menu.SetTitle( aCollector->m_MenuTitle );
-        menu.SetIcon( BITMAPS::info );
-        menu.DisplayTitle( true );
-    }
-    else
-    {
-        menu.DisplayTitle( false );
-    }
-
-    SetContextMenu( &menu, CMENU_NOW );
-
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
-        {
-            if( current )
-            {
-                current->ClearBrightened();
-                getView()->Hide( current, false );
-                highlightGroup.Remove( current );
-                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-            }
-
-            int id = *evt->GetCommandId();
-
-            // User has pointed an item, so show it in a different way
-            if( id > 0 && id <= limit )
-            {
-                current = ( *aCollector )[id - 1];
-                current->SetBrightened();
-                getView()->Hide( current, true );
-                highlightGroup.Add( current );
-                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-            }
-            else
-            {
-                current = nullptr;
-            }
-        }
-        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
-        {
-            OPT<int> id = evt->GetCommandId();
-
-            // User has selected an item, so this one will be returned
-            if( id && ( *id > 0 ) )
-                current = ( *aCollector )[*id - 1];
-            else
-                current = nullptr;
-
-            break;
-        }
-    }
-
-    if( current && current->IsBrightened() )
-    {
-        current->ClearBrightened();
-        getView()->Hide( current, false );
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-    }
-
-    getView()->Remove( &highlightGroup );
-
-    return current;
 }
 
 

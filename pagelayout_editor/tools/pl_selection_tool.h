@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ namespace KIGFX
 }
 
 
-class PL_SELECTION_TOOL : public SELECTION_TOOL, public TOOL_INTERACTIVE
+class PL_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
     PL_SELECTION_TOOL();
@@ -51,8 +51,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
-
-    int UpdateMenu( const TOOL_EVENT& aEvent );
 
     /**
      * The main loop.
@@ -81,19 +79,6 @@ public:
      */
     void SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag = nullptr );
 
-    int AddItemToSel( const TOOL_EVENT& aEvent );
-    void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
-    int AddItemsToSel( const TOOL_EVENT& aEvent );
-    void AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode = false );
-
-    int RemoveItemFromSel( const TOOL_EVENT& aEvent );
-    void RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode = false );
-    int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
-    void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
-
-    void BrightenItem( EDA_ITEM* aItem );
-    void UnbrightenItem( EDA_ITEM* aItem );
-
     int ClearSelection( const TOOL_EVENT& aEvent );
     void ClearSelection();
 
@@ -103,13 +88,8 @@ public:
      */
     void RebuildSelection();
 
-    /**
-     * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
-     * item.
-     *
-     * @note This routine **does not** modify the selection.
-     */
-    int SelectionMenu( const TOOL_EVENT& aEvent );
+protected:
+    SELECTION& selection() override { return m_selection; }
 
 private:
     /**
@@ -126,22 +106,6 @@ private:
     void guessSelectionCandidates( COLLECTOR& collector, const VECTOR2I& aWhere );
 
     /**
-     * Allow the selection of a single item from a list via pop-up menu.  The items are
-     * highlighted on the canvas when hovered in the menu.  The collector is trimmed to
-     * the picked item.
-     *
-     * @return true if an item was picked.
-     */
-    bool doSelectionMenu( COLLECTOR* aItems );
-
-    /**
-     * Start the process to show our disambiguation menu once the user has kept
-     * the mouse down for the minimum time
-     * @param aEvent
-     */
-    void onDisambiguationExpire( wxTimerEvent& aEvent );
-
-    /**
      * Handle disambiguation actions including displaying the menu.
      */
     int disambiguateCursor( const TOOL_EVENT& aEvent );
@@ -151,14 +115,14 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void select( EDA_ITEM* aItem );
+    void select( EDA_ITEM* aItem ) override;
 
     /**
      * Take necessary action mark an item as unselected.
      *
      * @param aItem is an item to be unselected.
      */
-    void unselect( EDA_ITEM* aItem );
+    void unselect( EDA_ITEM* aItem ) override;
 
     /**
      * Highlight the item visually.
@@ -167,7 +131,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * Unhighlight the item visually.
@@ -176,7 +140,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * @return True if the given point is contained in any of selected items' bounding box.

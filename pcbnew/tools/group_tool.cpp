@@ -57,12 +57,12 @@ private:
     void update() override
     {
         PCB_SELECTION_TOOL* selTool = getToolManager()->GetTool<PCB_SELECTION_TOOL>();
-        BOARD*              board = selTool->GetBoard();
+        BOARD*              board = static_cast<BOARD*>( getToolManager()->GetModel() );
 
         const auto& selection = selTool->GetSelection();
 
         wxString check = board->GroupsSanityCheck();
-        wxCHECK_RET( check == wxEmptyString, _( "Group is in inconsistent state:" ) + wxS( " " )+ check );
+        wxCHECK_RET( check == wxEmptyString, _( "Group is in inconsistent state:" ) + wxS( " " ) + check );
 
         BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
 

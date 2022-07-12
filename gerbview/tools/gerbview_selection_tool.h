@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,7 +43,7 @@ namespace KIGFX
 /**
  * Selection tool for GerbView, based on the one in Pcbnew
  */
-class GERBVIEW_SELECTION_TOOL : public SELECTION_TOOL, public TOOL_INTERACTIVE
+class GERBVIEW_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
     GERBVIEW_SELECTION_TOOL();
@@ -54,9 +54,6 @@ public:
 
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
-
-    // called to rebuild a CONDITIONAL_MENU before opening it:
-    int UpdateMenu( const TOOL_EVENT& aEvent );
 
     /**
      * The main loop.
@@ -79,39 +76,23 @@ public:
     ///< Sets up handlers for various events.
     void setTransitions() override;
 
+protected:
+    SELECTION& selection() override { return m_selection; }
+
 private:
     /**
      * Select an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows one to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
-     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
-     * a menu is shown, otherwise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
-    bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false );
-
-    /**
-     * Select an item under the cursor unless there is something already selected or
-     * \a aSelectAlways is true.
-     *
-     * @param aSelectAlways forces to select an item even if there is an item already selected.
-     * @return true if eventually there is an item selected, false otherwise.
-     */
-    bool selectCursor( bool aSelectAlways = false );
+    bool selectPoint( const VECTOR2I& aWhere );
 
     /**
      * Clear the current selection.
      */
     void clearSelection();
-
-    /**
-     * Handle the menu that allows one to select one of many items in case
-     * there is more than one item at the selected point (@see selectCursor()).
-     *
-     * @param aItems contains list of items that are displayed to the user.
-     */
-    EDA_ITEM* disambiguationMenu( GERBER_COLLECTOR* aItems );
 
     /**
      * Check conditions for an item to be selected.
@@ -125,14 +106,14 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void select( EDA_ITEM* aItem );
+    void select( EDA_ITEM* aItem ) override;
 
     /**
      * Take necessary action mark an item as unselected.
      *
      * @param aItem is an item to be unselected.
      */
-    void unselect( EDA_ITEM* aItem );
+    void unselect( EDA_ITEM* aItem ) override;
 
     /**
      * Mark item as selected, but does not add it to the #ITEMS_PICKED_LIST.
@@ -148,10 +129,33 @@ private:
      */
     void unselectVisually( EDA_ITEM* aItem );
 
-    GERBVIEW_FRAME* m_frame;        // Pointer to the parent frame.
-    GERBVIEW_SELECTION m_selection; // Current state of selection.
+    /**
+     * Highlight the item visually.
+     *
+     * @param aItem is an item to be be highlighted.
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to add the item to in the BRIGHTENED mode.
+     */
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override
+    {
+        // Currently not used in GerbView
+    };
 
-    bool m_preliminary;             // Determines if the selection is preliminary or final.
+    /**
+     * Unhighlight the item visually.
+     *
+     * @param aItem is an item to be be highlighted.
+     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aGroup is the group to remove the item from.
+     */
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override
+    {
+        // Currently not used in GerbView
+    };
+
+private:
+    GERBVIEW_FRAME*    m_frame;        // Pointer to the parent frame.
+    GERBVIEW_SELECTION m_selection;    // Current state of selection.
 };
 
 #endif

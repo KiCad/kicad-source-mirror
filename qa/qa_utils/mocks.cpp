@@ -191,7 +191,7 @@ public:
 
 
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
-        PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
+        SELECTION_TOOL( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ),
         m_enteredGroup( NULL ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
@@ -283,53 +283,9 @@ int PCB_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-int PCB_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
 int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
     return 0;
-}
-
-
-void PCB_SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
-{
-}
-
-
-int PCB_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-int PCB_SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-void PCB_SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
-{
-}
-
-
-void PCB_SELECTION_TOOL::BrightenItem( BOARD_ITEM* aItem )
-{
-}
-
-
-void PCB_SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
-{
 }
 
 
@@ -425,49 +381,9 @@ void PCB_SELECTION_TOOL::RebuildSelection()
 }
 
 
-int PCB_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
-{
-    return false;
-}
-
-
 bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     return false;
-}
-
-
-void PCB_SELECTION_TOOL::select( BOARD_ITEM* aItem )
-{
-}
-
-
-void PCB_SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
-{
-}
-
-void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
-{
-}
-
-void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
-{
-}
-
-
-void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
-{
-}
-
-
-void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
-{
 }
 
 
@@ -485,12 +401,6 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
 
 int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-int PCB_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
     return 0;
 }
