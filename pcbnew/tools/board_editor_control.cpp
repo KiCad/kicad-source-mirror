@@ -687,6 +687,10 @@ int BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
     if( frame )
     {
         std::string payload;
+
+        if( wxWindow* blocking_win = frame->Kiway().GetBlockingDialog() )
+            blocking_win->Close( true );
+
         m_frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_UPDATE, payload, m_frame );
     }
     return 0;

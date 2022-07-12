@@ -1394,6 +1394,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
                                                                         true );
 
+            if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+                blocking_win->Close( true );
+
             editor->LoadSymbolFromSchematic( symbol );
 
             editor->Show( true );
@@ -1403,6 +1406,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR,
                                                                         true );
+
+            if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+                blocking_win->Close( true );
 
             editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
 

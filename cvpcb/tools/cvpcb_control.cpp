@@ -167,6 +167,9 @@ int CVPCB_CONTROL::ShowFootprintViewer( const TOOL_EVENT& aEvent )
     }
     else
     {
+        if( wxWindow* blocking_win = fpframe->Kiway().GetBlockingDialog() )
+            blocking_win->Close( true );
+
         if( fpframe->IsIconized() )
             fpframe->Iconize( false );
 

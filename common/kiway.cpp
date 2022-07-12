@@ -50,7 +50,7 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
 KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
-    m_program( aProgram ), m_ctl( aCtlBits ), m_top( nullptr )
+    m_program( aProgram ), m_ctl( aCtlBits ), m_top( nullptr ), m_blockingDialog( wxID_NONE )
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
@@ -604,6 +604,19 @@ void KIWAY::ProjectChanged()
         if( frame )
             frame->ProjectChanged();
     }
+}
+
+wxWindow* KIWAY::GetBlockingDialog()
+{
+    return wxWindow::FindWindowById( m_blockingDialog );
+}
+
+void KIWAY::SetBlockingDialog( wxWindow* aWin )
+{
+    if( !aWin )
+        m_blockingDialog = wxID_NONE;
+    else
+        m_blockingDialog = aWin->GetId();
 }
 
 
