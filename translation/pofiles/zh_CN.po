@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-07-09 21:10+0000\n"
+"PO-Revision-Date: 2022-07-16 04:16+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5049,9 +5049,8 @@ msgid "Schematic text && graphics"
 msgstr "原理图文本和图形"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "原理图文本和图形"
+msgstr "符号私有文本 && 图形"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -16011,15 +16010,14 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad 符号库查看器"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"筛选封装名称、关键字、描述和焊盘计数。\n"
-"搜索词按空格分隔。 所有搜索词必须匹配。\n"
-"数字的术语也将与焊盘计数匹配。"
+"筛选符号名称、关键字、描述和引脚计数。\n"
+"搜索词由空格分隔。 所有搜索词必须匹配。\n"
+"数字搜索词还将匹配引脚计数。"
 
 #: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1094
 #: pcbnew/footprint_viewer_frame.cpp:1099
@@ -28588,9 +28586,8 @@ msgstr ""
 "他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "最小环形宽度："
+msgstr "最小连接宽度："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -30625,9 +30622,8 @@ msgid "Drilled holes co-located"
 msgstr "钻孔并列在一起了"
 
 #: pcbnew/drc/drc_item.cpp:112
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "到敷铜的焊盘连接："
+msgstr "铜连接过窄"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Track width"
@@ -30925,9 +30921,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "正检查网络的最小连接宽度..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum connection width %s; actual %s"
-msgstr "(%s 最小宽度 %s; 实际 %s)"
+msgstr "最小连接宽度 %s; 实际 %s"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -36061,7 +36057,7 @@ msgstr "未定义 'diff_pair_uncoupled' 约束。"
 #: pcbnew/tools/board_inspection_tool.cpp:820
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "注意：%s 完全被焊膏覆盖； 间隙仅适用于过孔。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Silkscreen clearance resolution for:"
