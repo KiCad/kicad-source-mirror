@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-06-22 20:38+0200\n"
+"POT-Creation-Date: 2022-07-14 08:58+0200\n"
+"PO-Revision-Date: 2022-07-14 09:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Basepath: ../../../git_dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -1744,35 +1744,35 @@ msgid "Donate"
 msgstr "Faire un don"
 
 #: common/dialog_about/dialog_about_base.cpp:69
-#: common/tool/common_control.cpp:287
+#: common/tool/common_control.cpp:294
 msgid "Donate to KiCad"
 msgstr "Faire un don à KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:658
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:663
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:659
+#: common/dialog_shim.cpp:664
 msgid "&Cancel"
 msgstr "&Annuler"
 
-#: common/dialog_shim.cpp:660
+#: common/dialog_shim.cpp:665
 msgid "&Yes"
 msgstr "&Oui"
 
-#: common/dialog_shim.cpp:661
+#: common/dialog_shim.cpp:666
 msgid "&No"
 msgstr "&Non"
 
-#: common/dialog_shim.cpp:662
+#: common/dialog_shim.cpp:667
 msgid "&Apply"
 msgstr "&Appliquer"
 
-#: common/dialog_shim.cpp:663
+#: common/dialog_shim.cpp:668
 msgid "&Save"
 msgstr "&Sauver"
 
-#: common/dialog_shim.cpp:664 common/dialog_shim.cpp:665
+#: common/dialog_shim.cpp:669 common/dialog_shim.cpp:670
 #: common/eda_base_frame.cpp:466
 msgid "&Help"
 msgstr "Ai&de"
@@ -3708,7 +3708,7 @@ msgstr "Style de Ligne"
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1102 include/stroke_params.h:79
+#: eeschema/tools/sch_editor_control.cpp:1110 include/stroke_params.h:79
 msgid "Default"
 msgstr "Défaut"
 
@@ -5173,9 +5173,8 @@ msgid "Schematic text && graphics"
 msgstr "Texte de schématique et graphiques"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Texte de schématique et graphiques"
+msgstr "Symbole texte && graphiques privés"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -6365,7 +6364,7 @@ msgstr "Ouvrez \"Faire un don à KiCad\" dans un navigateur Web"
 msgid "Report Bug"
 msgstr "Rapporter un Bug"
 
-#: common/tool/common_control.cpp:219
+#: common/tool/common_control.cpp:226
 #, c-format
 msgid ""
 "Help file '%s' or\n"
@@ -6376,11 +6375,11 @@ msgstr ""
 "'%s' n’a pas pu être trouvé.\n"
 "Voulez-vous accéder à l’aide en ligne KiCad?"
 
-#: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
+#: common/tool/common_control.cpp:229 common/tool/common_control.cpp:249
 msgid "File Not Found"
 msgstr "Fichier Non Trouvé"
 
-#: common/tool/common_control.cpp:239
+#: common/tool/common_control.cpp:246
 #, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
@@ -6389,7 +6388,7 @@ msgstr ""
 "Le fichier d’aide '%s' n’a pas pu être trouvé.\n"
 "Voulez-vous accéder à l’aide en ligne KiCad?"
 
-#: common/tool/common_control.cpp:269
+#: common/tool/common_control.cpp:276
 #, c-format
 msgid ""
 "Could not launch the default browser.\n"
@@ -6398,11 +6397,11 @@ msgstr ""
 "Impossible de lancer le navigateur par défaut.\n"
 "Pour plus d’informations sur la façon d’aider le projet KiCad, visitez %s"
 
-#: common/tool/common_control.cpp:272
+#: common/tool/common_control.cpp:279
 msgid "Get involved with KiCad"
 msgstr "Rester impliqué avec KiCad"
 
-#: common/tool/common_control.cpp:284
+#: common/tool/common_control.cpp:291
 #, c-format
 msgid ""
 "Could not launch the default browser.\n"
@@ -7079,7 +7078,7 @@ msgstr "Nombre de Pin"
 #: cvpcb/cvpcb_mainframe.cpp:742 eeschema/sch_symbol.cpp:1461
 #: eeschema/sch_symbol.cpp:1465 eeschema/sch_symbol.cpp:1495
 #: eeschema/symbol_editor/symbol_editor.cpp:117
-#: pcbnew/tools/pcb_control.cpp:1230
+#: pcbnew/tools/pcb_control.cpp:1220
 msgid "Library"
 msgstr "Librairie"
 
@@ -9063,8 +9062,8 @@ msgstr "Taille jonction:"
 msgid "Junction color:"
 msgstr "Couleur de jonction:"
 
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:119
-#: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:101
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:120
+#: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:102
 msgid "Edit Text and Graphic Properties"
 msgstr "Editer Propriétés des Textes et Elément Graphiques"
 
@@ -12472,16 +12471,15 @@ msgid "Cross-probing"
 msgstr "Cross-probing"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Le symbole alias doit avoir un parent sélectionné"
+msgstr ""
+"Mise en surbrillance les symboles lorsque les empreintes sont sélectionnées"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
 msgstr ""
-"Mettre en surbrillance tous les éléments cuivre de(s) équipotentielle(s) "
-"sélectionnée(s)"
+"Mettre en surbrillance les symboles correspondant aux empreintes "
+"sélectionnées"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -12491,6 +12489,8 @@ msgstr "Centrer la vue sur les éléments sélectionnés"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
 msgstr ""
+"S'assure que les symboles en sélection croisée sont visibles dans la vue "
+"actuelle"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -16502,17 +16502,16 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "Visionneuse de Librairies de Symboles KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"Filtrage sur le nom de l'empreinte, les mots clés, la description et le "
-"nombre de pads.\n"
-"Les termes de recherche sont séparés par des espaces.  Tous les termes de "
-"recherche doivent correspondre.\n"
-"Un terme qui est un nombre drevra également correspondre au nombre de pad."
+"Filtre sur le nom du symbole, les mots-clés, la description et le nombre de "
+"broches.\n"
+"Les termes de recherche sont séparés par des espaces.  Tous les termes "
+"recherchés doivent correspondre.\n"
+"Un terme qui est un nombre correspondra également au nombre de broches."
 
 #: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1094
 #: pcbnew/footprint_viewer_frame.cpp:1099
@@ -16577,22 +16576,22 @@ msgstr ""
 "mode autonome.\n"
 "Vous devez lancer le gestionnaire de projet KiCad et créer un projet."
 
-#: eeschema/tools/backannotate.cpp:165
+#: eeschema/tools/backannotate.cpp:168
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
 msgstr "L'empreinte '%s' n'a pas de symbole associé."
 
-#: eeschema/tools/backannotate.cpp:197
+#: eeschema/tools/backannotate.cpp:200
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
 msgstr "Les empreintes '%s' et '%s' sont liées au même symbole."
 
-#: eeschema/tools/backannotate.cpp:262
+#: eeschema/tools/backannotate.cpp:265
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
 msgstr "Impossible de trouver un symbole pour l'empreinte  '%s'."
 
-#: eeschema/tools/backannotate.cpp:291
+#: eeschema/tools/backannotate.cpp:294
 #, c-format
 msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
@@ -16601,47 +16600,47 @@ msgstr ""
 "L’empreinte '%s' n’est pas présente sur le PCB. Les symboles correspondants "
 "dans le schéma doivent être supprimés manuellement (si désiré)."
 
-#: eeschema/tools/backannotate.cpp:304
+#: eeschema/tools/backannotate.cpp:307
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Re-appairer les empreintes nécessite un schéma complètement numéroté."
 
-#: eeschema/tools/backannotate.cpp:307
+#: eeschema/tools/backannotate.cpp:310
 msgid "Footprint re-linking cancelled by user."
 msgstr "Re-liaison d’empreinte annulée par l’utilisateur."
 
-#: eeschema/tools/backannotate.cpp:330
+#: eeschema/tools/backannotate.cpp:333
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
 msgstr "Change la référence schématique de %s en %s."
 
-#: eeschema/tools/backannotate.cpp:347
+#: eeschema/tools/backannotate.cpp:350
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
 msgstr "Change empreinte assignée '%s' de '%s' en '%s'."
 
-#: eeschema/tools/backannotate.cpp:365
+#: eeschema/tools/backannotate.cpp:368
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
 msgstr "Modifie valeur %s de '%s' en '%s'."
 
-#: eeschema/tools/backannotate.cpp:390
+#: eeschema/tools/backannotate.cpp:393
 #, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "Impossible de trouver '%s' pin '%s'."
 
-#: eeschema/tools/backannotate.cpp:533
+#: eeschema/tools/backannotate.cpp:536
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "Change '%s' pin'%s' label '%s'en '%s'."
 
-#: eeschema/tools/backannotate.cpp:558
+#: eeschema/tools/backannotate.cpp:561
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
 "Le net %s ne peut pas être changé en %s car il est piloté par une pin "
 "d'alimentation."
 
-#: eeschema/tools/backannotate.cpp:567
+#: eeschema/tools/backannotate.cpp:570
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Ajout label '%s' a pin %s net '%s'."
@@ -17534,10 +17533,8 @@ msgid "Enter Sheet"
 msgstr "Entrer dans Feuille"
 
 #: eeschema/tools/ee_actions.cpp:730
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr ""
-"Afficher le contenu de la feuille sélectionnée dans l'éditeur de schéma"
+msgstr "Changer par le contenu de la feuille fournie dans l'éditeur de schémas"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Display the selected sheet's contents in the schematic editor"
@@ -17730,7 +17727,7 @@ msgstr "Aucun problème de symbole trouvé."
 msgid "Symbol Warnings"
 msgstr "Avertissements de Symboles"
 
-#: eeschema/tools/ee_inspection_tool.cpp:296
+#: eeschema/tools/ee_inspection_tool.cpp:299
 msgid "No datasheet defined."
 msgstr "Aucune fiche de données n’a été définie."
 
@@ -17810,17 +17807,17 @@ msgstr "Édition Champ %s"
 msgid "Edit '%s' Field"
 msgstr "Édition Champ '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1944
+#: eeschema/tools/sch_edit_tool.cpp:1950
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2004
+#: eeschema/tools/sch_edit_tool.cpp:2010
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2007
+#: eeschema/tools/sch_edit_tool.cpp:2013
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -17843,32 +17840,32 @@ msgstr "Fin de la feuille atteinte."
 msgid "Find again to wrap around to the start."
 msgstr "Rechercher à nouveau pour reprendre au début."
 
-#: eeschema/tools/sch_editor_control.cpp:969
+#: eeschema/tools/sch_editor_control.cpp:977
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 "Erreur :  noms de sous-feuilles dupliqués trouvés dans la feuille courante."
 
-#: eeschema/tools/sch_editor_control.cpp:1060
+#: eeschema/tools/sch_editor_control.cpp:1068
 msgid "Net must be labeled to assign a netclass."
 msgstr "Le net doit être étiqueté pour être attribué à une netclass."
 
-#: eeschema/tools/sch_editor_control.cpp:1066
+#: eeschema/tools/sch_editor_control.cpp:1074
 msgid "Bus has no members to assign netclass to."
 msgstr "Le Bus n’a pas de membre à qui attribuer une netclasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1099
+#: eeschema/tools/sch_editor_control.cpp:1107
 msgid "Netclasses"
 msgstr "Classes d'Equipots"
 
-#: eeschema/tools/sch_editor_control.cpp:1112
+#: eeschema/tools/sch_editor_control.cpp:1120
 msgid "Assign Netclass"
 msgstr "Assigner NetClasse"
 
-#: eeschema/tools/sch_editor_control.cpp:1113
+#: eeschema/tools/sch_editor_control.cpp:1121
 msgid "Select netclass:"
 msgstr "Sélection netclasse:"
 
-#: eeschema/tools/sch_editor_control.cpp:1722
+#: eeschema/tools/sch_editor_control.cpp:1730
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17879,21 +17876,21 @@ msgstr ""
 "a été abandonnée parce que la destination contient déjà la feuille ou l’une "
 "de ses sous-feuilles en tant que parent."
 
-#: eeschema/tools/sch_editor_control.cpp:2281
+#: eeschema/tools/sch_editor_control.cpp:2292
 #: pcbnew/tools/board_editor_control.cpp:590
 #: pcbnew/tools/footprint_editor_control.cpp:692
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d Unique IDs dupliqués remplacés.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2288
+#: eeschema/tools/sch_editor_control.cpp:2299
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:707
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d problèmes potentiels réparés."
 
-#: eeschema/tools/sch_editor_control.cpp:2295
+#: eeschema/tools/sch_editor_control.cpp:2306
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Aucune erreur trouvée."
@@ -19691,9 +19688,8 @@ msgid "Uninstall Pending"
 msgstr "Désinstallation en Suspend"
 
 #: kicad/pcm/dialogs/panel_package.cpp:123
-#, fuzzy
 msgid "Update Pending"
-msgstr "Mise à jour PCB"
+msgstr "Mise à Jour en Suspend"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:211
 msgid "Metadata"
@@ -19764,9 +19760,8 @@ msgid "Install package"
 msgstr "Installer le paquet"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:684
-#, fuzzy
 msgid "Pending"
-msgstr "En attente (%d)"
+msgstr "En attente"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Download Size"
@@ -19909,7 +19904,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:188 kicad/pcm/pcm_task_manager.cpp:397
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "Suppression de la version précédente du paquet '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:196
 #, c-format
@@ -19949,18 +19944,17 @@ msgid "Archive metadata must have a single version defined"
 msgstr "Les métadonnées de l'archive doivent avoir une seule version définie"
 
 #: kicad/pcm/pcm_task_manager.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Le paquet avec identificateur %s est déjà installé, vous devez d’abord "
-"désinstaller ce paquet."
+"Le paquet avec identificateur %s est déjà installé, voulez vous le mettre à "
+"jour à la version sélectionnée?"
 
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid "Update package"
-msgstr "Sauve paquet"
+msgstr "Mise à jour paquet"
 
 #: kicad/pcm/pcm_task_manager.cpp:471
 #, c-format
@@ -21951,36 +21945,31 @@ msgstr "Vue de dessus de la via"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "Longueur d'onde dans le vide :"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Longueur d'onde dans le milieu :"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Vitesse dand le milieu:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
-#, fuzzy
 msgid "er:"
-msgstr "Er:"
+msgstr "er :"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr ""
-"Epsilon R: constante diélectrique relative du substrat (constante "
-"diélectrique)"
+msgstr "permittivité relative (constante diélectrique)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
-msgstr ""
+msgstr "µr:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
-#, fuzzy
 msgid "relative permeability"
-msgstr "Perméabilité relative (mu) du substrat"
+msgstr "perméabilité relative"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -22117,9 +22106,8 @@ msgid "High speed"
 msgstr "Haute vitesse"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
-msgstr "Longueur du guide d'onde"
+msgstr "Longueur d’onde"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
@@ -22560,19 +22548,19 @@ msgstr "pieds"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "ft/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "mi/h"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -22615,7 +22603,7 @@ msgstr "PCB"
 #: pcbnew/board.cpp:1257 pcbnew/dialogs/dialog_board_statistics.cpp:711
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
 #: pcbnew/netinfo_item.cpp:96 pcbnew/pcb_draw_panel_gal.cpp:453
-#: pcbnew/tools/pcb_control.cpp:1236 pcbnew/widgets/appearance_controls.cpp:337
+#: pcbnew/tools/pcb_control.cpp:1226 pcbnew/widgets/appearance_controls.cpp:337
 #: pcbnew/widgets/panel_selection_filter.cpp:190
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -26204,9 +26192,8 @@ msgid "Map File Format"
 msgstr "Format de Fichier du Plan"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Créer un plan de perçage en format PS, HPGL ou autres"
+msgstr "Création d'un plan de perçage au format PDF ou autre"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -29037,18 +29024,20 @@ msgid "Show pad clearance"
 msgstr "Montrer isolation"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Supprimer les empreintes sans symbole associé"
+msgstr ""
+"Mise en surbrillance les empreintes lorsque les symboles sont sélectionnés"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Attribuer l’empreinte aux symboles sélectionnés"
+msgstr ""
+"Mettre en surbrillance les empreintes correspondant aux symboles sélectionnés"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
 msgstr ""
+"S'assure que les empreintes en sélection croisée sont visibles dans la vue "
+"actuelle"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -29112,9 +29101,8 @@ msgstr "Sélection élément(s)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Basculer état de nouvelle sélection"
+msgstr "Basculer la sélection."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -29423,9 +29411,8 @@ msgstr ""
 "paramètres."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "Largeur minimale d'anneau:"
+msgstr "Largeur minimale de connextion:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -31438,9 +31425,8 @@ msgid "Drilled holes co-located"
 msgstr "Trous forés co-localisés"
 
 #: pcbnew/drc/drc_item.cpp:112
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "Connexion des pads aux zones:"
+msgstr "Connexion cuivre trop étroite"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Track width"
@@ -31733,14 +31719,13 @@ msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s largeur d'anneau max %s; réelle %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:551
-#, fuzzy
 msgid "Checking nets for minimum connection width..."
-msgstr "Vérification des connexions..."
+msgstr "Vérification de la largeur minimale de connexion des nets..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum connection width %s; actual %s"
-msgstr "(%s largeur min %s; réelle %s)"
+msgstr "Largeur minimale de la connexion %s ; réelle %s"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -32137,12 +32122,11 @@ msgstr "Echec en VRML Export: Impossible d'ajouter les trous aux contours."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "Pas de projet lors de l'exportation du fichier VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "I&DF Export erreur:\n"
+msgstr "L'exportation VRML a échoué :\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -32413,12 +32397,12 @@ msgstr "Forme 3D: %s"
 msgid "<none>"
 msgstr "<aucun>"
 
-#: pcbnew/footprint.cpp:1021 pcbnew/tools/pcb_control.cpp:1239
+#: pcbnew/footprint.cpp:1021 pcbnew/tools/pcb_control.cpp:1229
 #, c-format
 msgid "Doc: %s"
 msgstr "Doc: %s"
 
-#: pcbnew/footprint.cpp:1022 pcbnew/tools/pcb_control.cpp:1240
+#: pcbnew/footprint.cpp:1022 pcbnew/tools/pcb_control.cpp:1230
 #, c-format
 msgid "Keywords: %s"
 msgstr "Mots Clé: %s"
@@ -32848,7 +32832,6 @@ msgid "Dimension of matrices should be >= 1."
 msgstr "La dimension des matrices doit être >= 1."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
-#, fuzzy
 msgid "Bandwidth of banded matrices should be >= 1."
 msgstr "La largeur de bande des matrices à bandes doit être >= 1."
 
@@ -32998,14 +32981,12 @@ msgid "Invalid pullup."
 msgstr "Pullup non valide."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Nom de pin invalide"
+msgstr "Clamp d'alimentation non valide."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Nom de pin invalide"
+msgstr "Clamp GND non valide."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
 msgid "Invalid Ramp"
@@ -36776,46 +36757,46 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/tools/board_editor_control.cpp:1113
+#: pcbnew/tools/board_editor_control.cpp:1117
 msgid "Place a footprint"
 msgstr "Ajouter une empreinte"
 
-#: pcbnew/tools/board_editor_control.cpp:1218 pcbnew/tools/pcb_actions.cpp:704
+#: pcbnew/tools/board_editor_control.cpp:1222 pcbnew/tools/pcb_actions.cpp:704
 msgid "Lock"
 msgstr "Verrouiller"
 
-#: pcbnew/tools/board_editor_control.cpp:1218 pcbnew/tools/pcb_actions.cpp:709
+#: pcbnew/tools/board_editor_control.cpp:1222 pcbnew/tools/pcb_actions.cpp:709
 msgid "Unlock"
 msgstr "Déverrouiller"
 
-#: pcbnew/tools/board_editor_control.cpp:1248
+#: pcbnew/tools/board_editor_control.cpp:1252
 msgid "Zones have insufficient overlap for merging."
 msgstr "Les zones ne se chevauchent pas suffisamment pour fusionner."
 
-#: pcbnew/tools/board_editor_control.cpp:1294
+#: pcbnew/tools/board_editor_control.cpp:1298
 msgid "Some zone netcodes did not match and were not merged."
 msgstr "Certaines zones n'ont pas le même net pas et n’ont pas été fusionnées."
 
-#: pcbnew/tools/board_editor_control.cpp:1300
+#: pcbnew/tools/board_editor_control.cpp:1304
 msgid "Some zone priorities did not match and were not merged."
 msgstr ""
 "Certaines priorités de zone ne correspondent pas et n’ont pas été fusionnées."
 
-#: pcbnew/tools/board_editor_control.cpp:1306
+#: pcbnew/tools/board_editor_control.cpp:1310
 msgid "Some zones were rule areas and were not merged."
 msgstr ""
 "Certaines zones étaient des zones de règles et n’ont pas été fusionnées."
 
-#: pcbnew/tools/board_editor_control.cpp:1312
+#: pcbnew/tools/board_editor_control.cpp:1316
 msgid "Some zone layer sets did not match and were not merged."
 msgstr ""
 "Certaines zones n'ont pas les même couches pas et n’ont pas été fusionnées."
 
-#: pcbnew/tools/board_editor_control.cpp:1329
+#: pcbnew/tools/board_editor_control.cpp:1333
 msgid "Some zones did not intersect and were not merged."
 msgstr "Certaines zones n'intersectent pas et n’ont pas été fusionnées."
 
-#: pcbnew/tools/board_editor_control.cpp:1398
+#: pcbnew/tools/board_editor_control.cpp:1402
 msgid "Duplicate zone"
 msgstr "Dupliquer Zone"
 
@@ -37071,7 +37052,7 @@ msgstr "Aucune contrainte 'diff_pair_uncoupled' n’est définie."
 #: pcbnew/tools/board_inspection_tool.cpp:820
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "Note : %s est recouvert ; la marge ne sera appliquée qu'aux trous."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Silkscreen clearance resolution for:"
@@ -39039,13 +39020,21 @@ msgstr ""
 "Erreur en chargement du PCB.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1216
-msgid "Selected Items"
-msgstr "Éléments Sélectionnés"
-
-#: pcbnew/tools/pcb_control.cpp:1233
+#: pcbnew/tools/pcb_control.cpp:1223
 msgid "Footprint Name"
 msgstr "Nom Empreinte"
+
+#: pcbnew/tools/pcb_control.cpp:1279
+msgid "Resolved clearance"
+msgstr "Isolation résolue"
+
+#: pcbnew/tools/pcb_control.cpp:1322
+msgid "Resolved hole clearance"
+msgstr "Isolation de trou résolue"
+
+#: pcbnew/tools/pcb_control.cpp:1329
+msgid "Selected Items"
+msgstr "Éléments Sélectionnés"
 
 #: pcbnew/tools/pcb_point_editor.cpp:609
 msgid "Drag a corner"
@@ -40017,6 +40006,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -40027,9 +40021,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -40043,9 +40038,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -40055,9 +40051,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -40072,6 +40068,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -40084,6 +40084,11 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -40095,10 +40100,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -40179,28 +40180,23 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ "Les microvias doivent être activées dans Config. CI > Règles de "
 #~ "Conception > Contraintes."
 
-#~ msgid "Cross-probe on selection"
-#~ msgstr "Cross-probing sur sélection"
-
-#~ msgid "Scroll cross-probed items into view"
-#~ msgstr "Zoom optimal sur éléments télé-sélectionnés"
-
-#, c-format
 #~ msgid "Violations (%d)"
 #~ msgstr "Violations (%d)"
 
-#, c-format
 #~ msgid "Ignored Tests (%d)"
 #~ msgstr "Tests Ignorés (%d)"
+
+#~ msgid "Cross-probe on selection"
+#~ msgstr "Cross-probing sur sélection"
 
 #~ msgid "135 deg Angle"
 #~ msgstr "Angle de 135 degrés"
 
-#~ msgid "kicad"
-#~ msgstr "kicad"
+#~ msgid "A drill map is a doc. file, not a fab. file"
+#~ msgstr "Un plan de perçage est un fichier doc. et non un fichier de fab."
 
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
+#~ msgid "Scroll cross-probed items into view"
+#~ msgstr "Zoom optimal sur éléments télé-sélectionnés"
 
 #~ msgid "Unit %c"
 #~ msgstr "Unité %c"
