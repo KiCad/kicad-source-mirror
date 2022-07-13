@@ -29,6 +29,7 @@
 #include <eda_draw_frame.h>
 #include <kiface_base.h>
 #include <macros.h>
+#include <scoped_set_reset.h>
 #include <settings/app_settings.h>
 #include <trace_helpers.h>
 
@@ -202,11 +203,12 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     if( m_drawing )
         return;
 
+    SCOPED_SET_RESET<bool> drawing( m_drawing, true );
+
     ( *m_PaintEventCounter )++;
 
     wxASSERT( m_painter );
 
-    m_drawing = true;
     KIGFX::RENDER_SETTINGS* settings =
             static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
@@ -315,7 +317,6 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     }
 
     m_lastRefresh = wxGetLocalTimeMillis();
-    m_drawing = false;
 }
 
 
@@ -581,7 +582,6 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
     {
         if( m_gal && m_gal->IsInitialized() )
         {
-            m_drawing = false;
             m_pendingRefresh = true;
             Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
                      this );
