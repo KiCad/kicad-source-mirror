@@ -1190,9 +1190,14 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
-    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    ROUTER_TOOL*        routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
-    PCB_SELECTION&      selection = selTool->GetSelection();
+    PCB_SELECTION_TOOL*   selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    ROUTER_TOOL*          routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
+    PCB_SELECTION&        selection = selTool->GetSelection();
+    FOOTPRINT_EDIT_FRAME* fpFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
+    PCB_EDIT_FRAME*       pcbFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    EDA_UNITS                   units = m_frame->GetUserUnits();
+    std::vector<MSG_PANEL_ITEM> msgItems;
 
     if( routerTool && routerTool->RoutingInProgress() )
     {
@@ -1200,52 +1205,131 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( selection.GetSize() == 1 )
+    if( selection.Empty() )
+    {
+        if( fpFrame )
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( fpFrame->GetModel() );
+
+            if( !footprint )
+                return 0;
+
+            wxString                    msg;
+
+            msg = footprint->GetFPID().GetLibNickname().wx_str();
+            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
+
+            msg = footprint->GetFPID().GetLibItemName().wx_str();
+            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg ) );
+
+            msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
+            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg ) );
+
+            wxString doc, keyword;
+            doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
+            keyword.Printf( _( "Keywords: %s" ), footprint->GetKeywords() );
+            msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword ) );
+        }
+        else
+        {
+            m_frame->SetMsgPanel( m_frame->GetBoard() );
+            return 0;
+        }
+    }
+    else if( selection.GetSize() == 1 )
     {
         EDA_ITEM*                   item = selection.Front();
-        std::vector<MSG_PANEL_ITEM> msgItems;
 
         item->GetMsgPanelInfo( m_frame, msgItems );
-        m_frame->SetMsgPanel( msgItems );
     }
-    else if( selection.GetSize() > 1 )
+
+    // Pair selection broken into multiple, optional data, starting with the selection item names
+    if( selection.GetSize() == 2 )
     {
-        std::vector<MSG_PANEL_ITEM> msgItems;
-        wxString                    msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
+        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
+        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg ) );
-        m_frame->SetMsgPanel( msgItems );
+        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetSelectMenuText( units ),
+                                               b->GetSelectMenuText( units ) ) );
     }
-    else if( auto editFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
+
+    if( BOARD_CONNECTED_ITEM *a, *b;
+        selection.GetSize() == 2 && pcbFrame &&
+        ( a = dyn_cast<BOARD_CONNECTED_ITEM*>( selection[0] ) ) &&
+        ( b = dyn_cast<BOARD_CONNECTED_ITEM*>( selection[1] ) ) )
     {
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( editFrame->GetModel() );
+        LSET overlap = a->GetLayerSet() & b->GetLayerSet() & LSET::AllCuMask();
 
-        if( !footprint )
-            return 0;
+        BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
 
-        std::vector<MSG_PANEL_ITEM> msgItems;
-        wxString                    msg;
+        if( overlap.count() > 0
+                && ( a->GetNetCode() != b->GetNetCode()
+                        || a->GetNetCode() < 0
+                        || b->GetNetCode() < 0 ) )
+        {
+            PCB_LAYER_ID layer = overlap.CuStack().front();
+            auto aShape = a->GetEffectiveShape( layer );
+            auto bShape = b->GetEffectiveShape( layer );
 
-        msg = footprint->GetFPID().GetLibNickname().wx_str();
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
+            DRC_CONSTRAINT        constraint;
+            int                   clearance = 0;
 
-        msg = footprint->GetFPID().GetLibItemName().wx_str();
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg ) );
-
-        msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg ) );
-
-        wxString doc, keyword;
-        doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
-        keyword.Printf( _( "Keywords: %s" ), footprint->GetKeywords() );
-        msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword ) );
-
-        m_frame->SetMsgPanel( msgItems );
+            constraint = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
+            clearance = constraint.m_Value.Min();
+            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved clearance" ),
+                                                     StringFromValue( units, clearance, true ) ) );
+        }
     }
-    else
+
+
+    auto hasHole = []( EDA_ITEM* aItem ) -> bool
     {
-        m_frame->SetMsgPanel( m_frame->GetBoard() );
+        PAD* pad = dyn_cast<PAD*>( aItem );
+
+        if( pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+            return true;
+
+        return !!dyn_cast<PCB_VIA*>( aItem );
+    };
+
+    if( selection.GetSize() == 2 && pcbFrame &&
+          ( hasHole( selection[0] ) || hasHole( selection[1] ) ) )
+    {
+        PCB_LAYER_ID active = m_frame->GetActiveLayer();
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
+
+        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
+        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
+
+        if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( hasHole( b ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( hasHole( a ) && b->IsOnCopperLayer() )
+            layer = b->GetLayer();
+        else if( hasHole( b ) && b->IsOnCopperLayer() )
+            layer = a->GetLayer();
+
+        if( layer >= 0 )
+        {
+
+            BOARD_DESIGN_SETTINGS&      bds = m_frame->GetBoard()->GetDesignSettings();
+            DRC_CONSTRAINT              constraint;
+            int                         clearance = 0;
+
+            constraint = bds.m_DRCEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
+            clearance = constraint.m_Value.Min();
+            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved hole clearance" ),
+                                                     StringFromValue( units, clearance, true ) ) );
+        }
     }
+
+    if( msgItems.empty() )
+        msgItems.emplace_back(
+                MSG_PANEL_ITEM( _( "Selected Items" ),
+                        wxString::Format( wxT( "%d" ), selection.GetSize() ) ) );
+
+    m_frame->SetMsgPanel( msgItems );
 
     return 0;
 }
