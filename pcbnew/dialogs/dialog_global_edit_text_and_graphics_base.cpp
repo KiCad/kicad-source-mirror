@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,7 +92,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bSizerTop->Add( sbFilters, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
-	bMainSizer->Add( bSizerTop, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerTop, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
@@ -290,6 +290,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsOK );
+	m_sdbSizerButtonsApply = new wxButton( this, wxID_APPLY );
+	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsApply );
 	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
