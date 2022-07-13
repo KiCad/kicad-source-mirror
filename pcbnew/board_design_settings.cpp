@@ -67,9 +67,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_UseConnectedTrackWidth = false;
     m_TempOverrideTrackWidth = false;
 
-    m_BlindBuriedViaAllowed = false;
-    m_MicroViasAllowed  = false;
-
     // First is always the reference designator
     m_DefaultFPTextItems.emplace_back( wxT( "REF**" ), true, F_SilkS );
     // Second is always the value
@@ -223,10 +220,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // project.  Going forward, the import feature will just import from other board files (since
     // we could have multi-board projects in the future anyway) so this functionality is dropped.
 
-    m_params.emplace_back( new PARAM<bool>( "rules.allow_microvias", &m_MicroViasAllowed, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "rules.allow_blind_buried_vias",
-            &m_BlindBuriedViaAllowed, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "rules.use_height_for_length_calcs",
             &m_UseHeightForLengthCalcs, true ) );
@@ -821,8 +814,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_TrackWidthList         = aOther.m_TrackWidthList;
     m_ViasDimensionsList     = aOther.m_ViasDimensionsList;
     m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
-    m_MicroViasAllowed       = aOther.m_MicroViasAllowed;
-    m_BlindBuriedViaAllowed  = aOther.m_BlindBuriedViaAllowed;
     m_CurrentViaType         = aOther.m_CurrentViaType;
     m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
     m_MinClearance           = aOther.m_MinClearance;

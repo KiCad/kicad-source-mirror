@@ -674,8 +674,6 @@ public:
      */
     TEARDROP_PARAMETERS_LIST         m_TeardropParamsList;
 
-    bool       m_MicroViasAllowed;          ///< true to allow micro vias
-    bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 
     bool       m_UseConnectedTrackWidth;    // use width of existing track when creating a new,

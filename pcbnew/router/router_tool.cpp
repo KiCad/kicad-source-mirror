@@ -879,53 +879,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
 
-    if( !m_router->IsPlacingVia() )
-    {
-        // Cannot place microvias or blind vias if not allowed (obvious)
-        if( ( viaType == VIATYPE::BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
-        {
-            WX_INFOBAR* infobar = frame()->GetInfoBar();
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                           _( "Show board setup" ),
-                                                           wxEmptyString );
-
-            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                    [&]( wxHyperlinkEvent& aEvent )
-                    {
-                        getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
-                    } ) );
-
-            infobar->RemoveAllButtons();
-            infobar->AddButton( button );
-
-            infobar->ShowMessageFor( _( "Blind/buried vias must first be enabled in "
-                                        "Board Setup > Design Rules > Constraints." ),
-                                     10000, wxICON_ERROR, WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
-            return false;
-        }
-
-        if( ( viaType == VIATYPE::MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
-        {
-            WX_INFOBAR* infobar = frame()->GetInfoBar();
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                           _( "Show board setup" ), wxEmptyString );
-
-            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                    [&]( wxHyperlinkEvent& aEvent )
-                    {
-                        getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
-                    } ) );
-
-            infobar->RemoveAllButtons();
-            infobar->AddButton( button );
-
-            infobar->ShowMessageFor( _( "Microvias must first be enabled in "
-                                        "Board Setup > Design Rules > Constraints." ),
-                                     10000, wxICON_ERROR, WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
-            return false;
-        }
-    }
-
     // Convert blind/buried via to a through hole one, if it goes through all layers
     if( viaType == VIATYPE::BLIND_BURIED
             && ( ( targetLayer == B_Cu && currentLayer == F_Cu )

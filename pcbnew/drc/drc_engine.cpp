@@ -220,24 +220,6 @@ void DRC_ENGINE::loadImplicitRules()
     uViaDiameterConstraint.Value().SetMin( bds.m_MicroViasMinSize );
     uViaRule->AddConstraint( uViaDiameterConstraint );
 
-    if( !bds.m_MicroViasAllowed )
-    {
-        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
-        disallowConstraint.m_DisallowFlags = DRC_DISALLOW_MICRO_VIAS;
-        uViaRule->AddConstraint( disallowConstraint );
-    }
-
-    if( !bds.m_BlindBuriedViaAllowed )
-    {
-        std::shared_ptr<DRC_RULE> bbViaRule = createImplicitRule( _( "board setup constraints" ) );
-
-        bbViaRule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Via_Type == 'Blind/buried'" ) );
-
-        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
-        disallowConstraint.m_DisallowFlags = DRC_DISALLOW_BB_VIAS;
-        bbViaRule->AddConstraint( disallowConstraint );
-    }
-
     // 3) per-netclass rules
 
     std::vector<std::shared_ptr<DRC_RULE>> netclassClearanceRules;

@@ -19,141 +19,6 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bScrolledSizer;
 	bScrolledSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* sbFeatureRules;
-	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText26 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Allowed features"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText26->Wrap( -1 );
-	sbFeatureRules->Add( m_staticText26, 0, wxRIGHT|wxLEFT, 5 );
-
-	wxFlexGridSizer* fgSizerViaOpt;
-	fgSizerViaOpt = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerViaOpt->SetFlexibleDirection( wxBOTH );
-	fgSizerViaOpt->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_bitmapBlindBuried = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerViaOpt->Add( m_bitmapBlindBuried, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_OptAllowBlindBuriedVias = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow blind/buried vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerViaOpt->Add( m_OptAllowBlindBuriedVias, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
-
-	m_bitmap_uVia = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerViaOpt->Add( m_bitmap_uVia, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_OptAllowMicroVias = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow micro vias (uVias)"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerViaOpt->Add( m_OptAllowMicroVias, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
-
-
-	sbFeatureRules->Add( fgSizerViaOpt, 0, wxEXPAND|wxTOP, 5 );
-
-	wxBoxSizer* bSizerArcToPoly;
-	bSizerArcToPoly = new wxBoxSizer( wxVERTICAL );
-
-	m_staticline2 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerArcToPoly->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
-
-	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stCircleToPolyOpt->Wrap( -1 );
-	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 4, 3, 0 );
-	fgSizer2->AddGrowableCol( 2 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-
-	fgSizer2->Add( 15, 0, 0, 0, 5 );
-
-	m_maxErrorTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Max allowed deviation:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_maxErrorTitle->Wrap( -1 );
-	m_maxErrorTitle->SetToolTip( _("This is the maximum distance between a circle and the polygonal shape that approximate it.\nThe error max defines the number of segments of this polygon.") );
-
-	fgSizer2->Add( m_maxErrorTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
-
-	m_maxErrorCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_maxErrorCtrl->SetToolTip( _("The maximum allowed deviation between a true arc or circle and segments used to approximate it.  Smaller values produce smoother graphics at the expense of performance.") );
-
-	fgSizer2->Add( m_maxErrorCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	m_maxErrorUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_maxErrorUnits->Wrap( -1 );
-	fgSizer2->Add( m_maxErrorUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-
-	bSizerArcToPoly->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM, 5 );
-
-	m_stCircleToPolyWarning = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Note: zone filling can be slow when < %s."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stCircleToPolyWarning->Wrap( -1 );
-	bSizerArcToPoly->Add( m_stCircleToPolyWarning, 0, wxLEFT|wxRIGHT, 5 );
-
-
-	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND|wxTOP, 5 );
-
-	m_bSizerPolygonFillOption = new wxBoxSizer( wxVERTICAL );
-
-	m_staticline1 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_bSizerPolygonFillOption->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
-
-	m_stZoneFilledPolysOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Zone fill strategy"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stZoneFilledPolysOpt->Wrap( -1 );
-	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_filletBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_filletBitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_allowExternalFilletsOpt = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow fillets outside zone outline"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_allowExternalFilletsOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_bSizerPolygonFillOption->Add( bSizer9, 0, wxEXPAND|wxTOP, 7 );
-
-	wxBoxSizer* bSizer111;
-	bSizer111 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_spokeBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer111->Add( m_spokeBitmap, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_minResolvedSpokesLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Min thermal relief spoke count:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_minResolvedSpokesLabel->Wrap( -1 );
-	bSizer111->Add( m_minResolvedSpokesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_minResolvedSpokeCountCtrl = new wxSpinCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
-	bSizer111->Add( m_minResolvedSpokeCountCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_bSizerPolygonFillOption->Add( bSizer111, 1, wxEXPAND|wxTOP, 5 );
-
-
-	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 10 );
-
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
-
-	m_staticline15 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer11->Add( m_staticline15, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
-
-	m_staticText33 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Length tuning"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText33->Wrap( -1 );
-	bSizer11->Add( m_staticText33, 0, wxALL, 5 );
-
-	m_useHeightForLengthCalcs = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Include stackup height in track length calculations"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useHeightForLengthCalcs->SetToolTip( _("When enabled, the distance between copper layers will be included in track length calculations for tracks with vias.  When disabled, via stackup height is ignored.") );
-
-	bSizer11->Add( m_useHeightForLengthCalcs, 0, wxALL, 5 );
-
-
-	sbFeatureRules->Add( bSizer11, 1, wxEXPAND, 5 );
-
-
-	bScrolledSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT, 5 );
-
-
-	bScrolledSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
-
 	wxBoxSizer* sbFeatureConstraints;
 	sbFeatureConstraints = new wxBoxSizer( wxVERTICAL );
 
@@ -477,6 +342,114 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 
 	bScrolledSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxRIGHT, 5 );
+
+
+	bScrolledSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
+
+	wxBoxSizer* sbFeatureRules;
+	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizerArcToPoly;
+	bSizerArcToPoly = new wxBoxSizer( wxVERTICAL );
+
+	m_stCircleToPolyOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Arc/circle approximated by segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyOpt->Wrap( -1 );
+	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 4, 3, 0 );
+	fgSizer2->AddGrowableCol( 2 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	fgSizer2->Add( 15, 0, 0, 0, 5 );
+
+	m_maxErrorTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Max allowed deviation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxErrorTitle->Wrap( -1 );
+	m_maxErrorTitle->SetToolTip( _("This is the maximum distance between a circle and the polygonal shape that approximate it.\nThe error max defines the number of segments of this polygon.") );
+
+	fgSizer2->Add( m_maxErrorTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+
+	m_maxErrorCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxErrorCtrl->SetToolTip( _("The maximum allowed deviation between a true arc or circle and segments used to approximate it.  Smaller values produce smoother graphics at the expense of performance.") );
+
+	fgSizer2->Add( m_maxErrorCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_maxErrorUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxErrorUnits->Wrap( -1 );
+	fgSizer2->Add( m_maxErrorUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizerArcToPoly->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	m_stCircleToPolyWarning = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Note: zone filling can be slow when < %s."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyWarning->Wrap( -1 );
+	bSizerArcToPoly->Add( m_stCircleToPolyWarning, 0, wxLEFT|wxRIGHT, 5 );
+
+
+	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND|wxTOP, 5 );
+
+	m_bSizerPolygonFillOption = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline1 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_bSizerPolygonFillOption->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
+
+	m_stZoneFilledPolysOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Zone fill strategy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stZoneFilledPolysOpt->Wrap( -1 );
+	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_filletBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_filletBitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_allowExternalFilletsOpt = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Allow fillets outside zone outline"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_allowExternalFilletsOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_bSizerPolygonFillOption->Add( bSizer9, 0, wxEXPAND|wxTOP, 7 );
+
+	wxBoxSizer* bSizer111;
+	bSizer111 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_spokeBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer111->Add( m_spokeBitmap, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_minResolvedSpokesLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Min thermal relief spoke count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minResolvedSpokesLabel->Wrap( -1 );
+	bSizer111->Add( m_minResolvedSpokesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_minResolvedSpokeCountCtrl = new wxSpinCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
+	bSizer111->Add( m_minResolvedSpokeCountCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_bSizerPolygonFillOption->Add( bSizer111, 1, wxEXPAND|wxTOP, 5 );
+
+
+	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 10 );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline15 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer11->Add( m_staticline15, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
+
+	m_staticText33 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Length tuning"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText33->Wrap( -1 );
+	bSizer11->Add( m_staticText33, 0, wxALL, 5 );
+
+	m_useHeightForLengthCalcs = new wxCheckBox( m_scrolledWindow, wxID_ANY, _("Include stackup height in track length calculations"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useHeightForLengthCalcs->SetToolTip( _("When enabled, the distance between copper layers will be included in track length calculations for tracks with vias.  When disabled, via stackup height is ignored.") );
+
+	bSizer11->Add( m_useHeightForLengthCalcs, 0, wxALL, 5 );
+
+
+	sbFeatureRules->Add( bSizer11, 1, wxEXPAND, 5 );
+
+
+	bScrolledSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT, 5 );
 
 
 	bScrolledSizer->Add( 0, 0, 1, wxEXPAND, 0 );

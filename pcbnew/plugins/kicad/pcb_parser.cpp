@@ -1995,13 +1995,13 @@ void PCB_PARSER::parseSetup()
             break;
 
         case T_uvias_allowed:
-            designSettings.m_MicroViasAllowed = parseBool();
+            parseBool();
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_blind_buried_vias_allowed:
-            designSettings.m_BlindBuriedViaAllowed = parseBool();
+            parseBool();
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;

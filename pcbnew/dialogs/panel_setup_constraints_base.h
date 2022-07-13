@@ -20,11 +20,11 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/checkbox.h>
-#include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/statline.h>
+#include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
@@ -39,28 +39,6 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxStaticText* m_staticText26;
-		wxStaticBitmap* m_bitmapBlindBuried;
-		wxCheckBox* m_OptAllowBlindBuriedVias;
-		wxStaticBitmap* m_bitmap_uVia;
-		wxCheckBox* m_OptAllowMicroVias;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_stCircleToPolyOpt;
-		wxStaticText* m_maxErrorTitle;
-		wxTextCtrl* m_maxErrorCtrl;
-		wxStaticText* m_maxErrorUnits;
-		wxStaticText* m_stCircleToPolyWarning;
-		wxBoxSizer* m_bSizerPolygonFillOption;
-		wxStaticLine* m_staticline1;
-		wxStaticText* m_stZoneFilledPolysOpt;
-		wxStaticBitmap* m_filletBitmap;
-		wxCheckBox* m_allowExternalFilletsOpt;
-		wxStaticBitmap* m_spokeBitmap;
-		wxStaticText* m_minResolvedSpokesLabel;
-		wxSpinCtrl* m_minResolvedSpokeCountCtrl;
-		wxStaticLine* m_staticline15;
-		wxStaticText* m_staticText33;
-		wxCheckBox* m_useHeightForLengthCalcs;
 		wxStaticText* m_staticText23;
 		wxStaticBitmap* m_bitmapClearance;
 		wxStaticText* m_clearanceTitle;
@@ -130,6 +108,22 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_textThicknessLabel;
 		wxTextCtrl* m_textThicknessCtrl;
 		wxStaticText* m_textThicknessUnits;
+		wxStaticText* m_stCircleToPolyOpt;
+		wxStaticText* m_maxErrorTitle;
+		wxTextCtrl* m_maxErrorCtrl;
+		wxStaticText* m_maxErrorUnits;
+		wxStaticText* m_stCircleToPolyWarning;
+		wxBoxSizer* m_bSizerPolygonFillOption;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_stZoneFilledPolysOpt;
+		wxStaticBitmap* m_filletBitmap;
+		wxCheckBox* m_allowExternalFilletsOpt;
+		wxStaticBitmap* m_spokeBitmap;
+		wxStaticText* m_minResolvedSpokesLabel;
+		wxSpinCtrl* m_minResolvedSpokeCountCtrl;
+		wxStaticLine* m_staticline15;
+		wxStaticText* m_staticText33;
+		wxCheckBox* m_useHeightForLengthCalcs;
 
 	public:
 		wxScrolledWindow* m_scrolledWindow;

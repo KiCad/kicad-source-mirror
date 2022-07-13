@@ -988,8 +988,7 @@ void LEGACY_PLUGIN::loadSETUP()
         }
         else if( TESTLINE( "MicroViasAllowed" ) )
         {
-            int tmp = intParse( line + SZ( "MicroViasAllowed" ) );
-            bds.m_MicroViasAllowed = tmp;
+            intParse( line + SZ( "MicroViasAllowed" ) );
         }
         else if( TESTLINE( "TextPcbWidth" ) )
         {

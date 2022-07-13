@@ -69,8 +69,6 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
                 StringFromValue( m_Frame->GetUserUnits(), ARC_HIGH_DEF, true ) );
     m_stCircleToPolyWarning->SetLabel( msg );
 
-    m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
-    m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
     m_useHeightForLengthCalcs->SetValue( m_BrdSettings->m_UseHeightForLengthCalcs );
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
@@ -131,8 +129,6 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     // These are all stored in project file, not board, so no need for OnModify()
 
-    m_BrdSettings->m_BlindBuriedViaAllowed   = m_OptAllowBlindBuriedVias->GetValue();
-    m_BrdSettings->m_MicroViasAllowed        = m_OptAllowMicroVias->GetValue();
     m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
 
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
@@ -186,8 +182,6 @@ bool PANEL_SETUP_CONSTRAINTS::Show( bool aShow )
         m_bitmapHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_copper_clearance ) );
         m_bitmapMinHoleClearance->SetBitmap( KiBitmap( BITMAPS::hole_to_hole_clearance ) );
         m_bitmapEdgeClearance->SetBitmap( KiBitmap( BITMAPS::edge_to_copper_clearance ) );
-        m_bitmapBlindBuried->SetBitmap( KiBitmap( BITMAPS::via_buried ) );
-        m_bitmap_uVia->SetBitmap( KiBitmap( BITMAPS::via_microvia ) );
 
         Layout();
     }
