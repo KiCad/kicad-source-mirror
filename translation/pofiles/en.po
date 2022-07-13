@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 08:58-0700\n"
+"POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3123,6 +3123,9 @@ msgstr "Symbol body fills"
 msgid "Schematic text && graphics"
 msgstr "Schematic text && graphics"
 
+msgid "Symbol private text && graphics"
+msgstr "Symbol private text && graphics"
+
 msgid "Schematic text && graphics backgrounds"
 msgstr "Schematic text && graphics backgrounds"
 
@@ -3985,6 +3988,12 @@ msgstr "Grid: %s (%s)"
 #, c-format
 msgid "User grid: %s (%s)"
 msgstr "User grid: %s (%s)"
+
+msgid "Select &All\tA"
+msgstr "Select &All\tA"
+
+msgid "&Expand Selection\tE"
+msgstr "&Expand Selection\tE"
 
 #, c-format
 msgid "Zoom: %.2f"
@@ -6385,6 +6394,9 @@ msgstr "Edit Spice Model…"
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
 
+msgid "Text can not be empty."
+msgstr "Text can not be empty."
+
 msgid "Background fill"
 msgstr "Background fill"
 
@@ -7979,9 +7991,6 @@ msgstr "Some of the project files could not be backed up."
 
 msgid "Remap Symbols"
 msgstr "Remap Symbols"
-
-msgid "Text can not be empty."
-msgstr "Text can not be empty."
 
 msgid "Text Properties"
 msgstr "Text Properties"
@@ -11132,6 +11141,15 @@ msgstr "(failed to load)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad Symbol Library Viewer"
 
+msgid ""
+"Filter on symbol name, keywords, description and pin count.\n"
+"Search terms are separated by spaces.  All search terms must match.\n"
+"A term which is a number will also match against the pin count."
+msgstr ""
+"Filter on symbol name, keywords, description and pin count.\n"
+"Search terms are separated by spaces.  All search terms must match.\n"
+"A term which is a number will also match against the pin count."
+
 msgid "[no library selected]"
 msgstr "[no library selected]"
 
@@ -12028,12 +12046,6 @@ msgstr "Symbol Warnings"
 
 msgid "No datasheet defined."
 msgstr "No datasheet defined."
-
-msgid "Select &All\tA"
-msgstr "Select &All\tA"
-
-msgid "&Expand Selection\tE"
-msgstr "&Expand Selection\tE"
 
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Press <ESC> to cancel symbol creation."
@@ -20430,67 +20442,6 @@ msgid "Select which the direction on the screen in which the Y axis increases."
 msgstr ""
 "Select which the direction on the screen in which the Y axis increases."
 
-msgid "Allowed features"
-msgstr "Allowed features"
-
-msgid "Allow blind/buried vias"
-msgstr "Allow blind/buried vias"
-
-msgid "Allow micro vias (uVias)"
-msgstr "Allow micro vias (µVias)"
-
-msgid "Arc/circle approximated by segments"
-msgstr "Arc/circle approximated by segments"
-
-msgid "Max allowed deviation:"
-msgstr "Max allowed deviation:"
-
-msgid ""
-"This is the maximum distance between a circle and the polygonal shape that "
-"approximate it.\n"
-"The error max defines the number of segments of this polygon."
-msgstr ""
-"This is the maximum distance between a circle and the polygonal shape that "
-"approximate it.\n"
-"The error max defines the number of segments of this polygon."
-
-msgid ""
-"The maximum allowed deviation between a true arc or circle and segments used "
-"to approximate it.  Smaller values produce smoother graphics at the expense "
-"of performance."
-msgstr ""
-"The maximum allowed deviation between a true arc or circle and segments used "
-"to approximate it.  Smaller values produce smoother graphics at the expense "
-"of performance."
-
-#, c-format
-msgid "Note: zone filling can be slow when < %s."
-msgstr "Note: zone filling can be slow when < %s."
-
-msgid "Zone fill strategy"
-msgstr "Zone fill strategy"
-
-msgid "Allow fillets outside zone outline"
-msgstr "Allow fillets outside zone outline"
-
-msgid "Min thermal relief spoke count:"
-msgstr "Min thermal relief spoke count:"
-
-msgid "Length tuning"
-msgstr "Length tuning"
-
-msgid "Include stackup height in track length calculations"
-msgstr "Include stackup height in track length calculations"
-
-msgid ""
-"When enabled, the distance between copper layers will be included in track "
-"length calculations for tracks with vias.  When disabled, via stackup height "
-"is ignored."
-msgstr ""
-"When enabled, the distance between copper layers will be included in track "
-"length calculations for tracks with vias.  When disabled, via stackup height "
-"is ignored."
-
 msgid "Minimum clearance:"
 msgstr "Minimum clearance:"
 
@@ -20512,6 +20463,9 @@ msgid ""
 msgstr ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
+
+msgid "Minimum connection width:"
+msgstr "Minimum connection width:"
 
 msgid "Minimum annular width:"
 msgstr "Minimum annular width:"
@@ -20625,6 +20579,58 @@ msgstr "Minimum text height:"
 
 msgid "Minimum text thickness:"
 msgstr "Minimum text thickness:"
+
+msgid "Arc/circle approximated by segments"
+msgstr "Arc/circle approximated by segments"
+
+msgid "Max allowed deviation:"
+msgstr "Max allowed deviation:"
+
+msgid ""
+"This is the maximum distance between a circle and the polygonal shape that "
+"approximate it.\n"
+"The error max defines the number of segments of this polygon."
+msgstr ""
+"This is the maximum distance between a circle and the polygonal shape that "
+"approximate it.\n"
+"The error max defines the number of segments of this polygon."
+
+msgid ""
+"The maximum allowed deviation between a true arc or circle and segments used "
+"to approximate it.  Smaller values produce smoother graphics at the expense "
+"of performance."
+msgstr ""
+"The maximum allowed deviation between a true arc or circle and segments used "
+"to approximate it.  Smaller values produce smoother graphics at the expense "
+"of performance."
+
+#, c-format
+msgid "Note: zone filling can be slow when < %s."
+msgstr "Note: zone filling can be slow when < %s."
+
+msgid "Zone fill strategy"
+msgstr "Zone fill strategy"
+
+msgid "Allow fillets outside zone outline"
+msgstr "Allow fillets outside zone outline"
+
+msgid "Min thermal relief spoke count:"
+msgstr "Min thermal relief spoke count:"
+
+msgid "Length tuning"
+msgstr "Length tuning"
+
+msgid "Include stackup height in track length calculations"
+msgstr "Include stackup height in track length calculations"
+
+msgid ""
+"When enabled, the distance between copper layers will be included in track "
+"length calculations for tracks with vias.  When disabled, via stackup height "
+"is ignored."
+msgstr ""
+"When enabled, the distance between copper layers will be included in track "
+"length calculations for tracks with vias.  When disabled, via stackup height "
+"is ignored."
 
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "Use the Physical Stackup page to change the number of copper layers."
@@ -21989,6 +21995,9 @@ msgstr "Drilled holes too close together"
 msgid "Drilled holes co-located"
 msgstr "Drilled holes co-located"
 
+msgid "Copper connection too narrow"
+msgstr "Copper connection too narrow"
+
 msgid "Track width"
 msgstr "Track width"
 
@@ -22201,6 +22210,13 @@ msgstr "(%s min annular width %s; actual %s)"
 msgid "(%s max annular width %s; actual %s)"
 msgstr "(%s max annular width %s; actual %s)"
 
+msgid "Checking nets for minimum connection width..."
+msgstr "Checking nets for minimum connection width..."
+
+#, c-format
+msgid "Minimum connection width %s; actual %s"
+msgstr "Minimum connection width %s; actual %s"
+
 msgid "Checking pad, via and zone connections..."
 msgstr "Checking pad, via and zone connections..."
 
@@ -22229,9 +22245,6 @@ msgstr "(%s clearance %s; actual %s)"
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(nets %s and %s)"
-
-msgid "Checking nets for minimum connection width..."
-msgstr "Checking nets for minimum connection width..."
 
 msgid "Checking footprint courtyard definitions..."
 msgstr "Checking footprint courtyard definitions..."
@@ -25678,21 +25691,6 @@ msgstr ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 
-msgid "Show board setup"
-msgstr "Show board setup"
-
-msgid ""
-"Blind/buried vias must first be enabled in Board Setup > Design Rules > "
-"Constraints."
-msgstr ""
-"Blind/buried vias must first be enabled in Board Setup > Design Rules > "
-"Constraints."
-
-msgid ""
-"Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
-"Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-
 msgid "Blind/buried via need 2 different layers."
 msgstr "Blind/buried via need 2 different layers."
 
@@ -26216,6 +26214,10 @@ msgstr "Diff pair max uncoupled length resolution for:"
 
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "No 'diff_pair_uncoupled' constraints defined."
+
+#, c-format
+msgid "Note: %s is tented; clearance will only be applied to holes."
+msgstr "Note: %s is tented; clearance will only be applied to holes."
 
 msgid "Silkscreen clearance resolution for:"
 msgstr "Silkscreen clearance resolution for:"
@@ -27675,11 +27677,11 @@ msgstr "Selected Items"
 msgid "Footprint Name"
 msgstr "Footprint Name"
 
-msgid "Self-intersecting polygons are not allowed."
-msgstr "Self-intersecting polygons are not allowed."
-
 msgid "Drag a corner"
 msgstr "Drag a corner"
+
+msgid "Self-intersecting polygons are not allowed."
+msgstr "Self-intersecting polygons are not allowed."
 
 msgid "Add a zone corner"
 msgstr "Add a zone corner"
@@ -28474,6 +28476,32 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Allowed features"
+#~ msgstr "Allowed features"
+
+#~ msgid "Allow blind/buried vias"
+#~ msgstr "Allow blind/buried vias"
+
+#~ msgid "Allow micro vias (uVias)"
+#~ msgstr "Allow micro vias (µVias)"
+
+#~ msgid "Show board setup"
+#~ msgstr "Show board setup"
+
+#~ msgid ""
+#~ "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
+#~ msgstr ""
+#~ "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
+
+#~ msgid ""
+#~ "Microvias must first be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
+#~ msgstr ""
+#~ "Microvias must first be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
 
 #~ msgid "Cross-probe on selection"
 #~ msgstr "Cross-probe on selection"
