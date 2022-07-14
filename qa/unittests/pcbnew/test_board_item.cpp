@@ -34,6 +34,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_bitmap.h>
 #include <fp_text.h>
 #include <fp_textbox.h>
 #include <fp_shape.h>
@@ -76,6 +77,7 @@ public:
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
+        case PCB_BITMAP_T:            return new PCB_BITMAP( &m_board );
         case PCB_FP_TEXT_T:           return new FP_TEXT( &m_footprint );
         case PCB_FP_TEXTBOX_T:        return new FP_TEXTBOX( &m_footprint );
         case PCB_FP_SHAPE_T:          return new FP_SHAPE( &m_footprint );
