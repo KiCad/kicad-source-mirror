@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-16 04:16+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -20704,139 +20704,172 @@ msgstr "비도금 패드: (직경 - 드릴)"
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
 #, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
+#, fuzzy
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
+#, fuzzy
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
+#, fuzzy
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
+#, fuzzy
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
+#, fuzzy
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
+#, fuzzy
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
+#, fuzzy
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
+#, fuzzy
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
+#, fuzzy
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
+#, fuzzy
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
+#, fuzzy
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
+#, fuzzy
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
+#, fuzzy
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
+#, fuzzy
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
+#, fuzzy
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
+#, fuzzy
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
+#, fuzzy
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
+#, fuzzy
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
+#, fuzzy
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
+#, fuzzy
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
+#, fuzzy
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
+#, fuzzy
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
+#, fuzzy
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
+#, fuzzy
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
+#, fuzzy
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
+#, fuzzy
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
+#, fuzzy
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
+#, fuzzy
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
+#, fuzzy
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
+#, fuzzy
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
+#, fuzzy
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
+#, fuzzy
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
+#, fuzzy
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20845,7 +20878,7 @@ msgstr "와이어 속성"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 #, fuzzy
 msgid "Standard Size:"
-msgstr "표준 형식"
+msgstr "표준 크기:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -21116,7 +21149,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 #, fuzzy
 msgid "Ambient temperature:"
-msgstr "주변 카메라 조명 :"
+msgstr "주변 온도:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21128,7 +21161,7 @@ msgstr "℃"
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
 #, fuzzy
 msgid "Melting point:"
-msgstr "동작점"
+msgstr "녹는 점:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -21625,16 +21658,18 @@ msgid "Top view of via"
 msgstr "비아의 평면도"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
+#, fuzzy
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "진공에서 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
+#, fuzzy
 msgid "Speed in medium:"
-msgstr ""
+msgstr "중간 속도:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 #, fuzzy
@@ -21770,12 +21805,12 @@ msgstr "전기적 간격"
 #: pcb_calculator/pcb_calculator_frame.cpp:94
 #, fuzzy
 msgid "Fusing Current"
-msgstr "전류"
+msgstr "융합 전류"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:97
 #, fuzzy
 msgid "Cable Size"
-msgstr "홀 크기"
+msgstr "케이블 크기"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:99
 msgid "High speed"
@@ -21784,7 +21819,7 @@ msgstr "고속"
 #: pcb_calculator/pcb_calculator_frame.cpp:103
 #, fuzzy
 msgid "Wavelength"
-msgstr "도파관 길이"
+msgstr "파장"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
@@ -22204,20 +22239,22 @@ msgstr "rad"
 #: pcb_calculator/widgets/unit_selector.cpp:211
 #, fuzzy
 msgid "m"
-msgstr "mm"
+msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
 #, fuzzy
 msgid "km"
-msgstr "mm"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
+#, fuzzy
 msgid "feet"
-msgstr ""
+msgstr "feet"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
+#, fuzzy
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
@@ -22225,11 +22262,11 @@ msgstr ""
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "mi/h"
 
 #: pcbnew/array_creator.cpp:213
 msgid "Create an array"
@@ -23624,9 +23661,8 @@ msgid "Cleanup Graphics"
 msgstr "그래픽 정리"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:81
-#, fuzzy
 msgid "Build Changes"
-msgstr "변경 취소"
+msgstr "변경 사항"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:152
