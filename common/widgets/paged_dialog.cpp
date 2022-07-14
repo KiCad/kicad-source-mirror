@@ -219,7 +219,9 @@ bool PAGED_DIALOG::TransferDataToWindow()
         }
     }
 
-    m_treebook->ChangeSelection( (unsigned) std::max( 0, lastPageIndex ) );
+    lastPageIndex = std::max( 0, lastPageIndex );
+    m_treebook->ChangeSelection( lastPageIndex );
+    UpdateResetButton( lastPageIndex );
 
     return true;
 }
@@ -301,31 +303,19 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow
 }
 
 
-void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
+void PAGED_DIALOG::UpdateResetButton( int aPage )
 {
-    int page = event.GetSelection();
-
-    // Use the first sub-page when a tree level node is selected.
-    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
-    {
-        unsigned next = page + 1;
-
-        if( next < m_treebook->GetPageCount() )
-            m_treebook->ChangeSelection( next );
-    }
-
-    // NB: dynamic_cast doesn't work over Kiway.
-    wxWindow* panel = m_treebook->GetPage( page );
+    wxWindow* panel = m_treebook->GetPage( aPage );
 
     wxCHECK( panel, /* void */ );
 
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
     {
-        if( panel && panel->GetWindowStyle() & wxRESETTABLE )
+        if( panel && ( panel->GetWindowStyle() & wxRESETTABLE ) )
         {
             m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
-                                                       m_treebook->GetPageText( page ) ) );
+                                                       m_treebook->GetPageText( aPage ) ) );
             m_resetButton->SetToolTip( panel->GetHelpTextAtPoint( wxPoint( -INT_MAX, INT_MAX ),
                                        wxHelpEvent::Origin_Unknown ) );
             m_resetButton->Enable( true );
@@ -339,6 +329,23 @@ void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
 
         m_resetButton->GetParent()->Layout();
     }
+}
+
+
+void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
+{
+    int page = event.GetSelection();
+
+    // Use the first sub-page when a tree level node is selected.
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
+    {
+        unsigned next = page + 1;
+
+        if( next < m_treebook->GetPageCount() )
+            m_treebook->ChangeSelection( next );
+    }
+
+    UpdateResetButton( page );
 
     wxSizeEvent evt( wxDefaultSize );
 
