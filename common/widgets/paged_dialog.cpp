@@ -237,7 +237,9 @@ bool PAGED_DIALOG::TransferDataToWindow()
         }
     }
 
-    m_treebook->SetSelection( (unsigned) std::max( 0, lastPageIndex ) );
+    lastPageIndex = std::max( 0, lastPageIndex );
+    m_treebook->ChangeSelection( lastPageIndex );
+    UpdateResetButton( lastPageIndex );
 
     return true;
 }
@@ -360,18 +362,17 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
+void PAGED_DIALOG::UpdateResetButton( int aPage )
 {
-    size_t page = event.GetSelection();
-
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
     {
-        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
+        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( aPage ) ) )
         {
             m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
-                                                       m_treebook->GetPageText( page ) ) );
-            m_resetButton->SetToolTip( panel->GetResetTooltip() );
+                                                       m_treebook->GetPageText( aPage ) ) );
+            m_resetButton->SetToolTip( panel->GetHelpTextAtPoint( wxPoint( -INT_MAX, INT_MAX ),
+                                       wxHelpEvent::Origin_Unknown ) );
             m_resetButton->Enable( true );
         }
         else
@@ -382,20 +383,27 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         }
 
     }
+}
 
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
-#ifdef __WXMAC__
-    if( page + 1 <= m_macHack.size() && m_macHack[ page ] )
+
+void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
+{
+    int page = event.GetSelection();
+
+    // Use the first sub-page when a tree level node is selected.
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
     {
-        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
-        pageSize.x -= 5;
-        pageSize.y += 2;
+        unsigned next = page + 1;
 
-        m_treebook->GetPage( page )->SetSize( pageSize );
-        m_macHack[ page ] = false;
+        if( next < m_treebook->GetPageCount() )
+            m_treebook->ChangeSelection( next );
     }
-#endif
+
+    UpdateResetButton( page );
+
+    wxSizeEvent evt( wxDefaultSize );
+
+    wxQueueEvent( m_treebook, evt.Clone() );
 }
 
 

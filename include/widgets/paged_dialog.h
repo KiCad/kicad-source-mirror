@@ -46,6 +46,8 @@ public:
     void SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl, int aRow = -1,
                    int aCol = -1 );
 
+    void UpdateResetButton( int aPage );
+
 protected:
     void finishInitialization();
 
