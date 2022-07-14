@@ -75,6 +75,7 @@ private:
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
+    bool getNearestRatnestAnchor( VECTOR2I& aPoint, LAYER_RANGE& aLayers );
 
     int onLayerCommand( const TOOL_EVENT& aEvent );
     int onViaCommand( const TOOL_EVENT& aEvent );

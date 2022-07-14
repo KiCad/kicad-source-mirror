@@ -60,8 +60,13 @@ using namespace std::placeholders;
 #include "pns_router.h"
 #include "pns_itemset.h"
 #include "pns_logger.h"
+#include "pns_placement_algo.h"
+#include "pns_line_placer.h"
+#include "pns_topology.h"
 
 #include "pns_kicad_iface.h"
+
+#include <ratsnest/ratsnest_data.h>
 
 #include <plugins/kicad/pcb_plugin.h>
 
@@ -95,11 +100,6 @@ static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
         WXK_END, "",
         _( "Finish Track" ),  _( "Stops laying the current track." ),
         BITMAPS::checked_ok );
-
-static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
-        AS_CONTEXT,
-        'F', "",
-        _( "Auto-finish Track" ),  _( "Automatically finishes laying the current track." ) );
 
 static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
         AS_CONTEXT,
@@ -461,6 +461,13 @@ bool ROUTER_TOOL::Init()
                 return !m_router->RoutingInProgress();
             };
 
+    auto hasOtherEnd = [&]( const SELECTION& )
+            {
+                VECTOR2I    unusedEnd;
+                LAYER_RANGE unusedEndLayers;
+                return getNearestRatnestAnchor( unusedEnd, unusedEndLayers );
+            };
+
     menu.AddItem( ACTIONS::cancelInteractive,         SELECTION_CONDITIONS::ShowAlways, 1 );
     menu.AddSeparator( 1 );
 
@@ -471,12 +478,13 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::routeDiffPair,         notRoutingCond );
     menu.AddItem( ACT_EndTrack,                       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( PCB_ACTIONS::routerUndoLastSegment, SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::routerContinueFromEnd, hasOtherEnd );
+    menu.AddItem( PCB_ACTIONS::routerAttemptFinish,   hasOtherEnd );
     menu.AddItem( PCB_ACTIONS::breakTrack,            notRoutingCond );
 
     menu.AddItem( PCB_ACTIONS::drag45Degree,          notRoutingCond );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle,         notRoutingCond );
 
-//        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
     menu.AddItem( ACT_PlaceThroughVia,                SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_PlaceBlindVia,                  SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_PlaceMicroVia,                  SELECTION_CONDITIONS::ShowAlways );
@@ -635,6 +643,78 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
+}
+
+
+bool ROUTER_TOOL::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers )
+{
+    // Can't finish something with no connections
+    if( m_router->GetCurrentNets().empty() )
+        return false;
+
+    PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( m_router->Placer() );
+
+    if( placer == nullptr )
+        return false;
+
+    PNS::LINE     current = placer->Trace();
+    PNS::NODE*    lastNode = placer->CurrentNode( true );
+    PNS::TOPOLOGY topo( lastNode );
+
+    VECTOR2I currentEndPos   = placer->CurrentEnd();
+    VECTOR2I currentStartPos = m_startSnapPoint;
+    int      currentLayer    = m_router->GetCurrentLayer();
+
+    // If we have an active line being routed, attempt finish from line front using
+    // dynamic ratnest topology
+    if( current.PointCount() > 0 )
+        return topo.NearestUnconnectedAnchorPoint( &current, aOtherEnd, aOtherEndLayers );
+
+    // No line, find nearest static ratsnest item for net
+    auto    connectivity = getEditFrame<PCB_EDIT_FRAME>()->GetBoard()->GetConnectivity();
+    RN_NET* net = connectivity->GetRatsnestForNet( m_router->GetCurrentNets()[0] );
+    auto    edges = net->GetEdges();
+
+    // Need to have something unconnected to finish to
+    if( edges.size() == 0 )
+        return false;
+
+    // Default to the first item if we don't have a position
+    std::shared_ptr<CN_ANCHOR> nearest = edges[0].GetSourceNode();
+
+    double currentDistance = DBL_MAX;
+
+    // Find nearest unconnected end
+    for( const CN_EDGE& edge : edges )
+    {
+        VECTOR2I    sourcePos = edge.GetSourcePos();
+        VECTOR2I    targetPos = edge.GetTargetPos();
+        double      sourceDistance = ( currentEndPos - sourcePos ).EuclideanNorm();
+        double      targetDistance = ( currentEndPos - targetPos ).EuclideanNorm();
+        LAYER_RANGE sourceLayers = edge.GetSourceNode()->Item()->Layers();
+        LAYER_RANGE targetLayers = edge.GetTargetNode()->Item()->Layers();
+
+        // Basically look for the closest ratnest item that isn't this item
+        // (same point, same layer)
+        if( ( sourcePos != m_startSnapPoint || !sourceLayers.Overlaps( currentLayer ) )
+            && ( sourceDistance < currentDistance ) )
+        {
+            nearest = edge.GetSourceNode();
+            currentDistance = sourceDistance;
+        }
+
+        if( ( targetPos != m_startSnapPoint || !targetLayers.Overlaps( currentLayer ) )
+            && ( targetDistance < currentDistance ) )
+        {
+            nearest = edge.GetTargetNode();
+            currentDistance = targetDistance;
+        }
+    }
+
+    aOtherEnd = nearest->Pos();
+    aOtherEndLayers = nearest->Item()->Layers();
+
+    return true;
 }
 
 
@@ -1122,6 +1202,21 @@ void ROUTER_TOOL::performRouting()
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    auto syncRouterAndFrameLayer =
+            [&]()
+            {
+                PCB_LAYER_ID    routingLayer = ToLAYER_ID( m_router->GetCurrentLayer() );
+                PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+                editFrame->SetActiveLayer( routingLayer );
+
+                if( !getView()->IsLayerVisible( routingLayer ) )
+                {
+                    editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
+                    editFrame->GetCanvas()->Refresh();
+                }
+            };
+
     // Set initial cursor
     setCursor();
 
@@ -1151,6 +1246,71 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::routerAttemptFinish )
+                 || evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
+        {
+            PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( m_router->Placer() );
+
+            if( placer == nullptr )
+                break;
+
+            // Get our current line and position and nearest ratsnest to them if it exists
+            PNS::LINE   current = placer->Trace();
+            VECTOR2I    currentEnd = placer->CurrentEnd();
+            VECTOR2I    otherEnd;
+            LAYER_RANGE otherEndLayers;
+
+            if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
+                break;
+
+            if( evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
+            {
+                // Commit routing will put the router on no layer, so save it
+                int currentLayer = m_router->GetCurrentLayer();
+
+                // Commit whatever we've fixed and restart routing from the other end
+                m_router->CommitRouting();
+
+                if( otherEndLayers.Overlaps( currentLayer ) )
+                    m_router->StartRouting( otherEnd, &current, currentLayer );
+                else
+                {
+                    m_router->StartRouting( otherEnd, &current, otherEndLayers.Start() );
+                    syncRouterAndFrameLayer();
+                }
+
+                m_startSnapPoint = otherEnd;
+
+                // Attempt to route to our current position
+                m_router->Move( currentEnd, &current );
+                VECTOR2I moveResultPoint = m_router->Placer()->CurrentEnd();
+
+                // Warp the mouse to wherever we actually ended up routing to
+                controls()->WarpMouseCursor( currentEnd, true, true );
+            }
+            else
+            {
+                VECTOR2I moveResultPoint;
+
+                // Keep moving until we don't change position
+                do
+                {
+                    moveResultPoint = m_router->Placer()->CurrentEnd();
+                    m_router->Move( otherEnd, &current );
+                } while( m_router->Placer()->CurrentEnd() != moveResultPoint );
+
+                // Fix the route and end routing if we made it to the destination
+                if( moveResultPoint == otherEnd
+                    && otherEndLayers.Overlaps( m_router->GetCurrentLayer() ) )
+                {
+                    if( m_router->FixRoute( otherEnd, &current, false ) )
+                        break;
+                }
+                // Otherwise warp the mouse so the user is at the point we managed to route to
+                else
+                    controls()->WarpMouseCursor( moveResultPoint, true, true );
+            }
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
         {
             updateEndItem( *evt );
@@ -1166,16 +1326,7 @@ void ROUTER_TOOL::performRouting()
                 switchLayerOnViaPlacement();
 
             // Synchronize the indicated layer
-            PCB_LAYER_ID    routingLayer = ToLAYER_ID( m_router->GetCurrentLayer() );
-            PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-
-            editFrame->SetActiveLayer( routingLayer );
-
-            if( !getView()->IsLayerVisible( routingLayer ) )
-            {
-                editFrame->GetAppearancePanel()->SetLayerVisible( routingLayer, true );
-                editFrame->GetCanvas()->Refresh();
-            }
+            syncRouterAndFrameLayer();
 
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );

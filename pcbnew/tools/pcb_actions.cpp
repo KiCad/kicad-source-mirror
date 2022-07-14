@@ -1418,6 +1418,18 @@ TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( "pcbnew.InteractiveRouter.UndoLa
         WXK_BACK, "",
         _( "Undo Last Segment" ),  _( "Walks the current track back one segment." ) );
 
+TOOL_ACTION PCB_ACTIONS::routerContinueFromEnd( "pcbnew.InteractiveRouter.ContinueFromEnd",
+        AS_CONTEXT,
+        'E', "",
+        _( "Route From Other End" ),
+        _( "Commits current segments and starts next segment from nearest ratsnest end." ) );
+
+TOOL_ACTION PCB_ACTIONS::routerAttemptFinish( "pcbnew.InteractiveRouter.AttemptFinish",
+        AS_CONTEXT,
+        'F', "",
+        _( "Attempt Finish" ),
+        _( "Attempts to complete current route to nearest ratsnest end." ) );
+
 TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         AS_GLOBAL, 0, "",
         _( "Break Track" ),

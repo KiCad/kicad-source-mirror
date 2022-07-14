@@ -93,7 +93,8 @@ const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( JOINT* aStart )
 }
 
 
-bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
+bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoint,
+                                              LAYER_RANGE& aLayers )
 {
     LINE track( *aTrack );
     VECTOR2I end;
@@ -113,6 +114,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
             || ( track.EndsWithVia() && jt->LinkCount() >= 3 ) ) // we got something connected
     {
         end = jt->Pos();
+        aLayers = jt->Layers();
     }
     else
     {
@@ -125,10 +127,25 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
             return false;
 
         end = it->Anchor( anchor );
+        aLayers = it->Layers();
     }
 
+    aPoint = end;
+    return true;
+}
+
+
+bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
+{
+    VECTOR2I end;
+    // Ratline doesn't care about the layer
+    LAYER_RANGE layers;
+
+    if( !NearestUnconnectedAnchorPoint( aTrack, end, layers ) )
+        return false;
+
     aRatLine.Clear();
-    aRatLine.Append( track.CPoint( -1 ) );
+    aRatLine.Append( aTrack->CPoint( -1 ) );
     aRatLine.Append( end );
     return true;
 }

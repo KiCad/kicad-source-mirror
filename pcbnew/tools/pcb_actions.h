@@ -195,6 +195,9 @@ public:
 
     static TOOL_ACTION routerUndoLastSegment;
 
+    static TOOL_ACTION routerContinueFromEnd;
+    static TOOL_ACTION routerAttemptFinish;
+
     /// Activation of the Push and Shove settings dialogs
     static TOOL_ACTION routerSettingsDialog;
     static TOOL_ACTION routerDiffPairDialog;
