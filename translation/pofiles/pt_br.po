@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-07-09 21:10+0000\n"
+"PO-Revision-Date: 2022-07-16 04:16+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -5173,9 +5173,8 @@ msgid "Schematic text && graphics"
 msgstr "Texto do esquema && os gráficos"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Texto do esquema && os gráficos"
+msgstr "Símbolo do texto privado && gráficos"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -16467,17 +16466,16 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "Visualizador dos símbolos da biblioteca do KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"Filtre pelo nome do footprint, pelas palavras-chave, pela descrição e pela "
-"contagem da ilha.\n"
+"Filtre pelo nome do símbolo, pelas palavras-chave, pela descrição e pela "
+"quantidade de pinos.\n"
 "Os termos da busca são separados por espaços.  Todos os termos da busca "
 "devem coincidir.\n"
-"Um termo que é um número também corresponderá à contagem das ilhas."
+"Um termo que for um número também corresponderá à contagem dos pinos."
 
 #: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1094
 #: pcbnew/footprint_viewer_frame.cpp:1099
@@ -29348,9 +29346,8 @@ msgstr ""
 "por outras configurações."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "Largura anular mínima:"
+msgstr "Largura mínima da conexão:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
@@ -31371,9 +31368,8 @@ msgid "Drilled holes co-located"
 msgstr "Os furos perfurados co-localizados"
 
 #: pcbnew/drc/drc_item.cpp:112
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "Conexão Cobreada"
+msgstr "Conexão de cobre muito estreita"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Track width"
@@ -31671,9 +31667,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "Verificando as nets para largura mínima da conexão..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum connection width %s; actual %s"
-msgstr "(%s largura mín %s; atual %s)"
+msgstr "Largura mínima da conexão %s; atual %s"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -36999,7 +36995,7 @@ msgstr "Nenhuma restrição 'diff_pair_uncoupled' foi definida."
 #: pcbnew/tools/board_inspection_tool.cpp:820
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "Nota: %s está coberto; a folga só será aplicada aos furos."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Silkscreen clearance resolution for:"
