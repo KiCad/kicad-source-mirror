@@ -798,6 +798,11 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
             return;
         }
 
+        wxWindow* blocking_dialog = pcbframe->Kiway().GetBlockingDialog();
+
+        if( blocking_dialog )
+            blocking_dialog->Close( true );
+
         toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
         BOARD_COMMIT commit( pcbframe );
 
@@ -836,7 +841,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, false, newFootprint );
 
         newFootprint->ClearFlags();
     }

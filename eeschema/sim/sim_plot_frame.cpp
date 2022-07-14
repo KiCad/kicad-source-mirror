@@ -1533,6 +1533,11 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
     if( m_schematicFrame == nullptr )
         return;
 
+    wxWindow* blocking_dialog = m_schematicFrame->Kiway().GetBlockingDialog();
+
+    if( blocking_dialog )
+        blocking_dialog->Close( true );
+
     m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simProbe );
     m_schematicFrame->Raise();
 }
@@ -1544,6 +1549,11 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 
     if( m_schematicFrame == nullptr )
         return;
+
+    wxWindow* blocking_dialog = m_schematicFrame->Kiway().GetBlockingDialog();
+
+    if( blocking_dialog )
+        blocking_dialog->Close( true );
 
     m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simTune );
     m_schematicFrame->Raise();
