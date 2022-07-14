@@ -49,10 +49,7 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 
         curr_full_uuid.push_back( symbol->m_Uuid );
 
-        wxString ref = symbol->GetRef( curr_sheetpath );
-
-        if( symbol->GetUnitCount() > 1 )
-            ref << LIB_SYMBOL::SubReference( symbol->GetUnitSelection( curr_sheetpath ) );
+        wxString ref = symbol->GetRef( curr_sheetpath, true );
 
         if( symbol->IsAnnotated( curr_sheetpath ) )
             aMap[ curr_full_uuid.AsString() ] = ref;
