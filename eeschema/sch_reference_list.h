@@ -141,7 +141,7 @@ public:
 
     int CompareRef( const SCH_REFERENCE& item ) const
     {
-        return m_ref.compare( item.m_ref );
+        return m_ref.CmpNoCase( item.m_ref );
     }
 
     int CompareLibName( const SCH_REFERENCE& item ) const
@@ -175,7 +175,7 @@ private:
     friend class SCH_REFERENCE_LIST;
 
     /// Symbol reference prefix, without number (for IC1, this is IC) )
-    UTF8            m_ref;               // it's private, use the accessors please
+    wxString        m_ref;               // it's private, use the accessors please
     SCH_SYMBOL*     m_rootSymbol;        ///< The symbol associated the reference object.
     LIB_SYMBOL*     m_libPart;           ///< The source symbol from a library.
     VECTOR2I        m_symbolPos;         ///< The physical position of the symbol in schematic
@@ -486,7 +486,7 @@ public:
 
             printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
                     i,
-                    schref.m_ref.c_str(),
+                    schref.m_ref.ToStdString().c_str(),
                     schref.m_numRef,
                     TO_UTF8( schref.GetLibPart()->GetName() ) );
         }
