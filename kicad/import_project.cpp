@@ -183,6 +183,11 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     {
         KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, true );
 
+        wxWindow* blocking_dialog = schframe->Kiway().GetBlockingDialog();
+
+        if( blocking_dialog )
+            blocking_dialog->Close( true );
+
         packet = StrPrintf( "%d\n%s", aSchFileType, TO_UTF8( schCopy.GetFullPath() ) );
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
 
@@ -202,6 +207,11 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     if( pcbCopy.FileExists() )
     {
         KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
+
+        wxWindow* blocking_dialog = pcbframe->Kiway().GetBlockingDialog();
+
+        if( blocking_dialog )
+            blocking_dialog->Close( true );
 
         if( !pcbframe->IsVisible() )
             pcbframe->Show( true );

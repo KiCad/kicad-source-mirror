@@ -57,6 +57,15 @@ public:
     }
 
     /**
+     * Safety check before asking for the Kiway reference
+     * @return true if kiway is non-null
+     */
+    bool HasKiway() const
+    {
+        return m_kiway != nullptr;
+    }
+
+    /**
      * Return a reference to the #PROJECT associated with this #KIWAY.
      */
     PROJECT& Prj() const;
