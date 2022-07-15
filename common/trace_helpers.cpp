@@ -292,16 +292,26 @@ TRACE_MANAGER& TRACE_MANAGER::Instance()
     return *self;
 }
 
-void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list vargs )
+
+bool TRACE_MANAGER::IsTraceEnabled( const wxString& aWhat )
 {
     if( !m_printAllTraces )
     {
         if( !m_globalTraceEnabled )
-            return;
+            return false;
 
         if( m_enabledTraces.find( aWhat ) == m_enabledTraces.end() )
-            return;
+            return false;
     }
+
+    return true;
+}
+
+
+void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list vargs )
+{
+    if( !IsTraceEnabled( aWhat ) )
+        return;
 
     wxString str;
     str.PrintfV( aFmt, vargs );
@@ -310,6 +320,7 @@ void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list
     fprintf( stderr, " %-30s | %s", aWhat.c_str().AsChar(), str.c_str().AsChar() );
 #endif
 }
+
 
 void TRACE_MANAGER::init()
 {
