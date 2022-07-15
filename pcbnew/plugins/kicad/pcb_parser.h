@@ -73,12 +73,12 @@ class PROGRESS_REPORTER;
 class PCB_PARSER : public PCB_LEXER
 {
 public:
-    PCB_PARSER( LINE_READER* aReader, BOARD* aBoard,
+    PCB_PARSER( LINE_READER* aReader, BOARD* aAppendToMe,
                 std::function<bool( wxString, int, wxString, wxString )>* aQueryUserCallback,
                 PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
         PCB_LEXER( aReader ),
-        m_board( aBoard ),
-        m_resetKIIDs( aBoard != nullptr ),
+        m_board( aAppendToMe ),
+        m_appendToExisting( aAppendToMe != nullptr ),
         m_progressReporter( aProgressReporter ),
         m_lastProgressTime( std::chrono::steady_clock::now() ),
         m_lineCount( aLineCount ),
@@ -324,7 +324,7 @@ private:
     bool parseBool();
 
     /*
-     * @return if m_resetKIIDs, returns new KIID(), otherwise returns CurStr() as KIID.
+     * @return if m_appendToExisting, returns new KIID(), otherwise returns CurStr() as KIID.
      */
     KIID CurStrToKIID();
 
@@ -354,7 +354,7 @@ private:
     std::vector<int>    m_netCodes;         ///< net codes mapping for boards being loaded
     bool                m_tooRecent;        ///< true if version parses as later than supported
     int                 m_requiredVersion;  ///< set to the KiCad format version this board requires
-    bool                m_resetKIIDs;       ///< reading into an existing board; reset UUIDs
+    bool                m_appendToExisting; ///< reading into an existing board; reset UUIDs
 
     ///< if resetting UUIDs, record new ones to update groups with.
     KIID_MAP            m_resetKIIDMap;
