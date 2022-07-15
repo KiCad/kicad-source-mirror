@@ -62,9 +62,12 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( m_constructMan.IsReset() )
         return;
 
-    const VECTOR2I origin = m_constructMan.GetOrigin();
-    const VECTOR2I end    = m_constructMan.GetEnd();
-    const VECTOR2I radVec = end - origin;
+    const VECTOR2I  origin = m_constructMan.GetOrigin();
+    const VECTOR2I  end    = m_constructMan.GetEnd();
+    const VECTOR2I  radVec = end - origin;
+
+    // Ensures that +90° is up and -90° is down in pcbnew
+    const EDA_ANGLE deltaAngle( VECTOR2I( radVec.x, -radVec.y ) );
 
     if( radVec.x == 0 && radVec.y == 0 )
     {
@@ -78,6 +81,8 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( m_shape == GEOM_SHAPE::SEGMENT )
     {
         cursorStrings.push_back( DimensionLabel( "l", radVec.EuclideanNorm(), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), deltaAngle.AsDegrees(),
+                                                 EDA_UNITS::DEGREES ) );
     }
     else if( m_shape == GEOM_SHAPE::RECT )
     {
