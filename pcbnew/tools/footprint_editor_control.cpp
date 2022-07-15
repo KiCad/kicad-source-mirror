@@ -353,7 +353,9 @@ int FOOTPRINT_EDITOR_CONTROL::PasteFootprint( const TOOL_EVENT& aEvent )
         m_frame->SaveFootprintInLibrary( m_copiedFootprint.get(), newLib );
 
         m_frame->SyncLibraryTree( true );
+        m_frame->LoadFootprintFromLibrary( m_copiedFootprint->GetFPID() );
         m_frame->FocusOnLibID( m_copiedFootprint->GetFPID() );
+        m_frame->RefreshLibraryTree();
     }
 
     return 0;
@@ -375,6 +377,7 @@ int FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint( const TOOL_EVENT& aEvent )
     if( footprint && m_frame->DuplicateFootprint( footprint ) )
     {
         m_frame->SyncLibraryTree( true );
+        m_frame->LoadFootprintFromLibrary( m_copiedFootprint->GetFPID() );
         m_frame->FocusOnLibID( footprint->GetFPID() );
         m_frame->RefreshLibraryTree();
     }
