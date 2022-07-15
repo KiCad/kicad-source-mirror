@@ -1754,6 +1754,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
                     m_out->Print( nested_level, "(gr_poly\n" );
                     formatPolyPts( outline, nested_level, ADVANCED_CFG::GetCfg().m_CompactSave );
+                    m_out->Print( nested_level, "" );  // just to align the next info at the right place
                 }
                 break;
 
@@ -1764,10 +1765,19 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             m_out->Print( 0, " (width %s)",
                           FormatInternalUnits( primitive->GetWidth() ).c_str() );
 
-            if( primitive->IsFilled() )
-                m_out->Print( 0, " (fill yes)" );
+            // The filled flag represents if a solid fill is present on circles,
+            // rectangles and polygons
+            if( ( primitive->GetShape() == SHAPE_T::POLY )
+                || ( primitive->GetShape() == SHAPE_T::RECT )
+                || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
+            {
+                if( primitive->IsFilled() )
+                    m_out->Print( 0, " (fill yes)" );
+                else
+                    m_out->Print( 0, " (fill none)" );
 
-            m_out->Print( 0, ")" );
+                m_out->Print( 0, ")" );
+            }
         }
 
         m_out->Print( 0, "\n");
