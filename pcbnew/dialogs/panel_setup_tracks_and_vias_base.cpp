@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,13 +38,12 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Columns
 	m_trackWidthsGrid->EnableDragColMove( false );
 	m_trackWidthsGrid->EnableDragColSize( false );
-	m_trackWidthsGrid->SetColLabelSize( 24 );
 	m_trackWidthsGrid->SetColLabelValue( 0, _("Width") );
+	m_trackWidthsGrid->SetColLabelSize( 24 );
 	m_trackWidthsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_trackWidthsGrid->EnableDragRowSize( false );
-	m_trackWidthsGrid->SetRowLabelSize( 0 );
 	m_trackWidthsGrid->SetRowLabelValue( 0, _("1") );
 	m_trackWidthsGrid->SetRowLabelValue( 1, _("2") );
 	m_trackWidthsGrid->SetRowLabelValue( 2, _("3") );
@@ -53,6 +52,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_trackWidthsGrid->SetRowLabelValue( 5, _("6") );
 	m_trackWidthsGrid->SetRowLabelValue( 6, _("7") );
 	m_trackWidthsGrid->SetRowLabelValue( 7, _("8") );
+	m_trackWidthsGrid->SetRowLabelSize( 0 );
 	m_trackWidthsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -66,6 +66,9 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	m_trackWidthsAddButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer3->Add( m_trackWidthsAddButton, 0, wxLEFT|wxRIGHT, 5 );
+
+	m_trackWidthsSortButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer3->Add( m_trackWidthsSortButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer3->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -94,14 +97,13 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Columns
 	m_viaSizesGrid->EnableDragColMove( false );
 	m_viaSizesGrid->EnableDragColSize( false );
-	m_viaSizesGrid->SetColLabelSize( 24 );
 	m_viaSizesGrid->SetColLabelValue( 0, _("Diameter") );
 	m_viaSizesGrid->SetColLabelValue( 1, _("Hole") );
+	m_viaSizesGrid->SetColLabelSize( 24 );
 	m_viaSizesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_viaSizesGrid->EnableDragRowSize( false );
-	m_viaSizesGrid->SetRowLabelSize( 0 );
 	m_viaSizesGrid->SetRowLabelValue( 0, _("1") );
 	m_viaSizesGrid->SetRowLabelValue( 1, _("2") );
 	m_viaSizesGrid->SetRowLabelValue( 2, _("3") );
@@ -110,6 +112,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->SetRowLabelValue( 5, _("6") );
 	m_viaSizesGrid->SetRowLabelValue( 6, _("7") );
 	m_viaSizesGrid->SetRowLabelValue( 7, _("8") );
+	m_viaSizesGrid->SetRowLabelSize( 0 );
 	m_viaSizesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -123,6 +126,9 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	m_viaSizesAddButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer4->Add( m_viaSizesAddButton, 0, wxLEFT|wxRIGHT, 5 );
+
+	m_viaSizesSortButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer4->Add( m_viaSizesSortButton, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 5 );
 
 
 	bSizer4->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -151,15 +157,14 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	// Columns
 	m_diffPairsGrid->EnableDragColMove( false );
 	m_diffPairsGrid->EnableDragColSize( false );
-	m_diffPairsGrid->SetColLabelSize( 24 );
 	m_diffPairsGrid->SetColLabelValue( 0, _("Width") );
 	m_diffPairsGrid->SetColLabelValue( 1, _("Gap") );
 	m_diffPairsGrid->SetColLabelValue( 2, _("Via Gap") );
+	m_diffPairsGrid->SetColLabelSize( 24 );
 	m_diffPairsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_diffPairsGrid->EnableDragRowSize( false );
-	m_diffPairsGrid->SetRowLabelSize( 0 );
 	m_diffPairsGrid->SetRowLabelValue( 0, _("1") );
 	m_diffPairsGrid->SetRowLabelValue( 1, _("2") );
 	m_diffPairsGrid->SetRowLabelValue( 2, _("3") );
@@ -168,6 +173,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_diffPairsGrid->SetRowLabelValue( 5, _("6") );
 	m_diffPairsGrid->SetRowLabelValue( 6, _("7") );
 	m_diffPairsGrid->SetRowLabelValue( 7, _("8") );
+	m_diffPairsGrid->SetRowLabelSize( 0 );
 	m_diffPairsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -182,6 +188,9 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	m_diffPairsAddButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_diffPairsAddButton, 0, wxLEFT|wxRIGHT, 5 );
+
+	m_diffPairsSortButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer5->Add( m_diffPairsSortButton, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 5 );
 
 
 	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -204,10 +213,13 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 
 	// Connect Events
 	m_trackWidthsAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddTrackWidthsClick ), NULL, this );
+	m_trackWidthsSortButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortTrackWidthsClick ), NULL, this );
 	m_trackWidthsRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveTrackWidthsClick ), NULL, this );
 	m_viaSizesAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddViaSizesClick ), NULL, this );
+	m_viaSizesSortButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortViaSizesClick ), NULL, this );
 	m_viaSizesRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveViaSizesClick ), NULL, this );
 	m_diffPairsAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddDiffPairsClick ), NULL, this );
+	m_diffPairsSortButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortDiffPairsClick ), NULL, this );
 	m_diffPairsRemoveButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveDiffPairsClick ), NULL, this );
 }
 
@@ -215,10 +227,13 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::~PANEL_SETUP_TRACKS_AND_VIAS_BASE()
 {
 	// Disconnect Events
 	m_trackWidthsAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddTrackWidthsClick ), NULL, this );
+	m_trackWidthsSortButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortTrackWidthsClick ), NULL, this );
 	m_trackWidthsRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveTrackWidthsClick ), NULL, this );
 	m_viaSizesAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddViaSizesClick ), NULL, this );
+	m_viaSizesSortButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortViaSizesClick ), NULL, this );
 	m_viaSizesRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveViaSizesClick ), NULL, this );
 	m_diffPairsAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnAddDiffPairsClick ), NULL, this );
+	m_diffPairsSortButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnSortDiffPairsClick ), NULL, this );
 	m_diffPairsRemoveButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_TRACKS_AND_VIAS_BASE::OnRemoveDiffPairsClick ), NULL, this );
 
 }

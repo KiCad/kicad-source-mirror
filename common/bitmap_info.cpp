@@ -73,6 +73,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_trash].emplace_back( BITMAPS::small_trash, wxT( "small_trash_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_up].emplace_back( BITMAPS::small_up, wxT( "small_up_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::small_warning].emplace_back( BITMAPS::small_warning, wxT( "small_warning_16.png" ), 16, wxT( "light" ) );
@@ -142,6 +143,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::small_library].emplace_back( BITMAPS::small_library, wxT( "small_library_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_plus].emplace_back( BITMAPS::small_plus, wxT( "small_plus_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_refresh].emplace_back( BITMAPS::small_refresh, wxT( "small_refresh_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::small_sort_desc].emplace_back( BITMAPS::small_sort_desc, wxT( "small_sort_desc_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_trash].emplace_back( BITMAPS::small_trash, wxT( "small_trash_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_up].emplace_back( BITMAPS::small_up, wxT( "small_up_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::small_warning].emplace_back( BITMAPS::small_warning, wxT( "small_warning_dark_16.png" ), 16, wxT( "dark" ) );

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 16 16"
+   version="1.1"
+   sodipodi:docname="small_sort_desc.svg"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   width="16"
+   height="16">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2099"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="72.651158"
+     inkscape:cx="8.0905574"
+     inkscape:cy="11.73278"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>small_down</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs160009">
+    <style
+       id="style160007">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title160011">small_down</title>
+  <line
+     class="cls-1"
+     x1="12"
+     y1="10"
+     x2="12"
+     y2="2"
+     id="line160013"
+     style="stroke:#545454;stroke-opacity:1" />
+  <path
+     id="polyline160015"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 14.5,7.5 12,10 9,7.5"
+     class="cls-1"
+     sodipodi:nodetypes="ccc" />
+  <line
+     class="cls-1"
+     x1="4"
+     y1="2"
+     x2="1"
+     y2="2"
+     id="line1038"
+     style="stroke:#545454;stroke-opacity:1" />
+  <line
+     class="cls-1"
+     x1="5"
+     y1="6"
+     x2="1"
+     y2="6"
+     id="line1040"
+     style="stroke:#545454;stroke-opacity:1" />
+  <line
+     class="cls-1"
+     x1="7"
+     y1="10"
+     x2="1"
+     y2="10"
+     id="line1042"
+     style="stroke:#545454;stroke-opacity:1" />
+  <line
+     class="cls-1"
+     x1="10"
+     y1="14"
+     x2="1"
+     y2="14"
+     id="line1044"
+     style="stroke:#545454;stroke-opacity:1" />
+</svg>

@@ -64,10 +64,13 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
     m_ConstraintsPanel = aConstraintsPanel;
 
     m_trackWidthsAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_trackWidthsSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
     m_trackWidthsRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_viaSizesAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_viaSizesSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
     m_viaSizesRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_diffPairsAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_diffPairsSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
     m_diffPairsRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     // Membership combobox editors require a bit more room, so increase the row size of
@@ -113,6 +116,98 @@ PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
     m_diffPairsGrid->PopEventHandler( true );
 
     m_Frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_TRACKS_AND_VIAS::onUnitsChanged, this );
+}
+
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent )
+{
+    std::vector<int> trackWidths;
+    wxString         msg;
+
+    wxGridUpdateLocker lock( m_trackWidthsGrid );
+
+    for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
+    {
+        msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
+
+        if( !msg.IsEmpty() )
+            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg ) );
+    }
+
+    std::sort( trackWidths.begin(), trackWidths.end() );
+    m_trackWidthsGrid->DeleteRows(0, m_trackWidthsGrid->GetNumberRows(), false);
+
+    for( int width : trackWidths )
+        AppendTrackWidth( width );
+}
+
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
+{
+    std::vector<VIA_DIMENSION> vias;
+    wxString                   msg;
+
+    wxGridUpdateLocker lock( m_viaSizesGrid );
+
+    for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
+    {
+        msg = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
+
+        if( !msg.IsEmpty() )
+        {
+            VIA_DIMENSION via_dim;
+            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg );
+
+            msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
+
+            if( !msg.IsEmpty() )
+                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg );
+
+            vias.push_back( via_dim );
+        }
+    }
+
+    std::sort( vias.begin(), vias.end() );
+    m_viaSizesGrid->DeleteRows(0, m_viaSizesGrid->GetNumberRows(), false );
+
+    for( const VIA_DIMENSION& via : vias )
+        AppendViaSize( via.m_Diameter, via.m_Drill );
+}
+
+
+void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
+{
+    wxString                         msg;
+    std::vector<DIFF_PAIR_DIMENSION> diffPairs;
+
+    wxGridUpdateLocker lock( m_diffPairsGrid );
+
+    for( int row = 0; row < m_diffPairsGrid->GetNumberRows();  ++row )
+    {
+        msg = m_diffPairsGrid->GetCellValue( row, DP_WIDTH_COL );
+
+        if( !msg.IsEmpty() )
+        {
+            DIFF_PAIR_DIMENSION diffPair_dim;
+            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg );
+
+            msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
+            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg );
+
+            msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
+
+            if( !msg.IsEmpty() )
+                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg );
+
+            diffPairs.push_back( diffPair_dim );
+        }
+    }
+
+    std::sort( diffPairs.begin(), diffPairs.end() );
+    m_diffPairsGrid->DeleteRows(0, m_diffPairsGrid->GetNumberRows(), false );
+
+    for( const DIFF_PAIR_DIMENSION& dp : diffPairs )
+        AppendDiffPairs( dp.m_Width, dp.m_Gap, dp.m_ViaGap );
 }
 
 

@@ -115,6 +115,7 @@ set( BMAPS_SMALL
     small_library
     small_plus
     small_refresh
+    small_sort_desc
     small_trash
     small_up
     small_warning

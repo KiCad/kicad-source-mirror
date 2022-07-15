@@ -52,10 +52,13 @@ public:
 
 protected:
     void OnAddTrackWidthsClick( wxCommandEvent& event ) override;
+    void OnSortTrackWidthsClick( wxCommandEvent& event ) override;
     void OnRemoveTrackWidthsClick( wxCommandEvent& event ) override;
     void OnAddViaSizesClick( wxCommandEvent& event ) override;
+    void OnSortViaSizesClick( wxCommandEvent& event ) override;
     void OnRemoveViaSizesClick( wxCommandEvent& event ) override;
     void OnAddDiffPairsClick( wxCommandEvent& event ) override;
+    void OnSortDiffPairsClick( wxCommandEvent& event ) override;
     void OnRemoveDiffPairsClick( wxCommandEvent& event ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
