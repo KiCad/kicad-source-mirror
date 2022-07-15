@@ -206,7 +206,8 @@ TOOL_MANAGER::TOOL_MANAGER() :
         m_warpMouseAfterContextMenu( true ),
         m_menuActive( false ),
         m_menuOwner( -1 ),
-        m_activeState( nullptr )
+        m_activeState( nullptr ),
+        m_shuttingDown( false )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 }
@@ -313,6 +314,9 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 
 bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
 {
+    if( m_shuttingDown )
+        return true;
+
     bool       handled = false;
     TOOL_EVENT event = aAction.MakeEvent();
 
@@ -446,9 +450,21 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
 void TOOL_MANAGER::ShutdownAllTools()
 {
+    m_shuttingDown = true;
+
     // Create a temporary list of tools to iterate over since when the tools shutdown
     // they remove themselves from the list automatically (invalidating the iterator)
     ID_LIST tmpList = m_activeTools;
+
+    // Make sure each tool knows that it is shutting down, so that loops get shut down
+    // at the dispatcher
+    for( auto id : tmpList )
+    {
+        if( m_toolIdIndex.count( id ) == 0 )
+            continue;
+
+        m_toolIdIndex[id]->shutdown = true;
+    }
 
     for( auto id : tmpList )
     {
@@ -949,6 +965,11 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
+    // Once the tool manager is shutting down, don't start
+    // activating more tools
+    if( m_shuttingDown )
+        return true;
+
     bool handled = processEvent( aEvent );
 
     TOOL_STATE* activeTool = GetCurrentToolState();

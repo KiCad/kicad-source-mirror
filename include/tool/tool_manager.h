@@ -580,6 +580,9 @@ private:
 
     ///< Pointer to the state object corresponding to the currently executed tool.
     TOOL_STATE* m_activeState;
+
+    ///< True if the tool manager is shutting down (don't process additional events)
+    bool m_shuttingDown;
 };
 
 #endif // __TOOL_MANAGER_H
