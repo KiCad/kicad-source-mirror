@@ -1775,9 +1775,9 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                     m_out->Print( 0, " (fill yes)" );
                 else
                     m_out->Print( 0, " (fill none)" );
-
-                m_out->Print( 0, ")" );
             }
+
+            m_out->Print( 0, ")" );
         }
 
         m_out->Print( 0, "\n");
