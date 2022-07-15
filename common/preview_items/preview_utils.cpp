@@ -157,6 +157,8 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     textAttrs.m_Mirrored = viewFlipped; // Prevent text flipping when view is flipped
     textAttrs.m_Size = textDims.GlyphSize;
     textAttrs.m_StrokeWidth = textDims.StrokeWidth;
+    gal->SetIsFill( false );
+    gal->SetIsStroke( true );
 
     if( aDrawingDropShadows )
     {
