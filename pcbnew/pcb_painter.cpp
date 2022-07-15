@@ -799,7 +799,15 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         // Default font settings
         m_gal->ResetTextAttributes();
+        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+        m_gal->SetFontBold( false );
+        m_gal->SetFontItalic( false );
+        m_gal->SetFontUnderlined( false );
+        m_gal->SetTextMirrored( false );
         m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, aLayer ) );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
 
         // Set the text position to the pad shape position (the pad position is not the best place)
         VECTOR2D textpos( 0.0, 0.0 );
@@ -1004,6 +1012,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             size = maxSize;
 
         // Default font settings
+        m_gal->ResetTextAttributes();
         m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
         m_gal->SetFontBold( false );
