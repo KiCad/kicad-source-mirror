@@ -1726,8 +1726,17 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             m_out->Print( 0, " (width %s)",
                           FormatInternalUnits( primitive->GetWidth() ).c_str() );
 
-            if( primitive->IsFilled() )
-                m_out->Print( 0, " (fill yes)" );
+            // The filled flag represents if a solid fill is present on circles,
+            // rectangles and polygons
+            if( ( primitive->GetShape() == SHAPE_T::POLY )
+                || ( primitive->GetShape() == SHAPE_T::RECT )
+                || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
+            {
+                if( primitive->IsFilled() )
+                    m_out->Print( 0, " (fill yes)" );
+                else
+                    m_out->Print( 0, " (fill none)" );
+            }
 
             m_out->Print( 0, ")" );
         }
