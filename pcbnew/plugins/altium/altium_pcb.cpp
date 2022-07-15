@@ -2546,7 +2546,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         break;
     }
 
-    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetDrillSizeX() )
+    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->HasHole() )
     {
         // KiCad likes NPTH pads to be the same size & shape as their holes
         pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE ? PAD_SHAPE::CIRCLE

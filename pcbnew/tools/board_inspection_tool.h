@@ -106,6 +106,8 @@ public:
         return !m_currentlyHighlighted.empty();
     }
 
+    static bool HasHole( BOARD_ITEM* aItem );
+
 private:
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );

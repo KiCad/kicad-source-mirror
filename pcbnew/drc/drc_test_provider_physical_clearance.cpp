@@ -136,19 +136,9 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 LSET layers = item->GetLayerSet();
 
                 // Special-case holes and edge-cuts which pierce all physical layers
-                if( item->Type() == PCB_PAD_T )
+                if( item->HasHole() )
                 {
-                    PAD* pad = static_cast<PAD*>( item );
-
-                    if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                        layers |= LSET::PhysicalLayersMask() | courtyards;
-                }
-                else if( item->Type() == PCB_VIA_T )
-                {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
-
-                    if( via->GetDrill() > 0 )
-                        layers |= LSET::PhysicalLayersMask() | courtyards;
+                    layers |= LSET::PhysicalLayersMask() | courtyards;
                 }
                 else if( item->Type() == PCB_FOOTPRINT_T )
                 {

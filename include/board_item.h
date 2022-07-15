@@ -117,6 +117,11 @@ public:
         return IsCopperLayer( GetLayer() );
     }
 
+    virtual bool HasHole() const
+    {
+        return false;
+    }
+
     virtual bool IsTented() const
     {
         return false;

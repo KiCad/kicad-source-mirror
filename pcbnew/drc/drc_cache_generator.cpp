@@ -116,7 +116,7 @@ bool DRC_CACHE_GENERATOR::Run()
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
-                    if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                    if( pad->HasHole() )
                         layers |= LSET::AllCuMask();
                 }
 

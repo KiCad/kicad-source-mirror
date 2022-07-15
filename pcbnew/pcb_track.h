@@ -353,6 +353,11 @@ public:
     VIATYPE GetViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
+    bool HasHole() const override
+    {
+        return true;
+    }
+
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;
 

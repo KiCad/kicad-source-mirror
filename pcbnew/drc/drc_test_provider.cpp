@@ -276,8 +276,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             for( PAD* pad : footprint->Pads() )
             {
                 // Careful: if a pad has a hole then it pierces all layers
-                if( ( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                        || ( pad->GetLayerSet() & aLayers ).any() )
+                if( pad->HasHole() || ( pad->GetLayerSet() & aLayers ).any() )
                 {
                     if( !aFunc( pad ) )
                         return n;

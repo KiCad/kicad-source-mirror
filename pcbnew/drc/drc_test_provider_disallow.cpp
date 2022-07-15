@@ -244,7 +244,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
                 {
                     ZONE* zone = dynamic_cast<ZONE*>( item );
-                    PAD*  pad = dynamic_cast<PAD*>( item );
 
                     if( zone && zone->GetIsRuleArea() )
                         return true;
@@ -253,22 +252,10 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                     checkDisallow( item );
 
-                    bool hasHole;
-
-                    switch( item->Type() )
-                    {
-                    case PCB_VIA_T: hasHole = true;                            break;
-                    case PCB_PAD_T: hasHole = pad && pad->GetDrillSizeX() > 0; break;
-                    default:        hasHole = false;                           break;
-                    }
-
-                    if( hasHole )
+                    if( item->HasHole() )
                     {
                         item->SetFlags( HOLE_PROXY );
-                        {
-                            checkDisallow( item );
-                        }
-
+                        checkDisallow( item );
                         item->ClearFlags( HOLE_PROXY );
                     }
                 }

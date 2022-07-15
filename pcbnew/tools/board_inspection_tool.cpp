@@ -504,22 +504,6 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 }
 
 
-bool hasHole( BOARD_ITEM* aItem )
-{
-    PAD* pad = dynamic_cast<PAD*>( aItem );
-
-    if( pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-        return true;
-
-    PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
-
-    if( via )
-        return true;
-
-    return false;
-};
-
-
 int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -878,17 +862,17 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( hasHole( a ) || hasHole( b ) )
+    if( a->HasHole() || b->HasHole() )
     {
         PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        if( hasHole( a ) && b->IsOnLayer( active ) && IsCopperLayer( active ) )
+        if( a->HasHole() && b->IsOnLayer( active ) && IsCopperLayer( active ) )
             layer = active;
-        else if( hasHole( b ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
+        else if( b->HasHole() && a->IsOnLayer( active ) && IsCopperLayer( active ) )
             layer = active;
-        else if( hasHole( a ) && b->IsOnCopperLayer() )
+        else if( a->HasHole() && b->IsOnCopperLayer() )
             layer = b->GetLayer();
-        else if( hasHole( b ) && b->IsOnCopperLayer() )
+        else if( b->HasHole() && b->IsOnCopperLayer() )
             layer = a->GetLayer();
 
         if( layer >= 0 )
@@ -1007,15 +991,15 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             reportPhysicalClearance( B_CrtYd );
     }
 
-    if( hasHole( a ) || hasHole( b ) )
+    if( a->HasHole() || b->HasHole() )
     {
         PCB_LAYER_ID layer;
 
-        if( hasHole( a ) && b->IsOnLayer( active ) )
+        if( a->HasHole() && b->IsOnLayer( active ) )
             layer = active;
-        else if( hasHole( b ) && a->IsOnLayer( active ) )
+        else if( b->HasHole() && a->IsOnLayer( active ) )
             layer = active;
-        else if( hasHole( a ) )
+        else if( a->HasHole() )
             layer = b->GetLayer();
         else
             layer = a->GetLayer();

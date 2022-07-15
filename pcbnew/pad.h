@@ -103,6 +103,11 @@ public:
         return false;
     }
 
+    bool HasHole() const override
+    {
+        return GetDrillSizeX() > 0 && GetDrillSizeY() > 0;
+    }
+
     FOOTPRINT* GetParent() const;
 
     wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }

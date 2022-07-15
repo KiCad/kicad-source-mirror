@@ -138,12 +138,10 @@ void TEARDROP_MANAGER::collectPadsCandidate( std::vector< VIAPAD >& aList,
                     continue;
             }
 
-            bool has_hole = pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0;
-
-            if( has_hole && !aDrilledViaPad )
+            if( pad->HasHole() && !aDrilledViaPad )
                 continue;
 
-            if( has_hole || aIncludeNotDrilled )
+            if( pad->HasHole() || aIncludeNotDrilled )
                 aList.emplace_back( pad );
         }
     }

@@ -121,7 +121,7 @@ public:
         {
             PAD* pad = static_cast<PAD*>( aItem );
 
-            if( pad->GetDrillSizeX() )
+            if( pad->HasHole() )
             {
                 const SHAPE* hole = pad->GetEffectiveHoleShape();
                 subshapes.push_back( const_cast<SHAPE*>( hole ) );
