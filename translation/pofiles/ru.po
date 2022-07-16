@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-04 20:18+0000\n"
+"PO-Revision-Date: 2022-07-17 14:14+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7042,17 +7042,15 @@ msgstr ""
 "Сохранить имя назначенного посад.места в поле посад.места символа схемы"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Сохранить в схеме"
+msgstr "Сохранить в схему и файл"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Сохранить имя назначенного посад.места в поле посад.места символа схемы"
+"Сохранить назначения посадочных мест в поля символов на схеме и файлы схемы"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -30075,9 +30073,8 @@ msgid "Thermal Relief Gap"
 msgstr "Зазор мостика терморазгрузки"
 
 #: pcbnew/footprint.cpp:2385
-#, fuzzy
 msgid "Library ID"
-msgstr "Библиотека"
+msgstr "ID в библиотеке"
 
 #: pcbnew/footprint.h:219
 #, c-format
@@ -30532,6 +30529,8 @@ msgstr "Импорт файла векторной графики"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Память была исчерпана при попытке загрузить DXF, возможно, он слишком "
+"большой."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
