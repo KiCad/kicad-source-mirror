@@ -14,13 +14,14 @@
 # gurqja3810 <gurqja3810@naver.com>, 2022.
 # YunJiSang <js_7744@naver.com>, 2022.
 # 이기형 <oddlight0@gmail.com>, 2022.
+# kmn4555 <kmn4555@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-16 11:50+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: kmn4555 <kmn4555@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9563,9 +9564,9 @@ msgstr "심볼에서 대체 바디 스타일(드모르간)을 삭제하시겠습
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에서 사용 중입니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
