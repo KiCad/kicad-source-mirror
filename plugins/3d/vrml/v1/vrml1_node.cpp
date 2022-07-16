@@ -97,41 +97,41 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 
     if( nodenames.empty() )
     {
-        nodenames.insert( NODEITEM( "AsciiText", WRL1NODES::WRL1_ASCIITEXT ) );
-        nodenames.insert( NODEITEM( "Cone", WRL1NODES::WRL1_CONE ) );
-        nodenames.insert( NODEITEM( "Coordinate3", WRL1NODES::WRL1_COORDINATE3 ) );
-        nodenames.insert( NODEITEM( "Cube", WRL1NODES::WRL1_CUBE ) );
-        nodenames.insert( NODEITEM( "Cylinder", WRL1NODES::WRL1_CYLINDER ) );
-        nodenames.insert( NODEITEM( "DirectionalLight", WRL1NODES::WRL1_DIRECTIONALLIGHT ) );
-        nodenames.insert( NODEITEM( "FontStyle", WRL1NODES::WRL1_FONTSTYLE ) );
-        nodenames.insert( NODEITEM( "Group", WRL1NODES::WRL1_GROUP ) );
-        nodenames.insert( NODEITEM( "IndexedFaceSet", WRL1NODES::WRL1_INDEXEDFACESET ) );
-        nodenames.insert( NODEITEM( "IndexedLineSet", WRL1NODES::WRL1_INDEXEDLINESET ) );
-        nodenames.insert( NODEITEM( "Info", WRL1NODES::WRL1_INFO ) );
-        nodenames.insert( NODEITEM( "LOD", WRL1NODES::WRL1_LOD ) );
-        nodenames.insert( NODEITEM( "Material", WRL1NODES::WRL1_MATERIAL ) );
-        nodenames.insert( NODEITEM( "MaterialBinding", WRL1NODES::WRL1_MATERIALBINDING ) );
-        nodenames.insert( NODEITEM( "MatrixTransform", WRL1NODES::WRL1_MATRIXTRANSFORM ) );
-        nodenames.insert( NODEITEM( "Normal", WRL1NODES::WRL1_NORMAL ) );
-        nodenames.insert( NODEITEM( "NormalBinding", WRL1NODES::WRL1_NORMALBINDING ) );
-        nodenames.insert( NODEITEM( "OrthographicCamera", WRL1NODES::WRL1_ORTHOCAMERA ) );
-        nodenames.insert( NODEITEM( "PerspectiveCamera", WRL1NODES::WRL1_PERSPECTIVECAMERA ) );
-        nodenames.insert( NODEITEM( "PointLight", WRL1NODES::WRL1_POINTLIGHT ) );
-        nodenames.insert( NODEITEM( "PointSet", WRL1NODES::WRL1_POINTSET ) );
-        nodenames.insert( NODEITEM( "Rotation", WRL1NODES::WRL1_ROTATION ) );
-        nodenames.insert( NODEITEM( "Scale", WRL1NODES::WRL1_SCALE ) );
-        nodenames.insert( NODEITEM( "Separator", WRL1NODES::WRL1_SEPARATOR ) );
-        nodenames.insert( NODEITEM( "ShapeHints", WRL1NODES::WRL1_SHAPEHINTS ) );
-        nodenames.insert( NODEITEM( "Sphere", WRL1NODES::WRL1_SPHERE ) );
-        nodenames.insert( NODEITEM( "SpotLight", WRL1NODES::WRL1_SPOTLIGHT ) );
-        nodenames.insert( NODEITEM( "Switch", WRL1NODES::WRL1_SWITCH ) );
-        nodenames.insert( NODEITEM( "Texture2", WRL1NODES::WRL1_TEXTURE2 ) );
-        nodenames.insert( NODEITEM( "Testure2Transform", WRL1NODES::WRL1_TEXTURE2TRANSFORM ) );
-        nodenames.insert( NODEITEM( "TextureCoordinate2", WRL1NODES::WRL1_TEXTURECOORDINATE2 ) );
-        nodenames.insert( NODEITEM( "Transform", WRL1NODES::WRL1_TRANSFORM ) );
-        nodenames.insert( NODEITEM( "Translation", WRL1NODES::WRL1_TRANSLATION ) );
-        nodenames.insert( NODEITEM( "WWWAnchor", WRL1NODES::WRL1_WWWANCHOR ) );
-        nodenames.insert( NODEITEM( "WWWInline", WRL1NODES::WRL1_WWWINLINE ) );
+        nodenames.emplace( NODEITEM( "AsciiText", WRL1NODES::WRL1_ASCIITEXT ) );
+        nodenames.emplace( NODEITEM( "Cone", WRL1NODES::WRL1_CONE ) );
+        nodenames.emplace( NODEITEM( "Coordinate3", WRL1NODES::WRL1_COORDINATE3 ) );
+        nodenames.emplace( NODEITEM( "Cube", WRL1NODES::WRL1_CUBE ) );
+        nodenames.emplace( NODEITEM( "Cylinder", WRL1NODES::WRL1_CYLINDER ) );
+        nodenames.emplace( NODEITEM( "DirectionalLight", WRL1NODES::WRL1_DIRECTIONALLIGHT ) );
+        nodenames.emplace( NODEITEM( "FontStyle", WRL1NODES::WRL1_FONTSTYLE ) );
+        nodenames.emplace( NODEITEM( "Group", WRL1NODES::WRL1_GROUP ) );
+        nodenames.emplace( NODEITEM( "IndexedFaceSet", WRL1NODES::WRL1_INDEXEDFACESET ) );
+        nodenames.emplace( NODEITEM( "IndexedLineSet", WRL1NODES::WRL1_INDEXEDLINESET ) );
+        nodenames.emplace( NODEITEM( "Info", WRL1NODES::WRL1_INFO ) );
+        nodenames.emplace( NODEITEM( "LOD", WRL1NODES::WRL1_LOD ) );
+        nodenames.emplace( NODEITEM( "Material", WRL1NODES::WRL1_MATERIAL ) );
+        nodenames.emplace( NODEITEM( "MaterialBinding", WRL1NODES::WRL1_MATERIALBINDING ) );
+        nodenames.emplace( NODEITEM( "MatrixTransform", WRL1NODES::WRL1_MATRIXTRANSFORM ) );
+        nodenames.emplace( NODEITEM( "Normal", WRL1NODES::WRL1_NORMAL ) );
+        nodenames.emplace( NODEITEM( "NormalBinding", WRL1NODES::WRL1_NORMALBINDING ) );
+        nodenames.emplace( NODEITEM( "OrthographicCamera", WRL1NODES::WRL1_ORTHOCAMERA ) );
+        nodenames.emplace( NODEITEM( "PerspectiveCamera", WRL1NODES::WRL1_PERSPECTIVECAMERA ) );
+        nodenames.emplace( NODEITEM( "PointLight", WRL1NODES::WRL1_POINTLIGHT ) );
+        nodenames.emplace( NODEITEM( "PointSet", WRL1NODES::WRL1_POINTSET ) );
+        nodenames.emplace( NODEITEM( "Rotation", WRL1NODES::WRL1_ROTATION ) );
+        nodenames.emplace( NODEITEM( "Scale", WRL1NODES::WRL1_SCALE ) );
+        nodenames.emplace( NODEITEM( "Separator", WRL1NODES::WRL1_SEPARATOR ) );
+        nodenames.emplace( NODEITEM( "ShapeHints", WRL1NODES::WRL1_SHAPEHINTS ) );
+        nodenames.emplace( NODEITEM( "Sphere", WRL1NODES::WRL1_SPHERE ) );
+        nodenames.emplace( NODEITEM( "SpotLight", WRL1NODES::WRL1_SPOTLIGHT ) );
+        nodenames.emplace( NODEITEM( "Switch", WRL1NODES::WRL1_SWITCH ) );
+        nodenames.emplace( NODEITEM( "Texture2", WRL1NODES::WRL1_TEXTURE2 ) );
+        nodenames.emplace( NODEITEM( "Testure2Transform", WRL1NODES::WRL1_TEXTURE2TRANSFORM ) );
+        nodenames.emplace( NODEITEM( "TextureCoordinate2", WRL1NODES::WRL1_TEXTURECOORDINATE2 ) );
+        nodenames.emplace( NODEITEM( "Transform", WRL1NODES::WRL1_TRANSFORM ) );
+        nodenames.emplace( NODEITEM( "Translation", WRL1NODES::WRL1_TRANSLATION ) );
+        nodenames.emplace( NODEITEM( "WWWAnchor", WRL1NODES::WRL1_WWWANCHOR ) );
+        nodenames.emplace( NODEITEM( "WWWInline", WRL1NODES::WRL1_WWWINLINE ) );
     }
 }
 
