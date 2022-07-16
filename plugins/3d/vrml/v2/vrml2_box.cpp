@@ -221,6 +221,10 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
     std::vector< int > idx;
     int base = 0;
 
+    vertices.reserve( 6 * 4 );
+    norms.reserve( 6 * 4 );
+    idx.reserve( 6 * 6 );
+
     // top
     vertices.emplace_back( -x, -y, z );
     vertices.emplace_back(  x, -y, z );
