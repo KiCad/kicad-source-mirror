@@ -216,6 +216,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( false );
         break;
 
+    case SHAPE_T::BEZIER:
+        SetTitle( _( "Curve Properties" ) );
+        m_filledCtrl->Show( true );
+        break;
+
     default:
         break;
     }
@@ -354,7 +359,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
 bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 {
-    wxArrayString error_msgs;
+    wxArrayString errors;
 
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::Validate() )
         return false;
@@ -365,13 +370,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
     case SHAPE_T::ARC:
         // Check angle of arc.
         if( m_angle.GetValue() == 0 )
-            error_msgs.Add( _( "The arc angle cannot be zero." ) );
+            errors.Add( _( "The arc angle cannot be zero." ) );
 
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
         {
             double arcAngleDeg = m_angle.GetDoubleValue()/10.0;
-            error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
-                                      0.0, arcAngleDeg ) );
+            errors.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+                                          0.0, arcAngleDeg ) );
         }
         else
         {
@@ -386,27 +391,52 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
             if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2 )
                     || center == start || center == end )
             {
-                error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
-                                          radius, arcAngleDeg ) );
+                errors.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+                                              radius, arcAngleDeg ) );
             }
         }
+
+        if( m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero." ) );
+
         break;
 
     case SHAPE_T::CIRCLE:
         // Check radius.
-        if( m_endX.GetValue() == 0 )
-            error_msgs.Add( _( "The radius cannot be zero." ) );
+        if( m_endX.GetValue() <= 0 )
+            errors.Add( _( "Radius must be greater than zero." ) );
+
+        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero for an unfilled circle." ) );
+
         break;
 
     case SHAPE_T::RECT:
         // Check for null rect.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            error_msgs.Add( _( "The rectangle cannot be empty." ) );
+            errors.Add( _( "Rectangle cannot be empty." ) );
+
+        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
+
         break;
 
     case SHAPE_T::POLY:
+        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero for an unfilled polygon." ) );
+
+        break;
+
     case SHAPE_T::SEGMENT:
+        if( m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero." ) );
+
+        break;
+
     case SHAPE_T::BEZIER:
+        if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero for an unfilled curve." ) );
+
         break;
 
     default:
@@ -414,12 +444,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         break;
     }
 
-    if( error_msgs.GetCount() )
+    if( errors.GetCount() )
     {
         HTML_MESSAGE_BOX dlg( this, _( "Error List" ) );
-        dlg.ListSet( error_msgs );
+        dlg.ListSet( errors );
         dlg.ShowModal();
     }
 
-    return error_msgs.GetCount() == 0;
+    return errors.GetCount() == 0;
 }

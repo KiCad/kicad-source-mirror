@@ -181,9 +181,9 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxT( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
-    m_auimgr.AddPane( libPanel, EDA_PANE().Palette().Name( wxT( "Libraries" ) ).Left().Layer(2)
+    m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( wxT( "Libraries" ) ).Left().Layer(2)
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 200, -1 ) );
-    m_auimgr.AddPane( symbolPanel, EDA_PANE().Palette().Name( wxT( "Symbols" ) ).Left().Layer(1)
+    m_auimgr.AddPane( m_symbolList, EDA_PANE().Palette().Name( wxT( "Symbols" ) ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxT( "DrawFrame" ) ).Center() );
@@ -194,7 +194,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     if( m_libListWidth > 0 )
     {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Libraries" );
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( wxT( "Libraries" ) );
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
@@ -213,7 +213,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     if( m_symbolListWidth > 0 )
     {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Symbols" );
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( wxT( "Symbols" ) );
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
