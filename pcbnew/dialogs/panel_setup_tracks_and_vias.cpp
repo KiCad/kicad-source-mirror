@@ -443,6 +443,27 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( const int aWidth, const int a
     }
 }
 
+void removeSelectedRows( WX_GRID* aGrid )
+{
+    wxArrayInt selectedRows = aGrid->GetSelectedRows();
+    int        curRow = aGrid->GetGridCursorRow();
+
+    if( selectedRows.empty() && curRow >= 0 && curRow < aGrid->GetNumberRows() )
+        selectedRows.Add( curRow );
+
+    for( int ii = selectedRows.Count() - 1; ii >= 0; --ii )
+    {
+        int row = selectedRows.Item( ii );
+        aGrid->DeleteRows( row, 1 );
+        curRow = std::min( curRow, row );
+    }
+
+    curRow = std::max( 0, curRow - 1 );
+    aGrid->MakeCellVisible( curRow, aGrid->GetGridCursorCol() );
+    aGrid->SetGridCursor( curRow, aGrid->GetGridCursorCol() );
+}
+
+
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent )
 {
     AppendTrackWidth( 0 );
@@ -457,16 +478,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent 
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& event )
 {
-    int curRow = m_trackWidthsGrid->GetGridCursorRow();
-
-    if( curRow < 0 || m_trackWidthsGrid->GetNumberRows() <= curRow )
-        return;
-
-    m_trackWidthsGrid->DeleteRows( curRow, 1 );
-
-    curRow = std::max( 0, curRow - 1 );
-    m_trackWidthsGrid->MakeCellVisible( curRow, m_trackWidthsGrid->GetGridCursorCol() );
-    m_trackWidthsGrid->SetGridCursor( curRow, m_trackWidthsGrid->GetGridCursorCol() );
+    removeSelectedRows( m_trackWidthsGrid );
 }
 
 
@@ -484,16 +496,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
 {
-    int curRow = m_viaSizesGrid->GetGridCursorRow();
-
-    if( curRow < 0 || m_viaSizesGrid->GetNumberRows() <= curRow )
-        return;
-
-    m_viaSizesGrid->DeleteRows( curRow, 1 );
-
-    curRow = std::max( 0, curRow - 1 );
-    m_viaSizesGrid->MakeCellVisible( curRow, m_viaSizesGrid->GetGridCursorCol() );
-    m_viaSizesGrid->SetGridCursor( curRow, m_viaSizesGrid->GetGridCursorCol() );
+    removeSelectedRows( m_viaSizesGrid );
 }
 
 
@@ -511,16 +514,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event )
 {
-    int curRow = m_diffPairsGrid->GetGridCursorRow();
-
-    if( curRow < 0 || m_diffPairsGrid->GetNumberRows() <= curRow )
-        return;
-
-    m_diffPairsGrid->DeleteRows( curRow, 1 );
-
-    curRow = std::max( 0, curRow - 1 );
-    m_diffPairsGrid->MakeCellVisible( curRow, m_diffPairsGrid->GetGridCursorCol() );
-    m_diffPairsGrid->SetGridCursor( curRow, m_diffPairsGrid->GetGridCursorCol() );
+    removeSelectedRows( m_diffPairsGrid );
 }
 
 
