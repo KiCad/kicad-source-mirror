@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-07-16 08:53+0000\n"
+"PO-Revision-Date: 2022-07-16 11:50+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5093,9 +5093,8 @@ msgid "Schematic text && graphics"
 msgstr "회로도 텍스트 및 그래픽"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "회로도 텍스트 및 그래픽"
+msgstr "회로도 개인 텍스트 및 그래픽"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -9293,7 +9292,6 @@ msgstr "이름 텍스트 크기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
 msgstr "드 모르간"
 
@@ -9781,9 +9779,8 @@ msgid "Set width to 0 to use schematic's default line width."
 msgstr "테두리 너비를 0으로 설정하여 회로도 기본 기호 선 너비를 사용합니다."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
-#, fuzzy
 msgid "Line Properties"
-msgstr "핀 속성"
+msgstr "라인 속성"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -9939,9 +9936,8 @@ msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "드 모르간 기호에는 대체 핀 할당을 사용할 수 없습니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "세그먼트 편집"
+msgstr "동기화 핀 모드 종료"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 msgid ""
@@ -9982,11 +9978,11 @@ msgstr "동기화된 핀 편집 모드."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "동기화된 핀 모드.  모든 유닛에 새로운 핀이 추가됩니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "동기화된 핀 모드. 다른 장치의 일치하는 핀이 업데이트됩니다."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -10615,9 +10611,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties.cpp:77
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "참고: 항목 색상은 현재 색상 테마에 의해 재정의됩니다."
+msgstr "참고: 개별 항목 색상은 기본 설정에서 재정의됩니다."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10627,14 +10622,12 @@ msgid "Filled shape"
 msgstr "채워진 도형"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "테두리 너비를 0으로 설정하여 회로도 기본 기호 선 너비를 사용합니다."
+msgstr "회로도의 기본 선 너비를 사용하려면 테두리 너비를 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "회로도 편집기 색상을 사용할 수 있도록 색상을 투명하게 설정합니다."
+msgstr "회로도의 편집기 색상을 사용하려면 색상을 지웁니다."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, c-format
@@ -11754,42 +11747,36 @@ msgid "Field name '%s' already in use."
 msgstr "필드 이름 '%s'은(는) 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1097
-#, fuzzy
 msgid "User Fields"
-msgstr "필드"
+msgstr "사용자 필드"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1106
-#, fuzzy
 msgid "Delete Field"
 msgstr "필드 삭제"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1107
-#, fuzzy
 msgid "Select field:"
-msgstr "시트 필드"
+msgstr "필드 선택:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[저장되지 않음]"
+msgstr "저장되지 않은 데이터"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "변경 사항이 저장되지 않습니다. 저장되지 않은 데이터를 내보내시겠습니까?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
-#, fuzzy
 msgid "Save as CSV"
-msgstr "이미지로 저장"
+msgstr "CSV로 저장"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
 msgstr "필드 추가..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
-#, fuzzy
 msgid "Remove Field..."
-msgstr "파일명 변경..."
+msgstr "필드 제거..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:65
 msgid "Group symbols"
@@ -11800,9 +11787,8 @@ msgid "Group symbols together based on common properties"
 msgstr "기본 속성을 기반으로 심볼 분류하기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "심볼을 SVG로 내보내기..."
+msgstr "CSV로 내보내기..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -11835,7 +11821,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "모든 시트 인스턴스의 기본값"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -11843,6 +11829,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"이 심볼의 모든 시트 인스턴스에 대한\n"
+"단위 및 참조, 값 및 풋프린트 필드를\n"
+"기본값으로 설정하려면 선택하시오"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12161,33 +12150,28 @@ msgid "Update Symbol Fields"
 msgstr "심볼 필드 업데이트"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "선 너비:"
+msgstr "배선/버스 폭:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr "네크클래스 선 너비를 사용하려면 너비를 0으로 설정하십시오."
+msgstr "네트클래스의 배선폭을 사용하려면 너비를 0으로 설정하십시오."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "배선, 와이어 및 버스 속성"
+msgstr "배선 및 버스 속성"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "심볼 단위 표기:"
+msgstr "심볼 주석"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "심볼 필드를 자동으로 배치 (&u)"
+msgstr "자동할당 심볼주석"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "하위 시트에 반복적으로 주석 달기"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -12276,14 +12260,12 @@ msgid "Cross-probing"
 msgstr "교차-탐지"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "별칭이 지정된 심볼은 상위 항목이 선택되어 있어야 합니다"
+msgstr "풋프린트 선택 시 심볼 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "선택한 네트의 모든 구리 항목을 강조 표시"
+msgstr "선택한 풋프린트에 해당하는 심볼 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -12292,7 +12274,7 @@ msgstr "교차 조사 항목의 중앙 보기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "교차 조사된 심볼은 현재 뷰에 표시되게함"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -12309,23 +12291,20 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCB 편집기에서 강조 표시될 때 네트 강조"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "그리기 모드"
+msgstr "선 그리기 모드 :"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "자유 각도"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "90도 각도"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45도"
+msgstr "45도 각도"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -12530,9 +12509,8 @@ msgstr ""
 "와이어 또는 버스 위 또는 아래의 텍스트를 간격띄우기하는 텍스트 크기의 백분율"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "전역 라벨 크기:"
+msgstr "전역 라벨 여백:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -13057,7 +13035,7 @@ msgstr "지정된 시트 내에서 시트 이름 복제"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "심볼 핀 또는 와이어 끝 오프 그리드"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -13604,15 +13582,13 @@ msgstr "굵은 기울임꼴"
 
 #: eeschema/lib_textbox.cpp:406 eeschema/sch_textbox.cpp:404
 #: pcbnew/fp_textbox.cpp:322 pcbnew/pcb_textbox.cpp:316
-#, fuzzy
 msgid "Box Width"
-msgstr "텍스트 너비"
+msgstr "상자 너비"
 
 #: eeschema/lib_textbox.cpp:409 eeschema/sch_textbox.cpp:407
 #: pcbnew/fp_textbox.cpp:325 pcbnew/pcb_textbox.cpp:319
-#, fuzzy
 msgid "Box Height"
-msgstr "텍스트 높이"
+msgstr "상자 높이"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -13940,9 +13916,8 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCad 회로도 편집기"
 
 #: eeschema/sch_edit_frame.cpp:169
-#, fuzzy
 msgid "Schematic Hierarchy"
-msgstr "회로도 동등성"
+msgstr "회로도 계층"
 
 #: eeschema/sch_edit_frame.cpp:240
 msgid "New schematic file is unsaved"
@@ -14383,13 +14358,12 @@ msgstr ""
 "를 참조합니다. KiCad 라이브러리에 부품을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
-msgstr ""
-"부품 정의 '%s'은(는) 심볼 라이브러리에서 찾을 수 없는 심볼 '%s' ('%s' 대체) "
-"를 참조합니다. KiCad 라이브러리에 부품을 불러오지 않았습니다."
+msgstr "부품 정의 '%s'에 불완전한 정의가 있습니다(연결된 기호 정의가 없음). 부품이 "
+"KiCad 라이브러리에 로드되지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
 #, c-format
@@ -15226,7 +15200,6 @@ msgid "Cancel Load"
 msgstr "불러오기 취소"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15259,7 +15232,6 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15267,12 +15239,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 라이브러"
-"리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 손상시킵"
-"니다.  계속하시겠습니까?"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 "
+"라이브러리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 "
+"손상시킵니다. \n"
+"\n"
+" 계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15280,9 +15253,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 이"
-"름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 링크"
-"를 손상시킵니다.  계속하시겠습니까?"
+"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 "
+"이름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 "
+"링크를 손상시킵니다. \n"
+"\n"
+"계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15371,9 +15346,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "네트리스트 내보내기 중에 오류가 발생하였습니다. 내보내기를 중단합니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1837
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "Cvpcb가 이미 실행 중입니다. 그래도 계속 하시겠습니까?"
+msgstr "다른 시뮬레이션이 이미 실행 중입니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:516
 #, c-format
@@ -15613,7 +15587,8 @@ msgstr ""
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
-msgstr ""
+msgstr "<b>경고: 참조 접두사</b><br>'%s'로 끝나는 접두사는 기호 라이브러리에 저장할 "
+"경우 문제를 일으킬 수 있음"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -15625,13 +15600,13 @@ msgstr ""
 "<b>(%.3f, %.3f)</b>) 와 충돌합니다."
 
 #: eeschema/symbol_checker.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b> 중복되는 핀 %s</b> %s (위치 <b>(%.3f, %.3f)</b>) 가 핀 %s%s (위치 "
-"<b>(%.3f, %.3f)</b>) 와 충돌합니다 (단위 %c와 %c 변환됨)."
+"<b> 중복되는 핀 %s</b> %s (위치 <b>(%.3f, %.3f)</b>) 가 핀 %s%s (위치 <b>("
+"%.3f, %.3f)</b>) 와 충돌합니다 (단위 %s와 %s 변환됨)."
 
 #: eeschema/symbol_checker.cpp:147
 #, c-format
@@ -15643,25 +15618,25 @@ msgstr ""
 "<b>(%s, %s)</b>) 와 충돌합니다."
 
 #: eeschema/symbol_checker.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b> 중복되는 핀 %s</b> %s (위치 <b>(%s, %s)</b>) 가 핀 %s%s (위치 <b>(%s, "
-"%s)</b>) 와 충돌합니다 (유닛 %c와 %c)."
+"%s)</b>) 와 충돌합니다 (유닛 %s와 %s)."
 
 #: eeschema/symbol_checker.cpp:188
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>전원 심볼에는 하나의 유닛만 있어야 함</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>전원 심볼에는 변환 옵션이 없어야 함</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>전원 심볼에는 핀이 하나만 있어야 함</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:209
 msgid ""
@@ -32723,9 +32698,8 @@ msgid "Unknown keyword in "
 msgstr "알 수 없는 레코드 ID: %d."
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "컴포넌트 확장자: "
+msgstr " 문맥: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
 #, fuzzy
