@@ -21,6 +21,7 @@
 #define VECTOR3_H_
 
 #include <limits>
+#include <wx/debug.h>
 
 /**
  * Traits class for VECTOR2.
@@ -149,12 +150,12 @@ template <class T>
 VECTOR3<T> VECTOR3<T>::Normalize()
 {
     T norm = EuclideanNorm();
-    if( norm > T( 0 ) )
-    {
-        x /= norm;
-        y /= norm;
-        z /= norm;
-    }
+
+    wxCHECK_MSG( norm > T( 0 ), *this, wxT( "Invalid element length 0" ) );
+
+    x /= norm;
+    y /= norm;
+    z /= norm;
 
     return *this;
 }
