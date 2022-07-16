@@ -1161,7 +1161,7 @@ public:
      * @param aClosestVertex is the index of the closes vertex to \p aPoint.
      * @return bool - true if there is a collision, false in any other case.
      */
-    bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
+    bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX* aClosestVertex = nullptr,
                         int aClearance = 0 ) const;
 
     /**
@@ -1174,7 +1174,7 @@ public:
      * @param aClosestVertex is the index of the closes vertex to \p aPoint.
      * @return bool - true if there is a collision, false in any other case.
      */
-    bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
+    bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX* aClosestVertex = nullptr,
                       int aClearance = 0 ) const;
 
     /**

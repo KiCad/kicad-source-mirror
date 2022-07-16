@@ -375,46 +375,17 @@ bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-void ZONE::SetSelectedCorner( const VECTOR2I& aPosition, int aAccuracy )
-{
-    SHAPE_POLY_SET::VERTEX_INDEX corner;
-
-    // If there is some corner to be selected, assign it to m_CornerSelection
-    if( HitTestForCorner( aPosition, aAccuracy * 2, corner )
-        || HitTestForEdge( aPosition, aAccuracy, corner ) )
-    {
-        if( m_CornerSelection == nullptr )
-            m_CornerSelection = new SHAPE_POLY_SET::VERTEX_INDEX;
-
-        *m_CornerSelection = corner;
-    }
-}
-
 bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
-                             SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
+                             SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
     return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy ) const
-{
-    SHAPE_POLY_SET::VERTEX_INDEX dummy;
-    return HitTestForCorner( refPos, aAccuracy, dummy );
-}
-
-
 bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
-                           SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
+                           SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
     return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, aAccuracy );
-}
-
-
-bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy ) const
-{
-    SHAPE_POLY_SET::VERTEX_INDEX dummy;
-    return HitTestForEdge( refPos, aAccuracy, dummy );
 }
 
 

@@ -321,9 +321,6 @@ public:
     }
 
     ///
-    // Like HitTest but selects the current corner to be operated on
-    void SetSelectedCorner( const VECTOR2I& aPosition, int aAccuracy );
-
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
@@ -423,43 +420,25 @@ public:
      *
      * @param  refPos     is the VECTOR2I to test.
      * @param  aAccuracy  increase the item bounding box by this amount.
-     * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
-     *                    value is false.
+     * @param  aCornerHit [out, optional] is the index of the closest vertex found when return
+     *                    value is true
      * @return true if some corner was found to be closer to refPos than aClearance; false
      *         otherwise.
      */
     bool HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
-                           SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
-
-    /**
-     * Test if the given VECTOR2I is near a corner.
-     * @param  refPos     is the VECTOR2I to test.
-     * @param  aAccuracy  increase the item bounding box by this amount.
-     * @return true if some corner was found to be closer to refPos than aClearance; false
-     *         otherwise.
-     */
-    bool HitTestForCorner( const VECTOR2I& refPos, int aAccuracy ) const;
+                           SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit = nullptr ) const;
 
     /**
      * Test if the given VECTOR2I is near a segment defined by 2 corners.
      *
      * @param  refPos     is the VECTOR2I to test.
      * @param  aAccuracy  increase the item bounding box by this amount.
-     * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
-     *                    value is false.
+     * @param  aCornerHit [out, optional] is the index of the closest vertex found when return
+     *                    value is true.
      * @return true if some edge was found to be closer to refPos than aClearance.
      */
     bool HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
-                         SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
-
-    /**
-     * Test if the given VECTOR2I is near a segment defined by 2 corners.
-     *
-     * @param  refPos     is the VECTOR2I to test.
-     * @param  aAccuracy  increase the item bounding box by this amount.
-     * @return true if some edge was found to be closer to refPos than aClearance.
-     */
-    bool HitTestForEdge( const VECTOR2I& refPos, int aAccuracy ) const;
+                         SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit = nullptr ) const;
 
     /**
      * @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,

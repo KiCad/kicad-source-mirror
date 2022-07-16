@@ -214,14 +214,12 @@ BOOST_AUTO_TEST_CASE( Collide )
  */
 BOOST_AUTO_TEST_CASE( CollideVertex )
 {
-    // Variable to store the index of the corner hit
-    SHAPE_POLY_SET::VERTEX_INDEX cornerHit;
-
     // Check that the set collides with the colliding points
     for( const VECTOR2I& point : common.holeyPoints )
     {
-        BOOST_CHECK_MESSAGE( common.holeyPolySet.CollideVertex( point, cornerHit, 0 ), " Point "
-                << point.x << ", " << point.y << " does not collide with holeyPolySet polygon" );
+        BOOST_CHECK_MESSAGE( common.holeyPolySet.CollideVertex( point, nullptr, 0 ),
+                             " Point " << point.x << ", " << point.y <<
+                             " does not collide with holeyPolySet polygon" );
     }
 }
 
@@ -231,14 +229,9 @@ BOOST_AUTO_TEST_CASE( CollideVertex )
  */
 BOOST_AUTO_TEST_CASE( CollideVertexWithClearance )
 {
-    // Variable to store the index of the corner hit
-    SHAPE_POLY_SET::VERTEX_INDEX cornerHit;
-
     // Check that the set collides with the colliding points
     for( const VECTOR2I& point : common.holeyPoints )
-    {
-        BOOST_CHECK( common.holeyPolySet.CollideVertex( point + VECTOR2I( 1, 1 ), cornerHit, 2 ) );
-    }
+        BOOST_CHECK( common.holeyPolySet.CollideVertex( point + VECTOR2I( 1, 1 ), nullptr, 2 ) );
 }
 
 

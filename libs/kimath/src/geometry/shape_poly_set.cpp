@@ -1700,7 +1700,7 @@ void SHAPE_POLY_SET::Append( const VECTOR2I& aP, int aOutline, int aHole )
 
 
 bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
-                                    SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex,
+                                    SHAPE_POLY_SET::VERTEX_INDEX* aClosestVertex,
                                     int aClearance ) const
 {
     // Shows whether there was a collision
@@ -1708,10 +1708,8 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
 
     // Difference vector between each vertex and aPoint.
     VECTOR2D    delta;
-    double      distance, clearance;
-
-    // Convert clearance to double for precision when comparing distances
-    clearance = aClearance;
+    ecoord      distance_squared;
+    ecoord      clearance_squared = SEG::Square( aClearance );
 
     for( CONST_ITERATOR iterator = CIterateWithHoles(); iterator; iterator++ )
     {
@@ -1719,18 +1717,21 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
         delta = *iterator - aPoint;
 
         // Compute distance
-        distance = delta.EuclideanNorm();
+        distance_squared = delta.SquaredEuclideanNorm();
 
         // Check for collisions
-        if( distance <= clearance )
+        if( distance_squared <= clearance_squared )
         {
+            if( !aClosestVertex )
+                return true;
+
             collision = true;
 
-            // Update aClearance to look for closer vertices
-            clearance = distance;
+            // Update clearance to look for closer vertices
+            clearance_squared = distance_squared;
 
             // Store the indices that identify the vertex
-            aClosestVertex = iterator.GetIndex();
+            *aClosestVertex = iterator.GetIndex();
         }
     }
 
@@ -1739,27 +1740,31 @@ bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
 
 
 bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
-                                  SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex,
+                                  SHAPE_POLY_SET::VERTEX_INDEX* aClosestVertex,
                                   int aClearance ) const
 {
     // Shows whether there was a collision
-    bool collision = false;
+    bool   collision = false;
+    ecoord clearance_squared = SEG::Square( aClearance );
 
     for( CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles(); iterator; iterator++ )
     {
         const SEG currentSegment = *iterator;
-        int distance = currentSegment.Distance( aPoint );
+        ecoord    distance_squared = currentSegment.SquaredDistance( aPoint );
 
         // Check for collisions
-        if( distance <= aClearance )
+        if( distance_squared <= clearance_squared )
         {
+            if( !aClosestVertex )
+                return true;
+
             collision = true;
 
-            // Update aClearance to look for closer edges
-            aClearance = distance;
+            // Update clearance to look for closer edges
+            clearance_squared = distance_squared;
 
             // Store the indices that identify the vertex
-            aClosestVertex = iterator.GetIndex();
+            *aClosestVertex = iterator.GetIndex();
         }
     }
 
