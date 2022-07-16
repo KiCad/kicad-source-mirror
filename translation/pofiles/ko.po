@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-16 11:50+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -26821,14 +26821,13 @@ msgstr ""
 "경고: 도금된 스루홀은 보통 최소한 한 개의 레이어에 구리 패드가 있어야 합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1363
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "오류: 패드에 레이어가 없습니다."
+msgstr "오류: Trapazoid delta가 너무 큽니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1372
 #, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "스루홀 패드에 구멍이 없음"
+msgstr "오류: 관통 구멍 패드에 구멍이 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 #, fuzzy
