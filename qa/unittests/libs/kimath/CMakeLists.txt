@@ -40,6 +40,7 @@ set( KIMATH_SRCS
 
     math/test_vector2.cpp
     math/test_vector3.cpp
+    math/test_util.cpp
 )
 
 add_executable( qa_kimath ${KIMATH_SRCS} )
