@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-15 10:19+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2022-07-17 14:14+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -6574,9 +6574,9 @@ msgid "Hotkey file"
 msgstr "단축키 파일"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "동등성 파일 '%s'을(를) 찾을 수 없습니다."
+msgstr "동일한 파일 '%s'을 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -14331,7 +14331,6 @@ msgid "Cancel Load"
 msgstr "불러오기 취소"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14339,9 +14338,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 테이블"
-"에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 손상시킵니다.  계"
-"속하시겠습니까?"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 "
+"테이블에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 "
+"손상시킵니다. \n"
+"\n"
+" 계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14362,7 +14363,6 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14370,12 +14370,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 라이브러"
-"리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 손상시킵"
-"니다.  계속하시겠습니까?"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 "
+"라이브러리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 "
+"손상시킵니다. \n"
+"\n"
+" 계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14383,9 +14384,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 이"
-"름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 링크"
-"를 손상시킵니다.  계속하시겠습니까?"
+"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 "
+"이름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 "
+"링크를 손상시킵니다. \n"
+"\n"
+"계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -24205,9 +24208,8 @@ msgid "Map File Format"
 msgstr "맵 파일 형식"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "PDF 또는 다른 형식으로 드릴 맵을 생성합니다"
+msgstr "PDF 또는 다른 형식으로 드릴 맵 생성"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
