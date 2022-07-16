@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-16 08:53+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -6876,9 +6876,9 @@ msgid "Hotkey file"
 msgstr "단축키 파일"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "동등성 파일 '%s'을(를) 찾을 수 없습니다."
+msgstr "동일한 파일 '%s'을 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -15234,9 +15234,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 테이블"
-"에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 손상시킵니다.  계"
-"속하시겠습니까?"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 "
+"테이블에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 "
+"손상시킵니다. \n"
+"\n"
+" 계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -25847,9 +25849,8 @@ msgid "Map File Format"
 msgstr "맵 파일 형식"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "PS, HPGL 또는 다른 형식으로 드릴 맵을 생성합니다"
+msgstr "PDF 또는 다른 형식으로 드릴 맵 생성"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
