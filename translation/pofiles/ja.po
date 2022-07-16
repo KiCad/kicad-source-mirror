@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-07-11 09:14+0000\n"
+"PO-Revision-Date: 2022-07-18 16:31+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32657,9 +32657,8 @@ msgid "No extra argument was expected"
 msgstr "ネットが未選択です"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "不明なレコードID: %d."
+msgstr "不明なキーワードがあります "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
 #, fuzzy
@@ -32730,7 +32729,7 @@ msgstr "不明なメソッド"
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "model_typeの読み込み中に内部エラーが発生"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
 #, fuzzy
@@ -32800,9 +32799,8 @@ msgid "Internal error: Bad parser context."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
-#, fuzzy
 msgid "Missing keyword."
-msgstr "エイリアスのキーワード:"
+msgstr "キーワードがありません。"
 
 #: pcbnew/ibis/kibis.cpp:396
 #, fuzzy
@@ -32810,24 +32808,20 @@ msgid "waveform has less than two points"
 msgstr "形状に点がありません。"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
-#, fuzzy
 msgid "Cannot remove temporary input file"
-msgstr "一時ファイル '%s' を '%s' にリネームできません"
+msgstr "テンポラリ入力ファイルを削除できません"
 
 #: pcbnew/ibis/kibis.cpp:600 pcbnew/ibis/kibis.cpp:662
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "一時ファイル '%s' を '%s' にリネームできません"
+msgstr "テンポラリ出力ファイルを削除できません"
 
 #: pcbnew/ibis/kibis.cpp:644
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "ファイル読み込み中のエラー。"
+msgstr "テンポラリファイル読み込み中のエラー"
 
 #: pcbnew/ibis/kibis.cpp:652
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "テンポラリー ファイル \"%s\" の作成に失敗しました"
+msgstr "テンポラリファイル作成に失敗しました"
 
 #: pcbnew/ibis/kibis.cpp:705
 msgid ""
