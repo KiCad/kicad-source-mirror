@@ -366,7 +366,7 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void EDA_SHAPE::RebuildBezierToSegmentsPointsList( int aMinSegLen )
 {
-    // Has meaning only for S_CURVE DRAW_SEGMENT shape
+    // Has meaning only for SHAPE_T::BEZIER
     if( m_shape != SHAPE_T::BEZIER )
     {
         m_bezierPoints.clear();
