@@ -705,7 +705,9 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     case SHAPE_T::CIRCLE:
     {
         int radius = GetRadius();
-        long dist = KiROUND<double, long>( EuclideanNorm( aPosition - getCenter() ) );
+
+        VECTOR2I::extended_type dist = KiROUND<double, VECTOR2I::extended_type>(
+                EuclideanNorm( aPosition - getCenter() ) );
 
         if( IsFilled() )
             return dist <= radius + maxdist;          // Filled circle hit-test
@@ -723,7 +725,9 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
         VECTOR2I relPos = aPosition - getCenter();
         int      radius = GetRadius();
-        long     dist = KiROUND<double, long>( EuclideanNorm( relPos ) );
+
+        VECTOR2I::extended_type dist =
+                KiROUND<double, VECTOR2I::extended_type>( EuclideanNorm( relPos ) );
 
         if( IsFilled() )
         {

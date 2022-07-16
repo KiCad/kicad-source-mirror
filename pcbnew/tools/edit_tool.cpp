@@ -1078,8 +1078,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     typedef std::numeric_limits<int> coord_limits;
 
-    long max = coord_limits::max() - COORDS_PADDING;
-    long min = -max;
+    int max = coord_limits::max() - COORDS_PADDING;
+    int min = -max;
 
     bool outOfBounds = rotPos.x < min || rotPos.x > max || rotPos.y < min || rotPos.y > max
                        || rotEnd.x < min || rotEnd.x > max || rotEnd.y < min || rotEnd.y > max;

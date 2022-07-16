@@ -284,10 +284,10 @@ private:
         typedef std::numeric_limits<int> coord_limits;
         const int                        guardValue = 1;
 
-        long maxDiff = coord_limits::max() - guardValue;
+        VECTOR2I::extended_type maxDiff = coord_limits::max() - guardValue;
 
-        long xDiff = long( aEnd.x ) - aOrigin.x;
-        long yDiff = long( aEnd.y ) - aOrigin.y;
+        VECTOR2I::extended_type xDiff = VECTOR2I::extended_type( aEnd.x ) - aOrigin.x;
+        VECTOR2I::extended_type yDiff = VECTOR2I::extended_type( aEnd.y ) - aOrigin.y;
 
         if( xDiff > maxDiff )
             xDiff = maxDiff;
@@ -314,8 +314,8 @@ private:
         typedef std::numeric_limits<int> coord_limits;
         const int                        guardValue = 10;
 
-        long xDiff = long( aEnd.x ) - aOrigin.x;
-        long yDiff = long( aEnd.y ) - aOrigin.y;
+        VECTOR2I::extended_type xDiff = VECTOR2I::extended_type( aEnd.x ) - aOrigin.x;
+        VECTOR2I::extended_type yDiff = VECTOR2I::extended_type( aEnd.y ) - aOrigin.y;
 
         double maxRadius = coord_limits::max() / 2 - guardValue;
         double radius = std::hypot( xDiff, yDiff );

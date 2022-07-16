@@ -299,8 +299,8 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 {
     typedef std::numeric_limits<int> coord_limits;
 
-    long max = coord_limits::max();
-    long min = -max;
+    int max = coord_limits::max();
+    int min = -max;
 
     double left = aBBoxOffset.x + aSourceBBox.GetPosition().x;
     double top = aBBoxOffset.y + aSourceBBox.GetPosition().y;
