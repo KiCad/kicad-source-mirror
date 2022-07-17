@@ -787,14 +787,19 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        // We want the bitmap bounding box just in the footprint editor
-        // so it will start with the correct initial zoom
-        if( !isFPEdit
-            && ( m_privateLayers.test( item->GetLayer() ) || item->Type() != PCB_BITMAP_T ) )
+        if( m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
             continue;
 
-        if( item->Type() != PCB_FP_TEXT_T )
-            area.Merge( item->GetBoundingBox() );
+        // We want the bitmap bounding box just in the footprint editor
+        // so it will start with the correct initial zoom
+        if( item->Type() == PCB_BITMAP_T && !isFPEdit )
+            continue;
+
+        // Handle text separately
+        if( item->Type() == PCB_FP_TEXT_T )
+            continue;
+
+        area.Merge( item->GetBoundingBox() );
     }
 
     for( PAD* pad : m_pads )
