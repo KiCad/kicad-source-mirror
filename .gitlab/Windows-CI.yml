@@ -22,7 +22,7 @@ win64_build:
     - C:\builder\build.ps1 -Env -Arch x64
     - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
     - nuget.exe sources add -Name kicad -Source "https://nuget.kicad.org:443/v3/index.json"
-    - nuget.exe setapikey $env:NUGET_KEY -Source "https://nuget.kicad.org:443/v3/index.json"
+    - nuget.exe setapikey $env:KICAD_NUGET_KEY -Source "https://nuget.kicad.org:443/v3/index.json"
     - mkdir -p build/windows -Force
     - cd build/windows
     - cmake `
