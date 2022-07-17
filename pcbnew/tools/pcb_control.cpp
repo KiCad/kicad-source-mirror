@@ -1250,9 +1250,9 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     if( pcbFrame && selection.GetSize() == 2 )
     {
         auto clearanceString =
-                [&]( const DRC_CONSTRAINT& constraint )
+                [&]( const DRC_CONSTRAINT& curr_constraint )
                 {
-                    return StringFromValue( units, constraint.m_Value.Min(), true );
+                    return StringFromValue( units, curr_constraint.m_Value.Min(), true );
                 };
 
         BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );

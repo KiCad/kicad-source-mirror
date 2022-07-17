@@ -1754,7 +1754,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
                     m_out->Print( nested_level, "(gr_poly\n" );
                     formatPolyPts( outline, nested_level, ADVANCED_CFG::GetCfg().m_CompactSave );
-                    m_out->Print( nested_level, "" );  // just to align the next info at the right place
+                    m_out->Print( nested_level, " " );  // just to align the next info at the right place
                 }
                 break;
 
