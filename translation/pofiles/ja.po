@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-18 16:31+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -13090,7 +13090,7 @@ msgstr "その他"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr "与えられたシートの中でシート名が重複しています"
+msgstr "与えられたシートの中でシート名が重複している"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
@@ -29743,7 +29743,7 @@ msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "まー"
+msgstr "マージン"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -33740,7 +33740,7 @@ msgstr "端面スルーホール パッド"
 
 #: pcbnew/pad.cpp:1686
 msgid "Pad Type"
-msgstr "パッド形状"
+msgstr "パッドタイプ"
 
 #: pcbnew/pad.cpp:1694
 msgid "Pad Number"
