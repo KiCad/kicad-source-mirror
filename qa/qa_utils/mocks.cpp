@@ -410,6 +410,28 @@ void PCB_SELECTION_TOOL::setTransitions()
 {
 }
 
+
+void PCB_SELECTION_TOOL::select( EDA_ITEM* aItem )
+{
+}
+
+
+void PCB_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
+{
+}
+
+
+void PCB_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aHighlightMode,
+                                    SELECTION* aGroup )
+{
+}
+
+
+void PCB_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aHighlightMode,
+                                              SELECTION* aGroup )
+{
+}
+
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
