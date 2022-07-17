@@ -3,6 +3,8 @@ build_doxygen_docker:
   services:
     - docker:dind
   stage: build
+  tags:
+    - docker
   before_script:
     - docker info
     - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
