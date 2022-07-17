@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-08 08:59-0700\n"
-"PO-Revision-Date: 2022-07-09 21:11+0000\n"
+"PO-Revision-Date: 2022-07-18 15:18+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -12257,7 +12257,7 @@ msgstr "その他"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr "与えられたシートの中でシート名が重複しています"
+msgstr "与えられたシートの中でシート名が重複している"
 
 #: eeschema/erc_item.cpp:50
 msgid "Pin not connected"
@@ -28170,7 +28170,7 @@ msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "まー"
+msgstr "マージン"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -31208,7 +31208,7 @@ msgstr "端面スルーホール パッド"
 
 #: pcbnew/pad.cpp:1692
 msgid "Pad Type"
-msgstr "パッド形状"
+msgstr "パッドタイプ"
 
 #: pcbnew/pad.cpp:1700
 msgid "Pad Number"
