@@ -268,6 +268,11 @@ private:
 
 #define KI_TRACE( aWhat, ... )                                                                     \
     if( TRACE_MANAGER::Instance().IsTraceEnabled( aWhat ) )                                        \
-        TRACE_MANAGER::Instance().Trace( aWhat, __VA_ARGS__ )
+    {                                                                                              \
+        TRACE_MANAGER::Instance().Trace( aWhat, __VA_ARGS__ );                                     \
+    }                                                                                              \
+    else                                                                                           \
+    {                                                                                              \
+    }
 
 #endif    // _TRACE_HELPERS_H_
