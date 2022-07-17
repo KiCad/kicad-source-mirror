@@ -7,16 +7,27 @@ win64_build:
     - kicad-windows-1809
   extends: .only_code
   interruptible: false
-  image: registry.gitlab.com/kicad/kicad-ci/source_containers/win64:msvc1809
+  image: registry.gitlab.com/kicad/kicad-ci/windows-build-image/win1809-msvc:latest
+  variables:
+    VCPKG_BINARY_SOURCES: 'nuget,kicad,readwrite'
+  cache:
+    key: win64-vcpkg-"$CI_COMMIT_REF_SLUG"
+    paths:
+      - build\windows\vcpkg_installed
+      - .vcpkgCache
   only:
     - branches@kicad/code/kicad
     - tags@kicad/code/kicad
   script:
+    - C:\builder\build.ps1 -Env -Arch x64
+    - $vcpkgCache=Join-Path -Path (Get-Location) -ChildPath ".vcpkgCache";$env:VCPKG_DEFAULT_BINARY_CACHE=$vcpkgCache;New-Item -ItemType Directory -Force -Path $vcpkgCache
+    - nuget.exe sources add -Name kicad -Source "https://nuget.kicad.org:443/v3/index.json"
+    - nuget.exe setapikey $env:NUGET_KEY -Source "https://nuget.kicad.org:443/v3/index.json"
     - mkdir -p build/windows -Force
     - cd build/windows
     - cmake `
       -G "Ninja" `
-      -DCMAKE_TOOLCHAIN_FILE=C:\build\vcpkg\scripts\buildsystems\vcpkg.cmake `
+      -DCMAKE_TOOLCHAIN_FILE=C:\builder\vcpkg\scripts\buildsystems\vcpkg.cmake `
       -DCMAKE_BUILD_TYPE=Debug `
       -DKICAD_SCRIPTING_WXPYTHON=OFF `
       -DKICAD_USE_OCC=ON `
