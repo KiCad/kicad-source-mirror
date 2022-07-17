@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-18 16:31+0000\n"
-"Last-Translator: ky107601 <qldkr1@naver.com>\n"
+"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17166,9 +17166,8 @@ msgid "Lines drawn at any angle"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:696
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "수평 다음 수직"
+msgstr "수평과 수직으로 선그리기"
 
 #: eeschema/tools/ee_actions.cpp:701
 #, fuzzy
@@ -17187,7 +17186,7 @@ msgstr "자동 수정"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "새 부품 기호에 대한  자동 주석 기능 토글"
 
 #: eeschema/tools/ee_actions.cpp:716
 msgid "Repair Schematic"
@@ -17210,9 +17209,8 @@ msgid "Enter Sheet"
 msgstr "시트로 들어가기"
 
 #: eeschema/tools/ee_actions.cpp:730
-#, fuzzy
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "회로도 편집기에서 선택한 시트의 내용을 표시합니다"
+msgstr "회로도 편집기에서 선택한 시트의 내용을 변경합니다"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Display the selected sheet's contents in the schematic editor"
