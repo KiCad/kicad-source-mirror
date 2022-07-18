@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 08:59-0700\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
 "PO-Revision-Date: 2022-03-13 03:55+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v6/sr/>\n"
@@ -144,7 +144,7 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, c-format
 msgid "Loading %s..."
@@ -7385,12 +7385,12 @@ msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3051
+#: eeschema/connection_graph.cpp:3063
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3068
+#: eeschema/connection_graph.cpp:3080
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -30218,8 +30218,8 @@ msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:633
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, fuzzy, c-format
 msgid "Library '%s' is read only."
 msgstr "Библиотека \"%s\" није пронађена."
@@ -31689,7 +31689,7 @@ msgstr "фајл не постоји"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:366
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:78
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:73
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
 msgid "Open cancelled by user."
@@ -32473,13 +32473,13 @@ msgid "Element token contains %d parameters."
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr ""
@@ -32490,7 +32490,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Избриши поље"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -32657,48 +32657,48 @@ msgstr "Превуци свакако"
 msgid "unknown pad type: %d"
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
 #, c-format
 msgid "unknown via type %d"
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
 msgid "This file does not contain a PCB."
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
 #, fuzzy
 msgid "Library Not Found"
 msgstr "Маркер није пронађен"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Попуњавање зона"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Немогуће сачувати фајл %s."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Избриши поље"

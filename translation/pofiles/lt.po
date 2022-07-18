@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 08:59-0700\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -172,7 +172,7 @@ msgstr "Perkrovimo laikas %.3f s"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, fuzzy, c-format
 msgid "Loading %s..."
@@ -7344,12 +7344,12 @@ msgstr ""
 "Tinklas %s yra grafiškai prijungtas prie magistralės %s, tačiau nėra tos "
 "magistralės narys"
 
-#: eeschema/connection_graph.cpp:3051
+#: eeschema/connection_graph.cpp:3063
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Lapo smeigtukas %s neturi atitikimo hierarchinės etiketės lapo viduje"
 
-#: eeschema/connection_graph.cpp:3068
+#: eeschema/connection_graph.cpp:3080
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Иерархическая метка %s не соединена с меткой листа."
@@ -30665,8 +30665,8 @@ msgstr "Biblioteka %s jau yra."
 
 #: pcbnew/footprint_libraries_utils.cpp:633
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Biblioteka „%s“ yra tik skaitoma."
@@ -32123,7 +32123,7 @@ msgstr "Gaunant failą įvyko klaida!\n"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:366
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:78
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:73
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
 #, fuzzy
@@ -33021,7 +33021,7 @@ msgid "Element token contains %d parameters."
 msgstr "Elemento žetone yra %d parametrai."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
@@ -33029,7 +33029,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Bibliotekos kataloge „%s“ yra netikėtų pakatalogių."
@@ -33040,7 +33040,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Bibliotekos kelyje „%s“ rastas netikėtas failas „%s“."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -33246,22 +33246,22 @@ msgstr "Išsaugoti vis tiek"
 msgid "unknown pad type: %d"
 msgstr "nežinomas pagalvėlės tipas: %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
 #, c-format
 msgid "unknown via type %d"
 msgstr "nežinoma per tipą %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nežinomas zonos kampų lyginimo tipas %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "šiame faile nėra PCB"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
 #, fuzzy, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -33270,28 +33270,28 @@ msgstr ""
 "Bibliotekos „%s“ nėra.\n"
 "Ar norėtumėte jį sukurti?"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
 msgid "Library Not Found"
 msgstr "Biblioteka nerasta"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Netinkamas pėdsako failo pavadinimas „%s“."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Negalima perrašyti bibliotekos kelio „%s“."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Bibliotekos kelyje „%s“ rastas netikėtas failas „%s“."

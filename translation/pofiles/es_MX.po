@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 08:59-0700\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
 "PO-Revision-Date: 2022-07-04 20:18+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -157,7 +157,7 @@ msgstr "Tiempo de actualización %.3f s"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, c-format
 msgid "Loading %s..."
@@ -7223,14 +7223,14 @@ msgid ""
 msgstr ""
 "La red %s está conectada gráficamente al bus %s pero no a un miembro del bus"
 
-#: eeschema/connection_graph.cpp:3051
+#: eeschema/connection_graph.cpp:3063
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "El puerto de hoja %s no tiene una etiqueta jerárquica correspondiente en la "
 "hoja"
 
-#: eeschema/connection_graph.cpp:3068
+#: eeschema/connection_graph.cpp:3080
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "La etiqueta jerárquica %s no está conectada a la hoja pricipal"
@@ -30427,8 +30427,8 @@ msgstr "La librería %s ya existe."
 
 #: pcbnew/footprint_libraries_utils.cpp:633
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "La librería '%s' es de solo lectura."
@@ -31887,7 +31887,7 @@ msgstr "Error al leer el archivo."
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:366
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:78
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:73
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
 msgid "Open cancelled by user."
@@ -32818,13 +32818,13 @@ msgid "Element token contains %d parameters."
 msgstr "El token de elemento contiene %d parámetros."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permisos insuficientes para eliminar la carpeta '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "La carpeta de librerías '%s' tiene subcarpetas inesperadas."
@@ -32835,7 +32835,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Archivo inesperado '%s' encontrado en la librería '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -33043,21 +33043,21 @@ msgstr "Guardar de todas formas"
 msgid "unknown pad type: %d"
 msgstr "tipo de pad desconocido: %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
 #, c-format
 msgid "unknown via type %d"
 msgstr "tipo de vía desconocido %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "tipo de suavizado de esquinas de zona desconocido %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
 msgid "This file does not contain a PCB."
 msgstr "Este archivo no contiene una placa."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -33066,26 +33066,26 @@ msgstr ""
 "La biblioteca «%s» no existe.\n"
 "¿Quiere crearla?"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
 msgid "Library Not Found"
 msgstr "No se encontró la biblioteca"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "El nombre del archivo de huellas '%s' es inválido."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Permisos insuficientes para eliminar '%s'."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "No puede sobrescribirse la ruta de la biblioteca «%s»."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr ""

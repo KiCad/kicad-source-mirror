@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 08:59-0700\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
 "PO-Revision-Date: 2022-07-17 14:14+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
@@ -164,7 +164,7 @@ msgstr "다시 불러오기 시간 %.3f s"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, c-format
 msgid "Loading %s..."
@@ -7143,12 +7143,12 @@ msgstr ""
 "네트 %s은(는) 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니"
 "다"
 
-#: eeschema/connection_graph.cpp:3051
+#: eeschema/connection_graph.cpp:3063
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "시트 핀 %s에는 시트 내부에 일치하는 계층 라벨이 없습니다"
 
-#: eeschema/connection_graph.cpp:3068
+#: eeschema/connection_graph.cpp:3080
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없습니다"
@@ -14338,9 +14338,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 "
-"테이블에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 "
-"손상시킵니다. \n"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 테이블"
+"에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 링크를 손상시킵니다. \n"
 "\n"
 " 계속하시겠습니까?"
 
@@ -14370,9 +14369,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 "
-"라이브러리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 "
-"손상시킵니다. \n"
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 라이브러"
+"리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 링크를 손상시킵"
+"니다. \n"
 "\n"
 " 계속하시겠습니까?"
 
@@ -14384,9 +14383,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 "
-"이름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 "
-"링크를 손상시킵니다. \n"
+"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 이"
+"름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 심볼 라이브러리 링크"
+"를 손상시킵니다. \n"
 "\n"
 "계속하시겠습니까?"
 
@@ -29962,8 +29961,8 @@ msgstr "라이브러리 %s이(가) 이미 존재합니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:633
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "%s 라이브러리는 읽기 전용입니다."
@@ -30266,7 +30265,8 @@ msgstr "벡터 그래픽 파일 불러오기"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr "메모리가 부족하여 DXF 파일을 로드할 수 없습니다. 파일이 너무 클 수 있습니다."
+msgstr ""
+"메모리가 부족하여 DXF 파일을 로드할 수 없습니다. 파일이 너무 클 수 있습니다."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -31383,7 +31383,7 @@ msgstr "파일을 읽는 중에 오류가 발생하였습니다."
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:366
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:78
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:73
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
 msgid "Open cancelled by user."
@@ -32285,13 +32285,13 @@ msgid "Element token contains %d parameters."
 msgstr "원소 토큰이 %d개의 매개변수를 포함하고 있습니다."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "'%s' 폴더를 삭제에 필요한 권한이 충분하지 않음."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "라이브러리 폴더 '%s'에 예기치 못한 하위 폴더가 존재합니다."
@@ -32302,7 +32302,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "예기치 못한 파일 '%s'이(가) 라이브러리 '%s'에서 발견되었습니다."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -32507,21 +32507,21 @@ msgstr "강제로 저장"
 msgid "unknown pad type: %d"
 msgstr "알 수 없는 패드 유형: %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
 #, c-format
 msgid "unknown via type %d"
 msgstr "알 수 없는 비아 유형 %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "알 수 없는 영역 모서리 매끄러움 유형 %d"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
 msgid "This file does not contain a PCB."
 msgstr "이 파일에는 PCB가 포함되어 있지 않습니다."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -32530,26 +32530,26 @@ msgstr ""
 "라이브러리 '%s'이(가) 존재하지 않습니다.\n"
 "생성하시겠습니까?"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
 msgid "Library Not Found"
 msgstr "라이브러리를 찾을 수 없습니다"
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "풋프린트 파일 이름 '%s'이(가) 잘못되었습니다."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "'%s' 삭제에 필요한 권한이 충분하지 않음."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "라이브러리 경로 '%s'을(를) 덮어쓸 수 없습니다."
 
-#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "예기치 못한 파일 '%s'이(가) 라이브러리 경로 '%s'에서 발견되었습니다."
