@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-13 06:29-0700\n"
+"POT-Creation-Date: 2022-07-18 09:36-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1316,32 +1316,6 @@ msgstr "Grid Settings"
 msgid "Hotkey List"
 msgstr "Hotkey List"
 
-msgid "Incorrect scale number"
-msgstr "Incorrect scale number"
-
-#, c-format
-msgid ""
-"This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr ""
-"This scale results in an image which is too small (%.2f mm or %.1f mil)."
-
-#, c-format
-msgid ""
-"This scale results in an image which is very large (%.1f mm or %.2f in). Are "
-"you sure?"
-msgstr ""
-"This scale results in an image which is very large (%.1f mm or %.2f in). Are "
-"you sure?"
-
-msgid "Grey"
-msgstr "Grey"
-
-msgid "Image Scale:"
-msgstr "Image Scale:"
-
-msgid "Image Editor"
-msgstr "Image Editor"
-
 msgid "Skip Locked Items"
 msgstr "Skip Locked Items"
 
@@ -2030,6 +2004,29 @@ msgstr "Import Hotkeys File:"
 msgid "| Action | Default Hotkey | Description"
 msgstr "| Action | Default Hotkey | Description"
 
+msgid "Incorrect scale number"
+msgstr "Incorrect scale number"
+
+#, c-format
+msgid ""
+"This scale results in an image which is too small (%.2f mm or %.1f mil)."
+msgstr ""
+"This scale results in an image which is too small (%.2f mm or %.1f mil)."
+
+#, c-format
+msgid ""
+"This scale results in an image which is very large (%.1f mm or %.2f in). Are "
+"you sure?"
+msgstr ""
+"This scale results in an image which is very large (%.1f mm or %.2f in). Are "
+"you sure?"
+
+msgid "Grey"
+msgstr "Grey"
+
+msgid "Image Scale:"
+msgstr "Image Scale:"
+
 msgid "Cmd"
 msgstr "Cmd"
 
@@ -2599,6 +2596,9 @@ msgstr "Pad"
 msgid "Graphic"
 msgstr "Graphic"
 
+msgid "Bitmap"
+msgstr "Bitmap"
+
 msgid "Text Box"
 msgstr "Text Box"
 
@@ -2643,9 +2643,6 @@ msgstr "Wire Entry"
 
 msgid "Bus Entry"
 msgstr "Bus Entry"
-
-msgid "Bitmap"
-msgstr "Bitmap"
 
 msgid "Net Label"
 msgstr "Net Label"
@@ -18381,17 +18378,39 @@ msgstr "Rectangle Properties"
 msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
+msgid "Curve Properties"
+msgstr "Curve Properties"
+
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
 
-msgid "The arc angle cannot be zero."
-msgstr "The arc angle cannot be zero."
+msgid "Arc angle cannot be zero."
+msgstr "Arc angle cannot be zero."
 
-msgid "The radius cannot be zero."
-msgstr "The radius cannot be zero."
+#, c-format
+msgid "Invalid Arc with radius %f and angle %f."
+msgstr "Invalid Arc with radius %f and angle %f."
 
-msgid "The rectangle cannot be empty."
-msgstr "The rectangle cannot be empty."
+msgid "Line width must be greater than zero."
+msgstr "Line width must be greater than zero."
+
+msgid "Radius must be greater than zero."
+msgstr "Radius must be greater than zero."
+
+msgid "Line width must be greater than zero for an unfilled circle."
+msgstr "Line width must be greater than zero for an unfilled circle."
+
+msgid "Rectangle cannot be empty."
+msgstr "Rectangle cannot be empty."
+
+msgid "Line width must be greater than zero for an unfilled rectangle."
+msgstr "Line width must be greater than zero for an unfilled rectangle."
+
+msgid "Line width must be greater than zero for an unfilled polygon."
+msgstr "Line width must be greater than zero for an unfilled polygon."
+
+msgid "Line width must be greater than zero for an unfilled curve."
+msgstr "Line width must be greater than zero for an unfilled curve."
 
 msgid "Error List"
 msgstr "Error List"
@@ -26371,6 +26390,9 @@ msgstr "Draw a circle"
 msgid "Draw an arc"
 msgstr "Draw an arc"
 
+msgid "Place an image"
+msgstr "Place an image"
+
 msgid "Place a text"
 msgstr "Place a text"
 
@@ -27671,11 +27693,23 @@ msgstr ""
 "Error loading board.\n"
 "%s"
 
-msgid "Selected Items"
-msgstr "Selected Items"
-
 msgid "Footprint Name"
 msgstr "Footprint Name"
+
+msgid "Resolved clearance"
+msgstr "Resolved clearance"
+
+msgid "Resolved hole clearance"
+msgstr "Resolved hole clearance"
+
+msgid "Resolved edge clearance"
+msgstr "Resolved edge clearance"
+
+msgid "Resolved margin clearance"
+msgstr "Resolved margin clearance"
+
+msgid "Selected Items"
+msgstr "Selected Items"
 
 msgid "Drag a corner"
 msgstr "Drag a corner"
@@ -27815,6 +27849,12 @@ msgstr "Show all pads"
 
 msgid "Show copper zones"
 msgstr "Show copper zones"
+
+msgid "Images"
+msgstr "Images"
+
+msgid "Show user images"
+msgstr "Show user images"
 
 msgid "Footprints Front"
 msgstr "Footprints Front"
@@ -28476,6 +28516,18 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Image Editor"
+#~ msgstr "Image Editor"
+
+#~ msgid "The arc angle cannot be zero."
+#~ msgstr "The arc angle cannot be zero."
+
+#~ msgid "The radius cannot be zero."
+#~ msgstr "The radius cannot be zero."
+
+#~ msgid "The rectangle cannot be empty."
+#~ msgstr "The rectangle cannot be empty."
 
 #~ msgid "Allowed features"
 #~ msgstr "Allowed features"
