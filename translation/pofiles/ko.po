@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-18 16:31+0000\n"
-"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
+"Last-Translator: kmn4555 <kmn4555@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11762,7 +11762,7 @@ msgstr "필드 선택:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
 msgid "Unsaved data"
-msgstr "저장되지 않은 데이터"
+msgstr "데이터가 저장되지 않음"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Changes are unsaved. Export unsaved data?"
@@ -11770,7 +11770,7 @@ msgstr "변경 사항이 저장되지 않습니다. 저장되지 않은 데이�
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
 msgid "Save as CSV"
-msgstr "CSV로 저장"
+msgstr "CSV파일로 저장"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -11790,7 +11790,7 @@ msgstr "기본 속성을 기반으로 심볼 분류하기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
 msgid "Export as CSV..."
-msgstr "CSV로 내보내기..."
+msgstr "CSV파일로 내보내기..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16191,15 +16191,14 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad 심볼 라이브러리 뷰어"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"풋프린트 이름, 키워드, 설명과 패드 개수로 필터링할 수 있습니다.\n"
-"검색어는 공백으로 구분됩니다.  모든 검색어가 일치하여야 합니다.\n"
-"숫자 검색어는 패드 개수에 대해서도 일치합니다."
+"심볼 이름, 키워드, 설명과 핀 개수로 필터링할 수 있습니다.\n"
+"검색어는 공백으로 구분됩니다.  모든 검색어가 일치해야 합니다.\n"
+"숫자 항목도 핀 개수와 일치해야 합니다."
 
 #: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1094
 #: pcbnew/footprint_viewer_frame.cpp:1099
@@ -17163,16 +17162,15 @@ msgstr "버스와 도선 수평/수직 배치 강제하기"
 
 #: eeschema/tools/ee_actions.cpp:691
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "임의 각도로 도선 그리기"
 
 #: eeschema/tools/ee_actions.cpp:696
 msgid "Lines drawn horizontally and vertically"
 msgstr "수평과 수직으로 선그리기"
 
 #: eeschema/tools/ee_actions.cpp:701
-#, fuzzy
 msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr "이 영역에서는 수평, 수직, 45도 각도 선으로만 그리기"
+msgstr "수평, 수직, 45도 각도로만 도선 그리기"
 
 #: eeschema/tools/ee_actions.cpp:706
 #, fuzzy
@@ -17274,9 +17272,8 @@ msgid "Hierarchy Navigator"
 msgstr "계층 내비게이터"
 
 #: eeschema/tools/ee_actions.cpp:776
-#, fuzzy
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "회로도 시트 계층을 표시합니다"
+msgstr "회로도 시트 계층 네비게이터를 표시 또는 숨김"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Navigate to page"
@@ -17327,9 +17324,8 @@ msgid "Switch Segment Posture"
 msgstr "호의 모양 전환"
 
 #: eeschema/tools/ee_actions.cpp:833
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "현재 라우팅중인 배선의 모양을 전환합니다."
+msgstr "현재 세그먼트의 모양을 전환합니다."
 
 #: eeschema/tools/ee_actions.cpp:839
 msgid "Finish Wire or Bus"
@@ -17470,7 +17466,6 @@ msgid "Edit Main Fields"
 msgstr "기본 필드 편집"
 
 #: eeschema/tools/sch_edit_tool.cpp:477
-#, fuzzy
 msgid "Change To"
 msgstr "바꾸기"
 
@@ -17504,9 +17499,10 @@ msgid "Edit Sheet Page Number"
 msgstr "시트 페이지 번호 편집"
 
 #: eeschema/tools/sch_editor_control.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "마지막으로 저장된 버전으로 '%s'을(를) 되돌리시겠습니까?"
+msgstr "마지막으로 저장된 버전으로 (모든 하위 시트를 포함한) '%s'을(를) "
+"되돌리시겠습니까?"
 
 #: eeschema/tools/sch_editor_control.cpp:563
 msgid "Reached end of schematic."
