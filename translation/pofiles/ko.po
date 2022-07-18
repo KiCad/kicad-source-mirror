@@ -15,13 +15,14 @@
 # YunJiSang <js_7744@naver.com>, 2022.
 # 이기형 <oddlight0@gmail.com>, 2022.
 # kmn4555 <kmn4555@naver.com>, 2022.
+# ky107601 <qldkr1@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
-"PO-Revision-Date: 2022-07-16 11:50+0000\n"
-"Last-Translator: kmn4555 <kmn4555@naver.com>\n"
+"PO-Revision-Date: 2022-07-18 16:31+0000\n"
+"Last-Translator: ky107601 <qldkr1@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -16421,14 +16422,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "선택한 심볼의 복사본 만들기"
 
 #: eeschema/tools/ee_actions.cpp:139
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "심볼 복구..."
+msgstr "심볼 이름 변경..."
 
 #: eeschema/tools/ee_actions.cpp:139
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "선택한 심볼 업데이트"
+msgstr "선택한 심볼 이름 변경"
 
 #: eeschema/tools/ee_actions.cpp:144
 msgid "Save the current symbol to a different library."
@@ -17256,7 +17255,6 @@ msgid "Move backward in sheet navigation history"
 msgstr "시트 탐색 기록에서 뒤로 이동"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Previous Sheet"
 msgstr "이전 시트"
 
@@ -17266,7 +17264,6 @@ msgid "Move to previous sheet by number"
 msgstr "번호로 이전 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:770
-#, fuzzy
 msgid "Next Sheet"
 msgstr "다음 시트"
 
@@ -32373,9 +32370,8 @@ msgid "Invalid C_pkg value."
 msgstr "잘못된 길이 값"
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "핀 확인..."
+msgstr "핀 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
 #, fuzzy
@@ -32413,9 +32409,8 @@ msgid "Component name cannot be empty."
 msgstr "네트 이름은 빈 칸이 될 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "영역 확인 중"
+msgstr "부품 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
 #, fuzzy
@@ -32465,9 +32460,8 @@ msgid "Model name cannot be empty"
 msgstr "네트 이름은 빈 칸이 될 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "영역 확인 중"
+msgstr "모델 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
 #, fuzzy
@@ -38651,14 +38645,12 @@ msgid "Removing null tracks and vias..."
 msgstr "트랙 및 비아 모두 편집"
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "중복 배선 제거"
+msgstr "필요 없는 배선 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "중복 배선 제거"
+msgstr "필요 없는 배선 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:95
 #, fuzzy
