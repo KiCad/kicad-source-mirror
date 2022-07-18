@@ -2714,9 +2714,21 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             {
             case SCH_PIN_T:
             {
-                // Only consider a connection to be between pins on different symbols
-                if( !pins.empty() && ( item->GetParent() != pins.front()->GetParent() ) )
-                    has_other_connections = true;
+                // Stacked pins do not count as other connections but non-stacked pins do
+                if( !has_other_connections && !pins.empty() )
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+                    for( SCH_PIN* other_pin  : pins )
+                    {
+                        if( other_pin->GetParent() != pin->GetParent()
+                                || other_pin->GetPosition() != pin->GetPosition() )
+                        {
+                            has_other_connections = true;
+                            break;
+                        }
+                    }
+                }
 
                 pins.emplace_back( static_cast<SCH_PIN*>( item ) );
 
