@@ -430,7 +430,7 @@ OPT<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyI
 #endif
 
     if( key == WXK_ESCAPE ) // ESC is the special key for canceling tools
-        evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
+        evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL, WXK_ESCAPE );
     else
         evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
 

@@ -86,7 +86,7 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
     // Since selection tools are run permanently underneath the toolStack, this is really
     // just a cancel of whatever other tools might be running.
 
-    m_toolMgr->ProcessEvent( TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL, ID_SEL_TOOL ) );
+    m_toolMgr->ProcessEvent( TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL ) );
     return 0;
 }
 

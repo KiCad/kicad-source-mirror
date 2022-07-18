@@ -572,7 +572,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 ClearSelection();
             }
-            else if( evt->FirstResponder() == this && evt->GetCommandId() != (int) ID_SEL_TOOL )
+            else if( evt->FirstResponder() == this && evt->GetCommandId() == (int) WXK_ESCAPE )
             {
                 SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
 
