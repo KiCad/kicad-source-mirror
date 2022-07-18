@@ -153,8 +153,8 @@ public:
         int         layer;
         bool        interactive_placement;
         wxString    last_file;
-        double      line_width;
-        int         line_width_units;
+        double      dxf_line_width;
+        int         dxf_line_width_units;
         int         origin_units;
         double      origin_x;
         double      origin_y;

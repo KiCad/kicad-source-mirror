@@ -364,10 +364,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_ImportGraphics.interactive_placement, true ) );
 
     m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
-            &m_ImportGraphics.line_width_units, 0 ) );
+            &m_ImportGraphics.dxf_line_width_units, 0 ) );
 
     m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
-            &m_ImportGraphics.line_width, 0.2 ) );
+            &m_ImportGraphics.dxf_line_width, 0.2 ) );
 
     m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
             &m_ImportGraphics.origin_units, 0 ) );

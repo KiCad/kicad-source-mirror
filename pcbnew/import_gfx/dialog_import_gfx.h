@@ -71,6 +71,7 @@ private:
     void onUnitPositionSelection( wxCommandEvent& event ) override;
     void onUnitWidthSelection( wxCommandEvent& event ) override;
     void onBrowseFiles( wxCommandEvent& event ) override;
+    void onFilename( wxCommandEvent& event );
     void originOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
 
 	void onInteractivePlacement( wxCommandEvent& event ) override
@@ -89,8 +90,8 @@ private:
     }
 
     void updatePcbImportOffsets_mm();
-    double getPCBdefaultLineWidthMM();
-    void showPCBdefaultLineWidth();
+    double getDXFDefaultLineWidthMM();
+    void showDXFDefaultLineWidth();
     void showPcbImportOffsets();
 
     PCB_BASE_FRAME*      m_parent;
@@ -104,9 +105,9 @@ private:
     static bool          m_shouldGroupItems;
     static bool          m_placementInteractive;
     static LAYER_NUM     m_layer;
-    double               m_lineWidth;           // always in mm: line width when a line width
+    double               m_dxfLineWidth;        // always in mm: line width when a line width
                                                 // is not specified
-    static int           m_lineWidthUnits;
+    static int           m_dxfLineWidthUnits;
     static double        m_scaleImport;         // a scale factor to change the size of imported
                                                 // items m_scaleImport =1.0 means keep original size
     static int           m_dxfUnits;
