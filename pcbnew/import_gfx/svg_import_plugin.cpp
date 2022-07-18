@@ -87,8 +87,10 @@ bool SVG_IMPORT_PLUGIN::Import()
         m_internalImporter.NewShape( rule );
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
+        {
             DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR,
                       lineWidth );
+        }
     }
 
     m_internalImporter.PostprocessNestedPolygons();

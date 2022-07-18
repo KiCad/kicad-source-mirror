@@ -45,7 +45,7 @@ bool DIALOG_IMPORT_GFX::m_shouldGroupItems = true;
 int DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
 double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
 int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
-int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter
+int DIALOG_IMPORT_GFX::m_dxfLineWidthUnits = 0;    // millimeter
 int DIALOG_IMPORT_GFX::m_dxfUnits = 0;             // first entry in the dxfUnits map below
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
@@ -86,23 +86,23 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_originUnits = 0;
     m_origin.x = 0.0;              // always in mm
     m_origin.y = 0.0;              // always in mm
-    m_lineWidth = 0.2;             // always in mm
-    m_lineWidthUnits = 0;
+    m_dxfLineWidth = 0.2;          // always in mm
+    m_dxfLineWidthUnits = 0;
 
     auto cfg = m_parent->GetPcbNewSettings();
 
     m_layer                = cfg->m_ImportGraphics.layer;
     m_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
     m_filename             = cfg->m_ImportGraphics.last_file;
-    m_lineWidth            = cfg->m_ImportGraphics.line_width;
-    m_lineWidthUnits       = cfg->m_ImportGraphics.line_width_units;
+    m_dxfLineWidth         = cfg->m_ImportGraphics.dxf_line_width;
+    m_dxfLineWidthUnits    = cfg->m_ImportGraphics.dxf_line_width_units;
     m_originUnits          = cfg->m_ImportGraphics.origin_units;
     m_origin.x             = cfg->m_ImportGraphics.origin_x;
     m_origin.y             = cfg->m_ImportGraphics.origin_y;
     m_dxfUnits             = cfg->m_ImportGraphics.dxf_units;
 
-    m_choiceUnitLineWidth->SetSelection( m_lineWidthUnits );
-    showPCBdefaultLineWidth();
+    m_choiceUnitLineWidth->SetSelection( m_dxfLineWidthUnits );
+    showDXFDefaultLineWidth();
 
     m_DxfPcbPositionUnits->SetSelection( m_originUnits );
     showPcbImportOffsets();
@@ -132,12 +132,19 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
+    wxCommandEvent dummy;
+    onFilename( dummy );
+
     SetInitialFocus( m_textCtrlFileName );
     SetupStandardButtons();
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
+
+    m_textCtrlFileName->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                                 wxCommandEventHandler( DIALOG_IMPORT_GFX::onFilename ),
+                                 NULL, this );
 }
 
 
@@ -148,16 +155,37 @@ DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
     cfg->m_ImportGraphics.layer                 = m_layer;
     cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
     cfg->m_ImportGraphics.last_file             = m_filename;
-    cfg->m_ImportGraphics.line_width            = m_lineWidth;
-    cfg->m_ImportGraphics.line_width_units      = m_lineWidthUnits;
+    cfg->m_ImportGraphics.dxf_line_width        = m_dxfLineWidth;
+    cfg->m_ImportGraphics.dxf_line_width_units  = m_dxfLineWidthUnits;
     cfg->m_ImportGraphics.origin_units          = m_originUnits;
     cfg->m_ImportGraphics.origin_x              = m_origin.x;
     cfg->m_ImportGraphics.origin_y              = m_origin.y;
     cfg->m_ImportGraphics.dxf_units             = m_dxfUnits;
+
+    m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
+                                    wxCommandEventHandler( DIALOG_IMPORT_GFX::onFilename ),
+                                    NULL, this );
 }
 
 
-void DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEvent& event )
+void DIALOG_IMPORT_GFX::onFilename( wxCommandEvent& event )
+{
+    bool     enableDXFControls = true;
+    wxString filename = m_textCtrlFileName->GetValue();
+
+    if( auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( filename ).GetExt() ) )
+        enableDXFControls = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() ) != nullptr;
+
+    m_staticTextLineWidth->Enable( enableDXFControls );
+    m_textCtrlLineWidth->Enable( enableDXFControls );
+    m_choiceUnitLineWidth->Enable( enableDXFControls );
+
+    m_staticTextLineWidth1->Enable( enableDXFControls );
+    m_choiceDxfUnits->Enable( enableDXFControls );
+}
+
+
+void DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEvent& event )
 {
     // Collect last entered values:
     updatePcbImportOffsets_mm();
@@ -167,11 +195,11 @@ void DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEve
 }
 
 
-double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
+double DIALOG_IMPORT_GFX::getDXFDefaultLineWidthMM()
 {
     double value = DoubleValueFromString( EDA_UNITS::UNSCALED, m_textCtrlLineWidth->GetValue() );
 
-    switch( m_lineWidthUnits )
+    switch( m_dxfLineWidthUnits )
     {
     default:
     case 0:                       break;  // display units = mm
@@ -185,11 +213,11 @@ double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
 
 void DIALOG_IMPORT_GFX::onUnitWidthSelection( wxCommandEvent& event )
 {
-    m_lineWidth = getPCBdefaultLineWidthMM();
+    m_dxfLineWidth = getDXFDefaultLineWidthMM();
 
     // Switch to new units
-    m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
-    showPCBdefaultLineWidth();
+    m_dxfLineWidthUnits = m_choiceUnitLineWidth->GetSelection();
+    showDXFDefaultLineWidth();
 }
 
 
@@ -207,16 +235,16 @@ void DIALOG_IMPORT_GFX::showPcbImportOffsets()
 }
 
 
-void DIALOG_IMPORT_GFX::showPCBdefaultLineWidth()
+void DIALOG_IMPORT_GFX::showDXFDefaultLineWidth()
 {
     double value;
 
-    switch( m_lineWidthUnits )
+    switch( m_dxfLineWidthUnits )
     {
     default:
-    case 0: value = m_lineWidth;               break;  // display units = mm
-    case 1: value = m_lineWidth / 25.4 * 1000; break;  // display units = mil
-    case 2: value = m_lineWidth / 25.4;        break;  // display units = inch
+    case 0: value = m_dxfLineWidth;               break;  // display units = mm
+    case 1: value = m_dxfLineWidth / 25.4 * 1000; break;  // display units = mil
+    case 2: value = m_dxfLineWidth / 25.4;        break;  // display units = inch
     }
 
     m_textCtrlLineWidth->SetValue( wxString::Format( wxT( "%f" ), value ) );
@@ -239,10 +267,10 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
     wxString wildcardsDesc;
     wxString allWildcards;
 
-    for( auto pluginType : m_gfxImportMgr->GetImportableFileTypes() )
+    for( GRAPHICS_IMPORT_MGR::GFX_FILE_T pluginType : m_gfxImportMgr->GetImportableFileTypes() )
     {
-        auto       plugin = m_gfxImportMgr->GetPlugin( pluginType );
-        const auto extensions = plugin->GetFileExtensions();
+        std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPlugin( pluginType );
+        const std::vector<std::string>          extensions = plugin->GetFileExtensions();
 
         wildcardsDesc += wxT( "|" ) + plugin->GetName() + AddFileExtListToFilter( extensions );
         allWildcards += plugin->GetWildcards() + wxT( ";" );
@@ -290,19 +318,18 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         return false;
     }
 
-    m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
-    m_lineWidth = getPCBdefaultLineWidthMM();
+    m_dxfLineWidthUnits = m_choiceUnitLineWidth->GetSelection();
+    m_dxfLineWidth = getDXFDefaultLineWidthMM();
 
     m_dxfUnits = m_choiceDxfUnits->GetSelection();
 
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
 
-    auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() );
-
-    if( plugin )
+    if( auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() ) )
     {
         DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() );
-        if( dxfPlugin != nullptr )
+
+        if( dxfPlugin )
         {
             auto it = dxfUnitsMap.begin();
             std::advance( it, m_dxfUnits );
@@ -311,6 +338,12 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
                 dxfPlugin->SetUnit( DXF_IMPORT_UNITS::DEFAULT );
             else
                 dxfPlugin->SetUnit( it->first );
+
+            m_importer->SetLineWidthMM( m_dxfLineWidth );
+        }
+        else
+        {
+            m_importer->SetLineWidthMM( 0.0 );
         }
 
         // Set coordinates offset for import (offset is given in mm)
@@ -318,9 +351,6 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         m_scaleImport = DoubleValueFromString( EDA_UNITS::UNSCALED,
                                                m_textCtrlImportScale->GetValue() );
 
-        // The line width is meant to be in pcbnew units, so we scale the import width before
-        // applying
-        m_importer->SetLineWidthMM( m_lineWidth );
         m_importer->SetPlugin( std::move( plugin ) );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
