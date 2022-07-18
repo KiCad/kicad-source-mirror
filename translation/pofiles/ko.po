@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 06:29-0700\n"
 "PO-Revision-Date: 2022-07-18 16:31+0000\n"
-"Last-Translator: kmn4555 <kmn4555@naver.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -26817,7 +26817,6 @@ msgid "Error: Trapazoid delta is too large."
 msgstr "오류: Trapazoid delta가 너무 큽니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1372
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
 msgstr "오류: 관통 구멍 패드에 구멍이 없습니다."
 
@@ -26829,9 +26828,8 @@ msgstr ""
 "경고: 연결 패드는 보통 솔더 페이스트가 없습니다. SMD 패드를 대신 사용하세요."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1388
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "오류: 패드에 레이어가 없습니다."
+msgstr "오류: SMD 패드에 구멍이 있습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Warning: SMD pad has no outer layers."
@@ -27356,17 +27354,17 @@ msgstr "다각형 기본 모양"
 #: pcbnew/dialogs/dialog_plot.cpp:132
 #, fuzzy
 msgid "Plot on All Layers"
-msgstr "모든 페이지 플롯"
+msgstr "모든 레이어에 플롯"
 
 #: pcbnew/dialogs/dialog_plot.cpp:161
 #, fuzzy
 msgid "Move current selection up"
-msgstr "현재 레이어 위로 이동"
+msgstr "현재 선택 영역을 위로 이동"
 
 #: pcbnew/dialogs/dialog_plot.cpp:168
 #, fuzzy
 msgid "Move current selection down"
-msgstr "현재 레이어 아래로 이동"
+msgstr "현재 선택 영역을 아래로 이동"
 
 #: pcbnew/dialogs/dialog_plot.cpp:179
 msgid "Generate Drill Files..."
