@@ -801,6 +801,22 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
     else
     {
         aCollector.Collect( m_frame->GetScreen(), aFilterList, aWhere, m_unit, m_convert );
+
+        if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+        {
+            int originalCount = aCollector.GetCount();
+
+            for( int ii = 0; ii < originalCount; ++ii )
+            {
+                if( aCollector[ii]->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( aCollector[ii] );
+
+                    if( !aCollector.HasItem( pin->GetParentSymbol() ) )
+                        aCollector.Append( pin->GetParentSymbol() );
+                }
+            }
+        }
     }
 
     return aCollector.GetCount() > 0;
@@ -996,15 +1012,23 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
-        EDA_ITEM*  item = collector[ i ];
-        SCH_LINE*  line = dynamic_cast<SCH_LINE*>( item );
-        LIB_SHAPE* shape = dynamic_cast<LIB_SHAPE*>( item );
+        EDA_ITEM*   item = collector[ i ];
+        SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
+        LIB_SHAPE*  shape = dynamic_cast<LIB_SHAPE*>( item );
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
 
         if( line || ( shape && shape->GetShape() == SHAPE_T::POLY ) )
         {
-            if( item->HitTest( aPos, Mils2iu( DANGLING_SYMBOL_SIZE ) ) )
+            int pixelThreshold = KiROUND( getView()->ToWorld( 1 ) );
+
+            if( item->HitTest( aPos, pixelThreshold ) )
+                exactHits.insert( item );
+        }
+        else if( symbol && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+        {
+            if( symbol->GetBodyAndPinsBoundingBox().Contains( aPos ) )
                 exactHits.insert( item );
         }
         else
