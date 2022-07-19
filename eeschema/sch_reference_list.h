@@ -35,6 +35,37 @@
 #include <sch_text.h>
 #include <erc_settings.h>
 
+
+/** Schematic annotation scope options. */
+enum ANNOTATE_SCOPE_T
+{
+    ANNOTATE_ALL,           ///< Annotate the full schematic
+    ANNOTATE_CURRENT_SHEET, ///< Annotate the current sheet
+    ANNOTATE_SELECTION      ///< Annotate the selection
+};
+
+
+/** Schematic annotation order options. */
+enum ANNOTATE_ORDER_T
+{
+    SORT_BY_X_POSITION, ///< Annotate by X position from left to right.
+    SORT_BY_Y_POSITION, ///< Annotate by Y position from top to bottom.
+    UNSORTED,           ///< Annotate by position of symbol in the schematic sheet
+                        ///< object list.
+};
+
+
+/** Schematic annotation type options. */
+enum ANNOTATE_ALGO_T
+{
+    INCREMENTAL_BY_REF,  ///< Annotate incrementally using the first free reference number.
+    SHEET_NUMBER_X_100,  ///< Annotate using the first free reference number starting at
+                         ///< the sheet number * 100.
+    SHEET_NUMBER_X_1000, ///< Annotate using the first free reference number starting at
+                         ///< the sheet number * 1000.
+};
+
+
 /**
  * A helper to define a symbol's reference designator in a schematic.
  *
@@ -312,6 +343,29 @@ public:
      * @param aAdditionalReferences Additional references to check for duplicates
      */
     void ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences );
+
+
+    /**
+     * Annotate the references by the provided options.
+     *
+     * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
+     * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
+     * @param aStartNumber The start number for non-sheet-based annotation styles.
+     * @param appendUndo True if the annotation operation should be added to an existing undo,
+     *                   false if it should be separately undo-able.
+     * @param aLockedUnitMap A SCH_MULTI_UNIT_REFERENCE_MAP of reference designator wxStrings
+     *      to SCH_REFERENCE_LISTs. May be an empty map. If not empty, any multi-unit parts
+     *      found in this map will be annotated as a group rather than individually.
+     * @param aAdditionalReferences Additional references to check for duplicates
+     * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
+     *        aStartNumber)
+     */
+    void AnnotateByOptions( enum ANNOTATE_ORDER_T        aSortOption,
+                            enum ANNOTATE_ALGO_T         aAlgoOption,
+                            int                          aStartNumber,
+                            SCH_MULTI_UNIT_REFERENCE_MAP aLockedUnitMap,
+                            const SCH_REFERENCE_LIST&    aAdditionalRefs,
+                            bool                         aStartAtCurrent );
 
     /**
      * Set the reference designators in the list that have not been annotated.

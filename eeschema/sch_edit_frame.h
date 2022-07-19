@@ -77,36 +77,6 @@ enum SYMBOL_ORIENTATION_T
 };
 
 
-/** Schematic annotation scope options. */
-enum ANNOTATE_SCOPE_T
-{
-    ANNOTATE_ALL,           ///< Annotate the full schematic
-    ANNOTATE_CURRENT_SHEET, ///< Annotate the current sheet
-    ANNOTATE_SELECTION      ///< Annotate the selection
-};
-
-
-/** Schematic annotation order options. */
-enum ANNOTATE_ORDER_T
-{
-    SORT_BY_X_POSITION,     ///< Annotate by X position from left to right.
-    SORT_BY_Y_POSITION,     ///< Annotate by Y position from top to bottom.
-    UNSORTED,               ///< Annotate by position of symbol in the schematic sheet
-                            ///< object list.
-};
-
-
-/** Schematic annotation type options. */
-enum ANNOTATE_ALGO_T
-{
-    INCREMENTAL_BY_REF,     ///< Annotate incrementally using the first free reference number.
-    SHEET_NUMBER_X_100,     ///< Annotate using the first free reference number starting at
-                            ///< the sheet number * 100.
-    SHEET_NUMBER_X_1000,    ///< Annotate using the first free reference number starting at
-                            ///< the sheet number * 1000.
-};
-
-
 /// Schematic search type used by the socket link with Pcbnew
 enum SCH_SEARCH_T
 {

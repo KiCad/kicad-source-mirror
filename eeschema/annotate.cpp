@@ -305,34 +305,9 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // example: IC1 become IC, and 1
     references.SplitReferences();
 
-    switch( aSortOption )
-    {
-    default:
-    case SORT_BY_X_POSITION: references.SortByXCoordinate(); break;
-    case SORT_BY_Y_POSITION: references.SortByYCoordinate(); break;
-    }
-
-    bool useSheetNum = false;
-    int idStep = 100;
-
-    switch( aAlgoOption )
-    {
-    default:
-    case INCREMENTAL_BY_REF:
-        break;
-
-    case SHEET_NUMBER_X_100:
-        useSheetNum = true;
-        break;
-
-    case SHEET_NUMBER_X_1000:
-        useSheetNum = true;
-        idStep = 1000;
-        break;
-    }
-
-    // Recalculate and update reference numbers in schematic
-    references.Annotate( useSheetNum, idStep, aStartNumber, lockedSymbols, additionalRefs );
+    // Annotate all of the references we've collected by our options
+    references.AnnotateByOptions( aSortOption, aAlgoOption, aStartNumber, lockedSymbols,
+                                  additionalRefs, false );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
