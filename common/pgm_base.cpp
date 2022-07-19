@@ -472,9 +472,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     // Need to create a project early for now (it can have an empty path for the moment)
     GetSettingsManager().LoadProject( "" );
 
-    // TODO: Move tooltips into KIPLATFORM
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving
+    wxToolTip::Enable( true );
     wxToolTip::SetAutoPop( 10000 );
 
     if( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval != 0 )
