@@ -264,7 +264,7 @@ public:
      * @param aForce select the element in pcbnew whether or not the user has the select option chosen
      * This is used for when the eeschema user is using the cross-probe tool
      */
-    void SendSelectItems( const std::deque<EDA_ITEM*>& aElements, bool aForce );
+    void SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aElements, bool aForce );
 
     /**
      * Sends a net name to Pcbnew for highlighting
@@ -772,6 +772,8 @@ public:
 
     void FocusOnItem( SCH_ITEM* aItem );
 
+    bool IsSyncingSelection() { return m_syncingPcbToSchSelection; }
+
     /**
      * Update a schematic symbol from a LIB_SYMBOL.
      *
@@ -923,6 +925,8 @@ private:
     DIALOG_SCH_FIND*        m_findReplaceDialog;
 
     HIERARCHY_NAVIG_PANEL*  m_hierarchy;
+
+	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
 };
 
 

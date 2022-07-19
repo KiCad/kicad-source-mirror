@@ -187,7 +187,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_SelLayerBox = nullptr;
     m_show_layer_manager_tools = true;
     m_supportsAutoSave = true;
-    m_syncingSchToPcbSelection = false;
+    m_probingSchToPcb = false;
 
     // We don't know what state board was in when it was last saved, so we have to
     // assume dirty
@@ -778,6 +778,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectOnSchematic,
+                        ENABLE( SELECTION_CONDITIONS::HasTypes( { PCB_PAD_T, PCB_FOOTPRINT_T, PCB_GROUP_T } ) ) );
 
 
     SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 )

@@ -866,6 +866,18 @@ void SCH_SHEET_LIST::GetSheetsWithinPath( SCH_SHEET_PATHS&      aSheets,
 }
 
 
+std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetSheetPathByKIIDPath( const KIID_PATH& aPath ) const
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        if( sheet.Path() == aPath )
+            return SCH_SHEET_PATH( sheet );
+    }
+
+    return std::nullopt;
+}
+
+
 void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                           bool aIncludePowerSymbols ) const
 {

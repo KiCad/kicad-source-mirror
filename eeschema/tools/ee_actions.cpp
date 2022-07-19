@@ -110,6 +110,9 @@ TOOL_ACTION EE_ACTIONS::removeItemsFromSel( "eeschema.InteractiveSelection.Remov
 TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSelection",
         AS_GLOBAL );
 
+TOOL_ACTION EE_ACTIONS::syncSelection( "eeschema.InteractiveSelection.SyncSelection",
+        AS_GLOBAL );
+
 
 // SYMBOL_EDITOR_CONTROL
 //

@@ -36,6 +36,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_group.h>
 #include <zone.h>
 #include <collectors.h>
 #include <eda_dde.h>
@@ -221,11 +222,11 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         renderSettings->SetHighlight( false );
     }
 
-    if( crossProbingSettings.center_on_items && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+    if( crossProbingSettings.center_on_items && bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
         if( crossProbingSettings.zoom_to_fit )
         {
-            GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->zoomFitCrossProbeBBox( bbox );
+            GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
         }
 
         FocusOnLocation( (wxPoint) bbox.Centre() );
@@ -293,9 +294,108 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 }
 
 
-void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
+template <typename ItemContainer>
+void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts )
 {
-    std::string packet = FormatProbeItem( aSyncItem );
+    for( EDA_ITEM* item : aItems )
+    {
+        switch( item->Type() )
+        {
+        case PCB_GROUP_T:
+        {
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+            collectItemsForSyncParts( group->GetItems(), parts );
+
+            break;
+        }
+        case PCB_FOOTPRINT_T:
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+            wxString   ref = footprint->GetReference();
+
+            parts.emplace( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
+
+            break;
+        }
+
+        case PCB_PAD_T:
+        {
+            PAD*       pad = static_cast<PAD*>( item );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( pad->GetParentFootprint() );
+            wxString   ref = footprint->GetReference();
+
+            parts.emplace( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
+                           + EscapeString( pad->GetNumber(), CTX_IPC ) );
+
+            break;
+        }
+
+        default: break;
+        }
+    }
+}
+
+
+void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
+                                           EDA_ITEM* aFocusItem, bool aForce )
+{
+    std::string command = "$SELECT: ";
+
+    if( aFocusItem )
+    {
+        std::deque<EDA_ITEM*> focusItems = { aFocusItem };
+        std::set<wxString>    focusParts;
+        collectItemsForSyncParts( focusItems, focusParts );
+
+        if( focusParts.size() > 0 )
+        {
+            command += "1,";
+            command += *focusParts.begin();
+            command += ",";
+        }
+        else
+        {
+            command += "0,";
+        }
+    }
+    else
+    {
+        command += "0,";
+    }
+
+    std::set<wxString> parts;
+    collectItemsForSyncParts( aItems, parts );
+
+    if( parts.empty() )
+        return;
+
+    for( wxString part : parts )
+    {
+        command += part;
+        command += ",";
+    }
+
+    command.pop_back();
+
+    if( Kiface().IsSingle() )
+    {
+        SendCommand( MSG_TO_PCB, command );
+    }
+    else
+    {
+        // Typically ExpressMail is going to be s-expression packets, but since
+        // we have existing interpreter of the selection packet on the other
+        // side in place, we use that here.
+        Kiway().ExpressMail( FRAME_SCH, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION, command,
+                             this );
+    }
+}
+
+
+void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
+{
+    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
 
     if( !packet.empty() )
     {
@@ -314,9 +414,9 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 }
 
 
-void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
+void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
 {
-    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
+    std::string packet = FormatProbeItem( aSyncItem );
 
     if( !packet.empty() )
     {
@@ -503,7 +603,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             std::vector<BOARD_ITEM*> items =
                     FindItemsFromSyncSelection( paramStr.substr( modeEnd + 1 ) );
 
-            m_syncingSchToPcbSelection = true; // recursion guard
+            m_probingSchToPcb = true; // recursion guard
 
             if( selectConnections )
             {
@@ -516,7 +616,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                                              static_cast<void*>( &items ) );
             }
 
-            m_syncingSchToPcbSelection = false;
+            m_probingSchToPcb = false;
         }
 
         break;

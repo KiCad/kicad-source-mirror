@@ -27,7 +27,9 @@
 #include <kiway_express.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
+#include <sch_sheet.h>
 #include <sch_symbol.h>
+#include <sch_reference_list.h>
 #include <schematic.h>
 #include <reporter.h>
 #include <string_utils.h>
@@ -133,113 +135,15 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
         {
             if( crossProbingSettings.zoom_to_fit )
             {
-                EDA_RECT bbox       = symbol->GetBoundingBox();
-                VECTOR2I bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-                VECTOR2D screenSize = getView()->GetViewport().GetSize();
+                EDA_RECT bbox = symbol->GetBoundingBox();
 
-                // This code tries to come up with a zoom factor that doesn't simply zoom in
-                // to the cross probed symbol, but instead shows a reasonable amount of the
-                // circuit around it to provide context.  This reduces or eliminates the need
-                // to manually change the zoom because it's too close.
-
-                // Using the default text height as a constant to compare against, use the
-                // height of the bounding box of visible items for a footprint to figure out
-                // if this is a big symbol (like a processor) or a small symbol (like a resistor).
-                // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
-                // provide good scaling at varying symbol sizes.  Bigger symbols need less
-                // scaling than small ones.
-                double currTextHeight = Mils2iu( DEFAULT_TEXT_SIZE );
-
-                double compRatio = bbSize.y / currTextHeight; // Ratio of symbol to text height
-                double compRatioBent = 1.0;
-
-                // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
-                // with symbols of varying sizes (e.g. 0402 package and 200 pin BGA).
-                // "first" is used as the input and "second" as the output
-                //
-                // "first" = compRatio (symbol height / default text height)
-                // "second" = Amount to scale ratio by
-                std::vector<std::pair<double, double>> lut
-                {
-                    {1.25, 16}, // 32
-                    {2.5, 12}, //24
-                    {5, 8}, // 16
-                    {6, 6}, //
-                    {10, 4}, //8
-                    {20, 2}, //4
-                    {40, 1.5}, // 2
-                    {100, 1}
-                };
-
-                std::vector<std::pair<double, double>>::iterator it;
-
-                // Large symbol default is last LUT entry (1:1).
-                compRatioBent = lut.back().second;
-
-                // Use LUT to do linear interpolation of "compRatio" within "first", then
-                // use that result to linearly interpolate "second" which gives the scaling
-                // factor needed.
-                if( compRatio >= lut.front().first )
-                {
-                    for( it = lut.begin(); it < lut.end() - 1; it++ )
-                    {
-                        if( it->first <= compRatio && next( it )->first >= compRatio )
-                        {
-
-                            double diffx = compRatio - it->first;
-                            double diffn = next( it )->first - it->first;
-
-                            compRatioBent = it->second
-                                            + ( next( it )->second - it->second ) * diffx / diffn;
-                            break; // We have our interpolated value
-                        }
-                    }
-                }
-                else
-                {
-                    compRatioBent = lut.front().second; // Small symbol default is first entry
-                }
-
-                // This is similar to the original KiCad code that scaled the zoom to make sure
-                // symbols were visible on screen.  It's simply a ratio of screen size to
-                // symbol size, and its job is to zoom in to make the component fullscreen.
-                // Earlier in the code the symbol BBox is given a 20% margin to add some
-                // breathing room. We compare the height of this enlarged symbol bbox to the
-                // default text height.  If a symbol will end up with the sides clipped, we
-                // adjust later to make sure it fits on screen.
-                screenSize.x      = std::max( 10.0, screenSize.x );
-                screenSize.y      = std::max( 10.0, screenSize.y );
-                double ratio      = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
-
-                // Original KiCad code for how much to scale the zoom
-                double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
-                                              fabs( bbSize.y / screenSize.y ) );
-
-                // If the width of the part we're probing is bigger than what the screen width
-                // will be after the zoom, then punt and use the KiCad zoom algorithm since it
-                // guarantees the part's width will be encompassed within the screen.
-                if( bbSize.x > screenSize.x * ratio * compRatioBent )
-                {
-                    // Use standard KiCad zoom for parts too wide to fit on screen/
-                    ratio = kicadRatio;
-                    compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
-                    wxLogTrace( "CROSS_PROBE_SCALE",
-                                "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
-                                ratio );
-                }
-
-                // Now that "compRatioBent" holds our final scaling factor we apply it to the
-                // original fullscreen zoom ratio to arrive at the final ratio itself.
-                ratio *= compRatioBent;
-
-                bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
-
-                // Try not to zoom on every cross-probe; it gets very noisy
-                if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
-                    getView()->SetScale( getView()->GetScale() / ratio );
+                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
             }
 
-            m_frame->FocusOnItem( symbol );
+            if( pin )
+                m_frame->FocusOnItem( pin );
+            else
+                m_frame->FocusOnItem( symbol );
         }
     }
 
@@ -272,18 +176,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     }
 
     m_frame->SetStatusText( msg );
-
-    m_probingPcbToSch = true;   // recursion guard
-
-    {
-        // Clear any existing highlighting
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-        if( foundItem )
-            m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, foundItem );
-    }
-
-    m_probingPcbToSch = false;
 
     m_frame->GetCanvas()->Refresh();
 
@@ -382,7 +274,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-void SCH_EDIT_FRAME::SendSelectItems( const std::deque<EDA_ITEM*>& aItems, bool aForce )
+void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, bool aForce )
 {
     std::set<wxString> parts;
 
@@ -552,6 +444,375 @@ void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
 }
 
 
+bool findSymbolsAndPins(
+        const SCHEMATIC& aSchematic, const SCH_SHEET_PATH& aSheetPath,
+        std::unordered_map<wxString, std::vector<SCH_REFERENCE>>&             aSyncSymMap,
+        std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>>& aSyncPinMap,
+        bool                                                                  aRecursive = false )
+{
+    if( aRecursive )
+    {
+        // Iterate over children
+        for( const SCH_SHEET_PATH& candidate : aSchematic.GetSheets() )
+        {
+            if( candidate == aSheetPath || !candidate.IsContainedWithin( aSheetPath ) )
+                continue;
+
+            findSymbolsAndPins( aSchematic, candidate, aSyncSymMap, aSyncPinMap, aRecursive );
+        }
+    }
+
+    SCH_REFERENCE_LIST references;
+
+    aSheetPath.GetSymbols( references, false, true );
+
+    for( unsigned ii = 0; ii < references.GetCount(); ii++ )
+    {
+        SCH_REFERENCE& schRef = references[ii];
+
+        if( schRef.IsSplitNeeded() )
+            schRef.Split();
+
+        SCH_SYMBOL* symbol = schRef.GetSymbol();
+        wxString    refNum = schRef.GetRefNumber();
+        wxString    fullRef = schRef.GetRef() + refNum;
+
+        // Skip power symbols
+        if( fullRef.StartsWith( "#" ) )
+            continue;
+
+        // Unannotated symbols are not supported
+        if( refNum.compare( "?" ) == 0 )
+            continue;
+
+        // Look for whole footprint
+        auto symMatchIt = aSyncSymMap.find( fullRef );
+
+        if( symMatchIt != aSyncSymMap.end() )
+        {
+            symMatchIt->second.emplace_back( schRef );
+
+            // Whole footprint was selected, no need to select pins
+            continue;
+        }
+
+        // Look for pins
+        auto symPinMatchIt = aSyncPinMap.find( fullRef );
+
+        if( symPinMatchIt != aSyncPinMap.end() )
+        {
+            std::unordered_map<wxString, SCH_PIN*>& pinMap = symPinMatchIt->second;
+            std::vector<SCH_PIN*>                   pinsOnSheet = symbol->GetPins( &aSheetPath );
+
+            for( SCH_PIN* pin : pinsOnSheet )
+            {
+                int pinUnit = pin->GetLibPin()->GetUnit();
+
+                if( pinUnit > 0 && pinUnit != schRef.GetUnit() )
+                    continue;
+
+                auto pinIt = pinMap.find( pin->GetNumber() );
+
+                if( pinIt != pinMap.end() )
+                    pinIt->second = pin;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+bool sheetContainsOnlyWantedItems(
+        const SCHEMATIC& aSchematic, const SCH_SHEET_PATH& aSheetPath,
+        std::unordered_map<wxString, std::vector<SCH_REFERENCE>>&             aSyncSymMap,
+        std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>>& aSyncPinMap,
+        std::unordered_map<SCH_SHEET_PATH, bool>&                             aCache )
+{
+    auto cacheIt = aCache.find( aSheetPath );
+
+    if( cacheIt != aCache.end() )
+        return cacheIt->second;
+
+    // Iterate over children
+    for( const SCH_SHEET_PATH& candidate : aSchematic.GetSheets() )
+    {
+        if( candidate == aSheetPath || !candidate.IsContainedWithin( aSheetPath ) )
+            continue;
+
+        bool childRet = sheetContainsOnlyWantedItems( aSchematic, candidate, aSyncSymMap,
+                                                      aSyncPinMap, aCache );
+
+        if( !childRet )
+        {
+            aCache.emplace( aSheetPath, false );
+            return false;
+        }
+    }
+
+    SCH_REFERENCE_LIST references;
+    aSheetPath.GetSymbols( references, false, true );
+
+    for( unsigned ii = 0; ii < references.GetCount(); ii++ )
+    {
+        SCH_REFERENCE& schRef = references[ii];
+
+        if( schRef.IsSplitNeeded() )
+            schRef.Split();
+
+        wxString refNum = schRef.GetRefNumber();
+        wxString fullRef = schRef.GetRef() + refNum;
+
+        // Skip power symbols
+        if( fullRef.StartsWith( "#" ) )
+            continue;
+
+        // Unannotated symbols are not supported
+        if( refNum.compare( "?" ) == 0 )
+            continue;
+
+        if( aSyncSymMap.find( fullRef ) == aSyncSymMap.end() )
+        {
+            aCache.emplace( aSheetPath, false );
+            return false; // Some symbol is not wanted.
+        }
+
+        if( aSyncPinMap.find( fullRef ) != aSyncPinMap.end() )
+        {
+            aCache.emplace( aSheetPath, false );
+            return false; // Looking for specific pins, so can't be mapped
+        }
+    }
+
+    aCache.emplace( aSheetPath, true );
+    return true;
+}
+
+
+std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>>
+findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSyncStr,
+                            bool aFocusOnFirst )
+{
+    wxArrayString syncArray = wxStringTokenize( aSyncStr, "," );
+
+    std::unordered_map<wxString, std::vector<SCH_REFERENCE>>             syncSymMap;
+    std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>> syncPinMap;
+    std::unordered_map<SCH_SHEET_PATH, double>                           symScores;
+    std::unordered_map<SCH_SHEET_PATH, bool>                             fullyWantedCache;
+
+    std::optional<wxString>                                    focusSymbol;
+    std::optional<std::pair<wxString, wxString>>               focusPin;
+    std::unordered_map<SCH_SHEET_PATH, std::vector<SCH_ITEM*>> focusItemResults;
+
+    const SCH_SHEET_LIST allSheetsList = aSchematic.GetSheets();
+
+    // In orderedSheets, the current sheet comes first.
+    SCH_SHEET_PATHS orderedSheets;
+    orderedSheets.reserve( allSheetsList.size() );
+    orderedSheets.push_back( aSchematic.CurrentSheet() );
+
+    for( const SCH_SHEET_PATH& sheetPath : allSheetsList )
+    {
+        if( sheetPath != aSchematic.CurrentSheet() )
+            orderedSheets.push_back( sheetPath );
+    }
+
+    // Init sync maps from the sync string
+    for( int i = 0; i < syncArray.size(); i++ )
+    {
+        wxString syncEntry = syncArray[i];
+
+        if( syncEntry.empty() )
+            continue;
+
+        wxString syncData = syncEntry.substr( 1 );
+
+        switch( syncEntry.GetChar( 0 ).GetValue() )
+        {
+        case 'F': // Select by footprint: F<Reference>
+        {
+            wxString symRef = UnescapeString( syncData );
+
+            if( aFocusOnFirst && ( i == 0 ) )
+                focusSymbol = symRef;
+
+            syncSymMap[symRef] = std::vector<SCH_REFERENCE>();
+            break;
+        }
+        case 'P': // Select by pad: P<Footprint reference>/<Pad number>
+        {
+            wxString symRef = UnescapeString( syncData.BeforeFirst( '/' ) );
+            wxString padNum = UnescapeString( syncData.AfterFirst( '/' ) );
+
+            if( aFocusOnFirst && ( i == 0 ) )
+                focusPin = std::make_pair( symRef, padNum );
+
+            syncPinMap[symRef][padNum] = nullptr;
+            break;
+        }
+        default: break;
+        }
+    }
+
+    // Lambda definitions
+    auto flattenSyncMaps = [&syncSymMap, &syncPinMap]() -> std::vector<SCH_ITEM*>
+    {
+        std::vector<SCH_ITEM*> allVec;
+
+        for( auto const& pairSym : syncSymMap )
+        {
+            for( const SCH_REFERENCE& ref : pairSym.second )
+            {
+                allVec.push_back( ref.GetSymbol() );
+            }
+        }
+
+        for( auto const& pairSym : syncPinMap )
+        {
+            for( auto const& pairPin : pairSym.second )
+            {
+                if( pairPin.second )
+                    allVec.push_back( pairPin.second );
+            }
+        }
+
+        return allVec;
+    };
+
+    auto clearSyncMaps = [&syncSymMap, &syncPinMap]()
+    {
+        for( auto& pairSym : syncSymMap )
+        {
+            pairSym.second.clear();
+        }
+
+        for( auto& pairSym : syncPinMap )
+        {
+            for( auto& pairPin : pairSym.second )
+            {
+                pairPin.second = nullptr;
+            }
+        }
+    };
+
+    auto syncMapsValuesEmpty = [&syncSymMap, &syncPinMap]() -> bool
+    {
+        for( auto const& pairSym : syncSymMap )
+        {
+            if( pairSym.second.size() > 0 )
+                return false;
+        }
+
+        for( auto const& pairSym : syncPinMap )
+        {
+            for( auto const& pairPin : pairSym.second )
+            {
+                if( pairPin.second )
+                    return false;
+            }
+        }
+
+        return true;
+    };
+
+    auto checkFocusItems = [&]( const SCH_SHEET_PATH& aSheetPath )
+    {
+        if( focusSymbol )
+        {
+            auto findIt = syncSymMap.find( *focusSymbol );
+            if( findIt != syncSymMap.end() )
+            {
+                if( findIt->second.size() > 0 )
+                {
+                    focusItemResults[aSheetPath].push_back( findIt->second.front().GetSymbol() );
+                }
+            }
+        }
+        else if( focusPin )
+        {
+            auto findIt = syncPinMap.find( focusPin->first );
+            if( findIt != syncPinMap.end() )
+            {
+                if( findIt->second[focusPin->second] )
+                {
+                    focusItemResults[aSheetPath].push_back( findIt->second[focusPin->second] );
+                }
+            }
+        }
+    };
+
+    auto makeRetForSheet = [&]( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aFocusItem )
+    {
+        clearSyncMaps();
+
+        // Fill sync maps
+        findSymbolsAndPins( aSchematic, aSheet, syncSymMap, syncPinMap );
+        std::vector<SCH_ITEM*> itemsVector = flattenSyncMaps();
+
+        // Add fully wanted sheets to vector
+        for( SCH_ITEM* item : aSheet.LastScreen()->Items().OfType( SCH_SHEET_T ) )
+        {
+            KIID_PATH kiidPath = aSheet.Path();
+            kiidPath.push_back( item->m_Uuid );
+
+            std::optional<SCH_SHEET_PATH> subsheetPath =
+                    allSheetsList.GetSheetPathByKIIDPath( kiidPath );
+
+            if( !subsheetPath )
+                continue;
+
+            if( sheetContainsOnlyWantedItems( aSchematic, *subsheetPath, syncSymMap, syncPinMap,
+                                              fullyWantedCache ) )
+            {
+                itemsVector.push_back( item );
+            }
+        }
+
+        return std::make_tuple( aSheet, aFocusItem, itemsVector );
+    };
+
+    if( aFocusOnFirst )
+    {
+        for( const SCH_SHEET_PATH& sheetPath : orderedSheets )
+        {
+            clearSyncMaps();
+
+            findSymbolsAndPins( aSchematic, sheetPath, syncSymMap, syncPinMap );
+
+            checkFocusItems( sheetPath );
+        }
+
+        if( focusItemResults.size() > 0 )
+        {
+            for( const SCH_SHEET_PATH& sheetPath : orderedSheets )
+            {
+                auto vec = focusItemResults[sheetPath];
+
+                if( !vec.empty() )
+                    return makeRetForSheet( sheetPath, vec.front() );
+            }
+        }
+    }
+    else
+    {
+        for( const SCH_SHEET_PATH& sheetPath : orderedSheets )
+        {
+            clearSyncMaps();
+
+            findSymbolsAndPins( aSchematic, sheetPath, syncSymMap, syncPinMap );
+
+            if( !syncMapsValuesEmpty() )
+            {
+                // Something found on sheet
+                return makeRetForSheet( sheetPath, nullptr );
+            }
+        }
+    }
+
+    return std::nullopt;
+}
+
+
 void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     std::string& payload = mail.GetPayload();
@@ -561,6 +822,45 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
+
+    case MAIL_SELECTION:
+        if( !eeconfig()->m_CrossProbing.on_selection )
+            break;
+
+        KI_FALLTHROUGH;
+
+    case MAIL_SELECTION_FORCE:
+    {
+        // $SELECT: 0,<spec1>,<spec2>,<spec3>
+        // Try to select specified items.
+
+        // $SELECT: 1,<spec1>,<spec2>,<spec3>
+        // Select and focus on <spec1> item, select other specified items that are on the same sheet.
+
+        std::string prefix = "$SELECT: ";
+
+        std::string paramStr = payload.substr( prefix.size() );
+        std::string syncStr = paramStr.substr( 2 );
+
+        bool focusOnFirst = ( paramStr[0] == '1' );
+
+        std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>> findRet =
+                findItemsFromSyncSelection( Schematic(), syncStr, focusOnFirst );
+
+        if( findRet )
+        {
+            auto& [sheetPath, focusItem, items] = *findRet;
+
+            m_syncingPcbToSchSelection = true; // recursion guard
+
+            GetToolManager()->GetTool<EE_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem,
+                                                                           items );
+
+            m_syncingPcbToSchSelection = false;
+        }
+
+        break;
+    }
 
     case MAIL_SCH_GET_NETLIST:
     {

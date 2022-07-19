@@ -1477,6 +1477,7 @@ void EE_POINT_EDITOR::rollbackFromUndo()
 
 void EE_POINT_EDITOR::setTransitions()
 {
+    Go( &EE_POINT_EDITOR::Main,              EVENTS::PointSelectedEvent );
     Go( &EE_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
     Go( &EE_POINT_EDITOR::Main,              ACTIONS::activatePointEditor.MakeEvent() );
     Go( &EE_POINT_EDITOR::addCorner,         EE_ACTIONS::pointEditorAddCorner.MakeEvent() );

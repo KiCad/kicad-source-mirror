@@ -2425,6 +2425,7 @@ void PCB_POINT_EDITOR::setTransitions()
     Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::PointSelectedEvent );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
     Go( &PCB_POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );

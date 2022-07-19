@@ -637,12 +637,25 @@ public:
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
     /**
-     * Send a message to the schematic editor so that it may move its cursor
-     * to a symbol with the same reference as the \a objectToSync.
+     * Send a message to the schematic editor to try to find schematic counterparts
+     * of specified PCB items and select them.
      *
-     * @param objectToSync The object whose reference is used to synchronize Eeschema.
+     * @param aItems are the items to try to select on schematic.
+     * @param aFocusItem set to item to select and focus on even if selection can't be
+     *                   represented in Schematic editor fully.
+     * @param aForce select elements in Schematic editor whether or not the user has 
+     *               the select option chosen.
      */
-    void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
+    void SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems, EDA_ITEM* aFocusItem,
+                               bool aForce );
+
+    /**
+     * Send a message to the schematic editor so that it may move its cursor
+     * to an item with the same reference as the \a aSyncItem and highlight it.
+     *
+     * @param aSyncItem The object whose reference is used to highlight in Eeschema.
+     */
+    void SendCrossProbeItem( BOARD_ITEM* aSyncItem );
 
     /**
      * Send a net name to Eeschema for highlighting.
@@ -795,7 +808,7 @@ public:
 
     bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
 
-    bool m_syncingSchToPcbSelection; // Recursion guard when synchronizing selection from schematic
+    bool m_probingSchToPcb;              // Recursion guard when synchronizing selection from schematic
 
 private:
     friend struct PCB::IFACE;

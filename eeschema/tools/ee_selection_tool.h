@@ -73,6 +73,9 @@ public:
 
     void OnIdle( wxIdleEvent& aEvent );
 
+    ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
+    void ZoomFitCrossProbeBBox( EDA_RECT bbox );
+
     /**
      * @return the set of currently selected items.
      */
@@ -135,7 +138,7 @@ public:
     ///< Select all visible items in sheet
     int SelectAll( const TOOL_EVENT& aEvent );
 
-    void ClearSelection();
+    void ClearSelection( bool aQuietMode = false );
 
     /**
      * Check conditions for an item to be selected.
@@ -169,6 +172,11 @@ public:
      */
     bool CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                       const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } );
+
+    ///< Set selection to items passed by parameter.
+    ///< Zooms to fit, if enabled.
+    int SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetPath, SCH_ITEM* focusItem,
+                       std::vector<SCH_ITEM*> items );
 
 protected:
     SELECTION& selection() override { return m_selection; }

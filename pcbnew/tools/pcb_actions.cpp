@@ -1291,6 +1291,12 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
         _( "Selects all footprints and tracks in the same schematic sheet" ),
         BITMAPS::select_same_sheet );
 
+TOOL_ACTION PCB_ACTIONS::selectOnSchematic( "pcbnew.InteractiveSelection.SelectOnSchematic",
+        AS_GLOBAL, 0, "",
+        _( "Select on Schematic" ),
+        _( "Selects corresponding items in Schematic editor" ),
+        BITMAPS::select_same_sheet );
+
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0, "",
         _( "Filter Selected Items..." ), _( "Remove items from the selection by type" ),

@@ -224,7 +224,8 @@ bool TOOL_EVENT::IsSelectionEvent() const
 {
     return Matches( EVENTS::ClearedEvent )
         || Matches( EVENTS::UnselectedEvent )
-        || Matches( EVENTS::SelectedEvent );
+        || Matches( EVENTS::SelectedEvent )
+        || Matches( EVENTS::PointSelectedEvent );
 }
 
 

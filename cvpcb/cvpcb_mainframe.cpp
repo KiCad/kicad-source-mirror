@@ -31,6 +31,7 @@
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
+#include <string_utils.h>
 #include <project/project_file.h>
 #include <macros.h>
 #include <netlist_reader/netlist_reader.h>
@@ -417,8 +418,8 @@ void CVPCB_MAINFRAME::doCloseWindow()
 
     m_modified = false;
 
-    // clear highlight symbol in schematic:
-    SendMessageToEESCHEMA( true );
+    // clear symbol selection in schematic:
+    SendComponentSelectionToSch( true );
 }
 
 
@@ -708,7 +709,7 @@ void CVPCB_MAINFRAME::refreshAfterSymbolSearch( COMPONENT* aSymbol )
         }
     }
 
-    SendMessageToEESCHEMA();
+    SendComponentSelectionToSch();
     DisplayStatus();
 }
 
@@ -881,40 +882,41 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 }
 
 
-void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
+void CVPCB_MAINFRAME::SendComponentSelectionToSch( bool aClearSelectionOnly )
 {
     if( m_netlist.IsEmpty() )
         return;
 
-    // clear highlight of previously selected symbols (if any):
-    // Selecting a non existing symbol clears any previously highlighted symbols
-    std::string packet = "$CLEAR: \"HIGHLIGHTED\"";
+    std::string command = "$SELECT: ";
 
-    if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_SCH, packet );
-    else
-        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
+    if( aClearSelectionOnly )
+    {
+        // Sending an empty list means clearing the selection.
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_SCH, command );
+        else
+            Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, this );
 
-    if( aClearHighligntOnly )
         return;
+    }
 
     int selection = m_symbolsListBox->GetSelection();
 
-    if ( selection < 0 )    // Nothing selected
+    if( selection < 0 ) // Nothing selected
         return;
 
     if( m_netlist.GetComponent( selection ) == nullptr )
         return;
 
-    // Now highlight the selected symbol:
-    COMPONENT* symbol = m_netlist.GetComponent( selection );
+    // Now select the corresponding symbol on the schematic:
+    wxString ref = m_netlist.GetComponent( selection )->GetReference();
 
-    packet = std::string( "$PART: \"" ) + TO_UTF8( symbol->GetReference() ) + "\"";
+    command += wxT( "F" ) + EscapeString( ref, CTX_IPC );
 
     if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_SCH, packet );
+        SendCommand( MSG_TO_SCH, command );
     else
-        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, this );
 }
 
 
@@ -1069,7 +1071,7 @@ void CVPCB_MAINFRAME::SetSelectedComponent( int aIndex, bool aSkipUpdate )
     {
         m_symbolsListBox->DeselectAll();
         m_symbolsListBox->SetSelection( aIndex );
-        SendMessageToEESCHEMA();
+        SendComponentSelectionToSch();
     }
 
     m_skipComponentSelect = false;

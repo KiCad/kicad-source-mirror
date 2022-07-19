@@ -37,7 +37,10 @@ void SELECTION::Add( EDA_ITEM* aItem )
     ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
 
     if( i == m_items.end() || *i > aItem )
+    {
         m_items.insert( i, aItem );
+        m_lastAddedItem = aItem;
+    }
 }
 
 
@@ -46,7 +49,12 @@ void SELECTION::Remove( EDA_ITEM* aItem )
     ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
 
     if( !( i == m_items.end() || *i > aItem ) )
+    {
         m_items.erase( i );
+
+        if( aItem == m_lastAddedItem )
+            m_lastAddedItem = nullptr;
+    }
 }
 
 

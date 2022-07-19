@@ -1464,6 +1464,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::Paste,                ACTIONS::paste.MakeEvent() );
     Go( &PCB_CONTROL::Paste,                ACTIONS::pasteSpecial.MakeEvent() );
 
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::PointSelectedEvent );
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::SelectedEvent );
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
     Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );

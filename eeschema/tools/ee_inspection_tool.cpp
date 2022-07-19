@@ -338,6 +338,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::PrevMarker,          EE_ACTIONS::prevMarker.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::NextMarker,          EE_ACTIONS::nextMarker.MakeEvent() );
     // See note 1:
+    Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::PointSelectedEvent );
     Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::SelectedEvent );
     Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
 

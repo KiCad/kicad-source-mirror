@@ -91,6 +91,9 @@ public:
     /// Select all components on the same sheet as the selected footprint.
     static TOOL_ACTION selectSameSheet;
 
+    /// Select symbols/pins on schematic corresponding to selected footprints/pads.
+    static TOOL_ACTION selectOnSchematic;
+
     /// Filter the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 

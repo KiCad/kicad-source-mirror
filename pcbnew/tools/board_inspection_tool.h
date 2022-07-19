@@ -57,9 +57,6 @@ public:
      */
     int ShowStatisticsDialog( const TOOL_EVENT& aEvent );
 
-    ///< Notify Eeschema about the selected item.
-    int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
-
     ///< Highlight net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
@@ -143,7 +140,6 @@ private:
 private:
     PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
 
-    bool                m_probingSchToPcb;      // Recursion guard when cross-probing to Eeschema
     std::set<int>       m_currentlyHighlighted; // Active net being highlighted, or -1 when off
     std::set<int>       m_lastHighlighted;      // For toggling between last two highlighted nets
 

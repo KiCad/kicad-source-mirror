@@ -42,6 +42,7 @@ public:
             KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_isHover = false;
+        m_lastAddedItem = nullptr;
     }
 
     SELECTION( const SELECTION& aOther ) :
@@ -49,12 +50,14 @@ public:
     {
         m_items = aOther.m_items;
         m_isHover = aOther.m_isHover;
+        m_lastAddedItem = aOther.m_lastAddedItem;
     }
 
     SELECTION& operator= ( const SELECTION& aOther )
     {
         m_items = aOther.m_items;
         m_isHover = aOther.m_isHover;
+        m_lastAddedItem = aOther.m_lastAddedItem;
         return *this;
     }
 
@@ -109,6 +112,11 @@ public:
     const std::deque<EDA_ITEM*> GetItems() const
     {
         return m_items;
+    }
+
+    EDA_ITEM* GetLastAddedItem() const
+    {
+        return m_lastAddedItem;
     }
 
     /**
@@ -257,6 +265,7 @@ public:
 protected:
     OPT<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
+    EDA_ITEM*             m_lastAddedItem;
     bool                  m_isHover;
 
     // mute hidden overloaded virtual function warnings

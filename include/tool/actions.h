@@ -198,6 +198,7 @@ public:
 class EVENTS
 {
 public:
+    const static TOOL_EVENT PointSelectedEvent;
     const static TOOL_EVENT SelectedEvent;
     const static TOOL_EVENT UnselectedEvent;
     const static TOOL_EVENT ClearedEvent;

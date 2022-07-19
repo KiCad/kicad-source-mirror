@@ -93,6 +93,12 @@ public:
 
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
+    ///< Notify Eeschema about selected items.
+    int CrossProbeToSch( const TOOL_EVENT& aEvent );
+
+    ///< Equivalent to the above, but initiated by the user.
+    int ExplicitCrossProbeToSch( const TOOL_EVENT& aEvent );
+
     /**
      * Display a dialog to select a footprint to be added and allows the user to set its position.
      */
@@ -127,6 +133,8 @@ private:
 
     ///< Set up handlers for various events.
     void setTransitions() override;
+
+    void doCrossProbePcbToSch( const TOOL_EVENT& aEvent, bool aForce );
 
 private:
     PCB_EDIT_FRAME*  m_frame;

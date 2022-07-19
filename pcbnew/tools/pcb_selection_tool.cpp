@@ -86,6 +86,7 @@ public:
         // This could be enabled if we have better logic for picking the target net with the mouse
         // Add( PCB_ACTIONS::deselectNet );
         Add( PCB_ACTIONS::selectSameSheet );
+        Add( PCB_ACTIONS::selectOnSchematic );
     }
 
 private:
@@ -740,7 +741,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         }
     }
 
-    bool anyAdded      = false;
+    int  addedCount = 0;
     bool anySubtracted = false;
 
     if( !m_additive && !m_subtractive && !m_exclusive_or )
@@ -764,12 +765,17 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
             else
             {
                 select( collector[i] );
-                anyAdded = true;
+                addedCount++;
             }
         }
     }
 
-    if( anyAdded )
+    if( addedCount == 1 )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::PointSelectedEvent );
+        return true;
+    }
+    else if( addedCount > 1 )
     {
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
         return true;
@@ -1536,12 +1542,12 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
 
     EDA_RECT bbox = m_selection.GetBoundingBox();
 
-    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+    if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
         if( m_frame->GetPcbNewSettings()->m_CrossProbing.center_on_items )
         {
             if( m_frame->GetPcbNewSettings()->m_CrossProbing.zoom_to_fit )
-                zoomFitCrossProbeBBox( bbox );
+                ZoomFitCrossProbeBBox( bbox );
 
             m_frame->FocusOnLocation( bbox.Centre() );
         }
@@ -1630,15 +1636,17 @@ void PCB_SELECTION_TOOL::zoomFitSelection()
 }
 
 
-void PCB_SELECTION_TOOL::zoomFitCrossProbeBBox( EDA_RECT bbox )
+void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( EDA_RECT bbox )
 {
     // Should recalculate the view to zoom in on the bbox.
     auto view = getView();
 
-    if( bbox.GetWidth() == 0 && bbox.GetHeight() != 0 )
+    if( bbox.GetWidth() == 0 )
         return;
 
-        //#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm
+    bbox.Normalize();
+
+    //#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm
 #ifdef DEFAULT_PCBNEW_CODE
     auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
     auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
@@ -2939,7 +2947,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::syncSelection, PCB_ACTIONS::syncSelection.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::syncSelection,       PCB_ACTIONS::syncSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelectionWithNets,
         PCB_ACTIONS::syncSelectionWithNets.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );

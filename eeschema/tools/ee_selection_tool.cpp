@@ -872,7 +872,7 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
     if( !aAdd && !aSubtract && !aExclusiveOr )
         ClearSelection();
 
-    bool anyAdded      = false;
+    int  addedCount = 0;
     bool anySubtracted = false;
 
     if( aCollector.GetCount() > 0 )
@@ -908,18 +908,23 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
             {
                 aCollector[i]->SetFlags( flags );
                 select( aCollector[i] );
-                anyAdded = true;
+                addedCount++;
             }
         }
     }
 
-    if( anyAdded )
+    if( addedCount == 1 )
     {
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::PointSelectedEvent );
 
         if( aItem && aCollector.GetCount() == 1 )
             *aItem = aCollector[0];
 
+        return true;
+    }
+    else if( addedCount > 1 )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
         return true;
     }
     else if( anySubtracted )
@@ -1491,6 +1496,156 @@ int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 }
 
 
+void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( EDA_RECT bbox )
+{
+    if( bbox.GetWidth() == 0 )
+        return;
+
+    bbox.Normalize();
+
+    VECTOR2I bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+    VECTOR2D screenSize = getView()->GetViewport().GetSize();
+
+    // This code tries to come up with a zoom factor that doesn't simply zoom in
+    // to the cross probed symbol, but instead shows a reasonable amount of the
+    // circuit around it to provide context.  This reduces or eliminates the need
+    // to manually change the zoom because it's too close.
+
+    // Using the default text height as a constant to compare against, use the
+    // height of the bounding box of visible items for a footprint to figure out
+    // if this is a big symbol (like a processor) or a small symbol (like a resistor).
+    // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
+    // provide good scaling at varying symbol sizes.  Bigger symbols need less
+    // scaling than small ones.
+    double currTextHeight = Mils2iu( DEFAULT_TEXT_SIZE );
+
+    double compRatio = bbSize.y / currTextHeight; // Ratio of symbol to text height
+    double compRatioBent = 1.0;
+
+    // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
+    // with symbols of varying sizes (e.g. 0402 package and 200 pin BGA).
+    // "first" is used as the input and "second" as the output
+    //
+    // "first" = compRatio (symbol height / default text height)
+    // "second" = Amount to scale ratio by
+    std::vector<std::pair<double, double>> lut{ { 1.25, 16 }, // 32
+                                                { 2.5, 12 },  //24
+                                                { 5, 8 },     // 16
+                                                { 6, 6 },     //
+                                                { 10, 4 },    //8
+                                                { 20, 2 },    //4
+                                                { 40, 1.5 },  // 2
+                                                { 100, 1 } };
+
+    std::vector<std::pair<double, double>>::iterator it;
+
+    // Large symbol default is last LUT entry (1:1).
+    compRatioBent = lut.back().second;
+
+    // Use LUT to do linear interpolation of "compRatio" within "first", then
+    // use that result to linearly interpolate "second" which gives the scaling
+    // factor needed.
+    if( compRatio >= lut.front().first )
+    {
+        for( it = lut.begin(); it < lut.end() - 1; it++ )
+        {
+            if( it->first <= compRatio && next( it )->first >= compRatio )
+            {
+                double diffx = compRatio - it->first;
+                double diffn = next( it )->first - it->first;
+
+                compRatioBent = it->second + ( next( it )->second - it->second ) * diffx / diffn;
+                break; // We have our interpolated value
+            }
+        }
+    }
+    else
+    {
+        compRatioBent = lut.front().second; // Small symbol default is first entry
+    }
+
+    // This is similar to the original KiCad code that scaled the zoom to make sure
+    // symbols were visible on screen.  It's simply a ratio of screen size to
+    // symbol size, and its job is to zoom in to make the component fullscreen.
+    // Earlier in the code the symbol BBox is given a 20% margin to add some
+    // breathing room. We compare the height of this enlarged symbol bbox to the
+    // default text height.  If a symbol will end up with the sides clipped, we
+    // adjust later to make sure it fits on screen.
+    screenSize.x = std::max( 10.0, screenSize.x );
+    screenSize.y = std::max( 10.0, screenSize.y );
+    double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+
+    // Original KiCad code for how much to scale the zoom
+    double kicadRatio =
+            std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+
+    // If the width of the part we're probing is bigger than what the screen width
+    // will be after the zoom, then punt and use the KiCad zoom algorithm since it
+    // guarantees the part's width will be encompassed within the screen.
+    if( bbSize.x > screenSize.x * ratio * compRatioBent )
+    {
+        // Use standard KiCad zoom for parts too wide to fit on screen/
+        ratio = kicadRatio;
+        compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
+        wxLogTrace( "CROSS_PROBE_SCALE",
+                    "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
+    }
+
+    // Now that "compRatioBent" holds our final scaling factor we apply it to the
+    // original fullscreen zoom ratio to arrive at the final ratio itself.
+    ratio *= compRatioBent;
+
+    bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+
+    // Try not to zoom on every cross-probe; it gets very noisy
+    if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
+        getView()->SetScale( getView()->GetScale() / ratio );
+}
+
+
+int EE_SELECTION_TOOL::SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetPath,
+                                      SCH_ITEM* focusItem, std::vector<SCH_ITEM*> items )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    if( !editFrame || m_isSymbolEditor || m_isSymbolViewer )
+        return 0;
+
+    if( targetSheetPath && targetSheetPath != editFrame->Schematic().CurrentSheet() )
+    {
+        editFrame->Schematic().SetCurrentSheet( *targetSheetPath );
+        editFrame->DisplayCurrentSheet();
+    }
+
+    ClearSelection( items.size() > 0 ? true /*quiet mode*/ : false );
+
+    // Perform individual selection of each item before processing the event.
+    for( SCH_ITEM* item : items )
+        select( item );
+
+    EDA_RECT bbox = m_selection.GetBoundingBox();
+
+    if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
+    {
+        if( m_frame->eeconfig()->m_CrossProbing.center_on_items )
+        {
+            if( m_frame->eeconfig()->m_CrossProbing.zoom_to_fit )
+                ZoomFitCrossProbeBBox( bbox );
+
+            editFrame->FocusOnItem( focusItem );
+
+            if( !focusItem )
+                editFrame->FocusOnLocation( bbox.Centre() );
+        }
+    }
+
+    if( m_selection.Size() > 0 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
 void EE_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
@@ -1604,7 +1759,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
 }
 
 
-void EE_SELECTION_TOOL::ClearSelection()
+void EE_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
     if( m_selection.Empty() )
         return;
@@ -1618,7 +1773,10 @@ void EE_SELECTION_TOOL::ClearSelection()
     m_selection.ClearReferencePoint();
 
     // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
+    if( !aQuietMode )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
+    }
 }
 
 

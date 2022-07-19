@@ -66,6 +66,9 @@ public:
     /// Runs a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
+    /// Selection synchronization (PCB -> SCH)
+    static TOOL_ACTION syncSelection;
+
     // Locking
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;

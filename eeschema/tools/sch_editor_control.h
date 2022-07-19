@@ -149,7 +149,7 @@ public:
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**
-     * Find a symbol in the schematic and an item in this symbol.
+     * Find a symbol in the schematic and an item in this symbol and select it.
      *
      * @param aPath The symbol path to find. Pass nullptr to search by aReference.
      * @param aReference The symbol reference designator to find, or to display in
@@ -222,7 +222,7 @@ private:
                          wxFindReplaceData& aData );
 
 private:
-    bool      m_probingPcbToSch; // Recursion guard when cross-probing to PcbNew
+    bool      m_probingPcbToSch; // Recursion guard when cross-probing to schematic editor
     EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
 
     // Temporary storage location for Duplicate action

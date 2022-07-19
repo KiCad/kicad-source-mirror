@@ -300,6 +300,7 @@ void DRC_TOOL::setTransitions()
     Go( &DRC_TOOL::PrevMarker,                 ACTIONS::prevMarker.MakeEvent() );
     Go( &DRC_TOOL::NextMarker,                 ACTIONS::nextMarker.MakeEvent() );
     Go( &DRC_TOOL::ExcludeMarker,              ACTIONS::excludeMarker.MakeEvent() );
+    Go( &DRC_TOOL::CrossProbe,                 EVENTS::PointSelectedEvent );
     Go( &DRC_TOOL::CrossProbe,                 EVENTS::SelectedEvent );
 }
 

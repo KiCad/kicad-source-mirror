@@ -45,7 +45,6 @@ BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InspectionTool" ),
         m_frame( nullptr )
 {
-    m_probingSchToPcb = false;
     m_dynamicData     = nullptr;
 }
 
@@ -1245,39 +1244,18 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
-{
-    // Don't get in an infinite loop PCB -> SCH -> PCB -> SCH -> ...
-    if( m_probingSchToPcb || m_frame->m_syncingSchToPcbSelection )
-        return 0;
-
-    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    const PCB_SELECTION& selection = selTool->GetSelection();
-
-    if( selection.Size() == 1 )
-        m_frame->SendMessageToEESCHEMA( static_cast<BOARD_ITEM*>( selection.Front() ) );
-    else
-        m_frame->SendMessageToEESCHEMA( nullptr );
-
-    // Update 3D viewer highlighting
-    m_frame->Update3DView( false, frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
-
-    return 0;
-}
-
-
 int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
-    m_probingSchToPcb = true;   // recursion guard
+    m_frame->m_probingSchToPcb = true; // recursion guard
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         if( item )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) item );
     }
-    m_probingSchToPcb = false;
+    m_frame->m_probingSchToPcb = false;
 
     bool request3DviewRedraw = frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh;
 
@@ -1363,7 +1341,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         filter.lockedItems = saved;
 
         // Clear the previous highlight
-        m_frame->SendMessageToEESCHEMA( nullptr );
+        //m_frame->SendMessageToEESCHEMA( nullptr );
 
         bool         highContrast  = settings->GetHighContrast();
         PCB_LAYER_ID contrastLayer = settings->GetPrimaryHighContrastLayer();
@@ -1388,7 +1366,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
             BOARD_CONNECTED_ITEM* targetItem = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] );
 
             if( targetItem->Type() == PCB_PAD_T )
-                m_frame->SendMessageToEESCHEMA( targetItem );
+                m_frame->SendCrossProbeItem( targetItem );
 
             net = targetItem->GetNetCode();
         }
@@ -1829,10 +1807,6 @@ void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
 
 void BOARD_INSPECTION_TOOL::setTransitions()
 {
-    Go( &BOARD_INSPECTION_TOOL::CrossProbePcbToSch,     EVENTS::SelectedEvent );
-    Go( &BOARD_INSPECTION_TOOL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
-    Go( &BOARD_INSPECTION_TOOL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
-
     Go( &BOARD_INSPECTION_TOOL::LocalRatsnestTool,
         PCB_ACTIONS::localRatsnestTool.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::HideDynamicRatsnest,

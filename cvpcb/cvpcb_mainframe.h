@@ -250,10 +250,10 @@ public:
      * Commands are:
      * $PART: "reference" put cursor on component anchor
      *
-     * @param aClearHighligntOnly use true if the message to send is only "clear highlight"
+     * @param aClearSelectionOnly use true if the message to send is only "clear clear selection"
      *                            (used when exiting CvPcb)
      */
-    void SendMessageToEESCHEMA( bool aClearHighligntOnly = false );
+    void SendComponentSelectionToSch( bool aClearSelectionOnly = false );
 
     /**
      * Get the selected component from the component listbox.

@@ -120,6 +120,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_supportsAutoSave = true;
+    m_syncingPcbToSchSelection = false;
     m_aboutTitle = _( "KiCad Schematic Editor" );
 
     m_findReplaceDialog = nullptr;
@@ -1762,10 +1763,13 @@ void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
 
     if( aItem )
     {
-        aItem->SetBrightened();
+        if( !aItem->IsBrightened() )
+        {
+            aItem->SetBrightened();
 
-        UpdateItem( aItem );
-        lastBrightenedItemID = aItem->m_Uuid;
+            UpdateItem( aItem );
+            lastBrightenedItemID = aItem->m_Uuid;
+        }
 
         FocusOnLocation( aItem->GetFocusPosition() );
     }

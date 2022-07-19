@@ -32,8 +32,10 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <map>
+#include <optional>
 
 #include <kiid.h>
+#include <wx/string.h>
 
 /**
  * A simple container for schematic symbol instance information.
@@ -505,6 +507,15 @@ public:
      * @param aSheetPath Path to return sheets from
      */
     void GetSheetsWithinPath( SCH_SHEET_PATHS& aSheets, const SCH_SHEET_PATH& aSheetPath ) const;
+
+
+    /**
+     * Finds a SCH_SHEET_PATH that matches the provided KIID_PATH.
+     *
+     * @param aPath The KIID_PATH to search for.
+     */
+    std::optional<SCH_SHEET_PATH> GetSheetPathByKIIDPath( const KIID_PATH& aPath ) const;
+
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
