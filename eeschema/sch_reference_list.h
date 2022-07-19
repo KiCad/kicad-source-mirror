@@ -337,13 +337,32 @@ public:
     }
 
     /**
-     * Replace any duplicate reference designators with the next available number after the
-     * present number. Multi-unit symbols are reannotated together.
+     * @brief Forces reannotation of the provided references. Will also reannotate
+     * associated multi-unit symbols.
      *
+     * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
+     * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
+     * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aAdditionalReferences Additional references to check for duplicates
+     * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
+     *        aStartNumber)
+     */
+    void ReannotateByOptions( ANNOTATE_ORDER_T             aSortOption,
+                              ANNOTATE_ALGO_T              aAlgoOption,
+                              int                          aStartNumber,
+                              const SCH_REFERENCE_LIST&    aAdditionalRefs,
+                              bool                         aStartAtCurrent );
+
+    /**
+     * Convenience function for the Paste Unique functionality. Do not use as a general
+     * reannotation method.
+     *
+     * Replaces any duplicate reference designators with the next available number after the
+     * present number regardless of configured annotation options.
+     *
+     * Multi-unit symbols are reannotated together.
      */
     void ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences );
-
 
     /**
      * Annotate the references by the provided options.

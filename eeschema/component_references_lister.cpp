@@ -376,7 +376,11 @@ wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
 }
 
 
-void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
+void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSortOption,
+                                              ANNOTATE_ALGO_T              aAlgoOption,
+                                              int                          aStartNumber,
+                                              const SCH_REFERENCE_LIST&    aAdditionalRefs,
+                                              bool                         aStartAtCurrent )
 {
     SplitReferences();
 
@@ -397,7 +401,14 @@ void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditi
         lockedSymbols[refstr].AddItem( ref );
     }
 
-    Annotate( false, 0, 0, lockedSymbols, aAdditionalReferences, true );
+    AnnotateByOptions( aSortOption, aAlgoOption, aStartNumber, lockedSymbols, aAdditionalRefs,
+                       aStartAtCurrent );
+}
+
+
+void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
+{
+    ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 0, aAdditionalReferences, true );
 }
 
 
