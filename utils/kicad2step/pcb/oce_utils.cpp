@@ -1379,7 +1379,6 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                                    Handle( TDocStd_Document )& dest, TRIPLET aScale )
 {
     // transfer data from Source into a top level component of Dest
-
     gp_GTrsf scale_transform;
     scale_transform.SetVectorialPart( gp_Mat( aScale.x, 0, 0,
                                               0, aScale.y, 0,
@@ -1412,18 +1411,22 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
 
         if( !shape.IsNull() )
         {
-            brep.Perform( shape, Standard_False );
-            TopoDS_Shape scaled_shape;
+            TopoDS_Shape scaled_shape( shape );
 
-            if( brep.IsDone() )
+            if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
             {
-                scaled_shape = brep.Shape();
-            }
-            else
-            {
-                ReportMessage( wxT( "  * transfertModel(): failed to scale model\n" ) );
+                brep.Perform( shape, Standard_False );
 
-                scaled_shape = shape;
+                if( brep.IsDone() )
+                {
+                    scaled_shape = brep.Shape();
+                }
+                else
+                {
+                    ReportMessage( wxT( "  * transfertModel(): failed to scale model\n" ) );
+
+                    scaled_shape = shape;
+                }
             }
 
             TDF_Label niulab = d_assy->AddComponent( component, scaled_shape, Standard_False );
