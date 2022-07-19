@@ -1912,22 +1912,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     pasteInstances.SortByPageNumbers();
 
-    if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
-    {
-        for( SCH_SHEET_PATH& instance : pasteInstances )
-        {
-            pastedSymbols[instance].SortByReferenceOnly();
-            pastedSymbols[instance].ReannotateDuplicates( existingRefs );
-            pastedSymbols[instance].UpdateAnnotation();
-
-            // Update existing refs for next iteration
-            for( size_t i = 0; i < pastedSymbols[instance].GetCount(); i++ )
-                existingRefs.AddItem( pastedSymbols[instance][i] );
-        }
-    }
-
-    m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-
     if( sheetsPasted )
     {
         // Update page numbers: Find next free numeric page number
@@ -1952,6 +1936,29 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         m_frame->UpdateHierarchyNavigator();
     }
 
+    if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pasteMode == PASTE_MODE::RESPECT_OPTIONS )
+    {
+        for( SCH_SHEET_PATH& instance : pasteInstances )
+        {
+            pastedSymbols[instance].SortByReferenceOnly();
+
+            if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
+                pastedSymbols[instance].ReannotateDuplicates( existingRefs );
+            else
+                pastedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
+                                                             (ANNOTATE_ALGO_T) annotate.method,
+                                                             annotateStartNum, existingRefs, true );
+
+            pastedSymbols[instance].UpdateAnnotation();
+
+            // Update existing refs for next iteration
+            for( size_t i = 0; i < pastedSymbols[instance].GetCount(); i++ )
+                existingRefs.AddItem( pastedSymbols[instance][i] );
+        }
+    }
+
+    m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+
     // Now clear the previous selection, select the pasted items, and fire up the "move"
     // tool.
     //
@@ -1959,16 +1966,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
     EE_SELECTION& selection = selTool->GetSelection();
-
-    // We should have a new selection of only the pasted symbols and sheets
-    if( pasteMode == PASTE_MODE::RESPECT_OPTIONS )
-    {
-        // Annotate the symbols on the current sheet with the selection
-        m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
-                                  (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
-                                  annotateStartNum, true, false, NULL_REPORTER::GetInstance(),
-                                  true );
-    }
 
     if( !selection.Empty() )
     {
