@@ -151,6 +151,7 @@ msgstr "リロード時間 %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
 #, c-format
 msgid "Loading %s..."
 msgstr "%s をロードしています..."
@@ -7172,12 +7173,12 @@ msgstr ""
 "表示上はネット %s はバス %s に接続されていますが、バスのメンバーではありませ"
 "ん"
 
-#: eeschema/connection_graph.cpp:3063
+#: eeschema/connection_graph.cpp:3063 eeschema/connection_graph.cpp:3051
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "シートピン %s に対応する階層ラベルがシート内にありません"
 
-#: eeschema/connection_graph.cpp:3080
+#: eeschema/connection_graph.cpp:3080 eeschema/connection_graph.cpp:3068
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "階層ラベル %s と対応するシートピンが親シートにありません"
@@ -16112,8 +16113,8 @@ msgstr "フットプリントの割り当てをインポート..."
 #: eeschema/tools/ee_actions.cpp:578
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
-"Pcbnewで作成された .cmp ファイルからシンボルのフットプリント割当てをインポー"
-"ト"
+"Pcbnewで作成された .cmp ファイルからシンボルのフットプリント割り当てをイン"
+"ポート"
 
 #: eeschema/tools/ee_actions.cpp:583
 msgid "Annotate Schematic..."
@@ -30130,6 +30131,8 @@ msgstr "ライブラリー %s は既に存在します。"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "ライブラリー '%s' は読み込み専用です。"
@@ -31569,6 +31572,7 @@ msgstr "ファイル読み込み中のエラー。"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
 msgid "Open cancelled by user."
 msgstr "オープンの操作はユーザーによってキャンセルされました。"
 
@@ -32476,12 +32480,14 @@ msgstr "要素トークンは %d パラメーターを含んでいます。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "フォルダー '%s' を削除する権限がありません。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "ライブラリーのフォルダー '%s' には予期しないサブフォルダーがあります。"
@@ -32494,6 +32500,7 @@ msgstr "予期しないファイル '%s' がライブラリー '%s' に見つか
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "フットプリント ライブラリー '%s' は削除できません。"
@@ -32697,20 +32704,24 @@ msgid "unknown pad type: %d"
 msgstr "未知のパッド形状です: %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
 #, c-format
 msgid "unknown via type %d"
 msgstr "未知のビア形状です: %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "未知のゾーンのコーナー用スムージング タイプ %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
 msgid "This file does not contain a PCB."
 msgstr "このファイルは基板 (PCB) を含んでいません。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -32720,25 +32731,30 @@ msgstr ""
 "作成しますか？"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
 msgid "Library Not Found"
 msgstr "ライブラリー が見つかりません"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "フットプリント ファイル名 '%s' は不正です。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "'%s' を削除する権限がありません。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "ライブラリー パス '%s' を上書きできません。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "予期しないファイル '%s' がライブラリー パス '%s' に見つかりました。"
