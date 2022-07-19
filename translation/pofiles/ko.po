@@ -15739,12 +15739,16 @@ msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>의심스러운 전원 심볼</b><br>하나의 입력 또는 출력 전원 핀만이 의미가 있습"
+"니다<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>의심스러운 전원 심볼</b><br>보이지 않는 입력 전원 핀만이 자동으로 연결됩니"
+"다<br><br>"
 
 #: eeschema/symbol_checker.cpp:241
 #, c-format
@@ -17341,7 +17345,7 @@ msgstr "페이지로 이동"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "이 계층에서 한 시트 위로 이동"
 
 #: eeschema/tools/ee_actions.cpp:752
 #, fuzzy
@@ -17350,7 +17354,7 @@ msgstr "페이지로 이동"
 
 #: eeschema/tools/ee_actions.cpp:752
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "시트 탐색 기록에서 앞으로 이동"
 
 #: eeschema/tools/ee_actions.cpp:758
 #, fuzzy
@@ -21010,16 +21014,16 @@ msgstr "면적:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 msgid "Linear resistance:"
 msgstr "선형 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
-#, c-format
+#, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "100% 표면 깊이에 대한 주파수"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 #, fuzzy
@@ -21267,7 +21271,7 @@ msgstr "4R 해답:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:229
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습니다."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 #, fuzzy
@@ -21806,7 +21810,7 @@ msgstr "서브스트레이트 상대 유전율 (유전체 상수)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
 #, fuzzy
@@ -22381,7 +22385,7 @@ msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "ft/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
