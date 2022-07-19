@@ -1581,7 +1581,9 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     SCH_TEXTBOX*           textbox = static_cast<SCH_TEXTBOX*>( item );
                     DIALOG_TEXT_PROPERTIES dlg( m_frame, textbox );
 
-                    if( dlg.ShowQuasiModal() != wxID_OK )
+                    // This is modal not quasi to protect against place symbol calls starting
+                    // TwoClickPlace wait routines in the middle
+                    if( dlg.ShowModal() != wxID_OK )
                     {
                         cleanup();
                         continue;
