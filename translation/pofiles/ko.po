@@ -21791,7 +21791,7 @@ msgstr "진공에서 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "중간 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 #, fuzzy
@@ -31870,12 +31870,11 @@ msgstr "VRML 내보내기 실패: 윤곽에 홀을 추가할 수 없습니다."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1190
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "VRML 파일을 내보낼 때 프로젝트 없음"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1250
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "IDF 내보내기 실패:\n"
+msgstr "VRML 내보내기 실패:\n"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
@@ -31911,7 +31910,7 @@ msgstr "전체 컴포넌트 수: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:454
 #: pcbnew/exporters/gen_footprints_placefile.cpp:505
 msgid "File generation successful."
-msgstr "파일 생성에 성공했습니다."
+msgstr "파일 생성 성공."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:372
 msgid "No footprint for automated placement."
