@@ -25,6 +25,7 @@
  * Main file for the pcbnew tests to be compiled
  */
 #include <boost/test/unit_test.hpp>
+#include <kiplatform/app.h>
 
 #include <wx/init.h>
 
@@ -38,6 +39,7 @@ bool init_unit_test()
 
 int main( int argc, char* argv[] )
 {
+    KIPLATFORM::APP::Init();
     int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
