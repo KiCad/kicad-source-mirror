@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 09:36-0700\n"
-"PO-Revision-Date: 2022-07-14 09:00+0200\n"
+"POT-Creation-Date: 2022-07-20 08:43+0200\n"
+"PO-Revision-Date: 2022-07-19 15:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -202,7 +202,7 @@ msgstr "Exporter la Vue en Cours en JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1053
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:576
-#: pcbnew/footprint_viewer_frame.cpp:1053 pcbnew/pcb_base_frame.cpp:684
+#: pcbnew/footprint_viewer_frame.cpp:1054 pcbnew/pcb_base_frame.cpp:684
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -1468,7 +1468,7 @@ msgstr "Question"
 #: eeschema/symbol_editor/symbol_editor.cpp:803
 #: eeschema/symbol_editor/symbol_editor.cpp:1219
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337 pcbnew/pcb_marker.cpp:144
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367 pcbnew/pcb_marker.cpp:144
 #: pcbnew/plugins/kicad/pcb_parser.cpp:949
 msgid "Warning"
 msgstr "Avertissement"
@@ -2844,7 +2844,7 @@ msgstr "MyLabel"
 #: eeschema/symbol_viewer_frame.cpp:163 eeschema/symbol_viewer_frame.cpp:178
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
 #: pcbnew/dialogs/dialog_copper_zones.cpp:220
-#: pcbnew/footprint_viewer_frame.cpp:148 pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:149 pcbnew/footprint_viewer_frame.cpp:164
 msgid "Filter"
 msgstr "Filtre"
 
@@ -3692,7 +3692,7 @@ msgid "Bus Thickness"
 msgstr "Épaisseur de Bus"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
-#: common/stroke_params.cpp:211 eeschema/sch_line.cpp:916
+#: common/stroke_params.cpp:211 eeschema/sch_line.cpp:910
 msgid "Line Style"
 msgstr "Style de Ligne"
 
@@ -6262,8 +6262,8 @@ msgstr "Examen des librairies de symboles"
 msgid "Create, delete and edit symbols"
 msgstr "Créer, supprimer et éditer les symboles"
 
-#: common/tool/actions.cpp:591 pcbnew/footprint_viewer_frame.cpp:111
-#: pcbnew/footprint_viewer_frame.cpp:1107
+#: common/tool/actions.cpp:591 pcbnew/footprint_viewer_frame.cpp:112
+#: pcbnew/footprint_viewer_frame.cpp:1108
 msgid "Footprint Library Browser"
 msgstr "Examinateur de Librairies d'Empreintes"
 
@@ -7252,38 +7252,38 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "Conflits Attribution Empreinte"
 
-#: cvpcb/display_footprints_frame.cpp:70
+#: cvpcb/display_footprints_frame.cpp:71
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "Footprint Viewer"
 msgstr "Visualisateur d'Empreintes"
 
-#: cvpcb/display_footprints_frame.cpp:322
+#: cvpcb/display_footprints_frame.cpp:323
 #: pcbnew/toolbars_footprint_viewer.cpp:107
 msgid "Automatic Zoom on footprint change"
 msgstr "Zoom automatique sur le changement d’empreinte"
 
-#: cvpcb/display_footprints_frame.cpp:406
+#: cvpcb/display_footprints_frame.cpp:407
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "Identificateur d'empreinte '%s' non valide."
 
-#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:422
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "La librairie '%s' n'est pas dans la table des librairies d'empreintes."
 
-#: cvpcb/display_footprints_frame.cpp:430
-#: cvpcb/display_footprints_frame.cpp:455
+#: cvpcb/display_footprints_frame.cpp:431
+#: cvpcb/display_footprints_frame.cpp:456
 #, c-format
 msgid "Footprint '%s' not found."
 msgstr "Empreinte '%s' non trouvée."
 
-#: cvpcb/display_footprints_frame.cpp:485 pcbnew/footprint.cpp:1025
+#: cvpcb/display_footprints_frame.cpp:486 pcbnew/footprint.cpp:1025
 #, c-format
 msgid "Footprint: %s"
 msgstr "Empreinte: %s"
 
-#: cvpcb/display_footprints_frame.cpp:496
+#: cvpcb/display_footprints_frame.cpp:497
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -13540,7 +13540,7 @@ msgstr ""
 "Voulez vous sauver le document courant avant de procéder?"
 
 #: eeschema/files-io.cpp:602 pcbnew/files.cpp:169
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:251
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:279
 msgid "All supported formats|"
 msgstr "Tous les formats supportés|"
 
@@ -14145,11 +14145,11 @@ msgstr "Entrée de Bus (Bus vers Fil)"
 msgid "Bus to Bus Entry"
 msgstr "Entrée de Bus (Bus vers Bus)"
 
-#: eeschema/sch_bus_entry.cpp:525 eeschema/sch_line.cpp:906
+#: eeschema/sch_bus_entry.cpp:525 eeschema/sch_line.cpp:900
 msgid "Wire"
 msgstr "Fil"
 
-#: eeschema/sch_bus_entry.cpp:526 eeschema/sch_line.cpp:907
+#: eeschema/sch_bus_entry.cpp:526 eeschema/sch_line.cpp:901
 msgid "Bus"
 msgstr "Bus"
 
@@ -14158,7 +14158,7 @@ msgid "Bus Entry Type"
 msgstr "Type Entrée de Bus"
 
 #: eeschema/sch_bus_entry.cpp:549 eeschema/sch_label.cpp:817
-#: eeschema/sch_line.cpp:938
+#: eeschema/sch_line.cpp:932
 msgid "Assigned Netclass"
 msgstr "NetClasses Assignées"
 
@@ -14358,15 +14358,15 @@ msgstr "Bus, longueur %s"
 msgid "Graphic Line, length %s"
 msgstr "Ligne Graphique, longueur %s"
 
-#: eeschema/sch_line.cpp:908
+#: eeschema/sch_line.cpp:902
 msgid "Graphical"
 msgstr "Graphique"
 
-#: eeschema/sch_line.cpp:911
+#: eeschema/sch_line.cpp:905
 msgid "Line Type"
 msgstr "Type de Ligne"
 
-#: eeschema/sch_line.cpp:916
+#: eeschema/sch_line.cpp:910
 msgid "from netclass"
 msgstr "de netclasse"
 
@@ -16511,8 +16511,8 @@ msgstr ""
 "recherchés doivent correspondre.\n"
 "Un terme qui est un nombre correspondra également au nombre de broches."
 
-#: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1099
-#: pcbnew/footprint_viewer_frame.cpp:1104
+#: eeschema/symbol_viewer_frame.cpp:1149 pcbnew/footprint_viewer_frame.cpp:1100
+#: pcbnew/footprint_viewer_frame.cpp:1105
 msgid "[no library selected]"
 msgstr "[pas de librairie sélectionnée]"
 
@@ -17764,7 +17764,7 @@ msgstr "Appuyez <ESC> sur pour annuler la création d'éléments."
 msgid "Click over a sheet."
 msgstr "Cliquez sur une feuille."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1724
+#: eeschema/tools/sch_drawing_tools.cpp:1726
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Appuyez <ESC> sur pour annuler la création de feuilles."
 
@@ -21700,7 +21700,7 @@ msgstr "Er:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:98
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
 msgid "..."
 msgstr "..."
@@ -21768,7 +21768,7 @@ msgid "Results"
 msgstr "Résultats"
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:92
-#: pcb_calculator/calculator_panels/panel_wavelength.cpp:250
+#: pcb_calculator/calculator_panels/panel_wavelength.cpp:257
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
 msgstr "Constantes Diélectriques Relatives"
@@ -21951,21 +21951,21 @@ msgstr "Longueur d'onde dans le milieu :"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr "Vitesse dand le milieu:"
+msgstr "Vitesse dans le milieu:"
 
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 msgid "er:"
 msgstr "er :"
 
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
 msgstr "permittivité relative (constante diélectrique)"
 
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
 msgstr "µr:"
 
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
 msgstr "perméabilité relative"
 
@@ -26581,64 +26581,58 @@ msgid "Line Segment Properties"
 msgstr "Propriétés du Segment de Droite"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "Propriétés du Cercle"
+msgstr "Propriétés de la Courbe"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
 msgstr "Modifier les propriétés de l'élément graphique"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
-msgstr "L'angle de l'arc doit être différent de zéro."
+msgstr "L'angle de l'arc ne peut être zéro."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Arc non valide avec le rayon %f et l’angle %f"
+msgstr "Arc non valide avec le rayon %f et l’angle %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
-#, fuzzy
 msgid "Line width must be greater than zero."
-msgstr "Le rayon doit être plus grand que zéro."
+msgstr "La largeur de la ligne doit être supérieure à zéro."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
 msgstr "Le rayon doit être plus grand que zéro."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr ""
-"La largeur de la ligne ne peut pas être 0 pour les formes non remplies."
+"La largeur de la ligne doit être supérieure à zéro pour un cercle non rempli."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
 msgstr "Le rectangle ne peut pas être vide."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr ""
-"La largeur de la ligne ne peut pas être 0 pour les formes non remplies."
+"La largeur de la ligne doit être supérieure à zéro pour un rectangle non "
+"rempli."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr ""
-"La largeur de la ligne ne peut pas être 0 pour les formes non remplies."
+"La largeur de la ligne doit être supérieure à zéro pour un polygone non "
+"rempli."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr ""
-"La largeur de la ligne ne peut pas être 0 pour les formes non remplies."
+"La largeur de la ligne doit être supérieure à zéro pour une courbe non "
+"remplie."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
@@ -32575,7 +32569,7 @@ msgstr ""
 "\n"
 " Utilisez Gérer les Librairies d'Empreintes pour modifier la configuration."
 
-#: pcbnew/footprint_editor_utils.cpp:335 pcbnew/footprint_viewer_frame.cpp:1027
+#: pcbnew/footprint_editor_utils.cpp:335 pcbnew/footprint_viewer_frame.cpp:1028
 msgid "Footprint library not enabled."
 msgstr "Librairie d'empreintes non activée."
 
@@ -32679,7 +32673,7 @@ msgstr ""
 "librairie?"
 
 #: pcbnew/footprint_libraries_utils.cpp:918
-#: pcbnew/footprint_viewer_frame.cpp:789
+#: pcbnew/footprint_viewer_frame.cpp:790
 msgid "No board currently open."
 msgstr "Pas de pcb en cours d'édition."
 
@@ -32692,7 +32686,7 @@ msgstr ""
 "Ne peut pas sauver."
 
 #: pcbnew/footprint_libraries_utils.cpp:952
-#: pcbnew/footprint_viewer_frame.cpp:797
+#: pcbnew/footprint_viewer_frame.cpp:798
 msgid "Previous footprint placement still in progress."
 msgstr "Placement de l’empreinte précédente toujours en cours."
 
@@ -32736,11 +32730,11 @@ msgstr "Nouvelle Empreinte"
 msgid "No footprint name defined."
 msgstr "Aucun nom d'empreinte défini."
 
-#: pcbnew/footprint_viewer_frame.cpp:123
+#: pcbnew/footprint_viewer_frame.cpp:124
 msgid "KiCad Footprint Library Viewer"
 msgstr "Examinateur de Librairies d'Empreintes KiCad"
 
-#: pcbnew/footprint_viewer_frame.cpp:165
+#: pcbnew/footprint_viewer_frame.cpp:166
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
@@ -32752,7 +32746,7 @@ msgstr ""
 "recherche doivent correspondre.\n"
 "Un terme qui est un nombre drevra également correspondre au nombre de pad."
 
-#: pcbnew/footprint_viewer_frame.cpp:746
+#: pcbnew/footprint_viewer_frame.cpp:747
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -32763,7 +32757,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:1017
+#: pcbnew/footprint_viewer_frame.cpp:1018
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -32772,11 +32766,11 @@ msgstr ""
 "La configuration actuelle n'inclut pas la librairie d'empreintes '%s'.\n"
 "Utilisez Gérer les Librairies d'Empreintes pour modifier la configuration."
 
-#: pcbnew/footprint_viewer_frame.cpp:1020
+#: pcbnew/footprint_viewer_frame.cpp:1021
 msgid "Footprint library not found."
 msgstr "Librairies d'empreintes non trouvée."
 
-#: pcbnew/footprint_viewer_frame.cpp:1024
+#: pcbnew/footprint_viewer_frame.cpp:1025
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -33377,25 +33371,25 @@ msgstr "Centimètre"
 msgid "Feet"
 msgstr "Pieds"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:253
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:281
 msgid "Open File"
 msgstr "Ouverture Fichier"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:306
 msgid "No file selected!"
 msgstr "Pas de fichier sélectionné!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:289
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:317
 msgid "Please select a valid layer."
 msgstr "SVP, choisissez une couche valide."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:338
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:368
 msgid "Items in the imported file could not be handled properly."
 msgstr ""
 "Les éléments du fichier importé pourraient ne pas être pris en compte "
 "correctement."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:346
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:376
 msgid "There is no plugin to handle this file type."
 msgstr "Il n'y a pas de plugin pour gérer ce type de fichier."
 
@@ -37304,9 +37298,8 @@ msgid "Draw an arc"
 msgstr "Tracer un arc"
 
 #: pcbnew/tools/drawing_tool.cpp:707
-#, fuzzy
 msgid "Place an image"
-msgstr "Placer une empreinte"
+msgstr "Placez une image"
 
 #: pcbnew/tools/drawing_tool.cpp:954
 msgid "Place a text"
@@ -39081,14 +39074,12 @@ msgid "Resolved hole clearance"
 msgstr "Isolation de trou résolue"
 
 #: pcbnew/tools/pcb_control.cpp:1332
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Isolation résolue"
+msgstr "Isolation pour les contours résolue"
 
 #: pcbnew/tools/pcb_control.cpp:1337
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Isolation résolue"
+msgstr "Isolation pour la couche \"margin\" résolue"
 
 #: pcbnew/tools/pcb_control.cpp:1347
 msgid "Selected Items"
@@ -39285,14 +39276,12 @@ msgid "Show copper zones"
 msgstr "Montrer les zones cuivre"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Images"
-msgstr "Image"
+msgstr "Images"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "Afficher en image mirroir"
+msgstr "Afficher images"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Front"
@@ -40074,6 +40063,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -40084,9 +40078,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -40100,9 +40095,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -40112,9 +40108,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -40129,6 +40125,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -40141,6 +40141,11 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -40152,10 +40157,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -40215,12 +40216,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "The radius cannot be zero."
 #~ msgstr "Le rayon ne peut pas être nul."
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Allowed features"
 #~ msgstr "Caractéristiques autorisées"
