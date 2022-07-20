@@ -1934,6 +1934,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         m_frame->SetSheetNumberAndCount();
         m_frame->UpdateHierarchyNavigator();
+
+        // Get a version with correct sheet numbers since we've pasted sheets,
+        // we'll need this when annotating next
+        hierarchy = m_frame->Schematic().GetSheets();
     }
 
     if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS || pasteMode == PASTE_MODE::RESPECT_OPTIONS )
@@ -1947,7 +1951,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             else
                 pastedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
                                                              (ANNOTATE_ALGO_T) annotate.method,
-                                                             annotateStartNum, existingRefs, true );
+                                                             annotateStartNum, existingRefs, true,
+                                                             &hierarchy );
 
             pastedSymbols[instance].UpdateAnnotation();
 

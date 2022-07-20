@@ -346,12 +346,16 @@ public:
      * @param aAdditionalReferences Additional references to check for duplicates
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
      *        aStartNumber)
+     * @param aHierarchy Optional sheet path hierarchy for resetting the references'
+     *        sheet numbers based on their sheet's place in the hierarchy. Set
+     *        nullptr if not desired.
      */
     void ReannotateByOptions( ANNOTATE_ORDER_T             aSortOption,
                               ANNOTATE_ALGO_T              aAlgoOption,
                               int                          aStartNumber,
                               const SCH_REFERENCE_LIST&    aAdditionalRefs,
-                              bool                         aStartAtCurrent );
+                              bool                         aStartAtCurrent,
+                              SCH_SHEET_LIST*              aHierarchy );
 
     /**
      * Convenience function for the Paste Unique functionality. Do not use as a general

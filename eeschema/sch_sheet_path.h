@@ -521,6 +521,12 @@ public:
                            const wxString& aDestFileName );
 
     /**
+     * Return a pointer to the first #SCH_SHEET_PATH object (not necessarily the only one)
+     * matching the provided path. Returns nullptr if not found.
+     */
+    SCH_SHEET_PATH* FindSheetForPath( const SCH_SHEET_PATH* aPath );
+
+    /**
      * Return a pointer to the first #SCH_SHEET_PATH object (not necessarily the only one) using
      * a particular screen.
      */

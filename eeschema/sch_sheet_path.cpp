@@ -921,6 +921,18 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 }
 
 
+SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForPath( const SCH_SHEET_PATH* aPath )
+{
+    for( SCH_SHEET_PATH& path : *this )
+    {
+        if( path.Path() == aPath->Path() )
+            return &path;
+    }
+
+    return nullptr;
+}
+
+
 SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( const SCH_SCREEN* aScreen )
 {
     for( SCH_SHEET_PATH& sheetpath : *this )

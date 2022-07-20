@@ -380,7 +380,8 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
                                               ANNOTATE_ALGO_T              aAlgoOption,
                                               int                          aStartNumber,
                                               const SCH_REFERENCE_LIST&    aAdditionalRefs,
-                                              bool                         aStartAtCurrent )
+                                              bool                         aStartAtCurrent,
+                                              SCH_SHEET_LIST*              aHierarchy )
 {
     SplitReferences();
 
@@ -391,6 +392,17 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
     {
         SCH_REFERENCE& ref = flatList[i];
         wxString       refstr = ref.GetSymbol()->GetRef( &ref.GetSheetPath() );
+
+        // Update sheet numbers based on the reference's sheet's position within the full
+        // hierarchy; we do this now before we annotate so annotation by sheet number * X
+        // works correctly.
+        if( aHierarchy )
+        {
+            SCH_SHEET_PATH* path = aHierarchy->FindSheetForPath( &ref.GetSheetPath() );
+            wxASSERT_MSG( path, wxT( "Attempting to annotate item on sheet not part of the hierarchy?" ) );
+
+            ref.SetSheetNumber( path->GetVirtualPageNumber() );
+        }
 
         // Never lock unassigned references
         if( refstr[refstr.Len() - 1] == '?' )
@@ -408,7 +420,7 @@ void SCH_REFERENCE_LIST::ReannotateByOptions( ANNOTATE_ORDER_T             aSort
 
 void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditionalReferences )
 {
-    ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 0, aAdditionalReferences, true );
+    ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 0, aAdditionalReferences, true, nullptr );
 }
 
 
