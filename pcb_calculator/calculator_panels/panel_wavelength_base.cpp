@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,7 +41,7 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_periodCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_periodCtrl, 0, wxALL, 5 );
+	fgSizer3->Add( m_periodCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_periodUnitChoices;
 	m_periodUnit = new UNIT_SELECTOR_TIME( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_periodUnitChoices, 0 );
@@ -53,7 +53,7 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_wavelengthVacuumCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_wavelengthVacuumCtrl, 0, wxALL, 5 );
+	fgSizer3->Add( m_wavelengthVacuumCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_wavelengthVacuumUnitChoices;
 	m_wavelengthVacuumUnit = new UNIT_SELECTOR_LEN_CABLE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_wavelengthVacuumUnitChoices, 0 );
@@ -65,7 +65,7 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_staticText18111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_wavelengthMediumCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_wavelengthMediumCtrl, 0, wxALL, 5 );
+	fgSizer3->Add( m_wavelengthMediumCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_wavelengthMediumUnitChoices;
 	m_wavelengthMediumUnit = new UNIT_SELECTOR_LEN_CABLE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_wavelengthMediumUnitChoices, 0 );
@@ -76,10 +76,8 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticText181112->Wrap( -1 );
 	fgSizer3->Add( m_staticText181112, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-	m_speedCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_speedCtrl->Enable( false );
-
-	fgSizer3->Add( m_speedCtrl, 0, wxALL, 5 );
+	m_speedCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer3->Add( m_speedCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	wxArrayString m_speedUnitChoices;
 	m_speedUnit = new UNIT_SELECTOR_SPEED( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_speedUnitChoices, 0 );
@@ -93,7 +91,7 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_staticText181111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_permittivityCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_permittivityCtrl, 0, wxALL, 5 );
+	fgSizer3->Add( m_permittivityCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_button1 = new wxButton( this, wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_button1, 0, wxALL, 5 );
@@ -105,7 +103,7 @@ PANEL_WAVELENGTH_BASE::PANEL_WAVELENGTH_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_staticText42, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_permeabilityCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_permeabilityCtrl, 0, wxALL, 5 );
+	fgSizer3->Add( m_permeabilityCtrl, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer4->Add( fgSizer3, 1, wxEXPAND, 5 );

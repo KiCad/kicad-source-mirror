@@ -24,6 +24,7 @@
 #include <wx/choicdlg.h>
 #include "pcb_calculator_utils.h"
 #include "common_data.h"
+#include <wx/dcclient.h>
 
 #define SPEED_LIGHT 299792458
 
@@ -31,6 +32,12 @@ PANEL_WAVELENGTH::PANEL_WAVELENGTH( wxWindow* parent, wxWindowID id, const wxPoi
                                     const wxSize& size, long style, const wxString& name ) :
         PANEL_WAVELENGTH_BASE( parent, id, pos, size, style, name )
 {
+    // Set the min size of wxTextCtrls showing long values
+    wxString msg( wxT( "1.234567890E+99" ) );
+    wxClientDC dc( m_speedCtrl );
+    wxSize txt_size = dc.GetTextExtent( msg );
+    m_speedCtrl->SetMinSize( txt_size );
+    Layout();
 }
 
 void PANEL_WAVELENGTH::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
