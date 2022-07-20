@@ -132,7 +132,7 @@ public:
                 val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
                 break;
             case COL_POSY:
-                val = StringFromValue( aUserUnits, pin->GetPosition().y, true );
+                val = StringFromValue( aUserUnits, -pin->GetPosition().y, true );
                 break;
             case COL_VISIBLE:
                 val = StringFromBool( pin->IsVisible() );
@@ -216,7 +216,7 @@ public:
 
             case COL_POSY:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                           ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
+                                           -ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
                 break;
 
             case COL_VISIBLE:
