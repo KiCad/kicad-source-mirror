@@ -101,7 +101,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Text & Graphics" ) );
     m_treebook->AddSubPage( m_textAndGraphics,  _( "Defaults" ) );
-    m_treebook->AddSubPage( m_formatting, _( "Fomatting" ) );
+    m_treebook->AddSubPage( m_formatting, _( "Formatting" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Design Rules" ) );
