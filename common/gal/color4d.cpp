@@ -277,7 +277,32 @@ std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 
 void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
 {
-    aJson = nlohmann::json( aColor.ToWxString( wxC2S_CSS_SYNTAX ).ToStdString() );
+    wxColour   c = aColor.ToColour();
+    wxString   str;
+
+    const int  red = c.Red();
+    const int  green = c.Green();
+    const int  blue = c.Blue();
+    const int  alpha = c.Alpha();
+
+    if ( alpha == wxALPHA_OPAQUE )
+    {
+        str.Printf( wxT( "rgb(%d, %d, %d)" ), red, green, blue );
+    }
+    else // use rgba() form
+    {
+        wxString a = wxString::FromCDouble( alpha / 255.0, 3);
+
+        // The wxC2S_CSS_SYNTAX is particularly sensitive to ','s (as it uses them for value
+        // delimiters), and wxWidgets is known to be buggy in this respect when dealing with
+        // Serbian and Russian locales (at least), so we enforce an extra level of safety.
+        a.Replace( wxT( "," ), wxT( "." ) );
+
+        str.Printf( wxT( "rgba(%d, %d, %d, %s)" ), red, green, blue, a );
+    }
+
+    aJson = nlohmann::json( str.ToStdString() );
+
 }
 
 
