@@ -117,6 +117,19 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inPlaceSymbol );
 
+    // First we need to get all instances of this sheet so we can annotate
+    // whatever symbols we place on all copies
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_LIST newInstances =
+            hierarchy.FindAllSheetsForScreen( m_frame->GetCurrentSheet().LastScreen() );
+    newInstances.SortByPageNumbers();
+
+    // Get a list of all references in the schematic to avoid duplicates wherever
+    // they're placed
+    SCH_REFERENCE_LIST existingRefs;
+    hierarchy.GetSymbols( existingRefs );
+    existingRefs.SortByReferenceOnly();
+
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
     {
         historyList = &m_symbolHistoryList;
@@ -171,22 +184,35 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
-                if( symbol->GetLibSymbolRef()->IsPower() )
+                // Then we need to annotate all instances by sheet
+                for( SCH_SHEET_PATH& instance : newInstances )
                 {
-                    NULL_REPORTER reporter;
-                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION, UNSORTED, INCREMENTAL_BY_REF,
-                                              false, 1, false, false, reporter, true );
+                    SCH_REFERENCE newReference( symbol, symbol->GetLibSymbolRef().get(), instance );
+                    SCH_REFERENCE_LIST refs;
+                    refs.AddItem( newReference );
+
+                    if( symbol->GetLibSymbolRef()->IsPower() )
+                    {
+                        refs.ReannotateByOptions( UNSORTED, INCREMENTAL_BY_REF, 1, existingRefs,
+                                                  true, nullptr );
+                    }
+                    else if( cfg->m_AnnotatePanel.automatic )
+                    {
+                        refs.ReannotateByOptions(
+                                (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
+                                (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
+                                m_frame->Schematic().Settings().m_AnnotateStartNum, existingRefs,
+                                false, &hierarchy );
+
+                        refs.UpdateAnnotation();
+
+                        // Update existing refs for next iteration
+                        for( size_t i = 0; i < refs.GetCount(); i++ )
+                            existingRefs.AddItem( refs[i] );
+                    }
                 }
-                else if( cfg->m_AnnotatePanel.automatic )
-                {
-                    NULL_REPORTER reporter;
-                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
-                                              (ANNOTATE_ORDER_T) cfg->m_AnnotatePanel.sort_order,
-                                              (ANNOTATE_ALGO_T) cfg->m_AnnotatePanel.method,
-                                              cfg->m_AnnotatePanel.recursive,
-                                              m_frame->Schematic().Settings().m_AnnotateStartNum,
-                                              false, false, reporter, true );
-                }
+
+                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
             };
 
     Activate();
@@ -350,6 +376,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                             nextSymbol->ClearAnnotation( nullptr, false );
 
                         addSymbol( nextSymbol );
+                        symbol = nextSymbol; // annotate() looks at symbol, update it
                         annotate();
                     }
                 }
