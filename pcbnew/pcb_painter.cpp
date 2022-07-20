@@ -331,7 +331,14 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
                 color = COLOR4D::CLEAR;
             else
+            {
                 color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+
+                // Bitmaps can't have their color mixed so just reduce the opacity a bit so they
+                // show through less
+                if( item->Type() == PCB_BITMAP_T )
+                    color.a *= m_hiContrastFactor;
+            }
         }
     }
 
@@ -1693,7 +1700,8 @@ void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
         m_gal->DrawBitmap( *aBitmap->GetImage(), 1.0 );
     }
     else
-        m_gal->DrawBitmap( *aBitmap->GetImage(), m_pcbSettings.m_imageOpacity );
+        m_gal->DrawBitmap( *aBitmap->GetImage(),
+                           m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a );
 
 
     m_gal->Restore();
