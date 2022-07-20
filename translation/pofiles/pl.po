@@ -152,6 +152,7 @@ msgstr "Czas przeładowania %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
 #, c-format
 msgid "Loading %s..."
 msgstr "Wczytywanie %s..."
@@ -4050,7 +4051,7 @@ msgstr "Ekran"
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:907
 msgid "Footprint"
-msgstr "Ślad stopy"
+msgstr "Footprint"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pad.cpp:910
@@ -7205,14 +7206,14 @@ msgstr ""
 "Sieć %s jest graficznie połączona z magistralą %s ale nie jest członkiem tej "
 "magistrali"
 
-#: eeschema/connection_graph.cpp:3063
+#: eeschema/connection_graph.cpp:3063 eeschema/connection_graph.cpp:3051
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Pin hierarchiczny %s nie ma odpowiednika w etykietach hierarchicznych "
 "wewnątrz arkusza"
 
-#: eeschema/connection_graph.cpp:3080
+#: eeschema/connection_graph.cpp:3080 eeschema/connection_graph.cpp:3068
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -30369,6 +30370,8 @@ msgstr "Biblioteka %s już istnieje."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Biblioteka '%s' jest tylko do odczytu."
@@ -31802,6 +31805,7 @@ msgstr "Błąd podczas odczytywania pliku."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
 msgid "Open cancelled by user."
 msgstr "Otwieranie zostało anulowane przez użytkownika."
 
@@ -32728,12 +32732,14 @@ msgstr "Token \"Element\" zawiera %d parametrów."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Niewystarczające uprawnienia by usunąć folder '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr ""
@@ -32747,6 +32753,7 @@ msgstr "Niespodziewany plik '%s' został odnaleziony w bibliotece '%s'."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Biblioteka footprintu '%s' nie może zostać usunięta."
@@ -32951,20 +32958,24 @@ msgid "unknown pad type: %d"
 msgstr "nieznany typ pola lutowniczego: %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
 #, c-format
 msgid "unknown via type %d"
 msgstr "nieznany typ przelotki %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nieznany typ zaokrągleń krawędzi strefy %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
 msgid "This file does not contain a PCB."
 msgstr "Ten plik z nie zawiera obwodu drukowanego."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -32974,25 +32985,30 @@ msgstr ""
 "Czy chcesz ją teraz utworzyć?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
 msgid "Library Not Found"
 msgstr "Biblioteka nie została znaleziona"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nazwa pliku footprintu '%s' nie jest prawidłowa."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Niewystarczające uprawnienia by usunąć '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Nie można nadpisać biblioteki w ścieżce '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr ""
