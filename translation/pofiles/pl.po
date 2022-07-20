@@ -4292,7 +4292,7 @@ msgstr "Ekran"
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:913
 msgid "Footprint"
-msgstr "Ślad stopy"
+msgstr "Footprint"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pad.cpp:916
