@@ -32139,15 +32139,14 @@ msgstr "(%s 최대 직경 %s; 실제 값 %s)"
 msgid "(expected 'Other'; actual '%s')"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2314 pcbnew/footprint.cpp:2301
-#, fuzzy
+#: pcbnew/footprint.cpp:2301
 msgid "(PTH pad has no copper layers)"
-msgstr "경고: SMD 패드에는 외부 레이어가 없습니다."
+msgstr "(PTH 패드에는 구리레이어가 없습니다)"
 
 #: pcbnew/footprint.cpp:2337 pcbnew/footprint.cpp:2324
 #, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "경고: SMD 패드에는 외부 레이어가 없습니다."
+msgstr "(PTH 패드의 구멍은 구리를 남기지 않습니다)"
 
 #: pcbnew/footprint.cpp:2669 pcbnew/pad.cpp:1747 pcbnew/zone.cpp:1322
 #: pcbnew/footprint.cpp:2656 pcbnew/zone.cpp:1351
@@ -32547,81 +32546,72 @@ msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
+#, fuzzy
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "행렬에는 NaN 요소가 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
 #, fuzzy
 msgid "Invalid R_pkg value."
-msgstr "잘못된 길이 값"
+msgstr "잘못된 R_pkg 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
 #, fuzzy
 msgid "Invalid L_pkg value."
-msgstr "잘못된 길이 값"
+msgstr "잘못된 L_pkg 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
 #, fuzzy
 msgid "Invalid C_pkg value."
-msgstr "잘못된 길이 값"
+msgstr "잘못된 C_pkg 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:173
 msgid "Checking pin "
 msgstr "핀 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
-#, fuzzy
 msgid "Pin name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "Pin 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:183
-#, fuzzy
 msgid "Signal name cannot be empty."
-msgstr "변수 이름은 비워 둘 수 없습니다."
+msgstr "신호 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:188
-#, fuzzy
 msgid "Model name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "모델 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "풋프린트 ID '%s'은(는) 유효하지 않습니다."
+msgstr "Rpin이 유효하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "풋프린트 ID '%s'은(는) 유효하지 않습니다."
+msgstr "Lpin이 유효하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "풋프린트 ID '%s'은(는) 유효하지 않습니다."
+msgstr "Cpin이 유효하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Component name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "Component 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
 msgid "Checking component "
-msgstr "부품 확인 중 "
+msgstr "Component 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
-#, fuzzy
 msgid "Component: manufacturer cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "Component: 제조업체는 비어있을 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Component: Invalid Package."
-msgstr "컴포넌트 값:"
+msgstr "Component: 잘못된 패키지입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:239
-#, fuzzy
 msgid "Component: no pin"
-msgstr "부품:"
+msgstr "Component: 핀 없음"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
