@@ -426,19 +426,27 @@ void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T             aSortOp
     case SORT_BY_Y_POSITION: SortByYCoordinate(); break;
     }
 
-    bool useSheetNum = false;
-    int  idStep = 100;
+    bool useSheetNum;
+    int  idStep;
 
     switch( aAlgoOption )
     {
     default:
-    case INCREMENTAL_BY_REF: break;
+    case INCREMENTAL_BY_REF:
+        useSheetNum = false;
+        idStep = 1;
+        break;
 
-    case SHEET_NUMBER_X_100: useSheetNum = true; break;
+    case SHEET_NUMBER_X_100:
+        useSheetNum = true;
+        idStep = 100;
+        aStartAtCurrent = false; // Not implemented for sheet # * 100
+        break;
 
     case SHEET_NUMBER_X_1000:
         useSheetNum = true;
         idStep = 1000;
+        aStartAtCurrent = false; // Not implemented for sheet # * 1000
         break;
     }
 
