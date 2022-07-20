@@ -115,47 +115,52 @@ void DIALOG_GLOBAL_DELETION::onCheckDeleteBoardOutlines( wxCommandEvent& event )
 void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
 {
     bool gen_rastnest = false;
+    bool delete_all = m_delAll->GetValue();
 
-    // Clear selection before removing any items
-    m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    bool delete_all = false;
-
-    if( m_delAll->GetValue() )
-    {
-        if( !IsOK( GetParent(), _( "Are you sure you want to delete the entire board?" ) ) )
-            return;
-
-        delete_all = true;
-    }
-    else if( !IsOK( GetParent(), _( "Are you sure you want to delete the selected items?" ) ) )
+    if( !IsOK( GetParent(), delete_all ? _( "Are you sure you want to delete the entire board?" )
+                                       : _( "Are you sure you want to delete the selected items?" ) ) )
     {
         return;
     }
 
+    // Clear selection before removing any items
+    m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
     BOARD*       board = m_Parent->GetBoard();
     BOARD_COMMIT commit( m_Parent );
-    LSET         layers_filter = LSET().set();
+    LSET         all_layers = LSET().set();
+    LSET         layers_filter;
 
-    if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
-        layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
+    if( m_rbLayersOption->GetSelection() != 0 )
+        layers_filter.set( m_currentLayer );
+    else
+        layers_filter = all_layers;
+
+    auto processItem =
+            [&]( BOARD_ITEM* item, const LSET& layers_mask )
+            {
+                if( ( item->GetLayerSet() & layers_mask ).any() )
+                    commit.Remove( item );
+            };
+
+    auto processConnectedItem =
+            [&]( BOARD_ITEM* item, const LSET& layers_mask )
+            {
+                if( ( item->GetLayerSet() & layers_mask ).any() )
+                {
+                    commit.Remove( item );
+                    gen_rastnest = true;
+                }
+            };
 
     if( delete_all || m_delZones->GetValue() )
     {
-        int area_index = 0;
-        ZONE* item = board->GetArea( area_index );
-
-        while( item )
+        for( ZONE* zone : board->Zones() )
         {
-            // The zone will be deleted if it is ar least on one selected layer.
-            if( delete_all || ( layers_filter & item->GetLayerSet() ).any() )
-            {
-                commit.Remove( item );
-                gen_rastnest = true;
-            }
-
-            area_index++;
-            item = board->GetArea( area_index );
+            if( delete_all )
+                processConnectedItem( zone, all_layers );
+            else
+                processConnectedItem( zone, layers_filter );
         }
     }
 
@@ -164,46 +169,41 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
 
     if( delete_all || delete_shapes || delete_texts )
     {
-        // Layer mask for texts
-        LSET del_text_layers = layers_filter;
-
         // Layer mask for drawings
-        LSET masque_layer;
+        LSET drawing_layers_filter;
 
         if( m_delDrawings->GetValue() )
-            masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
+            drawing_layers_filter = LSET::AllNonCuMask().set( Edge_Cuts, false );
 
         if( m_delBoardEdges->GetValue() )
-            masque_layer.set( Edge_Cuts );
+            drawing_layers_filter.set( Edge_Cuts );
 
-        masque_layer &= layers_filter;
+        drawing_layers_filter &= layers_filter;
 
         for( BOARD_ITEM* item : board->Drawings() )
         {
-            KICAD_T type = item->Type();
-            int     layer = item->GetLayer();
-
-            if( !delete_all )
+            if( delete_all )
             {
-                if( type == PCB_SHAPE_T )
+                processItem( item, all_layers );
+            }
+            else if( delete_shapes )
+            {
+                if( item->Type() == PCB_SHAPE_T && item->IsLocked() )
                 {
-                    if( !delete_shapes || !masque_layer[layer] )
-                        continue;
-
-                    if( item->IsLocked() && !m_drawingFilterLocked->GetValue() )
-                        continue;
-
-                    if( !item->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
-                        continue;
+                    if( m_drawingFilterLocked->GetValue() )
+                        processItem( item, drawing_layers_filter );
                 }
-                else if( type == PCB_TEXT_T || type == PCB_TEXTBOX_T )
+                else if( item->Type() == PCB_SHAPE_T && !item->IsLocked() )
                 {
-                    if( !delete_texts || !del_text_layers[layer] )
-                        continue;
+                    if( m_drawingFilterUnlocked->GetValue() )
+                        processItem( item, drawing_layers_filter );
                 }
             }
-
-            commit.Remove( item );
+            else if( delete_texts )
+            {
+                if( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
+                    processItem( item, layers_filter );
+            }
         }
     }
 
@@ -211,20 +211,20 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
     {
         for( FOOTPRINT* footprint : board->Footprints() )
         {
-            if( !delete_all )
+            if( delete_all )
             {
-                if( footprint->IsLocked() && !m_footprintFilterLocked->GetValue() )
-                    continue;
-
-                if( !footprint->IsLocked() && !m_footprintFilterUnlocked->GetValue() )
-                    continue;
-
-                if( !layers_filter[footprint->GetLayer()] )
-                    continue;
+                processConnectedItem( footprint, all_layers );
             }
-
-            commit.Remove( footprint );
-            gen_rastnest = true;
+            else if( footprint->IsLocked() )
+            {
+                if( m_footprintFilterLocked->GetValue() )
+                    processConnectedItem( footprint, layers_filter );
+            }
+            else
+            {
+                if( m_footprintFilterUnlocked->GetValue() )
+                    processConnectedItem( footprint, layers_filter );
+            }
         }
     }
 
@@ -232,26 +232,25 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
     {
         for( PCB_TRACK* track : board->Tracks() )
         {
-            if( !delete_all )
+            if( delete_all )
             {
-                if( track->Type() == PCB_TRACE_T )
-                {
-                    if( track->IsLocked() && !m_trackFilterLocked->GetValue() )
-                        continue;
-
-                    if( !track->IsLocked() && !m_trackFilterUnlocked->GetValue() )
-                        continue;
-                }
-
-                if( ( track->Type() == PCB_VIA_T ) && !m_trackFilterVias->GetValue() )
-                    continue;
-
-                if( ( track->GetLayerSet() & layers_filter ) == 0 )
-                    continue;
+                processConnectedItem( track, all_layers );
             }
-
-            commit.Remove( track );
-            gen_rastnest = true;
+            else if( track->Type() == PCB_VIA_T )
+            {
+                if( m_trackFilterVias->GetValue() )
+                    processConnectedItem( track, layers_filter );
+            }
+            else if( track->IsLocked() )
+            {
+                if( m_trackFilterLocked->GetValue() )
+                    processConnectedItem( track, layers_filter );
+            }
+            else
+            {
+                if( m_trackFilterUnlocked->GetValue() )
+                    processConnectedItem( track, layers_filter );
+            }
         }
     }
 
