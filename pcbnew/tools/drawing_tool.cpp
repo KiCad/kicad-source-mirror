@@ -1300,6 +1300,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             if( ++step >= FINISHED )
             {
+                dimension = nullptr;
                 step = SET_ORIGIN;
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
