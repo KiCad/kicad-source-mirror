@@ -60,8 +60,6 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
     if( aOther->GetIndexableSubshapeCount() == 0 )
         b_shapes.push_back( aOther );
 
-    // Clearance gets the distance to the centerline.  We add in the additional size
-    // after to get the true clearance
     for( const SHAPE* a : a_shapes )
     {
         for( const SHAPE* b : b_shapes )
