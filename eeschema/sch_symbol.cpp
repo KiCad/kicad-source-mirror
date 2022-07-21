@@ -488,12 +488,14 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
 {
     KIID_PATH path = sheet->Path();
     wxString  ref;
+    wxString  subRef;
 
     for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
             ref = instance.m_Reference;
+            subRef = LIB_SYMBOL::SubReference( instance.m_Unit );
             break;
         }
     }
@@ -512,7 +514,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
         ref = UTIL::GetRefDesUnannotated( m_prefix );
 
     if( aIncludeUnit && GetUnitCount() > 1 )
-        ref += LIB_SYMBOL::SubReference( GetUnit() );
+        ref += subRef;
 
     return ref;
 }
