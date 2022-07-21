@@ -438,6 +438,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             chain_commands = true;
             break;
         }
+        else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, true );
+        }
+        else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, true );
+        }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
