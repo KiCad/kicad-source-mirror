@@ -28785,8 +28785,9 @@ msgid "Highlight footprints corresponding to selected symbols"
 msgstr "선택한 심볼에 풋프린트 할당"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
+#, fuzzy
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr ""
+msgstr "교차 조사된(cross-probed) 풋프린트가 현재 뷰에 표시되도록 합니다."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -32135,9 +32136,9 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(%s 최대 직경 %s; 실제 값 %s)"
 
 #: pcbnew/footprint.cpp:2287 pcbnew/footprint.cpp:2274
-#, c-format
+#, fuzzy, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(예측 'Other', 실제 '%s')"
 
 #: pcbnew/footprint.cpp:2301
 msgid "(PTH pad has no copper layers)"
@@ -32538,11 +32539,11 @@ msgstr "doc url"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "매트릭스의 차원은 >= 1이어야 합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "밴딩 매트릭스의 대역폭은 >= 1이어야합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
@@ -32615,15 +32616,17 @@ msgstr "Component: 핀 없음"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "이 IV 테이블을 기반으로는 전류를 보간(Interpolate)할 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
+#, fuzzy
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "IV 테이블에 Nan 전압이 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:361
+#, fuzzy
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "IV 테이블에 무효 전류가 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:404
 #, fuzzy
@@ -32685,8 +32688,9 @@ msgid "Invalid V_meas value."
 msgstr "잘못된 지연 값"
 
 #: pcbnew/ibis/ibis_parser.cpp:474
+#, fuzzy
 msgid "C_comp is invalid."
-msgstr ""
+msgstr "C_comp는 유효하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
 #, fuzzy
@@ -32730,7 +32734,7 @@ msgstr "패드 확인 중..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
-msgstr ""
+msgstr "누락 [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
@@ -32838,7 +32842,7 @@ msgstr "불러온 파일에 있는 항목을 제대로 처리할 수 없습니�
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "최대 패턴길이를 초과합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:933
 #, fuzzy
@@ -32862,15 +32866,15 @@ msgstr "'%s' 데이터 파일을 읽을 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "사용할 수 없는 코멘트 문자 입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "잘못된 구문입니다. |_char 또는 &_char 등의 형식이어야합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
 msgid "No extra argument was expected"
-msgstr ""
+msgstr "추가 인수가 예상되지 않았습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
 #, fuzzy
@@ -32888,7 +32892,7 @@ msgstr "잘못된 핀 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr ""
+msgstr "해당 종류의 매트릭스에 대한 대역폭을 지정할 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
 #, fuzzy
@@ -32897,7 +32901,7 @@ msgstr "잘못된 행 정의"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "이 매트릭스의 행에 대한 데이터가 너무 많습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
 #, fuzzy
@@ -32906,11 +32910,11 @@ msgstr "모듈에 패드가 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "매트릭스 요소를 읽을 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "매트릭스 인덱스를 읽을 수 없습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
 #, fuzzy
@@ -32925,18 +32929,21 @@ msgstr "최대값이 누락되었습니다."
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
+" 매트릭스가 이미 초기화되었습니다. 그러나 m_continue가 설정되지 않았습니다(내"
+"부 오류)."
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "정의되지 않은 매트릭스에서 행을 읽으려고 했습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "매트릭스 포인터가 null입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
+#, fuzzy
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max 값에는 최소한 Typ가 필요합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
 #, fuzzy
@@ -32944,8 +32951,9 @@ msgid "Unknown Model_type "
 msgstr "알 수 없는 메서드"
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
+#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr ""
+msgstr "model_type을 읽는 동안 내부 오류가 발생했습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
 #, fuzzy
@@ -32953,8 +32961,9 @@ msgid "Unknown Enable: "
 msgstr "알 수 없는 PCad 레이어 %u"
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
+#, fuzzy
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Enable 읽기 동안 내부 오류"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
 #, fuzzy
@@ -32963,19 +32972,20 @@ msgstr "근원을 알 수 없음"
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "시작되지 않은 모델 읽기를 계속 했습니다. (내부 오류)"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "1개의 [Package] 행에는 정확히 4개의 요소가 필요합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
+#, fuzzy
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "핀에 대한 R, L 또는 C 값을 읽을 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
 #, fuzzy
@@ -32988,8 +32998,9 @@ msgid "Missing argument in [Pin]"
 msgstr "상위 항목 존재하지 않음"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
+#, fuzzy
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "핀 매핑에 대한 열 수가 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
 #, fuzzy
@@ -33008,11 +33019,12 @@ msgstr "알 수 없는 비아 유형 %d"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
+#, fuzzy
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "내부 오류: 잘못된 파서 컨텍스트입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
 #, fuzzy
@@ -33045,26 +33057,30 @@ msgid "Error while creating temporary file"
 msgstr "문서 라이브러리 파일 만들기 실패"
 
 #: pcbnew/ibis/kibis.cpp:705
+#, fuzzy
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
 msgstr ""
+"Kibis는 아직 DUT 값을 지원하지 않습니다. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "상승 에지(edge)가 ON time보다 더 깁니다."
 
 #: pcbnew/ibis/kibis.cpp:731
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "하강 에지(Edge)가  OFF time보다 더 깁니다."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "모델에는 하나의 파형쌍(waveform pair)만 있어 정확도가 감소합니다."
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
+#, fuzzy
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "드라이버는 최소한 풀업 또는 풀다운이 필요합니다."
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
@@ -33077,12 +33093,13 @@ msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
 
 #: pcbnew/ibis/kibis.cpp:1122
+#, fuzzy
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "모델에는 처음 두 개를 사용하는 2개 이상의 파형 쌍이 있습니다."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "드라이버에 대한 잘못된 모델 유형입니다."
 
 #: pcbnew/ibis/kibis.cpp:1209
 #, fuzzy
@@ -36884,11 +36901,10 @@ msgstr "차동 비결합 길이 너무 긺"
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "정의된 'mechanical_clearance' 제약 조건이 없습니다."
 
-#: pcbnew/tools/board_inspection_tool.cpp:804
 #: pcbnew/tools/board_inspection_tool.cpp:820
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr ""
+msgstr "참고 : %s는 텐트입니다. 클리어런스는 구멍(holes)에만 적용됩니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:821
 #: pcbnew/tools/board_inspection_tool.cpp:837
@@ -39217,10 +39233,9 @@ msgstr "풋프린트와 텍스트 원점을 십자로 표시"
 msgid "Shadow on Locked Items"
 msgstr "잠긴 항목 건너뛰기"
 
-#: pcbnew/widgets/appearance_controls.cpp:356
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "잠긴 항목에 그림자 마커 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 #: pcbnew/widgets/appearance_controls.cpp:356
@@ -39230,8 +39245,9 @@ msgstr "잠긴 항목 건너뛰기"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 #: pcbnew/widgets/appearance_controls.cpp:357
+#, fuzzy
 msgid "Show a shadow on overlapping courtyards while moving footprints"
-msgstr ""
+msgstr "풋프린트를 움직이는 동안 겹치는 영역에서  그림자로  표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 #: pcbnew/widgets/appearance_controls.cpp:358
