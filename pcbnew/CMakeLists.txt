@@ -509,7 +509,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
         ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
     COMMAND ${PYTHON_EXECUTABLE}
-        ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py
+        ${CMAKE_SOURCE_DIR}/tools/build/fix_swig_imports.py
         ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -538,7 +538,7 @@ if( DOXYGEN_FOUND )
     add_custom_target( xml-to-docstrings
         COMMAND ${CMAKE_COMMAND} -E remove_directory docstrings
         COMMAND ${CMAKE_COMMAND} -E make_directory docstrings
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/build/extract_docstrings.py pcbnew.py doxygen-xml/xml docstrings
         COMMAND ${CMAKE_COMMAND} -E remove pcbnew.py # force removal so it will be recreated later with the new docstrings
         COMMENT "building docstring files"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

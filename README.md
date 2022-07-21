@@ -39,7 +39,7 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [common](common)            - Sourcecode of the common library
 * [cvpcb](cvpcb)             - Sourcecode of the CvPCB tool
 * [demos](demos)             - Some demo examples
-* [Documentation](Documentation)     - Developer documentation (deprecated; moved to [https://dev-docs.kicad.org](https://dev-docs.kicad.org))
+* [doxygen](doxygen)     - Configuration for generating pretty doxygen manual of the codebase
 * [eeschema](eeschema)          - Sourcecode of the schematic editor
 * [gerbview](gerbview)          - Sourcecode of the gerber viewer
 * [helpers](helpers)           - Helper tools and utilities for development
@@ -52,10 +52,9 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [plugins](plugins)           - Sourcecode for the 3D viewer plugins
 * [qa](qa)                - Unit testing framework for KiCad
 * [resources](resources)         - Packaging resources for various operating systems
-* [scripting](scripting)         - SWIG Python scripting definitions and build scripts
-* [scripts](scripts)           - Example scripts for distribution with KiCad
+* [scripting](scripting)         - Python integration for KiCad
 * [template](template)          - Project template
 * [thirdparty](thirdparty)           - Sourcecode of external libraries used in KiCad but not written by the KiCad team
-* [tools](tools)             - Other miscellaneous helpers for testing
+* [tools](tools)             - Other miscellaneous helpers for testing and building
 * [translation](translation) - Translation data files (managed through [Weblate](https://hosted.weblate.org/projects/kicad/master-source/) for most languages)
 * [utils](utils)             - Small utils for KiCad, e.g. IDF, STEP, and OGL tools and converters

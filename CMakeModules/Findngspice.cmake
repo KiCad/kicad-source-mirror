@@ -138,7 +138,7 @@ if( ${NGSPICE_INCLUDE_DIR} STREQUAL "NGSPICE_INCLUDE_DIR-NOTFOUND" OR ${NGSPICE_
     message( "Most of ngspice packages do not provide the required libngspice library." )
     message( "You can either compile ngspice configured with --with-ngshared parameter" )
     message( "or run a script that does the job for you:" )
-    message( "  cd ./scripting/build_tools" )
+    message( "  cd ./tools/build" )
     message( "  chmod +x get_libngspice_so.sh" )
     message( "  ./get_libngspice_so.sh" )
     message( "  sudo ./get_libngspice_so.sh install" )
