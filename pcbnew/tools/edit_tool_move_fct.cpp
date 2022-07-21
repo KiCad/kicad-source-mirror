@@ -375,7 +375,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
         if( boardItem )
         {
-            orig_items.push_back( boardItem );
+            if( !is_hover )
+                orig_items.push_back( boardItem );
+
             sel_items.push_back( boardItem );
         }
 
@@ -736,12 +738,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 
-    // Unselect all items to update flags
+    // Unselect all items to clear selection flags and then re-select the originally selected
+    // items.
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    // Reselect items if they were already selected and we completed the move
-    if( !is_hover && !restore_state )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     editFrame->PopTool( tool );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
