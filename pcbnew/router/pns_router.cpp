@@ -284,18 +284,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
         }
     }
 
-    VECTOR2I startPoint = aStartItem ? aStartItem->Anchor( 0 ) : aWhere;
-
-    if( aStartItem && aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
-    {
-        VECTOR2I otherEnd = aStartItem->Anchor( 1 );
-
-        if( ( otherEnd - aWhere ).SquaredEuclideanNorm()
-                < ( startPoint - aWhere ).SquaredEuclideanNorm() )
-        {
-            startPoint = otherEnd;
-        }
-    }
+    VECTOR2I startPoint = aWhere;
 
     if( m_mode == PNS_MODE_ROUTE_SINGLE )
     {

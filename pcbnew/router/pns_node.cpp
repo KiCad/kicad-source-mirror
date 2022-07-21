@@ -489,7 +489,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
         if( line->EndsWithVia() )
         {
             n += QueryColliding( &line->Via(), obs, aKindMask, 1 );
-
+            
             if( n )
                 return OPT_OBSTACLE( obs[0] );
         }
