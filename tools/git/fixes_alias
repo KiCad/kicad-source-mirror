@@ -3,7 +3,7 @@
 	# Once the script is enabled, commit your changes and run 'git fixes 123456' to mark the last commit as a fix for issue #123456
 
 	# Enable by executing in the source root directory:
-	# git config --add include.path $(pwd)/helpers/git/fixes_alias
+	# git config --add include.path $(pwd)/tools/git/fixes_alias
 
 	fixes = "!f() { \
 		COMMIT_MSG=$(git log -n1 --format=%B); \

@@ -42,7 +42,6 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [doxygen](doxygen)     - Configuration for generating pretty doxygen manual of the codebase
 * [eeschema](eeschema)          - Sourcecode of the schematic editor
 * [gerbview](gerbview)          - Sourcecode of the gerber viewer
-* [helpers](helpers)           - Helper tools and utilities for development
 * [include](include)           - Interfaces to the common library
 * [kicad](kicad)             - Sourcecode of the project manager
 * [libs](libs)           - Sourcecode of KiCad utilities (geometry and others)
@@ -55,6 +54,6 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [scripting](scripting)         - Python integration for KiCad
 * [template](template)          - Project template
 * [thirdparty](thirdparty)           - Sourcecode of external libraries used in KiCad but not written by the KiCad team
-* [tools](tools)             - Other miscellaneous helpers for testing and building
+* [tools](tools)             - Helpers for developing, testing and building
 * [translation](translation) - Translation data files (managed through [Weblate](https://hosted.weblate.org/projects/kicad/master-source/) for most languages)
 * [utils](utils)             - Small utils for KiCad, e.g. IDF, STEP, and OGL tools and converters
