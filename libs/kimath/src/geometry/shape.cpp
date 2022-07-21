@@ -24,6 +24,12 @@
 
 
 #include <geometry/shape.h>
+#include <geometry/shape_arc.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_rect.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_compound.h>
 
 bool SHAPE::Parse( std::stringstream& aStream )
 {
@@ -36,4 +42,37 @@ const std::string SHAPE::Format() const
 {
     assert( false );
     return std::string( "" );
+}
+
+
+int SHAPE::GetClearance( const SHAPE* aOther ) const
+{
+    int actual_clearance = std::numeric_limits<int>::max();
+    std::vector<const SHAPE*> a_shapes;
+    std::vector<const SHAPE*> b_shapes;
+
+    GetIndexableSubshapes( a_shapes );
+    aOther->GetIndexableSubshapes( b_shapes );
+
+    if( GetIndexableSubshapeCount() == 0 )
+        a_shapes.push_back( this );
+
+    if( aOther->GetIndexableSubshapeCount() == 0 )
+        b_shapes.push_back( aOther );
+
+    // Clearance gets the distance to the centerline.  We add in the additional size
+    // after to get the true clearance
+    for( const SHAPE* a : a_shapes )
+    {
+        for( const SHAPE* b : b_shapes )
+        {
+            int temp_dist = 0;
+            a->Collide( b, std::numeric_limits<int>::max() / 2, &temp_dist );
+
+            if( temp_dist < actual_clearance )
+                actual_clearance = temp_dist;
+        }
+    }
+
+    return actual_clearance;
 }

@@ -82,10 +82,10 @@ public:
         // Don't make clients deal with nested SHAPE_COMPOUNDs
         if( aShape->HasIndexableSubshapes() )
         {
-            std::vector<SHAPE*> subshapes;
+            std::vector<const SHAPE*> subshapes;
             aShape->GetIndexableSubshapes( subshapes );
 
-            for( SHAPE* subshape : subshapes )
+            for( const SHAPE* subshape : subshapes )
                 m_shapes.push_back( subshape->Clone() );
 
             delete aShape;
@@ -127,9 +127,11 @@ public:
         return m_shapes.size();
     }
 
-    virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override
+    virtual void GetIndexableSubshapes( std::vector<const SHAPE*>& aSubshapes ) const override
     {
-        aSubshapes = m_shapes;
+        aSubshapes.clear();
+        aSubshapes.reserve( m_shapes.size() );
+        std::copy( m_shapes.begin(), m_shapes.end(), std::back_inserter( aSubshapes ) );
     }
 
     bool ConvertToSimplePolygon( SHAPE_SIMPLE* aOut ) const;

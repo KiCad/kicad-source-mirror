@@ -937,7 +937,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
     {
-        std::vector<SHAPE*> subshapes;
+        std::vector<const SHAPE*> subshapes;
         shape->GetIndexableSubshapes( subshapes );
 
         solid->SetShape( subshapes[0]->Clone() );

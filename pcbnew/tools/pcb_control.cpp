@@ -1276,8 +1276,20 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b,
                                                    overlap.CuStack().front() );
 
+                std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( overlap.CuStack().front() ) );
+                std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( overlap.CuStack().front() ) );
+
+                int actual_clearance = a_shape->GetClearance( b_shape.get() );
+
                 msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved clearance" ),
                                                        clearanceString( constraint ) ) );
+
+                if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
+                {
+                    msgItems.emplace_back(
+                            MSG_PANEL_ITEM( _( "Actual clearance" ),
+                                    StringFromValue( units, actual_clearance, true ) ) );
+                }
             }
         }
 

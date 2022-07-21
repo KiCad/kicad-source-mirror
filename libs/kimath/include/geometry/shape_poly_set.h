@@ -517,7 +517,7 @@ public:
 
     virtual size_t GetIndexableSubshapeCount() const override;
 
-    virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override;
+    virtual void GetIndexableSubshapes( std::vector<const SHAPE*>& aSubshapes ) const override;
 
     /**
      * Convert a global vertex index ---i.e., a number that globally identifies a vertex in a

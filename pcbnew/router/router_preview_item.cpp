@@ -450,10 +450,10 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( m_shape->HasIndexableSubshapes() )
         {
-            std::vector<SHAPE*> subshapes;
+            std::vector<const SHAPE*> subshapes;
             m_shape->GetIndexableSubshapes( subshapes );
 
-            for( SHAPE* shape : subshapes )
+            for( const SHAPE* shape : subshapes )
                 drawShape( shape, gal );
         }
         else

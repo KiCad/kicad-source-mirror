@@ -51,7 +51,7 @@ public:
 
     struct ITEM_WITH_SHAPE
     {
-        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, SHAPE* aShape,
+        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, const SHAPE* aShape,
                          std::shared_ptr<SHAPE> aParentShape = nullptr ) :
             parent ( aParent ),
             shape ( aShape ),
@@ -59,7 +59,7 @@ public:
         {};
 
         BOARD_ITEM* parent;
-        SHAPE* shape;
+        const SHAPE* shape;
         std::shared_ptr<SHAPE> parentShape;
     };
 
@@ -108,7 +108,7 @@ public:
         if( aItem->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( aItem )->IsVisible() )
             return;
 
-        std::vector<SHAPE*> subshapes;
+        std::vector<const SHAPE*> subshapes;
         std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );
         subshapes.clear();
 
@@ -128,9 +128,9 @@ public:
             }
         }
 
-        for( SHAPE* subshape : subshapes )
+        for( const SHAPE* subshape : subshapes )
         {
-            if( dynamic_cast<SHAPE_NULL*>( subshape ) )
+            if( dynamic_cast<const SHAPE_NULL*>( subshape ) )
                 continue;
 
             BOX2I bbox = subshape->BBox();
@@ -336,9 +336,9 @@ public:
         auto polyVisitor =
                 [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
-                    SHAPE* shape = aItem->shape;
-                    wxASSERT( dynamic_cast<SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape ) );
-                    auto tri = static_cast<SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape );
+                    const SHAPE* shape = aItem->shape;
+                    wxASSERT( dynamic_cast<const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape ) );
+                    auto tri = static_cast<const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI*>( shape );
 
                     const SHAPE_LINE_CHAIN& outline = poly->Outline( 0 );
 
