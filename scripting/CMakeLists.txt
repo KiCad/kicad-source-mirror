@@ -22,7 +22,7 @@ target_include_directories( scripting PUBLIC
 
 target_include_directories( scripting PRIVATE
     $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
-    ${PROJECT_SOURCE_DIR}/bitmaps_png/include
+    ${PROJECT_SOURCE_DIR}/resources/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
     ${Boost_INCLUDE_DIR}
@@ -41,7 +41,7 @@ set_source_files_properties( kicad_scripting_main.cpp PROPERTIES
     )
 
 target_include_directories( scripting_kiface PRIVATE
-    ${PROJECT_SOURCE_DIR}/bitmaps_png/include
+    ${PROJECT_SOURCE_DIR}/resources/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include
     ${wxWidgets_LIBRARIES}
     ${Boost_INCLUDE_DIR}

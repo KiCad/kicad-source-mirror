@@ -1,4 +1,4 @@
-icon_bitmap2component ICON "../bitmaps_png/icons/icon_bitmap2component.ico"
+icon_bitmap2component ICON "../resources/bitmaps_png/icons/icon_bitmap2component.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad Image Converter " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "bitmap2component"

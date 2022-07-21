@@ -1,4 +1,4 @@
-icon_pcbcalculator ICON "../bitmaps_png/icons/icon_pcbcalculator.ico"
+icon_pcbcalculator ICON "../resources/bitmaps_png/icons/icon_pcbcalculator.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad PCB Calculator " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "pcb_calculator"

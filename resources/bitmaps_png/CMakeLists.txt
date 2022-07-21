@@ -46,13 +46,13 @@
 # lower case is used for local variables, uppercase for global variables
 
 option( MAINTAIN_PNGS
-        "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
+        "Set to true if you are a PNG maintainer and have the required tools given in the resources/bitmaps_png/CMakeLists.txt file (default OFF)."
         OFF)
 
 # Used Only to maintain PNG files (and therefore to recreate .cpp files)
 # The png2cpp creates files with native End of Line format.
 
-# List of themes - each corresponds to a folder of SVGS in ./bitmaps_png/sources/
+# List of themes - each corresponds to a folder of SVGS in ./resources/bitmaps_png/sources/
 set( THEMES
     light
     dark )

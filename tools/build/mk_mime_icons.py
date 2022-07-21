@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from shutil import copyfile, rmtree
 from subprocess import call
 
-ICON_SOURCES = "../../bitmaps_png/sources/"
+ICON_SOURCES = "../../resources/bitmaps_png/sources/"
 DEST_FOLDER = "../../resources/linux/mime"
 
 def icon_sourcename(icon):
@@ -20,7 +20,7 @@ def icon_sourcename(icon):
 
 # Get a list of the applications we will install, their icons and mimes
 app_icons = {}
-for desktopfile in glob.glob(DEST_FOLDER+"/applications/*.desktop"): 
+for desktopfile in glob.glob(DEST_FOLDER+"/applications/*.desktop"):
     icon = None
     mimes = []
     for line in open(desktopfile):
@@ -62,7 +62,7 @@ os.makedirs(DEST_FOLDER+'/icons/hicolor/scalable/mimetypes')
 for r in RESOLUTIONS:
         os.makedirs(DEST_FOLDER+'/icons/hicolor/%ix%i/apps' % (r,r))
         os.makedirs(DEST_FOLDER+'/icons/hicolor/%ix%i/mimetypes' % (r,r))
-        
+
 for icon in app_icons.keys():
     copyfile(icon_sourcename(icon),
              DEST_FOLDER+"/icons/hicolor/scalable/apps/%s.svg" % icon)
@@ -71,7 +71,7 @@ for icon in app_icons.keys():
               '-e', DEST_FOLDER+'/icons/hicolor/%ix%i/apps/%s.png' % (r, r, icon),
               '-w', str(r), '-h', str(r), '--export-area-snap'])
 
-        
+
 for mime, icon in mime_icons.iteritems():
     copyfile(icon_sourcename(icon),
              DEST_FOLDER+"/icons/hicolor/scalable/mimetypes/%s.svg" % mime)

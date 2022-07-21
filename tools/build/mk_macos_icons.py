@@ -9,7 +9,7 @@ import os
 from shutil import copy, rmtree
 from subprocess import call
 
-ICON_SOURCES = "../../bitmaps_png/sources/"
+ICON_SOURCES = "../../resources/bitmaps_png/sources/"
 
 ICONS = [
     ("bitmap2component", ("bitmap2component",), "../../bitmap2component"),

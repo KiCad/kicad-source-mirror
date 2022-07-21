@@ -13,7 +13,7 @@ include_directories(
     ./dialogs
     ./widgets
     ./dialog_about
-    ${CMAKE_SOURCE_DIR}/bitmaps_png
+    ${CMAKE_SOURCE_DIR}/resources/bitmaps_png
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${INC_AFTER}
