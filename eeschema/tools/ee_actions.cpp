@@ -510,6 +510,11 @@ TOOL_ACTION EE_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
         _( "Change to Text" ), _( "Change existing item to a text comment" ),
         BITMAPS::text, AF_NONE, (void*) SCH_TEXT_T );
 
+TOOL_ACTION EE_ACTIONS::toTextBox( "eeschema.InteractiveEdit.toTextBox",
+        AS_GLOBAL, 0, "",
+        _( "Change to Text Box" ), _( "Change existing item to a text box" ),
+        BITMAPS::add_textbox, AF_NONE, (void*) SCH_TEXTBOX_T );
+
 TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
         AS_GLOBAL, 0, "",
         _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ) );

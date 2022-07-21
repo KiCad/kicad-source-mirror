@@ -572,8 +572,6 @@ int SCH_LABEL_BASE::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) con
         ratio = DEFAULT_LABEL_SIZE_RATIO; // For previews (such as in Preferences), etc.
 
     return KiROUND( ratio * GetTextSize().y );
-
-    return 0;
 }
 
 

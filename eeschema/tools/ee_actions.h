@@ -138,6 +138,7 @@ public:
     static TOOL_ACTION toHLabel;
     static TOOL_ACTION toGLabel;
     static TOOL_ACTION toText;
+    static TOOL_ACTION toTextBox;
     static TOOL_ACTION breakWire;
     static TOOL_ACTION breakBus;
     static TOOL_ACTION pointEditorAddCorner;

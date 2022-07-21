@@ -325,34 +325,39 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
-    static KICAD_T allLabelTypes[] = { SCH_LABEL_T,
-                                       SCH_DIRECTIVE_LABEL_T,
-                                       SCH_GLOBAL_LABEL_T,
-                                       SCH_HIER_LABEL_T,
-                                       SCH_TEXT_T,
-                                       EOT };
+    static KICAD_T allTextTypes[] = { SCH_LABEL_T,
+                                      SCH_DIRECTIVE_LABEL_T,
+                                      SCH_GLOBAL_LABEL_T,
+                                      SCH_HIER_LABEL_T,
+                                      SCH_TEXT_T,
+                                      SCH_TEXTBOX_T,
+                                      EOT };
 
-    auto toChangeCondition = ( E_C::OnlyTypes( allLabelTypes ) );
+    auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toLabelTypes[] = { SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toLabelTypes[] = { SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
     auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
+                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toCLabelTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toCLabelTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
     auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toCLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
+                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toHLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toHLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
     auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
+                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toGLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toGLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
     auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLabelTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
+                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+    static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXTBOX_T, EOT };
     auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
-                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
+                                || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
+
+    static KICAD_T toTextBoxTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextBoxTypes ) )
+                                   || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
     static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
@@ -439,6 +444,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toTextBox,        anyTextTool && E_C::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
@@ -483,6 +489,7 @@ bool SCH_EDIT_TOOL::Init()
     convertToSubMenu->AddItem( EE_ACTIONS::toHLabel,   toHLabelCondition, 200 );
     convertToSubMenu->AddItem( EE_ACTIONS::toGLabel,   toGLabelCondition, 200 );
     convertToSubMenu->AddItem( EE_ACTIONS::toText,     toTextCondition, 200 );
+    convertToSubMenu->AddItem( EE_ACTIONS::toTextBox,  toTextBoxCondition, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
@@ -1766,54 +1773,226 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     KICAD_T       allTextTypes[] = { SCH_LABEL_T,
                                      SCH_GLOBAL_LABEL_T,
                                      SCH_HIER_LABEL_T,
-                                     SCH_TEXT_T,
                                      SCH_DIRECTIVE_LABEL_T,
+                                     SCH_TEXT_T,
+                                     SCH_TEXTBOX_T,
                                      EOT };
     EE_SELECTION  selection = m_selectionTool->RequestSelection( allTextTypes );
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
-        SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selection.GetItem( i ) );
+        SCH_ITEM*    item = dynamic_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-        if( text && text->Type() != convertTo )
+        if( item && item->Type() != convertTo )
         {
-            bool            selected    = text->IsSelected();
-            SCH_TEXT*       newtext     = nullptr;
-            const VECTOR2I& position    = text->GetPosition();
-            TEXT_SPIN_STYLE orientation = text->GetTextSpinStyle();
-            wxString        txt         = UnescapeString( text->GetText() );
+            bool             selected    = item->IsSelected();
+            SCH_ITEM*        newtext     = nullptr;
+            VECTOR2I         position    = item->GetPosition();
+            wxString         txt;
+            TEXT_SPIN_STYLE  orientation = TEXT_SPIN_STYLE::SPIN::RIGHT;
+            LABEL_FLAG_SHAPE shape       = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
-            if( text->Type() == SCH_DIRECTIVE_LABEL_T )
+            switch( item->Type() )
             {
-                // a SCH_DIRECTIVE_LABEL has no text, but it has at least one field
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
+            {
+                SCH_TEXT* label = static_cast<SCH_LABEL_BASE*>( item );
+
+                txt = UnescapeString( label->GetText() );
+                orientation = label->GetTextSpinStyle();
+                shape = label->GetShape();
+                break;
+            }
+
+            case SCH_DIRECTIVE_LABEL_T:
+            {
+                SCH_DIRECTIVE_LABEL* dirlabel = static_cast<SCH_DIRECTIVE_LABEL*>( item );
+
+                // a SCH_DIRECTIVE_LABEL has no text, but it usually has at least one field
                 // containing the net class name
-                SCH_DIRECTIVE_LABEL* dirlabel =
-                            dynamic_cast<SCH_DIRECTIVE_LABEL*>( selection.GetItem( i ) );
-                txt = UnescapeString( dirlabel->GetFields()[0].GetText() );
+                if( dirlabel->GetFields().empty() )
+                    txt = _( "<empty>" );
+                else
+                    txt = dirlabel->GetFields()[0].GetText();
+
+                orientation = dirlabel->GetTextSpinStyle();
+                break;
             }
 
-            // There can be characters in a SCH_TEXT object that can break labels so we have to
-            // fix them here.
-            if( text->Type() == SCH_TEXT_T )
+            case SCH_TEXT_T:
             {
-                txt.Replace( "\n", "_" );
-                txt.Replace( "\r", "_" );
-                txt.Replace( "\t", "_" );
-                txt.Replace( " ", "_" );
+                SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
+
+                txt = text->GetText();
+                orientation = text->GetTextSpinStyle();
+                break;
             }
 
-            // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
-            if( convertTo != SCH_TEXT_T )
-                txt = EscapeString( txt, CTX_NETNAME );
+            case SCH_TEXTBOX_T:
+            {
+                SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( item );
+                BOX2I        bbox = textbox->GetBoundingBox();
+
+                bbox.Inflate( -textbox->GetTextMargin() );
+
+                if( convertTo == SCH_LABEL_T
+                        || convertTo == SCH_HIER_LABEL_T
+                        || convertTo == SCH_GLOBAL_LABEL_T )
+                {
+                    int textSize = dynamic_cast<EDA_TEXT*>( item )->GetTextSize().y;
+                    bbox.Inflate( item->Schematic()->Settings().m_LabelSizeRatio * textSize );
+                }
+
+                txt = textbox->GetText();
+
+                if( textbox->GetTextAngle().IsVertical() )
+                {
+                    if( textbox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                    {
+                        orientation = TEXT_SPIN_STYLE::SPIN::BOTTOM;
+                        position = VECTOR2I( bbox.Centre().x, bbox.GetOrigin().y );
+                    }
+                    else
+                    {
+                        orientation = TEXT_SPIN_STYLE::SPIN::UP;
+                        position = VECTOR2I( bbox.Centre().x, bbox.GetEnd().y );
+                    }
+                }
+                else
+                {
+                    if( textbox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                    {
+                        orientation = TEXT_SPIN_STYLE::SPIN::LEFT;
+                        position = VECTOR2I( bbox.GetEnd().x, bbox.Centre().y );
+                    }
+                    else
+                    {
+                        orientation = TEXT_SPIN_STYLE::SPIN::RIGHT;
+                        position = VECTOR2I( bbox.GetOrigin().x, bbox.Centre().y );
+                    }
+                }
+
+                position = m_frame->GetNearestGridPosition( position );
+                break;
+            }
+
+            default:
+                UNIMPLEMENTED_FOR( item->GetClass() );
+                break;
+            }
+
+            auto prepareForNetName =
+                    []( wxString& aText )
+                {
+                    wxString txt = aText;
+                    txt.Replace( "\n", "_" );
+                    txt.Replace( "\r", "_" );
+                    txt.Replace( "\t", "_" );
+                    txt.Replace( " ", "_" );
+
+                    // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
+                    return EscapeString( txt, CTX_NETNAME );
+                };
 
             switch( convertTo )
             {
-            case SCH_LABEL_T:           newtext = new SCH_LABEL( position, txt );       break;
-            case SCH_GLOBAL_LABEL_T:    newtext = new SCH_GLOBALLABEL( position, txt ); break;
-            case SCH_HIER_LABEL_T:      newtext = new SCH_HIERLABEL( position, txt );   break;
-            case SCH_TEXT_T:            newtext = new SCH_TEXT( position, txt );        break;
-            case SCH_DIRECTIVE_LABEL_T: newtext = new SCH_DIRECTIVE_LABEL( position );  break;
-            default:    UNIMPLEMENTED_FOR( wxString::Format( "%d.", convertTo ) );      break;
+            case SCH_LABEL_T:
+            {
+                SCH_LABEL_BASE* new_label = new SCH_LABEL( position, prepareForNetName( txt ) );
+
+                new_label->SetShape( shape );
+                new_label->SetTextSpinStyle( orientation );
+                newtext = new_label;
+                break;
+            }
+
+            case SCH_GLOBAL_LABEL_T:
+            {
+                SCH_LABEL_BASE* new_label = new SCH_GLOBALLABEL( position, prepareForNetName( txt ) );
+
+                new_label->SetShape( shape );
+                new_label->SetTextSpinStyle( orientation );
+                newtext = new_label;
+                break;
+            }
+
+            case SCH_HIER_LABEL_T:
+            {
+                SCH_LABEL_BASE* new_label = new SCH_HIERLABEL( position, prepareForNetName( txt ) );
+
+                new_label->SetShape( shape );
+                new_label->SetTextSpinStyle( orientation );
+                newtext = new_label;
+                break;
+            }
+
+            case SCH_DIRECTIVE_LABEL_T:
+            {
+                SCH_LABEL_BASE* new_label = new SCH_DIRECTIVE_LABEL( position );
+
+                // a SCH_DIRECTIVE_LABEL usually has at least one field containing the net class
+                // name
+                SCH_FIELD netclass( position, 0, new_label, wxT( "Netclass" ) );
+                netclass.SetText( txt );
+                netclass.SetVisible( true );
+                new_label->GetFields().push_back( netclass );
+
+                new_label->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
+                new_label->SetTextSpinStyle( orientation );
+                newtext = new_label;
+                break;
+            }
+
+            case SCH_TEXT_T:
+            {
+                SCH_TEXT* new_text = new SCH_TEXT( position, txt );
+
+                new_text->SetTextSpinStyle( orientation );
+                newtext = new_text;
+                break;
+            }
+
+            case SCH_TEXTBOX_T:
+            {
+                SCH_TEXTBOX* new_textbox = new SCH_TEXTBOX( 0, FILL_T::NO_FILL, txt );
+                BOX2I        bbox = item->GetBoundingBox();
+
+                if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+                    bbox.Inflate( -label->GetLabelBoxExpansion() );
+
+                bbox.Inflate( new_textbox->GetTextMargin() );
+
+                new_textbox->SetPosition( bbox.GetPosition() );
+                new_textbox->SetEnd( bbox.GetEnd() );
+
+                switch( orientation )
+                {
+                case TEXT_SPIN_STYLE::SPIN::RIGHT:
+                    break;
+
+                case TEXT_SPIN_STYLE::SPIN::LEFT:
+                    new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    break;
+
+                case TEXT_SPIN_STYLE::SPIN::UP:
+                    new_textbox->SetTextAngle( ANGLE_VERTICAL );
+                    break;
+
+                case TEXT_SPIN_STYLE::SPIN::BOTTOM:
+                    new_textbox->SetTextAngle( ANGLE_VERTICAL );
+                    new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    break;
+                }
+
+                newtext = new_textbox;
+                break;
+            }
+
+            default:
+                UNIMPLEMENTED_FOR( wxString::Format( "%d.", convertTo ) );
+                break;
             }
 
             wxCHECK2( newtext, continue );
@@ -1822,44 +2001,27 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             // because they are not used in labels.  Justifications will be set to default value
             // in the new text item type.
             //
-            newtext->SetFlags( text->GetEditFlags() );
+            newtext->SetFlags( item->GetEditFlags() );
 
-            if( newtext->Type() == SCH_DIRECTIVE_LABEL_T )
-            {
-                // a SCH_DIRECTIVE_LABEL has at least one field containing the net class name
-                // build it:
-                SCH_DIRECTIVE_LABEL* new_dirlabel = static_cast<SCH_DIRECTIVE_LABEL*>( newtext );
-                SCH_FIELD name( position, 0, new_dirlabel, wxT( "Netclass" ) );
-                name.SetText( txt );
-                name.SetVisible( true );
-                new_dirlabel->GetFields().push_back( name );
-            }
-            else
-            {
-                // We cannot use a shape from SCH_DIRECTIVE_LABEL_T label
-                // It has no meaning for a H or G label
-                if( text->Type() == SCH_DIRECTIVE_LABEL_T )
-                    newtext->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-                else
-                    newtext->SetShape( text->GetShape() );
-            }
+            EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( item );
+            EDA_TEXT* new_eda_text = dynamic_cast<EDA_TEXT*>( newtext );
 
-            newtext->SetTextSpinStyle( orientation );
-            newtext->SetTextSize( text->GetTextSize() );
-            newtext->SetTextThickness( text->GetTextThickness() );
-            newtext->SetItalic( text->IsItalic() );
-            newtext->SetBold( text->IsBold() );
+            new_eda_text->SetTextSize( eda_text->GetTextSize() );
+            new_eda_text->SetTextThickness( eda_text->GetTextThickness() );
+            new_eda_text->SetItalic( eda_text->IsItalic() );
+            new_eda_text->SetBold( eda_text->IsBold() );
+
             newtext->AutoplaceFields( m_frame->GetScreen(), false );
 
             if( selected )
-                m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, text );
+                m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );
 
-            if( !text->IsNew() )
+            if( !item->IsNew() )
             {
-                saveCopyInUndoList( text, UNDO_REDO::DELETED, i != 0 );
+                saveCopyInUndoList( item, UNDO_REDO::DELETED, i != 0 );
                 saveCopyInUndoList( newtext, UNDO_REDO::NEWITEM, true );
 
-                m_frame->RemoveFromScreen( text, m_frame->GetScreen() );
+                m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
                 m_frame->AddToScreen( newtext, m_frame->GetScreen() );
             }
 
@@ -1867,10 +2029,10 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
 
             // Otherwise, pointer is owned by the undo stack
-            if( text->IsNew() )
-                delete text;
+            if( item->IsNew() )
+                delete item;
 
-            if( convertTo == SCH_TEXT_T )
+            if( convertTo == SCH_TEXT_T || convertTo == SCH_TEXTBOX_T )
             {
                 if( newtext->IsDangling() )
                     getView()->Update( newtext, KIGFX::REPAINT );
@@ -2054,6 +2216,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toCLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toText.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toTextBox.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakBus.MakeEvent() );
