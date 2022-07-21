@@ -32613,19 +32613,16 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "이 IV 테이블을 기반으로는 전류를 보간(Interpolate)할 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:354
-#, fuzzy
 msgid "There is a Nan voltage in an IV table"
-msgstr "IV 테이블에 Nan 전압이 있습니다."
+msgstr "IV 테이블에 Nan 전압이 있습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
-#, fuzzy
 msgid "There is an invalid current in an IV table"
-msgstr "IV 테이블에 무효 전류가 있습니다."
+msgstr "IV 테이블에 무효 전류가 있습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
-#, fuzzy
 msgid "Invalid R_load."
-msgstr "유효하지 않음"
+msgstr "잘못된 R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
 #, fuzzy
@@ -32638,93 +32635,76 @@ msgid "Invalid rising dv/dt."
 msgstr "잘못된 저항 값"
 
 #: pcbnew/ibis/ibis_parser.cpp:428
-#, fuzzy
 msgid "Model name cannot be empty"
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "모델 이름은 비워둘 수 없습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:433
 msgid "Checking model "
 msgstr "모델 확인 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
-#, fuzzy
 msgid "Undefined model type"
-msgstr "정의되지 않은 레이어:"
+msgstr "정의되지 않은 모델 유형"
 
 #: pcbnew/ibis/ibis_parser.cpp:444
-#, fuzzy
 msgid "Invalid Vinh value."
-msgstr "잘못된 길이 값"
+msgstr "잘못된 Vinh 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 Vinh 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
-#, fuzzy
 msgid "Invalid R_ref value."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 R_ref 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:459
-#, fuzzy
 msgid "Invalid C_ref value."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 C_ref 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:464
-#, fuzzy
 msgid "invalid V_ref value."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 V_ref 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:469
-#, fuzzy
 msgid "Invalid V_meas value."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 V_meas 값."
 
 #: pcbnew/ibis/ibis_parser.cpp:474
-#, fuzzy
 msgid "C_comp is invalid."
 msgstr "C_comp는 유효하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:479
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "온도 상승"
+msgstr "온도 범위가 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "페이지 유형 '%s'이(가) 잘못되었습니다."
+msgstr "전압 범위가 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
-#, fuzzy
 msgid "Invalid pulldown."
-msgstr "잘못된 핀 이름"
+msgstr "잘못된 풀다운입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:515
-#, fuzzy
 msgid "Invalid pullup."
-msgstr "잘못된 지연 값"
+msgstr "잘못된 풀업입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "잘못된 핀 이름"
+msgstr "잘못된 전원 클램프입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "잘못된 핀 이름"
+msgstr "잘못된 GND 클램프입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "유효하지 않음"
+msgstr "잘못된 Ramp"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
-#, fuzzy
 msgid "Checking Header..."
-msgstr "패드 확인 중..."
+msgstr "헤더 확인 중..."
 
 #: pcbnew/ibis/ibis_parser.cpp:548
 msgid "Missing [IBIS Ver]"
@@ -32735,29 +32715,28 @@ msgid "The parser does not handle this IBIS version"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:560
-#, fuzzy
 msgid "Missing [File Rev]"
-msgstr "규칙 이름이 누락되었습니다."
+msgstr "[파일 개정판] 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
 #, fuzzy
 msgid "Missing [File Name]"
-msgstr "규칙 이름이 누락되었습니다."
+msgstr "[파일 이름] 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
 #, fuzzy
 msgid "Package model name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "패키지 모델 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
 #, fuzzy
 msgid "Checking package model "
-msgstr "패드 홀 확인 중..."
+msgstr "패키지 모델 확인 "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
 #, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "제조업체는 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
 #, fuzzy
