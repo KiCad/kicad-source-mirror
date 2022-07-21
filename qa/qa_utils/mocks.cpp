@@ -405,28 +405,6 @@ int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void PCB_SELECTION_TOOL::select(EDA_ITEM*)
-{
-
-}
-
-void PCB_SELECTION_TOOL::unselect(EDA_ITEM*)
-{
-
-}
-
-void PCB_SELECTION_TOOL::highlight(EDA_ITEM*, int, SELECTION*)
-{
-
-}
-
-void PCB_SELECTION_TOOL::unhighlight(EDA_ITEM*, int, SELECTION*)
-{
-
-}
-
-
-
 
 void PCB_SELECTION_TOOL::setTransitions()
 {
