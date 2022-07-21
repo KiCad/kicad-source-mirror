@@ -16606,20 +16606,19 @@ msgid "Create SVG file from the current symbol"
 msgstr "현재 심볼에서 SVG 파일 생성"
 
 #: eeschema/tools/ee_actions.cpp:214
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "동기화된 핀 편집 모드"
+msgstr "핀 편집 동기화 모드"
 
 #: eeschema/tools/ee_actions.cpp:215
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"동기화된 핀 편집 모드\n"
-"활성화된 경우 모든 변경 내용 (핀 번호 제외) 을 다른 유닛으로 전파합니다.\n"
-"교체 가능한 유닛이 있는 다중 유닛 부품에 대해 기본적으로 활성화됩니다."
+"핀 편집 동기화 모드\n"
+"기능이 활성화된 경우 모든 변경 내용 (핀 번호 제외) 을 다른 유닛에 전달합니"
+"다.\n"
+"교체 가능한 유닛을 포함한 다중 유닛 부품에 대해서는 초기에 활성화됩니다."
 
 #: eeschema/tools/ee_actions.cpp:226
 msgid "Add Pin"
@@ -17292,9 +17291,8 @@ msgid "Switch to next line mode"
 msgstr "다음 그리드로 전환"
 
 #: eeschema/tools/ee_actions.cpp:711
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "자동 수정"
+msgstr "자동 주석 기능"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Toggle automatic annotation of new parts symbols"
@@ -17791,15 +17789,13 @@ msgstr ""
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:37
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "라이브러리 테이블을 업데이트하지 마십시오."
+msgstr "라이브러리 테이블을 업데이트하지 마십시오"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:42
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "기존 라이브러리를 테이블에 추가"
+msgstr "기존 라이브러리 테이블 업데이트"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:48
@@ -20829,172 +20825,138 @@ msgid "NP Pad: (diam - drill)"
 msgstr "비도금 패드: (직경 - 드릴)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
-#, fuzzy
 msgid "AWG0000"
 msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
-#, fuzzy
 msgid "AWG000"
 msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
-#, fuzzy
 msgid "AWG00"
 msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
-#, fuzzy
 msgid "AWG0"
 msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
-#, fuzzy
 msgid "AWG1"
 msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
-#, fuzzy
 msgid "AWG2"
 msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
-#, fuzzy
 msgid "AWG3"
 msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
-#, fuzzy
 msgid "AWG4"
 msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
-#, fuzzy
 msgid "AWG5"
 msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
-#, fuzzy
 msgid "AWG6"
 msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
-#, fuzzy
 msgid "AWG7"
 msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
-#, fuzzy
 msgid "AWG8"
 msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
-#, fuzzy
 msgid "AWG9"
 msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
-#, fuzzy
 msgid "AWG10"
 msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
-#, fuzzy
 msgid "AWG11"
 msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
-#, fuzzy
 msgid "AWG12"
 msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
-#, fuzzy
 msgid "AWG13"
 msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
-#, fuzzy
 msgid "AWG14"
 msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
-#, fuzzy
 msgid "AWG15"
 msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
-#, fuzzy
 msgid "AWG16"
 msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
-#, fuzzy
 msgid "AWG17"
 msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
-#, fuzzy
 msgid "AWG18"
 msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
-#, fuzzy
 msgid "AWG19"
 msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
-#, fuzzy
 msgid "AWG20"
 msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
-#, fuzzy
 msgid "AWG21"
 msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
-#, fuzzy
 msgid "AWG22"
 msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
-#, fuzzy
 msgid "AWG23"
 msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
-#, fuzzy
 msgid "AWG24"
 msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
-#, fuzzy
 msgid "AWG25"
 msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
-#, fuzzy
 msgid "AWG26"
 msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
-#, fuzzy
 msgid "AWG27"
 msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
-#, fuzzy
 msgid "AWG28"
 msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
-#, fuzzy
 msgid "AWG29"
 msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
-#, fuzzy
 msgid "AWG30"
 msgstr "AWG30"
 
