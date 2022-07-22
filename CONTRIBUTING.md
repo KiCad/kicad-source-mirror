@@ -1,7 +1,7 @@
 
 ## Joining the development team
 
-To begin contributing to KiCad, you should first join the [KiCad Developers mailing list](https://launchpad.net/~kicad-developers). This mailing list is used for announcements about development progress (milestones, deadlines, new releases, etc.), discussing the implementation of new features, and for asking general questions about the KiCad codebase.
+To begin contributing to KiCad, you should first join the [KiCad Developers mailing list](https://groups.google.com/a/kicad.org/g/devlist). This mailing list is used for announcements about development progress (milestones, deadlines, new releases, etc.), discussing the implementation of new features, and for asking general questions about the KiCad codebase.
 
 New developers are encouraged to start small with their contribution, and gradually work their way up to larger changes as they gain knowledge in the codebase. The development team labels issues in the [issue tracker](https://gitlab.com/kicad/code/kicad/-/issues) with "[starter](https://gitlab.com/kicad/code/kicad/-/issues?scope=all&utf8=%E2%9C%93&state=opened&label_name[]=starter)" when the issue or feature being requested is a good way for a new person to contribute to KiCad. Alternately, you can search through the issue tracker for any issues that look interesting and leave a comment saying you are interested in working on it. If you have any questions while working on these issues, please leave a comment in the issue with the question or comment and other developers can help you.
 
@@ -15,7 +15,7 @@ KiCad welcomes contributions via merge requests on GitLab.  Here are some tips t
 1. Always create a new branch for merge requests instead of using your fork's master branch.
 2. Make sure your code submission follows the [KiCad Code Style Guide](https://dev-docs.kicad.org/en/rules-guidelines/code-style/), see below for some details.
 3. Make sure all User Interface changes follow the [User Interface Guidelines](https://dev-docs.kicad.org/en/rules-guidelines/ui/).
-4. If you are planning a large change or new feature, be sure to ask on the [developer mailing list](https://launchpad.net/~kicad-developers) before you begin your work to see if anyone else is working on it and to ensure that it fits into the overall development plans.
+4. If you are planning a large change or new feature, be sure to ask on the [developer mailing list](https://groups.google.com/a/kicad.org/g/devlist) before you begin your work to see if anyone else is working on it and to ensure that it fits into the overall development plans.
 5. Give merge requests a short and descriptive title that summarizes the major changes it contains. A longer description of the changes should be contained inside the description of the merge request.
 
 ### Code style and formatting

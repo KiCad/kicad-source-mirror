@@ -49,8 +49,8 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [plugins](plugins)           - Sourcecode for the 3D viewer plugins
 * [qa](qa)                - Unit testing framework for KiCad
 * [resources](resources)         - Packaging resources such as bitmaps and operating system specific files
-** [bitmaps_png](bitmaps_png)       - Menu and program icons
-** [project_template](project_template)          - Project template
+    - [bitmaps_png](bitmaps_png)       - Menu and program icons
+    - [project_template](project_template)          - Project template
 * [scripting](scripting)         - Python integration for KiCad
 * [thirdparty](thirdparty)           - Sourcecode of external libraries used in KiCad but not written by the KiCad team
 * [tools](tools)             - Helpers for developing, testing and building
