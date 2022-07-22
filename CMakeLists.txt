@@ -1033,17 +1033,6 @@ add_custom_target( uninstall
 # Installation
 #================================================
 
-###
-# Install scripts
-###
-if( UNIX AND NOT APPLE )
-    install( DIRECTORY scripts
-        DESTINATION ${KICAD_DOCS}
-        COMPONENT resources
-        PATTERN "*.bat" EXCLUDE
-        )
-endif()
-
 
 include( CTest )
 enable_testing()
