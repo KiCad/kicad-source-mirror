@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <project/project_file.h>
 #include <core/kicad_algo.h>
 #include <symbol_library_common.h>
 #include <confirm.h>
@@ -97,6 +98,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
     SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
+    COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&                project = Prj().GetProjectFile();
 
     // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
@@ -105,6 +108,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
     // Make sure settings are loaded before we start running multi-threaded symbol loaders
     Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
                                     = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
@@ -116,12 +120,16 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
     {
         const wxArrayString& liblist = aFilter->GetAllowedLibList();
 
-        for( unsigned ii = 0; ii < liblist.GetCount(); ii++ )
+        for( const wxString& nickname : liblist )
         {
-            if( libs->HasLibrary( liblist[ii], true ) )
+            if( libs->HasLibrary( nickname, true ) )
             {
                 loaded = true;
-                modelAdapter->AddLibrary( liblist[ii] );
+
+                bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, nickname )
+                                || alg::contains( project.m_PinnedSymbolLibs, nickname );
+
+                modelAdapter->AddLibrary( nickname, pinned );
             }
         }
 
@@ -158,7 +166,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
     }
 
     modelAdapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                                history_list, true );
+                                history_list, false, true );
 
     if( !aHistoryList.empty() )
         modelAdapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );

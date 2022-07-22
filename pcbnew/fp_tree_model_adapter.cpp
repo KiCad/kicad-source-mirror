@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,6 +17,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <pgm_base.h>
+#include <eda_base_frame.h>
+#include <core/kicad_algo.h>
+#include <settings/common_settings.h>
+#include <project/project_file.h>
 #include <wx/tokenzr.h>
 #include <string_utils.h>
 #include <eda_pattern_match.h>
@@ -42,13 +47,18 @@ FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE
 {}
 
 
-void FP_TREE_MODEL_ADAPTER::AddLibraries()
+void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
 {
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&    project = aParent->Prj().GetProjectFile();
+
     for( const wxString& libName : m_libs->GetLogicalLibs() )
     {
         const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
+        bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
+                        || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-        DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
+        DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
     }
 
     m_tree.AssignIntrinsicRanks();

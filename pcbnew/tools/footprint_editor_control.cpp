@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include "kicad_clipboard.h"
 #include "wx/generic/textdlgg.h"
 #include "string_utils.h"
+#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <view/view_controls.h>
@@ -34,12 +35,13 @@
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <widgets/infobar.h>
-#include <bitmaps.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <zone.h>
 #include <project.h>
+#include <project/project_file.h>
+#include <settings/settings_manager.h>
 #include <fp_lib_table.h>
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <dialogs/dialog_footprint_checker.h>
@@ -548,6 +550,20 @@ int FOOTPRINT_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 
     if( currentNode && !currentNode->m_Pinned )
     {
+        COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+        PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+        wxString         nickname = currentNode->m_LibId.GetLibNickname();
+
+        if( !alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+            project.m_PinnedFootprintLibs.push_back( nickname );
+
+        Pgm().GetSettingsManager().SaveProject();
+
+        if( !alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
+            cfg->m_Session.pinned_fp_libs.push_back( nickname );
+
+        cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
+
         currentNode->m_Pinned = true;
         m_frame->RegenerateLibraryTree();
     }
@@ -562,6 +578,16 @@ int FOOTPRINT_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
     if( currentNode && currentNode->m_Pinned )
     {
+        COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+        PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+        wxString         nickname = currentNode->m_LibId.GetLibNickname();
+
+        alg::delete_matching( project.m_PinnedFootprintLibs, nickname );
+        Pgm().GetSettingsManager().SaveProject();
+
+        alg::delete_matching( cfg->m_Session.pinned_fp_libs, nickname );
+        cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
+
         currentNode->m_Pinned = false;
         m_frame->RegenerateLibraryTree();
     }

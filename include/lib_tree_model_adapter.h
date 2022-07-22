@@ -137,7 +137,6 @@ public:
      * valid.
      */
     void SaveColWidths();
-    void SavePinnedItems();
 
     /**
      * Set the symbol filter type. Must be set before adding libraries
@@ -177,7 +176,8 @@ public:
      * @param aItemList    list of symbols
      */
     void DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
-                       const std::vector<LIB_TREE_ITEM*>& aItemList, bool presorted );
+                       const std::vector<LIB_TREE_ITEM*>& aItemList,
+                       bool pinned, bool presorted );
 
 
     /**
@@ -307,7 +307,8 @@ protected:
      */
     LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey );
 
-    LIB_TREE_NODE_LIB& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc );
+    LIB_TREE_NODE_LIB& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
+                                         bool pinned );
 
     /**
      * Check whether a container has columns too
@@ -370,7 +371,7 @@ private:
      * The highest-scoring node is written to aHighScore
      */
     void Find( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc,
-                        LIB_TREE_NODE** aHighScore );
+               LIB_TREE_NODE** aHighScore );
 
     /**
      * Find and expand successful search results.  Return the best match (if any).
@@ -404,8 +405,6 @@ private:
     wxDataViewCtrl*         m_widget;
 
     int                     m_colWidths[NUM_COLS];
-    wxArrayString           m_pinnedLibs;
-    wxString                m_pinnedKey;
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

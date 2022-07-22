@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -323,6 +323,12 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "session.remember_open_files",
             &m_Session.remember_open_files, false ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "session.pinned_symbol_libs",
+            &m_Session.pinned_symbol_libs, {} ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "session.pinned_fp_libs",
+            &m_Session.pinned_fp_libs, {} ) );
 
     m_params.emplace_back( new PARAM<int>( "netclass_panel.sash_pos",
             &m_NetclassPanel.sash_pos, 160 ) );

@@ -26,6 +26,7 @@
 
 class LIB_TABLE;
 class SYMBOL_LIB_TABLE;
+class SCH_BASE_FRAME;
 
 class SYMBOL_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
@@ -51,9 +52,9 @@ public:
      * @param aParent is the parent window to display the progress dialog
      * @return false if loading was cancelled by the user
      */
-    bool AddLibraries( const std::vector<wxString>& aNicknames, wxWindow* aParent );
+    bool AddLibraries( const std::vector<wxString>& aNicknames, SCH_BASE_FRAME* aFrame );
 
-    void AddLibrary( wxString const& aLibNickname );
+    void AddLibrary( wxString const& aLibNickname, bool pinned );
 
     wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) override;
 

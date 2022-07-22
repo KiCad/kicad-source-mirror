@@ -22,17 +22,20 @@
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/window.h>
+#include <core/kicad_algo.h>
+#include <pgm_base.h>
+#include <project/project_file.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialogs/html_message_box.h>
 #include <eda_pattern_match.h>
 #include <generate_alias_info.h>
-#include <lib_symbol.h>
+#include <sch_base_frame.h>
 #include <locale_io.h>
+#include <lib_symbol.h>
 #include <symbol_async_loader.h>
 #include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
 #include <string_utils.h>
-
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
 
@@ -58,14 +61,15 @@ SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 
 
 bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNicknames,
-                                              wxWindow* aParent )
+                                              SCH_BASE_FRAME* aFrame )
 {
-    std::unique_ptr<WX_PROGRESS_REPORTER> prg = nullptr;
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter = nullptr;
 
     if( m_show_progress )
     {
-        prg = std::make_unique<WX_PROGRESS_REPORTER>( aParent, _( "Loading Symbol Libraries" ),
-                                                      aNicknames.size(), true );
+        progressReporter = std::make_unique<WX_PROGRESS_REPORTER>( aFrame,
+                                                                   _( "Loading Symbol Libraries" ),
+                                                                   aNicknames.size(), true );
     }
 
     // Disable KIID generation: not needed for library parts; sometimes very slow
@@ -75,7 +79,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     SYMBOL_ASYNC_LOADER loader( aNicknames, m_libs,
                                 GetFilter() == LIB_TREE_MODEL_ADAPTER::SYM_FILTER_POWER,
-                                &loadedSymbols, prg.get() );
+                                &loadedSymbols, progressReporter.get() );
 
     LOCALE_IO toggle;
 
@@ -83,7 +87,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     while( !loader.Done() )
     {
-        if( prg && !prg->KeepRefreshing() )
+        if( progressReporter && !progressReporter->KeepRefreshing() )
             break;
 
         wxMilliSleep( PROGRESS_INTERVAL_MILLIS );
@@ -93,12 +97,12 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     bool cancelled = false;
 
-    if( prg )
-        cancelled = prg->IsCancelled();
+    if( progressReporter )
+        cancelled = progressReporter->IsCancelled();
 
     if( !loader.GetErrors().IsEmpty() )
     {
-        HTML_MESSAGE_BOX dlg( aParent, _( "Load Error" ) );
+        HTML_MESSAGE_BOX dlg( aFrame, _( "Load Error" ) );
 
         dlg.MessageSet( _( "Errors loading symbols:" ) );
 
@@ -111,10 +115,17 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( loadedSymbols.size() > 0 )
     {
+        COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+        PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
+
         for( const std::pair<const wxString, std::vector<LIB_SYMBOL*>>& pair : loadedSymbols )
         {
             std::vector<LIB_TREE_ITEM*> treeItems( pair.second.begin(), pair.second.end() );
-            DoAddLibrary( pair.first, m_libs->GetDescription( pair.first ), treeItems, false );
+            bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, pair.first )
+                            || alg::contains( project.m_PinnedSymbolLibs, pair.first );
+
+            DoAddLibrary( pair.first, m_libs->GetDescription( pair.first ), treeItems, pinned,
+                          false );
         }
     }
 
@@ -122,7 +133,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     m_tree.AssignIntrinsicRanks();
 
-    if( prg )
+    if( progressReporter )
     {
         // Force immediate deletion of the APP_PROGRESS_DIALOG
         // ( do not use Destroy(), or use Destroy() followed by wxSafeYield() )
@@ -130,7 +141,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         // manager. A side effect is the call of ShowModal() of a dialog following
         // the use of SYMBOL_TREE_MODEL_ADAPTER creating a APP_PROGRESS_DIALOG
         // has a broken behavior (incorrect modal behavior).
-        prg.reset();
+        progressReporter.reset();
         m_show_progress = false;
     }
 
@@ -138,7 +149,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 }
 
 
-void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
+void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool pinned )
 {
     bool                        onlyPowerSymbols = ( GetFilter() == SYM_FILTER_POWER );
     std::vector<LIB_SYMBOL*>    symbols;
@@ -159,7 +170,8 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
     if( symbols.size() > 0 )
     {
         comp_list.assign( symbols.begin(), symbols.end() );
-        DoAddLibrary( aLibNickname, m_libs->GetDescription( aLibNickname ), comp_list, false );
+        DoAddLibrary( aLibNickname, m_libs->GetDescription( aLibNickname ), comp_list, pinned,
+                      false );
     }
 }
 

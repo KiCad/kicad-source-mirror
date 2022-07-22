@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <project/project_file.h>
 #include <fp_tree_synchronizing_adapter.h>
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
@@ -87,15 +89,19 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
     }
 
     // Look for new libraries
-    size_t count = m_libMap.size();
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+    size_t           count = m_libMap.size();
 
     for( const wxString& libName : m_libs->GetLogicalLibs() )
     {
         if( m_libMap.count( libName ) == 0 )
         {
             const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
+            bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
+                            || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-            DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
+            DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
             m_libMap.insert( libName  );
         }
     }

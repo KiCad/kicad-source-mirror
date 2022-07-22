@@ -106,6 +106,8 @@ public:
     struct SESSION
     {
         bool remember_open_files;
+        std::vector<wxString> pinned_symbol_libs;
+        std::vector<wxString> pinned_fp_libs;
     };
 
     struct SYSTEM

@@ -153,8 +153,6 @@ LIB_TREE::~LIB_TREE()
 
     // Save the column widths to the config file
     m_adapter->SaveColWidths();
-
-    m_adapter->SavePinnedItems();
 }
 
 

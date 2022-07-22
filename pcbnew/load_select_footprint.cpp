@@ -253,14 +253,14 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     }
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                           historyInfos, true );
+                           historyInfos, false, true );
 
     if( aPreselect.IsValid() )
         adapter->SetPreselectNode( aPreselect, 0 );
     else if( historyInfos.size() )
         adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
 
-    adapter->AddLibraries();
+    adapter->AddLibraries( this );
 
     wxString title;
     title.Printf( _( "Choose Footprint (%d items loaded)" ), adapter->GetItemCount() );

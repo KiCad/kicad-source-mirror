@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <project/project_file.h>
 #include <symbol_tree_synchronizing_adapter.h>
 #include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
@@ -105,6 +107,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     }
 
     // Look for new libraries
+    //
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+
     for( const wxString& libName : m_libMgr->GetLibraryNames() )
     {
         if( m_libHashes.count( libName ) == 0 )
@@ -116,7 +122,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             }
 
             SYMBOL_LIB_TABLE_ROW* library = m_libMgr->GetLibrary( libName );
-            LIB_TREE_NODE_LIB&    lib_node = DoAddLibraryNode( libName, library->GetDescr() );
+            bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, libName )
+                            || alg::contains( project.m_PinnedSymbolLibs, libName );
+
+            LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( libName, library->GetDescr(), pinned );
 
             updateLibrary( lib_node );
         }

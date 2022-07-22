@@ -76,9 +76,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
         m_freeze( 0 ),
         m_col_part( nullptr ),
         m_col_desc( nullptr ),
-        m_widget( nullptr ),
-        m_pinnedLibs(),
-        m_pinnedKey( aPinnedKey )
+        m_widget( nullptr )
 {
     // Default column widths
     m_colWidths[PART_COL] = 360;
@@ -86,16 +84,6 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
 
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
     m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
-
-    // Read the pinned entries from the project config
-    PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
-
-    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
-                                             project.m_PinnedSymbolLibs :
-                                             project.m_PinnedFootprintLibs;
-
-    for( const wxString& entry : entries )
-        m_pinnedLibs.push_back( entry );
 }
 
 
@@ -109,28 +97,6 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
     {
         APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
         cfg->m_LibTree.column_width = m_widget->GetColumn( PART_COL )->GetWidth();
-    }
-}
-
-
-void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
-{
-    PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
-
-    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
-                                     project.m_PinnedSymbolLibs :
-                                     project.m_PinnedFootprintLibs;
-
-    entries.clear();
-    m_pinnedLibs.clear();
-
-    for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.m_Children )
-    {
-        if( child->m_Pinned )
-        {
-            m_pinnedLibs.push_back( child->m_LibId.GetLibNickname() );
-            entries.push_back( child->m_LibId.GetLibNickname() );
-        }
     }
 }
 
@@ -155,11 +121,11 @@ void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( const LIB_ID& aLibId, int aUnit )
 
 
 LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName,
-                                                             const wxString& aDesc )
+                                                             const wxString& aDesc, bool pinned )
 {
     LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
-    lib_node.m_Pinned = m_pinnedLibs.Index( lib_node.m_LibId.GetLibNickname() ) != wxNOT_FOUND;
+    lib_node.m_Pinned = pinned;
 
     return lib_node;
 }
@@ -167,9 +133,9 @@ LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNo
 
 void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
                                            const std::vector<LIB_TREE_ITEM*>& aItemList,
-                                           bool presorted )
+                                           bool pinned, bool presorted )
 {
-    LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( aNodeName, aDesc );
+    LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( aNodeName, aDesc, pinned );
 
     for( LIB_TREE_ITEM* item: aItemList )
         lib_node.AddItem( item );

@@ -23,6 +23,10 @@
  */
 
 #include <kiway.h>
+#include <pgm_base.h>
+#include <project.h>
+#include <project/project_file.h>
+#include <settings/settings_manager.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -412,6 +416,20 @@ int SYMBOL_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 
         if( currentNode && !currentNode->m_Pinned )
         {
+            COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+            PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+            wxString         nickname = currentNode->m_LibId.GetLibNickname();
+
+            if( !alg::contains( project.m_PinnedSymbolLibs, nickname ) )
+                project.m_PinnedSymbolLibs.push_back( nickname );
+
+            Pgm().GetSettingsManager().SaveProject();
+
+            if( !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
+                cfg->m_Session.pinned_symbol_libs.push_back( nickname );
+
+            cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
+
             currentNode->m_Pinned = true;
             editFrame->RegenerateLibraryTree();
         }
@@ -430,6 +448,16 @@ int SYMBOL_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
         if( currentNode && currentNode->m_Pinned )
         {
+            COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+            PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
+            wxString         nickname = currentNode->m_LibId.GetLibNickname();
+
+            alg::delete_matching( project.m_PinnedSymbolLibs, nickname );
+            Pgm().GetSettingsManager().SaveProject();
+
+            alg::delete_matching( cfg->m_Session.pinned_symbol_libs, nickname );
+            cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
+
             currentNode->m_Pinned = false;
             editFrame->RegenerateLibraryTree();
         }

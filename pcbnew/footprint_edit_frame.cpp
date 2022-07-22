@@ -930,7 +930,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
     m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, fpTable );
     auto adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
 
-    adapter->AddLibraries();
+    adapter->AddLibraries( this );
 }
 
 
