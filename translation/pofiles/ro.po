@@ -38,18 +38,18 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Schița amprentei lipsește sau este greșită. Rulați Verificator de amprentă "
+"Conturul capsulei lipsește sau este greșit. Rulați Verificator de capsule "
 "pentru o analiză completă."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Schița planșei lipsește sau este greșită. Rulați DRC pentru o analiză "
+"Conturul plăcii lipsește sau este greșit. Rulați DRC pentru o analiză "
 "completă."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Creați trasee și via-uri"
+msgstr "Creați trasee și via"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:682
 msgid "Create zones"
@@ -107,7 +107,7 @@ msgstr "Net %s\tNetClass%s\tNumePad %s"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:768
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Net %s\tNetClass %s"
+msgstr "Net '%s' NetClass '%s'"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:464
 msgid "Load OpenGL: board"
@@ -468,9 +468,8 @@ msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Utilizați numai proprietatea difuză a culorilor din fișierul model 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Culori definite"
+msgstr "Redare culori"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -484,25 +483,25 @@ msgstr "Comutați modele 3D prin gaură"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 #, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Comutați modele 3D cu atributul „Prin gaură”"
+msgstr "Comutați modele 3D pentru componentele tip 'through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
 msgstr "Comutați modele 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Comutați modele 3D cu atributul „Montaj de suprafață”"
+msgstr "Comutați modele 3D pentru componente tip 'SMD'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 #, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Comutați modele 3D SMD"
+msgstr "Comutați alte modele 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
+#, fuzzy
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Comutați modele 3D pentru componente de alte tipuri"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -593,7 +592,7 @@ msgstr "Selectați Modelul 3D"
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:23
 #, fuzzy
 msgid "Environment Colors"
-msgstr "Variabile de mediu"
+msgstr "Culorile interfeței"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:30
 #, fuzzy
@@ -610,14 +609,12 @@ msgid "Solder paste:"
 msgstr "Pastă de sudură:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Culoarea corpului plăcii"
+msgstr "Culori circuit"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "constrângeri de configurare a plăcii"
+msgstr "Folosește culorile definite pentru structura circuitului"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -634,12 +631,12 @@ msgstr "Partea inferioară a serigrafiei:"
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 #, fuzzy
 msgid "Solder mask top:"
-msgstr "Culoarea măștii de sudură"
+msgstr "Mască lipire față:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:104
 #, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Culoarea măștii de sudură"
+msgstr "Mască lipire spate:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
@@ -660,12 +657,12 @@ msgstr "Afișați straturi de serigrafie"
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 #, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Decupați serigrafia la via anulară"
+msgstr "Decupați desenul serigrafic la marginile măștii serigrafice"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 #, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Decupați serigrafia la via anulară"
+msgstr "Decupați desenul serigrafic la inelul via"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -684,9 +681,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Straturi ale utilizator (nu sunt afișate în modul realist)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "Afișați straturi de comentarii și desene"
+msgstr "Afișați straturile de comentarii și desene"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -767,7 +763,7 @@ msgstr "Viteza animației:"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
 #, fuzzy
 msgid "Rendering Options"
-msgstr "Opțiuni de randare"
+msgstr "Opțiuni de redare"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
@@ -778,9 +774,8 @@ msgid "Show copper thickness"
 msgstr "Arată grosimea cuprului"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Elemente evidențiate"
+msgstr "Evidențiază elementele"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
@@ -843,7 +838,7 @@ msgstr "Adăugați podea (lent)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 #, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Antidedublare"
+msgstr "Anti-aliasing"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #, fuzzy
@@ -1194,9 +1189,9 @@ msgstr "Creați fișier de siglă"
 #: bitmap2component/bitmap2cmp_gui.cpp:799
 #: bitmap2component/bitmap2cmp_gui.cpp:838
 #: bitmap2component/bitmap2cmp_gui.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "Fișierul „%s” nu a putut fi creat."
+msgstr "Fișierul '%s' nu a putut fi creat."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:779
 msgid "Create PostScript File"
@@ -1305,9 +1300,8 @@ msgid "Export to Clipboard"
 msgstr "Exportați în mapă"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Simbol (fișier .lib)"
+msgstr "Simbol (fișier .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1459,9 +1453,9 @@ msgstr ""
 "„%s”."
 
 #: common/common.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Imposibil de făcut calea \"%s\" absolută în ceea ce privește \"%s\"."
+msgstr "Imposibil de făcut calea '%s' absolută în ceea ce privește '%s'."
 
 #: common/common.cpp:327
 #, c-format
@@ -1520,13 +1514,12 @@ msgid "Warning"
 msgstr "Atenție"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Eroare de salvare a fișierului"
+msgstr "Eroare la deschiderea fișierului"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Salvările încrucișate pot produce rezultate nedorite."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:259
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -1535,9 +1528,8 @@ msgid "OK"
 msgstr "Bine"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Adăugați oricum"
+msgstr "Deschideți oricum"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
@@ -2259,9 +2251,8 @@ msgid "Image Editor"
 msgstr "Editor de imagini"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Elemente blocate"
+msgstr "Omite elementele blocate"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
@@ -2614,7 +2605,7 @@ msgstr "Exportați în alte foii"
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "Foaie de desen"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153 eeschema/sch_field.cpp:189
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
@@ -2715,9 +2706,8 @@ msgstr ""
 "Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Trasați desemnatori de referință"
+msgstr "Ștergeți referințele pentru toate simbolurile inserate"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3100,6 +3090,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Acest artificiu va îmbunătăți niște probleme de scalare a fonturilor în GTK)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3175,7 +3166,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr ""
+msgstr "zile"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -3682,9 +3673,8 @@ msgid "New net class:"
 msgstr "Nouă Netclass:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:181
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "Atribuiți rețelelor listate"
+msgstr "Atribuiți la toate conexiunile listate"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:187
 msgid "Assign To Selected Nets"
@@ -3746,9 +3736,9 @@ msgid "Save Report to File"
 msgstr "Salvați raportul în fișier"
 
 #: common/dialogs/wx_html_report_panel.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nu se poate scrie raportul în fișierul \"%s\"."
+msgstr "Nu pot scrie raportul în fișierul '%s'."
 
 #: common/dialogs/wx_html_report_panel.cpp:387
 msgid "File save error"
@@ -3808,19 +3798,19 @@ msgid "Could not use OpenGL"
 msgstr "Nu s-a putut utiliza OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Fișierul foii de desen \"%s\" nu a fost găsit."
+msgstr "Fișierul foii de desen '%s' nu a fost găsit."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Fișierul foii de desen \"%s\" nu a fost găsit."
+msgstr "Fișierul foii de desen '%s' nu a fost găsit."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:919
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Fișierul \"%s\" nu a fost citit în întregime."
+msgstr "Fișierul '%s' nu a fost citit în întregime."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
@@ -3868,9 +3858,8 @@ msgstr "Imagine"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Trasarea foii de desen"
+msgstr "Eroare la scrierea fișierului foii de desen"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3976,9 +3965,9 @@ msgid "&Help"
 msgstr "&Ajutor"
 
 #: common/eda_base_frame.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Fișierul \"%s\" nu a fost găsit."
+msgstr "Fișierul '%s' nu a fost găsit."
 
 #: common/eda_base_frame.cpp:1003
 msgid "Preferences"
@@ -4003,7 +3992,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisiuni insuficiente pentru folderul \"%s\"."
 
 #: common/eda_base_frame.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -4013,9 +4002,9 @@ msgid ""
 msgstr ""
 "Ei bine, acest lucru este posibil jenant!\n"
 "Se pare că ultima dată când ai editat fișierul\n"
-"\"%s\"\n"
-"nu a fost salvat corespunzător.  Doriți să restaurați ultimele modificări "
-"salvate pe care le-ați făcut?"
+"'%s'\n"
+"acesta nu a fost salvat corespunzător.  Doriți să restaurați ultimele "
+"modificări salvate pe care le-ați făcut?"
 
 #: common/eda_base_frame.cpp:1123
 msgid "The auto save file could not be renamed to the board file name."
@@ -4024,19 +4013,18 @@ msgstr ""
 "plăcii."
 
 #: common/eda_doc.cpp:130
-#, fuzzy
 msgid "Documentation File"
-msgstr "Documentație"
+msgstr "Fișier documentație"
 
 #: common/eda_doc.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "Fișierul '%s' nu a fost găsit."
 
 #: common/eda_doc.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Tip MIME necunoscut pentru fișierul doc \"%s\""
+msgstr "Tip MIME necunoscut pentru fișierul doc '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:486
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4149,9 +4137,8 @@ msgid "ItemList"
 msgstr "Lista de obiecte"
 
 #: common/eda_item.cpp:333
-#, fuzzy
 msgid "NetInfo"
-msgstr "Informații despre rețea"
+msgstr "Informații despre conexiune"
 
 #: common/eda_item.cpp:334 pcbnew/pcb_group.cpp:335
 #: pcbnew/tools/pcb_actions.cpp:699
@@ -4284,7 +4271,7 @@ msgstr "Unghi"
 
 #: common/eda_shape.cpp:588
 msgid "Curve"
-msgstr ""
+msgstr "Curbă"
 
 #: common/eda_shape.cpp:591 common/eda_shape.cpp:616
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:75
@@ -4338,7 +4325,7 @@ msgstr "Nerecunoscut"
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Line width"
-msgstr ""
+msgstr "Grosimea liniei"
 
 #: common/eda_shape.cpp:1636
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
@@ -4348,28 +4335,26 @@ msgid "Bezier"
 msgstr "Curbă Bezier"
 
 #: common/eda_shape.cpp:1648
-#, fuzzy
 msgid "Start X"
-msgstr "începe"
+msgstr "Începe X"
 
 #: common/eda_shape.cpp:1650
-#, fuzzy
 msgid "Start Y"
-msgstr "începe"
+msgstr "Începe Y"
 
 #: common/eda_shape.cpp:1652 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1140
 #: pcbnew/pcb_track.cpp:1157
 msgid "End X"
-msgstr ""
+msgstr "Termină X"
 
 #: common/eda_shape.cpp:1654 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1142
 #: pcbnew/pcb_track.cpp:1159
 msgid "End Y"
-msgstr ""
+msgstr "Termină Y"
 
 #: common/eda_shape.cpp:1657
 msgid "Line Width"
-msgstr ""
+msgstr "Grosimea liniei"
 
 #: common/eda_text.cpp:515
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
@@ -4559,6 +4544,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Un director care conține elemente tip plugin terțe, biblioteci și alte "
+"tipuri de conținut descărcabil."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4603,9 +4590,9 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Versiune învechită a KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "de la %s : %s() linie:%d"
+msgstr "de la '%s' : '%s'() linie:'%d'"
 
 #: common/exceptions.cpp:76
 #, c-format
@@ -4731,9 +4718,9 @@ msgstr "Problemă în timpul rulării vizualizatorului PDF \"%s\"."
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
 #: gerbview/gerbview.cpp:237 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Nu se poate copia fișierul \"%s\"."
+msgstr "Nu se poate copia fișierul '%s'."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
@@ -4808,7 +4795,7 @@ msgstr "Adăugați la selecție"
 #: gerbview/tools/gerbview_actions.cpp:113 pcbnew/tools/pcb_actions.cpp:729
 #: pcbnew/tools/pcb_actions.cpp:751
 msgid "Highlight Net"
-msgstr ""
+msgstr "Evidențiază conexiunea"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
@@ -4854,31 +4841,31 @@ msgid "Gestures"
 msgstr "Gesturi"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Nu s-a putut încărca biblioteca kiface '%s'."
 
 #: common/kiway.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Nu s-a putut încărca biblioteca kiface '%s'."
 
 #: common/kiway.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
 "Nu s-a putut citi numele instanței și simbolul versiunii din biblioteca "
-"kiface \"%s\"."
+"kiface '%s'."
 
 #: common/kiway.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Eroare fatală de instalare. Fișier:\n"
-"\"%s\"\n"
+"'%s'\n"
 "nu a putut fi încărcat\n"
 
 #: common/kiway.cpp:312
@@ -5088,9 +5075,8 @@ msgid "Reference designators"
 msgstr "Indicatori de referință"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Footprint text"
-msgstr "Text amprentă"
+msgstr "Text capsulă"
 
 #: common/layer_id.cpp:151
 msgid "Hidden text"
@@ -5099,17 +5085,17 @@ msgstr "Text ascuns"
 #: common/layer_id.cpp:152
 #, fuzzy
 msgid "SMD pads front"
-msgstr "Față Pad"
+msgstr "Fața padului SMD"
 
 #: common/layer_id.cpp:153
 #, fuzzy
 msgid "SMD pads back"
-msgstr "Spate Pad"
+msgstr "Spatele padului SMD"
 
 #: common/layer_id.cpp:154
 #, fuzzy
 msgid "Through-hole pads"
-msgstr "Pad-uri prin gaură"
+msgstr "Paduri componentă Through-Hole"
 
 #: common/layer_id.cpp:155
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5260,9 +5246,8 @@ msgid "No default editor found, you must choose one."
 msgstr "Nu s-a găsit niciun editor predefinit, trebuie să alegeți unul."
 
 #: common/pgm_base.cpp:189 common/pgm_base.cpp:191
-#, fuzzy
 msgid "Executable file"
-msgstr "Fișiere executabile ("
+msgstr "Fișier executabil"
 
 #: common/pgm_base.cpp:201
 msgid "Select Preferred Editor"
@@ -5308,7 +5293,7 @@ msgstr "Nu se poate deschide fișierul '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2358
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2656
 msgid "File import cancelled by user."
-msgstr ""
+msgstr "Importul fișierului a fost oprit de către utilizator."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2374
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2392
@@ -5369,7 +5354,6 @@ msgid "Could not open archive file."
 msgstr "Nu s-a putut deschide fișierul de arhivă."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:275
-#, fuzzy
 msgid "Invalid archive file format."
 msgstr "Format de fișier de arhivă nevalabil."
 
@@ -5410,9 +5394,9 @@ msgstr "Eroare la extragerea fișierului!"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
+msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
 
 #: common/project/project_archiver.cpp:205
 #, c-format
@@ -6104,14 +6088,14 @@ msgid "Report Bug"
 msgstr "Raportați eroarea"
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Fișierul de ajutor \"%s\" sau\n"
-"\"%s\" nu a putut fi găsit.\n"
+"Fișierul de ajutor '%s' sau\n"
+"'%s' nu a putut fi găsit.\n"
 "Doriți să accesați ajutorul online KiCad?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
@@ -6119,12 +6103,12 @@ msgid "File Not Found"
 msgstr "Nu s-a gasit fisierul"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Fișierul de ajutor \"%s\" nu a putut fi găsit.\n"
+"Fișierul de ajutor '%s' nu a putut fi găsit.\n"
 "Doriți să accesați ajutorul online KiCad?"
 
 #: common/tool/common_control.cpp:269
@@ -6141,13 +6125,13 @@ msgid "Get involved with KiCad"
 msgstr "Implică-te cu KiCad"
 
 #: common/tool/common_control.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
 "Nu s-a putut lansa browserul predefinit.\n"
-"Pentru informații despre cum să ajutați proiectul KiCad, vizitați %s"
+"Pentru informații despre cum să ajutați proiectul KiCad, vizitați '%s'"
 
 #: common/tool/grid_menu.cpp:99
 #, c-format
@@ -7203,7 +7187,7 @@ msgstr "Actualizat %s (unitatea %s) de la %s la %s."
 #: eeschema/annotate.cpp:297
 #, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Actualizat %s de la %s la %s."
+msgstr "Actualizat '%s' de la '%s' la '%s'."
 
 #: eeschema/annotate.cpp:307
 #, c-format
@@ -11798,9 +11782,8 @@ msgstr ""
 "dedesubtul firului sau magistralei"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Etichete globale"
+msgstr "Dimensiune globală etichete:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 #, fuzzy
@@ -17049,7 +17032,7 @@ msgstr "Partea de jos"
 #: gerbview/files.cpp:152
 #, fuzzy
 msgid "Top paste"
-msgstr "Pastă de sudură:"
+msgstr "Strat de pastă superior"
 
 #: gerbview/files.cpp:153
 msgid "Keep-out layer"
@@ -18091,9 +18074,8 @@ msgid "Waiting..."
 msgstr "Se încarcă..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
-msgstr "Proprietățile materialului:"
+msgstr "Progres general"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
@@ -18191,9 +18173,8 @@ msgid "Install Size"
 msgstr "Dimensiunea textului:"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Modul de compatibilitate:"
+msgstr "Compatibil"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 #, fuzzy
@@ -18854,9 +18835,8 @@ msgid "(sheet count)"
 msgstr "Repetați numărul"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:572
-#, fuzzy
 msgid "(paper size)"
-msgstr "Dimensiunea personalizată a foii:"
+msgstr "(dimensiunea foii)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -19707,9 +19687,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Fișiere generator:"
+msgstr "Creștere de temperatură"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 #, fuzzy
@@ -19746,9 +19725,8 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "Lățimea traseului"
+msgstr "Lățimea traseului (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
@@ -20486,9 +20464,8 @@ msgid "Dielectric losses (odd):"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Decalajul perechii diferențiale"
+msgstr "Impedanță trasee diferențiale (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -20746,9 +20723,8 @@ msgid "Loss Tg:"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Comun tuturor unităților"
+msgstr "Materiale comune:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
 #, fuzzy
@@ -20788,9 +20764,9 @@ msgid "PrePreg"
 msgstr "Pre-Preg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Grosimea grilei:"
+msgstr "Introduceți grosimea circuitului în '%s':"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
@@ -24749,9 +24725,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Stil linie"
+msgstr "Colț %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25426,9 +25402,8 @@ msgid "Gerber"
 msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Straturi inactive:"
+msgstr "Include straturi"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -26045,9 +26020,9 @@ msgid "<none selected>"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referință:"
+msgstr "Referință: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -26102,9 +26077,9 @@ msgid "from %s"
 msgstr "[din %s]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Netclass"
+msgstr "Detalii: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -27030,9 +27005,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "Distanța minimă a cuprului"
+msgstr "Spațiere cupru - gaură:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -27042,9 +27016,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "Distanța minimă a cuprului"
+msgstr "Spațiere cupru - margine:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -28394,9 +28367,9 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Distanța minimă a placii: %s."
 
 #: pcbnew/drc/drc_engine.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Se verifică etichetele..."
+msgstr "Verific %s spațiere: %s."
 
 #: pcbnew/drc/drc_engine.cpp:882 pcbnew/drc/drc_engine.cpp:883
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/tools/board_inspection_tool.cpp:647
@@ -28404,7 +28377,7 @@ msgstr "Se verifică etichetele..."
 #: pcbnew/tools/board_inspection_tool.cpp:665
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "undefined"
-msgstr ""
+msgstr "nedefinit"
 
 #: pcbnew/drc/drc_engine.cpp:893
 #, fuzzy
@@ -28438,7 +28411,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:926
 #, c-format
 msgid "Checking %s."
-msgstr ""
+msgstr "Verific %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
 msgid "Board and netclass clearances apply only between copper items."
@@ -28480,7 +28453,7 @@ msgstr "Verificarea condiției regulii \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1063
 msgid "Constraint applied."
-msgstr ""
+msgstr "Constrângere aplicată."
 
 #: pcbnew/drc/drc_engine.cpp:1064
 msgid "Rule applied; overrides previous constraints."
@@ -28533,7 +28506,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:66
 msgid "Clearance violation"
-msgstr ""
+msgstr "Încălcarea regulilor de spațiere"
 
 #: pcbnew/drc/drc_item.cpp:70
 msgid "Tracks crossing"
@@ -28574,7 +28547,7 @@ msgstr "Găuri prea aproape una de alta"
 
 #: pcbnew/drc/drc_item.cpp:106
 msgid "Track width"
-msgstr ""
+msgstr "Grosime traseu"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Annular width"
@@ -28586,7 +28559,7 @@ msgstr "Foraj în afara razei de acțiune"
 
 #: pcbnew/drc/drc_item.cpp:118
 msgid "Via diameter"
-msgstr ""
+msgstr "Diametru via"
 
 #: pcbnew/drc/drc_item.cpp:122
 msgid "Padstack is not valid"
@@ -30952,7 +30925,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Erare la citirea fișierului: nu pot determina lungimea."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 msgid "Error reading file."
@@ -32253,9 +32226,8 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:492
-#, fuzzy
 msgid "existing track"
-msgstr "Calea existentă:"
+msgstr "traseu existent"
 
 #: pcbnew/router/pns_kicad_iface.cpp:506 pcbnew/router/pns_kicad_iface.cpp:519
 #, fuzzy
@@ -32942,7 +32914,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:421 pcbnew/zone.cpp:335
 #: pcbnew/zone.cpp:350 pcbnew/zone.cpp:498 pcbnew/zone.cpp:758
 msgid "zone"
-msgstr ""
+msgstr "zonă"
 
 #: pcbnew/tools/board_inspection_tool.cpp:404
 #, c-format
@@ -35208,9 +35180,9 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:671
 #: pcbnew/widgets/appearance_controls.cpp:2367
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Lipiți culoarea"
+msgstr "Culori legături electrice (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:673
 #: pcbnew/widgets/appearance_controls.cpp:2369
@@ -35521,7 +35493,7 @@ msgstr "Ascundeți toate celelalte netclasses"
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 #, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Prestabilite (Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls.cpp:2422
 msgid "Save preset..."
