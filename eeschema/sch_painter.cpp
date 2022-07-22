@@ -2205,12 +2205,13 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 
     if( drawingShadows )
     {
-        bbox.Inflate( getTextThickness( aField ) * 2 );
-        bbox.RevertYAxis();
+        EDA_RECT shadow_box = bbox;
+        shadow_box.Inflate( getTextThickness( aField ) * 2 );
+        shadow_box.RevertYAxis();
 
         m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->DrawRectangle( mapCoords( bbox.GetPosition() ), mapCoords( bbox.GetEnd() ) );
+        m_gal->DrawRectangle( mapCoords( shadow_box.GetPosition() ), mapCoords( shadow_box.GetEnd() ) );
     }
     else
     {
