@@ -31,7 +31,7 @@ msgstr "Creați straturi"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:712
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:105
 msgid "No footprint loaded."
-msgstr "Nici o amprentă încărcată."
+msgstr "Nici o capsulă încărcată."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:728
 msgid ""
@@ -146,6 +146,7 @@ msgstr "Timp de reîncărcare %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
 #, c-format
 msgid "Loading %s..."
 msgstr "Se încarcă %s..."
@@ -7278,14 +7279,14 @@ msgstr ""
 "Rețeaua %s este conectată grafic la magistrală %s, dar nu este membră a "
 "acestei magistrale"
 
-#: eeschema/connection_graph.cpp:3063
+#: eeschema/connection_graph.cpp:3063 eeschema/connection_graph.cpp:3051
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Fișa pin %s nu are nicio etichetă ierarhică corespunzătoare în interiorul "
 "fișei"
 
-#: eeschema/connection_graph.cpp:3080
+#: eeschema/connection_graph.cpp:3080 eeschema/connection_graph.cpp:3068
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -15101,7 +15102,7 @@ msgstr "Corp"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1276
 msgid "Power Symbol"
-msgstr ""
+msgstr "Simbol alimentare"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -29564,6 +29565,8 @@ msgstr ""
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
 #, c-format
 msgid "Library '%s' is read only."
 msgstr ""
@@ -30963,6 +30966,7 @@ msgstr "Eroare la citirea fișierului."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
 msgid "Open cancelled by user."
 msgstr ""
 
@@ -31759,12 +31763,14 @@ msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permisiuni insuficiente pentru a șterge dosarul '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr ""
@@ -31777,6 +31783,7 @@ msgstr "Fișier neașteptat \"%s\" găsit în biblioteca \"%s\"."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr ""
@@ -31972,20 +31979,24 @@ msgid "unknown pad type: %d"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
 #, c-format
 msgid "unknown via type %d"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
 msgid "This file does not contain a PCB."
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -31993,25 +32004,30 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
 msgid "Library Not Found"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Permisiuni insuficiente pentru a șterge \"%s\"."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Nu se poate suprascrie calea bibliotecii \"%s\"."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "S-a găsit un fișier neașteptat '%s' în calea de bibliotecă '%s'."
@@ -33088,8 +33104,9 @@ msgid "Thickness (mils)"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
+#, fuzzy
 msgid "Loss Tangent"
-msgstr ""
+msgstr "Tangenta unghiului de pierderi"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 #, fuzzy
