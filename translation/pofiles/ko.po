@@ -17286,9 +17286,8 @@ msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
 msgstr "수평, 수직, 45도 각도로만 도선 그리기"
 
 #: eeschema/tools/ee_actions.cpp:706
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "다음 그리드로 전환"
+msgstr "다음 라인 모드로 전환"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Annotate Automatically"
@@ -17348,7 +17347,7 @@ msgstr "이 계층에서 한 시트 위로 이동"
 #: eeschema/tools/ee_actions.cpp:752
 #, fuzzy
 msgid "Navigate Back"
-msgstr "페이지로 이동"
+msgstr "뒤로 이동"
 
 #: eeschema/tools/ee_actions.cpp:752
 msgid "Move forward in sheet navigation history"
@@ -17357,7 +17356,7 @@ msgstr "시트 탐색 기록에서 앞으로 이동"
 #: eeschema/tools/ee_actions.cpp:758
 #, fuzzy
 msgid "Navigate Forward"
-msgstr "네비게이터"
+msgstr "앞으로 이동"
 
 #: eeschema/tools/ee_actions.cpp:758
 #, fuzzy
@@ -17436,7 +17435,7 @@ msgstr "현재의 배선을 1 세그먼트만큼 되돌립니다."
 #: eeschema/tools/ee_actions.cpp:833
 #, fuzzy
 msgid "Switch Segment Posture"
-msgstr "호의 모양 전환"
+msgstr "세그먼트 모양 전환"
 
 #: eeschema/tools/ee_actions.cpp:833
 msgid "Switches posture of the current segment."
@@ -17725,9 +17724,7 @@ msgid "No symbol library selected."
 msgstr "선택한 심볼 라이브러리가 없습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#: pcbnew/tools/footprint_editor_control.cpp:400
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
 msgstr "새 이름:"
 
@@ -19764,8 +19761,8 @@ msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"식별자 %s에 해당하는 패키지는 이미 설치되었습니다. 이 패키지를 제거하고 다시 "
-"시도하세요."
+"식별자 %s에 해당하는 패키지는 이미 설치되었습니다.선택한 파일의 버전으로 업데"
+"이트 하시겠습니까?"
 
 #: kicad/pcm/pcm_task_manager.cpp:383
 msgid "Update package"
@@ -20965,7 +20962,6 @@ msgid "Wire properties"
 msgstr "와이어 속성"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
 msgstr "표준 크기:"
 
@@ -20990,7 +20986,7 @@ msgstr "100% 표면 깊이에 대한 주파수"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 #, fuzzy
 msgid "Ampacity:"
-msgstr "불투명도 :"
+msgstr "전류용량:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
 #, fuzzy
@@ -21238,7 +21234,7 @@ msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습�
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 #, fuzzy
 msgid "Ambient temperature:"
-msgstr "주변 온도:"
+msgstr "주위 온도:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21248,7 +21244,6 @@ msgid "deg C"
 msgstr "℃"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
 msgstr "녹는 점:"
 
@@ -21259,9 +21254,8 @@ msgid "Track width:"
 msgstr "배선 너비:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "트레이스 두께 (H):"
+msgstr "배선 두께:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
 #, fuzzy
