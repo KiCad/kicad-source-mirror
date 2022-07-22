@@ -24,7 +24,6 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 * [AUTHORS.txt](AUTHORS.txt) - The authors, contributors, document writers and translators list
 * [CMakeLists.txt](CMakeLists.txt) - Main CMAKE build tool script
 * [copyright.h](copyright.h) - A very short copy of the GNU General Public License to be included in new source files
-* [CTestConfig.cmake](CTestConfig.cmake) - Support for CTest and CDash testing tools
 * [Doxyfile](Doxyfile) - Doxygen config file for KiCad
 * [INSTALL.txt](INSTALL.txt) - The release (binary) installation instructions
 * [uncrustify.cfg](uncrustify.cfg) - Uncrustify config file for uncrustify sources formatting tool
@@ -34,7 +33,7 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 
 * [3d-viewer](3d-viewer)         - Sourcecode of the 3D viewer
 * [bitmap2component](bitmap2component)  - Sourcecode of the bitmap to PCB artwork converter
-* [CMakeModules](CMakeModules)      - Modules for the CMAKE build tool
+* [cmake](cmake)      - Modules for the CMAKE build tool
 * [common](common)            - Sourcecode of the common library
 * [cvpcb](cvpcb)             - Sourcecode of the CvPCB tool
 * [demos](demos)             - Some demo examples

@@ -40,7 +40,7 @@ include( CMakeDependentOption )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 # Path to local CMake modules.
-set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
+set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake )
 
 # On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
 # and more than 3Gb for the full kicad suite)
@@ -952,7 +952,7 @@ endif()
 # Require the same wxWidgets version as is used by wxPython
 set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
 
-# See line 49 of CMakeModules/FindwxWidgets.cmake
+# See line 49 of cmake/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
 
 find_package( wxWidgets ${wxWidgets_REQ_VERSION} COMPONENTS gl aui adv html core net base propgrid xml stc richtext REQUIRED )
@@ -1002,7 +1002,7 @@ find_package( Doxygen )
 add_subdirectory( doxygen )
 
 # Generate config.h.
-configure_file( ${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
+configure_file( ${PROJECT_SOURCE_DIR}/cmake/config.h.cmake
     ${CMAKE_BINARY_DIR}/config.h )
 
 ###
