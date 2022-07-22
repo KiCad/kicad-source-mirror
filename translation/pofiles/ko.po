@@ -17268,9 +17268,8 @@ msgstr "제외된 전기 규칙 검사기 위반에 대한 마커 표시"
 
 #: eeschema/tools/ee_actions.cpp:691 eeschema/tools/ee_actions.cpp:696
 #: eeschema/tools/ee_actions.cpp:701 eeschema/tools/ee_actions.cpp:706
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "버스와 도선 수평/수직 배치 강제하기"
+msgstr "전선 및 버스의 선 모드"
 
 #: eeschema/tools/ee_actions.cpp:691
 msgid "Lines drawn at any angle"
@@ -17343,23 +17342,20 @@ msgid "Navigate up one sheet in the hierarchy"
 msgstr "이 계층에서 한 시트 위로 이동"
 
 #: eeschema/tools/ee_actions.cpp:752
-#, fuzzy
 msgid "Navigate Back"
-msgstr "뒤로 이동"
+msgstr "뒤로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:752
 msgid "Move forward in sheet navigation history"
 msgstr "시트 탐색 기록에서 앞으로 이동"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Navigate Forward"
-msgstr "앞으로 이동"
+msgstr "앞으로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:758
-#, fuzzy
 msgid "Move backward in sheet navigation history"
-msgstr "시트 탐색 기록에서 뒤로 이동"
+msgstr "시트 탐색 기록에서 뒤로 가기"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Previous Sheet"
@@ -17368,7 +17364,7 @@ msgstr "이전 시트"
 #: eeschema/tools/ee_actions.cpp:764
 #, fuzzy
 msgid "Move to previous sheet by number"
-msgstr "번호로 이전 시트로 이동"
+msgstr "번호별로 이전 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:770
 msgid "Next Sheet"
@@ -17428,7 +17424,7 @@ msgstr "마지막 세그먼트 되돌리기"
 #: eeschema/tools/ee_actions.cpp:827
 #, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "현재의 배선을 1 세그먼트만큼 되돌립니다."
+msgstr "현재 줄을 한 세그먼트 뒤로 이동합니다."
 
 #: eeschema/tools/ee_actions.cpp:833
 #, fuzzy
@@ -17574,9 +17570,8 @@ msgstr "심볼은 다중 단위가 아닙니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:378 eeschema/tools/sch_edit_tool.cpp:419
 #: eeschema/tools/sch_edit_tool.cpp:456
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "기본 필드 편집"
+msgstr "주요 필드 편집"
 
 #: eeschema/tools/sch_edit_tool.cpp:477
 msgid "Change To"
