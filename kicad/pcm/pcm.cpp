@@ -371,8 +371,8 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     bool packages_cache_exists = false;
 
     // First load repository data from local filesystem if available.
-    wxFileName repo_cache = wxFileName( m_3rdparty_path, "repository.json" );
-    repo_cache.AppendDir( "cache" );
+    wxFileName repo_cache = wxFileName( PATHS::GetUserCachePath(), "repository.json" );
+    repo_cache.AppendDir( "pcm" );
     repo_cache.AppendDir( aRepositoryId );
     wxFileName packages_cache( repo_cache.GetPath(), "packages.json" );
 
@@ -839,8 +839,8 @@ PLUGIN_CONTENT_MANAGER::GetRepositoryPackageBitmaps( const wxString& aRepository
 {
     std::unordered_map<wxString, wxBitmap> bitmaps;
 
-    wxFileName resources_file = wxFileName( m_3rdparty_path, "resources.zip" );
-    resources_file.AppendDir( "cache" );
+    wxFileName resources_file = wxFileName( PATHS::GetUserCachePath(), "resources.zip" );
+    resources_file.AppendDir( "pcm" );
     resources_file.AppendDir( aRepositoryId );
 
     if( !resources_file.FileExists() )
