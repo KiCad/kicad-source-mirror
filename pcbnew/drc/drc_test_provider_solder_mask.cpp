@@ -84,6 +84,10 @@ private:
     void testMaskItemAgainstZones( BOARD_ITEM* item, const EDA_RECT& itemBBox,
                                    PCB_LAYER_ID refLayer, PCB_LAYER_ID targetLayer );
 
+    bool checkMaskAperture( BOARD_ITEM* aMaskItem, PCB_LAYER_ID aCopperLayer,
+                            BOARD_ITEM* aTestItem, int aTestNet,
+                            BOARD_ITEM** aCollidingItem );
+
 private:
     DRC_RULE m_bridgeRule;
 
@@ -98,9 +102,9 @@ private:
     std::map< std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID>, int> m_checkedPairs;
 
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
-    // first net that bridges their aperture (after which any other nets will generate
+    // first object+net that bridges their aperture (after which any other nets will generate
     // violations).
-    std::map< std::pair<BOARD_ITEM*, PCB_LAYER_ID>, int> m_maskApertureNetMap;
+    std::map< std::pair<BOARD_ITEM*, PCB_LAYER_ID>, std::pair<BOARD_ITEM*, int> > m_maskApertureNetMap;
 };
 
 
@@ -321,6 +325,49 @@ bool isNullAperture( BOARD_ITEM* aItem )
 }
 
 
+// Simple mask apertures aren't associated with copper items, so they only constitute a bridge
+// when they expose other copper items having at least two distinct nets.  We use a map to record
+// the first net exposed by each mask aperture (on each copper layer).
+
+bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem,
+                                                       PCB_LAYER_ID aCopperLayer,
+                                                       BOARD_ITEM* aTestItem, int aTestNet,
+                                                       BOARD_ITEM** aCollidingItem )
+{
+    wxASSERT( IsCopperLayer( aCopperLayer ) );
+
+    if( aMaskItem->GetParentFootprint() )
+    {
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
+
+        // Mask apertures in footprints which allow soldermask bridges are ignored entirely.
+        if( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
+            return false;
+    }
+
+    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aMaskItem, aCopperLayer };
+
+    auto ii = m_maskApertureNetMap.find( key );
+
+    if( ii == m_maskApertureNetMap.end() )
+    {
+        m_maskApertureNetMap[ key ] = { aTestItem, aTestNet };
+
+        // First net; no bridge yet....
+        return false;
+    }
+
+    if( ii->second.second == aTestNet && aTestNet > 0 )
+    {
+        // Same net; still no bridge...
+        return false;
+    }
+
+    *aCollidingItem = ii->second.first;
+    return true;
+}
+
+
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                                                           const EDA_RECT& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer,
@@ -403,7 +450,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                     // Aperture-to-aperture must enforce web-min-width
                     clearance = m_webWidth;
                 }
-                else
+                else // ( aRefLayer == F_Cu || aRefLayer == B_Cu )
                 {
                     // Copper-to-aperture uses the solder-mask-to-copper-clearance
                     clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
@@ -421,59 +468,50 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
 
                 if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
                 {
-                    // Simple mask apertures aren't associated with copper items, so they only
-                    // constitute a bridge when they expose other copper items having at least
-                    // two distinct nets.  We use a map to record the first net exposed by each
-                    // mask aperture.
-
-                    if( isMaskAperture( aItem ) )
-                    {
-                        std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aRefLayer };
-
-                        if( m_maskApertureNetMap.count( key ) == 0 )
-                        {
-                            m_maskApertureNetMap[ key ] = otherNet;
-
-                            // First net; no bridge yet....
-                            return true;
-                        }
-
-                        if( m_maskApertureNetMap.at( key ) == otherNet && otherNet > 0 )
-                            return true;
-                    }
-
-                    if( isMaskAperture( other ) )
-                    {
-                        std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { other, aRefLayer };
-
-                        if( m_maskApertureNetMap.count( key ) == 0 )
-                        {
-                            m_maskApertureNetMap[ key ] = itemNet;
-
-                            // First net; no bridge yet....
-                            return true;
-                        }
-
-                        if( m_maskApertureNetMap.at( key ) == itemNet && itemNet > 0 )
-                            return true;
-                    }
-
-                    auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                    wxString    msg;
+                    BOARD_ITEM* colliding = nullptr;
 
                     if( aTargetLayer == F_Mask )
+                        msg = _( "Front solder mask aperture bridges items with different nets" );
+                    else
+                        msg = _( "Rear solder mask aperture bridges items with different nets" );
+
+                    // Simple mask apertures aren't associated with copper items, so they only
+                    // constitute a bridge when they expose other copper items having at least
+                    // two distinct nets.
+                    if( isMaskAperture( aItem ) && otherNet >= 0 )
                     {
-                        drce->SetErrorMessage( _( "Front solder mask aperture bridges items with "
-                                                  "different nets" ) );
+                        if( checkMaskAperture( aItem, aRefLayer, other, otherNet, &colliding ) )
+                        {
+                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                            drce->SetErrorMessage( msg );
+                            drce->SetItems( aItem, colliding, other );
+                            drce->SetViolatingRule( &m_bridgeRule );
+                            reportViolation( drce, pos, aTargetLayer );
+                        }
+                    }
+                    else if( isMaskAperture( other ) && itemNet >= 0 )
+                    {
+                        if( checkMaskAperture( other, aRefLayer, aItem, itemNet, &colliding ) )
+                        {
+                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                            drce->SetErrorMessage( msg );
+                            drce->SetItems( other, colliding, aItem );
+                            drce->SetViolatingRule( &m_bridgeRule );
+                            reportViolation( drce, pos, aTargetLayer );
+                        }
                     }
                     else
                     {
-                        drce->SetErrorMessage( _( "Rear solder mask aperture bridges items with "
-                                                  "different nets" ) );
-                    }
+                        auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
-                    drce->SetItems( aItem, other );
-                    drce->SetViolatingRule( &m_bridgeRule );
-                    reportViolation( drce, pos, aTargetLayer );
+                        drce->SetErrorMessage( msg );
+                        drce->SetItems( aItem, other );
+                        drce->SetViolatingRule( &m_bridgeRule );
+                        reportViolation( drce, pos, aTargetLayer );
+                    }
                 }
 
                 return !m_drcEngine->IsCancelled();
@@ -527,42 +565,38 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
             if( zoneTree && zoneTree->QueryColliding( aItemBBox, itemShape.get(), aTargetLayer,
                                                       clearance, &actual, &pos ) )
             {
-                if( isMaskAperture( aItem ) )
-                {
-                    // Simple mask apertures aren't associated with copper items, so they only
-                    // constitute a bridge when they expose other copper items having at least
-                    // two distinct nets.  We use a map to record the first net exposed by each
-                    // mask aperture.
-
-                    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aMaskLayer };
-                    if( m_maskApertureNetMap.count( key ) == 0 )
-                    {
-                        m_maskApertureNetMap[ key ] = zoneNet;
-
-                        // First net; no bridge yet....
-                        continue;
-                    }
-
-                    if( m_maskApertureNetMap.at( key ) == zoneNet && zoneNet > 0 )
-                        continue;
-                }
-
-                auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                wxString    msg;
+                BOARD_ITEM* colliding = nullptr;
 
                 if( aMaskLayer == F_Mask )
+                    msg = _( "Front solder mask aperture bridges items with different nets" );
+                else
+                    msg = _( "Rear solder mask aperture bridges items with different nets" );
+
+                // Simple mask apertures aren't associated with copper items, so they only
+                // constitute a bridge when they expose other copper items having at least
+                // two distinct nets.
+                if( isMaskAperture( aItem ) && zoneNet >= 0 )
                 {
-                    drce->SetErrorMessage( _( "Front solder mask aperture bridges items with "
-                                              "different nets" ) );
+                    if( checkMaskAperture( aItem, aTargetLayer, zone, zoneNet, &colliding ) )
+                    {
+                        auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                        drce->SetErrorMessage( msg );
+                        drce->SetItems( aItem, colliding, zone );
+                        drce->SetViolatingRule( &m_bridgeRule );
+                        reportViolation( drce, pos, aTargetLayer );
+                    }
                 }
                 else
                 {
-                    drce->SetErrorMessage( _( "Rear solder mask aperture bridges items with "
-                                              "different nets" ) );
-                }
+                    auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
-                drce->SetItems( aItem, zone );
-                drce->SetViolatingRule( &m_bridgeRule );
-                reportViolation( drce, pos, aTargetLayer );
+                    drce->SetErrorMessage( msg );
+                    drce->SetItems( aItem, zone );
+                    drce->SetViolatingRule( &m_bridgeRule );
+                    reportViolation( drce, pos, aTargetLayer );
+                }
             }
         }
 
