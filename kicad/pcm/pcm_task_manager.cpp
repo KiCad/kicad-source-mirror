@@ -22,9 +22,10 @@
 #include "kicad_curl/kicad_curl.h"
 #include "kicad_curl/kicad_curl_easy.h"
 
+#include <paths.h>
 #include "pcm_task_manager.h"
-#include "reporter.h"
-#include "wxstream_helper.h"
+#include <reporter.h>
+#include <wxstream_helper.h>
 
 #include <fstream>
 #include <thread>
@@ -58,8 +59,8 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
 {
     PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, isUpdate, this]()
     {
-        wxFileName file_path( m_pcm->Get3rdPartyPath(), "" );
-        file_path.AppendDir( "cache" );
+        wxFileName file_path( PATHS::GetUserCachePath(), "" );
+        file_path.AppendDir( "pcm" );
         file_path.SetFullName( wxString::Format( "%s_v%s.zip", aPackage.identifier, aVersion ) );
 
         auto find_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
