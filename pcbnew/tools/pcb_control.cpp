@@ -1208,35 +1208,28 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    if( fpFrame && !fpFrame->GetModel() )
+        return 0;
+
     if( selection.Empty() )
     {
         if( fpFrame )
         {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( fpFrame->GetModel() );
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( fpFrame->GetModel() );
+            size_t     padCount = fp->GetPadCount( DO_NOT_INCLUDE_NPTH );
 
-            if( !footprint )
-                return 0;
+            msgItems.emplace_back( _( "Library" ), fp->GetFPID().GetLibNickname().wx_str() );
 
-            wxString msg;
+            msgItems.emplace_back( _( "Footprint Name" ), fp->GetFPID().GetLibItemName().wx_str() );
 
-            msg = footprint->GetFPID().GetLibNickname().wx_str();
-            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
+            msgItems.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
 
-            msg = footprint->GetFPID().GetLibItemName().wx_str();
-            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg ) );
-
-            msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
-            msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg ) );
-
-            wxString doc, keyword;
-            doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
-            keyword.Printf( _( "Keywords: %s" ), footprint->GetKeywords() );
-            msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword ) );
+            msgItems.emplace_back( wxString::Format( _( "Doc: %s" ), fp->GetDescription() ),
+                                   wxString::Format( _( "Keywords: %s" ), fp->GetKeywords() ) );
         }
         else
         {
             m_frame->SetMsgPanel( m_frame->GetBoard() );
-            return 0;
         }
     }
     else if( selection.GetSize() == 1 )
@@ -1245,15 +1238,10 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
         item->GetMsgPanelInfo( m_frame, msgItems );
     }
-
-    // Pair selection broken into multiple, optional data, starting with the selection item names
-    if( pcbFrame && selection.GetSize() == 2 )
+    else if( pcbFrame && selection.GetSize() == 2 )
     {
-        auto clearanceString =
-                [&]( const DRC_CONSTRAINT& curr_constraint )
-                {
-                    return StringFromValue( units, curr_constraint.m_Value.Min(), true );
-                };
+        // Pair selection broken into multiple, optional data, starting with the selected item
+        // names
 
         BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
         BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
@@ -1281,14 +1269,13 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 int actual_clearance = a_shape->GetClearance( b_shape.get() );
 
-                msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved clearance" ),
-                                                       clearanceString( constraint ) ) );
+                msgItems.emplace_back( _( "Resolved clearance" ),
+                                       MessageTextFromValue( units, constraint.m_Value.Min() ) );
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
-                    msgItems.emplace_back(
-                            MSG_PANEL_ITEM( _( "Actual clearance" ),
-                                    StringFromValue( units, actual_clearance, true ) ) );
+                    msgItems.emplace_back( _( "Actual clearance" ),
+                                           MessageTextFromValue( units, actual_clearance ) );
                 }
             }
         }
@@ -1309,9 +1296,33 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
             if( layer >= 0 )
             {
+                int actual = std::numeric_limits<int>::max();
+
+                if( a->HasHole() )
+                {
+                    std::shared_ptr<SHAPE_SEGMENT> hole = a->GetEffectiveHoleShape();
+                    std::shared_ptr<SHAPE>         other( b->GetEffectiveShape( layer ) );
+
+                    actual = std::min( actual, hole->GetClearance( other.get() ) );
+                }
+
+                if( b->HasHole() )
+                {
+                    std::shared_ptr<SHAPE_SEGMENT> hole = b->GetEffectiveHoleShape();
+                    std::shared_ptr<SHAPE>         other( a->GetEffectiveShape( layer ) );
+
+                    actual = std::min( actual, hole->GetClearance( other.get() ) );
+                }
+
                 constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
-                msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved hole clearance" ),
-                                                       clearanceString( constraint ) ) );
+                msgItems.emplace_back( _( "Resolved hole clearance" ),
+                                       MessageTextFromValue( units, constraint.m_Value.Min() ) );
+
+                if( actual > -1 && actual < std::numeric_limits<int>::max() )
+                {
+                    msgItems.emplace_back( _( "Actual hole clearance" ),
+                                           MessageTextFromValue( units, actual ) );
+                }
             }
         }
 
@@ -1341,13 +1352,13 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 if( edgeLayer == Edge_Cuts )
                 {
-                    msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved edge clearance" ),
-                                                           clearanceString( constraint ) ) );
+                    msgItems.emplace_back( _( "Resolved edge clearance" ),
+                                           MessageTextFromValue( units, constraint.m_Value.Min() ) );
                 }
                 else
                 {
-                    msgItems.emplace_back( MSG_PANEL_ITEM( _( "Resolved margin clearance" ),
-                                                           clearanceString( constraint ) ) );
+                    msgItems.emplace_back( _( "Resolved margin clearance" ),
+                                           MessageTextFromValue( units, constraint.m_Value.Min() ) );
                 }
             }
         }
@@ -1355,8 +1366,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( msgItems.empty() )
     {
-        wxString msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg ) );
+        msgItems.emplace_back( _( "Selected Items" ),
+                               wxString::Format( wxT( "%d" ), selection.GetSize() ) );
     }
 
     m_frame->SetMsgPanel( msgItems );

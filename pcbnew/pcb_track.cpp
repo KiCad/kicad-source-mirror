@@ -366,6 +366,12 @@ SEARCH_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD
 }
 
 
+std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
+{
+    return std::make_shared<SHAPE_SEGMENT>( SEG( m_Start, m_Start ), KiROUND( m_drill / 2.0 ) );
+}
+
+
 bool PCB_VIA::IsTented() const
 {
     const BOARD* board = GetBoard();

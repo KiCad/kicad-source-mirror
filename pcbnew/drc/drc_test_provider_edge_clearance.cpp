@@ -86,11 +86,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                                                         DRC_CONSTRAINT_T aConstraintType,
                                                         PCB_DRC_CODE aErrorCode )
 {
-    const std::shared_ptr<SHAPE>& shape = edge->GetEffectiveShape( Edge_Cuts );
-    const SHAPE*                  edgeShape = shape.get();
+    std::shared_ptr<SHAPE> shape;
 
     if( edge->Type() == PCB_PAD_T )
-        edgeShape = static_cast<PAD*>( edge )->GetEffectiveHoleShape();
+        shape = edge->GetEffectiveHoleShape();
+    else
+        shape = edge->GetEffectiveShape( Edge_Cuts );
 
     auto     constraint = m_drcEngine->EvalRules( aConstraintType, edge, item, UNDEFINED_LAYER );
     int      minClearance = constraint.GetValue().Min();
@@ -99,7 +100,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && minClearance >= 0 )
     {
-        if( itemShape->Collide( edgeShape, minClearance, &actual, &pos ) )
+        if( itemShape->Collide( shape.get(), minClearance, &actual, &pos ) )
         {
             if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {

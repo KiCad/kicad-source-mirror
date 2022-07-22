@@ -437,9 +437,9 @@ public:
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
 
     /**
-     * Return a SHAPE object representing the pad's hole.
+     * Return a SHAPE_SEGMENT object representing the pad's hole.
      */
-    const SHAPE_SEGMENT* GetEffectiveHoleShape() const;
+    std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
 
     /**
      * Return the radius of a minimum sized circle which fully encloses this pad.

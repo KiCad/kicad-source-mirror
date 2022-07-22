@@ -1297,7 +1297,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
             {
                 std::unique_ptr<SHAPE> hole;
-                hole.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+                hole.reset( pad->GetEffectiveHoleShape()->Clone() );
                 aWorld->AddEdgeExclusion( std::move( hole ) );
             }
         }

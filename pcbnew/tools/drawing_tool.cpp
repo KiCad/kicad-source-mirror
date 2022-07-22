@@ -2816,24 +2816,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            std::unique_ptr<SHAPE_SEGMENT> holeShape;
-
-            if( aOther->Type() == PCB_VIA_T )
-            {
-                PCB_VIA* via = static_cast<PCB_VIA*>( aOther );
-                VECTOR2I pos = via->GetPosition();
-
-                holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
-            }
-            else if( aOther->Type() == PCB_PAD_T )
-            {
-                PAD* pad = static_cast<PAD*>( aOther );
-
-                if( pad->GetDrillSize().x )
-                    holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
-            }
-
-            if( holeShape )
+            if( aOther->HasHole() )
             {
                 constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aVia, aOther,
                                                      UNDEFINED_LAYER );
@@ -2843,8 +2826,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( UNDEFINED_LAYER );
 
-                    if( viaShape->Collide( holeShape.get(), clearance - m_drcEpsilon ) )
+                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(),
+                                           clearance - m_drcEpsilon ) )
+                    {
                         return true;
+                    }
                 }
             }
 

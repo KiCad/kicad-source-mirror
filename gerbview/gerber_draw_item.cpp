@@ -687,15 +687,15 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     if( m_Flashed )
     {
         msg.Printf( wxT( "(%.4f, %.4f)" ), xStart, yStart );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Position" ), msg, BLUE ) );
+        aList.emplace_back( _( "Position" ), msg );
     }
     else
     {
         msg.Printf( wxT( "(%.4f, %.4f)" ), xStart, yStart );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Start" ), msg, BLUE ) );
+        aList.emplace_back( _( "Start" ), msg );
 
         msg.Printf( wxT( "(%.4f, %.4f)" ), xEnd, yEnd );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "End" ), msg, BLUE ) );
+        aList.emplace_back( _( "End" ), msg );
     }
 
     // Display item rotation

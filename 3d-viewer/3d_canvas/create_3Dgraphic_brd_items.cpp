@@ -429,28 +429,26 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 
 OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue )
 {
-    VECTOR2I drillSize = aPad->GetDrillSize();
-
-    if( !drillSize.x || !drillSize.y )
+    if( !aPad->HasHole() )
     {
         wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithDrill - found an invalid pad" ) );
         return nullptr;
     }
 
-    if( drillSize.x == drillSize.y )    // usual round hole
+    std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
+
+    if( slot->GetSeg().A == slot->GetSeg().B )
     {
-        const int radius = ( drillSize.x / 2 ) + aInflateValue;
-
-        return new FILLED_CIRCLE_2D( TO_SFVEC2F( aPad->GetPosition() ), TO_3DU( radius ), *aPad );
-
+        return new FILLED_CIRCLE_2D( TO_SFVEC2F( slot->GetSeg().A ),
+                                     TO_3DU( slot->GetWidth() / 2 + aInflateValue ),
+                                     *aPad );
     }
-    else                                // Oblong hole
+    else
     {
-        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
-        float width = seg->GetWidth() + aInflateValue * 2;
-
-        return new ROUND_SEGMENT_2D( TO_SFVEC2F( seg->GetSeg().A ), TO_SFVEC2F( seg->GetSeg().B ),
-                                     TO_3DU( width ), *aPad );
+        return new ROUND_SEGMENT_2D( TO_SFVEC2F( slot->GetSeg().A ),
+                                     TO_SFVEC2F( slot->GetSeg().B ),
+                                     TO_3DU( slot->GetWidth() + aInflateValue * 2 ),
+                                     *aPad );
     }
 }
 

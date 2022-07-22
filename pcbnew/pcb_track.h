@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 
 #include <board_connected_item.h>
 #include <convert_to_biu.h>
+#include <geometry/shape_segment.h>
 
 
 class PCB_TRACK;
@@ -357,6 +358,8 @@ public:
     {
         return true;
     }
+
+    std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
 
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;

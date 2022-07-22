@@ -184,7 +184,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 BOARD_ITEM*  testItem = aTestItemShape->parent;
                 const SHAPE* testShape = aTestItemShape->shape;
 
-                std::unique_ptr<SHAPE> hole;
+                std::shared_ptr<SHAPE> hole;
 
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
                     return false;
@@ -194,28 +194,13 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 if( testItem->IsTented() )
                 {
-                    switch( testItem->Type() )
+                    if( testItem->HasHole() )
                     {
-                    case PCB_VIA_T:
-                    {
-                        PCB_VIA* via = static_cast<PCB_VIA*>( testItem );
-                        hole.reset( via->GetEffectiveShape( UNDEFINED_LAYER,
-                                                            FLASHING::NEVER_FLASHED )->Clone() );
+                        hole = testItem->GetEffectiveHoleShape();
                         testShape = hole.get();
-                        break;
                     }
-                    case PCB_PAD_T:
+                    else
                     {
-                        PAD* pad = static_cast<PAD*>( testItem );
-
-                        if( pad->GetDrillSize().x || pad->GetDrillSize().y )
-                            return true;
-
-                        hole.reset( pad->GetEffectiveHoleShape()->Clone() );
-                        testShape = hole.get();
-                        break;
-                    }
-                    default:
                         return true;
                     }
                 }

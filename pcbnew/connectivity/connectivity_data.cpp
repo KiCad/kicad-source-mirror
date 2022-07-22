@@ -398,14 +398,12 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                 if( aItem->Type() == PCB_PAD_T && zoneLayer )
                 {
                     const PAD*    pad = static_cast<const PAD*>( aItem );
-                    SHAPE_SEGMENT hole( *pad->GetEffectiveHoleShape() );
-                    PCB_LAYER_ID  layer = ToLAYER_ID( aLayer );
                     ZONE*         zone = static_cast<ZONE*>( zoneLayer->Parent() );
                     int           islandIdx = zoneLayer->SubpolyIndex();
 
                     if( zone->IsFilled() )
                     {
-                        const SHAPE_POLY_SET*   zoneFill = zone->GetFill( layer );
+                        const SHAPE_POLY_SET*   zoneFill = zone->GetFill( ToLAYER_ID( aLayer ) );
                         const SHAPE_LINE_CHAIN& padHull = pad->GetEffectivePolygon()->Outline( 0 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )
@@ -424,14 +422,12 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                 else if( aItem->Type() == PCB_VIA_T && zoneLayer )
                 {
                     const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
-                    SHAPE_CIRCLE   hole( via->GetCenter(), via->GetDrillValue() / 2 );
-                    PCB_LAYER_ID   layer = ToLAYER_ID( aLayer );
                     ZONE*          zone = static_cast<ZONE*>( zoneLayer->Parent() );
                     int            islandIdx = zoneLayer->SubpolyIndex();
 
                     if( zone->IsFilled() )
                     {
-                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( layer );
+                        const SHAPE_POLY_SET* zoneFill = zone->GetFill( ToLAYER_ID( aLayer ) );
                         SHAPE_CIRCLE          viaHull( via->GetCenter(), via->GetWidth() / 2 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )

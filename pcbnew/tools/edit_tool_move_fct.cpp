@@ -187,22 +187,16 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
             auto testPadAgainstCourtyards =
                     [&]( const PAD* pad, FOOTPRINT* footprint ) -> bool
                     {
-                        // Skip pads with no hole
-                        if( pad->GetAttribute() != PAD_ATTRIB::PTH
-                            && pad->GetAttribute() != PAD_ATTRIB::NPTH )
-                            return false;
-
-                        const SHAPE_SEGMENT*  hole = pad->GetEffectiveHoleShape();
-                        const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
-                        const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
-
-                        if( front.OutlineCount() > 0 && front.Collide( hole, 0 ) )
+                        if( pad->HasHole() )
                         {
-                            return true;
-                        }
-                        else if( back.OutlineCount() > 0 && back.Collide( hole, 0 ) )
-                        {
-                            return true;
+                            std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+                            const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
+                            const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
+
+                            if( front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
+                                return true;
+                            else if( back.OutlineCount() > 0 && back.Collide( hole.get(), 0 ) )
+                                return true;
                         }
 
                         return false;

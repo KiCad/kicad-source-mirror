@@ -593,40 +593,28 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* item
 
     if( testHoles )
     {
-        std::unique_ptr<SHAPE_SEGMENT> itemHoleShape;
-        std::unique_ptr<SHAPE_SEGMENT> otherHoleShape;
+        std::shared_ptr<SHAPE_SEGMENT> itemHoleShape;
+        std::shared_ptr<SHAPE_SEGMENT> otherHoleShape;
         clearance = 0;
 
         if( item->Type() == PCB_VIA_T )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( item );
-            pos = via->GetPosition();
-
-            if( via->GetLayerSet().Contains( layer ) )
-                itemHoleShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+            if( item->GetLayerSet().Contains( layer ) )
+                itemHoleShape = item->GetEffectiveHoleShape();
         }
-        else if( item->Type() == PCB_PAD_T )
+        else if( item->HasHole() )
         {
-            PAD* pad = static_cast<PAD*>( item );
-
-            if( pad->GetDrillSize().x )
-                itemHoleShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            itemHoleShape = item->GetEffectiveHoleShape();
         }
 
         if( other->Type() == PCB_VIA_T )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( other );
-            pos = via->GetPosition();
-
-            if( via->GetLayerSet().Contains( layer ) )
-                otherHoleShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+            if( other->GetLayerSet().Contains( layer ) )
+                otherHoleShape = other->GetEffectiveHoleShape();
         }
-        else if( other->Type() == PCB_PAD_T )
+        else if( other->HasHole() )
         {
-            PAD* pad = static_cast<PAD*>( other );
-
-            if( pad->GetDrillSize().x )
-                otherHoleShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            otherHoleShape = other->GetEffectiveHoleShape();
         }
 
         if( itemHoleShape || otherHoleShape )
@@ -722,8 +710,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                         if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                             continue;
 
-                        const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
-                        int                  size = hole->GetWidth();
+                        std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+                        int                            size = hole->GetWidth();
 
                         // Note: drill size represents finish size, which means the actual hole
                         // size is the plating thickness larger.
@@ -763,24 +751,18 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                 }
             }
 
-            if( testHoles && ( aItem->Type() == PCB_VIA_T || aItem->Type() == PCB_PAD_T ) )
+            if( testHoles )
             {
-                std::unique_ptr<SHAPE_SEGMENT> holeShape;
+                std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
                 if( aItem->Type() == PCB_VIA_T )
                 {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-                    pos = via->GetPosition();
-
-                    if( via->GetLayerSet().Contains( aLayer ) )
-                        holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+                    if( aItem->GetLayerSet().Contains( aLayer ) )
+                        holeShape = aItem->GetEffectiveHoleShape();
                 }
-                else if( aItem->Type() == PCB_PAD_T )
+                else if( aItem->HasHole() )
                 {
-                    PAD* pad = static_cast<PAD*>( aItem );
-
-                    if( pad->GetDrillSize().x )
-                        holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+                    holeShape = aItem->GetEffectiveHoleShape();
                 }
 
                 if( holeShape )

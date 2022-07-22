@@ -259,7 +259,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             }
 
             auto testPadAgainstCourtyards =
-                    [&]( const PAD* pad, const FOOTPRINT* footprint )
+                    [&]( const PAD* pad, const FOOTPRINT* fp )
                     {
                         int errorCode = 0;
 
@@ -273,21 +273,24 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         if( m_drcEngine->IsErrorLimitExceeded( errorCode ) )
                             return;
 
-                        const SHAPE_SEGMENT*  hole = pad->GetEffectiveHoleShape();
-                        const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
-                        const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
+                        if( pad->HasHole() )
+                        {
+                            std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+                            const SHAPE_POLY_SET&          front = fp->GetPolyCourtyard( F_CrtYd );
+                            const SHAPE_POLY_SET&          back = fp->GetPolyCourtyard( B_CrtYd );
 
-                        if( front.OutlineCount() > 0 && front.Collide( hole, 0 ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
-                            drce->SetItems( pad, footprint );
-                            reportViolation( drce, pad->GetPosition(), F_CrtYd );
-                        }
-                        else if( back.OutlineCount() > 0 && back.Collide( hole, 0 ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
-                            drce->SetItems( pad, footprint );
-                            reportViolation( drce, pad->GetPosition(), B_CrtYd );
+                            if( front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
+                            {
+                                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
+                                drce->SetItems( pad, fp );
+                                reportViolation( drce, pad->GetPosition(), F_CrtYd );
+                            }
+                            else if( back.OutlineCount() > 0 && back.Collide( hole.get(), 0 ) )
+                            {
+                                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
+                                drce->SetItems( pad, fp );
+                                reportViolation( drce, pad->GetPosition(), B_CrtYd );
+                            }
                         }
                     };
 

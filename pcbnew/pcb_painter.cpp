@@ -1086,13 +1086,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetLineWidth( m_holePlatingThickness );
         m_gal->SetStrokeColor( color );
 
-        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
-        int                  holeSize = seg->GetWidth() + m_holePlatingThickness;
+        std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
+        int                            holeSize = slot->GetWidth() + m_holePlatingThickness;
 
-        if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( seg->GetSeg().A, holeSize / 2 );
+        if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
+            m_gal->DrawCircle( slot->GetSeg().A, KiROUND( holeSize / 2.0 ) );
         else
-            m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, holeSize );
+            m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, holeSize );
 
         return;
     }
@@ -1122,12 +1122,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     if( aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
-        const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
+        std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
 
-        if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( seg->GetSeg().A, getDrillSize( aPad ).x / 2 );
+        if( slot->GetSeg().A == slot->GetSeg().B )    // Circular hole
+            m_gal->DrawCircle( slot->GetSeg().A, slot->GetWidth() / 2 );
         else
-            m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
+            m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, slot->GetWidth() );
     }
     else
     {
@@ -1400,9 +1400,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             {
                 clearance += m_holePlatingThickness;
 
-                const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
-                m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,
-                                    seg->GetWidth() + 2 * clearance );
+                std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
+                m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B,
+                                    slot->GetWidth() + 2 * clearance );
             }
         }
     }

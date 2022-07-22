@@ -329,17 +329,9 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFl
             || ( aLayer != UNDEFINED_LAYER && !FlashLayer( aLayer ) ) )
     {
         if( GetAttribute() == PAD_ATTRIB::PTH )
-        {
-            BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-            // Note: drill size represents finish size, which means the actual holes size is the
-            // plating thickness larger.
-            auto hole = static_cast<SHAPE_SEGMENT*>( GetEffectiveHoleShape()->Clone() );
-            hole->SetWidth( hole->GetWidth() + bds.GetHolePlatingThickness() );
-            return std::make_shared<SHAPE_SEGMENT>( *hole );
-        }
-
-        return std::make_shared<SHAPE_NULL>();
+            return GetEffectiveHoleShape();
+        else
+            return std::make_shared<SHAPE_NULL>();
     }
 
     if( m_shapesDirty )
@@ -349,12 +341,12 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFl
 }
 
 
-const SHAPE_SEGMENT* PAD::GetEffectiveHoleShape() const
+std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape() const
 {
     if( m_shapesDirty )
         BuildEffectiveShapes( UNDEFINED_LAYER );
 
-    return m_effectiveHoleShape.get();
+    return m_effectiveHoleShape;
 }
 
 
@@ -1537,10 +1529,10 @@ bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, in
     if( !drillsize.x || !drillsize.y )
         return false;
 
-    const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
+    std::shared_ptr<SHAPE_SEGMENT> slot = GetEffectiveHoleShape();
 
-    TransformOvalToPolygon( aCornerBuffer, seg->GetSeg().A, seg->GetSeg().B,
-                            seg->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
+    TransformOvalToPolygon( aCornerBuffer, slot->GetSeg().A, slot->GetSeg().B,
+                            slot->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
 
     return true;
 }

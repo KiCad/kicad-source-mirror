@@ -467,22 +467,17 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
     {
         if( aItem->Type() == PCB_PAD_T )
         {
-            PAD*                 pad = static_cast<PAD*>( aItem );
-            const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
-
-            return areaOutline.Collide( holeShape );
+            return areaOutline.Collide( aItem->GetEffectiveHoleShape().get() );
         }
         else if( aItem->Type() == PCB_VIA_T )
         {
-            PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
-            const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
-            LSET               overlap = via->GetLayerSet() & aArea->GetLayerSet();
+            LSET overlap = aItem->GetLayerSet() & aArea->GetLayerSet();
 
             /// Avoid buried vias that don't overlap the zone's layers
-            if( overlap.count() > 0 )
+            if( overlap.any() )
             {
                 if( aCtx->GetLayer() == UNDEFINED_LAYER || overlap.Contains( aCtx->GetLayer() ) )
-                return areaOutline.Collide( &holeShape );
+                    return areaOutline.Collide( aItem->GetEffectiveHoleShape().get() );
             }
         }
 

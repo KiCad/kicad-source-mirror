@@ -1281,14 +1281,13 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
         else if( m_dummyPad->GetAttribute() == PAD_ATTRIB::PTH )
         {
-            const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
-            const SEG            drillSeg   = drillShape->GetSeg();
-            SHAPE_POLY_SET       drillOutline;
+            std::shared_ptr<SHAPE_SEGMENT> slot = m_dummyPad->GetEffectiveHoleShape();
+            SHAPE_POLY_SET                 slotOutline;
 
-            TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
-                                    drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+            TransformOvalToPolygon( slotOutline, slot->GetSeg().A, slot->GetSeg().B,
+                                    slot->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
 
-            padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
             if( padOutline.IsEmpty() )
                 warning_msgs.Add( _( "Warning: Pad hole will leave no copper." ) );

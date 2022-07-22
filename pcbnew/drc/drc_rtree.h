@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2020 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -53,13 +53,23 @@ public:
     {
         ITEM_WITH_SHAPE( BOARD_ITEM *aParent, const SHAPE* aShape,
                          std::shared_ptr<SHAPE> aParentShape = nullptr ) :
-            parent ( aParent ),
-            shape ( aShape ),
+            parent( aParent ),
+            shape( aShape ),
+            shapeStorage( nullptr ),
             parentShape( aParentShape )
         {};
 
-        BOARD_ITEM* parent;
-        const SHAPE* shape;
+        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, std::shared_ptr<SHAPE> aShape,
+                         std::shared_ptr<SHAPE> aParentShape = nullptr ) :
+            parent( aParent ),
+            shape( aShape.get() ),
+            shapeStorage( aShape ),
+            parentShape( aParentShape )
+        {};
+
+        BOARD_ITEM*            parent;
+        const SHAPE*           shape;
+        std::shared_ptr<SHAPE> shapeStorage;
         std::shared_ptr<SHAPE> parentShape;
     };
 
@@ -79,9 +89,9 @@ public:
 
     ~DRC_RTREE()
     {
-        for( auto tree : m_tree )
+        for( drc_rtree* tree : m_tree )
         {
-            for( auto el : *tree )
+            for( DRC_RTREE::ITEM_WITH_SHAPE* el : *tree )
                 delete el;
 
             delete tree;
@@ -110,23 +120,11 @@ public:
 
         std::vector<const SHAPE*> subshapes;
         std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );
-        subshapes.clear();
 
         if( shape->HasIndexableSubshapes() )
             shape->GetIndexableSubshapes( subshapes );
         else
             subshapes.push_back( shape.get() );
-
-        if( aItem->Type() == PCB_PAD_T )
-        {
-            PAD* pad = static_cast<PAD*>( aItem );
-
-            if( pad->HasHole() )
-            {
-                const SHAPE* hole = pad->GetEffectiveHoleShape();
-                subshapes.push_back( const_cast<SHAPE*>( hole ) );
-            }
-        }
 
         for( const SHAPE* subshape : subshapes )
         {
@@ -143,6 +141,22 @@ public:
 
             m_tree[aTargetLayer]->Insert( mmin, mmax, itemShape );
             m_count++;
+        }
+
+        if( aItem->Type() == PCB_PAD_T && aItem->HasHole() )
+        {
+            std::shared_ptr<SHAPE_SEGMENT> hole = aItem->GetEffectiveHoleShape();
+            BOX2I                          bbox = hole->BBox();
+
+            bbox.Inflate( aWorstClearance );
+
+            const int        mmin[2] = { bbox.GetX(), bbox.GetY() };
+            const int        mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+            ITEM_WITH_SHAPE* itemShape = new ITEM_WITH_SHAPE( aItem, hole, shape );
+
+            m_tree[aTargetLayer]->Insert( mmin, mmax, itemShape );
+            m_count++;
+
         }
     }
 

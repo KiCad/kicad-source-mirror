@@ -229,24 +229,18 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         }
     }
 
-    if( testHoles && ( other->Type() == PCB_VIA_T || other->Type() == PCB_PAD_T ) )
+    if( testHoles && other->HasHole() )
     {
-        std::unique_ptr<SHAPE_SEGMENT> holeShape;
+        std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
         if( other->Type() == PCB_VIA_T )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( other );
-            pos = via->GetPosition();
-
-            if( via->GetLayerSet().Contains( layer ) )
-                holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+            if( other->GetLayerSet().Contains( layer ) )
+                holeShape = other->GetEffectiveHoleShape();
         }
-        else if( other->Type() == PCB_PAD_T )
+        else
         {
-            PAD* pad = static_cast<PAD*>( other );
-
-            if( pad->GetDrillSize().x )
-                holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            holeShape = other->GetEffectiveHoleShape();
         }
 
         if( holeShape )
@@ -285,7 +279,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem, ZONE* aZone,
-                                                               PCB_LAYER_ID aLayer )
+                                                              PCB_LAYER_ID aLayer )
 {
     if( !aZone->GetLayerSet().test( aLayer ) )
         return;
@@ -312,31 +306,22 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     int              clearance = -1;
     int              actual;
     VECTOR2I         pos;
-    PCB_VIA*         via = nullptr;
-    PAD*             pad = nullptr;
-    bool             flashed = false;
-    bool             hasHole = false;
+    bool             unflashedPad = false;
     bool             platedHole = false;
 
-    if( aItem->Type() == PCB_VIA_T )
+    if( aItem->Type() == PCB_PAD_T )
     {
-        via = static_cast<PCB_VIA*>( aItem );
-    }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        pad = static_cast<PAD*>( aItem );
-        flashed = pad->FlashLayer( aLayer );
-        hasHole = pad->GetDrillSize().x > 0 || pad->GetDrillSize().y > 0;
+        unflashedPad = !static_cast<PAD*>( aItem )->FlashLayer( aLayer );
 
-        if( !flashed && !hasHole )
+        if( unflashedPad && !aItem->HasHole() )
             return;
 
-        platedHole = hasHole && pad->GetAttribute() == PAD_ATTRIB::PTH;
+        platedHole = static_cast<PAD*>( aItem )->GetAttribute() == PAD_ATTRIB::PTH;
     }
 
     if( zoneTree && testClearance )
     {
-        if( pad && !flashed && hasHole && !platedHole )
+        if( unflashedPad && !platedHole )
             constraintType = HOLE_CLEARANCE_CONSTRAINT;
 
         constraint = m_drcEngine->EvalRules( constraintType, aItem, aZone, aLayer );
@@ -347,10 +332,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     {
         std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
 
-        if( pad && !flashed && hasHole )
+        if( unflashedPad )
         {
-            const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
-            int                  size = hole->GetWidth();
+            std::shared_ptr<SHAPE_SEGMENT> hole = aItem->GetEffectiveHoleShape();
+            int                            size = hole->GetWidth();
 
             // Note: drill size represents finish size, which means the actual hole size is
             // 2x the plating thickness larger.
@@ -380,18 +365,18 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
         }
     }
 
-    if( zoneTree && testHoles && ( pad || via ) )
+    if( zoneTree && testHoles && aItem->HasHole() )
     {
-        std::unique_ptr<SHAPE_SEGMENT> holeShape;
+        std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
-        if( via && via->GetLayerSet().Contains( aLayer ) )
+        if( aItem->Type() == PCB_VIA_T )
         {
-            holeShape.reset( new SHAPE_SEGMENT( via->GetPosition(), via->GetPosition(),
-                                                via->GetDrill() ) );
+            if( aItem->GetLayerSet().Contains( aLayer ) )
+                holeShape = aItem->GetEffectiveHoleShape();
         }
-        else if( pad && pad->GetDrillSize().x )
+        else
         {
-            holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            holeShape = aItem->GetEffectiveHoleShape();
         }
 
         if( holeShape )
@@ -628,9 +613,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testHoles = false;
     }
 
-    if( testHoles && otherPad && pad->FlashLayer( aLayer ) && otherPad->GetDrillSize().x )
+    if( testHoles && otherPad && pad->FlashLayer( aLayer ) && otherPad->HasHole() )
     {
-        if( clearance > 0 && padShape->Collide( otherPad->GetEffectiveHoleShape(),
+        if( clearance > 0 && padShape->Collide( otherPad->GetEffectiveHoleShape().get(),
                                                 std::max( 0, clearance - m_drcEpsilon ),
                                                 &actual, &pos ) )
         {
@@ -651,9 +636,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         }
     }
 
-    if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->GetDrillSize().x )
+    if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->HasHole() )
     {
-        if( clearance > 0 && otherShape->Collide( pad->GetEffectiveHoleShape(),
+        if( clearance > 0 && otherShape->Collide( pad->GetEffectiveHoleShape().get(),
                                                   std::max( 0, clearance - m_drcEpsilon ),
                                                   &actual, &pos ) )
         {
@@ -676,10 +661,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
     if( testHoles && otherVia && otherVia->IsOnLayer( aLayer ) )
     {
-        pos = otherVia->GetPosition();
-        otherShape.reset( new SHAPE_SEGMENT( pos, pos, otherVia->GetDrill() ) );
-
-        if( clearance > 0 && padShape->Collide( otherShape.get(),
+        if( clearance > 0 && padShape->Collide( otherVia->GetEffectiveHoleShape().get(),
                                                 std::max( 0, clearance - m_drcEpsilon ),
                                                 &actual, &pos ) )
         {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wandadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 class BOARD;
 class BOARD_ITEM_CONTAINER;
 class SHAPE_POLY_SET;
+class SHAPE_SEGMENT;
 class PCB_BASE_FRAME;
 class SHAPE;
 class PCB_GROUP;
@@ -145,7 +146,9 @@ public:
      *               will be returned. Pass UNDEFINED_LAYER to return shapes for all layers.
      */
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const;
+                                                      FLASHING aFlash = FLASHING::DEFAULT ) const;
+
+    virtual std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const;
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 

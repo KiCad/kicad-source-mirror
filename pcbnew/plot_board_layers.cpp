@@ -702,23 +702,22 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             {
                 for( PAD* pad : footprint->Pads() )
                 {
-                    VECTOR2I hole = pad->GetDrillSize();
-
-                    if( hole.x == 0 || hole.y == 0 )
-                        continue;
-
-                    if( hole.x == hole.y )
+                    if( pad->HasHole() )
                     {
-                        hole.x = std::min( smallDrill, hole.x );
-                        aPlotter->Circle( pad->GetPosition(), hole.x, FILL_T::NO_FILL );
-                    }
-                    else
-                    {
-                        // Note: small drill marks have no significance when applied to slots
-                        const SHAPE_SEGMENT* seg = pad->GetEffectiveHoleShape();
-                        aPlotter->ThickSegment( seg->GetSeg().A,
-                                                seg->GetSeg().B,
-                                                seg->GetWidth(), SKETCH, nullptr );
+                        std::shared_ptr<SHAPE_SEGMENT> slot = pad->GetEffectiveHoleShape();
+
+                        if( slot->GetSeg().A == slot->GetSeg().B )  // circular hole
+                        {
+                            int drill = std::min( smallDrill, slot->GetWidth() );
+                            aPlotter->Circle( pad->GetPosition(), drill, FILL_T::NO_FILL );
+                        }
+                        else
+                        {
+                            // Note: small drill marks have no significance when applied to slots
+                            aPlotter->ThickSegment( slot->GetSeg().A,
+                                                    slot->GetSeg().B,
+                                                    slot->GetWidth(), SKETCH, nullptr );
+                        }
                     }
                 }
             }

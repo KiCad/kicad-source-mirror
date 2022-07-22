@@ -2322,20 +2322,16 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
                 pad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, ARC_HIGH_DEF,
                                                            ERROR_LOC::ERROR_INSIDE );
 
-                const SHAPE_SEGMENT* drillShape = pad->GetEffectiveHoleShape();
-                const SEG            drillSeg   = drillShape->GetSeg();
-                SHAPE_POLY_SET       drillOutline;
+                std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+                SHAPE_POLY_SET                 holeOutline;
 
-                TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
-                                        drillShape->GetWidth(), ARC_HIGH_DEF,
-                                        ERROR_LOC::ERROR_INSIDE );
+                TransformOvalToPolygon( holeOutline, hole->GetSeg().A, hole->GetSeg().B,
+                                        hole->GetWidth(), ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
 
-                padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                padOutline.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
                 if( padOutline.IsEmpty() )
-                {
                     (aErrorHandler)( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
-                }
             }
         }
     }

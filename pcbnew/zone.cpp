@@ -522,7 +522,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
             AccumulateDescription( msg, _( "No footprints" ) );
 
         if( !msg.IsEmpty() )
-            aList.emplace_back( MSG_PANEL_ITEM( _( "Restrictions" ), msg ) );
+            aList.emplace_back( _( "Restrictions" ), msg );
     }
     else if( IsOnCopperLayer() )
     {
@@ -586,23 +586,14 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
                                               source ) );
     }
 
-    // Useful for statistics, especially when zones are complex the number of hatches
-    // and filled polygons can explain the display and DRC calculation time:
-    msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg ) );
-
     if( !m_FilledPolysList.empty() )
     {
         count = 0;
 
-        for( auto item: m_FilledPolysList )
-        {
-            const std::shared_ptr<SHAPE_POLY_SET>& polyset = item.second;
-            count +=  polyset->TotalVertices();
-        }
+        for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& ii: m_FilledPolysList )
+            count += ii.second->TotalVertices();
 
-        msg.Printf( wxT( "%d" ), count );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg ) );
+        aList.emplace_back( _( "Corner Count" ), wxString::Format( wxT( "%d" ), count ) );
     }
 }
 
