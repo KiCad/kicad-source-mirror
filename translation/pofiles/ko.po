@@ -6951,7 +6951,7 @@ msgstr "단축키 파일"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "동일한 파일 '%s'을 찾을 수 없습니다."
+msgstr "동일한 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -9372,7 +9372,7 @@ msgstr "이름 텍스트 크기"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
 msgid "De Morgan"
-msgstr "드 모르간"
+msgstr "드모르간"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:70
@@ -9858,7 +9858,7 @@ msgstr "도식의 기본 선 너비로 사용하기 위해 너비를 0으로 설
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
-msgstr "라인 속성"
+msgstr "선 속성"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -10016,7 +10016,7 @@ msgstr "드 모르간 기호에는 대체 핀 할당을 사용할 수 없습니�
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
 msgid "Exit sync pins mode"
-msgstr "동기화 핀 모드 종료"
+msgstr "핀 동기화 모드 나가기"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 msgid ""
@@ -30894,34 +30894,34 @@ msgid "Checking board setup constraints track width: min %s."
 msgstr "기판 구성 제약 코트야드"
 
 #: pcbnew/drc/drc_engine.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "비아 환형 고리 확인 중..."
+msgstr "확인 중 %s 랜드 폭: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:932
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "비아 지름 확인 중..."
+msgstr "확인 중 %s 경로 지름: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:938
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "기판 구성 제약 모서리"
+msgstr "기판 설정에 따른 제한 비아 홀 지름 확인 중 :최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:947
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "%s 확인 중; 홀 클리어런스: %s."
+msgstr "확인 중 %s 홀 크기: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:953
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "기판 구성 제약 홀"
+msgstr "기판 설정에 따른 제한 구멍 크기 확인 중 :최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:961 pcbnew/drc/drc_engine.cpp:967
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "%s %s 확인 중: %s."
+msgstr "확인 중 %s: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:975
 #, fuzzy, c-format
@@ -30929,9 +30929,9 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "%s 확인 중 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "%s 확인 중; 코트야드 클리어런스: %s."
+msgstr "기판 설정에 따른 제한 간격 확인 중 :최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:990 pcbnew/drc/drc_engine.cpp:1016
 #: pcbnew/drc/drc_engine.cpp:1434
@@ -31124,9 +31124,8 @@ msgid "Drilled holes co-located"
 msgstr "드릴된 홀이 너무 가까이 배치됨"
 
 #: pcbnew/drc/drc_item.cpp:112
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "영역과 패드 간 연결:"
+msgstr "구리 도선 연결이 너무 좁습니다"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Track width"
@@ -31423,9 +31422,9 @@ msgid "Checking nets for minimum connection width..."
 msgstr "네트의 최소 연결 너비 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum connection width %s; actual %s"
-msgstr "(%s 최소 폭 %s; 실제 값 %s)"
+msgstr "최소 연결 폭 %s; 실제 값 %s"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
@@ -31660,7 +31659,7 @@ msgstr "물리적 여유 공간 확인 중..."
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
 #, fuzzy, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "%s의 지역 클리어런스 값; 클리어런스: %s."
+msgstr "내부 유격 위반 (%s 유격: 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -32117,10 +32116,10 @@ msgstr "풋프린트 %s"
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "\"스루홀\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
 
-#: pcbnew/footprint.cpp:2284 pcbnew/footprint.cpp:2271
-#, fuzzy, c-format
+#: pcbnew/footprint.cpp:2271
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s 최대 직경 %s; 실제 값 %s)"
+msgstr "(기대값 'SMD'; 실제 '%s')"
 
 #: pcbnew/footprint.cpp:2287 pcbnew/footprint.cpp:2274
 #, fuzzy, c-format
@@ -32618,14 +32617,12 @@ msgid "Invalid R_load."
 msgstr "잘못된 R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "잘못된 길이 값"
+msgstr "잘못된 하향 dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "잘못된 저항 값"
+msgstr "잘못된 상향 dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
 msgid "Model name cannot be empty"
@@ -32737,14 +32734,12 @@ msgid "OEM cannot be empty."
 msgstr "텍스트는 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
-#, fuzzy
 msgid "Negative number of pins."
-msgstr "포인트 수"
+msgstr "핀 개수가 음수입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:625
-#, fuzzy
 msgid "Empty pin number"
-msgstr "예상 번호."
+msgstr "핀번호가 비었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:633
 #, fuzzy
@@ -32782,24 +32777,20 @@ msgid "Inductance matrix is nullptr"
 msgstr "단위 길이당 인덕턴스"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "'%s' 파일을 열 수 없음"
+msgstr "파일을 열 수 없음 "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "설정 파일 읽기:"
+msgstr "파일 읽는 중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "예기치 않은 파일의 끝."
+msgstr "예기치 않은 EOF(end of file). [END]가 없습니까 ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "프린터 정보 초기화 오류"
+msgstr "줄에서 오류 발생 "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
 #, fuzzy
@@ -32840,12 +32831,11 @@ msgstr "잘못된 구문입니다. |_char 또는 &_char 등의 형식이어야�
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
 msgid "No extra argument was expected"
-msgstr "추가 인수가 예상되지 않았습니다."
+msgstr "추가 인수를 필요로 하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "알 수 없는 레코드 ID: %d."
+msgstr "알 수 없는 키워드 "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
 msgid " context: "
@@ -32858,7 +32848,7 @@ msgstr "잘못된 핀 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
-msgstr "해당 종류의 매트릭스에 대한 대역폭을 지정할 수 없습니다."
+msgstr "해당 종류의 매트릭스에 대한 대역폭을 지정할 수 없습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
 #, fuzzy
@@ -32888,15 +32878,14 @@ msgid "Unknown matrix type"
 msgstr "알 수 없는 비아 유형 %d"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "최대값이 누락되었습니다."
+msgstr "메트릭스 타입 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
 msgstr ""
-" 매트릭스가 이미 초기화되었습니다. 그러나 m_continue가 설정되지 않았습니다(내"
-"부 오류)."
+" 매트릭스가 이미 초기화되었습니다. 그러나 m_continue가 설정되지 않았습니다 "
+"(내부 오류)"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
@@ -32912,19 +32901,16 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr "Typ-Min-Max 값에는 최소한 Typ가 필요합니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "알 수 없는 메서드"
+msgstr "알 수 없는 모델_타입 "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
-#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr "model_type을 읽는 동안 내부 오류가 발생했습니다."
+msgstr "model_type을 읽는 동안 내부 오류가 발생"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "알 수 없는 PCad 레이어 %u"
+msgstr "알수 없는 활성화: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 #, fuzzy
@@ -32932,9 +32918,8 @@ msgid "Internal Error while reading Enable"
 msgstr "Enable 읽기 동안 내부 오류"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "근원을 알 수 없음"
+msgstr "알수 없는 극성 "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
