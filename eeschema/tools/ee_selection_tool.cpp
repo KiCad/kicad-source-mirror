@@ -1218,11 +1218,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
-    KIGFX::VIEW*    view = getView();
-    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
-
-    if( !editFrame )
-        return cancelled;
+    KIGFX::VIEW* view = getView();
 
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
@@ -1279,49 +1275,25 @@ bool EE_SELECTION_TOOL::selectMultiple()
             view->Query( area.ViewBBox(), nearbyViewItems );
 
             // Build lists of nearby items and their children
-            std::unordered_set<EDA_ITEM*> nearbyItems;
-            std::vector<EDA_ITEM*>        nearbyChildren;
-            std::vector<EDA_ITEM*>        flaggedItems;
+            std::vector<EDA_ITEM*> nearbyItems;
+            std::vector<EDA_ITEM*> nearbyChildren;
+            std::vector<EDA_ITEM*> flaggedItems;
 
             for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
             {
-                EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first );
-
-                if( !item )
-                    continue;
-
-                item->ClearFlags( CANDIDATE );
-                auto emplaceRet = nearbyItems.emplace( item );
-
-                if( !emplaceRet.second )
-                    continue; // Item already in set
-
-                if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+                if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first ) )
                 {
-                    int unit = symbol->GetUnitSelection( &editFrame->Schematic().CurrentSheet() );
+                    item->ClearFlags( CANDIDATE );
+                    nearbyItems.push_back( item );
 
-                    symbol->RunOnChildren(
-                            [&]( SCH_ITEM* aChild )
-                            {
-                                // Filter pins by unit
-                                SCH_PIN* pin = dyn_cast<SCH_PIN*>( aChild );
-
-                                if( pin && unit && pin->GetLibPin()->GetUnit()
-                                    && ( pin->GetLibPin()->GetUnit() != unit ) )
+                    if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
+                    {
+                        sch_item->RunOnChildren(
+                                [&]( SCH_ITEM* aChild )
                                 {
-                                    return;
-                                }
-
-                                nearbyChildren.push_back( aChild );
-                            } );
-                }
-                else if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
-                {
-                    sch_item->RunOnChildren(
-                            [&]( SCH_ITEM* aChild )
-                            {
-                                nearbyChildren.push_back( aChild );
-                            } );
+                                    nearbyChildren.push_back( aChild );
+                                } );
+                    }
                 }
             }
 

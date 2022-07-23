@@ -343,7 +343,10 @@ void SCH_SYMBOL::UpdatePins()
     {
         wxASSERT( libPin->Type() == LIB_PIN_T );
 
-        if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
+        if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )
+            continue;
+
+        if( libPin->GetUnit() && m_unit && m_unit != libPin->GetUnit() )
             continue;
 
         m_pins.push_back( std::make_unique<SCH_PIN>( libPin, this ) );
@@ -369,7 +372,7 @@ void SCH_SYMBOL::SetUnit( int aUnit )
 {
     if( m_unit != aUnit )
     {
-        m_unit = aUnit;
+        UpdateUnit( aUnit );
         SetModified();
     }
 }
@@ -377,7 +380,13 @@ void SCH_SYMBOL::SetUnit( int aUnit )
 
 void SCH_SYMBOL::UpdateUnit( int aUnit )
 {
-    m_unit = aUnit;
+    if( m_unit != aUnit )
+    {
+        m_unit = aUnit;
+
+        // The unit may have a different pins so the update the pin map.
+        UpdatePins();
+    }
 }
 
 
