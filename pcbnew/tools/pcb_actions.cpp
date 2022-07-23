@@ -745,8 +745,10 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         BITMAPS::add_board );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Net" ), _( "Highlight net under the cursor" ),
+        AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
+        _( "Highlight Net" ), _( "Highlight net under cursor" ),
         BITMAPS::net_highlight );
 
 TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLastNetHighlight",
@@ -765,9 +767,7 @@ TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( "pcbnew.EditorControl.toggleNetHigh
         BITMAPS::net_highlight );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
-        AS_GLOBAL,
-        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
+        AS_GLOBAL, 0, "",
         _( "Highlight Selected Net" ), _( "Highlight all copper items on the selected net(s)" ),
         BITMAPS::net_highlight );
 
