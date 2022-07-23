@@ -48,8 +48,9 @@ public:
     void ThemeChanged() override{};
 
     void OnCableSizeChange( wxCommandEvent& aEvent ) override;
+    void OnConductorResistivityChange( wxCommandEvent& aEvent ) override;
+    void OnConductorResistivity_Button( wxCommandEvent& aEvent ) override;
     void OnUpdateUnit( wxCommandEvent& aEvent ) override;
-
     void OnDiameterChange( wxCommandEvent& aEvent ) override;
     void OnAreaChange( wxCommandEvent& aEvent ) override;
     void OnLinResistanceChange( wxCommandEvent& aEvent ) override;
@@ -84,6 +85,8 @@ private:
     bool m_imperial;
 
     // Stored in normalized units
+    double m_button_ResistivityConductor;
+    double m_conductorMaterialResitivity;
     double m_diameter;
     double m_current;
     double m_length;

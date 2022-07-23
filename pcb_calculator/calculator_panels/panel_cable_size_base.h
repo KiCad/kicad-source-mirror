@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,6 +24,10 @@ class UNIT_SELECTOR_LINEAR_RESISTANCE;
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
@@ -47,6 +51,9 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText161;
 		wxTextCtrl* m_areaCtrl;
 		wxStaticText* m_staticText1641;
+		wxStaticText* m_staticText18;
+		wxTextCtrl* m_textCtrlConductorResistivity;
+		wxButton* m_button_ResistivityConductor;
 		wxStaticText* m_staticText16411;
 		wxTextCtrl* m_linResistanceCtrl;
 		UNIT_SELECTOR_LINEAR_RESISTANCE* m_linResistanceUnit;
@@ -77,6 +84,8 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		virtual void OnDiameterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUnit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAreaChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnConductorResistivityChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnConductorResistivity_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLinResistanceChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFrequencyChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAmpacityChange( wxCommandEvent& event ) { event.Skip(); }

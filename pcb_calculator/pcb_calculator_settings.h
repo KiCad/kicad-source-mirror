@@ -68,6 +68,7 @@ public:
         int linResUnit;
         int frequencyUnit;
         int lengthUnit;
+        wxString conductorMaterialResitivity;
     };
 
     struct WAVELENGTH

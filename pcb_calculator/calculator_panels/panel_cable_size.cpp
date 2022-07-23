@@ -16,15 +16,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <wx/choicdlg.h>
 
+#include <common_data.h>
 #include <calculator_panels/panel_cable_size.h>
 #include <pcb_calculator_settings.h>
 #include <string_utils.h>
 #include <widgets/unit_selector.h>
 
+extern double DoubleFromString( const wxString& TextValue );
+
 #define M2_to_MM2 1000000.0
 
-#define COPPER_RESISTIVITY 1.72e-8      // ohm meter
 #define VACCUM_PERMEABILITY 1.256637e-6
 #define RELATIVE_PERMEABILITY 1
 
@@ -83,7 +86,6 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
 
     // Set internal state flags:
     m_updatingUI = false;
-    m_updatingUI = false;
     m_updatingDiameter = false;
     m_updatingArea = false;
     m_updatingLinResistance = false;
@@ -99,16 +101,13 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
 
     // Initialize variables to a reasonable value
     // Stored in normalized units
+
     m_diameter = 0.001;
     m_current = 1.0;
     m_length = 1.0;
-    m_area = m_diameter * m_diameter / 4 * 3.14156;
-    m_linearResistance = 0.000813269;
-    m_maxFrequency = 17.4272;
-    m_resistance = 0.0218997;
-    m_voltageDrop = 0.0218997;
-    m_dissipatedPower = 0.0218997;
-    m_ampacity = 1.0;
+    m_conductorMaterialResitivity = 1.72e-8; //Initialized for copper
+
+    updateAll( m_diameter / 2 );
 }
 
 
@@ -129,6 +128,7 @@ void PANEL_CABLE_SIZE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     aCfg->m_cableSize.linResUnit = m_linResistanceUnit->GetSelection();
     aCfg->m_cableSize.frequencyUnit = m_frequencyUnit->GetSelection();
     aCfg->m_cableSize.lengthUnit = m_lengthUnit->GetSelection();
+    aCfg->m_cableSize.conductorMaterialResitivity = m_textCtrlConductorResistivity->GetValue();
 }
 
 
@@ -138,6 +138,14 @@ void PANEL_CABLE_SIZE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     m_linResistanceUnit->SetSelection( aCfg->m_cableSize.linResUnit );
     m_frequencyUnit->SetSelection( aCfg->m_cableSize.frequencyUnit );
     m_lengthUnit->SetSelection( aCfg->m_cableSize.lengthUnit );
+    m_textCtrlConductorResistivity->SetValue( aCfg->m_cableSize.conductorMaterialResitivity );
+
+    if( m_textCtrlConductorResistivity->IsEmpty() )
+    {
+        //Initialize m_textCtrl to fill UI space
+        //Working variable initialized earlier
+        m_textCtrlConductorResistivity->SetValue( "1.72e-8" );
+    }
 }
 
 void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
@@ -155,6 +163,29 @@ void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
     }
 }
 
+void PANEL_CABLE_SIZE::OnConductorResistivityChange( wxCommandEvent& aEvent )
+{
+    if( !m_updatingUI )
+    {
+        m_conductorMaterialResitivity =
+                std::abs( DoubleFromString( m_textCtrlConductorResistivity->GetValue() ) );
+        updateAll( m_diameter / 2 );
+    }
+}
+
+void PANEL_CABLE_SIZE::OnConductorResistivity_Button( wxCommandEvent& event )
+{
+    wxArrayString list = StandardResistivityList();
+
+    // Shows a list of current Specific resistance list (rho) and select a value
+    wxString value =
+            wxGetSingleChoice( wxEmptyString, _( "Electrical Resistivity in Ohm*m" ), list )
+                    .BeforeFirst( ' ' );
+
+    if( !value.IsEmpty() )
+        m_textCtrlConductorResistivity->ChangeValue( value );
+    OnConductorResistivityChange( event );
+}
 
 void PANEL_CABLE_SIZE::OnDiameterChange( wxCommandEvent& aEvent )
 {
@@ -182,8 +213,8 @@ void PANEL_CABLE_SIZE::OnLinResistanceChange( wxCommandEvent& aEvent )
 
         if( m_linResistanceCtrl->GetValue().ToDouble( &value ) )
         {
-            updateAll( sqrt( COPPER_RESISTIVITY / ( value * m_linResistanceUnit->GetUnitScale() )
-                             / M_PI ) );
+            updateAll( sqrt( m_conductorMaterialResitivity
+                             / ( value * m_linResistanceUnit->GetUnitScale() ) / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingLinResistance = false;
@@ -217,8 +248,8 @@ void PANEL_CABLE_SIZE::OnFrequencyChange( wxCommandEvent& aEvent )
 
         if( m_frequencyCtrl->GetValue().ToDouble( &value ) )
         {
-            updateAll( sqrt( COPPER_RESISTIVITY / value / m_frequencyUnit->GetUnitScale() / M_PI
-                             / VACCUM_PERMEABILITY / RELATIVE_PERMEABILITY ) );
+            updateAll( sqrt( m_conductorMaterialResitivity / value / m_frequencyUnit->GetUnitScale()
+                             / M_PI / VACCUM_PERMEABILITY / RELATIVE_PERMEABILITY ) );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingFrequency = false;
@@ -288,7 +319,7 @@ void PANEL_CABLE_SIZE::OnResistanceChange( wxCommandEvent& aEvent )
 
         if( m_resistanceCtrl->GetValue().ToDouble( &value ) )
         {
-            updateAll( sqrt( COPPER_RESISTIVITY / value * m_length / M_PI ) );
+            updateAll( sqrt( m_conductorMaterialResitivity / value * m_length / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingResistance = false;
@@ -307,7 +338,8 @@ void PANEL_CABLE_SIZE::OnVDropChange( wxCommandEvent& aEvent )
         {
             // in m_vDropCtrl, The value is in mV. We need it in Volt in calculations
             value /= 1000;
-            updateAll( sqrt( COPPER_RESISTIVITY / value * m_length * m_current / M_PI ) );
+            updateAll(
+                    sqrt( m_conductorMaterialResitivity / value * m_length * m_current / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingRVdrop = false;
@@ -326,8 +358,8 @@ void PANEL_CABLE_SIZE::OnPowerChange( wxCommandEvent& aEvent )
         {
             // m_powerCtrl shows the power in mW. we need Watts
             value /= 1000;
-            updateAll(
-                    sqrt( COPPER_RESISTIVITY / value * m_length * m_current * m_current / M_PI ) );
+            updateAll( sqrt( m_conductorMaterialResitivity / value * m_length * m_current
+                             * m_current / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingPower = false;
@@ -412,10 +444,10 @@ void PANEL_CABLE_SIZE::updateAll( double aRadius )
     // Update wire properties
     m_diameter = aRadius * 2;
     m_area = M_PI * aRadius * aRadius;
-    m_linearResistance = COPPER_RESISTIVITY / m_area;
+    m_linearResistance = m_conductorMaterialResitivity / m_area;
 
     // max frequency is when skin depth = radius
-    m_maxFrequency = COPPER_RESISTIVITY
+    m_maxFrequency = m_conductorMaterialResitivity
                      / ( M_PI * aRadius * aRadius * VACCUM_PERMEABILITY * RELATIVE_PERMEABILITY );
 
     // Based on the 700 circular mils per amp rule of the thumb
@@ -426,6 +458,7 @@ void PANEL_CABLE_SIZE::updateAll( double aRadius )
     m_resistance = m_linearResistance * m_length;
     m_voltageDrop = m_resistance * m_current;
     m_dissipatedPower = m_voltageDrop * m_current;
+
     printAll();
 }
 

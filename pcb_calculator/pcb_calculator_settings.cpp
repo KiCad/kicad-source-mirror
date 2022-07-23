@@ -83,6 +83,10 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "regulators.selected_regulator",
             &m_Regulators.selected_regulator, "" ) );
 
+
+    m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorMaterialResitivity",
+                                                &m_cableSize.conductorMaterialResitivity, "" ) );
+
     m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
