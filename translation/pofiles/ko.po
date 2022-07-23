@@ -20978,9 +20978,8 @@ msgid "Ampacity:"
 msgstr "전류 용량:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
-#, fuzzy
 msgid "Application"
-msgstr "도우미 응용 프로그램"
+msgstr "응용 프로그램"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
@@ -21006,18 +21005,16 @@ msgid "Voltage drop:"
 msgstr "전압 강하:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Dissipated power:"
 msgstr "소비된 전력:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
-#, fuzzy
 msgid "mW"
-msgstr "W"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
