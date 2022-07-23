@@ -1741,6 +1741,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
             for( LIB_ITEM* item : frameItems )
             {
                 item->SetParent( aSymbol.get() );
+                item->SetUnit( aGateNumber );
                 aSymbol->AddDrawItem( item );
             }
         }
