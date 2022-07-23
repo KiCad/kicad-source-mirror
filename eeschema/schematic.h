@@ -159,7 +159,7 @@ public:
      */
     bool ResolveCrossReference( wxString* token, int aDepth ) const;
 
-    std::map<wxString, std::set<wxString>>& GetPageRefsMap() { return m_labelToPageRefsMap; }
+    std::map<wxString, std::set<int>>& GetPageRefsMap() { return m_labelToPageRefsMap; }
 
     wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
@@ -202,10 +202,10 @@ private:
     CONNECTION_GRAPH* m_connectionGraph;
 
     /**
-     * Holds a map of labels to the page numbers that they appear on.  Used to update global
-     * label intersheet references.
+     * Holds a map of labels to the page sequence (virtual page number) that they appear on.  It is
+     * used for updating global label intersheet references.
      */
-    std::map<wxString, std::set<wxString>> m_labelToPageRefsMap;
+    std::map<wxString, std::set<int>> m_labelToPageRefsMap;
 };
 
 #endif

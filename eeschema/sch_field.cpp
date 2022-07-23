@@ -750,8 +750,8 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
 
         if( it != Schematic()->GetPageRefsMap().end() )
         {
-            std::map<wxString, wxString> sheetNames;
-            std::vector<wxString>        pageListCopy;
+            std::map<int, wxString> sheetNames;
+            std::vector<int>        pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
@@ -772,9 +772,9 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
             for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
             {
                 if( sheet.size() == 1 )
-                    sheetNames[ sheet.GetPageNumber() ] = _( "<root sheet>" );
+                    sheetNames[ sheet.GetVirtualPageNumber() ] = _( "<root sheet>" );
                 else
-                    sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+                    sheetNames[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
             }
 
             for( int i = 0; i < (int) pageListCopy.size(); ++i )

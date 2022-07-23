@@ -1509,23 +1509,23 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
 void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 {
-    std::map<wxString, std::set<wxString>>& pageRefsMap = Schematic().GetPageRefsMap();
+    std::map<wxString, std::set<int>>& pageRefsMap = Schematic().GetPageRefsMap();
 
     pageRefsMap.clear();
 
-    SCH_SCREENS           screens( Schematic().Root() );
-    std::vector<wxString> pageNumbers;
+    SCH_SCREENS      screens( Schematic().Root() );
+    std::vector<int> virtualPageNumbers;
 
     /* Iterate over screens */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
-        pageNumbers.clear();
+        virtualPageNumbers.clear();
 
         /* Find in which sheets this screen is used */
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
         {
             if( sheet.LastScreen() == screen )
-                pageNumbers.push_back( sheet.GetPageNumber() );
+                virtualPageNumbers.push_back( sheet.GetVirtualPageNumber() );
         }
 
         for( SCH_ITEM* item : screen->Items() )
@@ -1533,10 +1533,10 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
                 SCH_GLOBALLABEL*    globalLabel = static_cast<SCH_GLOBALLABEL*>( item );
-                std::set<wxString>& pageList = pageRefsMap[ globalLabel->GetText() ];
+                std::set<int>& virtualpageList = pageRefsMap[ globalLabel->GetText() ];
 
-                for( const wxString& pageNo : pageNumbers )
-                    pageList.insert( pageNo );
+                for( const int& pageNo : virtualPageNumbers )
+                    virtualpageList.insert( pageNo );
             }
         }
     }
