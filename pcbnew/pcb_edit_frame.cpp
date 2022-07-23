@@ -767,9 +767,10 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return false;
             };
 
-    mgr->SetConditions( PCB_ACTIONS::showNet,      ENABLE( haveNetCond ) );
-    mgr->SetConditions( PCB_ACTIONS::hideNet,      ENABLE( haveNetCond ) );
-    mgr->SetConditions( PCB_ACTIONS::highlightNet, ENABLE( haveNetCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showNet,               ENABLE( haveNetCond ) );
+    mgr->SetConditions( PCB_ACTIONS::hideNet,               ENABLE( haveNetCond ) );
+    mgr->SetConditions( PCB_ACTIONS::highlightNet,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( PCB_ACTIONS::highlightNetSelection, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
     mgr->SetConditions( PCB_ACTIONS::selectNet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
