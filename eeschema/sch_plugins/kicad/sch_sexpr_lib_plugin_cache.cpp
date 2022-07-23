@@ -59,8 +59,8 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
                                    "open library '%s'.", m_libFileName.GetFullPath() ) );
 
     // The current locale must use period as the decimal point.
-    wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
-              LOCALE_IO toggle );
+    // Yes, we did this earlier, but it's sadly not thread-safe.
+    LOCALE_IO toggle;
 
     wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file '%s'",
                 m_libFileName.GetFullPath() );
@@ -72,9 +72,8 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
     parser.ParseLib( m_symbols );
     ++m_modHash;
 
-    // Remember the file modification time of library file when the
-    // cache snapshot was made, so that in a networked environment we will
-    // reload the cache as needed.
+    // Remember the file modification time of library file when the cache snapshot was made,
+    // so that in a networked environment we will reload the cache as needed.
     m_fileModTime = GetLibModificationTime();
 }
 
