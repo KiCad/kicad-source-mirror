@@ -436,8 +436,8 @@ std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 
 
 void PCB_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                         PCB_LAYER_ID aLayer, int aClearance,
-                                                         int aError, ERROR_LOC aErrorLoc ) const
+                                                            PCB_LAYER_ID aLayer, int aClearance,
+                                                            int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = GetDrawFont();
@@ -459,7 +459,7 @@ void PCB_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCor
                     aCornerBuffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
+    font->Draw( &callback_gal, GetShownText(), GetDrawPos(), GetAttributes() );
 }
 
 

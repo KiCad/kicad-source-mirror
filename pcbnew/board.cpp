@@ -2305,6 +2305,11 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_TEXTBOX_T:
         {
             const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
+
+            // plot border
+            textbox->PCB_SHAPE::TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0,
+                                                                      maxError, ERROR_INSIDE );
+            // plot text
             textbox->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                                ERROR_INSIDE );
             break;
