@@ -560,6 +560,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
     m_libList->Clear();
 
+    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
     std::vector<wxString> libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
     std::set<wxString>    pinnedMatches;
@@ -586,10 +587,15 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                         return;
                 }
 
-                if( alg::contains( project.m_PinnedSymbolLibs, aLib ) )
+                if( alg::contains( project.m_PinnedSymbolLibs, aLib )
+                        || alg::contains( cfg->m_Session.pinned_symbol_libs, aLib ) )
+                {
                     pinnedMatches.insert( aLib );
+                }
                 else
+                {
                     otherMatches.insert( aLib );
+                }
             };
 
     if( m_libFilter->GetValue().IsEmpty() )

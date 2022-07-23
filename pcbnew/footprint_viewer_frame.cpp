@@ -442,6 +442,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 {
     m_libList->Clear();
 
+    COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
     std::vector<wxString> nicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
     std::set<wxString>    pinnedMatches;
@@ -450,10 +451,15 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     auto process =
             [&]( const wxString& aNickname )
             {
-                if( alg::contains( project.m_PinnedFootprintLibs, aNickname ) )
+                if( alg::contains( project.m_PinnedFootprintLibs, aNickname )
+                        || alg::contains( cfg->m_Session.pinned_fp_libs, aNickname ) )
+                {
                     pinnedMatches.insert( aNickname );
+                }
                 else
+                {
                     otherMatches.insert( aNickname );
+                }
             };
 
     if( m_libFilter->GetValue().IsEmpty() )

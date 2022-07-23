@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
 #include <confirm.h>
 #include <kiway.h>
 #include <widgets/infobar.h>
@@ -104,7 +105,8 @@ void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
 
 wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
 {
-    PROJECT& prj = Prj();
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    PROJECT&         prj = Prj();
 
     if( prj.SchSymbolLibTable()->IsEmpty() )
     {
@@ -125,7 +127,8 @@ wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
         if( m_libMgr->IsLibraryReadOnly( name ) )
             continue;
 
-        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name ) )
+        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
+                || alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
         {
             wxArrayString item;
 
@@ -140,7 +143,8 @@ wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
         if( m_libMgr->IsLibraryReadOnly( name ) )
             continue;
 
-        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name ) )
+        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
+                && !alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
         {
             wxArrayString item;
 
@@ -578,6 +582,7 @@ static int ID_MAKE_NEW_LIBRARY = 4173;
 EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolName,
                                                        const wxString& aLibraryPreselect )
 {
+    COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
     SYMBOL_LIB_TABLE*          tbl = Prj().SchSymbolLibTable();
     std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
@@ -589,7 +594,8 @@ EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolNa
 
     for( const wxString& nickname : libNicknames )
     {
-        if( alg::contains( project.m_PinnedSymbolLibs, nickname ) )
+        if( alg::contains( project.m_PinnedSymbolLibs, nickname )
+                || alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
         {
             wxArrayString item;
             item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
@@ -600,7 +606,8 @@ EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolNa
 
     for( const wxString& nickname : libNicknames )
     {
-        if( !alg::contains( project.m_PinnedSymbolLibs, nickname ) )
+        if( !alg::contains( project.m_PinnedSymbolLibs, nickname )
+                && !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
         {
             wxArrayString item;
             item.Add( nickname );

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_dde.h>
@@ -961,6 +962,7 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
 
 void CVPCB_MAINFRAME::BuildLibrariesListBox()
 {
+    COMMON_SETTINGS*   cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
     FP_LIB_TABLE*      tbl = Prj().PcbFootprintLibs();
     std::set<wxString> pinnedMatches;
@@ -969,10 +971,15 @@ void CVPCB_MAINFRAME::BuildLibrariesListBox()
     auto process =
             [&]( const wxString& aNickname )
             {
-                if( alg::contains( project.m_PinnedFootprintLibs, aNickname ) )
+                if( alg::contains( project.m_PinnedFootprintLibs, aNickname )
+                        || alg::contains( cfg->m_Session.pinned_fp_libs, aNickname ) )
+                {
                     pinnedMatches.insert( aNickname );
+                }
                 else
+                {
                     otherMatches.insert( aNickname );
+                }
             };
 
 

@@ -1016,6 +1016,7 @@ static int ID_MAKE_NEW_LIBRARY = 4173;
 EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootprintName,
                                                           const wxString& aLibraryPreselect )
 {
+    COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
     FP_LIB_TABLE*              tbl = Prj().PcbFootprintLibs();
     std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
@@ -1027,7 +1028,8 @@ EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootp
 
     for( const wxString& nickname : nicknames )
     {
-        if( alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        if( alg::contains( project.m_PinnedFootprintLibs, nickname )
+                || alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
         {
             wxArrayString item;
 
@@ -1039,7 +1041,8 @@ EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootp
 
     for( const wxString& nickname : nicknames )
     {
-        if( !alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        if( !alg::contains( project.m_PinnedFootprintLibs, nickname )
+                && !alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
         {
             wxArrayString item;
 
@@ -1340,6 +1343,7 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
     headers.Add( _( "Nickname" ) );
     headers.Add( _( "Description" ) );
 
+    COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&                project = Kiway().Prj().GetProjectFile();
     FP_LIB_TABLE*                fptbl = Prj().PcbFootprintLibs();
     std::vector< wxArrayString > itemsToDisplay;
@@ -1347,7 +1351,8 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
     for( const wxString& nickname : nicknames )
     {
-        if( alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        if( alg::contains( project.m_PinnedFootprintLibs, nickname )
+                || alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
         {
             wxArrayString item;
 
@@ -1359,7 +1364,8 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
     for( const wxString& nickname : nicknames )
     {
-        if( !alg::contains( project.m_PinnedFootprintLibs, nickname ) )
+        if( !alg::contains( project.m_PinnedFootprintLibs, nickname )
+                && !alg::contains( cfg->m_Session.pinned_fp_libs, nickname ) )
         {
             wxArrayString item;
 
