@@ -84,9 +84,8 @@ private:
     void testMaskItemAgainstZones( BOARD_ITEM* item, const EDA_RECT& itemBBox,
                                    PCB_LAYER_ID refLayer, PCB_LAYER_ID targetLayer );
 
-    bool checkMaskAperture( BOARD_ITEM* aMaskItem, PCB_LAYER_ID aCopperLayer,
-                            BOARD_ITEM* aTestItem, int aTestNet,
-                            BOARD_ITEM** aCollidingItem );
+    bool checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem, PCB_LAYER_ID aTestLayer,
+                            int aTestNet, BOARD_ITEM** aCollidingItem );
 
 private:
     DRC_RULE m_bridgeRule;
@@ -329,23 +328,22 @@ bool isNullAperture( BOARD_ITEM* aItem )
 // when they expose other copper items having at least two distinct nets.  We use a map to record
 // the first net exposed by each mask aperture (on each copper layer).
 
-bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem,
-                                                       PCB_LAYER_ID aCopperLayer,
-                                                       BOARD_ITEM* aTestItem, int aTestNet,
+bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem,
+                                                       PCB_LAYER_ID aTestLayer, int aTestNet,
                                                        BOARD_ITEM** aCollidingItem )
 {
-    wxASSERT( IsCopperLayer( aCopperLayer ) );
+    if( !IsCopperLayer( aTestLayer ) )
+        return false;
 
-    if( aMaskItem->GetParentFootprint() )
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
+
+    if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
     {
-        FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
-
         // Mask apertures in footprints which allow soldermask bridges are ignored entirely.
-        if( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
-            return false;
+        return false;
     }
 
-    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aMaskItem, aCopperLayer };
+    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aMaskItem, aTestLayer };
 
     auto ii = m_maskApertureNetMap.find( key );
 
@@ -386,8 +384,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
             // Filter:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD* otherPad = dynamic_cast<PAD*>( other );
-                int  otherNet = -1;
+                FOOTPRINT* itemFP = static_cast<FOOTPRINT*>( aItem->GetParentFootprint() );
+                PAD*       otherPad = dynamic_cast<PAD*>( other );
+                int        otherNet = -1;
 
                 if( other->IsConnected() )
                     otherNet = static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetCode();
@@ -398,18 +397,15 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 if( isNullAperture( other ) )
                     return false;
 
-                if( aItem->GetParentFootprint() && other->GetParentFootprint() )
+                if( itemFP && itemFP == other->GetParentFootprint()
+                    && ( itemFP->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
                 {
-                    int attr = static_cast<FOOTPRINT*>( aItem->GetParentFootprint() )->GetAttributes();
-
-                    if( attr & FP_ALLOW_SOLDERMASK_BRIDGES )
-                        return false;
+                    return false;
                 }
 
-                if( pad && otherPad && pad->GetParent() == otherPad->GetParent() )
+                if( pad && otherPad && pad->SameLogicalPadAs( otherPad ) )
                 {
-                    if( pad->SameLogicalPadAs( otherPad ) )
-                        return false;
+                    return false;
                 }
 
                 BOARD_ITEM* a = aItem;
@@ -479,9 +475,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                     // Simple mask apertures aren't associated with copper items, so they only
                     // constitute a bridge when they expose other copper items having at least
                     // two distinct nets.
-                    if( isMaskAperture( aItem ) && otherNet >= 0 )
+                    if( isMaskAperture( aItem ) )
                     {
-                        if( checkMaskAperture( aItem, aRefLayer, other, otherNet, &colliding ) )
+                        if( checkMaskAperture( aItem, other, aRefLayer, otherNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
@@ -491,9 +487,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                             reportViolation( drce, pos, aTargetLayer );
                         }
                     }
-                    else if( isMaskAperture( other ) && itemNet >= 0 )
+                    else if( isMaskAperture( other ) )
                     {
-                        if( checkMaskAperture( other, aRefLayer, aItem, itemNet, &colliding ) )
+                        if( checkMaskAperture( other, aItem, aRefLayer, itemNet, &colliding ) )
                         {
                             auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
@@ -578,7 +574,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
                 // two distinct nets.
                 if( isMaskAperture( aItem ) && zoneNet >= 0 )
                 {
-                    if( checkMaskAperture( aItem, aTargetLayer, zone, zoneNet, &colliding ) )
+                    if( checkMaskAperture( aItem, zone, aTargetLayer, zoneNet, &colliding ) )
                     {
                         auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 

@@ -158,7 +158,7 @@ public:
     bool SameLogicalPadAs( const PAD* other ) const
     {
         // hide tricks behind sensible API
-        return GetParent() == other->GetParent() && m_number == other->m_number;
+        return GetParentFootprint() == other->GetParentFootprint() && m_number == other->m_number;
     }
 
     /**
