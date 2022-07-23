@@ -262,6 +262,16 @@ public:
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
             points->AddPoint( botRight );
+
+            points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
+            points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
+            points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
+            points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
+            points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
+            points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
+            points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
+            points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
+
             break;
         }
 
@@ -955,6 +965,11 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
         int            edited = getEditedPointIndex();
 
+        if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
+            edited = RECT_TOPRIGHT;
+        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
+            edited = RECT_BOTLEFT;
+
         pinEditedCorner( sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
                          sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
                          topLeft, topRight, botLeft, botRight, &gridHelper );
@@ -963,8 +978,41 @@ void EE_POINT_EDITOR::updateParentItem() const
         // are if the origin moves.
         VECTOR2I originDelta = sheet->GetPosition() - topLeft;
 
-        sheet->SetPosition( topLeft );
-        sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
+        if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
+                || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
+                || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
+                || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
+        {
+            sheet->SetPosition( topLeft );
+            sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
+        }
+        else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
+        {
+            sheet->SetPosition( VECTOR2I( sheet->GetPosition().x, topLeft.y ) );
+            sheet->SetSize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
+        }
+        else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
+        {
+            sheet->SetPosition( VECTOR2I( topLeft.x, sheet->GetPosition().y ) );
+            sheet->SetSize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
+        }
+        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
+        {
+            sheet->SetSize( wxSize( sheet->GetSize().x, botRight.y - topLeft.y ) );
+        }
+        else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
+        {
+            sheet->SetSize( wxSize( botRight.x - topLeft.x, sheet->GetSize().y ) );
+        }
+
+        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+        {
+            if( !isModified( m_editPoints->Line( i ) ) )
+            {
+                m_editPoints->Line( i ).SetConstraint(
+                        new EC_PERPLINE( m_editPoints->Line( i ) ) );
+            }
+        }
 
         // Update the fields if we're in autoplace mode
         if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
