@@ -405,7 +405,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( !m_currentText->ValidateHyperlink( m_hyperlinkCtrl->GetValue() ) )
     {
-        DisplayError( this, _( "Invalid hyperlink destination (URL)." ) );
+        DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
+                               "(e.g. file:// or http(s)://) or \"goto:<page sequence>\" to create "
+                               "a hyperlink to a page in this schematic." ) );
         return false;
     }
     else

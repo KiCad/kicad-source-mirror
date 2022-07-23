@@ -408,15 +408,23 @@ void SCH_TEXT::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
                 sheetNames[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
         }
 
-        menu.Append( 0, wxString::Format( _( "Go to Page %s (%s)" ),
-                                          sheetPages[destPage],
-                                          sheetNames[destPage] ) );
+        if( sheetPages.count( destPage ) > 0 )
+        {
+            menu.Append( 0, wxString::Format( _( "Go to Page %s (%s)" ),
+                                              sheetPages[destPage],
+                                              sheetNames[destPage] ) );
 
-        int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
-        void* param = &sheetPages[destPage];
+            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
+            void* param = &sheetPages[destPage];
 
-        if( param )
-            aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
+            if( param )
+                aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
+        }
+        else
+        {
+            aFrame->ShowInfoBarError( wxString::Format( _( "Page sequence '%d' does not exist." ),
+                                                        destPage ) );
+        }
     }
     else
     {

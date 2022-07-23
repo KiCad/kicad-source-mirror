@@ -92,7 +92,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	bSizer11->Add( 10, 0, 0, wxEXPAND, 5 );
 
-	m_hyperlinkDestinationLabel = new wxStaticText( this, wxID_ANY, _("Destination (URL):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hyperlinkDestinationLabel = new wxStaticText( this, wxID_ANY, _("Destination:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hyperlinkDestinationLabel->Wrap( -1 );
 	m_hyperlinkDestinationLabel->Enable( false );
 
@@ -100,7 +100,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_hyperlinkCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_hyperlinkCtrl->Enable( false );
-	m_hyperlinkCtrl->SetToolTip( _("Please enter a file:// or http(s):// URL") );
+	m_hyperlinkCtrl->SetToolTip( _("Please enter either a valid URL (e.g. file:// or http(s)://) or \"goto:<page sequence>\" to create a hyperlink to a page in this schematic.") );
 
 	bSizer11->Add( m_hyperlinkCtrl, 10, wxALL, 5 );
 
