@@ -17335,7 +17335,7 @@ msgstr "회로도 편집기의 상위 시트를 표시합니다"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Navigate Up"
-msgstr "위로 이동"
+msgstr "페이지로 이동"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Navigate up one sheet in the hierarchy"
