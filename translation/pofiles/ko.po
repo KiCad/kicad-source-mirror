@@ -17269,7 +17269,7 @@ msgstr "제외된 전기 규칙 검사기 위반에 대한 마커 표시"
 #: eeschema/tools/ee_actions.cpp:691 eeschema/tools/ee_actions.cpp:696
 #: eeschema/tools/ee_actions.cpp:701 eeschema/tools/ee_actions.cpp:706
 msgid "Line Mode for Wires and Buses"
-msgstr "전선 및 버스의 선 모드"
+msgstr "전선 및 버스용 직선 배치 모드"
 
 #: eeschema/tools/ee_actions.cpp:691
 msgid "Lines drawn at any angle"
@@ -21861,6 +21861,13 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"이 계산기를 사용하여 작은 배선이 짧은 시간동안 큰 전류를 처리할 수 있는지 확"
+"인할 수 있습니다.<br>\n"
+"이 도구는 배선에 퓨즈를 설계할수 있지만 추정치로만 사용해야합니다.\n"
+"\n"
+"계산기는 와이어를 가열하는데 필요한 에너지를 추정합니다.<br>\n"
+"이 에너지는 상태변화에 요구되는 녹는점만큼의 에너지 입니다.<br>\n"
+"이 에너지는 전선 저항에 의해 소멸된 에너지이기도 합니다."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "General system design"
@@ -32702,7 +32709,7 @@ msgstr "누락 [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "이 파서는 해당 IBIS 버전을 처리하지 않습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:560
 msgid "Missing [File Rev]"
@@ -32931,7 +32938,7 @@ msgstr "1개의 [Package] 행에는 정확히 4개의 요소가 필요합니다.
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "잘못된 핀 항목: 3개짜리 테이블에 6개의 값이 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 #, fuzzy
@@ -33038,6 +33045,8 @@ msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"2개의 파형이 있지만 트랜지스터는 1개입니다. 알수 없는 더 많은 방정식이 있습니"
+"다."
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
