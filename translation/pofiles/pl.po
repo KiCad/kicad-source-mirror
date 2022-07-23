@@ -18967,11 +18967,11 @@ msgstr "Błąd!"
 
 #: kicad/tools/kicad_manager_control.cpp:643
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Tworzy (lub otwiera) projekt w celu edycji schematu."
+msgstr "Utwórz (lub otwórz) projekt w celu edycji schematu."
 
 #: kicad/tools/kicad_manager_control.cpp:649
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Tworzy (lub otwiera) projektu w celu edycji obwodu drukowanego."
+msgstr "Utwórz (lub otwórz) projekt w celu edycji obwodu drukowanego."
 
 #: kicad/tools/kicad_manager_control.cpp:668
 msgid "Application failed to load:\n"
