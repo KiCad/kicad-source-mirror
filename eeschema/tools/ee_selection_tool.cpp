@@ -1275,24 +1275,26 @@ bool EE_SELECTION_TOOL::selectMultiple()
             view->Query( area.ViewBBox(), nearbyViewItems );
 
             // Build lists of nearby items and their children
-            std::vector<EDA_ITEM*> nearbyItems;
-            std::vector<EDA_ITEM*> nearbyChildren;
-            std::vector<EDA_ITEM*> flaggedItems;
+            std::unordered_set<EDA_ITEM*> nearbyItems;
+            std::vector<EDA_ITEM*>        nearbyChildren;
+            std::vector<EDA_ITEM*>        flaggedItems;
 
             for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
             {
                 if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first ) )
                 {
-                    item->ClearFlags( CANDIDATE );
-                    nearbyItems.push_back( item );
-
-                    if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
+                    if( nearbyItems.insert( item ).second )
                     {
-                        sch_item->RunOnChildren(
-                                [&]( SCH_ITEM* aChild )
-                                {
-                                    nearbyChildren.push_back( aChild );
-                                } );
+                        item->ClearFlags( CANDIDATE );
+
+                        if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
+                        {
+                            sch_item->RunOnChildren(
+                                    [&]( SCH_ITEM* aChild )
+                                    {
+                                        nearbyChildren.push_back( aChild );
+                                    } );
+                        }
                     }
                 }
             }
