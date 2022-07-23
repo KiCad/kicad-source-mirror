@@ -6577,7 +6577,7 @@ msgstr "단축키 파일"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "동일한 파일 '%s'을 찾을 수 없습니다."
+msgstr "동일한 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
