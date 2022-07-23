@@ -28,7 +28,7 @@
 #include <pcbnew_settings.h>
 #include <settings/app_settings.h>
 
-class CVPCB_SETTINGS : public APP_SETTINGS_BASE
+class CVPCB_SETTINGS : public PCB_VIEWERS_SETTINGS_BASE
 {
 public:
     CVPCB_SETTINGS();

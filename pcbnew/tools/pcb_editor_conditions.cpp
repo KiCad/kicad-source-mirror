@@ -146,25 +146,25 @@ bool PCB_EDITOR_CONDITIONS::hasItemsFunc( const SELECTION& aSelection, PCB_BASE_
 
 bool PCB_EDITOR_CONDITIONS::padNumberDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_PadNumbers;
+    return aFrame->Settings().m_ViewersDisplay.m_DisplayPadNumbers;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::padFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_DisplayPadFill;
+    return aFrame->GetPcbNewSettings()->m_ViewersDisplay.m_DisplayPadFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::textFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_DisplayTextFill;
+    return aFrame->Settings().m_ViewersDisplay.m_DisplayTextFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::graphicsFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_DisplayGraphicsFill;
+    return aFrame->Settings().m_ViewersDisplay.m_DisplayGraphicsFill;
 }
 
 

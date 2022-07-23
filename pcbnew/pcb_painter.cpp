@@ -66,6 +66,43 @@
 
 using namespace KIGFX;
 
+
+PCBNEW_SETTINGS* pcbconfig()
+{
+    return dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+}
+
+// Helpers for display options existing in Cvpcb and Pcbnew
+// Note, when running Cvpcb, pcbconfig() returns nullptr and viewer_settings()
+// returns the viewer options existing to Cvpcb and Pcbnew
+static PCB_VIEWERS_SETTINGS_BASE* viewer_settings()
+{
+    return static_cast<PCB_VIEWERS_SETTINGS_BASE*>( Kiface().KifaceSettings() );
+}
+
+static bool displayPadFill()
+{
+    return viewer_settings()->m_ViewersDisplay.m_DisplayPadFill;
+}
+
+static bool displayGraphicsFill()
+{
+    return viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
+}
+
+
+static bool displayTextFill()
+{
+    return viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
+}
+
+
+static bool displayPadNumbers()
+{
+    return viewer_settings()->m_ViewersDisplay.m_DisplayPadNumbers;
+}
+
+
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {
     m_backgroundColor = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
@@ -356,12 +393,6 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
     // No special modifiers enabled
     return color;
-}
-
-
-PCBNEW_SETTINGS* pcbconfig()
-{
-    return dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
 
@@ -957,28 +988,28 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        if( !pcbconfig() )
-            return;
-
-        PCBNEW_SETTINGS::DISPLAY_OPTIONS& displayOpts = pcbconfig()->m_Display;
+        PCBNEW_SETTINGS::DISPLAY_OPTIONS* displayOpts = pcbconfig() ? &pcbconfig()->m_Display : nullptr;
         wxString                          netname;
         wxString                          padNumber;
 
-        if( displayOpts.m_PadNumbers )
+        if( displayPadNumbers() )
             padNumber = UnescapeString( aPad->GetNumber() );
 
-        if( displayOpts.m_NetNames == 1 || displayOpts.m_NetNames == 3 )
-            netname = UnescapeString( aPad->GetShortNetname() );
-
-        if( displayOpts.m_PadNoConnects
-                && aPad->GetShortNetname().StartsWith( wxT( "unconnected-(" ) ) )
+        if( displayOpts )
         {
-            wxString pinType = aPad->GetPinType();
+            if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
+                netname = UnescapeString( aPad->GetShortNetname() );
 
-            if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
-                netname = wxT( "x" );
-            else if( pinType == wxT( "free" ) )
-                netname = wxT( "*" );
+            if( displayOpts->m_PadNoConnects
+                    && aPad->GetShortNetname().StartsWith( wxT( "unconnected-(" ) ) )
+            {
+                wxString pinType = aPad->GetPinType();
+
+                if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
+                    netname = wxT( "x" );
+                else if( pinType == wxT( "free" ) )
+                    netname = wxT( "*" );
+            }
         }
 
         if( netname.IsEmpty() && padNumber.IsEmpty() )
@@ -1097,7 +1128,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         return;
     }
 
-    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPadFill;
+    bool outline_mode = !displayPadFill();
 
     if( m_pcbSettings.m_ForcePadSketchModeOff )
         outline_mode = false;
@@ -1412,7 +1443,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
     COLOR4D        color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
-    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayGraphicsFill;
+    bool           outline_mode = !displayGraphicsFill();
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
@@ -1733,7 +1764,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    bool           outline_mode = !displayTextFill();
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -1886,7 +1917,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D&  color = m_pcbSettings.GetColor( aText, aLayer );
-    bool            outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    bool            outline_mode = !displayTextFill();
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     m_gal->SetStrokeColor( color );
@@ -2226,7 +2257,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
-    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayGraphicsFill;
+    bool outline_mode = !displayGraphicsFill();
 
     if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );

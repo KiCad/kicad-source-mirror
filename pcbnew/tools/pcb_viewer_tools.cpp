@@ -90,7 +90,8 @@ template<class T> void Flip( T& aValue )
 
 int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 {
-    Flip( displayOptions().m_PadNumbers );
+    PCB_VIEWERS_SETTINGS_BASE& cfg = frame()->Settings();
+    Flip( cfg.m_ViewersDisplay.m_DisplayPadNumbers );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -106,7 +107,8 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
-    Flip( displayOptions().m_DisplayPadFill );
+    PCB_VIEWERS_SETTINGS_BASE& cfg = frame()->Settings();
+    Flip( cfg.m_ViewersDisplay.m_DisplayPadFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -122,7 +124,8 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 {
-    Flip( displayOptions().m_DisplayGraphicsFill );
+    PCB_VIEWERS_SETTINGS_BASE& cfg = frame()->Settings();
+    Flip( cfg.m_ViewersDisplay.m_DisplayGraphicsFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -151,7 +154,8 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 {
-    Flip( displayOptions().m_DisplayTextFill );
+    PCB_VIEWERS_SETTINGS_BASE& cfg = frame()->Settings();
+    Flip( cfg.m_ViewersDisplay.m_DisplayTextFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {

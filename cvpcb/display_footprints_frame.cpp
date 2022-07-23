@@ -346,7 +346,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateToolbarControlSizes()
 
 void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, /* void */ );
 
     // We don't allow people to change this right now, so make sure it's on

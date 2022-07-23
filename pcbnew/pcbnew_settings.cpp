@@ -47,7 +47,7 @@ const int pcbnewSchemaVersion = 2;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
-        : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
+        : PCB_VIEWERS_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
           m_AuiPanels(),
           m_Cleanup(),
           m_DrcDialog(),
@@ -162,16 +162,16 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             900 ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
-            &m_Display.m_DisplayGraphicsFill, true ) );
+            &m_ViewersDisplay.m_DisplayGraphicsFill, true ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.max_links_shown",
             &m_Display.m_MaxLinksShowed, 3, 0, 15 ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphics_fill",
-            &m_Display.m_DisplayGraphicsFill, true ) );
+            &m_ViewersDisplay.m_DisplayGraphicsFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
-            &m_Display.m_DisplayTextFill, true ) );
+            &m_ViewersDisplay.m_DisplayTextFill, true ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.net_names_mode",
             &m_Display.m_NetNames, 3, 0, 3 ) );
@@ -183,10 +183,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Display.m_PadNoConnects, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
-            &m_Display.m_DisplayPadFill, true ) );
+            &m_ViewersDisplay.m_DisplayPadFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_numbers",
-            &m_Display.m_PadNumbers, true ) );
+            &m_ViewersDisplay.m_DisplayPadNumbers, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_global",
             &m_Display.m_ShowGlobalRatsnest, true ) );

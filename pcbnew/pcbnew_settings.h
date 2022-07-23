@@ -82,7 +82,34 @@ enum PCB_DISPLAY_ORIGIN
 typedef std::vector<std::pair<wxString, bool>> ACTION_PLUGIN_SETTINGS_LIST;
 
 
-class PCBNEW_SETTINGS : public APP_SETTINGS_BASE
+// base class to handle Pcbnew SETTINGS also used in Cvpcb
+class PCB_VIEWERS_SETTINGS_BASE : public APP_SETTINGS_BASE
+{
+public:
+    struct VIEWERS_DISPLAY_OPTIONS
+    {
+        bool    m_DisplayGraphicsFill;
+        bool    m_DisplayTextFill;
+        bool    m_DisplayPadNumbers;
+        bool    m_DisplayPadFill;
+    };
+
+    VIEWERS_DISPLAY_OPTIONS m_ViewersDisplay;
+
+    PCB_VIEWERS_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ):
+        APP_SETTINGS_BASE( aFilename, aSchemaVersion )
+    {
+        m_ViewersDisplay.m_DisplayGraphicsFill = true;
+        m_ViewersDisplay.m_DisplayTextFill = true;
+        m_ViewersDisplay.m_DisplayPadNumbers = true;
+        m_ViewersDisplay.m_DisplayPadFill = true;
+    }
+
+    virtual ~PCB_VIEWERS_SETTINGS_BASE() {};
+};
+
+
+class PCBNEW_SETTINGS : public PCB_VIEWERS_SETTINGS_BASE
 {
 public:
     struct AUI_PANELS
@@ -251,17 +278,16 @@ public:
 
     struct DISPLAY_OPTIONS
     {
-        bool                 m_DisplayPadFill;
+        // Note: Display options common to  Cvpcb and Pcbnew are stored in
+        // VIEWERS_DISPLAY_OPTIONS m_ViewersDisplay, because the section DISPLAY_OPTIONS
+        // exists only for Pcbnew
         bool                 m_DisplayViaFill;
-        bool                 m_DisplayGraphicsFill;
-        bool                 m_DisplayTextFill;
         bool                 m_DisplayPcbTrackFill;
 
         TRACK_CLEARANCE_MODE m_TrackClearance;
         bool                 m_PadClearance;
 
         int                  m_NetNames;
-        bool                 m_PadNumbers;
         bool                 m_PadNoConnects;
 
         RATSNEST_MODE        m_RatsnestMode;
