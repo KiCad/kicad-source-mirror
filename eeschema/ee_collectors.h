@@ -108,6 +108,8 @@ public:
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
     int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
+
+    bool     m_ShowPinElectricalTypes;
 };
 
 

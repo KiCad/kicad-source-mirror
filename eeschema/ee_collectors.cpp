@@ -117,25 +117,30 @@ const KICAD_T EE_COLLECTOR::FieldOwners[] = {
 
 SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
-    if( aItem->Type() == LIB_PIN_T )
-    {
-        // Special selection rules apply to pins of different units when edited in
-        // synchronized pins mode.  Leave it to EE_SELECTION_TOOL::Selectable() to
-        // decide what to do with them.
-    }
-    else if( m_Unit || m_Convert )
+    if( m_Unit || m_Convert )
     {
         LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( aItem );
 
-        if( m_Unit && lib_item && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
-            return SEARCH_RESULT::CONTINUE;
+        // Special selection rules apply to pins of different units when edited in synchronized
+        // pins mode.  Leave it to EE_SELECTION_TOOL::Selectable() to decide what to do with them.
 
-        if( m_Convert && lib_item && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
-            return SEARCH_RESULT::CONTINUE;
+        if( lib_item && lib_item->Type() != LIB_PIN_T )
+        {
+            if( m_Unit && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
+                return SEARCH_RESULT::CONTINUE;
+
+            if( m_Convert && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
+                return SEARCH_RESULT::CONTINUE;
+        }
     }
+
+    if( m_ShowPinElectricalTypes )
+        aItem->SetFlags( SHOW_ELEC_TYPE );
 
     if( aItem->HitTest( m_refPos, m_Threshold ) )
         Append( aItem );
+
+    aItem->ClearFlags( SHOW_ELEC_TYPE );
 
     return SEARCH_RESULT::CONTINUE;
 }

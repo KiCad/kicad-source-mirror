@@ -64,6 +64,8 @@ public:
     wxString GetAlt() const { return m_alt; }
     void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
 
+    const BOX2I ViewBBox() const override;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -82,13 +84,14 @@ public:
     void           SetPosition( const VECTOR2I& aPosition ) override { m_position = aPosition; }
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
-    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
+    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false, true, false ); }
 
     /**
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
      *      in the calculation.
      */
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly = false ) const;
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                   bool aIncludeElectricalType ) const;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

@@ -143,6 +143,14 @@ int SCH_PIN::GetLength() const
 }
 
 
+const BOX2I SCH_PIN::ViewBBox() const
+{
+    EDA_RECT bbox = GetBoundingBox( false, true, true );
+
+    return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
+}
+
+
 void SCH_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 3;
@@ -305,10 +313,12 @@ VECTOR2I SCH_PIN::GetTransformedPosition() const
 }
 
 
-const EDA_RECT SCH_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
+const EDA_RECT SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                        bool aIncludeElectricalType ) const
 {
     TRANSFORM t = GetParentSymbol()->GetTransform();
-    EDA_RECT  r = m_libPin->GetBoundingBox( aIncludeInvisibles, aPinOnly );
+    EDA_RECT  r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
+                                            aIncludeElectricalType );
 
     r.RevertYAxis();
 
@@ -326,7 +336,7 @@ bool SCH_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     if( Schematic() )
         aAccuracy = std::max( aAccuracy, Schematic()->Settings().m_PinSymbolSize / 4 );
 
-    EDA_RECT rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -339,9 +349,9 @@ bool SCH_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) c
         sel.Inflate( aAccuracy );
 
     if( aContained )
-        return sel.Contains( GetBoundingBox( false, true ) );
+        return sel.Contains( GetBoundingBox( false, false, false ) );
 
-    return sel.Intersects( GetBoundingBox( false, true ) );
+    return sel.Intersects( GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE ) );
 }
 
 

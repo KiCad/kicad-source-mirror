@@ -938,7 +938,7 @@ const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIn
                 // a well-defined body.
 
                 if( aIncludePins )
-                    bbox.Merge( pin.GetBoundingBox( false, true ) );
+                    bbox.Merge( pin.GetBoundingBox( false, false, false ) );
                 else
                     bbox.Merge( pin.GetPinRoot() );
             }

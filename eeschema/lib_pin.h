@@ -177,16 +177,19 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    const BOX2I ViewBBox() const override;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
-    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
+    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false, true, false ); }
 
     /**
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
      *      in the calculation.
      */
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly = false ) const;
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                   bool aIncludeElectricalType ) const;
 
     /**
      * Return whether this pin forms an implicit power connection: i.e., is hidden

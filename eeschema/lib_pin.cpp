@@ -140,7 +140,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aN
 
 bool LIB_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
 
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
@@ -157,9 +157,9 @@ bool LIB_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) c
         sel.Inflate( aAccuracy );
 
     if( aContained )
-        return sel.Contains( GetBoundingBox( false, true ) );
+        return sel.Contains( GetBoundingBox( false, false, false ) );
 
-    return sel.Intersects( GetBoundingBox( false, true ) );
+    return sel.Intersects( GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE ) );
 }
 
 
@@ -1104,6 +1104,14 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 }
 
 
+const BOX2I LIB_PIN::ViewBBox() const
+{
+    EDA_RECT bbox = GetBoundingBox( false, true, true );
+
+    return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
+}
+
+
 void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 3;
@@ -1115,7 +1123,8 @@ void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
+const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                        bool aIncludeElectricalType ) const
 {
     KIFONT::FONT* font = KIFONT::FONT::GetFont( Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>()->m_Appearance.default_font );
 
@@ -1127,35 +1136,33 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     int            nameTextHeight = 0;
     int            numberTextLength = 0;
     int            numberTextHeight = 0;
+    int            typeTextLength = 0;
     wxString       name = GetShownName();
     wxString       number = GetShownNumber();
-    bool           showName = !name.IsEmpty();
-    bool           showNum = !number.IsEmpty();
+    bool           includeName = aIncludeNameAndNumber && !name.IsEmpty();
+    bool           includeNumber = aIncludeNameAndNumber && !number.IsEmpty();
+    bool           includeType = aIncludeElectricalType;
     int            minsizeV = TARGET_PIN_RADIUS;
     int            penWidth = GetPenWidth();
 
-    if( !aIncludeInvisibles && !IsVisible() )
-        showName = false;
+    if( !aIncludeInvisiblePins && !IsVisible() )
+    {
+        includeName = false;
+        includeType = false;
+    }
 
     if( GetParent() )
     {
         if( GetParent()->ShowPinNames() )
             nameTextOffset = GetParent()->GetPinNameOffset();
         else
-            showName = false;
+            includeName = false;
 
         if( !GetParent()->ShowPinNumbers() )
-            showNum = false;
+            includeNumber = false;
     }
 
-    if( aPinOnly )
-    {
-        showName = false;
-        showNum = false;
-    }
-
-    // First, calculate boundary box corners position
-    if( showNum )
+    if( includeNumber )
     {
         VECTOR2D fontSize( m_numTextSize, m_numTextSize );
         VECTOR2I numSize = font->StringBoundaryLimits( number, fontSize, penWidth, false, false );
@@ -1164,16 +1171,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
         numberTextHeight = numSize.y;
     }
 
-    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
-        minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
-
-    // calculate top left corner position
-    // for the default pin orientation (PIN_RIGHT)
-    begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
-    begin.x = std::min( 0, m_length - ( numberTextLength / 2) );
-
-    // calculate bottom right corner position and adjust top left corner position
-    if( showName )
+    if( includeName )
     {
         VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
         VECTOR2I nameSize = font->StringBoundaryLimits( name, fontSize, penWidth, false, false );
@@ -1182,6 +1180,27 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
         nameTextHeight = nameSize.y + Mils2iu( PIN_TEXT_MARGIN );
     }
 
+    if( includeType )
+    {
+        double   fontSize = std::max( m_nameTextSize * 3 / 4, Millimeter2iu( 0.7 ) );
+        VECTOR2I typeTextSize = font->StringBoundaryLimits( GetElectricalTypeName(),
+                                                            VECTOR2D( fontSize, fontSize ),
+                                                            fontSize / 8.0, false, false );
+
+        typeTextLength = typeTextSize.x + Mils2iu( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS;
+        minsizeV = std::max( minsizeV, typeTextSize.y / 2 );
+    }
+
+    // First, calculate boundary box corners position
+    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
+        minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
+
+    // calculate top left corner position
+    // for the default pin orientation (PIN_RIGHT)
+    begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
+    begin.x = std::min( -typeTextLength, m_length - ( numberTextLength / 2) );
+
+    // calculate bottom right corner position and adjust top left corner position
     if( nameTextOffset )        // for values > 0, pin name is inside the body
     {
         end.x = m_length + nameTextLength;

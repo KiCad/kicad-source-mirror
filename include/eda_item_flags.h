@@ -62,6 +62,7 @@
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define HOLE_PROXY     (1 << 24)   ///< Indicates the BOARD_ITEM is a proxy for its hole
 #define IS_ROLLOVER    (1 << 25)   ///< Rollover active.  Used for hyperlink highlighting.
+#define SHOW_ELEC_TYPE (1 << 25)   ///< Show pin electrical type.  Shared with IS_ROLLOVER.
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
 #define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair

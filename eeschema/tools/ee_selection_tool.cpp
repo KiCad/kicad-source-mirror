@@ -35,7 +35,7 @@
 #include <math/util.h>
 #include <geometry/shape_rect.h>
 #include <menus_helpers.h>
-#include <painter.h>
+#include <sch_painter.h>
 #include <preview_items/selection_area.h>
 #include <sch_base_frame.h>
 #include <sch_symbol.h>
@@ -788,6 +788,7 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
     int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2 );
     aCollector.m_Threshold = std::max( pixelThreshold, gridThreshold );
+    aCollector.m_ShowPinElectricalTypes = m_frame->GetRenderSettings()->m_ShowPinsElectricalType;
 
     if( m_isSymbolEditor )
     {
@@ -1349,22 +1350,32 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             for( EDA_ITEM* item : nearbyItems )
             {
+                if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
+                    item->SetFlags( SHOW_ELEC_TYPE );
+
                 if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
                 {
                     item->SetFlags( CANDIDATE );
                     flaggedItems.push_back( item );
                     selectItem( item );
                 }
+
+                item->ClearFlags( SHOW_ELEC_TYPE );
             }
 
             for( EDA_ITEM* item : nearbyChildren )
             {
+                if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
+                    item->SetFlags( SHOW_ELEC_TYPE );
+
                 if( Selectable( item )
                         && !item->GetParent()->HasFlag( CANDIDATE )
                         && item->HitTest( selectionRect, isWindowSelection ) )
                 {
                     selectItem( item );
                 }
+
+                item->ClearFlags( SHOW_ELEC_TYPE );
             }
 
             for( EDA_ITEM* item : flaggedItems )
