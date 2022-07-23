@@ -576,7 +576,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 SCH_EDITOR_CONTROL* editor = m_toolMgr->GetTool<SCH_EDITOR_CONTROL>();
 
-                if( editor )
+                if( editor && m_frame->eeconfig()->m_Input.esc_clears_net_highlight )
                     editor->ClearHighlight( *evt );
             }
         }

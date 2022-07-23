@@ -22,7 +22,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_staticText24 = new wxStaticText( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Line Drawing Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
-	sbSizerEditOpt->Add( m_staticText24, 0, wxALL, 5 );
+	sbSizerEditOpt->Add( m_staticText24, 0, wxLEFT|wxRIGHT|wxBOTTOM, 5 );
 
 	wxString m_choiceLineModeChoices[] = { _("Free Angle"), _("90 deg Angle"), _("45 deg Angle") };
 	int m_choiceLineModeNChoices = sizeof( m_choiceLineModeChoices ) / sizeof( wxString );
@@ -38,7 +38,12 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_cbAutoStartWires = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Automatically start wires on unconnected pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAutoStartWires->SetToolTip( _("When enabled, you can start wiring by clicking on unconnected pins even when the wire tool is not active") );
 
-	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxALL, 5 );
+	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+    m_escClearsNetHighlight = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_cbAutoStartWires->SetToolTip( _("First <ESC> in selection tool clears selection, next clears net highlighting") );
+
+   	sbSizerEditOpt->Add( m_escClearsNetHighlight, 0, wxALL, 5 );
 
 
 	bLeftColumn->Add( sbSizerEditOpt, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );

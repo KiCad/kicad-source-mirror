@@ -200,6 +200,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
             &m_Input.drag_is_move, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "input.esc_clears_net_highlight",
+            &m_Input.esc_clears_net_highlight, true ) );
+
     m_params.emplace_back( new PARAM<int>( "selection.thickness",
             &m_Selection.selection_thickness, 3 ) );
 
