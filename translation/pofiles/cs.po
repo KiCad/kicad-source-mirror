@@ -156,6 +156,7 @@ msgstr "Čas obnovení %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2308
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2299
 #, c-format
 msgid "Loading %s..."
 msgstr "Načítání %s..."
@@ -833,12 +834,10 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Použít okolní okluzi obrazovky a odrazy globálního osvětlení na konečné "
-"vykreslení (pomalé)"
+"Okluze okolního prostoru obrazovky a odrazy globálního osvětlení (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -6992,11 +6991,11 @@ msgid "Save to Schematic and File"
 msgstr "Uložit do schématu a souboru"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "Uložit přiřazení pouzdra v polích pouzdra symbolu schématu"
+msgstr ""
+"Uložit přiřazení pouzdra v polích pouzdra symbolu schématu a souborů schématu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -7157,12 +7156,12 @@ msgid ""
 msgstr ""
 "Síť %s je graficky připojena ke sběrnici %s, ale není členem této sběrnice"
 
-#: eeschema/connection_graph.cpp:3063
+#: eeschema/connection_graph.cpp:3063 eeschema/connection_graph.cpp:3051
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Vývod listu %s nemá uvnitř listu odpovídající hierarchické označení"
 
-#: eeschema/connection_graph.cpp:3080
+#: eeschema/connection_graph.cpp:3080 eeschema/connection_graph.cpp:3068
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11755,10 +11754,9 @@ msgid "Global label size:"
 msgstr "Globální označení velikost:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
+"Procento velikosti textu pro použití jako mezera kolem globálního označení"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
 msgid "Pin symbol size:"
@@ -11891,21 +11889,18 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Knihovna s názvem '%s' již existuje."
+msgstr "Přezdívka řádku tabulky knihovny a buňky cesty jsou prázdné."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Knihovna s názvem '%s' již existuje."
+msgstr "Buňka přezdívky knihovny je prázdná."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Soubor knihovny symbolů \"%s\" je prázdný."
+msgstr "Buňka cesty řádku tabulky knihovny je prázdná."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
@@ -13373,9 +13368,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník zaobleného obdélníku (%d) nenalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 msgid "Arcs on schematic not currently supported."
@@ -14397,7 +14392,6 @@ msgid "Cancel Load"
 msgstr "Zrušit načtení"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14405,9 +14399,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V načteném schématu jsou názvy knihoven, které chybí v tabulce knihoven "
-"projektu. To může mít za následek nefunkční odkazy na knihovnu symbolů pro "
-"načtené schéma. Chcete pokračovat?"
+"V vybraném schématu jsou názvy knihoven, které chybí v aktuální tabulce "
+"knihoven projektu.  To může mít za následek nefunkční odkazy na knihovnu "
+"symbolů pro načtené schéma.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14429,7 +14425,6 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14437,12 +14432,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V načteném schématu jsou názvy knihoven, které v tabulce knihovny načtených "
-"projektů schématu chybí. To může mít za následek nefunkční odkazy na "
-"knihovnu symbolů schématu. Chcete pokračovat?"
+"Ve vybraném schématu jsou názvy knihoven symbolů, které ve vybrané tabulce "
+"knihovny schémat chybí.  To může mít za následek nefunkční odkazy na "
+"knihovnu symbolů schématu.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14450,9 +14446,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V aktuální tabulce knihoven existuje duplicitní název knihovny, který "
-"odkazuje na jinou knihovnu. Tento konflikt nelze vyřešit a může mít za "
-"následek nefunkční odkazy na knihovnu symbolů pro schéma. Chcete pokračovat?"
+"V aktuální tabulce knihovny existuje duplicitní název knihovny, který "
+"odkazuje na jinou knihovnu.   Tento konflikt nelze vyřešit a může vyústit v "
+"porušené reference na knihovnu symbolů.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -14820,9 +14818,8 @@ msgid "Library changes are unsaved"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Knihovna symbolů '%s' již existuje."
+msgstr "Načtení knihovny symbolů bylo zrušeno uživatelem."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/symbol_viewer_frame.cpp:465 eeschema/tools/sch_edit_tool.cpp:117
@@ -14997,13 +14994,16 @@ msgid "Add new project library table entry"
 msgstr "Přidat novou položku do tabulky knihovny projektu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:75
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
-msgstr "Přidat nový záznam do tabulky knihovny symbolů projektu."
+msgstr ""
+"Přidat nový záznam do tabulky knihovny symbolů projektu.\n"
+"\n"
+"Přezdívka knihovní tabulky symbolů je doplněna o celé číslo,\n"
+"aby se zajistilo, že nedochází k duplicitním položkám tabulky."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
 msgid "[from schematic]"
@@ -16244,7 +16244,7 @@ msgstr "Přejít na stránku"
 
 #: eeschema/tools/ee_actions.cpp:693
 msgid "Add Junctions to Selection where needed"
-msgstr ""
+msgstr "V případě potřeby přidat propojení do výběru"
 
 #: eeschema/tools/ee_actions.cpp:706
 msgid "Add Wire"
@@ -16485,7 +16485,7 @@ msgstr "Žádné nové hierarchické označení nenalezeno."
 
 #: eeschema/tools/sch_drawing_tools.cpp:740
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "V místě umístění propojení nejsou žádné spoje a/nebo vývody."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1105
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
@@ -21332,6 +21332,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Změny očíslování DPS by měly být synchronizovány se schématem pomocí "
+"nástroje \"Aktualizovat schéma z DPS\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:305
 #, c-format
@@ -21348,6 +21350,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"Jakékoli typy reference %s nebudou očíslovány."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:315
 msgid ""
@@ -24215,7 +24219,7 @@ msgstr "Formát souboru mapy vrtání"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Vytvoří mapu vrtání v PDF nebo dalších formátech"
+msgstr "Vytvoří mapu vrtání v PDF nebo jiných formátech"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -28947,7 +28951,7 @@ msgstr "Chybějící typ omezení.|  Očekávané %s."
 #: pcbnew/drc/drc_rule_parser.cpp:296
 #, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr ""
+msgstr "Pravidlo už má omezení '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:354
 msgid "Missing min value."
@@ -29138,17 +29142,17 @@ msgstr "Chybějící pouzdro %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:145
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "Ve schématu nebyl nalezen odpovídající vývod."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:155
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "Chybějící síť plošky daná schématem (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:166
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
+msgstr "Síť plošky (%s) neodpovídá síti dané schématem (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:187
 #, c-format
@@ -29757,6 +29761,8 @@ msgstr "Knihovna %s již existuje."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Knihovna '%s' je pouze pro čtení."
@@ -31185,6 +31191,7 @@ msgstr "Chyba čtení souboru."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2311
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:214
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:453
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2302
 msgid "Open cancelled by user."
 msgstr "Otevírání zrušeno uživatelem."
 
@@ -31572,9 +31579,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nelze najít prohlížeč PDF pro '%s'."
+msgstr "Nelze najít index plošky '%d' v pouzdře '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -31776,6 +31783,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"CADSTAR kód prokovu '%s' má jiný tvar než kruh. KiCad podporuje pouze "
+"kruhové prokovy, takže tento typ prokovu byl změněn na kruhový prokov s "
+"průměrem %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2693
 #, c-format
@@ -31783,6 +31793,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
+"Tvar pro '%s' je vyplněna mřížkou v CADSTAR, pro kterou neexistuje "
+"ekvivalent v KiCadu. Místo toho se používá plná výplň."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3542
 #, c-format
@@ -32034,12 +32046,14 @@ msgstr "Token prvku obsahuje %d parametrů."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2633
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Nedostatečná oprávnění k odstranění složky '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2641
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Adresář knihovny '%s' má neočekávané podadresáře."
@@ -32052,6 +32066,7 @@ msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Knihovnu pouzder '%s' nelze odstranit."
@@ -32251,20 +32266,24 @@ msgid "unknown pad type: %d"
 msgstr "neznámá ploška typu: %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1901
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:1892
 #, c-format
 msgid "unknown via type %d"
 msgstr "neznámý prokov typu %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2090
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2081
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "neznámé zaoblení okraje zóny typu %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2360
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
 msgid "This file does not contain a PCB."
 msgstr "Tento soubor neobsahuje DPS."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2510
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -32274,25 +32293,30 @@ msgstr ""
 "Chcete ji vytvořit?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2514
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2505
 msgid "Library Not Found"
 msgstr "Knihovna nenalezena"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2540
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Název souboru pouzdra '%s' není platný."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2546
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Nedostatečná oprávnění k odstranění '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2617
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Nelze přepsat cestu knihovny '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2669
+#: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
@@ -34519,9 +34543,8 @@ msgid "Ungroup"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:704
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "vybraných skupin"
+msgstr "Zrušit seskupení všech vybraných skupin"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Remove Items"
