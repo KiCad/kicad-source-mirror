@@ -17293,7 +17293,7 @@ msgstr "자동 주석 기능"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr "새 부품 기호에 대한  자동 주석 기능 토글"
+msgstr "새 부품 기호에 대한 자동 주석 전환"
 
 #: eeschema/tools/ee_actions.cpp:716
 msgid "Repair Schematic"
@@ -17422,9 +17422,8 @@ msgid "Undo Last Segment"
 msgstr "마지막 세그먼트 되돌리기"
 
 #: eeschema/tools/ee_actions.cpp:827
-#, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "현재 줄을 한 세그먼트 뒤로 이동합니다."
+msgstr "현재 선을 1 세그먼트 만큼 되돌립니다."
 
 #: eeschema/tools/ee_actions.cpp:833
 #, fuzzy
@@ -17812,7 +17811,6 @@ msgstr ""
 "기존 라이브러리는 더이상 사용할 수 없게 됩니다."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -17822,10 +17820,9 @@ msgstr ""
 "전역 심볼 라이브러리 테이블에 새로운 항목을 추가합니다.\n"
 "\n"
 "심볼 라이브러리 테이블 별칭에는 접미사로 정수가 붙으며,\n"
-"이는 테이블 항목이 겹치지 않도록 합니다."
+"이는 테이블 항목들이 겹치지 않도록 합니다."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:55
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
@@ -17835,7 +17832,7 @@ msgstr ""
 "프로젝트 심볼 라이브러리 테이블에 새로운 항목을 추가합니다.\n"
 "\n"
 "심볼 라이브러리 테이블 별칭에는 접미사로 정수가 붙으며,\n"
-"이는 테이블 항목이 겹치지 않도록 합니다."
+"이는 테이블 항목들이 겹치지 않도록 합니다."
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
@@ -20974,12 +20971,11 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "100% 표면 깊이에 대한 주파수"
+msgstr "겉면 깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Ampacity:"
-msgstr "전류용량:"
+msgstr "전류 용량:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
 #, fuzzy
@@ -21015,9 +21011,8 @@ msgid "mV"
 msgstr "V"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
-#, fuzzy
 msgid "Dissipated power:"
-msgstr "소비 전력:"
+msgstr "소비된 전력:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #, fuzzy
@@ -21208,9 +21203,8 @@ msgstr "간단한 해답:"
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
-#, fuzzy
 msgid "Approximation:"
-msgstr "근사치:"
+msgstr "근사값:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
@@ -21225,9 +21219,8 @@ msgid "Current calculation is underestimated due to long fusing time."
 msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습니다."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "주위 온도:"
+msgstr "주위의 온도:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -21734,9 +21727,8 @@ msgid "Top view of via"
 msgstr "비아의 평면도"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
-#, fuzzy
 msgid "Wavelength in vacuum:"
-msgstr "진공에서 파장:"
+msgstr "진공 속의 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
@@ -21753,18 +21745,16 @@ msgid "er:"
 msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:91
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr "서브스트레이트 상대 유전율 (유전체 상수)"
+msgstr "상대적 유전율 (유전 상수)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "mur:"
 msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:103
-#, fuzzy
 msgid "relative permeability"
-msgstr "서브스트레이트의 상대 투과율 (μ)"
+msgstr "상대 투자율"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21886,12 +21876,10 @@ msgid "Electrical Spacing"
 msgstr "전기적 간격"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
-#, fuzzy
 msgid "Fusing Current"
 msgstr "융합 전류"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:97
-#, fuzzy
 msgid "Cable Size"
 msgstr "케이블 크기"
 
@@ -21900,7 +21888,6 @@ msgid "High speed"
 msgstr "고속"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
 msgstr "파장"
 
@@ -23769,9 +23756,8 @@ msgid "Checking zones..."
 msgstr "영역 확인 중..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "영역 채우기 실행 중..."
+msgstr "연결 재구축 중..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -24678,9 +24664,8 @@ msgid "Run clearance resolution tool..."
 msgstr "클리어런스 해결 도구 실행..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:582
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "클리어런스 해결 도구 실행..."
+msgstr "제약 해결 도구 실행..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Open the Board Setup... dialog"
@@ -25285,9 +25270,8 @@ msgid "Search DRC markers"
 msgstr "DRC 마커 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "시트 이름"
+msgstr "검색 네트워크 이름"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -26943,14 +26927,13 @@ msgid "Warning: Pad size is less than zero."
 msgstr "경고: 패드 크기가 0보다 작습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1280
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "경고: 패드 크기가 0보다 작습니다."
+msgstr "경고: 패드 구멍이 패드 모양 안에 있지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1294
 #, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "경고: 패드 크기가 0보다 작습니다."
+msgstr "경고: 패드 구멍에 구리가 남지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1299
 msgid "Warning: Negative local clearance values will have no effect."
@@ -27303,9 +27286,8 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:550
-#, fuzzy
 msgid "Fabrication property:"
-msgstr "기판 제조 속성:"
+msgstr "제작 속성:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:552
 msgid ""
@@ -27536,14 +27518,12 @@ msgid "Plot on All Layers"
 msgstr "모든 레이어에 플롯"
 
 #: pcbnew/dialogs/dialog_plot.cpp:161
-#, fuzzy
 msgid "Move current selection up"
-msgstr "현재 선택 영역을 위로 이동"
+msgstr "현재 선택을 위로 이동"
 
 #: pcbnew/dialogs/dialog_plot.cpp:168
-#, fuzzy
 msgid "Move current selection down"
-msgstr "현재 선택 영역을 아래로 이동"
+msgstr "현재 선택을 아래로 이동"
 
 #: pcbnew/dialogs/dialog_plot.cpp:179
 msgid "Generate Drill Files..."
@@ -28473,9 +28453,8 @@ msgid "Enter the text placed on selected layer."
 msgstr "선택한 레이어에 위치할 텍스트를 입력하세요."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
-#, fuzzy
 msgid "Knockout"
-msgstr "영역 녹아웃:"
+msgstr "녹아웃"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -29143,9 +29122,8 @@ msgstr ""
 "스, 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
-#, fuzzy
 msgid "Minimum connection width:"
-msgstr "최소 환형 폭:"
+msgstr "최소 연결 너비:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
