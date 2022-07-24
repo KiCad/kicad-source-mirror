@@ -157,16 +157,16 @@ bool OverrideLock( wxWindow* aParent, const wxString& aMessage )
     // wxMessageDialog gets the button spacing wrong on Mac so we have to use wxRichMessageDialog.
     // Note that its warning icon is more like wxMessageDialog's error icon, so we use it instead
     // of wxICON_ERROR.
-    wxRichMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
+    wxRichMessageDialog dlg( aParent, aMessage, _( "File Open Warning" ),
                              wxYES_NO | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." )
                                 + wxS( "\n" ) );
-    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+    dlg.SetYesNoLabels( _( "Cancel" ), _( "Open Anyway" ) );
 #else
-    wxMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
+    wxMessageDialog dlg( aParent, aMessage, _( "File Open Warning" ),
                          wxYES_NO | wxICON_ERROR | wxCENTER );
     dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." ) );
-    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+    dlg.SetYesNoLabels( _( "Cancel" ), _( "Open Anyway" ) );
 #endif
 
     return dlg.ShowModal() == wxID_NO;
