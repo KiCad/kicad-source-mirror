@@ -39165,11 +39165,9 @@ msgstr "잠긴 항목에 그림자 마커 표시"
 msgid "Shadow on Conflicts"
 msgstr "잠긴 항목 건너뛰기"
 
-#: pcbnew/widgets/appearance_controls.cpp:358
 #: pcbnew/widgets/appearance_controls.cpp:357
-#, fuzzy
 msgid "Show a shadow on overlapping courtyards while moving footprints"
-msgstr "풋프린트를 움직이는 동안 겹치는 영역에서  그림자로  표시"
+msgstr "풋프린트를 움직이는 동안 겹치는 영역에서  그림자로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 #: pcbnew/widgets/appearance_controls.cpp:358
