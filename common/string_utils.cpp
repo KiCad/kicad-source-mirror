@@ -245,6 +245,15 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
+        else if( aContext == CTX_CSV )
+        {
+            if( c == ',' )
+                converted += wxT( "{comma}" );
+            else if( c == '\n' || c == '\r' )
+                converted += wxT( "{return}" );
+            else
+                converted += c;
+        }
         else
         {
             converted += c;

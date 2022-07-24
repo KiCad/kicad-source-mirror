@@ -56,6 +56,7 @@ enum ESCAPE_CONTEXT
     CTX_IPC,
     CTX_QUOTED_STR,
     CTX_LINE,
+    CTX_CSV,
     CTX_FILENAME,
     CTX_NO_SPACE        // to replace spaces in names that do not accept spaces
 };
