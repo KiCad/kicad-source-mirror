@@ -49,7 +49,7 @@
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
-#include <cvpcb_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>
 #include <kiplatform/ui.h>
 #include <listboxes.h>

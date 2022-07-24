@@ -829,7 +829,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // set footprint column browse button
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_FOOTPRINT_ID_EDITOR( this ) );
+    attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
     m_grid->SetColAttr( FOOTPRINT_FIELD, attr );
 
     // set datasheet column viewer button

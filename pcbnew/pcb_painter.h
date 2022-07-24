@@ -28,6 +28,7 @@
 #ifndef PCB_PAINTER_H
 #define PCB_PAINTER_H
 
+#include <frame_type.h>
 #include <painter.h>
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
@@ -36,6 +37,7 @@
 
 class EDA_ITEM;
 class PCB_DISPLAY_OPTIONS;
+class PCB_VIEWERS_SETTINGS_BASE;
 class BOARD_ITEM;
 class PCB_ARC;
 class BOARD;
@@ -153,7 +155,7 @@ protected:
 class PCB_PAINTER : public PAINTER
 {
 public:
-    PCB_PAINTER( GAL* aGal );
+    PCB_PAINTER( GAL* aGal, FRAME_T aFrameType );
 
     /// @copydoc PAINTER::GetSettings()
     virtual PCB_RENDER_SETTINGS* GetSettings() override
@@ -165,6 +167,8 @@ public:
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
 protected:
+    PCB_VIEWERS_SETTINGS_BASE* viewer_settings();
+
     // Drawing functions for various types of PCB-specific items
     void draw( const PCB_TRACK* aTrack, int aLayer );
     void draw( const PCB_ARC* aArc, int aLayer );
@@ -211,6 +215,7 @@ protected:
 
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;
+    FRAME_T             m_frameType;
 
     int                 m_maxError;
     int                 m_holePlatingThickness;

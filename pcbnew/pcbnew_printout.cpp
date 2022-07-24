@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -283,7 +283,7 @@ std::unique_ptr<KIGFX::PAINTER> PCBNEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 
 
 KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal ) :
-        PCB_PAINTER( aGal ),
+        PCB_PAINTER( aGal, FRAME_PCB_EDITOR ),
         m_drillMarkReal( false ),
         m_drillMarkSize( 0 )
 { }

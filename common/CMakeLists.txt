@@ -429,6 +429,7 @@ set( COMMON_SRCS
 
     settings/app_settings.cpp
     settings/color_settings.cpp
+    settings/cvpcb_settings.cpp
     settings/common_settings.cpp
     settings/json_settings.cpp
     settings/nested_settings.cpp

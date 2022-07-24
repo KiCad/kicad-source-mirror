@@ -58,6 +58,36 @@ enum
 #define DEFAULT_FONT_NAME _( "Default Font" )
 
 
+static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
+{
+    /*
+     * Symbol netlist format:
+     *   library:footprint
+     *   reference
+     *   value
+     *   pinName,netName,pinFunction,pinType
+     *   pinName,netName,pinFunction,pinType
+     *   ...
+     */
+    wxString netlist;
+
+    netlist << EscapeString( aSymbol->GetFootprint( &aSheetPath, true ), CTX_LINE ) << wxS( "\r" );
+    netlist << EscapeString( aSymbol->GetRef( &aSheetPath ), CTX_LINE ) << wxS( "\r" );
+    netlist << EscapeString( aSymbol->GetValue( &aSheetPath, true ), CTX_LINE );
+
+    for( SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
+    {
+        netlist << wxS( "\r" );
+        netlist << EscapeString( pin->GetNumber(), CTX_CSV ) << wxS( "," );
+        netlist << EscapeString( pin->GetDefaultNetName( aSheetPath ), CTX_CSV ) << wxS( "," );
+        netlist << EscapeString( pin->GetName(), CTX_CSV ) << wxS( "," );
+        netlist << EscapeString( pin->GetCanonicalElectricalTypeName(), CTX_CSV );
+    }
+
+    return netlist;
+}
+
+
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
                                          WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
@@ -80,7 +110,29 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
 
 
 template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
+                                         WX_GRID* aGrid, SCH_SYMBOL* aSymbol ) :
+        m_frame( aFrame ),
+        m_dialog( aDialog ),
+        m_grid( aGrid ),
+        m_parentType( SCH_SYMBOL_T ),
+        m_mandatoryFieldCount( MANDATORY_FIELDS ),
+        m_part( aSymbol->GetLibSymbolRef().get() ),
+        m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE_FIELD ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
+        m_libIdValidator(),
+        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
+{
+    initGrid( aGrid );
+}
+
+
+template <class T>
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
                                          WX_GRID* aGrid, SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
@@ -101,7 +153,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
 
 
 template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
                                          WX_GRID* aGrid, SCH_LABEL_BASE* aLabel ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
@@ -147,7 +199,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
-    GRID_CELL_FOOTPRINT_ID_EDITOR* fpIdEditor = new GRID_CELL_FOOTPRINT_ID_EDITOR( m_dialog );
+    GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, m_symbolNetlist );
     fpIdEditor->SetValidator( m_libIdValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 

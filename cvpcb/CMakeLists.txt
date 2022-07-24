@@ -35,7 +35,6 @@ set( CVPCB_SRCS
     footprints_listbox.cpp
     library_listbox.cpp
     cvpcb_mainframe.cpp
-    cvpcb_settings.cpp
     listbox_base.cpp
     menubar.cpp
     readwrite_dlgs.cpp

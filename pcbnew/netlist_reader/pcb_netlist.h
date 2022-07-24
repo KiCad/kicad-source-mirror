@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@gmail.com>.
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,6 +112,8 @@ public:
 
     const COMPONENT_NET& GetNet( const wxString& aPinName ) const;
 
+    void ClearNets() { m_nets.clear(); }
+
     void SortPins() { sort( m_nets.begin(), m_nets.end() ); }
 
     void SetName( const wxString& aName ) { m_name = aName;}
@@ -120,7 +122,10 @@ public:
     void SetLibrary( const wxString& aLibrary ) { m_library = aLibrary; }
     const wxString& GetLibrary() const { return m_library; }
 
+    void SetReference( const wxString& aReference ) { m_reference = aReference; }
     const wxString& GetReference() const { return m_reference; }
+
+    void SetValue( const wxString& aValue ) { m_value = aValue; }
     const wxString& GetValue() const { return m_value; }
 
     void SetProperties( std::map<wxString, wxString>& aProps )
@@ -160,39 +165,40 @@ public:
     void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
 
 private:
-    COMPONENT_NETS m_nets;              ///< list of nets shared by the component pins
-    wxArrayString  m_footprintFilters;  ///< Footprint filters found in netlist.
-    int            m_pinCount;          ///< Number of pins found in netlist.
-    wxString       m_reference;         ///< The component reference designator found in netlist.
-    wxString       m_value;             ///< The component value found in netlist.
+    std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
+
+    wxArrayString                m_footprintFilters;
+    int                          m_pinCount;
+    wxString                     m_reference;
+    wxString                     m_value;
 
     /// A fully specified path to the component (but not the component: [ sheetUUID, sheetUUID, .. ]
-    KIID_PATH      m_path;
+    KIID_PATH                    m_path;
 
     /// A vector of possible KIIDs corresponding to all units in a symbol
-    std::vector<KIID>   m_kiids;
+    std::vector<KIID>            m_kiids;
 
-    /// The name of the component in #m_library used when it was placed on the schematic..
-    wxString       m_name;
+    /// The name of the component in #m_library used when it was placed on the schematic.
+    wxString                     m_name;
 
     /// The name of the component library where #m_name was found.
-    wxString       m_library;
+    wxString                     m_library;
 
     /// The #LIB_ID of the footprint assigned to the component.
-    LIB_ID         m_fpid;
+    LIB_ID                       m_fpid;
 
     /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
     /// One from the netlist, the other from the .cmp file.
     /// this one is a copy of the netlist footprint assignment
-    LIB_ID         m_altFpid;
+    LIB_ID                       m_altFpid;
 
     /// The #FOOTPRINT loaded for #m_FPID.
-    std::unique_ptr< FOOTPRINT > m_footprint;
+    std::unique_ptr<FOOTPRINT>   m_footprint;
 
     /// Component-specific properties found in the netlist.
     std::map<wxString, wxString> m_properties;
 
-    static COMPONENT_NET    m_emptyNet;
+    static COMPONENT_NET         m_emptyNet;
 };
 
 

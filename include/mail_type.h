@@ -42,6 +42,7 @@ enum MAIL_T
     MAIL_ASSIGN_FOOTPRINTS,        // CVPCB->SCH footprint stuffing
     MAIL_SCH_SAVE,                 // CVPCB->SCH save the schematic
     MAIL_EESCHEMA_NETLIST,         // SCH->CVPCB netlist immediately after launching CVPCB
+    MAIL_SYMBOL_NETLIST,           // SCH->FP_VIEWER symbol pin information
     MAIL_PCB_UPDATE,               // SCH->PCB forward update
     MAIL_SCH_UPDATE,               // PCB->SCH forward update
     MAIL_IMPORT_FILE,              // Import a different format file

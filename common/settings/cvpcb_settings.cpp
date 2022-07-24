@@ -21,7 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include <cvpcb_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 

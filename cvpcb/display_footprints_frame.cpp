@@ -26,9 +26,10 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <common.h>
 #include <confirm.h>
-#include <cvpcb_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <id.h>
@@ -376,16 +377,20 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxCHECK( cfg, nullptr );
+    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
     return &cfg->m_FootprintViewer;
+}
+
+
+PCB_VIEWERS_SETTINGS_BASE* DISPLAY_FOOTPRINTS_FRAME::GetViewerSettingsBase() const
+{
+    return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
 }
 
 
 MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 {
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( Kiface().KifaceSettings() );
-    wxCHECK( cfg, nullptr );
+    CVPCB_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
     return &cfg->m_FootprintViewerMagneticSettings;
 }
 
@@ -462,21 +467,18 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 {
     CVPCB_MAINFRAME*      parentframe = (CVPCB_MAINFRAME *) GetParent();
+    COMPONENT*            comp = parentframe->GetSelectedComponent();
     FOOTPRINT*            footprint = nullptr;
     const FOOTPRINT_INFO* fpInfo = nullptr;
 
     GetBoard()->DeleteAllFootprints();
+    GetBoard()->GetNetInfo().RemoveUnusedNets();
     GetCanvas()->GetView()->Clear();
 
     wxString footprintName = parentframe->GetSelectedFootprint();
 
-    if( footprintName.IsEmpty() )
-    {
-        COMPONENT* comp = parentframe->GetSelectedComponent();
-
-        if( comp )
-            footprintName = comp->GetFPID().GetUniStringLibId();
-    }
+    if( footprintName.IsEmpty() && comp )
+        footprintName = comp->GetFPID().GetUniStringLibId();
 
     INFOBAR_REPORTER infoReporter( m_infoBar );
     m_infoBar->Dismiss();
@@ -491,7 +493,25 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     }
 
     if( footprint )
+    {
+        if( comp )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                const COMPONENT_NET& net = comp->GetNet( pad->GetNumber() );
+
+                if( !net.GetPinFunction().IsEmpty() )
+                {
+                    NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
+                    netinfo->SetNetname( net.GetPinFunction() );
+                    GetBoard()->Add( netinfo );
+                    pad->SetNet( netinfo );
+                }
+            }
+        }
+
         GetBoard()->Add( footprint );
+    }
 
     if( fpInfo )
         SetStatusText( wxString::Format( _( "Lib: %s" ), fpInfo->GetLibNickname() ), 0 );

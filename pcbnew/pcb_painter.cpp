@@ -49,6 +49,7 @@
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <settings/cvpcb_settings.h>
 #include <pcbnew_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
@@ -76,34 +77,24 @@ PCBNEW_SETTINGS* pcbconfig()
 // Helpers for display options existing in Cvpcb and Pcbnew
 // Note, when running Cvpcb, pcbconfig() returns nullptr and viewer_settings()
 // returns the viewer options existing to Cvpcb and Pcbnew
-static PCB_VIEWERS_SETTINGS_BASE* viewer_settings()
+PCB_VIEWERS_SETTINGS_BASE* PCB_PAINTER::viewer_settings()
 {
-    if( pcbconfig() )
+    switch( m_frameType )
+    {
+    case FRAME_PCB_EDITOR:
+    case FRAME_FOOTPRINT_EDITOR:
+    case FRAME_FOOTPRINT_WIZARD:
+    case FRAME_PCB_DISPLAY3D:
+    default:
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-    else
-        return dynamic_cast<PCB_VIEWERS_SETTINGS_BASE*>( Kiface().KifaceSettings() );
-}
 
-static bool displayPadFill()
-{
-    return viewer_settings()->m_ViewersDisplay.m_DisplayPadFill;
-}
-
-static bool displayGraphicsFill()
-{
-    return viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
-}
-
-
-static bool displayTextFill()
-{
-    return viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
-}
-
-
-static bool displayPadNumbers()
-{
-    return viewer_settings()->m_ViewersDisplay.m_DisplayPadNumbers;
+    case FRAME_FOOTPRINT_VIEWER:
+    case FRAME_FOOTPRINT_VIEWER_MODAL:
+    case FRAME_FOOTPRINT_PREVIEW:
+    case FRAME_CVPCB:
+    case FRAME_CVPCB_DISPLAY:
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+    }
 }
 
 
@@ -406,8 +397,9 @@ bool PCB_RENDER_SETTINGS::GetShowPageLimits() const
 }
 
 
-PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
+PCB_PAINTER::PCB_PAINTER( GAL* aGal, FRAME_T aFrameType ) :
     PAINTER( aGal ),
+    m_frameType( aFrameType ),
     m_maxError( ARC_HIGH_DEF ),
     m_holePlatingThickness( 0 )
 {
@@ -996,11 +988,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         wxString                          netname;
         wxString                          padNumber;
 
-        if( displayPadNumbers() )
+        if( viewer_settings()->m_ViewersDisplay.m_DisplayPadNumbers )
         {
             padNumber = UnescapeString( aPad->GetNumber() );
 
-            if( !displayOpts )
+            if( dynamic_cast<CVPCB_SETTINGS*>( viewer_settings() ) )
                 netname = UnescapeString( aPad->GetShortNetname() );
         }
 
@@ -1078,7 +1070,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         // position to display 2 lines
         if( !netname.IsEmpty() && !padNumber.IsEmpty() )
         {
-            size = size / 2.5;
+            size = size / 2.2;
             textpos.y = size / 1.7;
         }
 
@@ -1089,11 +1081,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
-            tsize *= 0.75;
+            tsize *= 0.85;
             VECTOR2D namesize( tsize, tsize );
 
             m_gal->SetGlyphSize( namesize );
-            m_gal->SetLineWidth( namesize.x / 12.0 );
+            m_gal->SetLineWidth( namesize.x / 6.0 );
+            m_gal->SetFontBold( true );
             m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
         }
 
@@ -1106,12 +1099,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
-            tsize *= 0.75;
+            tsize *= 0.85;
             tsize = std::min( tsize, size );
             VECTOR2D numsize( tsize, tsize );
 
             m_gal->SetGlyphSize( numsize );
-            m_gal->SetLineWidth( numsize.x / 12.0 );
+            m_gal->SetLineWidth( numsize.x / 6.0 );
+            m_gal->SetFontBold( true );
             m_gal->BitmapText( padNumber, textpos, ANGLE_HORIZONTAL );
         }
 
@@ -1137,7 +1131,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         return;
     }
 
-    bool outline_mode = !displayPadFill();
+    bool outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayPadFill;
 
     if( m_pcbSettings.m_ForcePadSketchModeOff )
         outline_mode = false;
@@ -1452,7 +1446,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
     COLOR4D        color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
-    bool           outline_mode = !displayGraphicsFill();
+    bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
@@ -1773,7 +1767,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    bool           outline_mode = !displayTextFill();
+    bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -1926,7 +1920,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D&  color = m_pcbSettings.GetColor( aText, aLayer );
-    bool            outline_mode = !displayTextFill();
+    bool            outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     m_gal->SetStrokeColor( color );
@@ -2266,7 +2260,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
-    bool outline_mode = !displayGraphicsFill();
+    bool outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
 
     if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );

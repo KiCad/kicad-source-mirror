@@ -73,6 +73,8 @@ public:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    PCB_VIEWERS_SETTINGS_BASE* GetViewerSettingsBase() const override;
+
     MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
     ///< @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,18 +89,19 @@ protected:
 };
 
 
-class GRID_CELL_FOOTPRINT_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
+class GRID_CELL_FPID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_FOOTPRINT_ID_EDITOR( DIALOG_SHIM* aParent,
-                                   const wxString& aPreselect = wxEmptyString ) :
+    GRID_CELL_FPID_EDITOR( DIALOG_SHIM* aParent, const wxString& aSymbolNetlist,
+                           const wxString& aPreselect = wxEmptyString ) :
             m_dlg( aParent ),
-            m_preselect( aPreselect )
+            m_preselect( aPreselect ),
+            m_symbolNetlist( aSymbolNetlist )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_FOOTPRINT_ID_EDITOR( m_dlg );
+        return new GRID_CELL_FPID_EDITOR( m_dlg, m_symbolNetlist );
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -108,6 +109,7 @@ public:
 protected:
     DIALOG_SHIM* m_dlg;
     wxString     m_preselect;
+    wxString     m_symbolNetlist;
 };
 
 

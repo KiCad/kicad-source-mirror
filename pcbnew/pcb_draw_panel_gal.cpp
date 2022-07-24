@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -210,7 +210,12 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view = new KIGFX::PCB_VIEW( true );
     m_view->SetGAL( m_gal );
 
-    m_painter = std::make_unique<KIGFX::PCB_PAINTER>( m_gal );
+    FRAME_T frameType = FRAME_FOOTPRINT_PREVIEW;
+
+    if( EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( aParentWindow ) )
+        frameType = frame->GetFrameType();
+
+    m_painter = std::make_unique<KIGFX::PCB_PAINTER>( m_gal, frameType );
     m_view->SetPainter( m_painter.get() );
 
     // This fixes the zoom in and zoom out limits:

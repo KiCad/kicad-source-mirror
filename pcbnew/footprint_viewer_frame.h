@@ -29,6 +29,7 @@
 #include <wx/gdicmn.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
+#include <netlist_reader/pcb_netlist.h>
 
 class wxSashLayoutWindow;
 class WX_LISTBOX;
@@ -81,6 +82,8 @@ public:
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
+    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
 
@@ -104,6 +107,8 @@ private:
      * Update the window title with current library information.
      */
     void UpdateTitle();
+
+    void displayFootprint( FOOTPRINT* aFootprint );
 
     void doCloseWindow() override;
     void CloseFootprintViewer( wxCommandEvent& event );
@@ -165,6 +170,7 @@ private:
 
     friend struct PCB::IFACE;       // constructor called from here only
 
+private:
     wxSearchCtrl*       m_libFilter;
     WX_LISTBOX*         m_libList;        // The list of library names.
     int                 m_libListWidth;   // Last width of the window.
@@ -172,6 +178,8 @@ private:
     wxSearchCtrl*       m_fpFilter;
     WX_LISTBOX*         m_fpList;         // The list of footprint names.
     int                 m_fpListWidth;    // Last width of the window.
+
+    COMPONENT           m_comp;
 
     bool                m_autoZoom;
     double              m_lastZoom;

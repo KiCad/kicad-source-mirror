@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <kiway.h>
+#include <kiway_express.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
 #include <pcb_draw_panel_gal.h>
@@ -110,11 +112,12 @@ END_EVENT_TABLE()
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                                 FRAME_T aFrameType ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
-            wxDefaultPosition, wxDefaultSize,
-            aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
-                                                       : NONMODAL_STYLE,
-            aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
-                                                       : FOOTPRINT_VIEWER_FRAME_NAME )
+                    wxDefaultPosition, wxDefaultSize,
+                    aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
+                                                               : NONMODAL_STYLE,
+                    aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
+                                                               : FOOTPRINT_VIEWER_FRAME_NAME ),
+   m_comp( LIB_ID(), wxEmptyString, wxEmptyString, KIID_PATH(), {} )
 {
     wxASSERT( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL || aFrameType == FRAME_FOOTPRINT_VIEWER );
 
@@ -145,7 +148,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxSizer* libSizer = new wxBoxSizer( wxVERTICAL );
 
     m_libFilter = new wxSearchCtrl( libPanel, ID_MODVIEW_LIB_FILTER, wxEmptyString,
-                                  wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+                                    wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
     m_libFilter->SetDescriptiveText( _( "Filter" ) );
     libSizer->Add( m_libFilter, 0, wxEXPAND, 5 );
 
@@ -160,7 +163,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxSizer* fpSizer = new wxBoxSizer( wxVERTICAL );
 
     m_fpFilter = new wxSearchCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
-                                 wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+                                   wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
     m_fpFilter->SetDescriptiveText( _( "Filter" ) );
     m_fpFilter->SetToolTip(
             _( "Filter on footprint name, keywords, description and pad count.\n"
@@ -738,14 +741,17 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         GetBoard()->DeleteAllFootprints();
+        GetBoard()->GetNetInfo().RemoveUnusedNets();
 
         LIB_ID id;
         id.SetLibNickname( getCurNickname() );
         id.SetLibItemName( getCurFootprintName() );
 
+        FOOTPRINT* footprint = nullptr;
+
         try
         {
-            GetBoard()->Add( loadFootprint( id ) );
+            footprint = loadFootprint( id );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -757,6 +763,9 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
             DisplayError( this, msg );
         }
 
+        if( footprint )
+            displayFootprint( footprint );
+
         UpdateTitle();
 
         updateView();
@@ -764,6 +773,25 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         GetCanvas()->Refresh();
         Update3DView( true, true );
     }
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::displayFootprint( FOOTPRINT* aFootprint )
+{
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        const COMPONENT_NET& net = m_comp.GetNet( pad->GetNumber() );
+
+        if( !net.GetPinFunction().IsEmpty() )
+        {
+            NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
+            netinfo->SetNetname( net.GetPinFunction() );
+            GetBoard()->Add( netinfo );
+            pad->SetNet( netinfo );
+        }
+    }
+
+    GetBoard()->Add( aFootprint );
 }
 
 
@@ -1004,6 +1032,52 @@ void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+{
+    const std::string& payload = mail.GetPayload();
+
+    switch( mail.Command() )
+    {
+    case MAIL_SYMBOL_NETLIST:
+    {
+        /*
+         * Symbol netlist format:
+         *   library:footprint
+         *   reference
+         *   value
+         *   pinName,netName,pinFunction,pinType
+         *   pinName,netName,pinFunction,pinType
+         *   ...
+         */
+        std::vector<std::string> strings = split( payload, "\r" );
+        LIB_ID libid;
+
+        if( strings.size() >= 3 )
+        {
+            libid.Parse( strings[0] );
+
+            m_comp.SetFPID( libid );
+            m_comp.SetReference( strings[1] );
+            m_comp.SetValue( strings[2] );
+
+            m_comp.ClearNets();
+
+            for( size_t ii = 3; ii < strings.size(); ++ii )
+            {
+                std::vector<std::string> pinData = split( strings[ii], "," );
+                m_comp.AddNet( pinData[0], pinData[1], pinData[2], pinData[3] );
+            }
+        }
+
+        break;
+    }
+
+    default:
+        ;
+    }
+}
+
+
 bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent )
 {
     if( aFootprint && !aFootprint->IsEmpty() )
@@ -1144,15 +1218,15 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
         // Delete the current footprint
         GetBoard()->DeleteAllFootprints();
+        GetBoard()->GetNetInfo().RemoveUnusedNets();
 
         FOOTPRINT* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
                                                                         getCurFootprintName() );
 
         if( footprint )
-            GetBoard()->Add( footprint, ADD_MODE::APPEND );
+            displayFootprint( footprint );
 
         Update3DView( true, true );
-
         updateView();
     }
 

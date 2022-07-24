@@ -52,7 +52,7 @@
 
 #include <pcb_painter.h>
 #include <settings/settings_manager.h>
-#include <pcbnew_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
@@ -926,7 +926,22 @@ FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings() const
 
 PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
 {
-    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    switch( GetFrameType() )
+    {
+    case FRAME_PCB_EDITOR:
+    case FRAME_FOOTPRINT_EDITOR:
+    case FRAME_FOOTPRINT_WIZARD:
+    case FRAME_PCB_DISPLAY3D:
+    default:
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    case FRAME_FOOTPRINT_VIEWER:
+    case FRAME_FOOTPRINT_VIEWER_MODAL:
+    case FRAME_FOOTPRINT_PREVIEW:
+    case FRAME_CVPCB:
+    case FRAME_CVPCB_DISPLAY:
+        return Pgm().GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>();
+    }
 }
 
 
