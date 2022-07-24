@@ -869,6 +869,12 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
         fn.SetExt( PcbFileExtension );
 
         frame = Kiway().Player( FRAME_PCB_EDITOR, true );
+
+        // If Kiway() cannot create the Pcbnew frame, it shows a error message, and
+        // frame is null
+        if( !frame )
+            return;
+
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
     }
 
@@ -1043,6 +1049,12 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
             if( !frame )
             {
                 frame = Kiway().Player( FRAME_PCB_EDITOR, true );
+
+                // frame can be null if Cvpcb cannot be run. No need to show a warning
+                // Kiway() generates the error messages
+                if( !frame )
+                    return;
+
                 frame->OpenProjectFiles( std::vector<wxString>( 1, boardfn.GetFullPath() ) );
             }
 
@@ -1080,6 +1092,12 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         if( !player )
         {
             player = Kiway().Player( FRAME_CVPCB, true );
+
+            // player can be null if Cvpcb cannot be run. No need to show a warning
+            // Kiway() generates the error messages
+            if( !player )
+                return;
+
             player->Show( true );
         }
 

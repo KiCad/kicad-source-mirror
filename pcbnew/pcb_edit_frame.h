@@ -592,9 +592,11 @@ public:
     /**
      * Test if standalone mode.
      *
-     * @return true if in standalone, opens Eeschema, and opens the schematic for this project
+     * @return 0 if in standalone, -1 if Eeschema cannot be opened,
+     * -2 if the schematic cannot be opened and 1 if OK.
+     * If OK, opens Eeschema, and opens the schematic for this project
      */
-    bool TestStandalone( void );
+    int TestStandalone( void );
 
     /**
      * Read a netlist from a file into a #NETLIST object.
