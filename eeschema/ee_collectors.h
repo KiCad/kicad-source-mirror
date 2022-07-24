@@ -49,7 +49,8 @@ public:
 
     EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
         m_Unit( 0 ),
-        m_Convert( 0 )
+        m_Convert( 0 ),
+        m_ShowPinElectricalTypes( false )
     {
         SetScanTypes( aScanTypes );
     }

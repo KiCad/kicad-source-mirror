@@ -1886,14 +1886,14 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             auto prepareForNetName =
                     []( wxString& aText )
                 {
-                    wxString txt = aText;
-                    txt.Replace( "\n", "_" );
-                    txt.Replace( "\r", "_" );
-                    txt.Replace( "\t", "_" );
-                    txt.Replace( " ", "_" );
+                    wxString local_txt = aText;
+                    local_txt.Replace( "\n", "_" );
+                    local_txt.Replace( "\r", "_" );
+                    local_txt.Replace( "\t", "_" );
+                    local_txt.Replace( " ", "_" );
 
                     // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
-                    return EscapeString( txt, CTX_NETNAME );
+                    return EscapeString( local_txt, CTX_NETNAME );
                 };
 
             switch( convertTo )

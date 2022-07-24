@@ -76,7 +76,7 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
         delete m_image;
         m_image = new BITMAP_BASE( *bitmap->m_image );
         m_pos = bitmap->m_pos;
-        m_image->SetPixelSizeIu( Mils2iu( 1000 ) / m_image->GetPPI() );
+        m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
     }
 
     return *this;
