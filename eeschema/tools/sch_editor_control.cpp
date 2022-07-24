@@ -1002,17 +1002,18 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
     }
 
-    if( !conn )
+    if( !conn || conn == editFrame->GetHighlightedConnection() )
     {
         editFrame->SetStatusText( wxT( "" ) );
         editFrame->SendCrossProbeClearHighlight();
+        editFrame->SetHighlightedConnection( nullptr );
     }
     else
     {
         editFrame->SetCrossProbeConnection( conn );
+        editFrame->SetHighlightedConnection( conn );
     }
 
-    editFrame->SetHighlightedConnection( conn );
     editFrame->UpdateNetHighlightStatus();
 
     TOOL_EVENT dummy;
