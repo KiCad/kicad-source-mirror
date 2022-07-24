@@ -17362,7 +17362,6 @@ msgid "Previous Sheet"
 msgstr "이전 시트"
 
 #: eeschema/tools/ee_actions.cpp:764
-#, fuzzy
 msgid "Move to previous sheet by number"
 msgstr "번호별로 이전 시트로 이동"
 
@@ -17426,9 +17425,8 @@ msgid "Walks the current line back one segment."
 msgstr "현재 선을 1 세그먼트 만큼 되돌립니다."
 
 #: eeschema/tools/ee_actions.cpp:833
-#, fuzzy
 msgid "Switch Segment Posture"
-msgstr "세그먼트 모양 전환"
+msgstr "세그먼트 자세 전환"
 
 #: eeschema/tools/ee_actions.cpp:833
 msgid "Switches posture of the current segment."
@@ -19746,7 +19744,7 @@ msgid "Archive metadata must have a single version defined"
 msgstr "보관문서 메타데이터는 하나의 버전이 정의되어 있어야 합니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
@@ -33024,8 +33022,10 @@ msgstr ""
 "다."
 
 #: pcbnew/ibis/kibis.cpp:1109
+#, fuzzy
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgstr ""
+"모델은 파형 쌍을 가지지 않습니다, [Ramp]를 대신 사용 해보세요, 정확도 낮음"
 
 #: pcbnew/ibis/kibis.cpp:1122
 #, fuzzy
