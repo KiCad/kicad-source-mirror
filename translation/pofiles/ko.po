@@ -20969,7 +20969,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "겉면 깊이 100%를 위한 주파수:"
+msgstr "표면 깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
@@ -26780,9 +26780,8 @@ msgid "degree"
 msgstr "각도"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
-msgstr "비 구리 영역 속성"
+msgstr "구리가 아닌 영역 속성"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 msgid "Ring"
@@ -26928,7 +26927,7 @@ msgstr "경고: 패드 구멍이 패드 모양 안에 있지 않습니다."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1294
 #, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "경고: 패드 구멍에 구리가 남지 않습니다."
+msgstr "주의: 패드 구멍에 구리가 남지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1299
 msgid "Warning: Negative local clearance values will have no effect."
@@ -26978,11 +26977,11 @@ msgid "Error: Through hole pad has no hole."
 msgstr "오류: 관통 구멍 패드에 구멍이 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
-"경고: 연결 패드는 보통 솔더 페이스트가 없습니다. SMD 패드를 대신 사용하세요."
+"주의: 커넥터 패드는 일반적으로 솔더 페이스트가 없습니다. SMD 패드를 대신 사용"
+"하세요."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1388
 msgid "Error: SMD pad has a hole."
@@ -28745,12 +28744,12 @@ msgstr "패드 클리어런스 표시"
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 #, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "심볼리 없는 풋프린트 삭제"
+msgstr "심볼이 선택되었을때 연결된 선 강조"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
 #, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "선택한 심볼에 풋프린트 할당"
+msgstr "선택된 심볼에 상응하는 연결된 선 강조"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 #, fuzzy
@@ -30839,12 +30838,12 @@ msgstr "%s %s 확인 중: %s."
 #: pcbnew/drc/drc_engine.cpp:862
 #, fuzzy, c-format
 msgid "Checking %s gap: %s."
-msgstr "%s %s 확인 중: %s."
+msgstr "%s 의 갭 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
 #, fuzzy, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "영역 %s 열 스포크 폭: %s."
+msgstr "%s의 열 스포크 폭 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:874
 #, fuzzy, c-format
@@ -31000,7 +30999,7 @@ msgstr "%s 영역 연결: %s."
 #: pcbnew/drc/drc_engine.cpp:1348
 #, fuzzy, c-format
 msgid "%s pad connection: %s."
-msgstr "구역 %s 패드 연결: %s."
+msgstr "%s 패드 연결: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1353 pcbnew/drc/drc_engine.cpp:1370
 #: pcbnew/drc/drc_engine.cpp:1387 pcbnew/zone.cpp:328 pcbnew/zone.cpp:439
@@ -32113,7 +32112,7 @@ msgstr "(PTH 패드에는 구리레이어가 없습니다)"
 #: pcbnew/footprint.cpp:2337 pcbnew/footprint.cpp:2324
 #, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "(PTH 패드의 구멍은 구리를 남기지 않습니다)"
+msgstr "(PTH 패드의 홀은 구리를 남기지 않습니다)"
 
 #: pcbnew/footprint.cpp:2669 pcbnew/pad.cpp:1747 pcbnew/zone.cpp:1322
 #: pcbnew/footprint.cpp:2656 pcbnew/zone.cpp:1351
@@ -32518,17 +32517,14 @@ msgid "There are NaN elements in a matrix."
 msgstr "행렬에는 NaN 요소가 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:149
-#, fuzzy
 msgid "Invalid R_pkg value."
 msgstr "잘못된 R_pkg 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:154
-#, fuzzy
 msgid "Invalid L_pkg value."
 msgstr "잘못된 L_pkg 값입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:159
-#, fuzzy
 msgid "Invalid C_pkg value."
 msgstr "잘못된 C_pkg 값입니다."
 
@@ -32689,29 +32685,24 @@ msgid "Missing [File Rev]"
 msgstr "[파일 개정판] 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:566
-#, fuzzy
 msgid "Missing [File Name]"
 msgstr "[파일 이름] 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:589
-#, fuzzy
 msgid "Package model name cannot be empty."
 msgstr "패키지 모델 이름은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "패키지 모델 확인 "
+msgstr "패키지 모델 확인중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
-#, fuzzy
 msgid "Manufacturer cannot be empty."
-msgstr "제조업체는 비워둘 수 없습니다."
+msgstr "제조업체 항목은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
-#, fuzzy
 msgid "OEM cannot be empty."
-msgstr "텍스트는 비워둘 수 없습니다."
+msgstr "OEM 항목은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
 msgid "Negative number of pins."
