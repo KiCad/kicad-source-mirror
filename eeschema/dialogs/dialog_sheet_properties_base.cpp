@@ -179,7 +179,7 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizer6->Add( m_pageNumberStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_pageNumberTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_pageNumberTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer6->Add( m_pageNumberTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer6->Add( 0, 0, 3, wxEXPAND, 5 );
