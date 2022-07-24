@@ -152,7 +152,7 @@ bool PCB_EDITOR_CONDITIONS::padNumberDisplayFunc( const SELECTION& aSelection, P
 
 bool PCB_EDITOR_CONDITIONS::padFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetPcbNewSettings()->m_ViewersDisplay.m_DisplayPadFill;
+    return aFrame->Settings().m_ViewersDisplay.m_DisplayPadFill;
 }
 
 
