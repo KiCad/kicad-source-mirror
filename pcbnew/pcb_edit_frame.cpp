@@ -1549,14 +1549,19 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
 }
 
 
-bool PCB_EDIT_FRAME::TestStandalone()
+int PCB_EDIT_FRAME::TestStandalone()
 {
     if( Kiface().IsSingle() )
-        return false;
+        return 0;
 
     // Update PCB requires a netlist. Therefore the schematic editor must be running
     // If this is not the case, open the schematic editor
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
+
+    // If Kiway() cannot create the eeschema frame, it shows a error message, and
+    // frame is null
+    if( !frame )
+        return -1;
 
     if( !frame->IsShown() )
     {
@@ -1572,7 +1577,7 @@ bool PCB_EDIT_FRAME::TestStandalone()
             if( !fn.FileExists() )
             {
                 DisplayError( this, _( "The schematic for this board cannot be found." ) );
-                return false;
+                return -2;
             }
         }
 
@@ -1586,14 +1591,14 @@ bool PCB_EDIT_FRAME::TestStandalone()
         Raise();
     }
 
-    return true;            //Success!
+    return 1;            //Success!
 }
 
 
 bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
                                                 const wxString& aAnnotateMessage )
 {
-    if( !TestStandalone() )
+    if( TestStandalone() == 0 )
     {
         DisplayErrorMessage( this, _( "Cannot update the PCB because PCB editor is opened in "
                                       "stand-alone mode. In order to create or update PCBs from "
@@ -1601,6 +1606,9 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
                                       "create a project." ) );
         return false;       // Not in standalone mode
     }
+
+    if( TestStandalone() < 0 )      // Problem with Eeschema or the schematic
+        return false;
 
     Raise();                // Show
 
@@ -1690,6 +1698,11 @@ void PCB_EDIT_FRAME::RunEeschema()
                 return;
             }
         }
+
+        // If Kiway() cannot create the eeschema frame, it shows a error message, and
+        // frame is null
+        if( !frame )
+            return;
 
         if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
                                 // but no project loaded.
