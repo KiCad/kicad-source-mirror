@@ -59,6 +59,7 @@ class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
+class PCB_VIEWERS_SETTINGS_BASE;
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
@@ -164,9 +165,6 @@ public:
         wxFAIL_MSG( wxT( "Color settings requested for a PCB_BASE_FRAME that does not override!" ) );
         return nullptr;
     }
-
-    PCBNEW_SETTINGS& Settings() { return *m_settings; }
-    const PCBNEW_SETTINGS& Settings() const { return *m_settings; }
 
     void SetDrawBgColor( const COLOR4D& aColor ) override;
 
@@ -375,6 +373,8 @@ public:
 
     FOOTPRINT_EDITOR_SETTINGS* GetFootprintEditorSettings() const;
 
+    virtual PCB_VIEWERS_SETTINGS_BASE* GetViewerSettingsBase() const;
+
     virtual MAGNETIC_SETTINGS* GetMagneticItemsSettings();
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
@@ -412,7 +412,6 @@ protected:
     BOARD*                  m_pcb;
     PCB_DISPLAY_OPTIONS     m_displayOptions;
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
-    PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
 
 private:
     NL_PCBNEW_PLUGIN* m_spaceMouse;

@@ -146,37 +146,37 @@ bool PCB_EDITOR_CONDITIONS::hasItemsFunc( const SELECTION& aSelection, PCB_BASE_
 
 bool PCB_EDITOR_CONDITIONS::padNumberDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_ViewersDisplay.m_DisplayPadNumbers;
+    return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_DisplayPadNumbers;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::padFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_ViewersDisplay.m_DisplayPadFill;
+    return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_DisplayPadFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::textFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_ViewersDisplay.m_DisplayTextFill;
+    return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_DisplayTextFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::graphicsFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_ViewersDisplay.m_DisplayGraphicsFill;
+    return aFrame->GetViewerSettingsBase()->m_ViewersDisplay.m_DisplayGraphicsFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::viaFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_DisplayViaFill;
+    return aFrame->GetPcbNewSettings()->m_Display.m_DisplayViaFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::trackFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Display.m_DisplayPcbTrackFill;
+    return aFrame->GetPcbNewSettings()->m_Display.m_DisplayPcbTrackFill;
 }
 
 

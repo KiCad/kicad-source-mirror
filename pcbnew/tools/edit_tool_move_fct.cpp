@@ -312,7 +312,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
-            editFrame->Settings().m_AllowFreePads && !m_isFootprintEditor );
+            editFrame->GetPcbNewSettings()->m_AllowFreePads && !m_isFootprintEditor );
 
     if( m_dragging || selection.Empty() )
         return 0;
@@ -324,7 +324,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     // Now filter out pads if not in free pads mode.  We cannot do this in the first
     // RequestSelection() as we need the item_layers when a pad is the selection front.
-    if( !m_isFootprintEditor && !editFrame->Settings().m_AllowFreePads )
+    if( !m_isFootprintEditor && !editFrame->GetPcbNewSettings()->m_AllowFreePads )
     {
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -396,7 +396,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool hv45Mode        = false;
     bool eatFirstMouseUp = true;
     bool hasRedrawn3D    = false;
-    bool allowRedraw3D   = editFrame->Settings().m_Display.m_Live3DRefresh;
+    bool allowRedraw3D   = editFrame->GetPcbNewSettings()->m_Display.m_Live3DRefresh;
     // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
     bool showCourtyardConflicts = !m_isFootprintEditor
                                     && board->IsElementVisible( LAYER_CONFLICTS_SHADOW );
@@ -524,7 +524,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 // Prepare to start dragging
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
                        || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
-                    && ( editFrame->Settings().m_TrackDragAction != TRACK_DRAG_ACTION::MOVE ) )
+                    && ( editFrame->GetPcbNewSettings()->m_TrackDragAction != TRACK_DRAG_ACTION::MOVE ) )
                 {
                     if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;

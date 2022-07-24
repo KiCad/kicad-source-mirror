@@ -256,7 +256,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         MOUSE_DRAG_ACTION dragAction = m_frame->GetDragAction();
-        TRACK_DRAG_ACTION trackDragAction = m_frame->Settings().m_TrackDragAction;
+        TRACK_DRAG_ACTION trackDragAction = m_frame->GetPcbNewSettings()->m_TrackDragAction;
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
@@ -668,8 +668,7 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
 
 bool PCB_SELECTION_TOOL::ctrlClickHighlights()
 {
-    return m_frame && m_frame->Settings().m_CtrlClickHighlight
-           && !m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
+    return m_frame && m_frame->GetPcbNewSettings()->m_CtrlClickHighlight && !m_isFootprintEditor;
 }
 
 
@@ -1537,9 +1536,9 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
 
     if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
     {
-        if( m_frame->Settings().m_CrossProbing.center_on_items )
+        if( m_frame->GetPcbNewSettings()->m_CrossProbing.center_on_items )
         {
-            if( m_frame->Settings().m_CrossProbing.zoom_to_fit )
+            if( m_frame->GetPcbNewSettings()->m_CrossProbing.zoom_to_fit )
                 zoomFitCrossProbeBBox( bbox );
 
             m_frame->FocusOnLocation( bbox.Centre() );
@@ -2884,7 +2883,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollect
         BOARD_ITEM* item = aCollector[i];
 
         if( !m_isFootprintEditor && item->Type() == PCB_PAD_T
-            && !frame()->Settings().m_AllowFreePads )
+            && !frame()->GetPcbNewSettings()->m_AllowFreePads )
         {
             if( !aCollector.HasItem( item->GetParent() ) )
                 to_add.insert( item->GetParent() );

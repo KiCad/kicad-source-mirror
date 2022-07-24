@@ -448,7 +448,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         if( rc_item->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
         {
-            if( !m_frame->Settings().m_Display.m_ShowGlobalRatsnest )
+            if( !m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest )
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showRatsnest, true );
 
             std::vector<CN_EDGE> edges;

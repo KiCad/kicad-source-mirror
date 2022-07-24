@@ -40,6 +40,7 @@
 #include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>          // To include VIEWER3D_FRAMENAME
 #include <footprint_editor_settings.h>
+#include <pcbnew_settings.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
 #include <board.h>
@@ -73,9 +74,10 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName ) :
         EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-        m_pcb( nullptr ), m_originTransforms( *this ), m_spaceMouse( nullptr )
+        m_pcb( nullptr ),
+        m_originTransforms( *this ),
+        m_spaceMouse( nullptr )
 {
-    m_settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
 
@@ -233,7 +235,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
         if( aFootprint->IsFlipped() )
-            aFootprint->Flip( aFootprint->GetPosition(), m_settings->m_FlipLeftRight );
+            aFootprint->Flip( aFootprint->GetPosition(), GetPcbNewSettings()->m_FlipLeftRight );
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
@@ -567,7 +569,7 @@ const VECTOR2I PCB_BASE_FRAME::GetUserOrigin() const
 {
     VECTOR2I origin( 0, 0 );
 
-    switch( Settings().m_Display.m_DisplayOrigin )
+    switch( GetPcbNewSettings()->m_Display.m_DisplayOrigin )
     {
     case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE:                           break;
     case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = GetAuxOrigin();  break;
@@ -922,10 +924,15 @@ FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings() const
 }
 
 
+PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
+{
+    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+}
+
+
 MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
 {
-    wxCHECK( m_settings, nullptr );
-    return &m_settings->m_MagneticItems;
+    return &GetPcbNewSettings()->m_MagneticItems;
 }
 
 

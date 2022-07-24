@@ -175,7 +175,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
-    m_frame->Settings().m_FootprintTextShownColumns = m_itemsGrid->GetShownColumns().ToStdString();
+    m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
@@ -480,7 +480,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
         change_layer = true;
 
     if( change_layer )
-        m_footprint->Flip( m_footprint->GetPosition(), m_frame->Settings().m_FlipLeftRight );
+        m_footprint->Flip( m_footprint->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipLeftRight );
 
     // Copy the models from the panel to the footprint
     std::vector<FP_3DMODEL>& panelList = m_3dPanel->GetModelList();

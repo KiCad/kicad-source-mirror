@@ -522,7 +522,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     aNew->SetPosition( aExisting->GetPosition() );
 
     if( aNew->GetLayer() != aExisting->GetLayer() )
-        aNew->Flip( aNew->GetPosition(), m_settings->m_FlipLeftRight );
+        aNew->Flip( aNew->GetPosition(), GetPcbNewSettings()->m_FlipLeftRight );
 
     if( aNew->GetOrientation() != aExisting->GetOrientation() )
         aNew->SetOrientation( aExisting->GetOrientation() );

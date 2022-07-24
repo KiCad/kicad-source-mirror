@@ -694,13 +694,13 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto globalRatsnestCond =
             [this] (const SELECTION& )
             {
-                return Settings().m_Display.m_ShowGlobalRatsnest;
+                return GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest;
             };
 
     auto curvedRatsnestCond =
             [this] (const SELECTION& )
             {
-                return Settings().m_Display.m_DisplayRatsnestLinesCurved;
+                return GetPcbNewSettings()->m_Display.m_DisplayRatsnestLinesCurved;
             };
 
     auto netHighlightCond =
@@ -1166,7 +1166,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
-                    if( Settings().m_Display.m_PadClearance )
+                    if( GetPcbNewSettings()->m_Display.m_PadClearance )
                     {
                         // Round-corner rects are expensive to draw, but are mostly found on
                         // SMD pads which only need redrawing on an active-to-not-active
@@ -1187,7 +1187,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
-                    if( Settings().m_Display.m_TrackClearance )
+                    if( GetPcbNewSettings()->m_Display.m_TrackClearance )
                     {
                         // Tracks aren't particularly expensive to draw, but it's an easy check.
                         return track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer );
@@ -1247,7 +1247,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     // Sync layer and item visibility
     GetCanvas()->SyncLayersVisibility( m_pcb );
 
-    SetElementVisibility( LAYER_RATSNEST, Settings().m_Display.m_ShowGlobalRatsnest );
+    SetElementVisibility( LAYER_RATSNEST, GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
     m_appearancePanel->OnBoardChanged();
 
@@ -1355,7 +1355,7 @@ void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
 
-    Update3DView( true, Settings().m_Display.m_Live3DRefresh );
+    Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
     if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
@@ -1842,10 +1842,10 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     renderSettings->LoadDisplayOptions( GetDisplayOptions() );
 
-    SetElementVisibility( LAYER_NO_CONNECTS, Settings().m_Display.m_PadNoConnects );
-    SetElementVisibility( LAYER_RATSNEST, Settings().m_Display.m_ShowGlobalRatsnest );
+    SetElementVisibility( LAYER_NO_CONNECTS, GetPcbNewSettings()->m_Display.m_PadNoConnects );
+    SetElementVisibility( LAYER_RATSNEST, GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
-    GetGalDisplayOptions().ReadWindowSettings( Settings().m_Window );
+    GetGalDisplayOptions().ReadWindowSettings( GetPcbNewSettings()->m_Window );
 
     // Netclass definitions could have changed, either by us or by Eeschema, so we need to
     // recompile the implicit rules

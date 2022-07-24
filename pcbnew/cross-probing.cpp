@@ -76,7 +76,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     PAD*        pad = nullptr;
     BOARD*      pcb = GetBoard();
 
-    CROSS_PROBING_SETTINGS& crossProbingSettings = Settings().m_CrossProbing;
+    CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;
 
     KIGFX::VIEW*            view = m_toolManager->GetView();
     KIGFX::RENDER_SETTINGS* renderSettings = view->GetPainter()->GetSettings();
@@ -473,7 +473,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
 
     case MAIL_SELECTION:
-        if( !Settings().m_CrossProbing.on_selection )
+        if( !GetPcbNewSettings()->m_CrossProbing.on_selection )
             break;
 
         KI_FALLTHROUGH;

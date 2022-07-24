@@ -147,7 +147,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     // Put it on FRONT layer,
     // because this is the default in Footprint Editor, and in libs
     if( newFootprint->GetLayer() != F_Cu )
-        newFootprint->Flip( newFootprint->GetPosition(), frame->Settings().m_FlipLeftRight );
+        newFootprint->Flip( newFootprint->GetPosition(), frame->GetPcbNewSettings()->m_FlipLeftRight );
 
     // Put it in orientation 0,
     // because this is the default orientation in Footprint Editor, and in libs

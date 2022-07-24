@@ -48,6 +48,7 @@
 #include <project/net_settings.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
@@ -77,7 +78,10 @@ PCBNEW_SETTINGS* pcbconfig()
 // returns the viewer options existing to Cvpcb and Pcbnew
 static PCB_VIEWERS_SETTINGS_BASE* viewer_settings()
 {
-    return static_cast<PCB_VIEWERS_SETTINGS_BASE*>( Kiface().KifaceSettings() );
+    if( pcbconfig() )
+        return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    else
+        return dynamic_cast<PCB_VIEWERS_SETTINGS_BASE*>( Kiface().KifaceSettings() );
 }
 
 static bool displayPadFill()
@@ -993,7 +997,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         wxString                          padNumber;
 
         if( displayPadNumbers() )
+        {
             padNumber = UnescapeString( aPad->GetNumber() );
+
+            if( !displayOpts )
+                netname = UnescapeString( aPad->GetShortNetname() );
+        }
 
         if( displayOpts )
         {

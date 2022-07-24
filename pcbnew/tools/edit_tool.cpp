@@ -1027,7 +1027,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
-            frame()->Settings().m_AllowFreePads && !m_isFootprintEditor );
+            frame()->GetPcbNewSettings()->m_AllowFreePads && !m_isFootprintEditor );
 
     if( selection.Empty() )
         return 0;
@@ -1041,7 +1041,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     // Now filter out pads if not in free pads mode.  We cannot do this in the first
     // RequestSelection() as we need the reference point when a pad is the selection front.
-    if( !m_isFootprintEditor && !frame()->Settings().m_AllowFreePads )
+    if( !m_isFootprintEditor && !frame()->GetPcbNewSettings()->m_AllowFreePads )
     {
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -1301,7 +1301,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
             refPt = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();
     }
 
-    bool leftRight = frame()->Settings().m_FlipLeftRight;
+    bool leftRight = frame()->GetPcbNewSettings()->m_FlipLeftRight;
 
     // When editing footprints, all items have the same parent
     if( IsFootprintEditor() )
@@ -1464,7 +1464,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         }
 
         case PCB_PAD_T:
-            if( IsFootprintEditor() || frame()->Settings().m_AllowFreePads )
+            if( IsFootprintEditor() || frame()->GetPcbNewSettings()->m_AllowFreePads )
             {
                 PAD*       pad = static_cast<PAD*>( item );
                 FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
@@ -1544,8 +1544,11 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                             }
                             else if( bItem->Type() == PCB_PAD_T )
                             {
-                                if( !IsFootprintEditor() && !frame()->Settings().m_AllowFreePads )
+                                if( !IsFootprintEditor()
+                                        && !frame()->GetPcbNewSettings()->m_AllowFreePads )
+                                {
                                     return;
+                                }
                             }
 
                             m_commit->Modify( bItem->GetParent() );
@@ -1627,7 +1630,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         // Make sure the rotation is from the right reference point
         selCenter += translation;
 
-        if( !frame()->Settings().m_Display.m_DisplayInvertYAxis )
+        if( !frame()->GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis )
             rotation = -rotation;
 
         // When editing footprints, all items have the same parent

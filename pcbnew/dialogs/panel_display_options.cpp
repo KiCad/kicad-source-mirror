@@ -89,8 +89,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     if( m_isPCBEdit )
     {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
         int i = m_OptDisplayTracksClearance->GetSelection();
         cfg->m_Display.m_TrackClearance = UTIL::GetValFromConfig( clearanceModeMap, i );

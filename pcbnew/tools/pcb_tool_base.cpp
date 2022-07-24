@@ -225,7 +225,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )
             {
-                newItem->Flip( newItem->GetPosition(), frame()->Settings().m_FlipLeftRight );
+                newItem->Flip( newItem->GetPosition(), frame()->GetPcbNewSettings()->m_FlipLeftRight );
                 view()->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::properties ) )

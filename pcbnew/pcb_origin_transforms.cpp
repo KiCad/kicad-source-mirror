@@ -119,10 +119,10 @@ int PCB_ORIGIN_TRANSFORMS::getUserYOrigin() const
 
 bool PCB_ORIGIN_TRANSFORMS::invertXAxis() const
 {
-    return m_pcbBaseFrame.Settings().m_Display.m_DisplayInvertXAxis;
+    return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis;
 }
 
 bool PCB_ORIGIN_TRANSFORMS::invertYAxis() const
 {
-    return m_pcbBaseFrame.Settings().m_Display.m_DisplayInvertYAxis;
+    return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis;
 }

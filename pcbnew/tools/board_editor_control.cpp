@@ -1092,7 +1092,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 for( PAD* pad : fp->Pads() )
                 {
-                    pad->SetLocalRatsnestVisible( m_frame->Settings().m_Display.m_ShowGlobalRatsnest );
+                    pad->SetLocalRatsnestVisible( m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
                     // Pads in the library all have orphaned nets.  Replace with Default.
                     pad->SetNetCode( 0 );
@@ -1101,7 +1101,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
                 if( fp->IsFlipped() )
-                    fp->Flip( fp->GetPosition(), m_frame->Settings().m_FlipLeftRight );
+                    fp->Flip( fp->GetPosition(), m_frame->GetPcbNewSettings()->m_FlipLeftRight );
 
                 fp->SetOrientation( ANGLE_0 );
                 fp->SetPosition( cursorPos );
