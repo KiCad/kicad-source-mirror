@@ -28882,7 +28882,7 @@ msgstr "基板の設定の制約"
 
 #: pcbnew/drc/drc_engine.cpp:173
 msgid "board setup constraints silk"
-msgstr "基板の設定のシルク印刷の制約"
+msgstr "基板の設定のシルクスクリーンの制約"
 
 #: pcbnew/drc/drc_engine.cpp:179
 msgid "board setup constraints hole"
