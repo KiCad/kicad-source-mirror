@@ -384,23 +384,21 @@ private:
     ACTION_TOOLBAR*           m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_librariesListBox;
-    SYMBOLS_LISTBOX*       m_symbolsListBox;
+    SYMBOLS_LISTBOX*          m_symbolsListBox;
     wxTextCtrl*               m_tcFilterString;
     wxStaticText*             m_statusLine1;
     wxStaticText*             m_statusLine2;
     wxStaticText*             m_statusLine3;
     wxButton*                 m_saveAndContinue;
 
-    // Tool dispatcher
-    TOOL_DISPATCHER* m_toolDispatcher;
+    TOOL_DISPATCHER*          m_toolDispatcher;
 
     // Context menus for the list boxes
-    ACTION_MENU* m_footprintContextMenu;
-    ACTION_MENU* m_symbolsContextMenu;
+    ACTION_MENU*              m_footprintContextMenu;
+    ACTION_MENU*              m_symbolsContextMenu;
 
-    // Undo/Redo item lists
-    CVPCB_UNDO_REDO_LIST    m_undoList;
-    CVPCB_UNDO_REDO_LIST    m_redoList;
+    CVPCB_UNDO_REDO_LIST      m_undoList;
+    CVPCB_UNDO_REDO_LIST      m_redoList;
 };
 
 #endif  //#ifndef _CVPCB_MAINFRAME_H_
