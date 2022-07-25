@@ -306,6 +306,8 @@ void PANEL_CABLE_SIZE::OnVDropChange( wxCommandEvent& aEvent )
 
         if( m_vDropCtrl->GetValue().ToDouble( &value ) )
         {
+            // in m_vDropCtrl, The value is in mV. We need it in Volt in calculations
+            value /= 1000;
             updateAll( sqrt( COPPER_RESISTIVITY / value * m_length * m_current / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
         }
@@ -323,6 +325,8 @@ void PANEL_CABLE_SIZE::OnPowerChange( wxCommandEvent& aEvent )
 
         if( m_powerCtrl->GetValue().ToDouble( &value ) )
         {
+            // m_powerCtrl shows the power in mW. we need Watts
+            value /= 1000;
             updateAll(
                     sqrt( COPPER_RESISTIVITY / value * m_length * m_current * m_current / M_PI ) );
             m_sizeChoice->SetSelection( -1 );
@@ -388,13 +392,15 @@ void PANEL_CABLE_SIZE::printAll()
 
     if( !m_updatingRVdrop )
     {
-        value = wxString( "" ) << m_voltageDrop;
+        // The value is in mV
+        value = wxString( "" ) << m_voltageDrop * 1000;
         m_vDropCtrl->SetValue( value );
     }
 
     if( !m_updatingPower )
     {
-        value = wxString( "" ) << m_dissipatedPower;
+        // m_powerCtrl shows the power in mW. we have Watts
+        value = wxString( "" ) << m_dissipatedPower * 1000;
         m_powerCtrl->SetValue( value );
     }
 
@@ -408,6 +414,7 @@ void PANEL_CABLE_SIZE::updateAll( double aRadius )
     m_diameter = aRadius * 2;
     m_area = M_PI * aRadius * aRadius;
     m_linearResistance = COPPER_RESISTIVITY / m_area;
+
     // max frequency is when skin depth = radius
     m_maxFrequency = COPPER_RESISTIVITY
                      / ( M_PI * aRadius * aRadius * VACCUM_PERMEABILITY * RELATIVE_PERMEABILITY );
@@ -415,6 +422,7 @@ void PANEL_CABLE_SIZE::updateAll( double aRadius )
     // Based on the 700 circular mils per amp rule of the thumb
     // The long number is the sq m to circular mils conversion
     m_ampacity = ( m_area * 1973525241.77 ) / 700;
+
     // Update application-specific values
     m_resistance = m_linearResistance * m_length;
     m_voltageDrop = m_resistance * m_current;
