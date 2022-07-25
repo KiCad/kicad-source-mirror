@@ -250,19 +250,10 @@ void X2_ATTRIBUTE_FILEFUNCTION::set_Z_Order()
             m_z_sub_order = -lnum;
     }
 
-    if( GetFileType().IsSameAs( wxT( "Paste" ), false ) )
-    {
-        // solder paste layer: the priority is top then bottom
-        m_z_order = 1;       // for top
-
-        if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
-            m_z_order = -m_z_order;
-    }
-
     if( GetFileType().IsSameAs( wxT( "Soldermask" ), false ) )
     {
         // solder mask layer: the priority is top then bottom
-        m_z_order = 2;       // for top
+        m_z_order = 1;       // for top
 
         if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
             m_z_order = -m_z_order;
@@ -271,6 +262,15 @@ void X2_ATTRIBUTE_FILEFUNCTION::set_Z_Order()
     if( GetFileType().IsSameAs( wxT( "Legend" ), false ) )
     {
         // Silk screen layer: the priority is top then bottom
+        m_z_order = 2;       // for top
+
+        if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
+            m_z_order = -m_z_order;
+    }
+
+    if( GetFileType().IsSameAs( wxT( "Paste" ), false ) )
+    {
+        // solder paste layer: the priority is top then bottom
         m_z_order = 3;       // for top
 
         if( GetBrdLayerId().IsSameAs( wxT( "Bot" ), false ) )
