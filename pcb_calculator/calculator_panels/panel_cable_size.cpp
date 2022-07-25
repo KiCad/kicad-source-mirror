@@ -24,15 +24,15 @@
 
 #define M2_to_MM2 1000000.0
 
-#define COPPER_RESISTIVITY 1.72e-8 // ohm meter
+#define COPPER_RESISTIVITY 1.72e-8      // ohm meter
 #define VACCUM_PERMEABILITY 1.256637e-6
 #define RELATIVE_PERMEABILITY 1
 
 
-CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( wxString aName, double aRadius )
+CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( wxString aName, double aRadius_meter ) :
+    m_Name( aName ),
+    m_Radius( aRadius_meter )
 {
-    m_name = aName;
-    m_radius = aRadius;
 }
 
 
@@ -78,8 +78,37 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
 
     for( CABLE_SIZE_ENTRY entry : m_entries )
     {
-        m_sizeChoice->Append( entry.m_name );
+        m_sizeChoice->Append( entry.m_Name );
     }
+
+    // Set internal state flags:
+    m_updatingUI = false;
+    m_updatingUI = false;
+    m_updatingDiameter = false;
+    m_updatingArea = false;
+    m_updatingLinResistance = false;
+    m_updatingFrequency = false;
+    m_updatingAmpacity = false;
+    m_updatingCurrent = false;
+    m_updatingLength = false;
+    m_updatingResistance = false;
+    m_updatingRVdrop = false;
+    m_updatingPower = false;
+
+    m_imperial = false;
+
+    // Initialize variables to a reasonable value
+    // Stored in normalized units
+    m_diameter = 0.001;
+    m_current = 1.0;
+    m_length = 1.0;
+    m_area = m_diameter * m_diameter / 4 * 3.14156;
+    m_linearResistance = 0.000813269;
+    m_maxFrequency = 17.4272;
+    m_resistance = 0.0218997;
+    m_voltageDrop = 0.0218997;
+    m_dissipatedPower = 0.0218997;
+    m_ampacity = 1.0;
 }
 
 
@@ -111,7 +140,7 @@ void PANEL_CABLE_SIZE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     m_lengthUnit->SetSelection( aCfg->m_cableSize.lengthUnit );
 }
 
-void PANEL_CABLE_SIZE::OnSizeChange( wxCommandEvent& aEvent )
+void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
 {
     if( !m_updatingUI )
     {
@@ -121,7 +150,7 @@ void PANEL_CABLE_SIZE::OnSizeChange( wxCommandEvent& aEvent )
 
         if( ( index >= 0 ) && ( index < m_entries.size() ) )
         {
-            value = m_entries.at( index ).m_radius;
+            value = m_entries.at( index ).m_Radius;
             updateAll( value );
         }
     }

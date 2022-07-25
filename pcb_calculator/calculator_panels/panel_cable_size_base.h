@@ -73,7 +73,7 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText16121211;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnSizeChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCableSizeChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDiameterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUnit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAreaChange( wxCommandEvent& event ) { event.Skip(); }

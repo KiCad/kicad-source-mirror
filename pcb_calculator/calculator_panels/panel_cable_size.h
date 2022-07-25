@@ -28,9 +28,10 @@ class PCB_CALCULATOR_SETTINGS;
 class CABLE_SIZE_ENTRY
 {
 public:
-    CABLE_SIZE_ENTRY( wxString aName, double aRadius );
-    wxString m_name;
-    double   m_radius; // stored in m
+    CABLE_SIZE_ENTRY( wxString aName, double aRadius_meter );
+
+    wxString m_Name;
+    double   m_Radius;  // stored in meters
 };
 
 class PANEL_CABLE_SIZE : public PANEL_CABLE_SIZE_BASE
@@ -46,7 +47,7 @@ public:
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override{};
 
-    void OnSizeChange( wxCommandEvent& aEvent ) override;
+    void OnCableSizeChange( wxCommandEvent& aEvent ) override;
     void OnUpdateUnit( wxCommandEvent& aEvent ) override;
 
     void OnDiameterChange( wxCommandEvent& aEvent ) override;
@@ -61,6 +62,13 @@ public:
     void OnPowerChange( wxCommandEvent& aEvent ) override;
 
 private:
+    void updateAll( double aRadius );
+    void updateApplication();
+    void printAll();
+
+private:
+    std::vector<CABLE_SIZE_ENTRY> m_entries;
+
     bool m_updatingUI;
     bool m_updatingDiameter;
     bool m_updatingArea;
@@ -72,16 +80,8 @@ private:
     bool m_updatingResistance;
     bool m_updatingRVdrop;
     bool m_updatingPower;
-    void updateAll( double aRadius );
-    void updateApplication();
-    void printAll();
 
     bool m_imperial;
-
-
-    std::vector<CABLE_SIZE_ENTRY> m_entries;
-
-    void onParameterUpdate( wxCommandEvent& aEvent );
 
     // Stored in normalized units
     double m_diameter;
@@ -94,11 +94,6 @@ private:
     double m_voltageDrop;
     double m_dissipatedPower;
     double m_ampacity;
-    /*
-    void updateRow( int aRow, bool aInit=false );
-    void updateRows();
-    void OnUpdateLength();
-*/
 };
 
 #endif
