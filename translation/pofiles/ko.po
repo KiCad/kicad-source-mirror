@@ -21730,7 +21730,6 @@ msgid "Wavelength in medium:"
 msgstr "중간 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
-#, fuzzy
 msgid "Speed in medium:"
 msgstr "중간 속도:"
 
@@ -22307,17 +22306,14 @@ msgid "m"
 msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
 msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
-#, fuzzy
 msgid "feet"
 msgstr "feet"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
-#, fuzzy
 msgid "m/s"
 msgstr "m/s"
 
