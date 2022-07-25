@@ -404,8 +404,6 @@ void LAYER_WIDGET::updateLayerRow( int aRow, const wxString& aName )
     {
         if( aRow == m_CurrentRow )
             indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
-        if( useAlternateBitmap( aRow ) )
-            indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DIMMED );
         else
             indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
     }
@@ -509,7 +507,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     // change the font size on the notebook's tabs to match aPointSize
     font.SetPointSize( pointSize );
     m_notebook->SetFont( font );
-    
+
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxTAB_TRAVERSAL );
 
@@ -679,12 +677,7 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     INDICATOR_ICON* oldIndicator = (INDICATOR_ICON*) getLayerComp( m_CurrentRow, 0 );
 
     if( oldIndicator )
-    {
-        if( useAlternateBitmap( m_CurrentRow ) )
-            oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DIMMED );
-        else
-            oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
-    }
+        oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
 
     INDICATOR_ICON* newIndicator = (INDICATOR_ICON*) getLayerComp( aRow, 0 );
 
@@ -846,8 +839,6 @@ void LAYER_WIDGET::UpdateLayerIcons()
 
             if( row == m_CurrentRow )
                 state = ROW_ICON_PROVIDER::STATE::ON;
-            else if( useAlternateBitmap( row ) )
-                state = ROW_ICON_PROVIDER::STATE::DIMMED;
             else
                 state = ROW_ICON_PROVIDER::STATE::OFF;
 

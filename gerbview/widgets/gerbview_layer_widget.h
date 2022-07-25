@@ -115,12 +115,6 @@ private:
     /// on every child control within the layer panel.
     void installRightLayerClickHandler();
 
-    /**
-     * @return true if bitmaps shown in Render layer list are alternate bitmaps else false if
-     *         they are "normal" bitmaps.
-     */
-    virtual bool useAlternateBitmap( int aRow ) override;
-
     GERBER_FILE_IMAGE_LIST* GetImagesList();
 
     GERBVIEW_FRAME* m_frame;

@@ -377,9 +377,3 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
     m_frame->GetCanvas()->Refresh();
 }
-
-
-bool GERBER_LAYER_WIDGET::useAlternateBitmap( int aRow )
-{
-    return GetImagesList()->GetGbrImage( aRow ) != nullptr;
-}
