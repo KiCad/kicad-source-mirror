@@ -26921,9 +26921,8 @@ msgid "Warning: Pad hole not inside pad shape."
 msgstr "경고: 패드 구멍이 패드 모양 안에 있지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1294
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "주의: 패드 구멍에 구리가 남지 않습니다."
+msgstr "주의: 패드 구멍에 구리가 놓여있지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1299
 msgid "Warning: Negative local clearance values will have no effect."
@@ -28738,14 +28737,12 @@ msgid "Show pad clearance"
 msgstr "패드 클리어런스 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "심볼이 선택되었을때 연결된 선 강조"
+msgstr "심볼이 선택되었을때 연결부 강조"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "선택된 심볼에 상응하는 연결된 선 강조"
+msgstr "선택된 심볼에 상응하는 연결부 강조"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 #, fuzzy
@@ -30819,7 +30816,7 @@ msgstr "--> 규칙에 실패했습니다. <--"
 #: pcbnew/drc/drc_engine.cpp:844
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s 확인 중 클리어런스: %s."
+msgstr "%s 클리어런스 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:850
 #, fuzzy, c-format
@@ -30827,14 +30824,14 @@ msgid "Checking %s max uncoupled length: %s."
 msgstr "%s 확인 중; 홀 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s %s 확인 중: %s."
+msgstr "%s 최대 스큐 확인 중 : %s"
 
 #: pcbnew/drc/drc_engine.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "%s 의 갭 확인중: %s."
+msgstr "%s 의 차이 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
 #, fuzzy, c-format
@@ -30847,9 +30844,9 @@ msgid "Checking %s min spoke count: %s."
 msgstr "%s %s 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "네트 연결 확인 중..."
+msgstr "%s 구역 연결 확인 중: %s"
 
 #: pcbnew/drc/drc_engine.cpp:896 pcbnew/drc/drc_engine.cpp:897
 #: pcbnew/drc/drc_engine.cpp:898 pcbnew/tools/board_inspection_tool.cpp:202
