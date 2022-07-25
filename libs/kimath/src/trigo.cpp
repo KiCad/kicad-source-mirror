@@ -314,7 +314,7 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     if( angle > ANGLE_180 )
     {
         std::swap( start, end );
-        angle = ANGLE_180 - angle;
+        angle = ANGLE_360 - angle;
     }
 
     double chord = ( start - end ).EuclideanNorm();
