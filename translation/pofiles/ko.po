@@ -32712,9 +32712,8 @@ msgid "Capacitance matrix is undefined"
 msgstr "정전 용량이 정의되지 않음"
 
 #: pcbnew/ibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "단위 길이당 정전 용량"
+msgstr "정전 용량이 잘못되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
 #, fuzzy
@@ -32738,11 +32737,11 @@ msgstr "단위 길이당 인덕턴스"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
 msgid "Cannot open file "
-msgstr "파일을 열 수 없음 "
+msgstr "파일을 열 수 없습니다 "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
 msgid "Reading file "
-msgstr "파일 읽는 중 "
+msgstr "파일 읽는중 "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
 msgid "Unexpected end of file. Missing [END] ?"
@@ -32750,12 +32749,11 @@ msgstr "예기치 않은 EOF(end of file). [END]가 없습니까 ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
 msgid "Error on line "
-msgstr "줄에서 오류 발생 "
+msgstr "오류 라인 "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
-#, fuzzy
 msgid "A line did not end properly.."
-msgstr "불러온 파일에 있는 항목을 제대로 처리할 수 없습니다."
+msgstr "줄이 제대로 끝나지 않았습니다.."
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
