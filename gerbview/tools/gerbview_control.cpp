@@ -327,7 +327,7 @@ int GERBVIEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
     int layer = m_frame->GetActiveLayer();
 
-    if( layer < GERBER_DRAWLAYERS_COUNT - 1 )
+    if( layer < ( (int) GERBER_FILE_IMAGE_LIST::GetImagesList().GetLoadedImageCount() - 1 ) )
         m_frame->SetActiveLayer( layer + 1, true );
 
     return 0;
