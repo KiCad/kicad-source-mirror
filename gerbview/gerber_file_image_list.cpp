@@ -228,6 +228,7 @@ static struct GERBER_ORDER gerberFileExtensionOrder[] =
        { ".XLN",        GERBER_ORDER_ENUM::GERBER_DRILL },
        { ".TAP",        GERBER_ORDER_ENUM::GERBER_DRILL },
        { ".DRD",        GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".DRL",        GERBER_ORDER_ENUM::GERBER_DRILL },
        { ".NC",         GERBER_ORDER_ENUM::GERBER_DRILL },
        { ".XNC",        GERBER_ORDER_ENUM::GERBER_DRILL },
 

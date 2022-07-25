@@ -236,7 +236,7 @@ bool X2_ATTRIBUTE_FILEFUNCTION::IsDrillFile()
 
 void X2_ATTRIBUTE_FILEFUNCTION::set_Z_Order()
 {
-    m_z_order = -100;     // low level
+    m_z_order = 100;     // high level
     m_z_sub_order = 0;
 
     if( IsCopper() )
