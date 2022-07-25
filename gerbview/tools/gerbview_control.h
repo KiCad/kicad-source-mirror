@@ -45,6 +45,8 @@ public:
     // Layer control
     int LayerNext( const TOOL_EVENT& aEvent );
     int LayerPrev( const TOOL_EVENT& aEvent );
+    int MoveLayerUp( const TOOL_EVENT& aEvent );
+    int MoveLayerDown( const TOOL_EVENT& aEvent );
     int ClearLayer( const TOOL_EVENT& aEvent );
     int ClearAllLayers( const TOOL_EVENT& aEvent );
     int ReloadAllLayers( const TOOL_EVENT& aEvent );

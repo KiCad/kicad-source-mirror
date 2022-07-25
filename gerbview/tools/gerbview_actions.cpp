@@ -136,13 +136,25 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( "gerbview.Control.highlightDCode",
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL,
-        '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
+        WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Next Layer" ),
         _( "Next Layer" ), _( "Next Layer" ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
         AS_GLOBAL,
-        '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
+        WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Previous Layer" ),
         _( "Previous Layer" ), _( "Previous Layer" ) );
+
+TOOL_ACTION GERBVIEW_ACTIONS::moveLayerUp( "gerbview.Control.moveLayerUp",
+        AS_GLOBAL,
+        '+', "",
+        _( "Move Layer Up" ), _( "Move Current Layer Up" ),
+        BITMAPS::up );
+
+TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( "gerbview.Control.moveLayerDown",
+        AS_GLOBAL,
+        '-', "",
+        _( "Move Layer Down" ), _( "Move Current Layer Down" ),
+        BITMAPS::down );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
         AS_GLOBAL,

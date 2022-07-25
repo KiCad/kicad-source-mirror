@@ -36,6 +36,8 @@
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <settings/settings_manager.h>
+#include <tool/tool_manager.h>
+#include <tools/gerbview_actions.h>
 
 #include "layer_widget.h"
 #include "gbr_layer_box_selector.h"
@@ -215,23 +217,11 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         break;
 
     case ID_LAYER_MOVE_UP:
-        layer = m_frame->GetActiveLayer();
-
-        if( layer > 0 )
-        {
-            m_frame->RemapLayers( GetImagesList()->SwapImages( layer, layer - 1 ) );
-            m_frame->SetActiveLayer( layer - 1 );
-        }
+        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerUp, true );
         break;
 
     case ID_LAYER_MOVE_DOWN:
-        layer = m_frame->GetActiveLayer();
-
-        if( layer < ( (int)GetImagesList()->GetLoadedImageCount() - 1 ) )
-        {
-            m_frame->RemapLayers( GetImagesList()->SwapImages( layer, layer + 1 ) );
-            m_frame->SetActiveLayer( layer + 1 );
-        }
+        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerDown, true );
         break;
 
     case ID_LAYER_DELETE:

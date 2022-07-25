@@ -69,6 +69,8 @@ public:
     // Layer control
     static TOOL_ACTION layerPrev;
     static TOOL_ACTION layerNext;
+    static TOOL_ACTION moveLayerUp;
+    static TOOL_ACTION moveLayerDown;
     static TOOL_ACTION clearLayer;
     static TOOL_ACTION clearAllLayers;
     static TOOL_ACTION reloadAllLayers;

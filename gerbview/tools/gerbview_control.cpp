@@ -345,6 +345,36 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
+int GERBVIEW_CONTROL::MoveLayerUp( const TOOL_EVENT& aEvent )
+{
+    int layer = m_frame->GetActiveLayer();
+
+    if( layer > 0 )
+    {
+        m_frame->RemapLayers(
+                GERBER_FILE_IMAGE_LIST::GetImagesList().SwapImages( layer, layer - 1 ) );
+        m_frame->SetActiveLayer( layer - 1 );
+    }
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::MoveLayerDown( const TOOL_EVENT& aEvent )
+{
+    int                     layer = m_frame->GetActiveLayer();
+    GERBER_FILE_IMAGE_LIST& list = GERBER_FILE_IMAGE_LIST::GetImagesList();
+
+    if( layer < ( (int) list.GetLoadedImageCount() - 1 ) )
+    {
+        m_frame->RemapLayers( list.SwapImages( layer, layer + 1 ) );
+        m_frame->SetActiveLayer( layer + 1 );
+    }
+
+    return 0;
+}
+
+
 int GERBVIEW_CONTROL::ClearLayer( const TOOL_EVENT& aEvent )
 {
     m_frame->Erase_Current_DrawLayer( true );
@@ -448,6 +478,8 @@ void GERBVIEW_CONTROL::setTransitions()
 
     Go( &GERBVIEW_CONTROL::LayerNext,          GERBVIEW_ACTIONS::layerNext.MakeEvent() );
     Go( &GERBVIEW_CONTROL::LayerPrev,          GERBVIEW_ACTIONS::layerPrev.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::MoveLayerUp,        GERBVIEW_ACTIONS::moveLayerUp.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::MoveLayerDown,      GERBVIEW_ACTIONS::moveLayerDown.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ClearLayer,         GERBVIEW_ACTIONS::clearLayer.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ClearAllLayers,     GERBVIEW_ACTIONS::clearAllLayers.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ReloadAllLayers,    GERBVIEW_ACTIONS::reloadAllLayers.MakeEvent() );
