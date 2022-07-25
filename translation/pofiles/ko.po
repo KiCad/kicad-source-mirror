@@ -28785,7 +28785,7 @@ msgstr "기판 최소 홀 클리어런스: %s."
 #: pcbnew/drc/drc_engine.cpp:870
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s 확인 중 클리어런스: %s."
+msgstr "%s 클리어런스 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:882 pcbnew/drc/drc_engine.cpp:883
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/tools/board_inspection_tool.cpp:647
