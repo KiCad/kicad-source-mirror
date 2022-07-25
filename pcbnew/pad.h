@@ -390,6 +390,8 @@ public:
     int GetLocalClearance() const               { return m_localClearance; }
     void SetLocalClearance( int aClearance )    { m_localClearance = aClearance; }
 
+    int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const override;
+
     int GetLocalSolderPasteMargin() const       { return m_localSolderPasteMargin; }
     void SetLocalSolderPasteMargin( int aMargin ) { m_localSolderPasteMargin = aMargin; }
 

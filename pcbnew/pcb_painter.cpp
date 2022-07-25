@@ -1317,6 +1317,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( flashActiveLayer || aPad->GetDrillSize().x )
         {
+            if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
+                color = m_pcbSettings.GetLayerColor( LAYER_NON_PLATEDHOLES );
+
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
