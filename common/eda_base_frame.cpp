@@ -1059,7 +1059,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     if( GetFrameType() == FRAME_GERBER )
         expand.push_back( book->GetPageCount() );
 
-    book->AddPage( new wxPanel( book ), _( "GerbView" ) );
+    book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
 
