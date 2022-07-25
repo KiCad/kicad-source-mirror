@@ -578,7 +578,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 
 bool DIALOG_SYMBOL_PROPERTIES::Validate()
 {
-    wxString msg;
     LIB_ID   id;
 
     if( !m_fieldsGrid->CommitPendingChanges() || !m_fieldsGrid->Validate() )
@@ -634,8 +633,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
     // the schematic file.
     currentScreen->Remove( m_symbol );
-
-    wxString msg;
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_symbol->GetEditFlags() == 0 )

@@ -161,8 +161,6 @@ bool FILENAME_RESOLVER::createPathList()
     if( !m_paths.empty() )
         return true;
 
-    wxString kmod;
-
     // add an entry for the default search path; at this point
     // we cannot set a sensible default so we use an empty string.
     // the user may change this later with a call to SetProjectDir()

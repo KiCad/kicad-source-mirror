@@ -455,7 +455,6 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     size_t   groupLen = aGroup.length();
     size_t   i = 0;
     wxString prefix;
-    wxString suffix;
     wxString tmp;
     int      braceNesting = 0;
 

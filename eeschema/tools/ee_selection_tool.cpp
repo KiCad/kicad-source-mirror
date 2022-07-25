@@ -1477,7 +1477,6 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
         return 0;
 
     SCH_LINE* line = (SCH_LINE*) m_selection.Front();
-    EDA_ITEMS items;
     unsigned  done = false;
 
     m_frame->GetScreen()->ClearDrawingState();

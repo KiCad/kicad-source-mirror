@@ -183,7 +183,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_SHEET_PROPERTIES::Validate()
 {
-    wxString msg;
     LIB_ID   id;
 
     if( !m_grid->CommitPendingChanges() || !m_grid->Validate() )

@@ -373,7 +373,6 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
         }
         else
         {
-            wxString      space( wxS( " " ) );
             wxString      textRun = aNode->asWxString();
             wxArrayString words;
 

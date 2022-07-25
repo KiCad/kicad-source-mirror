@@ -317,7 +317,6 @@ bool GERBER_PLOTTER::StartPlot()
 bool GERBER_PLOTTER::EndPlot()
 {
     char     line[1024];
-    wxString msg;
 
     wxASSERT( m_outputFile );
 

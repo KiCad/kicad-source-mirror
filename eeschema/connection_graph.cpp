@@ -2419,7 +2419,6 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
 bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
-    wxString msg;
     const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
     SCH_SCREEN* screen = sheet.LastScreen();
 
@@ -2587,7 +2586,6 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     ERC_SETTINGS&         settings = m_schematic->ErcSettings();
-    wxString              msg;
     const SCH_SHEET_PATH& sheet  = aSubgraph->m_sheet;
     SCH_SCREEN*           screen = sheet.LastScreen();
     bool                  ok     = true;

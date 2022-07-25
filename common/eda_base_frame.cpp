@@ -709,12 +709,8 @@ void EDA_BASE_FRAME::LoadWindowSettings( const WINDOW_SETTINGS* aCfg )
 
 void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
 {
-    wxString        text;
-
     if( IsIconized() )
         return;
-
-    wxString baseCfgName = ConfigBaseName();
 
     // If the window is maximized, we use the saved window size from before it was maximized
     if( IsMaximized() )

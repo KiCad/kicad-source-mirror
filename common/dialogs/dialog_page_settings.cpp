@@ -126,8 +126,6 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 
 bool DIALOG_PAGES_SETTINGS::TransferDataToWindow()
 {
-    wxString      msg;
-
     // initialize page format choice box and page format list.
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();

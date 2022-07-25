@@ -812,7 +812,6 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 {
     if( m_part )
     {
-        wxString                symbolName;
         std::vector<LIB_FIELD*> fields;
 
         m_part->GetFields( fields );
@@ -1124,8 +1123,6 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
 {
     // a empty sheet path is illegal:
     wxCHECK( aSheetPath.size() > 0, false );
-
-    wxString reference_path;
 
     for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {

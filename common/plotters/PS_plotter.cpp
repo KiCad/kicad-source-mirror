@@ -765,7 +765,6 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 bool PS_PLOTTER::StartPlot()
 {
     wxASSERT( m_outputFile );
-    wxString           msg;
 
     static const char* PSMacro[] =
     {

@@ -701,8 +701,6 @@ void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol )
     wxCHECK_RET( CurTok() == T_pin_names,
                  "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_name token." );
 
-    wxString error;
-
     T token = NextTok();
 
     if( token == T_LEFT )
@@ -736,7 +734,6 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a property." ) );
     wxCHECK( aSymbol, nullptr );
 
-    wxString error;
     wxString name;
     wxString value;
     std::unique_ptr<LIB_FIELD> field = std::make_unique<LIB_FIELD>( aSymbol.get(),
@@ -1567,7 +1564,6 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text token." ) );
 
     T token;
-    wxString tmp;
     std::unique_ptr<LIB_TEXT> text = std::make_unique<LIB_TEXT>( nullptr );
 
     text->SetUnit( m_unit );
@@ -2423,7 +2419,6 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
 
     T token;
-    wxString tmp;
     wxString libName;
     SCH_FIELD* field;
     std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();

@@ -275,8 +275,6 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else
     {
-        wxString extendedMsg;
-
         if( m_simCommand.IsEmpty() )
         {
             KIDIALOG dlg( this, _( "No valid simulation is configured." ), _( "Warning" ),

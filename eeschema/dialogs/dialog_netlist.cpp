@@ -552,8 +552,6 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxStr
 
 void NETLIST_DIALOG::WriteCurrentNetlistSetup()
 {
-    wxString  msg;
-
     NetlistUpdateOpt();
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );

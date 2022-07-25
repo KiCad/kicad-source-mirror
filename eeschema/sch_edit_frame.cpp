@@ -1832,7 +1832,6 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
-    wxString msg;
     bool appendToUndo = false;
 
     SCH_SHEET_PATH sheetPath;

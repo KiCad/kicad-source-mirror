@@ -1051,7 +1051,7 @@ void RENDER_3D_OPENGL::freeAllLists()
 
     m_triangles.clear();
 
-    for( const std::pair<const wxString&, MODEL_3D*>& entry : m_3dModelMap )
+    for( const std::pair<const wxString, MODEL_3D*>& entry : m_3dModelMap )
         delete entry.second;
 
     m_3dModelMap.clear();

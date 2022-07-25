@@ -339,7 +339,6 @@ int ERC_TESTER::TestMultiunitFootprints()
     SCH_SHEET_LIST sheets = m_schematic->GetSheets();
 
     int errors = 0;
-    std::map<wxString, LIB_ID> footprints;
     SCH_MULTI_UNIT_REFERENCE_MAP refMap;
     sheets.GetMultiUnitSymbols( refMap, true );
 
@@ -589,7 +588,6 @@ int ERC_TESTER::TestMultUnitPinConflicts()
     for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
         const wxString& netName = net.first.first;
-        std::vector<SCH_PIN*> pins;
 
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
@@ -647,8 +645,6 @@ int ERC_TESTER::TestSimilarLabels()
 
     for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
-        std::vector<SCH_PIN*> pins;
-
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
             for( EDA_ITEM* item : subgraph->m_items )

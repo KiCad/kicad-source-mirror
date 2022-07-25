@@ -613,7 +613,6 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
-    wxString  msg;
 
     switch( settings.GetSeverity( rcItem->GetErrorCode() ) )
     {

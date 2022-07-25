@@ -1034,7 +1034,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( aBackground && !aPlotter->GetColorMode() )
         return;
 
-    wxString msg;
     VECTOR2I pos;
     auto*    settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     bool     override = settings ? settings->m_OverrideItemColors : false;

@@ -823,8 +823,6 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsActivate() )
     {
-        wxString cmdStr( *aEvent.GetCommandStr() );
-
         auto tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
 
         if( tool != m_toolNameIndex.end() )

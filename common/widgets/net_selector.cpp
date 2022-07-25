@@ -201,7 +201,6 @@ public:
         wxString  escapedNetName;
         wxString  remainingName;
         int       selection     = m_listBox->GetSelection();
-        wxString  prefix        = CREATE_NET;
 
         if( selection >= 0 )
             selectedNetName = m_listBox->GetString( (unsigned) selection );

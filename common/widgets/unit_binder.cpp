@@ -188,14 +188,13 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
         if( m_eval.Process( textEntry->GetValue() ) )
         {
             textEntry->GetSelection( &m_selStart, &m_selEnd );
-            wxString sel = textEntry->GetStringSelection();
-
             textEntry->ChangeValue( m_eval.Result() );
 
 #ifdef __WXGTK__
             // Manually copy the selected text to the primary selection clipboard
             if( wxTheClipboard->Open() )
             {
+                wxString sel = textEntry->GetStringSelection();
                 bool clipTarget = wxTheClipboard->IsUsingPrimarySelection();
                 wxTheClipboard->UsePrimarySelection( true );
                 wxTheClipboard->SetData( new wxTextDataObject( sel ) );

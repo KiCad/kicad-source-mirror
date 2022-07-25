@@ -628,9 +628,6 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
     std::string     libName;
-    wxArrayString   reference_fields;
-
-    static wxString delimiters( wxT( " " ) );
 
     wxString symbol_name = aSymbol->GetLibId().Format();
 
@@ -987,8 +984,6 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
 void SCH_SEXPR_PLUGIN::saveShape( SCH_SHAPE* aShape, int aNestLevel )
 {
     wxCHECK_RET( aShape != nullptr && m_out != nullptr, "" );
-
-    wxString lineType;
 
     switch( aShape->GetShape() )
     {

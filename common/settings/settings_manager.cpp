@@ -1120,8 +1120,6 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
     target.SetName( fileName );
     target.SetExt( ArchiveFileExtension );
 
-    wxDir dir( target.GetPath() );
-
     if( !target.DirExists() && !wxMkdir( target.GetPath() ) )
     {
         wxLogTrace( traceSettings, wxT( "Could not create project backup path %s" ), target.GetPath() );

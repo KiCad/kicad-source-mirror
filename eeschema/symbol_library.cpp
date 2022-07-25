@@ -477,8 +477,6 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             lib_dialog.Show();
         }
 
-        wxString progress_message;
-
         for( unsigned i = 0; i < lib_names.GetCount();  ++i )
         {
             if( aShowProgress )

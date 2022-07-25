@@ -736,7 +736,7 @@ void SCH_LINE::GetSelectedPoints( std::vector<VECTOR2I>& aPoints ) const
 
 wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString txtfmt, orient;
+    wxString txtfmt;
 
     if( m_start.x == m_end.x )
     {

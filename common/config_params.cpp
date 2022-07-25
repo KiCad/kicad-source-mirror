@@ -423,7 +423,7 @@ void PARAM_CFG_WXSTRING_SET::SaveParam( wxConfigBase* aConfig ) const
 
     for( const wxString& str : *m_Pt_param )
     {
-        wxString key, data;
+        wxString key;
 
         key = m_Ident;
         key << i++;

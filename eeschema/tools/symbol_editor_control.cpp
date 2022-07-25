@@ -518,8 +518,6 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxString   file_ext = wxT( "png" );
-    wxString   mask = wxT( "*." ) + file_ext;
     wxFileName fn( symbol->GetName() );
     fn.SetExt( "png" );
 
@@ -558,7 +556,6 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxString   file_ext = SVGFileExtension;
     wxFileName fn( symbol->GetName() );
     fn.SetExt( SVGFileExtension );
 

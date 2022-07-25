@@ -113,7 +113,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
 
 void SYMBOL_EDIT_FRAME::ExportSymbol()
 {
-    wxString msg, title;
+    wxString msg;
     LIB_SYMBOL* symbol = getTargetSymbol();
 
     if( !symbol )

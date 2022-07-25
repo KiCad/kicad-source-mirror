@@ -66,7 +66,6 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 {
     m_changesCount = 0;
     m_appendUndo = false;
-    wxString msg;
 
     if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
         && !m_processNetNames )

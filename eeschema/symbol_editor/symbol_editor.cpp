@@ -58,7 +58,6 @@ SYMBOL_SAVEAS_TYPE SYMBOL_LEGACYFILEDLG_SAVE_AS::m_option = SYMBOL_SAVEAS_TYPE::
 
 void SYMBOL_EDIT_FRAME::updateTitle()
 {
-    wxString lib = GetCurLib();
     wxString title;
 
     if( GetCurSymbol() && IsSymbolFromSchematic() )
@@ -299,7 +298,6 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
 bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxString& aLibrary,
                                                  int aUnit, int aConvert )
 {
-    wxString msg, rootName;
     bool rebuildMenuAndToolbar = false;
 
     if( !aEntry || aLibrary.empty() )
