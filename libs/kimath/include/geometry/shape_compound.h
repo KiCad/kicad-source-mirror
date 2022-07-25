@@ -30,6 +30,7 @@
 #include <math/box2.h>
 #include <list>
 #include <vector>
+#include <memory>
 #include "eda_angle.h"
 
 class SHAPE_SIMPLE;
