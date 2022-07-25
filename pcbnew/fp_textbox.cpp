@@ -435,7 +435,12 @@ wxString FP_TEXTBOX::GetShownText( int aDepth ) const
 
 std::shared_ptr<SHAPE> FP_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    return GetEffectiveTextShape();
+    std::shared_ptr<SHAPE_COMPOUND> shape = GetEffectiveTextShape();
+
+    if( PCB_SHAPE::GetStroke().GetWidth() >= 0 )
+        shape->AddShape( PCB_SHAPE::GetEffectiveShape( aLayer, aFlash ) );
+
+    return shape;
 }
 
 

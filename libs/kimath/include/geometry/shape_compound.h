@@ -98,6 +98,25 @@ public:
         m_dirty = true;
     }
 
+    void AddShape( std::shared_ptr<SHAPE> aShape )
+    {
+        // Don't make clients deal with nested SHAPE_COMPOUNDs
+        if( aShape->HasIndexableSubshapes() )
+        {
+            std::vector<const SHAPE*> subshapes;
+            aShape->GetIndexableSubshapes( subshapes );
+
+            for( const SHAPE* subshape : subshapes )
+                m_shapes.push_back( subshape->Clone() );
+        }
+        else
+        {
+            m_shapes.push_back( aShape->Clone() );
+        }
+
+        m_dirty = true;
+    }
+
     bool Empty() const
     {
         return m_shapes.empty();
