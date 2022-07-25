@@ -175,12 +175,8 @@ private:
             int orig_layer = m_groups[i].first;
             int new_layer = orig_layer;
 
-            try
-            {
+            if( aReorderMap.count( orig_layer ) )
                 new_layer = aReorderMap.at( orig_layer );
-            }
-            catch( const std::out_of_range& )
-            {}
 
             m_groups[i].first = new_layer;
         }
