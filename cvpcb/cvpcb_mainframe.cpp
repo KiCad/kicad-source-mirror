@@ -64,7 +64,8 @@
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
-                      wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
+                      wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME ),
+        m_viewerPendingUpdate( false )
 {
     m_symbolsListBox      = nullptr;
     m_footprintListBox    = nullptr;
@@ -427,11 +428,20 @@ void CVPCB_MAINFRAME::onTextFilterChanged( wxCommandEvent& event )
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
     // of available footprints which match the filter
 
-    long pos = m_tcFilterString->GetInsertionPoint();
-    wxListEvent l_event;
-    OnSelectComponent( l_event );
-    m_tcFilterString->SetFocus();
-    m_tcFilterString->SetInsertionPoint( pos );
+    COMPONENT* symbol = GetSelectedComponent();
+    wxString   libraryName = m_librariesListBox->GetSelectedLibrary();
+
+    m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, symbol,
+                                       m_tcFilterString->GetValue(), m_filteringOptions );
+
+    if( symbol && symbol->GetFPID().IsValid() )
+        m_footprintListBox->SetSelectedFootprint( symbol->GetFPID() );
+    else if( m_footprintListBox->GetSelection() >= 0 )
+        m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
+
+    RefreshFootprintViewer();
+
+    DisplayStatus();
 }
 
 
@@ -440,19 +450,55 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     if( m_skipComponentSelect )
         return;
 
-    wxString   libraryName;
     COMPONENT* symbol = GetSelectedComponent();
-    libraryName = m_librariesListBox->GetSelectedLibrary();
+    wxString   libraryName = m_librariesListBox->GetSelectedLibrary();
 
     m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, symbol,
                                        m_tcFilterString->GetValue(), m_filteringOptions );
 
     if( symbol && symbol->GetFPID().IsValid() )
         m_footprintListBox->SetSelectedFootprint( symbol->GetFPID() );
-    else
+    else if( m_footprintListBox->GetSelection() >= 0 )
         m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
 
+    RefreshFootprintViewer();
+
     refreshAfterSymbolSearch( symbol );
+}
+
+
+void CVPCB_MAINFRAME::RefreshFootprintViewer()
+{
+    if( GetFootprintViewerFrame() && !m_viewerPendingUpdate )
+    {
+        Bind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintViewerOnIdle, this );
+        m_viewerPendingUpdate = true;
+    }
+}
+
+
+void CVPCB_MAINFRAME::updateFootprintViewerOnIdle( wxIdleEvent& aEvent )
+{
+    Unbind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintViewerOnIdle, this );
+    m_viewerPendingUpdate = false;
+
+    // On some plateforms (OSX) the focus is lost when the viewers (fp and 3D viewers)
+    // are opened and refreshed when a new footprint is selected.
+    // If the listbox has the focus before selecting a new footprint, it will be forced
+    // after selection.
+    bool footprintListHasFocus = m_footprintListBox->HasFocus();
+    bool symbolListHasFocus = m_symbolsListBox->HasFocus();
+
+    // If the footprint view window is displayed, update the footprint.
+    if( GetFootprintViewerFrame() )
+        GetToolManager()->RunAction( CVPCB_ACTIONS::showFootprintViewer, true );
+
+    DisplayStatus();
+
+    if( footprintListHasFocus )
+        m_footprintListBox->SetFocus();
+    else if( symbolListHasFocus )
+        m_symbolsListBox->SetFocus();
 }
 
 
@@ -660,9 +706,6 @@ void CVPCB_MAINFRAME::refreshAfterSymbolSearch( COMPONENT* aSymbol )
                 break;
             }
         }
-
-        if( GetFootprintViewerFrame() )
-            m_toolManager->RunAction( CVPCB_ACTIONS::showFootprintViewer, true );
     }
 
     SendMessageToEESCHEMA();
