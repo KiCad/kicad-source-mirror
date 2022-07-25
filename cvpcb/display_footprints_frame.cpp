@@ -67,9 +67,10 @@ END_EVENT_TABLE()
 
 
 DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_CVPCB_DISPLAY, _( "Footprint Viewer" ),
-                    wxDefaultPosition, wxDefaultSize,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
+        PCB_BASE_FRAME( aKiway, aParent, FRAME_CVPCB_DISPLAY, _( "Footprint Viewer" ),
+                        wxDefaultPosition, wxDefaultSize,
+                        KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME ),
+        m_currentComp( nullptr )
 {
     // Give an icon
     wxIcon  icon;
@@ -455,18 +456,16 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     FOOTPRINT*            footprint = nullptr;
     const FOOTPRINT_INFO* fpInfo = nullptr;
 
-    GetBoard()->DeleteAllFootprints();
-    GetCanvas()->GetView()->Clear();
-
     wxString footprintName = parentframe->GetSelectedFootprint();
 
-    if( footprintName.IsEmpty() )
-    {
-        COMPONENT* comp = parentframe->GetSelectedComponent();
+    if( footprintName.IsEmpty() && comp )
+        footprintName = comp->GetFPID().Format();
 
-        if( comp )
-            footprintName = comp->GetFPID().GetUniStringLibId();
-    }
+    if( m_currentFootprint == footprintName && m_currentComp == comp )
+        return;
+
+    GetBoard()->DeleteAllFootprints();
+    GetCanvas()->GetView()->Clear();
 
     INFOBAR_REPORTER infoReporter( m_infoBar );
     m_infoBar->Dismiss();
@@ -482,6 +481,9 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     if( footprint )
         GetBoard()->Add( footprint );
+        m_currentFootprint = footprintName;
+        m_currentComp = comp;
+    }
 
     if( fpInfo )
         SetStatusText( wxString::Format( _( "Lib: %s" ), fpInfo->GetLibNickname() ), 0 );

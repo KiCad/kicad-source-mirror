@@ -114,6 +114,10 @@ public:
 
 protected:
     void setupUIConditions() override;
+
+private:
+    wxString   m_currentFootprint;
+    COMPONENT* m_currentComp;
 };
 
 #endif   // DISPLAY_FOOTPRINTS_FRAME_H

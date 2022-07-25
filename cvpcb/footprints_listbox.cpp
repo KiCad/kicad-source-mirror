@@ -99,15 +99,15 @@ wxString FOOTPRINTS_LISTBOX::OnGetItemText( long item, long column ) const
 }
 
 
-void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
+void FOOTPRINTS_LISTBOX::SetSelection( int aIndex, bool aState )
 {
-    if( index >= GetCount() )
-        index = GetCount() - 1;
+    if( aIndex >= GetCount() )
+        aIndex = GetCount() - 1;
 
-    if( (index >= 0)  && (GetCount() > 0) )
+    if(( aIndex >= 0) && ( GetCount() > 0) )
     {
-        Select( index, State );
-        EnsureVisible( index );
+        Select( aIndex, aState );
+        EnsureVisible( aIndex );
         Refresh();
     }
 }
@@ -156,7 +156,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
         oldSelection = m_footprintList[ GetSelection() ];
 
-    for( auto& i: filter )
+    for( const FOOTPRINT_INFO& i : filter )
     {
         msg.Printf( wxT( "%3d %s:%s" ),
                     int( newList.GetCount() + 1 ),
@@ -199,23 +199,7 @@ END_EVENT_TABLE()
 
 void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 {
-    if( m_footprintList.IsEmpty() )
-        return;
-
-    // On some plateforms (OSX) the focus is lost when the viewers (fp and 3D viewers)
-    // are opened and refreshed when a new footprint is selected.
-    // If the listbox has the focus before selecting a new footprint, it will be forced
-    // after selection.
-    bool hasFocus = HasFocus();
-
-    // If the footprint view window is displayed, update the footprint.
-    if( GetParent()->GetFootprintViewerFrame() )
-        GetParent()->GetToolManager()->RunAction( CVPCB_ACTIONS::showFootprintViewer, true );
-
-    GetParent()->DisplayStatus();
-
-    if( hasFocus )
-        SetFocus();
+    GetParent()->RefreshFootprintViewer();
 }
 
 

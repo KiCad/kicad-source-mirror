@@ -330,6 +330,8 @@ public:
      */
     wxString GetSelectedFootprint();
 
+    void RefreshFootprintViewer();
+
     void SetStatusText( const wxString& aText, int aNumber = 0 ) override;
 
 protected:
@@ -350,6 +352,10 @@ private:
      * Setup event handlers
      */
     void setupEventHandlers();
+
+    void onTextFilterChanged( wxCommandEvent& event );
+
+    void updateFootprintViewerOnIdle( wxIdleEvent& aEvent );
 
     /**
      * Read the .equ files and populate the list of equivalents.
@@ -398,9 +404,11 @@ private:
     ACTION_MENU* m_footprintContextMenu;
     ACTION_MENU* m_symbolsContextMenu;
 
-    // Undo/Redo item lists
-    CVPCB_UNDO_REDO_LIST    m_undoList;
-    CVPCB_UNDO_REDO_LIST    m_redoList;
+    CVPCB_UNDO_REDO_LIST      m_undoList;
+    CVPCB_UNDO_REDO_LIST      m_redoList;
+
+    bool                      m_viewerPendingUpdate;
+
 };
 
 #endif  //#ifndef _CVPCB_MAINFRAME_H_
