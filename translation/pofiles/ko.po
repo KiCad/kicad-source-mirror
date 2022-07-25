@@ -32698,7 +32698,7 @@ msgstr "제조업체 항목은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:605
 msgid "OEM cannot be empty."
-msgstr "OEM 항목은 비워둘 수 없습니다."
+msgstr "OEM은 비워둘 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:611
 msgid "Negative number of pins."
@@ -32706,12 +32706,11 @@ msgstr "핀 개수가 음수입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:625
 msgid "Empty pin number"
-msgstr "핀번호가 비었습니다."
+msgstr "핀번호가 비었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "단위 길이당 저항"
+msgstr "저항 매트릭스가 잘못되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:641
 #, fuzzy
