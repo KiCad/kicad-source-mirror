@@ -126,13 +126,6 @@ public:
     CVPCB_MAINFRAME::CONTROL_TYPE GetFocusedControl() const;
 
     /**
-     * Get a pointer to the currently focused control
-     *
-     * @return the control that currently has focus
-     */
-    wxControl* GetFocusedControlObject() const;
-
-    /**
      * Set the focus to a specific control.
      *
      * @param aControl the control to set focus to
@@ -146,9 +139,6 @@ public:
      * * Updates the footprint shown in footprint display window (if opened)
      */
     void OnSelectComponent( wxListEvent& event );
-
-    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
-    void doCloseWindow() override;
 
     /*
      * Functions to rebuild the toolbars and menubars
@@ -176,11 +166,6 @@ public:
      */
     void SetFootprintFilter( FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter,
                              CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction );
-
-    /**
-     * Called each time the text of m_tcFilterString is changed.
-     */
-    void OnEnterFilteringText( wxCommandEvent& event );
 
     /**
      * Undo the most recent associations that were performed.
@@ -229,24 +214,6 @@ public:
      * Optionally saves the schematic to disk as well.
      */
     bool SaveFootprintAssociation( bool doSaveSchematic );
-
-    /**
-     * Load the netlist file built on the fly by Eeschema and loads footprint libraries from
-     * fp lib tables.
-     *
-     * @param aNetlist is the netlist from Eeschema in KiCad s-expr format.
-     * (see CVPCB_MAINFRAME::KiwayMailIn() to know how to get this netlist)
-     */
-    bool ReadNetListAndFpFiles( const std::string& aNetlist );
-
-    /**
-     * Read the netlist (.net) file built on the fly by Eeschema.
-     *
-     * @param aNetlist is the netlist buffer filled by Eeschema, in KiCad s-expr format.
-     * It is the same netlist as the .net file created by Eeschema.
-     * (This method is called by ReadNetListAndFpFiles)
-     */
-    int ReadSchematicNetlist( const std::string& aNetlist );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
@@ -337,6 +304,27 @@ protected:
 
     void setupUIConditions() override;
 
+    bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
+    void doCloseWindow() override;
+
+    /**
+     * Load the netlist file built on the fly by Eeschema and loads footprint libraries from
+     * fp lib tables.
+     *
+     * @param aNetlist is the netlist from Eeschema in KiCad s-expr format.
+     * (see CVPCB_MAINFRAME::KiwayMailIn() to know how to get this netlist)
+     */
+    bool readNetListAndFpFiles( const std::string& aNetlist );
+
+    /**
+     * Read the netlist (.net) file built on the fly by Eeschema.
+     *
+     * @param aNetlist is the netlist buffer filled by Eeschema, in KiCad s-expr format.
+     * It is the same netlist as the .net file created by Eeschema.
+     * (This method is called by readNetListAndFpFiles)
+     */
+    int readSchematicNetlist( const std::string& aNetlist );
+
 private:
     wxString formatSymbolDesc( int idx, const wxString& aReference, const wxString& aValue,
                                const wxString& aFootprint );
@@ -350,6 +338,8 @@ private:
      * Setup event handlers
      */
     void setupEventHandlers();
+
+    void onTextFilterChanged( wxCommandEvent& event );
 
     /**
      * Read the .equ files and populate the list of equivalents.

@@ -63,8 +63,8 @@
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
-                  wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
+        KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
+                      wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_symbolsListBox      = nullptr;
     m_footprintListBox    = nullptr;
@@ -365,7 +365,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             }, wxID_EXIT );
 
     // Toolbar events
-    Bind( wxEVT_TEXT, &CVPCB_MAINFRAME::OnEnterFilteringText, this, ID_CVPCB_FILTER_TEXT_EDIT );
+    Bind( wxEVT_TEXT, &CVPCB_MAINFRAME::onTextFilterChanged, this );
 
     // Just skip the resize events
     Bind( wxEVT_SIZE,
@@ -421,7 +421,7 @@ void CVPCB_MAINFRAME::doCloseWindow()
 }
 
 
-void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
+void CVPCB_MAINFRAME::onTextFilterChanged( wxCommandEvent& event )
 {
     // Called when changing the filter string in main toolbar.
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
@@ -875,7 +875,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
 }
 
 
-int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
+int CVPCB_MAINFRAME::readSchematicNetlist( const std::string& aNetlist )
 {
     STRING_LINE_READER*  stringReader = new STRING_LINE_READER( aNetlist, "Eeschema via Kiway" );
     KICAD_NETLIST_READER netlistReader( stringReader, &m_netlist );
@@ -1118,19 +1118,6 @@ CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl() const
 }
 
 
-wxControl* CVPCB_MAINFRAME::GetFocusedControlObject() const
-{
-    if( m_librariesListBox->HasFocus() )
-        return m_librariesListBox;
-    else if( m_symbolsListBox->HasFocus() )
-        return m_symbolsListBox;
-    else if( m_footprintListBox->HasFocus() )
-        return m_footprintListBox;
-
-    return nullptr;
-}
-
-
 void CVPCB_MAINFRAME::SetFocusedControl( CVPCB_MAINFRAME::CONTROL_TYPE aLB )
 {
     switch( aLB )
@@ -1178,10 +1165,10 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     switch( mail.Command() )
     {
     case MAIL_EESCHEMA_NETLIST:
-        // Disable Close events during ReadNetListAndFpFiles() to avoid crash when updating
+        // Disable Close events during readNetListAndFpFiles() to avoid crash when updating
         // widgets:
         m_cannotClose = true;
-        ReadNetListAndFpFiles( payload );
+        readNetListAndFpFiles( payload );
         m_cannotClose = false;
         /* @todo
         Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.

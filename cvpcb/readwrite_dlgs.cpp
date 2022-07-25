@@ -80,12 +80,12 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
 }
 
 
-bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
+bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
 {
     wxString        msg;
     bool            hasMissingNicks = false;
 
-    ReadSchematicNetlist( aNetlist );
+    readSchematicNetlist( aNetlist );
 
     if( m_symbolsListBox == nullptr )
         return false;

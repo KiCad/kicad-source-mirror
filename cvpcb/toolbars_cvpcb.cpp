@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,11 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @file tool_cvpcb.cpp
- */
-
-#include <bitmaps.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 
@@ -42,7 +37,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -86,10 +81,10 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
 
-    m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT, wxEmptyString,
-                                       wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+    m_tcFilterString = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxTE_PROCESS_ENTER );
 
-    m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::OnEnterFilteringText, this );
+    m_tcFilterString->Bind( wxEVT_TEXT_ENTER, &CVPCB_MAINFRAME::onTextFilterChanged, this );
 
     m_mainToolBar->AddControl( m_tcFilterString );
 
