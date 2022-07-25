@@ -299,7 +299,8 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     {
         m_frame->SetElementVisibility( LAYER_DCODES, !cfg->m_Appearance.show_dcodes );
     }
-    else if( aEvent.IsAction( &ACTIONS::highContrastMode ) )
+    else if( aEvent.IsAction( &ACTIONS::highContrastMode )
+             || aEvent.IsAction( &ACTIONS::highContrastModeCycle ) )
     {
         cfg->m_Display.m_HighContrastMode = !cfg->m_Display.m_HighContrastMode;
     }
@@ -490,6 +491,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::negativeObjectDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastModeCycle.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flipGerberView.MakeEvent() );
 

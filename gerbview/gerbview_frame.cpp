@@ -462,6 +462,7 @@ void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->SetHighContrast( gvconfig()->m_Display.m_HighContrastMode );
     settings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
