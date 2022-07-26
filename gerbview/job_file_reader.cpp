@@ -115,7 +115,6 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
     FILE_LINE_READER jobfileReader( jobFile, m_filename.GetFullPath() );  // Will close jobFile
 
-    wxString msg;
     wxString data;
 
     // detect the file format: old (deprecated) gerber format of official JSON format

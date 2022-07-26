@@ -166,8 +166,6 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
 
 void GERBER_JOBFILE_WRITER::addJSONHeader()
 {
-    wxString text;
-
     m_json["Header"] = {
         {
             "GenerationSoftware",

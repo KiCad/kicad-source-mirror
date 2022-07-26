@@ -117,7 +117,6 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod( const char*   aMet
                                                               PyObject*     aArglist )
 {
     wxArrayString   ret;
-    wxString        str_item;
     PyLOCK          lock;
 
     PyObject*       result = CallMethod( aMethod, aArglist );

@@ -173,7 +173,6 @@ void PROJECT_TREE_ITEM::Delete()
 
 void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 {
-    wxString             sep = wxFileName::GetPathSeparator();
     wxString             fullFileName = GetFileName();
     wxTreeItemId         id = GetId();
     std::string          packet;

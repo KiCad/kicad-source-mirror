@@ -124,7 +124,6 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
     // Create layer list
     for( unsigned ii = 0; ii < images->ImagesMaxCount(); ++ii )
     {
-        wxString layerName;
         unsigned int listIdx = itemIdx / LAYER_PER_LIST;
 
         if( listIdx >= LAYER_LIST_COUNT )

@@ -40,8 +40,6 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    wxString      msg;
-
     m_mainToolBar->Add( ACTIONS::doNew );
     m_mainToolBar->Add( ACTIONS::open );
     m_mainToolBar->Add( ACTIONS::save );

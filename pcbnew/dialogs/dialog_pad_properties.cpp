@@ -1245,7 +1245,6 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
-    wxString      msg;
     VECTOR2I      pad_size = m_dummyPad->GetSize();
     VECTOR2I      drill_size = m_dummyPad->GetDrillSize();
 
@@ -1732,14 +1731,15 @@ void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
 
 bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 {
-    wxString    msg;
-
     if( !Validate() )
         return false;
+
     if( !m_panelGeneral->Validate() )
         return false;
+
     if( !m_localSettingsPanel->Validate() )
         return false;
+
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 

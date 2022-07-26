@@ -445,8 +445,6 @@ double PANEL_TRACK_WIDTH::TWCalculateCurrent( double aWidth, double aThickness, 
 
 void PANEL_TRACK_WIDTH::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    wxString msg;
-
     // Disable calculations while we initialise.
     m_TWNested = true;
 

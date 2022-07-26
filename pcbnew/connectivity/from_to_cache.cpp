@@ -140,7 +140,6 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
     for( FT_PATH& path : paths )
     {
         int count = 0;
-        auto netName = path.from->GetNetname();
 
         wxString fromName = path.from->GetParent()->GetReference() + wxT( "-" )
                                                                     + path.from->GetNumber();

@@ -146,7 +146,6 @@ void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
     {
         double   value;
         int      index = m_sizeChoice->GetSelection();
-        wxString str;
 
         if( ( index >= 0 ) && ( index < m_entries.size() ) )
         {

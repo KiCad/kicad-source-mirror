@@ -138,7 +138,6 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( m_frame );
 
     wxFileName  templatePath;
-    wxString    envStr;
 
     // KiCad system template path.
     ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );
@@ -212,7 +211,6 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         fn.AppendDir( fn.GetName() );
 
     // Check if the project directory is empty if it already exists.
-    wxDir directory( fn.GetPath() );
 
     if( !fn.DirExists() )
     {

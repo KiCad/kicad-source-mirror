@@ -54,8 +54,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    wxString msg;
-
     // Set up toolbar
     m_mainToolBar->Add( PCB_ACTIONS::newFootprint );
     m_mainToolBar->Add( PCB_ACTIONS::createFootprint );

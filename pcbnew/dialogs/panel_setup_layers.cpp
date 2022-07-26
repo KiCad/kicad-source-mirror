@@ -419,7 +419,6 @@ void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
 void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 {
     wxObject* source = event.GetEventObject();
-    wxString msg;
 
     for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
     {

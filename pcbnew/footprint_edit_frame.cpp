@@ -1241,8 +1241,6 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 
 void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 {
-    wxString   fullFileName;
-
     LIB_ID id = GetLoadedFPID();
 
     if( id.empty() )

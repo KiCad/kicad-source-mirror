@@ -852,8 +852,6 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
                                             std::vector<MSG_PANEL_ITEM>& aList ) const
 {
-    wxString msg;
-
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
     aList.emplace_back( _( "Net Class" ), UnescapeString( GetNetClass()->GetName() ) );

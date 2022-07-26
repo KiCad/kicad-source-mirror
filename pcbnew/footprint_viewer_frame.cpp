@@ -1163,7 +1163,6 @@ void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
 void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 {
     wxString title;
-    wxString path;
 
     if( !getCurNickname().IsEmpty() )
     {

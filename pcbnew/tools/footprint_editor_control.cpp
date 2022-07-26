@@ -367,8 +367,6 @@ int FOOTPRINT_EDITOR_CONTROL::PasteFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID     fpID = m_frame->GetTreeFPID();
-    wxString   libraryName = fpID.GetLibNickname();
-    wxString   footprintName = fpID.GetLibItemName();
     FOOTPRINT* footprint;
 
     if( fpID == m_frame->GetLoadedFPID() )

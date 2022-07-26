@@ -315,7 +315,6 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
 void DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
 {
     LIB_ID   newFPID;
-    wxString value;
 
     if( m_parent->GetBoard()->Footprints().empty() )
         return;

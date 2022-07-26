@@ -107,7 +107,6 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
         FOOTPRINT_WIZARD *wizard = FOOTPRINT_WIZARD_LIST::GetWizard( ii );
         wxString name = wizard->GetName();
         wxString description = wizard->GetDescription();
-        wxString image = wizard->GetImage();
 
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NUMBER, num );
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NAME, name );

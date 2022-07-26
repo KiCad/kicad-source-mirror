@@ -326,8 +326,6 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::UpdateDrillParams()
 {
-    wxString msg;
-
     // Set output directory and replace backslashes with forward ones
     wxString dirStr;
     dirStr = m_outputDirectoryName->GetValue();

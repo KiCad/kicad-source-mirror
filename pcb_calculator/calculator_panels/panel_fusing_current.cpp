@@ -41,7 +41,6 @@ PANEL_FUSING_CURRENT::PANEL_FUSING_CURRENT( wxWindow * parent, wxWindowID id,
 PANEL_FUSING_CURRENT_BASE( parent, id, pos, size, style, name )
 {
     // Set some defaults
-    wxString wxs( "" );
     m_ambientValue->SetValue( wxString::Format( wxT( "%i" ), 25 ) );
     m_meltingValue->SetValue( wxString::Format( wxT( "%i" ), 1084 ) ); // Value for copper
     m_meltingValue->SetEditable( false ); // For now, this panel only works for copper.

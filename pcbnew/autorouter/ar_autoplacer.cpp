@@ -611,11 +611,12 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
                 {
                     lastPosOK   = m_curPosition;
                     min_cost    = Score;
+/*
                     wxString msg;
-/*                    msg.Printf( wxT( "Score %g, pos %s, %s" ),
+                    msg.Printf( wxT( "Score %g, pos %s, %s" ),
                                 min_cost,
-                                GetChars( ::CoordinateToString( LastPosOK.x ) ),
-                                GetChars( ::CoordinateToString( LastPosOK.y ) ) );
+                                ::CoordinateToString( LastPosOK.x ),
+                                ::CoordinateToString( LastPosOK.y ) );
                     m_frame->SetStatusText( msg );*/
                 }
             }
@@ -882,7 +883,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
 
 
     int         cnt = 0;
-    wxString    msg;
 
     if( m_progressReporter )
     {
@@ -900,7 +900,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
     while( ( footprint = pickFootprint() ) != nullptr )
     {
         // Display some info about activity, footprint placement can take a while:
-        //m_frame->SetStatusText( msg );
 
         if( m_progressReporter )
             m_progressReporter->SetTitle( wxString::Format( _( "Autoplacing %s" ),

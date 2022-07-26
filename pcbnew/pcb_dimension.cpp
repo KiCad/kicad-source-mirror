@@ -1084,8 +1084,6 @@ void PCB_DIM_LEADER::updateGeometry()
 
 void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString    msg;
-
     aList.emplace_back( _( "Leader" ), m_text.GetShownText() );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();

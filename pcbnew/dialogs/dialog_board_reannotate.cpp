@@ -300,8 +300,6 @@ void DIALOG_BOARD_REANNOTATE::OnApplyClick( wxCommandEvent& event )
 
 void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 {
-    wxString tmp;
-
     aMessage.Printf( _( "\n%s footprints will be reannotated." ),
                      _( AnnotateString[m_annotationScope] ) );
 

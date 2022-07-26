@@ -102,7 +102,6 @@ void PANEL_SETUP_RULES::onCharHook( wxKeyEvent& aEvent )
 void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
 {
     wxMenu   menu;
-    wxString msg;
 
     menu.Append( wxID_UNDO, _( "Undo" ) );
     menu.Append( wxID_REDO, _( "Redo" ) );

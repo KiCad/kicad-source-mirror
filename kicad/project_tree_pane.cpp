@@ -647,8 +647,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         can_delete = item->CanDelete();
         can_rename = item->CanRename();
 
-        wxString full_file_name = item->GetFileName();
-
         switch( item->GetType() )
         {
         case TREE_FILE_TYPE::LEGACY_PROJECT:

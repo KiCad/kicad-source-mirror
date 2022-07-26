@@ -370,7 +370,7 @@ void IPC356D_WRITER::Write( const wxString& aFilename )
 void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
 {
     wxFileName  fn = GetBoard()->GetFileName();
-    wxString    msg, ext, wildcard;
+    wxString    ext, wildcard;
 
     ext = IpcD356FileExtension;
     wildcard = IpcD356FileWildcard();

@@ -332,7 +332,6 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 #endif
     }
 
-    wxString pname = path.GetPath();
     std::list< SEARCH_PATH >::iterator sPL = m_Paths.begin();
     std::list< SEARCH_PATH >::iterator ePL = m_Paths.end();
 
