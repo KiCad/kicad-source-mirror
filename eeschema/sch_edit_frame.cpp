@@ -175,9 +175,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .TopDockable( false )
                       .BottomDockable( false )
                       .CloseButton( true )
-                      .MinSize( 120, -1 )
-                      .BestSize( 200, -1 )
-                      .FloatingSize( 200, 80 )
+                      .MinSize( 120, 60 )
+                      .BestSize( 200, 200 )
+                      .FloatingSize( 200, 200 )
                       .Show( false ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
@@ -232,7 +232,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
         // back to minimum.
-        hierarchy_pane.MinSize( 120, -1 );
+        hierarchy_pane.MinSize( 120, 60 );
     }
     else
     {
