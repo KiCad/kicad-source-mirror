@@ -297,6 +297,7 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
                 label = changed_hk.m_Actions[ 0 ]->GetName();
 
             label.Replace( wxT( "..." ), wxEmptyString );
+            label.Replace( wxT( "…" ), wxEmptyString );
 
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
