@@ -122,6 +122,8 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
         for( int i = 0; i < item_layers_count; i++ )
         {
+            wxCHECK_RET( item_layers[i] <= LAYER_ID_COUNT, wxT( "Invalid item layer" ) );
+
             if( layer_item_map.count( item_layers[i] ) == 0 )
             {
                 layer_item_map.emplace( std::make_pair( item_layers[i],

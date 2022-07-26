@@ -49,7 +49,7 @@ void LIB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 2;
     aLayers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : LAYER_DEVICE;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 
