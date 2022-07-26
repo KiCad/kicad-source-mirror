@@ -228,7 +228,9 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
                 str = data.GetText();
 
                 ConvertSmartQuotesAndDashes( &str );
+                m_te->BeginUndoAction();
                 m_te->AddText( str );
+                m_te->EndUndoAction();
             }
 
             wxTheClipboard->Close();
