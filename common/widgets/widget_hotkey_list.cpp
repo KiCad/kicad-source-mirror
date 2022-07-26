@@ -296,9 +296,14 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
             if( label.IsEmpty() )
                 label = changed_hk.m_Actions[ 0 ]->GetName();
 
+            label.Replace( wxT( "..." ), wxEmptyString );
+
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
                 label += " *";
+
+            description.Replace( wxS( "\n" ), wxS( " " ) );
+            description.Replace( wxS( "\r" ), wxS( " " ) );
 
             SetItemText( i, 0, label );
             SetItemText( i, 1, key_text);
@@ -477,14 +482,15 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     wxString longKey = wxT( "Ctrl+Alt+Shift+X" );
     int      pad     = 20;
 
-    dv->GetColumn( 0 )->SetMinWidth( dv->GetMainWindow()->GetTextExtent( command_header ).x + pad );
-    dv->GetColumn( 1 )->SetMinWidth( dv->GetMainWindow()->GetTextExtent( longKey ).x + pad );
+    dv->GetColumn( 0 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 2 + pad );
+    dv->GetColumn( 1 )->SetMinWidth( aParent->GetTextExtent( longKey ).x + pad );
+    dv->GetColumn( 2 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 5 + pad );
 
     CallAfter( [&]()
                {
                    GetDataView()->Update();
                } );
-    #endif
+#endif
 
     std::vector<wxString> reserved_keys =
     {
@@ -492,16 +498,14 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
             "Ctrl+Shift+Tab"
     };
 
-    for( auto& key : reserved_keys )
+    for( const wxString& key : reserved_keys )
     {
         long code = KeyCodeFromKeyName( key );
 
         if( code )
             m_reservedHotkeys[code] = key;
         else
-        {
             wxLogWarning( "Unknown reserved keycode %s\n", key );
-        }
     }
 
     GetDataView()->SetIndent( 10 );
@@ -561,6 +565,14 @@ void WIDGET_HOTKEY_LIST::updateColumnWidths()
 #endif
 
     col = GetDataView()->GetColumn( 1 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    col->SetResizeable( true );
+#endif
+
+    col = GetDataView()->GetColumn( 2 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
 
