@@ -27502,7 +27502,6 @@ msgid "Basic Shape Polygon"
 msgstr "다각형 기본 모양"
 
 #: pcbnew/dialogs/dialog_plot.cpp:132
-#, fuzzy
 msgid "Plot on All Layers"
 msgstr "모든 레이어에 플롯"
 
@@ -30834,9 +30833,9 @@ msgid "Checking %s gap: %s."
 msgstr "%s 의 차이 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "%s의 열 스포크 폭 확인중: %s."
+msgstr "%s의 단열 스포크 폭 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:874
 #, fuzzy, c-format
@@ -31006,9 +31005,9 @@ msgid "%s thermal relief gap: %s."
 msgstr "영역 %s 열 릴리프 갭: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1382
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "영역 %s 열 스포크 폭: %s."
+msgstr "%s 단열 스포크 폭: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1415
 #, c-format
@@ -31627,11 +31626,10 @@ msgstr "물리적 항목 수집 중..."
 msgid "Checking physical clearances..."
 msgstr "물리적 여유 공간 확인 중..."
 
-#: pcbnew/drc/drc_test_provider_physical_clearance.cpp:475
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "내부 유격 위반 (%s 유격: 실제 %s)"
+msgstr "내부 유격 위반 (%s 유격 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
