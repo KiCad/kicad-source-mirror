@@ -102,7 +102,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelViolations->SetSizer( bSizerViolationsBox );
 	m_panelViolations->Layout();
 	bSizerViolationsBox->Fit( m_panelViolations );
-	m_Notebook->AddPage( m_panelViolations, _("Violations (%d)"), false );
+	m_Notebook->AddPage( m_panelViolations, _("Violations (%s)"), false );
 	m_panelUnconnectedItems = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
@@ -114,7 +114,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelUnconnectedItems->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedItems->Layout();
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedItems );
-	m_Notebook->AddPage( m_panelUnconnectedItems, _("Unconnected Items (%d)"), false );
+	m_Notebook->AddPage( m_panelUnconnectedItems, _("Unconnected Items (%s)"), false );
 	m_panelFootprintWarnings = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerFootprintsBox;
 	bSizerFootprintsBox = new wxBoxSizer( wxVERTICAL );
@@ -126,7 +126,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelFootprintWarnings->SetSizer( bSizerFootprintsBox );
 	m_panelFootprintWarnings->Layout();
 	bSizerFootprintsBox->Fit( m_panelFootprintWarnings );
-	m_Notebook->AddPage( m_panelFootprintWarnings, _("Schematic Parity (%d)"), false );
+	m_Notebook->AddPage( m_panelFootprintWarnings, _("Schematic Parity (%s)"), false );
 
 	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
