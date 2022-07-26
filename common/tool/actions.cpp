@@ -477,7 +477,7 @@ TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
 
 TOOL_ACTION ACTIONS::toggleGrid( "common.Control.toggleGrid",
         AS_GLOBAL, 0, "",
-        _( "Show Grid" ), _( "Display grid dots or lines in the edit window" ),
+        _( "Show Grid" ), _( "Display background grid in the edit window" ),
         BITMAPS::grid );
 
 TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
