@@ -48,10 +48,10 @@
 #define UNIT_OHM 1.0                // Ohm to Ohm
 #define UNIT_KOHM 1e3               // KOhm to Ohm
 
-#define UNIT_OHM_PER_METER 1.0        // Ohm per meter to Ohm per meter
-#define UNIT_OHM_PER_KILOMETER 1e-3   // Ohm per kilometer to Ohm per meter
-#define UNIT_OHM_PER_FEET 3.28084     // Ohm per feet to Ohm per meter
-#define UNIT_OHM_PER_1000FEET 3280.84 // Ohm per feet to Ohm per meter
+#define UNIT_OHM_PER_METER 1.0           // Ohm per meter to Ohm per meter
+#define UNIT_OHM_PER_KILOMETER 1e-3      // Ohm per kilometer to Ohm per meter
+#define UNIT_OHM_PER_FEET 3.28084        // Ohm per feet to Ohm per meter
+#define UNIT_OHM_PER_1000FEET 3.28084e-3 // Ohm per feet to Ohm per meter
 
 #define UNIT_METER_PER_SECOND 1.0           // meter per second to meter per second
 #define UNIT_KILOMETER_PER_HOUR ( 1 / 3.6 ) // km/h to m/s
