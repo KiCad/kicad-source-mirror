@@ -1194,7 +1194,6 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PCB_SELECTION_TOOL*         selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     ROUTER_TOOL*                routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
     PCB_SELECTION&              selection = selTool->GetSelection();
-    FOOTPRINT_EDIT_FRAME*       fpFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
     PCB_EDIT_FRAME*             pcbFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
     std::shared_ptr<DRC_ENGINE> drcEngine = m_frame->GetBoard()->GetDesignSettings().m_DRCEngine;
     DRC_CONSTRAINT              constraint;
@@ -1208,14 +1207,14 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( fpFrame && !fpFrame->GetModel() )
+    if( !pcbFrame && !m_frame->GetModel() )
         return 0;
 
     if( selection.Empty() )
     {
-        if( fpFrame )
+        if( !pcbFrame )
         {
-            FOOTPRINT* fp = static_cast<FOOTPRINT*>( fpFrame->GetModel() );
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_frame->GetModel() );
             size_t     padCount = fp->GetPadCount( DO_NOT_INCLUDE_NPTH );
 
             msgItems.emplace_back( _( "Library" ), fp->GetFPID().GetLibNickname().wx_str() );
