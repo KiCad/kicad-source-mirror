@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 09:36-0700\n"
+"POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -884,14 +884,14 @@ msgstr "Question"
 msgid "Warning"
 msgstr "Warning"
 
-msgid "File Open Error"
-msgstr "File Open Error"
+msgid "File Open Warning"
+msgstr "File Open Warning"
 
 msgid "Interleaved saves may produce very unexpected results."
 msgstr "Interleaved saves may produce very unexpected results."
 
-msgid "OK"
-msgstr "OK"
+msgid "Cancel"
+msgstr "Cancel"
 
 msgid "Open Anyway"
 msgstr "Open Anyway"
@@ -917,8 +917,8 @@ msgstr "Your current changes will be permanently lost."
 msgid "Revert"
 msgstr "Revert"
 
-msgid "Cancel"
-msgstr "Cancel"
+msgid "OK"
+msgstr "OK"
 
 msgid "Information"
 msgstr "Information"
@@ -2512,8 +2512,8 @@ msgstr "Realtime Renderer"
 msgid "Raytracing Renderer"
 msgstr "Raytracing Renderer"
 
-msgid "GerbView"
-msgstr "GerbView"
+msgid "Gerber Viewer"
+msgstr "Gerber Viewer"
 
 msgid "Excellon Options"
 msgstr "Excellon Options"
@@ -8176,6 +8176,14 @@ msgstr ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 
+msgid "<ESC> clears net highlighting"
+msgstr "<ESC> clears net highlighting"
+
+msgid ""
+"First <ESC> in selection tool clears selection, next clears net highlighting"
+msgstr ""
+"First <ESC> in selection tool clears selection, next clears net highlighting"
+
 msgid "Defaults for New Objects"
 msgstr "Defaults for New Objects"
 
@@ -11674,6 +11682,12 @@ msgstr "Change to Text"
 msgid "Change existing item to a text comment"
 msgstr "Change existing item to a text comment"
 
+msgid "Change to Text Box"
+msgstr "Change to Text Box"
+
+msgid "Change existing item to a text box"
+msgstr "Change existing item to a text box"
+
 msgid "Cleanup Sheet Pins"
 msgstr "Cleanup Sheet Pins"
 
@@ -12094,6 +12108,9 @@ msgstr "Edit %s Field"
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Edit '%s' Field"
+
+msgid "<empty>"
+msgstr "<empty>"
 
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
@@ -12748,9 +12765,6 @@ msgstr "Clear Recent Job Files"
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber Viewer"
 
-msgid "Gerber Viewer"
-msgstr "Gerber Viewer"
-
 msgid "Drawing layer not in use"
 msgstr "Drawing layer not in use"
 
@@ -12931,6 +12945,18 @@ msgstr "Next Layer"
 msgid "Previous Layer"
 msgstr "Previous Layer"
 
+msgid "Move Layer Up"
+msgstr "Move Layer Up"
+
+msgid "Move Current Layer Up"
+msgstr "Move Current Layer Up"
+
+msgid "Move Layer Down"
+msgstr "Move Layer Down"
+
+msgid "Move Current Layer Down"
+msgstr "Move Current Layer Down"
+
 msgid "Sketch Lines"
 msgstr "Sketch Lines"
 
@@ -13056,12 +13082,6 @@ msgstr "Sort Layers if X2 Mode"
 
 msgid "Sort Layers by File Extension"
 msgstr "Sort Layers by File Extension"
-
-msgid "Move Current Layer Up"
-msgstr "Move Current Layer Up"
-
-msgid "Move Current Layer Down"
-msgstr "Move Current Layer Down"
 
 msgid "Change Layer Color for"
 msgstr "Change Layer Color for"
@@ -16345,9 +16365,6 @@ msgstr "Text & Graphics"
 
 msgid "Defaults"
 msgstr "Defaults"
-
-msgid "Fomatting"
-msgstr "Fomatting"
 
 msgid "Design Rules"
 msgstr "Design Rules"
@@ -27168,9 +27185,6 @@ msgstr "Append Board..."
 msgid "Open another board and append its contents to this board"
 msgstr "Open another board and append its contents to this board"
 
-msgid "Highlight the selected net"
-msgstr "Highlight the selected net"
-
 msgid "Toggle Last Net Highlight"
 msgstr "Toggle Last Net Highlight"
 
@@ -27182,6 +27196,9 @@ msgstr "Toggle Net Highlight"
 
 msgid "Toggle net highlighting"
 msgstr "Toggle net highlighting"
+
+msgid "Highlight Selected Net"
+msgstr "Highlight Selected Net"
 
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Highlight all copper items on the selected net(s)"
@@ -27699,8 +27716,14 @@ msgstr "Footprint Name"
 msgid "Resolved clearance"
 msgstr "Resolved clearance"
 
+msgid "Actual clearance"
+msgstr "Actual clearance"
+
 msgid "Resolved hole clearance"
 msgstr "Resolved hole clearance"
+
+msgid "Actual hole clearance"
+msgstr "Actual hole clearance"
 
 msgid "Resolved edge clearance"
 msgstr "Resolved edge clearance"
@@ -28348,9 +28371,6 @@ msgstr "Fill Mode"
 msgid "Filled Area"
 msgstr "Filled Area"
 
-msgid "HatchBorder Lines"
-msgstr "HatchBorder Lines"
-
 msgid "Corner Count"
 msgstr "Corner Count"
 
@@ -28516,6 +28536,21 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "File Open Error"
+#~ msgstr "File Open Error"
+
+#~ msgid "GerbView"
+#~ msgstr "GerbView"
+
+#~ msgid "Fomatting"
+#~ msgstr "Fomatting"
+
+#~ msgid "Highlight the selected net"
+#~ msgstr "Highlight the selected net"
+
+#~ msgid "HatchBorder Lines"
+#~ msgstr "HatchBorder Lines"
 
 #~ msgid "Image Editor"
 #~ msgstr "Image Editor"
