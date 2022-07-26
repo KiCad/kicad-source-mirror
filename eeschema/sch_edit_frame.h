@@ -923,7 +923,6 @@ private:
     DIALOG_SCH_FIND*        m_findReplaceDialog;
 
     HIERARCHY_NAVIG_PANEL*  m_hierarchy;
-    bool                    m_showHierarchy;
 };
 
 

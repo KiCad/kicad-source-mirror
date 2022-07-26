@@ -175,20 +175,26 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
+
+    // Rows; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
                       .Top().Layer( 6 ) );
+
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
                       .Bottom().Layer( 6 ) );
 
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
-                      .Left().Layer( 3 ) );
+    // Columns; layers 1 - 3
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "SymbolTree" )
-                      .Left().Layer( 2 )
+                      .Left().Layer( 3 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+                      .Left().Layer( 2 ) );
+
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer( 2 ) );
 
+    // Center
     m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" )
                       .CentrePane() );
 

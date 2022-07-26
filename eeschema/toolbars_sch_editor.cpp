@@ -226,45 +226,36 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
 {
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = eeconfig();
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-    m_showHierarchy =  hierarchy_pane.IsShown();
 
-    // show auxiliary Vertical layers and visibility manager toolbar
-    m_showHierarchy = !m_showHierarchy;
-    hierarchy_pane.Show( m_showHierarchy );
+    hierarchy_pane.Show( !hierarchy_pane.IsShown() );
 
-    if( m_showHierarchy )
+    if( hierarchy_pane.IsShown() )
     {
-        if( cfg )
+        if( hierarchy_pane.IsFloating() )
         {
-            if( hierarchy_pane.IsFloating() )
-            {
-                hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
-                                             cfg->m_AuiPanels.hierarchy_panel_float_height );
-                m_auimgr.Update();
-            }
-            else
-            {
-                hierarchy_pane.BestSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, -1);
-                // SetAuiPaneSize also update m_auimgr
-                SetAuiPaneSize( m_auimgr, hierarchy_pane, cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
-            }
-        }
-        else
+            hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
+                                         cfg->m_AuiPanels.hierarchy_panel_float_height );
             m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
+        {
+            // SetAuiPaneSize also updates m_auimgr
+            SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                            cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        }
     }
     else
     {
-        if( cfg )
+        if( hierarchy_pane.IsFloating() )
         {
-            if( hierarchy_pane.IsFloating() )
-            {
-                cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
-                cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
-            }
-            else
-                cfg->m_AuiPanels.hierarchy_panel_docked_width = m_hierarchy->GetSize().x;
+            cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
+            cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
+        }
+        else
+        {
+            cfg->m_AuiPanels.hierarchy_panel_docked_width = m_hierarchy->GetSize().x;
         }
 
         m_auimgr.Update();

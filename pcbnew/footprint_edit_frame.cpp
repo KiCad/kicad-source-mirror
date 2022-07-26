@@ -208,20 +208,20 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Rows; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
                       .Top().Layer( 6 ) );
+
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
                       .Bottom().Layer( 6 ) );
 
     // Columns; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
-                      .Left().Layer( 3 ) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
-                      .Left().Layer(2)
+                      .Left().Layer( 3 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+                      .Left().Layer( 2 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer(2) );
-
     m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
                       .Right().Layer( 3 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
@@ -245,41 +245,44 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     FinishAUIInitialization();
 
-    if( GetSettings()->m_LibWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( GetSettings()->m_LibWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 250, -1 );
-    }
-
-    wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
-
-    if( m_editorSettings->m_LibWidth > 0 )
-        SetAuiPaneSize( m_auimgr, treePane, m_editorSettings->m_LibWidth, -1 );
-
     // Apply saved visibility stuff at the end
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
-    m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
-    m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
+    wxAuiPaneInfo&             treePane = m_auimgr.GetPane( "Footprints" );
+    wxAuiPaneInfo&             layersManager = m_auimgr.GetPane( "LayersManager" );
+
+    // wxAUI hack: force widths by setting MinSize() and then Fixed()
+    // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+
+    if( cfg->m_LibWidth > 0 )
+    {
+        SetAuiPaneSize( m_auimgr, treePane, cfg->m_LibWidth, -1 );
+
+        treePane.MinSize( cfg->m_LibWidth, -1 );
+        treePane.Fixed();
+    }
 
     if( cfg->m_AuiPanels.right_panel_width > 0 )
     {
-        wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
         SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+
+        layersManager.MinSize( cfg->m_LibWidth, -1 );
+        layersManager.Fixed();
     }
 
+    // Apply fixed sizes
+    m_auimgr.Update();
+
+    // Now make them resizable again
+    treePane.Resizable();
+    m_auimgr.Update();
+
+    // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the sizes
+    // back to minimum.
+    treePane.MinSize( 250, -1 );
+    layersManager.MinSize( 250, -1 );
+
+    m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
+    m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
     m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
@@ -364,7 +367,10 @@ void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
     treePane.Show( !IsSearchTreeShown() );
 
     if( IsSearchTreeShown() )
+    {
+        // SetAuiPaneSize also updates m_auimgr
         SetAuiPaneSize( m_auimgr, treePane, m_editorSettings->m_LibWidth, -1 );
+    }
     else
     {
         m_editorSettings->m_LibWidth = m_treePane->GetSize().x;

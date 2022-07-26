@@ -119,7 +119,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_schematic = new SCHEMATIC( nullptr );
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_showHierarchy = true;
     m_supportsAutoSave = true;
     m_aboutTitle = _( "KiCad Schematic Editor" );
 
@@ -161,51 +160,84 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
+
+    // Rows; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
                       .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
-                      .Left().Layer( 4 ) );
+
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+                      .Bottom().Layer( 6 ) );
+
+    // Columns; layers 1 - 3
     m_auimgr.AddPane( m_hierarchy, EDA_PANE().Palette().Name( SchematicHierarchyPaneName() )
-                      .Caption( _("Schematic Hierarchy") )
+                      .Caption( _( "Schematic Hierarchy" ) )
                       .Left().Layer( 3 )
                       .TopDockable( false )
                       .BottomDockable( false )
                       .CloseButton( true )
-                      .MinSize(120, -1)
-                      .BestSize(200, -1)
+                      .MinSize( 120, -1 )
+                      .BestSize( 200, -1 )
                       .FloatingSize( 200, 80 )
-                      .Show( false )
-                      );
+                      .Show( false ) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+                      .Left().Layer( 2 ) );
+
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
                       .Right().Layer( 2 ) );
+
+    // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
                       .Center() );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
-                      .Bottom().Layer( 6 ) );
-
-    wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-
-    if( eeconfig() )
-    {
-        if( eeconfig()->m_AuiPanels.hierarchy_panel_float_width > 0
-            && eeconfig()->m_AuiPanels.hierarchy_panel_float_height > 0 )
-        {
-            hierarchy_pane.FloatingSize( eeconfig()->m_AuiPanels.hierarchy_panel_float_width,
-                                         eeconfig()->m_AuiPanels.hierarchy_panel_float_height );
-        }
-
-        if( eeconfig()->m_AuiPanels.hierarchy_panel_docked_width > 0 )
-        {
-            hierarchy_pane.BestSize( eeconfig()->m_AuiPanels.hierarchy_panel_docked_width, -1);
-            SetAuiPaneSize( m_auimgr, hierarchy_pane,
-                            eeconfig()->m_AuiPanels.hierarchy_panel_docked_width, -1 );
-        }
-    }
 
     FinishAUIInitialization();
 
     resolveCanvasType();
     SwitchCanvas( m_canvasType );
+
+    GetCanvas()->GetGAL()->SetAxesEnabled( false );
+
+    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
+    static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
+
+    wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
+
+    if( cfg->m_AuiPanels.hierarchy_panel_float_width > 0
+            && cfg->m_AuiPanels.hierarchy_panel_float_height > 0 )
+    {
+        // Show at end, after positioning
+        hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
+                                     cfg->m_AuiPanels.hierarchy_panel_float_height );
+    }
+
+    if( cfg->m_AuiPanels.schematic_hierarchy_float )
+        hierarchy_pane.Float();
+
+    if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
+    {
+        SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                        cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        hierarchy_pane.MinSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        hierarchy_pane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        hierarchy_pane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        hierarchy_pane.MinSize( 120, -1 );
+    }
+    else
+    {
+        m_auimgr.Update();
+    }
 
     LoadProjectSettings();
 
@@ -219,14 +251,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
     Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
-
-    if( GetCanvas() )
-    {
-        GetCanvas()->GetGAL()->SetAxesEnabled( false );
-
-        if( auto p = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() ) )
-            p->SetSchematic( m_schematic );
-    }
 
     setupUnits( eeconfig() );
 
@@ -242,24 +266,18 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Ensure the window is on top
     Raise();
 
-    // Now every sizes are fixed, set the initial hierarchy_pane floating position
-    // to the left top corner of the canvas
+    // Now that all sizes are fixed, set the initial hierarchy_pane floating position to the
+    // top-left corner of the canvas
     wxPoint canvas_pos = GetCanvas()->GetScreenPosition();
     hierarchy_pane.FloatingPosition( canvas_pos.x + 10, canvas_pos.y + 10 );
-
-    if( eeconfig() && eeconfig()->m_AuiPanels.schematic_hierarchy_float )
-        hierarchy_pane.Float();
-
-    hierarchy_pane.Show( m_showHierarchy );
 }
 
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-
     m_hierarchy->Disconnect( wxEVT_SIZE,
-                          wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
-                          NULL, this );
+                             wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
+                             NULL, this );
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
 
@@ -311,7 +329,7 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     // Store the current pane size
     // It allows to retrieve the last defined pane size when switching between
     // docked and floating pane state
-    // Note: *DO NOT* call m_auimgr.Update() here: it crashes Kicad at leat on Windows
+    // Note: *DO NOT* call m_auimgr.Update() here: it crashes Kicad at least on Windows
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
@@ -797,6 +815,14 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
         m_findReplaceDialog->Destroy();
         m_findReplaceDialog = nullptr;
+    }
+
+    wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+
+    if( hierarchy_pane.IsShown() && hierarchy_pane.IsFloating() )
+    {
+        hierarchy_pane.Show( false );
+        m_auimgr.Update();
     }
 
     if( Kiway().Player( FRAME_SIMULATOR, false ) )

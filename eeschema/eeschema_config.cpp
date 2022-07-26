@@ -140,8 +140,6 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // For now, axes are forced off in Eeschema even if turned on in config
     eeconfig()->m_Window.grid.axes_enabled = false;
 
-    m_showHierarchy = eeconfig()->m_AuiPanels.show_schematic_hierarchy;
-
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
@@ -152,13 +150,12 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     SCH_BASE_FRAME::SaveSettings( eeconfig() );
     wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-    m_showHierarchy = hierarchy_pane.IsShown();
 
     // TODO(JE) do we need to keep m_userUnits around?
     if( eeconfig() )
     {
         eeconfig()->m_System.units = static_cast<int>( m_userUnits );
-        eeconfig()->m_AuiPanels.show_schematic_hierarchy = m_showHierarchy;
+        eeconfig()->m_AuiPanels.show_schematic_hierarchy = hierarchy_pane.IsShown();
         eeconfig()->m_AuiPanels.schematic_hierarchy_float = hierarchy_pane.IsFloating();
         // Other parameters (hierarchy_panel_float_width, hierarchy_panel_float_height,
         // and hierarchy_panel_docked_width should have been updated when resizing the
