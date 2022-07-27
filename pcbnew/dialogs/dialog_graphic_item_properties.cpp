@@ -216,11 +216,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( false );
         break;
 
-    case SHAPE_T::BEZIER:
-        SetTitle( _( "Curve Properties" ) );
-        m_filledCtrl->Show( true );
-        break;
-
     default:
         break;
     }
@@ -397,45 +392,45 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         }
 
         if( m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero." ) );
+            errors.Add( _( "The item thickness must be greater than zero." ) );
 
         break;
 
     case SHAPE_T::CIRCLE:
         // Check radius.
         if( m_endX.GetValue() <= 0 )
-            errors.Add( _( "Radius must be greater than zero." ) );
+            errors.Add( _( "The radius must be greater than zero." ) );
 
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero for an unfilled circle." ) );
+            errors.Add( _( "The item thickness must be greater than zero." ) );
 
         break;
 
     case SHAPE_T::RECT:
         // Check for null rect.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            errors.Add( _( "Rectangle cannot be empty." ) );
+            errors.Add( _( "The rectangle cannot be empty." ) );
 
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
+            errors.Add( _( "The item thickness must be greater than zero." ) );
 
         break;
 
     case SHAPE_T::POLY:
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero for an unfilled polygon." ) );
+            errors.Add( _( "The polygon outline thickness must be >= 0." ) );
 
         break;
 
     case SHAPE_T::SEGMENT:
         if( m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero." ) );
+            errors.Add( _( "The item thickness must be greater than zero." ) );
 
         break;
 
     case SHAPE_T::BEZIER:
         if( !m_filledCtrl->GetValue() && m_thickness.GetValue() <= 0 )
-            errors.Add( _( "Line width must be greater than zero for an unfilled curve." ) );
+            errors.Add( _( "The item thickness must be greater than zero." ) );
 
         break;
 
