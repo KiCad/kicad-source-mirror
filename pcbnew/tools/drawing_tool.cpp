@@ -263,7 +263,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    updateStatusBar();
+    UpdateStatusBar();
 }
 
 
@@ -273,7 +273,7 @@ DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 }
 
 
-void DRAWING_TOOL::updateStatusBar() const
+void DRAWING_TOOL::UpdateStatusBar() const
 {
     if( m_frame )
     {
@@ -1737,7 +1737,7 @@ int DRAWING_TOOL::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
     else
         TOGGLE( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit );
 
-    updateStatusBar();
+    UpdateStatusBar();
 
     return 0;
 

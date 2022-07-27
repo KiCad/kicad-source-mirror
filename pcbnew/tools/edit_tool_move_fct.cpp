@@ -48,6 +48,7 @@
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
 #include <tools/drc_tool.h>
+#include <tools/drawing_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
@@ -358,6 +359,13 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         return 0;
     }
 
+    auto displayConstraintsMessage =
+            [editFrame]( bool constrained )
+            {
+                editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
+                                                            : wxT( "" ) );
+            };
+
     std::vector<BOARD_ITEM*> sel_items;         // All the items operated on by the move below
     std::vector<BOARD_ITEM*> orig_items;        // All the original items in the selection
     std::vector<FOOTPRINT*> lastFpInConflict;   // last footprints with courtyard overlapping
@@ -400,6 +408,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Courtyard conflicts will be tested only if the LAYER_CONFLICTS_SHADOW gal layer is visible
     bool showCourtyardConflicts = !m_isFootprintEditor
                                     && board->IsElementVisible( LAYER_CONFLICTS_SHADOW );
+
+    displayConstraintsMessage( hv45Mode );
 
     // Used to test courtyard overlaps
     DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE drc_on_move;
@@ -693,6 +703,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
             hv45Mode = !hv45Mode;
+            displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
         }
         else
@@ -715,6 +726,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     m_dragging = false;
     editFrame->UndoRedoBlock( false );
+
+    m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
 
     if( hasRedrawn3D && restore_state )
         editFrame->Update3DView( false, true );
