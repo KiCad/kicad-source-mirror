@@ -123,70 +123,28 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 {
-    FOOTPRINT* parentFootprint = nullptr;
+    FOOTPRINT*     parentFootprint = nullptr;
 
-    auto& selection = m_selectionTool->RequestSelection(
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    switch( item->Type() )
-                    {
-                    case PCB_SHAPE_T:
-                    case PCB_FP_SHAPE_T:
-                    {
-                        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
-
-                        switch( shape->GetShape() )
-                        {
-                        case SHAPE_T::SEGMENT:
-                        case SHAPE_T::RECT:
-                        case SHAPE_T::CIRCLE:
-                        case SHAPE_T::ARC:
-                            if( shape->GetStart() == shape->GetEnd() )
-                                aCollector.Remove( item );
-
-                            break;
-
-                        case SHAPE_T::POLY:
-                            break;
-
-                        default:
-                            aCollector.Remove( item );
-                        }
-
-                        break;
-                    }
-                    case PCB_TRACE_T:
-                    case PCB_ARC_T:
-                        break;
-
-                    case PCB_ZONE_T:
-                    case PCB_FP_ZONE_T:
-                        break;
-
-                    default:
-                        aCollector.Remove( item );
-                    }
-                }
             } );
 
     if( selection.Empty() )
         return 0;
 
     PCB_LAYER_ID   destLayer = m_frame->GetActiveLayer();
-    SHAPE_POLY_SET polySet   = makePolysFromSegs( selection.GetItems() );
+    SHAPE_POLY_SET polySet;
 
-    polySet.Append( makePolysFromRects( selection.GetItems() ) );
+    if( !IsCopperLayer( destLayer ) )
+        polySet = makePolysFromChainedSegs( selection.GetItems() );
 
-    polySet.Append( makePolysFromCircles( selection.GetItems() ) );
-
-    polySet.Append( extractPolygons( selection.GetItems() ) );
+    polySet.Append( makePolysFromGraphics( selection.GetItems() ) );
 
     if( polySet.IsEmpty() )
         return 0;
+
+    polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
@@ -205,8 +163,13 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     // For now, we convert each outline in the returned shape to its own polygon
     std::vector<SHAPE_POLY_SET> polys;
 
-    for( int i = 0; i < polySet.OutlineCount(); i++ )
-        polys.emplace_back( SHAPE_POLY_SET( polySet.COutline( i ) ) );
+    for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
+    {
+        polys.emplace_back( SHAPE_POLY_SET( polySet.COutline( ii ) ) );
+
+        for( int jj = 0; jj < polySet.HoleCount( ii ); ++jj )
+            polys.back().AddHole( polySet.Hole( ii, jj ) );
+    }
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
@@ -276,7 +239,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aItems )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM*>& aItems )
 {
     // TODO: This code has a somewhat-similar purpose to ConvertOutlineToPolygon but is slightly
     // different, so this remains a separate algorithm.  It might be nice to analyze the dfiferences
@@ -289,7 +252,6 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
     // Stores pairs of (anchor, item) where anchor == 0 -> SEG.A, anchor == 1 -> SEG.B
     std::map<VECTOR2I, std::vector<std::pair<int, EDA_ITEM*>>> connections;
-    std::set<EDA_ITEM*> used;
     std::deque<EDA_ITEM*> toCheck;
 
     auto closeEnough =
@@ -315,6 +277,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
     for( EDA_ITEM* item : aItems )
     {
+        item->ClearFlags( SKIP_STRUCT );
+
         if( OPT<SEG> seg = getStartEndPoints( item, nullptr ) )
         {
             toCheck.push_back( item );
@@ -328,7 +292,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         EDA_ITEM* candidate = toCheck.front();
         toCheck.pop_front();
 
-        if( used.count( candidate ) )
+        if( candidate->GetFlags() & SKIP_STRUCT )
             continue;
 
         int width = -1;
@@ -379,10 +343,10 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         std::function<void( EDA_ITEM*, VECTOR2I, bool )> process =
                 [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
                 {
-                    if( used.count( aItem ) )
+                    if( aItem->GetFlags() & SKIP_STRUCT )
                         return;
 
-                    used.insert( aItem );
+                    aItem->SetFlags( SKIP_STRUCT );
 
                     insert( aItem, aAnchor, aDirection );
 
@@ -446,87 +410,27 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aItems )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>& aItems )
 {
-    SHAPE_POLY_SET poly;
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+    SHAPE_POLY_SET         poly;
 
     for( EDA_ITEM* item : aItems )
     {
-        if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
+        if( item->GetFlags() & SKIP_STRUCT )
             continue;
 
-        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
-
-        if( graphic->GetShape() != SHAPE_T::RECT )
-            continue;
-
-        SHAPE_LINE_CHAIN outline;
-        VECTOR2I start( graphic->GetStart() );
-        VECTOR2I end( graphic->GetEnd() );
-
-        outline.Append( start );
-        outline.Append( VECTOR2I( end.x, start.y ) );
-        outline.Append( end );
-        outline.Append( VECTOR2I( start.x, end.y ) );
-        outline.SetClosed( true );
-
-        outline.SetWidth( graphic->GetWidth() );
-
-        poly.AddOutline( outline );
-    }
-
-    return poly;
-}
-
-
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromCircles( const std::deque<EDA_ITEM*>& aItems )
-{
-    SHAPE_POLY_SET poly;
-
-    for( EDA_ITEM* item : aItems )
-    {
-        if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
-            continue;
-
-        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
-
-        if( graphic->GetShape() != SHAPE_T::CIRCLE )
-            continue;
-
-        BOARD_DESIGN_SETTINGS& bds = graphic->GetBoard()->GetDesignSettings();
-        SHAPE_LINE_CHAIN outline;
-
-        TransformCircleToPolygon( outline, graphic->GetPosition(), graphic->GetRadius(),
-                                  bds.m_MaxError, ERROR_OUTSIDE );
-
-        poly.AddOutline( outline );
-    }
-
-    return poly;
-}
-
-
-SHAPE_POLY_SET CONVERT_TOOL::extractPolygons( const std::deque<EDA_ITEM*>& aItems )
-{
-    SHAPE_POLY_SET poly;
-
-    for( EDA_ITEM* item : aItems )
-    {
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
         case PCB_FP_SHAPE_T:
-            switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
-            {
-            case SHAPE_T::POLY:
-                poly.Append( static_cast<PCB_SHAPE*>( item )->GetPolyShape() );
-                break;
+        {
+            PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
 
-            default:
-                continue;
-            }
-
+            graphic->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
+                                                           bds.m_MaxError, ERROR_INSIDE );
             break;
+        }
 
         case PCB_ZONE_T:
         case PCB_FP_ZONE_T:
@@ -881,11 +785,23 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
 
-        if( aWidth )
-            *aWidth = shape->GetWidth();
+        switch( shape->GetShape() )
+        {
+        case SHAPE_T::SEGMENT:
+        case SHAPE_T::ARC:
+        case SHAPE_T::POLY:
+            if( shape->GetStart() == shape->GetEnd() )
+                return NULLOPT;
 
-        return boost::make_optional<SEG>( { VECTOR2I( shape->GetStart() ),
-                                            VECTOR2I( shape->GetEnd() ) } );
+            if( aWidth )
+                *aWidth = shape->GetWidth();
+
+            return boost::make_optional<SEG>( { VECTOR2I( shape->GetStart() ),
+                                                VECTOR2I( shape->GetEnd() ) } );
+
+        default:
+            return NULLOPT;
+        }
     }
 
     case PCB_TRACE_T:
