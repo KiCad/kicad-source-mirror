@@ -1043,7 +1043,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddSubPage( CREATE_PANEL( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
 
-    if( Kiway().Player( FRAME_PCB_DISPLAY3D, false ) )
+    if( GetFrameType() == FRAME_PCB_DISPLAY3D )
         expand.push_back( book->GetPageCount() );
 
     book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
@@ -1086,7 +1086,10 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
         book->ExpandNode( page );
 
     if( dlg.ShowModal() == wxID_OK )
+    {
+        Pgm().GetSettingsManager().Save();
         dlg.Kiway().CommonSettingsChanged( false, false );
+    }
 
 #undef CREATE_PANEL
 }
