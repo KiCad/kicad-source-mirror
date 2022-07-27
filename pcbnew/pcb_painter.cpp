@@ -827,33 +827,34 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     default:                    wxASSERT( false );                                           break;
     }
 
+    m_gal->SetStrokeColor( color );
+    m_gal->SetFillColor( color );
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+
     if( sketchMode )
-    {
-        // Outline mode
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( color );
-    }
-    else
-    {
-        // Filled mode
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( color );
-    }
 
     if( aLayer == LAYER_VIA_HOLES )
     {
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
         m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
     }
     else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
+        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
         double radius = aVia->GetWidth() / 2.0;
         bool   draw = aLayer == LAYER_VIA_THROUGH;
 
         if( m_pcbSettings.IsPrinting() )
             draw = aVia->FlashLayer( m_pcbSettings.GetPrintLayers() );
+
+        if( !sketchMode )
+        {
+            m_gal->SetLineWidth( annular_width );
+            radius -= annular_width / 2.0;
+        }
 
         if( draw )
             m_gal->DrawCircle( center, radius );
@@ -868,7 +869,11 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         double radius =  aVia->GetWidth() / 2.0;
 
         if( !sketchMode )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
+        }
 
         m_gal->DrawArc( center, radius, M_PI * -0.375, M_PI * 0.375 );
         m_gal->DrawArc( center, radius, M_PI * 0.625, M_PI * 1.375 );
