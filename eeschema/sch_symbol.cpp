@@ -529,27 +529,27 @@ bool SCH_SYMBOL::IsReferenceStringValid( const wxString& aReferenceString )
 void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     KIID_PATH path = sheet->Path();
-    bool      notInArray = true;
+    bool      found = false;
 
     // check to see if it is already there before inserting it
     for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
+            found = true;
             instance.m_Reference = ref;
-            notInArray = false;
+            break;
         }
     }
 
-    if( notInArray )
+    if( !found )
         AddHierarchicalReference( path, ref, m_unit );
 
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( sheet );
 
-    SCH_FIELD* rf = GetField( REFERENCE_FIELD );
-
-    rf->SetText( ref );  // for drawing.
+    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
+        m_fields[ REFERENCE_FIELD ].SetText( ref );
 
     // Reinit the m_prefix member if needed
     m_prefix = UTIL::GetRefDesPrefix( ref );
@@ -659,20 +659,28 @@ void SCH_SYMBOL::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
     }
 
     KIID_PATH path = sheet->Path();
+    bool      found = false;
 
     // check to see if it is already there before inserting it
     for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
+            found = true;
             instance.m_Value = aValue;
-            return;
+            break;
         }
     }
 
     // didn't find it; better add it
-    AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
-                              aValue, wxEmptyString );
+    if( !found )
+    {
+        AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit, aValue,
+                                  wxEmptyString );
+    }
+
+    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
+        m_fields[ VALUE_FIELD ].SetText( aValue );
 }
 
 
@@ -710,20 +718,28 @@ void SCH_SYMBOL::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFoo
     }
 
     KIID_PATH path = sheet->Path();
+    bool      found = false;
 
     // check to see if it is already there before inserting it
     for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
+            found = true;
             instance.m_Footprint = aFootprint;
-            return;
+            break;
         }
     }
 
     // didn't find it; better add it
-    AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
-                              wxEmptyString, aFootprint );
+    if( !found )
+    {
+        AddHierarchicalReference( path, UTIL::GetRefDesUnannotated( m_prefix ), m_unit,
+                                  wxEmptyString, aFootprint );
+    }
+
+    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
+        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
 }
 
 
