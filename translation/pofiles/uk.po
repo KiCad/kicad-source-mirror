@@ -6,17 +6,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-05 23:51+0000\n"
-"Last-Translator: Artem <artem@molotov.work>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -1487,7 +1487,6 @@ msgid "Warning"
 msgstr "Попередження"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Warning"
 msgstr "Помилка відкриття файлу"
 
@@ -5220,9 +5219,8 @@ msgid "Schematic text && graphics"
 msgstr "Текст схеми && зображення"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Текст схеми && зображення"
+msgstr "Текст символу && графіка"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
@@ -5461,14 +5459,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Знайдено неприпустимий символ у логічному імені бібліотеки"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "Шари не вибрані."
+msgstr "Активувати виділене"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Видалити виділені комірки"
+msgstr "Деактивувати виділене"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5947,7 +5943,6 @@ msgid "Paste Special..."
 msgstr "Вставити як..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
 msgstr "Вставити елементи з буфера обміну з опціями"
 
@@ -8814,7 +8809,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "Buses && bus labels"
-msgstr ""
+msgstr "Шини && мітки шини"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:54
 msgid "Sheet titles"
@@ -12277,14 +12272,12 @@ msgid "Cross-probing"
 msgstr "Двосторонній зв'язок"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Для символу псевдоніма потрібно вибрати батька"
+msgstr "Підсвітити символи якщо посадкове місце вибране"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Підсвічувати всі мідні елементи виділених звʼязків"
+msgstr "Підсвічувати всі мідні елементи виділеного зв'язку"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -12293,7 +12286,7 @@ msgstr "Сконцентрувати перегляд виділених еле�
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Забезпечити видимість перехресних символів у поточному перегляді"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -12344,9 +12337,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Очистити підсвічування звʼязків"
+msgstr "<ESC>очистити підсвічені зв'язки"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
@@ -12559,9 +12551,8 @@ msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Глобальні мітки"
+msgstr "Відступ глобальної мітки:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -16197,42 +16188,42 @@ msgstr "Додавання мітки звʼязку '%s' до %s, вивід %s
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
-msgstr ""
+msgstr "Виконати перевірку електричних правил"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
-msgstr ""
+msgstr "Перевірка символу"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Show the symbol checker window"
-msgstr ""
+msgstr "Відобразити вікно перевірки символу"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
-msgstr ""
+msgstr "Симулятор..."
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulate circuit in SPICE"
-msgstr ""
+msgstr "Симулювати схему в SPICE"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr ""
+msgstr "Відкрити зв'язані документи і в браузері"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1200
 #: pcbnew/tools/pcb_actions.cpp:1195
 msgid "Create Corner"
-msgstr ""
+msgstr "Створити кут"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1200
 #: pcbnew/tools/pcb_actions.cpp:1195
 msgid "Create a corner"
-msgstr ""
+msgstr "Створити кут"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1205
 #: pcbnew/tools/pcb_actions.cpp:1200
 msgid "Remove Corner"
-msgstr ""
+msgstr "Видалити кут"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1205
 #: pcbnew/tools/pcb_actions.cpp:1200
@@ -16380,121 +16371,121 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:226
 msgid "Add Pin"
-msgstr ""
+msgstr "Додати вивід"
 
 #: eeschema/tools/ee_actions.cpp:226
 msgid "Add a pin"
-msgstr ""
+msgstr "Додати вивід"
 
 #: eeschema/tools/ee_actions.cpp:231 eeschema/tools/ee_actions.cpp:346
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:128
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add Text"
-msgstr ""
+msgstr "Додати текст"
 
 #: eeschema/tools/ee_actions.cpp:231 pagelayout_editor/tools/pl_actions.cpp:54
 #: pcbnew/tools/pcb_actions.cpp:128 pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a text item"
-msgstr ""
+msgstr "Додати напис"
 
 #: eeschema/tools/ee_actions.cpp:236 eeschema/tools/ee_actions.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:128
 msgid "Add Text Box"
-msgstr ""
+msgstr "Додати блок тексту"
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Add a text box item"
-msgstr ""
+msgstr "Додати елемент блоку тексту"
 
 #: eeschema/tools/ee_actions.cpp:241 eeschema/tools/ee_actions.cpp:826
 #: eeschema/tools/ee_actions.cpp:821
 msgid "Add Lines"
-msgstr ""
+msgstr "Додати лінію"
 
 #: eeschema/tools/ee_actions.cpp:241 eeschema/tools/ee_actions.cpp:826
 #: eeschema/tools/ee_actions.cpp:821
 msgid "Add connected graphic lines"
-msgstr ""
+msgstr "Додати з'єднання графічних ліній"
 
 #: eeschema/tools/ee_actions.cpp:246
 msgid "Move Symbol Anchor"
-msgstr ""
+msgstr "Перемістити прив’язку символу"
 
 #: eeschema/tools/ee_actions.cpp:246
 msgid "Specify a new location for the symbol anchor"
-msgstr ""
+msgstr "Вкажіть нове розташування опорної точки символу"
 
 #: eeschema/tools/ee_actions.cpp:251
 msgid "Finish drawing shape"
-msgstr ""
+msgstr "Завершення креслення форми"
 
 #: eeschema/tools/ee_actions.cpp:258
 msgid "Push Pin Length"
-msgstr ""
+msgstr "Додати довжину контакту"
 
 #: eeschema/tools/ee_actions.cpp:258
 msgid "Copy pin length to other pins in symbol"
-msgstr ""
+msgstr "Скопіювати довжину контакту в інші контакти в символу"
 
 #: eeschema/tools/ee_actions.cpp:263
 msgid "Push Pin Name Size"
-msgstr ""
+msgstr "Виконати розмір імені контакту"
 
 #: eeschema/tools/ee_actions.cpp:263
 msgid "Copy pin name size to other pins in symbol"
-msgstr ""
+msgstr "Копіювати розмір назви контакту для інших контактів символу"
 
 #: eeschema/tools/ee_actions.cpp:268
 msgid "Push Pin Number Size"
-msgstr ""
+msgstr "Виконати розмір номеру контакту"
 
 #: eeschema/tools/ee_actions.cpp:268
 msgid "Copy pin number size to other pins in symbol"
-msgstr ""
+msgstr "Копіювати розмір номеру контакту для інших контактів символу"
 
 #: eeschema/tools/ee_actions.cpp:277
 msgid "Add Symbol"
-msgstr ""
+msgstr "Додати символ"
 
 #: eeschema/tools/ee_actions.cpp:277
 msgid "Add a symbol"
-msgstr ""
+msgstr "Додати символ"
 
 #: eeschema/tools/ee_actions.cpp:283
 msgid "Add Power"
-msgstr ""
+msgstr "Додати живлення"
 
 #: eeschema/tools/ee_actions.cpp:283
 msgid "Add a power port"
-msgstr ""
+msgstr "Додати порт живлення"
 
 #: eeschema/tools/ee_actions.cpp:289
 msgid "Add No Connect Flag"
-msgstr ""
+msgstr "Додати мітку \"Не підключено\""
 
 #: eeschema/tools/ee_actions.cpp:289
 msgid "Add a no-connection flag"
-msgstr ""
+msgstr "Додати мітку \"Не підключено\""
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Add Junction"
-msgstr ""
+msgstr "Додати з'єднання"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Add a junction"
-msgstr ""
+msgstr "Додати з'єднання"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add Wire to Bus Entry"
-msgstr ""
+msgstr "Додати провідник до входу шини"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add a wire entry to a bus"
-msgstr ""
+msgstr "Додати провідник до входу шини"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Label"
-msgstr ""
+msgstr "Додати мітку"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add a net label"
@@ -16510,140 +16501,140 @@ msgstr "Додати мітку директиви класу звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:318
 msgid "Add Hierarchical Label"
-msgstr ""
+msgstr "Додати ієрархічну мітку"
 
 #: eeschema/tools/ee_actions.cpp:318
 msgid "Add a hierarchical label"
-msgstr ""
+msgstr "Додати ієрархічну мітку"
 
 #: eeschema/tools/ee_actions.cpp:324
 msgid "Add Sheet"
-msgstr ""
+msgstr "Додати лист"
 
 #: eeschema/tools/ee_actions.cpp:324
 msgid "Add a hierarchical sheet"
-msgstr ""
+msgstr "Додати ієрархічний лист"
 
 #: eeschema/tools/ee_actions.cpp:329 eeschema/tools/ee_actions.cpp:334
 msgid "Import Sheet Pin"
-msgstr ""
+msgstr "Імпортувати контакт листа"
 
 #: eeschema/tools/ee_actions.cpp:329 eeschema/tools/ee_actions.cpp:334
 msgid "Import a hierarchical sheet pin"
-msgstr ""
+msgstr "Додати контакт ієрархічного листа"
 
 #: eeschema/tools/ee_actions.cpp:340
 msgid "Add Global Label"
-msgstr ""
+msgstr "Додати глобальну мітку"
 
 #: eeschema/tools/ee_actions.cpp:340
 msgid "Add a global label"
-msgstr ""
+msgstr "Додати глобальну мітку"
 
 #: eeschema/tools/ee_actions.cpp:346
 msgid "Add text"
-msgstr ""
+msgstr "Додати текст"
 
 #: eeschema/tools/ee_actions.cpp:351
 msgid "Add a text box"
-msgstr ""
+msgstr "Додати текстовий блок"
 
 #: eeschema/tools/ee_actions.cpp:356 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
-msgstr ""
+msgstr "Додати прямокутник"
 
 #: eeschema/tools/ee_actions.cpp:356 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add a rectangle"
-msgstr ""
+msgstr "Додати прямокутник"
 
 #: eeschema/tools/ee_actions.cpp:361
 msgid "Add Circle"
-msgstr ""
+msgstr "Додати коло"
 
 #: eeschema/tools/ee_actions.cpp:361
 msgid "Add a circle"
-msgstr ""
+msgstr "Додати коло"
 
 #: eeschema/tools/ee_actions.cpp:366
 msgid "Add Arc"
-msgstr ""
+msgstr "Додати дугу"
 
 #: eeschema/tools/ee_actions.cpp:366
 msgid "Add an arc"
-msgstr ""
+msgstr "Додати дугу"
 
 #: eeschema/tools/ee_actions.cpp:371 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add Image"
-msgstr ""
+msgstr "Додати зображення"
 
 #: eeschema/tools/ee_actions.cpp:371 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add bitmap image"
-msgstr ""
+msgstr "Додати растрове зображення"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Finish Sheet"
-msgstr ""
+msgstr "Закінчити лист"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Finish drawing sheet"
-msgstr ""
+msgstr "Закінчити креслення аркуша"
 
 #: eeschema/tools/ee_actions.cpp:389
 msgid "Repeat Last Item"
-msgstr ""
+msgstr "Повторити останній елемент"
 
 #: eeschema/tools/ee_actions.cpp:389
 msgid "Duplicates the last drawn item"
-msgstr ""
+msgstr "Дублювати останній накреслений елемент"
 
 #: eeschema/tools/ee_actions.cpp:393 pcbnew/tools/pcb_actions.cpp:308
 #: pcbnew/tools/pcb_actions.cpp:303
 msgid "Rotate Clockwise"
-msgstr ""
+msgstr "Повернути за годинниковою стрілкою"
 
 #: eeschema/tools/ee_actions.cpp:393 pcbnew/tools/pcb_actions.cpp:308
 #: pcbnew/tools/pcb_actions.cpp:303
 msgid "Rotates selected item(s) clockwise"
-msgstr ""
+msgstr "Обертати обраний предмет за годинниковою стрілкою"
 
 #: eeschema/tools/ee_actions.cpp:399 pcbnew/tools/pcb_actions.cpp:314
 #: pcbnew/tools/pcb_actions.cpp:309
 msgid "Rotate Counterclockwise"
-msgstr ""
+msgstr "Повернути проти годинникової стрілки"
 
 #: eeschema/tools/ee_actions.cpp:399
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr ""
+msgstr "Обертає обраний елемент проти годинникової стрілки"
 
 #: eeschema/tools/ee_actions.cpp:405
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "Віддзеркалити вертикально"
 
 #: eeschema/tools/ee_actions.cpp:405
 msgid "Flips selected item(s) from top to bottom"
-msgstr ""
+msgstr "Перевернути вибрані елементи зверху до низу"
 
 #: eeschema/tools/ee_actions.cpp:411
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "Відобразити горизонтально"
 
 #: eeschema/tools/ee_actions.cpp:411
 msgid "Flips selected item(s) from left to right"
-msgstr ""
+msgstr "Перевернути вибрані елемент зліва направо"
 
 #: eeschema/tools/ee_actions.cpp:417 pcbnew/tools/pcb_actions.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Properties..."
-msgstr ""
+msgstr "Властивості..."
 
 #: eeschema/tools/ee_actions.cpp:417 pcbnew/tools/pcb_actions.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Displays item properties dialog"
-msgstr ""
+msgstr "Показати діалогове вікно властивості товару"
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Edit Reference Designator..."
-msgstr ""
+msgstr "Редагувати позначення..."
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Displays reference designator dialog"
@@ -16668,7 +16659,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Autoplace Fields"
-msgstr ""
+msgstr "Розмістити поле автоматично"
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -16775,9 +16766,8 @@ msgid "Change existing item to a text comment"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Зміна методу правки"
+msgstr "Змінити на текст"
 
 #: eeschema/tools/ee_actions.cpp:515
 msgid "Change existing item to a text box"
@@ -17171,31 +17161,31 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:806 eeschema/tools/ee_actions.cpp:801
 msgid "Add a wire"
-msgstr ""
+msgstr "Додати провідник"
 
 #: eeschema/tools/ee_actions.cpp:813 eeschema/tools/ee_actions.cpp:808
 msgid "Add Bus"
-msgstr ""
+msgstr "Додати шину"
 
 #: eeschema/tools/ee_actions.cpp:813 eeschema/tools/ee_actions.cpp:808
 msgid "Add a bus"
-msgstr ""
+msgstr "Додати шину"
 
 #: eeschema/tools/ee_actions.cpp:819
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:133
 #: eeschema/tools/ee_actions.cpp:814
 msgid "Unfold from Bus"
-msgstr ""
+msgstr "Розгорнути від шини"
 
 #: eeschema/tools/ee_actions.cpp:819 eeschema/tools/ee_actions.cpp:814
 msgid "Break a wire out of a bus"
-msgstr ""
+msgstr "Розірвати провідник підключення до шини"
 
 #: eeschema/tools/ee_actions.cpp:832 pcbnew/tools/pcb_actions.cpp:1419
 #: eeschema/tools/ee_actions.cpp:827 pcbnew/tools/pcb_actions.cpp:1414
 msgid "Undo Last Segment"
-msgstr ""
+msgstr "Скасувати останній сегмент"
 
 #: eeschema/tools/ee_actions.cpp:832 eeschema/tools/ee_actions.cpp:827
 msgid "Walks the current line back one segment."
@@ -17357,14 +17347,12 @@ msgstr ""
 #: eeschema/tools/sch_edit_tool.cpp:383 eeschema/tools/sch_edit_tool.cpp:424
 #: eeschema/tools/sch_edit_tool.cpp:462 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:419 eeschema/tools/sch_edit_tool.cpp:456
-#, fuzzy
 msgid "Edit Main Fields"
-msgstr "Редагувати файл"
+msgstr "Редагувати основні поля"
 
 #: eeschema/tools/sch_edit_tool.cpp:483 eeschema/tools/sch_edit_tool.cpp:477
-#, fuzzy
 msgid "Change To"
-msgstr "Змінити"
+msgstr "Змінити на"
 
 #: eeschema/tools/sch_edit_tool.cpp:1013 eeschema/tools/sch_edit_tool.cpp:1006
 msgid "Label value cannot go below zero"
