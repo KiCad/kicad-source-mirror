@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-16 04:16+0000\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1477,9 +1477,8 @@ msgid "Warning"
 msgstr "警告"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Warning"
-msgstr "文件打开错误"
+msgstr "文件打开警告"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -12470,14 +12469,13 @@ msgstr ""
 "启用后，即使导线工具未处于活动状态，也可以通过单击未连接的接点来开始布线"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "清除网络高亮"
+msgstr "<ESC>清除网络高亮"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
+msgstr "首先在选择工具中按 <ESC> 清除所选，接着清除网络高亮"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -17150,14 +17148,12 @@ msgid "Change existing item to a text comment"
 msgstr "将现有项目更改为文本注释"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "改为注释文字"
+msgstr "改为文本框"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "将现有项目更改为文本注释"
+msgstr "将现有项目更改为文本框"
 
 #: eeschema/tools/ee_actions.cpp:520 eeschema/tools/ee_actions.cpp:515
 msgid "Cleanup Sheet Pins"
@@ -17753,9 +17749,8 @@ msgid "Edit '%s' Field"
 msgstr "编辑 '%s' 字段"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "空"
+msgstr "<空>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106 eeschema/tools/sch_edit_tool.cpp:1944
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18968,9 +18963,8 @@ msgid "Previous Layer"
 msgstr "上一层"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "上移电路板"
+msgstr "上移层"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -18979,9 +18973,8 @@ msgid "Move Current Layer Up"
 msgstr "将当前层上移"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "下移电路板"
+msgstr "下移层"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -38113,7 +38106,6 @@ msgid "Toggle net highlighting"
 msgstr "切换网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "高亮所选的网络"
 
@@ -38794,18 +38786,16 @@ msgid "Resolved clearance"
 msgstr "已解析的间隙"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "焊盘间隙"
+msgstr "实际间隙"
 
 #: pcbnew/tools/pcb_control.cpp:1301
 msgid "Resolved hole clearance"
 msgstr "已解析的孔间隙"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "孔对孔间隙："
+msgstr "实际孔间隙"
 
 #: pcbnew/tools/pcb_control.cpp:1332
 msgid "Resolved edge clearance"
