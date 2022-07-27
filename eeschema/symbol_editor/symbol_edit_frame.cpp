@@ -263,6 +263,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
         delete screen;
         m_isSymbolFromSchematic = false;
     }
+
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
