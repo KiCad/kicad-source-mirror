@@ -33431,7 +33431,7 @@ msgstr "누락 [IBIS Ver]"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr "이 파서는 해당 IBIS 버전을 처리하지 않습니다."
+msgstr "이 파서는 해당 IBIS 버전을 처리하지 않습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
 msgid "Missing [File Rev]"
@@ -33527,19 +33527,19 @@ msgstr "실수형 읽기 실패."
 
 #: pcbnew/ibis/ibis_parser.cpp:939 pcbnew/ibis/ibis_parser.cpp:983
 msgid "Failed to read a word."
-msgstr "단어를 불러오는데 실패했습니다."
+msgstr "단어를 읽지 못했습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:976
 msgid "Number is not an integer"
-msgstr "숫자가 정수가 아님"
+msgstr "숫자가 정수가 아닙니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1020
 msgid "Unable to read string, input is empty."
-msgstr "문자열을 읽을 수 없습니다, 입력이 비어 있습니다."
+msgstr "문자열을 읽을 수 없으며 입력이 비어 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
-msgstr "사용할 수 없는 코멘트 문자 입니다."
+msgstr "새 주석 문자가 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
@@ -33567,31 +33567,31 @@ msgstr "해당 종류의 매트릭스에 대한 대역폭을 지정할 수 없�
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
 msgid "Invalid row in matrix"
-msgstr "잘못된 행"
+msgstr "행렬의 행이 잘못되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr "이 매트릭스의 행에 대한 데이터가 너무 많습니다."
+msgstr "행렬의 행에 대한 데이터가 너무 많습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
 msgid "Too much data for this matrix."
-msgstr "이 매트릭스에 대한 데이터가 너무 많습니다."
+msgstr "행렬에 대한 데이터가 너무 많습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr "매트릭스 요소를 읽을 수 없음"
+msgstr "행렬 요소를 읽을 수 없습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr "매트릭스 인덱스를 읽을 수 없습니다"
+msgstr "행렬의 인덱스를 읽을 수 없습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
 msgid "Unknown matrix type"
-msgstr "알 수 없는 매트릭스 타입"
+msgstr "알 수 없는 행렬 유형"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
 msgid "Missing matrix type"
-msgstr "매트릭스 타입 누락"
+msgstr "행렬 유형이 누락되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
@@ -33601,14 +33601,13 @@ msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr "정의되지 않은 매트릭스에서 행을 읽으려고 했습니다."
+msgstr "정의되지 않은 행렬에서 행을 읽으려고 했습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr "매트릭스 포인터가 null입니다."
+msgstr "행렬 포인터가 null입니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
-#, fuzzy
 msgid "Typ-Min-Max Values requires at least Typ."
 msgstr "Typ-Min-Max 값에는 최소한 Typ가 필요합니다."
 
@@ -33681,7 +33680,7 @@ msgstr "알 수 없는 비아 유형 %d"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 합니다."
+msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 합니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 #, fuzzy
