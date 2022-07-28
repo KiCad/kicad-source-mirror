@@ -35,6 +35,7 @@
 #include <math/vector2d.h>
 #include <widgets/msgpanel.h>
 #include <memory>
+#include <mutex>
 
 #include <gal/cursors.h>
 
@@ -252,6 +253,8 @@ protected:
     wxLongLong               m_lastRefresh;      ///< Last timestamp when the panel was refreshed
     bool                     m_pendingRefresh;   ///< Is there a redraw event requested?
     wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
+
+    std::mutex               m_refreshMutex;     ///< Blocks multiple calls to the draw
 
     /// True if GAL is currently redrawing the view
     bool                     m_drawing;
