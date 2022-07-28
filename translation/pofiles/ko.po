@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-28 15:53+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"Last-Translator: YunJiSang <js_7744@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -31538,9 +31538,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "%s의 단열 스포크 폭 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "%s %s 확인 중: %s."
+msgstr "확인 중 %s 최소 스포크 개수: %s."
 
 #: pcbnew/drc/drc_engine.cpp:880
 #, c-format
@@ -31555,9 +31555,9 @@ msgid "undefined"
 msgstr "정의되지 않음"
 
 #: pcbnew/drc/drc_engine.cpp:910
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "배선 폭 확인 중..."
+msgstr "확인 중 %s 배선 폭: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:916
 #, c-format
