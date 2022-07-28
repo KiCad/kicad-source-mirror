@@ -91,7 +91,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_violationsTitleTemplate = m_notebook->GetPageText( 1 );
 
     // Hack to keep from changing translated string in 6.0.x
-    m_violationsTitleTemplate.Replace( wxT( "%d" ), wxT( "%s" ) );
+    m_violationsTitleTemplate.Append( wxT( " (%s)" ) );
 
     m_errorsBadge->SetMaximumNumber( 999 );
     m_warningsBadge->SetMaximumNumber( 999 );
