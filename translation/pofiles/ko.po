@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-28 15:53+0000\n"
-"Last-Translator: 김용재 <tpdlqj965@gmail.com>\n"
+"PO-Revision-Date: 2022-07-29 07:19+0000\n"
+"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17749,7 +17749,7 @@ msgstr "다음 라인 모드로 전환"
 
 #: eeschema/tools/ee_actions.cpp:716 eeschema/tools/ee_actions.cpp:711
 msgid "Annotate Automatically"
-msgstr "자동 주석 기능"
+msgstr "자동으로 주석 달기"
 
 #: eeschema/tools/ee_actions.cpp:716 eeschema/tools/ee_actions.cpp:711
 msgid "Toggle automatic annotation of new parts symbols"
@@ -17780,7 +17780,7 @@ msgstr "시트로 들어가기"
 
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:730
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "회로도 편집기에서 선택한 시트의 내용을 변경합니다"
+msgstr "회로도 편집기에서 제공된 시트의 내용을 변경합니다"
 
 #: eeschema/tools/ee_actions.cpp:740 eeschema/tools/ee_actions.cpp:735
 msgid "Display the selected sheet's contents in the schematic editor"
