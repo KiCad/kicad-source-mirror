@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-16 04:16+0000\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1505,9 +1505,8 @@ msgid "Warning"
 msgstr "Atenção"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Houve um erro ao abrir o arquivo"
+msgstr "Alerta de abertura de arquivo"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -12760,14 +12759,15 @@ msgstr ""
 "mesmo quando a ferramenta arame não estiver ativa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Remova o destaque da rede"
+msgstr "<ESC> limpa o destaque da net"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"O primeiro <ESC> na ferramenta de seleção limpa a seleção, o próximo limpa o "
+"realce da net"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -17620,14 +17620,12 @@ msgid "Change existing item to a text comment"
 msgstr "Transforma o item existente num comentário de texto"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Muda para texto"
+msgstr "Altera para a caixa de texto"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Transforma o item existente num comentário de texto"
+msgstr "Altera o item existente numa caixa de texto"
 
 #: eeschema/tools/ee_actions.cpp:520 eeschema/tools/ee_actions.cpp:515
 msgid "Cleanup Sheet Pins"
@@ -18235,9 +18233,8 @@ msgid "Edit '%s' Field"
 msgstr "Edite o campo '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "Vazio"
+msgstr "<vazio>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106 eeschema/tools/sch_edit_tool.cpp:1944
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -19465,9 +19462,8 @@ msgid "Previous Layer"
 msgstr "Camada anterior"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Mova a placa para cima"
+msgstr "Move a camada para cima"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -19476,9 +19472,8 @@ msgid "Move Current Layer Up"
 msgstr "Move a camada atual para cima"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Mova placa para baixo"
+msgstr "Move a camada para baixo"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -39088,9 +39083,8 @@ msgid "Toggle net highlighting"
 msgstr "Alterna o destaque de rede"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
-msgstr "Destaca a rede selecionada"
+msgstr "Realce a net selecionada"
 
 #: pcbnew/tools/pcb_actions.cpp:771
 msgid "Highlight all copper items on the selected net(s)"
@@ -39786,18 +39780,16 @@ msgid "Resolved clearance"
 msgstr "Isolamento resolvido"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Isolamento da ilha:"
+msgstr "Isolamento atual"
 
 #: pcbnew/tools/pcb_control.cpp:1301
 msgid "Resolved hole clearance"
 msgstr "Isolamento do furo resolvido"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Isolamento do furo a furo:"
+msgstr "Isolamento atual do furo"
 
 #: pcbnew/tools/pcb_control.cpp:1332
 msgid "Resolved edge clearance"
