@@ -174,6 +174,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
 void EDA_DRAW_PANEL_GAL::DoRePaint()
 {
+    if( !m_refreshMutex.try_lock() )
+        return;
+
+    std::lock_guard<std::mutex> lock( m_refreshMutex, std::adopt_lock );
+
     // Repaint the canvas, and fix scrollbar cursors
     // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
     // it can be called outside a wxPaintEvent.
