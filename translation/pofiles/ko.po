@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-28 15:53+0000\n"
-"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5518,11 +5518,11 @@ msgstr "논리 라이브러리 이름에 잘못된 문자가 있음"
 
 #: common/lib_table_grid_tricks.cpp:49
 msgid "Activate selected"
-msgstr "선택 활성화"
+msgstr "선택대상 활성화"
 
 #: common/lib_table_grid_tricks.cpp:51
 msgid "Deactivate selected"
-msgstr "선택 비활성화"
+msgstr "선택대상 비활성화"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -7765,7 +7765,7 @@ msgstr "선택"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Recurse into subsheets"
-msgstr "하위 시트로 반복"
+msgstr "하위 시트로 되돌아가기"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -9648,7 +9648,7 @@ msgstr "그룹 선택됨"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
 msgid "Filter by unit:"
-msgstr "단위별로 필터링:"
+msgstr "단위로 필터링:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
