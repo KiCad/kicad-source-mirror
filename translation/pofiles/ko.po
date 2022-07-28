@@ -16,13 +16,14 @@
 # 이기형 <oddlight0@gmail.com>, 2022.
 # kmn4555 <kmn4555@naver.com>, 2022.
 # ky107601 <qldkr1@naver.com>, 2022.
+# 김용재 <tpdlqj965@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-28 14:47+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: 김용재 <tpdlqj965@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -26993,7 +26994,7 @@ msgstr "채워지지 않은 원의 경우 선 너비가 0보다 커야 합니다
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
 #, fuzzy
 msgid "Rectangle cannot be empty."
-msgstr "직사각형은 비어있을 수 없습니다."
+msgstr "사각형은 비워둘 수 없습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
 msgid "Line width must be greater than zero for an unfilled rectangle."
@@ -31698,7 +31699,7 @@ msgstr "구역"
 #: pcbnew/drc/drc_engine.cpp:1365
 #, fuzzy, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "영역 %s 열 릴리프 갭: %s."
+msgstr "%s 단열판 격차: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1382
 #, c-format
@@ -32828,7 +32829,6 @@ msgstr "(PTH 패드에는 구리레이어가 없습니다)"
 
 #: pcbnew/footprint.cpp:2334 pcbnew/footprint.cpp:2337
 #: pcbnew/footprint.cpp:2324
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH 패드의 홀은 구리를 남기지 않습니다)"
 
@@ -33462,24 +33462,22 @@ msgid "Capacitance matrix is incorrect"
 msgstr "정전 용량이 잘못되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "단위 길이당 정전 용량"
+msgstr "정전 용량 행렬이 널 포인터입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:661
 #, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "단위 길이당 인덕턴스"
+msgstr "인덕턴스 행렬이 정의되지 않았습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:667
 #, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "단위 길이당 인덕턴스"
+msgstr "인덕턴스 행렬이 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "단위 길이당 인덕턴스"
+msgstr "인덕턴스 행렬이 널포인터입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:689
 msgid "Cannot open file "
@@ -33633,14 +33631,12 @@ msgid "Can't read a R, L or C value for a pin."
 msgstr "핀에 대한 R, L 또는 C 값을 읽을 수 없습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "잘못된 핀 이름 정의"
+msgstr "[Pin]에 필드 이름이 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "상위 항목 존재하지 않음"
+msgstr "[Pin]에서 누락된 인수"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 #, fuzzy
@@ -33693,12 +33689,12 @@ msgstr "임시 파일 '%s'의 이름을 '%s'(으)로 변경할 수 없음"
 #: pcbnew/ibis/kibis.cpp:644
 #, fuzzy
 msgid "Error while reading temporary file"
-msgstr "파일을 읽는 중에 오류가 발생하였습니다."
+msgstr "임시 파일을 읽는 동안 오류가 발생했습니다."
 
 #: pcbnew/ibis/kibis.cpp:652
 #, fuzzy
 msgid "Error while creating temporary file"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "임시 파일을 만드는 동안 오류가 발생했습니다."
 
 #: pcbnew/ibis/kibis.cpp:705
 #, fuzzy
@@ -33741,9 +33737,8 @@ msgstr ""
 "모델은 파형 쌍을 가지지 않습니다, [Ramp]를 대신 사용 해보세요, 정확도 낮음"
 
 #: pcbnew/ibis/kibis.cpp:1122
-#, fuzzy
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr "모델에는 처음 두 개를 사용하는 2개 이상의 파형 쌍이 있습니다."
+msgstr "모델에는 처음 2 개를 사용하는 2개 이상의 파형 쌍이 있습니다."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
@@ -37286,9 +37281,8 @@ msgid "Violation Report"
 msgstr "위반 사항 심각도"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "배선 길이"
+msgstr "연결되지 않은 길이"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
 #, fuzzy
@@ -37312,7 +37306,7 @@ msgstr "다음을 위한 킵아웃 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:285
 #, fuzzy, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 높이 제한: min %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1168
@@ -37347,7 +37341,7 @@ msgstr "다음을 위한 비아 직경 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:361
 #, fuzzy, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "직경 제한: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 직경 제한: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #, fuzzy
@@ -37363,7 +37357,7 @@ msgstr "다음을 위한 비아 환형 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:345
 #, fuzzy, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "랜드 폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "고리 너비 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1129
