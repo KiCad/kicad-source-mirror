@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-28 15:53+0000\n"
-"Last-Translator: YunJiSang <js_7744@naver.com>\n"
+"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7277,7 +7277,7 @@ msgstr "파일 '%s'은(는) 이미 목록에 있습니다."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "심볼 풋프린트 관련성 파일 (.equ)"
+msgstr "심볼 풋프린트 관련된 파일 (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -7389,7 +7389,7 @@ msgstr "풋프린트 보기"
 #: pcbnew/toolbars_footprint_viewer.cpp:107
 #: cvpcb/display_footprints_frame.cpp:322
 msgid "Automatic Zoom on footprint change"
-msgstr "자동 확대/축소 설치 공간 변경"
+msgstr "자동 줌 확대/축소 설치 공간 변경"
 
 #: cvpcb/display_footprints_frame.cpp:413
 #: cvpcb/display_footprints_frame.cpp:406
