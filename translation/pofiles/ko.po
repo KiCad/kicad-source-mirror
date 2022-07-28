@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-28 15:19+0000\n"
-"Last-Translator: YunJiSang <js_7744@naver.com>\n"
+"PO-Revision-Date: 2022-07-28 15:53+0000\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -29424,7 +29424,7 @@ msgstr "선택된 심볼에 상응하는 연결부 강조"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr "교차 조사된(cross-probed) 기록들을 현재 뷰에서 볼 수 있도록 합니다."
+msgstr "교차 조사된(cross-probed) 기록들을 현재 뷰에서 볼 수 있도록 하기"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -30728,7 +30728,6 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -31059,9 +31058,9 @@ msgstr ""
 " * via\\_diameter\n"
 " * zone\\_connection\n"
 "\n"
-"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 실행되"
-"지 않습니다. 'mechanical_clearance' 및 'mechanical_hole_clearance' 규칙이 있"
-"습니다..\n"
+"참고: `clearance` 및 `hole_clearance` 규칙은 동일한 네트의 항목에 대해 "
+"실행되지 않습니다. 'mechanical_clearance' 및 'mechanical_hole_clearance' "
+"규칙이 있습니다..\n"
 "<br>\n"
 "\n"
 "### 개체 형식\n"
@@ -31209,13 +31208,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -31282,6 +31281,13 @@ msgstr ""
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # 구성 요소와 보드 가장자리 사이에 기계적 간격 적용\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31519,7 +31525,7 @@ msgstr "%s 확인 중; 홀 클리어런스: %s."
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s 최대 스큐 확인 중 : %s"
+msgstr "%s 최대 스큐 확인 중 : %s."
 
 #: pcbnew/drc/drc_engine.cpp:862
 #, c-format
@@ -31539,7 +31545,7 @@ msgstr "%s %s 확인 중: %s."
 #: pcbnew/drc/drc_engine.cpp:880
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "%s 구역 연결 확인 중: %s"
+msgstr "%s 구역 연결 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:896 pcbnew/drc/drc_engine.cpp:897
 #: pcbnew/drc/drc_engine.cpp:898 pcbnew/tools/board_inspection_tool.cpp:202
@@ -31554,9 +31560,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "배선 폭 확인 중..."
 
 #: pcbnew/drc/drc_engine.cpp:916
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "기판 구성 제약 코트야드"
+msgstr "보드 트랙 폭 제한 검사: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:924
 #, c-format
@@ -32816,9 +32822,9 @@ msgid "(expected 'SMD'; actual '%s')"
 msgstr "(기대값 'SMD'; 실제 '%s')"
 
 #: pcbnew/footprint.cpp:2287 pcbnew/footprint.cpp:2274
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr "(예측 'Other', 실제 '%s')"
+msgstr "(예측 'Other'; 실제 '%s')"
 
 #: pcbnew/footprint.cpp:2314 pcbnew/footprint.cpp:2301
 msgid "(PTH pad has no copper layers)"
@@ -33658,18 +33664,16 @@ msgid "Internal error detected, a waveform should exist"
 msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 합니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
-#, fuzzy
 msgid "Internal error: Bad parser context."
-msgstr "내부 오류: 잘못된 파서 컨텍스트입니다."
+msgstr "내부 오류: 잘못된 parser 문맥입니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
 msgid "Missing keyword."
-msgstr "키워드를 빼먹음"
+msgstr "키워드가 없음."
 
 #: pcbnew/ibis/kibis.cpp:396
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "형상에 포인트가 없습니다."
+msgstr "파형의 포인트가 2개 미만임"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
 #, fuzzy
@@ -33682,14 +33686,12 @@ msgid "Cannot remove temporary output file"
 msgstr "임시 파일 '%s'의 이름을 '%s'(으)로 변경할 수 없음"
 
 #: pcbnew/ibis/kibis.cpp:644
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "임시 파일을 읽는 동안 오류가 발생했습니다."
+msgstr "임시 파일을 읽는 중 오류 발생"
 
 #: pcbnew/ibis/kibis.cpp:652
-#, fuzzy
 msgid "Error while creating temporary file"
-msgstr "임시 파일을 만드는 동안 오류가 발생했습니다."
+msgstr "임시 파일을 만드는 동안 오류 발생"
 
 #: pcbnew/ibis/kibis.cpp:705
 #, fuzzy
@@ -33710,12 +33712,11 @@ msgstr "하강 에지(Edge)가 OFF time보다 더 깁니다."
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr "모델에는 하나의 파형쌍(waveform pair)만 있어 정확도가 감소합니다."
+msgstr "모델에는 하나의 파형쌍(waveform pair)만 있어 정확도가 감소함"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
-#, fuzzy
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr "드라이버는 최소한 풀업 또는 풀다운이 필요합니다."
+msgstr "드라이버는 최소한 풀업 또는 풀다운이 필요"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
@@ -37280,9 +37281,8 @@ msgid "Uncoupled Length"
 msgstr "연결되지 않은 길이"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "차동 비결합 길이 너무 긺"
+msgstr "결합되지 않은 길이의 차동 쌍 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:780
@@ -37306,14 +37306,13 @@ msgstr "해결된 높이 제한: min %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1168
 #: pcbnew/tools/board_inspection_tool.cpp:1184
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "텍스트 두께가 범위를 벗어남"
+msgstr "텍스트 두께 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 두께 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:1073
@@ -37322,9 +37321,9 @@ msgid "Track width resolution for:"
 msgstr "다음을 위한 배선 폭 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 너비 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1092
@@ -37334,9 +37333,9 @@ msgstr "다음을 위한 비아 직경 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "해결된 직경 제한: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 직경 제한: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #, fuzzy
@@ -37350,9 +37349,9 @@ msgid "Via annular width resolution for:"
 msgstr "다음을 위한 비아 환형 폭 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "고리 너비 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 랜드 폭 제약: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1129
@@ -37510,9 +37509,9 @@ msgstr "다음을 위한 킵아웃 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:642
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "최소 단열판 스포크 수:"
+msgstr "최소 단열판 스포크 수: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:651
 #: pcbnew/tools/board_inspection_tool.cpp:699
@@ -37560,9 +37559,8 @@ msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:767
 #: pcbnew/tools/board_inspection_tool.cpp:783
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "차동 비결합 길이 너무 긺"
+msgstr "최대 길이를 벗어난 차동 쌍 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:772
 #: pcbnew/tools/board_inspection_tool.cpp:788
@@ -37969,9 +37967,9 @@ msgstr "네트 이름은 빈 칸이 될 수 없습니다."
 
 #: pcbnew/tools/footprint_editor_control.cpp:414
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "라이브러리에서 풋프린트를 찾을 수 없음"
+msgstr "풋프린트 이름 '%s'가 이미 라이브러리 '%s'에서 사용됨."
 
 #: pcbnew/tools/footprint_editor_control.cpp:739
 #: pcbnew/tools/footprint_editor_control.cpp:715
@@ -39565,9 +39563,8 @@ msgid "Footprint Name"
 msgstr "풋프린트 이름"
 
 #: pcbnew/tools/pcb_control.cpp:1271 pcbnew/tools/pcb_control.cpp:1279
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "해결된 클리어런스: %s."
+msgstr "해결된 클리어런스"
 
 #: pcbnew/tools/pcb_control.cpp:1276
 #, fuzzy
@@ -39575,24 +39572,20 @@ msgid "Actual clearance"
 msgstr "마스크 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1317 pcbnew/tools/pcb_control.cpp:1301
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "해결된 클리어런스: %s."
+msgstr "해결된 클리어런스 홀"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "홀 간 클리어런스:"
+msgstr "실제 홀 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1354 pcbnew/tools/pcb_control.cpp:1332
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "해결된 클리어런스: %s."
+msgstr "해결된 클리어런스 가장자리"
 
 #: pcbnew/tools/pcb_control.cpp:1359 pcbnew/tools/pcb_control.cpp:1337
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "해결된 클리어런스: %s."
+msgstr "해결된 클리어런스 마진"
 
 #: pcbnew/tools/pcb_control.cpp:1368 pcbnew/tools/pcb_control.cpp:1347
 #: pcbnew/tools/pcb_control.cpp:1216
@@ -39726,9 +39719,8 @@ msgid "Checking null tracks and vias..."
 msgstr "배선 폭 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "트랙 및 비아 모두 편집"
+msgstr "Null 트랙 및 비아 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 msgid "Checking redundant tracks..."
@@ -39744,9 +39736,8 @@ msgid "Checking shorting tracks..."
 msgstr "풋프린트 확인..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "두 개의 네트를 단락시켜 제거"
+msgstr "단락 트랙 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:110
 #, fuzzy
@@ -39754,9 +39745,8 @@ msgid "Checking tracks in pads..."
 msgstr "배선 폭 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "패드 내부 배선 제거"
+msgstr "패드에서 트랙을 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:126
 #, fuzzy
@@ -39779,9 +39769,8 @@ msgid "Checking collinear tracks..."
 msgstr "홀 클리어런스 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "동일 선상의 배선 병합"
+msgstr "동일 선상에 있는 트랙 병합 중..."
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
@@ -39948,7 +39937,7 @@ msgstr "잠긴 항목 건너뛰기"
 #: pcbnew/widgets/appearance_controls.cpp:358
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
-msgstr "풋프린트를 움직이는 동안 겹치는 영역에서  그림자로 표시"
+msgstr "풋프린트를 움직이는 동안 겹치는 영역에서 그림자로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 #: pcbnew/widgets/appearance_controls.cpp:358
