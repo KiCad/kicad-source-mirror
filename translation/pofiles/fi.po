@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-18 09:37-0700\n"
-"PO-Revision-Date: 2022-07-04 20:18+0000\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -29815,7 +29815,7 @@ msgstr "Tuo muu kuin KiCad-levytiedosto"
 
 #: pcbnew/files.cpp:213
 msgid "Create a new project for this board"
-msgstr "Luo uusi projekti tälle taululle"
+msgstr "Luo uusi projekti tälle piirilevylle"
 
 #: pcbnew/files.cpp:215
 msgid ""
@@ -35366,7 +35366,7 @@ msgstr "Korjaa Piirilevy"
 
 #: pcbnew/tools/pcb_actions.cpp:1119
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "Suorita erilaisia diagnooseja ja yritä korjata levy"
+msgstr "Suorita erilaisia diagnooseja ja yritä korjata piirilevy"
 
 #: pcbnew/tools/pcb_actions.cpp:1124
 msgid "Repair Footprint"
@@ -35481,7 +35481,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1259
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja jäljet kytkentäkaavioarkilla"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
 msgid "Items in Same Hierarchical Sheet"
@@ -35489,7 +35489,7 @@ msgstr "Kohteet Samassa Hierarkkisessa Lehdessä"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja raidat samalla kaavakkeella"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 msgid "Filter Selected Items..."
@@ -35545,7 +35545,9 @@ msgstr "Aseta ulkopuoliset jalanjäljet"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Performs automatic placement of components outside board area"
-msgstr "Suorittaa komponentit automaattisesti levyn alueen ulkopuolelle"
+msgstr ""
+"Suorittaa komponettien sijoituksen automaattisesti piirilevyn alueen "
+"ulkopuolelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route Single Track"
@@ -35553,7 +35555,7 @@ msgstr "Reititä Yksittäinen Johdin"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route tracks"
-msgstr "Reititä Johtimia"
+msgstr "Reititä johtimia"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route Differential Pair"
@@ -35778,7 +35780,7 @@ msgstr "Vyöhykkeiden tarkistaminen"
 #: pcbnew/tools/zone_filler_tool.cpp:88 pcbnew/tools/zone_filler_tool.cpp:161
 #: pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Fill Zone(s)"
-msgstr "Täytä alue (t)"
+msgstr "Täytä alue"
 
 #: pcbnew/tools/zone_filler_tool.cpp:130
 msgid "Show DRC rules"
