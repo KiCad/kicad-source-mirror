@@ -96,6 +96,11 @@ public:
         return m_type;
     }
 
+    wxString TypeName() const
+    {
+        return SHAPE_TYPE_asString( m_type );
+    }
+
     virtual bool HasIndexableSubshapes() const
     {
         return false;

@@ -290,8 +290,8 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -372,8 +372,8 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -429,8 +429,8 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aB, int a
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
@@ -445,8 +445,8 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
@@ -461,8 +461,8 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     bool rv = aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation );
 
@@ -484,8 +484,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     const SHAPE_LINE_CHAIN lc( aA );
 
@@ -501,10 +501,6 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
-
     const SHAPE_LINE_CHAIN lc( aA );
 
     bool rv = Collide( aB, lc, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
@@ -520,8 +516,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     int      closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -592,8 +588,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aC
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     const SHAPE_LINE_CHAIN lc( aA );
 
@@ -610,8 +606,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     int      closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -667,8 +663,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClear
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     wxASSERT_MSG( !aMTV, wxString::Format( wxT( "MTV not implemented for %s : %s collisions" ),
-                                           aA.Type(),
-                                           aB.Type() ) );
+                                           aA.TypeName(),
+                                           aB.TypeName() ) );
 
     SEG mediatrix( aA.GetCenter(), aB.GetCenter() );
 
