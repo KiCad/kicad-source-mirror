@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-29 07:19+0000\n"
-"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17884,7 +17884,7 @@ msgstr "마지막 세그먼트 되돌리기"
 
 #: eeschema/tools/ee_actions.cpp:832 eeschema/tools/ee_actions.cpp:827
 msgid "Walks the current line back one segment."
-msgstr "현재 선을 1 세그먼트 만큼 되돌립니다."
+msgstr "현재의 선을 1 세그먼트만큼 되돌립니다."
 
 #: eeschema/tools/ee_actions.cpp:838 eeschema/tools/ee_actions.cpp:833
 msgid "Switch Segment Posture"
@@ -33632,8 +33632,9 @@ msgid "Invalid field name in [Pin]"
 msgstr "잘못된 필드 이름 [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
+#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "[Pin]에서 누락된 인수"
+msgstr "[Pin]에 인수 누락"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
