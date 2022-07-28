@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-28 14:47+0000\n"
-"Last-Translator: 김용재 <tpdlqj965@gmail.com>\n"
+"PO-Revision-Date: 2022-07-28 15:19+0000\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -21555,7 +21555,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "표피 깊이 100%를 위한 주파수:"
+msgstr "표면 효과 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
@@ -21826,9 +21826,8 @@ msgid "Track thickness:"
 msgstr "배선 두께:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "시간 단계:"
+msgstr "퓨즈 시간:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
@@ -26992,9 +26991,8 @@ msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "채워지지 않은 원의 경우 선 너비가 0보다 커야 합니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
-msgstr "사각형은 비워둘 수 없습니다."
+msgstr "사각형을 비워 둘 수 없습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
 msgid "Line width must be greater than zero for an unfilled rectangle."
