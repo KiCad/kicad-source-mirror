@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-18 09:37-0700\n"
-"PO-Revision-Date: 2022-07-17 14:14+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2022-07-30 00:45+0000\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -6757,7 +6757,7 @@ msgstr "파일 '%s'은(는) 이미 목록에 있습니다."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "심볼 풋프린트 관련성 파일 (.equ)"
+msgstr "심볼 풋프린트 관련된 파일 (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
