@@ -149,6 +149,11 @@ void DIALOG_DRC::initValues()
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
+    // Hack to keep from changing translated string in 6.0.x
+    m_markersTitleTemplate.Replace( wxT( "%d" ), wxT( "%s" ) );
+    m_unconnectedTitleTemplate.Replace( wxT( "%d" ), wxT( "%s" ) );
+    m_footprintsTitleTemplate.Replace( wxT( "%d" ), wxT( "%s" ) );
+
     auto cfg = m_frame->GetPcbNewSettings();
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );

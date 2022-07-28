@@ -118,7 +118,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
         if( m_TextCtrl->GetValue().IsEmpty() )
         {
             // Other text items do not have defined extents, and so will disappear if empty
-            DisplayError( this, _( "Text can not be empty." ) );
+            DisplayError( this, _( "Value may not be empty." ) );
             return false;
         }
         else

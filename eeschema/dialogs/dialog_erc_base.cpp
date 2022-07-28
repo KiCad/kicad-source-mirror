@@ -54,7 +54,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	violationsPanel->SetSizer( bViolationsSizer );
 	violationsPanel->Layout();
 	bViolationsSizer->Fit( violationsPanel );
-	m_notebook->AddPage( violationsPanel, _("Violations (%s)"), false );
+	m_notebook->AddPage( violationsPanel, _("Violations (%d)"), false );
 
 	bMainSizer->Add( m_notebook, 1, wxEXPAND, 5 );
 
