@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-29 07:19+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"Last-Translator: YunJiSang <js_7744@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17796,7 +17796,7 @@ msgstr "회로도 편집기의 상위 시트를 표시합니다"
 
 #: eeschema/tools/ee_actions.cpp:751 eeschema/tools/ee_actions.cpp:746
 msgid "Navigate Up"
-msgstr "페이지로 이동"
+msgstr "위로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:751 eeschema/tools/ee_actions.cpp:746
 msgid "Navigate up one sheet in the hierarchy"
@@ -18043,7 +18043,7 @@ msgstr "심볼은 다중 단위가 아닙니다"
 #: eeschema/tools/sch_edit_tool.cpp:462 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:419 eeschema/tools/sch_edit_tool.cpp:456
 msgid "Edit Main Fields"
-msgstr "주요 필드 편집"
+msgstr "기본 필드 편집하기"
 
 #: eeschema/tools/sch_edit_tool.cpp:483 eeschema/tools/sch_edit_tool.cpp:477
 msgid "Change To"
