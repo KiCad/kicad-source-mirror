@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 09:37-0700\n"
+"POT-Creation-Date: 2022-07-27 19:48-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -17419,11 +17419,17 @@ msgstr "Modify drawing properties"
 msgid "The arc angle cannot be zero."
 msgstr "The arc angle cannot be zero."
 
-msgid "The radius cannot be zero."
-msgstr "The radius cannot be zero."
+msgid "The item thickness must be greater than zero."
+msgstr "The item thickness must be greater than zero."
+
+msgid "The radius must be greater than zero."
+msgstr "The radius must be greater than zero."
 
 msgid "The rectangle cannot be empty."
 msgstr "The rectangle cannot be empty."
+
+msgid "The polygon outline thickness must be >= 0."
+msgstr "The polygon outline thickness must be >= 0."
 
 msgid "Error List"
 msgstr "Error List"
@@ -26410,6 +26416,9 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "The radius cannot be zero."
+#~ msgstr "The radius cannot be zero."
 
 #, c-format
 #~ msgid "Unit %c"
@@ -38164,9 +38173,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ "This item was on a non-existing or forbidden layer.\n"
 #~ "It has been moved to the first allowed layer. Please fix it."
 
-#~ msgid "The radius must be greater than zero."
-#~ msgstr "The radius must be greater than zero."
-
 #~ msgid "The rectangle can not be empty."
 #~ msgstr "The rectangle can not be empty."
 
@@ -43303,12 +43309,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "The start and end points cannot be the same."
 #~ msgstr "The start and end points cannot be the same."
-
-#~ msgid "The polygon outline thickness must be >= 0."
-#~ msgstr "The polygon outline thickness must be >= 0."
-
-#~ msgid "The item thickness must be greater than zero."
-#~ msgstr "The item thickness must be greater than zero."
 
 #~ msgid "Bezier point C1 X:"
 #~ msgstr "Bezier point C1 X:"
