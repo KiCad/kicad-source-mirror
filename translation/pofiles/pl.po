@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-16 04:16+0000\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1462,9 +1462,8 @@ msgid "Warning"
 msgstr "Ostrzeżenie"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Błąd otwarcia pliku"
+msgstr "Ostrzeżenie o otwarciu pliku"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -12461,14 +12460,15 @@ msgstr ""
 "niepołączony pin, nawet jeśli narzędzie to będzie nieaktywne"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Skasuj podświetlenie"
+msgstr "<ESC> kasuje podświetlenie sieci"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Pierwsze naciśnięcie <ESC> w narzędziach wyboru kasuje zaznaczenie, następne "
+"kasuje podświetlenie sieci"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -17122,14 +17122,12 @@ msgid "Change existing item to a text comment"
 msgstr "Zmienia istniejący element w komentarz tekstowy"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Zmień na tekst"
+msgstr "Zmień na ramkę tekstu"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Zmienia istniejący element w komentarz tekstowy"
+msgstr "Zmienia istniejący element w ramkę tekstową"
 
 #: eeschema/tools/ee_actions.cpp:520
 msgid "Cleanup Sheet Pins"
@@ -17715,9 +17713,8 @@ msgid "Edit '%s' Field"
 msgstr "Edytuj pole '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "Pusty"
+msgstr "<pusty>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18916,9 +18913,8 @@ msgid "Previous Layer"
 msgstr "Poprzednia warstwa"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Przesuń płytkę w górę"
+msgstr "Przesuń warstwę w górę"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -18926,9 +18922,8 @@ msgid "Move Current Layer Up"
 msgstr "Przesuń bieżącą warstwę w górę"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Przesuń płytkę w dół"
+msgstr "Przesuń warstwę w dół"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -21081,9 +21076,9 @@ msgid "Linear resistance:"
 msgstr "Rezystancja liniowa:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "Częstotliwość dla 100% przenikalności skóry:"
+msgstr "Częstotliwość dla 100% skutecznej przenikalności skóry:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
@@ -26471,60 +26466,51 @@ msgid "Line Segment Properties"
 msgstr "Właściwości Segmentów"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "Właściwości Okręgów"
+msgstr "Właściwości Krzywej"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
 msgstr "Modyfikuj właściwości rysunków"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
 msgstr "Kąt łuku nie może być zerowy."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Nieprawidłowy łuk o promieniu %f i kącie %f"
+msgstr "Nieprawidłowy łuk o promieniu %f i kącie %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
-#, fuzzy
 msgid "Line width must be greater than zero."
-msgstr "Promień musi być większy niż zero."
+msgstr "Grubość linii musi być większa niż zero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
 msgstr "Promień musi być większy niż zero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "Szerokość linii nie może wynosić 0 dla niewypełnionych kształtów."
+msgstr "Grubość linii musi być większa niż zero dla niewypełnionego okręgu."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
 msgstr "Prostokąt nie może być pusty."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "Szerokość linii nie może wynosić 0 dla niewypełnionych kształtów."
+msgstr "Grubość linii musi być większa niż zero dla niewypełnionego prostokąta."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "Szerokość linii nie może wynosić 0 dla niewypełnionych kształtów."
+msgstr "Grubość linii musi być większa niż zero dla niewypełnionych kształtów."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "Szerokość linii nie może wynosić 0 dla niewypełnionych kształtów."
+msgstr "Grubość linii musi być większa niż zero dla niewypełnionych krzywych."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
@@ -37167,9 +37153,8 @@ msgid "Draw an arc"
 msgstr "Rysuje łuk"
 
 #: pcbnew/tools/drawing_tool.cpp:707
-#, fuzzy
 msgid "Place an image"
-msgstr "Umieść footpprint"
+msgstr "Umieść obraz"
 
 #: pcbnew/tools/drawing_tool.cpp:954
 msgid "Place a text"
@@ -38224,7 +38209,6 @@ msgid "Toggle net highlighting"
 msgstr "Przełącz podświetlenie danej sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Podświetl wybraną sieć"
 
@@ -38915,34 +38899,28 @@ msgid "Footprint Name"
 msgstr "Nazwa footprintu"
 
 #: pcbnew/tools/pcb_control.cpp:1271
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "Prześwit pola lutowniczego: %s."
+msgstr "Rozpoznany prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Prześwit pola lutowniczego:"
+msgstr "Obecny prześwit"
 
 #: pcbnew/tools/pcb_control.cpp:1317
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "Prześwit pola lutowniczego: %s."
+msgstr "Rozpoznany prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Prześwit pomiędzy otworami:"
+msgstr "Obecny prześwit otworu"
 
 #: pcbnew/tools/pcb_control.cpp:1354
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Prześwit pola lutowniczego: %s."
+msgstr "Rozpoznany prześwit względem krawędzi"
 
 #: pcbnew/tools/pcb_control.cpp:1359
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Prześwit pola lutowniczego: %s."
+msgstr "Rozpoznany prześwit względem marginesu"
 
 #: pcbnew/tools/pcb_control.cpp:1368
 msgid "Selected Items"
@@ -39136,14 +39114,12 @@ msgid "Show copper zones"
 msgstr "Pokaż strefy miedzi"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Images"
-msgstr "Obraz"
+msgstr "Obrazy"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "Pokaż jako odbicie lustrzane"
+msgstr "Pokazuje obrazy użytkownika"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Front"
