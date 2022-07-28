@@ -127,8 +127,8 @@ public:
      */
     enum TREE_COLS
     {
-        PART_COL = 0,   ///< Part name column
-        DESC_COL,       ///< Part description column
+        NAME_COL = 0,   ///< Library or library item name column
+        DESC_COL,       ///< Library or library description column
         NUM_COLS        ///< The number of tree columns
     };
 
@@ -207,6 +207,7 @@ public:
      */
     void FinishTreeInitialization();
 
+    void OnSize( wxSizeEvent& aEvent );
     /**
      * Return the alias for the given item.
      *

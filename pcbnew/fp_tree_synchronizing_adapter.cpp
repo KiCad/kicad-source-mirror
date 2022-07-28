@@ -180,7 +180,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
     switch( aCol )
     {
-    case 0:
+    case NAME_COL:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
             // Do not use GetLoadedFPID(); it returns m_footprintNameWhenLoaded.
@@ -203,7 +203,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
         break;
 
-    case 1:
+    case DESC_COL:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
             node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetDescription();

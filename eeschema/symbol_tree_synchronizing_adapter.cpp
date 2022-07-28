@@ -222,7 +222,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
     switch( aCol )
     {
-    case 0:
+    case NAME_COL:
         if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
             node->m_Name = m_frame->GetCurSymbol()->GetLibId().GetLibItemName();
 
@@ -245,7 +245,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
         break;
 
-    case 1:
+    case DESC_COL:
         if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
         {
             node->m_Desc = m_frame->GetCurSymbol()->GetDescription();
@@ -294,7 +294,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     }
 
     // The remaining attributes are only for the name column
-    if( aCol != 0 )
+    if( aCol != NAME_COL )
         return false;
 
     LIB_SYMBOL* curSymbol = m_frame->GetCurSymbol();

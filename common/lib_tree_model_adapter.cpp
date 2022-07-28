@@ -79,11 +79,11 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
         m_widget( nullptr )
 {
     // Default column widths
-    m_colWidths[PART_COL] = 360;
+    m_colWidths[NAME_COL] = 300;
     m_colWidths[DESC_COL] = 2000;
 
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-    m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
+    m_colWidths[NAME_COL] = cfg->m_LibTree.column_width;
 }
 
 
@@ -96,7 +96,7 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
     if( m_widget )
     {
         APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-        cfg->m_LibTree.column_width = m_widget->GetColumn( PART_COL )->GetWidth();
+        cfg->m_LibTree.column_width = m_widget->GetColumn( NAME_COL )->GetWidth();
     }
 }
 
@@ -236,28 +236,30 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
 
 void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
-    wxString partHead = _( "Item" );
+    wxString itemHead = _( "Item" );
     wxString descHead = _( "Description" );
 
     // The extent of the text doesn't take into account the space on either side
     // in the header, so artificially pad it
-    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + "MMM", aDataViewCtrl );
+    wxSize itemHeadMinWidth = KIUI::GetTextSize( itemHead + wxT( "MMM" ), aDataViewCtrl );
+    wxSize descHeadMinWidth = KIUI::GetTextSize( descHead + wxT( "MMM" ), aDataViewCtrl );
 
     // Ensure the part column is wider than the smallest allowable width
-    if( m_colWidths[PART_COL] < partHeadMinWidth.x )
-        m_colWidths[PART_COL] = partHeadMinWidth.x;
+    if( m_colWidths[NAME_COL] < itemHeadMinWidth.x )
+        m_colWidths[NAME_COL] = itemHeadMinWidth.x;
 
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    m_col_part = aDataViewCtrl->AppendTextColumn( partHead, PART_COL, wxDATAVIEW_CELL_INERT,
-                                                  m_colWidths[PART_COL] );
+    m_col_part = aDataViewCtrl->AppendTextColumn( itemHead, NAME_COL, wxDATAVIEW_CELL_INERT,
+                                                  m_colWidths[NAME_COL] );
     m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, DESC_COL, wxDATAVIEW_CELL_INERT,
                                                   m_colWidths[DESC_COL] );
 
-    m_col_part->SetMinWidth( partHeadMinWidth.x );
+    m_col_part->SetMinWidth( itemHeadMinWidth.x );
+    m_col_desc->SetMinWidth( descHeadMinWidth.x );
 }
 
 
@@ -350,7 +352,14 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
 
 void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
 {
-    m_col_part->SetWidth( m_colWidths[PART_COL] );
+    m_col_part->SetWidth( m_colWidths[NAME_COL] );
+    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
+{
+    m_colWidths[NAME_COL] = m_col_part->GetWidth();
     m_col_desc->SetWidth( m_colWidths[DESC_COL] );
 }
 
@@ -369,14 +378,14 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     // GTK returns the displayed width of the column, which is not calculated immediately
     if( descWidth > 0 )
     {
-        m_colWidths[PART_COL] = partWidth;
+        m_colWidths[NAME_COL] = partWidth;
         m_colWidths[DESC_COL] = descWidth;
     }
 
-    m_colWidths[PART_COL] += walk;
+    m_colWidths[NAME_COL] += walk;
     m_colWidths[DESC_COL] -= walk;
 
-    m_col_part->SetWidth( m_colWidths[PART_COL] );
+    m_col_part->SetWidth( m_colWidths[NAME_COL] );
     m_col_desc->SetWidth( m_colWidths[DESC_COL] );
     walk = -walk;
 }
