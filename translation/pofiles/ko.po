@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-29 07:19+0000\n"
-"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
+"Last-Translator: 박세훈 <helloworld4327@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10272,7 +10272,7 @@ msgstr "동기화된 핀 편집 모드."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr "동기화 된 핀 모드.  모든 장치에 새 핀이 추가됩니다."
+msgstr "동기화 된 핀 모드.  모든 장치에 새로운 핀이 추가됩니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
@@ -31389,23 +31389,20 @@ msgid "board setup constraints"
 msgstr "기판 설정 제약"
 
 #: pcbnew/drc/drc_engine.cpp:171
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "기판 구성 제약 홀"
+msgstr "보드의 구역 채우기 전략 제한"
 
 #: pcbnew/drc/drc_engine.cpp:176
 msgid "board setup constraints silk"
 msgstr "기판 구성 제약 실크"
 
 #: pcbnew/drc/drc_engine.cpp:182
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "기판 구성 제약 실크"
+msgstr "보드의 최대 실크 텍스트 높이 제한"
 
 #: pcbnew/drc/drc_engine.cpp:188
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "기판 구성 제약 실크"
+msgstr "보드의 최대 실크 텍스트 두께 제한"
 
 #: pcbnew/drc/drc_engine.cpp:194
 msgid "board setup constraints hole"
@@ -31518,9 +31515,9 @@ msgid "Checking %s clearance: %s."
 msgstr "%s 클리어런스 확인 중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:850
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "%s 확인 중; 홀 클리어런스: %s."
+msgstr "%s의 결합되지 않은 최대 길이 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
@@ -31595,9 +31592,9 @@ msgid "Checking %s: min %s."
 msgstr "확인 중 %s: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:975
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "%s 확인 중 클리어런스: %s."
+msgstr "%s의 차동 쌍 유격 확인 중: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, c-format
@@ -32812,9 +32809,9 @@ msgid "Footprint %s"
 msgstr "풋프린트 %s"
 
 #: pcbnew/footprint.cpp:2281 pcbnew/footprint.cpp:2268
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "\"스루홀\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
+msgstr "(예상 '스루 홀'; 실제 '%s')"
 
 #: pcbnew/footprint.cpp:2284 pcbnew/footprint.cpp:2271
 #, c-format
@@ -33627,7 +33624,6 @@ msgid "Invalid pin entry: 6 values from a table with only 3."
 msgstr "잘못된 핀 항목: 3개짜리 테이블에 6개의 값이 있습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
-#, fuzzy
 msgid "Can't read a R, L or C value for a pin."
 msgstr "핀에 대한 R, L 또는 C 값을 읽을 수 없습니다."
 
@@ -33640,24 +33636,20 @@ msgid "Missing argument in [Pin]"
 msgstr "[Pin]에서 누락된 인수"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
-#, fuzzy
 msgid "Wrong number of columns for pin mapping."
 msgstr "핀 매핑에 대한 열 수가 잘못되었습니다."
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "잘못된 배율 번호"
+msgstr "잘못된 차동 핀 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "잘못된 배율 번호"
+msgstr "잘못된 inv 핀 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "알 수 없는 비아 유형 %d"
+msgstr "알 수 없는 파형 타입"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
@@ -33676,14 +33668,12 @@ msgid "waveform has less than two points"
 msgstr "파형의 포인트가 2개 미만임"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
-#, fuzzy
 msgid "Cannot remove temporary input file"
-msgstr "임시 파일 '%s'의 이름을 '%s'(으)로 변경할 수 없음"
+msgstr "임시 입력 파일을 제거할 수 없음"
 
 #: pcbnew/ibis/kibis.cpp:600 pcbnew/ibis/kibis.cpp:662
-#, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr "임시 파일 '%s'의 이름을 '%s'(으)로 변경할 수 없음"
+msgstr "임시 출력 파일을 제거할 수 없음"
 
 #: pcbnew/ibis/kibis.cpp:644
 msgid "Error while reading temporary file"
@@ -33694,13 +33684,11 @@ msgid "Error while creating temporary file"
 msgstr "임시 파일을 만드는 동안 오류 발생"
 
 #: pcbnew/ibis/kibis.cpp:705
-#, fuzzy
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr ""
-"Kibis는 아직 DUT 값을 지원하지 않습니다. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+msgstr "Kibis는 아직 DUT 값을 지원하지 않습니다. https://ibis.org/summits/nov16a/chen"
+".pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
@@ -33727,10 +33715,8 @@ msgstr ""
 "다."
 
 #: pcbnew/ibis/kibis.cpp:1109
-#, fuzzy
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
-msgstr ""
-"모델은 파형 쌍을 가지지 않습니다, [Ramp]를 대신 사용 해보세요, 정확도 낮음"
+msgstr "모델에는 파형 쌍이 없습니다, 대신 [Ramp]를 사용, 낮은 정확도"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
@@ -37272,9 +37258,8 @@ msgstr ""
 "보고서 완료되지 않음: 사용자 정의 디자인 규칙을 컴파일할 수 없습니다.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "위반 사항 심각도"
+msgstr "위반 보고서"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
 msgid "Uncoupled Length"
