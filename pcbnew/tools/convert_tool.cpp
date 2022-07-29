@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,10 @@
  */
 
 #include <bitmaps.h>
+#include <dialog_shim.h>
+#include <wx/statline.h>
+#include <wx/checkbox.h>
+#include <wx/button.h>
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -33,7 +37,6 @@
 #include <footprint_edit_frame.h>
 #include <fp_shape.h>
 #include <geometry/shape_compound.h>
-#include <menus_helpers.h>
 #include <pcb_edit_frame.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -45,6 +48,75 @@
 #include <zone.h>
 
 #include "convert_tool.h"
+
+
+class CONVERT_SETTINGS_DIALOG : public DIALOG_SHIM
+{
+public:
+    CONVERT_SETTINGS_DIALOG( wxWindow* aParent, CONVERT_SETTINGS* aSettings ) :
+            DIALOG_SHIM( aParent, wxID_ANY, _( "Conversion Settings" ), wxDefaultPosition,
+                         wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+            m_settings( aSettings )
+    {
+        wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+        wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
+        SetSizer( mainSizer );
+
+        m_cbIgnoreLineWidths = new wxCheckBox( this, wxID_ANY,
+                                               _( "Ignore source object line widths" )  );
+        topSizer->Add( m_cbIgnoreLineWidths, 0, wxLEFT|wxRIGHT, 5 );
+
+        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
+                                              _( "Delete source objects after conversion" ) );
+        topSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
+
+        wxStaticLine* line =  new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                wxLI_HORIZONTAL );
+        topSizer->Add( line, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
+
+        mainSizer->Add( topSizer, 1, wxALL|wxEXPAND, 10 );
+
+        wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+        buttonsSizer->AddStretchSpacer();
+
+        wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
+        wxButton* sdbSizerOK = new wxButton( this, wxID_OK );
+        sdbSizer->AddButton( sdbSizerOK );
+        wxButton* sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+        sdbSizer->AddButton( sdbSizerCancel );
+        sdbSizer->Realize();
+
+        buttonsSizer->Add( sdbSizer, 1, 0, 5 );
+        mainSizer->Add( buttonsSizer, 0, wxLEFT|wxRIGHT|wxBOTTOM|wxEXPAND, 5 );
+
+        SetupStandardButtons();
+
+        finishDialogSettings();
+    }
+
+    ~CONVERT_SETTINGS_DIALOG()
+    {};
+
+protected:
+    bool TransferDataToWindow() override
+    {
+        m_cbIgnoreLineWidths->SetValue( m_settings->m_IgnoreLineWidths );
+        m_cbDeleteOriginals->SetValue( m_settings->m_DeleteOriginals );
+        return true;
+    }
+
+    bool TransferDataFromWindow() override
+    {
+        m_settings->m_IgnoreLineWidths = m_cbIgnoreLineWidths->GetValue();
+        m_settings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
+        return true;
+    }
+
+private:
+    CONVERT_SETTINGS* m_settings;
+    wxCheckBox*       m_cbIgnoreLineWidths;
+    wxCheckBox*       m_cbDeleteOriginals;
+};
 
 
 CONVERT_TOOL::CONVERT_TOOL() :
@@ -123,7 +195,12 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 {
-    FOOTPRINT*     parentFootprint = nullptr;
+    std::vector<SHAPE_POLY_SET> polys;
+    CONVERT_SETTINGS            convertSettings;
+    PCB_LAYER_ID                destLayer = m_frame->GetActiveLayer();
+    FOOTPRINT*                  parentFootprint = nullptr;
+    bool                        foundChainedSegs = false;
+    bool                        foundFilledShape = false;
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -133,18 +210,57 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    PCB_LAYER_ID   destLayer = m_frame->GetActiveLayer();
-    SHAPE_POLY_SET polySet;
+    auto getPolys =
+            [&]()
+            {
+                polys.clear();
 
-    if( !IsCopperLayer( destLayer ) )
-        polySet = makePolysFromChainedSegs( selection.GetItems() );
+                for( EDA_ITEM* item : selection )
+                {
+                    item->ClearTempFlags();
 
-    polySet.Append( makePolysFromGraphics( selection.GetItems() ) );
+                    if( item->Type() == PCB_SHAPE_T || item->Type() == PCB_FP_SHAPE_T )
+                        foundFilledShape = static_cast<PCB_SHAPE*>( item )->IsFilled();
+                }
 
-    if( polySet.IsEmpty() )
+                SHAPE_POLY_SET polySet;
+
+                if( convertSettings.m_IgnoreLineWidths )
+                {
+                    polySet.Append( makePolysFromChainedSegs( selection.GetItems() ) );
+                    foundChainedSegs = polySet.OutlineCount() > 0;
+                }
+
+                polySet.Append( makePolysFromGraphics( selection.GetItems(),
+                                                       convertSettings.m_IgnoreLineWidths ) );
+
+                if( polySet.IsEmpty() )
+                    return false;
+
+                polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+                for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
+                {
+                    polys.emplace_back( SHAPE_POLY_SET( polySet.COutline( ii ) ) );
+
+                    for( int jj = 0; jj < polySet.HoleCount( ii ); ++jj )
+                        polys.back().AddHole( polySet.Hole( ii, jj ) );
+                }
+
+                return true;
+            };
+
+    // Pre-flight getPolys().  If we find any chained segments then we default m_IgnoreLineWidths
+    // to true.
+    // We also use the pre-flight to keep from putting up any of the dialogs if there's nothing
+    // to convert.
+    convertSettings.m_IgnoreLineWidths = true;
+    convertSettings.m_DeleteOriginals = false;
+
+    if( !getPolys() )
         return 0;
 
-    polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+    convertSettings.m_IgnoreLineWidths = foundChainedSegs;
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
@@ -160,33 +276,28 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit( m_frame );
 
-    // For now, we convert each outline in the returned shape to its own polygon
-    std::vector<SHAPE_POLY_SET> polys;
-
-    for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
-    {
-        polys.emplace_back( SHAPE_POLY_SET( polySet.COutline( ii ) ) );
-
-        for( int jj = 0; jj < polySet.HoleCount( ii ); ++jj )
-            polys.back().AddHole( polySet.Hole( ii, jj ) );
-    }
-
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &convertSettings );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return 0;
+
+        if( !getPolys() )
+            return 0;
+
         for( const SHAPE_POLY_SET& poly : polys )
         {
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
             graphic->SetShape( SHAPE_T::POLY );
-            graphic->SetFilled( false );
-            graphic->SetStroke( STROKE_PARAMS( poly.Outline( 0 ).Width() ) );
+            graphic->SetFilled( !convertSettings.m_IgnoreLineWidths || foundFilledShape );
+            graphic->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID, COLOR4D::UNSPECIFIED ) );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
             commit.Add( graphic );
         }
-
-        commit.Push( _( "Convert shapes to polygon" ) );
     }
     else
     {
@@ -204,20 +315,23 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
         {
             zoneInfo.SetIsRuleArea( true );
-            ret = InvokeRuleAreaEditor( frame, &zoneInfo );
+            ret = InvokeRuleAreaEditor( frame, &zoneInfo, &convertSettings );
         }
         else if( nonCopper )
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo );
+            ret = InvokeNonCopperZonesEditor( frame, &zoneInfo, &convertSettings );
         }
         else
         {
             zoneInfo.SetIsRuleArea( false );
-            ret = InvokeCopperZonesEditor( frame, &zoneInfo );
+            ret = InvokeCopperZonesEditor( frame, &zoneInfo, &convertSettings );
         }
 
         if( ret == wxID_CANCEL )
+            return 0;
+
+        if( !getPolys() )
             return 0;
 
         for( const SHAPE_POLY_SET& poly : polys )
@@ -231,9 +345,21 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
             commit.Add( zone );
         }
-
-        commit.Push( _( "Convert shapes to zone" ) );
     }
+
+    if( convertSettings.m_DeleteOriginals )
+    {
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->GetFlags() & SKIP_STRUCT )
+                commit.Remove( item );
+        }
+    }
+
+    if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
+        commit.Push( _( "Convert shapes to polygon" ) );
+    else
+        commit.Push( _( "Convert shapes to zone" ) );
 
     return 0;
 }
@@ -410,7 +536,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 }
 
 
-SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>& aItems )
+SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>& aItems,
+                                                    bool aIgnoreLineWidths )
 {
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
     SHAPE_POLY_SET         poly;
@@ -425,16 +552,22 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromGraphics( const std::deque<EDA_ITEM*>&
         case PCB_SHAPE_T:
         case PCB_FP_SHAPE_T:
         {
-            PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
+            PCB_SHAPE* temp = static_cast<PCB_SHAPE*>( item->Clone() );
 
-            graphic->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
-                                                           bds.m_MaxError, ERROR_INSIDE );
+            if( aIgnoreLineWidths )
+                temp->SetFilled( true );
+
+            temp->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
+                                                        bds.m_MaxError, ERROR_INSIDE,
+                                                        aIgnoreLineWidths );
+            item->SetFlags( SKIP_STRUCT );
             break;
         }
 
         case PCB_ZONE_T:
         case PCB_FP_ZONE_T:
             poly.Append( *static_cast<ZONE*>( item )->Outline() );
+            item->SetFlags( SKIP_STRUCT );
             break;
 
         default:

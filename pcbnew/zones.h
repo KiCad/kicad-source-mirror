@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@
 #define ZONES_H_
 
 #include <wx/translation.h>
+
+struct CONVERT_SETTINGS;
 
 // Default values in mils for parameters in ZONE
 #define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
@@ -81,7 +83,8 @@ class PCB_BASE_FRAME;
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
+int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
+                                CONVERT_SETTINGS* aConvertSettings = nullptr );
 
 /**
  * Function InvokeCopperZonesEditor
@@ -92,7 +95,8 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
+int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
+                             CONVERT_SETTINGS* aConvertSettings = nullptr );
 
 /**
  * Function InvokeRuleAreaEditor
@@ -103,6 +107,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
+int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings,
+                          CONVERT_SETTINGS* aConvertSettings = nullptr );
 
 #endif  // ZONES_H_

@@ -247,7 +247,19 @@ public:
      */
     bool IsPolyShapeValid() const;
 
-    void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_poly = aShape; }
+    void SetPolyShape( const SHAPE_POLY_SET& aShape )
+    {
+        m_poly = aShape;
+
+        for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
+        {
+            if( m_poly.HoleCount( ii ) )
+            {
+                m_poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                break;
+            }
+        }
+    }
 
     void SetPolyPoints( const std::vector<VECTOR2I>& aPoints );
 

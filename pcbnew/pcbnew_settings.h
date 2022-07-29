@@ -31,6 +31,15 @@ namespace PNS
 }
 
 
+// Settings for the CONVERT_TOOL.
+struct CONVERT_SETTINGS
+{
+    bool m_IgnoreLineWidths;
+    bool m_DeleteOriginals;
+};
+
+
+
 enum class MAGNETIC_OPTIONS
 {
     NO_EFFECT = 0,

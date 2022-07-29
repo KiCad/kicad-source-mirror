@@ -30,6 +30,7 @@
 #include <zone_settings.h>
 #include <dialog_rule_area_properties_base.h>
 #include <widgets/unit_binder.h>
+#include <wx/statbox.h>
 
 #define LAYER_LIST_COLUMN_CHECK 0
 #define LAYER_LIST_COLUMN_ICON 1
@@ -40,42 +41,75 @@
 class DIALOG_RULE_AREA_PROPERTIES : public DIALOG_RULE_AREA_PROPERTIES_BASE
 {
 public:
-    DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
+    DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
+                                 CONVERT_SETTINGS* aConvertSettings );
 
 private:
-    UNIT_BINDER     m_outlineHatchPitch;
-    PCB_BASE_FRAME* m_parent;
-    ZONE_SETTINGS   m_zonesettings;         ///< the working copy of zone settings
-    ZONE_SETTINGS*  m_ptr;                  ///< the pointer to the zone settings
-                                            ///< of the zone to edit
-    bool            m_isFpEditor;
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void OnLayerSelection( wxDataViewEvent& event ) override;
+
+private:
+    UNIT_BINDER       m_outlineHatchPitch;
+    PCB_BASE_FRAME*   m_parent;
+    ZONE_SETTINGS     m_zonesettings;    ///< the working copy of zone settings
+    ZONE_SETTINGS*    m_ptr;             ///< the pointer to the zone settings of the zone to edit
+    bool              m_isFpEditor;
+
+    CONVERT_SETTINGS* m_convertSettings;
+    wxCheckBox*       m_cbIgnoreLineWidths;
+    wxCheckBox*       m_cbDeleteOriginals;
 };
 
 
-int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
+int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneSettings,
+                          CONVERT_SETTINGS* aConvertSettings )
 {
-    DIALOG_RULE_AREA_PROPERTIES dlg( aCaller, aSettings );
+    DIALOG_RULE_AREA_PROPERTIES dlg( aCaller, aZoneSettings, aConvertSettings );
 
     return dlg.ShowModal();
 }
 
 
 DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                          ZONE_SETTINGS* aSettings ) :
+                                                          ZONE_SETTINGS* aSettings,
+                                                          CONVERT_SETTINGS* aConvertSettings ) :
         DIALOG_RULE_AREA_PROPERTIES_BASE( aParent ),
         m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
-                             m_outlineHatchPitchCtrl, m_outlineHatchUnits )
+                             m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
+        m_convertSettings( aConvertSettings )
 
 {
     m_parent = aParent;
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
+
+    if( aConvertSettings )
+    {
+        wxBoxSizer* bConvertSizer = new wxBoxSizer( wxVERTICAL  );
+
+        wxStaticText* conversionSettingsLabel = new wxStaticText( this, wxID_ANY,
+                                                                  _( "Conversion settings:" ) );
+        bConvertSizer->Add( conversionSettingsLabel, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
+
+        m_cbIgnoreLineWidths = new wxCheckBox( this, wxID_ANY,
+                                               _( "Ignore source object line widths" )  );
+        bConvertSizer->Add( m_cbIgnoreLineWidths, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
+                                              _( "Delete source objects after conversion" ) );
+        bConvertSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
+
+        GetSizer()->Insert( 0, bConvertSizer, 0, wxALL|wxEXPAND, 10 );
+
+        wxStaticLine* line =  new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                wxLI_HORIZONTAL );
+        GetSizer()->Insert( 1, line, 0, wxLEFT|wxRIGHT|wxEXPAND, 10 );
+
+        SetTitle( _( "Convert to Rule Area" ) );
+    }
 
     m_isFpEditor = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
 
@@ -92,6 +126,12 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
 
 bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 {
+    if( m_convertSettings )
+    {
+        m_cbIgnoreLineWidths->SetValue( m_convertSettings->m_IgnoreLineWidths );
+        m_cbDeleteOriginals->SetValue( m_convertSettings->m_DeleteOriginals );
+    }
+
     // Init keepout parameters:
     m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
     m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
@@ -147,6 +187,12 @@ void DIALOG_RULE_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
 
 bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 {
+    if( m_convertSettings )
+    {
+        m_convertSettings->m_IgnoreLineWidths = m_cbIgnoreLineWidths->GetValue();
+        m_convertSettings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
+    }
+
     // Init keepout parameters:
     m_zonesettings.SetIsRuleArea( true );
     m_zonesettings.SetDoNotAllowTracks( m_cbTracksCtrl->GetValue() );
