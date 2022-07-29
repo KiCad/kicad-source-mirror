@@ -51,10 +51,11 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_viewportsLabel = new wxStaticText( this, wxID_ANY, _( "Viewports (Alt+Tab):" ) );
+    // Show the hotkey to open the windows list selector:
+    m_viewportsLabel = new wxStaticText( m_mainToolBar, wxID_ANY, _( "Viewports (Shift+Tab):" ) );
    	m_viewportsLabel->Wrap( -1 );
 
-   	m_cbViewports = new wxChoice( this, wxID_ANY );
+   	m_cbViewports = new wxChoice( m_mainToolBar, wxID_ANY );
 
     for( std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
         m_cbViewports->Append( pair.first, static_cast<void*>( &pair.second ) );

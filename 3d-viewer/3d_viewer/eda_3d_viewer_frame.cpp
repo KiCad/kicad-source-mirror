@@ -285,11 +285,9 @@ bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
 {
     static bool s_viewportSwitcherShown = false;
 
-#ifdef __WXMAC__
-    wxKeyCode viewSwitchKey = WXK_ALT;
-#else
-    wxKeyCode viewSwitchKey = WXK_WINDOWS_LEFT;
-#endif
+    // On Windows, the Alt key is not usable, especially with TAB key
+    // Shift key is OK on all platforms
+    wxKeyCode viewSwitchKey = WXK_SHIFT;
 
     if( aEvent.GetEventType() != wxEVT_CHAR && aEvent.GetEventType() != wxEVT_CHAR_HOOK )
         return wxFrame::TryBefore( aEvent );
