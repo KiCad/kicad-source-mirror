@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-30 00:30+0000\n"
-"Last-Translator: 김낙환 <ktkr1964@naver.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -33633,7 +33633,6 @@ msgid "Invalid field name in [Pin]"
 msgstr "잘못된 필드 이름 [Pin]"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
 msgstr "[Pin]에 인수 누락"
 
@@ -33647,11 +33646,11 @@ msgstr "잘못된 차동 핀 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
 msgid "Incorrect inv_pin name"
-msgstr "잘못된 inv 핀 이름"
+msgstr "잘못된 inv_pin 이름"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
 msgid "Unknown waveform type"
-msgstr "알 수 없는 파형 타입"
+msgstr "알 수 없는 파형 유형"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
@@ -33667,7 +33666,7 @@ msgstr "키워드가 없음."
 
 #: pcbnew/ibis/kibis.cpp:396
 msgid "waveform has less than two points"
-msgstr "파형의 포인트가 2개 미만임"
+msgstr "파형에 2개 미만의 포인트가 있습니다"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
 msgid "Cannot remove temporary input file"
@@ -37274,19 +37273,18 @@ msgstr "결합되지 않은 길이의 차동 쌍 해결:"
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:780
 #: pcbnew/tools/board_inspection_tool.cpp:796
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "사용하지 않은 네트 %s을(를) 제거했습니다."
+msgstr "최대 uncoupled 길이를 해결했습니다: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1152
 #: pcbnew/tools/board_inspection_tool.cpp:1168
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "다음을 위한 킵아웃 계산:"
+msgstr "텍스트 높이 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "해결된 높이 제한: min %s; 최대 %s."
 
@@ -37353,9 +37351,8 @@ msgid "Hole diameter resolution for:"
 msgstr "다음을 위한 홀 직경 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "클리어런스"
+msgstr "구멍 유격"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:881
@@ -37407,14 +37404,12 @@ msgstr "기계적 유격 해상도:"
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1019
 #: pcbnew/tools/board_inspection_tool.cpp:1035
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "정의된 'mechanical_hole_clearance' 제약 조건이 없습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "클리어런스"
+msgstr "가장자리 유격"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:920
@@ -37477,9 +37472,8 @@ msgstr "단열판 간격 해결: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:619
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "다음을 위한 배선 폭 계산:"
+msgstr "스포크 폭 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:628
 #: pcbnew/tools/board_inspection_tool.cpp:644
@@ -37794,9 +37788,8 @@ msgid "Draw an arc"
 msgstr "호 그리기"
 
 #: pcbnew/tools/drawing_tool.cpp:707
-#, fuzzy
 msgid "Place an image"
-msgstr "노드 설치"
+msgstr "이미지 배치"
 
 #: pcbnew/tools/drawing_tool.cpp:954 pcbnew/tools/drawing_tool.cpp:721
 msgid "Place a text"
@@ -37942,15 +37935,13 @@ msgstr "_복사"
 
 #: pcbnew/tools/footprint_editor_control.cpp:400
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "방향 바꾸기"
+msgstr "풋프린트 이름 변경"
 
 #: pcbnew/tools/footprint_editor_control.cpp:410
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "네트 이름은 빈 칸이 될 수 없습니다."
+msgstr "Footprint 이름은 비어있을 수 없습니다."
 
 #: pcbnew/tools/footprint_editor_control.cpp:414
 #: pcbnew/tools/footprint_editor_control.cpp:411
@@ -38375,24 +38366,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "편집기 캔버스에 선택한 풋프린트 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:379 pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "중복된 풋프린트"
+msgstr "풋프린트 복제"
 
 #: pcbnew/tools/pcb_actions.cpp:379 pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "선택한 심볼의 복사본 만들기"
+msgstr "선택한 풋프린트의의 복사본 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:384 pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "풋프린트 만들기…"
+msgstr "풋프린트 이름 바꾸기..."
 
 #: pcbnew/tools/pcb_actions.cpp:384 pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "선택한 풋프린트 업데이트"
+msgstr "선택한 풋프린트 이름 바꾸기"
 
 #: pcbnew/tools/pcb_actions.cpp:389 pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -38870,7 +38857,6 @@ msgid "Toggle net highlighting"
 msgstr "네트 강조 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "선택한 네트 강조"
 
