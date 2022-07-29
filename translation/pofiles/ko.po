@@ -17,13 +17,14 @@
 # kmn4555 <kmn4555@naver.com>, 2022.
 # ky107601 <qldkr1@naver.com>, 2022.
 # 김용재 <tpdlqj965@gmail.com>, 2022.
+# 김낙환 <ktkr1964@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-30 00:30+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: 김낙환 <ktkr1964@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1392,7 +1393,7 @@ msgstr "흑백 임계 값 :"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "레벨을 조정하여 그레이 스케일 그림을 흑백 그림으로 변환합니다."
+msgstr "그레이 스케일 그림을 흑백 그림으로 변환하기 위한 레벨을 조정합니다."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:356
@@ -21802,7 +21803,7 @@ msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습�
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 msgid "Ambient temperature:"
-msgstr "주위의 온도:"
+msgstr "주변 온도:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
@@ -31522,7 +31523,7 @@ msgstr "%s의 결합되지 않은 최대 길이 확인중: %s."
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s 최대 스큐 확인 중 : %s."
+msgstr "%s 최대 왜곡 구간 확인 : %s."
 
 #: pcbnew/drc/drc_engine.cpp:862
 #, c-format
@@ -31540,9 +31541,9 @@ msgid "Checking %s min spoke count: %s."
 msgstr "확인 중 %s 최소 스포크 개수: %s."
 
 #: pcbnew/drc/drc_engine.cpp:880
-#, c-format
+#, c-format, fuzzy
 msgid "Checking %s zone connection: %s."
-msgstr "%s 구역 연결 확인 중: %s."
+msgstr "%s 구역 연결 확인: %s."
 
 #: pcbnew/drc/drc_engine.cpp:896 pcbnew/drc/drc_engine.cpp:897
 #: pcbnew/drc/drc_engine.cpp:898 pcbnew/tools/board_inspection_tool.cpp:202
@@ -37401,7 +37402,7 @@ msgstr "해결된 클리어런스: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1023
 #, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "기계적 구멍 클리어런스 해상도:"
+msgstr "기계적 유격 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1019
@@ -37430,9 +37431,8 @@ msgstr "다음을 위한 클리어런스 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:941
 #: pcbnew/tools/board_inspection_tool.cpp:957
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "기계적 클리어런스 분해능:"
+msgstr "기계적 유격 분해능:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:953
@@ -37483,9 +37483,9 @@ msgstr "다음을 위한 배선 폭 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:628
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "해결된 써멀 스포크 너비: %s."
+msgstr "해결된 단열판 스포크 너비: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:633
 #: pcbnew/tools/board_inspection_tool.cpp:649
@@ -37579,7 +37579,7 @@ msgstr "물리적 매개변수"
 #: pcbnew/tools/board_inspection_tool.cpp:1046
 #: pcbnew/tools/board_inspection_tool.cpp:1062
 msgid "Select an item for a constraints resolution report."
-msgstr "제약 해결 보고서를 위해 항목을 선택하세요."
+msgstr "제약 해결 보고서를 위한 항목을 선택하세요."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1053
 #: pcbnew/tools/board_inspection_tool.cpp:1069
@@ -37613,15 +37613,15 @@ msgstr "랜드 폭 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1160
 #: pcbnew/tools/board_inspection_tool.cpp:1176
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "글자 높이 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1176
 #: pcbnew/tools/board_inspection_tool.cpp:1192
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "글자 폭 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1184
 #: pcbnew/tools/board_inspection_tool.cpp:1200
@@ -37645,7 +37645,7 @@ msgstr "기록이 불완전할 수 있습니다: 일부 풋프린트 코트야�
 #: pcbnew/tools/board_inspection_tool.cpp:1212
 #: pcbnew/tools/board_inspection_tool.cpp:1234
 msgid "Run DRC for a full analysis."
-msgstr "전체 분석을 위해 DRC를 실행합니다."
+msgstr "전체 분석을 위해 DRC를 실행시킵니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1202
 #: pcbnew/tools/board_inspection_tool.cpp:1218
@@ -37655,7 +37655,7 @@ msgstr "현재 경로에서 항목이 <b>사용 불가능</b>합니다."
 #: pcbnew/tools/board_inspection_tool.cpp:1204
 #: pcbnew/tools/board_inspection_tool.cpp:1220
 msgid "Item allowed at current location."
-msgstr "현재 경로에서 항목이 사용가능합니다."
+msgstr "현재 경로에서 항목이 사용 가능합니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1208
 #: pcbnew/tools/board_inspection_tool.cpp:1224
@@ -37668,8 +37668,9 @@ msgid "Assertions for:"
 msgstr "다음을 위한 규칙:"
 
 #: pcbnew/tools/convert_tool.cpp:77
+#, fuzzy
 msgid "Create from Selection"
-msgstr "선택 범위에서 생성"
+msgstr "선택된 범위에서 생성"
 
 #: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
@@ -37729,7 +37730,7 @@ msgstr "보드 전체 치수 : "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 msgid "Min track/spacing: "
-msgstr "최소 배선/간격 "
+msgstr "최소 배선/간격: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Copper Finish: "
