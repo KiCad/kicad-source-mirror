@@ -47,7 +47,7 @@ static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
 
 bool ENV_VAR::IsEnvVarImmutable( const wxString& aEnvVar )
 {
-    for( const auto& s : predefinedEnvVars )
+    for( const wxString& s : predefinedEnvVars )
     {
         if( s == aEnvVar )
             return true;

@@ -158,7 +158,8 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
 
     // Assign the fpid to the selections
     bool firstAssoc = true;
-    for( auto i : idx )
+
+    for( unsigned int i : idx )
     {
         m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, fpid ), firstAssoc );
         firstAssoc = false;
@@ -210,10 +211,9 @@ int CVPCB_ASSOCIATION_TOOL::Associate( const TOOL_EVENT& aEvent )
     }
 
     // Get all the components that are selected and associate them with the current footprint
-    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
-
     bool firstAssoc = true;
-    for( auto i : sel )
+
+    for( unsigned int i : m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS ) )
     {
         CVPCB_ASSOCIATION newfp( i, fpid );
         m_frame->AssociateFootprint( newfp, firstAssoc );
@@ -237,12 +237,10 @@ int CVPCB_ASSOCIATION_TOOL::AutoAssociate( const TOOL_EVENT& aEvent )
 
 int CVPCB_ASSOCIATION_TOOL::DeleteAssoc( const TOOL_EVENT& aEvent )
 {
-    // Get all the components that are selected
-    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
-
-    // Delete the association
+    // Delete all the selected components' associations
     bool firstAssoc = true;
-    for( auto i : sel )
+
+    for( unsigned int i : m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS ) )
     {
         m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
         firstAssoc = false;
@@ -258,11 +256,10 @@ int CVPCB_ASSOCIATION_TOOL::DeleteAll( const TOOL_EVENT& aEvent )
     {
         // Remove all selections to avoid issues when setting the fpids
         m_frame->SetSelectedComponent( -1, true );
-        std::vector<unsigned int> idx =
-                m_frame->GetComponentIndices( CVPCB_MAINFRAME::ALL_COMPONENTS );
 
         bool firstAssoc = true;
-        for( auto i : idx )
+
+        for( unsigned int i : m_frame->GetComponentIndices( CVPCB_MAINFRAME::ALL_COMPONENTS ) )
         {
             m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
             firstAssoc = false;

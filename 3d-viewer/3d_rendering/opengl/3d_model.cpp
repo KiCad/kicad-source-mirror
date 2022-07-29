@@ -149,24 +149,25 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 
     for( unsigned int mesh_i = 0; mesh_i < a3DModel.m_MeshesSize; ++mesh_i )
     {
-        const auto& mesh = a3DModel.m_Meshes[mesh_i];
+        const SMESH& mesh = a3DModel.m_Meshes[mesh_i];
 
         // silently ignore meshes that have invalid material references or invalid geometry.
         if( mesh.m_MaterialIdx >= m_materials.size()
-          || mesh.m_Positions == nullptr
-          || mesh.m_FaceIdx == nullptr
-          || mesh.m_Normals == nullptr
-          || mesh.m_FaceIdxSize == 0
-          || mesh.m_VertexSize == 0 )
-          continue;
+              || mesh.m_Positions == nullptr
+              || mesh.m_FaceIdx == nullptr
+              || mesh.m_Normals == nullptr
+              || mesh.m_FaceIdxSize == 0
+              || mesh.m_VertexSize == 0 )
+        {
+            continue;
+        }
 
-        auto& mesh_group = mesh_groups[mesh.m_MaterialIdx];
-        auto& material = m_materials[mesh.m_MaterialIdx];
+        MESH_GROUP& mesh_group = mesh_groups[mesh.m_MaterialIdx];
+        MATERIAL& material = m_materials[mesh.m_MaterialIdx];
 
-        if( material.IsTransparent()
-                && m_materialMode != MATERIAL_MODE::DIFFUSE_ONLY )
+        if( material.IsTransparent() && m_materialMode != MATERIAL_MODE::DIFFUSE_ONLY )
             m_have_transparent_meshes = true;
-         else
+        else
             m_have_opaque_meshes = true;
 
         const unsigned int vtx_offset = mesh_group.m_vertices.size();
@@ -180,15 +181,14 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
         {
             m_meshes_bbox[mesh_i].Union( mesh.m_Positions[vtx_i] );
 
-            auto& vtx_out = mesh_group.m_vertices[vtx_offset + vtx_i];
+            VERTEX& vtx_out = mesh_group.m_vertices[vtx_offset + vtx_i];
 
             vtx_out.m_pos = mesh.m_Positions[vtx_i];
             vtx_out.m_nrm = glm::clamp( glm::vec4( mesh.m_Normals[vtx_i], 1.0f ) * 127.0f,
                                         -127.0f, 127.0f );
 
-            vtx_out.m_tex_uv = mesh.m_Texcoords != nullptr
-                               ? mesh.m_Texcoords[vtx_i]
-                               : glm::vec2 (0);
+            vtx_out.m_tex_uv = mesh.m_Texcoords != nullptr ? mesh.m_Texcoords[vtx_i]
+                                                           : glm::vec2 (0);
 
             if( mesh.m_Color != nullptr )
             {
@@ -299,7 +299,7 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
     unsigned int total_vertex_count = 0;
     unsigned int total_index_count = 0;
 
-    for( auto& mg : mesh_groups )
+    for( const MESH_GROUP& mg : mesh_groups )
     {
         total_vertex_count += mg.m_vertices.size();
         total_index_count += mg.m_indices.size();
@@ -327,8 +327,7 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 
     // temporary index buffer which will contain either GLushort or GLuint
     // type indices.  allocate with a bit of meadow at the end.
-    auto tmp_idx = std::make_unique<GLuint[]>(
-                      ( idx_size * total_index_count + 8 ) / sizeof( GLuint ) );
+    auto tmp_idx = std::make_unique<GLuint[]>( ( idx_size * total_index_count + 8 ) / sizeof( GLuint ) );
 
     unsigned int prev_vtx_count = 0;
     unsigned int idx_offset = 0;
@@ -336,23 +335,22 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 
     for( unsigned int mg_i = 0; mg_i < mesh_groups.size (); ++mg_i )
     {
-        auto& mg = mesh_groups[mg_i];
-        auto& mat = m_materials[mg_i];
+        MESH_GROUP& mg = mesh_groups[mg_i];
+        MATERIAL&   mat = m_materials[mg_i];
+        uintptr_t   tmp_idx_ptr = reinterpret_cast<uintptr_t>( tmp_idx.get() );
 
         if( m_index_buffer_type == GL_UNSIGNED_SHORT )
         {
-            auto idx_out = reinterpret_cast<GLushort*>(
-                reinterpret_cast<uintptr_t>( tmp_idx.get() ) + idx_offset );
+            GLushort* idx_out = reinterpret_cast<GLushort*>( tmp_idx_ptr + idx_offset );
 
-            for( auto idx : mg.m_indices )
+            for( GLuint idx : mg.m_indices )
                 *idx_out++ = static_cast<GLushort>( idx + prev_vtx_count );
         }
         else if( m_index_buffer_type == GL_UNSIGNED_INT )
         {
-            auto idx_out = reinterpret_cast<GLuint*>(
-                reinterpret_cast<uintptr_t>( tmp_idx.get() ) + idx_offset );
+            GLuint* idx_out = reinterpret_cast<GLuint*>( tmp_idx_ptr + idx_offset );
 
-            for( auto idx : mg.m_indices )
+            for( GLuint idx : mg.m_indices )
                 *idx_out++ = static_cast<GLuint>( idx + prev_vtx_count );
         }
 

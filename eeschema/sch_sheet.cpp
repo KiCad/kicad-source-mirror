@@ -723,14 +723,12 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
         if( m_screen == aScreen )
             return true;
 
-        for( auto item : m_screen->Items().OfType( SCH_SHEET_T ) )
+        for( EDA_ITEM* item : m_screen->Items().OfType( SCH_SHEET_T ) )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
             if( sheet->LocatePathOfScreen( aScreen, aList ) )
-            {
                 return true;
-            }
         }
 
         aList->pop_back();

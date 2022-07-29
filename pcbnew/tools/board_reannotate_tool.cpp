@@ -73,13 +73,13 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
 }
 
 int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelectionToReannotate,
-        const std::vector<EDA_ITEM*>& aAdditionalFootprints )
+                                                 const std::vector<EDA_ITEM*>& aAdditionalFootprints )
 {
     if( aSelectionToReannotate.Empty() )
         return 0;
 
     // 1. Build list of designators on the board & the additional footprints
-    FOOTPRINTS         fpOnBoard = m_frame->GetBoard()->Footprints();
+    FOOTPRINTS                    fpOnBoard = m_frame->GetBoard()->Footprints();
     std::multimap<wxString, KIID> usedDesignatorsMap;
 
     for( EDA_ITEM* item : aAdditionalFootprints )

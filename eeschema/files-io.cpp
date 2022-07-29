@@ -990,7 +990,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             updateFileType = true;
             tmpFn.SetExt( KiCadSchematicFileExtension );
 
-            for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+            for( EDA_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
             {
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
                 wxFileName sheetFileName = sheet->GetFileName();

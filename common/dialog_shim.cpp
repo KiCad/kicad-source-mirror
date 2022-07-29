@@ -595,12 +595,13 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         int       currentIdx = -1;
         int       delta = aEvt.ShiftDown() ? -1 : 1;
 
-        auto advance = [&]( int& idx )
-        {
-            // Wrap-around modulus
-            int size = m_tabOrder.size();
-            idx = ( ( idx + delta ) % size + size ) % size;
-        };
+        auto advance =
+                [&]( int& idx )
+                {
+                    // Wrap-around modulus
+                    int size = m_tabOrder.size();
+                    idx = ( ( idx + delta ) % size + size ) % size;
+                };
 
         for( size_t i = 0; i < m_tabOrder.size(); ++i )
         {

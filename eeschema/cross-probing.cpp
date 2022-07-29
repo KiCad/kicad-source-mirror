@@ -60,7 +60,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
-        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( EDA_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 

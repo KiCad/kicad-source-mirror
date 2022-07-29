@@ -251,7 +251,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
     for( screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( EDA_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             symbol = dynamic_cast<SCH_SYMBOL*>( item );
 

@@ -198,7 +198,7 @@ const wxString PROJECT::GetSheetName( const KIID& aSheetID )
 {
     if( m_sheetNames.empty() )
     {
-        for( auto pair : GetProjectFile().GetSheets() )
+        for( const std::pair<KIID, wxString>& pair : GetProjectFile().GetSheets() )
             m_sheetNames[pair.first] = pair.second;
     }
 
@@ -214,13 +214,9 @@ void PROJECT::SetRString( RSTRING_T aIndex, const wxString& aString )
     unsigned ndx = unsigned( aIndex );
 
     if( ndx < arrayDim( m_rstrings ) )
-    {
         m_rstrings[ndx] = aString;
-    }
     else
-    {
         wxASSERT( 0 );      // bad index
-    }
 }
 
 
@@ -247,9 +243,7 @@ PROJECT::_ELEM* PROJECT::GetElem( ELEM_T aIndex )
 {
     // This is virtual, so implement it out of line
     if( unsigned( aIndex ) < arrayDim( m_elems ) )
-    {
         return m_elems[aIndex];
-    }
 
     return nullptr;
 }

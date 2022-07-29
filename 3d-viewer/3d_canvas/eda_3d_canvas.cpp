@@ -126,7 +126,11 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
     wxASSERT( m_3d_render_raytracing != nullptr );
     wxASSERT( m_3d_render_opengl != nullptr );
 
-    auto busy_indicator_factory = []() { return std::make_unique<WX_BUSY_INDICATOR>(); };
+    auto busy_indicator_factory =
+            []()
+            {
+                return std::make_unique<WX_BUSY_INDICATOR>();
+            };
 
     m_3d_render_raytracing->SetBusyIndicatorFactory( busy_indicator_factory );
     m_3d_render_opengl->SetBusyIndicatorFactory( busy_indicator_factory );

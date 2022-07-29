@@ -285,8 +285,7 @@ void DRAWING_TOOL::UpdateStatusBar() const
         else
             constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 
-        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
-                                                    : wxT( "" ) );
+        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : wxT( "" ) );
     }
 }
 

@@ -871,7 +871,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
             m_menuCursor = m_viewControls->GetCursorPosition();
 
         // Save all tools cursor settings, as they will be overridden
-        for( auto idState : m_toolIdIndex )
+        for( const std::pair<const TOOL_ID, TOOL_STATE*>& idState : m_toolIdIndex )
         {
             TOOL_STATE* s = idState.second;
             const auto& vc = s->vcSettings;
@@ -916,7 +916,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = -1;
 
         // Restore cursor settings
-        for( auto const& cursorSetting : m_cursorSettings )
+        for( const std::pair<const TOOL_ID, OPT<VECTOR2D>>& cursorSetting : m_cursorSettings )
         {
             auto it = m_toolIdIndex.find( cursorSetting.first );
             wxASSERT( it != m_toolIdIndex.end() );

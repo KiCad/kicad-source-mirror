@@ -58,7 +58,7 @@ void BOARD_ADAPTER::destroyLayers()
 {
     if( !m_layers_poly.empty() )
     {
-        for( auto& poly : m_layers_poly )
+        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layers_poly )
             delete poly.second;
 
         m_layers_poly.clear();
@@ -72,7 +72,7 @@ void BOARD_ADAPTER::destroyLayers()
 
     if( !m_layerHoleIdPolys.empty() )
     {
-        for( auto& poly : m_layerHoleIdPolys )
+        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layerHoleIdPolys )
             delete poly.second;
 
         m_layerHoleIdPolys.clear();
@@ -80,7 +80,7 @@ void BOARD_ADAPTER::destroyLayers()
 
     if( !m_layerHoleOdPolys.empty() )
     {
-        for( auto& poly : m_layerHoleOdPolys )
+        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layerHoleOdPolys )
             delete poly.second;
 
         m_layerHoleOdPolys.clear();
@@ -88,7 +88,7 @@ void BOARD_ADAPTER::destroyLayers()
 
     if( !m_layerMap.empty() )
     {
-        for( auto& poly : m_layerMap )
+        for( std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& poly : m_layerMap )
             delete poly.second;
 
         m_layerMap.clear();
@@ -102,7 +102,7 @@ void BOARD_ADAPTER::destroyLayers()
 
     if( !m_layerHoleMap.empty() )
     {
-        for( auto& poly : m_layerHoleMap )
+        for( std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& poly : m_layerHoleMap )
             delete poly.second;
 
         m_layerHoleMap.clear();
@@ -726,9 +726,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     auto layerPolyContainer = m_layers_poly.find( layer );
 
                     if( layerContainer != m_layerMap.end() )
-                    {
                         addSolidAreasShapes( zone, layerContainer->second, layer );
-                    }
 
                     if( m_Cfg->m_Render.opengl_copper_thickness
                           && m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
@@ -1087,7 +1085,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( !m_layerHoleMap.empty() )
     {
-        for( auto& hole : m_layerHoleMap )
+        for( std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& hole : m_layerHoleMap )
             hole.second->BuildBVH();
     }
 

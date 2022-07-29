@@ -86,13 +86,13 @@ public:
 
     /**
      */
-    std::vector<BOARD_ITEM*> DrawBoardCharacteristics( const wxPoint& origin, PCB_LAYER_ID aLayer,
-                                                       bool aDrawNow, wxPoint* tablesize );
+    std::vector<BOARD_ITEM*> DrawBoardCharacteristics( const VECTOR2I& origin, PCB_LAYER_ID aLayer,
+                                                       bool aDrawNow, VECTOR2I* tablesize );
 
     /**
      */
-    std::vector<BOARD_ITEM*> DrawSpecificationStackup( const wxPoint& origin, PCB_LAYER_ID aLayer,
-                                                       bool aDrawNow, wxPoint* tablesize );
+    std::vector<BOARD_ITEM*> DrawSpecificationStackup( const VECTOR2I& origin, PCB_LAYER_ID aLayer,
+                                                       bool aDrawNow, VECTOR2I* tablesize );
 
     /**
      */

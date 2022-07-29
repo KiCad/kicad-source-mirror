@@ -93,7 +93,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
     formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_symbol_editor)\n",
                       SEXPR_SYMBOL_LIB_FILE_VERSION );
 
-    for( auto parent : m_symbols )
+    for( const std::pair<const wxString, LIB_SYMBOL*>& parent : m_symbols )
     {
         // Save the root symbol first so alias can inherit from them.
         if( parent.second->IsRoot() )
@@ -101,7 +101,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
             SaveSymbol( parent.second, *formatter.get(), 1 );
 
             // Save all of the aliases associated with the current root symbol.
-            for( auto alias : m_symbols )
+            for( const std::pair<const wxString, LIB_SYMBOL*>& alias : m_symbols )
             {
                 if( !alias.second->IsAlias() )
                     continue;
@@ -218,7 +218,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
                         return a.m_unit < b.m_unit;
                    } );
 
-        for( auto unit : units )
+        for( const LIB_SYMBOL_UNIT& unit : units )
         {
             // Add quotes and escape chars like ") to the UTF8 unitName string
             name = aFormatter.Quotes( unitName );
@@ -298,7 +298,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFOR
     {
         wxString tmp;
 
-        for( auto filter : fpFilters )
+        for( const wxString& filter : fpFilters )
         {
             // Spaces are not handled in fp filter names so escape spaces if any
             wxString curr_filter = EscapeString( filter, ESCAPE_CONTEXT::CTX_NO_SPACE );

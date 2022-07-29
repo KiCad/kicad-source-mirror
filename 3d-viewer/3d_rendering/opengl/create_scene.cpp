@@ -531,7 +531,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         float layer_z_bot = 0.0f;
         float layer_z_top = 0.0f;
 
-        for( const auto ii : outerMapHoles )
+        for( const std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& ii : outerMapHoles )
         {
             const PCB_LAYER_ID      layer_id  = ii.first;
             const SHAPE_POLY_SET*   poly      = ii.second;
@@ -543,7 +543,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                                                          layer_z_top, layer_z_bot, false );
         }
 
-        for( const auto ii : innerMapHoles )
+        for( const std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& ii : innerMapHoles )
         {
             const PCB_LAYER_ID      layer_id  = ii.first;
             const SHAPE_POLY_SET*   poly      = ii.second;
@@ -565,7 +565,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     const MAP_POLY& map_poly = m_boardAdapter.GetPolyMap();
 
-    for( const auto ii : m_boardAdapter.GetLayerMap() )
+    for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& ii : m_boardAdapter.GetLayerMap() )
     {
         const PCB_LAYER_ID layer_id = ii.first;
 

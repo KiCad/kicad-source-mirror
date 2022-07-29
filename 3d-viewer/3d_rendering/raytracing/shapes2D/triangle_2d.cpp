@@ -130,7 +130,7 @@ void ConvertPolygonToTriangles( const SHAPE_POLY_SET& aPolyList, CONTAINER_2D_BA
 
     for( unsigned int j = 0; j < aPolyList.TriangulatedPolyCount(); j++ )
     {
-        auto triPoly = aPolyList.TriangulatedPolygon( j );
+        const SHAPE_POLY_SET::TRIANGULATED_POLYGON* triPoly = aPolyList.TriangulatedPolygon( j );
 
         for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
         {

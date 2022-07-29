@@ -49,7 +49,6 @@
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <pcbnew_settings.h>
 #include <project.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <tool/tool_manager.h>
@@ -95,7 +94,6 @@ public:
         Add( PCB_ACTIONS::drawZoneCutout );
         Add( PCB_ACTIONS::drawSimilarZone );
     }
-
 
 protected:
     ACTION_MENU* create() const override

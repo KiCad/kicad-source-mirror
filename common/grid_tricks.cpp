@@ -70,8 +70,8 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
 
 bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
 {
-    auto renderer = m_grid->GetCellRenderer( aRow, aCol );
-    bool isCheckbox = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) != nullptr );
+    wxGridCellRenderer* renderer = m_grid->GetCellRenderer( aRow, aCol );
+    bool                isCheckbox = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) );
     renderer->DecRef();
 
     if( isCheckbox )

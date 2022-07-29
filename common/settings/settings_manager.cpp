@@ -617,7 +617,7 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
 
     std::set<wxString> checkedPaths;
 
-    for( auto base_path : base_paths )
+    for( const wxFileName& base_path : base_paths )
     {
         if( checkedPaths.count( base_path.GetFullPath() ) )
             continue;

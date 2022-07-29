@@ -202,7 +202,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     }
     else if( !global.empty() )
     {
-        for( auto act : global )
+        for( const TOOL_ACTION* act : global )
         {
             bool runAction = true;
 

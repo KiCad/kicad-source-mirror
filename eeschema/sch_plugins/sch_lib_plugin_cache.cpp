@@ -111,7 +111,7 @@ LIB_SYMBOL* SCH_LIB_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
     // the root symbol and make it the new root.
     if( aSymbol->IsRoot() )
     {
-        for( auto entry : m_symbols )
+        for( const std::pair<const wxString, LIB_SYMBOL*>& entry : m_symbols )
         {
             if( entry.second->IsAlias()
               && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
@@ -139,11 +139,13 @@ LIB_SYMBOL* SCH_LIB_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
             }
 
             // Reparent the remaining aliases.
-            for( auto entry : m_symbols )
+            for( const std::pair<const wxString, LIB_SYMBOL*>& entry : m_symbols )
             {
                 if( entry.second->IsAlias()
-                  && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
+                      && entry.second->GetParent().lock() == aSymbol->SharedPtr() )
+                {
                     entry.second->SetParent( firstChild );
+                }
             }
         }
     }

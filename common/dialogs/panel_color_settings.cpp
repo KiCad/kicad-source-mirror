@@ -149,7 +149,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
         newSettings->SetName( themeName );
         newSettings->SetReadOnly( false );
 
-        for( auto layer : m_validLayers )
+        for( int layer : m_validLayers )
             newSettings->SetColor( layer, m_currentSettings->GetColor( layer ) );
 
         newSettings->SaveToFile( settingsMgr.GetPathForSettingsFile( newSettings ) );
@@ -367,7 +367,7 @@ bool PANEL_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
 
     selected->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
 
-    for( auto layer : m_validLayers )
+    for( int layer : m_validLayers )
         selected->SetColor( layer, m_currentSettings->GetColor( layer ) );
 
     settingsMgr.SaveColorSettings( selected, m_colorNamespace );

@@ -556,9 +556,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         aStatusReporter->Report( _( "Load Raytracing: layers" ) );
 
     // Add layers maps (except B_Mask and F_Mask)
-    for( auto entry : m_boardAdapter.GetLayerMap() )
+    for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry : m_boardAdapter.GetLayerMap() )
     {
-        PCB_LAYER_ID            layer_id = entry.first;
+        const PCB_LAYER_ID      layer_id = entry.first;
         const BVH_CONTAINER_2D* container2d = entry.second;
 
         // Only process layers that exist
@@ -677,9 +677,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         {
             const MATERIAL* materialLayer = &m_materials.m_SolderMask;
 
-            for( auto entry : m_boardAdapter.GetLayerMap() )
+            for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry : m_boardAdapter.GetLayerMap() )
             {
-                PCB_LAYER_ID            layer_id = entry.first;
+                const PCB_LAYER_ID      layer_id = entry.first;
                 const BVH_CONTAINER_2D* container2d = entry.second;
 
                 // Only process layers that exist

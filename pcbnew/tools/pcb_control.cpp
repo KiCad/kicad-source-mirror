@@ -33,7 +33,6 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/board_reannotate_tool.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
-#include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -57,8 +56,6 @@
 #include <properties.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
-#include <footprint_viewer_frame.h>
-#include <footprint_edit_frame.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/infobar.h>
 #include <wx/hyperlink.h>
@@ -171,7 +168,7 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
     for( PCB_TRACK* track : board()->Tracks() )
     {
-        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
+        if( track->Type() == PCB_VIA_T )
             view()->Update( track, KIGFX::REPAINT );
     }
 
@@ -587,11 +584,9 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
                 if( m_isFootprintEditor )
-                    collector.Collect( board, GENERAL_COLLECTOR::FootprintItems,
-                                       (wxPoint) aPos, guide );
+                    collector.Collect( board, GENERAL_COLLECTOR::FootprintItems, aPos, guide );
                 else
-                    collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems,
-                                       (wxPoint) aPos, guide );
+                    collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, aPos, guide );
 
                 // Remove unselectable items
                 for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -607,7 +602,6 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
                 if( m_pickerItem != item )
                 {
-
                     if( m_pickerItem )
                         selectionTool->UnbrightenItem( m_pickerItem );
 
@@ -714,12 +708,12 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
         return 0;
 
-    PASTE_MODE     pasteMode = PASTE_MODE::KEEP_ANNOTATIONS;
+    PASTE_MODE     mode = PASTE_MODE::KEEP_ANNOTATIONS;
     const wxString defaultRef = wxT( "REF**" );
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
-        DIALOG_PASTE_SPECIAL dlg( m_frame, &pasteMode, defaultRef );
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &mode, defaultRef );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
@@ -803,18 +797,17 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 delete clipBoard;
 
-                placeBoardItems( pastedItems, true, true,
-                                 pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             }
             else
             {
-                if( pasteMode == PASTE_MODE::REMOVE_ANNOTATIONS )
+                if( mode == PASTE_MODE::REMOVE_ANNOTATIONS )
                 {
                     for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
                         clipFootprint->SetReference( defaultRef );
                 }
 
-                placeBoardItems( clipBoard, true, pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                placeBoardItems( clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
 
                 m_frame->GetBoard()->BuildConnectivity();
                 m_frame->Compile_Ratsnest( true );
@@ -835,14 +828,14 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
-                if( pasteMode == PASTE_MODE::REMOVE_ANNOTATIONS )
+                if( mode == PASTE_MODE::REMOVE_ANNOTATIONS )
                     clipFootprint->SetReference( defaultRef );
 
                 clipFootprint->SetParent( board() );
                 pastedItems.push_back( clipFootprint );
             }
 
-            placeBoardItems( pastedItems, true, true, pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+            placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             break;
         }
 
@@ -1260,11 +1253,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             if( overlap.count() > 0
                     && ( a_netcode != b_netcode || a_netcode < 0 || b_netcode < 0 ) )
             {
-                constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b,
-                                                   overlap.CuStack().front() );
+                PCB_LAYER_ID layer = overlap.CuStack().front();
 
-                std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( overlap.CuStack().front() ) );
-                std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( overlap.CuStack().front() ) );
+                constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
+
+                std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
+                std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
 
                 int actual_clearance = a_shape->GetClearance( b_shape.get() );
 

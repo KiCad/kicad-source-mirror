@@ -175,7 +175,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
     delete m_socketServer;
 
-    for( auto socket : m_sockets )
+    for( wxSocketBase* socket : m_sockets )
     {
         socket->Shutdown();
         socket->Destroy();

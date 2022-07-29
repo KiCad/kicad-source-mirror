@@ -535,7 +535,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
     m_libraries.clear();
 
-    for( auto lcomp : m_libParts )
+    for( LIB_SYMBOL* lcomp : m_libParts )
     {
         wxString libNickname = lcomp->GetLibId().GetLibNickname();;
 

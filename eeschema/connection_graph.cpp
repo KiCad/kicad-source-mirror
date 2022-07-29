@@ -832,7 +832,7 @@ void CONNECTION_GRAPH::resolveAllDrivers()
             return 0;
 
         // Special processing for some items
-        for( auto item : subgraph->m_items )
+        for( SCH_ITEM* item : subgraph->m_items )
         {
             switch( item->Type() )
             {
@@ -1237,7 +1237,7 @@ void CONNECTION_GRAPH::processSubGraphs()
 
             wxString test_name = member->Name( true );
 
-            for( auto candidate : candidate_subgraphs )
+            for( CONNECTION_SUBGRAPH* candidate : candidate_subgraphs )
             {
                 if( candidate->m_absorbed )
                     continue;
@@ -2425,7 +2425,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
     SCH_ITEM* label = nullptr;
     SCH_ITEM* port = nullptr;
 
-    for( auto item : aSubgraph->m_items )
+    for( SCH_ITEM* item : aSubgraph->m_items )
     {
         switch( item->Type() )
         {

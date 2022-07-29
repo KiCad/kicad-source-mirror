@@ -69,7 +69,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
         SCH_SHEET_PATH sheet = sheetList[i];
 
         // Process symbol attributes
-        for( auto item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
@@ -79,9 +79,10 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             CreatePinList( symbol, &sheet, true );
 
             if( symbol->GetLibSymbolRef()
-              && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )
-                cmpList.push_back( SCH_REFERENCE( symbol, symbol->GetLibSymbolRef().get(),
-                                                  sheet ) );
+                  && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )
+            {
+                cmpList.push_back( SCH_REFERENCE( symbol, symbol->GetLibSymbolRef().get(), sheet ) );
+            }
 
             footprint = symbol->GetFootprint( &sheet, true );
             footprint.Replace( wxT( " " ), wxT( "_" ) );

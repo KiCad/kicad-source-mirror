@@ -68,7 +68,7 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
     // Get the full list
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( auto aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( EDA_ITEM* aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
             aSymbols.push_back( static_cast<SCH_SYMBOL*>( aItem ) );
     }
 
@@ -685,7 +685,7 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 
         rescueLib->GetSymbols( symbols );
 
-        for( auto symbol : symbols )
+        for( LIB_SYMBOL* symbol : symbols )
         {
             // The LIB_SYMBOL copy constructor flattens derived symbols (formerly known as aliases).
             m_rescue_lib->AddSymbol( new LIB_SYMBOL( *symbol, m_rescue_lib.get() ) );

@@ -154,7 +154,7 @@ void SCH_SHEET_PATH::Rehash()
 {
     m_current_hash = 0;
 
-    for( auto sheet : m_sheets )
+    for( SCH_SHEET* sheet : m_sheets )
         boost::hash_combine( m_current_hash, sheet->m_Uuid.Hash() );
 }
 

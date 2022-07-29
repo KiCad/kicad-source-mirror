@@ -538,7 +538,7 @@ void DS_DRAW_ITEM_LIST::Print( const RENDER_SETTINGS* aSettings )
             second_items.push_back( item );
     }
 
-    for( auto item : second_items )
+    for( DS_DRAW_ITEM_BASE* item : second_items )
         item->PrintWsItem( aSettings );
 }
 

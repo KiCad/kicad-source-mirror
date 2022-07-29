@@ -36,7 +36,6 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
 #include <array_creator.h>
-#include <pcbnew_settings.h>
 #include <status_popup.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_manager.h>

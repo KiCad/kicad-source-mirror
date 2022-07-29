@@ -100,7 +100,7 @@ SCHEMATIC* SCH_SCREEN::Schematic() const
 
 void SCH_SCREEN::clearLibSymbols()
 {
-    for( auto libSymbol : m_libSymbols )
+    for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : m_libSymbols )
         delete libSymbol.second;
 
     m_libSymbols.clear();
@@ -529,9 +529,9 @@ TEXT_SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       a
 
         case SCH_SYMBOL_T:
         {
-            auto symbol = static_cast<SCH_SYMBOL*>( item );
-            auto pins = symbol->GetPins( aSheet );
-            for( auto pin : pins )
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_PIN* pin : symbol->GetPins( aSheet ) )
             {
                 if( pin->GetPosition() == aPosition )
                 {

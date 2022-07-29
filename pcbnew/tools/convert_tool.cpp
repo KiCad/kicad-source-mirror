@@ -691,7 +691,6 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
     FOOTPRINT_EDIT_FRAME* fpEditor    = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
     FOOTPRINT*            footprint   = nullptr;
     PCB_LAYER_ID          targetLayer = m_frame->GetActiveLayer();
-    PCB_LAYER_ID          copperLayer = F_Cu;
     BOARD_ITEM_CONTAINER* parent      = frame->GetModel();
 
     if( fpEditor )
@@ -738,12 +737,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
     {
         if( !IsCopperLayer( targetLayer ) )
         {
-            copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
+            targetLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
 
-            if( copperLayer == UNDEFINED_LAYER )    // User canceled
+            if( targetLayer == UNDEFINED_LAYER )    // User canceled
                 return true;
-
-            targetLayer = copperLayer;
         }
     }
 

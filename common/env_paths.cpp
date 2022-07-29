@@ -79,12 +79,14 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
     if( aEnvVars )
     {
-        for( auto& entry : *aEnvVars )
+        for( const std::pair<const wxString, ENV_VAR_ITEM>& entry : *aEnvVars )
         {
             // Don't bother normalizing paths that don't exist or the user cannot read.
             if( !wxFileName::DirExists( entry.second.GetValue() )
-                || !wxFileName::IsDirReadable( entry.second.GetValue() ) )
+                    || !wxFileName::IsDirReadable( entry.second.GetValue() ) )
+            {
                 continue;
+            }
 
             envPath.SetPath( entry.second.GetValue() );
 
@@ -177,7 +179,7 @@ wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
 
     if( aEnvVars )
     {
-        for( auto& entry : *aEnvVars )
+        for( const std::pair<const wxString, ENV_VAR_ITEM>& entry : *aEnvVars )
         {
             wxFileName fn( createFilePath( entry.second.GetValue(), aFileName ) );
 

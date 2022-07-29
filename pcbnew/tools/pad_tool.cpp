@@ -594,8 +594,8 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
         {
             msg.Printf( _( "Pad Edit Mode.  Press %s again to exit." ),
-                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );}
-
+                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
+        }
         else
         {
             msg.Printf( _( "Pad Edit Mode.  Press %s to exit." ),

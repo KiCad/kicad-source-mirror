@@ -60,7 +60,7 @@ ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
 ACTION_MENU::~ACTION_MENU()
 {
     // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
-    for( auto menu : m_submenus )
+    for( ACTION_MENU* menu : m_submenus )
         menu->SetParent( nullptr );
 
     ACTION_MENU* parent = dynamic_cast<ACTION_MENU*>( GetParent() );
