@@ -361,6 +361,9 @@ void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
 {
     m_colWidths[NAME_COL] = m_col_part->GetWidth();
     m_col_desc->SetWidth( m_colWidths[DESC_COL] );
+
+    // Mandatory in any wxSizeEvent handler:
+    aEvent.Skip();
 }
 
 
