@@ -86,7 +86,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] = {
       _( "Substitute STEP or IGS models with the same name in place of VRML models" ).mb_str(),
       wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_OPTION, NULL, "min-distance",
-      _( "Minimum distance between points to treat them as separate ones (default 0.01mm)" )
+      _( "Minimum distance between points to treat them as separate ones (default 0.01 mm)" )
               .mb_str(),
       wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
     { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ).mb_str(), wxCMD_LINE_VAL_NONE,
