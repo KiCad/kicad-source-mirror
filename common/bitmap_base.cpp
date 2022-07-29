@@ -261,7 +261,10 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
-    #if !wxCHECK_VERSION( 3, 1, 6 )
+
+        // Looks like wxWidgets 3.1.6 has a bug to fix the clipboard position
+        // So for 3.1.6 only, clipAreaPos.x =  clipAreaPos.y = 0
+    #if !wxCHECK_VERSION( 3, 1, 6 ) || wxCHECK_VERSION( 3, 1, 7 )
         clipAreaPos.x = pos.x;
         clipAreaPos.y = pos.y;
     #else
