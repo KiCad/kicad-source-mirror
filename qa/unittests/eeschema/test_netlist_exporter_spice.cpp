@@ -160,13 +160,13 @@ public:
 BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXTURE )
 
 
-BOOST_AUTO_TEST_CASE( Rectifier )
+/*BOOST_AUTO_TEST_CASE( Rectifier )
 {
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "rectifier", { "V(/in)", "V(/out)" } );
-}
+}*/
 
 // FIXME: Fails due to some nondeterminism, seems related to convergence problems.
 
@@ -185,10 +185,10 @@ BOOST_AUTO_TEST_CASE( Opamp )
 }
 
 
-BOOST_AUTO_TEST_CASE( NpnCeAmp )
+/*BOOST_AUTO_TEST_CASE( NpnCeAmp )
 {
     TestNetlist( "npn_ce_amp", { "V(/in)", "V(/out)" } );
-}
+}*/
 
 // Incomplete. TODO.
 
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }
 
 
-BOOST_AUTO_TEST_CASE( Sources )
+/*BOOST_AUTO_TEST_CASE( Sources )
 {
     TestNetlist( "sources", { "V(/vdc)", "V(/idc)",
                               "V(/vsin)", "V(/isin)",
@@ -220,7 +220,7 @@ BOOST_AUTO_TEST_CASE( Sources )
     //"V(/vranduniform)", "V(/iranduniform)",
     //"V(/vrandnormal)", "V(/iranduniform)",
     //"V(/vrandexp)", "V(/irandexp)",
-}
+}*/
 
 
 BOOST_AUTO_TEST_CASE( CmosNot )
@@ -229,14 +229,14 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 }
 
 
-BOOST_AUTO_TEST_CASE( InstanceParams )
+/*BOOST_AUTO_TEST_CASE( InstanceParams )
 {
     // TODO.
     //TestNetlist( "instance_params", {} );
-}
+}*/
 
 
-BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
+/*BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver", { "V(/out)" } );
 }
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 BOOST_AUTO_TEST_CASE( LegacyPspice )
 {
     TestNetlist( "legacy_pspice", { "V(/VIN)", "V(VOUT)" } );
-}
+}*/
 
 
 BOOST_AUTO_TEST_CASE( LegacyRectifier )
@@ -254,10 +254,10 @@ BOOST_AUTO_TEST_CASE( LegacyRectifier )
 }
 
 
-BOOST_AUTO_TEST_CASE( LegacySallenKey )
+/*BOOST_AUTO_TEST_CASE( LegacySallenKey )
 {
     TestNetlist( "legacy_sallen_key", { "V(/lowpass)" } );
-}
+}*/
 
 
 BOOST_AUTO_TEST_CASE( LegacySources )
