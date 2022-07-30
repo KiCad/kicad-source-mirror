@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-30 09:06+0000\n"
-"Last-Translator: minsu kim (0xGabriel) <rlaalstn9601@gmail.com>\n"
+"Last-Translator: ky107601 <qldkr1@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -33478,7 +33478,7 @@ msgstr "인덕턴스 행렬이 잘못되었습니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:673
 msgid "Inductance matrix is nullptr"
-msgstr "인덕턴스 행렬이 널포인터입니다"
+msgstr "인덕턴스 행렬이 널 포인터입니다"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
 msgid "Cannot open file "
@@ -39534,9 +39534,8 @@ msgid "Resolved clearance"
 msgstr "해결된 클리어런스"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "마스크 유격"
+msgstr "실제 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1317 pcbnew/tools/pcb_control.cpp:1301
 msgid "Resolved hole clearance"
@@ -39681,13 +39680,12 @@ msgid "Auto-fill Zone(s)"
 msgstr "자동 채우기 영역"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "배선 폭 확인 중..."
+msgstr "null 배선 및 비아를 확인하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:70
 msgid "Removing null tracks and vias..."
-msgstr "Null 트랙 및 비아 제거 중..."
+msgstr "null 배선 및 비아를 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 msgid "Checking redundant tracks..."
@@ -39707,9 +39705,8 @@ msgid "Removing shorting tracks..."
 msgstr "단락 트랙 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "배선 폭 확인 중..."
+msgstr "패드의 배선 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:112
 msgid "Removing tracks in pads..."
@@ -39718,7 +39715,7 @@ msgstr "패드에서 트랙을 제거하는 중..."
 #: pcbnew/tracks_cleaner.cpp:126
 #, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "배선 폭 확인 중..."
+msgstr "배선과 비아 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:131
 #, fuzzy
@@ -39728,7 +39725,7 @@ msgstr "배선 불러오는 중..."
 #: pcbnew/tracks_cleaner.cpp:134
 #, fuzzy
 msgid "Removing dangling vias..."
-msgstr "비아 불러오는 중..."
+msgstr "비아 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:148
 #, fuzzy
