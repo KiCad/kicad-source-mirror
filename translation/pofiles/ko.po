@@ -20,13 +20,14 @@
 # 김낙환 <ktkr1964@naver.com>, 2022.
 # minsu kim (0xGabriel) <rlaalstn9601@gmail.com>, 2022.
 # 김세영 <tpdud2980@naver.com>, 2022.
+# 남우근 <rolru7686@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-31 19:18+0000\n"
-"Last-Translator: 김세영 <tpdud2980@naver.com>\n"
+"Last-Translator: 남우근 <rolru7686@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -37505,9 +37506,9 @@ msgstr "구역 클리어런스: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:665
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "%s로 더 큰 단열판으로 재정의 됨; 유격: %s."
+msgstr "%s로 더 큰 물리적 유격에 의해 재정의 됨; 유격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
 #: pcbnew/tools/board_inspection_tool.cpp:697
