@@ -186,11 +186,16 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
         return false;   // DRC cancelled
 
     std::vector< std::pair<ZONE*, PCB_LAYER_ID> > zoneLayers;
+    std::atomic<size_t> done( 1 );
+    size_t total_effort = 0;
 
     for( ZONE* zone : board->m_DRCCopperZones )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
             zoneLayers.push_back( { zone, layer } );
+            total_effort += zone->GetFilledPolysList( layer )->FullPointCount();
+        }
     }
 
     thread_pool& tp = GetKiCadThreadPool();
@@ -198,26 +203,29 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
     returns.reserve( zoneLayers.size() );
 
-    for( auto& zonelayer : zoneLayers )
+    for( const std::pair<ZONE*, PCB_LAYER_ID>& zonelayer : zoneLayers )
     {
-        returns.emplace_back( tp.submit([&]( ZONE* aZone, PCB_LAYER_ID aLayer ) -> int
+        returns.emplace_back( tp.submit(
+                [&]( ZONE* aZone, PCB_LAYER_ID aLayer ) -> int
                 {
                     if( !m_drcEngine->IsCancelled() )
                     {
                         testZoneLayer( aZone, aLayer );
-                        m_drcEngine->AdvanceProgress();
+                        done.fetch_add( aZone->GetFilledPolysList( aLayer )->FullPointCount() );
                     }
+
                     return 0;
-                }, zonelayer.first, zonelayer.second ) );
+                },
+                zonelayer.first, zonelayer.second ) );
     }
 
-    for( auto& retval : returns )
+    for( std::future<int>& retval : returns )
     {
         std::future_status status;
 
         do
         {
-            m_drcEngine->KeepRefreshing();
+            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
             status = retval.wait_for( std::chrono::milliseconds( 100 ) );
         } while( status != std::future_status::ready );
     }
