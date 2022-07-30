@@ -60,6 +60,7 @@ void HIDPI_GL_3D_CANVAS::OnMouseMoveCamera( wxMouseEvent& event )
         m_mouse_is_moving = true;
         m_mouse_was_moved = true;
     }
+
     m_camera.SetCurMousePosition( nativePosition );
 }
 

@@ -617,14 +617,17 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 
 void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 {
-    //wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnMouseMove" ) );
+    if( m_camera_is_moving )
+        return;
+
     OnMouseMoveCamera( event );
 
     if( m_mouse_was_moved )
     {
         DisplayStatus();
         Request_refresh();
-        restart_editingTimeOut_Timer();
+        // *Do not* reactivate the timer here during the mouse move command:
+        // OnMiddleUp() will do it at the end of mouse drag/move command
     }
 
     if( !event.Dragging() && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
