@@ -281,7 +281,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     }
                 }
 
-                if( autofillZones )
+                if( autofillZones && boardItem->Type() != PCB_MARKER_T )
                     dirtyIntersectingZones( boardItem );
 
                 if( view && boardItem->Type() != PCB_NETINFO_T )
