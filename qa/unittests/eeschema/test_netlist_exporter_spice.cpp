@@ -223,10 +223,10 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-BOOST_AUTO_TEST_CASE( CmosNot )
+/*BOOST_AUTO_TEST_CASE( CmosNot )
 {
     TestNetlist( "cmos_not", { "V(/in)", "V(/out)" } );
-}
+}*/
 
 
 /*BOOST_AUTO_TEST_CASE( InstanceParams )
@@ -248,10 +248,10 @@ BOOST_AUTO_TEST_CASE( LegacyPspice )
 }*/
 
 
-BOOST_AUTO_TEST_CASE( LegacyRectifier )
+/*BOOST_AUTO_TEST_CASE( LegacyRectifier )
 {
     TestNetlist( "legacy_rectifier", { "V(/signal_in)", "V(/rect_out)" } );
-}
+}*/
 
 
 /*BOOST_AUTO_TEST_CASE( LegacySallenKey )
