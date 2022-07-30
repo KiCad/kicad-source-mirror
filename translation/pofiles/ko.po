@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-30 09:06+0000\n"
-"Last-Translator: ky107601 <qldkr1@naver.com>\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -21557,7 +21557,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "표피 깊이 100%를 위한 주파수:"
+msgstr "침투깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
