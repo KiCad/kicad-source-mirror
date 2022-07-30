@@ -31,7 +31,6 @@
 #include <locale_io.h>
 #include <wx/filedlg.h>
 
-using TYPE = SIM_VALUE::TYPE;
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 
@@ -51,7 +50,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
       m_wasCodePreviewUpdated( true )
 {
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
-    auto validator = dynamic_cast<MODEL_NAME_VALIDATOR*>( m_modelNameCombobox->GetValidator() );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
@@ -59,7 +57,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
         m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
 
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-        
+
         if( !m_curModelTypeOfDeviceType.count( deviceType ) )
             m_curModelTypeOfDeviceType[deviceType] = type;
     }
@@ -69,7 +67,6 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     for( SIM_MODEL::DEVICE_TYPE_ deviceType : SIM_MODEL::DEVICE_TYPE__ITERATOR() )
         m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
-
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
 
@@ -353,7 +350,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
             continue;
 
         wxString modelPinString = getModelPinString( i + 1 );
-        wxArrayString choices; 
+        wxArrayString choices;
 
         m_pinAssignmentsGrid->SetCellValue( static_cast<int>( symbolPinNumber - 1 ),
                                             static_cast<int>( PIN_COLUMN::MODEL ),
@@ -979,7 +976,7 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
         m_prevParamGridSelection = grid->GetSelection();
         return;
     }
-    
+
     // Without this the user had to press tab before they could edit the field.
     editorControl->SetFocus();
     m_prevParamGridSelection = grid->GetSelection();
