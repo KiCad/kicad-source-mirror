@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-18 09:37-0700\n"
-"PO-Revision-Date: 2022-07-30 12:01+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"Last-Translator: 김세영 <tpdud2980@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -27214,9 +27214,8 @@ msgid "Show Plugin Errors"
 msgstr "플러그인 오류 표시"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
-msgstr "페이지 원점"
+msgstr "페이지 출처"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 msgid "Display Origin"
