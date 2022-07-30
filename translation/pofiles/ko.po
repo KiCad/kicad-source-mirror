@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-30 00:30+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"PO-Revision-Date: 2022-07-30 01:16+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -31523,12 +31523,12 @@ msgstr "%s의 결합되지 않은 최대 길이 확인중: %s."
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s 최대 왜곡 구간 확인 : %s."
+msgstr "%s 최대 왜곡 확인중 : %s."
 
 #: pcbnew/drc/drc_engine.cpp:862
 #, c-format
 msgid "Checking %s gap: %s."
-msgstr "%s 의 차이 확인중: %s."
+msgstr "%s 의 간격 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
 #, c-format
@@ -31541,9 +31541,9 @@ msgid "Checking %s min spoke count: %s."
 msgstr "확인 중 %s 최소 스포크 개수: %s."
 
 #: pcbnew/drc/drc_engine.cpp:880
-#, c-format, fuzzy
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "%s 구역 연결 확인: %s."
+msgstr "%s 구역 연결 확인중: %s."
 
 #: pcbnew/drc/drc_engine.cpp:896 pcbnew/drc/drc_engine.cpp:897
 #: pcbnew/drc/drc_engine.cpp:898 pcbnew/tools/board_inspection_tool.cpp:202
@@ -31560,7 +31560,7 @@ msgstr "확인 중 %s 배선 폭: 선택 %s."
 #: pcbnew/drc/drc_engine.cpp:916
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "보드 트랙 폭 제한 검사: 최소 %s."
+msgstr "보드 설정 제약 조건 트랙 폭 확인: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:924
 #, c-format
@@ -31570,7 +31570,7 @@ msgstr "확인 중 %s 랜드 폭: 최소 %s."
 #: pcbnew/drc/drc_engine.cpp:932
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "확인 중 %s 경로 지름: 선택 %s."
+msgstr "%s 비아 직경 확인: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:938
 #, c-format
@@ -31698,9 +31698,9 @@ msgid "zone"
 msgstr "구역"
 
 #: pcbnew/drc/drc_engine.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "%s 단열판 격차: %s."
+msgstr "%s 단열판 갭: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1382
 #, c-format
@@ -37323,7 +37323,6 @@ msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "해결된 직경 제한: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
 msgstr "비아 환형 폭"
 
@@ -37397,9 +37396,8 @@ msgstr "해결된 클리어런스: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:1007
 #: pcbnew/tools/board_inspection_tool.cpp:1023
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "기계적 유격 해상도:"
+msgstr "물리적 홀 유격 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1019
@@ -37432,9 +37430,8 @@ msgstr "기계적 유격 분해능:"
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:953
 #: pcbnew/tools/board_inspection_tool.cpp:969
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "정의된 'mechanical_clearance' 제약 조건이 없습니다."
+msgstr "정의된 '물리적 유격' 제약 조건이 없습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:514
 #: pcbnew/tools/board_inspection_tool.cpp:530
@@ -37460,9 +37457,8 @@ msgstr "다음을 위한 영역 연결 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:605
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "다음을 위한 킵아웃 계산:"
+msgstr "단열판 갭 분해능:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:614
 #: pcbnew/tools/board_inspection_tool.cpp:630
@@ -37483,9 +37479,8 @@ msgstr "해결된 단열판 스포크 너비: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:633
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "다음을 위한 킵아웃 계산:"
+msgstr "스포크 수 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:642
 #: pcbnew/tools/board_inspection_tool.cpp:658
@@ -37497,9 +37492,8 @@ msgstr "최소 단열판 스포크 수: %d."
 #: pcbnew/tools/board_inspection_tool.cpp:699
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "다음을 위한 홀 클리어런스 계산:"
+msgstr "구역 클리어런스 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:655
 #: pcbnew/tools/board_inspection_tool.cpp:671
@@ -37662,9 +37656,8 @@ msgid "Assertions for:"
 msgstr "다음을 위한 규칙:"
 
 #: pcbnew/tools/convert_tool.cpp:77
-#, fuzzy
 msgid "Create from Selection"
-msgstr "선택된 범위에서 생성"
+msgstr "선택 항목에서 생성"
 
 #: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
