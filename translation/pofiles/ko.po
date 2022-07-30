@@ -18,13 +18,14 @@
 # ky107601 <qldkr1@naver.com>, 2022.
 # 김용재 <tpdlqj965@gmail.com>, 2022.
 # 김낙환 <ktkr1964@naver.com>, 2022.
+# minsu kim (0xGabriel) <rlaalstn9601@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-30 01:16+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2022-07-30 09:06+0000\n"
+"Last-Translator: minsu kim (0xGabriel) <rlaalstn9601@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -21556,7 +21557,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "표면 효과 100%를 위한 주파수:"
+msgstr "표피 깊이 100%를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Ampacity:"
@@ -29716,8 +29717,9 @@ msgid "Show Plugin Errors"
 msgstr "플러그인 오류 표시"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
+#, fuzzy
 msgid "Page origin"
-msgstr "페이지 출처"
+msgstr "페이지 원점"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 msgid "Display Origin"
@@ -37560,9 +37562,8 @@ msgstr "다음을 위한 코트야드 클리어런스 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
 #: pcbnew/tools/board_inspection_tool.cpp:952
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "물리적 매개변수"
+msgstr "물리적 허용 범위"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1046
 #: pcbnew/tools/board_inspection_tool.cpp:1062
