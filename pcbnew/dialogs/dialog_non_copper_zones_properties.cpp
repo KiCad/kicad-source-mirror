@@ -88,7 +88,9 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
     m_hatchGap( aParent, m_hatchGapLabel, m_hatchGapCtrl, m_hatchGapUnits ),
     m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
-    m_convertSettings( aConvertSettings )
+    m_convertSettings( aConvertSettings ),
+    m_cbIgnoreLineWidths( nullptr ),
+    m_cbDeleteOriginals( nullptr )
 {
     m_parent = aParent;
 

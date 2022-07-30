@@ -56,7 +56,9 @@ public:
     CONVERT_SETTINGS_DIALOG( wxWindow* aParent, CONVERT_SETTINGS* aSettings ) :
             DIALOG_SHIM( aParent, wxID_ANY, _( "Conversion Settings" ), wxDefaultPosition,
                          wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-            m_settings( aSettings )
+            m_settings( aSettings ),
+            m_cbIgnoreLineWidths( nullptr ),
+            m_cbDeleteOriginals( nullptr )
     {
         wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
         wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );

@@ -78,8 +78,9 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
         DIALOG_RULE_AREA_PROPERTIES_BASE( aParent ),
         m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
                              m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
-        m_convertSettings( aConvertSettings )
-
+        m_convertSettings( aConvertSettings ),
+        m_cbIgnoreLineWidths( nullptr ),
+        m_cbDeleteOriginals( nullptr )
 {
     m_parent = aParent;
 
