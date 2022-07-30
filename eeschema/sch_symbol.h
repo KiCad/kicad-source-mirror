@@ -630,7 +630,7 @@ public:
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
      * Return the symbol library item at \a aPosition that is part of this symbol.

@@ -1235,7 +1235,7 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 }
 
 
-SEARCH_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
+INSPECT_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
                                  const KICAD_T aFilterTypes[] )
 {
     // The part itself is never inspected, only its children
@@ -1243,12 +1243,12 @@ SEARCH_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
     {
         if( item.IsType( aFilterTypes ) )
         {
-            if( aInspector( &item, aTestData ) == SEARCH_RESULT::QUIT )
-                return SEARCH_RESULT::QUIT;
+            if( aInspector( &item, aTestData ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
         }
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

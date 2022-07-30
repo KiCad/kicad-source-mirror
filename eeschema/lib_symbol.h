@@ -502,7 +502,7 @@ public:
     LIB_ITEMS_CONTAINER& GetDrawItems() { return m_drawings; }
     const LIB_ITEMS_CONTAINER& GetDrawItems() const { return m_drawings; }
 
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
      * Set the units per symbol count.

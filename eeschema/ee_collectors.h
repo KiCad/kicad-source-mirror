@@ -69,7 +69,7 @@ public:
         return nullptr;
     }
 
-    SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
+    INSPECT_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
 
     /**
      * Scan a #EDA_ITEM using this class's Inspector method which does the collection.

@@ -2104,7 +2104,7 @@ void PCB_SELECTION_TOOL::RebuildSelection()
 
                     // Let selected parents handle their children.
                     if( parent && parent->IsSelected() )
-                        return SEARCH_RESULT::CONTINUE;
+                        return INSPECT_RESULT::CONTINUE;
 
                     highlight( item, SELECTED, &m_selection );
                 }
@@ -2119,7 +2119,7 @@ void PCB_SELECTION_TOOL::RebuildSelection()
                     item->ClearFlags( ENTERED );
                 }
 
-                return SEARCH_RESULT::CONTINUE;
+                return INSPECT_RESULT::CONTINUE;
             };
 
     board()->Visit( inspector, nullptr, m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems

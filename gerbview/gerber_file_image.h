@@ -299,7 +299,7 @@ public:
     void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
 
     ///< @copydoc EDA_ITEM::Visit()
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
 #if defined(DEBUG)
 

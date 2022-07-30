@@ -1237,10 +1237,10 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 
 
 // see footprint.h
-SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
+    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
@@ -1272,12 +1272,12 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
         case PCB_FP_TEXT_T:
             result = inspector( m_reference, testData );
 
-            if( result == SEARCH_RESULT::QUIT )
+            if( result == INSPECT_RESULT::QUIT )
                 break;
 
             result = inspector( m_value, testData );
 
-            if( result == SEARCH_RESULT::QUIT )
+            if( result == INSPECT_RESULT::QUIT )
                 break;
 
             // Intentionally fall through since m_Drawings can hold PCB_FP_SHAPE_T also
@@ -1326,7 +1326,7 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
             break;
         }
 
-        if( result == SEARCH_RESULT::QUIT )
+        if( result == INSPECT_RESULT::QUIT )
             break;
     }
 

@@ -115,7 +115,7 @@ const KICAD_T EE_COLLECTOR::FieldOwners[] = {
 };
 
 
-SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
+INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( m_Unit || m_Convert )
     {
@@ -127,10 +127,10 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         if( lib_item && lib_item->Type() != LIB_PIN_T )
         {
             if( m_Unit && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
-                return SEARCH_RESULT::CONTINUE;
+                return INSPECT_RESULT::CONTINUE;
 
             if( m_Convert && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
-                return SEARCH_RESULT::CONTINUE;
+                return INSPECT_RESULT::CONTINUE;
         }
     }
 
@@ -142,7 +142,7 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 
     aItem->ClearFlags( SHOW_ELEC_TYPE );
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 
@@ -180,7 +180,7 @@ void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterLi
 
     for( LIB_ITEM& item : aItems )
     {
-        if( item.Visit( m_inspector, nullptr, m_scanTypes ) == SEARCH_RESULT::QUIT )
+        if( item.Visit( m_inspector, nullptr, m_scanTypes ) == INSPECT_RESULT::QUIT )
             break;
     }
 }

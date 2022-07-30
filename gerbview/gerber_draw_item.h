@@ -231,7 +231,7 @@ public:
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///< @copydoc EDA_ITEM::Visit()
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     ///< @copydoc EDA_ITEM::GetSelectMenuText()
     virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

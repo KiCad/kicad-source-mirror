@@ -161,7 +161,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     ///< @copydoc EDA_ITEM::Visit
-    SEARCH_RESULT Visit( INSPECTOR aInspector, void* aTestData,
+    INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                          const KICAD_T aScanTypes[] ) override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLayers

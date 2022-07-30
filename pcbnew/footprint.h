@@ -596,7 +596,7 @@ public:
      */
     void Add3DModel( FP_3DMODEL* a3DModel );
 
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     wxString GetClass() const override
     {

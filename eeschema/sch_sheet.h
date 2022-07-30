@@ -350,7 +350,7 @@ public:
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 

@@ -331,7 +331,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *         else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData )  override;
+    INSPECT_RESULT Inspect( EDA_ITEM* testItem, void* testData )  override;
 
     /**
      * Scan a BOARD_ITEM using this class's Inspector method, which does the collection.
@@ -559,7 +559,7 @@ public:
      * @param testData is not used in this class.
      * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
+    INSPECT_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
     /**
      * Collect #BOARD_ITEM objects using this class's Inspector method, which does the collection.
@@ -594,7 +594,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
+    INSPECT_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
     /**
      * Test a BOARD_ITEM using this class's Inspector method, which does the collection.

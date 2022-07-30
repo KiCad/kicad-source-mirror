@@ -945,7 +945,7 @@ std::vector<VECTOR2I> SCH_SHEET::GetConnectionPoints() const
 }
 
 
-SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICAD_T aFilterTypes[] )
+INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICAD_T aFilterTypes[] )
 {
     KICAD_T stype;
 
@@ -954,8 +954,8 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
         // If caller wants to inspect my type
         if( stype == SCH_LOCATE_ANY_T || stype == Type() )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( this, nullptr ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( this, nullptr ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
@@ -963,8 +963,8 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
             // Test the sheet fields.
             for( SCH_FIELD& field : m_fields )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( &field, this ) )
-                    return SEARCH_RESULT::QUIT;
+                if( INSPECT_RESULT::QUIT == aInspector( &field, this ) )
+                    return INSPECT_RESULT::QUIT;
             }
         }
 
@@ -973,13 +973,13 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
             // Test the sheet labels.
             for( SCH_SHEET_PIN* sheetPin : m_pins )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( sheetPin, this ) )
-                    return SEARCH_RESULT::QUIT;
+                if( INSPECT_RESULT::QUIT == aInspector( sheetPin, this ) )
+                    return INSPECT_RESULT::QUIT;
             }
         }
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

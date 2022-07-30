@@ -34,12 +34,12 @@ const KICAD_T GERBER_COLLECTOR::AllItems[] = {
  * @param testData is not used here.
  * @return SEARCH_QUIT if the iterator is to stop the scan, else SCAN_CONTINUE.
  */
-SEARCH_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
+INSPECT_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     if( testItem->HitTest( m_refPos ) )
         Append( testItem );
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

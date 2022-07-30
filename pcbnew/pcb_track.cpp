@@ -351,18 +351,18 @@ void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 
 // see class_track.h
-SEARCH_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
 
     // If caller wants to inspect my type
     if( stype == Type() )
     {
-        if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
-            return SEARCH_RESULT::QUIT;
+        if( INSPECT_RESULT::QUIT == inspector( this, testData ) )
+            return INSPECT_RESULT::QUIT;
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

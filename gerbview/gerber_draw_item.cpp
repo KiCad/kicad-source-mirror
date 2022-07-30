@@ -996,7 +996,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
+INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
                                        const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
@@ -1004,11 +1004,11 @@ SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
     // If caller wants to inspect my type
     if( stype == Type() )
     {
-        if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
-            return SEARCH_RESULT::QUIT;
+        if( INSPECT_RESULT::QUIT == inspector( this, testData ) )
+            return INSPECT_RESULT::QUIT;
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

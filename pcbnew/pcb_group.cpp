@@ -233,19 +233,19 @@ const EDA_RECT PCB_GROUP::GetBoundingBox() const
 }
 
 
-SEARCH_RESULT PCB_GROUP::Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aScanTypes[] )
+INSPECT_RESULT PCB_GROUP::Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aScanTypes[] )
 {
     for( const KICAD_T* stype = aScanTypes; *stype != EOT; ++stype )
     {
         // If caller wants to inspect my type
         if( *stype == Type() )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( this, aTestData ) )
+                return INSPECT_RESULT::QUIT;
         }
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

@@ -763,7 +763,7 @@ public:
      * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE, and
      *         determined by the inspector.
      */
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
      * Search for a FOOTPRINT within this board with the given reference designator.

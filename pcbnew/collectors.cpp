@@ -174,7 +174,7 @@ const KICAD_T GENERAL_COLLECTOR::DraggableItems[] = {
 };
 
 
-SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
+INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*         item        = (BOARD_ITEM*) testItem;
     FOOTPRINT*          footprint   = nullptr;
@@ -613,7 +613,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     }
 
 exit:
-    return SEARCH_RESULT::CONTINUE; // always when collecting
+    return INSPECT_RESULT::CONTINUE; // always when collecting
 }
 
 
@@ -645,13 +645,13 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 }
 
 
-SEARCH_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
+INSPECT_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     // The Visit() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
     Append( testItem );
 
-    return SEARCH_RESULT::CONTINUE; // always when collecting
+    return INSPECT_RESULT::CONTINUE; // always when collecting
 }
 
 
@@ -663,14 +663,14 @@ void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] 
 }
 
 
-SEARCH_RESULT PCB_LAYER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
+INSPECT_RESULT PCB_LAYER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM* item = (BOARD_ITEM*) testItem;
 
     if( item->IsOnLayer( m_layer_id ) )
         Append( testItem );
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

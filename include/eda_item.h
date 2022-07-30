@@ -38,7 +38,7 @@
 enum class BITMAPS : unsigned int;
 
 
-enum class SEARCH_RESULT
+enum class INSPECT_RESULT
 {
     QUIT,
     CONTINUE
@@ -87,7 +87,7 @@ class MSG_PANEL_ITEM;
  * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
  *          stop the scan, else #SEARCH_CONTINUE;
  */
-typedef std::function< SEARCH_RESULT ( EDA_ITEM* aItem, void* aTestData ) > INSPECTOR_FUNC;
+typedef std::function< INSPECT_RESULT ( EDA_ITEM* aItem, void* aTestData ) > INSPECTOR_FUNC;
 
 ///< std::function passed to nested users by ref, avoids copying std::function.
 typedef const INSPECTOR_FUNC& INSPECTOR;
@@ -305,13 +305,13 @@ public:
      * @return #SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
      *         else #SCAN_CONTINUE, and determined by the inspector.
      */
-    virtual SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
+    virtual INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
 
     /**
      * This changes first parameter to avoid the DList and use the main queue instead.
      */
     template< class T >
-    static SEARCH_RESULT IterateForward( std::deque<T>&  aList,
+    static INSPECT_RESULT IterateForward( std::deque<T>&  aList,
                                          INSPECTOR       inspector,
                                          void*           testData,
                                          const KICAD_T   scanTypes[] )
@@ -319,28 +319,28 @@ public:
         for( auto it : aList )
         {
             if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
-                    == SEARCH_RESULT::QUIT )
-                return SEARCH_RESULT::QUIT;
+                    == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
         }
 
-        return SEARCH_RESULT::CONTINUE;
+        return INSPECT_RESULT::CONTINUE;
     }
 
     /**
      * Change first parameter to avoid the DList and use std::vector instead.
      */
     template <class T>
-    static SEARCH_RESULT IterateForward(
+    static INSPECT_RESULT IterateForward(
             std::vector<T>& aList, INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
     {
         for( auto it : aList )
         {
             if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
-                    == SEARCH_RESULT::QUIT )
-                return SEARCH_RESULT::QUIT;
+                    == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
         }
 
-        return SEARCH_RESULT::CONTINUE;
+        return INSPECT_RESULT::CONTINUE;
     }
 
     /**

@@ -1711,7 +1711,7 @@ wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-SEARCH_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
+INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
                                  const KICAD_T aFilterTypes[] )
 {
     KICAD_T     stype;
@@ -1722,42 +1722,42 @@ SEARCH_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
           || ( stype == SCH_SYMBOL_T )
           || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( this, aTestData ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
         {
             for( SCH_FIELD& field : m_fields )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( &field, (void*) this ) )
-                    return SEARCH_RESULT::QUIT;
+                if( INSPECT_RESULT::QUIT == aInspector( &field, (void*) this ) )
+                    return INSPECT_RESULT::QUIT;
             }
         }
 
         if( stype == SCH_FIELD_LOCATE_REFERENCE_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( REFERENCE_FIELD ), (void*) this ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( REFERENCE_FIELD ), (void*) this ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_VALUE_T
                 || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( FOOTPRINT_FIELD ), (void*) this ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( FOOTPRINT_FIELD ), (void*) this ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_DATASHEET_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( DATASHEET_FIELD ), (void*) this ) )
-                return SEARCH_RESULT::QUIT;
+            if( INSPECT_RESULT::QUIT == aInspector( GetField( DATASHEET_FIELD ), (void*) this ) )
+                return INSPECT_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_PIN_T )
@@ -1775,13 +1775,13 @@ SEARCH_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
                 if( pin_convert > 0 && pin_convert != GetConvert() )
                     continue;
 
-                if( SEARCH_RESULT::QUIT == aInspector( pin.get(), (void*) this ) )
-                    return SEARCH_RESULT::QUIT;
+                if( INSPECT_RESULT::QUIT == aInspector( pin.get(), (void*) this ) )
+                    return INSPECT_RESULT::QUIT;
             }
         }
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

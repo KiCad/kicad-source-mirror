@@ -237,7 +237,7 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
                         view->Update( dimension );
                     }
 
-                    return SEARCH_RESULT::CONTINUE;
+                    return INSPECT_RESULT::CONTINUE;
                 };
 
         board->Visit( inspector, nullptr, GENERAL_COLLECTOR::Dimensions );

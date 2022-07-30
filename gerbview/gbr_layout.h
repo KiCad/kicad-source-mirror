@@ -78,7 +78,7 @@ public:
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
     ///< @copydoc EDA_ITEM::Visit()
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

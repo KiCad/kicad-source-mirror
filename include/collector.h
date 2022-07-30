@@ -63,9 +63,9 @@ public:
 
     virtual ~COLLECTOR() {}
 
-    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData )
+    virtual INSPECT_RESULT Inspect( EDA_ITEM* aItem, void* aTestData )
     {
-        return SEARCH_RESULT::QUIT;
+        return INSPECT_RESULT::QUIT;
     };
 
     using ITER = std::vector<EDA_ITEM*>::iterator;

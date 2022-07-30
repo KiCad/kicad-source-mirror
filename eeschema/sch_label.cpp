@@ -509,15 +509,15 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 }
 
 
-SEARCH_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
+INSPECT_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
                                      const KICAD_T aFilterTypes[] )
 {
     KICAD_T stype;
 
     if( IsType( aFilterTypes ) )
     {
-        if( SEARCH_RESULT::QUIT == aInspector( this, nullptr ) )
-            return SEARCH_RESULT::QUIT;
+        if( INSPECT_RESULT::QUIT == aInspector( this, nullptr ) )
+            return INSPECT_RESULT::QUIT;
     }
 
     for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
@@ -526,13 +526,13 @@ SEARCH_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
         {
             for( SCH_FIELD& field : m_fields )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( &field, this ) )
-                    return SEARCH_RESULT::QUIT;
+                if( INSPECT_RESULT::QUIT == aInspector( &field, this ) )
+                    return INSPECT_RESULT::QUIT;
             }
         }
     }
 
-    return SEARCH_RESULT::CONTINUE;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

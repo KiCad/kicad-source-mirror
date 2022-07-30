@@ -333,7 +333,7 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
         // aMoveVector was snapshotted, don't need "data".
         brd_item->Move( aMoveVector );
 
-        return SEARCH_RESULT::CONTINUE;
+        return INSPECT_RESULT::CONTINUE;
     };
 
     Visit( inspector, nullptr, top_level_board_stuff );
@@ -351,7 +351,7 @@ TRACKS BOARD::TracksInNet( int aNetCode )
                                    if( t->GetNetCode() == aNetCode )
                                        ret.push_back( t );
 
-                                   return SEARCH_RESULT::CONTINUE;
+                                   return INSPECT_RESULT::CONTINUE;
                                };
 
     // visit this BOARD's PCB_TRACKs and PCB_VIAs with above TRACK INSPECTOR which
@@ -1266,10 +1266,10 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 }
 
 
-SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
+    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
     const KICAD_T* p      = scanTypes;
     bool           done   = false;
 
@@ -1391,7 +1391,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 result = marker->Visit( inspector, testData, p );
 
-                if( result == SEARCH_RESULT::QUIT )
+                if( result == INSPECT_RESULT::QUIT )
                     break;
             }
 
@@ -1403,7 +1403,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 result = zone->Visit( inspector, testData, p );
 
-                if( result == SEARCH_RESULT::QUIT )
+                if( result == INSPECT_RESULT::QUIT )
                     break;
             }
 
@@ -1420,7 +1420,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
         }
 
-        if( result == SEARCH_RESULT::QUIT )
+        if( result == INSPECT_RESULT::QUIT )
             break;
     }
 
