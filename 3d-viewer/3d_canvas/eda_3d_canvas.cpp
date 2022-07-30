@@ -208,7 +208,7 @@ void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent& event )
 
 void EDA_3D_CANVAS::OnResize( wxSizeEvent& event )
 {
-    this->Request_refresh();
+    Request_refresh();
 }
 
 
@@ -370,8 +370,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
     // !TODO: implement error reporter
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
-    STATUSBAR_REPORTER activityReporter( m_parentStatusBar,
-                                         (int) EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
+    STATUSBAR_REPORTER activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -636,15 +635,22 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
     if( !event.Dragging() && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
-        STATUSBAR_REPORTER reporter( m_parentStatusBar,
-                                     static_cast<int>( EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM ) );
+        STATUSBAR_REPORTER reporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM );
+        RAY                mouseRay = getRayAtCurrentMousePosition();
+        BOARD_ITEM*        rollOverItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
 
-        RAY mouseRay = getRayAtCurrentMousePosition();
-
-        BOARD_ITEM *rollOverItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+        auto printNetInfo =
+                []( BOARD_CONNECTED_ITEM* aItem )
+                {
+                    return wxString::Format( _( "Net %s\tNet class %s" ),
+                                             aItem->GetNet()->GetNetname(),
+                                             aItem->GetNet()->GetNetClassName() );
+                };
 
         if( rollOverItem )
         {
+            wxString msg;
+
             if( rollOverItem != m_currentRollOverItem )
             {
                 m_3d_render_opengl->SetCurrentRollOverItem( rollOverItem );
@@ -657,58 +663,56 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
             {
             case PCB_PAD_T:
             {
-                PAD* pad = dynamic_cast<PAD*>( rollOverItem );
+                PAD* pad = static_cast<PAD*>( rollOverItem );
 
-                if( pad && pad->IsOnCopperLayer() )
-                {
-                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
-                                                       pad->GetNet()->GetNetname(),
-                                                       pad->GetNet()->GetNetClassName(),
-                                                       pad->GetNumber() ) );
-                }
-            }
+                if( !pad->GetNumber().IsEmpty() )
+                    msg += wxString::Format( _( "Pad %s\t" ), pad->GetNumber() );
+
+                if( pad->IsOnCopperLayer() )
+                    msg += printNetInfo( pad );
+
                 break;
+            }
 
             case PCB_FOOTPRINT_T:
             {
-                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( rollOverItem );
-
-                if( footprint )
-                    reporter.Report( footprint->GetReference() );
-            }
+                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( rollOverItem );
+                msg += footprint->GetReference();
                 break;
+            }
 
             case PCB_TRACE_T:
             case PCB_VIA_T:
             case PCB_ARC_T:
             {
-                PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( rollOverItem );
-
-                if( track )
-                {
-                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                       track->GetNet()->GetNetname(),
-                                                       track->GetNet()->GetNetClassName() ) );
-                }
-            }
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( rollOverItem );
+                msg += printNetInfo( track );
                 break;
+            }
 
             case PCB_ZONE_T:
             {
-                ZONE* zone = dynamic_cast<ZONE*>( rollOverItem );
+                ZONE* zone = static_cast<ZONE*>( rollOverItem );
 
-                if( zone && zone->IsOnCopperLayer() )
+                if( !zone->GetZoneName().IsEmpty() )
                 {
-                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                       zone->GetNet()->GetNetname(),
-                                                       zone->GetNet()->GetNetClassName() ) );
+                    if( zone->GetIsRuleArea() )
+                        msg += wxString::Format( _( "Rule area %s\t" ), zone->GetZoneName() );
+                    else
+                        msg += wxString::Format( _( "Zone %s\t" ), zone->GetZoneName() );
                 }
-            }
+
+                if( zone->IsOnCopperLayer() )
+                    msg += printNetInfo( zone );
+
                 break;
+            }
 
             default:
                 break;
             }
+
+            reporter.Report( msg );
         }
         else
         {
@@ -890,7 +894,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
     const float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
     const float arrow_moving_time_speed = 8.0f;
-    bool handled = false;
+    bool        handled = false;
 
     switch( aKeycode )
     {
