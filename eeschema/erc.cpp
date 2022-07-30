@@ -516,14 +516,25 @@ int ERC_TESTER::TestPinToPin()
                 if( testPin == refPin )
                     continue;
 
-                std::pair<SCH_PIN*, SCH_PIN*> pair1 = std::make_pair( refPin, testPin );
-                std::pair<SCH_PIN*, SCH_PIN*> pair2 = std::make_pair( testPin, refPin );
+                SCH_PIN* first_pin = refPin;
+                SCH_PIN* second_pin = testPin;
 
-                if( tested.count( pair1 ) || tested.count( pair2 ) )
+                if( first_pin > second_pin )
+                    std::swap( first_pin, second_pin );
+
+                std::pair<SCH_PIN*, SCH_PIN*> pair = std::make_pair( first_pin, second_pin );
+                
+                if( auto [ins_pin, inserted ] = tested.insert( pair ); !inserted )
                     continue;
 
-                tested.insert( pair1 );
-                tested.insert( pair2 );
+                // Multiple pins in the same symbol that share a type,
+                // name and position are considered
+                // "stacked" and shouldn't trigger ERC errors
+                if( refPin->GetParent() == testPin->GetParent() &&
+                    refPin->GetPosition() == testPin->GetPosition() &&
+                    refPin->GetName() == testPin->GetName() &&
+                    refPin->GetType() == testPin->GetType() )
+                    continue;
 
                 ELECTRICAL_PINTYPE testType = testPin->GetType();
 
