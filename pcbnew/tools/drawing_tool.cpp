@@ -222,7 +222,7 @@ bool DRAWING_TOOL::Init()
                 return m_mode == MODE::VIA;
             };
 
-    auto& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive,       activeToolFunctor, 1 );
@@ -530,17 +530,17 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
     if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawingTool );
+    REENTRANCY_GUARD    guard( &m_inDrawingTool );
 
-    PCB_BITMAP*      image = aEvent.Parameter<PCB_BITMAP*>();
-    bool             immediateMode = image != nullptr;
-    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    bool             ignorePrimePosition = false;
-    COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
+    PCB_BITMAP*         image = aEvent.Parameter<PCB_BITMAP*>();
+    bool                immediateMode = image != nullptr;
+    PCB_GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    bool                ignorePrimePosition = false;
+    COMMON_SETTINGS*    common_settings = Pgm().GetCommonSettings();
 
-    VECTOR2I     cursorPos = getViewControls()->GetCursorPosition();
-    auto         selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    BOARD_COMMIT commit( m_frame );
+    VECTOR2I            cursorPos = getViewControls()->GetCursorPosition();
+    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    BOARD_COMMIT        commit( m_frame );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -2039,7 +2039,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
-                auto newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
+                VECTOR2I newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
                 twoPointManager.SetEnd( twoPointManager.GetOrigin() + newEnd );
                 twoPointManager.SetAngleSnap( true );

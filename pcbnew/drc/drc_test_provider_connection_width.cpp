@@ -310,10 +310,11 @@ private:
         Vertex* nz = p0->nextZ;
         Vertex* pz = p0->prevZ;
 
-        auto same_point = []( const Vertex* a, const Vertex* b ) -> bool
-            {
-                return a && b && a->x == b->x && a->y == b->y;
-            };
+        auto same_point =
+                []( const Vertex* a, const Vertex* b ) -> bool
+                {
+                    return a && b && a->x == b->x && a->y == b->y;
+                };
 
         // If we hit a fracture point, we want to continue around the
         // edge we are working on and not switch to the pair edge
@@ -322,14 +323,20 @@ private:
         // a new fracture point, then we know that we are proceeding
         // in the wrong direction from the fracture and should
         // fall through to the next point
-        if( same_point( p0, nz ) &&
-                !( same_point( nz->next, nz->next->prevZ ) || same_point( nz->next, nz->next->nextZ ) ) )
+        if( same_point( p0, nz )
+                && !( same_point( nz->next, nz->next->prevZ ) || same_point( nz->next, nz->next->nextZ ) ) )
+        {
             p = nz->next;
-        else if( same_point( p0, pz ) &&
-                !( same_point( pz->next, pz->next->prevZ ) || same_point( pz->next, pz->next->nextZ ) ) )
+        }
+        else if( same_point( p0, pz )
+                && !( same_point( pz->next, pz->next->prevZ ) || same_point( pz->next, pz->next->nextZ ) ) )
+        {
             p = pz->next;
+        }
         else
+        {
             p = p0->next;
+        }
 
         while( p0 != aB && checked < total_pts && directions != 15 )
         {
@@ -357,14 +364,20 @@ private:
         nz = p0->nextZ;
         pz = p0->prevZ;
 
-        if( nz && same_point( p0, nz ) &&
-                !( same_point( nz->prev, nz->prev->nextZ ) || same_point( nz->prev, nz->prev->prevZ ) ) )
+        if( nz && same_point( p0, nz )
+                && !( same_point( nz->prev, nz->prev->nextZ ) || same_point( nz->prev, nz->prev->prevZ ) ) )
+        {
             p = nz->prev;
-        else if( pz && same_point( p0, pz ) &&
-                !( same_point( pz->prev, pz->prev->nextZ ) || same_point( pz->prev, pz->prev->prevZ ) ) )
+        }
+        else if( pz && same_point( p0, pz )
+                && !( same_point( pz->prev, pz->prev->nextZ ) || same_point( pz->prev, pz->prev->prevZ ) ) )
+        {
             p = pz->prev;
+        }
         else
+        {
             p = p0->prev;
+        }
 
         directions = 0;
         checked = 0;
@@ -376,6 +389,7 @@ private:
             directions |= ( 1 << ( 2 + bit2x ) ) + ( 1 << bit2y );
 
             p0 = p;
+
             if( same_point( p, p->nextZ ) )
                 p = p->nextZ->prev;
             else if( same_point( p, p->prevZ ) )
@@ -409,11 +423,15 @@ private:
         }
 
         if( sum > 0.0 )
+        {
             for( int i = points.PointCount() - 1; i >= 0; i--)
                 tail = insertVertex( i, points.CPoint( i ), tail );
+        }
         else
+        {
             for( int i = 0; i < points.PointCount(); i++ )
                 tail = insertVertex( i, points.CPoint( i ), tail );
+        }
 
         if( tail && ( *tail == *tail->next ) )
         {
@@ -556,28 +574,30 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     BOARD* board = m_drcEngine->GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    PROGRESS_REPORTER* reporter = m_drcEngine->GetProgressReporter();
 
-    if( reporter && reporter->IsCancelled() )
+    if( m_drcEngine->IsCancelled() )
         return false;   // DRC cancelled
 
-    std::map<PCB_LAYER_ID, std::map<int, std::set<BOARD_CONNECTED_ITEM*>>> net_items;
+    std::map<PCB_LAYER_ID, std::map<int, std::set<BOARD_ITEM*>>> net_items;
+    std::atomic<size_t> done( 1 );
 
     DRC_RTREE*    tree = board->m_CopperItemRTreeCache.get();
 
     auto min_checker =
-        [&](const std::set<BOARD_CONNECTED_ITEM*>& aItems, PCB_LAYER_ID aLayer ) -> size_t
+        [&](const std::set<BOARD_ITEM*>& aItems, PCB_LAYER_ID aLayer ) -> size_t
         {
-
-            if( reporter && reporter->IsCancelled() )
+            if( m_drcEngine->IsCancelled() )
                 return 0;
 
             SHAPE_POLY_SET poly;
 
-            for( BOARD_CONNECTED_ITEM* item : aItems )
-                item->TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_OUTSIDE);
+            for( BOARD_ITEM* item : aItems )
+            {
+                item->TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF,
+                                                            ERROR_OUTSIDE );
+            }
 
-            poly.Fracture(SHAPE_POLY_SET::PM_FAST);
+            poly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
             int minimum_width = bds.m_MinConn;
             POLYGON_TEST test( minimum_width );
@@ -614,8 +634,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 }
             }
 
-            if( reporter )
-                reporter->AdvanceProgress();
+            done.fetch_add( aItems.size() );
 
             return 1;
         };
@@ -632,7 +651,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
         for( PCB_TRACK* track : board->Tracks() )
         {
-            if( PCB_VIA* via = dyn_cast<PCB_VIA*>( track ) )
+            if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( track ) )
             {
                 if( via->FlashLayer( static_cast<int>( layer ) ) )
                     layer_items[via->GetNetCode()].emplace( via );
@@ -662,20 +681,19 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
     size_t return_count = 0;
+    size_t total_count = 0;
 
     for( auto& layer_items : net_items )
         return_count += layer_items.second.size();
 
     returns.reserve( return_count );
 
-    if( reporter )
-        reporter->SetMaxProgress( return_count );
-
     for( auto& layer_items : net_items )
     {
         for( const auto& items : layer_items.second )
         {
             returns.emplace_back( tp.submit( min_checker, items.second, layer_items.first ) );
+            total_count += items.second.size();
         }
     }
 
@@ -685,6 +703,8 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
         do
         {
+            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_count );
+
             status = retval.wait_for( std::chrono::milliseconds( 100 ) );
         } while( status != std::future_status::ready );
     }

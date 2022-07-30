@@ -186,8 +186,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = RPT_SEVERITY_WARNING;
 
-    // TODO: Change to warning after testing
-    m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = RPT_SEVERITY_IGNORE;
+    m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
     m_ZoneKeepExternalFillets = false;
