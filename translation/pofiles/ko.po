@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-18 09:37-0700\n"
 "PO-Revision-Date: 2022-07-30 12:01+0000\n"
-"Last-Translator: minsu kim (0xGabriel) <rlaalstn9601@gmail.com>\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -33622,9 +33622,8 @@ msgid "Item allowed at current location."
 msgstr "현재 경로에서 항목이 사용 가능합니다."
 
 #: pcbnew/tools/convert_tool.cpp:77
-#, fuzzy
 msgid "Create from Selection"
-msgstr "선택된 범위에서 생성"
+msgstr "선택 항목에서 생성"
 
 #: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
