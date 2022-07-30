@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
+#include <sch_textbox.h>
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <trace_helpers.h>
@@ -1012,7 +1013,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
                                           it->m_Footprint );
         symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
     }
-    
+
     if( size() >= 1 && at( 0 ).LastScreen()->GetFileFormatVersionAtLoad() < 20220622 )
         MigrateSimModelNameFields();
 }
@@ -1145,7 +1146,7 @@ void SCH_SHEET_LIST::MigrateSimModelNameFields()
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_TEXTBOX_T ) )
         {
-            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
+            wxString text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
 
             if( text.StartsWith( ".inc" ) || text.StartsWith( ".lib" )
                 || text.StartsWith( ".model" ) || text.StartsWith( ".subckt" ) )
