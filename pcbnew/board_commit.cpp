@@ -110,6 +110,11 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
 {
     wxCHECK( item, /* void */ );
 
+    ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
+
     if( item->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( item )->RunOnChildren(
@@ -128,23 +133,27 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
     }
     else
     {
-        ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
-        BOARD*            board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-        EDA_RECT          bbox = item->GetBoundingBox();
-        LSET              layers = item->GetLayerSet();
+        BOARD*   board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+        EDA_RECT bbox = item->GetBoundingBox();
+        LSET     layers = item->GetLayerSet();
 
         if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
             layers = LSET::PhysicalLayersMask();
+        else
+            layers &= LSET::AllCuMask();
 
-        for( ZONE* zone : board->Zones() )
+        if( layers.any() )
         {
-            if( zone->GetIsRuleArea() )
-                continue;
-
-            if( ( zone->GetLayerSet() & layers ).any()
-                    && zone->GetCachedBoundingBox().Intersects( bbox ) )
+            for( ZONE* zone : board->Zones() )
             {
-                zoneFillerTool->DirtyZone( zone );
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( ( zone->GetLayerSet() & layers ).any()
+                        && zone->GetCachedBoundingBox().Intersects( bbox ) )
+                {
+                    zoneFillerTool->DirtyZone( zone );
+                }
             }
         }
     }
