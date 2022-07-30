@@ -34,13 +34,16 @@
 #include <footprint.h>
 
 
+/*
+ * This is used to draw pad outlines on silk layers.
+ */
 void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
                                               int aWidth ) const
 {
     if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
     {
-        TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(), aPad->GetSize().x / 2,
-                                aWidth, ARC_HIGH_DEF, ERROR_INSIDE );
+        TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(), aPad->GetSize().x / 2, aWidth,
+                                ARC_HIGH_DEF, ERROR_INSIDE );
         return;
     }
 
@@ -53,8 +56,7 @@ void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& a
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformOvalToPolygon( aCornerBuffer, a, b, aWidth, ARC_HIGH_DEF,
-                                ERROR_INSIDE );
+        TransformOvalToPolygon( aCornerBuffer, a, b, aWidth, ARC_HIGH_DEF, ERROR_INSIDE );
     }
 }
 

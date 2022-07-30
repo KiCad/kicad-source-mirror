@@ -613,8 +613,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                 aContainer->Add( new FILLED_CIRCLE_2D( center3DU, outer_radius3DU, *aOwner ) );
             else
                 aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU, *aOwner ) );
-        }
+
             break;
+        }
 
         case SHAPE_T::RECT:
             if( aShape->IsFilled() )

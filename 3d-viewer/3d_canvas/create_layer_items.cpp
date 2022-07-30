@@ -183,7 +183,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         m_averageViaHoleDiameter /= (float)m_viaCount;
 
     // Prepare copper layers index and containers
-    std::vector< PCB_LAYER_ID > layer_id;
+    std::vector<PCB_LAYER_ID> layer_id;
     layer_id.clear();
     layer_id.reserve( m_copperLayersCount );
 
@@ -308,8 +308,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     // Add through hole object
                     m_throughHoleOds.Add( new FILLED_CIRCLE_2D( via_center,
-                                                                     hole_inner_radius + thickness,
-                                                                     *track ) );
+                                                                hole_inner_radius + thickness,
+                                                                *track ) );
                     m_throughHoleViaOds.Add( new FILLED_CIRCLE_2D( via_center,
                                                                    hole_inner_radius + thickness,
                                                                    *track ) );
@@ -879,7 +879,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Vertical walls (layer thickness) around shapes is really time consumming
     // They are built on request
     bool buildVerticalWallsForTechLayers = m_Cfg->m_Render.opengl_copper_thickness
-                              && m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL;
+                                              && m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL;
 
     static const PCB_LAYER_ID teckLayerList[] = {
             B_Adhes,
@@ -911,8 +911,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             continue;
 
         if( aStatusReporter )
-            aStatusReporter->Report( wxString::Format(
-                                     _( "Build Tech layer %d" ), (int)curr_layer_id ) );
+        {
+            aStatusReporter->Report( wxString::Format( _( "Build Tech layer %d" ),
+                                                       (int) curr_layer_id ) );
+        }
 
         BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
         m_layerMap[curr_layer_id] = layerContainer;
