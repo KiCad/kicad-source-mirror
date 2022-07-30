@@ -19,13 +19,14 @@
 # 김용재 <tpdlqj965@gmail.com>, 2022.
 # 김낙환 <ktkr1964@naver.com>, 2022.
 # minsu kim (0xGabriel) <rlaalstn9601@gmail.com>, 2022.
+# 김세영 <tpdud2980@naver.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
 "PO-Revision-Date: 2022-07-31 19:18+0000\n"
-"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
+"Last-Translator: 김세영 <tpdud2980@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -29717,9 +29718,8 @@ msgid "Show Plugin Errors"
 msgstr "플러그인 오류 표시"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
-msgstr "페이지 원점"
+msgstr "페이지 출처"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 msgid "Display Origin"
@@ -37519,7 +37519,7 @@ msgstr "%s로 더 큰 단열판으로 재정의 됨; 유격: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:769
 #, fuzzy
 msgid "Diff Pair"
-msgstr "차이 쌍 간격"
+msgstr "차이 쌍"
 
 #: pcbnew/tools/board_inspection_tool.cpp:754
 #: pcbnew/tools/board_inspection_tool.cpp:770
@@ -37540,9 +37540,8 @@ msgstr "최대 길이를 벗어난 차동 쌍 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:772
 #: pcbnew/tools/board_inspection_tool.cpp:788
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "정의된 'mechanical_clearance' 제약 조건이 없습니다."
+msgstr "정의된 'diff_pair_uncoupled' 제약 조건이 없습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:804
 #: pcbnew/tools/board_inspection_tool.cpp:820
@@ -39696,9 +39695,8 @@ msgid "Removing redundant tracks..."
 msgstr "필요 없는 배선 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "풋프린트 확인..."
+msgstr "단락 트랙 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:97
 msgid "Removing shorting tracks..."
@@ -39720,7 +39718,7 @@ msgstr "배선과 비아 확인 중..."
 #: pcbnew/tracks_cleaner.cpp:131
 #, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "배선 불러오는 중..."
+msgstr "배선 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:134
 #, fuzzy
@@ -39728,9 +39726,8 @@ msgid "Removing dangling vias..."
 msgstr "비아 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "홀 클리어런스 확인 중..."
+msgstr "동일선상에 있는 트랙을 확인하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:150
 msgid "Merging collinear tracks..."
@@ -39757,14 +39754,12 @@ msgid "Show copper zones"
 msgstr "구리 영역 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Images"
 msgstr "이미지"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "이미지 반전시켜 표시"
+msgstr "사용자 이미지 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 #: pcbnew/widgets/appearance_controls.cpp:340
@@ -39885,7 +39880,7 @@ msgstr "풋프린트와 텍스트 원점을 십자로 표시"
 #: pcbnew/widgets/appearance_controls.cpp:355
 #, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "잠긴 항목 건너뛰기"
+msgstr "잠긴 항목의 그림자"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 #: pcbnew/widgets/appearance_controls.cpp:355
