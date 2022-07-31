@@ -6,6 +6,16 @@ endif()
 
 add_definitions( -DEESCHEMA )
 
+if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    if( MSYS )
+        # For some reason the big file sim/ngspice_models.cpp creates an issue when
+        # compiled in debug mode on msys2
+        # (Probably some out of memory issue that crashes Eeschema at start)
+        # So compile it in release mode that generates much smaller binaries
+        set_source_files_properties( sim/ngspice_models.cpp PROPERTIES COMPILE_FLAGS "-O2" )
+    endif()
+endif()
+
 if( KICAD_SPICE )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 
