@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifdef KICAD_SPICE
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eeschema_test_utils.h>
 #include <netlist_exporter_spice.h>
@@ -275,3 +277,5 @@ BOOST_AUTO_TEST_CASE( LegacySources )
 
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#endif // KICAD_SPICE
