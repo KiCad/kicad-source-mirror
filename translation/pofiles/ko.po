@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 09:37-0700\n"
+"POT-Creation-Date: 2022-07-31 13:00-0700\n"
 "PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: 김세영 <tpdud2980@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
@@ -207,7 +207,7 @@ msgstr "현재 화면을 JPEG로 내보내기 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1021
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1022
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D 뷰어"
@@ -1491,7 +1491,7 @@ msgstr "질문"
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/symbol_editor/symbol_editor.cpp:1213
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:336
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:366
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
 msgid "Warning"
 msgstr "경고"
@@ -2709,7 +2709,7 @@ msgstr "인쇄 미리보기"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:288
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:121
+#: pcbnew/dialogs/dialog_export_step.cpp:123
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -2832,7 +2832,7 @@ msgstr "마이라벨"
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:73
 #: pcbnew/dialogs/dialog_copper_zones.cpp:197
-#: pcbnew/footprint_viewer_frame.cpp:146 pcbnew/footprint_viewer_frame.cpp:161
+#: pcbnew/footprint_viewer_frame.cpp:147 pcbnew/footprint_viewer_frame.cpp:162
 msgid "Filter"
 msgstr "필터"
 
@@ -3723,11 +3723,11 @@ msgstr "정보"
 msgid "Save..."
 msgstr "저장..."
 
-#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
+#: common/draw_panel_gal.cpp:288 common/draw_panel_gal.cpp:459
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL을 사용할 수 없으며, 소프트웨어 렌더링으로 대체됨"
 
-#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
+#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:466
 msgid "Could not use OpenGL"
 msgstr "OpenGL을 사용할 수 없음"
 
@@ -5890,8 +5890,8 @@ msgstr "심볼 편집기"
 msgid "Create, delete and edit symbols"
 msgstr "심볼 생성, 삭제 및 편집"
 
-#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1071
+#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
+#: pcbnew/footprint_viewer_frame.cpp:1072
 msgid "Footprint Library Browser"
 msgstr "풋프린트 라이브러리 브라우저"
 
@@ -6853,33 +6853,33 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "풋프린트 할당 충돌"
 
-#: cvpcb/display_footprints_frame.cpp:69
+#: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:164
 msgid "Footprint Viewer"
 msgstr "풋프린트 보기"
 
-#: cvpcb/display_footprints_frame.cpp:396
+#: cvpcb/display_footprints_frame.cpp:397
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "풋프린트 ID '%s'은(는) 유효하지 않습니다."
 
-#: cvpcb/display_footprints_frame.cpp:411
+#: cvpcb/display_footprints_frame.cpp:412
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "라이브러리 '%s'이(가) 풋프린트 라이브러리 테이블에 없습니다."
 
-#: cvpcb/display_footprints_frame.cpp:420
-#: cvpcb/display_footprints_frame.cpp:445
+#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:446
 #, c-format
 msgid "Footprint '%s' not found."
 msgstr "%s 풋프린트를 찾을 수 없습니다."
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:982
+#: cvpcb/display_footprints_frame.cpp:476 pcbnew/footprint.cpp:982
 #, c-format
 msgid "Footprint: %s"
 msgstr "풋프린트: %s"
 
-#: cvpcb/display_footprints_frame.cpp:486
+#: cvpcb/display_footprints_frame.cpp:487
 #, c-format
 msgid "Lib: %s"
 msgstr "라이브러리: %s"
@@ -11960,7 +11960,7 @@ msgstr ""
 "테이블에서 오래된 항목을 교체하시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/dialog_export_step.cpp:350
+#: pcbnew/dialogs/dialog_export_step.cpp:358
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니까?"
@@ -12450,7 +12450,7 @@ msgstr ""
 "진행하기 전에 현재 문서를 저장하시겠습니까?"
 
 #: eeschema/files-io.cpp:627 pcbnew/files.cpp:163
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "지원되는 모든 형식|"
 
@@ -12783,7 +12783,7 @@ msgid "Footprint Assignments..."
 msgstr "풋프린트 할당…"
 
 #: eeschema/menubar.cpp:118 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:122
+#: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
@@ -15238,7 +15238,7 @@ msgstr "(불러오기 실패하였습니다)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad 심볼 라이브러리 뷰어"
 
-#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1068
+#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 msgid "[no library selected]"
 msgstr "[선택된 라이브러리 없음]"
 
@@ -23164,34 +23164,34 @@ msgstr "출력 단위"
 msgid "Export IDFv3"
 msgstr "IDFv3 내보내기"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:142
+#: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "Select a STEP export filename"
 msgstr "STEP 내보내기 파일명을 지정"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:143
+#: pcbnew/dialogs/dialog_export_step.cpp:145
 msgid "STEP files"
 msgstr "STEP 파일"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:210
+#: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
 msgstr "배율이 일정하지 않은 모델:"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:212
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 "크기가 조정된 모델이 감지되었습니다. 모델의 크기 변환은 기계용 내보내기 시에 "
 "불안정을 초래합니다."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:214
+#: pcbnew/dialogs/dialog_export_step.cpp:216
 msgid "Model Scale Warning"
 msgstr "모델 배율 경고"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:276
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP 내보내기 실패!  PCB를 저장하고 다시 시도하십시오"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:341
+#: pcbnew/dialogs/dialog_export_step.cpp:349
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -23200,7 +23200,7 @@ msgstr ""
 "기판의 외곽선이 누락되었거나 %.3f 허용 오차로 닫혀있지 않습니다.\n"
 "전체 분석을 위해 DRC를 실행시키세요."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:353
+#: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
 msgstr "STEP 내보내기"
 
@@ -24291,11 +24291,11 @@ msgstr "사용 가능한 풋프린트:"
 msgid "Get and Move Footprint"
 msgstr "풋 프린트 가져오기 및 이동"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:124
+#: pcbnew/dialogs/dialog_global_deletion.cpp:118
 msgid "Are you sure you want to delete the entire board?"
 msgstr "전체 보드를 삭제 하겠습니까?"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:129
+#: pcbnew/dialogs/dialog_global_deletion.cpp:119
 msgid "Are you sure you want to delete the selected items?"
 msgstr "선택한 항목을 삭제 하겠습니까?"
 
@@ -29905,7 +29905,7 @@ msgstr ""
 "라이브러리 '%s'은(는) 현재 설정에서 활성화되어 있지 않습니다.\n"
 "풋프린트 라이브러리 관리를 사용하여 설정을 편집합니다."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:995
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
 msgstr "풋프린트 라이브러리가 활성화되지 않았습니다."
 
@@ -30006,7 +30006,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "기판상의 풋프린트를 새 라이브러리를 참조하여 업데이트하시겠습니까?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:764
+#: pcbnew/footprint_viewer_frame.cpp:765
 msgid "No board currently open."
 msgstr "현재 열린 기판이 없습니다."
 
@@ -30019,7 +30019,7 @@ msgstr ""
 "저장할 수 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:772
+#: pcbnew/footprint_viewer_frame.cpp:773
 msgid "Previous footprint placement still in progress."
 msgstr "이전의 풋프린트 배치가 진행 중입니다."
 
@@ -30062,11 +30062,11 @@ msgstr "새 풋프린트"
 msgid "No footprint name defined."
 msgstr "정의된 풋프린트 이름이 없습니다."
 
-#: pcbnew/footprint_viewer_frame.cpp:121
+#: pcbnew/footprint_viewer_frame.cpp:122
 msgid "KiCad Footprint Library Viewer"
 msgstr "KiCad 풋프린트 라이브러리 뷰어"
 
-#: pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
@@ -30076,7 +30076,7 @@ msgstr ""
 "검색어는 공백으로 구분됩니다.  모든 검색어가 일치하여야 합니다.\n"
 "숫자 검색어는 패드 개수에 대해서도 일치합니다."
 
-#: pcbnew/footprint_viewer_frame.cpp:721
+#: pcbnew/footprint_viewer_frame.cpp:722
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30087,7 +30087,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:985
+#: pcbnew/footprint_viewer_frame.cpp:986
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30096,11 +30096,11 @@ msgstr ""
 "현재 설정은 '%s' 라이브러리를 포함하지 않습니다.  풋프린트 라이브러리 관리를 "
 "사용하여 설정을 편집하세요."
 
-#: pcbnew/footprint_viewer_frame.cpp:988
+#: pcbnew/footprint_viewer_frame.cpp:989
 msgid "Footprint library not found."
 msgstr "풋프린트 라이브러리를 찾을 수 없습니다."
 
-#: pcbnew/footprint_viewer_frame.cpp:992
+#: pcbnew/footprint_viewer_frame.cpp:993
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -30197,23 +30197,23 @@ msgstr "센티미터"
 msgid "Feet"
 msgstr "피트"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:252
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:280
 msgid "Open File"
 msgstr "파일 열기"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:277
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:305
 msgid "No file selected!"
 msgstr "선택된 파일 없음!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:288
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Please select a valid layer."
 msgstr "유효한 레이어를 선택하세요."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367
 msgid "Items in the imported file could not be handled properly."
 msgstr "불러온 파일에 있는 항목을 제대로 처리할 수 없습니다."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:345
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:375
 msgid "There is no plugin to handle this file type."
 msgstr "이 파일 형식을 처리할 플러그인이 없습니다."
 
@@ -33719,7 +33719,7 @@ msgstr "예, 경사진"
 msgid "Select Via Size"
 msgstr "크기를 통해 선택"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1657
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1658
 msgid "Draw a line segment"
 msgstr "선 세그먼트 그리기"
 
@@ -33747,27 +33747,27 @@ msgstr "지시선 그리기"
 msgid "Draw a dimension"
 msgstr "치수선 그리기"
 
-#: pcbnew/tools/drawing_tool.cpp:1191
+#: pcbnew/tools/drawing_tool.cpp:1192
 msgid "No graphic items found in file."
 msgstr "파일에 그래픽 항목이 없습니다."
 
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1312
+#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1313
 msgid "Place a DXF_SVG drawing"
 msgstr "DXF_SVG 도면 배치"
 
-#: pcbnew/tools/drawing_tool.cpp:1386
+#: pcbnew/tools/drawing_tool.cpp:1387
 msgid "Move the footprint reference anchor"
 msgstr "풋프린트 참조 앵커 이동"
 
-#: pcbnew/tools/drawing_tool.cpp:2104
+#: pcbnew/tools/drawing_tool.cpp:2105
 msgid "Self-intersecting polygons are not allowed"
 msgstr "자체 교차하는 다각형은 허용되지 않습니다"
 
-#: pcbnew/tools/drawing_tool.cpp:2635
+#: pcbnew/tools/drawing_tool.cpp:2636
 msgid "Via location violates DRC."
 msgstr "비아 위치가 DRC를 위반합니다."
 
-#: pcbnew/tools/drawing_tool.cpp:2739
+#: pcbnew/tools/drawing_tool.cpp:2740
 msgid "Place via"
 msgstr "비아 설치 (V)"
 

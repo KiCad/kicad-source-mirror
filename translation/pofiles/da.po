@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
+"POT-Creation-Date: 2022-07-31 13:00-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -192,7 +192,7 @@ msgstr "Eksporter aktuel visning som JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1021
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1022
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D-fremviser"
@@ -1547,7 +1547,7 @@ msgstr "Spørgsmål"
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/symbol_editor/symbol_editor.cpp:1213
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:336
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:366
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
 msgid "Warning"
 msgstr "Advarsel"
@@ -2781,7 +2781,7 @@ msgstr "Print udkast"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:288
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:121
+#: pcbnew/dialogs/dialog_export_step.cpp:123
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -2904,7 +2904,7 @@ msgstr "Mit mærke"
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:73
 #: pcbnew/dialogs/dialog_copper_zones.cpp:197
-#: pcbnew/footprint_viewer_frame.cpp:146 pcbnew/footprint_viewer_frame.cpp:161
+#: pcbnew/footprint_viewer_frame.cpp:147 pcbnew/footprint_viewer_frame.cpp:162
 msgid "Filter"
 msgstr "Filter"
 
@@ -3841,11 +3841,11 @@ msgstr "Info"
 msgid "Save..."
 msgstr "Gemme..."
 
-#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
+#: common/draw_panel_gal.cpp:288 common/draw_panel_gal.cpp:459
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Kunne ikke bruge OpenGL, falder tilbage til softwaregengivelse"
 
-#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
+#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:466
 msgid "Could not use OpenGL"
 msgstr "Kunne ikke bruge OpenGL"
 
@@ -6057,8 +6057,8 @@ msgstr "Symbol Editor"
 msgid "Create, delete and edit symbols"
 msgstr "Opret, slet og rediger symboler"
 
-#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1071
+#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
+#: pcbnew/footprint_viewer_frame.cpp:1072
 msgid "Footprint Library Browser"
 msgstr "Footprint Library Browser"
 
@@ -7031,33 +7031,33 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "Konflikter om tildeling af fodaftryk"
 
-#: cvpcb/display_footprints_frame.cpp:69
+#: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:164
 msgid "Footprint Viewer"
 msgstr "Footprint Viewer"
 
-#: cvpcb/display_footprints_frame.cpp:396
+#: cvpcb/display_footprints_frame.cpp:397
 #, fuzzy, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "Footprint ID \"%s\" er ikke gyldigt."
 
-#: cvpcb/display_footprints_frame.cpp:411
+#: cvpcb/display_footprints_frame.cpp:412
 #, fuzzy, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "Biblioteket \"%s\" findes ikke i fodaftrykbibliotekstabellen."
 
-#: cvpcb/display_footprints_frame.cpp:420
-#: cvpcb/display_footprints_frame.cpp:445
+#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:446
 #, fuzzy, c-format
 msgid "Footprint '%s' not found."
 msgstr "Fodaftryk \"%s\" blev ikke fundet."
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:982
+#: cvpcb/display_footprints_frame.cpp:476 pcbnew/footprint.cpp:982
 #, c-format
 msgid "Footprint: %s"
 msgstr "Fodaftryk: %s"
 
-#: cvpcb/display_footprints_frame.cpp:486
+#: cvpcb/display_footprints_frame.cpp:487
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -12248,7 +12248,7 @@ msgstr ""
 "ældre poster i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/dialog_export_step.cpp:350
+#: pcbnew/dialogs/dialog_export_step.cpp:358
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Filen %s findes allerede. Vil du overskrive denne fil?"
@@ -12753,7 +12753,7 @@ msgstr ""
 "Vil du gemme det aktuelle dokument, inden du fortsætter?"
 
 #: eeschema/files-io.cpp:627 pcbnew/files.cpp:163
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "Alle understøttede formater |"
 
@@ -13096,7 +13096,7 @@ msgid "Footprint Assignments..."
 msgstr "Footprint-opgaver"
 
 #: eeschema/menubar.cpp:118 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:122
+#: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
@@ -15631,7 +15631,7 @@ msgstr "(kunne ikke indlæses)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad-symbolbiblioteksfiler"
 
-#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1068
+#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 #, fuzzy
 msgid "[no library selected]"
 msgstr "intet bibliotek er valgt"
@@ -23815,41 +23815,41 @@ msgstr "Output-enheder"
 msgid "Export IDFv3"
 msgstr "Eksport IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:142
+#: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "Select a STEP export filename"
 msgstr "Vælg et STEP-eksportfilnavn"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:143
+#: pcbnew/dialogs/dialog_export_step.cpp:145
 #, fuzzy
 msgid "STEP files"
 msgstr "SVG filer"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:210
+#: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:212
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:214
+#: pcbnew/dialogs/dialog_export_step.cpp:216
 #, fuzzy
 msgid "Model Scale Warning"
 msgstr "Advarsel om projektbesparelse"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:276
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP-eksport mislykkedes! Gem PCB, og prøv igen"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:341
+#: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr "Print omrids mangler eller er forkert. Kør DRC for en fuld analyse."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:353
+#: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
 msgstr "STEP Eksport"
 
@@ -24973,11 +24973,11 @@ msgstr "Tilgængelige veje:"
 msgid "Get and Move Footprint"
 msgstr "Få og flyt fodaftryk"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:124
+#: pcbnew/dialogs/dialog_global_deletion.cpp:118
 msgid "Are you sure you want to delete the entire board?"
 msgstr "Er du sikker på, at du vil slette hele tavlen?"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:129
+#: pcbnew/dialogs/dialog_global_deletion.cpp:119
 msgid "Are you sure you want to delete the selected items?"
 msgstr "Er du sikker på, at du vil slette de valgte emner?"
 
@@ -30524,7 +30524,7 @@ msgstr ""
 "Biblioteket '%s' er ikke aktiveret i den aktuelle konfiguration.\n"
 "Brug Manage Footprint Libraries til at redigere konfigurationen."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:995
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
 msgstr "Footprint-bibliotek er ikke aktiveret."
 
@@ -30628,7 +30628,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Opdater fodspor, så de inkluderer ændringer fra biblioteket"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:764
+#: pcbnew/footprint_viewer_frame.cpp:765
 msgid "No board currently open."
 msgstr "Der er i øjeblikket ikke noget bord åbent."
 
@@ -30641,7 +30641,7 @@ msgstr ""
 "Kan ikke gemme."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:772
+#: pcbnew/footprint_viewer_frame.cpp:773
 msgid "Previous footprint placement still in progress."
 msgstr ""
 
@@ -30685,12 +30685,12 @@ msgstr "Nyt fodaftryk"
 msgid "No footprint name defined."
 msgstr "Intet fodaftryksnavn defineret."
 
-#: pcbnew/footprint_viewer_frame.cpp:121
+#: pcbnew/footprint_viewer_frame.cpp:122
 #, fuzzy
 msgid "KiCad Footprint Library Viewer"
 msgstr "Footprint Library Browser"
 
-#: pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
@@ -30700,7 +30700,7 @@ msgstr ""
 "Søgeudtryk er adskilt af mellemrum. Alle søgeudtryk skal matche.\n"
 "Et udtryk, der er et tal, vil også matche mod antallet af pad."
 
-#: pcbnew/footprint_viewer_frame.cpp:721
+#: pcbnew/footprint_viewer_frame.cpp:722
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30711,7 +30711,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:985
+#: pcbnew/footprint_viewer_frame.cpp:986
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30720,11 +30720,11 @@ msgstr ""
 "Den aktuelle konfiguration inkluderer ikke biblioteket '%s'. Brug Manage "
 "Footprint Libraries til at redigere konfigurationen."
 
-#: pcbnew/footprint_viewer_frame.cpp:988
+#: pcbnew/footprint_viewer_frame.cpp:989
 msgid "Footprint library not found."
 msgstr "Fodaftrykbibliotek ikke fundet."
 
-#: pcbnew/footprint_viewer_frame.cpp:992
+#: pcbnew/footprint_viewer_frame.cpp:993
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -30823,23 +30823,23 @@ msgstr "Centimeter"
 msgid "Feet"
 msgstr "Fødder"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:252
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:280
 msgid "Open File"
 msgstr "Åbn fil"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:277
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:305
 msgid "No file selected!"
 msgstr "Ingen fil er valgt!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:288
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Please select a valid layer."
 msgstr "Vælg et gyldigt lag."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367
 msgid "Items in the imported file could not be handled properly."
 msgstr "Elementer i den importerede fil kunne ikke håndteres korrekt."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:345
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:375
 msgid "There is no plugin to handle this file type."
 msgstr "Der er intet plugin til at håndtere denne filtype."
 
@@ -34437,7 +34437,7 @@ msgstr "Ja, skrå"
 msgid "Select Via Size"
 msgstr "Vælg Via størrelse"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1657
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1658
 msgid "Draw a line segment"
 msgstr "Tegn et linjesegment"
 
@@ -34465,29 +34465,29 @@ msgstr "Tegn en leder"
 msgid "Draw a dimension"
 msgstr "Tegn en dimension"
 
-#: pcbnew/tools/drawing_tool.cpp:1191
+#: pcbnew/tools/drawing_tool.cpp:1192
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Ingen grafiske genstande fundet i filen at importere"
 
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1312
+#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1313
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer en DXF_SVG-tegning"
 
-#: pcbnew/tools/drawing_tool.cpp:1386
+#: pcbnew/tools/drawing_tool.cpp:1387
 msgid "Move the footprint reference anchor"
 msgstr "Flyt referenceankeret til fodaftryk"
 
-#: pcbnew/tools/drawing_tool.cpp:2104
+#: pcbnew/tools/drawing_tool.cpp:2105
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Selvkrydsende polygoner er ikke tilladt"
 
-#: pcbnew/tools/drawing_tool.cpp:2635
+#: pcbnew/tools/drawing_tool.cpp:2636
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Ruteplanens startpunkt overtræder DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2739
+#: pcbnew/tools/drawing_tool.cpp:2740
 msgid "Place via"
 msgstr "Placer via"
 

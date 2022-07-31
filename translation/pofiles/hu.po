@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
+"POT-Creation-Date: 2022-07-31 13:00-0700\n"
 "PO-Revision-Date: 2022-04-28 11:12+0000\n"
 "Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v6/hu/>\n"
@@ -189,7 +189,7 @@ msgstr "Aktuális nézet exportálása JPEG-ként..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1021
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1022
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "3D megjelenítő"
@@ -1589,7 +1589,7 @@ msgstr "Kérdés"
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/symbol_editor/symbol_editor.cpp:1213
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:336
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:366
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
 msgid "Warning"
 msgstr "Figyelmeztetés"
@@ -2848,7 +2848,7 @@ msgstr "Nyomtatási előnézet"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:288
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:121
+#: pcbnew/dialogs/dialog_export_step.cpp:123
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -2969,7 +2969,7 @@ msgstr "A címkéim"
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:73
 #: pcbnew/dialogs/dialog_copper_zones.cpp:197
-#: pcbnew/footprint_viewer_frame.cpp:146 pcbnew/footprint_viewer_frame.cpp:161
+#: pcbnew/footprint_viewer_frame.cpp:147 pcbnew/footprint_viewer_frame.cpp:162
 msgid "Filter"
 msgstr "Szűrő"
 
@@ -3915,11 +3915,11 @@ msgstr "Információk"
 msgid "Save..."
 msgstr "Mentés..."
 
-#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
+#: common/draw_panel_gal.cpp:288 common/draw_panel_gal.cpp:459
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Nem használható az OpenGL mód, visszatérés szoftveres renderelésre"
 
-#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
+#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:466
 #, fuzzy
 msgid "Could not use OpenGL"
 msgstr "Nem sikerült megnyitni az alkatrésztársítót"
@@ -6257,8 +6257,8 @@ msgstr "Rajzjel szerkesztő"
 msgid "Create, delete and edit symbols"
 msgstr "Rajzjelek létrehozása, törlése vagy szerkesztése"
 
-#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1071
+#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
+#: pcbnew/footprint_viewer_frame.cpp:1072
 msgid "Footprint Library Browser"
 msgstr "Alkatrészrajzolat könyvtár böngésző"
 
@@ -7267,33 +7267,33 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "Alkatrészrajzolat hozzárendelési konfliktusok"
 
-#: cvpcb/display_footprints_frame.cpp:69
+#: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:164
 msgid "Footprint Viewer"
 msgstr "Alkatrészrajzolat böngésző"
 
-#: cvpcb/display_footprints_frame.cpp:396
+#: cvpcb/display_footprints_frame.cpp:397
 #, fuzzy, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "A(z) \"%s\" alkatrészrajzolat azonosító nem érvényes."
 
-#: cvpcb/display_footprints_frame.cpp:411
+#: cvpcb/display_footprints_frame.cpp:412
 #, fuzzy, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "A könyvtár nem található az alkatrészrajzolat könyvtártáblázatban."
 
-#: cvpcb/display_footprints_frame.cpp:420
-#: cvpcb/display_footprints_frame.cpp:445
+#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:446
 #, fuzzy, c-format
 msgid "Footprint '%s' not found."
 msgstr "A(z) \"%s\" alkatrészrajzolat nem található"
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:982
+#: cvpcb/display_footprints_frame.cpp:476 pcbnew/footprint.cpp:982
 #, c-format
 msgid "Footprint: %s"
 msgstr "Alkatrészrajzolat: %s"
 
-#: cvpcb/display_footprints_frame.cpp:486
+#: cvpcb/display_footprints_frame.cpp:487
 #, c-format
 msgid "Lib: %s"
 msgstr "Könyvtár: %s"
@@ -12429,7 +12429,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/dialog_export_step.cpp:350
+#: pcbnew/dialogs/dialog_export_step.cpp:358
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr ""
@@ -12958,7 +12958,7 @@ msgstr ""
 "El szeretné menteni az aktuális dokumentumot, mielőtt folytatná?"
 
 #: eeschema/files-io.cpp:627 pcbnew/files.cpp:163
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "Minden támogatott formátum|"
 
@@ -13301,7 +13301,7 @@ msgid "Footprint Assignments..."
 msgstr "Rajzjel : Alkatrészrajzolat hozzárendelések"
 
 #: eeschema/menubar.cpp:118 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:122
+#: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
@@ -15664,7 +15664,7 @@ msgstr "\"%s\" betöltése sikertelen"
 msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad rajzjel könyvtár fájl (*.lib)"
 
-#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1068
+#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 #, fuzzy
 msgid "[no library selected]"
 msgstr "nincs könyvtár kiválasztva"
@@ -24052,41 +24052,41 @@ msgstr "Kimeneti mértékegység:"
 msgid "Export IDFv3"
 msgstr "IDFv3 exportálás"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:142
+#: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "Select a STEP export filename"
 msgstr "STEP exportálási fájlnév kiválasztás"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:143
+#: pcbnew/dialogs/dialog_export_step.cpp:145
 #, fuzzy
 msgid "STEP files"
 msgstr "SVG fájlok"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:210
+#: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:212
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:214
+#: pcbnew/dialogs/dialog_export_step.cpp:216
 #, fuzzy
 msgid "Model Scale Warning"
 msgstr "Legacy zóna figyelmeztetés"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:276
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "A STEP exportálás sikertelen! Mentse a nyáktervet, majd próbálja újra"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:341
+#: pcbnew/dialogs/dialog_export_step.cpp:349
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:353
+#: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
 msgstr "STEP exportálás"
 
@@ -25247,11 +25247,11 @@ msgstr "Elérhető:"
 msgid "Get and Move Footprint"
 msgstr "Alkatrészrajzolat mozgatása ide"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:124
+#: pcbnew/dialogs/dialog_global_deletion.cpp:118
 msgid "Are you sure you want to delete the entire board?"
 msgstr "Biztosan törli az egész nyáktervet?"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:129
+#: pcbnew/dialogs/dialog_global_deletion.cpp:119
 msgid "Are you sure you want to delete the selected items?"
 msgstr "Biztosan törli a kijelölt elemeket?"
 
@@ -30990,7 +30990,7 @@ msgstr ""
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció "
 "szerkesztéséhez."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:995
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
 msgstr "Az alkatrészrajzolat könyvtár nincs engedélyezve."
 
@@ -31097,7 +31097,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:764
+#: pcbnew/footprint_viewer_frame.cpp:765
 msgid "No board currently open."
 msgstr "Jelenleg nincs nyitva panel."
 
@@ -31110,7 +31110,7 @@ msgstr ""
 "Nem menthető."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:772
+#: pcbnew/footprint_viewer_frame.cpp:773
 msgid "Previous footprint placement still in progress."
 msgstr ""
 
@@ -31157,19 +31157,19 @@ msgstr "Új alkatrészrajzolat"
 msgid "No footprint name defined."
 msgstr "Az alkatrészrajzolat nincs elnevezve."
 
-#: pcbnew/footprint_viewer_frame.cpp:121
+#: pcbnew/footprint_viewer_frame.cpp:122
 #, fuzzy
 msgid "KiCad Footprint Library Viewer"
 msgstr "Alkatrészrajzolat könyvtár böngésző"
 
-#: pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
 
-#: pcbnew/footprint_viewer_frame.cpp:721
+#: pcbnew/footprint_viewer_frame.cpp:722
 #, fuzzy, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -31180,7 +31180,7 @@ msgstr ""
 "\n"
 "Hiba %s."
 
-#: pcbnew/footprint_viewer_frame.cpp:985
+#: pcbnew/footprint_viewer_frame.cpp:986
 #, fuzzy, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -31192,11 +31192,11 @@ msgstr ""
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció "
 "szerkesztéséhez."
 
-#: pcbnew/footprint_viewer_frame.cpp:988
+#: pcbnew/footprint_viewer_frame.cpp:989
 msgid "Footprint library not found."
 msgstr "Az alkatrészrajzolat könyvtár nem található!"
 
-#: pcbnew/footprint_viewer_frame.cpp:992
+#: pcbnew/footprint_viewer_frame.cpp:993
 #, fuzzy, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -31299,24 +31299,24 @@ msgstr "Középre"
 msgid "Feet"
 msgstr ""
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:252
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:280
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:277
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:305
 msgid "No file selected!"
 msgstr "Nincs fájl kiválasztva!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:288
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Please select a valid layer."
 msgstr "Válasszon ki egy érvényes réteget."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367
 #, fuzzy
 msgid "Items in the imported file could not be handled properly."
 msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:345
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:375
 msgid "There is no plugin to handle this file type."
 msgstr "Nem található megfelelő plugin az adott fájltípus kezeléséhez."
 
@@ -34876,7 +34876,7 @@ msgstr ""
 msgid "Select Via Size"
 msgstr "Fájl kiválasztása"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1657
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1658
 msgid "Draw a line segment"
 msgstr "Vonalszegmens rajzolása"
 
@@ -34906,29 +34906,29 @@ msgstr "Vonal rajzolása"
 msgid "Draw a dimension"
 msgstr "Méretvonal hozzáadása"
 
-#: pcbnew/tools/drawing_tool.cpp:1191
+#: pcbnew/tools/drawing_tool.cpp:1192
 #, fuzzy
 msgid "No graphic items found in file."
 msgstr "Nem található grafikai elem az importált fájlban"
 
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1312
+#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1313
 msgid "Place a DXF_SVG drawing"
 msgstr "DXF_SVG rajz hozzáadása"
 
-#: pcbnew/tools/drawing_tool.cpp:1386
+#: pcbnew/tools/drawing_tool.cpp:1387
 msgid "Move the footprint reference anchor"
 msgstr "Alkatrészrajzolat horgony mozgatása"
 
-#: pcbnew/tools/drawing_tool.cpp:2104
+#: pcbnew/tools/drawing_tool.cpp:2105
 msgid "Self-intersecting polygons are not allowed"
 msgstr "A sokszög élei nem metszhetik egymást"
 
-#: pcbnew/tools/drawing_tool.cpp:2635
+#: pcbnew/tools/drawing_tool.cpp:2636
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Szimulátor beállítások"
 
-#: pcbnew/tools/drawing_tool.cpp:2739
+#: pcbnew/tools/drawing_tool.cpp:2740
 msgid "Place via"
 msgstr "Via hozzáadása"
 

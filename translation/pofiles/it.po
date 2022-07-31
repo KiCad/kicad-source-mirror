@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
+"POT-Creation-Date: 2022-07-31 13:00-0700\n"
 "PO-Revision-Date: 2022-06-09 19:41+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -304,7 +304,7 @@ msgstr "Esporta la vista corrente come JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1021
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1022
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
@@ -1601,7 +1601,7 @@ msgstr "Domanda"
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/symbol_editor/symbol_editor.cpp:1213
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:336
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:366
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
 msgid "Warning"
 msgstr "Attenzione"
@@ -2832,7 +2832,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:288
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:121
+#: pcbnew/dialogs/dialog_export_step.cpp:123
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -2955,7 +2955,7 @@ msgstr "MiaEtichetta"
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:73
 #: pcbnew/dialogs/dialog_copper_zones.cpp:197
-#: pcbnew/footprint_viewer_frame.cpp:146 pcbnew/footprint_viewer_frame.cpp:161
+#: pcbnew/footprint_viewer_frame.cpp:147 pcbnew/footprint_viewer_frame.cpp:162
 msgid "Filter"
 msgstr "Filtra"
 
@@ -3870,11 +3870,11 @@ msgstr "Info"
 msgid "Save..."
 msgstr "Salva..."
 
-#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
+#: common/draw_panel_gal.cpp:288 common/draw_panel_gal.cpp:459
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Impossibile usare OpenGL, ripiego sul rendering software"
 
-#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
+#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:466
 msgid "Could not use OpenGL"
 msgstr "Impossibile usare OpenGL"
 
@@ -6045,8 +6045,8 @@ msgstr "Editor simboli"
 msgid "Create, delete and edit symbols"
 msgstr "Crea, cancella e modifica i simboli"
 
-#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1071
+#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
+#: pcbnew/footprint_viewer_frame.cpp:1072
 msgid "Footprint Library Browser"
 msgstr "Esploratore librerie di impronte"
 
@@ -7012,33 +7012,33 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "Conflitto di assegnamento impronte"
 
-#: cvpcb/display_footprints_frame.cpp:69
+#: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:164
 msgid "Footprint Viewer"
 msgstr "Visualizzatore impronte"
 
-#: cvpcb/display_footprints_frame.cpp:396
+#: cvpcb/display_footprints_frame.cpp:397
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "L'ID impronta \"%s\" non è valido."
 
-#: cvpcb/display_footprints_frame.cpp:411
+#: cvpcb/display_footprints_frame.cpp:412
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "La libreria \"%s\" non è nella tabella librerie impronte."
 
-#: cvpcb/display_footprints_frame.cpp:420
-#: cvpcb/display_footprints_frame.cpp:445
+#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:446
 #, c-format
 msgid "Footprint '%s' not found."
 msgstr "Impronta \"%s\" non trovata."
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:982
+#: cvpcb/display_footprints_frame.cpp:476 pcbnew/footprint.cpp:982
 #, c-format
 msgid "Footprint: %s"
 msgstr "Impronta: %s"
 
-#: cvpcb/display_footprints_frame.cpp:486
+#: cvpcb/display_footprints_frame.cpp:487
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -12194,7 +12194,7 @@ msgstr ""
 "le voci obsolete nella tabella?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/dialog_export_step.cpp:350
+#: pcbnew/dialogs/dialog_export_step.cpp:358
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Il file \"%s\" esiste già. Vuoi sovrascrivere questo file?"
@@ -12695,7 +12695,7 @@ msgstr ""
 "Salvare il documento corrente prima di procedere?"
 
 #: eeschema/files-io.cpp:627 pcbnew/files.cpp:163
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "Tutti i formati supportati|"
 
@@ -13031,7 +13031,7 @@ msgid "Footprint Assignments..."
 msgstr "Assegnamenti impronte..."
 
 #: eeschema/menubar.cpp:118 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:122
+#: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
@@ -15378,7 +15378,7 @@ msgstr "(caricamento fallito)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "Visualizzatore di librerie di simboli KiCad"
 
-#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1068
+#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 msgid "[no library selected]"
 msgstr "[nessuna libreria selezionata]"
 
@@ -23362,34 +23362,34 @@ msgstr "Unità d'uscita"
 msgid "Export IDFv3"
 msgstr "Esporta IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:142
+#: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "Select a STEP export filename"
 msgstr "Seleziona un nome file per l'esportazione STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:143
+#: pcbnew/dialogs/dialog_export_step.cpp:145
 msgid "STEP files"
 msgstr "File STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:210
+#: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
 msgstr "Modelli in scala non-unitaria:"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:212
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 "Modelli scalati rilevati.  La scalatura modelli non è affidabile per "
 "l'esportazione meccanica."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:214
+#: pcbnew/dialogs/dialog_export_step.cpp:216
 msgid "Model Scale Warning"
 msgstr "Avviso scalatura modelli"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:276
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Esportazione STEP fallita; salvare la scheda e riprovare"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:341
+#: pcbnew/dialogs/dialog_export_step.cpp:349
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -23398,7 +23398,7 @@ msgstr ""
 "I bordi scheda mancano o non sono chiusi con tolleranza di %.3f mm.\n"
 "Eseguire un DRC per un'analisi completa."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:353
+#: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
 msgstr "Esportazione STEP"
 
@@ -24519,11 +24519,11 @@ msgstr "Impronte disponibili:"
 msgid "Get and Move Footprint"
 msgstr "Ottieni e sposta impronta"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:124
+#: pcbnew/dialogs/dialog_global_deletion.cpp:118
 msgid "Are you sure you want to delete the entire board?"
 msgstr "Sicuri di voler cancellare l'intera scheda?"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:129
+#: pcbnew/dialogs/dialog_global_deletion.cpp:119
 msgid "Are you sure you want to delete the selected items?"
 msgstr "Cancellare gli elementi selezionati?"
 
@@ -30016,7 +30016,7 @@ msgstr ""
 "configurazione.\n"
 "Usare la gestione librerie di impronte per modificare la configurazione."
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:995
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
 msgstr "Libreria impronte non abilitata."
 
@@ -30116,7 +30116,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "Aggiornare le impronte per riferirsi alla nuova libreria?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:764
+#: pcbnew/footprint_viewer_frame.cpp:765
 msgid "No board currently open."
 msgstr "Nessuna scheda attualmente aperta."
 
@@ -30129,7 +30129,7 @@ msgstr ""
 "Impossibile salvare."
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:772
+#: pcbnew/footprint_viewer_frame.cpp:773
 msgid "Previous footprint placement still in progress."
 msgstr "Piazzamento impronta precedente ancora in essere."
 
@@ -30172,11 +30172,11 @@ msgstr "Nuova impronta"
 msgid "No footprint name defined."
 msgstr "Nessun nome impronta definito."
 
-#: pcbnew/footprint_viewer_frame.cpp:121
+#: pcbnew/footprint_viewer_frame.cpp:122
 msgid "KiCad Footprint Library Viewer"
 msgstr "Visualizzatore librerie impronte KiCad"
 
-#: pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
@@ -30187,7 +30187,7 @@ msgstr ""
 "devono corrispondere.\n"
 "Un termine numerico corrisponderà anche con l'elenco piazzole."
 
-#: pcbnew/footprint_viewer_frame.cpp:721
+#: pcbnew/footprint_viewer_frame.cpp:722
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -30198,7 +30198,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:985
+#: pcbnew/footprint_viewer_frame.cpp:986
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -30207,11 +30207,11 @@ msgstr ""
 "L'attuale configurazione non include la libreria \"%s\". Usare la gestione "
 "librerie di impronte per modificare la configurazione."
 
-#: pcbnew/footprint_viewer_frame.cpp:988
+#: pcbnew/footprint_viewer_frame.cpp:989
 msgid "Footprint library not found."
 msgstr "Libreria impronte non trovata."
 
-#: pcbnew/footprint_viewer_frame.cpp:992
+#: pcbnew/footprint_viewer_frame.cpp:993
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -30307,23 +30307,23 @@ msgstr "Centimetri"
 msgid "Feet"
 msgstr "Piedi"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:252
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:280
 msgid "Open File"
 msgstr "Apri file"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:277
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:305
 msgid "No file selected!"
 msgstr "Nessun file selezionato!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:288
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Please select a valid layer."
 msgstr "Selezionare uno strato valido."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367
 msgid "Items in the imported file could not be handled properly."
 msgstr "Elementi del file importato non possono essere gestiti correttamente."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:345
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:375
 msgid "There is no plugin to handle this file type."
 msgstr "Non c'è un plugin per gestire questo tipo di file."
 
@@ -33880,7 +33880,7 @@ msgstr "Si, smussato"
 msgid "Select Via Size"
 msgstr "Seleziona dimensione via"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1657
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1658
 msgid "Draw a line segment"
 msgstr "Disegna un segmento"
 
@@ -33908,27 +33908,27 @@ msgstr "Disegna una bollatura"
 msgid "Draw a dimension"
 msgstr "Disegna una quota"
 
-#: pcbnew/tools/drawing_tool.cpp:1191
+#: pcbnew/tools/drawing_tool.cpp:1192
 msgid "No graphic items found in file."
 msgstr "Nessun elemento grafico trovato nel file."
 
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1312
+#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1313
 msgid "Place a DXF_SVG drawing"
 msgstr "Piazza un disegno DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1386
+#: pcbnew/tools/drawing_tool.cpp:1387
 msgid "Move the footprint reference anchor"
 msgstr "Sposta l'ancoraggio di riferimento dell'impronta"
 
-#: pcbnew/tools/drawing_tool.cpp:2104
+#: pcbnew/tools/drawing_tool.cpp:2105
 msgid "Self-intersecting polygons are not allowed"
 msgstr "I poligoni autointersecanti non permessi"
 
-#: pcbnew/tools/drawing_tool.cpp:2635
+#: pcbnew/tools/drawing_tool.cpp:2636
 msgid "Via location violates DRC."
 msgstr "La posizione via viola il DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2739
+#: pcbnew/tools/drawing_tool.cpp:2740
 msgid "Place via"
 msgstr "Piazza via"
 

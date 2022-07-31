@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
+"POT-Creation-Date: 2022-07-31 13:00-0700\n"
 "PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
@@ -181,7 +181,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1021
+#: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:1022
 #: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
@@ -1464,7 +1464,7 @@ msgstr "คำถาม"
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/symbol_editor/symbol_editor.cpp:1213
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:336
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:366
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
 msgid "Warning"
 msgstr "ระวัง"
@@ -2670,7 +2670,7 @@ msgstr "พริวิวก่อนพิมพ์"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:288
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:121
+#: pcbnew/dialogs/dialog_export_step.cpp:123
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -2793,7 +2793,7 @@ msgstr "ป้ายของฉัน"
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:73
 #: pcbnew/dialogs/dialog_copper_zones.cpp:197
-#: pcbnew/footprint_viewer_frame.cpp:146 pcbnew/footprint_viewer_frame.cpp:161
+#: pcbnew/footprint_viewer_frame.cpp:147 pcbnew/footprint_viewer_frame.cpp:162
 msgid "Filter"
 msgstr "กรอง"
 
@@ -3673,11 +3673,11 @@ msgstr "ข้อมูล"
 msgid "Save..."
 msgstr "บันทึก…"
 
-#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
+#: common/draw_panel_gal.cpp:288 common/draw_panel_gal.cpp:459
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "ไม่สามารถใช้ OpenGL, กลับไปใช้เรนเดอร์ด้วยซอฟต์แวร์"
 
-#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
+#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:466
 msgid "Could not use OpenGL"
 msgstr "ไม่สามารถใช้ OpenGL"
 
@@ -5831,8 +5831,8 @@ msgstr "เครื่องมือแก้ไขสัญลักษณ์
 msgid "Create, delete and edit symbols"
 msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
-#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:109
-#: pcbnew/footprint_viewer_frame.cpp:1071
+#: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
+#: pcbnew/footprint_viewer_frame.cpp:1072
 msgid "Footprint Library Browser"
 msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
@@ -6787,33 +6787,33 @@ msgstr ""
 msgid "Footprint Assignment Conflicts"
 msgstr "การมอบหมายฟุ้ทพรินท์ขัดแย้ง"
 
-#: cvpcb/display_footprints_frame.cpp:69
+#: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:164
 msgid "Footprint Viewer"
 msgstr "ผู้ดูฟุ้ทพรินท์"
 
-#: cvpcb/display_footprints_frame.cpp:396
+#: cvpcb/display_footprints_frame.cpp:397
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "ค่าฟุ้ทพรินท์ ID '%s' ไม่ถูกต้อง"
 
-#: cvpcb/display_footprints_frame.cpp:411
+#: cvpcb/display_footprints_frame.cpp:412
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
 msgstr "ไลบรารี '%s' ไม่อยู่ในตารางไลบรารีฟุ้ทพรินท์"
 
-#: cvpcb/display_footprints_frame.cpp:420
-#: cvpcb/display_footprints_frame.cpp:445
+#: cvpcb/display_footprints_frame.cpp:421
+#: cvpcb/display_footprints_frame.cpp:446
 #, c-format
 msgid "Footprint '%s' not found."
 msgstr "ฟุ้ทพรินท์ '%s' หาไม่พบ"
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:982
+#: cvpcb/display_footprints_frame.cpp:476 pcbnew/footprint.cpp:982
 #, c-format
 msgid "Footprint: %s"
 msgstr "ฟุ้ทพรินท์:%s"
 
-#: cvpcb/display_footprints_frame.cpp:486
+#: cvpcb/display_footprints_frame.cpp:487
 #, c-format
 msgid "Lib: %s"
 msgstr "ไลบรารี:%s"
@@ -11867,7 +11867,7 @@ msgstr ""
 "บันทึก '%d' แบบเก่า ให้เป็นรูปแบบ KiCad ปัจจุบัน (*.kicad_sym) และแทนแบบเก่าในตาราง?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/dialog_export_step.cpp:350
+#: pcbnew/dialogs/dialog_export_step.cpp:358
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "ไฟล์ '%s' มีอยู่แล้ว คุณต้องการเขียนทับ?"
@@ -12348,7 +12348,7 @@ msgstr ""
 "คุณต้องการบันทึกเอกสารปัจจุบันก่อนดำเนินการต่อหรือไม่?"
 
 #: eeschema/files-io.cpp:627 pcbnew/files.cpp:163
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "รูปแบบที่รองรับทั้งหมด|"
 
@@ -12680,7 +12680,7 @@ msgid "Footprint Assignments..."
 msgstr "การกำหนดฟุ้ทพรินท์…"
 
 #: eeschema/menubar.cpp:118 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:122
+#: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:129
 msgid "Export"
@@ -15093,7 +15093,7 @@ msgstr "(โหลดไม่สำเร็จ)"
 msgid "KiCad Symbol Library Viewer"
 msgstr "โปรแกรมดูไลบรารีสัญลักษณ์ KiCad"
 
-#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1068
+#: eeschema/symbol_viewer_frame.cpp:968 pcbnew/footprint_viewer_frame.cpp:1069
 msgid "[no library selected]"
 msgstr "[ไม่ได้เลือกไลบรารี]"
 
@@ -22958,32 +22958,32 @@ msgstr "หน่วยเอาท์พุท"
 msgid "Export IDFv3"
 msgstr "ส่งออก IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:142
+#: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "Select a STEP export filename"
 msgstr "เลือกชื่อไฟล์การส่งออก STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:143
+#: pcbnew/dialogs/dialog_export_step.cpp:145
 msgid "STEP files"
 msgstr "ไฟล์ STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:210
+#: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid "Non-unity scaled models:"
 msgstr "โมเดลที่ไม่มีอัตราเป็นเอกภาพ:"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:212
+#: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr "ตรวจพบโมเดลที่ปรับอัตราแล้ว มาตราส่วนแบบจำลองไม่น่าเชื่อถือสำหรับการส่งออกทางกล"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:214
+#: pcbnew/dialogs/dialog_export_step.cpp:216
 msgid "Model Scale Warning"
 msgstr "คำเตือนอัตราส่วนแบบจำลอง"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:276
+#: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "การส่งออก STEP ล้มเหลว!  กรุณาบันทึกพีซีบีแล้วลองอีกครั้ง"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:341
+#: pcbnew/dialogs/dialog_export_step.cpp:349
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -22992,7 +22992,7 @@ msgstr ""
 "เค้าโครงบอร์ดขาดหายไปหรือไม่เป็นรูปปิดโดยใช้ระดับความผิดพลาด %.3f มม.\n"
 "เรียกใช้ DRC เพื่อการวิเคราะห์แบบเต็ม"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:353
+#: pcbnew/dialogs/dialog_export_step.cpp:361
 msgid "STEP Export"
 msgstr "ส่งออกชนิด STEP"
 
@@ -24073,11 +24073,11 @@ msgstr "ฟุ้ทพรินท์ที่มีอยู่:"
 msgid "Get and Move Footprint"
 msgstr "รับและย้ายฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:124
+#: pcbnew/dialogs/dialog_global_deletion.cpp:118
 msgid "Are you sure you want to delete the entire board?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบทั้งบอร์ด?"
 
-#: pcbnew/dialogs/dialog_global_deletion.cpp:129
+#: pcbnew/dialogs/dialog_global_deletion.cpp:119
 msgid "Are you sure you want to delete the selected items?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชิ้นส่วนที่เลือก?"
 
@@ -29638,7 +29638,7 @@ msgstr ""
 "ไลบรารี '%s' ไม่ได้เปิดใช้งานในการกําหนดค่าปรับแต่ง\n"
 "ใช้ 'จัดการไลบรารีสัญลักษณ์' เพื่อแก้ไขการปรับแต่ง"
 
-#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:995
+#: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:996
 msgid "Footprint library not enabled."
 msgstr "ไม่ได้เปิดใช้งานไลบรารีฟุ้ทพรินท์"
 
@@ -29738,7 +29738,7 @@ msgid "Update footprints on board to refer to new library?"
 msgstr "ปรับปรุงฟุ้ทพรินท์บนบอร์ดให้อ้างถึงไลบรารีใหม่?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
-#: pcbnew/footprint_viewer_frame.cpp:764
+#: pcbnew/footprint_viewer_frame.cpp:765
 msgid "No board currently open."
 msgstr "ไม่มีไฟล์บอร์ดเปิดไว้"
 
@@ -29751,7 +29751,7 @@ msgstr ""
 "ไม่สามารถบันทึก"
 
 #: pcbnew/footprint_libraries_utils.cpp:919
-#: pcbnew/footprint_viewer_frame.cpp:772
+#: pcbnew/footprint_viewer_frame.cpp:773
 msgid "Previous footprint placement still in progress."
 msgstr "ยังคงอยู่ในกระบวนการจัดวางฟุ้ทพรินท์ตัวก่อนหน้า"
 
@@ -29794,11 +29794,11 @@ msgstr "ฟุ้ทพรินท์ใหม่"
 msgid "No footprint name defined."
 msgstr "ไม่ได้กำหนดชื่อฟุ้ทพรินท์"
 
-#: pcbnew/footprint_viewer_frame.cpp:121
+#: pcbnew/footprint_viewer_frame.cpp:122
 msgid "KiCad Footprint Library Viewer"
 msgstr "โปรแกรมมองไลบรารีฟุ้ทพรินท์ของ KiCad"
 
-#: pcbnew/footprint_viewer_frame.cpp:163
+#: pcbnew/footprint_viewer_frame.cpp:164
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
@@ -29808,7 +29808,7 @@ msgstr ""
 "คําค้นหาจะถูกคั่นด้วยช่องว่าง  คําค้นหาทั้งหมดต้องตรงกัน\n"
 "คําที่เป็นตัวเลขจะตรงกับจํานวนแพ็ดด้วย"
 
-#: pcbnew/footprint_viewer_frame.cpp:721
+#: pcbnew/footprint_viewer_frame.cpp:722
 #, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
@@ -29819,7 +29819,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/footprint_viewer_frame.cpp:985
+#: pcbnew/footprint_viewer_frame.cpp:986
 #, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
@@ -29827,11 +29827,11 @@ msgid ""
 msgstr ""
 "การปรับแต่งค่าปัจจุบันไม่รวมไลบรารี '%s'  ใช้จัดการไลบรารีฟุ้ทพรินท์เพื่อแก้ไขการปรับแต่งค่า"
 
-#: pcbnew/footprint_viewer_frame.cpp:988
+#: pcbnew/footprint_viewer_frame.cpp:989
 msgid "Footprint library not found."
 msgstr "ไม่พบไลบรารีฟุ้ทพรินท์"
 
-#: pcbnew/footprint_viewer_frame.cpp:992
+#: pcbnew/footprint_viewer_frame.cpp:993
 #, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
@@ -29927,23 +29927,23 @@ msgstr "เซนติเมตร"
 msgid "Feet"
 msgstr "ฟุต"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:252
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:280
 msgid "Open File"
 msgstr "เปิดไฟล์"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:277
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:305
 msgid "No file selected!"
 msgstr "ไม่ได้เลือกไฟล์!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:288
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Please select a valid layer."
 msgstr "โปรดเลือกเลเยอร์ที่ถูกต้อง"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:337
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:367
 msgid "Items in the imported file could not be handled properly."
 msgstr "ชิ้นส่วนในไฟล์ที่นำเข้าไม่สามารถจัดการได้อย่างเหมาะสม"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:345
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:375
 msgid "There is no plugin to handle this file type."
 msgstr "ไม่มีปลั๊กอินสำหรับจัดการไฟล์ประเภทนี้"
 
@@ -33373,7 +33373,7 @@ msgstr "ใช่, ขอบเอียง"
 msgid "Select Via Size"
 msgstr "เลือกขนาดเวีย"
 
-#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1657
+#: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1658
 msgid "Draw a line segment"
 msgstr "วาดส่วนของเส้นตรง"
 
@@ -33401,27 +33401,27 @@ msgstr "วาดเส้นนำ"
 msgid "Draw a dimension"
 msgstr "วาดวัดขนาด"
 
-#: pcbnew/tools/drawing_tool.cpp:1191
+#: pcbnew/tools/drawing_tool.cpp:1192
 msgid "No graphic items found in file."
 msgstr "ไม่พบชิ้นส่วนกราฟิกในไฟล์"
 
-#: pcbnew/tools/drawing_tool.cpp:1241 pcbnew/tools/drawing_tool.cpp:1312
+#: pcbnew/tools/drawing_tool.cpp:1242 pcbnew/tools/drawing_tool.cpp:1313
 msgid "Place a DXF_SVG drawing"
 msgstr "วางเขียนแบบ DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1386
+#: pcbnew/tools/drawing_tool.cpp:1387
 msgid "Move the footprint reference anchor"
 msgstr "ย้ายจุดยึดชื่ออ้างอิงฟุ้ทพรินท์"
 
-#: pcbnew/tools/drawing_tool.cpp:2104
+#: pcbnew/tools/drawing_tool.cpp:2105
 msgid "Self-intersecting polygons are not allowed"
 msgstr "ไม่อนุญาตให้ใช้รูปหลายเหลี่ยมที่ตัดกันเอง"
 
-#: pcbnew/tools/drawing_tool.cpp:2635
+#: pcbnew/tools/drawing_tool.cpp:2636
 msgid "Via location violates DRC."
 msgstr "ตำแหน่งเวียละเมิด DRC"
 
-#: pcbnew/tools/drawing_tool.cpp:2739
+#: pcbnew/tools/drawing_tool.cpp:2740
 msgid "Place via"
 msgstr "วางเวีย"
 
