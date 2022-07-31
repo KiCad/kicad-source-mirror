@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"PO-Revision-Date: 2022-08-02 15:49+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -273,9 +273,8 @@ msgid "&Preferences"
 msgstr "偏好设置 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "视口 (Alt+Tab)："
+msgstr "视口 (Shift+Tab)："
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -5966,9 +5965,8 @@ msgid "Show Grid"
 msgstr "显示网格"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "在编辑窗口中显示网格点或线条"
+msgstr "在编辑窗口中显示背景网格"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9715,22 +9713,20 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "仿真器需要一张完整批注的原理图。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "保存所有变更"
+msgstr "保存所有电压"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "编写指令以保存所有电压（.save all）"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "保存所有变更"
+msgstr "保存所有电流"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "编写指令以保存所有电流 (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -10673,19 +10669,18 @@ msgid "Add signal by name:"
 msgstr "按名称添加信号："
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "未能创建符号库文件 \"%s\"。"
+msgstr "未能读取模型库 \"%s\"。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:713
-#, fuzzy
 msgid "Browse Models"
-msgstr "代码模型"
+msgstr "浏览模型"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "网络名称 '%s' 已经在使用中。"
+msgstr "库中没有名为 '%s' 的模型。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -12988,9 +12983,9 @@ msgstr ""
 "仿真前必须校正注释。"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "无法找到库文件 %s。"
+msgstr "找不到库文件 '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14542,19 +14537,19 @@ msgid "Discard New Sheet"
 msgstr "丢弃新图纸"
 
 #: eeschema/sim/sim_model.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "无法分析 '%s' (在 '%s' 中)"
+msgstr "未能将参数“%s”设置到“%s”"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s 描述 %lu 引脚，预期 %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "创建文件 \"%s\" 失败。"
+msgstr "无法从值“%s”推断模型"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -14805,9 +14800,8 @@ msgid "Voltage (measured)"
 msgstr "电压 (测量)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "未知 Model_type "
+msgstr "未知的 SIM_VALUE 类型"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -20062,9 +20056,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "铜电阻率："
+msgstr "导体电阻率："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -22930,30 +22923,26 @@ msgstr "泪滴属性"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:225
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "焊盘枚举设置"
+msgstr "转换设置"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:66
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "增加线宽"
+msgstr "忽略源对象线宽"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:70
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "删除文件及其内容"
+msgstr "转换后删除源对象"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:242
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "连接到敷铜区"
+msgstr "转换到敷铜区"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:440
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -22977,9 +22966,8 @@ msgid "No layer selected."
 msgstr "没有图层被选择。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:967
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "选中 <no net> 将创建一个隔绝的铜岛。"
+msgstr "<no net> 将导致隔绝的铜岛。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -25858,9 +25846,8 @@ msgid "Import Netlist"
 msgstr "导入网表"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "连接到敷铜区"
+msgstr "转换到非敷铜区"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -27363,9 +27350,8 @@ msgid "Push Pad Properties"
 msgstr "推挤焊盘属性"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "常规设置："
+msgstr "转换设置："
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 msgid "Convert to Rule Area"
