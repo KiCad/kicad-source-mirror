@@ -631,6 +631,65 @@ TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
 }
 
 
+template <typename T>
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
+{
+    doReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+template <>
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+{
+    ReadDataSchFields( aSymbolPinCount, aFields );
+}
+
+
+template <>
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+{
+    ReadDataLibFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+{
+    doReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+{
+    doReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+template <>
+void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    WriteDataSchFields( aFields );
+}
+
+
+template <>
+void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    WriteDataLibFields( aFields );
+}
+
+
+void SIM_MODEL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    doWriteFields( aFields );
+}
+
+
+void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    doWriteFields( aFields );
+}
+
+
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount )
 {
     std::unique_ptr<SIM_MODEL> model = create( aType );
@@ -842,65 +901,6 @@ void SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
     }
 
     m_spiceCode = aSpiceCode;
-}
-
-
-template <typename T>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-template <>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
-{
-    ReadDataSchFields( aSymbolPinCount, aFields );
-}
-
-
-template <>
-void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
-{
-    ReadDataLibFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
-{
-    doReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-template <>
-void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    WriteDataSchFields( aFields );
-}
-
-
-template <>
-void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    WriteDataLibFields( aFields );
-}
-
-
-void SIM_MODEL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    doWriteFields( aFields );
-}
-
-
-void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    doWriteFields( aFields );
 }
 
 

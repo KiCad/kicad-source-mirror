@@ -664,7 +664,6 @@ bool SIM_VALUE_INST<bool>::operator==( const bool& aOther ) const
 }
 
 
-template bool SIM_VALUE_INST<bool>::operator==( const bool& aOther ) const;
 template bool SIM_VALUE_INST<long>::operator==( const long& aOther ) const;
 template bool SIM_VALUE_INST<double>::operator==( const double& aOther ) const;
 template bool SIM_VALUE_INST<std::complex<double>>::operator==( const std::complex<double>& aOther ) const;
