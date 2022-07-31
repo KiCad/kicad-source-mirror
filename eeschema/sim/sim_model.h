@@ -25,12 +25,16 @@
 #ifndef SIM_MODEL_H
 #define SIM_MODEL_H
 
-#include <sim/sim_value.h>
-#include <enum_vector.h>
-#include <sch_field.h>
-#include <lib_field.h>
 #include <wx/string.h>
 #include <map>
+
+#include <sch_field.h>
+#include <lib_field.h>
+
+// Must be included after sch_field.h (exactly eda_shape.h) to avoid a colliding
+// declaration with a window header (under msys2)
+#include <sim/sim_value.h>
+#include <enum_vector.h>
 
 class SIM_LIBRARY;
 
@@ -94,7 +98,7 @@ public:
 
 
     // There's a trailing '_' because `DEVICE_TYPE` collides with something in Windows headers.
-    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE_, 
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE_,
         NONE,
 
         R,
@@ -359,7 +363,7 @@ public:
         std::unique_ptr<SIM_VALUE> value;
         const INFO& info;
         bool isOtherVariant = false; // Legacy.
-        
+
         PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
             : value( SIM_VALUE::Create( aInfo.type ) ),
               info( aInfo ),
