@@ -1739,6 +1739,9 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 
     i = 0;
 
+    m_points.push_back( pts_unique[0] );
+    m_shapes.push_back( shapes_unique[0] );
+
     // stage 2: eliminate colinear segments
     for( i = 1 ; i < np - 1 ; i ++ )
     {
@@ -1753,22 +1756,16 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
             const auto distToMidpoint = SEG( p_prev, p_next ).LineDistance( midpoint );
             const auto isMidpointColinear = SEG( p_prev, p_next ).Collinear( SEG( p_prev, midpoint ) );
 
-            if( distToMidpoint <= 1 || isMidpointColinear )
+            if( distToMidpoint > 1 && !isMidpointColinear )
             {
-                pts_unique.erase( pts_unique.begin() +  i );
-                shapes_unique.erase( shapes_unique.begin() + i );
-                i--;
-                np--;
-                continue;
+                m_points.push_back( pts_unique[i] );
+                m_shapes.push_back( shapes_unique[i] );
             }
         }
     }
 
-    for( i = 0 ; i < np; i ++ )
-    {
-        m_points.push_back( pts_unique[i] );
-        m_shapes.push_back( shapes_unique[i] );
-    }
+    m_points.push_back( pts_unique.back() );
+    m_shapes.push_back( shapes_unique.back() );
 
     assert( m_points.size() == m_shapes.size() );
 
