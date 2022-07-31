@@ -695,13 +695,7 @@ public:
      *
      * @return the courtyard polygon.
      */
-    const SHAPE_POLY_SET& GetPolyCourtyard( PCB_LAYER_ID aLayer ) const
-    {
-        if( IsBackLayer( aLayer ) )
-            return m_poly_courtyard_back;
-        else
-            return m_poly_courtyard_front;
-    }
+    const SHAPE_POLY_SET& GetCourtyard( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Build complex polygons of the courtyard areas from graphic items on the courtyard layers.
@@ -709,7 +703,7 @@ public:
      * @note Set the #MALFORMED_F_COURTYARD and #MALFORMED_B_COURTYARD status flags if the given
      *       courtyard layer does not contain a (single) closed shape.
      */
-    void BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
+    void BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
@@ -786,8 +780,9 @@ private:
     wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed
 
-    SHAPE_POLY_SET  m_poly_courtyard_front;  // Note that a footprint can have both front and back
-    SHAPE_POLY_SET  m_poly_courtyard_back;   // courtyards populated.
+    SHAPE_POLY_SET  m_courtyard_cache_front;  // Note that a footprint can have both front and back
+    SHAPE_POLY_SET  m_courtyard_cache_back;   // courtyards populated.
+    mutable int     m_courtyard_cache_timestamp;
 };
 
 #endif     // FOOTPRINT_H

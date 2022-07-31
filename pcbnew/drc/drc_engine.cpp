@@ -717,7 +717,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
                 copperZones.push_back( zone );
         }
 
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
     }
 
     int zoneCount = copperZones.size();
@@ -990,10 +990,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     {
                         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
 
-                        if( !footprint->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+                        if( !footprint->GetCourtyard( F_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::FrontMask();
 
-                        if( !footprint->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+                        if( !footprint->GetCourtyard( B_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::BackMask();
                     }
 

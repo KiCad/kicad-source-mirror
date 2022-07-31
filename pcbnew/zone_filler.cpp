@@ -133,7 +133,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
 
         // Rules may depend on insideCourtyard() or other expressions
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
     }
 
     // Sort by priority to reduce deferrals waiting on higher priority zones.

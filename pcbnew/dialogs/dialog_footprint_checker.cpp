@@ -119,7 +119,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 m_frame->GetCanvas()->GetView()->Add( marker );
             };
 
-    footprint->BuildPolyCourtyards( &errorHandler );
+    footprint->BuildCourtyardCaches( &errorHandler );
 
 
     const std::function<void( const wxString& msg )> typeWarning =

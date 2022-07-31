@@ -122,10 +122,10 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
                     };
 
             // Re-run courtyard tests to generate DRC_ITEMs
-            footprint->BuildPolyCourtyards( &errorHandler );
+            footprint->BuildCourtyardCaches( &errorHandler );
         }
-        else if( footprint->GetPolyCourtyard( F_CrtYd ).OutlineCount() == 0
-                && footprint->GetPolyCourtyard( B_CrtYd ).OutlineCount() == 0 )
+        else if( footprint->GetCourtyard( F_CrtYd ).OutlineCount() == 0
+                && footprint->GetCourtyard( B_CrtYd ).OutlineCount() == 0 )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
                 continue;
@@ -136,8 +136,8 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         }
         else
         {
-            footprint->GetPolyCourtyard( F_CrtYd ).BuildBBoxCaches();
-            footprint->GetPolyCourtyard( B_CrtYd ).BuildBBoxCaches();
+            footprint->GetCourtyard( F_CrtYd ).BuildBBoxCaches();
+            footprint->GetCourtyard( B_CrtYd ).BuildBBoxCaches();
         }
     }
 
@@ -167,8 +167,8 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
         }
 
         FOOTPRINT*            fpA = *itA;
-        const SHAPE_POLY_SET& frontA = fpA->GetPolyCourtyard( F_CrtYd );
-        const SHAPE_POLY_SET& backA = fpA->GetPolyCourtyard( B_CrtYd );
+        const SHAPE_POLY_SET& frontA = fpA->GetCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backA = fpA->GetCourtyard( B_CrtYd );
 
         if( frontA.OutlineCount() == 0 && backA.OutlineCount() == 0
              && m_drcEngine->IsErrorLimitExceeded( DRCE_PTH_IN_COURTYARD )
@@ -190,8 +190,8 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
         {
             FOOTPRINT*            fpB = *itB;
             EDA_RECT              fpBBBox = fpB->GetBoundingBox();
-            const SHAPE_POLY_SET& frontB = fpB->GetPolyCourtyard( F_CrtYd );
-            const SHAPE_POLY_SET& backB = fpB->GetPolyCourtyard( B_CrtYd );
+            const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
             DRC_CONSTRAINT        constraint;
             int                   clearance;
             int                   actual;
@@ -269,8 +269,8 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                             return;
 
                         const SHAPE_SEGMENT*  hole = pad->GetEffectiveHoleShape();
-                        const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
-                        const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
+                        const SHAPE_POLY_SET& front = footprint->GetCourtyard( F_CrtYd );
+                        const SHAPE_POLY_SET& back = footprint->GetCourtyard( B_CrtYd );
 
                         if( ( front.OutlineCount() > 0 && front.Collide( hole, 0 ) )
                             || ( back.OutlineCount() > 0 && back.Collide( hole, 0 ) ) )

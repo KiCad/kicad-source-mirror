@@ -159,7 +159,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
         for( ZONE* zone : footprint->Zones() )
             zone->CacheBoundingBox();
 
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
     }
 
     DRC_CONSTRAINT constraint = drcEngine.EvalRules( aClearanceType, aA, aB, aLayer, r );
@@ -351,7 +351,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         for( ZONE* z : f->Zones() )
             z->CacheBoundingBox();
 
-        f->BuildPolyCourtyards();
+        f->BuildCourtyardCaches();
     }
 
     auto hasHole =
@@ -518,8 +518,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     for( PCB_LAYER_ID layer : { F_CrtYd, B_CrtYd } )
     {
-        bool aCourtyard = aFP && !aFP->GetPolyCourtyard( layer ).IsEmpty();
-        bool bCourtyard = bFP && !bFP->GetPolyCourtyard( layer ).IsEmpty();
+        bool aCourtyard = aFP && !aFP->GetCourtyard( layer ).IsEmpty();
+        bool bCourtyard = bFP && !bFP->GetCourtyard( layer ).IsEmpty();
 
         if( aCourtyard && bCourtyard )
         {
@@ -714,14 +714,14 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         for( ZONE* zone : footprint->Zones() )
             zone->CacheBoundingBox();
 
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
 
         if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
             courtyardError = true;
     }
 
     WX_HTML_REPORT_BOX* r = nullptr;
-    
+
     if( item->Type() == PCB_TRACE_T )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );

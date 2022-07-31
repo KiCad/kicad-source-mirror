@@ -195,7 +195,7 @@ bool calcIsInsideCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
 {
     SHAPE_POLY_SET footprintCourtyard;
 
-    footprintCourtyard = aFootprint->GetPolyCourtyard( aSide );
+    footprintCourtyard = aFootprint->GetCourtyard( aSide );
 
     if( !aFootprint->GetBoundingBox().Intersects( aItemBBox ) )
         return false;
@@ -495,7 +495,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 
         if( ( aArea->GetLayerSet() & LSET::FrontMask() ).any() )
         {
-            SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( F_CrtYd );
 
             if( courtyard.OutlineCount() == 0 )
             {
@@ -512,7 +512,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 
         if( ( aArea->GetLayerSet() & LSET::BackMask() ).any() )
         {
-            SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( B_CrtYd );
+            const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( B_CrtYd );
 
             if( courtyard.OutlineCount() == 0 )
             {
