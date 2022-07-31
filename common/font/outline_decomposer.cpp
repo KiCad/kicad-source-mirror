@@ -46,7 +46,7 @@ static VECTOR2D toVector2D( const FT_Vector* aFreeTypeVector )
 void OUTLINE_DECOMPOSER::newContour()
 {
     CONTOUR contour;
-    contour.orientation = FT_Outline_Get_Orientation( &m_outline );
+    contour.m_Orientation = FT_Outline_Get_Orientation( &m_outline );
     m_contours->push_back( contour );
 }
 
@@ -54,8 +54,8 @@ void OUTLINE_DECOMPOSER::newContour()
 void OUTLINE_DECOMPOSER::addContourPoint( const VECTOR2D& p )
 {
     // don't add repeated points
-    if( m_contours->back().points.empty() || m_contours->back().points.back() != p )
-        m_contours->back().points.push_back( p );
+    if( m_contours->back().m_Points.empty() || m_contours->back().m_Points.back() != p )
+        m_contours->back().m_Points.push_back( p );
 }
 
 
@@ -141,7 +141,7 @@ void OUTLINE_DECOMPOSER::OutlineToSegments( CONTOURS* aContours )
     }
 
     for( CONTOUR& c : *m_contours )
-        c.winding = winding( c.points );
+        c.m_Winding = winding( c.m_Points );
 }
 
 

@@ -164,10 +164,10 @@ double OUTLINE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) co
 
 static bool contourIsFilled( const CONTOUR& c )
 {
-    switch( c.orientation )
+    switch( c.m_Orientation )
     {
-    case FT_ORIENTATION_TRUETYPE:   return c.winding == 1;
-    case FT_ORIENTATION_POSTSCRIPT: return c.winding == -1;
+    case FT_ORIENTATION_TRUETYPE:   return c.m_Winding == 1;
+    case FT_ORIENTATION_POSTSCRIPT: return c.m_Winding == -1;
     default:                        return false;
     }
 }
@@ -343,7 +343,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
             for( CONTOUR& c : contours )
             {
-                GLYPH_POINTS     points = c.points;
+                GLYPH_POINTS     points = c.m_Points;
                 SHAPE_LINE_CHAIN shape;
 
                 for( const VECTOR2D& v : points )

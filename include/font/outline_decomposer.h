@@ -45,12 +45,12 @@ typedef std::vector<VECTOR2D>     GLYPH_POINTS;
 typedef std::vector<GLYPH_POINTS> GLYPH_POINTS_LIST;
 typedef std::vector<BOX2D>        GLYPH_BOUNDING_BOX_LIST;
 
-typedef struct
+struct CONTOUR
 {
-    GLYPH_POINTS   points;
-    int            winding;
-    FT_Orientation orientation;
-} CONTOUR;
+    GLYPH_POINTS   m_Points;
+    int            m_Winding = 0;
+    FT_Orientation m_Orientation;
+};
 
 
 typedef std::vector<CONTOUR> CONTOURS;
