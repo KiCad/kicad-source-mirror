@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 16:34-0700\n"
+"POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2022-06-12 08:49+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -109,13 +109,13 @@ msgstr "Vaše verze OpenGL není podporována. Minimální požadovaná je 1.5."
 msgid "Last render time %.0f ms"
 msgstr "Čas posledního vykreslení %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:657
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:660
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "Síť %s\tTřída spojů %s\tJméno plošky %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:682
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:695
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:685
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "Síť %s\tTřída spojů %s"
@@ -268,34 +268,32 @@ msgstr "&Pohled"
 msgid "&Preferences"
 msgstr "&Nastavení"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:54
-#: pcbnew/widgets/appearance_controls.cpp:2671
-#: pcbnew/widgets/appearance_controls_base.cpp:182
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 #, fuzzy
-msgid "Viewports (Alt+Tab):"
+msgid "Viewports (Shift+Tab):"
 msgstr "Přednastavuje (Ctrl+Tab):"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
 #, fuzzy
 msgid "Save viewport..."
 msgstr "Uložit předvolbu..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2680
 #, fuzzy
 msgid "Delete viewport..."
 msgstr "Smazat předvolbu..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
 msgstr "Znovu načíst desku"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:76
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:77
 msgid "Copy 3D image to clipboard"
 msgstr "Kopírovat 3D obrázek do schránky"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:81
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:82
 msgid "Render current view using Raytracing"
 msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 
@@ -304,49 +302,49 @@ msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D prohlížeč"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 #, fuzzy
 msgid "Viewport name:"
 msgstr "Název sítě:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 #, fuzzy
 msgid "Save Viewport"
 msgstr "Uložit soubor hlášení"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:550
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2766
 #, fuzzy
 msgid "Viewports"
 msgstr "Report"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:559
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2775
 #, fuzzy
 msgid "Delete Viewport"
 msgstr "Odstranit průchodku"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:560
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2776
 #, fuzzy
 msgid "Select viewport:"
 msgstr "Vybrat předvolbu:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:762
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:760
 msgid "3D Image File Name"
 msgstr "Název souboru 3D obrázku"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:783
-#: common/eda_base_frame.cpp:1120 common/eda_base_frame.cpp:1125
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
+#: common/eda_base_frame.cpp:1123 common/eda_base_frame.cpp:1128
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Nedostatečná oprávnění k uložení souboru '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784 common/confirm.cpp:130
-#: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782 common/confirm.cpp:131
+#: common/confirm.cpp:309 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:828 eeschema/files-io.cpp:900
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
@@ -361,11 +359,11 @@ msgstr "Nedostatečná oprávnění k uložení souboru '%s'."
 msgid "Error"
 msgstr "Chyba"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:817
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:815
 msgid "Failed to copy image to clipboard"
 msgstr "Nepodařilo se zkopírovat obrázek do schránky"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Can't save file"
 msgstr "Nelze uložit soubor"
 
@@ -1437,19 +1435,19 @@ msgstr ""
 "Jakékoli problémy s KiCadem v tomto systému nelze hlásit oficiální "
 "bugtracker."
 
-#: common/confirm.cpp:57
+#: common/confirm.cpp:58
 msgid "Do not show again"
 msgstr "Znovu neukazovat"
 
-#: common/confirm.cpp:127
+#: common/confirm.cpp:128
 msgid "Message"
 msgstr "Zprávy"
 
-#: common/confirm.cpp:128
+#: common/confirm.cpp:129
 msgid "Question"
 msgstr "Otázka"
 
-#: common/confirm.cpp:129 common/confirm.cpp:284
+#: common/confirm.cpp:130 common/confirm.cpp:291
 #: common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1316
@@ -1466,17 +1464,17 @@ msgstr "Otázka"
 msgid "Warning"
 msgstr "Varování"
 
-#: common/confirm.cpp:160 common/confirm.cpp:166
+#: common/confirm.cpp:161 common/confirm.cpp:167
 #, fuzzy
 msgid "File Open Warning"
 msgstr "Chyba otevření souboru"
 
-#: common/confirm.cpp:162 common/confirm.cpp:168
+#: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
 msgstr "Prokládané listy mohou vytvářet velmi neočekávané výsledky."
 
-#: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:233
-#: common/confirm.cpp:260 common/tool/actions.cpp:121
+#: common/confirm.cpp:165 common/confirm.cpp:170 common/confirm.cpp:234
+#: common/confirm.cpp:261 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
@@ -1486,19 +1484,19 @@ msgstr "Prokládané listy mohou vytvářet velmi neočekávané výsledky."
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169
+#: common/confirm.cpp:165 common/confirm.cpp:170
 msgid "Open Anyway"
 msgstr "Přesto otevřít"
 
-#: common/confirm.cpp:180 common/confirm.cpp:217
+#: common/confirm.cpp:181 common/confirm.cpp:218
 msgid "Save Changes?"
 msgstr "Uložit změny?"
 
-#: common/confirm.cpp:182 common/confirm.cpp:219
+#: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Nemáte uloženo, všechny vaše změny budou navždy ztraceny."
 
-#: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
+#: common/confirm.cpp:185 common/confirm.cpp:221 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #: eeschema/symbol_editor/symbol_editor.cpp:621
 #: eeschema/widgets/tuner_slider_base.cpp:74
@@ -1506,33 +1504,33 @@ msgstr "Nemáte uloženo, všechny vaše změny budou navždy ztraceny."
 msgid "Save"
 msgstr "Uložit"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220
+#: common/confirm.cpp:185 common/confirm.cpp:221
 msgid "Discard Changes"
 msgstr "Zrušit změny"
 
-#: common/confirm.cpp:187 common/confirm.cpp:266
+#: common/confirm.cpp:188 common/confirm.cpp:267
 msgid "Apply to all"
 msgstr "Použít pro vše"
 
-#: common/confirm.cpp:232
+#: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
 msgstr "Vaše aktuální změny budou trvale ztraceny."
 
-#: common/confirm.cpp:233 common/tool/actions.cpp:91
+#: common/confirm.cpp:234 common/tool/actions.cpp:91
 msgid "Revert"
 msgstr "Vrátit se"
 
-#: common/confirm.cpp:259 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: common/confirm.cpp:260 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:539
 msgid "OK"
 msgstr "OK"
 
-#: common/confirm.cpp:312
+#: common/confirm.cpp:331
 msgid "Information"
 msgstr "Informace"
 
-#: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:412
+#: common/confirm.cpp:344 eeschema/symbol_editor/symbol_editor.cpp:412
 #: eeschema/symbol_editor/symbol_editor.cpp:726
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
@@ -1550,7 +1548,7 @@ msgstr "Potvrzení"
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:240
-#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1485
+#: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1512
 #: eeschema/symbol_editor/symbol_editor.cpp:591
 #: eeschema/symbol_editor/symbol_editor.cpp:1292
 #: eeschema/symbol_viewer_frame.cpp:442 include/lib_table_grid.h:185
@@ -1805,8 +1803,6 @@ msgid "Saturation:"
 msgstr "Saturace:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45
-#: eeschema/dialogs/dialog_spice_model_base.cpp:638
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:29
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:92
@@ -1935,8 +1931,8 @@ msgstr "Proměnné prostředí"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:298
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/fields_grid_table.cpp:335 eeschema/lib_pin.cpp:1086
-#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1449
-#: eeschema/sch_symbol.cpp:1494 eeschema/symbol_editor/symbol_editor.cpp:1264
+#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1476
+#: eeschema/sch_symbol.cpp:1521 eeschema/symbol_editor/symbol_editor.cpp:1264
 #: eeschema/symbol_viewer_frame.cpp:440
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -2036,33 +2032,6 @@ msgstr "Vybrat soubor tabulky globálních %s knihoven symbolů:"
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:40
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
-#: eeschema/dialogs/dialog_spice_model_base.cpp:81
-#: eeschema/dialogs/dialog_spice_model_base.cpp:85
-#: eeschema/dialogs/dialog_spice_model_base.cpp:89
-#: eeschema/dialogs/dialog_spice_model_base.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:97
-#: eeschema/dialogs/dialog_spice_model_base.cpp:101
-#: eeschema/dialogs/dialog_spice_model_base.cpp:105
-#: eeschema/dialogs/dialog_spice_model_base.cpp:109
-#: eeschema/dialogs/dialog_spice_model_base.cpp:113
-#: eeschema/dialogs/dialog_spice_model_base.cpp:117
-#: eeschema/dialogs/dialog_spice_model_base.cpp:121
-#: eeschema/dialogs/dialog_spice_model_base.cpp:125
-#: eeschema/dialogs/dialog_spice_model_base.cpp:129
-#: eeschema/dialogs/dialog_spice_model_base.cpp:133
-#: eeschema/dialogs/dialog_spice_model_base.cpp:137
-#: eeschema/dialogs/dialog_spice_model_base.cpp:141
-#: eeschema/dialogs/dialog_spice_model_base.cpp:145
-#: eeschema/dialogs/dialog_spice_model_base.cpp:149
-#: eeschema/dialogs/dialog_spice_model_base.cpp:153
-#: eeschema/dialogs/dialog_spice_model_base.cpp:157
-#: eeschema/dialogs/dialog_spice_model_base.cpp:161
-#: eeschema/dialogs/dialog_spice_model_base.cpp:165
-#: eeschema/dialogs/dialog_spice_model_base.cpp:169
-#: eeschema/dialogs/dialog_spice_model_base.cpp:173
-#: eeschema/dialogs/dialog_spice_model_base.cpp:177
-#: eeschema/dialogs/dialog_spice_model_base.cpp:181
-#: eeschema/dialogs/dialog_spice_model_base.cpp:185
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:154
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:166
@@ -2442,7 +2411,6 @@ msgstr "Vlastní výška papíru."
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:325
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:373
 #: eeschema/dialogs/dialog_line_properties_base.cpp:39
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:39
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:281
@@ -2582,7 +2550,7 @@ msgid "Revision:"
 msgstr "Revize:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist.cpp:386
+#: eeschema/dialogs/dialog_netlist.cpp:402
 msgid "Title:"
 msgstr "Název:"
 
@@ -2678,7 +2646,7 @@ msgstr "Náhled před tiskem"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:101 eeschema/dialogs/dialog_erc.cpp:430
-#: eeschema/dialogs/dialog_netlist.cpp:261
+#: eeschema/dialogs/dialog_netlist.cpp:264
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2820,11 +2788,11 @@ msgstr "Nastavení stránky..."
 msgid "MyLabel"
 msgstr "Moje označení"
 
-#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:123
+#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/symbol_viewer_frame.cpp:163 eeschema/symbol_viewer_frame.cpp:178
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:251
 #: pcbnew/footprint_viewer_frame.cpp:152 pcbnew/footprint_viewer_frame.cpp:167
 msgid "Filter"
 msgstr "Filtr"
@@ -3647,14 +3615,14 @@ msgid "Line Style"
 msgstr "Styl čáry"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1631
-#: common/pgm_base.cpp:84 common/stroke_params.cpp:200
+#: common/pgm_base.cpp:85 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1111 include/stroke_params.h:79
+#: eeschema/tools/sch_editor_control.cpp:1170 include/stroke_params.h:79
 msgid "Default"
 msgstr "Výchozí"
 
@@ -3805,11 +3773,11 @@ msgstr "Info"
 msgid "Save..."
 msgstr "Uložit..."
 
-#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:464
+#: common/draw_panel_gal.cpp:299 common/draw_panel_gal.cpp:469
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL nelze použít, návrat k softwarovému rendrování"
 
-#: common/draw_panel_gal.cpp:300 common/draw_panel_gal.cpp:471
+#: common/draw_panel_gal.cpp:305 common/draw_panel_gal.cpp:476
 msgid "Could not use OpenGL"
 msgstr "Nelze použít OpenGL"
 
@@ -4107,12 +4075,12 @@ msgstr "Možnosti Excellon"
 msgid "Drawing Sheet Editor"
 msgstr "Editor výkresových listů"
 
-#: common/eda_base_frame.cpp:1115
+#: common/eda_base_frame.cpp:1118
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Nedostatečná oprávnění ke složce '%s'."
 
-#: common/eda_base_frame.cpp:1157
+#: common/eda_base_frame.cpp:1160
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4127,7 +4095,7 @@ msgstr ""
 "nebyl správně uložen.  Přejete si obnovit poslední uložené úpravy, které "
 "jste provedli?"
 
-#: common/eda_base_frame.cpp:1173
+#: common/eda_base_frame.cpp:1176
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Automaticky uložený soubor nelze přejmenovat na název souboru desky."
 
@@ -4158,7 +4126,8 @@ msgid "Inches"
 msgstr "Palce"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:157
-#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/pcb_actions.cpp:703
+#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/edit_tool_move_fct.cpp:365
+#: pcbnew/tools/pcb_actions.cpp:703
 msgid "Constrain to H, V, 45"
 msgstr "Omezit na H, V a 45 stupňů"
 
@@ -4220,7 +4189,7 @@ msgid "Screen"
 msgstr "Obrazovka"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
-#: eeschema/sch_symbol.cpp:1482 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1509 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:905
@@ -4430,8 +4399,7 @@ msgstr "Oblouk"
 #: common/eda_shape.cpp:592 common/eda_shape.cpp:617
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1094
-#: eeschema/sch_pin.cpp:223
+#: eeschema/lib_pin.cpp:1094 eeschema/sch_pin.cpp:223
 msgid "Length"
 msgstr "Délka"
 
@@ -5422,19 +5390,19 @@ msgstr "Neshoda typu mezi '%s' a %lf"
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Neshoda typu mezi %lf a '%s'"
 
-#: common/pgm_base.cpp:185
+#: common/pgm_base.cpp:186
 msgid "No default editor found, you must choose one."
 msgstr "Výchozí editor nenalezen, je třeba jej zvolit."
 
-#: common/pgm_base.cpp:205 common/pgm_base.cpp:207
+#: common/pgm_base.cpp:206 common/pgm_base.cpp:208
 msgid "Executable file"
 msgstr "Spustitelný soubor"
 
-#: common/pgm_base.cpp:217
+#: common/pgm_base.cpp:218
 msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
-#: common/pgm_base.cpp:341
+#: common/pgm_base.cpp:342
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5444,19 +5412,19 @@ msgid ""
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
 
-#: common/pgm_base.cpp:348
+#: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
 msgstr ""
 
-#: common/pgm_base.cpp:394
+#: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Proměnná prostředí HOME je prázdná. Nelze pokračovat."
 
-#: common/pgm_base.cpp:609
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Tento jazyk není operačním systémem podporován."
 
-#: common/pgm_base.cpp:660 common/pgm_base.cpp:698
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:702
 msgid "The KiCad language file for this language is not installed."
 msgstr "Jazykový soubor KiCadu pro tento jazyk není nainstalován."
 
@@ -6061,7 +6029,8 @@ msgid "Show Grid"
 msgstr "Zobrazit mřížku"
 
 #: common/tool/actions.cpp:480
-msgid "Display grid dots or lines in the edit window"
+#, fuzzy
+msgid "Display background grid in the edit window"
 msgstr "Zobrazí tečky nebo čáry mřížky v editačním okně"
 
 #: common/tool/actions.cpp:485
@@ -6589,28 +6558,28 @@ msgstr "Aktuální klávesa:"
 msgid "Set Hotkey"
 msgstr "Nastavit kl. zkratku"
 
-#: common/widgets/widget_hotkey_list.cpp:345
+#: common/widgets/widget_hotkey_list.cpp:351
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr "'%s' je vyhrazená klávesová zkratka v KiCadu a nemůže být přiřazena."
 
-#: common/widgets/widget_hotkey_list.cpp:396
+#: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
 msgstr "Upravit..."
 
-#: common/widgets/widget_hotkey_list.cpp:397
+#: common/widgets/widget_hotkey_list.cpp:403
 msgid "Undo Changes"
 msgstr "Vrátit změny"
 
-#: common/widgets/widget_hotkey_list.cpp:398
+#: common/widgets/widget_hotkey_list.cpp:404
 msgid "Clear Assigned Hotkey"
 msgstr "Vymazat přiřazenou klávesovou zkratku"
 
-#: common/widgets/widget_hotkey_list.cpp:399
+#: common/widgets/widget_hotkey_list.cpp:405
 msgid "Restore Default"
 msgstr "Obnovit výchozí"
 
-#: common/widgets/widget_hotkey_list.cpp:435
+#: common/widgets/widget_hotkey_list.cpp:441
 #, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
@@ -6619,19 +6588,19 @@ msgstr ""
 "'%s' je již přiřazena k '%s' v sekci '%s'. Jste si jisti, že chcete změnit "
 "její přiřazení?"
 
-#: common/widgets/widget_hotkey_list.cpp:441
+#: common/widgets/widget_hotkey_list.cpp:447
 msgid "Confirm change"
 msgstr "Potvrzení změny"
 
-#: common/widgets/widget_hotkey_list.cpp:461
+#: common/widgets/widget_hotkey_list.cpp:467
 msgid "Command"
 msgstr "Příkaz"
 
-#: common/widgets/widget_hotkey_list.cpp:464
+#: common/widgets/widget_hotkey_list.cpp:470
 msgid "(double-click to edit)"
 msgstr "(dvojklik pro úpravu)"
 
-#: common/widgets/widget_hotkey_list.cpp:467
+#: common/widgets/widget_hotkey_list.cpp:473
 msgid "Hotkey"
 msgstr "Klávesová zkratka"
 
@@ -6979,7 +6948,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' není platné pouzdro."
 
 #: cvpcb/cvpcb_mainframe.cpp:757 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1486 eeschema/symbol_editor/symbol_editor.cpp:1293
+#: eeschema/sch_symbol.cpp:1513 eeschema/symbol_editor/symbol_editor.cpp:1293
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/footprint.cpp:2678
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -6989,8 +6958,8 @@ msgstr "Klíčová slova"
 msgid "Pin Count"
 msgstr "Počet vývodů"
 
-#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1469
-#: eeschema/sch_symbol.cpp:1473 eeschema/sch_symbol.cpp:1503
+#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500 eeschema/sch_symbol.cpp:1530
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1220
 msgid "Library"
@@ -7076,8 +7045,7 @@ msgstr "Uložit soubor přiřazení pouzdra (.equ)"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
-#: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
 #: pcbnew/footprint_libraries_utils.cpp:532
 msgid "Add"
 msgstr "Přidat"
@@ -7085,7 +7053,6 @@ msgstr "Přidat"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:76
 #: eeschema/dialogs/dialog_bus_manager.cpp:110
-#: eeschema/dialogs/dialog_spice_model_base.cpp:660
 msgid "Remove"
 msgstr "Smazat"
 
@@ -7115,8 +7082,8 @@ msgstr "Dostupné proměnné prostředí pro relativní cesty:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1024
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1448
-#: eeschema/sch_symbol.cpp:1493
+#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1475
+#: eeschema/sch_symbol.cpp:1520
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7630,7 +7597,7 @@ msgstr "Přidat generátor"
 msgid "Nickname '%s' already in use."
 msgstr "Přezdívka '%s' se již používá."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:702
 msgid "Generator File"
 msgstr "Soubory generátoru"
 
@@ -9249,8 +9216,8 @@ msgstr "Tří-stavový"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:162
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
-#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:56
-#: eeschema/pin_type.cpp:248 eeschema/sch_label.cpp:148
+#: eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:248
+#: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "Pasivní"
 
@@ -9883,28 +9850,38 @@ msgstr "Přijmout název"
 msgid "Migrate Buses"
 msgstr "Migrovat sběnice"
 
-#: eeschema/dialogs/dialog_netlist.cpp:260
+#: eeschema/dialogs/dialog_netlist.cpp:263
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exportovat Netlist"
 
-#: eeschema/dialogs/dialog_netlist.cpp:298
+#: eeschema/dialogs/dialog_netlist.cpp:307
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulátor vyžaduje plně očíslované schéma."
 
-#: eeschema/dialogs/dialog_netlist.cpp:324
-msgid "Reformat passive symbol values"
-msgstr "Přeformátovat hodnoty pasivních symbolů"
+#: eeschema/dialogs/dialog_netlist.cpp:333
+#, fuzzy
+msgid "Save all voltages"
+msgstr "Uložit všechny změny"
 
-#: eeschema/dialogs/dialog_netlist.cpp:325
-msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Přeformátujte hodnoty pasivního symbolu, např. 1M -> 1Meg"
+#: eeschema/dialogs/dialog_netlist.cpp:334
+msgid "Write a directive to save all voltages (.save all)"
+msgstr ""
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:339
+#, fuzzy
+msgid "Save all currents"
+msgstr "Uložit všechny knihovny"
+
+#: eeschema/dialogs/dialog_netlist.cpp:340
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr ""
+
+#: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
 msgstr "Příkaz externího simulátoru:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:347
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -9914,37 +9891,37 @@ msgstr ""
 "Obvykle <cesta k binárnímu spice> %I\n"
 "%I Budu nahrazen skutečným názvem netlist spice"
 
-#: eeschema/dialogs/dialog_netlist.cpp:345
+#: eeschema/dialogs/dialog_netlist.cpp:361
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Vytvořit Netlist a spustit příkaz simulátoru"
 
-#: eeschema/dialogs/dialog_netlist.cpp:396
+#: eeschema/dialogs/dialog_netlist.cpp:412
 msgid "Netlist command:"
 msgstr "Příkaz netlistu:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_netlist.cpp:457
 msgid "Save Netlist File"
 msgstr "Uložit soubor netlistu"
 
-#: eeschema/dialogs/dialog_netlist.cpp:472
+#: eeschema/dialogs/dialog_netlist.cpp:492
 #, c-format
 msgid "%s Export"
 msgstr "%s Export"
 
-#: eeschema/dialogs/dialog_netlist.cpp:501
+#: eeschema/dialogs/dialog_netlist.cpp:521
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "Exportování netlistu vyžaduje plně očíslované schéma."
 
-#: eeschema/dialogs/dialog_netlist.cpp:625
+#: eeschema/dialogs/dialog_netlist.cpp:645
 msgid "This plugin already exists."
 msgstr "Plugin již existuje."
 
-#: eeschema/dialogs/dialog_netlist.cpp:658
+#: eeschema/dialogs/dialog_netlist.cpp:678
 msgid "You must provide a netlist generator command string"
 msgstr "Musíte poskytnout příkazový řetězec generátoru netlistu"
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:684
 msgid "You must provide a netlist generator title"
 msgstr "Musíte poskytnout název generátoru netlistu"
 
@@ -10171,8 +10148,8 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:296
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:100
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:38
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
@@ -10438,7 +10415,7 @@ msgstr "Akce provedena"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1023
-#: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1491
+#: eeschema/sch_symbol.cpp:1474 eeschema/sch_symbol.cpp:1518
 #: pcbnew/footprint.cpp:2658 pcbnew/fp_text.cpp:267
 msgid "Reference"
 msgstr "Reference"
@@ -10631,7 +10608,7 @@ msgid "Electrical Rules"
 msgstr "Elektrická pravidla"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1061
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Project"
@@ -10857,6 +10834,21 @@ msgstr "Vlastnosti listu"
 msgid "Add signal by name:"
 msgstr "Přidat signál podle názvu:"
 
+#: eeschema/dialogs/dialog_sim_model.cpp:401
+#, fuzzy, c-format
+msgid "Failed reading model library '%s'."
+msgstr "Selhalo vytvoření souboru knihovny symbolu '%s'."
+
+#: eeschema/dialogs/dialog_sim_model.cpp:713
+#, fuzzy
+msgid "Browse Models"
+msgstr "Procházet soubory"
+
+#: eeschema/dialogs/dialog_sim_model.h:62
+#, fuzzy, c-format
+msgid "No model named '%s' in library."
+msgstr "Součástka nenalezena"
+
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
 msgstr "Musíte vybrat zdroj stejnosměrného proudu"
@@ -10885,7 +10877,7 @@ msgstr "Konec bez platné simulace"
 msgid "Configure Valid Simulation"
 msgstr "Konfigurace platné simulace"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:586
+#: eeschema/dialogs/dialog_sim_settings.cpp:591
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:166
@@ -10895,11 +10887,11 @@ msgstr "Konfigurace platné simulace"
 msgid "Volts"
 msgstr "Voltů"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
+#: eeschema/dialogs/dialog_sim_settings.cpp:592
 msgid "Amperes"
 msgstr "Ampéry"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:588
+#: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
@@ -10938,10 +10930,6 @@ msgstr "Počáteční frekvence:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
-#: eeschema/dialogs/dialog_spice_model_base.cpp:706
-#: eeschema/dialogs/dialog_spice_model_base.cpp:728
-#: eeschema/dialogs/dialog_spice_model_base.cpp:797
-#: eeschema/dialogs/dialog_spice_model_base.cpp:808
 msgid "Hertz"
 msgstr "Hertz"
 
@@ -11081,19 +11069,6 @@ msgstr "Časový krok:"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:390
-#: eeschema/dialogs/dialog_spice_model_base.cpp:407
-#: eeschema/dialogs/dialog_spice_model_base.cpp:418
-#: eeschema/dialogs/dialog_spice_model_base.cpp:429
-#: eeschema/dialogs/dialog_spice_model_base.cpp:440
-#: eeschema/dialogs/dialog_spice_model_base.cpp:451
-#: eeschema/dialogs/dialog_spice_model_base.cpp:509
-#: eeschema/dialogs/dialog_spice_model_base.cpp:567
-#: eeschema/dialogs/dialog_spice_model_base.cpp:578
-#: eeschema/dialogs/dialog_spice_model_base.cpp:589
-#: eeschema/dialogs/dialog_spice_model_base.cpp:600
-#: eeschema/dialogs/dialog_spice_model_base.cpp:819
-#: eeschema/dialogs/dialog_spice_model_base.cpp:870
-#: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
 msgstr "sekund"
 
@@ -11165,600 +11140,6 @@ msgstr "HSpice"
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
 msgstr "Nastavení simulace"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:80
-msgid "Diode"
-msgstr "Dioda"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:81
-msgid "BJT"
-msgstr "BJT"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:82
-msgid "MOSFET"
-msgstr "MOSFET"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:83
-msgid "JFET"
-msgstr "JFET"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:84
-msgid "Subcircuit"
-msgstr "Podobvod"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
-msgid "Code Model"
-msgstr "Mód modelu"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:497
-msgid ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-msgstr ""
-"Číslování pinů symbolů nemusí vždy odpovídat požadované objednávce pinů "
-"SPICE\n"
-"Zkontrolujte symbol a v případě potřeby změňte pořadí kolíků pomocí "
-"„Alternativní sekvence uzlů“"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:506
-msgid "For a Diode, pin order is anode, cathode"
-msgstr "Pro diodu je pořadí pinů anoda, katoda"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:510
-msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr ""
-"U BJT je objednávka pinů kolektor, základna, emitor, substrát (volitelně)"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:514
-msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "Pro MOSFET, pořadí vývodů drain, gate, source"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:518
-msgid "For a JFET, pin order is drain, gate, source"
-msgstr "Pro JFET, pořadí vývodů drain, gate, source"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
-msgid "Invalid Impedance value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
-msgid "Invalid delay value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
-msgid "Invalid frequency value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
-msgid "Invalid length in wavelength value"
-msgstr "Neplatný alternativní název vývodu"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
-msgid "Invalid resistance value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
-msgid "Invalid capacitance value"
-msgstr "Neplatný řetězec hodnot Spice"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
-msgid "Invalid inductance value"
-msgstr "Neplatný řetězec hodnot Spice"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
-msgid "Invalid conductance value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
-msgid "Invalid length value"
-msgstr "Neplatná hodnota vlastnosti"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1066
-#, c-format
-msgid ""
-"You need to specify at least the first %d parameters for the transient source"
-msgstr "Musíte zadat alespoň první parametry %d pro zdroj přechodu"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1075
-msgid ""
-"You cannot leave interleaved empty fields when defining a transient source"
-msgstr "Při definování zdroje přechodu nemůžete ponechat prázdná pole"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1292
-msgid "Select library"
-msgstr "Vybrat knihovnu"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1360
-#: eeschema/dialogs/dialog_spice_model_base.cpp:885
-msgid "Range:"
-msgstr "Rozsah:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1361
-#: eeschema/dialogs/dialog_spice_model.cpp:1373
-#: eeschema/dialogs/dialog_spice_model.cpp:1379
-#: eeschema/dialogs/dialog_spice_model_base.cpp:675
-#: eeschema/dialogs/dialog_spice_model_base.cpp:779
-#: eeschema/dialogs/dialog_spice_model_base.cpp:895
-msgid "Offset:"
-msgstr "Ofset:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1366
-msgid "Standard deviation:"
-msgstr "Standardní odchylka:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1367
-#: eeschema/dialogs/dialog_spice_model.cpp:1372
-msgid "Mean:"
-msgstr "Průměr:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1378
-msgid "Lambda:"
-msgstr "Lambda:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1383
-msgid "type of random generator for source is invalid"
-msgstr "typ náhodného generátoru pro zdroj je neplatný"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:30
-#: eeschema/dialogs/dialog_spice_model_base.cpp:233
-#: eeschema/dialogs/dialog_spice_model_base.cpp:850
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-msgid "Type:"
-msgstr "Typ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:34
-#: eeschema/dialogs/dialog_spice_model_base.cpp:35
-msgid "Resistor"
-msgstr "Rezistor"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:36
-msgid "Capacitor"
-msgstr "Kondenzátor"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:37
-msgid "Inductor"
-msgstr "Cívka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:41
-msgid "Passive type"
-msgstr "Pasivní typ"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:54
-msgid "Spice value in simulation"
-msgstr "Spice hodnota v simulaci"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:67
-msgid ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-msgstr ""
-"V hodnotách Spice je desetinný oddělovač tečka.\n"
-"Hodnoty mohou používat symboly jednotek Spice."
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:71
-msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Symboly jednotek Spice v hodnotách (nerozlišuje velikost písmen):"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
-msgid "Library:"
-msgstr "Knihovna:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:220
-msgid "Select file..."
-msgstr "Vybrat soubor..."
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:226
-msgid "Model:"
-msgstr "Model:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:240
-msgid "Note:"
-msgstr "Poznámka:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:244
-msgid "note"
-msgstr "poznámka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:294
-msgid "Model"
-msgstr "Model"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:302
-msgid "DC/AC Analysis"
-msgstr "DC/AC analýza"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:311
-msgid "DC:"
-msgstr "DC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:320
-#: eeschema/dialogs/dialog_spice_model_base.cpp:342
-#: eeschema/dialogs/dialog_spice_model_base.cpp:385
-#: eeschema/dialogs/dialog_spice_model_base.cpp:396
-#: eeschema/dialogs/dialog_spice_model_base.cpp:476
-#: eeschema/dialogs/dialog_spice_model_base.cpp:487
-#: eeschema/dialogs/dialog_spice_model_base.cpp:545
-#: eeschema/dialogs/dialog_spice_model_base.cpp:556
-#: eeschema/dialogs/dialog_spice_model_base.cpp:645
-#: eeschema/dialogs/dialog_spice_model_base.cpp:684
-#: eeschema/dialogs/dialog_spice_model_base.cpp:695
-#: eeschema/dialogs/dialog_spice_model_base.cpp:775
-#: eeschema/dialogs/dialog_spice_model_base.cpp:786
-msgid "Volts/Amps"
-msgstr "Volt/Amp"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:333
-msgid "AC magnitude:"
-msgstr "AC velikost:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:346
-msgid "AC phase:"
-msgstr "AC fáze:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:355
-msgid "radians"
-msgstr "radiány"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:366
-msgid "Transient Analysis"
-msgstr "Přechodná analýza"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:376
-#: eeschema/dialogs/dialog_spice_model_base.cpp:536
-msgid "Initial value:"
-msgstr "Počáteční hodnota:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:389
-#: eeschema/dialogs/dialog_spice_model_base.cpp:549
-msgid "Pulsed value:"
-msgstr "Pulzní hodnota:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:400
-msgid "Delay time:"
-msgstr "Čas zpoždění:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:411
-msgid "Rise time:"
-msgstr "Doba náběhu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:422
-msgid "Fall time:"
-msgstr "Doba doběhu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:433
-msgid "Pulse width:"
-msgstr "Šířka impulsu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:444
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
-msgid "Period:"
-msgstr "Perioda:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:459
-msgid "Pulse"
-msgstr "Puls"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:467
-msgid "DC offset:"
-msgstr "DC ofset:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:480
-#: eeschema/dialogs/dialog_spice_model_base.cpp:688
-#: eeschema/dialogs/dialog_spice_model_base.cpp:766
-msgid "Amplitude:"
-msgstr "Amplituda:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:491
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
-msgid "Frequency:"
-msgstr "Frekvence:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:498
-#: eeschema/dialogs/dialog_spice_model_base.cpp:983
-#: pcb_calculator/widgets/unit_selector.cpp:103
-msgid "Hz"
-msgstr "Hz"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:502
-msgid "Delay:"
-msgstr "Zpoždění:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:513
-msgid "Damping factor:"
-msgstr "Tlumící faktor:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:520
-msgid "1/seconds"
-msgstr "1/sekund"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:528
-msgid "Sinusoidal"
-msgstr "Sinusový"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:560
-msgid "Rise delay time:"
-msgstr "Doba náběhu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:571
-msgid "Rise time constant:"
-msgstr "Časové konstanta náběhu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:582
-msgid "Fall delay time:"
-msgstr "Čas zpoždění:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:593
-msgid "Fall time constant:"
-msgstr "Sestupná časová konstanta:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:608
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Exponential"
-msgstr "Exponenciální"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:610
-msgid "Piece-wise linear"
-msgstr "Částečně lineární"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:625
-msgid "Time:"
-msgstr "Čas:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:634
-msgid "second"
-msgstr "sekund"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:667
-msgid "Piece-wise Linear"
-msgstr "Částečně lineární"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:699
-#: eeschema/dialogs/dialog_spice_model_base.cpp:801
-msgid "Carrier frequency:"
-msgstr "Nosná frekvence:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:710
-msgid "Modulation index:"
-msgstr "Modulační index:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:717
-#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
-msgid "-"
-msgstr "-"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:721
-msgid "Signal frequency:"
-msgstr "Frekvence signálu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:732
-#: eeschema/dialogs/dialog_spice_model_base.cpp:823
-msgid "Carrier phase:"
-msgstr "Nosná fáze:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:739
-#: eeschema/dialogs/dialog_spice_model_base.cpp:750
-#: eeschema/dialogs/dialog_spice_model_base.cpp:830
-msgid "degrees"
-msgstr "stupňů"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:743
-msgid "Signal phase:"
-msgstr "Fáze signálu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:758
-msgid "FM"
-msgstr "FM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:790
-msgid "Modulating frequency:"
-msgstr "Modulační frekvence:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:812
-msgid "Signal delay:"
-msgstr "Zpoždění signálu:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:838
-msgid "AM"
-msgstr "AM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:842
-msgid "Transient noise"
-msgstr "Přechodný šum"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Uniform"
-msgstr "Jednotný"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Gaussian"
-msgstr "Gaussův"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Poisson"
-msgstr "Poisson"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:863
-msgid "Individual value duration:"
-msgstr "Trvání individuální hodnoty:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:874
-msgid "Time delay:"
-msgstr "Časová prodleva:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:909
-msgid "Random"
-msgstr "Libovolný"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:913
-msgid "External data"
-msgstr "Externí data"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:366
-msgid "Voltage"
-msgstr "Napětí"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
-msgid "Current"
-msgstr "Proud"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:922
-msgid "Source Type"
-msgstr "Typ zdroje"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:930
-msgid "Source"
-msgstr "Zdroj"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
-msgid "Line model"
-msgstr "Režim tisku"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:954
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:183
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:291
-#: pcb_calculator/transline_ident.cpp:373
-#: pcb_calculator/transline_ident.cpp:412
-msgid "Characteristic impedance"
-msgstr "Charakteristická impedance"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:961
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
-msgid "ohm"
-msgstr "ohm"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:965
-msgid "Propagation delay"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
-msgid "s"
-msgstr "s"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:976
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
-#: pcb_calculator/transline_ident.cpp:108
-msgid "Frequency"
-msgstr "Frekvence"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
-msgid "Length in wavelength"
-msgstr "Délka v pouzdře"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use time delay"
-msgstr "Časová prodleva"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use frequency and number of wavelength"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
-msgid "Delay / Electrical length"
-msgstr "Elektrická délka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1010
-msgid "Lossless"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1024
-msgid "Resistance per unit length"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1031
-msgid "ohm / unit"
-msgstr "ohm / jednotka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-#, fuzzy
-msgid "Inductance per unit length"
-msgstr "Délka vodiče:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1042
-msgid "henry / unit"
-msgstr "henry / jednotka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1046
-msgid "Capacitance per unit length"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1053
-msgid "farad / unit"
-msgstr "farad / jednotka"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-#, fuzzy
-msgid "Conductance per unit length"
-msgstr "Délka vodiče:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-#, fuzzy
-msgid "siemens / unit"
-msgstr "Jednotky měření:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
-msgid "Extra parameters"
-msgstr "Špatné parametery"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1092
-msgid ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
-msgid "Lossy"
-msgstr "Loss Tg"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
-msgid "Transmission Line"
-msgstr "Přenosové vedení typu"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1118
-msgid "Disable symbol for simulation"
-msgstr "Zakázat symbol pro simulaci"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1124
-msgid "Alternate node sequence:"
-msgstr "Alternativní sekvence uzlů:"
-
-#: eeschema/dialogs/dialog_spice_model_base.h:289
-msgid "Spice Model Editor"
-msgstr "Spice Editor modelu"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:89
 #: eeschema/fields_grid_table.cpp:801
@@ -12866,7 +12247,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Po přidání této knihovny bude třeba změnit jeden z aliasů knihovny."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:522
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1067
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Skip"
@@ -12947,8 +12328,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1068
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1081
 #: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1468
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1520
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1469
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
@@ -13114,22 +12495,22 @@ msgstr "Různé pouzdra přiřazené k %s a %s"
 msgid "Pins with \"no connection\" type are connected"
 msgstr "Vývody s příznakem \"nepřipojeno\" jsou připojeny"
 
-#: eeschema/erc.cpp:546
+#: eeschema/erc.cpp:557
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "Vývody typu %s a %s jsou spojeny"
 
-#: eeschema/erc.cpp:616
+#: eeschema/erc.cpp:627
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Vývod %s je připojen k %s i %s"
 
-#: eeschema/erc.cpp:718 pcbnew/drc/drc_test_provider_library_parity.cpp:493
+#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'."
 
-#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:507
+#: eeschema/erc.cpp:740 pcbnew/drc/drc_test_provider_library_parity.cpp:507
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "Knihovna „%s“ není v aktuální konfiguraci povolena."
@@ -13256,7 +12637,7 @@ msgid "Bus Entry needed"
 msgstr "Je nutný vstup do sběrnice"
 
 #: eeschema/fields_grid_table.cpp:221 eeschema/files-io.cpp:795
-#: eeschema/tools/sch_editor_control.cpp:102
+#: eeschema/tools/sch_editor_control.cpp:103
 msgid "Schematic Files"
 msgstr "Soubory schémat"
 
@@ -13560,7 +12941,7 @@ msgstr ""
 "bude\n"
 "zobrazena pokaždé při spuštění editoru schémat."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1465
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1492
 msgid "Alias of"
 msgstr "Alias pro"
 
@@ -13819,12 +13200,18 @@ msgid "Could not find library file %s."
 msgstr "Nelze najít soubor knihovny %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:371
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:297
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
 "Vícenásobné symboly mají stejné referenční označení.\n"
 "Očíslování musí být před simulací opraveno."
+
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
+#, fuzzy, c-format
+msgid "Could not find library file '%s'"
+msgstr "Nelze najít soubor knihovny %s."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -13859,7 +13246,7 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
 "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
-#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:63
+#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 msgid "none"
 msgstr "žádný"
 
@@ -14045,8 +13432,8 @@ msgstr "Pole schématu"
 msgid "New schematic file is unsaved"
 msgstr "Nový soubor schématu není uložen"
 
-#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1638
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:524
+#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1645
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:525
 #: eeschema/symbol_editor/symbol_editor.cpp:1197
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:676 pcbnew/footprint_edit_frame.cpp:716
@@ -14872,7 +14259,7 @@ msgstr "Název souboru"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarchický list %s"
 
-#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:341
+#: eeschema/sch_sheet_path.cpp:62 include/board_item.h:341
 msgid "(Deleted Item)"
 msgstr "(Smazaná položka)"
 
@@ -14881,36 +14268,36 @@ msgstr "(Smazaná položka)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchický vývod listu %s"
 
-#: eeschema/sch_symbol.cpp:1443
+#: eeschema/sch_symbol.cpp:1470
 msgid "Power symbol"
 msgstr "Symbol napájení"
 
-#: eeschema/sch_symbol.cpp:1453
+#: eeschema/sch_symbol.cpp:1480
 msgid "flags"
 msgstr "příznaky"
 
-#: eeschema/sch_symbol.cpp:1458
+#: eeschema/sch_symbol.cpp:1485
 msgid "Missing parent"
 msgstr "Chybějící zdroj"
 
-#: eeschema/sch_symbol.cpp:1473
+#: eeschema/sch_symbol.cpp:1500
 msgid "Undefined!!!"
 msgstr "Nedefinováno!!!"
 
-#: eeschema/sch_symbol.cpp:1480
+#: eeschema/sch_symbol.cpp:1507
 msgid "<Unknown>"
 msgstr "<Neznámý>"
 
-#: eeschema/sch_symbol.cpp:1499
+#: eeschema/sch_symbol.cpp:1526
 msgid "No library defined!"
 msgstr "Žádná knihovna není definována!"
 
-#: eeschema/sch_symbol.cpp:1501
+#: eeschema/sch_symbol.cpp:1528
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbol nebyl nalezen v %s!"
 
-#: eeschema/sch_symbol.cpp:1692
+#: eeschema/sch_symbol.cpp:1719
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
@@ -15425,6 +14812,21 @@ msgstr "Vytvořit nový list"
 msgid "Discard New Sheet"
 msgstr "Zahodit nový list"
 
+#: eeschema/sim/sim_model.cpp:827
+#, fuzzy, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "Nelze analyzovat '%s' na '%s'"
+
+#: eeschema/sim/sim_model.cpp:1347
+#, c-format
+msgid "%s describes %lu pins, expected %u"
+msgstr ""
+
+#: eeschema/sim/sim_model_ideal.cpp:115
+#, fuzzy, c-format
+msgid "Failed to infer model from Value '%s'"
+msgstr "Nepodařilo se vytvořit složku '%s'."
+
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -15474,56 +14876,56 @@ msgstr "Parametry a nastavení simulace"
 msgid "Spice Simulator"
 msgstr "Spice Simulátor"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1472
+#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1479
 msgid "There were errors during netlist export, aborted."
 msgstr "Během exportu netlistu došlo k chybám, přerušeno."
 
-#: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1847
+#: eeschema/sim/sim_plot_frame.cpp:492 eeschema/sim/sim_plot_frame.cpp:1852
 msgid "Another simulation is already running."
 msgstr "Již běží jiná simulace."
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:519
 #, c-format
 msgid "Plot%u - "
 msgstr "Kreslit%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:649
 msgid "Error: simulation type not defined!\n"
 msgstr "Chyba: typ simulace není definován!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:655
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Chyba: typ simulace nepodporuje vykreslování!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:826 eeschema/sim/sim_plot_frame.cpp:1680
+#: eeschema/sim/sim_plot_frame.cpp:833 eeschema/sim/sim_plot_frame.cpp:1687
 msgid "Signal"
 msgstr "Signál"
 
-#: eeschema/sim/sim_plot_frame.cpp:1104
+#: eeschema/sim/sim_plot_frame.cpp:1111
 msgid "noname"
 msgstr "bez názvu"
 
-#: eeschema/sim/sim_plot_frame.cpp:1153
+#: eeschema/sim/sim_plot_frame.cpp:1160
 msgid "Open simulation workbook"
 msgstr "Otevřít záznamy simulaci"
 
-#: eeschema/sim/sim_plot_frame.cpp:1182
+#: eeschema/sim/sim_plot_frame.cpp:1189
 msgid "Save Simulation Workbook As"
 msgstr "Uložit sešit simulace jako"
 
-#: eeschema/sim/sim_plot_frame.cpp:1198
+#: eeschema/sim/sim_plot_frame.cpp:1205
 msgid "Save Plot as Image"
 msgstr "Uložit kresbu jako obrázek"
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot Data"
 msgstr "Uložit data vykreslení"
 
-#: eeschema/sim/sim_plot_frame.cpp:1520
+#: eeschema/sim/sim_plot_frame.cpp:1527
 msgid "You need to run plot-providing simulation first."
 msgstr "Nejdříve musíte spustit simulaci, která generuje grafy."
 
-#: eeschema/sim/sim_plot_frame.cpp:1778
+#: eeschema/sim/sim_plot_frame.cpp:1783
 msgid ""
 "\n"
 "\n"
@@ -15535,19 +14937,19 @@ msgstr ""
 "Výsledky simulace:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Hide Signal"
 msgstr "Skrýt signál"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Erase the signal from plot screen"
 msgstr "Vymazat signál z obrazovky výkresu"
 
-#: eeschema/sim/sim_plot_frame.cpp:1873
+#: eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Hide Cursor"
 msgstr "Skrýt kurzor"
 
-#: eeschema/sim/sim_plot_frame.cpp:1875
+#: eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Show Cursor"
 msgstr "Zobrazit kurzor"
 
@@ -15624,6 +15026,11 @@ msgstr "Signály"
 msgid "Cursors"
 msgstr "Kurzor"
 
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: pcb_calculator/transline_ident.cpp:108
+msgid "Frequency"
+msgstr "Frekvence"
+
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "Zisk"
@@ -15639,6 +15046,14 @@ msgstr "šum [(V or A)^2/Hz]"
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "Čas"
+
+#: eeschema/sim/sim_plot_panel.cpp:366
+msgid "Voltage"
+msgstr "Napětí"
+
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
+msgid "Current"
+msgstr "Proud"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
@@ -15659,6 +15074,11 @@ msgstr "Teplota (rozmítána)"
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "Napětí (měřeno)"
+
+#: eeschema/sim/sim_value.cpp:385
+#, fuzzy
+msgid "Unknown SIM_VALUE type"
+msgstr "Neznámá metoda"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -15871,7 +15291,7 @@ msgid "KiCad Symbol Editor"
 msgstr "KiCad editor symbolů"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:71
 msgid "Loading Symbol Libraries"
 msgstr "Načítání knihoven symbolů"
@@ -15889,13 +15309,13 @@ msgstr "Změny v knihovně nejsou uloženy"
 msgid "Symbol library loading was cancelled by user."
 msgstr "Načtení knihovny symbolů bylo zrušeno uživatelem."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:597
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:598
 #: eeschema/symbol_viewer_frame.cpp:540 eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "Jednotka %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:754
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
@@ -15903,11 +15323,11 @@ msgstr ""
 "Upravený symbol %s ze schématu. Při ukládání je aktualizováno pouze schéma "
 "zapojení."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:763
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:764
 msgid "Manage symbol libraries"
 msgstr "Správa knihoven symbolů"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:774
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -15915,22 +15335,22 @@ msgstr ""
 "Symboly ve starých knihovnách nejsou upravitelné. Použít Správa Knihovny "
 "symbolů pro migraci do aktuálního formátu."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:785
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Symbol %s je odvozen z %s. Grafika symbolu nebude upravitelná."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:788
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:789
 #, c-format
 msgid "Open %s"
 msgstr "Otevřít %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "Knihovna '%s' již existuje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:870
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15939,47 +15359,47 @@ msgstr ""
 "Nelze vytvořit soubor knihovny '%s'.\n"
 "Zkontrolujte oprávnění zápisu a zkuste to znovu."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:880
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:881
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "Soubor knihovny nelze otevřít."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:957
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:958
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "Načítání knihovny '%s'..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1048
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
 msgstr "Přidat knihovnu do globální tabulky knihoven?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1050
 #: pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
 msgstr "Přidat do globální tabulky knihoven"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1059
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
 msgstr "Globální"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1062
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
 msgstr "Zvolte tabulku knihovny kam chcete knihovnu přidat:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1064
 #: pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
 msgstr "Přidat do tabulky knihoven"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1095
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1096
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Selhalo uložení zálohy do '%s'."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:467
 #, c-format
 msgid ""
@@ -15989,12 +15409,12 @@ msgstr ""
 "Aktuální konfigurace neobsahuje knihovnu '%s'.\n"
 "K úpravě konfigurace použijte Spravovat knihovny symbolů."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1267
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1268
 #: eeschema/symbol_viewer_frame.cpp:470
 msgid "Library not found in symbol library table."
 msgstr "Knihovna nebyla nalezena v tabulce knihoven symbolů."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1275
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1276
 #: eeschema/symbol_viewer_frame.cpp:474
 #, c-format
 msgid ""
@@ -16004,18 +15424,18 @@ msgstr ""
 "Knihovna '%s' není v aktuální konfiguraci povolena.\n"
 "K úpravě konfigurace použijte Spravovat knihovny symbolů."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1278
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1279
 #: eeschema/symbol_viewer_frame.cpp:477
 msgid "Symbol library not enabled."
 msgstr "Knihovna symbolů není povolena."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1465
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1517
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
 msgid "Error saving global library table."
 msgstr "Chyba při ukládání globální tabulky knihovny symbolů."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1467
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1519
 msgid "Error saving project library table."
 msgstr "Chyba při ukládání tabulky knihoven projektu."
 
@@ -17522,7 +16942,7 @@ msgstr "Přesunout"
 msgid "Moves the selected item(s)"
 msgstr "Přesune vybranou položku(y)"
 
-#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:730
+#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:743
 msgid "Drag"
 msgstr "Táhnout"
 
@@ -17656,48 +17076,48 @@ msgstr "Zadejte číslo stránky pro cestu listu%s"
 msgid "Edit Sheet Page Number"
 msgstr "Upravit číslo stránky listu"
 
-#: eeschema/tools/sch_editor_control.cpp:139
+#: eeschema/tools/sch_editor_control.cpp:140
 #, fuzzy, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Vrátit '%s' na poslední uloženou verzi?"
 
-#: eeschema/tools/sch_editor_control.cpp:563
+#: eeschema/tools/sch_editor_control.cpp:564
 msgid "Reached end of schematic."
 msgstr "Bylo dosaženo konce schématu."
 
-#: eeschema/tools/sch_editor_control.cpp:564
+#: eeschema/tools/sch_editor_control.cpp:565
 msgid "Reached end of sheet."
 msgstr "Dosažen konec listu."
 
-#: eeschema/tools/sch_editor_control.cpp:568
+#: eeschema/tools/sch_editor_control.cpp:569
 msgid "Find again to wrap around to the start."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:1036
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Chyba: duplicitní názvy sub-listů nalezené v aktuálním listu."
 
-#: eeschema/tools/sch_editor_control.cpp:1069
+#: eeschema/tools/sch_editor_control.cpp:1128
 msgid "Net must be labeled to assign a netclass."
 msgstr "Síť musí být označena k přiřazení třídy sítě."
 
-#: eeschema/tools/sch_editor_control.cpp:1075
+#: eeschema/tools/sch_editor_control.cpp:1134
 msgid "Bus has no members to assign netclass to."
 msgstr "Sběrnice nemá žádné členy k přiřazení třídy spojů."
 
-#: eeschema/tools/sch_editor_control.cpp:1108
+#: eeschema/tools/sch_editor_control.cpp:1167
 msgid "Netclasses"
 msgstr "Třídy spojů"
 
-#: eeschema/tools/sch_editor_control.cpp:1121
+#: eeschema/tools/sch_editor_control.cpp:1180
 msgid "Assign Netclass"
 msgstr "Přiřadit třídu spojů"
 
-#: eeschema/tools/sch_editor_control.cpp:1122
+#: eeschema/tools/sch_editor_control.cpp:1181
 msgid "Select netclass:"
 msgstr "Vybrat třídu spojů:"
 
-#: eeschema/tools/sch_editor_control.cpp:1731
+#: eeschema/tools/sch_editor_control.cpp:1790
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17708,21 +17128,21 @@ msgstr ""
 "bylo zrušeno, protože cíl již má list nebo jednu z jeho podřízených listů "
 "jako nadřazenou."
 
-#: eeschema/tools/sch_editor_control.cpp:2295
+#: eeschema/tools/sch_editor_control.cpp:2354
 #: pcbnew/tools/board_editor_control.cpp:590
 #: pcbnew/tools/footprint_editor_control.cpp:719
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplicitní ID byly nahrazeny.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2302
+#: eeschema/tools/sch_editor_control.cpp:2361
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:734
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d opraveny potenciální problémy."
 
-#: eeschema/tools/sch_editor_control.cpp:2309
+#: eeschema/tools/sch_editor_control.cpp:2368
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Žádná chyba nenalezena."
@@ -20179,6 +19599,10 @@ msgstr "Návrh"
 msgid "Size: %.1fx%.1fmm"
 msgstr "Velikost: %.1fx%.1fmm"
 
+#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
+msgid "-"
+msgstr "-"
+
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Počátek Y:"
@@ -20847,142 +20271,147 @@ msgstr "Pokovená ploška: (prům. - vrtání)"
 msgid "NP Pad: (diam - drill)"
 msgstr "NP ploška: (průměr - vrtání)"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 #, fuzzy
 msgid "AWG0000"
 msgstr "0000"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
 msgstr ""
+
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
+#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "Elektrická rezistivita v Ohm*m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -21005,59 +20434,83 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
+msgid "Conductor resistivity:"
+msgstr "Měrný odpor:"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
+msgid "..."
+msgstr "..."
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:88
+#, fuzzy
 msgid "Linear resistance:"
 msgstr "Tepelný odpor:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
 #, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 #, fuzzy
 msgid "Ampacity:"
 msgstr "Neprůhlednost:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 #, fuzzy
 msgid "Application"
 msgstr "Pomocné aplikace"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
 #, fuzzy
 msgid "Current:"
 msgstr "Proud"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 #, fuzzy
 msgid "Length:"
 msgstr "&Délka:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
 msgstr "Odpor:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:153
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:168
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
+msgid "ohm"
+msgstr "ohm"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
 msgid "Voltage drop:"
 msgstr "Úbytek napětí:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
 #, fuzzy
 msgid "mV"
 msgstr "V"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 #, fuzzy
 msgid "mW"
 msgstr "Š"
@@ -21296,6 +20749,10 @@ msgstr "Tloušťka spoje (H):"
 msgid "Time to fuse:"
 msgstr "Časový krok:"
 
+#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
+msgid "s"
+msgstr "s"
+
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
 msgstr "Soubor dat PCB Calculatoru"
@@ -21333,6 +20790,11 @@ msgstr "Vref nastaveno na 0 !"
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
 msgstr "Nesprávná hodnota pro R1 R2"
+
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
+msgid "Type:"
+msgstr "Typ:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -21532,16 +20994,6 @@ msgstr "Parametry substrátu"
 msgid "Er:"
 msgstr "Er:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
-msgid "..."
-msgstr "..."
-
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 msgid "Tan delta:"
 msgstr "Tan delta:"
@@ -21583,6 +21035,11 @@ msgstr "Vodič mu:"
 msgid "Component Parameters"
 msgstr "Parametry součástky"
 
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
+msgid "Frequency:"
+msgstr "Frekvence:"
+
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:229
 msgid "Physical Parameters"
 msgstr "Fyzické parametry"
@@ -21609,10 +21066,6 @@ msgstr "Výsledek"
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
 msgstr "Relativní dielektrické konstanty"
-
-#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "Elektrická rezistivita v Ohm*m"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
@@ -21770,6 +21223,10 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
 msgstr "Pohled shora na prokov"
+
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
+msgid "Period:"
+msgstr "Perioda:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
@@ -22153,6 +21610,16 @@ msgstr "Tloušťka čáry"
 msgid "Line length"
 msgstr "Délka vedení"
 
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:373
+#: pcb_calculator/transline_ident.cpp:412
+msgid "Characteristic impedance"
+msgstr "Charakteristická impedance"
+
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:220
@@ -22329,6 +21796,10 @@ msgstr "MHz"
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
 msgstr "kHz"
+
+#: pcb_calculator/widgets/unit_selector.cpp:103
+msgid "Hz"
+msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
@@ -23798,44 +23269,73 @@ msgstr "Vyčistit spoje a prokovy"
 msgid "Constraints Resolution Report"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:202
+#: pcbnew/dialogs/dialog_copper_zones.cpp:210
 #, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "Spoje & prokovy Vlastnosti"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones.cpp:214
 #, fuzzy
 msgid "Teardrop on Tracks Properties"
 msgstr "Nastavit spoje a prokovy Vlastnosti"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:210
+#: pcbnew/dialogs/dialog_copper_zones.cpp:218
 #, fuzzy
 msgid "Teardrop Properties"
 msgstr "Vlastnosti skupiny"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones.cpp:225
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
+#: pcbnew/tools/convert_tool.cpp:57
+#, fuzzy
+msgid "Conversion Settings"
+msgstr "Obecná nastavení"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
+#: pcbnew/tools/convert_tool.cpp:66
+#, fuzzy
+msgid "Ignore source object line widths"
+msgstr "Zvětšit tloušťku čáry"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
+#: pcbnew/tools/convert_tool.cpp:70
+#, fuzzy
+msgid "Delete source objects after conversion"
+msgstr "Smazat objekty s gumou"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:242
+#, fuzzy
+msgid "Convert to Copper Zone"
+msgstr "Připojení k zónám mědi"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:440
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
 msgid "Chamfer distance:"
 msgstr "Délka úkosu:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:405
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
+#: pcbnew/dialogs/dialog_copper_zones.cpp:442
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:142
 msgid "Fillet radius:"
 msgstr "Poloměr zaoblení:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:551
+#: pcbnew/dialogs/dialog_copper_zones.cpp:594
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:580
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:264
+#: pcbnew/dialogs/dialog_copper_zones.cpp:623
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:311
 msgid "No layer selected."
 msgstr "Není vybrána žádná vrstva."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:923
-msgid "Selecting <no net> will create an isolated copper island."
+#: pcbnew/dialogs/dialog_copper_zones.cpp:967
+#, fuzzy
+msgid "<no net> will result in an isolated copper island."
 msgstr "Výběr <žádná síť> vytvoří izolovaný ostrov mědi."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
@@ -26773,6 +26273,11 @@ msgstr "Smazat spoje spojující různé sítě"
 msgid "Import Netlist"
 msgstr "Importovat netlist"
 
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
+#, fuzzy
+msgid "Convert to Non Copper Zone"
+msgstr "Připojení k zónám mědi"
+
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
 msgstr "Styl obrysu:"
@@ -28314,7 +27819,17 @@ msgstr "Neupravujte plošky mající odlišný typ"
 msgid "Push Pad Properties"
 msgstr "Vynutit vlastnosti plošky"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:160
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
+#, fuzzy
+msgid "Conversion settings:"
+msgstr "Nastavení vývodů:"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
+#, fuzzy
+msgid "Convert to Rule Area"
+msgstr "Převést na oblouk"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:206
 msgid "No layers selected."
 msgstr "Nevybrány žádné vrstvy."
 
@@ -36575,24 +36090,24 @@ msgstr "Akce"
 msgid "Assertions for:"
 msgstr ""
 
-#: pcbnew/tools/convert_tool.cpp:77
+#: pcbnew/tools/convert_tool.cpp:149
 msgid "Create from Selection"
 msgstr "Vytvořit z výběru"
 
-#: pcbnew/tools/convert_tool.cpp:226
+#: pcbnew/tools/convert_tool.cpp:360
 msgid "Convert shapes to polygon"
 msgstr "Převod tvarů na mnohoúhelník"
 
-#: pcbnew/tools/convert_tool.cpp:272
+#: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to zone"
 msgstr "Převést tvary do zóny"
 
-#: pcbnew/tools/convert_tool.cpp:781
+#: pcbnew/tools/convert_tool.cpp:818
 #, fuzzy
 msgid "Convert polygons to lines"
 msgstr "Zkosený obdélník"
 
-#: pcbnew/tools/convert_tool.cpp:869
+#: pcbnew/tools/convert_tool.cpp:906
 #, fuzzy
 msgid "Create arc from line segment"
 msgstr "Táhnout obrys segmentu"
@@ -36828,7 +36343,7 @@ msgstr "Výběr zkopírován"
 msgid "Copy canceled"
 msgstr "Kopírování zrušeno"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:351
+#: pcbnew/tools/edit_tool_move_fct.cpp:352
 #, fuzzy
 msgid "Select reference point for move..."
 msgstr "Vybrat referenční bod pro kopírování..."
@@ -39311,6 +38826,12 @@ msgstr "Smazat předvolbu"
 msgid "Select preset:"
 msgstr "Vybrat předvolbu:"
 
+#: pcbnew/widgets/appearance_controls.cpp:2671
+#: pcbnew/widgets/appearance_controls_base.cpp:182
+#, fuzzy
+msgid "Viewports (Alt+Tab):"
+msgstr "Přednastavuje (Ctrl+Tab):"
+
 #: pcbnew/widgets/appearance_controls.cpp:3215
 msgid "Open Preferences"
 msgstr "Otevřít Předvolby"
@@ -39520,22 +39041,22 @@ msgstr "Znovu vyplnit"
 msgid "Continue without Refill"
 msgstr "Pokračovat bez vyplnění"
 
-#: pcbnew/zones.h:62
+#: pcbnew/zones.h:64
 #, fuzzy
 msgid "inherited"
 msgstr "Dědičný"
 
-#: pcbnew/zones.h:64
+#: pcbnew/zones.h:66
 #, fuzzy
 msgid "thermal reliefs"
 msgstr "Teplotní profily"
 
-#: pcbnew/zones.h:65
+#: pcbnew/zones.h:67
 #, fuzzy
 msgid "solid"
 msgstr "Pevné"
 
-#: pcbnew/zones.h:66
+#: pcbnew/zones.h:68
 #, fuzzy
 msgid "thermal reliefs for PTH"
 msgstr "Teplotní profily"
@@ -39676,6 +39197,369 @@ msgstr "KiCad schéma"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad deska plošných spojů"
+
+#~ msgid "Reformat passive symbol values"
+#~ msgstr "Přeformátovat hodnoty pasivních symbolů"
+
+#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
+#~ msgstr "Přeformátujte hodnoty pasivního symbolu, např. 1M -> 1Meg"
+
+#~ msgid "Diode"
+#~ msgstr "Dioda"
+
+#~ msgid "BJT"
+#~ msgstr "BJT"
+
+#~ msgid "MOSFET"
+#~ msgstr "MOSFET"
+
+#~ msgid "JFET"
+#~ msgstr "JFET"
+
+#~ msgid "Subcircuit"
+#~ msgstr "Podobvod"
+
+#, fuzzy
+#~ msgid "Code Model"
+#~ msgstr "Mód modelu"
+
+#~ msgid ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+#~ msgstr ""
+#~ "Číslování pinů symbolů nemusí vždy odpovídat požadované objednávce pinů "
+#~ "SPICE\n"
+#~ "Zkontrolujte symbol a v případě potřeby změňte pořadí kolíků pomocí "
+#~ "„Alternativní sekvence uzlů“"
+
+#~ msgid "For a Diode, pin order is anode, cathode"
+#~ msgstr "Pro diodu je pořadí pinů anoda, katoda"
+
+#~ msgid ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+#~ msgstr ""
+#~ "U BJT je objednávka pinů kolektor, základna, emitor, substrát (volitelně)"
+
+#~ msgid "For a MOSFET, pin order is drain, gate, source"
+#~ msgstr "Pro MOSFET, pořadí vývodů drain, gate, source"
+
+#~ msgid "For a JFET, pin order is drain, gate, source"
+#~ msgstr "Pro JFET, pořadí vývodů drain, gate, source"
+
+#, fuzzy
+#~ msgid "Invalid Impedance value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, fuzzy
+#~ msgid "Invalid delay value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, fuzzy
+#~ msgid "Invalid frequency value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, fuzzy
+#~ msgid "Invalid length in wavelength value"
+#~ msgstr "Neplatný alternativní název vývodu"
+
+#, fuzzy
+#~ msgid "Invalid resistance value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, fuzzy
+#~ msgid "Invalid capacitance value"
+#~ msgstr "Neplatný řetězec hodnot Spice"
+
+#, fuzzy
+#~ msgid "Invalid inductance value"
+#~ msgstr "Neplatný řetězec hodnot Spice"
+
+#, fuzzy
+#~ msgid "Invalid conductance value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, fuzzy
+#~ msgid "Invalid length value"
+#~ msgstr "Neplatná hodnota vlastnosti"
+
+#, c-format
+#~ msgid ""
+#~ "You need to specify at least the first %d parameters for the transient "
+#~ "source"
+#~ msgstr "Musíte zadat alespoň první parametry %d pro zdroj přechodu"
+
+#~ msgid ""
+#~ "You cannot leave interleaved empty fields when defining a transient source"
+#~ msgstr "Při definování zdroje přechodu nemůžete ponechat prázdná pole"
+
+#~ msgid "Select library"
+#~ msgstr "Vybrat knihovnu"
+
+#~ msgid "Range:"
+#~ msgstr "Rozsah:"
+
+#~ msgid "Offset:"
+#~ msgstr "Ofset:"
+
+#~ msgid "Standard deviation:"
+#~ msgstr "Standardní odchylka:"
+
+#~ msgid "Mean:"
+#~ msgstr "Průměr:"
+
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "type of random generator for source is invalid"
+#~ msgstr "typ náhodného generátoru pro zdroj je neplatný"
+
+#~ msgid "Resistor"
+#~ msgstr "Rezistor"
+
+#~ msgid "Capacitor"
+#~ msgstr "Kondenzátor"
+
+#~ msgid "Inductor"
+#~ msgstr "Cívka"
+
+#~ msgid "Passive type"
+#~ msgstr "Pasivní typ"
+
+#~ msgid "Spice value in simulation"
+#~ msgstr "Spice hodnota v simulaci"
+
+#~ msgid ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+#~ msgstr ""
+#~ "V hodnotách Spice je desetinný oddělovač tečka.\n"
+#~ "Hodnoty mohou používat symboly jednotek Spice."
+
+#~ msgid "Spice unit symbols in values (case insensitive):"
+#~ msgstr "Symboly jednotek Spice v hodnotách (nerozlišuje velikost písmen):"
+
+#~ msgid "Library:"
+#~ msgstr "Knihovna:"
+
+#~ msgid "Select file..."
+#~ msgstr "Vybrat soubor..."
+
+#~ msgid "Model:"
+#~ msgstr "Model:"
+
+#~ msgid "Note:"
+#~ msgstr "Poznámka:"
+
+#~ msgid "note"
+#~ msgstr "poznámka"
+
+#~ msgid "Model"
+#~ msgstr "Model"
+
+#~ msgid "DC/AC Analysis"
+#~ msgstr "DC/AC analýza"
+
+#~ msgid "DC:"
+#~ msgstr "DC:"
+
+#~ msgid "Volts/Amps"
+#~ msgstr "Volt/Amp"
+
+#~ msgid "AC magnitude:"
+#~ msgstr "AC velikost:"
+
+#~ msgid "AC phase:"
+#~ msgstr "AC fáze:"
+
+#~ msgid "radians"
+#~ msgstr "radiány"
+
+#~ msgid "Transient Analysis"
+#~ msgstr "Přechodná analýza"
+
+#~ msgid "Initial value:"
+#~ msgstr "Počáteční hodnota:"
+
+#~ msgid "Pulsed value:"
+#~ msgstr "Pulzní hodnota:"
+
+#~ msgid "Delay time:"
+#~ msgstr "Čas zpoždění:"
+
+#~ msgid "Rise time:"
+#~ msgstr "Doba náběhu:"
+
+#~ msgid "Fall time:"
+#~ msgstr "Doba doběhu:"
+
+#~ msgid "Pulse width:"
+#~ msgstr "Šířka impulsu:"
+
+#~ msgid "Pulse"
+#~ msgstr "Puls"
+
+#~ msgid "DC offset:"
+#~ msgstr "DC ofset:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Amplituda:"
+
+#~ msgid "Delay:"
+#~ msgstr "Zpoždění:"
+
+#~ msgid "Damping factor:"
+#~ msgstr "Tlumící faktor:"
+
+#~ msgid "1/seconds"
+#~ msgstr "1/sekund"
+
+#~ msgid "Sinusoidal"
+#~ msgstr "Sinusový"
+
+#~ msgid "Rise delay time:"
+#~ msgstr "Doba náběhu:"
+
+#~ msgid "Rise time constant:"
+#~ msgstr "Časové konstanta náběhu:"
+
+#~ msgid "Fall delay time:"
+#~ msgstr "Čas zpoždění:"
+
+#~ msgid "Fall time constant:"
+#~ msgstr "Sestupná časová konstanta:"
+
+#~ msgid "Exponential"
+#~ msgstr "Exponenciální"
+
+#~ msgid "Piece-wise linear"
+#~ msgstr "Částečně lineární"
+
+#~ msgid "Time:"
+#~ msgstr "Čas:"
+
+#~ msgid "second"
+#~ msgstr "sekund"
+
+#~ msgid "Piece-wise Linear"
+#~ msgstr "Částečně lineární"
+
+#~ msgid "Carrier frequency:"
+#~ msgstr "Nosná frekvence:"
+
+#~ msgid "Modulation index:"
+#~ msgstr "Modulační index:"
+
+#~ msgid "Signal frequency:"
+#~ msgstr "Frekvence signálu:"
+
+#~ msgid "Carrier phase:"
+#~ msgstr "Nosná fáze:"
+
+#~ msgid "degrees"
+#~ msgstr "stupňů"
+
+#~ msgid "Signal phase:"
+#~ msgstr "Fáze signálu:"
+
+#~ msgid "FM"
+#~ msgstr "FM"
+
+#~ msgid "Modulating frequency:"
+#~ msgstr "Modulační frekvence:"
+
+#~ msgid "Signal delay:"
+#~ msgstr "Zpoždění signálu:"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "Transient noise"
+#~ msgstr "Přechodný šum"
+
+#~ msgid "Uniform"
+#~ msgstr "Jednotný"
+
+#~ msgid "Gaussian"
+#~ msgstr "Gaussův"
+
+#~ msgid "Poisson"
+#~ msgstr "Poisson"
+
+#~ msgid "Individual value duration:"
+#~ msgstr "Trvání individuální hodnoty:"
+
+#~ msgid "Time delay:"
+#~ msgstr "Časová prodleva:"
+
+#~ msgid "Random"
+#~ msgstr "Libovolný"
+
+#~ msgid "External data"
+#~ msgstr "Externí data"
+
+#~ msgid "Source Type"
+#~ msgstr "Typ zdroje"
+
+#~ msgid "Source"
+#~ msgstr "Zdroj"
+
+#, fuzzy
+#~ msgid "Line model"
+#~ msgstr "Režim tisku"
+
+#, fuzzy
+#~ msgid "Length in wavelength"
+#~ msgstr "Délka v pouzdře"
+
+#~ msgid "Use time delay"
+#~ msgstr "Časová prodleva"
+
+#, fuzzy
+#~ msgid "Delay / Electrical length"
+#~ msgstr "Elektrická délka"
+
+#~ msgid "ohm / unit"
+#~ msgstr "ohm / jednotka"
+
+#, fuzzy
+#~ msgid "Inductance per unit length"
+#~ msgstr "Délka vodiče:"
+
+#~ msgid "henry / unit"
+#~ msgstr "henry / jednotka"
+
+#~ msgid "farad / unit"
+#~ msgstr "farad / jednotka"
+
+#, fuzzy
+#~ msgid "Conductance per unit length"
+#~ msgstr "Délka vodiče:"
+
+#, fuzzy
+#~ msgid "siemens / unit"
+#~ msgstr "Jednotky měření:"
+
+#, fuzzy
+#~ msgid "Extra parameters"
+#~ msgstr "Špatné parametery"
+
+#, fuzzy
+#~ msgid "Lossy"
+#~ msgstr "Loss Tg"
+
+#, fuzzy
+#~ msgid "Transmission Line"
+#~ msgstr "Přenosové vedení typu"
+
+#~ msgid "Disable symbol for simulation"
+#~ msgstr "Zakázat symbol pro simulaci"
+
+#~ msgid "Alternate node sequence:"
+#~ msgstr "Alternativní sekvence uzlů:"
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "Spice Editor modelu"
 
 #~ msgid "GerbView"
 #~ msgstr "GerbView"
@@ -40949,10 +40833,6 @@ msgstr "KiCad deska plošných spojů"
 #, fuzzy
 #~ msgid "Convert to Polygon"
 #~ msgstr "Mnohoúhelníky v režimu obrysů"
-
-#, fuzzy
-#~ msgid "Convert to Rule Area"
-#~ msgstr "Převést na oblouk"
 
 #~ msgid "Convert to Lines"
 #~ msgstr "Převést na čáru"
@@ -44269,9 +44149,6 @@ msgstr "KiCad deska plošných spojů"
 
 #~ msgid "General Settings:"
 #~ msgstr "Obecná nastavení:"
-
-#~ msgid "Pin Settings:"
-#~ msgstr "Nastavení vývodů:"
 
 #~ msgid "&Run Simulator"
 #~ msgstr "Spustit simuláto&r"
@@ -48186,9 +48063,6 @@ msgstr "KiCad deska plošných spojů"
 #~ msgid "Copy Document from Parent"
 #~ msgstr "Kopírovat nadřazený dokument"
 
-#~ msgid "Browse Files"
-#~ msgstr "Procházet soubory"
-
 #~ msgid "Alias List:"
 #~ msgstr "Alias pro:"
 
@@ -48872,9 +48746,6 @@ msgstr "KiCad deska plošných spojů"
 
 #~ msgid "Deselect current tool"
 #~ msgstr "Zrušit výběr aktuálního nástroje"
-
-#~ msgid "Save all libraries"
-#~ msgstr "Uložit všechny knihovny"
 
 #~ msgid "Save current symbol"
 #~ msgstr "Uložit aktuální symbol"
@@ -51937,10 +51808,6 @@ msgstr "KiCad deska plošných spojů"
 #~ msgid "&Import DXF File"
 #~ msgstr "Importovat soubory"
 
-#, fuzzy
-#~ msgid "Delete objects with eraser"
-#~ msgstr "Smazat objekty s gumou"
-
 #~ msgid "Adjust user grid"
 #~ msgstr "Nastavit uživatelskou mřížku"
 
@@ -52270,10 +52137,6 @@ msgstr "KiCad deska plošných spojů"
 #, fuzzy
 #~ msgid "Revert all component table changes?"
 #~ msgstr "Zahrnout poslední úpravy součástky"
-
-#, fuzzy
-#~ msgid "General Pin Settings"
-#~ msgstr "Obecná nastavení"
 
 #~ msgid "Move the selected optional fields up one position"
 #~ msgstr "Přemístit zvolená dodatečná pole o jednu pozici výš"
@@ -52942,10 +52805,6 @@ msgstr "KiCad deska plošných spojů"
 #, fuzzy
 #~ msgid "'%s' - Export OK"
 #~ msgstr " - Exportování OK"
-
-#, fuzzy
-#~ msgid "Failed to find part '%s' in library"
-#~ msgstr "Součástka nenalezena"
 
 #, fuzzy
 #~ msgid "Polyline only had %d parameters of the required 4"

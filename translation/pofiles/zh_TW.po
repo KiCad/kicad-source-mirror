@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 16:34-0700\n"
+"POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -106,13 +106,13 @@ msgstr "不支援您的 OpenGL 版本。最低要求版本為 1.5。"
 msgid "Last render time %.0f ms"
 msgstr "上次渲染時間 %.0f s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:657
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:660
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "網路 %s\t網路類 %s\t焊盤名稱 %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:682
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:695
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:685
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "網路 %s網路類 %s"
@@ -265,31 +265,30 @@ msgstr "檢視 (&V)"
 msgid "&Preferences"
 msgstr "偏好設定 (&P)"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:54
-#: pcbnew/widgets/appearance_controls.cpp:2671
-#: pcbnew/widgets/appearance_controls_base.cpp:182
-msgid "Viewports (Alt+Tab):"
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
+#, fuzzy
+msgid "Viewports (Shift+Tab):"
 msgstr "視口 (Alt+Tab)："
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
 msgid "Save viewport..."
 msgstr "儲存視口…"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2680
 msgid "Delete viewport..."
 msgstr "刪除視口…"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
 msgstr "重新載入電路板"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:76
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:77
 msgid "Copy 3D image to clipboard"
 msgstr "複製 3D 影象到剪貼簿"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:81
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:82
 msgid "Render current view using Raytracing"
 msgstr "使用光線追蹤渲染當前檢視"
 
@@ -298,44 +297,44 @@ msgstr "使用光線追蹤渲染當前檢視"
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D 檢視器"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 msgid "Viewport name:"
 msgstr "視口名稱："
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 msgid "Save Viewport"
 msgstr "儲存視口"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:550
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2766
 msgid "Viewports"
 msgstr "視口"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:559
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Delete Viewport"
 msgstr "刪除視口"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:560
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2776
 msgid "Select viewport:"
 msgstr "選擇視口："
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:762
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:760
 msgid "3D Image File Name"
 msgstr "3D 影象檔名稱"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:783
-#: common/eda_base_frame.cpp:1120 common/eda_base_frame.cpp:1125
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
+#: common/eda_base_frame.cpp:1123 common/eda_base_frame.cpp:1128
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "無足夠許可權儲存檔案 '%s'。"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784 common/confirm.cpp:130
-#: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782 common/confirm.cpp:131
+#: common/confirm.cpp:309 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:828 eeschema/files-io.cpp:900
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
@@ -350,11 +349,11 @@ msgstr "無足夠許可權儲存檔案 '%s'。"
 msgid "Error"
 msgstr "錯誤"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:817
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:815
 msgid "Failed to copy image to clipboard"
 msgstr "無法將影象複製到剪貼簿"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Can't save file"
 msgstr "無法儲存檔案"
 
@@ -1416,19 +1415,19 @@ msgid ""
 "bugtracker."
 msgstr "無法將這個系統上任何 KiCad 的問題報告至官方 bugtracker。"
 
-#: common/confirm.cpp:57
+#: common/confirm.cpp:58
 msgid "Do not show again"
 msgstr "不再顯示"
 
-#: common/confirm.cpp:127
+#: common/confirm.cpp:128
 msgid "Message"
 msgstr "訊息"
 
-#: common/confirm.cpp:128
+#: common/confirm.cpp:129
 msgid "Question"
 msgstr "問題"
 
-#: common/confirm.cpp:129 common/confirm.cpp:284
+#: common/confirm.cpp:130 common/confirm.cpp:291
 #: common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1316
@@ -1445,17 +1444,17 @@ msgstr "問題"
 msgid "Warning"
 msgstr "警告"
 
-#: common/confirm.cpp:160 common/confirm.cpp:166
+#: common/confirm.cpp:161 common/confirm.cpp:167
 #, fuzzy
 msgid "File Open Warning"
 msgstr "檔案開啟錯誤"
 
-#: common/confirm.cpp:162 common/confirm.cpp:168
+#: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
 msgstr "交錯儲存可能會產生出乎意料的結果。"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:233
-#: common/confirm.cpp:260 common/tool/actions.cpp:121
+#: common/confirm.cpp:165 common/confirm.cpp:170 common/confirm.cpp:234
+#: common/confirm.cpp:261 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
@@ -1465,19 +1464,19 @@ msgstr "交錯儲存可能會產生出乎意料的結果。"
 msgid "Cancel"
 msgstr "取消"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169
+#: common/confirm.cpp:165 common/confirm.cpp:170
 msgid "Open Anyway"
 msgstr "仍要開啟"
 
-#: common/confirm.cpp:180 common/confirm.cpp:217
+#: common/confirm.cpp:181 common/confirm.cpp:218
 msgid "Save Changes?"
 msgstr "儲存變更嗎？"
 
-#: common/confirm.cpp:182 common/confirm.cpp:219
+#: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "如果不儲存，所有變更將永久丟失。"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
+#: common/confirm.cpp:185 common/confirm.cpp:221 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #: eeschema/symbol_editor/symbol_editor.cpp:621
 #: eeschema/widgets/tuner_slider_base.cpp:74
@@ -1485,33 +1484,33 @@ msgstr "如果不儲存，所有變更將永久丟失。"
 msgid "Save"
 msgstr "儲存"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220
+#: common/confirm.cpp:185 common/confirm.cpp:221
 msgid "Discard Changes"
 msgstr "放棄變更"
 
-#: common/confirm.cpp:187 common/confirm.cpp:266
+#: common/confirm.cpp:188 common/confirm.cpp:267
 msgid "Apply to all"
 msgstr "應用於全部"
 
-#: common/confirm.cpp:232
+#: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
 msgstr "你當前的變更將永久丟失。"
 
-#: common/confirm.cpp:233 common/tool/actions.cpp:91
+#: common/confirm.cpp:234 common/tool/actions.cpp:91
 msgid "Revert"
 msgstr "恢復"
 
-#: common/confirm.cpp:259 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: common/confirm.cpp:260 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:539
 msgid "OK"
 msgstr "確定"
 
-#: common/confirm.cpp:312
+#: common/confirm.cpp:331
 msgid "Information"
 msgstr "資訊"
 
-#: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:412
+#: common/confirm.cpp:344 eeschema/symbol_editor/symbol_editor.cpp:412
 #: eeschema/symbol_editor/symbol_editor.cpp:726
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
@@ -1529,7 +1528,7 @@ msgstr "確認"
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:240
-#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1485
+#: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1512
 #: eeschema/symbol_editor/symbol_editor.cpp:591
 #: eeschema/symbol_editor/symbol_editor.cpp:1292
 #: eeschema/symbol_viewer_frame.cpp:442 include/lib_table_grid.h:185
@@ -1782,8 +1781,6 @@ msgid "Saturation:"
 msgstr "飽和度："
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45
-#: eeschema/dialogs/dialog_spice_model_base.cpp:638
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:29
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:92
@@ -1907,8 +1904,8 @@ msgstr "環境變數"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:298
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/fields_grid_table.cpp:335 eeschema/lib_pin.cpp:1086
-#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1449
-#: eeschema/sch_symbol.cpp:1494 eeschema/symbol_editor/symbol_editor.cpp:1264
+#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1476
+#: eeschema/sch_symbol.cpp:1521 eeschema/symbol_editor/symbol_editor.cpp:1264
 #: eeschema/symbol_viewer_frame.cpp:440
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -2002,33 +1999,6 @@ msgstr "選擇全域性%s庫表文件："
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:40
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
-#: eeschema/dialogs/dialog_spice_model_base.cpp:81
-#: eeschema/dialogs/dialog_spice_model_base.cpp:85
-#: eeschema/dialogs/dialog_spice_model_base.cpp:89
-#: eeschema/dialogs/dialog_spice_model_base.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:97
-#: eeschema/dialogs/dialog_spice_model_base.cpp:101
-#: eeschema/dialogs/dialog_spice_model_base.cpp:105
-#: eeschema/dialogs/dialog_spice_model_base.cpp:109
-#: eeschema/dialogs/dialog_spice_model_base.cpp:113
-#: eeschema/dialogs/dialog_spice_model_base.cpp:117
-#: eeschema/dialogs/dialog_spice_model_base.cpp:121
-#: eeschema/dialogs/dialog_spice_model_base.cpp:125
-#: eeschema/dialogs/dialog_spice_model_base.cpp:129
-#: eeschema/dialogs/dialog_spice_model_base.cpp:133
-#: eeschema/dialogs/dialog_spice_model_base.cpp:137
-#: eeschema/dialogs/dialog_spice_model_base.cpp:141
-#: eeschema/dialogs/dialog_spice_model_base.cpp:145
-#: eeschema/dialogs/dialog_spice_model_base.cpp:149
-#: eeschema/dialogs/dialog_spice_model_base.cpp:153
-#: eeschema/dialogs/dialog_spice_model_base.cpp:157
-#: eeschema/dialogs/dialog_spice_model_base.cpp:161
-#: eeschema/dialogs/dialog_spice_model_base.cpp:165
-#: eeschema/dialogs/dialog_spice_model_base.cpp:169
-#: eeschema/dialogs/dialog_spice_model_base.cpp:173
-#: eeschema/dialogs/dialog_spice_model_base.cpp:177
-#: eeschema/dialogs/dialog_spice_model_base.cpp:181
-#: eeschema/dialogs/dialog_spice_model_base.cpp:185
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:154
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:166
@@ -2404,7 +2374,6 @@ msgstr "自定義圖框高度。"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:325
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:373
 #: eeschema/dialogs/dialog_line_properties_base.cpp:39
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:39
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:281
@@ -2544,7 +2513,7 @@ msgid "Revision:"
 msgstr "修訂："
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist.cpp:386
+#: eeschema/dialogs/dialog_netlist.cpp:402
 msgid "Title:"
 msgstr "標題："
 
@@ -2638,7 +2607,7 @@ msgstr "列印預覽"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:101 eeschema/dialogs/dialog_erc.cpp:430
-#: eeschema/dialogs/dialog_netlist.cpp:261
+#: eeschema/dialogs/dialog_netlist.cpp:264
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2780,11 +2749,11 @@ msgstr "頁面設定..."
 msgid "MyLabel"
 msgstr "我的標籤"
 
-#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:123
+#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/symbol_viewer_frame.cpp:163 eeschema/symbol_viewer_frame.cpp:178
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:251
 #: pcbnew/footprint_viewer_frame.cpp:152 pcbnew/footprint_viewer_frame.cpp:167
 msgid "Filter"
 msgstr "篩選"
@@ -3585,14 +3554,14 @@ msgid "Line Style"
 msgstr "線型"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1631
-#: common/pgm_base.cpp:84 common/stroke_params.cpp:200
+#: common/pgm_base.cpp:85 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1111 include/stroke_params.h:79
+#: eeschema/tools/sch_editor_control.cpp:1170 include/stroke_params.h:79
 msgid "Default"
 msgstr "預設"
 
@@ -3743,11 +3712,11 @@ msgstr "資訊"
 msgid "Save..."
 msgstr "儲存..."
 
-#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:464
+#: common/draw_panel_gal.cpp:299 common/draw_panel_gal.cpp:469
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "無法使用 OpenGL，回退到軟體渲染"
 
-#: common/draw_panel_gal.cpp:300 common/draw_panel_gal.cpp:471
+#: common/draw_panel_gal.cpp:305 common/draw_panel_gal.cpp:476
 msgid "Could not use OpenGL"
 msgstr "無法使用 OpenGL"
 
@@ -4046,12 +4015,12 @@ msgstr "Excellon 選項"
 msgid "Drawing Sheet Editor"
 msgstr "圖紙編輯器"
 
-#: common/eda_base_frame.cpp:1115
+#: common/eda_base_frame.cpp:1118
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "對資料夾 '%s' 的許可權不足。"
 
-#: common/eda_base_frame.cpp:1157
+#: common/eda_base_frame.cpp:1160
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4065,7 +4034,7 @@ msgstr ""
 "似乎上次你正在編輯檔案%s\n"
 "它未被正確儲存。是否要恢復上次所做的已儲存的編輯？"
 
-#: common/eda_base_frame.cpp:1173
+#: common/eda_base_frame.cpp:1176
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "自動儲存檔案不能重新命名為電路板檔名稱。"
 
@@ -4096,7 +4065,8 @@ msgid "Inches"
 msgstr "英寸"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:157
-#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/pcb_actions.cpp:703
+#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/edit_tool_move_fct.cpp:365
+#: pcbnew/tools/pcb_actions.cpp:703
 msgid "Constrain to H, V, 45"
 msgstr "約束為水平、垂直或 45 度"
 
@@ -4158,7 +4128,7 @@ msgid "Screen"
 msgstr "螢幕"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
-#: eeschema/sch_symbol.cpp:1482 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1509 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:905
@@ -4367,8 +4337,7 @@ msgstr "曲線"
 #: common/eda_shape.cpp:592 common/eda_shape.cpp:617
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1094
-#: eeschema/sch_pin.cpp:223
+#: eeschema/lib_pin.cpp:1094 eeschema/sch_pin.cpp:223
 msgid "Length"
 msgstr "長度"
 
@@ -5346,19 +5315,19 @@ msgstr "'%s' 和 %lf 的型別不匹配"
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'的型別不匹配"
 
-#: common/pgm_base.cpp:185
+#: common/pgm_base.cpp:186
 msgid "No default editor found, you must choose one."
 msgstr "未找到預設編輯器，你必須先選擇一個。"
 
-#: common/pgm_base.cpp:205 common/pgm_base.cpp:207
+#: common/pgm_base.cpp:206 common/pgm_base.cpp:208
 msgid "Executable file"
 msgstr "可執行檔案"
 
-#: common/pgm_base.cpp:217
+#: common/pgm_base.cpp:218
 msgid "Select Preferred Editor"
 msgstr "選擇首選編輯器"
 
-#: common/pgm_base.cpp:341
+#: common/pgm_base.cpp:342
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5368,19 +5337,19 @@ msgid ""
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
 
-#: common/pgm_base.cpp:348
+#: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
 msgstr ""
 
-#: common/pgm_base.cpp:394
+#: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "環境變數 HOME 為空。無法繼續。"
 
-#: common/pgm_base.cpp:609
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "作業系統不支援此語言。"
 
-#: common/pgm_base.cpp:660 common/pgm_base.cpp:698
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:702
 msgid "The KiCad language file for this language is not installed."
 msgstr "未安裝此語言的 KiCad 語言檔案。"
 
@@ -5984,7 +5953,8 @@ msgid "Show Grid"
 msgstr "顯示網格"
 
 #: common/tool/actions.cpp:480
-msgid "Display grid dots or lines in the edit window"
+#, fuzzy
+msgid "Display background grid in the edit window"
 msgstr "在編輯視窗中顯示網格點或線條"
 
 #: common/tool/actions.cpp:485
@@ -6509,47 +6479,47 @@ msgstr "當前快捷鍵："
 msgid "Set Hotkey"
 msgstr "設定快捷鍵"
 
-#: common/widgets/widget_hotkey_list.cpp:345
+#: common/widgets/widget_hotkey_list.cpp:351
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr "'%s' 是 KiCad 中的一個保留快捷鍵，不能進行分配。"
 
-#: common/widgets/widget_hotkey_list.cpp:396
+#: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
 msgstr "編輯..."
 
-#: common/widgets/widget_hotkey_list.cpp:397
+#: common/widgets/widget_hotkey_list.cpp:403
 msgid "Undo Changes"
 msgstr "撤銷變更"
 
-#: common/widgets/widget_hotkey_list.cpp:398
+#: common/widgets/widget_hotkey_list.cpp:404
 msgid "Clear Assigned Hotkey"
 msgstr "清除關聯的快捷鍵"
 
-#: common/widgets/widget_hotkey_list.cpp:399
+#: common/widgets/widget_hotkey_list.cpp:405
 msgid "Restore Default"
 msgstr "重置為預設值"
 
-#: common/widgets/widget_hotkey_list.cpp:435
+#: common/widgets/widget_hotkey_list.cpp:441
 #, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr "\"%s\" 已經分配給 \"%s\" 部分的 '%s'。你確定修改其分配嗎？"
 
-#: common/widgets/widget_hotkey_list.cpp:441
+#: common/widgets/widget_hotkey_list.cpp:447
 msgid "Confirm change"
 msgstr "確認修改"
 
-#: common/widgets/widget_hotkey_list.cpp:461
+#: common/widgets/widget_hotkey_list.cpp:467
 msgid "Command"
 msgstr "命令"
 
-#: common/widgets/widget_hotkey_list.cpp:464
+#: common/widgets/widget_hotkey_list.cpp:470
 msgid "(double-click to edit)"
 msgstr "(雙擊編輯)"
 
-#: common/widgets/widget_hotkey_list.cpp:467
+#: common/widgets/widget_hotkey_list.cpp:473
 msgid "Hotkey"
 msgstr "快捷鍵"
 
@@ -6893,7 +6863,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "\"%s\" 不是有效的封裝。"
 
 #: cvpcb/cvpcb_mainframe.cpp:757 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1486 eeschema/symbol_editor/symbol_editor.cpp:1293
+#: eeschema/sch_symbol.cpp:1513 eeschema/symbol_editor/symbol_editor.cpp:1293
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/footprint.cpp:2678
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -6903,8 +6873,8 @@ msgstr "關鍵字"
 msgid "Pin Count"
 msgstr "引腳數量"
 
-#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1469
-#: eeschema/sch_symbol.cpp:1473 eeschema/sch_symbol.cpp:1503
+#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500 eeschema/sch_symbol.cpp:1530
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1220
 msgid "Library"
@@ -6988,8 +6958,7 @@ msgstr "符號封裝關聯檔案（.equ）"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
-#: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
 #: pcbnew/footprint_libraries_utils.cpp:532
 msgid "Add"
 msgstr "新增"
@@ -6997,7 +6966,6 @@ msgstr "新增"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:76
 #: eeschema/dialogs/dialog_bus_manager.cpp:110
-#: eeschema/dialogs/dialog_spice_model_base.cpp:660
 msgid "Remove"
 msgstr "移除"
 
@@ -7027,8 +6995,8 @@ msgstr "可選的相對路徑環境變數："
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1024
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1448
-#: eeschema/sch_symbol.cpp:1493
+#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1475
+#: eeschema/sch_symbol.cpp:1520
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7533,7 +7501,7 @@ msgstr "新增生成器"
 msgid "Nickname '%s' already in use."
 msgstr "別名 \"%s\" 已經被佔用了。"
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:702
 msgid "Generator File"
 msgstr "生成器檔案"
 
@@ -9115,8 +9083,8 @@ msgstr "三態"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:162
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
-#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:56
-#: eeschema/pin_type.cpp:248 eeschema/sch_label.cpp:148
+#: eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:248
+#: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "無源"
 
@@ -9738,28 +9706,38 @@ msgstr "接受名稱"
 msgid "Migrate Buses"
 msgstr "遷移匯流排"
 
-#: eeschema/dialogs/dialog_netlist.cpp:260
+#: eeschema/dialogs/dialog_netlist.cpp:263
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "匯出網表"
 
-#: eeschema/dialogs/dialog_netlist.cpp:298
+#: eeschema/dialogs/dialog_netlist.cpp:307
 msgid "Simulator requires a fully annotated schematic."
 msgstr "模擬器需要一張完整批註的原理圖。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:324
-msgid "Reformat passive symbol values"
-msgstr "重新格式化無源符號值"
+#: eeschema/dialogs/dialog_netlist.cpp:333
+#, fuzzy
+msgid "Save all voltages"
+msgstr "儲存所有變更"
 
-#: eeschema/dialogs/dialog_netlist.cpp:325
-msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "重新格式化無源符號值 e.g. 1M -> 1Meg"
+#: eeschema/dialogs/dialog_netlist.cpp:334
+msgid "Write a directive to save all voltages (.save all)"
+msgstr ""
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:339
+#, fuzzy
+msgid "Save all currents"
+msgstr "儲存所有符號庫"
+
+#: eeschema/dialogs/dialog_netlist.cpp:340
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr ""
+
+#: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
 msgstr "外部模擬器命令："
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:347
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -9769,37 +9747,37 @@ msgstr ""
 "通常 <SPICE 二進位制路徑> %I。\n"
 "%I 將被實際的 SPICE 網表名稱替換"
 
-#: eeschema/dialogs/dialog_netlist.cpp:345
+#: eeschema/dialogs/dialog_netlist.cpp:361
 msgid "Create Netlist and Run Simulator Command"
 msgstr "建立網表並執行模擬器命令"
 
-#: eeschema/dialogs/dialog_netlist.cpp:396
+#: eeschema/dialogs/dialog_netlist.cpp:412
 msgid "Netlist command:"
 msgstr "網表命令："
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_netlist.cpp:457
 msgid "Save Netlist File"
 msgstr "儲存網表文件"
 
-#: eeschema/dialogs/dialog_netlist.cpp:472
+#: eeschema/dialogs/dialog_netlist.cpp:492
 #, c-format
 msgid "%s Export"
 msgstr "匯出 %s"
 
-#: eeschema/dialogs/dialog_netlist.cpp:501
+#: eeschema/dialogs/dialog_netlist.cpp:521
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "匯出網表需要一張完整批註的原理圖。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:625
+#: eeschema/dialogs/dialog_netlist.cpp:645
 msgid "This plugin already exists."
 msgstr "此外掛已存在。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:658
+#: eeschema/dialogs/dialog_netlist.cpp:678
 msgid "You must provide a netlist generator command string"
 msgstr "你必須提供網表生成器命令字串"
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:684
 msgid "You must provide a netlist generator title"
 msgstr "你必須提供網表生成器標題"
 
@@ -10025,8 +10003,8 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:296
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:100
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:38
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
@@ -10287,7 +10265,7 @@ msgstr "操作已完成"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1023
-#: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1491
+#: eeschema/sch_symbol.cpp:1474 eeschema/sch_symbol.cpp:1518
 #: pcbnew/footprint.cpp:2658 pcbnew/fp_text.cpp:267
 msgid "Reference"
 msgstr "位號"
@@ -10478,7 +10456,7 @@ msgid "Electrical Rules"
 msgstr "電氣規則"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1061
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Project"
@@ -10702,6 +10680,21 @@ msgstr "圖框屬性"
 msgid "Add signal by name:"
 msgstr "按名稱新增訊號："
 
+#: eeschema/dialogs/dialog_sim_model.cpp:401
+#, fuzzy, c-format
+msgid "Failed reading model library '%s'."
+msgstr "未能建立符號庫檔案 \"%s\"。"
+
+#: eeschema/dialogs/dialog_sim_model.cpp:713
+#, fuzzy
+msgid "Browse Models"
+msgstr "瀏覽文件"
+
+#: eeschema/dialogs/dialog_sim_model.h:62
+#, fuzzy, c-format
+msgid "No model named '%s' in library."
+msgstr "網路名稱 '%s' 已經在使用中。"
+
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
 msgstr "你需要選擇 DC 源"
@@ -10730,7 +10723,7 @@ msgstr "在無有效模擬的情況下退出"
 msgid "Configure Valid Simulation"
 msgstr "配置有效模擬"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:586
+#: eeschema/dialogs/dialog_sim_settings.cpp:591
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:166
@@ -10740,11 +10733,11 @@ msgstr "配置有效模擬"
 msgid "Volts"
 msgstr "V"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
+#: eeschema/dialogs/dialog_sim_settings.cpp:592
 msgid "Amperes"
 msgstr "安培"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:588
+#: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
@@ -10783,10 +10776,6 @@ msgstr "起始頻率："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
-#: eeschema/dialogs/dialog_spice_model_base.cpp:706
-#: eeschema/dialogs/dialog_spice_model_base.cpp:728
-#: eeschema/dialogs/dialog_spice_model_base.cpp:797
-#: eeschema/dialogs/dialog_spice_model_base.cpp:808
 msgid "Hertz"
 msgstr "Hz"
 
@@ -10926,19 +10915,6 @@ msgstr "時間步長："
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:390
-#: eeschema/dialogs/dialog_spice_model_base.cpp:407
-#: eeschema/dialogs/dialog_spice_model_base.cpp:418
-#: eeschema/dialogs/dialog_spice_model_base.cpp:429
-#: eeschema/dialogs/dialog_spice_model_base.cpp:440
-#: eeschema/dialogs/dialog_spice_model_base.cpp:451
-#: eeschema/dialogs/dialog_spice_model_base.cpp:509
-#: eeschema/dialogs/dialog_spice_model_base.cpp:567
-#: eeschema/dialogs/dialog_spice_model_base.cpp:578
-#: eeschema/dialogs/dialog_spice_model_base.cpp:589
-#: eeschema/dialogs/dialog_spice_model_base.cpp:600
-#: eeschema/dialogs/dialog_spice_model_base.cpp:819
-#: eeschema/dialogs/dialog_spice_model_base.cpp:870
-#: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
 msgstr "秒"
 
@@ -11010,586 +10986,6 @@ msgstr "HSpice"
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
 msgstr "模擬設定"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:80
-msgid "Diode"
-msgstr "二極體"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:81
-msgid "BJT"
-msgstr "雙極型電晶體"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:82
-msgid "MOSFET"
-msgstr "金氧半導體場效應電晶體"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:83
-msgid "JFET"
-msgstr "結晶型場效應電晶體"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:84
-msgid "Subcircuit"
-msgstr "子電路"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:85
-msgid "Code Model"
-msgstr "程式碼模型"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:497
-msgid ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-msgstr ""
-"符號引腳編號並不總是符合所需的 SPICE 引腳順序\n"
-"檢查符號並使用“備用節點序列”重新排序引腳（如有必要）"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:506
-msgid "For a Diode, pin order is anode, cathode"
-msgstr "對於二極體，引腳順序為陽極、陰極"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:510
-msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr "對於 BJT，引腳順序為集電極，基極，發射極，基板（可選）"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:514
-msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "對於 MOSFET，引腳順序為 drain、gate、source"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:518
-msgid "For a JFET, pin order is drain, gate, source"
-msgstr "對於 JFET，引腳順序為 drain、gate、source"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:803
-msgid "Invalid Impedance value"
-msgstr "無效的阻抗值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:818
-msgid "Invalid delay value"
-msgstr "無效的延遲值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:833
-msgid "Invalid frequency value"
-msgstr "無效的頻率值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:845
-msgid "Invalid length in wavelength value"
-msgstr "無效的波長值長度"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:870
-msgid "Invalid resistance value"
-msgstr "無效電阻值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:881
-msgid "Invalid capacitance value"
-msgstr "無效的電容值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:892
-msgid "Invalid inductance value"
-msgstr "無效的電感值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:903
-msgid "Invalid conductance value"
-msgstr "無效的電導值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:914
-msgid "Invalid length value"
-msgstr "無效的長度值"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1066
-#, c-format
-msgid ""
-"You need to specify at least the first %d parameters for the transient source"
-msgstr "你需要指定瞬時源的至少前 %d 個引數"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1075
-msgid ""
-"You cannot leave interleaved empty fields when defining a transient source"
-msgstr "定義暫態源時，你不能保留交錯的空欄位"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1292
-msgid "Select library"
-msgstr "選擇庫"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1360
-#: eeschema/dialogs/dialog_spice_model_base.cpp:885
-msgid "Range:"
-msgstr "範圍："
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1361
-#: eeschema/dialogs/dialog_spice_model.cpp:1373
-#: eeschema/dialogs/dialog_spice_model.cpp:1379
-#: eeschema/dialogs/dialog_spice_model_base.cpp:675
-#: eeschema/dialogs/dialog_spice_model_base.cpp:779
-#: eeschema/dialogs/dialog_spice_model_base.cpp:895
-msgid "Offset:"
-msgstr "偏移："
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1366
-msgid "Standard deviation:"
-msgstr "標準偏差："
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1367
-#: eeschema/dialogs/dialog_spice_model.cpp:1372
-msgid "Mean:"
-msgstr "意思："
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1378
-msgid "Lambda:"
-msgstr "Lambda:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1383
-msgid "type of random generator for source is invalid"
-msgstr "源的隨機生成器型別無效"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:30
-#: eeschema/dialogs/dialog_spice_model_base.cpp:233
-#: eeschema/dialogs/dialog_spice_model_base.cpp:850
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-msgid "Type:"
-msgstr "型別："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:34
-#: eeschema/dialogs/dialog_spice_model_base.cpp:35
-msgid "Resistor"
-msgstr "電阻"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:36
-msgid "Capacitor"
-msgstr "電容"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:37
-msgid "Inductor"
-msgstr "電感"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:41
-msgid "Passive type"
-msgstr "無源型別"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:54
-msgid "Spice value in simulation"
-msgstr "模擬中的 SPICE 值"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:67
-msgid ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-msgstr ""
-"在 Spice 值中，十進位制分隔符是點。\n"
-"值可以使用 Spice 單元符號。"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:71
-msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Spice 單元符號值(不區分大小寫):"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
-msgid "Library:"
-msgstr "庫："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:220
-msgid "Select file..."
-msgstr "選擇檔案..."
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:226
-msgid "Model:"
-msgstr "模型："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:240
-msgid "Note:"
-msgstr "注意："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:244
-msgid "note"
-msgstr "注意"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:294
-msgid "Model"
-msgstr "模型"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:302
-msgid "DC/AC Analysis"
-msgstr "直流電/交流電分析"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:311
-msgid "DC:"
-msgstr "直流電："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:320
-#: eeschema/dialogs/dialog_spice_model_base.cpp:342
-#: eeschema/dialogs/dialog_spice_model_base.cpp:385
-#: eeschema/dialogs/dialog_spice_model_base.cpp:396
-#: eeschema/dialogs/dialog_spice_model_base.cpp:476
-#: eeschema/dialogs/dialog_spice_model_base.cpp:487
-#: eeschema/dialogs/dialog_spice_model_base.cpp:545
-#: eeschema/dialogs/dialog_spice_model_base.cpp:556
-#: eeschema/dialogs/dialog_spice_model_base.cpp:645
-#: eeschema/dialogs/dialog_spice_model_base.cpp:684
-#: eeschema/dialogs/dialog_spice_model_base.cpp:695
-#: eeschema/dialogs/dialog_spice_model_base.cpp:775
-#: eeschema/dialogs/dialog_spice_model_base.cpp:786
-msgid "Volts/Amps"
-msgstr "電壓/電流"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:333
-msgid "AC magnitude:"
-msgstr "交流幅度："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:346
-msgid "AC phase:"
-msgstr "交流相位："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:355
-msgid "radians"
-msgstr "弧度"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:366
-msgid "Transient Analysis"
-msgstr "瞬態分析"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:376
-#: eeschema/dialogs/dialog_spice_model_base.cpp:536
-msgid "Initial value:"
-msgstr "初始值："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:389
-#: eeschema/dialogs/dialog_spice_model_base.cpp:549
-msgid "Pulsed value:"
-msgstr "脈衝值："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:400
-msgid "Delay time:"
-msgstr "延遲時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:411
-msgid "Rise time:"
-msgstr "上升時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:422
-msgid "Fall time:"
-msgstr "下降時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:433
-msgid "Pulse width:"
-msgstr "脈衝寬度："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:444
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
-msgid "Period:"
-msgstr "週期："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:459
-msgid "Pulse"
-msgstr "脈衝"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:467
-msgid "DC offset:"
-msgstr "直流偏移："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:480
-#: eeschema/dialogs/dialog_spice_model_base.cpp:688
-#: eeschema/dialogs/dialog_spice_model_base.cpp:766
-msgid "Amplitude:"
-msgstr "幅度："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:491
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
-msgid "Frequency:"
-msgstr "頻率："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:498
-#: eeschema/dialogs/dialog_spice_model_base.cpp:983
-#: pcb_calculator/widgets/unit_selector.cpp:103
-msgid "Hz"
-msgstr "Hz"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:502
-msgid "Delay:"
-msgstr "延時："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:513
-msgid "Damping factor:"
-msgstr "阻尼因數："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:520
-msgid "1/seconds"
-msgstr "1/秒"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:528
-msgid "Sinusoidal"
-msgstr "正弦"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:560
-msgid "Rise delay time:"
-msgstr "上升延遲時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:571
-msgid "Rise time constant:"
-msgstr "上升時間常數："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:582
-msgid "Fall delay time:"
-msgstr "下降延遲時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:593
-msgid "Fall time constant:"
-msgstr "下降延遲時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:608
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Exponential"
-msgstr "指數分佈"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:610
-msgid "Piece-wise linear"
-msgstr "分段線性"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:625
-msgid "Time:"
-msgstr "時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:634
-msgid "second"
-msgstr "秒"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:667
-msgid "Piece-wise Linear"
-msgstr "分段線性"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:699
-#: eeschema/dialogs/dialog_spice_model_base.cpp:801
-msgid "Carrier frequency:"
-msgstr "載頻："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:710
-msgid "Modulation index:"
-msgstr "調製指數："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:717
-#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
-msgid "-"
-msgstr "-"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:721
-msgid "Signal frequency:"
-msgstr "訊號頻率："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:732
-#: eeschema/dialogs/dialog_spice_model_base.cpp:823
-msgid "Carrier phase:"
-msgstr "載波相位："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:739
-#: eeschema/dialogs/dialog_spice_model_base.cpp:750
-#: eeschema/dialogs/dialog_spice_model_base.cpp:830
-msgid "degrees"
-msgstr "度"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:743
-msgid "Signal phase:"
-msgstr "訊號相位："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:758
-msgid "FM"
-msgstr "調頻"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:790
-msgid "Modulating frequency:"
-msgstr "調製頻率："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:812
-msgid "Signal delay:"
-msgstr "訊號延遲："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:838
-msgid "AM"
-msgstr "調幅"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:842
-msgid "Transient noise"
-msgstr "瞬態噪聲"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Uniform"
-msgstr "均勻分佈"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Gaussian"
-msgstr "高斯分佈"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Poisson"
-msgstr "泊松分佈"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:863
-msgid "Individual value duration:"
-msgstr "單值持續時間："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:874
-msgid "Time delay:"
-msgstr "時間延遲："
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:909
-msgid "Random"
-msgstr "隨機"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:913
-msgid "External data"
-msgstr "外部資料"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:366
-msgid "Voltage"
-msgstr "電壓"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
-msgid "Current"
-msgstr "電流"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:922
-msgid "Source Type"
-msgstr "源型別"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:930
-msgid "Source"
-msgstr "源"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:938
-msgid "Line model"
-msgstr "線條模型"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:954
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:183
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:291
-#: pcb_calculator/transline_ident.cpp:373
-#: pcb_calculator/transline_ident.cpp:412
-msgid "Characteristic impedance"
-msgstr "特性阻抗"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:961
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
-msgid "ohm"
-msgstr "歐姆"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:965
-msgid "Propagation delay"
-msgstr "傳播延遲"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
-msgid "s"
-msgstr "s"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:976
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
-#: pcb_calculator/transline_ident.cpp:108
-msgid "Frequency"
-msgstr "頻率"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:987
-msgid "Length in wavelength"
-msgstr "波長長度"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use time delay"
-msgstr "使用時間延遲"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use frequency and number of wavelength"
-msgstr "使用頻率和波長的編號"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-msgid "Delay / Electrical length"
-msgstr "延遲/電氣長度"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1010
-msgid "Lossless"
-msgstr "無損"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1024
-msgid "Resistance per unit length"
-msgstr "單位長度電阻"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1031
-msgid "ohm / unit"
-msgstr "歐姆/單位"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-msgid "Inductance per unit length"
-msgstr "單位長度電感值"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1042
-msgid "henry / unit"
-msgstr "亨利/單位"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1046
-msgid "Capacitance per unit length"
-msgstr "單位長度電容"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1053
-msgid "farad / unit"
-msgstr "法拉/單位"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-msgid "Conductance per unit length"
-msgstr "單位長度電導"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-msgid "siemens / unit"
-msgstr "電阻/單位"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-msgid "Extra parameters"
-msgstr "附加引數"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1092
-msgid ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-msgstr ""
-"目前為止，已經實現了以下型別的線：\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"任何其他的組合都會產生錯誤的結果，不應該嘗試。"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-msgid "Lossy"
-msgstr "有損耗的"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-msgid "Transmission Line"
-msgstr "傳輸線"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1118
-msgid "Disable symbol for simulation"
-msgstr "禁用符號模擬"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1124
-msgid "Alternate node sequence:"
-msgstr "替代節點序列："
-
-#: eeschema/dialogs/dialog_spice_model_base.h:289
-msgid "Spice Model Editor"
-msgstr "Spice 模型編輯器"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:89
 #: eeschema/fields_grid_table.cpp:801
@@ -12671,7 +12067,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "在新增此庫後需要更改其中一個庫暱稱。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:522
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1067
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Skip"
@@ -12748,8 +12144,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1068
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1081
 #: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1468
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1520
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1469
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
@@ -12913,22 +12309,22 @@ msgstr "關聯給 %s 和 %s 的封裝不同"
 msgid "Pins with \"no connection\" type are connected"
 msgstr "連線了“無連線”型別的管腳"
 
-#: eeschema/erc.cpp:546
+#: eeschema/erc.cpp:557
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "型別為 %s 和 %s 的引腳已連線"
 
-#: eeschema/erc.cpp:616
+#: eeschema/erc.cpp:627
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "引腳 %s 同時連線到 %s 和 %s"
 
-#: eeschema/erc.cpp:718 pcbnew/drc/drc_test_provider_library_parity.cpp:493
+#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "當前配置不包含庫 '%s'。"
 
-#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:507
+#: eeschema/erc.cpp:740 pcbnew/drc/drc_test_provider_library_parity.cpp:507
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "當前配置中未啟用庫 '%s'。"
@@ -13055,7 +12451,7 @@ msgid "Bus Entry needed"
 msgstr "需要匯流排入口"
 
 #: eeschema/fields_grid_table.cpp:221 eeschema/files-io.cpp:795
-#: eeschema/tools/sch_editor_control.cpp:102
+#: eeschema/tools/sch_editor_control.cpp:103
 msgid "Schematic Files"
 msgstr "原理圖檔案"
 
@@ -13350,7 +12746,7 @@ msgstr ""
 "此檔案必須手動刪除，\n"
 "否則每次啟動原理圖編輯器時都會顯示自動儲存功能。"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1465
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1492
 msgid "Alias of"
 msgstr "別名的"
 
@@ -13607,12 +13003,18 @@ msgid "Could not find library file %s."
 msgstr "無法找到庫檔案 %s。"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:371
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:297
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
 "多個符號的位號相同。\n"
 "模擬前必須校正註釋。"
+
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
+#, fuzzy, c-format
+msgid "Could not find library file '%s'"
+msgstr "無法找到庫檔案 %s。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -13646,7 +13048,7 @@ msgstr "選擇符號(共 %d 項)"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "在庫 \"%s\" 中未找到符號 \"%s\" 的替代主體樣式。"
 
-#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:63
+#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 msgid "none"
 msgstr "無"
 
@@ -13828,8 +13230,8 @@ msgstr "原理圖一致性檢驗"
 msgid "New schematic file is unsaved"
 msgstr "新原理圖檔案未儲存"
 
-#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1638
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:524
+#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1645
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:525
 #: eeschema/symbol_editor/symbol_editor.cpp:1197
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:676 pcbnew/footprint_edit_frame.cpp:716
@@ -14620,7 +14022,7 @@ msgstr "檔名稱"
 msgid "Hierarchical Sheet %s"
 msgstr "層次分頁 %s"
 
-#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:341
+#: eeschema/sch_sheet_path.cpp:62 include/board_item.h:341
 msgid "(Deleted Item)"
 msgstr "(刪除項)"
 
@@ -14629,36 +14031,36 @@ msgstr "(刪除項)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "層次圖框引腳 %s"
 
-#: eeschema/sch_symbol.cpp:1443
+#: eeschema/sch_symbol.cpp:1470
 msgid "Power symbol"
 msgstr "電源符號"
 
-#: eeschema/sch_symbol.cpp:1453
+#: eeschema/sch_symbol.cpp:1480
 msgid "flags"
 msgstr "標誌"
 
-#: eeschema/sch_symbol.cpp:1458
+#: eeschema/sch_symbol.cpp:1485
 msgid "Missing parent"
 msgstr "缺少父級"
 
-#: eeschema/sch_symbol.cpp:1473
+#: eeschema/sch_symbol.cpp:1500
 msgid "Undefined!!!"
 msgstr "未定義!!!"
 
-#: eeschema/sch_symbol.cpp:1480
+#: eeschema/sch_symbol.cpp:1507
 msgid "<Unknown>"
 msgstr "<未知>"
 
-#: eeschema/sch_symbol.cpp:1499
+#: eeschema/sch_symbol.cpp:1526
 msgid "No library defined!"
 msgstr "未定義庫!"
 
-#: eeschema/sch_symbol.cpp:1501
+#: eeschema/sch_symbol.cpp:1528
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "在 %s 中找不到符號!"
 
-#: eeschema/sch_symbol.cpp:1692
+#: eeschema/sch_symbol.cpp:1719
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "符號 %s [%s]"
@@ -15157,6 +14559,21 @@ msgstr "建立新圖紙"
 msgid "Discard New Sheet"
 msgstr "丟棄新圖紙"
 
+#: eeschema/sim/sim_model.cpp:827
+#, fuzzy, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "無法分析 '%s' (在 '%s' 中)"
+
+#: eeschema/sim/sim_model.cpp:1347
+#, c-format
+msgid "%s describes %lu pins, expected %u"
+msgstr ""
+
+#: eeschema/sim/sim_model_ideal.cpp:115
+#, fuzzy, c-format
+msgid "Failed to infer model from Value '%s'"
+msgstr "建立檔案 \"%s\" 失敗。"
+
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -15206,57 +14623,57 @@ msgstr "模擬引數和設定"
 msgid "Spice Simulator"
 msgstr "Spice 模擬器"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1472
+#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1479
 msgid "There were errors during netlist export, aborted."
 msgstr "在網表匯出過程中出現錯誤，中止。"
 
-#: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1847
+#: eeschema/sim/sim_plot_frame.cpp:492 eeschema/sim/sim_plot_frame.cpp:1852
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "pl_editor 正在執行，是否開啟新窗口執行？"
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:519
 #, c-format
 msgid "Plot%u - "
 msgstr "繪製 %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:649
 msgid "Error: simulation type not defined!\n"
 msgstr "錯誤：未定義模擬型別！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:655
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "錯誤：模擬型別不支援繪製！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:826 eeschema/sim/sim_plot_frame.cpp:1680
+#: eeschema/sim/sim_plot_frame.cpp:833 eeschema/sim/sim_plot_frame.cpp:1687
 msgid "Signal"
 msgstr "訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:1104
+#: eeschema/sim/sim_plot_frame.cpp:1111
 msgid "noname"
 msgstr "無名稱"
 
-#: eeschema/sim/sim_plot_frame.cpp:1153
+#: eeschema/sim/sim_plot_frame.cpp:1160
 msgid "Open simulation workbook"
 msgstr "開啟模擬工作簿"
 
-#: eeschema/sim/sim_plot_frame.cpp:1182
+#: eeschema/sim/sim_plot_frame.cpp:1189
 msgid "Save Simulation Workbook As"
 msgstr "將模擬工作簿儲存為"
 
-#: eeschema/sim/sim_plot_frame.cpp:1198
+#: eeschema/sim/sim_plot_frame.cpp:1205
 msgid "Save Plot as Image"
 msgstr "另存繪製為圖片"
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot Data"
 msgstr "儲存繪製資料"
 
-#: eeschema/sim/sim_plot_frame.cpp:1520
+#: eeschema/sim/sim_plot_frame.cpp:1527
 msgid "You need to run plot-providing simulation first."
 msgstr "您需要先執行繪製提供模擬。"
 
-#: eeschema/sim/sim_plot_frame.cpp:1778
+#: eeschema/sim/sim_plot_frame.cpp:1783
 msgid ""
 "\n"
 "\n"
@@ -15268,19 +14685,19 @@ msgstr ""
 "模擬結果：\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Hide Signal"
 msgstr "隱藏訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Erase the signal from plot screen"
 msgstr "擦除繪製螢幕上的訊號"
 
-#: eeschema/sim/sim_plot_frame.cpp:1873
+#: eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Hide Cursor"
 msgstr "隱藏游標"
 
-#: eeschema/sim/sim_plot_frame.cpp:1875
+#: eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Show Cursor"
 msgstr "顯示游標"
 
@@ -15357,6 +14774,11 @@ msgstr "訊號"
 msgid "Cursors"
 msgstr "游標"
 
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: pcb_calculator/transline_ident.cpp:108
+msgid "Frequency"
+msgstr "頻率"
+
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "增益"
@@ -15372,6 +14794,14 @@ msgstr "噪音 [(V 或 A)^2/Hz]"
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "時間"
+
+#: eeschema/sim/sim_plot_panel.cpp:366
+msgid "Voltage"
+msgstr "電壓"
+
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
+msgid "Current"
+msgstr "電流"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
@@ -15392,6 +14822,11 @@ msgstr "溫度 (掃描)"
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "電壓 (測量)"
+
+#: eeschema/sim/sim_value.cpp:385
+#, fuzzy
+msgid "Unknown SIM_VALUE type"
+msgstr "未知方法"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -15599,7 +15034,7 @@ msgid "KiCad Symbol Editor"
 msgstr "KiCad 符號編輯器"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:71
 msgid "Loading Symbol Libraries"
 msgstr "載入符號庫"
@@ -15617,44 +15052,44 @@ msgstr "庫變更未儲存"
 msgid "Symbol library loading was cancelled by user."
 msgstr "使用者取消了符號庫載入。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:597
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:598
 #: eeschema/symbol_viewer_frame.cpp:540 eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "單元 %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:754
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "從原理圖編輯符號 %s。  儲存將僅更新原理圖。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:763
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:764
 msgid "Manage symbol libraries"
 msgstr "管理符號庫"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:774
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr "舊版庫中的符號不可編輯。使用“管理符號庫”遷移到當前格式。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:785
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "符號%s源自%s。符號圖形將不可編輯。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:788
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:789
 #, c-format
 msgid "Open %s"
 msgstr "開啟 %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "庫 \"%s\" 已經存在。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:870
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15663,47 +15098,47 @@ msgstr ""
 "無法建立庫檔案 \"%s\"。\n"
 "請確保您有寫入許可權，然後重試。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:880
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:881
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "無法開啟庫檔案。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:957
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:958
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "正在載入庫 '%s'…"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1048
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
 msgstr "是否將庫新增到全域性庫表？"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1050
 #: pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
 msgstr "新增到全域性庫表"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1059
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
 msgstr "全域性"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1062
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
 msgstr "選擇庫表新增到以下庫："
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1064
 #: pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
 msgstr "新增到庫表"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1095
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1096
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "未能將備份儲存到 \"%s\"。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:467
 #, c-format
 msgid ""
@@ -15713,12 +15148,12 @@ msgstr ""
 "當前配置不包括符號庫'%s'。\n"
 "使用管理符號庫來編輯配置。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1267
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1268
 #: eeschema/symbol_viewer_frame.cpp:470
 msgid "Library not found in symbol library table."
 msgstr "在符號庫表中找不到庫。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1275
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1276
 #: eeschema/symbol_viewer_frame.cpp:474
 #, c-format
 msgid ""
@@ -15728,18 +15163,18 @@ msgstr ""
 "當前配置未啟用庫 '%s'。\n"
 "使用管理符號庫來編輯配置。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1278
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1279
 #: eeschema/symbol_viewer_frame.cpp:477
 msgid "Symbol library not enabled."
 msgstr "符號庫未啟用。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1465
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1517
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
 msgid "Error saving global library table."
 msgstr "儲存全域性庫表時發生錯誤。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1467
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1519
 msgid "Error saving project library table."
 msgstr "儲存工程庫表時出錯。"
 
@@ -17227,7 +16662,7 @@ msgstr "移動"
 msgid "Moves the selected item(s)"
 msgstr "移動選擇項"
 
-#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:730
+#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:743
 msgid "Drag"
 msgstr "拖動"
 
@@ -17361,48 +16796,48 @@ msgstr "輸入圖框路徑 %s 的頁碼"
 msgid "Edit Sheet Page Number"
 msgstr "編輯圖紙頁碼"
 
-#: eeschema/tools/sch_editor_control.cpp:139
+#: eeschema/tools/sch_editor_control.cpp:140
 #, fuzzy, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "是否將 \"%s\" 恢復到上個儲存的版本？"
 
-#: eeschema/tools/sch_editor_control.cpp:563
+#: eeschema/tools/sch_editor_control.cpp:564
 msgid "Reached end of schematic."
 msgstr "到達原理圖的末尾。"
 
-#: eeschema/tools/sch_editor_control.cpp:564
+#: eeschema/tools/sch_editor_control.cpp:565
 msgid "Reached end of sheet."
 msgstr "到達圖框的末尾。"
 
-#: eeschema/tools/sch_editor_control.cpp:568
+#: eeschema/tools/sch_editor_control.cpp:569
 msgid "Find again to wrap around to the start."
 msgstr "再次查詢到開始。"
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:1036
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "錯誤：在當前圖框中找到重複的子圖框名稱。"
 
-#: eeschema/tools/sch_editor_control.cpp:1069
+#: eeschema/tools/sch_editor_control.cpp:1128
 msgid "Net must be labeled to assign a netclass."
 msgstr "網路必須標記才能關聯網路類。"
 
-#: eeschema/tools/sch_editor_control.cpp:1075
+#: eeschema/tools/sch_editor_control.cpp:1134
 msgid "Bus has no members to assign netclass to."
 msgstr "匯流排沒有要分配網路類的成員。"
 
-#: eeschema/tools/sch_editor_control.cpp:1108
+#: eeschema/tools/sch_editor_control.cpp:1167
 msgid "Netclasses"
 msgstr "網路類"
 
-#: eeschema/tools/sch_editor_control.cpp:1121
+#: eeschema/tools/sch_editor_control.cpp:1180
 msgid "Assign Netclass"
 msgstr "關聯網路類"
 
-#: eeschema/tools/sch_editor_control.cpp:1122
+#: eeschema/tools/sch_editor_control.cpp:1181
 msgid "Select netclass:"
 msgstr "選擇網路類："
 
-#: eeschema/tools/sch_editor_control.cpp:1731
+#: eeschema/tools/sch_editor_control.cpp:1790
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17412,21 +16847,21 @@ msgstr ""
 "貼上的圖框 \"%s\"\n"
 "被丟棄, 因為目標已有該圖框或其子圖框之一作為父級。"
 
-#: eeschema/tools/sch_editor_control.cpp:2295
+#: eeschema/tools/sch_editor_control.cpp:2354
 #: pcbnew/tools/board_editor_control.cpp:590
 #: pcbnew/tools/footprint_editor_control.cpp:719
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替換 %d 個重複 ID。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2302
+#: eeschema/tools/sch_editor_control.cpp:2361
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:734
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修復 %d 個潛在問題。"
 
-#: eeschema/tools/sch_editor_control.cpp:2309
+#: eeschema/tools/sch_editor_control.cpp:2368
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "未發現錯誤。"
@@ -19858,6 +19293,10 @@ msgstr "佈局"
 msgid "Size: %.1fx%.1fmm"
 msgstr "尺寸：%.1fx%.1fmm"
 
+#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
+msgid "-"
+msgstr "-"
+
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "起點 Y："
@@ -20524,142 +19963,147 @@ msgstr "金屬化焊盤：（外徑 - 內徑）"
 msgid "NP Pad: (diam - drill)"
 msgstr "非金屬化焊盤：（外徑 - 內徑）"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 #, fuzzy
 msgid "AWG0000"
 msgstr "0000"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
 msgstr ""
+
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
+#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "電阻率（以 Ohm*m 為單位）"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -20682,59 +20126,83 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
+msgid "Conductor resistivity:"
+msgstr "銅電阻率："
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
+msgid "..."
+msgstr "..."
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:88
+#, fuzzy
 msgid "Linear resistance:"
 msgstr "熱阻："
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
 #, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 #, fuzzy
 msgid "Ampacity:"
 msgstr "不透明度："
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 #, fuzzy
 msgid "Application"
 msgstr "輔助應用"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
 #, fuzzy
 msgid "Current:"
 msgstr "電流"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 #, fuzzy
 msgid "Length:"
 msgstr "長度(&L):"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
 msgstr "阻抗："
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:153
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:168
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
+msgid "ohm"
+msgstr "歐姆"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
 msgid "Voltage drop:"
 msgstr "壓降："
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
 #, fuzzy
 msgid "mV"
 msgstr "V"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 #, fuzzy
 msgid "mW"
 msgstr "W"
@@ -20972,6 +20440,10 @@ msgstr "線路厚度 (H)："
 msgid "Time to fuse:"
 msgstr "時間步長："
 
+#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
+msgid "s"
+msgstr "s"
+
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
 msgstr "PCB 計算器資料檔案"
@@ -21009,6 +20481,11 @@ msgstr "Vref 已經被設定為 0 ！"
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
 msgstr "R1 R2 的值錯誤"
+
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
+msgid "Type:"
+msgstr "型別："
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -21208,16 +20685,6 @@ msgstr "基板引數"
 msgid "Er:"
 msgstr "Er："
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
-msgid "..."
-msgstr "..."
-
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 msgid "Tan delta:"
 msgstr "介損:"
@@ -21259,6 +20726,11 @@ msgstr "導體 mu:"
 msgid "Component Parameters"
 msgstr "元件引數"
 
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
+msgid "Frequency:"
+msgstr "頻率："
+
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:229
 msgid "Physical Parameters"
 msgstr "物理引數"
@@ -21285,10 +20757,6 @@ msgstr "結果"
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
 msgstr "相對介電常數"
-
-#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "電阻率（以 Ohm*m 為單位）"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
@@ -21449,6 +20917,10 @@ msgstr "給定上升時間和計算電感的感抗"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
 msgstr "過孔的頂檢視"
+
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
+msgid "Period:"
+msgstr "週期："
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
@@ -21845,6 +21317,16 @@ msgstr "線寬"
 msgid "Line length"
 msgstr "線路長度"
 
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:373
+#: pcb_calculator/transline_ident.cpp:412
+msgid "Characteristic impedance"
+msgstr "特性阻抗"
+
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:220
@@ -22021,6 +21503,10 @@ msgstr "MHz"
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
 msgstr "kHz"
+
+#: pcb_calculator/widgets/unit_selector.cpp:103
+msgid "Hz"
+msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
@@ -23506,41 +22992,70 @@ msgstr "清除佈線和過孔"
 msgid "Constraints Resolution Report"
 msgstr "約束解析報告"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:202
+#: pcbnew/dialogs/dialog_copper_zones.cpp:210
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "過孔/焊盤上的淚滴屬性"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones.cpp:214
 msgid "Teardrop on Tracks Properties"
 msgstr "佈線上的淚滴屬性"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:210
+#: pcbnew/dialogs/dialog_copper_zones.cpp:218
 msgid "Teardrop Properties"
 msgstr "淚滴屬性"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones.cpp:225
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
+#: pcbnew/tools/convert_tool.cpp:57
+#, fuzzy
+msgid "Conversion Settings"
+msgstr "焊盤列舉設定"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
+#: pcbnew/tools/convert_tool.cpp:66
+#, fuzzy
+msgid "Ignore source object line widths"
+msgstr "增加線寬"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
+#: pcbnew/tools/convert_tool.cpp:70
+#, fuzzy
+msgid "Delete source objects after conversion"
+msgstr "刪除檔案及其內容"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:242
+#, fuzzy
+msgid "Convert to Copper Zone"
+msgstr "連線到敷銅區"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:440
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
 msgid "Chamfer distance:"
 msgstr "倒角距離："
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:405
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
+#: pcbnew/dialogs/dialog_copper_zones.cpp:442
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:142
 msgid "Fillet radius:"
 msgstr "圓角半徑："
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:551
+#: pcbnew/dialogs/dialog_copper_zones.cpp:594
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "熱風焊盤輻射線不能小於最小寬度。"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:580
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:264
+#: pcbnew/dialogs/dialog_copper_zones.cpp:623
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:311
 msgid "No layer selected."
 msgstr "沒有圖層被選擇。"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:923
-msgid "Selecting <no net> will create an isolated copper island."
+#: pcbnew/dialogs/dialog_copper_zones.cpp:967
+#, fuzzy
+msgid "<no net> will result in an isolated copper island."
 msgstr "選中 <no net> 將建立一個隔絕的銅島。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
@@ -26431,6 +25946,11 @@ msgstr "刪除縮短多個網路的佈線"
 msgid "Import Netlist"
 msgstr "匯入網表"
 
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
+#, fuzzy
+msgid "Convert to Non Copper Zone"
+msgstr "連線到敷銅區"
+
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
 msgstr "輪廓樣式："
@@ -27939,7 +27459,16 @@ msgstr "不要修改具有不同型別的焊盤"
 msgid "Push Pad Properties"
 msgstr "推擠焊盤屬性"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:160
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
+#, fuzzy
+msgid "Conversion settings:"
+msgstr "接腳設定:"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
+msgid "Convert to Rule Area"
+msgstr "轉換為規則區域"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:206
 msgid "No layers selected."
 msgstr "沒有選擇層。"
 
@@ -36405,23 +35934,23 @@ msgstr "斷言"
 msgid "Assertions for:"
 msgstr "斷言："
 
-#: pcbnew/tools/convert_tool.cpp:77
+#: pcbnew/tools/convert_tool.cpp:149
 msgid "Create from Selection"
 msgstr "從選區建立"
 
-#: pcbnew/tools/convert_tool.cpp:226
+#: pcbnew/tools/convert_tool.cpp:360
 msgid "Convert shapes to polygon"
 msgstr "將形狀轉換為多邊形"
 
-#: pcbnew/tools/convert_tool.cpp:272
+#: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to zone"
 msgstr "將形狀轉換為敷銅"
 
-#: pcbnew/tools/convert_tool.cpp:781
+#: pcbnew/tools/convert_tool.cpp:818
 msgid "Convert polygons to lines"
 msgstr "將多邊形轉換為線"
 
-#: pcbnew/tools/convert_tool.cpp:869
+#: pcbnew/tools/convert_tool.cpp:906
 msgid "Create arc from line segment"
 msgstr "從線段建立圓弧"
 
@@ -36649,7 +36178,7 @@ msgstr "選擇已複製"
 msgid "Copy canceled"
 msgstr "已取消複製"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:351
+#: pcbnew/tools/edit_tool_move_fct.cpp:352
 msgid "Select reference point for move..."
 msgstr "選擇要移動的參考點..."
 
@@ -39034,6 +38563,11 @@ msgstr "刪除預設"
 msgid "Select preset:"
 msgstr "選擇預設："
 
+#: pcbnew/widgets/appearance_controls.cpp:2671
+#: pcbnew/widgets/appearance_controls_base.cpp:182
+msgid "Viewports (Alt+Tab):"
+msgstr "視口 (Alt+Tab)："
+
 #: pcbnew/widgets/appearance_controls.cpp:3215
 msgid "Open Preferences"
 msgstr "開啟偏好設定"
@@ -39240,19 +38774,19 @@ msgstr "重新填充"
 msgid "Continue without Refill"
 msgstr "取消敷銅"
 
-#: pcbnew/zones.h:62
+#: pcbnew/zones.h:64
 msgid "inherited"
 msgstr "繼承"
 
-#: pcbnew/zones.h:64
+#: pcbnew/zones.h:66
 msgid "thermal reliefs"
 msgstr "防散熱 (花焊盤)"
 
-#: pcbnew/zones.h:65
+#: pcbnew/zones.h:67
 msgid "solid"
 msgstr "實心"
 
-#: pcbnew/zones.h:66
+#: pcbnew/zones.h:68
 msgid "thermal reliefs for PTH"
 msgstr "用於金屬化孔 (PTH) 的防散熱"
 
@@ -39390,6 +38924,382 @@ msgstr "KiCad 原理圖"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷電路板"
+
+#~ msgid "Reformat passive symbol values"
+#~ msgstr "重新格式化無源符號值"
+
+#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
+#~ msgstr "重新格式化無源符號值 e.g. 1M -> 1Meg"
+
+#~ msgid "Diode"
+#~ msgstr "二極體"
+
+#~ msgid "BJT"
+#~ msgstr "雙極型電晶體"
+
+#~ msgid "MOSFET"
+#~ msgstr "金氧半導體場效應電晶體"
+
+#~ msgid "JFET"
+#~ msgstr "結晶型場效應電晶體"
+
+#~ msgid "Subcircuit"
+#~ msgstr "子電路"
+
+#~ msgid "Code Model"
+#~ msgstr "程式碼模型"
+
+#~ msgid ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+#~ msgstr ""
+#~ "符號引腳編號並不總是符合所需的 SPICE 引腳順序\n"
+#~ "檢查符號並使用“備用節點序列”重新排序引腳（如有必要）"
+
+#~ msgid "For a Diode, pin order is anode, cathode"
+#~ msgstr "對於二極體，引腳順序為陽極、陰極"
+
+#~ msgid ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+#~ msgstr "對於 BJT，引腳順序為集電極，基極，發射極，基板（可選）"
+
+#~ msgid "For a MOSFET, pin order is drain, gate, source"
+#~ msgstr "對於 MOSFET，引腳順序為 drain、gate、source"
+
+#~ msgid "For a JFET, pin order is drain, gate, source"
+#~ msgstr "對於 JFET，引腳順序為 drain、gate、source"
+
+#~ msgid "Invalid Impedance value"
+#~ msgstr "無效的阻抗值"
+
+#~ msgid "Invalid delay value"
+#~ msgstr "無效的延遲值"
+
+#~ msgid "Invalid frequency value"
+#~ msgstr "無效的頻率值"
+
+#~ msgid "Invalid length in wavelength value"
+#~ msgstr "無效的波長值長度"
+
+#~ msgid "Invalid resistance value"
+#~ msgstr "無效電阻值"
+
+#~ msgid "Invalid capacitance value"
+#~ msgstr "無效的電容值"
+
+#~ msgid "Invalid inductance value"
+#~ msgstr "無效的電感值"
+
+#~ msgid "Invalid conductance value"
+#~ msgstr "無效的電導值"
+
+#~ msgid "Invalid length value"
+#~ msgstr "無效的長度值"
+
+#, c-format
+#~ msgid ""
+#~ "You need to specify at least the first %d parameters for the transient "
+#~ "source"
+#~ msgstr "你需要指定瞬時源的至少前 %d 個引數"
+
+#~ msgid ""
+#~ "You cannot leave interleaved empty fields when defining a transient source"
+#~ msgstr "定義暫態源時，你不能保留交錯的空欄位"
+
+#~ msgid "Select library"
+#~ msgstr "選擇庫"
+
+#~ msgid "Range:"
+#~ msgstr "範圍："
+
+#~ msgid "Offset:"
+#~ msgstr "偏移："
+
+#~ msgid "Standard deviation:"
+#~ msgstr "標準偏差："
+
+#~ msgid "Mean:"
+#~ msgstr "意思："
+
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "type of random generator for source is invalid"
+#~ msgstr "源的隨機生成器型別無效"
+
+#~ msgid "Resistor"
+#~ msgstr "電阻"
+
+#~ msgid "Capacitor"
+#~ msgstr "電容"
+
+#~ msgid "Inductor"
+#~ msgstr "電感"
+
+#~ msgid "Passive type"
+#~ msgstr "無源型別"
+
+#~ msgid "Spice value in simulation"
+#~ msgstr "模擬中的 SPICE 值"
+
+#~ msgid ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+#~ msgstr ""
+#~ "在 Spice 值中，十進位制分隔符是點。\n"
+#~ "值可以使用 Spice 單元符號。"
+
+#~ msgid "Spice unit symbols in values (case insensitive):"
+#~ msgstr "Spice 單元符號值(不區分大小寫):"
+
+#~ msgid "Library:"
+#~ msgstr "庫："
+
+#~ msgid "Select file..."
+#~ msgstr "選擇檔案..."
+
+#~ msgid "Model:"
+#~ msgstr "模型："
+
+#~ msgid "Note:"
+#~ msgstr "注意："
+
+#~ msgid "note"
+#~ msgstr "注意"
+
+#~ msgid "Model"
+#~ msgstr "模型"
+
+#~ msgid "DC/AC Analysis"
+#~ msgstr "直流電/交流電分析"
+
+#~ msgid "DC:"
+#~ msgstr "直流電："
+
+#~ msgid "Volts/Amps"
+#~ msgstr "電壓/電流"
+
+#~ msgid "AC magnitude:"
+#~ msgstr "交流幅度："
+
+#~ msgid "AC phase:"
+#~ msgstr "交流相位："
+
+#~ msgid "radians"
+#~ msgstr "弧度"
+
+#~ msgid "Transient Analysis"
+#~ msgstr "瞬態分析"
+
+#~ msgid "Initial value:"
+#~ msgstr "初始值："
+
+#~ msgid "Pulsed value:"
+#~ msgstr "脈衝值："
+
+#~ msgid "Delay time:"
+#~ msgstr "延遲時間："
+
+#~ msgid "Rise time:"
+#~ msgstr "上升時間："
+
+#~ msgid "Fall time:"
+#~ msgstr "下降時間："
+
+#~ msgid "Pulse width:"
+#~ msgstr "脈衝寬度："
+
+#~ msgid "Pulse"
+#~ msgstr "脈衝"
+
+#~ msgid "DC offset:"
+#~ msgstr "直流偏移："
+
+#~ msgid "Amplitude:"
+#~ msgstr "幅度："
+
+#~ msgid "Delay:"
+#~ msgstr "延時："
+
+#~ msgid "Damping factor:"
+#~ msgstr "阻尼因數："
+
+#~ msgid "1/seconds"
+#~ msgstr "1/秒"
+
+#~ msgid "Sinusoidal"
+#~ msgstr "正弦"
+
+#~ msgid "Rise delay time:"
+#~ msgstr "上升延遲時間："
+
+#~ msgid "Rise time constant:"
+#~ msgstr "上升時間常數："
+
+#~ msgid "Fall delay time:"
+#~ msgstr "下降延遲時間："
+
+#~ msgid "Fall time constant:"
+#~ msgstr "下降延遲時間："
+
+#~ msgid "Exponential"
+#~ msgstr "指數分佈"
+
+#~ msgid "Piece-wise linear"
+#~ msgstr "分段線性"
+
+#~ msgid "Time:"
+#~ msgstr "時間："
+
+#~ msgid "second"
+#~ msgstr "秒"
+
+#~ msgid "Piece-wise Linear"
+#~ msgstr "分段線性"
+
+#~ msgid "Carrier frequency:"
+#~ msgstr "載頻："
+
+#~ msgid "Modulation index:"
+#~ msgstr "調製指數："
+
+#~ msgid "Signal frequency:"
+#~ msgstr "訊號頻率："
+
+#~ msgid "Carrier phase:"
+#~ msgstr "載波相位："
+
+#~ msgid "degrees"
+#~ msgstr "度"
+
+#~ msgid "Signal phase:"
+#~ msgstr "訊號相位："
+
+#~ msgid "FM"
+#~ msgstr "調頻"
+
+#~ msgid "Modulating frequency:"
+#~ msgstr "調製頻率："
+
+#~ msgid "Signal delay:"
+#~ msgstr "訊號延遲："
+
+#~ msgid "AM"
+#~ msgstr "調幅"
+
+#~ msgid "Transient noise"
+#~ msgstr "瞬態噪聲"
+
+#~ msgid "Uniform"
+#~ msgstr "均勻分佈"
+
+#~ msgid "Gaussian"
+#~ msgstr "高斯分佈"
+
+#~ msgid "Poisson"
+#~ msgstr "泊松分佈"
+
+#~ msgid "Individual value duration:"
+#~ msgstr "單值持續時間："
+
+#~ msgid "Time delay:"
+#~ msgstr "時間延遲："
+
+#~ msgid "Random"
+#~ msgstr "隨機"
+
+#~ msgid "External data"
+#~ msgstr "外部資料"
+
+#~ msgid "Source Type"
+#~ msgstr "源型別"
+
+#~ msgid "Source"
+#~ msgstr "源"
+
+#~ msgid "Line model"
+#~ msgstr "線條模型"
+
+#~ msgid "Propagation delay"
+#~ msgstr "傳播延遲"
+
+#~ msgid "Length in wavelength"
+#~ msgstr "波長長度"
+
+#~ msgid "Use time delay"
+#~ msgstr "使用時間延遲"
+
+#~ msgid "Use frequency and number of wavelength"
+#~ msgstr "使用頻率和波長的編號"
+
+#~ msgid "Delay / Electrical length"
+#~ msgstr "延遲/電氣長度"
+
+#~ msgid "Lossless"
+#~ msgstr "無損"
+
+#~ msgid "Resistance per unit length"
+#~ msgstr "單位長度電阻"
+
+#~ msgid "ohm / unit"
+#~ msgstr "歐姆/單位"
+
+#~ msgid "Inductance per unit length"
+#~ msgstr "單位長度電感值"
+
+#~ msgid "henry / unit"
+#~ msgstr "亨利/單位"
+
+#~ msgid "Capacitance per unit length"
+#~ msgstr "單位長度電容"
+
+#~ msgid "farad / unit"
+#~ msgstr "法拉/單位"
+
+#~ msgid "Conductance per unit length"
+#~ msgstr "單位長度電導"
+
+#~ msgid "siemens / unit"
+#~ msgstr "電阻/單位"
+
+#~ msgid "Extra parameters"
+#~ msgstr "附加引數"
+
+#~ msgid ""
+#~ "The following types of lines have been implemented so far:\n"
+#~ "\n"
+#~ "- RLC\n"
+#~ "- RC\n"
+#~ "- LC\n"
+#~ "- RG\n"
+#~ "\n"
+#~ "Any other combination will yield erroneous results and should not be "
+#~ "tried."
+#~ msgstr ""
+#~ "目前為止，已經實現了以下型別的線：\n"
+#~ "\n"
+#~ "- RLC\n"
+#~ "- RC\n"
+#~ "- LC\n"
+#~ "- RG\n"
+#~ "\n"
+#~ "任何其他的組合都會產生錯誤的結果，不應該嘗試。"
+
+#~ msgid "Lossy"
+#~ msgstr "有損耗的"
+
+#~ msgid "Transmission Line"
+#~ msgstr "傳輸線"
+
+#~ msgid "Disable symbol for simulation"
+#~ msgstr "禁用符號模擬"
+
+#~ msgid "Alternate node sequence:"
+#~ msgstr "替代節點序列："
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "Spice 模型編輯器"
 
 #~ msgid "GerbView"
 #~ msgstr "GerbView"
@@ -40722,9 +40632,6 @@ msgstr "KiCad 印刷電路板"
 
 #~ msgid "Convert to Polygon"
 #~ msgstr "轉換為多邊形"
-
-#~ msgid "Convert to Rule Area"
-#~ msgstr "轉換為規則區域"
 
 #~ msgid "Convert to Lines"
 #~ msgstr "轉換為線"
@@ -44643,9 +44550,6 @@ msgstr "KiCad 印刷電路板"
 #~ msgid "General Settings:"
 #~ msgstr "一般設定:"
 
-#~ msgid "Pin Settings:"
-#~ msgstr "接腳設定:"
-
 #~ msgid "&Run Simulator"
 #~ msgstr "執行模擬器 (&R)"
 
@@ -47714,9 +47618,6 @@ msgstr "KiCad 印刷電路板"
 #~ msgid "Copy Document from Parent"
 #~ msgstr "從父層級複製文件"
 
-#~ msgid "Browse Files"
-#~ msgstr "瀏覽文件"
-
 #~ msgid "Alias List:"
 #~ msgstr "別名列表:"
 
@@ -48105,9 +48006,6 @@ msgstr "KiCad 印刷電路板"
 
 #~ msgid "Deselect current tool"
 #~ msgstr "取消選擇目前工具"
-
-#~ msgid "Save all libraries"
-#~ msgstr "儲存所有符號庫"
 
 #~ msgid "Save current symbol"
 #~ msgstr "儲存目前符號"

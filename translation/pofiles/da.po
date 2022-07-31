@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 16:34-0700\n"
+"POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -102,13 +102,13 @@ msgstr "Din OpenGL-version understøttes ikke. Minimum krævet er 1,5"
 msgid "Last render time %.0f ms"
 msgstr "Gengivelsestid %.3f s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:657
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:660
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "Net %s NetKlasse %s ØNavn %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:682
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:695
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:685
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "Net %s NetKlasse %s"
@@ -262,34 +262,32 @@ msgstr "&Vis"
 msgid "&Preferences"
 msgstr "&Indstillinger"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:54
-#: pcbnew/widgets/appearance_controls.cpp:2671
-#: pcbnew/widgets/appearance_controls_base.cpp:182
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 #, fuzzy
-msgid "Viewports (Alt+Tab):"
+msgid "Viewports (Shift+Tab):"
 msgstr "(Ctrl + Tab)"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
 #, fuzzy
 msgid "Save viewport..."
 msgstr "Gem forudindstilling ..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2680
 #, fuzzy
 msgid "Delete viewport..."
 msgstr "Slet forudindstilling ..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
 msgstr "Genindlæs print"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:76
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:77
 msgid "Copy 3D image to clipboard"
 msgstr "Kopier 3D-billede til udklipsholderen"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:81
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:82
 msgid "Render current view using Raytracing"
 msgstr "Gengiv den aktuelle visning ved hjælp af Raytracing"
 
@@ -299,42 +297,42 @@ msgstr "Gengiv den aktuelle visning ved hjælp af Raytracing"
 msgid "KiCad 3D Viewer"
 msgstr "3D-fremviser"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 #, fuzzy
 msgid "Viewport name:"
 msgstr "Net navn:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 #, fuzzy
 msgid "Save Viewport"
 msgstr "Gem rapportfil"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:550
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2766
 #, fuzzy
 msgid "Viewports"
 msgstr "Rapport"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:559
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2775
 #, fuzzy
 msgid "Delete Viewport"
 msgstr "Slet telefonbog"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:560
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2776
 #, fuzzy
 msgid "Select viewport:"
 msgstr "Vælg forudindstilling:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:762
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:760
 msgid "3D Image File Name"
 msgstr "3D-billedfilnavn"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:783
-#: common/eda_base_frame.cpp:1120 common/eda_base_frame.cpp:1125
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
+#: common/eda_base_frame.cpp:1123 common/eda_base_frame.cpp:1128
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, fuzzy, c-format
 msgid "Insufficient permissions to save file '%s'."
@@ -342,8 +340,8 @@ msgstr ""
 "Der kræves ikke tilstrækkelige tilladelser til at gemme filen\n"
 "%s"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784 common/confirm.cpp:130
-#: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782 common/confirm.cpp:131
+#: common/confirm.cpp:309 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:828 eeschema/files-io.cpp:900
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
@@ -358,11 +356,11 @@ msgstr ""
 msgid "Error"
 msgstr "Fejl"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:817
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:815
 msgid "Failed to copy image to clipboard"
 msgstr "Kunne ikke kopiere billedet til udklipsholderen"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Can't save file"
 msgstr "Filen kan ikke gemmes"
 
@@ -1493,19 +1491,19 @@ msgid ""
 "bugtracker."
 msgstr ""
 
-#: common/confirm.cpp:57
+#: common/confirm.cpp:58
 msgid "Do not show again"
 msgstr "Vis ikke igen"
 
-#: common/confirm.cpp:127
+#: common/confirm.cpp:128
 msgid "Message"
 msgstr "Meddelelse"
 
-#: common/confirm.cpp:128
+#: common/confirm.cpp:129
 msgid "Question"
 msgstr "Spørgsmål"
 
-#: common/confirm.cpp:129 common/confirm.cpp:284
+#: common/confirm.cpp:130 common/confirm.cpp:291
 #: common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1316
@@ -1522,17 +1520,17 @@ msgstr "Spørgsmål"
 msgid "Warning"
 msgstr "Advarsel"
 
-#: common/confirm.cpp:160 common/confirm.cpp:166
+#: common/confirm.cpp:161 common/confirm.cpp:167
 #, fuzzy
 msgid "File Open Warning"
 msgstr "Fejl ved arkivering"
 
-#: common/confirm.cpp:162 common/confirm.cpp:168
+#: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
 msgstr ""
 
-#: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:233
-#: common/confirm.cpp:260 common/tool/actions.cpp:121
+#: common/confirm.cpp:165 common/confirm.cpp:170 common/confirm.cpp:234
+#: common/confirm.cpp:261 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
@@ -1542,21 +1540,21 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annuller"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169
+#: common/confirm.cpp:165 common/confirm.cpp:170
 #, fuzzy
 msgid "Open Anyway"
 msgstr "Gem alligevel"
 
-#: common/confirm.cpp:180 common/confirm.cpp:217
+#: common/confirm.cpp:181 common/confirm.cpp:218
 #, fuzzy
 msgid "Save Changes?"
 msgstr "Gem ændringer?"
 
-#: common/confirm.cpp:182 common/confirm.cpp:219
+#: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Hvis du ikke gemmer, går alle dine ændringer permanent tabt."
 
-#: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
+#: common/confirm.cpp:185 common/confirm.cpp:221 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #: eeschema/symbol_editor/symbol_editor.cpp:621
 #: eeschema/widgets/tuner_slider_base.cpp:74
@@ -1564,34 +1562,34 @@ msgstr "Hvis du ikke gemmer, går alle dine ændringer permanent tabt."
 msgid "Save"
 msgstr "Gem"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220
+#: common/confirm.cpp:185 common/confirm.cpp:221
 msgid "Discard Changes"
 msgstr "Kasser ændringer"
 
-#: common/confirm.cpp:187 common/confirm.cpp:266
+#: common/confirm.cpp:188 common/confirm.cpp:267
 msgid "Apply to all"
 msgstr "Anvend på alle"
 
-#: common/confirm.cpp:232
+#: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
 msgstr "Dine aktuelle ændringer går tabt permanent."
 
-#: common/confirm.cpp:233 common/tool/actions.cpp:91
+#: common/confirm.cpp:234 common/tool/actions.cpp:91
 msgid "Revert"
 msgstr "Tilbagefør"
 
-#: common/confirm.cpp:259 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: common/confirm.cpp:260 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:539
 msgid "OK"
 msgstr "OK"
 
-#: common/confirm.cpp:312
+#: common/confirm.cpp:331
 #, fuzzy
 msgid "Information"
 msgstr "Bekræftelse"
 
-#: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:412
+#: common/confirm.cpp:344 eeschema/symbol_editor/symbol_editor.cpp:412
 #: eeschema/symbol_editor/symbol_editor.cpp:726
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
@@ -1609,7 +1607,7 @@ msgstr "Bekræftelse"
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:240
-#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1485
+#: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1512
 #: eeschema/symbol_editor/symbol_editor.cpp:591
 #: eeschema/symbol_editor/symbol_editor.cpp:1292
 #: eeschema/symbol_viewer_frame.cpp:442 include/lib_table_grid.h:185
@@ -1869,8 +1867,6 @@ msgid "Saturation:"
 msgstr "Farvestyrke:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45
-#: eeschema/dialogs/dialog_spice_model_base.cpp:638
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:29
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:92
@@ -1997,8 +1993,8 @@ msgstr "miljøvariabler"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:298
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/fields_grid_table.cpp:335 eeschema/lib_pin.cpp:1086
-#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1449
-#: eeschema/sch_symbol.cpp:1494 eeschema/symbol_editor/symbol_editor.cpp:1264
+#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1476
+#: eeschema/sch_symbol.cpp:1521 eeschema/symbol_editor/symbol_editor.cpp:1264
 #: eeschema/symbol_viewer_frame.cpp:440
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -2099,33 +2095,6 @@ msgstr "Vælg global %s bibliotekstabelfil:"
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:40
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
-#: eeschema/dialogs/dialog_spice_model_base.cpp:81
-#: eeschema/dialogs/dialog_spice_model_base.cpp:85
-#: eeschema/dialogs/dialog_spice_model_base.cpp:89
-#: eeschema/dialogs/dialog_spice_model_base.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:97
-#: eeschema/dialogs/dialog_spice_model_base.cpp:101
-#: eeschema/dialogs/dialog_spice_model_base.cpp:105
-#: eeschema/dialogs/dialog_spice_model_base.cpp:109
-#: eeschema/dialogs/dialog_spice_model_base.cpp:113
-#: eeschema/dialogs/dialog_spice_model_base.cpp:117
-#: eeschema/dialogs/dialog_spice_model_base.cpp:121
-#: eeschema/dialogs/dialog_spice_model_base.cpp:125
-#: eeschema/dialogs/dialog_spice_model_base.cpp:129
-#: eeschema/dialogs/dialog_spice_model_base.cpp:133
-#: eeschema/dialogs/dialog_spice_model_base.cpp:137
-#: eeschema/dialogs/dialog_spice_model_base.cpp:141
-#: eeschema/dialogs/dialog_spice_model_base.cpp:145
-#: eeschema/dialogs/dialog_spice_model_base.cpp:149
-#: eeschema/dialogs/dialog_spice_model_base.cpp:153
-#: eeschema/dialogs/dialog_spice_model_base.cpp:157
-#: eeschema/dialogs/dialog_spice_model_base.cpp:161
-#: eeschema/dialogs/dialog_spice_model_base.cpp:165
-#: eeschema/dialogs/dialog_spice_model_base.cpp:169
-#: eeschema/dialogs/dialog_spice_model_base.cpp:173
-#: eeschema/dialogs/dialog_spice_model_base.cpp:177
-#: eeschema/dialogs/dialog_spice_model_base.cpp:181
-#: eeschema/dialogs/dialog_spice_model_base.cpp:185
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:154
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:166
@@ -2507,7 +2476,6 @@ msgstr "Brugerdefineret papirhøjde."
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:325
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:373
 #: eeschema/dialogs/dialog_line_properties_base.cpp:39
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:39
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:281
@@ -2648,7 +2616,7 @@ msgid "Revision:"
 msgstr "Revision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist.cpp:386
+#: eeschema/dialogs/dialog_netlist.cpp:402
 msgid "Title:"
 msgstr "Titel:"
 
@@ -2745,7 +2713,7 @@ msgstr "Print udkast"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:101 eeschema/dialogs/dialog_erc.cpp:430
-#: eeschema/dialogs/dialog_netlist.cpp:261
+#: eeschema/dialogs/dialog_netlist.cpp:264
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2888,11 +2856,11 @@ msgstr "Sideopsætning..."
 msgid "MyLabel"
 msgstr "Mit mærke"
 
-#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:123
+#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/symbol_viewer_frame.cpp:163 eeschema/symbol_viewer_frame.cpp:178
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:251
 #: pcbnew/footprint_viewer_frame.cpp:152 pcbnew/footprint_viewer_frame.cpp:167
 msgid "Filter"
 msgstr "Filter"
@@ -3752,14 +3720,14 @@ msgid "Line Style"
 msgstr "Linjetype"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1631
-#: common/pgm_base.cpp:84 common/stroke_params.cpp:200
+#: common/pgm_base.cpp:85 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1111 include/stroke_params.h:79
+#: eeschema/tools/sch_editor_control.cpp:1170 include/stroke_params.h:79
 msgid "Default"
 msgstr "Standard"
 
@@ -3912,11 +3880,11 @@ msgstr "Info"
 msgid "Save..."
 msgstr "Gemme..."
 
-#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:464
+#: common/draw_panel_gal.cpp:299 common/draw_panel_gal.cpp:469
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Kunne ikke bruge OpenGL, falder tilbage til softwaregengivelse"
 
-#: common/draw_panel_gal.cpp:300 common/draw_panel_gal.cpp:471
+#: common/draw_panel_gal.cpp:305 common/draw_panel_gal.cpp:476
 msgid "Could not use OpenGL"
 msgstr "Kunne ikke bruge OpenGL"
 
@@ -4223,14 +4191,14 @@ msgstr "Plugin-indstillinger"
 msgid "Drawing Sheet Editor"
 msgstr "Arbejdsark"
 
-#: common/eda_base_frame.cpp:1115
+#: common/eda_base_frame.cpp:1118
 #, fuzzy, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr ""
 "Der kræves ikke tilstrækkelige tilladelser til at gemme filen\n"
 "%s"
 
-#: common/eda_base_frame.cpp:1157
+#: common/eda_base_frame.cpp:1160
 #, fuzzy, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4245,7 +4213,7 @@ msgstr ""
 "det blev ikke gemt ordentligt. Ønsker du at gendanne de sidst gemte "
 "redigeringer, du har foretaget?"
 
-#: common/eda_base_frame.cpp:1173
+#: common/eda_base_frame.cpp:1176
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Filen til automatisk gemning kunne ikke omdøbes til filens filnavn."
 
@@ -4277,7 +4245,8 @@ msgid "Inches"
 msgstr "Tommer"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:157
-#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/pcb_actions.cpp:703
+#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/edit_tool_move_fct.cpp:365
+#: pcbnew/tools/pcb_actions.cpp:703
 #, fuzzy
 msgid "Constrain to H, V, 45"
 msgstr "Begræns omrids til H, V og 45 grader"
@@ -4340,7 +4309,7 @@ msgid "Screen"
 msgstr "Skærm"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
-#: eeschema/sch_symbol.cpp:1482 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1509 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:905
@@ -4554,8 +4523,7 @@ msgstr "Kurve"
 #: common/eda_shape.cpp:592 common/eda_shape.cpp:617
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1094
-#: eeschema/sch_pin.cpp:223
+#: eeschema/lib_pin.cpp:1094 eeschema/sch_pin.cpp:223
 msgid "Length"
 msgstr "Længde"
 
@@ -5574,21 +5542,21 @@ msgstr ""
 msgid "Type mismatch between %lf and '%s'"
 msgstr ""
 
-#: common/pgm_base.cpp:185
+#: common/pgm_base.cpp:186
 #, fuzzy
 msgid "No default editor found, you must choose one."
 msgstr "Ingen standardeditor fundet, du skal vælge den"
 
-#: common/pgm_base.cpp:205 common/pgm_base.cpp:207
+#: common/pgm_base.cpp:206 common/pgm_base.cpp:208
 #, fuzzy
 msgid "Executable file"
 msgstr "Eksekverbare filer ("
 
-#: common/pgm_base.cpp:217
+#: common/pgm_base.cpp:218
 msgid "Select Preferred Editor"
 msgstr "Vælg Preferred Editor"
 
-#: common/pgm_base.cpp:341
+#: common/pgm_base.cpp:342
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5598,20 +5566,20 @@ msgid ""
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
 
-#: common/pgm_base.cpp:348
+#: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
 msgstr ""
 
-#: common/pgm_base.cpp:394
+#: common/pgm_base.cpp:398
 #, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Navn på miljøvariabel kan ikke være tomt."
 
-#: common/pgm_base.cpp:609
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "Dette sprog understøttes ikke af operativsystemet."
 
-#: common/pgm_base.cpp:660 common/pgm_base.cpp:698
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:702
 msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-sprogfilen for dette sprog er ikke installeret."
 
@@ -6227,7 +6195,8 @@ msgid "Show Grid"
 msgstr "Vis &Linjenet"
 
 #: common/tool/actions.cpp:480
-msgid "Display grid dots or lines in the edit window"
+#, fuzzy
+msgid "Display background grid in the edit window"
 msgstr "Vis gitterprikker eller -linjer i redigeringsvinduet"
 
 #: common/tool/actions.cpp:485
@@ -6758,28 +6727,28 @@ msgstr "Nuværende nøgle:"
 msgid "Set Hotkey"
 msgstr "Indstil genvejstast"
 
-#: common/widgets/widget_hotkey_list.cpp:345
+#: common/widgets/widget_hotkey_list.cpp:351
 #, fuzzy, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr "Navnet %s er reserveret og kan ikke bruges her"
 
-#: common/widgets/widget_hotkey_list.cpp:396
+#: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
 msgstr "Rediger..."
 
-#: common/widgets/widget_hotkey_list.cpp:397
+#: common/widgets/widget_hotkey_list.cpp:403
 msgid "Undo Changes"
 msgstr "Fortryd ændringer"
 
-#: common/widgets/widget_hotkey_list.cpp:398
+#: common/widgets/widget_hotkey_list.cpp:404
 msgid "Clear Assigned Hotkey"
 msgstr "Ryd tildelt genvejstast"
 
-#: common/widgets/widget_hotkey_list.cpp:399
+#: common/widgets/widget_hotkey_list.cpp:405
 msgid "Restore Default"
 msgstr "Gendan standard"
 
-#: common/widgets/widget_hotkey_list.cpp:435
+#: common/widgets/widget_hotkey_list.cpp:441
 #, fuzzy, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
@@ -6788,19 +6757,19 @@ msgstr ""
 "\"%s\" er allerede tildelt \"%s\" i sektion \"%s\". Er du sikker på, at du "
 "vil ændre opgaven?"
 
-#: common/widgets/widget_hotkey_list.cpp:441
+#: common/widgets/widget_hotkey_list.cpp:447
 msgid "Confirm change"
 msgstr "Bekræft ændring"
 
-#: common/widgets/widget_hotkey_list.cpp:461
+#: common/widgets/widget_hotkey_list.cpp:467
 msgid "Command"
 msgstr "Kommando"
 
-#: common/widgets/widget_hotkey_list.cpp:464
+#: common/widgets/widget_hotkey_list.cpp:470
 msgid "(double-click to edit)"
 msgstr "(dobbeltklik for at redigere)"
 
-#: common/widgets/widget_hotkey_list.cpp:467
+#: common/widgets/widget_hotkey_list.cpp:473
 msgid "Hotkey"
 msgstr "Genvejstast"
 
@@ -7161,7 +7130,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "\"%s\" er ikke et gyldigt fodaftryk."
 
 #: cvpcb/cvpcb_mainframe.cpp:757 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1486 eeschema/symbol_editor/symbol_editor.cpp:1293
+#: eeschema/sch_symbol.cpp:1513 eeschema/symbol_editor/symbol_editor.cpp:1293
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/footprint.cpp:2678
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -7171,8 +7140,8 @@ msgstr "Nøgleord"
 msgid "Pin Count"
 msgstr "Pin-antal"
 
-#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1469
-#: eeschema/sch_symbol.cpp:1473 eeschema/sch_symbol.cpp:1503
+#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500 eeschema/sch_symbol.cpp:1530
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1220
 msgid "Library"
@@ -7258,8 +7227,7 @@ msgstr "Symbol Footprint Association-filer (.equ)"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
-#: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
 #: pcbnew/footprint_libraries_utils.cpp:532
 msgid "Add"
 msgstr "Tilføj"
@@ -7267,7 +7235,6 @@ msgstr "Tilføj"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:76
 #: eeschema/dialogs/dialog_bus_manager.cpp:110
-#: eeschema/dialogs/dialog_spice_model_base.cpp:660
 msgid "Remove"
 msgstr "Fjern"
 
@@ -7297,8 +7264,8 @@ msgstr "Tilgængelige miljøvariabler for relative stier:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1024
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1448
-#: eeschema/sch_symbol.cpp:1493
+#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1475
+#: eeschema/sch_symbol.cpp:1520
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7814,7 +7781,7 @@ msgstr "Tilføj generator"
 msgid "Nickname '%s' already in use."
 msgstr "Kælenavn \"%s\" er allerede i brug."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:702
 #, fuzzy
 msgid "Generator File"
 msgstr "Generatorfiler:"
@@ -9453,8 +9420,8 @@ msgstr "Tri-state"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:162
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
-#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:56
-#: eeschema/pin_type.cpp:248 eeschema/sch_label.cpp:148
+#: eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:248
+#: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "Passiv"
 
@@ -10104,30 +10071,40 @@ msgstr "Accepter navn"
 msgid "Migrate Buses"
 msgstr "Migrer busser"
 
-#: eeschema/dialogs/dialog_netlist.cpp:260
+#: eeschema/dialogs/dialog_netlist.cpp:263
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Eksportér Netlist"
 
-#: eeschema/dialogs/dialog_netlist.cpp:298
+#: eeschema/dialogs/dialog_netlist.cpp:307
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/dialogs/dialog_netlist.cpp:324
-msgid "Reformat passive symbol values"
-msgstr "Omformater passive symbolværdier"
+#: eeschema/dialogs/dialog_netlist.cpp:333
+#, fuzzy
+msgid "Save all voltages"
+msgstr "Gem alle ændringer"
 
-#: eeschema/dialogs/dialog_netlist.cpp:325
-msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Omformater passive symbolværdier f.eks. 1M -> 1Meg"
+#: eeschema/dialogs/dialog_netlist.cpp:334
+msgid "Write a directive to save all voltages (.save all)"
+msgstr ""
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:339
+#, fuzzy
+msgid "Save all currents"
+msgstr "Gem alle ændringer"
+
+#: eeschema/dialogs/dialog_netlist.cpp:340
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr ""
+
+#: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
 msgstr "Ekstern simulatorkommando:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:347
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -10137,40 +10114,40 @@ msgstr ""
 "Normalt <sti til krydderibinær>% I\n"
 "% Jeg vil blive erstattet af det faktiske kryddernetlistenavn"
 
-#: eeschema/dialogs/dialog_netlist.cpp:345
+#: eeschema/dialogs/dialog_netlist.cpp:361
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Opret Netlist og kør Simulator Command"
 
-#: eeschema/dialogs/dialog_netlist.cpp:396
+#: eeschema/dialogs/dialog_netlist.cpp:412
 msgid "Netlist command:"
 msgstr "Netlist-kommando:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_netlist.cpp:457
 msgid "Save Netlist File"
 msgstr "Gem Netlist-fil"
 
-#: eeschema/dialogs/dialog_netlist.cpp:472
+#: eeschema/dialogs/dialog_netlist.cpp:492
 #, c-format
 msgid "%s Export"
 msgstr "%s Eksport"
 
-#: eeschema/dialogs/dialog_netlist.cpp:501
+#: eeschema/dialogs/dialog_netlist.cpp:521
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 #, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/dialogs/dialog_netlist.cpp:625
+#: eeschema/dialogs/dialog_netlist.cpp:645
 msgid "This plugin already exists."
 msgstr "Dette plugin findes allerede."
 
-#: eeschema/dialogs/dialog_netlist.cpp:658
+#: eeschema/dialogs/dialog_netlist.cpp:678
 #, fuzzy
 msgid "You must provide a netlist generator command string"
 msgstr "Fejl. Du skal angive en kommando String"
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:684
 #, fuzzy
 msgid "You must provide a netlist generator title"
 msgstr "Fejl. Du skal angive en titel"
@@ -10393,8 +10370,8 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:296
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:100
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:38
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
@@ -10664,7 +10641,7 @@ msgstr "Handling taget"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1023
-#: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1491
+#: eeschema/sch_symbol.cpp:1474 eeschema/sch_symbol.cpp:1518
 #: pcbnew/footprint.cpp:2658 pcbnew/fp_text.cpp:267
 msgid "Reference"
 msgstr "Reference"
@@ -10857,7 +10834,7 @@ msgid "Electrical Rules"
 msgstr "Elektriske regler"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1061
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Project"
@@ -11079,6 +11056,21 @@ msgstr "Arkegenskaber"
 msgid "Add signal by name:"
 msgstr "Tilføj signal ved navn:"
 
+#: eeschema/dialogs/dialog_sim_model.cpp:401
+#, fuzzy, c-format
+msgid "Failed reading model library '%s'."
+msgstr "Kunne ikke oprette symbolbiblioteksfilen \"%s\""
+
+#: eeschema/dialogs/dialog_sim_model.cpp:713
+#, fuzzy
+msgid "Browse Models"
+msgstr "Model"
+
+#: eeschema/dialogs/dialog_sim_model.h:62
+#, fuzzy, c-format
+msgid "No model named '%s' in library."
+msgstr "Netnavnet '%s' er allerede i brug."
+
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 #, fuzzy
 msgid "You need to select DC source"
@@ -11107,7 +11099,7 @@ msgstr ""
 msgid "Configure Valid Simulation"
 msgstr "Luk simulering"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:586
+#: eeschema/dialogs/dialog_sim_settings.cpp:591
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:166
@@ -11117,12 +11109,12 @@ msgstr "Luk simulering"
 msgid "Volts"
 msgstr "Volt"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
+#: eeschema/dialogs/dialog_sim_settings.cpp:592
 #, fuzzy
 msgid "Amperes"
 msgstr "jumper"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:588
+#: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
@@ -11161,10 +11153,6 @@ msgstr "Startfrekvens:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
-#: eeschema/dialogs/dialog_spice_model_base.cpp:706
-#: eeschema/dialogs/dialog_spice_model_base.cpp:728
-#: eeschema/dialogs/dialog_spice_model_base.cpp:797
-#: eeschema/dialogs/dialog_spice_model_base.cpp:808
 msgid "Hertz"
 msgstr "Hertz"
 
@@ -11313,19 +11301,6 @@ msgstr "Tidstrin:"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:390
-#: eeschema/dialogs/dialog_spice_model_base.cpp:407
-#: eeschema/dialogs/dialog_spice_model_base.cpp:418
-#: eeschema/dialogs/dialog_spice_model_base.cpp:429
-#: eeschema/dialogs/dialog_spice_model_base.cpp:440
-#: eeschema/dialogs/dialog_spice_model_base.cpp:451
-#: eeschema/dialogs/dialog_spice_model_base.cpp:509
-#: eeschema/dialogs/dialog_spice_model_base.cpp:567
-#: eeschema/dialogs/dialog_spice_model_base.cpp:578
-#: eeschema/dialogs/dialog_spice_model_base.cpp:589
-#: eeschema/dialogs/dialog_spice_model_base.cpp:600
-#: eeschema/dialogs/dialog_spice_model_base.cpp:819
-#: eeschema/dialogs/dialog_spice_model_base.cpp:870
-#: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
 msgstr "sekunder"
 
@@ -11398,606 +11373,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
 msgstr "Simuleringsindstillinger"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:80
-msgid "Diode"
-msgstr "Diode"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:81
-msgid "BJT"
-msgstr "BJT"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:82
-msgid "MOSFET"
-msgstr "MOSFET"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:83
-msgid "JFET"
-msgstr "JFET"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:84
-msgid "Subcircuit"
-msgstr "Underkredsløb"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
-msgid "Code Model"
-msgstr "Model"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:497
-msgid ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-msgstr ""
-"Symbol PIN-nummerering stemmer ikke altid overens med den krævede SPICE-pin-"
-"rækkefølge\n"
-"Kontroller symbolet, og brug \"Alternativ knudepunktssekvens\" til at "
-"omorganisere benene, hvis det er nødvendigt"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:506
-msgid "For a Diode, pin order is anode, cathode"
-msgstr "For en diode er pin-rækkefølge anode, katode"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:510
-msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr ""
-"For en BJT er stiftbestilling kollektor, base, emitter, substrat (valgfri)"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:514
-#, fuzzy
-msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "For en MOSFET er pin ordre afløb, gitter, kilde"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:518
-#, fuzzy
-msgid "For a JFET, pin order is drain, gate, source"
-msgstr "For en JFET er pin ordre afløb, gitter, kilde"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
-msgid "Invalid Impedance value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
-msgid "Invalid delay value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
-msgid "Invalid frequency value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
-msgid "Invalid length in wavelength value"
-msgstr "Alternativt pin-navn"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
-msgid "Invalid resistance value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
-msgid "Invalid capacitance value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
-msgid "Invalid inductance value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
-msgid "Invalid conductance value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
-msgid "Invalid length value"
-msgstr "Ugyldig Spice-værdistreng"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1066
-#, c-format
-msgid ""
-"You need to specify at least the first %d parameters for the transient source"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1075
-msgid ""
-"You cannot leave interleaved empty fields when defining a transient source"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1292
-msgid "Select library"
-msgstr "Vælg bibliotek"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1360
-#: eeschema/dialogs/dialog_spice_model_base.cpp:885
-msgid "Range:"
-msgstr "Rækkevidde:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1361
-#: eeschema/dialogs/dialog_spice_model.cpp:1373
-#: eeschema/dialogs/dialog_spice_model.cpp:1379
-#: eeschema/dialogs/dialog_spice_model_base.cpp:675
-#: eeschema/dialogs/dialog_spice_model_base.cpp:779
-#: eeschema/dialogs/dialog_spice_model_base.cpp:895
-msgid "Offset:"
-msgstr "Forskydning:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1366
-msgid "Standard deviation:"
-msgstr "Standardafvigelse:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1367
-#: eeschema/dialogs/dialog_spice_model.cpp:1372
-msgid "Mean:"
-msgstr "Betyde:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1378
-msgid "Lambda:"
-msgstr "Lambda:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1383
-msgid "type of random generator for source is invalid"
-msgstr "typen af tilfældig generator for kilden er ugyldig"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:30
-#: eeschema/dialogs/dialog_spice_model_base.cpp:233
-#: eeschema/dialogs/dialog_spice_model_base.cpp:850
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-msgid "Type:"
-msgstr "Type:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:34
-#: eeschema/dialogs/dialog_spice_model_base.cpp:35
-msgid "Resistor"
-msgstr "Modstand"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:36
-msgid "Capacitor"
-msgstr "Kondensator"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:37
-msgid "Inductor"
-msgstr "Spole"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:41
-msgid "Passive type"
-msgstr "Passiv type"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:54
-msgid "Spice value in simulation"
-msgstr "Spice værdi i simulering"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
-msgid ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-msgstr ""
-"I Spice-værdier er decimalseparatoren punktet.\n"
-"Værdier kan bruge Spice unit symboler."
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:71
-msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Spice unit symboler i værdier (store og små bogstaver):"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
-msgid "Library:"
-msgstr "Bibliotek:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:220
-msgid "Select file..."
-msgstr "Vælg fil ..."
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:226
-msgid "Model:"
-msgstr "Model:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:240
-msgid "Note:"
-msgstr "Bemærk:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:244
-msgid "note"
-msgstr "Bemærk"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:294
-msgid "Model"
-msgstr "Model"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:302
-msgid "DC/AC Analysis"
-msgstr "DC / AC-analyse"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:311
-msgid "DC:"
-msgstr "DC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:320
-#: eeschema/dialogs/dialog_spice_model_base.cpp:342
-#: eeschema/dialogs/dialog_spice_model_base.cpp:385
-#: eeschema/dialogs/dialog_spice_model_base.cpp:396
-#: eeschema/dialogs/dialog_spice_model_base.cpp:476
-#: eeschema/dialogs/dialog_spice_model_base.cpp:487
-#: eeschema/dialogs/dialog_spice_model_base.cpp:545
-#: eeschema/dialogs/dialog_spice_model_base.cpp:556
-#: eeschema/dialogs/dialog_spice_model_base.cpp:645
-#: eeschema/dialogs/dialog_spice_model_base.cpp:684
-#: eeschema/dialogs/dialog_spice_model_base.cpp:695
-#: eeschema/dialogs/dialog_spice_model_base.cpp:775
-#: eeschema/dialogs/dialog_spice_model_base.cpp:786
-msgid "Volts/Amps"
-msgstr "Volt / forstærkere"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:333
-msgid "AC magnitude:"
-msgstr "AC-størrelse:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:346
-msgid "AC phase:"
-msgstr "AC-fase:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:355
-msgid "radians"
-msgstr "radianer"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:366
-msgid "Transient Analysis"
-msgstr "Forbigående analyse"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:376
-#: eeschema/dialogs/dialog_spice_model_base.cpp:536
-msgid "Initial value:"
-msgstr "Startværdi:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:389
-#: eeschema/dialogs/dialog_spice_model_base.cpp:549
-msgid "Pulsed value:"
-msgstr "Pulseret værdi:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:400
-msgid "Delay time:"
-msgstr "Forsinkelse:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:411
-msgid "Rise time:"
-msgstr "Tid til at stå op:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:422
-msgid "Fall time:"
-msgstr "Falltid:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:433
-msgid "Pulse width:"
-msgstr "Pulsbredde:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:444
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
-msgid "Period:"
-msgstr "Periode:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:459
-msgid "Pulse"
-msgstr "Puls"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:467
-msgid "DC offset:"
-msgstr "DC-forskydning:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:480
-#: eeschema/dialogs/dialog_spice_model_base.cpp:688
-#: eeschema/dialogs/dialog_spice_model_base.cpp:766
-msgid "Amplitude:"
-msgstr "Amplitude:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:491
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
-msgid "Frequency:"
-msgstr "Frekvens:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:498
-#: eeschema/dialogs/dialog_spice_model_base.cpp:983
-#: pcb_calculator/widgets/unit_selector.cpp:103
-msgid "Hz"
-msgstr "Hz"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:502
-msgid "Delay:"
-msgstr "Forsinke:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:513
-msgid "Damping factor:"
-msgstr "Dæmpningsfaktor:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:520
-msgid "1/seconds"
-msgstr "1 / sekunder"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:528
-msgid "Sinusoidal"
-msgstr "Sinusformet"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:560
-msgid "Rise delay time:"
-msgstr "Stigning forsinkelsestid:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:571
-msgid "Rise time constant:"
-msgstr "Stig tidskonstant:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:582
-msgid "Fall delay time:"
-msgstr "Fallforsinkelsestid:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:593
-msgid "Fall time constant:"
-msgstr "Falltidskonstant:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:608
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Exponential"
-msgstr "Eksponentiel"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:610
-msgid "Piece-wise linear"
-msgstr "Stykkevis lineær"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:625
-msgid "Time:"
-msgstr "Varighed:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:634
-msgid "second"
-msgstr "anden"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:667
-msgid "Piece-wise Linear"
-msgstr "Stykkevis lineær"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:699
-#: eeschema/dialogs/dialog_spice_model_base.cpp:801
-msgid "Carrier frequency:"
-msgstr "Bærefrekvens:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:710
-msgid "Modulation index:"
-msgstr "Modulationsindeks:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:717
-#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
-msgid "-"
-msgstr "-"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:721
-msgid "Signal frequency:"
-msgstr "Signalfrekvens:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:732
-#: eeschema/dialogs/dialog_spice_model_base.cpp:823
-msgid "Carrier phase:"
-msgstr "Transportørfase:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:739
-#: eeschema/dialogs/dialog_spice_model_base.cpp:750
-#: eeschema/dialogs/dialog_spice_model_base.cpp:830
-msgid "degrees"
-msgstr "grader"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:743
-msgid "Signal phase:"
-msgstr "Signalfase:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:758
-msgid "FM"
-msgstr "FM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:790
-msgid "Modulating frequency:"
-msgstr "Modulerende frekvens:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:812
-msgid "Signal delay:"
-msgstr "Signalforsinkelse:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:838
-msgid "AM"
-msgstr "AM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:842
-msgid "Transient noise"
-msgstr "Forbigående støj"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Uniform"
-msgstr "Uniform"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Gaussian"
-msgstr "Gaussisk"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Poisson"
-msgstr "Poisson"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:863
-msgid "Individual value duration:"
-msgstr "Varighed af individuel værdi:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:874
-msgid "Time delay:"
-msgstr "Tidsforsinkelse:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:909
-msgid "Random"
-msgstr "Tilfældig"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:913
-msgid "External data"
-msgstr "Eksterne data"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:366
-msgid "Voltage"
-msgstr "Spænding"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
-msgid "Current"
-msgstr "Nuværende"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:922
-msgid "Source Type"
-msgstr "Kildetype"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:930
-msgid "Source"
-msgstr "Kilde"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
-msgid "Line model"
-msgstr "Liniefarve:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:954
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:183
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:291
-#: pcb_calculator/transline_ident.cpp:373
-#: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
-msgid "Characteristic impedance"
-msgstr "Karakteristisk impedans"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:961
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
-#, fuzzy
-msgid "ohm"
-msgstr "Ohm"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:965
-msgid "Propagation delay"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
-#, fuzzy
-msgid "s"
-msgstr "ns"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:976
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
-#: pcb_calculator/transline_ident.cpp:108
-msgid "Frequency"
-msgstr "Frekvens"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
-msgid "Length in wavelength"
-msgstr "Længde i pakke"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-#, fuzzy
-msgid "Use time delay"
-msgstr "Tidsforsinkelse:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use frequency and number of wavelength"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
-msgid "Delay / Electrical length"
-msgstr "Elektrisk længde"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1010
-msgid "Lossless"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1024
-msgid "Resistance per unit length"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1031
-msgid "ohm / unit"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-#, fuzzy
-msgid "Inductance per unit length"
-msgstr "Ledningslængde:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1042
-msgid "henry / unit"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1046
-msgid "Capacitance per unit length"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1053
-msgid "farad / unit"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-#, fuzzy
-msgid "Conductance per unit length"
-msgstr "Ledningslængde:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-msgid "siemens / unit"
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
-msgid "Extra parameters"
-msgstr "Forkerte parametre"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1092
-msgid ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
-msgid "Lossy"
-msgstr "Tab Tg"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
-msgid "Transmission Line"
-msgstr "Transmissionslinjetype"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1118
-msgid "Disable symbol for simulation"
-msgstr "Deaktiver symbol til simulering"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1124
-msgid "Alternate node sequence:"
-msgstr "Alternativ nodesekvens:"
-
-#: eeschema/dialogs/dialog_spice_model_base.h:289
-msgid "Spice Model Editor"
-msgstr "Spice Model Editor"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:89
 #: eeschema/fields_grid_table.cpp:801
@@ -13135,7 +12510,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Et af kaldenavnene skal ændres efter tilføjelse af dette bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:522
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1067
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Skip"
@@ -13218,8 +12593,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1068
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1081
 #: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1468
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1520
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1469
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
@@ -13388,22 +12763,22 @@ msgstr "Forskellige fodspor tildelt %s og %s"
 msgid "Pins with \"no connection\" type are connected"
 msgstr "Stifter med \"ingen forbindelse\" -type er forbundet"
 
-#: eeschema/erc.cpp:546
+#: eeschema/erc.cpp:557
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "Stifter af typen %s og %s er forbundet"
 
-#: eeschema/erc.cpp:616
+#: eeschema/erc.cpp:627
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Stift %s er forbundet til både %s og %s"
 
-#: eeschema/erc.cpp:718 pcbnew/drc/drc_test_provider_library_parity.cpp:493
+#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "Den aktuelle konfiguration inkluderer ikke biblioteket '%s'."
 
-#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:507
+#: eeschema/erc.cpp:740 pcbnew/drc/drc_test_provider_library_parity.cpp:507
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "Biblioteket '%s' er ikke aktiveret i den aktuelle konfiguration."
@@ -13534,7 +12909,7 @@ msgid "Bus Entry needed"
 msgstr "Busindgang nødvendig"
 
 #: eeschema/fields_grid_table.cpp:221 eeschema/files-io.cpp:795
-#: eeschema/tools/sch_editor_control.cpp:102
+#: eeschema/tools/sch_editor_control.cpp:103
 msgid "Schematic Files"
 msgstr "Skematiske filer"
 
@@ -13844,7 +13219,7 @@ msgid ""
 "shown every time the schematic editor is launched."
 msgstr ""
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1465
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1492
 msgid "Alias of"
 msgstr "Alias for"
 
@@ -14111,10 +13486,16 @@ msgid "Could not find library file %s."
 msgstr "Kunne ikke finde biblioteksfilen %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:371
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:297
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
+#, fuzzy, c-format
+msgid "Could not find library file '%s'"
+msgstr "Kunne ikke finde biblioteksfilen %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, fuzzy, c-format
@@ -14150,7 +13531,7 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
 "Ingen alternativ kropsstil fundet for symbolet \"%s\" i biblioteket \"%s\"."
 
-#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:63
+#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 #, fuzzy
 msgid "none"
 msgstr "Ingen"
@@ -14338,8 +13719,8 @@ msgstr "Skematisk paritet"
 msgid "New schematic file is unsaved"
 msgstr "Ny skematisk fil er ikke gemt"
 
-#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1638
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:524
+#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1645
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:525
 #: eeschema/symbol_editor/symbol_editor.cpp:1197
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:676 pcbnew/footprint_edit_frame.cpp:716
@@ -15216,7 +14597,7 @@ msgstr "Filnavn"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarkisk ark %s"
 
-#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:341
+#: eeschema/sch_sheet_path.cpp:62 include/board_item.h:341
 msgid "(Deleted Item)"
 msgstr "(Slettet vare)"
 
@@ -15225,36 +14606,36 @@ msgstr "(Slettet vare)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarkisk arknål %s"
 
-#: eeschema/sch_symbol.cpp:1443
+#: eeschema/sch_symbol.cpp:1470
 msgid "Power symbol"
 msgstr "Power symbol"
 
-#: eeschema/sch_symbol.cpp:1453
+#: eeschema/sch_symbol.cpp:1480
 msgid "flags"
 msgstr "flag"
 
-#: eeschema/sch_symbol.cpp:1458
+#: eeschema/sch_symbol.cpp:1485
 msgid "Missing parent"
 msgstr "Manglende forælder"
 
-#: eeschema/sch_symbol.cpp:1473
+#: eeschema/sch_symbol.cpp:1500
 msgid "Undefined!!!"
 msgstr "Udefineret !!!"
 
-#: eeschema/sch_symbol.cpp:1480
+#: eeschema/sch_symbol.cpp:1507
 msgid "<Unknown>"
 msgstr "<Ukendt>"
 
-#: eeschema/sch_symbol.cpp:1499
+#: eeschema/sch_symbol.cpp:1526
 msgid "No library defined!"
 msgstr "Intet bibliotek defineret!"
 
-#: eeschema/sch_symbol.cpp:1501
+#: eeschema/sch_symbol.cpp:1528
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbol ikke fundet i %s!"
 
-#: eeschema/sch_symbol.cpp:1692
+#: eeschema/sch_symbol.cpp:1719
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
@@ -15763,6 +15144,21 @@ msgstr "Opret nyt ark"
 msgid "Discard New Sheet"
 msgstr "Kassér nyt ark"
 
+#: eeschema/sim/sim_model.cpp:827
+#, fuzzy, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "Kan ikke parse '%s' i '%s'"
+
+#: eeschema/sim/sim_model.cpp:1347
+#, c-format
+msgid "%s describes %lu pins, expected %u"
+msgstr ""
+
+#: eeschema/sim/sim_model_ideal.cpp:115
+#, fuzzy, c-format
+msgid "Failed to infer model from Value '%s'"
+msgstr "Kunne ikke oprette filen \"%s\""
+
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -15814,58 +15210,58 @@ msgstr "Simuleringsindstillinger"
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1472
+#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1479
 msgid "There were errors during netlist export, aborted."
 msgstr "Der var fejl under netlisteksporten, afbrudt."
 
-#: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1847
+#: eeschema/sim/sim_plot_frame.cpp:492 eeschema/sim/sim_plot_frame.cpp:1852
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "%s kører allerede. Blive ved?"
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:519
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:649
 msgid "Error: simulation type not defined!\n"
 msgstr "Fejl: simulationstype ikke defineret!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:655
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Fejl: simulationstype understøtter ikke tegning!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:826 eeschema/sim/sim_plot_frame.cpp:1680
+#: eeschema/sim/sim_plot_frame.cpp:833 eeschema/sim/sim_plot_frame.cpp:1687
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1104
+#: eeschema/sim/sim_plot_frame.cpp:1111
 msgid "noname"
 msgstr "intet navn"
 
-#: eeschema/sim/sim_plot_frame.cpp:1153
+#: eeschema/sim/sim_plot_frame.cpp:1160
 msgid "Open simulation workbook"
 msgstr "Åbn simulation-projektmappe"
 
-#: eeschema/sim/sim_plot_frame.cpp:1182
+#: eeschema/sim/sim_plot_frame.cpp:1189
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Gem simuleringsarbejdsbog"
 
-#: eeschema/sim/sim_plot_frame.cpp:1198
+#: eeschema/sim/sim_plot_frame.cpp:1205
 msgid "Save Plot as Image"
 msgstr "Gem plot som billede"
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot Data"
 msgstr "Gem plotdata"
 
-#: eeschema/sim/sim_plot_frame.cpp:1520
+#: eeschema/sim/sim_plot_frame.cpp:1527
 msgid "You need to run plot-providing simulation first."
 msgstr "Du skal først køre plot-tilvejebringende simulering."
 
-#: eeschema/sim/sim_plot_frame.cpp:1778
+#: eeschema/sim/sim_plot_frame.cpp:1783
 msgid ""
 "\n"
 "\n"
@@ -15877,19 +15273,19 @@ msgstr ""
 "Simuleringsresultater:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Hide Signal"
 msgstr "Skjul signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Erase the signal from plot screen"
 msgstr "Slet signalet fra plotskærmen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1873
+#: eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Hide Cursor"
 msgstr "Skjul markør"
 
-#: eeschema/sim/sim_plot_frame.cpp:1875
+#: eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Show Cursor"
 msgstr "Vis markør"
 
@@ -15968,6 +15364,11 @@ msgstr "Signaler"
 msgid "Cursors"
 msgstr "Markører"
 
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: pcb_calculator/transline_ident.cpp:108
+msgid "Frequency"
+msgstr "Frekvens"
+
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "Forstærkning"
@@ -15983,6 +15384,14 @@ msgstr "støj [(V eller A) ^ 2 / Hz]"
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "Tid"
+
+#: eeschema/sim/sim_plot_panel.cpp:366
+msgid "Voltage"
+msgstr "Spænding"
+
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
+msgid "Current"
+msgstr "Nuværende"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
@@ -16006,6 +15415,11 @@ msgstr "Temperaturstigning:"
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "Spænding (målt)"
+
+#: eeschema/sim/sim_value.cpp:385
+#, fuzzy
+msgid "Unknown SIM_VALUE type"
+msgstr "Ukendt metode"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16228,7 +15642,7 @@ msgid "KiCad Symbol Editor"
 msgstr "Symbol Editor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:71
 msgid "Loading Symbol Libraries"
 msgstr "Indlæser symbolbiblioteker"
@@ -16247,23 +15661,23 @@ msgstr "Biblioteksændringer er ikke gemt"
 msgid "Symbol library loading was cancelled by user."
 msgstr "Bibliotek %s findes allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:597
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:598
 #: eeschema/symbol_viewer_frame.cpp:540 eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "Enhed %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:754
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "Redigeringssymbol %s fra skematisk. Lagring opdaterer kun skematisk."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:763
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:764
 msgid "Manage symbol libraries"
 msgstr "Administrer symbolbiblioteker"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:774
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -16271,22 +15685,22 @@ msgstr ""
 "Symboler i ældre biblioteker kan ikke redigeres. Brug Manage Symbol "
 "Libraries til at migrere til det aktuelle format."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:785
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Symbol %s er afledt af %s. Symbolgrafik kan ikke redigeres."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:788
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:789
 #, c-format
 msgid "Open %s"
 msgstr "Åbn %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Bibliotek %s findes allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:870
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -16295,47 +15709,47 @@ msgstr ""
 "Kunne ikke oprette biblioteksfilen '%s'.\n"
 "Tjek skrivetilladelse."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:880
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:881
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "Kunne ikke åbne biblioteksfilen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:957
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:958
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Indlæser bibliotek \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1048
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
 msgstr "Vil du føje biblioteket til den globale biblioteketabel?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1050
 #: pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
 msgstr "Føj til den globale biblioteketabel"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1059
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1062
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
 msgstr "Vælg biblioteketabellen for at føje biblioteket til:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1064
 #: pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
 msgstr "Føj til biblioteketabel"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1095
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1096
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Kunne ikke gemme sikkerhedskopien til \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:467
 #, c-format
 msgid ""
@@ -16345,12 +15759,12 @@ msgstr ""
 "Den aktuelle konfiguration inkluderer ikke biblioteket '%s'.\n"
 "Brug Manage Symbol Libraries til at redigere konfigurationen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1267
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1268
 #: eeschema/symbol_viewer_frame.cpp:470
 msgid "Library not found in symbol library table."
 msgstr "Biblioteket blev ikke fundet i symbolbiblioteketabellen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1275
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1276
 #: eeschema/symbol_viewer_frame.cpp:474
 #, c-format
 msgid ""
@@ -16360,13 +15774,13 @@ msgstr ""
 "Biblioteket '%s' er ikke aktiveret i den aktuelle konfiguration.\n"
 "Brug Manage Symbol Libraries til at redigere konfigurationen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1278
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1279
 #: eeschema/symbol_viewer_frame.cpp:477
 msgid "Symbol library not enabled."
 msgstr "Symbolbiblioteket ikke aktiveret."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1465
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1517
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -16374,8 +15788,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1467
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1519
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -17932,7 +17346,7 @@ msgstr "Flyt"
 msgid "Moves the selected item(s)"
 msgstr "Flytter det (de) valgte element (er)"
 
-#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:730
+#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:743
 msgid "Drag"
 msgstr "Træk"
 
@@ -18072,49 +17486,49 @@ msgstr "Indtast sidenummer for arkstien %s"
 msgid "Edit Sheet Page Number"
 msgstr "Rediger sidetal"
 
-#: eeschema/tools/sch_editor_control.cpp:139
+#: eeschema/tools/sch_editor_control.cpp:140
 #, fuzzy, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Gendan \"%s\" til den sidste version gemt?"
 
-#: eeschema/tools/sch_editor_control.cpp:563
+#: eeschema/tools/sch_editor_control.cpp:564
 msgid "Reached end of schematic."
 msgstr "Nået slutningen af skematisk."
 
-#: eeschema/tools/sch_editor_control.cpp:564
+#: eeschema/tools/sch_editor_control.cpp:565
 msgid "Reached end of sheet."
 msgstr "Nået til slutningen af arket."
 
-#: eeschema/tools/sch_editor_control.cpp:568
+#: eeschema/tools/sch_editor_control.cpp:569
 msgid "Find again to wrap around to the start."
 msgstr "Find igen for at vikle rundt til starten."
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:1036
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Fejl: duplikat af underarknavne fundet i det aktuelle ark."
 
-#: eeschema/tools/sch_editor_control.cpp:1069
+#: eeschema/tools/sch_editor_control.cpp:1128
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net skal mærkes for at tildele en netklasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1075
+#: eeschema/tools/sch_editor_control.cpp:1134
 #, fuzzy
 msgid "Bus has no members to assign netclass to."
 msgstr "Net skal mærkes for at tildele en netklasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1108
+#: eeschema/tools/sch_editor_control.cpp:1167
 msgid "Netclasses"
 msgstr "Netklasser"
 
-#: eeschema/tools/sch_editor_control.cpp:1121
+#: eeschema/tools/sch_editor_control.cpp:1180
 msgid "Assign Netclass"
 msgstr "Tildel netklasse"
 
-#: eeschema/tools/sch_editor_control.cpp:1122
+#: eeschema/tools/sch_editor_control.cpp:1181
 msgid "Select netclass:"
 msgstr "Vælg netklasse:"
 
-#: eeschema/tools/sch_editor_control.cpp:1731
+#: eeschema/tools/sch_editor_control.cpp:1790
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18125,21 +17539,21 @@ msgstr ""
 "blev droppet, fordi destinationen allerede har arket eller et af dets "
 "underark som forælder."
 
-#: eeschema/tools/sch_editor_control.cpp:2295
+#: eeschema/tools/sch_editor_control.cpp:2354
 #: pcbnew/tools/board_editor_control.cpp:590
 #: pcbnew/tools/footprint_editor_control.cpp:719
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplikerede id'er udskiftet.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2302
+#: eeschema/tools/sch_editor_control.cpp:2361
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:734
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentielle problemer repareret."
 
-#: eeschema/tools/sch_editor_control.cpp:2309
+#: eeschema/tools/sch_editor_control.cpp:2368
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ingen fejl fundet."
@@ -20667,6 +20081,10 @@ msgstr "Layout"
 msgid "Size: %.1fx%.1fmm"
 msgstr "Størrelse: %.1f x %.1f mm"
 
+#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
+msgid "-"
+msgstr "-"
+
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Y start:"
@@ -21366,142 +20784,147 @@ msgstr "Belagt pude: (diam - bor)"
 msgid "NP Pad: (diam - drill)"
 msgstr "NP Pad: (diam - bor)"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 #, fuzzy
 msgid "AWG0000"
 msgstr "0000"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
 msgstr ""
+
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
+#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "Elektrisk modstand i Ohm * m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -21524,59 +20947,84 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
+msgid "Conductor resistivity:"
+msgstr "Modstandsevne:"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
+msgid "..."
+msgstr "..."
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:88
+#, fuzzy
 msgid "Linear resistance:"
 msgstr "Termisk modstand:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
 #, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 #, fuzzy
 msgid "Ampacity:"
 msgstr "Gennemsigtighed:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 #, fuzzy
 msgid "Application"
 msgstr "Hjælperapplikationer"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
 #, fuzzy
 msgid "Current:"
 msgstr "Nuværende"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 #, fuzzy
 msgid "Length:"
 msgstr "Længde"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
 msgstr "Modstand:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:153
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:168
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
+#, fuzzy
+msgid "ohm"
+msgstr "Ohm"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
 msgid "Voltage drop:"
 msgstr "Spændingsfald:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
 #, fuzzy
 msgid "mV"
 msgstr "V"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 msgid "mW"
 msgstr ""
 
@@ -21832,6 +21280,11 @@ msgstr "Spor tykkelse:"
 msgid "Time to fuse:"
 msgstr "Tidstrin:"
 
+#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
+#, fuzzy
+msgid "s"
+msgstr "ns"
+
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 #, fuzzy
 msgid "PCB Calculator data file"
@@ -21870,6 +21323,11 @@ msgstr "Vref indstillet til 0!"
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
 msgstr "Forkert værdi for R1 R2"
+
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
+msgid "Type:"
+msgstr "Type:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -22077,16 +21535,6 @@ msgstr "Substratparametre"
 msgid "Er:"
 msgstr "Er:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
-msgid "..."
-msgstr "..."
-
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 #, fuzzy
 msgid "Tan delta:"
@@ -22130,6 +21578,11 @@ msgstr "Ledningslængde:"
 msgid "Component Parameters"
 msgstr "Komponentparametre"
 
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
+msgid "Frequency:"
+msgstr "Frekvens:"
+
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:229
 msgid "Physical Parameters"
 msgstr "Fysiske parametre"
@@ -22156,10 +21609,6 @@ msgstr "Resultater"
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
 msgstr "Relative dielektriske konstanter"
-
-#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "Elektrisk modstand i Ohm * m"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
@@ -22324,6 +21773,10 @@ msgstr "Induktiv reaktans for given stigetid og beregnet induktans"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
 msgstr "Set ovenfra via"
+
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
+msgid "Period:"
+msgstr "Periode:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
@@ -22748,6 +22201,17 @@ msgstr "Liniebredde:"
 msgid "Line length"
 msgstr "Linjelængde"
 
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:373
+#: pcb_calculator/transline_ident.cpp:412
+#, fuzzy
+msgid "Characteristic impedance"
+msgstr "Karakteristisk impedans"
+
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:220
@@ -22946,6 +22410,10 @@ msgstr "MHz"
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
 msgstr "kHz"
+
+#: pcb_calculator/widgets/unit_selector.cpp:103
+msgid "Hz"
+msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 #, fuzzy
@@ -24465,45 +23933,73 @@ msgstr "Oprydningsspor og Vias"
 msgid "Constraints Resolution Report"
 msgstr "Rapport om begrænsninger"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:202
+#: pcbnew/dialogs/dialog_copper_zones.cpp:210
 #, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "Spor & Via egenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones.cpp:214
 #, fuzzy
 msgid "Teardrop on Tracks Properties"
 msgstr "Indstil spor og via egenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:210
+#: pcbnew/dialogs/dialog_copper_zones.cpp:218
 #, fuzzy
 msgid "Teardrop Properties"
 msgstr "Gruppeegenskaber"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones.cpp:225
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
+#: pcbnew/tools/convert_tool.cpp:57
+#, fuzzy
+msgid "Conversion Settings"
+msgstr "Indstillinger for pad-optælling"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
+#: pcbnew/tools/convert_tool.cpp:66
+#, fuzzy
+msgid "Ignore source object line widths"
+msgstr "Forøg linjebredden"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
+#: pcbnew/tools/convert_tool.cpp:70
+#, fuzzy
+msgid "Delete source objects after conversion"
+msgstr "Slet filerne og deres indhold"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:242
+#, fuzzy
+msgid "Convert to Copper Zone"
+msgstr "Forbindelse til kobberzoner"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:440
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
 msgid "Chamfer distance:"
 msgstr "Afkørselsafstand:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:405
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
+#: pcbnew/dialogs/dialog_copper_zones.cpp:442
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:142
 msgid "Fillet radius:"
 msgstr "Filetradius:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:551
+#: pcbnew/dialogs/dialog_copper_zones.cpp:594
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Termisk egerbredde kan ikke være mindre end minimumsbredden."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:580
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:264
+#: pcbnew/dialogs/dialog_copper_zones.cpp:623
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:311
 msgid "No layer selected."
 msgstr "Intet lag valgt."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:923
+#: pcbnew/dialogs/dialog_copper_zones.cpp:967
 #, fuzzy
-msgid "Selecting <no net> will create an isolated copper island."
+msgid "<no net> will result in an isolated copper island."
 msgstr ""
 "Intet netto vil resultere\n"
 "i en ikke-forbundet\n"
@@ -27501,6 +26997,11 @@ msgstr "Slet spor, der kortere flere net"
 msgid "Import Netlist"
 msgstr "Importér Netlist"
 
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
+#, fuzzy
+msgid "Convert to Non Copper Zone"
+msgstr "Forbindelse til kobberzoner"
+
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
 msgstr "Konturstil:"
@@ -29094,7 +28595,16 @@ msgstr "Modificer ikke elektroder med en anden type"
 msgid "Push Pad Properties"
 msgstr "Push Pad egenskaber"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:160
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
+#, fuzzy
+msgid "Conversion settings:"
+msgstr "Indstillinger for pad-optælling"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
+msgid "Convert to Rule Area"
+msgstr "Konverter til regelområde"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:206
 msgid "No layers selected."
 msgstr "Ingen lag valgt."
 
@@ -37532,24 +37042,24 @@ msgstr "Handlinger"
 msgid "Assertions for:"
 msgstr ""
 
-#: pcbnew/tools/convert_tool.cpp:77
+#: pcbnew/tools/convert_tool.cpp:149
 #, fuzzy
 msgid "Create from Selection"
 msgstr "Fjern fra markering"
 
-#: pcbnew/tools/convert_tool.cpp:226
+#: pcbnew/tools/convert_tool.cpp:360
 msgid "Convert shapes to polygon"
 msgstr "Konverter figurer til polygon"
 
-#: pcbnew/tools/convert_tool.cpp:272
+#: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to zone"
 msgstr "Konverter figurer til zone"
 
-#: pcbnew/tools/convert_tool.cpp:781
+#: pcbnew/tools/convert_tool.cpp:818
 msgid "Convert polygons to lines"
 msgstr "Konverter polygoner til linjer"
 
-#: pcbnew/tools/convert_tool.cpp:869
+#: pcbnew/tools/convert_tool.cpp:906
 msgid "Create arc from line segment"
 msgstr "Opret bue fra linjesegment"
 
@@ -37802,7 +37312,7 @@ msgstr "Valg kopieret"
 msgid "Copy canceled"
 msgstr "Kopi annulleret"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:351
+#: pcbnew/tools/edit_tool_move_fct.cpp:352
 msgid "Select reference point for move..."
 msgstr "Vælg referencepunkt for flytning ..."
 
@@ -40275,6 +39785,12 @@ msgstr "Slet forudindstilling"
 msgid "Select preset:"
 msgstr "Vælg forudindstilling:"
 
+#: pcbnew/widgets/appearance_controls.cpp:2671
+#: pcbnew/widgets/appearance_controls_base.cpp:182
+#, fuzzy
+msgid "Viewports (Alt+Tab):"
+msgstr "(Ctrl + Tab)"
+
 #: pcbnew/widgets/appearance_controls.cpp:3215
 msgid "Open Preferences"
 msgstr "Åben præferencer"
@@ -40489,22 +40005,22 @@ msgstr "Genopfyldning"
 msgid "Continue without Refill"
 msgstr "Fortsæt uden påfyldning"
 
-#: pcbnew/zones.h:62
+#: pcbnew/zones.h:64
 #, fuzzy
 msgid "inherited"
 msgstr "Arvet"
 
-#: pcbnew/zones.h:64
+#: pcbnew/zones.h:66
 #, fuzzy
 msgid "thermal reliefs"
 msgstr "Termiske relieffer"
 
-#: pcbnew/zones.h:65
+#: pcbnew/zones.h:67
 #, fuzzy
 msgid "solid"
 msgstr "Massiv"
 
-#: pcbnew/zones.h:66
+#: pcbnew/zones.h:68
 #, fuzzy
 msgid "thermal reliefs for PTH"
 msgstr "Termiske relieffer"
@@ -40659,6 +40175,346 @@ msgstr "Rediger skematisk"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-printkortfiler"
+
+#~ msgid "Reformat passive symbol values"
+#~ msgstr "Omformater passive symbolværdier"
+
+#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
+#~ msgstr "Omformater passive symbolværdier f.eks. 1M -> 1Meg"
+
+#~ msgid "Diode"
+#~ msgstr "Diode"
+
+#~ msgid "BJT"
+#~ msgstr "BJT"
+
+#~ msgid "MOSFET"
+#~ msgstr "MOSFET"
+
+#~ msgid "JFET"
+#~ msgstr "JFET"
+
+#~ msgid "Subcircuit"
+#~ msgstr "Underkredsløb"
+
+#~ msgid ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+#~ msgstr ""
+#~ "Symbol PIN-nummerering stemmer ikke altid overens med den krævede SPICE-"
+#~ "pin-rækkefølge\n"
+#~ "Kontroller symbolet, og brug \"Alternativ knudepunktssekvens\" til at "
+#~ "omorganisere benene, hvis det er nødvendigt"
+
+#~ msgid "For a Diode, pin order is anode, cathode"
+#~ msgstr "For en diode er pin-rækkefølge anode, katode"
+
+#~ msgid ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+#~ msgstr ""
+#~ "For en BJT er stiftbestilling kollektor, base, emitter, substrat (valgfri)"
+
+#, fuzzy
+#~ msgid "For a MOSFET, pin order is drain, gate, source"
+#~ msgstr "For en MOSFET er pin ordre afløb, gitter, kilde"
+
+#, fuzzy
+#~ msgid "For a JFET, pin order is drain, gate, source"
+#~ msgstr "For en JFET er pin ordre afløb, gitter, kilde"
+
+#, fuzzy
+#~ msgid "Invalid Impedance value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid delay value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid frequency value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid length in wavelength value"
+#~ msgstr "Alternativt pin-navn"
+
+#, fuzzy
+#~ msgid "Invalid resistance value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid capacitance value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid inductance value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid conductance value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#, fuzzy
+#~ msgid "Invalid length value"
+#~ msgstr "Ugyldig Spice-værdistreng"
+
+#~ msgid "Select library"
+#~ msgstr "Vælg bibliotek"
+
+#~ msgid "Range:"
+#~ msgstr "Rækkevidde:"
+
+#~ msgid "Offset:"
+#~ msgstr "Forskydning:"
+
+#~ msgid "Standard deviation:"
+#~ msgstr "Standardafvigelse:"
+
+#~ msgid "Mean:"
+#~ msgstr "Betyde:"
+
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "type of random generator for source is invalid"
+#~ msgstr "typen af tilfældig generator for kilden er ugyldig"
+
+#~ msgid "Resistor"
+#~ msgstr "Modstand"
+
+#~ msgid "Capacitor"
+#~ msgstr "Kondensator"
+
+#~ msgid "Inductor"
+#~ msgstr "Spole"
+
+#~ msgid "Passive type"
+#~ msgstr "Passiv type"
+
+#~ msgid "Spice value in simulation"
+#~ msgstr "Spice værdi i simulering"
+
+#, fuzzy
+#~ msgid ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+#~ msgstr ""
+#~ "I Spice-værdier er decimalseparatoren punktet.\n"
+#~ "Værdier kan bruge Spice unit symboler."
+
+#~ msgid "Spice unit symbols in values (case insensitive):"
+#~ msgstr "Spice unit symboler i værdier (store og små bogstaver):"
+
+#~ msgid "Library:"
+#~ msgstr "Bibliotek:"
+
+#~ msgid "Select file..."
+#~ msgstr "Vælg fil ..."
+
+#~ msgid "Model:"
+#~ msgstr "Model:"
+
+#~ msgid "Note:"
+#~ msgstr "Bemærk:"
+
+#~ msgid "note"
+#~ msgstr "Bemærk"
+
+#~ msgid "Model"
+#~ msgstr "Model"
+
+#~ msgid "DC/AC Analysis"
+#~ msgstr "DC / AC-analyse"
+
+#~ msgid "DC:"
+#~ msgstr "DC:"
+
+#~ msgid "Volts/Amps"
+#~ msgstr "Volt / forstærkere"
+
+#~ msgid "AC magnitude:"
+#~ msgstr "AC-størrelse:"
+
+#~ msgid "AC phase:"
+#~ msgstr "AC-fase:"
+
+#~ msgid "radians"
+#~ msgstr "radianer"
+
+#~ msgid "Transient Analysis"
+#~ msgstr "Forbigående analyse"
+
+#~ msgid "Initial value:"
+#~ msgstr "Startværdi:"
+
+#~ msgid "Pulsed value:"
+#~ msgstr "Pulseret værdi:"
+
+#~ msgid "Delay time:"
+#~ msgstr "Forsinkelse:"
+
+#~ msgid "Rise time:"
+#~ msgstr "Tid til at stå op:"
+
+#~ msgid "Fall time:"
+#~ msgstr "Falltid:"
+
+#~ msgid "Pulse width:"
+#~ msgstr "Pulsbredde:"
+
+#~ msgid "Pulse"
+#~ msgstr "Puls"
+
+#~ msgid "DC offset:"
+#~ msgstr "DC-forskydning:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Amplitude:"
+
+#~ msgid "Delay:"
+#~ msgstr "Forsinke:"
+
+#~ msgid "Damping factor:"
+#~ msgstr "Dæmpningsfaktor:"
+
+#~ msgid "1/seconds"
+#~ msgstr "1 / sekunder"
+
+#~ msgid "Sinusoidal"
+#~ msgstr "Sinusformet"
+
+#~ msgid "Rise delay time:"
+#~ msgstr "Stigning forsinkelsestid:"
+
+#~ msgid "Rise time constant:"
+#~ msgstr "Stig tidskonstant:"
+
+#~ msgid "Fall delay time:"
+#~ msgstr "Fallforsinkelsestid:"
+
+#~ msgid "Fall time constant:"
+#~ msgstr "Falltidskonstant:"
+
+#~ msgid "Exponential"
+#~ msgstr "Eksponentiel"
+
+#~ msgid "Piece-wise linear"
+#~ msgstr "Stykkevis lineær"
+
+#~ msgid "Time:"
+#~ msgstr "Varighed:"
+
+#~ msgid "second"
+#~ msgstr "anden"
+
+#~ msgid "Piece-wise Linear"
+#~ msgstr "Stykkevis lineær"
+
+#~ msgid "Carrier frequency:"
+#~ msgstr "Bærefrekvens:"
+
+#~ msgid "Modulation index:"
+#~ msgstr "Modulationsindeks:"
+
+#~ msgid "Signal frequency:"
+#~ msgstr "Signalfrekvens:"
+
+#~ msgid "Carrier phase:"
+#~ msgstr "Transportørfase:"
+
+#~ msgid "degrees"
+#~ msgstr "grader"
+
+#~ msgid "Signal phase:"
+#~ msgstr "Signalfase:"
+
+#~ msgid "FM"
+#~ msgstr "FM"
+
+#~ msgid "Modulating frequency:"
+#~ msgstr "Modulerende frekvens:"
+
+#~ msgid "Signal delay:"
+#~ msgstr "Signalforsinkelse:"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "Transient noise"
+#~ msgstr "Forbigående støj"
+
+#~ msgid "Uniform"
+#~ msgstr "Uniform"
+
+#~ msgid "Gaussian"
+#~ msgstr "Gaussisk"
+
+#~ msgid "Poisson"
+#~ msgstr "Poisson"
+
+#~ msgid "Individual value duration:"
+#~ msgstr "Varighed af individuel værdi:"
+
+#~ msgid "Time delay:"
+#~ msgstr "Tidsforsinkelse:"
+
+#~ msgid "Random"
+#~ msgstr "Tilfældig"
+
+#~ msgid "External data"
+#~ msgstr "Eksterne data"
+
+#~ msgid "Source Type"
+#~ msgstr "Kildetype"
+
+#~ msgid "Source"
+#~ msgstr "Kilde"
+
+#, fuzzy
+#~ msgid "Line model"
+#~ msgstr "Liniefarve:"
+
+#, fuzzy
+#~ msgid "Length in wavelength"
+#~ msgstr "Længde i pakke"
+
+#, fuzzy
+#~ msgid "Use time delay"
+#~ msgstr "Tidsforsinkelse:"
+
+#, fuzzy
+#~ msgid "Delay / Electrical length"
+#~ msgstr "Elektrisk længde"
+
+#, fuzzy
+#~ msgid "Inductance per unit length"
+#~ msgstr "Ledningslængde:"
+
+#, fuzzy
+#~ msgid "Conductance per unit length"
+#~ msgstr "Ledningslængde:"
+
+#, fuzzy
+#~ msgid "Extra parameters"
+#~ msgstr "Forkerte parametre"
+
+#, fuzzy
+#~ msgid "Lossy"
+#~ msgstr "Tab Tg"
+
+#, fuzzy
+#~ msgid "Transmission Line"
+#~ msgstr "Transmissionslinjetype"
+
+#~ msgid "Disable symbol for simulation"
+#~ msgstr "Deaktiver symbol til simulering"
+
+#~ msgid "Alternate node sequence:"
+#~ msgstr "Alternativ nodesekvens:"
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "Spice Model Editor"
 
 #~ msgid "GerbView"
 #~ msgstr "GerbView"
@@ -41949,9 +41805,6 @@ msgstr "KiCad-printkortfiler"
 
 #~ msgid "Convert to Polygon"
 #~ msgstr "Konverter til polygon"
-
-#~ msgid "Convert to Rule Area"
-#~ msgstr "Konverter til regelområde"
 
 #~ msgid "Convert to Lines"
 #~ msgstr "Konverter til linjer"

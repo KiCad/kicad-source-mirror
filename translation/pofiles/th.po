@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 16:34-0700\n"
+"POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -93,13 +93,13 @@ msgstr "เราไม่สนับสนุน OpenGL ของคุณ ต
 msgid "Last render time %.0f ms"
 msgstr "เวลาเรนเดอร์ล่าสุด %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:657
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:660
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "เน็ต %s เน็ตคลาส %s ชื่อแพ็ด %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:682
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:695
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:685
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "เน็ต %s เน็ตคลาส %s"
@@ -252,31 +252,30 @@ msgstr "มุมมอง(&V)"
 msgid "&Preferences"
 msgstr "ตั้งความชอบ(&P)"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:54
-#: pcbnew/widgets/appearance_controls.cpp:2671
-#: pcbnew/widgets/appearance_controls_base.cpp:182
-msgid "Viewports (Alt+Tab):"
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
+#, fuzzy
+msgid "Viewports (Shift+Tab):"
 msgstr "ช่องมอง (Alt+Tab):"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
 msgid "Save viewport..."
 msgstr "บันทึกช่องมอง..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2680
 msgid "Delete viewport..."
 msgstr "ลบช่องมอง..."
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
 msgstr "อ่านบอร์ดอีกครั้ง"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:76
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:77
 msgid "Copy 3D image to clipboard"
 msgstr "สำเนาภาพ3มิติใส่คลิปบอร์ด"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:81
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:82
 msgid "Render current view using Raytracing"
 msgstr "เรนเดอร์มุมมองปัจจุบันใช้เรย์เทรสซิ่ง"
 
@@ -285,44 +284,44 @@ msgstr "เรนเดอร์มุมมองปัจจุบันใช
 msgid "KiCad 3D Viewer"
 msgstr "เครื่องมือแสดง3มิติของ KiCad"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 msgid "Viewport name:"
 msgstr "ชื่อช่องมอง:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2728
 msgid "Save Viewport"
 msgstr "บันทึกช่องมอง"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:550
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2766
 msgid "Viewports"
 msgstr "ช่องมอง"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:559
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2775
 msgid "Delete Viewport"
 msgstr "ลบช่องมอง"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:560
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2776
 msgid "Select viewport:"
 msgstr "เลือกช่องมอง:"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:762
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:760
 msgid "3D Image File Name"
 msgstr "ชื่อไฟล์ภาพ3มิติ"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:783
-#: common/eda_base_frame.cpp:1120 common/eda_base_frame.cpp:1125
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
+#: common/eda_base_frame.cpp:1123 common/eda_base_frame.cpp:1128
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "ไม่มีสิทธิเพียงพอเพื่อบันทึกไฟล์ '%s'."
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:784 common/confirm.cpp:130
-#: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782 common/confirm.cpp:131
+#: common/confirm.cpp:309 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:828 eeschema/files-io.cpp:900
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
@@ -337,11 +336,11 @@ msgstr "ไม่มีสิทธิเพียงพอเพื่อบั
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:817
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:815
 msgid "Failed to copy image to clipboard"
 msgstr "สำเนาภาพไปคลิปบอร์ดล้มเหลว"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:828
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Can't save file"
 msgstr "ไม่สามารถบันทึกไฟล์"
 
@@ -1404,19 +1403,19 @@ msgid ""
 "bugtracker."
 msgstr "ประเด็นใดๆของ KiCad ในระบบนี้ ไม่สามารถรายงานไปยังระบบติดตามผิดพลาดอย่างทางการ"
 
-#: common/confirm.cpp:57
+#: common/confirm.cpp:58
 msgid "Do not show again"
 msgstr "ไม่แสดงอีกต่อไป"
 
-#: common/confirm.cpp:127
+#: common/confirm.cpp:128
 msgid "Message"
 msgstr "ข้อความ"
 
-#: common/confirm.cpp:128
+#: common/confirm.cpp:129
 msgid "Question"
 msgstr "คำถาม"
 
-#: common/confirm.cpp:129 common/confirm.cpp:284
+#: common/confirm.cpp:130 common/confirm.cpp:291
 #: common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1316
@@ -1433,17 +1432,17 @@ msgstr "คำถาม"
 msgid "Warning"
 msgstr "ระวัง"
 
-#: common/confirm.cpp:160 common/confirm.cpp:166
+#: common/confirm.cpp:161 common/confirm.cpp:167
 #, fuzzy
 msgid "File Open Warning"
 msgstr "การเปิดไฟล์ผิดพลาด"
 
-#: common/confirm.cpp:162 common/confirm.cpp:168
+#: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
 msgstr "การบันทึกแบบแทรกสอดอาจสร้างผลลัพธ์ที่ไม่คาดหวัง"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:233
-#: common/confirm.cpp:260 common/tool/actions.cpp:121
+#: common/confirm.cpp:165 common/confirm.cpp:170 common/confirm.cpp:234
+#: common/confirm.cpp:261 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:392
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1344
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
@@ -1453,19 +1452,19 @@ msgstr "การบันทึกแบบแทรกสอดอาจสร
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: common/confirm.cpp:164 common/confirm.cpp:169
+#: common/confirm.cpp:165 common/confirm.cpp:170
 msgid "Open Anyway"
 msgstr "เปิดต่อไป"
 
-#: common/confirm.cpp:180 common/confirm.cpp:217
+#: common/confirm.cpp:181 common/confirm.cpp:218
 msgid "Save Changes?"
 msgstr "บันทึกเปลี่ยนแปลงหรือไม่?"
 
-#: common/confirm.cpp:182 common/confirm.cpp:219
+#: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "ถ้าคุณไม่บันทึก,การแก้ไขทั้งหมดจะสูญหายถาวร"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
+#: common/confirm.cpp:185 common/confirm.cpp:221 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 #: eeschema/symbol_editor/symbol_editor.cpp:621
 #: eeschema/widgets/tuner_slider_base.cpp:74
@@ -1473,33 +1472,33 @@ msgstr "ถ้าคุณไม่บันทึก,การแก้ไข�
 msgid "Save"
 msgstr "บันทึก"
 
-#: common/confirm.cpp:184 common/confirm.cpp:220
+#: common/confirm.cpp:185 common/confirm.cpp:221
 msgid "Discard Changes"
 msgstr "ล้างทิ้งการแก้ไข"
 
-#: common/confirm.cpp:187 common/confirm.cpp:266
+#: common/confirm.cpp:188 common/confirm.cpp:267
 msgid "Apply to all"
 msgstr "นำไปใช้กับทั้งหมด"
 
-#: common/confirm.cpp:232
+#: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
 msgstr "การแก้ไขของคุณจะสูญหายถาวร"
 
-#: common/confirm.cpp:233 common/tool/actions.cpp:91
+#: common/confirm.cpp:234 common/tool/actions.cpp:91
 msgid "Revert"
 msgstr "ย้อนกลับ"
 
-#: common/confirm.cpp:259 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
+#: common/confirm.cpp:260 eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:539
 msgid "OK"
 msgstr "ตกลง"
 
-#: common/confirm.cpp:312
+#: common/confirm.cpp:331
 msgid "Information"
 msgstr "ข้อมูล"
 
-#: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:412
+#: common/confirm.cpp:344 eeschema/symbol_editor/symbol_editor.cpp:412
 #: eeschema/symbol_editor/symbol_editor.cpp:726
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
@@ -1517,7 +1516,7 @@ msgstr "คำยืนยัน"
 #: common/dialog_about/AboutDialog_main.cpp:115
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:240
-#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1485
+#: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1512
 #: eeschema/symbol_editor/symbol_editor.cpp:591
 #: eeschema/symbol_editor/symbol_editor.cpp:1292
 #: eeschema/symbol_viewer_frame.cpp:442 include/lib_table_grid.h:185
@@ -1770,8 +1769,6 @@ msgid "Saturation:"
 msgstr "ความอิ่มสี:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45
-#: eeschema/dialogs/dialog_spice_model_base.cpp:638
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:29
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_text_properties.cpp:92
@@ -1897,8 +1894,8 @@ msgstr "ตัวแปรสภาพแวดล้อม"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:298
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/fields_grid_table.cpp:335 eeschema/lib_pin.cpp:1086
-#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1449
-#: eeschema/sch_symbol.cpp:1494 eeschema/symbol_editor/symbol_editor.cpp:1264
+#: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1476
+#: eeschema/sch_symbol.cpp:1521 eeschema/symbol_editor/symbol_editor.cpp:1264
 #: eeschema/symbol_viewer_frame.cpp:440
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -1992,33 +1989,6 @@ msgstr "เลือกไฟล์ตารางไลบรารี %s ส�
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:40
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
-#: eeschema/dialogs/dialog_spice_model_base.cpp:81
-#: eeschema/dialogs/dialog_spice_model_base.cpp:85
-#: eeschema/dialogs/dialog_spice_model_base.cpp:89
-#: eeschema/dialogs/dialog_spice_model_base.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:97
-#: eeschema/dialogs/dialog_spice_model_base.cpp:101
-#: eeschema/dialogs/dialog_spice_model_base.cpp:105
-#: eeschema/dialogs/dialog_spice_model_base.cpp:109
-#: eeschema/dialogs/dialog_spice_model_base.cpp:113
-#: eeschema/dialogs/dialog_spice_model_base.cpp:117
-#: eeschema/dialogs/dialog_spice_model_base.cpp:121
-#: eeschema/dialogs/dialog_spice_model_base.cpp:125
-#: eeschema/dialogs/dialog_spice_model_base.cpp:129
-#: eeschema/dialogs/dialog_spice_model_base.cpp:133
-#: eeschema/dialogs/dialog_spice_model_base.cpp:137
-#: eeschema/dialogs/dialog_spice_model_base.cpp:141
-#: eeschema/dialogs/dialog_spice_model_base.cpp:145
-#: eeschema/dialogs/dialog_spice_model_base.cpp:149
-#: eeschema/dialogs/dialog_spice_model_base.cpp:153
-#: eeschema/dialogs/dialog_spice_model_base.cpp:157
-#: eeschema/dialogs/dialog_spice_model_base.cpp:161
-#: eeschema/dialogs/dialog_spice_model_base.cpp:165
-#: eeschema/dialogs/dialog_spice_model_base.cpp:169
-#: eeschema/dialogs/dialog_spice_model_base.cpp:173
-#: eeschema/dialogs/dialog_spice_model_base.cpp:177
-#: eeschema/dialogs/dialog_spice_model_base.cpp:181
-#: eeschema/dialogs/dialog_spice_model_base.cpp:185
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:142
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:154
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:166
@@ -2395,7 +2365,6 @@ msgstr "ผู้ใช้กำหนดความสูงกระดาษ
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:325
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:373
 #: eeschema/dialogs/dialog_line_properties_base.cpp:39
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:39
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:281
@@ -2535,7 +2504,7 @@ msgid "Revision:"
 msgstr "รุ่นแก้ไขที่:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist.cpp:386
+#: eeschema/dialogs/dialog_netlist.cpp:402
 msgid "Title:"
 msgstr "ไตเติ้ล:"
 
@@ -2629,7 +2598,7 @@ msgstr "พริวิวก่อนพิมพ์"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:101 eeschema/dialogs/dialog_erc.cpp:430
-#: eeschema/dialogs/dialog_netlist.cpp:261
+#: eeschema/dialogs/dialog_netlist.cpp:264
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2771,11 +2740,11 @@ msgstr "ตั้งค่าหน้ากระดาษ…"
 msgid "MyLabel"
 msgstr "ป้ายของฉัน"
 
-#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:123
+#: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:124
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:773
 #: eeschema/symbol_viewer_frame.cpp:163 eeschema/symbol_viewer_frame.cpp:178
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
-#: pcbnew/dialogs/dialog_copper_zones.cpp:220
+#: pcbnew/dialogs/dialog_copper_zones.cpp:251
 #: pcbnew/footprint_viewer_frame.cpp:152 pcbnew/footprint_viewer_frame.cpp:167
 msgid "Filter"
 msgstr "กรอง"
@@ -3575,14 +3544,14 @@ msgid "Line Style"
 msgstr "สไตล์เส้น"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1631
-#: common/pgm_base.cpp:84 common/stroke_params.cpp:200
+#: common/pgm_base.cpp:85 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1111 include/stroke_params.h:79
+#: eeschema/tools/sch_editor_control.cpp:1170 include/stroke_params.h:79
 msgid "Default"
 msgstr "ค่าปริยาย"
 
@@ -3733,11 +3702,11 @@ msgstr "ข้อมูล"
 msgid "Save..."
 msgstr "บันทึก…"
 
-#: common/draw_panel_gal.cpp:294 common/draw_panel_gal.cpp:464
+#: common/draw_panel_gal.cpp:299 common/draw_panel_gal.cpp:469
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "ไม่สามารถใช้ OpenGL, กลับไปใช้เรนเดอร์ด้วยซอฟต์แวร์"
 
-#: common/draw_panel_gal.cpp:300 common/draw_panel_gal.cpp:471
+#: common/draw_panel_gal.cpp:305 common/draw_panel_gal.cpp:476
 msgid "Could not use OpenGL"
 msgstr "ไม่สามารถใช้ OpenGL"
 
@@ -4036,12 +4005,12 @@ msgstr "ตัวเลือก Excellon"
 msgid "Drawing Sheet Editor"
 msgstr "เครื่องมือแก้ไขแผ่นกระดาษเขียนแบบ"
 
-#: common/eda_base_frame.cpp:1115
+#: common/eda_base_frame.cpp:1118
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "มีสิทธิไม่เพียงพอในโฟลเดอร์ '%s'"
 
-#: common/eda_base_frame.cpp:1157
+#: common/eda_base_frame.cpp:1160
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4055,7 +4024,7 @@ msgstr ""
 "%s\n"
 "ไม่ได้บันทึกอย่างถูกต้อง  คุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
 
-#: common/eda_base_frame.cpp:1173
+#: common/eda_base_frame.cpp:1176
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์บันทึกอัตโนมัติ เป็นชื่อเดียวกับไฟล์บอร์ด"
 
@@ -4086,7 +4055,8 @@ msgid "Inches"
 msgstr "นิ้ว"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:157
-#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/pcb_actions.cpp:703
+#: pcbnew/tools/drawing_tool.cpp:288 pcbnew/tools/edit_tool_move_fct.cpp:365
+#: pcbnew/tools/pcb_actions.cpp:703
 msgid "Constrain to H, V, 45"
 msgstr "จำกัดเป็น H, V, 45"
 
@@ -4148,7 +4118,7 @@ msgid "Screen"
 msgstr "จอภาพ"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
-#: eeschema/sch_symbol.cpp:1482 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1509 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:905
@@ -4357,8 +4327,7 @@ msgstr "เส้นโค้ง"
 #: common/eda_shape.cpp:592 common/eda_shape.cpp:617
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1094
-#: eeschema/sch_pin.cpp:223
+#: eeschema/lib_pin.cpp:1094 eeschema/sch_pin.cpp:223
 msgid "Length"
 msgstr "ความยาว"
 
@@ -5338,19 +5307,19 @@ msgstr "ประเภทไม่เหมือนกันระหว่า
 msgid "Type mismatch between %lf and '%s'"
 msgstr "ประเภทไม่เหมือนกันระหว่าง %lf และ '%s'"
 
-#: common/pgm_base.cpp:185
+#: common/pgm_base.cpp:186
 msgid "No default editor found, you must choose one."
 msgstr "ไม่พบเครื่องมือแก้ไขปริยาย,คุณต้องเลือก"
 
-#: common/pgm_base.cpp:205 common/pgm_base.cpp:207
+#: common/pgm_base.cpp:206 common/pgm_base.cpp:208
 msgid "Executable file"
 msgstr "ไฟล์ทำงานได้"
 
-#: common/pgm_base.cpp:217
+#: common/pgm_base.cpp:218
 msgid "Select Preferred Editor"
 msgstr "เลือกเครื่องมือแก้ไขที่ชอบ"
 
-#: common/pgm_base.cpp:341
+#: common/pgm_base.cpp:342
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5360,19 +5329,19 @@ msgid ""
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
 
-#: common/pgm_base.cpp:348
+#: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
 msgstr ""
 
-#: common/pgm_base.cpp:394
+#: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "ตัวแปรสภาพแวดล้อมชื่อ HOME ว่างเปล่า   ไม่สามารถทำงานต่อ"
 
-#: common/pgm_base.cpp:609
+#: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
 msgstr "ระบบปฏิบัติการไม่สนับสนุนภาษานี้"
 
-#: common/pgm_base.cpp:660 common/pgm_base.cpp:698
+#: common/pgm_base.cpp:664 common/pgm_base.cpp:702
 msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
@@ -5976,7 +5945,8 @@ msgid "Show Grid"
 msgstr "แสดงกริด"
 
 #: common/tool/actions.cpp:480
-msgid "Display grid dots or lines in the edit window"
+#, fuzzy
+msgid "Display background grid in the edit window"
 msgstr "แสดงกริดจุดหรือกริดเส้นในหน้าต่างแก้ไข"
 
 #: common/tool/actions.cpp:485
@@ -6503,47 +6473,47 @@ msgstr "คีย์ขณะนี้:"
 msgid "Set Hotkey"
 msgstr "ตั้งคีย์ร้อน"
 
-#: common/widgets/widget_hotkey_list.cpp:345
+#: common/widgets/widget_hotkey_list.cpp:351
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr "'%s' ถูกสงวนไว้ในคีย์ร้อนของ KiCad และไม่สามารถกำหนดซ้ำ"
 
-#: common/widgets/widget_hotkey_list.cpp:396
+#: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
 msgstr "แก้ไข…"
 
-#: common/widgets/widget_hotkey_list.cpp:397
+#: common/widgets/widget_hotkey_list.cpp:403
 msgid "Undo Changes"
 msgstr "ย้อนกลับเปลี่ยนแปลง"
 
-#: common/widgets/widget_hotkey_list.cpp:398
+#: common/widgets/widget_hotkey_list.cpp:404
 msgid "Clear Assigned Hotkey"
 msgstr "ล้างคีย์ร้อน"
 
-#: common/widgets/widget_hotkey_list.cpp:399
+#: common/widgets/widget_hotkey_list.cpp:405
 msgid "Restore Default"
 msgstr "ดึงค่ากลับเป็นปริยาย"
 
-#: common/widgets/widget_hotkey_list.cpp:435
+#: common/widgets/widget_hotkey_list.cpp:441
 #, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr "'%s' กำหนดให้ '%s' ในส่วน '%s' คุณแน่ใจว่าต้องการเปลี่ยน?"
 
-#: common/widgets/widget_hotkey_list.cpp:441
+#: common/widgets/widget_hotkey_list.cpp:447
 msgid "Confirm change"
 msgstr "ยืนยันการเปลี่ยน"
 
-#: common/widgets/widget_hotkey_list.cpp:461
+#: common/widgets/widget_hotkey_list.cpp:467
 msgid "Command"
 msgstr "คำสั่ง"
 
-#: common/widgets/widget_hotkey_list.cpp:464
+#: common/widgets/widget_hotkey_list.cpp:470
 msgid "(double-click to edit)"
 msgstr "(ดับเบิ้ลคลิกเพื่อแก้ไข)"
 
-#: common/widgets/widget_hotkey_list.cpp:467
+#: common/widgets/widget_hotkey_list.cpp:473
 msgid "Hotkey"
 msgstr "คีย์ร้อน"
 
@@ -6887,7 +6857,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
 #: cvpcb/cvpcb_mainframe.cpp:757 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1486 eeschema/symbol_editor/symbol_editor.cpp:1293
+#: eeschema/sch_symbol.cpp:1513 eeschema/symbol_editor/symbol_editor.cpp:1293
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/footprint.cpp:2678
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -6897,8 +6867,8 @@ msgstr "คำสำคัญ"
 msgid "Pin Count"
 msgstr "จำนวนขา"
 
-#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1469
-#: eeschema/sch_symbol.cpp:1473 eeschema/sch_symbol.cpp:1503
+#: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1496
+#: eeschema/sch_symbol.cpp:1500 eeschema/sch_symbol.cpp:1530
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1220
 msgid "Library"
@@ -6982,8 +6952,7 @@ msgstr "ไฟล์สัมพันธ์ระหว่างสัญลั
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
-#: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
 #: pcbnew/footprint_libraries_utils.cpp:532
 msgid "Add"
 msgstr "บวก"
@@ -6991,7 +6960,6 @@ msgstr "บวก"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:76
 #: eeschema/dialogs/dialog_bus_manager.cpp:110
-#: eeschema/dialogs/dialog_spice_model_base.cpp:660
 msgid "Remove"
 msgstr "นำออก"
 
@@ -7021,8 +6989,8 @@ msgstr "ตัวแปรสภาพแวดล้อมที่มีอย
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1024
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1448
-#: eeschema/sch_symbol.cpp:1493
+#: eeschema/fields_grid_table.cpp:336 eeschema/sch_symbol.cpp:1475
+#: eeschema/sch_symbol.cpp:1520
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7530,7 +7498,7 @@ msgstr "เพิ่มเครื่องสร้าง"
 msgid "Nickname '%s' already in use."
 msgstr "ชื่อเล่น '%s' ถูกใช้แล้ว"
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:702
 msgid "Generator File"
 msgstr "ไฟล์ผู้สร้าง"
 
@@ -9135,8 +9103,8 @@ msgstr "สามสถานะ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:162
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
-#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:56
-#: eeschema/pin_type.cpp:248 eeschema/sch_label.cpp:148
+#: eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:248
+#: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "แพสซีฟ"
 
@@ -9759,28 +9727,38 @@ msgstr "ยอมรับชื่อ"
 msgid "Migrate Buses"
 msgstr "โยกย้ายบัส"
 
-#: eeschema/dialogs/dialog_netlist.cpp:260
+#: eeschema/dialogs/dialog_netlist.cpp:263
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "ส่งออกรายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_netlist.cpp:298
+#: eeschema/dialogs/dialog_netlist.cpp:307
 msgid "Simulator requires a fully annotated schematic."
 msgstr "การจำลองต้องการวงจรที่ทำอธิบายประกอบสมบูรณ์แล้ว"
 
-#: eeschema/dialogs/dialog_netlist.cpp:324
-msgid "Reformat passive symbol values"
-msgstr "ปรับรูปแบบแสดงค่าของสัญลักษณ์แพสซีฟ"
+#: eeschema/dialogs/dialog_netlist.cpp:333
+#, fuzzy
+msgid "Save all voltages"
+msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
 
-#: eeschema/dialogs/dialog_netlist.cpp:325
-msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "ปรับรูปแบบแสดงค่าของสัญลักษณ์แพสซีฟ เช่น 1M เป็น 1Meg"
+#: eeschema/dialogs/dialog_netlist.cpp:334
+msgid "Write a directive to save all voltages (.save all)"
+msgstr ""
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:339
+#, fuzzy
+msgid "Save all currents"
+msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
+
+#: eeschema/dialogs/dialog_netlist.cpp:340
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr ""
+
+#: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
 msgstr "คำสั่งจำลองจากภายนอก:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:347
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -9790,37 +9768,37 @@ msgstr ""
 "โดยปกติแล้ว<พาธไปยังโปรแกรมสไปส์> %I\n"
 "%l จะถูกแทนที่ด้วยชื่อจริงของรายชื่อเน็ตสไปส์"
 
-#: eeschema/dialogs/dialog_netlist.cpp:345
+#: eeschema/dialogs/dialog_netlist.cpp:361
 msgid "Create Netlist and Run Simulator Command"
 msgstr "สร้างรายชื่อเน็ตและสั่งทำงานจำลองวงจร"
 
-#: eeschema/dialogs/dialog_netlist.cpp:396
+#: eeschema/dialogs/dialog_netlist.cpp:412
 msgid "Netlist command:"
 msgstr "คำสั่งสร้างรายชื่อเน็ต:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:439
+#: eeschema/dialogs/dialog_netlist.cpp:457
 msgid "Save Netlist File"
 msgstr "บันทึกไฟล์รายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_netlist.cpp:472
+#: eeschema/dialogs/dialog_netlist.cpp:492
 #, c-format
 msgid "%s Export"
 msgstr "ส่งออก %s"
 
-#: eeschema/dialogs/dialog_netlist.cpp:501
+#: eeschema/dialogs/dialog_netlist.cpp:521
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "การส่งออกรายชื่อเน็ตต้องการวงจรที่ทำอธิบายประกอบสมบูรณ์"
 
-#: eeschema/dialogs/dialog_netlist.cpp:625
+#: eeschema/dialogs/dialog_netlist.cpp:645
 msgid "This plugin already exists."
 msgstr "ปลั๊กอินนี้มีอยู่แล้ว"
 
-#: eeschema/dialogs/dialog_netlist.cpp:658
+#: eeschema/dialogs/dialog_netlist.cpp:678
 msgid "You must provide a netlist generator command string"
 msgstr "คุณต้องระบุข้อความคำสั่งสำหรับผู้สร้างรายชื่อเน็ต"
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:684
 msgid "You must provide a netlist generator title"
 msgstr "คุณต้องระบุไตเติ้ลของผู้สร้างรายชื่อเน็ต"
 
@@ -10045,8 +10023,8 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:296
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:100
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:38
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
@@ -10308,7 +10286,7 @@ msgstr "รับคำสั่ง"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1023
-#: eeschema/sch_symbol.cpp:1447 eeschema/sch_symbol.cpp:1491
+#: eeschema/sch_symbol.cpp:1474 eeschema/sch_symbol.cpp:1518
 #: pcbnew/footprint.cpp:2658 pcbnew/fp_text.cpp:267
 msgid "Reference"
 msgstr "อ้างอิง"
@@ -10499,7 +10477,7 @@ msgid "Electrical Rules"
 msgstr "กฎทางไฟฟ้า"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1061
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Project"
@@ -10722,6 +10700,21 @@ msgstr "คุณสมบัติชีต"
 msgid "Add signal by name:"
 msgstr "กำหนดสัญญาณด้วยชื่อ:"
 
+#: eeschema/dialogs/dialog_sim_model.cpp:401
+#, fuzzy, c-format
+msgid "Failed reading model library '%s'."
+msgstr "ล้มเหลวที่จะสร้างไฟล์ไลบรารีสัญลักษณ์ '%s'"
+
+#: eeschema/dialogs/dialog_sim_model.cpp:713
+#, fuzzy
+msgid "Browse Models"
+msgstr "โมเดลโค้ด"
+
+#: eeschema/dialogs/dialog_sim_model.h:62
+#, fuzzy, c-format
+msgid "No model named '%s' in library."
+msgstr "ชื่อเน็ต '%s' ถูกใช้แล้ว"
+
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
 msgstr "คุณต้องเลือกแหล่งกำเนิด DC"
@@ -10749,7 +10742,7 @@ msgstr "ออกโดยไม่กำหนดโปรแกรมจำล
 msgid "Configure Valid Simulation"
 msgstr "ปรับแต่งโปแกรมจำลองให้ถูกต้อง"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:586
+#: eeschema/dialogs/dialog_sim_settings.cpp:591
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:166
@@ -10759,11 +10752,11 @@ msgstr "ปรับแต่งโปแกรมจำลองให้ถู
 msgid "Volts"
 msgstr "โวลต์"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
+#: eeschema/dialogs/dialog_sim_settings.cpp:592
 msgid "Amperes"
 msgstr "แอมแปร์"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:588
+#: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
@@ -10802,10 +10795,6 @@ msgstr "ความถี่เริ่มต้น:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
-#: eeschema/dialogs/dialog_spice_model_base.cpp:706
-#: eeschema/dialogs/dialog_spice_model_base.cpp:728
-#: eeschema/dialogs/dialog_spice_model_base.cpp:797
-#: eeschema/dialogs/dialog_spice_model_base.cpp:808
 msgid "Hertz"
 msgstr "เฮิร์ซ"
 
@@ -10945,19 +10934,6 @@ msgstr "ขั้นของเวลา:"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:390
-#: eeschema/dialogs/dialog_spice_model_base.cpp:407
-#: eeschema/dialogs/dialog_spice_model_base.cpp:418
-#: eeschema/dialogs/dialog_spice_model_base.cpp:429
-#: eeschema/dialogs/dialog_spice_model_base.cpp:440
-#: eeschema/dialogs/dialog_spice_model_base.cpp:451
-#: eeschema/dialogs/dialog_spice_model_base.cpp:509
-#: eeschema/dialogs/dialog_spice_model_base.cpp:567
-#: eeschema/dialogs/dialog_spice_model_base.cpp:578
-#: eeschema/dialogs/dialog_spice_model_base.cpp:589
-#: eeschema/dialogs/dialog_spice_model_base.cpp:600
-#: eeschema/dialogs/dialog_spice_model_base.cpp:819
-#: eeschema/dialogs/dialog_spice_model_base.cpp:870
-#: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
 msgstr "วินาที"
 
@@ -11029,578 +11005,6 @@ msgstr "เอชสไปส์"
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
 msgstr "ตั้งค่าการจำลองวงจร"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:80
-msgid "Diode"
-msgstr "ไดโอด"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:81
-msgid "BJT"
-msgstr "บีเจที"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:82
-msgid "MOSFET"
-msgstr "มอสเฟ็ต"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:83
-msgid "JFET"
-msgstr "เจเฟ็ต"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:84
-msgid "Subcircuit"
-msgstr "วงจรย่อย"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:85
-msgid "Code Model"
-msgstr "โมเดลโค้ด"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:497
-msgid ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-msgstr ""
-"การกำหนดหมายเลขขาของสัญลักษณ์ ไม่ตรงกับลำดับขาในสไปส์\n"
-"ตรวจสอบสัญลักษณ์และใช้ \"ลำดับโหนดสำรอง\" เพื่อจัดลำดับขาใหม่ หากจำเป็น"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:506
-msgid "For a Diode, pin order is anode, cathode"
-msgstr "สำหรับไดโอด, ลำดับของขาคืออาโนด, คาโทด"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:510
-msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr "สำหรับบีเจทีลำดับของขาคือคอลเล็กเตอร์, เบส, อิมิตเตอร์, ซับสเตรส(ทางเลือก)"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:514
-msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "สำหรับมอสเฟ็ตขาเรียงคือเดรน,เกต,ซอส"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:518
-msgid "For a JFET, pin order is drain, gate, source"
-msgstr "สำหรับเจเฟ็ต ลำดับขาคือเดรน, เกต, ซอส"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:803
-msgid "Invalid Impedance value"
-msgstr "ค่าอิมพีแดนซ์ไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:818
-msgid "Invalid delay value"
-msgstr "ค่าความหน่วงไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:833
-msgid "Invalid frequency value"
-msgstr "ค่าความถี่ไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:845
-msgid "Invalid length in wavelength value"
-msgstr "ค่าความยาวคลื่นไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:870
-msgid "Invalid resistance value"
-msgstr "ค่าความต้านทานไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:881
-msgid "Invalid capacitance value"
-msgstr "ค่าตัวเก็บประจุไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:892
-msgid "Invalid inductance value"
-msgstr "ค่าตัวเหนี่ยวนำไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:903
-msgid "Invalid conductance value"
-msgstr "ค่าความนำไฟฟ้าไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:914
-msgid "Invalid length value"
-msgstr "ค่าความยาวไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1066
-#, c-format
-msgid ""
-"You need to specify at least the first %d parameters for the transient source"
-msgstr "คุณต้องระบุอย่างน้อย %d พารามิเตอร์สำหรับแหล่งทรานส์เชียน"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1075
-msgid ""
-"You cannot leave interleaved empty fields when defining a transient source"
-msgstr "คุณไม่สามารถปล่อยช่องว่างเมื่อกำหนดแหล่งกำเนิดทรานส์เชียน"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1292
-msgid "Select library"
-msgstr "เลือกไลบรารี"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1360
-#: eeschema/dialogs/dialog_spice_model_base.cpp:885
-msgid "Range:"
-msgstr "ระยะ:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1361
-#: eeschema/dialogs/dialog_spice_model.cpp:1373
-#: eeschema/dialogs/dialog_spice_model.cpp:1379
-#: eeschema/dialogs/dialog_spice_model_base.cpp:675
-#: eeschema/dialogs/dialog_spice_model_base.cpp:779
-#: eeschema/dialogs/dialog_spice_model_base.cpp:895
-msgid "Offset:"
-msgstr "ระยะเลื่อน:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1366
-msgid "Standard deviation:"
-msgstr "ค่าเบี่ยงเบนมาตฐาน:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1367
-#: eeschema/dialogs/dialog_spice_model.cpp:1372
-msgid "Mean:"
-msgstr "เฉลี่ย:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1378
-msgid "Lambda:"
-msgstr "แลมด้า:"
-
-#: eeschema/dialogs/dialog_spice_model.cpp:1383
-msgid "type of random generator for source is invalid"
-msgstr "ประเภทแหล่งกำเนิดแบบสุ่มไม่ถูกต้อง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:30
-#: eeschema/dialogs/dialog_spice_model_base.cpp:233
-#: eeschema/dialogs/dialog_spice_model_base.cpp:850
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-msgid "Type:"
-msgstr "ชนิด:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:34
-#: eeschema/dialogs/dialog_spice_model_base.cpp:35
-msgid "Resistor"
-msgstr "ความต้านทาน"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:36
-msgid "Capacitor"
-msgstr "คาปาซิเตอร์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:37
-msgid "Inductor"
-msgstr "อินดักเตอร์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:41
-msgid "Passive type"
-msgstr "ชนิดแพสซีฟ"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:54
-msgid "Spice value in simulation"
-msgstr "ค่าของสไปส์ในการจำลอง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:67
-msgid ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-msgstr ""
-"ในการกำหนดค่าของสไปส์, ใช้จุดเพื่อแยกทศนิยม\n"
-"และค่าสามารถใช้อักษรหน่วยของสไปส์ได้"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:71
-msgid "Spice unit symbols in values (case insensitive):"
-msgstr "สัญลักษณ์หน่วยของสไปส์ ใช้ในค่า (อักษรเล็กใหญ่สำคัญ):"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
-msgid "Library:"
-msgstr "ไลบรารี:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:220
-msgid "Select file..."
-msgstr "เลือกไฟล์…"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:226
-msgid "Model:"
-msgstr "โมเดล:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:240
-msgid "Note:"
-msgstr "บันทึก:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:244
-msgid "note"
-msgstr "บันทึก"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:294
-msgid "Model"
-msgstr "โมเดล"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:302
-msgid "DC/AC Analysis"
-msgstr "วิเคราะห์ DC/AC"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:311
-msgid "DC:"
-msgstr "DC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:320
-#: eeschema/dialogs/dialog_spice_model_base.cpp:342
-#: eeschema/dialogs/dialog_spice_model_base.cpp:385
-#: eeschema/dialogs/dialog_spice_model_base.cpp:396
-#: eeschema/dialogs/dialog_spice_model_base.cpp:476
-#: eeschema/dialogs/dialog_spice_model_base.cpp:487
-#: eeschema/dialogs/dialog_spice_model_base.cpp:545
-#: eeschema/dialogs/dialog_spice_model_base.cpp:556
-#: eeschema/dialogs/dialog_spice_model_base.cpp:645
-#: eeschema/dialogs/dialog_spice_model_base.cpp:684
-#: eeschema/dialogs/dialog_spice_model_base.cpp:695
-#: eeschema/dialogs/dialog_spice_model_base.cpp:775
-#: eeschema/dialogs/dialog_spice_model_base.cpp:786
-msgid "Volts/Amps"
-msgstr "โวลท์/แอมป์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:333
-msgid "AC magnitude:"
-msgstr "ขนาด AC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:346
-msgid "AC phase:"
-msgstr "เฟส AC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:355
-msgid "radians"
-msgstr "เรเดียน"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:366
-msgid "Transient Analysis"
-msgstr "วิเคราะห์ทราสเชียน"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:376
-#: eeschema/dialogs/dialog_spice_model_base.cpp:536
-msgid "Initial value:"
-msgstr "ค่าตั้งต้น:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:389
-#: eeschema/dialogs/dialog_spice_model_base.cpp:549
-msgid "Pulsed value:"
-msgstr "ค่าพัลส์:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:400
-msgid "Delay time:"
-msgstr "หน่วงเวลา:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:411
-msgid "Rise time:"
-msgstr "เวลาขาขึ้น:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:422
-msgid "Fall time:"
-msgstr "เวลาขาลง:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:433
-msgid "Pulse width:"
-msgstr "ความกว้างพัลส์:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:444
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
-msgid "Period:"
-msgstr "คาบ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:459
-msgid "Pulse"
-msgstr "พัลส์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:467
-msgid "DC offset:"
-msgstr "ออฟเซ็ต DC:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:480
-#: eeschema/dialogs/dialog_spice_model_base.cpp:688
-#: eeschema/dialogs/dialog_spice_model_base.cpp:766
-msgid "Amplitude:"
-msgstr "แอมปลิจูด:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:491
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
-msgid "Frequency:"
-msgstr "ความถี่:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:498
-#: eeschema/dialogs/dialog_spice_model_base.cpp:983
-#: pcb_calculator/widgets/unit_selector.cpp:103
-msgid "Hz"
-msgstr "Hz"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:502
-msgid "Delay:"
-msgstr "หน่วง:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:513
-msgid "Damping factor:"
-msgstr "แดมปิ้งแฟคเตอร์:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:520
-msgid "1/seconds"
-msgstr "1/วินาที"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:528
-msgid "Sinusoidal"
-msgstr "รูปร่างซายน์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:560
-msgid "Rise delay time:"
-msgstr "เวลาหน่วงขาขึ้น:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:571
-msgid "Rise time constant:"
-msgstr "เวลาขึ้นคงที่:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:582
-msgid "Fall delay time:"
-msgstr "เวลาหน่วงขาลง:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:593
-msgid "Fall time constant:"
-msgstr "เวลาขาลงคงที่:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:608
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Exponential"
-msgstr "เอ็กซ์โปเน้นเชียล"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:610
-msgid "Piece-wise linear"
-msgstr "เชิงเส้น piece-wise"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:625
-msgid "Time:"
-msgstr "เวลา:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:634
-msgid "second"
-msgstr "วินาที"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:667
-msgid "Piece-wise Linear"
-msgstr "เชิงเส้นแบบเพียส์ไวส์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:699
-#: eeschema/dialogs/dialog_spice_model_base.cpp:801
-msgid "Carrier frequency:"
-msgstr "ความถี่พาหะ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:710
-msgid "Modulation index:"
-msgstr "มอดดูเลชั่นอินเด็กซ์:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:717
-#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
-msgid "-"
-msgstr "-"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:721
-msgid "Signal frequency:"
-msgstr "ความถี่สัญญาณ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:732
-#: eeschema/dialogs/dialog_spice_model_base.cpp:823
-msgid "Carrier phase:"
-msgstr "เฟสพาหะ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:739
-#: eeschema/dialogs/dialog_spice_model_base.cpp:750
-#: eeschema/dialogs/dialog_spice_model_base.cpp:830
-msgid "degrees"
-msgstr "องศา"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:743
-msgid "Signal phase:"
-msgstr "เฟสของสัญญาณ:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:758
-msgid "FM"
-msgstr "FM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:790
-msgid "Modulating frequency:"
-msgstr "ความถี่ผสม:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:812
-msgid "Signal delay:"
-msgstr "สัญญาณหน่วง:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:838
-msgid "AM"
-msgstr "AM"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:842
-msgid "Transient noise"
-msgstr "ทรานส์เชียนน้อยส์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Uniform"
-msgstr "คงรูป"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Gaussian"
-msgstr "เกาส์เซี่ยน"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:854
-msgid "Poisson"
-msgstr "ปัวซอง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:863
-msgid "Individual value duration:"
-msgstr "ช่วงเวลาห่างแต่ละค่า:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:874
-msgid "Time delay:"
-msgstr "หน่วงเวลา:"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:909
-msgid "Random"
-msgstr "สุ่ม"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:913
-msgid "External data"
-msgstr "ข้อมูลภายนอก"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:366
-msgid "Voltage"
-msgstr "โวลท์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:920
-#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
-msgid "Current"
-msgstr "กระแส"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:922
-msgid "Source Type"
-msgstr "ชนิดแหล่งกำเนิด"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:930
-msgid "Source"
-msgstr "แหล่งกำเนิด"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:938
-msgid "Line model"
-msgstr "โมเดลเส้นตรง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:954
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:183
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:291
-#: pcb_calculator/transline_ident.cpp:373
-#: pcb_calculator/transline_ident.cpp:412
-msgid "Characteristic impedance"
-msgstr "คุณลักษณะอิมพีแดนซ์"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:961
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
-msgid "ohm"
-msgstr "โอห์ม"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:965
-msgid "Propagation delay"
-msgstr "ค่าหน่วงเวลา"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
-msgid "s"
-msgstr "s"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:976
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
-#: pcb_calculator/transline_ident.cpp:108
-msgid "Frequency"
-msgstr "ความถี่"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:987
-msgid "Length in wavelength"
-msgstr "ความยาวในความยาวคลื่น"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use time delay"
-msgstr "ใช้ค่าเวลาหน่วง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-msgid "Use frequency and number of wavelength"
-msgstr "ใช้ค่าความถี่และจำนวนนับของความยาวคลื่น"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-msgid "Delay / Electrical length"
-msgstr "ความหน่วง/ความยาวทางไฟฟ้า"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1010
-msgid "Lossless"
-msgstr "ไม่สูญเสีย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1024
-msgid "Resistance per unit length"
-msgstr "ค่าความต้านทานต่อหน่วยความยาว"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1031
-msgid "ohm / unit"
-msgstr "โอห์ม/หน่วย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-msgid "Inductance per unit length"
-msgstr "ค่าความเหนี่ยวนำต่อหน่วยความยาว"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1042
-msgid "henry / unit"
-msgstr "เฮ็นรี่/หน่วย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1046
-msgid "Capacitance per unit length"
-msgstr "ค่าความเก็บประจุต่อหน่วยความยาว"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1053
-msgid "farad / unit"
-msgstr "ฟารัด/หน่วย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-msgid "Conductance per unit length"
-msgstr "ความเหนี่ยวนำต่อหน่วยความยาว"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-msgid "siemens / unit"
-msgstr "ซีเมน/หน่วย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-msgid "Extra parameters"
-msgstr "พารามิเตอร์เพิ่มเติม"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1092
-msgid ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-msgstr ""
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-msgid "Lossy"
-msgstr "การสูญเสีย"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-msgid "Transmission Line"
-msgstr "สายส่งสัญญาณ"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1118
-msgid "Disable symbol for simulation"
-msgstr "ไม่ใช้สัญลักษณ์สำหรับจำลอง"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1124
-msgid "Alternate node sequence:"
-msgstr "ทางเลือกอื่นลำดับของโนด:"
-
-#: eeschema/dialogs/dialog_spice_model_base.h:289
-msgid "Spice Model Editor"
-msgstr "แก้ไขโมเดลสไปส์"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:89
 #: eeschema/fields_grid_table.cpp:801
@@ -12684,7 +12088,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "ชื่อเล่นจะต้องแก้ไข หลังจากเพิ่มเข้าในไลบรารีนี้"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:522
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1067
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1068
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Skip"
@@ -12762,8 +12166,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1068
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1081
 #: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1468
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1520
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1469
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
@@ -12927,22 +12331,22 @@ msgstr "มีการกำหนดฟุ้ทพรินท์ต่าง
 msgid "Pins with \"no connection\" type are connected"
 msgstr "ขาประเภท 'ไม่เชื่อมต่อ' ถูกเชื่อมต่อ"
 
-#: eeschema/erc.cpp:546
+#: eeschema/erc.cpp:557
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "ขาประเภท %s และ %s ถูกเชื่อมต่อเข้ากัน"
 
-#: eeschema/erc.cpp:616
+#: eeschema/erc.cpp:627
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "ขา %s ถูกเชื่อมต่อเข้ากับทั้ง %s และ %s"
 
-#: eeschema/erc.cpp:718 pcbnew/drc/drc_test_provider_library_parity.cpp:493
+#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "การปรับแต่งของปัจจุบันไม่รวมไลบรารี '%s'"
 
-#: eeschema/erc.cpp:729 pcbnew/drc/drc_test_provider_library_parity.cpp:507
+#: eeschema/erc.cpp:740 pcbnew/drc/drc_test_provider_library_parity.cpp:507
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "ไลบรารี '%s' ไม่เปิดใช้งานในการปรับแต่งปัจจุบัน"
@@ -13069,7 +12473,7 @@ msgid "Bus Entry needed"
 msgstr "ต้องมีทางเข้าบัส"
 
 #: eeschema/fields_grid_table.cpp:221 eeschema/files-io.cpp:795
-#: eeschema/tools/sch_editor_control.cpp:102
+#: eeschema/tools/sch_editor_control.cpp:103
 msgid "Schematic Files"
 msgstr "ไฟล์วงจร"
 
@@ -13365,7 +12769,7 @@ msgstr ""
 "ไฟล์นี้จะต้องลบออกด้วยตนเอง ไม่เช่นนั้นฟังก์ชั่นการบันทึกอัตโนมัติ\n"
 "จะแสดงทุกครั้งที่คุณเปิดโปรแกรมแก้ไขวงจร"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1465
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1492
 msgid "Alias of"
 msgstr "นามแฝงของ"
 
@@ -13622,12 +13026,18 @@ msgid "Could not find library file %s."
 msgstr "ไม่พบไฟล์ไลบรารี %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:371
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:297
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
 "สัญลักษณ์หลายตัวมีอักษรอ้างอิงเหมือนกัน\n"
 "ต้องแก้ไขคำอธิบายประกอบก่อนการจำลอง"
+
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
+#, fuzzy, c-format
+msgid "Could not find library file '%s'"
+msgstr "ไม่พบไฟล์ไลบรารี %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -13661,7 +13071,7 @@ msgstr "เลือกสัญลักษณ์ (%d สิ่งที่โ�
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "ไม่พบรูปแบบอื่นสำหรับสัญลักษณ์ '%s' ในไลบรารี '%s'"
 
-#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:63
+#: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:65
 #, fuzzy
 msgid "none"
 msgstr "<ไม่มี>"
@@ -13844,8 +13254,8 @@ msgstr "เท่าเทียมกับวงจร"
 msgid "New schematic file is unsaved"
 msgstr "ไม่ได้บันทึกไฟล์วงจรใหม่"
 
-#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1638
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:524
+#: eeschema/sch_edit_frame.cpp:777 eeschema/sim/sim_plot_frame.cpp:1645
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:525
 #: eeschema/symbol_editor/symbol_editor.cpp:1197
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:676 pcbnew/footprint_edit_frame.cpp:716
@@ -14644,7 +14054,7 @@ msgstr "ชื่อไฟล์"
 msgid "Hierarchical Sheet %s"
 msgstr "ชีตลำดับขั้น %s"
 
-#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:341
+#: eeschema/sch_sheet_path.cpp:62 include/board_item.h:341
 msgid "(Deleted Item)"
 msgstr "(ชิ้นส่วนที่ถูกลบ)"
 
@@ -14653,36 +14063,36 @@ msgstr "(ชิ้นส่วนที่ถูกลบ)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "ชีตพินแบบลำดับขั้น %s"
 
-#: eeschema/sch_symbol.cpp:1443
+#: eeschema/sch_symbol.cpp:1470
 msgid "Power symbol"
 msgstr "สัญลักษณ์เพาเวอร์"
 
-#: eeschema/sch_symbol.cpp:1453
+#: eeschema/sch_symbol.cpp:1480
 msgid "flags"
 msgstr "ธง"
 
-#: eeschema/sch_symbol.cpp:1458
+#: eeschema/sch_symbol.cpp:1485
 msgid "Missing parent"
 msgstr "ขาดต้นกำเนิด"
 
-#: eeschema/sch_symbol.cpp:1473
+#: eeschema/sch_symbol.cpp:1500
 msgid "Undefined!!!"
 msgstr "ไม่ได้กำหนด!!!"
 
-#: eeschema/sch_symbol.cpp:1480
+#: eeschema/sch_symbol.cpp:1507
 msgid "<Unknown>"
 msgstr "<ไม่ทราบ>"
 
-#: eeschema/sch_symbol.cpp:1499
+#: eeschema/sch_symbol.cpp:1526
 msgid "No library defined!"
 msgstr "ไม่มีการกําหนดไลบรารี!"
 
-#: eeschema/sch_symbol.cpp:1501
+#: eeschema/sch_symbol.cpp:1528
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "ไม่พบสัญลักษณ์ใน %s!"
 
-#: eeschema/sch_symbol.cpp:1692
+#: eeschema/sch_symbol.cpp:1719
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "สัญลักษณ์ %s [%s]"
@@ -15180,6 +14590,21 @@ msgstr "สร้างชีตใหม่"
 msgid "Discard New Sheet"
 msgstr "ทิ้งชีตใหม่"
 
+#: eeschema/sim/sim_model.cpp:827
+#, fuzzy, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "ไม่สามารถตีความ '%s' ใน '%s'"
+
+#: eeschema/sim/sim_model.cpp:1347
+#, c-format
+msgid "%s describes %lu pins, expected %u"
+msgstr ""
+
+#: eeschema/sim/sim_model_ideal.cpp:115
+#, fuzzy, c-format
+msgid "Failed to infer model from Value '%s'"
+msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
+
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
@@ -15229,56 +14654,56 @@ msgstr "พารามิเตอร์และการตั้งค่า
 msgid "Spice Simulator"
 msgstr "เครื่องจำลองสไปส์"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1472
+#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1479
 msgid "There were errors during netlist export, aborted."
 msgstr "มีข้อผิดพลาดระหว่างการส่งออกรายชื่อเน็ต,ถูกยกเลิก"
 
-#: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1847
+#: eeschema/sim/sim_plot_frame.cpp:492 eeschema/sim/sim_plot_frame.cpp:1852
 msgid "Another simulation is already running."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:519
 #, c-format
 msgid "Plot%u - "
 msgstr "พล็อต%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:649
 msgid "Error: simulation type not defined!\n"
 msgstr "ข้อผิดพลาด: ไม่ได้กำหนดประเภทการจำลอง!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:655
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "ข้อผิดพลาด: ประเภทการจำลองไม่รองรับการพล็อต!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:826 eeschema/sim/sim_plot_frame.cpp:1680
+#: eeschema/sim/sim_plot_frame.cpp:833 eeschema/sim/sim_plot_frame.cpp:1687
 msgid "Signal"
 msgstr "สัญญาณ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1104
+#: eeschema/sim/sim_plot_frame.cpp:1111
 msgid "noname"
 msgstr "ไม่มีชื่อ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1153
+#: eeschema/sim/sim_plot_frame.cpp:1160
 msgid "Open simulation workbook"
 msgstr "เปิดสมุดงานจำลอง"
 
-#: eeschema/sim/sim_plot_frame.cpp:1182
+#: eeschema/sim/sim_plot_frame.cpp:1189
 msgid "Save Simulation Workbook As"
 msgstr "บันทึกสมุดงานการจําลองเป็น"
 
-#: eeschema/sim/sim_plot_frame.cpp:1198
+#: eeschema/sim/sim_plot_frame.cpp:1205
 msgid "Save Plot as Image"
 msgstr "บันทึกพล็อตเป็นรูปภาพ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot Data"
 msgstr "บันทึกข้อมูลพล็อต"
 
-#: eeschema/sim/sim_plot_frame.cpp:1520
+#: eeschema/sim/sim_plot_frame.cpp:1527
 msgid "You need to run plot-providing simulation first."
 msgstr "คุณต้องเรียกใช้พล็อตภายในการจำลองก่อน"
 
-#: eeschema/sim/sim_plot_frame.cpp:1778
+#: eeschema/sim/sim_plot_frame.cpp:1783
 msgid ""
 "\n"
 "\n"
@@ -15290,19 +14715,19 @@ msgstr ""
 "ผลการจำลอง:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Hide Signal"
 msgstr "ซ่อนสัญญาณ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1867
+#: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Erase the signal from plot screen"
 msgstr "ลบสัญญาณออกจากหน้าจอพล็อต"
 
-#: eeschema/sim/sim_plot_frame.cpp:1873
+#: eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Hide Cursor"
 msgstr "ซ่อนเคอร์เซอร์"
 
-#: eeschema/sim/sim_plot_frame.cpp:1875
+#: eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Show Cursor"
 msgstr "แสดงเคอร์เซอร์"
 
@@ -15379,6 +14804,11 @@ msgstr "สัญญาณ"
 msgid "Cursors"
 msgstr "เคอร์เซอร์"
 
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: pcb_calculator/transline_ident.cpp:108
+msgid "Frequency"
+msgstr "ความถี่"
+
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "อัตราขยาย"
@@ -15394,6 +14824,14 @@ msgstr "เสียงรบกวน [(V หรือ A)^2/Hz]"
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "เวลา"
+
+#: eeschema/sim/sim_plot_panel.cpp:366
+msgid "Voltage"
+msgstr "โวลท์"
+
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
+msgid "Current"
+msgstr "กระแส"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
@@ -15414,6 +14852,11 @@ msgstr "อุณหภูมิ (กวาด)"
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "แรงดันไฟฟ้า (วัดได้)"
+
+#: eeschema/sim/sim_value.cpp:385
+#, fuzzy
+msgid "Unknown SIM_VALUE type"
+msgstr "ไม่รู้จักเมธอด"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -15618,7 +15061,7 @@ msgid "KiCad Symbol Editor"
 msgstr "ตัวแก้ไขสัญลักษณ์ KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:71
 msgid "Loading Symbol Libraries"
 msgstr "กำลังโหลดไลบรารีสัญลักษณ์"
@@ -15636,45 +15079,45 @@ msgstr "การเปลี่ยนแปลงไลบรารีไม่
 msgid "Symbol library loading was cancelled by user."
 msgstr "ยกเลิกการอ่านไลบรารีสัญลักษณ์โดยผู้ใช้"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:597
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:598
 #: eeschema/symbol_viewer_frame.cpp:540 eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "หน่วย %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:754
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "แก้ไขสัญลักษณ์ %s จากวงจร การบันทึกจะอัปเดตวงจรเท่านั้น"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:763
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:764
 msgid "Manage symbol libraries"
 msgstr "จัดการไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:774
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 "ไม่สามารถแก้ไขสัญลักษณ์ในไลบรารีดั้งเดิม  ใช้ จัดการไลบรารีสัญลักษณ์ เพื่อโยกย้ายไปยังรูปแบบปัจจุบัน"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:785
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "สัญลักษณ์ %s มาจาก %s กราฟิกสัญลักษณ์จะไม่สามารถแก้ไขได้"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:788
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:789
 #, c-format
 msgid "Open %s"
 msgstr "เปิด %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "มีไลบรารี '%s' อยู่แล้ว"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:869
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:870
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15683,47 +15126,47 @@ msgstr ""
 "ไม่สามารถสร้างไฟล์ไลบรารี '%s'\n"
 "ตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเขียนแล้วลองอีกครั้ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:880
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:881
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "ไม่สามารถเปิดไฟล์ไลบรารี"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:957
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:958
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "กําลังโหลดไลบรารี '%s'..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1048
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add the library to the global library table?"
 msgstr "เพิ่มไลบรารีลงในตารางไลบรารีส่วนกลางหรือไม่?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1049
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1050
 #: pcbnew/footprint_libraries_utils.cpp:513
 msgid "Add To Global Library Table"
 msgstr "เพิ่มลงในตารางไลบรารีส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1059
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1060
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Global"
 msgstr "ส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1062
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Choose the Library Table to add the library to:"
 msgstr "เลือกตารางไลบรารีเพื่อเพิ่มไลบรารีเข้าไป:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1063
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1064
 #: pcbnew/footprint_libraries_utils.cpp:527
 msgid "Add To Library Table"
 msgstr "เพิ่มลงในตารางไลบรารี"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1095
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1096
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "ล้มเหลวบันทึกข้อมูลสำรองไปที่ '%s'"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:467
 #, c-format
 msgid ""
@@ -15733,12 +15176,12 @@ msgstr ""
 "การปรับแต่งค่าปัจจุบันไม่รวมไลบรารี '%s'\n"
 "ใช้จัดการไลบรารีสัญลักษณ์เพื่อแก้ไขการปรับแต่ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1267
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1268
 #: eeschema/symbol_viewer_frame.cpp:470
 msgid "Library not found in symbol library table."
 msgstr "ไม่พบไลบรารีในตารางไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1275
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1276
 #: eeschema/symbol_viewer_frame.cpp:474
 #, c-format
 msgid ""
@@ -15748,18 +15191,18 @@ msgstr ""
 "ไลบรารี '%s' ไม่ได้เปิดใช้งานในการปรับแต่งปัจจุบัน\n"
 "ใช้ 'จัดการไลบรารีสัญลักษณ์' เพื่อแก้ไขค่าปรับแต่ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1278
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1279
 #: eeschema/symbol_viewer_frame.cpp:477
 msgid "Symbol library not enabled."
 msgstr "ไม่ได้เปิดใช้งานไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1465
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1517
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
 msgid "Error saving global library table."
 msgstr "ข้อผิดพลาดในการบันทึกตารางไลบรารีส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1466
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1518
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1467
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1519
 msgid "Error saving project library table."
 msgstr "ข้อผิดพลาดในการบันทึกตารางไลบรารีส่วนกลาง"
 
@@ -17247,7 +16690,7 @@ msgstr "ย้าย"
 msgid "Moves the selected item(s)"
 msgstr "ย้ายชิ้นส่วนที่เลือก"
 
-#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:730
+#: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:743
 msgid "Drag"
 msgstr "ลาก"
 
@@ -17381,48 +16824,48 @@ msgstr "ป้อนหมายเลขหน้าสำหรับเส้
 msgid "Edit Sheet Page Number"
 msgstr "แก้ไขหมายเลขหน้าแผ่นชีต"
 
-#: eeschema/tools/sch_editor_control.cpp:139
+#: eeschema/tools/sch_editor_control.cpp:140
 #, fuzzy, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "แปลงกลับ '%s' ไปเป็นบันทึกครั้งล่าสุดหรือไม่?"
 
-#: eeschema/tools/sch_editor_control.cpp:563
+#: eeschema/tools/sch_editor_control.cpp:564
 msgid "Reached end of schematic."
 msgstr "ถึงจุดสิ้นสุดของวงจร"
 
-#: eeschema/tools/sch_editor_control.cpp:564
+#: eeschema/tools/sch_editor_control.cpp:565
 msgid "Reached end of sheet."
 msgstr "ถึงจุดสิ้นสุดของแผ่นชีต"
 
-#: eeschema/tools/sch_editor_control.cpp:568
+#: eeschema/tools/sch_editor_control.cpp:569
 msgid "Find again to wrap around to the start."
 msgstr "ค้นหาอีกครั้งเพื่อย้อนกลับไปเริ่มต้นใหม่"
 
-#: eeschema/tools/sch_editor_control.cpp:977
+#: eeschema/tools/sch_editor_control.cpp:1036
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "ข้อผิดพลาด: พบชื่อแผ่นงานย่อยที่ซ้ำกันในแผ่นงานปัจจุบัน"
 
-#: eeschema/tools/sch_editor_control.cpp:1069
+#: eeschema/tools/sch_editor_control.cpp:1128
 msgid "Net must be labeled to assign a netclass."
 msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1075
+#: eeschema/tools/sch_editor_control.cpp:1134
 msgid "Bus has no members to assign netclass to."
 msgstr "บัสไม่มีสมาชิกที่จะกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1108
+#: eeschema/tools/sch_editor_control.cpp:1167
 msgid "Netclasses"
 msgstr "เน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1121
+#: eeschema/tools/sch_editor_control.cpp:1180
 msgid "Assign Netclass"
 msgstr "กำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1122
+#: eeschema/tools/sch_editor_control.cpp:1181
 msgid "Select netclass:"
 msgstr "เลือกเน็ตคลาส:"
 
-#: eeschema/tools/sch_editor_control.cpp:1731
+#: eeschema/tools/sch_editor_control.cpp:1790
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17432,21 +16875,21 @@ msgstr ""
 "แผ่นชีตที่วางสำเนา '%s'\n"
 "ถูกหลุดเนื่องจากปลายทางมีแผ่นงานหรือแผ่นงานย่อยเป็นต้นกำเนิดอยู่แล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2295
+#: eeschema/tools/sch_editor_control.cpp:2354
 #: pcbnew/tools/board_editor_control.cpp:590
 #: pcbnew/tools/footprint_editor_control.cpp:719
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2302
+#: eeschema/tools/sch_editor_control.cpp:2361
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:734
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2309
+#: eeschema/tools/sch_editor_control.cpp:2368
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "ไม่พบข้อผิดพลาด"
@@ -19882,6 +19325,10 @@ msgstr "เค้าโครง"
 msgid "Size: %.1fx%.1fmm"
 msgstr "ขนาด: %.1fx%.1fมม."
 
+#: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
+msgid "-"
+msgstr "-"
+
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "เริ่ม Y:"
@@ -20548,142 +19995,147 @@ msgstr "แพ็ดเคลือบ: (ศก.-รูเจาะ)"
 msgid "NP Pad: (diam - drill)"
 msgstr "แพ็ดไม่เคลือบ: (ศก.-รูเจาะ)"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:44
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
 #, fuzzy
 msgid "AWG0000"
 msgstr "0000"
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:45
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:46
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
 msgstr ""
+
+#: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
+#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "ความต้านทานไฟฟ้าในหน่วยโอห์ม*m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -20706,59 +20158,83 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
+msgid "Conductor resistivity:"
+msgstr "ความต้านทานทองแดง:"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
+msgid "..."
+msgstr "..."
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:88
+#, fuzzy
 msgid "Linear resistance:"
 msgstr "ความต้านทานความร้อน:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
 #, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 #, fuzzy
 msgid "Ampacity:"
 msgstr "ความทึบแสง:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:111
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
 #, fuzzy
 msgid "Application"
 msgstr "โปรแกรมผู้ช่วยเหลือ"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:119
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
 #, fuzzy
 msgid "Current:"
 msgstr "กระแส"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 #, fuzzy
 msgid "Length:"
 msgstr "ความยาว"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:142
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
 msgstr "ความต้านทาน:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:153
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:168
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
+msgid "ohm"
+msgstr "โอห์ม"
+
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:172
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
 msgid "Voltage drop:"
 msgstr "แรงดันตก:"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:160
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
 #, fuzzy
 msgid "mV"
 msgstr "V"
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
 msgstr ""
 
-#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
+#: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 #, fuzzy
 msgid "mW"
 msgstr "W"
@@ -20996,6 +20472,10 @@ msgstr "ความหนาลายทองแดง(H):"
 msgid "Time to fuse:"
 msgstr "ขั้นของเวลา:"
 
+#: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
+msgid "s"
+msgstr "s"
+
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
 msgstr "ไฟล์ข้อมูลเครื่องคิดเลขพีซีบี"
@@ -21033,6 +20513,11 @@ msgstr "Vref ตั้งค่าเป็น 0!"
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
 msgstr "ค่า R1 R2 ไม่ถูกต้อง"
+
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
+msgid "Type:"
+msgstr "ชนิด:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -21232,16 +20717,6 @@ msgstr "พารามิเตอร์ของซับสเตรท"
 msgid "Er:"
 msgstr "อีอาร์:"
 
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
-#: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
-msgid "..."
-msgstr "..."
-
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 msgid "Tan delta:"
 msgstr "แทนเดลต้า:"
@@ -21283,6 +20758,11 @@ msgstr "มิวของตัวนำ:"
 msgid "Component Parameters"
 msgstr "พารามิเตอร์คอมโพเนนต์"
 
+#: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
+msgid "Frequency:"
+msgstr "ความถี่:"
+
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:229
 msgid "Physical Parameters"
 msgstr "พารามิเตอร์ทางกายภาพ"
@@ -21309,10 +20789,6 @@ msgstr "ผลลัพธ์"
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
 msgstr "ค่าคงที่อิเล็กทริกสัมพัทธ์"
-
-#: pcb_calculator/calculator_panels/panel_via_size.cpp:105
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "ความต้านทานไฟฟ้าในหน่วยโอห์ม*m"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
@@ -21473,6 +20949,10 @@ msgstr "ค่ารีแอกแตนซ์ สำหรับเวลา�
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
 msgstr "มุมมองด้านบนเวีย"
+
+#: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
+msgid "Period:"
+msgstr "คาบ:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
@@ -21869,6 +21349,16 @@ msgstr "ความกว้างของเส้น"
 msgid "Line length"
 msgstr "ความยาวลายเส้น"
 
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:373
+#: pcb_calculator/transline_ident.cpp:412
+msgid "Characteristic impedance"
+msgstr "คุณลักษณะอิมพีแดนซ์"
+
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
 #: pcb_calculator/transline_ident.cpp:220
@@ -22045,6 +21535,10 @@ msgstr "MHz"
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
 msgstr "เคเฮิร์ซ"
+
+#: pcb_calculator/widgets/unit_selector.cpp:103
+msgid "Hz"
+msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
@@ -23531,41 +23025,70 @@ msgstr "ทำความสะอาดแทร็กและเวีย"
 msgid "Constraints Resolution Report"
 msgstr "รายงานการแก้ไขข้อจำกัด"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:202
+#: pcbnew/dialogs/dialog_copper_zones.cpp:210
 msgid "Teardrop on Vias/Pads Properties"
 msgstr "คุณสมบัติหยดน้ำบนเวีย/แทร็ก"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones.cpp:214
 msgid "Teardrop on Tracks Properties"
 msgstr "คุณสมบัติหยดน้ำบนแทร็ก"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:210
+#: pcbnew/dialogs/dialog_copper_zones.cpp:218
 msgid "Teardrop Properties"
 msgstr "คุณสมบัติหยดน้ำ"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones.cpp:225
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
+#: pcbnew/tools/convert_tool.cpp:57
+#, fuzzy
+msgid "Conversion Settings"
+msgstr "การตั้งค่าการแจงนับแพ็ด"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
+#: pcbnew/tools/convert_tool.cpp:66
+#, fuzzy
+msgid "Ignore source object line widths"
+msgstr "เพิ่มความกว้างเส้นตรง"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:233
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
+#: pcbnew/tools/convert_tool.cpp:70
+#, fuzzy
+msgid "Delete source objects after conversion"
+msgstr "ลบไฟล์และเนื้อหา"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:242
+#, fuzzy
+msgid "Convert to Copper Zone"
+msgstr "การเชื่อมต่อไปโซนทองแดง"
+
+#: pcbnew/dialogs/dialog_copper_zones.cpp:440
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:97
 msgid "Chamfer distance:"
 msgstr "ระยะลบมุม:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:405
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
+#: pcbnew/dialogs/dialog_copper_zones.cpp:442
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:142
 msgid "Fillet radius:"
 msgstr "รัศมีพอกมุม:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:551
+#: pcbnew/dialogs/dialog_copper_zones.cpp:594
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "ขนาดกิ่งซี่ล้อระบายความร้อน เล็กกว่าความกว้างน้อยสุดไม่ได้"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:580
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:264
+#: pcbnew/dialogs/dialog_copper_zones.cpp:623
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:311
 msgid "No layer selected."
 msgstr "ไม่ได้เลือกเลเยอร์"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:923
-msgid "Selecting <no net> will create an isolated copper island."
+#: pcbnew/dialogs/dialog_copper_zones.cpp:967
+#, fuzzy
+msgid "<no net> will result in an isolated copper island."
 msgstr "การเลือก<ไม่มีเน็ต>จะสร้างเกาะทองแดงที่โดดเดี่ยว"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
@@ -26465,6 +25988,11 @@ msgstr "ลบแทร็กที่ลัดวงจรหลายๆเน
 msgid "Import Netlist"
 msgstr "นำเข้ารายชื่อเน็ต"
 
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
+#, fuzzy
+msgid "Convert to Non Copper Zone"
+msgstr "การเชื่อมต่อไปโซนทองแดง"
+
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
 msgstr "รูปแบบเค้าโครง:"
@@ -27988,7 +27516,16 @@ msgstr "ไม่ดัดแปลงแพ็ดที่มีชนิดแ
 msgid "Push Pad Properties"
 msgstr "คุณสมบัติของแพ็ดกด"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:160
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
+#, fuzzy
+msgid "Conversion settings:"
+msgstr "การตั้งค่าการแจงนับแพ็ด"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
+msgid "Convert to Rule Area"
+msgstr "แปลงเป็นพื้นที่กฎ"
+
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:206
 msgid "No layers selected."
 msgstr "ไม่ได้เลือกเลเยอร์"
 
@@ -36389,23 +35926,23 @@ msgstr "การกระทำ"
 msgid "Assertions for:"
 msgstr ""
 
-#: pcbnew/tools/convert_tool.cpp:77
+#: pcbnew/tools/convert_tool.cpp:149
 msgid "Create from Selection"
 msgstr "สร้างขึ้นจากการเลือก"
 
-#: pcbnew/tools/convert_tool.cpp:226
+#: pcbnew/tools/convert_tool.cpp:360
 msgid "Convert shapes to polygon"
 msgstr "แปลงรูปเป็นหลายเหลี่ยม"
 
-#: pcbnew/tools/convert_tool.cpp:272
+#: pcbnew/tools/convert_tool.cpp:362
 msgid "Convert shapes to zone"
 msgstr "แปลงรูปร่างเป็นโซน"
 
-#: pcbnew/tools/convert_tool.cpp:781
+#: pcbnew/tools/convert_tool.cpp:818
 msgid "Convert polygons to lines"
 msgstr "แปลงรูปหลายเหลี่ยมเป็นลายเส้น"
 
-#: pcbnew/tools/convert_tool.cpp:869
+#: pcbnew/tools/convert_tool.cpp:906
 msgid "Create arc from line segment"
 msgstr "สร้างส่วนโค้งจากส่วนของเส้นตรง"
 
@@ -36634,7 +36171,7 @@ msgstr "สำเนาการเลือกแล้ว"
 msgid "Copy canceled"
 msgstr "ยกเลิกสำเนาแล้ว"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:351
+#: pcbnew/tools/edit_tool_move_fct.cpp:352
 msgid "Select reference point for move..."
 msgstr "เลือกจุดอ้างอิงสำหรับการย้าย..."
 
@@ -39019,6 +38556,11 @@ msgstr "ลบที่ตั้งไว้ล่วงหน้า"
 msgid "Select preset:"
 msgstr "เลือกค่าที่ตั้งไว้ล่วงหน้า:"
 
+#: pcbnew/widgets/appearance_controls.cpp:2671
+#: pcbnew/widgets/appearance_controls_base.cpp:182
+msgid "Viewports (Alt+Tab):"
+msgstr "ช่องมอง (Alt+Tab):"
+
 #: pcbnew/widgets/appearance_controls.cpp:3215
 msgid "Open Preferences"
 msgstr "เปิดตั้งความชอบ"
@@ -39228,22 +38770,22 @@ msgstr "เติมใหม่"
 msgid "Continue without Refill"
 msgstr "ทําต่อโดยไม่เติมโซน"
 
-#: pcbnew/zones.h:62
+#: pcbnew/zones.h:64
 #, fuzzy
 msgid "inherited"
 msgstr "ถูกสืบทอด"
 
-#: pcbnew/zones.h:64
+#: pcbnew/zones.h:66
 #, fuzzy
 msgid "thermal reliefs"
 msgstr "บรรเทาความร้อน"
 
-#: pcbnew/zones.h:65
+#: pcbnew/zones.h:67
 #, fuzzy
 msgid "solid"
 msgstr "เส้นทึบ"
 
-#: pcbnew/zones.h:66
+#: pcbnew/zones.h:68
 #, fuzzy
 msgid "thermal reliefs for PTH"
 msgstr "บรรเทาความร้อน"
@@ -39383,6 +38925,359 @@ msgstr "แผนผังวงจร KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "แผ่นวงจรพิมพ์ KiCad"
+
+#~ msgid "Reformat passive symbol values"
+#~ msgstr "ปรับรูปแบบแสดงค่าของสัญลักษณ์แพสซีฟ"
+
+#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
+#~ msgstr "ปรับรูปแบบแสดงค่าของสัญลักษณ์แพสซีฟ เช่น 1M เป็น 1Meg"
+
+#~ msgid "Diode"
+#~ msgstr "ไดโอด"
+
+#~ msgid "BJT"
+#~ msgstr "บีเจที"
+
+#~ msgid "MOSFET"
+#~ msgstr "มอสเฟ็ต"
+
+#~ msgid "JFET"
+#~ msgstr "เจเฟ็ต"
+
+#~ msgid "Subcircuit"
+#~ msgstr "วงจรย่อย"
+
+#~ msgid ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+#~ msgstr ""
+#~ "การกำหนดหมายเลขขาของสัญลักษณ์ ไม่ตรงกับลำดับขาในสไปส์\n"
+#~ "ตรวจสอบสัญลักษณ์และใช้ \"ลำดับโหนดสำรอง\" เพื่อจัดลำดับขาใหม่ หากจำเป็น"
+
+#~ msgid "For a Diode, pin order is anode, cathode"
+#~ msgstr "สำหรับไดโอด, ลำดับของขาคืออาโนด, คาโทด"
+
+#~ msgid ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+#~ msgstr "สำหรับบีเจทีลำดับของขาคือคอลเล็กเตอร์, เบส, อิมิตเตอร์, ซับสเตรส(ทางเลือก)"
+
+#~ msgid "For a MOSFET, pin order is drain, gate, source"
+#~ msgstr "สำหรับมอสเฟ็ตขาเรียงคือเดรน,เกต,ซอส"
+
+#~ msgid "For a JFET, pin order is drain, gate, source"
+#~ msgstr "สำหรับเจเฟ็ต ลำดับขาคือเดรน, เกต, ซอส"
+
+#~ msgid "Invalid Impedance value"
+#~ msgstr "ค่าอิมพีแดนซ์ไม่ถูกต้อง"
+
+#~ msgid "Invalid delay value"
+#~ msgstr "ค่าความหน่วงไม่ถูกต้อง"
+
+#~ msgid "Invalid frequency value"
+#~ msgstr "ค่าความถี่ไม่ถูกต้อง"
+
+#~ msgid "Invalid length in wavelength value"
+#~ msgstr "ค่าความยาวคลื่นไม่ถูกต้อง"
+
+#~ msgid "Invalid resistance value"
+#~ msgstr "ค่าความต้านทานไม่ถูกต้อง"
+
+#~ msgid "Invalid capacitance value"
+#~ msgstr "ค่าตัวเก็บประจุไม่ถูกต้อง"
+
+#~ msgid "Invalid inductance value"
+#~ msgstr "ค่าตัวเหนี่ยวนำไม่ถูกต้อง"
+
+#~ msgid "Invalid conductance value"
+#~ msgstr "ค่าความนำไฟฟ้าไม่ถูกต้อง"
+
+#~ msgid "Invalid length value"
+#~ msgstr "ค่าความยาวไม่ถูกต้อง"
+
+#, c-format
+#~ msgid ""
+#~ "You need to specify at least the first %d parameters for the transient "
+#~ "source"
+#~ msgstr "คุณต้องระบุอย่างน้อย %d พารามิเตอร์สำหรับแหล่งทรานส์เชียน"
+
+#~ msgid ""
+#~ "You cannot leave interleaved empty fields when defining a transient source"
+#~ msgstr "คุณไม่สามารถปล่อยช่องว่างเมื่อกำหนดแหล่งกำเนิดทรานส์เชียน"
+
+#~ msgid "Select library"
+#~ msgstr "เลือกไลบรารี"
+
+#~ msgid "Range:"
+#~ msgstr "ระยะ:"
+
+#~ msgid "Offset:"
+#~ msgstr "ระยะเลื่อน:"
+
+#~ msgid "Standard deviation:"
+#~ msgstr "ค่าเบี่ยงเบนมาตฐาน:"
+
+#~ msgid "Mean:"
+#~ msgstr "เฉลี่ย:"
+
+#~ msgid "Lambda:"
+#~ msgstr "แลมด้า:"
+
+#~ msgid "type of random generator for source is invalid"
+#~ msgstr "ประเภทแหล่งกำเนิดแบบสุ่มไม่ถูกต้อง"
+
+#~ msgid "Resistor"
+#~ msgstr "ความต้านทาน"
+
+#~ msgid "Capacitor"
+#~ msgstr "คาปาซิเตอร์"
+
+#~ msgid "Inductor"
+#~ msgstr "อินดักเตอร์"
+
+#~ msgid "Passive type"
+#~ msgstr "ชนิดแพสซีฟ"
+
+#~ msgid "Spice value in simulation"
+#~ msgstr "ค่าของสไปส์ในการจำลอง"
+
+#~ msgid ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+#~ msgstr ""
+#~ "ในการกำหนดค่าของสไปส์, ใช้จุดเพื่อแยกทศนิยม\n"
+#~ "และค่าสามารถใช้อักษรหน่วยของสไปส์ได้"
+
+#~ msgid "Spice unit symbols in values (case insensitive):"
+#~ msgstr "สัญลักษณ์หน่วยของสไปส์ ใช้ในค่า (อักษรเล็กใหญ่สำคัญ):"
+
+#~ msgid "Library:"
+#~ msgstr "ไลบรารี:"
+
+#~ msgid "Select file..."
+#~ msgstr "เลือกไฟล์…"
+
+#~ msgid "Model:"
+#~ msgstr "โมเดล:"
+
+#~ msgid "Note:"
+#~ msgstr "บันทึก:"
+
+#~ msgid "note"
+#~ msgstr "บันทึก"
+
+#~ msgid "Model"
+#~ msgstr "โมเดล"
+
+#~ msgid "DC/AC Analysis"
+#~ msgstr "วิเคราะห์ DC/AC"
+
+#~ msgid "DC:"
+#~ msgstr "DC:"
+
+#~ msgid "Volts/Amps"
+#~ msgstr "โวลท์/แอมป์"
+
+#~ msgid "AC magnitude:"
+#~ msgstr "ขนาด AC:"
+
+#~ msgid "AC phase:"
+#~ msgstr "เฟส AC:"
+
+#~ msgid "radians"
+#~ msgstr "เรเดียน"
+
+#~ msgid "Transient Analysis"
+#~ msgstr "วิเคราะห์ทราสเชียน"
+
+#~ msgid "Initial value:"
+#~ msgstr "ค่าตั้งต้น:"
+
+#~ msgid "Pulsed value:"
+#~ msgstr "ค่าพัลส์:"
+
+#~ msgid "Delay time:"
+#~ msgstr "หน่วงเวลา:"
+
+#~ msgid "Rise time:"
+#~ msgstr "เวลาขาขึ้น:"
+
+#~ msgid "Fall time:"
+#~ msgstr "เวลาขาลง:"
+
+#~ msgid "Pulse width:"
+#~ msgstr "ความกว้างพัลส์:"
+
+#~ msgid "Pulse"
+#~ msgstr "พัลส์"
+
+#~ msgid "DC offset:"
+#~ msgstr "ออฟเซ็ต DC:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "แอมปลิจูด:"
+
+#~ msgid "Delay:"
+#~ msgstr "หน่วง:"
+
+#~ msgid "Damping factor:"
+#~ msgstr "แดมปิ้งแฟคเตอร์:"
+
+#~ msgid "1/seconds"
+#~ msgstr "1/วินาที"
+
+#~ msgid "Sinusoidal"
+#~ msgstr "รูปร่างซายน์"
+
+#~ msgid "Rise delay time:"
+#~ msgstr "เวลาหน่วงขาขึ้น:"
+
+#~ msgid "Rise time constant:"
+#~ msgstr "เวลาขึ้นคงที่:"
+
+#~ msgid "Fall delay time:"
+#~ msgstr "เวลาหน่วงขาลง:"
+
+#~ msgid "Fall time constant:"
+#~ msgstr "เวลาขาลงคงที่:"
+
+#~ msgid "Exponential"
+#~ msgstr "เอ็กซ์โปเน้นเชียล"
+
+#~ msgid "Piece-wise linear"
+#~ msgstr "เชิงเส้น piece-wise"
+
+#~ msgid "Time:"
+#~ msgstr "เวลา:"
+
+#~ msgid "second"
+#~ msgstr "วินาที"
+
+#~ msgid "Piece-wise Linear"
+#~ msgstr "เชิงเส้นแบบเพียส์ไวส์"
+
+#~ msgid "Carrier frequency:"
+#~ msgstr "ความถี่พาหะ:"
+
+#~ msgid "Modulation index:"
+#~ msgstr "มอดดูเลชั่นอินเด็กซ์:"
+
+#~ msgid "Signal frequency:"
+#~ msgstr "ความถี่สัญญาณ:"
+
+#~ msgid "Carrier phase:"
+#~ msgstr "เฟสพาหะ:"
+
+#~ msgid "degrees"
+#~ msgstr "องศา"
+
+#~ msgid "Signal phase:"
+#~ msgstr "เฟสของสัญญาณ:"
+
+#~ msgid "FM"
+#~ msgstr "FM"
+
+#~ msgid "Modulating frequency:"
+#~ msgstr "ความถี่ผสม:"
+
+#~ msgid "Signal delay:"
+#~ msgstr "สัญญาณหน่วง:"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "Transient noise"
+#~ msgstr "ทรานส์เชียนน้อยส์"
+
+#~ msgid "Uniform"
+#~ msgstr "คงรูป"
+
+#~ msgid "Gaussian"
+#~ msgstr "เกาส์เซี่ยน"
+
+#~ msgid "Poisson"
+#~ msgstr "ปัวซอง"
+
+#~ msgid "Individual value duration:"
+#~ msgstr "ช่วงเวลาห่างแต่ละค่า:"
+
+#~ msgid "Time delay:"
+#~ msgstr "หน่วงเวลา:"
+
+#~ msgid "Random"
+#~ msgstr "สุ่ม"
+
+#~ msgid "External data"
+#~ msgstr "ข้อมูลภายนอก"
+
+#~ msgid "Source Type"
+#~ msgstr "ชนิดแหล่งกำเนิด"
+
+#~ msgid "Source"
+#~ msgstr "แหล่งกำเนิด"
+
+#~ msgid "Line model"
+#~ msgstr "โมเดลเส้นตรง"
+
+#~ msgid "Propagation delay"
+#~ msgstr "ค่าหน่วงเวลา"
+
+#~ msgid "Length in wavelength"
+#~ msgstr "ความยาวในความยาวคลื่น"
+
+#~ msgid "Use time delay"
+#~ msgstr "ใช้ค่าเวลาหน่วง"
+
+#~ msgid "Use frequency and number of wavelength"
+#~ msgstr "ใช้ค่าความถี่และจำนวนนับของความยาวคลื่น"
+
+#~ msgid "Delay / Electrical length"
+#~ msgstr "ความหน่วง/ความยาวทางไฟฟ้า"
+
+#~ msgid "Lossless"
+#~ msgstr "ไม่สูญเสีย"
+
+#~ msgid "Resistance per unit length"
+#~ msgstr "ค่าความต้านทานต่อหน่วยความยาว"
+
+#~ msgid "ohm / unit"
+#~ msgstr "โอห์ม/หน่วย"
+
+#~ msgid "Inductance per unit length"
+#~ msgstr "ค่าความเหนี่ยวนำต่อหน่วยความยาว"
+
+#~ msgid "henry / unit"
+#~ msgstr "เฮ็นรี่/หน่วย"
+
+#~ msgid "Capacitance per unit length"
+#~ msgstr "ค่าความเก็บประจุต่อหน่วยความยาว"
+
+#~ msgid "farad / unit"
+#~ msgstr "ฟารัด/หน่วย"
+
+#~ msgid "Conductance per unit length"
+#~ msgstr "ความเหนี่ยวนำต่อหน่วยความยาว"
+
+#~ msgid "siemens / unit"
+#~ msgstr "ซีเมน/หน่วย"
+
+#~ msgid "Extra parameters"
+#~ msgstr "พารามิเตอร์เพิ่มเติม"
+
+#~ msgid "Lossy"
+#~ msgstr "การสูญเสีย"
+
+#~ msgid "Transmission Line"
+#~ msgstr "สายส่งสัญญาณ"
+
+#~ msgid "Disable symbol for simulation"
+#~ msgstr "ไม่ใช้สัญลักษณ์สำหรับจำลอง"
+
+#~ msgid "Alternate node sequence:"
+#~ msgstr "ทางเลือกอื่นลำดับของโนด:"
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "แก้ไขโมเดลสไปส์"
 
 #~ msgid "GerbView"
 #~ msgstr "เกิร์บวิว"
@@ -40822,9 +40717,6 @@ msgstr "แผ่นวงจรพิมพ์ KiCad"
 
 #~ msgid "Convert to Polygon"
 #~ msgstr "แปลงเป็นรูปหลายเหลี่ยม"
-
-#~ msgid "Convert to Rule Area"
-#~ msgstr "แปลงเป็นพื้นที่กฎ"
 
 #~ msgid "Convert to Lines"
 #~ msgstr "แปลงเป็นเส้นตรง"

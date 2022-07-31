@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 16:34-0700\n"
+"POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -164,8 +164,8 @@ msgstr "&View"
 msgid "&Preferences"
 msgstr "&Preferences"
 
-msgid "Viewports (Alt+Tab):"
-msgstr "Viewports (Alt+Tab):"
+msgid "Viewports (Shift+Tab):"
+msgstr "Viewports (Shift+Tab):"
 
 msgid "Save viewport..."
 msgstr "Save viewport..."
@@ -3782,8 +3782,8 @@ msgstr "Set the grid origin point"
 msgid "Show Grid"
 msgstr "Show Grid"
 
-msgid "Display grid dots or lines in the edit window"
-msgstr "Display grid dots or lines in the edit window"
+msgid "Display background grid in the edit window"
+msgstr "Display background grid in the edit window"
 
 msgid "Grid Properties..."
 msgstr "Grid Properties..."
@@ -6450,11 +6450,17 @@ msgstr "Export Netlist"
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
 
-msgid "Reformat passive symbol values"
-msgstr "Reformat passive symbol values"
+msgid "Save all voltages"
+msgstr "Save all voltages"
 
-msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Reformat passive symbol values e.g. 1M → 1Meg"
+msgid "Write a directive to save all voltages (.save all)"
+msgstr "Write a directive to save all voltages (.save all)"
+
+msgid "Save all currents"
+msgstr "Save all currents"
+
+msgid "Write a directive to save all currents (.probe alli)"
+msgstr "Write a directive to save all currents (.probe alli)"
 
 msgid "External simulator command:"
 msgstr "External simulator command:"
@@ -7114,6 +7120,17 @@ msgstr "Sheet Properties"
 msgid "Add signal by name:"
 msgstr "Add signal by name:"
 
+#, c-format
+msgid "Failed reading model library '%s'."
+msgstr "Failed reading model library '%s'."
+
+msgid "Browse Models"
+msgstr "Browse Models"
+
+#, c-format
+msgid "No model named '%s' in library."
+msgstr "No model named '%s' in library."
+
 msgid "You need to select DC source"
 msgstr "You need to select DC source"
 
@@ -7309,409 +7326,6 @@ msgstr "HSpice"
 
 msgid "Simulation settings"
 msgstr "Simulation settings"
-
-msgid "Diode"
-msgstr "Diode"
-
-msgid "BJT"
-msgstr "BJT"
-
-msgid "MOSFET"
-msgstr "MOSFET"
-
-msgid "JFET"
-msgstr "JFET"
-
-msgid "Subcircuit"
-msgstr "Subcircuit"
-
-msgid "Code Model"
-msgstr "Code Model"
-
-msgid ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-msgstr ""
-"Symbol pin numbering don't always match the required SPICE pin order\n"
-"Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
-"necessary"
-
-msgid "For a Diode, pin order is anode, cathode"
-msgstr "For a Diode, pin order is anode, cathode"
-
-msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-
-msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "For a MOSFET, pin order is drain, gate, source"
-
-msgid "For a JFET, pin order is drain, gate, source"
-msgstr "For a JFET, pin order is drain, gate, source"
-
-msgid "Invalid Impedance value"
-msgstr "Invalid Impedance value"
-
-msgid "Invalid delay value"
-msgstr "Invalid delay value"
-
-msgid "Invalid frequency value"
-msgstr "Invalid frequency value"
-
-msgid "Invalid length in wavelength value"
-msgstr "Invalid length in wavelength value"
-
-msgid "Invalid resistance value"
-msgstr "Invalid resistance value"
-
-msgid "Invalid capacitance value"
-msgstr "Invalid capacitance value"
-
-msgid "Invalid inductance value"
-msgstr "Invalid inductance value"
-
-msgid "Invalid conductance value"
-msgstr "Invalid conductance value"
-
-msgid "Invalid length value"
-msgstr "Invalid length value"
-
-#, c-format
-msgid ""
-"You need to specify at least the first %d parameters for the transient source"
-msgstr ""
-"You need to specify at least the first %d parameters for the transient source"
-
-msgid ""
-"You cannot leave interleaved empty fields when defining a transient source"
-msgstr ""
-"You cannot leave interleaved empty fields when defining a transient source"
-
-msgid "Select library"
-msgstr "Select library"
-
-msgid "Range:"
-msgstr "Range:"
-
-msgid "Offset:"
-msgstr "Offset:"
-
-msgid "Standard deviation:"
-msgstr "Standard deviation:"
-
-msgid "Mean:"
-msgstr "Mean:"
-
-msgid "Lambda:"
-msgstr "Lambda:"
-
-msgid "type of random generator for source is invalid"
-msgstr "type of random generator for source is invalid"
-
-msgid "Type:"
-msgstr "Type:"
-
-msgid "Resistor"
-msgstr "Resistor"
-
-msgid "Capacitor"
-msgstr "Capacitor"
-
-msgid "Inductor"
-msgstr "Inductor"
-
-msgid "Passive type"
-msgstr "Passive type"
-
-msgid "Spice value in simulation"
-msgstr "Spice value in simulation"
-
-msgid ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-msgstr ""
-"In Spice values, the decimal separator is the point.\n"
-"Values can use Spice unit symbols."
-
-msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Spice unit symbols in values (case insensitive):"
-
-msgid "Library:"
-msgstr "Library:"
-
-msgid "Select file..."
-msgstr "Select file…"
-
-msgid "Model:"
-msgstr "Model:"
-
-msgid "Note:"
-msgstr "Note:"
-
-msgid "note"
-msgstr "note"
-
-msgid "Model"
-msgstr "Model"
-
-msgid "DC/AC Analysis"
-msgstr "DC/AC Analysis"
-
-msgid "DC:"
-msgstr "DC:"
-
-msgid "Volts/Amps"
-msgstr "Volts/Amps"
-
-msgid "AC magnitude:"
-msgstr "AC magnitude:"
-
-msgid "AC phase:"
-msgstr "AC phase:"
-
-msgid "radians"
-msgstr "radians"
-
-msgid "Transient Analysis"
-msgstr "Transient Analysis"
-
-msgid "Initial value:"
-msgstr "Initial value:"
-
-msgid "Pulsed value:"
-msgstr "Pulsed value:"
-
-msgid "Delay time:"
-msgstr "Delay time:"
-
-msgid "Rise time:"
-msgstr "Rise time:"
-
-msgid "Fall time:"
-msgstr "Fall time:"
-
-msgid "Pulse width:"
-msgstr "Pulse width:"
-
-msgid "Period:"
-msgstr "Period:"
-
-msgid "Pulse"
-msgstr "Pulse"
-
-msgid "DC offset:"
-msgstr "DC offset:"
-
-msgid "Amplitude:"
-msgstr "Amplitude:"
-
-msgid "Frequency:"
-msgstr "Frequency:"
-
-msgid "Hz"
-msgstr "Hz"
-
-msgid "Delay:"
-msgstr "Delay:"
-
-msgid "Damping factor:"
-msgstr "Damping factor:"
-
-msgid "1/seconds"
-msgstr "1/seconds"
-
-msgid "Sinusoidal"
-msgstr "Sinusoidal"
-
-msgid "Rise delay time:"
-msgstr "Rise delay time:"
-
-msgid "Rise time constant:"
-msgstr "Rise time constant:"
-
-msgid "Fall delay time:"
-msgstr "Fall delay time:"
-
-msgid "Fall time constant:"
-msgstr "Fall time constant:"
-
-msgid "Exponential"
-msgstr "Exponential"
-
-msgid "Piece-wise linear"
-msgstr "Piece-wise linear"
-
-msgid "Time:"
-msgstr "Time:"
-
-msgid "second"
-msgstr "second"
-
-msgid "Piece-wise Linear"
-msgstr "Piece-wise Linear"
-
-msgid "Carrier frequency:"
-msgstr "Carrier frequency:"
-
-msgid "Modulation index:"
-msgstr "Modulation index:"
-
-msgid "-"
-msgstr "-"
-
-msgid "Signal frequency:"
-msgstr "Signal frequency:"
-
-msgid "Carrier phase:"
-msgstr "Carrier phase:"
-
-msgid "degrees"
-msgstr "degrees"
-
-msgid "Signal phase:"
-msgstr "Signal phase:"
-
-msgid "FM"
-msgstr "FM"
-
-msgid "Modulating frequency:"
-msgstr "Modulating frequency:"
-
-msgid "Signal delay:"
-msgstr "Signal delay:"
-
-msgid "AM"
-msgstr "AM"
-
-msgid "Transient noise"
-msgstr "Transient noise"
-
-msgid "Uniform"
-msgstr "Uniform"
-
-msgid "Gaussian"
-msgstr "Gaussian"
-
-msgid "Poisson"
-msgstr "Poisson"
-
-msgid "Individual value duration:"
-msgstr "Individual value duration:"
-
-msgid "Time delay:"
-msgstr "Time delay:"
-
-msgid "Random"
-msgstr "Random"
-
-msgid "External data"
-msgstr "External data"
-
-msgid "Voltage"
-msgstr "Voltage"
-
-msgid "Current"
-msgstr "Current"
-
-msgid "Source Type"
-msgstr "Source Type"
-
-msgid "Source"
-msgstr "Source"
-
-msgid "Line model"
-msgstr "Line model"
-
-msgid "Characteristic impedance"
-msgstr "Characteristic impedance"
-
-msgid "ohm"
-msgstr "ohm"
-
-msgid "Propagation delay"
-msgstr "Propagation delay"
-
-msgid "s"
-msgstr "s"
-
-msgid "Frequency"
-msgstr "Frequency"
-
-msgid "Length in wavelength"
-msgstr "Length in wavelength"
-
-msgid "Use time delay"
-msgstr "Use time delay"
-
-msgid "Use frequency and number of wavelength"
-msgstr "Use frequency and number of wavelength"
-
-msgid "Delay / Electrical length"
-msgstr "Delay / Electrical length"
-
-msgid "Lossless"
-msgstr "Lossless"
-
-msgid "Resistance per unit length"
-msgstr "Resistance per unit length"
-
-msgid "ohm / unit"
-msgstr "ohm / unit"
-
-msgid "Inductance per unit length"
-msgstr "Inductance per unit length"
-
-msgid "henry / unit"
-msgstr "henry / unit"
-
-msgid "Capacitance per unit length"
-msgstr "Capacitance per unit length"
-
-msgid "farad / unit"
-msgstr "farad / unit"
-
-msgid "Conductance per unit length"
-msgstr "Conductance per unit length"
-
-msgid "siemens / unit"
-msgstr "siemens / unit"
-
-msgid "Extra parameters"
-msgstr "Extra parameters"
-
-msgid ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-msgstr ""
-"The following types of lines have been implemented so far:\n"
-"\n"
-"- RLC\n"
-"- RC\n"
-"- LC\n"
-"- RG\n"
-"\n"
-"Any other combination will yield erroneous results and should not be tried."
-
-msgid "Lossy"
-msgstr "Lossy"
-
-msgid "Transmission Line"
-msgstr "Transmission Line"
-
-msgid "Disable symbol for simulation"
-msgstr "Disable symbol for simulation"
-
-msgid "Alternate node sequence:"
-msgstr "Alternate node sequence:"
-
-msgid "Spice Model Editor"
-msgstr "Spice Model Editor"
 
 msgid "Select Footprint..."
 msgstr "Select Footprint…"
@@ -9172,6 +8786,10 @@ msgstr ""
 "Annotation must be corrected before simulating."
 
 #, c-format
+msgid "Could not find library file '%s'"
+msgstr "Could not find library file '%s'"
+
+#, c-format
 msgid "Command error. Return code %d."
 msgstr "Command error. Return code %d."
 
@@ -10476,6 +10094,18 @@ msgstr "Create New Sheet"
 msgid "Discard New Sheet"
 msgstr "Discard New Sheet"
 
+#, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "Failed to set parameter '%s' to '%s'"
+
+#, c-format
+msgid "%s describes %lu pins, expected %u"
+msgstr "%s describes %lu pins, expected %u"
+
+#, c-format
+msgid "Failed to infer model from Value '%s'"
+msgstr "Failed to infer model from Value '%s'"
+
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
 msgstr ""
@@ -10628,6 +10258,9 @@ msgstr "Signals"
 msgid "Cursors"
 msgstr "Cursors"
 
+msgid "Frequency"
+msgstr "Frequency"
+
 msgid "Gain"
 msgstr "Gain"
 
@@ -10639,6 +10272,12 @@ msgstr "noise [(V or A)^2/Hz]"
 
 msgid "Time"
 msgstr "Time"
+
+msgid "Voltage"
+msgstr "Voltage"
+
+msgid "Current"
+msgstr "Current"
 
 msgid "Voltage (swept)"
 msgstr "Voltage (swept)"
@@ -10654,6 +10293,9 @@ msgstr "Temperature (swept)"
 
 msgid "Voltage (measured)"
 msgstr "Voltage (measured)"
+
+msgid "Unknown SIM_VALUE type"
+msgstr "Unknown SIM_VALUE type"
 
 msgid "DC Sweep"
 msgstr "DC Sweep"
@@ -13951,6 +13593,9 @@ msgstr "Layout"
 msgid "Size: %.1fx%.1fmm"
 msgstr "Size: %.1fx%.1fmm"
 
+msgid "-"
+msgstr "-"
+
 msgid "Y start:"
 msgstr "Y start:"
 
@@ -14548,6 +14193,9 @@ msgstr "AWG29"
 msgid "AWG30"
 msgstr "AWG30"
 
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "Electrical Resistivity in Ohm*m"
+
 msgid "Wire properties"
 msgstr "Wire properties"
 
@@ -14559,6 +14207,12 @@ msgstr "Area:"
 
 msgid "mm^2"
 msgstr "mm^2"
+
+msgid "Conductor resistivity:"
+msgstr "Conductor resistivity:"
+
+msgid "..."
+msgstr "…"
 
 msgid "Linear resistance:"
 msgstr "Linear resistance:"
@@ -14581,6 +14235,9 @@ msgstr "Length:"
 
 msgid "Resistance:"
 msgstr "Resistance:"
+
+msgid "ohm"
+msgstr "ohm"
 
 msgid "Voltage drop:"
 msgstr "Voltage drop:"
@@ -14762,6 +14419,9 @@ msgstr "Track thickness:"
 msgid "Time to fuse:"
 msgstr "Time to fuse:"
 
+msgid "s"
+msgstr "s"
+
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
 
@@ -14789,6 +14449,9 @@ msgstr "Vref set to 0 !"
 
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
+
+msgid "Type:"
+msgstr "Type:"
 
 msgid ""
 "Type of the regulator.\n"
@@ -14931,9 +14594,6 @@ msgstr "Substrate Parameters"
 msgid "Er:"
 msgstr "Er:"
 
-msgid "..."
-msgstr "…"
-
 msgid "Tan delta:"
 msgstr "Tan delta:"
 
@@ -14964,6 +14624,9 @@ msgstr "Conductor mu:"
 msgid "Component Parameters"
 msgstr "Component Parameters"
 
+msgid "Frequency:"
+msgstr "Frequency:"
+
 msgid "Physical Parameters"
 msgstr "Physical Parameters"
 
@@ -14981,9 +14644,6 @@ msgstr "Results"
 
 msgid "Relative Dielectric Constants"
 msgstr "Relative Dielectric Constants"
-
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "Electrical Resistivity in Ohm*m"
 
 msgid "Finished hole diameter (D):"
 msgstr "Finished hole diameter (D):"
@@ -15104,6 +14764,9 @@ msgstr "Inductive reactance for given rise time and calculated inductance"
 
 msgid "Top view of via"
 msgstr "Top view of via"
+
+msgid "Period:"
+msgstr "Period:"
 
 msgid "Wavelength in vacuum:"
 msgstr "Wavelength in vacuum:"
@@ -15396,6 +15059,9 @@ msgstr "Line width"
 msgid "Line length"
 msgstr "Line length"
 
+msgid "Characteristic impedance"
+msgstr "Characteristic impedance"
+
 msgid "Electrical length"
 msgstr "Electrical length"
 
@@ -15511,6 +15177,9 @@ msgstr "MHz"
 
 msgid "kHz"
 msgstr "kHz"
+
+msgid "Hz"
+msgstr "Hz"
 
 msgid "rad"
 msgstr "rad"
@@ -16613,6 +16282,18 @@ msgstr "Teardrop on Tracks Properties"
 msgid "Teardrop Properties"
 msgstr "Teardrop Properties"
 
+msgid "Conversion Settings"
+msgstr "Conversion Settings"
+
+msgid "Ignore source object line widths"
+msgstr "Ignore source object line widths"
+
+msgid "Delete source objects after conversion"
+msgstr "Delete source objects after conversion"
+
+msgid "Convert to Copper Zone"
+msgstr "Convert to Copper Zone"
+
 msgid "Chamfer distance:"
 msgstr "Chamfer distance:"
 
@@ -16625,8 +16306,8 @@ msgstr "Thermal spoke width cannot be smaller than the minimum width."
 msgid "No layer selected."
 msgstr "No layer selected."
 
-msgid "Selecting <no net> will create an isolated copper island."
-msgstr "Selecting <no net> will create an isolated copper island."
+msgid "<no net> will result in an isolated copper island."
+msgstr "<no net> will result in an isolated copper island."
 
 msgid ""
 "Pattern to filter net names in filtered list.\n"
@@ -18720,6 +18401,9 @@ msgstr "Delete tracks shorting multiple nets"
 msgid "Import Netlist"
 msgstr "Import Netlist"
 
+msgid "Convert to Non Copper Zone"
+msgstr "Convert to Non Copper Zone"
+
 msgid "Outline style:"
 msgstr "Outline style:"
 
@@ -19899,6 +19583,12 @@ msgstr "Do not modify pads having a different type"
 
 msgid "Push Pad Properties"
 msgstr "Push Pad Properties"
+
+msgid "Conversion settings:"
+msgstr "Conversion settings:"
+
+msgid "Convert to Rule Area"
+msgstr "Convert to Rule Area"
 
 msgid "No layers selected."
 msgstr "No layers selected."
@@ -28265,6 +27955,9 @@ msgstr "Delete Preset"
 msgid "Select preset:"
 msgstr "Select preset:"
 
+msgid "Viewports (Alt+Tab):"
+msgstr "Viewports (Alt+Tab):"
+
 msgid "Open Preferences"
 msgstr "Open Preferences"
 
@@ -28536,6 +28229,394 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Display grid dots or lines in the edit window"
+#~ msgstr "Display grid dots or lines in the edit window"
+
+#~ msgid "Reformat passive symbol values"
+#~ msgstr "Reformat passive symbol values"
+
+#~ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
+#~ msgstr "Reformat passive symbol values e.g. 1M → 1Meg"
+
+#~ msgid "Diode"
+#~ msgstr "Diode"
+
+#~ msgid "BJT"
+#~ msgstr "BJT"
+
+#~ msgid "MOSFET"
+#~ msgstr "MOSFET"
+
+#~ msgid "JFET"
+#~ msgstr "JFET"
+
+#~ msgid "Subcircuit"
+#~ msgstr "Subcircuit"
+
+#~ msgid "Code Model"
+#~ msgstr "Code Model"
+
+#~ msgid ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+#~ msgstr ""
+#~ "Symbol pin numbering don't always match the required SPICE pin order\n"
+#~ "Check the symbol and use \"Alternate node sequence\" to reorder the pins, "
+#~ "if necessary"
+
+#~ msgid "For a Diode, pin order is anode, cathode"
+#~ msgstr "For a Diode, pin order is anode, cathode"
+
+#~ msgid ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+#~ msgstr ""
+#~ "For a BJT, pin order is collector, base, emitter, substrate (optional)"
+
+#~ msgid "For a MOSFET, pin order is drain, gate, source"
+#~ msgstr "For a MOSFET, pin order is drain, gate, source"
+
+#~ msgid "For a JFET, pin order is drain, gate, source"
+#~ msgstr "For a JFET, pin order is drain, gate, source"
+
+#~ msgid "Invalid Impedance value"
+#~ msgstr "Invalid Impedance value"
+
+#~ msgid "Invalid delay value"
+#~ msgstr "Invalid delay value"
+
+#~ msgid "Invalid frequency value"
+#~ msgstr "Invalid frequency value"
+
+#~ msgid "Invalid length in wavelength value"
+#~ msgstr "Invalid length in wavelength value"
+
+#~ msgid "Invalid resistance value"
+#~ msgstr "Invalid resistance value"
+
+#~ msgid "Invalid capacitance value"
+#~ msgstr "Invalid capacitance value"
+
+#~ msgid "Invalid inductance value"
+#~ msgstr "Invalid inductance value"
+
+#~ msgid "Invalid conductance value"
+#~ msgstr "Invalid conductance value"
+
+#~ msgid "Invalid length value"
+#~ msgstr "Invalid length value"
+
+#, c-format
+#~ msgid ""
+#~ "You need to specify at least the first %d parameters for the transient "
+#~ "source"
+#~ msgstr ""
+#~ "You need to specify at least the first %d parameters for the transient "
+#~ "source"
+
+#~ msgid ""
+#~ "You cannot leave interleaved empty fields when defining a transient source"
+#~ msgstr ""
+#~ "You cannot leave interleaved empty fields when defining a transient source"
+
+#~ msgid "Select library"
+#~ msgstr "Select library"
+
+#~ msgid "Range:"
+#~ msgstr "Range:"
+
+#~ msgid "Offset:"
+#~ msgstr "Offset:"
+
+#~ msgid "Standard deviation:"
+#~ msgstr "Standard deviation:"
+
+#~ msgid "Mean:"
+#~ msgstr "Mean:"
+
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "type of random generator for source is invalid"
+#~ msgstr "type of random generator for source is invalid"
+
+#~ msgid "Resistor"
+#~ msgstr "Resistor"
+
+#~ msgid "Capacitor"
+#~ msgstr "Capacitor"
+
+#~ msgid "Inductor"
+#~ msgstr "Inductor"
+
+#~ msgid "Passive type"
+#~ msgstr "Passive type"
+
+#~ msgid "Spice value in simulation"
+#~ msgstr "Spice value in simulation"
+
+#~ msgid ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+#~ msgstr ""
+#~ "In Spice values, the decimal separator is the point.\n"
+#~ "Values can use Spice unit symbols."
+
+#~ msgid "Spice unit symbols in values (case insensitive):"
+#~ msgstr "Spice unit symbols in values (case insensitive):"
+
+#~ msgid "Library:"
+#~ msgstr "Library:"
+
+#~ msgid "Select file..."
+#~ msgstr "Select file…"
+
+#~ msgid "Model:"
+#~ msgstr "Model:"
+
+#~ msgid "Note:"
+#~ msgstr "Note:"
+
+#~ msgid "note"
+#~ msgstr "note"
+
+#~ msgid "Model"
+#~ msgstr "Model"
+
+#~ msgid "DC/AC Analysis"
+#~ msgstr "DC/AC Analysis"
+
+#~ msgid "DC:"
+#~ msgstr "DC:"
+
+#~ msgid "Volts/Amps"
+#~ msgstr "Volts/Amps"
+
+#~ msgid "AC magnitude:"
+#~ msgstr "AC magnitude:"
+
+#~ msgid "AC phase:"
+#~ msgstr "AC phase:"
+
+#~ msgid "radians"
+#~ msgstr "radians"
+
+#~ msgid "Transient Analysis"
+#~ msgstr "Transient Analysis"
+
+#~ msgid "Initial value:"
+#~ msgstr "Initial value:"
+
+#~ msgid "Pulsed value:"
+#~ msgstr "Pulsed value:"
+
+#~ msgid "Delay time:"
+#~ msgstr "Delay time:"
+
+#~ msgid "Rise time:"
+#~ msgstr "Rise time:"
+
+#~ msgid "Fall time:"
+#~ msgstr "Fall time:"
+
+#~ msgid "Pulse width:"
+#~ msgstr "Pulse width:"
+
+#~ msgid "Pulse"
+#~ msgstr "Pulse"
+
+#~ msgid "DC offset:"
+#~ msgstr "DC offset:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Amplitude:"
+
+#~ msgid "Delay:"
+#~ msgstr "Delay:"
+
+#~ msgid "Damping factor:"
+#~ msgstr "Damping factor:"
+
+#~ msgid "1/seconds"
+#~ msgstr "1/seconds"
+
+#~ msgid "Sinusoidal"
+#~ msgstr "Sinusoidal"
+
+#~ msgid "Rise delay time:"
+#~ msgstr "Rise delay time:"
+
+#~ msgid "Rise time constant:"
+#~ msgstr "Rise time constant:"
+
+#~ msgid "Fall delay time:"
+#~ msgstr "Fall delay time:"
+
+#~ msgid "Fall time constant:"
+#~ msgstr "Fall time constant:"
+
+#~ msgid "Exponential"
+#~ msgstr "Exponential"
+
+#~ msgid "Piece-wise linear"
+#~ msgstr "Piece-wise linear"
+
+#~ msgid "Time:"
+#~ msgstr "Time:"
+
+#~ msgid "second"
+#~ msgstr "second"
+
+#~ msgid "Piece-wise Linear"
+#~ msgstr "Piece-wise Linear"
+
+#~ msgid "Carrier frequency:"
+#~ msgstr "Carrier frequency:"
+
+#~ msgid "Modulation index:"
+#~ msgstr "Modulation index:"
+
+#~ msgid "Signal frequency:"
+#~ msgstr "Signal frequency:"
+
+#~ msgid "Carrier phase:"
+#~ msgstr "Carrier phase:"
+
+#~ msgid "degrees"
+#~ msgstr "degrees"
+
+#~ msgid "Signal phase:"
+#~ msgstr "Signal phase:"
+
+#~ msgid "FM"
+#~ msgstr "FM"
+
+#~ msgid "Modulating frequency:"
+#~ msgstr "Modulating frequency:"
+
+#~ msgid "Signal delay:"
+#~ msgstr "Signal delay:"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "Transient noise"
+#~ msgstr "Transient noise"
+
+#~ msgid "Uniform"
+#~ msgstr "Uniform"
+
+#~ msgid "Gaussian"
+#~ msgstr "Gaussian"
+
+#~ msgid "Poisson"
+#~ msgstr "Poisson"
+
+#~ msgid "Individual value duration:"
+#~ msgstr "Individual value duration:"
+
+#~ msgid "Time delay:"
+#~ msgstr "Time delay:"
+
+#~ msgid "Random"
+#~ msgstr "Random"
+
+#~ msgid "External data"
+#~ msgstr "External data"
+
+#~ msgid "Source Type"
+#~ msgstr "Source Type"
+
+#~ msgid "Source"
+#~ msgstr "Source"
+
+#~ msgid "Line model"
+#~ msgstr "Line model"
+
+#~ msgid "Propagation delay"
+#~ msgstr "Propagation delay"
+
+#~ msgid "Length in wavelength"
+#~ msgstr "Length in wavelength"
+
+#~ msgid "Use time delay"
+#~ msgstr "Use time delay"
+
+#~ msgid "Use frequency and number of wavelength"
+#~ msgstr "Use frequency and number of wavelength"
+
+#~ msgid "Delay / Electrical length"
+#~ msgstr "Delay / Electrical length"
+
+#~ msgid "Lossless"
+#~ msgstr "Lossless"
+
+#~ msgid "Resistance per unit length"
+#~ msgstr "Resistance per unit length"
+
+#~ msgid "ohm / unit"
+#~ msgstr "ohm / unit"
+
+#~ msgid "Inductance per unit length"
+#~ msgstr "Inductance per unit length"
+
+#~ msgid "henry / unit"
+#~ msgstr "henry / unit"
+
+#~ msgid "Capacitance per unit length"
+#~ msgstr "Capacitance per unit length"
+
+#~ msgid "farad / unit"
+#~ msgstr "farad / unit"
+
+#~ msgid "Conductance per unit length"
+#~ msgstr "Conductance per unit length"
+
+#~ msgid "siemens / unit"
+#~ msgstr "siemens / unit"
+
+#~ msgid "Extra parameters"
+#~ msgstr "Extra parameters"
+
+#~ msgid ""
+#~ "The following types of lines have been implemented so far:\n"
+#~ "\n"
+#~ "- RLC\n"
+#~ "- RC\n"
+#~ "- LC\n"
+#~ "- RG\n"
+#~ "\n"
+#~ "Any other combination will yield erroneous results and should not be "
+#~ "tried."
+#~ msgstr ""
+#~ "The following types of lines have been implemented so far:\n"
+#~ "\n"
+#~ "- RLC\n"
+#~ "- RC\n"
+#~ "- LC\n"
+#~ "- RG\n"
+#~ "\n"
+#~ "Any other combination will yield erroneous results and should not be "
+#~ "tried."
+
+#~ msgid "Lossy"
+#~ msgstr "Lossy"
+
+#~ msgid "Transmission Line"
+#~ msgstr "Transmission Line"
+
+#~ msgid "Disable symbol for simulation"
+#~ msgstr "Disable symbol for simulation"
+
+#~ msgid "Alternate node sequence:"
+#~ msgstr "Alternate node sequence:"
+
+#~ msgid "Spice Model Editor"
+#~ msgstr "Spice Model Editor"
+
+#~ msgid "Selecting <no net> will create an isolated copper island."
+#~ msgstr "Selecting <no net> will create an isolated copper island."
 
 #~ msgid "File Open Error"
 #~ msgstr "File Open Error"
@@ -34885,9 +34966,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Convert to Zone"
 #~ msgstr "Convert to Zone"
-
-#~ msgid "Convert to Rule Area"
-#~ msgstr "Convert to Rule Area"
 
 #~ msgid "Convert to Lines"
 #~ msgstr "Convert to Lines"
