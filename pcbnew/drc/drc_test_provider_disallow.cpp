@@ -81,6 +81,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     std::vector<ZONE*>                   antiCopperKeepouts;
     std::vector<ZONE*>                   copperZones;
     std::vector<std::pair<ZONE*, ZONE*>> toCache;
+    std::atomic<size_t>                  done( 1 );
     int                                  totalCount = 0;
 
     forEachGeometryItem( {}, LSET::AllLayersMask(),
@@ -107,15 +108,14 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         }
     }
 
-    PROGRESS_REPORTER* reporter = m_drcEngine->GetProgressReporter();
-
-    auto query_areas = [&]( std::pair<ZONE*, ZONE*> aCache ) -> size_t
+    auto query_areas =
+            [&]( std::pair<ZONE* /* rule area */, ZONE* /* copper zone */> areaZonePair ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                ZONE*    ruleArea = aCache.first;
-                ZONE*    copperZone = aCache.second;
+                ZONE*    ruleArea = areaZonePair.first;
+                ZONE*    copperZone = areaZonePair.second;
                 EDA_RECT areaBBox = ruleArea->GetCachedBoundingBox();
                 EDA_RECT copperBBox = copperZone->GetCachedBoundingBox();
                 bool     isInside = false;
@@ -138,7 +138,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                             if( zoneRTree->QueryColliding( areaBBox, &areaPoly, layer ) )
                             {
                                 isInside = true;
-                                return 0;
+                                break;
                             }
 
                             if( m_drcEngine->IsCancelled() )
@@ -159,7 +159,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     board->m_InsideAreaCache[ key ] = isInside;
                 }
 
-                m_drcEngine->AdvanceProgress();
+                done.fetch_add( 1 );
 
                 return 1;
             };
@@ -169,18 +169,16 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
     returns.reserve( toCache.size() );
 
-    for( auto& cache : toCache )
-        returns.emplace_back( tp.submit( query_areas, cache ) );
+    for( const std::pair<ZONE*, ZONE*>& areaZonePair : toCache )
+        returns.emplace_back( tp.submit( query_areas, areaZonePair ) );
 
-    for( auto& retval : returns )
+    for( const std::future<size_t>& retval : returns )
     {
         std::future_status status;
 
         do
         {
-            if( reporter )
-                reporter->KeepRefreshing();
-
+            m_drcEngine->ReportProgress( static_cast<double>( done ) / toCache.size() );
             status = retval.wait_for( std::chrono::milliseconds( 100 ) );
         } while( status != std::future_status::ready );
     }
