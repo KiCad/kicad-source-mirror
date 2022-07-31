@@ -2087,8 +2087,8 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
 
     if( aLayer == LAYER_CONFLICTS_SHADOW )    // happens only if locked
     {
-        const SHAPE_POLY_SET& frontpoly = aFootprint->GetPolyCourtyard( F_CrtYd );
-        const SHAPE_POLY_SET& backpoly = aFootprint->GetPolyCourtyard( B_CrtYd );
+        const SHAPE_POLY_SET& frontpoly = aFootprint->GetCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backpoly = aFootprint->GetCourtyard( B_CrtYd );
 
         const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
 

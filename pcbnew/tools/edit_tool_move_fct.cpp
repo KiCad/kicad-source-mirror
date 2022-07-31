@@ -126,8 +126,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
         if( fpA->IsSelected() )
             continue;
 
-        const SHAPE_POLY_SET& frontA = fpA->GetPolyCourtyard( F_CrtYd );
-        const SHAPE_POLY_SET& backA = fpA->GetPolyCourtyard( B_CrtYd );
+        const SHAPE_POLY_SET& frontA = fpA->GetCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backA = fpA->GetCourtyard( B_CrtYd );
 
         if( frontA.OutlineCount() == 0 && backA.OutlineCount() == 0 )
              // No courtyards defined and no hole testing against other footprint's courtyards
@@ -143,10 +143,10 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
 
         for( FOOTPRINT* fpB : m_FpInMove )
         {
-            fpB->BuildPolyCourtyards();
+            fpB->BuildCourtyardCaches();
             EDA_RECT              fpBBBox = fpB->GetBoundingBox();
-            const SHAPE_POLY_SET& frontB = fpB->GetPolyCourtyard( F_CrtYd );
-            const SHAPE_POLY_SET& backB = fpB->GetPolyCourtyard( B_CrtYd );
+            const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
             DRC_CONSTRAINT        constraint;
             int                   clearance;
             int                   actual;
@@ -191,8 +191,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                         if( pad->HasHole() )
                         {
                             std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
-                            const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
-                            const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
+                            const SHAPE_POLY_SET& front = footprint->GetCourtyard( F_CrtYd );
+                            const SHAPE_POLY_SET& back = footprint->GetCourtyard( B_CrtYd );
 
                             if( front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
                                 return true;
@@ -249,7 +249,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Init( BOARD* aBoard )
     for( FOOTPRINT* fp: m_board->Footprints() )
     {
         fp->ClearFlags( COURTYARD_CONFLICT );
-        fp->BuildPolyCourtyards();
+        fp->BuildCourtyardCaches();
     }
 }
 

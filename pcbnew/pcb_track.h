@@ -39,7 +39,7 @@
 #include <board_connected_item.h>
 #include <convert_to_biu.h>
 #include <geometry/shape_segment.h>
-
+#include "core/minoptmax.h"
 
 class PCB_TRACK;
 class PCB_VIA;
@@ -192,6 +192,8 @@ public:
      * @return int - the clearance in internal units.
      */
     int GetLocalClearance( wxString* aSource ) const override;
+
+    MINOPTMAX<int> GetWidthConstraint( wxString* aSource ) const;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

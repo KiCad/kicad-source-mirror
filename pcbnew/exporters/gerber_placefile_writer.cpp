@@ -179,7 +179,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         bool useFpPadsBbox = true;
         bool onBack = aLayer == B_Cu;
 
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
 
         int checkFlag = onBack ? MALFORMED_B_COURTYARD : MALFORMED_F_COURTYARD;
 
@@ -188,7 +188,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             gbr_metadata.SetApertureAttrib(
                     GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 
-            const SHAPE_POLY_SET& courtyard = footprint->GetPolyCourtyard( aLayer );
+            const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( aLayer );
 
             for( int ii = 0; ii < courtyard.OutlineCount(); ii++ )
             {

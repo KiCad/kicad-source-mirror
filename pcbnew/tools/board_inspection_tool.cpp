@@ -129,7 +129,7 @@ DRC_ENGINE BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError, bool* aCou
         for( ZONE* zone : footprint->Zones() )
             zone->CacheBoundingBox();
 
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
 
         if( aCourtyardError && ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
             *aCourtyardError = true;
@@ -854,8 +854,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     for( PCB_LAYER_ID layer : { F_CrtYd, B_CrtYd } )
     {
-        bool aCourtyard = aFP && !aFP->GetPolyCourtyard( layer ).IsEmpty();
-        bool bCourtyard = bFP && !bFP->GetPolyCourtyard( layer ).IsEmpty();
+        bool aCourtyard = aFP && !aFP->GetCourtyard( layer ).IsEmpty();
+        bool bCourtyard = bFP && !bFP->GetCourtyard( layer ).IsEmpty();
 
         if( aCourtyard && bCourtyard )
         {
@@ -990,18 +990,18 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     if( aFP && b->IsOnLayer( Edge_Cuts ) )
     {
-        if( !aFP->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+        if( !aFP->GetCourtyard( F_CrtYd ).IsEmpty() )
             reportPhysicalClearance( F_CrtYd );
 
-        if( !aFP->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+        if( !aFP->GetCourtyard( B_CrtYd ).IsEmpty() )
             reportPhysicalClearance( B_CrtYd );
     }
     else if( bFP && a->IsOnLayer( Edge_Cuts ) )
     {
-        if( !bFP->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+        if( !bFP->GetCourtyard( F_CrtYd ).IsEmpty() )
             reportPhysicalClearance( F_CrtYd );
 
-        if( !bFP->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+        if( !bFP->GetCourtyard( B_CrtYd ).IsEmpty() )
             reportPhysicalClearance( B_CrtYd );
     }
 

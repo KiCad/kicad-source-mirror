@@ -152,7 +152,7 @@ bool DRC_CACHE_GENERATOR::Run()
     m_drcEngine->SetMaxProgress( allZones.size() );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        footprint->BuildPolyCourtyards();
+        footprint->BuildCourtyardCaches();
 
     thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;

@@ -124,7 +124,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 errorHandler( aItemA, aItemB, DRCE_MALFORMED_COURTYARD, aMsg, aPt );
             };
 
-    footprint->BuildPolyCourtyards( &outlineErrorHandler );
+    footprint->BuildCourtyardCaches( &outlineErrorHandler );
 
     footprint->CheckFootprintAttributes(
             [&]( const wxString& aMsg )

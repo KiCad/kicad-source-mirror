@@ -589,6 +589,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     if( !cacheGenerator.Run() )         // ... and regenerate them.
         return;
 
+    int timestamp = m_board->GetTimeStamp();
+
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
@@ -596,6 +598,10 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         if( !provider->Run() )
             break;
     }
+
+    // DRC tests are multi-threaded; anything that causes us to attempt to re-generate the
+    // caches while DRC is running is problematic.
+    wxASSERT( timestamp == m_board->GetTimeStamp() );
 }
 
 
@@ -1083,10 +1089,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     {
                         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
 
-                        if( !footprint->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+                        if( !footprint->GetCourtyard( F_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::FrontMask();
 
-                        if( !footprint->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+                        if( !footprint->GetCourtyard( B_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::BackMask();
                     }
 

@@ -59,7 +59,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_visibleBBoxCacheTimeStamp( 0 ),
         m_textExcludedBBoxCacheTimeStamp( 0 ),
         m_hullCacheTimeStamp( 0 ),
-        m_initial_comments( nullptr )
+        m_initial_comments( nullptr ),
+        m_courtyard_cache_timestamp( 0 )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
@@ -1658,7 +1659,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
 
-    std::swap( m_poly_courtyard_front, m_poly_courtyard_back );
+    std::swap( m_courtyard_cache_front, m_courtyard_cache_back );
 }
 
 
@@ -2186,7 +2187,7 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 
     if( aLayer == F_CrtYd || aLayer == B_CrtYd )
     {
-        const SHAPE_POLY_SET& courtyard = GetPolyCourtyard( aLayer );
+        const SHAPE_POLY_SET& courtyard = GetCourtyard( aLayer );
 
         if( courtyard.OutlineCount() == 0 )    // malformed/empty polygon
             return shape;
@@ -2209,11 +2210,25 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 }
 
 
-void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
+const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
 {
-    m_poly_courtyard_front.RemoveAllContours();
-    m_poly_courtyard_back.RemoveAllContours();
+    if( GetBoard() && GetBoard()->GetTimeStamp() > m_courtyard_cache_timestamp )
+        const_cast<FOOTPRINT*>( this )->BuildCourtyardCaches();
+
+    if( IsBackLayer( aLayer ) )
+        return m_courtyard_cache_back;
+    else
+        return m_courtyard_cache_front;
+}
+
+
+void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
+{
+    m_courtyard_cache_front.RemoveAllContours();
+    m_courtyard_cache_back.RemoveAllContours();
     ClearFlags( MALFORMED_COURTYARDS );
+
+    m_courtyard_cache_timestamp = GetBoard()->GetTimeStamp();
 
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
@@ -2236,26 +2251,26 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
     int errorMax = Millimeter2iu( 0.02 );         // max error for polygonization
     int chainingEpsilon = Millimeter2iu( 0.02 );  // max dist from one endPt to next startPt
 
-    if( ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, errorMax, chainingEpsilon,
+    if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, errorMax, chainingEpsilon,
                                  aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_poly_courtyard_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+        m_courtyard_cache_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
 
-        m_poly_courtyard_front.CacheTriangulation( false );
+        m_courtyard_cache_front.CacheTriangulation( false );
     }
     else
     {
         SetFlags( MALFORMED_F_COURTYARD );
     }
 
-    if( ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, errorMax, chainingEpsilon,
+    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, errorMax, chainingEpsilon,
                                  aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_poly_courtyard_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+        m_courtyard_cache_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
 
-        m_poly_courtyard_back.CacheTriangulation( false );
+        m_courtyard_cache_back.CacheTriangulation( false );
     }
     else
     {
