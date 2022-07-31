@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-16 04:16+0000\n"
+"PO-Revision-Date: 2022-08-02 15:49+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -272,9 +272,8 @@ msgid "&Preferences"
 msgstr "&Preferencias"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Vistas (Alt+Tab):"
+msgstr "Vistas (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -1468,9 +1467,8 @@ msgid "Warning"
 msgstr "Aviso"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Error al abrir el archivo"
+msgstr "Advertencia de archivo abierto"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -6082,9 +6080,8 @@ msgid "Show Grid"
 msgstr "Mostrar Cuadrícula"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Muestra puntos o líneas en la cuadrícula de la ventana de edición"
+msgstr "Mostrar la cuadrícula de fondo en la ventana de edición"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9928,22 +9925,20 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "El simulador requiere un esquema completamente anotado."
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Guardar todos los cambios"
+msgstr "Guardar todos los voltajes"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Escribir una directiva para guardar todos los voltajes (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "Guardar todas las librerías"
+msgstr "Guardar todas las corrientes"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Escribe una directiva para guardar todas las corrientes (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -10906,19 +10901,18 @@ msgid "Add signal by name:"
 msgstr "Añadir señal por nombre:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "No ha podido crearse el archivo de librería de símbolos '%s'."
+msgstr "Fallo en la lectura del modelo de biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:713
-#, fuzzy
 msgid "Browse Models"
-msgstr "Navegar archivos"
+msgstr "Buscar modelos"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "No se ha encontrado el componente '%s' en la librería"
+msgstr "No hay ningún modelo llamado '%s' en la biblioteca."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11872,14 +11866,15 @@ msgstr ""
 "desconectados incluso cuando la herramienta para añadir líneas no está activa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Limpiar el resaltado de redes"
+msgstr "<ESC> borra el resaltado de redes"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"El primer <ESC> en la herramienta de selección borra la selección, el "
+"siguiente borra el resaltado de redes"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -13293,9 +13288,9 @@ msgstr ""
 "La anotación tiene que ser corregida antes de simular."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "No pudo encontrarse el archivo de librería %s."
+msgstr "No pudo encontrarse el archivo de biblioteca '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14917,19 +14912,19 @@ msgid "Discard New Sheet"
 msgstr "Descartar nueva hoja"
 
 #: eeschema/sim/sim_model.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "No puede interpretarse '%s' en '%s'"
+msgstr "Fallo al establecer el parámetro '%s' a '%s'"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s describe %lu pines, esperados %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "Fallo al crear el archivo '%s'."
+msgstr "Fallo al inferir el modelo a partir del valor '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15184,9 +15179,8 @@ msgid "Voltage (measured)"
 msgstr "Voltaje (medido)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Model_type desconocido "
+msgstr "Tipo de SIM_VALUE desconocido"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16579,14 +16573,12 @@ msgid "Change existing item to a text comment"
 msgstr "Cambiar el elemento existente a un comentario de texto"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Cambiar a texto"
+msgstr "Cambiar a cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Cambiar el elemento existente a un comentario de texto"
+msgstr "Cambiar el elemento existente a un cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:520
 msgid "Cleanup Sheet Pins"
@@ -17173,9 +17165,8 @@ msgid "Edit '%s' Field"
 msgstr "Editar el campo '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "Vacío"
+msgstr "<vacío>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18382,9 +18373,8 @@ msgid "Previous Layer"
 msgstr "Capa anterior"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Mover capas:"
+msgstr "Mover capa hacia arriba"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -18392,9 +18382,8 @@ msgid "Move Current Layer Up"
 msgstr "Mover la capa actual hacia arriba"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Mover placa hacia abajo"
+msgstr "Mover capa hacia abajo"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -20560,9 +20549,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Resistividad del cobre:"
+msgstr "Resistividad del conductor:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -23474,30 +23462,26 @@ msgstr "Propiedades de lágrima"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:225
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Ajustes generales del pin"
+msgstr "Ajustes de conversión"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:66
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "Aumentar el ancho de línea"
+msgstr "Ignorar los anchos de línea de los objetos de origen"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:70
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Eliminar objetos con el borrador"
+msgstr "Eliminar los objetos de origen después de la conversión"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:242
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Conexión a zonas de cobre"
+msgstr "Convertir a zona de cobre"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:440
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23521,9 +23505,8 @@ msgid "No layer selected."
 msgstr "No se ha seleccionado ninguna capa."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:967
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "Seleccionar <sin red> creará una isla de cobre aislada."
+msgstr "<sin red> dará lugar a una isla de cobre aislada."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -26043,60 +26026,53 @@ msgid "Line Segment Properties"
 msgstr "Propiedades del segmento"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "Propiedades del círculo"
+msgstr "Propiedades de la curva"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
 msgstr "Modificar las propiedades de dibujo"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
 msgstr "El ángulo del arco no puede ser cero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Arco no válido con radio %f y ángulo %f"
+msgstr "Arco inválido con radio %f y ángulo %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
-#, fuzzy
 msgid "Line width must be greater than zero."
-msgstr "El radio debe ser mayor de cero."
+msgstr "El ancho de línea debe ser mayor que cero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
-msgstr "El radio debe ser mayor de cero."
+msgstr "El radio debe ser mayor que cero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
+msgstr "El ancho de línea debe ser mayor que cero para un círculo sin rellenar."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
 msgstr "El rectángulo no puede estar vacío."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
+msgstr ""
+"El ancho de línea debe ser mayor que cero para un rectángulo sin rellenar."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
+msgstr ""
+"El ancho de línea debe ser mayor que cero para un polígono sin rellenar."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
+msgstr "El ancho de línea debe ser mayor que cero para una curva sin rellenar."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
@@ -26503,9 +26479,8 @@ msgid "Import Netlist"
 msgstr "Importar lista de redes"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "Conexión a zonas de cobre"
+msgstr "Convertir a zona de no cobre"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -28085,9 +28060,8 @@ msgid "Push Pad Properties"
 msgstr "Empujar propiedades de pad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "Ajustes de pin:"
+msgstr "Ajustes de conversión:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 msgid "Convert to Rule Area"
@@ -36798,9 +36772,8 @@ msgid "Draw an arc"
 msgstr "Dibujar un arco"
 
 #: pcbnew/tools/drawing_tool.cpp:707
-#, fuzzy
 msgid "Place an image"
-msgstr "Situar un módulo"
+msgstr "Colocar una imagen"
 
 #: pcbnew/tools/drawing_tool.cpp:954
 msgid "Place a text"
@@ -37868,7 +37841,6 @@ msgid "Toggle net highlighting"
 msgstr "Alternar resaltado de red"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Resaltar la red seleccionada"
 
@@ -38556,34 +38528,28 @@ msgid "Footprint Name"
 msgstr "Nombre de huella"
 
 #: pcbnew/tools/pcb_control.cpp:1271
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "Margen resuelto: %s."
+msgstr "Margen resuelto"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Margen del antipad:"
+msgstr "Margen actual"
 
 #: pcbnew/tools/pcb_control.cpp:1317
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "Margen resuelto: %s."
+msgstr "Margen de orificios resuelta"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Margen de orificio a orificio:"
+msgstr "Margen de orificios actual"
 
 #: pcbnew/tools/pcb_control.cpp:1354
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Margen resuelto: %s."
+msgstr "Margen de borde resuelto"
 
 #: pcbnew/tools/pcb_control.cpp:1359
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Margen resuelto: %s."
+msgstr "Holgura de margen resuelta"
 
 #: pcbnew/tools/pcb_control.cpp:1368
 msgid "Selected Items"
@@ -38779,14 +38745,12 @@ msgid "Show copper zones"
 msgstr "Mostrar zonas de cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Images"
-msgstr "Imagen"
+msgstr "Imágenes"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "Mostrar como una imagen espejada"
+msgstr "Mostrar imágenes del usuario"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Front"
