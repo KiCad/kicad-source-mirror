@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-26 16:34-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -286,7 +286,7 @@ msgstr "&Asetukset"
 #: pcbnew/widgets/appearance_controls.cpp:2671
 #: pcbnew/widgets/appearance_controls_base.cpp:182
 msgid "Viewports (Alt+Tab):"
-msgstr "Näkymät (Ctrl+Sarkain):"
+msgstr "Näkymät (Alt+Sarkain):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:63
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -1477,9 +1477,8 @@ msgid "Warning"
 msgstr "Varoitus"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Virhe Avattaessa Tiedostoa"
+msgstr "Tiedoston Avaamisen Varoitus"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -12430,14 +12429,15 @@ msgstr ""
 "nastoja, vaikka johdotustyökalu ei olisi aktiivinen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Tyhjennä verkon korostus"
+msgstr "<ESC> Tyhjentää verkon korostuksen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Ensimmäinen <ESC> valintatyökalussa tyhjentää valinnan, seuraava poistaa "
+"verkon korostuksen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -17053,14 +17053,12 @@ msgid "Change existing item to a text comment"
 msgstr "Vaihda nykyinen kohde tekstikommentiksi"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Muuta tekstiksi"
+msgstr "Vaihda Tekstilaatikkoon"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Vaihda nykyinen kohde tekstikommentiksi"
+msgstr "Muuta olemassa oleva kohde tekstilaatikkoon"
 
 #: eeschema/tools/ee_actions.cpp:520
 msgid "Cleanup Sheet Pins"
@@ -17639,9 +17637,8 @@ msgid "Edit '%s' Field"
 msgstr "Muokkaa '%s' Kenttää"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "Tyhjä"
+msgstr "<tyhjä>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18836,9 +18833,8 @@ msgid "Previous Layer"
 msgstr "Edellinen Kerros"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Siirrä piirilevyä Ylöspäin"
+msgstr "Siirrä Kerros Ylös"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -18846,9 +18842,8 @@ msgid "Move Current Layer Up"
 msgstr "Siirrä Nykyistä Kerrosta Ylös"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Siirrä piirilevyä Alaspäin"
+msgstr "Siirrä Kerros Alas"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -26360,60 +26355,53 @@ msgid "Line Segment Properties"
 msgstr "Linjasegmentin ominaisuudet"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "Ympyrän ominaisuudet"
+msgstr "Kaaren Ominaisuudet"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
 msgstr "Muokkaa piirustuksen ominaisuuksia"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
-msgstr "Kaarikulma ei voi olla nolla."
+msgstr "Kaaren kulma ei voi olla nolla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Virheellinen kaari säteellä %f ja kulmalla %f"
+msgstr "Virheellinen kaari säteellä %f ja kulmalla %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
-#, fuzzy
 msgid "Line width must be greater than zero."
-msgstr "Voutin on oltava suurempi kuin vref"
+msgstr "Viivan leveyden on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
-msgstr "Voutin on oltava suurempi kuin vref"
+msgstr "Säteen on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "Viivan leveys ei saa olla 0 täyttämättömille muodoille."
+msgstr "Täyttämättömän ympyrän viivan leveyden on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
-msgstr "Suorakulmio ei voi olla tyhjä."
+msgstr "Suorakaide ei voi olla tyhjä."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "Viivan leveys ei saa olla 0 täyttämättömille muodoille."
+msgstr ""
+"Viivan leveyden on oltava suurempi kuin nolla täyttämättömässä "
+"suorakulmiossa."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "Viivan leveys ei saa olla 0 täyttämättömille muodoille."
+msgstr "Täyttämättömän polygonin viivan leveyden on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "Viivan leveys ei saa olla 0 täyttämättömille muodoille."
+msgstr "Viivaleveyden on oltava suurempi kuin nolla täyttämättömälle kaarelle."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
@@ -36933,9 +36921,8 @@ msgid "Draw an arc"
 msgstr "Piirrä kaari"
 
 #: pcbnew/tools/drawing_tool.cpp:707
-#, fuzzy
 msgid "Place an image"
-msgstr "Asemoi osa"
+msgstr "Aseta kuva"
 
 #: pcbnew/tools/drawing_tool.cpp:954
 msgid "Place a text"
@@ -37991,9 +37978,8 @@ msgid "Toggle net highlighting"
 msgstr "Kytke verkon korostus"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
-msgstr "Korosta valittu verkko"
+msgstr "Korosta Valittu Verkko"
 
 #: pcbnew/tools/pcb_actions.cpp:771
 msgid "Highlight all copper items on the selected net(s)"
@@ -38359,7 +38345,7 @@ msgstr "Korjaa Piirilevy"
 
 #: pcbnew/tools/pcb_actions.cpp:1139
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "Suorita erilaisia diagnooseja ja yritä korjata levy"
+msgstr "Suorita erilaisia diagnooseja ja yritä korjata piirilevy"
 
 #: pcbnew/tools/pcb_actions.cpp:1144
 msgid "Repair Footprint"
@@ -38474,7 +38460,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1285
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja jäljet kytkentäkaavioarkilla"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1290
 msgid "Items in Same Hierarchical Sheet"
@@ -38482,7 +38468,7 @@ msgstr "Kohteet Samassa Hierarkkisessa Lehdessä"
 
 #: pcbnew/tools/pcb_actions.cpp:1291
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja raidat samalla kaavakkeella"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1296
 msgid "Filter Selected Items..."
@@ -38538,7 +38524,9 @@ msgstr "Aseta ulkopuoliset jalanjäljet"
 
 #: pcbnew/tools/pcb_actions.cpp:1338
 msgid "Performs automatic placement of components outside board area"
-msgstr "Suorittaa komponentit automaattisesti levyn alueen ulkopuolelle"
+msgstr ""
+"Suorittaa komponettien sijoituksen automaattisesti piirilevyn alueen "
+"ulkopuolelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Route Single Track"
@@ -38546,7 +38534,7 @@ msgstr "Reititä Yksittäinen Johdin"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Route tracks"
-msgstr "Reititä Johtimia"
+msgstr "Reititä johtimia"
 
 #: pcbnew/tools/pcb_actions.cpp:1353
 msgid "Route Differential Pair"
@@ -38677,34 +38665,28 @@ msgid "Footprint Name"
 msgstr "Jalanjäljen Nimi"
 
 #: pcbnew/tools/pcb_control.cpp:1271
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "Ratkaistu Välys: %s."
+msgstr "Ratkaistu välys"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Välys"
+msgstr "Todellinen välys"
 
 #: pcbnew/tools/pcb_control.cpp:1317
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "Ratkaistu Välys: %s."
+msgstr "Ratkaistu reiän välys"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Reiän ja reiän välys:"
+msgstr "Todellinen reiän välys"
 
 #: pcbnew/tools/pcb_control.cpp:1354
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "Ratkaistu Välys: %s."
+msgstr "Ratkaistu reunan välys"
 
 #: pcbnew/tools/pcb_control.cpp:1359
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "Ratkaistu Välys: %s."
+msgstr "Ratkaistu marginaalivälys"
 
 #: pcbnew/tools/pcb_control.cpp:1368
 msgid "Selected Items"
@@ -38801,7 +38783,7 @@ msgstr "Vyöhykkeiden tarkistaminen"
 #: pcbnew/tools/zone_filler_tool.cpp:89 pcbnew/tools/zone_filler_tool.cpp:164
 #: pcbnew/tools/zone_filler_tool.cpp:305
 msgid "Fill Zone(s)"
-msgstr "Täytä alue (t)"
+msgstr "Täytä alue"
 
 #: pcbnew/tools/zone_filler_tool.cpp:133 pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Show DRC rules"
@@ -38898,14 +38880,12 @@ msgid "Show copper zones"
 msgstr "Näytä kuparivyöhykkeet"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Images"
-msgstr "Kuva"
+msgstr "Kuvat"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "Näytä peilikuvana"
+msgstr "Näytä käyttäjän kuvat"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Front"
@@ -39483,7 +39463,7 @@ msgstr "Kerroksen esiasetukset"
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
 msgid "Create a new project for this board"
-msgstr "Luo uusi projekti tälle taululle"
+msgstr "Luo uusi projekti tälle piirilevylle"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
