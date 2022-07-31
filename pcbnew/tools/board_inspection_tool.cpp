@@ -317,6 +317,20 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                                      reportMax( r->GetUnits(),  constraint ) ) );
         break;
 
+    case DRCE_CONNECTION_WIDTH:
+        r = m_inspectClearanceDialog->AddPage( _( "Connection Width" ) );
+        reportHeader( _( "Connection width resolution for:" ), a, b, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( CONNECTION_WIDTH_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved min connection width constraint: %s." ),
+                                     reportMin( r->GetUnits(),  constraint ) ) );
+        break;
+
     case DRCE_VIA_DIAMETER:
         r = m_inspectClearanceDialog->AddPage( _( "Via Diameter" ) );
         reportHeader( _( "Via diameter resolution for:" ), a, r );

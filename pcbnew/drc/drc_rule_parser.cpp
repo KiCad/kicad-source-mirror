@@ -313,6 +313,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_text_height:               c.m_Type = TEXT_HEIGHT_CONSTRAINT;               break;
     case T_text_thickness:            c.m_Type = TEXT_THICKNESS_CONSTRAINT;            break;
     case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
+    case T_connection_width:          c.m_Type = CONNECTION_WIDTH_CONSTRAINT;          break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
     case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
     case T_zone_connection:           c.m_Type = ZONE_CONNECTION_CONSTRAINT;           break;

@@ -4,6 +4,7 @@ board_edge
 buried_via
 clearance
 condition
+connection_width
 constraint
 courtyard_clearance
 diff_pair_gap

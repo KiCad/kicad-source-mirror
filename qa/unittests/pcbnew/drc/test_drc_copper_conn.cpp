@@ -48,14 +48,15 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
 {
     // Check for minimum copper connection errors
 
-    std::vector<wxString> tests =
+    std::vector<std::pair<wxString, int>> tests =
     {
-        "issue9870"
+        { "issue9870",              12  },
+        { "connection_width_rules",  3  }
     };
 
-    for( const wxString& relPath : tests )
+    for( const std::pair<wxString, int>& test : tests )
     {
-        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+        KI_TEST::LoadBoard( m_settingsManager, test.first, m_board );
         KI_TEST::FillZones( m_board.get() );
 
         std::vector<DRC_ITEM>  violations;
@@ -82,10 +83,10 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
 
         bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-        if( violations.size() == 12 )
+        if( violations.size() == test.second )
         {
             BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC connection width: %s, passed", relPath ) );
+            BOOST_TEST_MESSAGE( wxString::Format( "DRC connection width: %s, passed", test.first ) );
         }
         else
         {
@@ -98,7 +99,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
                                                      itemMap ) );
             }
 
-            BOOST_ERROR( wxString::Format( "DRC connection width: %s, failed", relPath ) );
+            BOOST_ERROR( wxString::Format( "DRC connection width: %s, failed", test.first ) );
         }
     }
 }

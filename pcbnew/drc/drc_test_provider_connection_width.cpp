@@ -37,6 +37,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_rtree.h>
+#include <drc/drc_rule_condition.h>
 #include <footprint.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
@@ -569,19 +570,24 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     if( !reportPhase( _( "Checking nets for minimum connection width..." ) ) )
         return false;   // DRC cancelled
 
-    LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
-    LSEQ   copperLayers = copperLayerSet.Seq();
-
-    BOARD* board = m_drcEngine->GetBoard();
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    LSET          copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
+    LSEQ          copperLayers = copperLayerSet.Seq();
+    BOARD*        board = m_drcEngine->GetBoard();
+    DRC_RTREE*    tree = board->m_CopperItemRTreeCache.get();
+    std::set<int> distinctMinWidths
+                        = m_drcEngine->QueryDistinctConstraints( CONNECTION_WIDTH_CONSTRAINT );
 
     if( m_drcEngine->IsCancelled() )
         return false;   // DRC cancelled
 
-    std::map<PCB_LAYER_ID, std::map<int, std::set<BOARD_ITEM*>>> net_items;
-    std::atomic<size_t> done( 1 );
+    struct ITEMS_POLY
+    {
+        std::set<BOARD_ITEM*> items;
+        SHAPE_POLY_SET        poly;
+    };
 
-    DRC_RTREE*    tree = board->m_CopperItemRTreeCache.get();
+    std::map< std::pair<int, PCB_LAYER_ID>, ITEMS_POLY > dataset;
+    std::atomic<size_t> done( 1 );
 
     auto calc_effort =
             [&]( const std::set<BOARD_ITEM*>& items, PCB_LAYER_ID aLayer ) -> size_t
@@ -604,28 +610,38 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 return effort;
             };
 
-    auto min_checker =
-            [&](const std::set<BOARD_ITEM*>& aItems, PCB_LAYER_ID aLayer ) -> size_t
+    auto build_netlayer_polys =
+            [&]( int aNetcode, const PCB_LAYER_ID aLayer ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                SHAPE_POLY_SET poly;
+                ITEMS_POLY& data = dataset[ { aNetcode, aLayer } ];
 
-                for( BOARD_ITEM* item : aItems )
+                for( BOARD_ITEM* item : data.items )
                 {
-                    item->TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF,
-                                                                ERROR_OUTSIDE );
+                    item->TransformShapeWithClearanceToPolygon( data.poly, aLayer, 0,
+                                                                ARC_HIGH_DEF, ERROR_OUTSIDE );
                 }
 
-                poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                data.poly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-                int minimum_width = bds.m_MinConn;
-                POLYGON_TEST test( minimum_width );
+                done.fetch_add( calc_effort( data.items, aLayer ) );
 
-                for( int ii = 0; ii < poly.OutlineCount(); ++ii )
+                return 1;
+            };
+
+    auto min_checker =
+            [&]( const ITEMS_POLY& aDataset, const PCB_LAYER_ID aLayer, int aMinWidth ) -> size_t
+            {
+                if( m_drcEngine->IsCancelled() )
+                    return 0;
+
+                POLYGON_TEST test( aMinWidth );
+
+                for( int ii = 0; ii < aDataset.poly.OutlineCount(); ++ii )
                 {
-                    const SHAPE_LINE_CHAIN& chain = poly.COutline( ii );
+                    const SHAPE_LINE_CHAIN& chain = aDataset.poly.COutline( ii );
 
                     test.FindPairs( chain );
                     auto& ret = test.GetVertices();
@@ -635,42 +651,57 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                         SEG span( chain.CPoint( pt.first ), chain.CPoint( pt.second ) );
                         VECTOR2I location = ( span.A + span.B ) / 2;
                         int dist = ( span.A - span.B ).EuclideanNorm();
-                        std::set<BOARD_ITEM*> items = tree->GetObjectsAt( location, aLayer,
-                                                                          minimum_width );
+                        std::set<BOARD_ITEM*> nearbyItems = tree->GetObjectsAt( location, aLayer,
+                                                                                aMinWidth );
 
-                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
-                        wxString msg;
+                        std::vector<BOARD_ITEM*> items;
 
-                        msg.Printf( _( "Minimum connection width %s; actual %s" ),
-                                      MessageTextFromValue( userUnits(), minimum_width ),
-                                      MessageTextFromValue( userUnits(), dist ) );
-
-                        drce->SetErrorMessage( msg + wxS( " " ) + layerDesc( aLayer ) );
-
-                        for( BOARD_ITEM* item : items )
+                        for( BOARD_ITEM* item : nearbyItems )
                         {
-                            if( item->HitTest( location, minimum_width ) )
-                                drce->AddItem( item );
+                            if( item->HitTest( location, aMinWidth ) )
+                                items.push_back( item );
                         }
 
-                        if( !drce->GetIDs().empty() )
-                            reportViolation( drce, location, aLayer );
+                        if( !items.empty() )
+                        {
+                            DRC_CONSTRAINT c = m_drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT,
+                                                                       items[0],
+                                                                       items.size() > 1 ? items[1]
+                                                                                        : nullptr,
+                                                                       aLayer );
+
+                            if( c.Value().Min() == aMinWidth )
+                            {
+                                auto     drce = DRC_ITEM::Create( DRCE_CONNECTION_WIDTH );
+                                wxString msg;
+
+                                msg.Printf( _( "Minimum connection width %s; actual %s" ),
+                                              MessageTextFromValue( userUnits(), aMinWidth ),
+                                              MessageTextFromValue( userUnits(), dist ) );
+
+                                drce->SetErrorMessage( msg + wxS( " " ) + layerDesc( aLayer ) );
+                                drce->SetViolatingRule( c.GetParentRule() );
+
+                                for( BOARD_ITEM* item : items )
+                                    drce->AddItem( item );
+
+                                reportViolation( drce, location, aLayer );
+                            }
+                        }
                     }
                 }
 
-                done.fetch_add( calc_effort( aItems, aLayer ) );
+                done.fetch_add( calc_effort( aDataset.items, aLayer ) );
 
                 return 1;
             };
 
     for( PCB_LAYER_ID layer : copperLayers )
     {
-        auto& layer_items = net_items[layer];
-
         for( ZONE* zone : board->m_DRCCopperZones )
         {
             if( !zone->GetIsRuleArea() && zone->IsOnLayer( layer ) )
-                layer_items[zone->GetNetCode()].emplace( zone );
+                dataset[ { zone->GetNetCode(), layer } ].items.emplace( zone );
         }
 
         for( PCB_TRACK* track : board->Tracks() )
@@ -678,11 +709,11 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( track ) )
             {
                 if( via->FlashLayer( static_cast<int>( layer ) ) )
-                    layer_items[via->GetNetCode()].emplace( via );
+                    dataset[ { via->GetNetCode(), layer } ].items.emplace( via );
             }
             else if( track->IsOnLayer( layer ) )
             {
-                layer_items[track->GetNetCode()].emplace( track );
+                dataset[ { track->GetNetCode(), layer } ].items.emplace( track );
             }
         }
 
@@ -691,29 +722,50 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             for( PAD* pad : fp->Pads() )
             {
                 if( pad->FlashLayer( static_cast<int>( layer ) ) )
-                    layer_items[pad->GetNetCode()].emplace( pad );
+                    dataset[ { pad->GetNetCode(), layer } ].items.emplace( pad );
             }
 
             // Footprint zones are also in the m_DRCCopperZones cache
         }
     }
 
-    thread_pool& tp = GetKiCadThreadPool();
+    thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
-    size_t return_count = 0;
-    size_t total_effort = 0;
+    size_t                           total_effort = 0;
 
-    for( auto& layer_items : net_items )
-        return_count += layer_items.second.size();
+    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
+        total_effort += calc_effort( netLayer.second.items, netLayer.first.second );
 
-    returns.reserve( return_count );
+    total_effort += total_effort * distinctMinWidths.size();
 
-    for( auto& layer_items : net_items )
+    returns.reserve( dataset.size() );
+
+    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
     {
-        for( const auto& items : layer_items.second )
+        returns.emplace_back( tp.submit( build_netlayer_polys, netLayer.first.first,
+                                         netLayer.first.second ) );
+    }
+
+    for( std::future<size_t>& retval : returns )
+    {
+        std::future_status status;
+
+        do
         {
-            returns.emplace_back( tp.submit( min_checker, items.second, layer_items.first ) );
-            total_effort += calc_effort( items.second, layer_items.first );
+            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
+            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
+        } while( status != std::future_status::ready );
+    }
+
+    returns.clear();
+    returns.reserve( dataset.size() * distinctMinWidths.size() );
+
+    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
+    {
+        for( int minWidth : distinctMinWidths )
+        {
+            returns.emplace_back( tp.submit( min_checker, netLayer.second, netLayer.first.second,
+                                             minWidth ) );
         }
     }
 

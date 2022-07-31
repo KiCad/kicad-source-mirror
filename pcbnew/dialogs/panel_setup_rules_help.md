@@ -24,6 +24,7 @@
 
  * annular\_width
  * clearance
+ * connection\_width
  * courtyard_clearance
  * diff\_pair\_gap
  * diff\_pair\_uncoupled
@@ -272,3 +273,10 @@ For the latter use a `(layer "layer_name")` clause in the rule.
         (layer "F.Courtyard")
         (constraint physical_clearance (min 3mm))
         (condition "B.Layer == 'Edge.Cuts'"))
+
+
+    # Check current-carrying capacity
+    (rule high-current
+        (constraint track_width (min 1.0mm))
+        (constraint connection_width (min 0.8mm))
+        (condition "A.NetClass == 'Power'"))

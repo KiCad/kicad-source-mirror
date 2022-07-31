@@ -152,6 +152,10 @@ void DRC_ENGINE::loadImplicitRules()
     widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
     rule->AddConstraint( widthConstraint );
 
+    DRC_CONSTRAINT connectionConstraint( CONNECTION_WIDTH_CONSTRAINT );
+    connectionConstraint.Value().SetMin( bds.m_MinConn );
+    rule->AddConstraint( connectionConstraint );
+
     DRC_CONSTRAINT drillConstraint( HOLE_SIZE_CONSTRAINT );
     drillConstraint.Value().SetMin( bds.m_MinThroughDrill );
     rule->AddConstraint( drillConstraint );
@@ -890,6 +894,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case TEXT_THICKNESS_CONSTRAINT:
                 case DIFF_PAIR_GAP_CONSTRAINT:
                 case LENGTH_CONSTRAINT:
+                case CONNECTION_WIDTH_CONSTRAINT:
                 {
                     if( aReporter )
                     {
@@ -958,12 +963,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                 break;
 
                             case TEXT_HEIGHT_CONSTRAINT:
-                                REPORT( wxString::Format( _( "Checking %s: min %s." ),
-                                                          EscapeHTML( c->constraint.GetName() ),
-                                                          min ) )
-                                break;
-
                             case TEXT_THICKNESS_CONSTRAINT:
+                            case CONNECTION_WIDTH_CONSTRAINT:
                                 REPORT( wxString::Format( _( "Checking %s: min %s." ),
                                                           EscapeHTML( c->constraint.GetName() ),
                                                           min ) )
@@ -1487,10 +1488,15 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                                   PCB_LAYER_ID aMarkerLayer )
 {
+    static std::mutex globalLock;
+
     m_errorLimits[ aItem->GetErrorCode() ] -= 1;
 
     if( m_violationHandler )
+    {
+        std::lock_guard<std::mutex> guard( globalLock );
         m_violationHandler( aItem, aPos, aMarkerLayer );
+    }
 
     if( m_reporter )
     {
@@ -1602,6 +1608,20 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
     }
 
     return worst > 0;
+}
+
+
+std::set<int> DRC_ENGINE::QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId )
+{
+    std::set<int> distinctMinimums;
+
+    if( m_constraintMap.count( aConstraintId ) )
+    {
+        for( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[aConstraintId] )
+            distinctMinimums.emplace( c->constraint.GetValue().Min() );
+    }
+
+    return distinctMinimums;
 }
 
 

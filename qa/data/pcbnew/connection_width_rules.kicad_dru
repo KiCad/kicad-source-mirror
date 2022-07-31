@@ -1,0 +1,7 @@
+(version 1)
+(rule high_current_netclass
+	(constraint connection_width (min 0.16mm))
+	(condition "A.NetClass == 'High_current'"))
+(rule high_current_area
+	(constraint connection_width (min 0.16mm))
+	(condition "A.insideArea('high_current')"))

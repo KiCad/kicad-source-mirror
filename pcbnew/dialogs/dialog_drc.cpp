@@ -577,7 +577,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             || rcItem->GetErrorCode() == DRCE_VIA_DIAMETER
             || rcItem->GetErrorCode() == DRCE_ANNULAR_WIDTH
             || rcItem->GetErrorCode() == DRCE_DRILL_OUT_OF_RANGE
-            || rcItem->GetErrorCode() == DRCE_MICROVIA_DRILL_OUT_OF_RANGE )
+            || rcItem->GetErrorCode() == DRCE_MICROVIA_DRILL_OUT_OF_RANGE
+            || rcItem->GetErrorCode() == DRCE_CONNECTION_WIDTH )
     {
         menu.Append( 3, _( "Run constraints resolution tool..." ) );
     }
