@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
-"PO-Revision-Date: 2022-07-18 15:18+0000\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -29238,7 +29238,7 @@ msgstr "フットプリントのタイプとフットプリントのパッドが
 
 #: pcbnew/drc/drc_item.cpp:210
 msgid "Through hole pad has no hole"
-msgstr "スルーホール パッドに穴がありません"
+msgstr "スルーホール パッドに穴がない"
 
 #: pcbnew/drc/drc_item.cpp:358
 #, c-format
@@ -36180,11 +36180,11 @@ msgstr "すべての導体レイヤーを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
 msgid "Show All Non Copper Layers"
-msgstr "全ての非導体レイヤーを表示"
+msgstr "すべての非導体レイヤーを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
 msgid "Hide All Non Copper Layers"
-msgstr "全ての非導体レイヤーを非表示"
+msgstr "すべての非導体レイヤーを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1733
 msgid "Show Only Front Assembly Layers"

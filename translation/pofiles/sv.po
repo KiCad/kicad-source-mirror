@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
-"PO-Revision-Date: 2022-07-04 20:18+0000\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
+"PO-Revision-Date: 2022-07-28 10:15+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -32,7 +32,7 @@ msgstr "Alla filer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:360
 msgid "Build board outline"
-msgstr "Bygg kortkonturer"
+msgstr "Bygg mönsterkortes konturer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
 msgid "Create layers"
@@ -53,7 +53,8 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Kortkontur saknas/är felaktig. Kör DRC för en fullständig analys."
+msgstr ""
+"Mönsterkortets kontur saknas/är felaktig. Kör DRC för en fullständig analys."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -23430,7 +23431,7 @@ msgstr "Skriv över gammal fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
 msgid "Board outline chaining tolerance:"
-msgstr "Kortkonturens sammanfogningstolerans:"
+msgstr "Mönsterkortkonturens sammanfogningstolerans:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Tight (0.001 mm)"
@@ -24501,7 +24502,7 @@ msgstr "Zoner"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
-msgstr "Kortkonturer"
+msgstr "Mönsterkortets konturer"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter.cpp:191
@@ -29443,7 +29444,7 @@ msgstr "(lager %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:302
 msgid "Checking board outline..."
-msgstr "Kontrollerar kortkontur..."
+msgstr "Kontrollerar mönsterkortets kontur..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:310
 msgid "Checking disabled layers..."
@@ -29519,7 +29520,7 @@ msgstr "De har exporterats som ovala lödytor."
 #: pcbnew/exporters/exporter_vrml.cpp:753
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Kortkontur är felaktig. Kör DRC för en fullständig analys."
+msgstr "Mönsterkortets kontur är felaktig. Kör DRC för en fullständig analys."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
 #: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/exporter_vrml.cpp:1221

@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-27 19:48-0700\n"
-"PO-Revision-Date: 2022-07-17 14:14+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"POT-Creation-Date: 2022-07-18 09:37-0700\n"
+"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"Last-Translator: 김세영 <tpdud2980@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1323,7 +1323,7 @@ msgstr "흑백 임계 값 :"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "레벨을 조정하여 그레이 스케일 그림을 흑백 그림으로 변환합니다."
+msgstr "그레이 스케일 그림을 흑백 그림으로 변환하기 위한 레벨을 조정합니다."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -6756,7 +6756,7 @@ msgstr "파일 '%s'은(는) 이미 목록에 있습니다."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "심볼 풋프린트 관련성 파일 (.equ)"
+msgstr "심볼 풋프린트 관련된 파일 (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -33541,7 +33541,7 @@ msgstr "관련 계층을 공유하지 않는 개체:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
-msgstr "제약 해결 보고서를 위해 항목을 선택하세요."
+msgstr "제약 해결 보고서를 위한 항목을 선택하세요."
 
 #: pcbnew/tools/board_inspection_tool.cpp:685
 msgid "Constraints Report"
@@ -33609,7 +33609,7 @@ msgstr "기록이 불완전할 수 있습니다: 일부 풋프린트 코트야�
 
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Run DRC for a full analysis."
-msgstr "전체 분석을 위해 DRC를 실행합니다."
+msgstr "전체 분석을 위해 DRC를 실행시킵니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Item <b>disallowed</b> at current location."
@@ -33617,11 +33617,11 @@ msgstr "현재 경로에서 항목이 <b>사용 불가능</b>합니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:839
 msgid "Item allowed at current location."
-msgstr "현재 경로에서 항목이 사용가능합니다."
+msgstr "현재 경로에서 항목이 사용 가능합니다."
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
-msgstr "선택 범위에서 생성"
+msgstr "선택 항목에서 생성"
 
 #: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
@@ -33681,7 +33681,7 @@ msgstr "보드 전체 치수 : "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 msgid "Min track/spacing: "
-msgstr "최소 배선/간격 "
+msgstr "최소 배선/간격: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Copper Finish: "
