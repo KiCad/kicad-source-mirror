@@ -89,35 +89,33 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     int    testLength = widthTolerance / ( 2 * sin( DEG2RAD( angleTolerance / 2 ) ) );
     LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
     LSEQ   copperLayers = copperLayerSet.Seq();
-    size_t layerCount = copperLayers.size();
+    int    layerCount = copperLayers.size();
 
-    if( m_drcEngine->IsCancelled() )
+    // Report progress on board zones only.  Everything else is in the noise.
+    int    zoneLayerCount = 0;
+    std::atomic<size_t> done( 1 );
+
+    for( PCB_LAYER_ID layer : copperLayers )
+    {
+        for( ZONE* zone : m_drcEngine->GetBoard()->Zones() )
+        {
+            if( !zone->GetIsRuleArea() && zone->IsOnLayer( layer ) )
+                zoneLayerCount++;
+        }
+    }
+
+    PROGRESS_REPORTER* reporter = m_drcEngine->GetProgressReporter();
+
+    if( reporter && reporter->IsCancelled() )
         return false;   // DRC cancelled
 
     std::vector<SHAPE_POLY_SET> layerPolys( layerCount );
-    std::vector<size_t>         layerEfforts( layerCount );
-    size_t                      total_effort = 0;
-    std::atomic<size_t>         done( 1 );
 
-    auto calc_effort =
-            [&]( BOARD_ITEM* item, PCB_LAYER_ID aLayer ) -> size_t
+    auto sliver_checker =
+            [&]( int aItem ) -> size_t
             {
-                if( item->Type() == PCB_ZONE_T )
-                {
-                    ZONE* zone = static_cast<ZONE*>( item );
-                    return zone->GetFilledPolysList( aLayer )->FullPointCount();
-                }
-                else
-                {
-                    return 4;
-                }
-            };
-
-    auto poly_builder =
-            [&]( size_t ii ) -> size_t
-            {
-                PCB_LAYER_ID    layer = copperLayers[ii];
-                SHAPE_POLY_SET& poly = layerPolys[ii];
+                PCB_LAYER_ID    layer = copperLayers[aItem];
+                SHAPE_POLY_SET& poly = layerPolys[aItem];
 
                 if( m_drcEngine->IsCancelled() )
                     return 0;
@@ -138,6 +136,10 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
                                     for( int jj = 0; jj < fill.OutlineCount(); ++jj )
                                         poly.AddOutline( fill.Outline( jj ) );
+
+                                    // Report progress on board zones only.  Everything else is
+                                    // in the noise.
+                                    done.fetch_add( 1 );
                                 }
                             }
                             else
@@ -146,8 +148,6 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                                                                             ARC_LOW_DEF,
                                                                             ERROR_OUTSIDE );
                             }
-
-                            done.fetch_add( calc_effort( item, layer ) );
 
                             if( m_drcEngine->IsCancelled() )
                                 return false;
@@ -168,107 +168,12 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 return 1;
             };
 
-    auto sliver_checker =
-            [&]( size_t ii ) -> size_t
-            {
-                PCB_LAYER_ID    layer = copperLayers[ii];
-                SHAPE_POLY_SET& poly = layerPolys[ii];
-
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_SLIVER ) )
-                    return 0;
-
-                // Frequently, in filled areas, some points of the polygons are very near (dist is
-                // only a few internal units, like 2 or 3 units).
-                // We skip very small vertices: one cannot really compute a valid orientation of
-                // such a vertex
-                // So skip points near than min_len (in internal units).
-                const int min_len = 3;
-
-                for( int jj = 0; jj < poly.OutlineCount(); ++jj )
-                {
-                    const std::vector<VECTOR2I>& pts = poly.Outline( jj ).CPoints();
-                    int                          ptCount = pts.size();
-
-                    for( int kk = 0; kk < ptCount; ++kk )
-                    {
-                        VECTOR2I pt = pts[ kk ];
-                        VECTOR2I ptPrior = pts[ ( ptCount + kk - 1 ) % ptCount ];
-                        VECTOR2I vPrior = ( ptPrior - pt );
-
-                        if( std::abs( vPrior.x ) < min_len && std::abs( vPrior.y ) < min_len && ptCount > 5)
-                        {
-                            ptPrior = pts[ ( ptCount + kk - 2 ) % ptCount ];
-                            vPrior = ( ptPrior - pt );
-                        }
-
-                        VECTOR2I ptAfter  = pts[ ( kk + 1 ) % ptCount ];
-                        VECTOR2I vAfter = ( ptAfter - pt );
-
-                        if( std::abs( vAfter.x ) < min_len && std::abs( vAfter.y ) < min_len && ptCount > 5 )
-                        {
-                            ptAfter  = pts[ ( kk + 2 ) % ptCount ];
-                            vAfter = ( ptAfter - pt );
-                        }
-
-                        VECTOR2I vIncluded = vPrior.Resize( testLength ) - vAfter.Resize( testLength );
-
-                        if( vIncluded.SquaredEuclideanNorm() < SEG::Square( widthTolerance ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_COPPER_SLIVER );
-                            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + layerDesc( layer ) );
-                            reportViolation( drce, pt, layer );
-                        }
-                    }
-                }
-
-                done.fetch_add( layerEfforts[ layer ] );
-
-                if( m_drcEngine->IsCancelled() )
-                    return 0;
-
-                return 1;
-            };
-
-    for( size_t ii = 0; ii < layerCount; ++ii )
-    {
-        PCB_LAYER_ID layer = copperLayers[ii];
-
-        forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
-                [&]( BOARD_ITEM* item ) -> bool
-                {
-                    layerEfforts[ layer ] += calc_effort( item, layer );
-                    return true;
-                } );
-
-        total_effort += layerEfforts[ layer ];
-    }
-
-    total_effort *= 2;      // Once for building polys; once for checking slivers
-
     thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
 
-    returns.reserve( layerCount );
+    returns.reserve( copperLayers.size() );
 
-    for( size_t ii = 0; ii < layerCount; ++ii )
-        returns.emplace_back( tp.submit( poly_builder, ii ) );
-
-    for( auto& retval : returns )
-    {
-        std::future_status status;
-
-        do
-        {
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
-    }
-
-    returns.clear();
-    returns.reserve( layerCount );
-
-    for( size_t ii = 0; ii < layerCount; ++ii )
+    for( size_t ii = 0; ii < copperLayers.size(); ++ii )
         returns.emplace_back( tp.submit( sliver_checker, ii ) );
 
     for( auto& retval : returns )
@@ -277,10 +182,64 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
         do
         {
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
+            m_drcEngine->ReportProgress( static_cast<double>( zoneLayerCount ) / done );
 
             status = retval.wait_for( std::chrono::milliseconds( 100 ) );
         } while( status != std::future_status::ready );
+    }
+
+
+    for( int ii = 0; ii < layerCount; ++ii )
+    {
+        PCB_LAYER_ID    layer = copperLayers[ii];
+        SHAPE_POLY_SET& poly = layerPolys[ii];
+
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_SLIVER ) )
+            continue;
+
+        // Frequently, in filled areas, some points of the polygons are very near (dist is only
+        // a few internal units, like 2 or 3 units.
+        // We skip very small vertices: one cannot really compute a valid orientation of
+        // such a vertex
+        // So skip points near than min_len (in internal units).
+        const int min_len = 3;
+
+        for( int jj = 0; jj < poly.OutlineCount(); ++jj )
+        {
+            const std::vector<VECTOR2I>& pts = poly.Outline( jj ).CPoints();
+            int                          ptCount = pts.size();
+
+            for( int kk = 0; kk < ptCount; ++kk )
+            {
+                VECTOR2I pt = pts[ kk ];
+                VECTOR2I ptPrior = pts[ ( ptCount + kk - 1 ) % ptCount ];
+                VECTOR2I vPrior = ( ptPrior - pt );
+
+                if( std::abs( vPrior.x ) < min_len && std::abs( vPrior.y ) < min_len && ptCount > 5)
+                {
+                    ptPrior = pts[ ( ptCount + kk - 2 ) % ptCount ];
+                    vPrior = ( ptPrior - pt );
+                }
+
+                VECTOR2I ptAfter  = pts[ ( kk + 1 ) % ptCount ];
+                VECTOR2I vAfter = ( ptAfter - pt );
+
+                if( std::abs( vAfter.x ) < min_len && std::abs( vAfter.y ) < min_len && ptCount > 5 )
+                {
+                    ptAfter  = pts[ ( kk + 2 ) % ptCount ];
+                    vAfter = ( ptAfter - pt );
+                }
+
+                VECTOR2I vIncluded = vPrior.Resize( testLength ) - vAfter.Resize( testLength );
+
+                if( vIncluded.SquaredEuclideanNorm() < SEG::Square( widthTolerance ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_COPPER_SLIVER );
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + layerDesc( layer ) );
+                    reportViolation( drce, pt, layer );
+                }
+            }
+        }
     }
 
     return true;
