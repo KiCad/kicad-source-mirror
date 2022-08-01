@@ -25,6 +25,19 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 
+if( KICAD_SPICE )
+    set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+
+    # Find out the exact libngspice file name
+    get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
+    get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
+
+    set_property( SOURCE sim/ngspice.cpp
+        APPEND PROPERTY COMPILE_DEFINITIONS
+        NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
+        )
+endif()
+
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
