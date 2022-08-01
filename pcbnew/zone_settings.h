@@ -53,7 +53,7 @@ enum class ZONE_BORDER_DISPLAY_STYLE
 };
 
 /// Whether or not to remove isolated islands from a zone
-enum ISLAND_REMOVAL_MODE
+enum class ISLAND_REMOVAL_MODE
 {
     ALWAYS = 0,
     NEVER,
