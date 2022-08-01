@@ -1266,13 +1266,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     // Test hole against pad shape
     if( m_dummyPad->IsOnCopperLayer() && m_dummyPad->GetDrillSize().x > 0 )
     {
-        LSET           lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
-        PCB_LAYER_ID   layer = lset.Seq().at( 0 );
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET padOutline;
 
-        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
-                                                          ERROR_LOC::ERROR_INSIDE );
+        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, UNDEFINED_LAYER, 0,
+                                                          maxError, ERROR_INSIDE );
 
         if( !padOutline.Collide( m_dummyPad->GetPosition() ) )
         {
@@ -1284,9 +1282,9 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
             SHAPE_POLY_SET                 slotOutline;
 
             TransformOvalToPolygon( slotOutline, slot->GetSeg().A, slot->GetSeg().B,
-                                    slot->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+                                    slot->GetWidth(), maxError, ERROR_INSIDE );
 
-            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+            padOutline.BooleanSubtract( slotOutline, SHAPE_POLY_SET::PM_FAST );
 
             if( padOutline.IsEmpty() )
                 warning_msgs.Add( _( "Warning: Pad hole will leave no copper." ) );
