@@ -212,7 +212,6 @@
     (descr "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (tags "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (path "/00000000-0000-0000-0000-000058633372")
-    (attr through_hole)
     (fp_text reference "MK2" (at 0 -4.50088) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp ff4093c6-37e5-4062-80ab-cee0613ea782)
@@ -232,7 +231,6 @@
     (descr "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (tags "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (path "/00000000-0000-0000-0000-000058633409")
-    (attr through_hole)
     (fp_text reference "MK1" (at 0 -4.50088) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp fdb9b92b-133b-4b47-8202-34e9c2a71818)
@@ -252,7 +250,6 @@
     (descr "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (tags "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (path "/00000000-0000-0000-0000-00005863348e")
-    (attr through_hole)
     (fp_text reference "MK4" (at 0 -4.50088) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 89f8f381-144b-4f6d-97c0-9d50963af224)
@@ -272,7 +269,6 @@
     (descr "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (tags "Mounting hole, Befestigungsbohrung, 3,5mm, No Annular, Kein Restring,")
     (path "/00000000-0000-0000-0000-000058633454")
-    (attr through_hole)
     (fp_text reference "MK3" (at 0 -4.50088) (layer "F.SilkS") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp ec3af793-b9a1-4776-987a-62dc3ac44e4a)

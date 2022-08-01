@@ -117,18 +117,19 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 
     std::vector< std::pair<wxString, int> > tests =
     {
-        { "issue1358", 2 },
-        { "issue2512", 5 },
-        { "issue2528", 1 },
-        { "issue5750", 4 },   //Shorting zone fills pass DRC in some cases
-        { "issue5854", 3 },
-        { "issue6879", 7 },
-        { "issue6945", 2 },
-        { "issue7241", 1 },
-        { "issue7267", 4 },
-        { "issue7325", 2 },
-        { "issue8003", 2 },
-        { "issue9081", 2 }
+        { "issue1358",  2 },
+        { "issue2512",  5 },
+        { "issue2528",  1 },
+        { "issue5750",  4 },   // Shorting zone fills pass DRC in some cases
+        { "issue5854",  3 },
+        { "issue6879",  7 },
+        { "issue6945",  2 },
+        { "issue7241",  1 },
+        { "issue7267",  4 },
+        { "issue7325",  2 },
+        { "issue8003",  2 },
+        { "issue9081",  2 },
+        { "issue12109", 8 }    // Pads fail annular width test
     };
 
     for( const std::pair<wxString, int>& entry : tests )
