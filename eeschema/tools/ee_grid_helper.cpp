@@ -294,6 +294,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     case SCH_HIER_LABEL_T:
     case SCH_LABEL_T:
     case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_SHEET_PIN_T:
     {
         std::vector<wxPoint> pts = aItem->GetConnectionPoints();
 
