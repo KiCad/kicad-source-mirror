@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-16 04:16+0000\n"
+"PO-Revision-Date: 2022-08-02 15:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -270,9 +270,8 @@ msgid "&Preferences"
 msgstr "&Inställningar"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Visningsytor (Alt + Tab):"
+msgstr "Visningsytor (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -1462,9 +1461,8 @@ msgid "Warning"
 msgstr "Varning"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Filöppningsfel"
+msgstr "Filöppningsvarning"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -6052,9 +6050,8 @@ msgid "Show Grid"
 msgstr "Visa Rutnät"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Visa rutnätets punkter eller linjer i redigeringsfönstret"
+msgstr "Visa rutnät i redigeringsfönstrets bakgrund"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9882,22 +9879,20 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulatorn kräver ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Spara alla ändringar"
+msgstr "Spara alla spänningar"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Skriv ett direktiv för att spara alla spänningar (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "Spara alla ändringar"
+msgstr "Spara alla strömmar"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Skriv ett direktiv för att spara alla strömmar (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -10856,19 +10851,18 @@ msgid "Add signal by name:"
 msgstr "Lägg till signal efter namn:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att läsa modellbibliotek '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:713
-#, fuzzy
 msgid "Browse Models"
-msgstr "Kodmodell"
+msgstr "Bläddra bland modeller"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Nätnamnet '%s' används redan."
+msgstr "Ingen modell med namnet '%s' finns i biblioteket."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -11817,14 +11811,14 @@ msgstr ""
 "även när trådverktyget inte är aktivt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Rensa nätmarkering"
+msgstr "<ESC> rensar nätmarkering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Första <ESC> i urvalsverktyget rensar urvalet, nästa rensar nätmarkering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -13222,9 +13216,9 @@ msgstr ""
 "Annoteringen måste korrigeras innan simulering."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Kunde inte hitta biblioteksfilen %s."
+msgstr "Kunde inte hitta biblioteksfilen '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14824,19 +14818,19 @@ msgid "Discard New Sheet"
 msgstr "Kasta nytt ark"
 
 #: eeschema/sim/sim_model.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Det går inte att tolka '%s' i '%s'"
+msgstr "Det gick inte att sätta parameter '%s' till '%s'"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s beskriver %lu stift, förväntas %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "Det gick inte att skapa mappen '%s'."
+msgstr "Det gick inte att sluta sig till en modell utifrån värde '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15088,9 +15082,8 @@ msgid "Voltage (measured)"
 msgstr "Spänning (uppmätt)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Okänd Model_type "
+msgstr "Okänd SIM_VALUE typ"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16478,14 +16471,12 @@ msgid "Change existing item to a text comment"
 msgstr "Ändra befintligt objekt till en textkommentar"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Ändra till text"
+msgstr "Byt till textruta"
 
 #: eeschema/tools/ee_actions.cpp:515
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Ändra befintligt objekt till en textkommentar"
+msgstr "Ändra befintligt objekt till en textruta"
 
 #: eeschema/tools/ee_actions.cpp:520
 msgid "Cleanup Sheet Pins"
@@ -17066,9 +17057,8 @@ msgid "Edit '%s' Field"
 msgstr "Redigera '%s' fält"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "Töm"
+msgstr "<tom>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18040,7 +18030,7 @@ msgstr "Bildnamn: \"%s\" Skiktnamn: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:649
 msgid "X2 attr"
-msgstr "X2 attr"
+msgstr "X2-attribut"
 
 #: gerbview/job_file_reader.cpp:156
 msgid "This job file uses an outdated format. Please recreate it."
@@ -18127,7 +18117,7 @@ msgstr "Markera objekt som tillhör detta nät"
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
-msgstr "Attr:"
+msgstr "Attribut:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
@@ -18263,9 +18253,8 @@ msgid "Previous Layer"
 msgstr "Föregående lager"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Flytta mönsterkortet uppåt"
+msgstr "Flytta lager uppåt"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
@@ -18273,9 +18262,8 @@ msgid "Move Current Layer Up"
 msgstr "Flytta aktuellt lager uppåt"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Flytta mönsterkortet neråt"
+msgstr "Flytta lager neråt"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
@@ -20434,9 +20422,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Kopparresistivitet:"
+msgstr "Ledarresistivitet:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -23344,30 +23331,26 @@ msgstr "Egenskaper för kragförstärkningar"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:225
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Inställningar för paduppräkning"
+msgstr "Inställningar för konvertering"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:66
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "Öka linjebredden"
+msgstr "Ignorera källobjektets linjebredder"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:70
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Ta bort filerna och deras innehåll"
+msgstr "Ta bort källobjekt efter konvertering"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:242
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Anslutning till kopparzoner"
+msgstr "Konvertera till kopparzon"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:440
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23392,7 +23375,6 @@ msgid "No layer selected."
 msgstr "Inget lager valt."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:967
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
 msgstr "Väljs <inget nät> skapas en isolerad kopparö."
 
@@ -25899,7 +25881,7 @@ msgstr "Bågvinkeln kan inte vara noll."
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Ogiltig båge med radie %f och vinkel %f"
+msgstr "Ogiltig båge med radie %f och vinkel %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
@@ -26332,9 +26314,8 @@ msgid "Import Netlist"
 msgstr "Importera Netlist"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "Anslutning till kopparzoner"
+msgstr "Konvertera till icke-kopparzoner"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -27779,9 +27760,9 @@ msgid "<none selected>"
 msgstr "<ingen vald>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referensobjekt: '%s'"
+msgstr "Referensobjekt: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -27890,9 +27871,8 @@ msgid "Push Pad Properties"
 msgstr "Push Pad Egenskaper"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "Sidinställningar"
+msgstr "Konverteringsinställningar:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 msgid "Convert to Rule Area"
@@ -30728,9 +30708,8 @@ msgid "Drilled holes co-located"
 msgstr "Borrade hål på samma position"
 
 #: pcbnew/drc/drc_item.cpp:112
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "Kopparanslutning för smal:"
+msgstr "Kopparanslutning för smal"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Track width"
@@ -37548,9 +37527,8 @@ msgid "Toggle net highlighting"
 msgstr "Växla nätmarkering"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
-msgstr "Markera det valda nätet"
+msgstr "Framhäv det valda nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:771
 msgid "Highlight all copper items on the selected net(s)"
@@ -38234,18 +38212,16 @@ msgid "Resolved clearance"
 msgstr "Löst avstånd"
 
 #: pcbnew/tools/pcb_control.cpp:1276
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Lödytans isolationsavstånd:"
+msgstr "Faktisk frigång"
 
 #: pcbnew/tools/pcb_control.cpp:1317
 msgid "Resolved hole clearance"
 msgstr "Löst frigång för hål"
 
 #: pcbnew/tools/pcb_control.cpp:1322
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "Hål till hål:"
+msgstr "Faktisk frigång för hål"
 
 #: pcbnew/tools/pcb_control.cpp:1354
 msgid "Resolved edge clearance"
@@ -38910,11 +38886,11 @@ msgstr "Dölj alla icke-koppar lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1741
 msgid "Show Only Front Assembly Layers"
-msgstr "Visa endast främre monteringslager"
+msgstr "Visa endast framsidans monteringslager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1744
 msgid "Show Only Front Layers"
-msgstr "Visa endast främre lager"
+msgstr "Visa endast framsidans lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1750
 msgid "Show Only Inner Layers"
@@ -38922,7 +38898,7 @@ msgstr "Visa endast inre lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1754
 msgid "Show Only Back Layers"
-msgstr "Visa endast bakre lager"
+msgstr "Visa endast baksidans lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1757
 msgid "Show Only Back Assembly Layers"
