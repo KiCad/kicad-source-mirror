@@ -34,9 +34,6 @@
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 
-template class DIALOG_SIM_MODEL<SCH_FIELD>;
-template class DIALOG_SIM_MODEL<LIB_FIELD>;
-
 template <typename T>
 DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
                                            std::vector<T>& aFields )
@@ -981,3 +978,7 @@ void DIALOG_SIM_MODEL<T>::onParamGridSelectionChange( wxPropertyGridEvent& aEven
     editorControl->SetFocus();
     m_prevParamGridSelection = grid->GetSelection();
 }
+
+
+template class DIALOG_SIM_MODEL<SCH_FIELD>;
+template class DIALOG_SIM_MODEL<LIB_FIELD>;
