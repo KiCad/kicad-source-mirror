@@ -717,8 +717,6 @@ public:
     bool GetDoNotAllowTracks() const     { return m_doNotAllowTracks; }
     bool GetDoNotAllowPads() const       { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
-    bool IsKeepout() const;
-    bool KeepoutAll() const;
 
     void SetIsRuleArea( bool aEnable )           { m_isRuleArea = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }

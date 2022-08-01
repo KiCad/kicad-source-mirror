@@ -1177,20 +1177,6 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
 }
 
 
-bool ZONE::IsKeepout() const
-{
-    return m_doNotAllowCopperPour || m_doNotAllowVias || m_doNotAllowTracks || m_doNotAllowPads ||
-           m_doNotAllowFootprints;
-}
-
-
-bool ZONE::KeepoutAll() const
-{
-    return m_doNotAllowCopperPour && m_doNotAllowVias && m_doNotAllowTracks && m_doNotAllowPads &&
-           m_doNotAllowFootprints;
-}
-
-
 FP_ZONE::FP_ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         ZONE( aParent, true )
 {
