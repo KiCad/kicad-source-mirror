@@ -1739,33 +1739,45 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 
     i = 0;
 
-    m_points.push_back( pts_unique[0] );
-    m_shapes.push_back( shapes_unique[0] );
-
     // stage 2: eliminate colinear segments
-    for( i = 1 ; i < np - 1 ; i ++ )
+    while( i < np - 2 )
     {
-        const VECTOR2I p_prev = pts_unique[i - 1];
-        const VECTOR2I midpoint = pts_unique[i];
-        const VECTOR2I p_next = pts_unique[i + 1];
+        const VECTOR2I p0 = pts_unique[i];
+        int n = i;
 
-
-        if( aRemoveColinear && shapes_unique[i - 1] == SHAPES_ARE_PT
-            && shapes_unique[i] == SHAPES_ARE_PT )
+        if( aRemoveColinear && shapes_unique[i] == SHAPES_ARE_PT
+            && shapes_unique[i + 1] == SHAPES_ARE_PT )
         {
-            const auto distToMidpoint = SEG( p_prev, p_next ).LineDistance( midpoint );
-            const auto isMidpointColinear = SEG( p_prev, p_next ).Collinear( SEG( p_prev, midpoint ) );
-
-            if( distToMidpoint > 1 && !isMidpointColinear )
-            {
-                m_points.push_back( pts_unique[i] );
-                m_shapes.push_back( shapes_unique[i] );
-            }
+            while( n < np - 2
+                    && ( SEG( p0, pts_unique[n + 2] ).LineDistance( pts_unique[n + 1] ) <= 1
+                      || SEG( p0, pts_unique[n + 2] ).Collinear( SEG( p0, pts_unique[n + 1] ) ) ) )
+                n++;
         }
+
+        m_points.push_back( p0 );
+        m_shapes.push_back( shapes_unique[i] );
+
+        if( n > i )
+            i = n;
+
+        if( n == np - 2 )
+        {
+            m_points.push_back( pts_unique[np - 1] );
+            m_shapes.push_back( shapes_unique[np - 1] );
+            return *this;
+        }
+
+        i++;
     }
 
-    m_points.push_back( pts_unique.back() );
-    m_shapes.push_back( shapes_unique.back() );
+    if( np > 1 )
+    {
+        m_points.push_back( pts_unique[np - 2] );
+        m_shapes.push_back( shapes_unique[np - 2] );
+    }
+
+    m_points.push_back( pts_unique[np - 1] );
+    m_shapes.push_back( shapes_unique[np - 1] );
 
     assert( m_points.size() == m_shapes.size() );
 
