@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"PO-Revision-Date: 2022-08-02 15:49+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -267,9 +267,8 @@ msgid "&Preferences"
 msgstr "&Ustawienia"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Widoki (Alt+Tab):"
+msgstr "Widoki (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -6060,9 +6059,8 @@ msgid "Show Grid"
 msgstr "Pokaż siatkę"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Wyświetla siatkę z punktów lub linii w oknie programu"
+msgstr "Wyświetla siatkę w tle w oknie edycyjnym"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9911,22 +9909,20 @@ msgstr ""
 "Symulator wymaga by elementy na schemacie zostały w pełni ponumerowane."
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Zapisz wszystkie zmiany"
+msgstr "Zapisz wszystkie napięcia"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Umieszcza dyrektywę by zapisać wszystkie napięcia (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "Zapisz wszystkie zmiany"
+msgstr "Zapisz wszystkie prądy"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Umieszcza dyrektywę by zapisać wszystkie prądy (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -10887,19 +10883,18 @@ msgid "Add signal by name:"
 msgstr "Dodaj sygnał na podstawie nazwy:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "Nie dało się utworzyć pliku bibliotek symboli '%s'."
+msgstr "Nie można odczytać biblioteki modeli '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:713
-#, fuzzy
 msgid "Browse Models"
-msgstr "Kod modelu"
+msgstr "Przeglądaj modele"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Nazwa sieci '%s' już jest w użyciu."
+msgstr "Nie ma modelu o nazwie '%s' w bibliotece."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:114
 msgid "You need to select DC source"
@@ -13270,9 +13265,9 @@ msgstr ""
 "Numeracja musi być poprawiona przed symulacją."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Nie można odnaleźć pliku biblioteki %s."
+msgstr "Nie można odnaleźć pliku biblioteki '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14890,19 +14885,19 @@ msgid "Discard New Sheet"
 msgstr "Porzuć nowy arkusz"
 
 #: eeschema/sim/sim_model.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Nie można przetworzyć '%s' w '%s'"
+msgstr "Nie ustawić parametru '%s' na '%s'"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s opisuje %lu pinów, spodziewano się %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "Nie można było utworzyć folderu '%s'."
+msgstr "Nie udało się wywnioskować modelu z Wartości '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15157,9 +15152,8 @@ msgid "Voltage (measured)"
 msgstr "Napięcie (zmierzone)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Nieznany Model_type "
+msgstr "Nieznany typ SIM_VALUE"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -20507,9 +20501,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Rezystywność miedzi:"
+msgstr "Rezystywność przewodnika:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -23416,30 +23409,26 @@ msgstr "Właściwości łezek"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:225
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Ustawienia numeracji pól lutowniczych"
+msgstr "Ustawienia konwersji"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:229
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:98
 #: pcbnew/tools/convert_tool.cpp:66
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "Zwiększa grubość linii"
+msgstr "Ignoruj grubość linii z obiektów źródłowych"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:233
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:109
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:102
 #: pcbnew/tools/convert_tool.cpp:70
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Usuwa pliki i ich zawartość"
+msgstr "Usuń obiekty źródłowe po konwersji"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:242
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Połączenia ze strefami miedzi"
+msgstr "Konwertuj na strefę miedzi"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:440
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23463,7 +23452,6 @@ msgid "No layer selected."
 msgstr "Nie wybrano warstwy."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:967
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
 msgstr "Wybór <brak sieci> spowoduje, że powstaną izolowane strefy."
 
@@ -26424,9 +26412,8 @@ msgid "Import Netlist"
 msgstr "Importuj listę sieci"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "Połączenia ze strefami miedzi"
+msgstr "Konwertuj na strefę niebędącą strefą miedzi"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -28007,9 +27994,8 @@ msgid "Push Pad Properties"
 msgstr "Wymuś właściwości pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "Ustawienia numeracji pól lutowniczych"
+msgstr "Ustawienia konwersji:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 msgid "Convert to Rule Area"
