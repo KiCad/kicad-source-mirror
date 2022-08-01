@@ -34,7 +34,8 @@ PROGRESS_REPORTER_BASE::PROGRESS_REPORTER_BASE( int aNumPhases ) :
     m_numPhases( aNumPhases ),
     m_progress( 0 ),
     m_maxProgress( 1000 ),
-    m_cancelled( false )
+    m_cancelled( false ),
+    m_messageChanged( false )
 {
 }
 
@@ -63,6 +64,8 @@ void PROGRESS_REPORTER_BASE::AdvancePhase( const wxString& aMessage )
 void PROGRESS_REPORTER_BASE::Report( const wxString& aMessage )
 {
     std::lock_guard<std::mutex> guard( m_mutex );
+
+    m_messageChanged = m_rptMessage != aMessage;
     m_rptMessage = aMessage;
 }
 

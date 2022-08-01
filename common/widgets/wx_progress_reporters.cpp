@@ -75,12 +75,21 @@ bool WX_PROGRESS_REPORTER::updateUI()
         message = m_rptMessage;
     }
 
-    int  newWidth = GetTextExtent( m_rptMessage ).x;
-
-    if( newWidth > m_messageWidth )
+    // Perhaps the window size is too small if the new message to display is bigger
+    // than the previous message. in this case, resize the WX_PROGRESS_REPORTER window
+    // GetTextExtent has probably bugs in wxWidgets < 3.1.6, so calling it only when
+    // the message has changed is mandatory
+    if( m_messageChanged )
     {
-        m_messageWidth = newWidth;
-        Fit();
+        int  newWidth = GetTextExtent( m_rptMessage ).x;
+
+        if( newWidth > m_messageWidth )
+        {
+            m_messageWidth = newWidth;
+            Fit();
+        }
+
+        m_messageChanged = false;
     }
 
     bool diag = wxProgressDialog::Update( cur, message );
