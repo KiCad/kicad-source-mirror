@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:00-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
-"Last-Translator: 김세영 <tpdud2980@naver.com>\n"
+"PO-Revision-Date: 2022-08-02 18:17+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -24588,14 +24588,12 @@ msgstr "호의 각도는 0이 될 수 없습니다."
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:415
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:427
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
-#, fuzzy
 msgid "The item thickness must be greater than zero."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "아이템의 두께는 0보다 커야 합니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
-#, fuzzy
 msgid "The radius must be greater than zero."
-msgstr "추적 간격은 0보다 커야 합니다."
+msgstr "반지름은 0보다 커야 합니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:412
 msgid "The rectangle cannot be empty."
@@ -24603,7 +24601,7 @@ msgstr "직사각형은 비어있을 수 없습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:421
 msgid "The polygon outline thickness must be >= 0."
-msgstr ""
+msgstr "다각형 윤곽선 두께는 >= 0이어야 합니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:444
 msgid "Error List"
