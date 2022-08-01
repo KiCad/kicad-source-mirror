@@ -1242,13 +1242,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     // Test hole size against pad size
     if( m_dummyPad->IsOnCopperLayer() )
     {
-        LSET           lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
-        PCB_LAYER_ID   layer = lset.Seq().at( 0 );
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET padOutline;
 
-        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
-                                                          ERROR_LOC::ERROR_INSIDE );
+        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, UNDEFINED_LAYER, 0,
+                                                          maxError, ERROR_INSIDE );
 
         const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
         const SEG            drillSeg   = drillShape->GetSeg();
