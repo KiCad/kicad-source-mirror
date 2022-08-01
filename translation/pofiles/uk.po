@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"PO-Revision-Date: 2022-08-02 15:49+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -259,9 +259,8 @@ msgid "&Preferences"
 msgstr "&Налаштування"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Набори (Alt+Tab):"
+msgstr "Вікна перегляду (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -3161,7 +3160,7 @@ msgstr "Скинути унікальний Id"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
-msgstr ""
+msgstr "Введіть тип фільтру"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:120
 msgid "Undo All Changes"
@@ -3506,14 +3505,14 @@ msgstr "Стиль лінії провідника схеми"
 
 #: common/dialogs/panel_setup_netclasses.cpp:605
 msgid "The default net class is required."
-msgstr ""
+msgstr "Клас зв'язків по замовчуванні обов'язково"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
 #: eeschema/sch_field.cpp:852 eeschema/sch_label.cpp:185 pcbnew/pad.cpp:920
 #: pcbnew/pcb_track.cpp:857 pcbnew/zone.cpp:533
 msgid "Net Class"
-msgstr ""
+msgstr "Клас зв'язків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: pcbnew/tools/board_inspection_tool.cpp:453
@@ -3543,12 +3542,12 @@ msgstr "Діаметр отвору перехідного отвору"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Size"
-msgstr ""
+msgstr "Розмір перехідного мікро отвору"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:233
 msgid "uVia Hole"
-msgstr ""
+msgstr "Сверло для мікро отвору"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Width"
@@ -3612,7 +3611,7 @@ msgstr "Застосувати фільтри"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:159
 msgid "Assign Net Class"
-msgstr ""
+msgstr "Призначити клас зв'язків"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:164
 msgid "New net class:"
@@ -3620,11 +3619,11 @@ msgstr "Новий клас зв'язку:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:181
 msgid "Assign To All Listed Nets"
-msgstr ""
+msgstr "Призначити всім перерахованим зв'язкам"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:187
 msgid "Assign To Selected Nets"
-msgstr ""
+msgstr "Призначити у вибрані зв'язки"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
@@ -3632,7 +3631,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_net_inspector.cpp:791 pcbnew/pad.cpp:918
 #: pcbnew/pcb_track.cpp:855 pcbnew/zone.cpp:531
 msgid "Net"
-msgstr ""
+msgstr "Зв'язок"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -4021,7 +4020,7 @@ msgstr "Трасування Променів"
 #: gerbview/gerbview_frame.cpp:602 gerbview/gerbview_frame.cpp:626
 #: gerbview/menubar.cpp:160 kicad/tools/kicad_manager_actions.cpp:93
 msgid "Gerber Viewer"
-msgstr ""
+msgstr "Переглядач Gerber"
 
 #: common/eda_base_frame.cpp:1064
 msgid "Excellon Options"
@@ -7799,7 +7798,7 @@ msgstr "Імʼя псевдоніма шини"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
-msgstr ""
+msgstr "Ім'я шини або зв'язку"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -8304,13 +8303,13 @@ msgstr "Клацніть на елемент, щоб виділити його �
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
 #, c-format
 msgid "Violations (%s)"
-msgstr ""
+msgstr "Порушення (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr ""
+msgstr "Ігнорувати тести (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8561,7 +8560,7 @@ msgstr "Символи живлення"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:125
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr ""
+msgstr "Фільтрувати елементи за зв'язками:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
@@ -8580,7 +8579,7 @@ msgstr "Колір тексту:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
 msgid "Up"
-msgstr ""
+msgstr "Вгору"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:130
@@ -8616,12 +8615,12 @@ msgstr "Ширина лінії:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:332
 msgid "Line color:"
-msgstr ""
+msgstr "Колір лінії:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:341
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:172
 msgid "Line style:"
-msgstr ""
+msgstr "Стиль лінії:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:357
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:244
@@ -8962,7 +8961,7 @@ msgstr "Форматування"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:233
 #: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "Auto"
-msgstr ""
+msgstr "Авто"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:42
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
@@ -9505,7 +9504,7 @@ msgstr "Нова мітка"
 #: pcbnew/pcb_group.cpp:339 pcbnew/pcb_shape.cpp:220 pcbnew/pcb_text.cpp:136
 #: pcbnew/pcb_textbox.cpp:304 pcbnew/pcb_track.cpp:874 pcbnew/zone.cpp:544
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:214
 msgid "Updated"
@@ -11403,7 +11402,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:38
 msgid "Automatically start wires on unconnected pins"
-msgstr ""
+msgstr "Автоматично починати провідник від непідключених виводів"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:39
 msgid ""
@@ -13944,55 +13943,55 @@ msgstr ""
 #: eeschema/sch_validators.cpp:126
 #, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr ""
+msgstr "Поле не може містити %s символ(и)."
 
 #: eeschema/sch_validators.cpp:138
 msgid "The name of the field cannot be empty."
-msgstr ""
+msgstr "Ім'я поля не може бути незаповненим."
 
 #: eeschema/sch_validators.cpp:140
 msgid "The value of the field cannot be empty."
-msgstr ""
+msgstr "Значення поля не може бути незаповненим."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
-msgstr ""
+msgstr "повернення каретки"
 
 #: eeschema/sch_validators.cpp:153
 msgid "line feed"
-msgstr ""
+msgstr "новий рядок"
 
 #: eeschema/sch_validators.cpp:155
 msgid "tab"
-msgstr ""
+msgstr "табуляція"
 
 #: eeschema/sch_validators.cpp:157
 msgid "space"
-msgstr ""
+msgstr "пробіл"
 
 #: eeschema/sch_validators.cpp:171
 msgid " or "
-msgstr ""
+msgstr " чи "
 
 #: eeschema/sch_validators.cpp:176
 msgid ", or "
-msgstr ""
+msgstr ", чи "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "Позначення не може мати текстові змінні"
 
 #: eeschema/sch_validators.cpp:196
 msgid "Field Validation Error"
-msgstr ""
+msgstr "Помилка перевірки поля"
 
 #: eeschema/sch_validators.cpp:226
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr ""
+msgstr "Назва сигналу містить '{' і '}, але не є допустимою назвою шини"
 
 #: eeschema/sch_validators.cpp:231
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
+msgstr "Назва сигналу містить '{' чи '}, але не є допустимою назвою шини"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -14018,19 +14017,19 @@ msgstr ""
 
 #: eeschema/sheet.cpp:150
 msgid "Schematic Load Error"
-msgstr ""
+msgstr "Помилка завантаження схеми"
 
 #: eeschema/sheet.cpp:153
 msgid "Use partial schematic"
-msgstr ""
+msgstr "Використовувати частину схеми"
 
 #: eeschema/sheet.cpp:206
 msgid "Continue Load"
-msgstr ""
+msgstr "Продовжити завантаження"
 
 #: eeschema/sheet.cpp:207
 msgid "Cancel Load"
-msgstr ""
+msgstr "Скасувати завантаження"
 
 #: eeschema/sheet.cpp:225
 msgid ""
@@ -14044,7 +14043,7 @@ msgstr ""
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
 msgid "Continue Load Schematic"
-msgstr ""
+msgstr "Продовжити завантаження схеми"
 
 #: eeschema/sheet.cpp:266
 msgid ""
@@ -14087,30 +14086,30 @@ msgstr ""
 
 #: eeschema/sheet.cpp:573
 msgid "Do not show this message again."
-msgstr ""
+msgstr "Більше не показувати це повідомлення."
 
 #: eeschema/sheet.cpp:574
 msgid "Create New Sheet"
-msgstr ""
+msgstr "Створити новий лист"
 
 #: eeschema/sheet.cpp:575
 msgid "Discard New Sheet"
-msgstr ""
+msgstr "Відхилити новий лист"
 
 #: eeschema/sim/sim_model.cpp:827
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Не вдалося обробити '%s' в '%s'"
+msgstr "Не вдалося встановити параметр '%s' в '%s'"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s описання %lu контактів, очікуваний %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося визначити модель із значенням '%s'."
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -14119,47 +14118,47 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:169
 msgid "Run/Stop Simulation"
-msgstr ""
+msgstr "Запустити/Зупинити симуляцію"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
-msgstr ""
+msgstr "Запуск симуляції"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Add Signals"
-msgstr ""
+msgstr "Додати Сигнали"
 
 #: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Add signals to plot"
-msgstr ""
+msgstr "Додати сигнали до діаграми"
 
 #: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Probe"
-msgstr ""
+msgstr "Проба"
 
 #: eeschema/sim/sim_plot_frame.cpp:174
 msgid "Probe signals on the schematic"
-msgstr ""
+msgstr "Пробні сигнали на схемі"
 
 #: eeschema/sim/sim_plot_frame.cpp:175 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr ""
+msgstr "Підлаштовувати"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Tune component values"
-msgstr ""
+msgstr "Підлаштовувати значення компонентів"
 
 #: eeschema/sim/sim_plot_frame.cpp:177
 msgid "Sim Parameters"
-msgstr ""
+msgstr "Параметри симуляції"
 
 #: eeschema/sim/sim_plot_frame.cpp:178
 msgid "Simulation parameters and settings"
-msgstr ""
+msgstr "Параметри та налаштування симулювання"
 
 #: eeschema/sim/sim_plot_frame.cpp:359 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
-msgstr ""
+msgstr "Spice симулятор"
 
 #: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1479
 msgid "There were errors during netlist export, aborted."
@@ -14167,48 +14166,48 @@ msgstr "Сталися помилки під час експорту списк�
 
 #: eeschema/sim/sim_plot_frame.cpp:492 eeschema/sim/sim_plot_frame.cpp:1852
 msgid "Another simulation is already running."
-msgstr ""
+msgstr "Інша симуляція вже запущена."
 
 #: eeschema/sim/sim_plot_frame.cpp:519
 #, c-format
 msgid "Plot%u - "
-msgstr ""
+msgstr "Діаграма%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:649
 msgid "Error: simulation type not defined!\n"
-msgstr ""
+msgstr "Помилка: не визначено типу симуляції!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:655
 msgid "Error: simulation type doesn't support plotting!\n"
-msgstr ""
+msgstr "Помилка: тип симуляції не підтримує діаграми!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:833 eeschema/sim/sim_plot_frame.cpp:1687
 msgid "Signal"
-msgstr ""
+msgstr "Сигнал"
 
 #: eeschema/sim/sim_plot_frame.cpp:1111
 msgid "noname"
-msgstr ""
+msgstr "безіменний"
 
 #: eeschema/sim/sim_plot_frame.cpp:1160
 msgid "Open simulation workbook"
-msgstr ""
+msgstr "Відкрити робочу симуляцію"
 
 #: eeschema/sim/sim_plot_frame.cpp:1189
 msgid "Save Simulation Workbook As"
-msgstr ""
+msgstr "Зберегти робочу симуляцію"
 
 #: eeschema/sim/sim_plot_frame.cpp:1205
 msgid "Save Plot as Image"
-msgstr ""
+msgstr "Зберегти діаграму як зображення"
 
 #: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Save Plot Data"
-msgstr ""
+msgstr "Зберегти дані діаграми"
 
 #: eeschema/sim/sim_plot_frame.cpp:1527
 msgid "You need to run plot-providing simulation first."
-msgstr ""
+msgstr "Спершу потрібно запустити симуляцію."
 
 #: eeschema/sim/sim_plot_frame.cpp:1783
 msgid ""
@@ -14217,51 +14216,55 @@ msgid ""
 "Simulation results:\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"Результати симуляції:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Hide Signal"
-msgstr ""
+msgstr "Приховати сигнал"
 
 #: eeschema/sim/sim_plot_frame.cpp:1872
 msgid "Erase the signal from plot screen"
-msgstr ""
+msgstr "Стерти сигнал з відображення графіку"
 
 #: eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Hide Cursor"
-msgstr ""
+msgstr "Приховати курсор"
 
 #: eeschema/sim/sim_plot_frame.cpp:1880
 msgid "Show Cursor"
-msgstr ""
+msgstr "Показати курсор"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr ""
+msgstr "Нова діаграма"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as Image"
-msgstr ""
+msgstr "Зберегти як зображення"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
 msgid "Save as .csv File"
-msgstr ""
+msgstr "Зберегти як .csv файл"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:24
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:61
 msgid "Add Signals..."
-msgstr ""
+msgstr "Додати сигнали..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Probe from schematics"
-msgstr ""
+msgstr "Перевірити сигнал на схемі"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
-msgstr ""
+msgstr "Підлаштовувати значення компоненту"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
@@ -14275,39 +14278,39 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
-msgstr ""
+msgstr "Налаштування..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Simulation"
-msgstr ""
+msgstr "Симуляція"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr ""
+msgstr "Показати сітку"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr ""
+msgstr "Показати легенду"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
-msgstr ""
+msgstr "Пунктирні струм/фаза"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
-msgstr ""
+msgstr "Білий фон"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
-msgstr ""
+msgstr "Вид"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:197
 msgid "Signals"
-msgstr ""
+msgstr "Сигнали"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:225
 msgid "Cursors"
-msgstr ""
+msgstr "Курсори"
 
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
 #: pcb_calculator/transline_ident.cpp:108
@@ -14316,19 +14319,19 @@ msgstr "Частота"
 
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
-msgstr ""
+msgstr "Підсилення"
 
 #: eeschema/sim/sim_plot_panel.cpp:350
 msgid "Phase"
-msgstr ""
+msgstr "Фаза"
 
 #: eeschema/sim/sim_plot_panel.cpp:361
 msgid "noise [(V or A)^2/Hz]"
-msgstr ""
+msgstr "шум [(V або А)^2/Гц]"
 
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
-msgstr ""
+msgstr "Час"
 
 #: eeschema/sim/sim_plot_panel.cpp:366
 msgid "Voltage"
@@ -14340,70 +14343,69 @@ msgstr "Струм"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
-msgstr ""
+msgstr "Напруга (поточна)"
 
 #: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
-msgstr ""
+msgstr "Струм (поточний)"
 
 #: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
-msgstr ""
+msgstr "Опір (поточний)"
 
 #: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
-msgstr ""
+msgstr "Температура (поточна)"
 
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
-msgstr ""
+msgstr "Напруга (вимірювання)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Невідомий батько властивості"
+msgstr "Невідомий SIM_VALUE тип"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
-msgstr ""
+msgstr "DC джерело"
 
 #: eeschema/sim/spice_simulator.cpp:73
 msgid "Pole-zero"
-msgstr ""
+msgstr "Нульовий пояс"
 
 #: eeschema/sim/spice_simulator.cpp:79
 msgid "Transfer function"
-msgstr ""
+msgstr "Передатна функція"
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
-msgstr ""
+msgstr "НЕВІДОМИЙ!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
-msgstr ""
+msgstr "Значення Spice не може бути незаповненим"
 
 #: eeschema/sim/spice_value.cpp:47
 msgid "Invalid Spice value string"
-msgstr ""
+msgstr "Недопустиме значення рядка Spice"
 
 #: eeschema/sim/spice_value.cpp:80
 msgid "Invalid unit prefix"
-msgstr ""
+msgstr "Неправильний префікс одиниці"
 
 #: eeschema/sim/spice_value.cpp:259
 msgid "Please, fill required fields"
-msgstr ""
+msgstr "Будь ласка, заповніть обов'язкові поля"
 
 #: eeschema/sim/spice_value.cpp:277
 #, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr ""
+msgstr "'%s' є неприпустимим значенням Spice."
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
 msgid "Loading library %s..."
-msgstr ""
+msgstr "Завантаження бібліотеки %s..."
 
 #: eeschema/symbol_async_loader.cpp:122
 #, c-format
@@ -14412,6 +14414,9 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"Помилка завантаження бібліотеки символів %s.\n"
+"\n"
+"%s\n"
 
 #: eeschema/symbol_checker.cpp:62
 #, c-format
@@ -14419,6 +14424,8 @@ msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
 msgstr ""
+"<b>Попередження: префікс посилання</b><br>префікс, що закінчується на '%s', "
+"може створити проблеми, якщо його зберегти в бібліотеці символів"
 
 #: eeschema/symbol_checker.cpp:114
 #, c-format
@@ -14426,6 +14433,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
+"<b>Дублікат виводу %s</b> %s на позиції <b>(%.3f, %.3f)</b> що конфліктує з "
+"виводом %s%s на позиції <b>(%.3f, %.3f)</b> змінений."
 
 #: eeschema/symbol_checker.cpp:128
 #, c-format
@@ -14433,6 +14442,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
+"<b>Дублікат виводу %s</b> %s на позиції <b>(%.3f, %.3f)</b> що конфліктує з "
+"виводом %s%s на позиції <b>(%.3f, %.3f)</b> в одиницях %s і %s змінено."
 
 #: eeschema/symbol_checker.cpp:147
 #, c-format
@@ -14440,6 +14451,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
 msgstr ""
+"<b>Дублікат виводу %s</b> %s на позиції <b>(%s, %s)</b> що конфліктує з "
+"виводом %s%s на позиції <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:160
 #, c-format
@@ -14447,18 +14460,20 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
+"<b>Дублікат виводу %s</b> %s на позиції <b>(%s, %s)</b> що конфліктує з "
+"виводом %s%s а позиції <b>(%s, %s)</b> в одиницях %s і %s."
 
 #: eeschema/symbol_checker.cpp:188
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Символ потужності повинен мати одне значення</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>Символ потужності не повинен мати конвертовані параметри</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Символ потужності повинен мати один вивід</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:209
 msgid ""
@@ -15565,7 +15580,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "Displays footprint field dialog"
-msgstr ""
+msgstr "Відобразити діалог для привязки посадкового місця"
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Autoplace Fields"
@@ -15573,19 +15588,19 @@ msgstr "Розмістити поле автоматично"
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
-msgstr ""
+msgstr "Запустити алгоритм автоматичного розміщення полів символа або листа"
 
 #: eeschema/tools/ee_actions.cpp:446
 msgid "Change Symbols..."
-msgstr ""
+msgstr "Змінити символи..."
 
 #: eeschema/tools/ee_actions.cpp:447
 msgid "Assign different symbols from the library"
-msgstr ""
+msgstr "Призначити інші символи з бібліотеки"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Update Symbols from Library..."
-msgstr ""
+msgstr "Оновити символи з бібліотеки..."
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Update symbols to include any changes from the library"
@@ -16567,80 +16582,80 @@ msgstr ""
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
 msgid "Copper layers count:"
-msgstr ""
+msgstr "Кількість мідних шарів:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
 msgid "2 Layers"
-msgstr ""
+msgstr "2 шари"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:84
 msgid "4 Layers"
-msgstr ""
+msgstr "4 шари"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:85
 msgid "6 Layers"
-msgstr ""
+msgstr "6 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 msgid "8 Layers"
-msgstr ""
+msgstr "8 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:87
 msgid "10 Layers"
-msgstr ""
+msgstr "10 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:88
 msgid "12 Layers"
-msgstr ""
+msgstr "12 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:89
 msgid "14 Layers"
-msgstr ""
+msgstr "14 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:90
 msgid "16 Layers"
-msgstr ""
+msgstr "16 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
 msgid "18 Layers"
-msgstr ""
+msgstr "18 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
 msgid "20 Layers"
-msgstr ""
+msgstr "20 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
 msgid "22 Layers"
-msgstr ""
+msgstr "22 шари"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
 msgid "24 Layers"
-msgstr ""
+msgstr "24 шари"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
 msgid "26 Layers"
-msgstr ""
+msgstr "26 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
 msgid "28 Layers"
-msgstr ""
+msgstr "28 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
 msgid "30 Layers"
-msgstr ""
+msgstr "30 шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
 msgid "32 Layers"
-msgstr ""
+msgstr "32 шари"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
-msgstr ""
+msgstr "Вибрати запас"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:113
 msgid "Get Stored Choice"
-msgstr ""
+msgstr "Отримати вибраний запас"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:116
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:35
@@ -16653,30 +16668,30 @@ msgstr "Скидання"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:79
 msgid "Layer Selection"
-msgstr ""
+msgstr "Вибір шару"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:170
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:94
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:246
 msgid "Print mirrored"
-msgstr ""
+msgstr "Друкувати зеркально"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:179
 msgid "Included Layers"
-msgstr ""
+msgstr "Внутрішні шари"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:193
 msgid "Select all"
-msgstr ""
+msgstr "Виділити все"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:195
 msgid "Deselect all"
-msgstr ""
+msgstr "Зняти всі виділення"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:92
 #, c-format
 msgid "Select Layer: %s"
-msgstr ""
+msgstr "Вибрати шар: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: pcbnew/board_connected_item.cpp:172 pcbnew/board_connected_item.cpp:173
@@ -16698,68 +16713,68 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:227
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:239 pcbnew/zone.cpp:561
 msgid "Layer"
-msgstr ""
+msgstr "Шар"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
-msgstr ""
+msgstr "Показати D коди"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:34
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Show page limits"
-msgstr ""
+msgstr "Показувати межі сторінки"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 msgid "Drawing Mode"
-msgstr ""
+msgstr "Режим відображення"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch flashed items"
-msgstr ""
+msgstr "Підсвічені елементи в контурному режимі"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:46
 msgid "Sketch lines"
-msgstr ""
+msgstr "Ескіз ліній"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:49
 msgid "Sketch polygons"
-msgstr ""
+msgstr "Ескіз полігонів"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Full size"
-msgstr ""
+msgstr "Повний розмір"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size A4"
-msgstr ""
+msgstr "Розмір A4"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size A3"
-msgstr ""
+msgstr "Розмір A3"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size A2"
-msgstr ""
+msgstr "Розмір A2"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size A"
-msgstr ""
+msgstr "Розмір A"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size B"
-msgstr ""
+msgstr "Розмір B"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Size C"
-msgstr ""
+msgstr "Розмір C"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Page Size"
-msgstr ""
+msgstr "Розмір сторінки"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
 msgid "File Format"
-msgstr ""
+msgstr "Формат файлу"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
@@ -16767,19 +16782,19 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 msgid "File units"
-msgstr ""
+msgstr "Одиниці виміру файлу"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "Немає попередніх нулів (TZ формат)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "Немає нульових ресурсів (LZ формат)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 msgid "Zero format"
-msgstr ""
+msgstr "Нульовий формат"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid ""
@@ -16790,7 +16805,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
-msgstr ""
+msgstr "Формат координат"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
@@ -16802,11 +16817,11 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Зазвичай у дюймах 3:3 і 2:4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 msgid "Format for mm"
-msgstr ""
+msgstr "Формат для mm"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16817,7 +16832,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16827,7 +16842,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16839,7 +16854,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16853,7 +16868,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:172
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16864,129 +16879,130 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:173
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:80
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
+#, fuzzy
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
 msgid "Format for inches"
-msgstr ""
+msgstr "Формат для дюймів"
 
 #: gerbview/events_called_functions.cpp:179 gerbview/gerbview_frame.cpp:154
 msgid "Layers Manager"
-msgstr ""
+msgstr "Менеджер шарів"
 
 #: gerbview/excellon_read_drill_file.cpp:270
 #, c-format
 msgid "File %s not found."
-msgstr ""
+msgstr "Файл %s не знайдено."
 
 #: gerbview/excellon_read_drill_file.cpp:282
 msgid "No empty layers to load file into."
-msgstr ""
+msgstr "Немає порожніх шарів для завантаження файлу."
 
 #: gerbview/excellon_read_drill_file.cpp:289
 msgid "Error reading EXCELLON drill file"
-msgstr ""
+msgstr "Помилка читання файлу отворів EXCELLON"
 
 #: gerbview/excellon_read_drill_file.cpp:577
 #, c-format
 msgid "Unknown Excellon command &lt;%s&gt;"
-msgstr ""
+msgstr "Невідома команда Excellon &lt;%s&gt;"
 
 #: gerbview/excellon_read_drill_file.cpp:777
 msgid "Tool definition shape not found"
-msgstr ""
+msgstr "Форма визначення інструменту не знайдено"
 
 #: gerbview/excellon_read_drill_file.cpp:780
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr ""
+msgstr "Визначення інструменту '%c' не підтримується"
 
 #: gerbview/excellon_read_drill_file.cpp:861
 #, c-format
 msgid "Tool %d not defined"
-msgstr ""
+msgstr "Інструмент %d не визначено"
 
 #: gerbview/excellon_read_drill_file.cpp:1047
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
-msgstr ""
+msgstr "Невідомий Excellon G код: &lt;%s&gt;"
 
 #: gerbview/files.cpp:42
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr ""
+msgstr "<b>Не має більше доступних слоїв</b> для загрузки файлів в GerbView"
 
 #: gerbview/files.cpp:43
 #, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
+msgstr "<b>Не завантажено:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
 #, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
+msgstr "<b>Закінчилась память при завантажені:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
-msgstr ""
+msgstr "Zip файли"
 
 #: gerbview/files.cpp:104
 msgid "Job files"
-msgstr ""
+msgstr "Файли завдання"
 
 #: gerbview/files.cpp:181
 msgid "Open Autodetected File(s)"
-msgstr ""
+msgstr "Відкрити автоматично виявлений файл(и)"
 
 #: gerbview/files.cpp:201
 msgid "Gerber files (.g* .lgr .pho)"
-msgstr ""
+msgstr "Gerber файли (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:207
 msgid "Top layer"
-msgstr ""
+msgstr "Верхній шар"
 
 #: gerbview/files.cpp:208
 msgid "Bottom layer"
-msgstr ""
+msgstr "Нижній шар"
 
 #: gerbview/files.cpp:209
 msgid "Bottom solder resist"
-msgstr ""
+msgstr "Нижня паяльна маска"
 
 #: gerbview/files.cpp:210
 msgid "Top solder resist"
-msgstr ""
+msgstr "Верхня паяльна маска"
 
 #: gerbview/files.cpp:211
 msgid "Bottom overlay"
-msgstr ""
+msgstr "Шовкографія знизу"
 
 #: gerbview/files.cpp:212
 msgid "Top overlay"
-msgstr ""
+msgstr "Шовкографія зверху"
 
 #: gerbview/files.cpp:213
 msgid "Bottom paste"
-msgstr ""
+msgstr "Паяльна паста знизу"
 
 #: gerbview/files.cpp:214
 msgid "Top paste"
-msgstr ""
+msgstr "Паяльна паста зверху"
 
 #: gerbview/files.cpp:215
 msgid "Keep-out layer"
-msgstr ""
+msgstr "Keep-out шар"
 
 #: gerbview/files.cpp:216
 msgid "Mechanical layers"
-msgstr ""
+msgstr "Механічні шари"
 
 #: gerbview/files.cpp:220
 msgid "Top Pad Master"
@@ -37332,7 +37348,7 @@ msgstr ""
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
-msgstr ""
+msgstr "Проект KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
