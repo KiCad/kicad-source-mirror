@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:00-0700\n"
-"PO-Revision-Date: 2022-07-28 10:15+0000\n"
+"PO-Revision-Date: 2022-08-02 18:17+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -4588,7 +4588,6 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "Denna sökväg:"
 
@@ -17422,7 +17421,7 @@ msgstr "Bildnamn: \"%s\" Skiktnamn: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:696
 msgid "X2 attr"
-msgstr "X2 attr"
+msgstr "X2-attribut"
 
 #: gerbview/gerbview_frame.cpp:1059
 msgid "GerbView"
@@ -17517,7 +17516,7 @@ msgstr "Markera objekt som tillhör detta nät"
 
 #: gerbview/toolbars_gerber.cpp:153 gerbview/toolbars_gerber.cpp:156
 msgid "Attr:"
-msgstr "Attr:"
+msgstr "Attribut:"
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Highlight items with this aperture attribute"
@@ -24776,9 +24775,8 @@ msgstr "Bågvinkeln kan inte vara noll."
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:415
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:427
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
-#, fuzzy
 msgid "The item thickness must be greater than zero."
-msgstr "Radien måste vara större än noll."
+msgstr "Objektets tjocklek måste vara större än noll."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
 msgid "The radius must be greater than zero."
@@ -24790,7 +24788,7 @@ msgstr "Rektangeln kan inte vara tom."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:421
 msgid "The polygon outline thickness must be >= 0."
-msgstr ""
+msgstr "Polygonens konturtjocklek måste vara >=0."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:444
 msgid "Error List"
@@ -26612,9 +26610,9 @@ msgid "<none selected>"
 msgstr "<ingen vald>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referensobjekt: '%s'"
+msgstr "Referensobjekt: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -27149,9 +27147,8 @@ msgid "Show pad clearance"
 msgstr "Visa vadderingsavstånd"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "Flytta vy till korsrefererade objekt"
+msgstr "Flytta vy till att visa korsrefererade objekt"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -36054,11 +36051,11 @@ msgstr "Dölj alla icke-koppar lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1733
 msgid "Show Only Front Assembly Layers"
-msgstr "Visa endast främre monteringslager"
+msgstr "Visa endast framsidans monteringslager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1736
 msgid "Show Only Front Layers"
-msgstr "Visa endast främre lager"
+msgstr "Visa endast framsidans lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1742
 msgid "Show Only Inner Layers"
@@ -36066,7 +36063,7 @@ msgstr "Visa endast inre lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1746
 msgid "Show Only Back Layers"
-msgstr "Visa endast bakre lager"
+msgstr "Visa endast baksidans lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1749
 msgid "Show Only Back Assembly Layers"
