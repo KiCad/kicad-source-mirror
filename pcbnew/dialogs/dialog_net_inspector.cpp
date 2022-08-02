@@ -1382,14 +1382,13 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack )
     // calculate the via length individually from the board stackup and via's start and end layer.
     if( bds.m_HasStackup )
     {
-        static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
-
         PCB_LAYER_ID top_layer = UNDEFINED_LAYER;
         PCB_LAYER_ID bottom_layer = UNDEFINED_LAYER;
 
         for( int layer = via->TopLayer(); layer <= via->BottomLayer(); ++layer )
         {
-            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer, connectedTypes, true ) )
+            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer,
+                    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T }, true ) )
             {
                 if( top_layer == UNDEFINED_LAYER )
                     top_layer = PCB_LAYER_ID( layer );
