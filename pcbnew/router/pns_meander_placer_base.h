@@ -149,7 +149,7 @@ protected:
      * @param aLine
      * @return
      */
-    long long int lineLength( const ITEM_SET& aLine ) const;
+    long long int lineLength( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
 
     ///< Pointer to world to search colliding items.
     NODE* m_world;
@@ -165,6 +165,11 @@ protected:
 
     ///< The current end point.
     VECTOR2I m_currentEnd;
+
+    SOLID*   m_startPad_p;
+    SOLID*   m_endPad_p;
+    SOLID*   m_startPad_n;
+    SOLID*   m_endPad_n;
 };
 
 }
