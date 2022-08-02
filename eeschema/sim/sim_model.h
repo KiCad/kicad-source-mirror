@@ -358,6 +358,36 @@ public:
             bool isSpiceInstanceParam = false;
             bool isInstanceParam = false;
             wxString spiceInstanceName = "";
+
+            // TODO: Stop using brace-initializers, use this constructor for all info structs.
+            INFO( wxString aName = "",
+                  unsigned aId = 0,
+                  DIR aDir = DIR_INOUT,
+                  SIM_VALUE::TYPE aType = SIM_VALUE::TYPE_FLOAT,
+                  FLAGS aFlags = {},
+                  std::string aUnit = "",
+                  CATEGORY aCategory = CATEGORY::PRINCIPAL,
+                  const wxString& aDefaultValue = "",
+                  const wxString& aDefaultValueOfOtherVariant = "",
+                  const wxString& aDescription = "",
+                  bool aIsSpiceInstanceParam = false,
+                  bool aIsInstanceParam = false,
+                  wxString aSpiceInstanceName = "" ) :
+                name( aName ),
+                id( aId ),
+                dir( aDir ),
+                type( aType ),
+                flags( aFlags ),
+                unit( aUnit ),
+                category( aCategory ),
+                defaultValue( aDefaultValue ),
+                defaultValueOfOtherVariant( aDefaultValueOfOtherVariant ),
+                description( aDescription ),
+                isSpiceInstanceParam( aIsSpiceInstanceParam ),
+                isInstanceParam( aIsInstanceParam ),
+                spiceInstanceName( aSpiceInstanceName )
+            {
+            }
         };
 
         std::unique_ptr<SIM_VALUE> value;

@@ -523,7 +523,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     const SIM_MODEL::PARAM& param = curModel().GetParam( aParamIndex );
     wxString paramDescription;
 
-    if( !param.info.description.IsEmpty() )
+    if( param.info.description == "" )
         paramDescription = wxString::Format( "%s (%s)",
                                              param.info.description,
                                              param.info.name );
