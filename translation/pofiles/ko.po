@@ -27,7 +27,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2022-08-02 09:55+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: YunJiSang <js_7744@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -30219,7 +30219,7 @@ msgstr "확인 중 %s 배선 폭: 선택 %s."
 #: pcbnew/drc/drc_engine.cpp:916
 #, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "보드 설정 제약 조건 트랙 폭 확인: 최소 %s."
+msgstr "보드 설정에서 제한 배선 폭을 확인 중: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:924
 #, c-format
