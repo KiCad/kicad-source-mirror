@@ -1376,14 +1376,35 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 
 unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack ) const
 {
-    const PCB_VIA&         via = dynamic_cast<const PCB_VIA&>( *aTrack );
+    const PCB_VIA*         via = dynamic_cast<const PCB_VIA*>( aTrack );
     BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
     // calculate the via length individually from the board stackup and via's start and end layer.
     if( bds.m_HasStackup )
     {
+        static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
+
+        PCB_LAYER_ID top_layer = UNDEFINED_LAYER;
+        PCB_LAYER_ID bottom_layer = UNDEFINED_LAYER;
+
+        for( int layer = via->TopLayer(); layer <= via->BottomLayer(); ++layer )
+        {
+            if( m_brd->GetConnectivity()->IsConnectedOnLayer( via, layer, connectedTypes, true ) )
+            {
+                if( top_layer == UNDEFINED_LAYER )
+                    top_layer = PCB_LAYER_ID( layer );
+                else
+                    bottom_layer = PCB_LAYER_ID( layer );
+            }
+        }
+
+        if( top_layer == UNDEFINED_LAYER )
+            top_layer = via->TopLayer();
+        if( bottom_layer == UNDEFINED_LAYER )
+            bottom_layer = via->BottomLayer();
+
         const BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
-        return stackup.GetLayerDistance( via.TopLayer(), via.BottomLayer() );
+        return stackup.GetLayerDistance( top_layer, bottom_layer );
     }
     else
     {
@@ -1392,12 +1413,12 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack )
         int layerThickness = bds.GetBoardThickness() / dielectricLayers;
         int effectiveBottomLayer;
 
-        if( via.BottomLayer() == B_Cu )
+        if( via->BottomLayer() == B_Cu )
             effectiveBottomLayer = F_Cu + dielectricLayers;
         else
-            effectiveBottomLayer = via.BottomLayer();
+            effectiveBottomLayer = via->BottomLayer();
 
-        int layerCount = effectiveBottomLayer - via.TopLayer();
+        int layerCount = effectiveBottomLayer - via->TopLayer();
 
         return layerCount * layerThickness;
     }
