@@ -293,16 +293,7 @@ long long int MEANDER_PLACER_BASE::lineLength( const ITEM_SET& aLine, const SOLI
     const ITEM* end_item = aLine[aLine.Size() - 1];
     bool start_via = false;
     bool end_via = false;
-    int start_layer = -1;
-    int end_layer = -1;
 
-    std::set<int> layer_set;
-
-    for( int idx = 0; idx < aLine.Size(); idx++ )
-    {
-        const ITEM* item = aLine[idx];
-        layer_set.insert( item->Layer() );
-    }
 
     /**
      * If there is a start pad but the pad's layers do not overlap the first track layer, then there must be a
