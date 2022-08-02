@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-02 15:49+0000\n"
+"PO-Revision-Date: 2022-08-05 14:22+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -114,24 +114,24 @@ msgid "Last render time %.0f ms"
 msgstr "上次渲染时间 %.0f s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "网络 %s网络类 %s"
+msgstr "网络 %s 网络类 %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s 和 %s"
+msgstr "焊盘 %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "%s 上的规则敷铜"
+msgstr "规则区域 %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "敷铜"
+msgstr "区域 %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -10696,9 +10696,8 @@ msgid "Source"
 msgstr "源"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "电感："
+msgstr "例子"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10709,7 +10708,6 @@ msgid "Model:"
 msgstr "模型："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
 msgstr "覆盖"
 
@@ -10720,7 +10718,7 @@ msgstr "模型"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Device:"
-msgstr ""
+msgstr "设备："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10729,9 +10727,8 @@ msgid "Type:"
 msgstr "类型："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "第 1 页"
+msgstr "页码"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10743,29 +10740,24 @@ msgid "Parameters"
 msgstr "参数"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "D 码："
+msgstr "码"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "符号链接："
+msgstr "符号引脚"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "模型"
+msgstr "模型引脚"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "备用引脚关联"
+msgstr "引脚分配"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "禁用符号仿真"
+msgstr "将符号排除于仿真外"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -24956,7 +24948,7 @@ msgstr "使用钻孔/放置文件原点"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "对底层的封装使用负 X 坐标"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -30558,9 +30550,8 @@ msgid "Missing severity name."
 msgstr "缺少严重性名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "检查过孔环形孔..."
+msgstr "检查焊盘和过孔环形孔..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -33276,14 +33267,14 @@ msgid "Full Length"
 msgstr "全长"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "宽度约束：最小 %s、最大 %s"
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "通孔约束：最小 %s。"
+msgstr "宽度约束：最小 %s"
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -35535,19 +35526,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "已解决的宽度约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
-msgstr "连接类型："
+msgstr "连接宽度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "下列项目的辐条宽度分辨率："
+msgstr "下列项目的连接宽度分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "解析敷铜连接类型：%s。"
+msgstr "已解析的最小连接宽度约束：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
