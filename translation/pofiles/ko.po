@@ -21,13 +21,14 @@
 # minsu kim (0xGabriel) <rlaalstn9601@gmail.com>, 2022.
 # 김세영 <tpdud2980@naver.com>, 2022.
 # 남우근 <rolru7686@gmail.com>, 2022.
+# 이윤성 <yunslee@student.42seoul.kr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
 "PO-Revision-Date: 2022-08-02 15:49+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: 이윤성 <yunslee@student.42seoul.kr>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -32313,7 +32314,7 @@ msgstr "모델에는 파형 쌍이 없습니다, 대신 [Ramp]를 사용, 낮은
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr "모델에는 처음 2 개를 사용하는 2개 이상의 파형 쌍이 있습니다."
+msgstr "모델에는 처음 2 개를 사용하여 2개 이상의 파형 쌍이 있습니다."
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
