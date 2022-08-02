@@ -100,28 +100,25 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( !m_originPair.PLine().SegmentCount() || !m_originPair.NLine().SegmentCount() )
         return false;
 
-    SOLID* padA = nullptr;
-    SOLID* padB = nullptr;
-
-    m_tunedPathP = topo.AssembleTuningPath( m_originPair.PLine().GetLink( 0 ), &padA, &padB );
+    m_tunedPathP = topo.AssembleTuningPath( m_originPair.PLine().GetLink( 0 ), &m_startPad_p, &m_endPad_p );
 
     m_padToDieP = 0;
 
-    if( padA )
-        m_padToDieP += padA->GetPadToDie();
+    if( m_startPad_p )
+        m_padToDieP += m_startPad_p->GetPadToDie();
 
-    if( padB )
-        m_padToDieP += padB->GetPadToDie();
+    if( m_endPad_p )
+        m_padToDieP += m_endPad_p->GetPadToDie();
 
-    m_tunedPathN = topo.AssembleTuningPath( m_originPair.NLine().GetLink( 0 ), &padA, &padB );
+    m_tunedPathN = topo.AssembleTuningPath( m_originPair.NLine().GetLink( 0 ), &m_startPad_n, &m_endPad_n );
 
     m_padToDieN = 0;
 
-    if( padA )
-        m_padToDieN += padA->GetPadToDie();
+    if( m_startPad_n )
+        m_padToDieN += m_startPad_n->GetPadToDie();
 
-    if( padB )
-        m_padToDieN += padB->GetPadToDie();
+    if( m_endPad_n )
+        m_padToDieN += m_endPad_n->GetPadToDie();
 
     m_padToDieLength = std::max( m_padToDieP, m_padToDieN );
 
@@ -141,8 +138,8 @@ void DP_MEANDER_PLACER::release()
 
 long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    long long int totalP = m_padToDieLength + lineLength( m_tunedPathP );
-    long long int totalN = m_padToDieLength + lineLength( m_tunedPathN );
+    long long int totalP = m_padToDieLength + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
+    long long int totalN = m_padToDieLength + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
     return std::max( totalP, totalN );
 }
 
