@@ -26,10 +26,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:02-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
-"Last-Translator: 남우근 <rolru7686@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2022-08-02 09:55+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9821,7 +9821,7 @@ msgstr "모든 변경 사항 저장"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "모든 전압을 저장하는 지시문 작성(.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
 #, fuzzy
@@ -9830,7 +9830,7 @@ msgstr "모든 변경 사항 저장"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "모든 전류를 저장하는 지시문 작성(.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -13120,9 +13120,9 @@ msgstr ""
 "시뮬레이션하기 전에 주석을 수정해야 합니다."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "라이브러리 파일 %s을(를) 찾을 수 없습니다."
+msgstr "라이브러리 파일 '%s'을(를) 찾을 수 없음"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14714,12 +14714,12 @@ msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s 설명 %lu 핀, 예상 %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "폴더 '%s' 생성 실패."
+msgstr "값' %s'에서 모델 유추에 실패"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -14974,9 +14974,8 @@ msgid "Voltage (measured)"
 msgstr "전압 (측정됨)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "알 수 없는 모델_타입 "
+msgstr "알 수 없는 SIM_VALUE 유형"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -27663,9 +27662,8 @@ msgid "Push Pad Properties"
 msgstr "패드 속성을 푸시"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:94
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "패드 설정"
+msgstr "변환 설정:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 msgid "Convert to Rule Area"
@@ -30184,12 +30182,12 @@ msgstr "%s의 결합되지 않은 최대 길이 확인중: %s."
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s 최대 왜곡 확인중 : %s."
+msgstr "%s 최대 왜곡 확인 : %s."
 
 #: pcbnew/drc/drc_engine.cpp:862
 #, c-format
 msgid "Checking %s gap: %s."
-msgstr "%s 의 간격 확인중: %s."
+msgstr "%s 간격 확인: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
 #, c-format
@@ -30204,7 +30202,7 @@ msgstr "확인 중 %s 최소 스포크 개수: %s."
 #: pcbnew/drc/drc_engine.cpp:880
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "%s 구역 연결 확인중: %s."
+msgstr "%s 영역 연결 확인: %s."
 
 #: pcbnew/drc/drc_engine.cpp:896 pcbnew/drc/drc_engine.cpp:897
 #: pcbnew/drc/drc_engine.cpp:898 pcbnew/tools/board_inspection_tool.cpp:202
@@ -35967,9 +35965,8 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "%s로 더 큰 단열판으로 재정의 됨; 유격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:753
-#, fuzzy
 msgid "Diff Pair"
-msgstr "차이 쌍"
+msgstr "차동 쌍"
 
 #: pcbnew/tools/board_inspection_tool.cpp:754
 #, fuzzy
@@ -38092,19 +38089,16 @@ msgid "Removing tracks in pads..."
 msgstr "패드에서 트랙을 제거하는 중..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "배선과 비아 확인 중..."
+msgstr "댕글링 트랙 및 비아 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "배선 제거하는 중..."
+msgstr "댕글링 트랙 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "비아 제거하는 중..."
+msgstr "댕글링 비아 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:148
 msgid "Checking collinear tracks..."
@@ -38235,7 +38229,6 @@ msgid "Show footprint and text origins as a cross"
 msgstr "풋프린트와 텍스트 원점을 십자로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Locked Items"
 msgstr "잠긴 항목의 그림자"
 
