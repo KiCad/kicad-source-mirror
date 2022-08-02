@@ -235,6 +235,7 @@ public:
         int  file_format;
         bool include_board_edge;
         bool use_aux_origin;
+        bool negate_xcoord;
     };
 
     struct DIALOG_PLOT

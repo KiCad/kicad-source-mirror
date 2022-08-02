@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,10 +61,12 @@ public:
      * @param aTopSide true to generate top side info
      * @param aBottomSide true to generate bottom side info
      * @param aFormatCSV true to generate a csv format info, false to generate a ascii info
+     * @param aNegateBottomX true to negate X coordinates for bottom side of the placement file
      * @param aUseAuxOrigin true to use auxiliary axis as an origin for the position data
      */
     PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOnlySMD, bool aExcludeAllTH,
-                         bool aTopSide, bool aBottomSide, bool aFormatCSV, bool aUseAuxOrigin );
+                         bool aTopSide, bool aBottomSide, bool aFormatCSV, bool aUseAuxOrigin,
+                         bool aNegateBottomX );
 
     /**
      * build a string filled with the position data
@@ -91,13 +93,14 @@ public:
 
 private:
     BOARD*   m_board;
-    bool     m_unitsMM;        // true for mm, false for inches
-    bool     m_onlySMD;        // Include only SMD components
-    bool     m_excludeAllTH;   // Exclude any footprints with through-hole pads
-    int      m_side;           // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
-    bool     m_formatCSV;      // true for csv format, false for ascii (utf8) format
-    int      m_fpCount;        // Number of footprints in list, for info
-    VECTOR2I m_place_Offset;   // Offset for coordinates in generated data.
+    bool     m_unitsMM;         // true for mm, false for inches
+    bool     m_onlySMD;         // Include only SMD components
+    bool     m_excludeAllTH;    // Exclude any footprints with through-hole pads
+    int      m_side;            // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
+    bool     m_formatCSV;       // true for csv format, false for ascii (utf8) format
+    bool     m_negateBottomX;   // true to negate X coordinate on bottom side
+    int      m_fpCount;         // Number of footprints in list, for info
+    VECTOR2I m_place_Offset;    // Offset for coordinates in generated data.
 };
 
 #endif      // #ifndef EXPORT_FOOTPRINTS_PLACEFILE_H

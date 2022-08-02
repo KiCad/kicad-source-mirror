@@ -308,11 +308,12 @@ public:
      *                    \a aTopSide are true, list footprints on both sides.
      * @param aFormatCSV true to use a comma separated file (CSV) format; default = false
      * @param aUseAuxOrigin true to use auxiliary axis as an origin for the position data
+     * @param aNegateBottomX true to negate X coordinates for bottom side of the placement file
      * @return the number of footprints found on aSide side or -1 if the file could not be created.
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM, bool aOnlySMD,
                                      bool aNoTHItems, bool aTopSide, bool aBottomSide,
-                                     bool aFormatCSV, bool aUseAuxOrigin );
+                                     bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX );
 
     /**
      * Call #DoGenFootprintsReport to create a footprint report file

@@ -75,13 +75,14 @@ enum SELECT_SIDE
 
 PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOnlySMD,
                                           bool aExcludeAllTH, bool aTopSide, bool aBottomSide,
-                                          bool aFormatCSV, bool aUseAuxOrigin )
+                                          bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX )
 {
-    m_board        = aBoard;
-    m_unitsMM      = aUnitsMM;
-    m_onlySMD      = aOnlySMD;
-    m_excludeAllTH = aExcludeAllTH;
-    m_fpCount      = 0;
+    m_board         = aBoard;
+    m_unitsMM       = aUnitsMM;
+    m_onlySMD       = aOnlySMD;
+    m_excludeAllTH  = aExcludeAllTH;
+    m_fpCount       = 0;
+    m_negateBottomX = aNegateBottomX;
 
     if( aTopSide && aBottomSide )
         m_side = PCB_BOTH_SIDES;
@@ -180,7 +181,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             int layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            if( layer == B_Cu )
+            if( layer == B_Cu && m_negateBottomX )
                 footprint_pos.x = - footprint_pos.x;
 
             wxString tmp = wxT( "\"" ) + list[ii].m_Reference;
@@ -248,7 +249,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             int layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
-            if( layer == B_Cu )
+            if( layer == B_Cu && m_negateBottomX )
                 footprint_pos.x = - footprint_pos.x;
 
             wxString ref = list[ii].m_Reference;
