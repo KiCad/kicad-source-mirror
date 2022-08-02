@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,7 +13,7 @@
 
 DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,800 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -24,7 +24,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, wxT("Source") ), wxVERTICAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Source") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer15;
 	fgSizer15 = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -32,30 +32,29 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer15->SetFlexibleDirection( wxBOTH );
 	fgSizer15->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_useInstanceModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Instance"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	fgSizer15->Add( m_useInstanceModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_useInstanceModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Instance"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	fgSizer15->Add( m_useInstanceModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_useLibraryModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_useLibraryModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer15->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_libraryPathLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_libraryPathLabel->Wrap( -1 );
-	fgSizer15->Add( m_libraryPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_tclibraryPathName = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer15->Add( m_tclibraryPathName, 0, wxEXPAND|wxALL, 5 );
 
 	m_browseButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizer15->Add( m_browseButton, 0, wxALL, 5 );
+	fgSizer15->Add( m_browseButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_modelNameLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_modelNameLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_modelNameLabel->Wrap( -1 );
-	fgSizer15->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer15->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_modelNameCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	fgSizer15->Add( m_modelNameCombobox, 0, wxALL|wxEXPAND, 5 );
 
-	m_overrideCheckbox = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Override"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_overrideCheckbox = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Override"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer15->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -65,10 +64,12 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizer9->Add( sbSizer4, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, wxT("Model") ), wxVERTICAL );
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, _("Model") ), wxVERTICAL );
 
 	m_notebook4 = new wxNotebook( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_parametersPanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_parametersPanel->SetMinSize( wxSize( 500,-1 ) );
+
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
@@ -78,7 +79,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer16->SetFlexibleDirection( wxBOTH );
 	fgSizer16->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText127 = new wxStaticText( m_parametersPanel, wxID_ANY, wxT("Device:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText127 = new wxStaticText( m_parametersPanel, wxID_ANY, _("Device:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText127->Wrap( -1 );
 	fgSizer16->Add( m_staticText127, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -87,7 +88,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_deviceTypeChoice->SetSelection( 0 );
 	fgSizer16->Add( m_deviceTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_staticText8 = new wxStaticText( m_parametersPanel, wxID_ANY, wxT("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8 = new wxStaticText( m_parametersPanel, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
 	fgSizer16->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -102,14 +103,14 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_paramGridMgr = new wxPropertyGridManager(m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE|wxPG_SPLITTER_AUTO_CENTER);
 	m_paramGridMgr->SetExtraStyle( wxPG_EX_MODE_BUTTONS|wxPG_EX_NATIVE_DOUBLE_BUFFERING );
 
-	m_paramGrid = m_paramGridMgr->AddPage( wxT("Page"), wxNullBitmap );
+	m_paramGrid = m_paramGridMgr->AddPage( _("Page"), wxNullBitmap );
 	bSizer12->Add( m_paramGridMgr, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_parametersPanel->SetSizer( bSizer12 );
 	m_parametersPanel->Layout();
 	bSizer12->Fit( m_parametersPanel );
-	m_notebook4->AddPage( m_parametersPanel, wxT("Parameters"), true );
+	m_notebook4->AddPage( m_parametersPanel, _("Parameters"), true );
 	m_codePanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
@@ -156,7 +157,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_codePanel->SetSizer( bSizer5 );
 	m_codePanel->Layout();
 	bSizer5->Fit( m_codePanel );
-	m_notebook4->AddPage( m_codePanel, wxT("Code"), false );
+	m_notebook4->AddPage( m_codePanel, _("Code"), false );
 
 	sbSizer5->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 
@@ -167,7 +168,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_modelPanel->SetSizer( bSizer9 );
 	m_modelPanel->Layout();
 	bSizer9->Fit( m_modelPanel );
-	m_notebook->AddPage( m_modelPanel, wxT("Model"), true );
+	m_notebook->AddPage( m_modelPanel, _("Model"), true );
 	m_pinAssignmentsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
@@ -186,8 +187,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_pinAssignmentsGrid->SetColSize( 1, 160 );
 	m_pinAssignmentsGrid->EnableDragColMove( false );
 	m_pinAssignmentsGrid->EnableDragColSize( true );
-	m_pinAssignmentsGrid->SetColLabelValue( 0, wxT("Symbol Pin") );
-	m_pinAssignmentsGrid->SetColLabelValue( 1, wxT("Model Pin") );
+	m_pinAssignmentsGrid->SetColLabelValue( 0, _("Symbol Pin") );
+	m_pinAssignmentsGrid->SetColLabelValue( 1, _("Model Pin") );
 	m_pinAssignmentsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -205,14 +206,14 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_pinAssignmentsPanel->SetSizer( bSizer10 );
 	m_pinAssignmentsPanel->Layout();
 	bSizer10->Fit( m_pinAssignmentsPanel );
-	m_notebook->AddPage( m_pinAssignmentsPanel, wxT("Pin Assignments"), false );
+	m_notebook->AddPage( m_pinAssignmentsPanel, _("Pin Assignments"), false );
 
 	bSizer8->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
-	m_excludeSymbolCheckbox = new wxCheckBox( this, wxID_ANY, wxT("Exclude symbol from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_excludeSymbolCheckbox = new wxCheckBox( this, wxID_ANY, _("Exclude symbol from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_excludeSymbolCheckbox, 0, wxALL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
@@ -227,14 +228,13 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	this->SetSizer( bSizer8 );
 	this->Layout();
-	bSizer8->Fit( this );
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
 	m_useInstanceModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_useLibraryModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
-	m_libraryPathLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
+	m_tclibraryPathName->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameCombobox->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameCombobox ), NULL, this );
@@ -259,7 +259,7 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	// Disconnect Events
 	m_useInstanceModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_useLibraryModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
-	m_libraryPathLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
+	m_tclibraryPathName->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathUpdate ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonClick ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
 	m_modelNameCombobox->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameCombobox ), NULL, this );

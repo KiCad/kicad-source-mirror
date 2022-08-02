@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -18,12 +19,13 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/stattext.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
@@ -54,7 +56,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxPanel* m_modelPanel;
 		wxRadioButton* m_useInstanceModelRadioButton;
 		wxRadioButton* m_useLibraryModelRadioButton;
-		wxStaticText* m_libraryPathLabel;
+		wxTextCtrl* m_tclibraryPathName;
 		wxBitmapButton* m_browseButton;
 		wxStaticText* m_modelNameLabel;
 		wxComboBox* m_modelNameCombobox;
@@ -101,7 +103,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 454,515 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_SIM_MODEL_BASE();
 

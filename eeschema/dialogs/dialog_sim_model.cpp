@@ -99,7 +99,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     else
         wxFAIL;
 
-    Layout();
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
 }
 
 
@@ -401,7 +402,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
         return;
     }
 
-    m_libraryPathLabel->SetLabel( aFilePath );
+    m_tclibraryPathName->ChangeValue( aFilePath );
 
     m_libraryModels.clear();
 
