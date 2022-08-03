@@ -400,6 +400,14 @@ namespace std
     };
 }
 
+struct SHEET_PATH_HASH
+{
+    const size_t operator()( const SCH_SHEET_PATH& path ) const
+    {
+        return path.GetCurrentHash();
+    }
+};
+
 struct SHEET_PATH_CMP
 {
     bool operator()( const SCH_SHEET_PATH& lhs, const SCH_SHEET_PATH& rhs ) const

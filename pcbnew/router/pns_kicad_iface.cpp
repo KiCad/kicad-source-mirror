@@ -71,6 +71,31 @@
 typedef VECTOR2I::extended_type ecoord;
 
 
+struct CLEARANCE_CACHE_KEY
+{
+    const PNS::ITEM*  A;
+    const PNS::ITEM*  B;
+    bool              Flag;
+
+    bool operator==(const CLEARANCE_CACHE_KEY& other) const
+    {
+        return A == other.A && B == other.B && Flag == other.Flag;
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<CLEARANCE_CACHE_KEY>
+    {
+        std::size_t operator()( const CLEARANCE_CACHE_KEY& k ) const
+        {
+            return hash<const void*>()( k.A ) ^ hash<const void*>()( k.B ) ^ hash<int>()( k.Flag );
+        }
+    };
+}
+
+
 class PNS_PCBNEW_RULE_RESOLVER : public PNS::RULE_RESOLVER
 {
 public:
@@ -120,11 +145,9 @@ private:
     PCB_VIA            m_dummyVias[2];
     int                m_clearanceEpsilon;
 
-    typedef std::tuple<const PNS::ITEM*, const PNS::ITEM*, bool> CLEARANCE_CACHE_KEY;
-
-    std::map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
-    std::map<CLEARANCE_CACHE_KEY, int> m_holeClearanceCache;
-    std::map<CLEARANCE_CACHE_KEY, int> m_holeToHoleClearanceCache;
+    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
+    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_holeClearanceCache;
+    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_holeToHoleClearanceCache;
 };
 
 
@@ -311,15 +334,18 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
 void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItem( const PNS::ITEM* aItem )
 {
-    m_clearanceCache.erase( std::make_tuple( aItem, nullptr, false ) );
-    m_clearanceCache.erase( std::make_tuple( aItem, nullptr, true ) );
+    CLEARANCE_CACHE_KEY key = { aItem, nullptr, false };
+    m_clearanceCache.erase( key );
+
+    key.Flag = true;
+    m_clearanceCache.erase( key );
 }
 
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                          bool aUseClearanceEpsilon )
 {
-    CLEARANCE_CACHE_KEY key( aA, aB, aUseClearanceEpsilon );
+    CLEARANCE_CACHE_KEY key = { aA, aB, aUseClearanceEpsilon };
     auto it = m_clearanceCache.find( key );
 
     if( it != m_clearanceCache.end() )
@@ -360,7 +386,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                              bool aUseClearanceEpsilon )
 {
-    CLEARANCE_CACHE_KEY key( aA, aB, aUseClearanceEpsilon );
+    CLEARANCE_CACHE_KEY key = { aA, aB, aUseClearanceEpsilon };
     auto it = m_holeClearanceCache.find( key );
 
     if( it != m_holeClearanceCache.end() )
@@ -389,7 +415,7 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
 int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                                    bool aUseClearanceEpsilon )
 {
-    CLEARANCE_CACHE_KEY key( aA, aB, aUseClearanceEpsilon );
+    CLEARANCE_CACHE_KEY key = { aA, aB, aUseClearanceEpsilon };
     auto it = m_holeToHoleClearanceCache.find( key );
 
     if( it != m_holeToHoleClearanceCache.end() )

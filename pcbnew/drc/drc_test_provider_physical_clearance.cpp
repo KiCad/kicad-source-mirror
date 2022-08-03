@@ -101,8 +101,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
 
     reportAux( wxT( "Largest physical clearance : %d nm" ), m_board->m_DRCMaxPhysicalClearance );
 
-    // This is the number of tests between 2 calls to the progress bar
-    size_t delta = 100;
+    size_t progressDelta = 250;
     size_t count = 0;
     size_t ii = 0;
 
@@ -130,7 +129,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
                 LSET layers = item->GetLayerSet();
@@ -155,7 +154,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 return true;
             } );
 
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
+    progressDelta = 100;
     ii = 0;
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
@@ -167,7 +167,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
         forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
                 [&]( BOARD_ITEM* item ) -> bool
                 {
-                    if( !reportProgress( ii++, count, delta ) )
+                    if( !reportProgress( ii++, count, progressDelta ) )
                         return false;
 
                     LSET layers = item->GetLayerSet();
@@ -216,6 +216,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 } );
     }
 
+    progressDelta = 100;
     count = 0;
     ii = 0;
 
@@ -247,7 +248,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 {
                     if( IsCopperLayer( layer ) )
                     {
-                        if( !reportProgress( ii++, count, delta ) )
+                        if( !reportProgress( ii++, count, progressDelta ) )
                             return false;
 
                         DRC_CONSTRAINT c = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT,

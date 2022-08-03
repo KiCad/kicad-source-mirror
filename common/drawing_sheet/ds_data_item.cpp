@@ -87,7 +87,7 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 0;
 
     std::map<size_t, EDA_ITEM_FLAGS> itemFlags;
-    DS_DRAW_ITEM_BASE*          item = nullptr;
+    DS_DRAW_ITEM_BASE*               item = nullptr;
 
     for( size_t i = 0; i < m_drawItems.size(); ++i )
     {

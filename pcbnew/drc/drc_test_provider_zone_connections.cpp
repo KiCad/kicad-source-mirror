@@ -94,15 +94,15 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
             // Quick tests for "connected":
             //
-            if( !pad->FlashLayer( aLayer ) )
-                continue;
-
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
                 continue;
 
-            EDA_RECT item_boundingbox = pad->GetBoundingBox();
+            EDA_RECT item_bbox = pad->GetBoundingBox();
 
-            if( !item_boundingbox.Intersects( aZone->GetCachedBoundingBox() ) )
+            if( !item_bbox.Intersects( aZone->GetCachedBoundingBox() ) )
+                continue;
+
+            if( !pad->FlashLayer( aLayer ) )
                 continue;
 
             // If those passed, do a thorough test:
@@ -125,19 +125,21 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                                                        ERROR_OUTSIDE );
 
             SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
+            BOX2I             padBBox( item_bbox );
             std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
-            int spokes = 0;
 
             for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
-                padOutline.Intersect( zoneFill->Outline( jj ), intersections, true );
+                zoneFill->Outline( jj ).Intersect( padOutline, intersections, true, &padBBox );
 
-            spokes += intersections.size() / 2;
+            int spokes = intersections.size() / 2;
 
-            if( spokes <= 0 )
+            if( spokes <= 0 )           // Not connected at all
                 continue;
 
-            // Now we know we're connected, so see if there are any other manual spokes
-            // added:
+            if( spokes >= minCount )    // We already have enough
+                continue;
+
+            // See if there are any other manual spokes added:
             //
             for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
             {
@@ -198,6 +200,8 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
         }
     }
 
+    total_effort = std::max( (size_t) 1, total_effort );
+
     thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<int>> returns;
 
@@ -219,15 +223,16 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                 zonelayer.first, zonelayer.second ) );
     }
 
-    for( std::future<int>& retval : returns )
+    for( const std::future<int>& retval : returns )
     {
         std::future_status status;
 
         do
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
     return !m_drcEngine->IsCancelled();

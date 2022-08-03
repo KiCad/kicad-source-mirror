@@ -230,8 +230,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
     ftCache->Rebuild( m_board );
 
-    // This is the number of tests between 2 calls to the progress bar
-    const size_t delta = 50;
+    const size_t progressDelta = 100;
     size_t       count = 0;
     size_t       ii = 0;
 
@@ -245,7 +244,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
     forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, LSET::AllCuMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
                 const DRC_CONSTRAINT_T constraintsToCheck[] = {
@@ -297,16 +296,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             {
                 if( citem->Type() == PCB_VIA_T )
                 {
-                    const BOARD_DESIGN_SETTINGS& ds = m_board->GetDesignSettings();
+                    const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+                    const BOARD_STACKUP&         stackup = bds.GetStackupDescriptor();
 
                     ent.viaCount++;
 
-                    if( ds.m_UseHeightForLengthCalcs )
+                    if( bds.m_UseHeightForLengthCalcs )
                     {
                         const PCB_VIA* v = static_cast<PCB_VIA*>( citem );
 
-                        ent.totalVia += ds.GetStackupDescriptor().GetLayerDistance(
-                                v->TopLayer(), v->BottomLayer() );
+                        ent.totalVia += stackup.GetLayerDistance( v->TopLayer(), v->BottomLayer() );
                     }
                 }
                 else if( citem->Type() == PCB_TRACE_T )
@@ -357,7 +356,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             DRC_RULE *rule = it.first;
             auto& matchedConnections = it.second;
 
-            if( !reportProgress( ii++, count, delta ) )
+            if( !reportProgress( ii++, count, progressDelta ) )
                 return false;
 
             std::sort( matchedConnections.begin(), matchedConnections.end(),

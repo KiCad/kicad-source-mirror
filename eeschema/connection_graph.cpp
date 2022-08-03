@@ -989,7 +989,7 @@ void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
             subgraph->AddItem( pin );
             subgraph->ResolveDrivers();
 
-            auto key = std::make_pair( subgraph->GetNetName(), code );
+            NET_NAME_CODE_CACHE_KEY key = { subgraph->GetNetName(), code };
             m_net_code_to_subgraphs_map[ key ].push_back( subgraph );
             m_subgraphs.push_back( subgraph );
             m_driver_subgraphs.push_back( subgraph );
@@ -1609,8 +1609,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
-        auto key = std::make_pair( subgraph->GetNetName(),
-                                   subgraph->m_driver_connection->NetCode() );
+        NET_NAME_CODE_CACHE_KEY key = { subgraph->GetNetName(),
+                                        subgraph->m_driver_connection->NetCode() };
         m_net_code_to_subgraphs_map[ key ].push_back( subgraph );
 
         m_net_name_to_subgraphs_map[subgraph->m_driver_connection->Name()].push_back( subgraph );

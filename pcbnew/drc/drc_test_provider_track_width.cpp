@@ -61,8 +61,6 @@ public:
 
 bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
-    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
-
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
     {
         reportAux( wxT( "Track width violations ignored. Tests not run." ) );
@@ -153,11 +151,12 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 return true;
             };
 
-    int ii = 0;
+    const int progressDelta = 250;
+    int       ii = 0;
 
     for( PCB_TRACK* item : m_drcEngine->GetBoard()->Tracks() )
     {
-        if( !reportProgress( ii++, m_drcEngine->GetBoard()->Tracks().size(), delta ) )
+        if( !reportProgress( ii++, m_drcEngine->GetBoard()->Tracks().size(), progressDelta ) )
             break;
 
         if( !checkTrackWidth( item ) )

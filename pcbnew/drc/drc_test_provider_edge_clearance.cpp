@@ -246,8 +246,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         }
     }
 
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 100;
+    const int progressDelta = 200;
     int       count = 0;
     int       ii = 0;
 
@@ -267,7 +266,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 if( !testCopper && !testSilk )
                     return false;    // We're done
 
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;    // DRC cancelled; we're done
 
                 if( isInvisibleText( item ) )

@@ -413,16 +413,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
     // This is the number of tests between 2 calls to the progress bar
-    const int delta = 100;
+    const int progressDelta = 100;
     int       ii = 0;
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-        if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
+        if( !reportProgress( ii++, m_board->Tracks().size(), progressDelta ) )
             break;
 
         for( PCB_LAYER_ID layer : track->GetLayerSet().Seq() )
@@ -687,17 +687,16 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
-    const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
-
-    size_t count = 0;
+    const int progressDelta = 100;
+    size_t    count = 0;
+    int       ii = 0;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
         count += footprint->Pads().size();
 
     reportAux( wxT( "Testing %d pads..." ), count );
 
-    int ii = 0;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
@@ -745,7 +744,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                 }
             }
 
-            if( !reportProgress( ii++, count, delta ) )
+            if( !reportProgress( ii++, count, progressDelta ) )
                 return;
         }
 
@@ -757,7 +756,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 {
-    const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
+    const int progressDelta = 50;
 
     SHAPE_POLY_SET  buffer;
     SHAPE_POLY_SET* boardOutline = nullptr;
@@ -790,7 +789,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         for( size_t ia = 0; ia < m_board->m_DRCCopperZones.size(); ia++ )
         {
             if( !reportProgress( layer_id * m_board->m_DRCCopperZones.size() + ia,
-                                 B_Cu * m_board->m_DRCCopperZones.size(), delta ) )
+                                 B_Cu * m_board->m_DRCCopperZones.size(), progressDelta ) )
             {
                 return;     // DRC cancelled
             }

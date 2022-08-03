@@ -405,7 +405,7 @@ int ERC_TESTER::TestNoConnectPins()
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
     {
-        std::map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
+        std::unordered_map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
@@ -448,7 +448,7 @@ int ERC_TESTER::TestPinToPin()
 
     int errors = 0;
 
-    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
         std::vector<SCH_PIN*> pins;
         std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
@@ -596,9 +596,9 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 
     std::unordered_map<wxString, std::pair<wxString, SCH_PIN*>> pinToNetMap;
 
-    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
-        const wxString& netName = net.first.first;
+        const wxString& netName = net.first.Name;
 
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
@@ -654,7 +654,7 @@ int ERC_TESTER::TestSimilarLabels()
 
     std::unordered_map<wxString, SCH_LABEL_BASE*> labelMap;
 
-    for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
+    for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {

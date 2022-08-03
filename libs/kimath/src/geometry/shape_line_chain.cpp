@@ -1395,9 +1395,9 @@ static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int a
 
 
 int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
-                                 bool aExcludeColinearAndTouching ) const
+                                 bool aExcludeColinearAndTouching, BOX2I* aChainBBox ) const
 {
-    BOX2I bb_other = aChain.BBox();
+    BOX2I bb_other = aChainBBox ? *aChainBBox : aChain.BBox();
 
     for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {

@@ -87,7 +87,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
     connectivity->FindIsolatedCopperIslands( islandsList, true );
 
-    int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+    int progressDelta = 250;
     int ii = 0;
     int count = board->Tracks().size() + islandsList.size();
 
@@ -106,7 +106,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         else if( track->Type() == PCB_TRACE_T && exceedT )
             continue;
 
-        if( !reportProgress( ii++, count, delta ) )
+        if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
         // Test for dangling items
@@ -127,7 +127,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
             break;
 
-        if( !reportProgress( ii++, count, delta ) )
+        if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
@@ -158,7 +158,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     std::vector<CN_EDGE> edges;
     connectivity->GetUnconnectedEdges( edges );
 
-    delta = 250;
     ii = 0;
     count = edges.size();
 
@@ -167,7 +166,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
             break;
 
-        if( !reportProgress( ii++, count, delta ) )
+        if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );

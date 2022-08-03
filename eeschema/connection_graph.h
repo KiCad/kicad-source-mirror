@@ -236,11 +236,33 @@ public:
     SCH_ITEM* m_second_driver;
 };
 
-/// Associates a net code with the final name of a net
-typedef std::pair<wxString, int> NET_NAME_CODE;
+struct NET_NAME_CODE_CACHE_KEY
+{
+    wxString  Name;
+    int       Netcode;
+
+    bool operator==(const NET_NAME_CODE_CACHE_KEY& other) const
+    {
+        return Name == other.Name && Netcode == other.Netcode;
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<NET_NAME_CODE_CACHE_KEY>
+    {
+        std::size_t operator()( const NET_NAME_CODE_CACHE_KEY& k ) const
+        {
+            const std::size_t prime = 19937;
+
+            return hash<wxString>()( k.Name ) ^ ( hash<int>()( k.Netcode ) * prime );
+        }
+    };
+}
 
 /// Associates a NET_CODE_NAME with all the subgraphs in that net
-typedef std::map<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
+typedef std::unordered_map<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 
 /**
  * Calculates the connectivity of a schematic and generates netlists
@@ -552,20 +574,20 @@ private:
 
     std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
 
-    std::unordered_map< wxString, std::shared_ptr<BUS_ALIAS> > m_bus_alias_cache;
+    std::unordered_map<wxString, std::shared_ptr<BUS_ALIAS>> m_bus_alias_cache;
 
-    std::map<wxString, int> m_net_name_to_code_map;
+    std::unordered_map<wxString, int> m_net_name_to_code_map;
 
-    std::map<wxString, int> m_bus_name_to_code_map;
+    std::unordered_map<wxString, int> m_bus_name_to_code_map;
 
-    std::map<wxString, std::vector<const CONNECTION_SUBGRAPH*>> m_global_label_cache;
+    std::unordered_map<wxString, std::vector<const CONNECTION_SUBGRAPH*>> m_global_label_cache;
 
     std::map< std::pair<SCH_SHEET_PATH, wxString>,
               std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
 
     std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
 
-    std::map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
+    std::unordered_map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
 
     NET_MAP m_net_code_to_subgraphs_map;
 

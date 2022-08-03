@@ -127,7 +127,7 @@ void PCB_PARSER::checkpoint()
         unsigned curLine = reader->LineNumber();
         auto delta = std::chrono::duration_cast<TIMEOUT>( curTime - m_lastProgressTime );
 
-        if( delta > std::chrono::milliseconds( 100 ) )
+        if( delta > std::chrono::milliseconds( 250 ) )
         {
             m_progressReporter->SetCurrentProgress( ( (double) curLine )
                                                             / std::max( 1U, m_lineCount ) );

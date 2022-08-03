@@ -645,7 +645,8 @@ public:
      * @return the number of intersections found.
      */
     int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
-                   bool aExcludeColinearAndTouching = false ) const;
+                   bool aExcludeColinearAndTouching = false,
+                   BOX2I* aChainBBox = nullptr ) const;
 
     /**
      * Compute the walk path length from the beginning of the line chain and the point \a aP

@@ -78,8 +78,6 @@ private:
 
 bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
-    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
-
     // Detects missing (or malformed) footprint courtyards
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD)
             || !m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD) )
@@ -98,11 +96,12 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         return true;        // continue with other tests
     }
 
-    int ii = 0;
+    const int progressDelta = 500;
+    int       ii = 0;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
+        if( !reportProgress( ii++, m_board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
         if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
@@ -148,16 +147,15 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
 bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 {
-    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
-
     if( !reportPhase( _( "Checking footprints for overlapping courtyards..." ) ) )
         return false;   // DRC cancelled
 
-    int ii = 0;
+    const int progressDelta = 100;
+    int       ii = 0;
 
     for( auto itA = m_board->Footprints().begin(); itA != m_board->Footprints().end(); itA++ )
     {
-        if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
+        if( !reportProgress( ii++, m_board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS)

@@ -265,10 +265,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         thread_pool& tp = GetKiCadThreadPool();
 
-        for( auto& fillItem : toFill )
+        for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
             returns.emplace_back( tp.submit( fill_lambda, fillItem ) );
 
-        for( auto& ret : returns )
+        for( const std::future<int>& ret : returns )
         {
             std::future_status status;
 
@@ -277,8 +277,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( m_progressReporter )
                     m_progressReporter->KeepRefreshing();
 
-                status = ret.wait_for( std::chrono::milliseconds( 100 ) );
-            } while( status != std::future_status::ready );
+                status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+            }
+            while( status != std::future_status::ready );
         }
 
         alg::delete_if( toFill, [&]( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool

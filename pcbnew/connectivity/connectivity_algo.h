@@ -193,7 +193,7 @@ public:
         return m_dirtyNets.size();
     }
 
-    void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
+    void Build( BOARD* aZoneLayer, PROGRESS_REPORTER* aReporter = nullptr );
     void LocalBuild( const std::vector<BOARD_ITEM*>& aItems );
 
     void Clear();

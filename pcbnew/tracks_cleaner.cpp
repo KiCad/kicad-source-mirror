@@ -215,22 +215,22 @@ bool TRACKS_CLEANER::testTrackEndpointIsNode( PCB_TRACK* aTrack, bool aTstStart 
 {
     // A node is a point where more than 2 items are connected.
 
-    auto connectivity = m_brd->GetConnectivity();
-    auto items = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
+    const std::list<CN_ITEM*>& items =
+                m_brd->GetConnectivity()->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
 
     if( items.empty() )
         return false;
 
-    auto citem = items.front();
+    CN_ITEM* citem = items.front();
 
     if( !citem->Valid() )
         return false;
 
-    auto anchors = citem->Anchors();
+    const std::vector<std::shared_ptr<CN_ANCHOR>>& anchors = citem->Anchors();
 
     VECTOR2I refpoint = aTstStart ? aTrack->GetStart() : aTrack->GetEnd();
 
-    for( const auto& anchor : anchors )
+    for( const std::shared_ptr<CN_ANCHOR>& anchor : anchors )
     {
         if( anchor->Pos() != refpoint )
             continue;
@@ -486,7 +486,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             merged = false;
             m_brd->BuildConnectivity();
 
-            auto connectivity = m_brd->GetConnectivity()->GetConnectivityAlgo();
+            std::shared_ptr<CN_CONNECTIVITY_ALGO> connectivity =
+                                    m_brd->GetConnectivity()->GetConnectivityAlgo();
 
             // Keep a duplicate deque to all deleting in the primary
             std::deque<PCB_TRACK*> temp_segments( m_brd->Tracks() );
@@ -716,7 +717,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
 
 void TRACKS_CLEANER::removeItems( std::set<BOARD_ITEM*>& aItems )
 {
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
     {
         m_brd->Remove( item );
         m_commit.Removed( item );

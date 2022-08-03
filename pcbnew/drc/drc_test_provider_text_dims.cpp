@@ -67,7 +67,7 @@ public:
 
 bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 {
-    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+    const int progressDelta = 250;
     int       count = 0;
     int       ii = 0;
 
@@ -273,7 +273,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
                 EDA_TEXT* text = nullptr;

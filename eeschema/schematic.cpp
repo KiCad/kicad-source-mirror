@@ -241,7 +241,6 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 {
     std::vector<wxString> names;
 
-    // Key is a NET_NAME_CODE aka std::pair<name, code>
     for( const NET_MAP::value_type& pair: m_connectionGraph->GetNetMap() )
     {
         CONNECTION_SUBGRAPH* subgraph = pair.second[0];
@@ -249,7 +248,7 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
         if( !subgraph->m_driver_connection->IsBus()
                 && subgraph->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
         {
-            names.emplace_back( pair.first.first );
+            names.emplace_back( pair.first.Name );
         }
     }
 

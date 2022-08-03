@@ -118,9 +118,9 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
     for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        auto subgraphs = it.second;
+        const std::vector<CONNECTION_SUBGRAPH*>& subgraphs = it.second;
 
-        netName.Printf( wxT( "\"%s\"" ), it.first.first );
+        netName.Printf( wxT( "\"%s\"" ), it.first.Name );
 
         std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
 

@@ -120,8 +120,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     if( !reportPhase( _( "Checking hole to hole clearances..." ) ) )
         return false;   // DRC cancelled
 
-    // This is the number of tests between 2 calls to the progress bar
-    const size_t delta = 100;
+    const size_t progressDelta = 200;
     size_t       count = 0;
     size_t       ii = 0;
 
@@ -139,7 +138,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
                 if( item->Type() == PCB_PAD_T )
@@ -162,7 +161,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 return true;
             } );
 
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -171,7 +170,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
         PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
-        if( !reportProgress( ii++, count, delta ) )
+        if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
         // We only care about mechanically drilled (ie: non-laser) holes
@@ -216,7 +215,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !reportProgress( ii++, count, delta ) )
+            if( !reportProgress( ii++, count, progressDelta ) )
                 return false;   // DRC cancelled
 
             // We only care about drilled (ie: round) holes

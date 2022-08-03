@@ -665,7 +665,7 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
         returns.emplace_back( tp.submit( cache_zones, zone ) );
 
     // Finalize the triangulation threads
-    for( auto& retval : returns )
+    for( const std::future<size_t>& retval : returns )
     {
         std::future_status status;
 
@@ -674,8 +674,9 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
             if( aReporter )
                 aReporter->KeepRefreshing();
 
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 }
 

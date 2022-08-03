@@ -92,7 +92,7 @@ bool DRC_CACHE_GENERATOR::Run()
     }
 
     // This is the number of tests between 2 calls to the progress bar
-    size_t delta = 50;
+    size_t progressDelta = 200;
     size_t count = 0;
     size_t ii = 0;
 
@@ -106,7 +106,7 @@ bool DRC_CACHE_GENERATOR::Run()
     auto addToCopperTree =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, count, delta ) )
+                if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
                 LSET layers = item->GetLayerSet();
@@ -149,17 +149,17 @@ bool DRC_CACHE_GENERATOR::Run()
     // Cache zone bounding boxes, triangulation, copper zone rtrees, and footprint courtyards
     // before we start.
 
-    m_drcEngine->SetMaxProgress( allZones.size() );
-
     for( FOOTPRINT* footprint : m_board->Footprints() )
         footprint->BuildCourtyardCaches();
 
     thread_pool&                     tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns;
+    std::atomic<size_t>              done( 1 );
 
     returns.reserve( allZones.size() );
 
-    auto cache_zones = [this]( ZONE* aZone ) -> size_t
+    auto cache_zones =
+            [this, &done]( ZONE* aZone ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
@@ -179,7 +179,8 @@ bool DRC_CACHE_GENERATOR::Run()
 
                    std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
                    m_board->m_CopperZoneRTreeCache[ aZone ] = std::move( rtree );
-                   m_drcEngine->AdvanceProgress();
+
+                   done.fetch_add( 1 );
                 }
 
                 return 1;
@@ -188,15 +189,16 @@ bool DRC_CACHE_GENERATOR::Run()
     for( ZONE* zone : allZones )
         returns.emplace_back( tp.submit( cache_zones, zone ) );
 
-    for( auto& retval : returns )
+    for( const std::future<size_t>& retval : returns )
     {
         std::future_status status;
 
         do
         {
-            m_drcEngine->KeepRefreshing();
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            m_drcEngine->ReportProgress( static_cast<double>( done ) / allZones.size() );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
     return !m_drcEngine->IsCancelled();

@@ -123,9 +123,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
 void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 {
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 2000;
-
+    const int progressDelta = 2000;
     int       ii = 0;
     int       items = 0;
 
@@ -147,7 +145,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_DISABLED_LAYER_ITEM ) )
                     return false;
 
-                if( !reportProgress( ii++, items, delta ) )
+                if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
                 PCB_LAYER_ID badLayer = UNDEFINED_LAYER;
@@ -216,9 +214,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
 void DRC_TEST_PROVIDER_MISC::testAssertions()
 {
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 2000;
-
+    const int progressDelta = 2000;
     int       ii = 0;
     int       items = 0;
 
@@ -235,7 +231,7 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
                     return false;
 
-                if( !reportProgress( ii++, items, delta ) )
+                if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
                 m_drcEngine->ProcessAssertions( item,
@@ -259,9 +255,7 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
 
 void DRC_TEST_PROVIDER_MISC::testTextVars()
 {
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 2000;
-
+    const int progressDelta = 2000;
     int       ii = 0;
     int       items = 0;
 
@@ -283,7 +277,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
                     return false;
 
-                if( !reportProgress( ii++, items, delta ) )
+                if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
                 BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );

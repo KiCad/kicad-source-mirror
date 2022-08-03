@@ -176,7 +176,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     for( size_t ii = 0; ii < copperLayers.size(); ++ii )
         returns.emplace_back( tp.submit( sliver_checker, ii ) );
 
-    for( auto& retval : returns )
+    for( const std::future<size_t>& retval : returns )
     {
         std::future_status status;
 
@@ -184,8 +184,9 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         {
             m_drcEngine->ReportProgress( static_cast<double>( zoneLayerCount ) / done );
 
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
 

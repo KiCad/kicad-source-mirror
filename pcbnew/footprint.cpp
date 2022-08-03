@@ -2356,7 +2356,7 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
 void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
                                                                 const VECTOR2I& )>& aErrorHandler )
 {
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
 
     for( PAD* pad : Pads() )
     {

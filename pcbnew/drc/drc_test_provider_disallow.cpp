@@ -150,9 +150,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID> key( ruleArea,
-                                                                        copperZone,
-                                                                        UNDEFINED_LAYER );
+                PTR_PTR_LAYER_CACHE_KEY key = { ruleArea, copperZone, UNDEFINED_LAYER };
 
                 {
                     std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
@@ -179,8 +177,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         do
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / toCache.size() );
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
     if( m_drcEngine->IsCancelled() )
@@ -189,8 +188,8 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     // Now go through all the board objects calling the DRC_ENGINE to run the actual disallow
     // tests.  These should be reasonably quick using the caches generated above.
     //
-    int    delta = 100;
-    int    ii = static_cast<int>( toCache.size() );
+    const int progressDelta = 250;
+    int       ii = static_cast<int>( toCache.size() );
 
     auto checkTextOnEdgeCuts =
             [&]( BOARD_ITEM* item )
@@ -258,7 +257,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     }
                 }
 
-                if( !reportProgress( ii++, totalCount, delta ) )
+                if( !reportProgress( ii++, totalCount, progressDelta ) )
                     return false;
 
                 return true;

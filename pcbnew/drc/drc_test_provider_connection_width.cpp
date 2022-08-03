@@ -736,7 +736,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
         total_effort += calc_effort( netLayer.second.items, netLayer.first.second );
 
-    total_effort += total_effort * distinctMinWidths.size();
+    total_effort += std::max( (size_t) 1, total_effort ) * distinctMinWidths.size();
 
     returns.reserve( dataset.size() );
 
@@ -753,8 +753,9 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         do
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
     returns.clear();
@@ -776,8 +777,9 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         do
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
     }
 
     return true;

@@ -63,6 +63,54 @@ class PROGRESS_REPORTER;
 // Forward declare endpoint from class_track.h
 enum ENDPOINT_T : int;
 
+
+struct PTR_PTR_CACHE_KEY
+{
+    BOARD_ITEM*  A;
+    BOARD_ITEM*  B;
+
+    bool operator==(const PTR_PTR_CACHE_KEY& other) const
+    {
+        return A == other.A && B == other.B;
+    }
+};
+
+struct PTR_PTR_LAYER_CACHE_KEY
+{
+    BOARD_ITEM*  A;
+    BOARD_ITEM*  B;
+    PCB_LAYER_ID Layer;
+
+    bool operator==(const PTR_PTR_LAYER_CACHE_KEY& other) const
+    {
+        return A == other.A && B == other.B && Layer == other.Layer;
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<PTR_PTR_CACHE_KEY>
+    {
+        std::size_t operator()( const PTR_PTR_CACHE_KEY& k ) const
+        {
+            return hash<void*>()( k.A ) ^ hash<void*>()( k.B );
+        }
+    };
+
+    template <>
+    struct hash<PTR_PTR_LAYER_CACHE_KEY>
+    {
+        std::size_t operator()( const PTR_PTR_LAYER_CACHE_KEY& k ) const
+        {
+            const std::size_t prime = 19937;
+
+            return hash<void*>()( k.A ) ^ hash<void*>()( k.B ) ^ ( hash<int>()( k.Layer ) * prime );
+        }
+    };
+}
+
+
 /**
  * The allowed types of layers, same as Specctra DSN spec.
  */
@@ -1071,14 +1119,14 @@ public:
     };
 
     // ------------ Run-time caches -------------
-    std::mutex                                                           m_CachesMutex;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideFCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >                m_InsideBCourtyardCache;
-    std::map< std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID>, bool > m_InsideAreaCache;
-    std::map< wxString, LSET >                                           m_LayerExpressionCache;
-    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >                        m_CopperZoneRTreeCache;
-    std::unique_ptr<DRC_RTREE>                                           m_CopperItemRTreeCache;
+    std::mutex                                            m_CachesMutex;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideCourtyardCache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideFCourtyardCache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideBCourtyardCache;
+    std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_InsideAreaCache;
+    std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
+    std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
+    std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;
@@ -1147,5 +1195,6 @@ private:
 
     std::vector<BOARD_LISTENER*> m_listeners;
 };
+
 
 #endif      // CLASS_BOARD_H_

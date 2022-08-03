@@ -76,8 +76,7 @@ private:
 
 bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 {
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 500;
+    const int progressDelta = 500;
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
     {
@@ -113,7 +112,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     auto addToSilkTree =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, items, delta ) )
+                if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
                 for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
@@ -128,7 +127,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     auto addToTargetTree =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, items, delta ) )
+                if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
 
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
@@ -261,7 +260,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             m_largestClearance,
             [&]( int aCount, int aSize ) -> bool
             {
-                return reportProgress( aCount, aSize, delta );
+                return reportProgress( aCount, aSize, progressDelta );
             } );
 
     reportRuleStatistics();

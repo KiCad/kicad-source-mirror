@@ -221,11 +221,11 @@ bool isInsideCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
     if( !aFootprint )
         return false;
 
-    BOARD*                              board = aItem->GetBoard();
-    std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-    std::pair<BOARD_ITEM*, BOARD_ITEM*> key( aFootprint, aItem );
+    BOARD*                       board = aItem->GetBoard();
+    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+    PTR_PTR_CACHE_KEY            key = { aFootprint, aItem };
 
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool >* cache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>* cache;
 
     switch( aSide )
     {
@@ -579,11 +579,11 @@ bool isInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEX
     if( !aArea || aArea == aItem || aArea->GetParent() == aItem )
         return false;
 
-    BOARD*                                             board = aArea->GetBoard();
-    std::unique_lock<std::mutex>                       cacheLock( board->m_CachesMutex );
-    PCB_LAYER_ID                                       layer = aCtx->GetLayer();
-    std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID> key( aArea, aItem, layer );
-    auto                                               i = board->m_InsideAreaCache.find( key );
+    BOARD*                       board = aArea->GetBoard();
+    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+    PCB_LAYER_ID                 layer = aCtx->GetLayer();
+    PTR_PTR_LAYER_CACHE_KEY      key = { aArea, aItem, layer };
+    auto                         i = board->m_InsideAreaCache.find( key );
 
     if( i != board->m_InsideAreaCache.end() )
         return i->second;

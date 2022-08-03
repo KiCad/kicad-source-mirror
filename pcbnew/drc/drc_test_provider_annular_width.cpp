@@ -77,7 +77,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
         return true;    // continue with other tests
     }
 
-    const int delta = 250;  // This is the number of tests between 2 calls to the progress bar
+    const int progressDelta = 500;
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
@@ -126,7 +126,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                         }
                     }
 
-                    return 100;
+                    return 5;
                 }
 
                 default:
@@ -286,7 +286,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
     {
         ii += calcEffort( item );
 
-        if( !reportProgress( ii, total, delta ) )
+        if( !reportProgress( ii, total, progressDelta ) )
             return false;   // DRC cancelled
 
         if( !checkAnnularWidth( item ) )
@@ -299,7 +299,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
         {
             ii += calcEffort( pad );
 
-            if( !reportProgress( ii, total, delta ) )
+            if( !reportProgress( ii, total, progressDelta ) )
                 return false;   // DRC cancelled
 
             if( !checkAnnularWidth( pad ) )

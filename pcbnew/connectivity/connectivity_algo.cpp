@@ -245,7 +245,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
         auto conn_lambda =
                 [&dirtyItems]( size_t aItem, CN_LIST* aItemList,
-                                          PROGRESS_REPORTER* aReporter) -> size_t
+                               PROGRESS_REPORTER* aReporter) -> size_t
                 {
                     if( aReporter && aReporter->IsCancelled() )
                         return 0;
@@ -262,17 +262,18 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
             returns[ii] = tp.submit( conn_lambda, ii, &m_itemList, m_progressReporter );
 
-        for( auto& retval : returns )
+        for( const std::future<size_t>& retval : returns )
         {
-            // Here we balance returns with a 100ms timeout to allow UI updating
+            // Here we balance returns with a 250ms timeout to allow UI updating
             std::future_status status;
             do
             {
                 if( m_progressReporter )
                     m_progressReporter->KeepRefreshing();
 
-                status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-            } while( status != std::future_status::ready );
+                status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            }
+            while( status != std::future_status::ready );
         }
 
         if( m_progressReporter )
@@ -299,7 +300,8 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS
-CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::initializer_list<KICAD_T>& aTypes,
+CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode,
+                                      const std::initializer_list<KICAD_T>& aTypes,
                                       int aSingleNet, CN_ITEM* rootItem )
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
@@ -313,7 +315,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::init
         searchConnections();
 
     auto addToSearchList =
-            [&item_set, withinAnyNet, aSingleNet, aTypes, rootItem ]( CN_ITEM *aItem )
+            [&item_set, withinAnyNet, aSingleNet, &aTypes, rootItem ]( CN_ITEM *aItem )
             {
                 if( withinAnyNet && aItem->Net() <= 0 )
                     return;
@@ -428,7 +430,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     // Setup progress metrics
     //
-    int    delta = 50;            // Number of additions between 2 calls to the progress bar
+    int    progressDelta = 50;
     double size = 0.0;
 
     size += zitems.size();        // Once for building RTrees
@@ -440,12 +442,12 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     size *= 1.5;                  // Our caller gets the other third of the progress bar
 
-    delta = std::max( delta, KiROUND( size / 10 ) );
+    progressDelta = std::max( progressDelta, (int) size / 4 );
 
     auto report =
             [&]( int progress )
             {
-                if( aReporter && ( progress % delta ) == 0 )
+                if( aReporter && ( progress % progressDelta ) == 0 )
                 {
                     aReporter->SetCurrentProgress( progress / size );
                     aReporter->KeepRefreshing( false );
@@ -457,12 +459,13 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     thread_pool& tp = GetKiCadThreadPool();
     std::vector<std::future<size_t>> returns( zitems.size() );
 
-    auto cache_zones = [aReporter]( CN_ZONE_LAYER* aZone ) -> size_t
+    auto cache_zones =
+            [aReporter]( CN_ZONE_LAYER* aZoneLayer ) -> size_t
             {
                 if( aReporter && aReporter->IsCancelled() )
                     return 0;
 
-                aZone->BuildRTree();
+                aZoneLayer->BuildRTree();
 
                 if( aReporter )
                     aReporter->AdvanceProgress();
@@ -473,7 +476,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     for( size_t ii = 0; ii < zitems.size(); ++ii )
         returns[ii] = tp.submit( cache_zones, zitems[ii] );
 
-    for( auto& retval : returns )
+    for( const std::future<size_t>& retval : returns )
     {
         std::future_status status;
 
@@ -482,8 +485,9 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
             if( aReporter )
                 aReporter->KeepRefreshing();
 
-            status = retval.wait_for( std::chrono::milliseconds( 100 ) );
-        } while( status != std::future_status::ready );
+            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+        }
+        while( status != std::future_status::ready );
 
     }
 
@@ -575,7 +579,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
             // normal cluster: just propagate from the pads
             int n_changed = 0;
 
-            for( auto item : *cluster )
+            for( CN_ITEM* item : *cluster )
             {
                 if( item->CanChangeNet() )
                 {
@@ -601,8 +605,10 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
                             (const char*) cluster->OriginNetName().c_str() );
             }
             else
+            {
                 wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : nothing to propagate" ),
                             cluster.get() );
+            }
         }
         else
         {
@@ -651,8 +657,10 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones,
                                                       bool aConnectivityAlreadyRebuilt )
 {
-    int delta = 10;    // Number of additions between 2 calls to the progress bar
+    int progressDelta = 50;
     int ii = 0;
+
+    progressDelta = std::max( progressDelta, (int) aZones.size() / 4 );
 
     if( !aConnectivityAlreadyRebuilt )
     {
@@ -662,7 +670,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
             Add( z.m_zone );
             ii++;
 
-            if( m_progressReporter && ( ii % delta ) == 0 )
+            if( m_progressReporter && ( ii % progressDelta ) == 0 )
             {
                 m_progressReporter->SetCurrentProgress( (double) ii / (double) aZones.size() );
                 m_progressReporter->KeepRefreshing( false );

@@ -456,7 +456,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
     FP_LIB_TABLE* libTable = project->PcbFootprintLibs();
     wxString      msg;
     int           ii = 0;
-    const int     delta = 50;  // Number of tests between calls to progress bar
+    const int     progressDelta = 250;
 
     if( !reportPhase( _( "Checking board footprints against library..." ) ) )
         return false;
@@ -469,7 +469,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             return true;    // Continue with other tests
         }
 
-        if( !reportProgress( ii++, board->Footprints().size(), delta ) )
+        if( !reportProgress( ii++, board->Footprints().size(), progressDelta ) )
             return false;   // DRC cancelled
 
         LIB_ID               fpID = footprint->GetFPID();

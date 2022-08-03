@@ -670,9 +670,9 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        wxString    net_name  = it.first.first;
-        auto        subgraphs = it.second;
-        NET_RECORD* net_record;
+        wxString                                 net_name  = it.first.Name;
+        const std::vector<CONNECTION_SUBGRAPH*>& subgraphs = it.second;
+        NET_RECORD*                              net_record = nullptr;
 
         if( subgraphs.empty() )
             continue;

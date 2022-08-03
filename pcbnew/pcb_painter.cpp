@@ -2073,7 +2073,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
     }
 
-    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && m_frameType == FRAME_PCB_EDITOR )    // happens only if locked
     {
         const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
 
@@ -2081,8 +2081,12 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->SetIsStroke( false );
         m_gal->SetFillColor( color );
 
+#if 0 // GetBoundingHull() can be very slow, especially for logos imported from graphics
         const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
+#else
+        m_gal->DrawRectangle( aFootprint->GetBoundingBox( true, false ) );
+#endif
     }
 
     if( aLayer == LAYER_CONFLICTS_SHADOW )    // happens only if locked
