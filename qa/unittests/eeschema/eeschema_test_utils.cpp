@@ -137,6 +137,10 @@ wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetNetlistPath( bool aTest )
 template <typename Exporter>
 void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::WriteNetlist()
 {
+    // In case of a crash the file may not have been deleted.
+    if( wxFileExists( GetNetlistPath( true ) ) )
+        wxRemoveFile( GetNetlistPath( true ) );
+
     auto exporter = std::make_unique<Exporter>( &m_schematic );
     BOOST_REQUIRE_EQUAL( exporter->WriteNetlist( GetNetlistPath( true ), GetNetlistOptions() ),
                                                  true );

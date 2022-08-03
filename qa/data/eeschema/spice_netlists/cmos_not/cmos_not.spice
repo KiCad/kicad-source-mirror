@@ -1,5 +1,5 @@
 .title KiCad schematic
-.include "cmos.lib.spice"
+.include "cmos_not.lib.spice"
 .model nmos nmos(
 + vto=500m kp=36u gamma=900m pb=950m
 + cgso=200p cgdo=200p cj=450u cjsw=215p tox=50n ld=300n )

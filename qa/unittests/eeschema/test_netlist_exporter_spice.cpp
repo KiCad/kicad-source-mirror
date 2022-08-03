@@ -95,16 +95,22 @@ public:
         ngspice->Command( "set ngbehavior=ps" );
         ngspice->Command( "setseed 1" );
         ngspice->Command( "set filetype=ascii" );
+        ngspice->Command( "set numdgt=3" );
+        ngspice->Command( "set wr_singlescale" );
+        ngspice->Command( "set wr_vecnames" );
         ngspice->LoadNetlist( netlist.ToStdString() );
         ngspice->Run();
 
 
         wxString vectors;
-        for( const wxString& vector : m_plottedVectors )
+        for( const wxString& vector : m_testedVectors )
             vectors << vector << " ";
 
-        ngspice->Command( wxString::Format( "write %s %s", GetResultsPath( true ),
-                                            vectors ).ToStdString() );
+        // We need to make sure that the number of points always the same.
+        ngspice->Command( wxString::Format( "linearize %s", vectors ).ToStdString() );
+
+        ngspice->Command(
+                wxString::Format( "wrdata %s %s", GetResultsPath( true ), vectors ).ToStdString() );
 
 
         FILE_LINE_READER refReader( GetResultsPath() );
@@ -134,7 +140,7 @@ public:
 
     void TestNetlist( const wxString& aBaseName, const std::vector<wxString> aPlottedVectors )
     {
-        m_plottedVectors = aPlottedVectors;
+        m_testedVectors = aPlottedVectors;
         TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>::TestNetlist( aBaseName );
     }
 
@@ -154,21 +160,21 @@ public:
     }
 
     std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
-    std::shared_ptr<SPICE_SIMULATOR> m_simulator;
-    std::vector<wxString> m_plottedVectors;
+    std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
+    std::vector<wxString>                m_testedVectors;
 };
 
 
 BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXTURE )
 
 
-/*BOOST_AUTO_TEST_CASE( Rectifier )
+BOOST_AUTO_TEST_CASE( Rectifier )
 {
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "rectifier", { "V(/in)", "V(/out)" } );
-}*/
+}
 
 // FIXME: Fails due to some nondeterminism, seems related to convergence problems.
 
@@ -187,10 +193,10 @@ BOOST_AUTO_TEST_CASE( Opamp )
 }
 
 
-/*BOOST_AUTO_TEST_CASE( NpnCeAmp )
+BOOST_AUTO_TEST_CASE( NpnCeAmp )
 {
     TestNetlist( "npn_ce_amp", { "V(/in)", "V(/out)" } );
-}*/
+}
 
 // Incomplete. TODO.
 
@@ -206,6 +212,7 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }
 
 
+// FIXME.
 /*BOOST_AUTO_TEST_CASE( Sources )
 {
     TestNetlist( "sources", { "V(/vdc)", "V(/idc)",
@@ -225,10 +232,10 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-/*BOOST_AUTO_TEST_CASE( CmosNot )
+BOOST_AUTO_TEST_CASE( CmosNot )
 {
     TestNetlist( "cmos_not", { "V(/in)", "V(/out)" } );
-}*/
+}
 
 
 /*BOOST_AUTO_TEST_CASE( InstanceParams )
@@ -238,7 +245,7 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-/*BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
+BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver", { "V(/out)" } );
 }
@@ -247,19 +254,19 @@ BOOST_AUTO_TEST_CASE( Tlines )
 BOOST_AUTO_TEST_CASE( LegacyPspice )
 {
     TestNetlist( "legacy_pspice", { "V(/VIN)", "V(VOUT)" } );
-}*/
+}
 
 
-/*BOOST_AUTO_TEST_CASE( LegacyRectifier )
+BOOST_AUTO_TEST_CASE( LegacyRectifier )
 {
     TestNetlist( "legacy_rectifier", { "V(/signal_in)", "V(/rect_out)" } );
-}*/
+}
 
 
-/*BOOST_AUTO_TEST_CASE( LegacySallenKey )
+BOOST_AUTO_TEST_CASE( LegacySallenKey )
 {
     TestNetlist( "legacy_sallen_key", { "V(/lowpass)" } );
-}*/
+}
 
 
 BOOST_AUTO_TEST_CASE( LegacySources )
