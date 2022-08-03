@@ -418,7 +418,7 @@ int ERC_TESTER::TestNoConnectPins()
             }
         }
 
-        for( auto& pair : pinMap )
+        for( const std::pair<const VECTOR2I, std::vector<SCH_PIN*>>& pair : pinMap )
         {
             if( pair.second.size() > 1 )
             {

@@ -85,33 +85,39 @@ public:
     {
         // Our simulator is actually Ngspice.
         NGSPICE* ngspice = dynamic_cast<NGSPICE*>( m_simulator.get() );
-        ngspice->SetReporter( m_reporter.get() );
+
+        if( ngspice )
+            ngspice->SetReporter( m_reporter.get() );
 
         wxFFile file( GetNetlistPath( true ), "rt" );
         wxString netlist;
 
         file.ReadAll( &netlist );
-        //ngspice->Init();
-        ngspice->Command( "set ngbehavior=ps" );
-        ngspice->Command( "setseed 1" );
-        ngspice->Command( "set filetype=ascii" );
-        ngspice->Command( "set numdgt=3" );
-        ngspice->Command( "set wr_singlescale" );
-        ngspice->Command( "set wr_vecnames" );
-        ngspice->LoadNetlist( netlist.ToStdString() );
-        ngspice->Run();
 
 
-        wxString vectors;
-        for( const wxString& vector : m_testedVectors )
-            vectors << vector << " ";
+        if( ngspice )
+        {
+            //ngspice->Init();
+            ngspice->Command( "set ngbehavior=ps" );
+            ngspice->Command( "setseed 1" );
+            ngspice->Command( "set filetype=ascii" );
+            ngspice->Command( "set numdgt=3" );
+            ngspice->Command( "set wr_singlescale" );
+            ngspice->Command( "set wr_vecnames" );
+            ngspice->LoadNetlist( netlist.ToStdString() );
+            ngspice->Run();
 
-        // We need to make sure that the number of points always the same.
-        ngspice->Command( wxString::Format( "linearize %s", vectors ).ToStdString() );
 
-        ngspice->Command(
-                wxString::Format( "wrdata %s %s", GetResultsPath( true ), vectors ).ToStdString() );
+            wxString vectors;
+            for( const wxString& vector : m_testedVectors )
+                vectors << vector << " ";
 
+            // We need to make sure that the number of points always the same.
+            ngspice->Command( wxString::Format( "linearize %s", vectors ).ToStdString() );
+
+            ngspice->Command(
+                    wxString::Format( "wrdata %s %s", GetResultsPath( true ), vectors ).ToStdString() );
+        }
 
         FILE_LINE_READER refReader( GetResultsPath() );
         FILE_LINE_READER resultReader( GetResultsPath( true ) );
