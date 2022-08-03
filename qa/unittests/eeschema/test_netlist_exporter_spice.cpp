@@ -172,13 +172,13 @@ public:
 BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXTURE )
 
 
-BOOST_AUTO_TEST_CASE( Rectifier )
+/*BOOST_AUTO_TEST_CASE( Rectifier )
 {
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
     TestNetlist( "rectifier", { "V(/in)", "V(/out)" } );
-}
+}*/
 
 // FIXME: Fails due to some nondeterminism, seems related to convergence problems.
 
@@ -235,10 +235,10 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-BOOST_AUTO_TEST_CASE( CmosNot )
+/*BOOST_AUTO_TEST_CASE( CmosNot )
 {
     TestNetlist( "cmos_not", { "V(/in)", "V(/out)" } );
-}
+}*/
 
 
 /*BOOST_AUTO_TEST_CASE( InstanceParams )
@@ -248,10 +248,10 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 }*/
 
 
-BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
+/*BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver", { "V(/out)" } );
-}
+}*/
 
 
 BOOST_AUTO_TEST_CASE( LegacyPspice )
