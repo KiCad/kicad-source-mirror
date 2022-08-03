@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
 "PO-Revision-Date: 2022-08-05 14:22+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -10958,22 +10958,18 @@ msgid "Code"
 msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Składnik symbolu"
+msgstr "Wyprowadzenie symbolu"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Model"
+msgstr "Wyprowadzenie modelu"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Alternatywne przypisania pinu"
+msgstr "Przyporządkowanie pinów"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
 msgstr "Wyłącz symbol z symulacji"
 
@@ -25500,7 +25496,7 @@ msgstr "Użyj punktu odniesienia wierceń/położeń"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "Użyj ujemnych koordynatów X dla footprintów na stronie dolnej"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -29852,7 +29848,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30327,8 +30322,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -30433,6 +30428,13 @@ msgstr ""
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Sprawdź bieżącą obciążalność prądową\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31208,9 +31210,8 @@ msgid "Missing severity name."
 msgstr "Brak informacji o ważności."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Sprawdzenie pierścieni przelotek..."
+msgstr "Sprawdzenie pierścieni pól lutowniczych i przelotek..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -33975,14 +33976,14 @@ msgid "Full Length"
 msgstr "Pełna Długość"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Ograniczenia szerokości: min %s; maks %s"
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "Ograniczenia otworów: min %s."
+msgstr "Ograniczenia otworów: min %s"
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -36357,19 +36358,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Przeanalizowano ograniczenia szerokości: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
-msgstr "Typ połączenia:"
+msgstr "Szerokość połączenia"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Analiza szerokości łącz termicznych dla:"
+msgstr "Analiza szerokości połączeń dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "Rozpoznany typ połączenia ze strefą: %s."
+msgstr "Rozpoznane ograniczenie min. szerokości połączenia: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
