@@ -42,7 +42,7 @@
 #define TR_OP_DIV 0x202
 #define TR_OP_ADD 0x203
 #define TR_OP_SUB 0x204
-#define TR_OP_LESS 0x25
+#define TR_OP_LESS 0x205
 #define TR_OP_GREATER 0x206
 #define TR_OP_LESS_EQUAL 0x207
 #define TR_OP_GREATER_EQUAL 0x208
