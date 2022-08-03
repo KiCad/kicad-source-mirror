@@ -469,6 +469,14 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         {
             if( item->IsConnectable() && ( aUnconditional || item->IsConnectivityDirty() ) )
                 items.push_back( item );
+
+            // Ensure the hierarchy info stored in SCREENS is built and up to date
+            // (multi-unit symbols and pin mapping)
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                symbol->UpdateUnit( symbol->GetUnitSelection( &sheet ) );
+            }
         }
 
         m_items.reserve( m_items.size() + items.size() );
