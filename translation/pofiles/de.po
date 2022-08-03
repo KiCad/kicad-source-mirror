@@ -19,16 +19,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-07-04 20:14+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2022-08-05 14:22+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11050,7 +11050,7 @@ msgstr "Modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Device:"
-msgstr ""
+msgstr "Gerät:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -11073,9 +11073,8 @@ msgid "Parameters"
 msgstr "Parameter"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "D-Code:"
+msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
 #, fuzzy
