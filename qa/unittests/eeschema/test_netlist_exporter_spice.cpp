@@ -94,19 +94,17 @@ public:
 
         file.ReadAll( &netlist );
 
-
         if( ngspice )
         {
             //ngspice->Init();
             ngspice->Command( "set ngbehavior=ps" );
             ngspice->Command( "setseed 1" );
             ngspice->Command( "set filetype=ascii" );
-            ngspice->Command( "set numdgt=3" );
+            ngspice->Command( "set numdgt=1" );
             ngspice->Command( "set wr_singlescale" );
             ngspice->Command( "set wr_vecnames" );
             ngspice->LoadNetlist( netlist.ToStdString() );
             ngspice->Run();
-
 
             wxString vectors;
             for( const wxString& vector : m_testedVectors )
@@ -218,7 +216,6 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }
 
 
-// FIXME.
 /*BOOST_AUTO_TEST_CASE( Sources )
 {
     TestNetlist( "sources", { "V(/vdc)", "V(/idc)",
