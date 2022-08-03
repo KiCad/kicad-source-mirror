@@ -119,6 +119,9 @@ i18n_status.csv
 *.kicad_prl
 *-backups
 
+# QA dataoutput
+qa/data/**/*.csv
+
 # Don't actually ignore any of these files, since we need them in the tree
 !resources/linux/icons/hicolor/**/**/*
 !resources/linux/icons-nightly/hicolor/**/**/*
