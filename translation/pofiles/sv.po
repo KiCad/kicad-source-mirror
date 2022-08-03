@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-02 15:49+0000\n"
+"PO-Revision-Date: 2022-08-05 14:22+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -110,24 +110,24 @@ msgid "Last render time %.0f ms"
 msgstr "Senaste renderingstid %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Nät %s\tNätKlass %s"
+msgstr "Nät %s\tNätklass %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s och %s"
+msgstr "Lödyta %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Regelområde den %s"
+msgstr "Regelområde %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zoner"
+msgstr "Zon %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -4311,9 +4311,8 @@ msgstr "Nätetikett"
 
 #: common/eda_item.cpp:355 eeschema/sch_label.cpp:764
 #: eeschema/sch_label.cpp:1107
-#, fuzzy
 msgid "Directive Label"
-msgstr "Directive etikett"
+msgstr "Direktivetikett"
 
 #: common/eda_item.cpp:356 eeschema/sch_label.cpp:765
 msgid "Global Label"
@@ -9049,9 +9048,8 @@ msgid "Label Properties"
 msgstr "Etikettegenskaper"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Egenskaper för directive etiketter"
+msgstr "Egenskaper för direktivetiketter"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Sheet Pin Properties"
@@ -9536,7 +9534,6 @@ msgid "Style:"
 msgstr "Stil:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr ""
 "Sätt kantlinjebredden till 0 för att använda kretsschemats förinställda "
@@ -10878,9 +10875,8 @@ msgid "Source"
 msgstr "Källa"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Induktans:"
+msgstr "Instans"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10891,9 +10887,8 @@ msgid "Model:"
 msgstr "Modell:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "Skriv över"
+msgstr "Åsidosätt"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -10911,9 +10906,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Sidstorlek:"
+msgstr "Sida"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10925,29 +10919,24 @@ msgid "Parameters"
 msgstr "Parametrar"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "DC-kod:"
+msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Symbolenhet"
+msgstr "Symbolstift"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Modell"
+msgstr "Modellstift"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Alternativa stifttilldelningar"
+msgstr "Stifttilldelningar"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "Inaktivera symbol för simulering"
+msgstr "Exkludera symbol från simulering"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -11814,9 +11803,8 @@ msgid "Fill selected shapes"
 msgstr "Fyll i valda former"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:83
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "Linjebredd för val:"
+msgstr "Linjebredd för urval:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:91
 msgid "(selection color can be edited in the \"Colors\" page)"
@@ -25414,7 +25402,7 @@ msgstr "Använd borr- / placeringsfilens origo"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "Använd negativa X-koordinater för fotavtryck på baksidans lager"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -31079,9 +31067,8 @@ msgid "Missing severity name."
 msgstr "Saknar namn för allvarlighetsgrad."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Kontroll med ringringar ..."
+msgstr "Kontrollerar kragar på lödytor och vior..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -33833,14 +33820,14 @@ msgid "Full Length"
 msgstr "Full längd"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Breddbegränsningar: min %s, max %s"
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "Hålbegränsning: min %s."
+msgstr "Breddbegränsning: min %s"
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -36175,19 +36162,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Tog reda på begränsningar för bredd: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
-msgstr "Anslutningstyp:"
+msgstr "Anslutningsbredd"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Tar reda på termiska ekrarnas bredd för:"
+msgstr "Tar reda på anslutningens bredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "Löst zonanslutningstyp: %s."
+msgstr "Fastställd begränsning för minsta anslutningsbredd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
