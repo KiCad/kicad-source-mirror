@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-02 15:49+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2022-08-05 14:22+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,24 +108,24 @@ msgid "Last render time %.0f ms"
 msgstr "Czas ostatniego renderowania %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Sieć %s\tKlasa sieci %s"
+msgstr "Sieć %s\tKlasaSieci %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s oraz %s"
+msgstr "Pole lutownicze %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Strefa z regułami na %s"
+msgstr "Strefa z regułami na %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Strefy"
+msgstr "Strefy %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -10910,9 +10910,8 @@ msgid "Source"
 msgstr "Źródło"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Induktancja:"
+msgstr "Instancja"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10923,9 +10922,8 @@ msgid "Model:"
 msgstr "Model:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "Nadpisz"
+msgstr "Nadpisanie"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -10934,7 +10932,7 @@ msgstr "Model"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Device:"
-msgstr ""
+msgstr "Urządzenie:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10943,9 +10941,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Pierwsza strona"
+msgstr "Strona"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10957,9 +10954,8 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
 #, fuzzy
