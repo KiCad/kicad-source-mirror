@@ -72,15 +72,6 @@ private:
     using LIST_ITEM_ITER       = std::vector<std::unique_ptr<LIST_ITEM>>::iterator;
     using LIST_ITEM_CONST_ITER = std::vector<std::unique_ptr<LIST_ITEM>>::const_iterator;
 
-    static COLUMN_DESC COLUMN_NET;
-    static COLUMN_DESC COLUMN_NAME;
-    static COLUMN_DESC COLUMN_PAD_COUNT;
-    static COLUMN_DESC COLUMN_VIA_COUNT;
-    static COLUMN_DESC COLUMN_VIA_LENGTH;
-    static COLUMN_DESC COLUMN_BOARD_LENGTH;
-    static COLUMN_DESC COLUMN_CHIP_LENGTH;
-    static COLUMN_DESC COLUMN_TOTAL_LENGTH;
-
     wxString formatNetCode( const NETINFO_ITEM* aNet ) const;
     wxString formatNetName( const NETINFO_ITEM* aNet ) const;
     wxString formatCount( unsigned int aValue ) const;
@@ -127,6 +118,10 @@ private:
     bool            m_filter_change_no_rebuild = false;
     wxSize          m_size;
 
+    std::vector<COLUMN_DESC> m_columns;
+
     class DATA_MODEL;
     wxObjectDataPtr<DATA_MODEL> m_data_model;
+
+    friend DATA_MODEL;
 };
