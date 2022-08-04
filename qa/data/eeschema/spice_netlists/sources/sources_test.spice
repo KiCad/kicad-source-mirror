@@ -1,0 +1,54 @@
+.title KiCad schematic
+.save all
+.probe alli
+.tran 1u 10m
+
+BI1 /ibehavioral GND I=sin(2*pi*10000*time) 
+R23 /irandexp GND 100 
+R22 /irandnormal GND 100 
+R21 /iranduniform GND 100 
+R20 /iburstnoise GND 100 
+R24 /ibehavioral GND 100 
+IBURSTNOISE1 /iburstnoise GND TRNOISE( 0 0 0 0 1 1m 1m ) 
+IRANDUNIFORM1 /iranduniform GND TRRANDOM( 1 1u 1m -2 0 ) 
+IRANDNORMAL1 /irandnormal GND TRRANDOM( 2 1u 0 1m 1 ) 
+IRANDEXP1 /irandexp GND TRRANDOM( 3 1u 0 1m 1 ) 
+VPINKNOISE1 /vpinknoise GND TRNOISE( 0 1u 1 1m 0 0 0 ) 
+VWHITENOISE1 /vwhitenoise GND TRNOISE( 1m 1u 0 0 0 0 0 ) 
+R6 /vwhitenoise GND 100 
+VPWL1 /vpwl GND PWL( 0 0 1m 1 2m 0 3m 500m 4m 0 ) 
+VEXP1 /vexp GND EXP( 0 1 1m 500u 2m 500u ) 
+R7 /vpinknoise GND 100 
+R5 /vpwl GND 100 
+R4 /vexp GND 100 
+R13 /iwhitenoise GND 100 
+R12 /ipwl GND 100 
+IPWL1 /ipwl GND PWL( 0 0 1m 1 2m 0 3m 500m 4m 0 ) 
+IWHITENOISE1 /iwhitenoise GND TRNOISE( 1m 1u 0 0 0 0 0 ) 
+R11 /iexp GND 100 
+IEXP1 /iexp GND EXP( 0 1 1m 500u 2m 500u ) 
+R14 /ipinknoise GND 100 
+IPINKNOISE1 /ipinknoise GND TRNOISE( 0 1u 1 1m 0 0 0 ) 
+R18 /vrandexp GND 100 
+R19 /vbehavioral GND 100 
+R15 /vburstnoise GND 100 
+R16 /vranduniform GND 100 
+VRANDUNIFORM1 /vranduniform GND TRRANDOM( 1 1u 1m -2 0 ) 
+BV1 /vbehavioral GND V=sin(2*pi*10000*time) 
+R17 /vrandnormal GND 100 
+VRANDNORMAL1 /vrandnormal GND TRRANDOM( 2 1u 0 1m 1 ) 
+VBURSTNOISE1 /vburstnoise GND TRNOISE( 0 0 0 0 1 1m 1m ) 
+VRANDEXP1 /vrandexp GND TRRANDOM( 3 1u 0 1m 1 ) 
+R8 /idc GND 100 
+R9 /isin GND 100 
+IPULSE1 /ipulse GND PULSE( 0 1 1m 1u 1u 1m 2m ) 
+R10 /ipulse GND 100 
+IDC1 /idc GND 1 
+ISIN1 /isin GND SIN( 0 1 1k 1m ) 
+VPULSE1 /vpulse GND PULSE( 0 1 1m 1u 1u 1m 2m ) 
+R3 /vpulse GND 100 
+R2 /vsin GND 100 
+VSIN1 /vsin GND SIN( 0 1 1k 1m ) 
+VDC1 /vdc GND 1 
+R1 /vdc GND 100 
+.end

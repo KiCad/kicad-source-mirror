@@ -597,7 +597,7 @@
       (reference "V3") (unit 1) (value "VDC") (footprint "")
     )
     (path "/10f44001-5f65-44eb-a535-b7b3c67d5b83"
-      (reference "VSIN1") (unit 1) (value "ampl=100m f=1k") (footprint "")
+      (reference "VSIN1") (unit 1) (value "ampl=500m f=1k") (footprint "")
     )
   )
 )

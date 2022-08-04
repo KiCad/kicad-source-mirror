@@ -85,67 +85,101 @@ public:
     {
         // Our simulator is actually Ngspice.
         NGSPICE* ngspice = dynamic_cast<NGSPICE*>( m_simulator.get() );
+        BOOST_TEST_CHECK( ngspice );
 
-        if( ngspice )
-            ngspice->SetReporter( m_reporter.get() );
+        ngspice->SetReporter( m_reporter.get() );
 
         wxFFile file( GetNetlistPath( true ), "rt" );
         wxString netlist;
 
         file.ReadAll( &netlist );
 
-        if( ngspice )
-        {
-            //ngspice->Init();
-            ngspice->Command( "set ngbehavior=ps" );
-            ngspice->Command( "setseed 1" );
-            ngspice->Command( "set filetype=ascii" );
-            ngspice->Command( "set numdgt=1" );
-            ngspice->Command( "set wr_singlescale" );
-            ngspice->Command( "set wr_vecnames" );
-            ngspice->LoadNetlist( netlist.ToStdString() );
-            ngspice->Run();
+        //ngspice->Init();
+        ngspice->Command( "set ngbehavior=ps" );
+        ngspice->Command( "setseed 1" );
+        ngspice->LoadNetlist( netlist.ToStdString() );
+        ngspice->Run();
 
-            wxString vectors;
-            for( const wxString& vector : m_testedVectors )
-                vectors << vector << " ";
-
-            // We need to make sure that the number of points always the same.
-            ngspice->Command( wxString::Format( "linearize %s", vectors ).ToStdString() );
-
-            ngspice->Command(
-                    wxString::Format( "wrdata %s %s", GetResultsPath( true ), vectors ).ToStdString() );
-        }
-
-        FILE_LINE_READER refReader( GetResultsPath() );
-        FILE_LINE_READER resultReader( GetResultsPath( true ) );
-        char* refLine = nullptr;
-        char* resultLine = nullptr;
-
-        while( true )
-        {
-            refLine = refReader.ReadLine();
-            resultLine = resultReader.ReadLine();
-
-            // Ignore the date.
-            if( wxString( resultLine ).StartsWith( "Date: " ) )
-                continue;
-
-            if( !refLine || !resultReader )
-                break;
-
-            BOOST_REQUIRE_EQUAL( std::string( refReader.Line() ),
-                                 std::string( resultReader.Line() ) );
-        }
-
-        BOOST_REQUIRE_EQUAL( std::string( refReader.Line() ),
-                             std::string( resultReader.Line() ) );
+        // We need to make sure that the number of points always the same.
+        ngspice->Command( "linearize" );
     }
 
-    void TestNetlist( const wxString& aBaseName, const std::vector<wxString> aPlottedVectors )
+    void TestNetlist( const wxString& aBaseName )
     {
-        m_testedVectors = aPlottedVectors;
+        // We actually ended up only generating the netlist here.
         TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>::TestNetlist( aBaseName );
+    }
+
+    void TestPoint( const std::string& aXVectorName, double aXValue,
+                    const std::map<const std::string, double> aTestVectorsAndValues,
+                    double aMaxRelError = 1e-2 )
+    {
+        // The default aMaxRelError is fairly large because we have some problems with determinism
+        // in QA pipeline. We don't need to fix this for now because, if this has to be fixed in
+        // the first place, this would have to be done from Ngspice's side.
+
+        BOOST_TEST_CONTEXT( "X vector name: " << aXVectorName << ", X value: " << aXValue )
+        {
+            NGSPICE* ngspice = static_cast<NGSPICE*>( m_simulator.get() );
+
+            std::vector<double> xVector = ngspice->GetRealPlot( aXVectorName );
+            std::size_t i = 0;
+
+            BOOST_REQUIRE_GE( xVector.size(), 2 );
+
+            //double xStep = xVector[1] - xVector[0];
+
+            for(; i < xVector.size(); ++i )
+            {
+                double inf = std::numeric_limits<double>::infinity();
+
+                double leftDelta = ( aXValue - ( i-1 >= 0 ? xVector[i-1] : -inf ) );
+                double middleDelta = ( aXValue - xVector[i] );
+                double rightDelta = ( aXValue - ( i+1 < xVector.size() ? xVector[i+1] : inf ) );
+
+                // Check if this point is the closest one.
+                if( abs( middleDelta ) <= abs( leftDelta )
+                    && abs( middleDelta ) <= abs( rightDelta ) )
+                {
+                    break;
+                }
+            }
+
+            BOOST_REQUIRE_LT( i, xVector.size() );
+
+            for( auto&& [vectorName, refValue] : aTestVectorsAndValues )
+            {
+                std::vector<double> yVector = ngspice->GetMagPlot( vectorName );
+
+                BOOST_TEST_CONTEXT( "Y vector name: " << vectorName
+                                    << ", Ref value: " << refValue
+                                    << ", Actual value: " << yVector[i] )
+                {
+                    double maxError = abs( refValue * aMaxRelError );
+                    if( maxError == 0 )
+                    {
+                        // If refValue is 0, we need a obtain the max. error differently.
+                        maxError = aMaxRelError;
+                    }
+
+                    BOOST_REQUIRE_LE( abs( yVector[i] - refValue ), maxError );
+                }
+            }
+        }
+    }
+
+    void TestTranPoint( double aTime,
+                        const std::map<const std::string, double> aTestVectorsAndValues,
+                        double aMaxAbsError = 1e-2 )
+    {
+        TestPoint( "time", aTime, aTestVectorsAndValues, aMaxAbsError );
+    }
+
+    void TestACPoint( double aFrequency,
+                      const std::map<const std::string, double> aTestVectorsAndValues,
+                      double aMaxAbsError = 1e-2 )
+    {
+        TestPoint( "frequency", aFrequency, aTestVectorsAndValues, aMaxAbsError );
     }
 
     wxString GetResultsPath( bool aTest = false )
@@ -165,20 +199,22 @@ public:
 
     std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
     std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
-    std::vector<wxString>                m_testedVectors;
 };
 
 
 BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXTURE )
 
 
-/*BOOST_AUTO_TEST_CASE( Rectifier )
+BOOST_AUTO_TEST_CASE( Rectifier )
 {
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
-    TestNetlist( "rectifier", { "V(/in)", "V(/out)" } );
-}*/
+    TestNetlist( "rectifier" );
+    TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+    TestTranPoint( 9250e-6, { { "V(/in)", 5 }, { "V(/out)", 4.26 } } );
+    TestTranPoint( 10e-3, { { "V(/in)", 0 }, { "V(/out)", 4.24 } } );
+}
 
 // FIXME: Fails due to some nondeterminism, seems related to convergence problems.
 
@@ -193,13 +229,23 @@ BOOST_AUTO_TEST_CASE( Opamp )
     const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );
     MOCK_EXPECT( program.GetLocalEnvVariables ).returns( ENV_VAR_MAP() );
 
-    TestNetlist( "opamp", { "V(/in)", "V(/out)", "I(XU1:+IN)", "I(XU1:-IN)", "I(XU1:OUT)" } );
+    TestNetlist( "opamp" );
+    TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+    TestTranPoint( 250e-6, { { "V(/in)", 500e-3 }, { "V(/out)", 1 } } );
+    TestTranPoint( 500e-6, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+    TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } ); 
+    TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
 }
 
 
 BOOST_AUTO_TEST_CASE( NpnCeAmp )
 {
-    TestNetlist( "npn_ce_amp", { "V(/in)", "V(/out)" } );
+    TestNetlist( "npn_ce_amp" );
+    TestTranPoint( 900e-6, { { "V(/in)", 0 }, { "V(/out)", 5.32 } } );
+    TestTranPoint( 925e-6, { { "V(/in)", 10e-3 }, { "V(/out)", 5.30 } } );
+    TestTranPoint( 950e-6, { { "V(/in)", 0 }, { "V(/out)", 5.88 } } );
+    TestTranPoint( 975e-6, { { "V(/in)", -10e-3 }, { "V(/out)", 5.91 } } );
+    TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 5.32 } } );
 }
 
 // Incomplete. TODO.
@@ -212,7 +258,11 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 
 BOOST_AUTO_TEST_CASE( Tlines )
 {
-    TestNetlist( "tlines", { "V(/z0_in)", "V(/z0_out)", "V(/rlgc_in)", "V(/rlgc_out)" } );
+    TestNetlist( "tlines" );
+    TestTranPoint( 910e-6, { { "V(/z0_in)", 1 }, { "V(/z0_out)", 0 },
+                             { "V(/rlgc_in)", 1 }, { "V(/rlgc_out)", 0 } } );
+    TestTranPoint( 970e-6, { { "V(/z0_in)", 0 }, { "V(/z0_out)", 1 },
+                             { "V(/rlgc_in)", 0 }, { "V(/rlgc_out)", 1 } } );
 }
 
 
@@ -235,10 +285,15 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-/*BOOST_AUTO_TEST_CASE( CmosNot )
+BOOST_AUTO_TEST_CASE( CmosNot )
 {
-    TestNetlist( "cmos_not", { "V(/in)", "V(/out)" } );
-}*/
+    TestNetlist( "cmos_not" );
+    TestTranPoint( 0, { { "V(/in)", 2.5 }, { "V(/out)", 2.64 } } );
+    TestTranPoint( 250e-6, { { "V(/in)", 5 }, { "V(/out)", 0.013 } } );
+    TestTranPoint( 500e-6, { { "V(/in)", 2.5 }, { "V(/out)", 2.64 } } );
+    TestTranPoint( 750e-6, { { "V(/in)", 0 }, { "V(/out)", 5 } } );
+    TestTranPoint( 1e-3, { { "V(/in)", 2.5 }, { "V(/out)", 2.64 } } );
+}
 
 
 /*BOOST_AUTO_TEST_CASE( InstanceParams )
@@ -248,31 +303,42 @@ BOOST_AUTO_TEST_CASE( Tlines )
 }*/
 
 
-/*BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
+BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
-    TestNetlist( "legacy_laser_driver", { "V(/out)" } );
-}*/
+    TestNetlist( "legacy_laser_driver" );
+    TestTranPoint( 95e-9, { { "I(D1)", 0 } } );
+    TestTranPoint( 110e-9, { { "I(D1)", 725e-3 } } );
+    TestTranPoint( 150e-9, { { "I(D1)", 0 } } );
+}
 
 
 BOOST_AUTO_TEST_CASE( LegacyPspice )
 {
-    TestNetlist( "legacy_pspice", { "V(/VIN)", "V(VOUT)" } );
+    TestNetlist( "legacy_pspice" );
+    TestACPoint( 190, { { "V(/VIN)", pow( 10, -186e-3 / 20 ) },
+                        { "V(VOUT)", pow( 10, 87e-3 / 20 ) } } );
 }
 
 
 BOOST_AUTO_TEST_CASE( LegacyRectifier )
 {
-    TestNetlist( "legacy_rectifier", { "V(/signal_in)", "V(/rect_out)" } );
+    TestNetlist( "legacy_rectifier" );
+    TestTranPoint( 0, { { "V(/signal_in)", 0 },
+                        { "V(/rect_out)", 0 } } );
+    TestTranPoint( 9.75e-3, { { "V(/signal_in)", 1.5 },
+                              { "V(/rect_out)", 823e-3 } } );
 }
 
 
 BOOST_AUTO_TEST_CASE( LegacySallenKey )
 {
-    TestNetlist( "legacy_sallen_key", { "V(/lowpass)" } );
+    TestNetlist( "legacy_sallen_key" );
+    TestACPoint( 1, { { "V(/lowpass)", pow( 10, 0.0 / 20 ) } } );
+    TestACPoint( 1e3, { { "V(/lowpass)", pow( 10, -2.9 / 20 ) } } );
 }
 
 
-BOOST_AUTO_TEST_CASE( LegacySources )
+/*BOOST_AUTO_TEST_CASE( LegacySources )
 {
     TestNetlist( "legacy_sources", { "V(/vam)", "V(/iam)",
                                      "V(/vdc)", "V(/idc)",
@@ -283,7 +349,7 @@ BOOST_AUTO_TEST_CASE( LegacySources )
                                      "V(/vsin)", "V(/isin)" } );
                                      //"V(/vtrnoise)", "V(/itrnoise)",
                                      //"V(/vtrrandom)", "V(/itrrandom)" } );
-}
+}*/
 
 
 BOOST_AUTO_TEST_SUITE_END()
