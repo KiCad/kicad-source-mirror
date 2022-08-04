@@ -55,16 +55,16 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
 
 int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
 {
-    wxString* page = aEvent.Parameter<wxString*>();
+    int* page = aEvent.Parameter<int*>();
 
     wxCHECK( page, 0 );
 
     auto goToPage =
-            [&]( wxString* aPage )
+            [&]( int* aPage )
             {
                 for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
                 {
-                    if( sheet.GetPageNumber() == *aPage )
+                    if( sheet.GetVirtualPageNumber() == *aPage )
                     {
                         changeSheet( sheet );
                         return;
@@ -72,7 +72,7 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
                 }
             };
 
-    if( *page == "HYPERTEXT_BACK" )
+    if( *page == -1 )
         Back( aEvent );
     else
         goToPage( page );

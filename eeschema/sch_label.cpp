@@ -1292,31 +1292,29 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
         }
         else
         {
-            std::vector<wxString> pageListCopy;
+            std::vector<int> pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
-            std::sort( pageListCopy.begin(), pageListCopy.end(),
-                       []( const wxString& a, const wxString& b ) -> bool
-                       {
-                           return StrNumCmp( a, b, true ) < 0;
-                       } );
+            std::sort( pageListCopy.begin(), pageListCopy.end() );
 
             if( !settings.m_IntersheetRefsListOwnPage )
             {
-                wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
+                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
                 alg::delete_matching( pageListCopy, currentPage );
             }
+
+            std::map<int, wxString> sheetPages = Schematic()->GetVirtualPageToSheetPagesMap();
 
             if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )
             {
                 ref.Append( wxString::Format( wxT( "%s..%s" ),
-                                              pageListCopy.front(),
-                                              pageListCopy.back() ) );
+                                              sheetPages[pageListCopy.front()],
+                                              sheetPages[pageListCopy.back()] ) );
             }
             else
             {
-                for( const wxString& pageNo : pageListCopy )
-                    ref.Append( wxString::Format( wxT( "%s," ), pageNo ) );
+                for( const int& pageNo : pageListCopy )
+                    ref.Append( wxString::Format( wxT( "%s," ), sheetPages[pageNo] ) );
 
                 if( !ref.IsEmpty() && ref.Last() == ',' )
                     ref.RemoveLast();

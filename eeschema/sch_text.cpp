@@ -415,7 +415,7 @@ void SCH_TEXT::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
                                               sheetNames[destPage] ) );
 
             int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
-            void* param = &sheetPages[destPage];
+            void* param = &destPage;
 
             if( param )
                 aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );

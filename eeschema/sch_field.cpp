@@ -740,7 +740,7 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
 {
     constexpr int START_ID = 1;
 
-    static wxString back = "HYPERTEXT_BACK";
+    static int back = -1;
     wxMenu          menu;
     SCH_TEXT*       label = dynamic_cast<SCH_TEXT*>( m_parent );
 
@@ -750,42 +750,32 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
 
         if( it != Schematic()->GetPageRefsMap().end() )
         {
-            std::map<int, wxString> sheetNames;
-            std::vector<int>        pageListCopy;
+            std::vector<int> pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
             {
-                wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
+                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
                 alg::delete_matching( pageListCopy, currentPage );
 
                 if( pageListCopy.empty() )
                     return;
             }
 
-            std::sort( pageListCopy.begin(), pageListCopy.end(),
-                       []( const wxString& a, const wxString& b ) -> bool
-                       {
-                           return StrNumCmp( a, b, true ) < 0;
-                       } );
+            std::sort( pageListCopy.begin(), pageListCopy.end() );
 
-            for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
-            {
-                if( sheet.size() == 1 )
-                    sheetNames[ sheet.GetVirtualPageNumber() ] = _( "<root sheet>" );
-                else
-                    sheetNames[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
-            }
+            std::map<int, wxString> sheetNames = Schematic()->GetVirtualPageToSheetNamesMap();
+            std::map<int, wxString> sheetPages = Schematic()->GetVirtualPageToSheetPagesMap();
 
             for( int i = 0; i < (int) pageListCopy.size(); ++i )
             {
                 menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
-                                                             pageListCopy[i],
+                                                             sheetPages[ pageListCopy[i] ],
                                                              sheetNames[ pageListCopy[i] ] ) );
             }
 
             menu.AppendSeparator();
-            menu.Append( 999, _( "Back to Previous Selected Sheet" ) );
+            menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
 
             int   sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
             void* param = nullptr;

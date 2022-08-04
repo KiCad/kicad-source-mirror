@@ -161,6 +161,9 @@ public:
 
     std::map<wxString, std::set<int>>& GetPageRefsMap() { return m_labelToPageRefsMap; }
 
+    std::map<int, wxString> GetVirtualPageToSheetNamesMap() const;
+    std::map<int, wxString> GetVirtualPageToSheetPagesMap() const;
+
     wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
 

@@ -289,6 +289,33 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 }
 
 
+std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetNamesMap() const
+{
+    std::map<int, wxString> namesMap;
+
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    {
+        if( sheet.size() == 1 )
+            namesMap[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
+        else
+            namesMap[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
+    }
+
+    return namesMap;
+}
+
+
+std::map<int, wxString> SCHEMATIC::GetVirtualPageToSheetPagesMap() const
+{
+    std::map<int, wxString> pagesMap;
+
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+        pagesMap[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
+
+    return pagesMap;
+}
+
+
 wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
 {
     wxString newbuf;
