@@ -454,6 +454,7 @@ target_link_libraries( common
     libcontext
     kimath
     kiplatform
+    fmt::fmt
     gal
     scripting
     threadpool
