@@ -248,7 +248,17 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     aDC->GetUserScale( &scale, &scale );
     aDC->GetLogicalOrigin( &logicalOriginX, &logicalOriginY );
 
+    // We already have issues to draw a bitmap on the wxDC, depending on wxWidgets version.
+    // Now we have an issue on wxWidgets 3.1.6 and later to fix the clipboard
+    // and the bitmap position when using TransformMatrix
+    // So for version >= 3.1.6  do not use it
+    // Be carefull before changing the code.
     bool useTransform = aDC->CanUseTransformMatrix();
+
+    #if wxCHECK_VERSION( 3, 1, 6 )
+    useTransform = false;
+    #endif
+
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
 
     wxPoint clipAreaPos;
@@ -259,15 +269,12 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
-
-        // Looks like wxWidgets 3.1.6 and 3.1.7 has a bug to fix the clipboard position
-        // So for 3.1.6 and 3.1.7, clipAreaPos.x =  clipAreaPos.y = 0
-    #if !wxCHECK_VERSION( 3, 1, 6 ) || wxCHECK_VERSION( 3, 2, 0 )
+        // Needed on wx <= 3.1.5, and this is strange...
+        // Nevertheless, this code has problem (the bitmap is not seen)
+        // with wx version > 3.1.5
         clipAreaPos.x = pos.x;
         clipAreaPos.y = pos.y;
-    #else
-        clipAreaPos.x =  clipAreaPos.y = 0;
-    #endif
+
         pos.x = pos.y = 0;
     }
     else
