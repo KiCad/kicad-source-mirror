@@ -874,7 +874,7 @@ protected:
                 && i1.GetLayerWireLength( m_parent.m_columns[aCol].layer )
                         != i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ) )
         {
-            compareUInt( i1.GetLayerWireLength( m_parent.m_columns[aCol].layer ),
+            return compareUInt( i1.GetLayerWireLength( m_parent.m_columns[aCol].layer ),
                     i2.GetLayerWireLength( m_parent.m_columns[aCol].layer ), aAsc );
         }
 
