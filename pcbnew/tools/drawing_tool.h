@@ -202,6 +202,8 @@ public:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
+    void UpdateStatusBar() const;
+
 private:
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
@@ -260,8 +262,6 @@ private:
 
     ///< Return the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;
-
-    void updateStatusBar() const;
 
     KIGFX::VIEW*              m_view;
     KIGFX::VIEW_CONTROLS*     m_controls;

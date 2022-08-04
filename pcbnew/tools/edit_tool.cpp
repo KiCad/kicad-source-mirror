@@ -46,6 +46,7 @@
 #include <tools/tool_event_utils.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
+#include <tools/drawing_tool.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
@@ -764,6 +765,13 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         return 0;
     }
 
+    auto displayConstraintsMessage =
+            [editFrame]( bool constrained )
+            {
+                editFrame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" )
+                                                            : wxT( "" ) );
+            };
+
     std::vector<BOARD_ITEM*> sel_items;     // All the items operated on by the move below
     std::vector<BOARD_ITEM*> orig_items;    // All the original items in the selection
 
@@ -802,6 +810,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool eatFirstMouseUp = true;
     bool hasRedrawn3D    = false;
     bool allowRedraw3D   = editFrame->GetDisplayOptions().m_Live3DRefresh;
+
+    displayConstraintsMessage( lock45 );
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -1048,6 +1058,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         else if( evt->IsAction( &PCB_ACTIONS::toggle45 ) )
         {
             lock45 = !lock45;
+            displayConstraintsMessage( lock45 );
             evt->SetPassEvent( false );
         }
         else
@@ -1063,6 +1074,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     m_dragging = false;
     editFrame->UndoRedoBlock( false );
+
+    m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
 
     if( hasRedrawn3D && restore_state )
         editFrame->Update3DView( false, true );

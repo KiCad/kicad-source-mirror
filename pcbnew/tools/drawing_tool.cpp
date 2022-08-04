@@ -241,7 +241,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    updateStatusBar();
+    UpdateStatusBar();
 }
 
 
@@ -251,7 +251,7 @@ DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 }
 
 
-void DRAWING_TOOL::updateStatusBar() const
+void DRAWING_TOOL::UpdateStatusBar() const
 {
     if( m_frame )
     {
@@ -1419,7 +1419,7 @@ int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
     else
         m_frame->Settings().m_FpeditUse45DegreeLimit = !m_frame->Settings().m_FpeditUse45DegreeLimit;
 
-    updateStatusBar();
+    UpdateStatusBar();
 
     return 0;
 }
