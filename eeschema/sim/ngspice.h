@@ -32,7 +32,11 @@
 #include <sim/sim_value.h>
 
 #include <wx/dynlib.h>
+
+#ifdef KICAD_SPICE
 #include <ngspice/sharedspice.h>
+#endif
+
 #include <enum_vector.h>
 
 // We have an issue here where NGSPICE incorrectly used bool for years
@@ -163,6 +167,7 @@ private:
     // Performs DLL initialization, obtains function pointers
     void init_dll();
 
+#ifdef KICAD_SPICE
     // ngspice library functions
     typedef void ( *ngSpice_Init )( SendChar*, SendStat*, ControlledExit*, SendData*, SendInitData*,
                                     BGThreadRunning*, void* );
@@ -202,6 +207,7 @@ private:
     static int cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser );
     static int cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
                                  void* aUser );
+#endif
 
     // Assure ngspice is in a valid state and reinitializes it if need be.
     void validate();
