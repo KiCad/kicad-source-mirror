@@ -756,6 +756,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference, bool aRe
     LSET     item_layers = selection.GetSelectionLayers();
     bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
                                                 // to RequestSelection() below
+
+    if( editFrame->GetMagneticItemsSettings()->graphics )
+        item_layers |= LSET::UserDefinedLayers() | LSET::UserMask();
+
     VECTOR2I pickedReferencePoint;
 
     // Now filter out pads if not in free pads mode.  We cannot do this in the first

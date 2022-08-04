@@ -166,6 +166,8 @@ public:
     const EDA_RECT GetBoundingBox() const override;
     const EDA_RECT GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
+    LSET GetLayerSet() const override;
+
     PADS& Pads()             { return m_pads; }
     const PADS& Pads() const { return m_pads; }
 

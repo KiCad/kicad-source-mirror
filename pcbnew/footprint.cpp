@@ -734,6 +734,19 @@ EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
 }
 
 
+LSET FOOTPRINT::GetLayerSet() const
+{
+    LSET retval;
+
+    RunOnChildren( [&retval]( BOARD_ITEM* aItem )
+            {
+                retval |= aItem->GetLayerSet();
+            } );
+
+    return retval;
+}
+
+
 const EDA_RECT FOOTPRINT::GetBoundingBox() const
 {
     return GetBoundingBox( true, true );
