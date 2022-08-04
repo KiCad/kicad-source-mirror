@@ -445,6 +445,42 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         *token = getElectricalTypeLabel( label->GetShape() );
         return true;
     }
+    else if( token->IsSameAs( wxT( "SHORT_NET_NAME" ) ) )
+    {
+        const SCH_CONNECTION* connection = Connection();
+        *token = wxEmptyString;
+
+        if( connection )
+            *token = connection->LocalName();
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "NET_NAME" ) ) )
+    {
+        const SCH_CONNECTION* connection = Connection();
+        *token = wxEmptyString;
+
+        if( connection )
+            *token = connection->Name();
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "NET_CLASS" ) ) )
+    {
+        const SCH_CONNECTION* connection = Connection();
+        *token = wxEmptyString;
+
+        if( connection )
+        {
+            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+            *token = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
+
+            if( netSettings.m_NetClassAssignments.count( connection->Name() ) )
+                *token = netSettings.m_NetClassAssignments[ connection->Name() ];
+        }
+
+        return true;
+    }
 
     for( size_t i = 0; i < m_fields.size(); ++i )
     {
