@@ -1359,8 +1359,15 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( msgItems.empty() )
     {
-        msgItems.emplace_back( _( "Selected Items" ),
-                               wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+        if( selection.GetSize() )
+        {
+            msgItems.emplace_back( _( "Selected Items" ),
+                                   wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+        }
+        else
+        {
+            m_frame->GetBoard()->GetMsgPanelInfo( m_frame, msgItems );
+        }
     }
 
     m_frame->SetMsgPanel( msgItems );
