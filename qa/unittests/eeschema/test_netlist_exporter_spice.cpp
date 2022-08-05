@@ -125,10 +125,6 @@ public:
             std::vector<double> xVector = ngspice->GetRealPlot( aXVectorName );
             std::size_t i = 0;
 
-            BOOST_REQUIRE_GE( xVector.size(), 2 );
-
-            //double xStep = xVector[1] - xVector[0];
-
             for(; i < xVector.size(); ++i )
             {
                 double inf = std::numeric_limits<double>::infinity();

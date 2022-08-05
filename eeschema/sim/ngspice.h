@@ -33,9 +33,7 @@
 
 #include <wx/dynlib.h>
 
-#ifdef KICAD_SPICE
 #include <ngspice/sharedspice.h>
-#endif
 
 #include <enum_vector.h>
 
@@ -54,60 +52,6 @@ class wxDynamicLibrary;
 class NGSPICE : public SPICE_SIMULATOR
 {
 public:
-    DEFINE_ENUM_CLASS_WITH_ITERATOR( MODEL_TYPE,
-        NONE,
-        //RESISTOR,
-        //CAPACITOR,
-        //INDUCTOR,
-        //LTRA,
-        //TRANLINE,
-        //URC,
-        //TRANSLINE,
-        SWITCH,
-        CSWITCH,
-        DIODE,
-        BJT,
-        VBIC,
-        HICUM2,
-        JFET,
-        JFET2,
-        MES,
-        MESA,
-        HFET1,
-        HFET2,
-        MOS1,
-        MOS2,
-        MOS3,
-        BSIM1,
-        BSIM2,
-        MOS6,
-        BSIM3,
-        MOS9,
-        B4SOI,
-        BSIM4,
-        B3SOIFD,
-        B3SOIDD,
-        B3SOIPD,
-        HISIM2,
-        HISIMHV1,
-        HISIMHV2
-    )
-
-    // May be moved to the SPICE_MODEL class later.
-    struct MODEL_INFO
-    {
-        wxString name;
-        wxString variant1;
-        wxString variant2;
-        std::vector<wxString> pinNames;
-        wxString description;
-        std::vector<SIM_MODEL::PARAM::INFO> modelParams;
-        std::vector<SIM_MODEL::PARAM::INFO> instanceParams;
-    };
-
-
-    static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
-
     NGSPICE();
     virtual ~NGSPICE();
 
@@ -167,7 +111,6 @@ private:
     // Performs DLL initialization, obtains function pointers
     void init_dll();
 
-#ifdef KICAD_SPICE
     // ngspice library functions
     typedef void ( *ngSpice_Init )( SendChar*, SendStat*, ControlledExit*, SendData*, SendInitData*,
                                     BGThreadRunning*, void* );
@@ -207,7 +150,6 @@ private:
     static int cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser );
     static int cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
                                  void* aUser );
-#endif
 
     // Assure ngspice is in a valid state and reinitializes it if need be.
     void validate();

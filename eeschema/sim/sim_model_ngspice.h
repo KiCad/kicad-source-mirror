@@ -26,12 +26,13 @@
 #define SIM_MODEL_NGSPICE_H
 
 #include <sim/sim_model.h>
-#include <sim/ngspice.h>
 
 
 class SIM_MODEL_NGSPICE : public SIM_MODEL
 {
 public:
+    friend struct MODEL_INFO_MAP;
+
     SIM_MODEL_NGSPICE( TYPE aType );
 
     std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
@@ -39,10 +40,64 @@ public:
     bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
+    // Protected because it's accessed by QA tests.
+protected:
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( MODEL_TYPE,
+        NONE,
+        //RESISTOR,
+        //CAPACITOR,
+        //INDUCTOR,
+        //LTRA,
+        //TRANLINE,
+        //URC,
+        //TRANSLINE,
+        SWITCH,
+        CSWITCH,
+        DIODE,
+        BJT,
+        VBIC,
+        HICUM2,
+        JFET,
+        JFET2,
+        MES,
+        MESA,
+        HFET1,
+        HFET2,
+        MOS1,
+        MOS2,
+        MOS3,
+        BSIM1,
+        BSIM2,
+        MOS6,
+        BSIM3,
+        MOS9,
+        B4SOI,
+        BSIM4,
+        B3SOIFD,
+        B3SOIDD,
+        B3SOIPD,
+        HISIM2,
+        HISIMHV1,
+        HISIMHV2
+    )
+
+    struct MODEL_INFO
+    {
+        wxString name;
+        wxString variant1;
+        wxString variant2;
+        std::vector<wxString> pinNames;
+        wxString description;
+        std::vector<SIM_MODEL::PARAM::INFO> modelParams;
+        std::vector<SIM_MODEL::PARAM::INFO> instanceParams;
+    };
+
+    static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
+
 private:
     std::vector<wxString> getPinNames() const override;
 
-    NGSPICE::MODEL_TYPE getModelType() const;
+    MODEL_TYPE getModelType() const;
     bool getIsOtherVariant();
 };
 

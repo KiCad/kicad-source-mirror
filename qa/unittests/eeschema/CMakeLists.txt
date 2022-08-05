@@ -89,7 +89,7 @@ if( KICAD_SPICE )
         ${QA_EESCHEMA_SRCS}
         # Simulation tests
         sim/test_library_spice.cpp
-        sim/test_ngspice.cpp
+        sim/test_sim_model_ngspice.cpp
         sim/test_ngspice_helpers.cpp
     )
 endif()
