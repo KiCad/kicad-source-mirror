@@ -153,6 +153,9 @@ public:
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    int getKnockoutMargin() const;
 };
 
 #endif  // #define PCB_TEXT_H

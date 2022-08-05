@@ -781,7 +781,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
             for( const VECTOR2I& pt : GetRectCorners() )
                 poly.Append( pt );
 
-            return poly.Collide( VECTOR2I( aPosition ), maxdist );
+            return poly.Collide( aPosition, maxdist );
         }
         else                        // Open rect hit-test
         {
@@ -795,9 +795,9 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     case SHAPE_T::POLY:
         if( IsFilled() )
-            return m_poly.Collide( VECTOR2I( aPosition ), maxdist );
+            return m_poly.Collide( aPosition, maxdist );
         else
-            return m_poly.CollideEdge( VECTOR2I( aPosition ), nullptr, maxdist );
+            return m_poly.CollideEdge( aPosition, nullptr, maxdist );
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );

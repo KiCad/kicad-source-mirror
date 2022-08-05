@@ -148,9 +148,21 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
+int PCB_TEXT::getKnockoutMargin() const
+{
+    VECTOR2I textSize( GetTextWidth(), GetTextHeight() );
+    int      thickness = GetTextThickness();
+
+    return thickness * 1.5 + GetKnockoutTextMargin( textSize, thickness );
+}
+
+
 const EDA_RECT PCB_TEXT::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
+
+    if( IsKnockout() )
+        rect.Inflate( getKnockoutMargin() );
 
     if( !GetTextAngle().IsZero() )
         rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
@@ -161,7 +173,18 @@ const EDA_RECT PCB_TEXT::GetBoundingBox() const
 
 bool PCB_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    return EDA_TEXT::TextHitTest( aPoint, aAccuracy );
+    if( IsKnockout() )
+    {
+        SHAPE_POLY_SET poly;
+
+        TransformBoundingBoxWithClearanceToPolygon( &poly, getKnockoutMargin() );
+
+        return poly.Collide( aPoint, aAccuracy );
+    }
+    else
+    {
+        return EDA_TEXT::TextHitTest( aPoint, aAccuracy );
+    }
 }
 
 
