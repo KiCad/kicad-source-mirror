@@ -1463,7 +1463,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( aText->GetTextAngle() ).c_str() );
+                      FormatAngle( angle * 10.0 ).c_str() );
     }
 
     if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
