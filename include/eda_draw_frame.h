@@ -101,7 +101,7 @@ public:
      */
     bool IsScriptingConsoleVisible();
 
-    wxFindReplaceData& GetFindReplaceData() { return *m_findReplaceData; }
+    EDA_SEARCH_DATA& GetFindReplaceData() { return *m_findReplaceData; }
     wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
@@ -501,7 +501,7 @@ protected:
     ACTION_TOOLBAR*    m_drawToolBar;       // Drawing tools (typically on right edge of window)
     ACTION_TOOLBAR*    m_optionsToolBar;    // Options (typically on left edge of window)
 
-    wxFindReplaceData* m_findReplaceData;
+    std::unique_ptr<EDA_SEARCH_DATA> m_findReplaceData;
     wxArrayString      m_findStringHistoryList;
     wxArrayString      m_replaceStringHistoryList;
 

@@ -143,7 +143,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 }
 
 
-bool NETINFO_ITEM::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+bool NETINFO_ITEM::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     return BOARD_ITEM::Matches( GetNetname(), aSearchData );
 }

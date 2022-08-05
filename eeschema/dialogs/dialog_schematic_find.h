@@ -47,7 +47,7 @@ class SCH_EDITOR_CONTROL;
 class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 {
 public:
-    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
+    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
                      const wxPoint& aPosition = wxDefaultPosition,
                      const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
 
@@ -80,7 +80,7 @@ protected:
 
     SCH_EDIT_FRAME*     m_frame;
     SCH_EDITOR_CONTROL* m_editorControl;
-    wxFindReplaceData*  m_findReplaceData;
+    SCH_SEARCH_DATA*    m_findReplaceData;
     bool                m_findDirty;
 
     DECLARE_NO_COPY_CLASS( DIALOG_SCH_FIND )

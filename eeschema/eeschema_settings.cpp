@@ -61,6 +61,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         m_Appearance(),
         m_AutoplaceFields(),
         m_Drawing(),
+        m_FindReplaceExtra(),
         m_Input(),
         m_PageSettings(),
         m_AnnotatePanel(),
@@ -197,6 +198,19 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back(new PARAM <int>( "drawing.junction_size_choice",
             &m_Drawing.junction_size_choice, 3 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_fields",
+                                            &m_FindReplaceExtra.search_all_fields, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_pins",
+                                            &m_FindReplaceExtra.search_all_pins, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.search_current_sheet_only",
+                                            &m_FindReplaceExtra.search_current_sheet_only,
+                                            false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.replace_references",
+                                            &m_FindReplaceExtra.replace_references, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
             &m_Input.drag_is_move, false ) );

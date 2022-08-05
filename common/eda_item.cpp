@@ -115,23 +115,22 @@ wxString EDA_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-bool EDA_ITEM::Matches( const wxString& aText, const wxFindReplaceData& aSearchData ) const
+bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchData ) const
 {
     wxString text = aText;
-    int      flags = aSearchData.GetFlags();
-    wxString searchText = aSearchData.GetFindString();
+    wxString searchText = aSearchData.findString;
 
     // Don't match if searching for replaceable item and the item doesn't support text replace.
-    if( ( flags & FR_SEARCH_REPLACE ) && !IsReplaceable() )
+    if( aSearchData.searchAndReplace && !IsReplaceable() )
         return false;
 
-    if( !( flags & wxFR_MATCHCASE ) )
+    if( !aSearchData.matchCase )
     {
         text.MakeUpper();
         searchText.MakeUpper();
     }
 
-    if( flags & wxFR_WHOLEWORD )
+    if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD )
     {
         int ii = 0;
 
@@ -156,7 +155,7 @@ bool EDA_ITEM::Matches( const wxString& aText, const wxFindReplaceData& aSearchD
 
         return false;
     }
-    else if( flags & FR_MATCH_WILDCARD )
+    else if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WILDCARD )
     {
         return text.Matches( searchText );
     }
@@ -167,15 +166,14 @@ bool EDA_ITEM::Matches( const wxString& aText, const wxFindReplaceData& aSearchD
 }
 
 
-bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
+bool EDA_ITEM::Replace( const EDA_SEARCH_DATA& aSearchData, wxString& aText )
 {
     wxString text = aText;
-    int      flags = aSearchData.GetFlags();
-    wxString searchText = aSearchData.GetFindString();
+    wxString searchText = aSearchData.findString;
     wxString result;
     bool     replaced = false;
 
-    if( flags & wxFR_MATCHCASE )
+    if( !aSearchData.matchCase )
     {
         text = text.Upper();
         searchText = searchText.Upper();
@@ -202,7 +200,7 @@ bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
         bool startOK;
         bool endOK;
 
-        if( flags & wxFR_WHOLEWORD )
+        if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD )
         {
             startOK = ( ii == 0 || !wxIsalnum( text.GetChar( ii - 1 ) ) );
             endOK = ( next == (int) text.length() || !wxIsalnum( text.GetChar( next ) ) );
@@ -215,7 +213,7 @@ bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
 
         if( startOK && endOK )
         {
-            result += aSearchData.GetReplaceString();
+            result += aSearchData.replaceString;
             replaced = true;
             ii = next;
         }

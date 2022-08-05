@@ -315,7 +315,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultPenWidth ) const
 }
 
 
-bool EDA_TEXT::Replace( const wxFindReplaceData& aSearchData )
+bool EDA_TEXT::Replace( const EDA_SEARCH_DATA& aSearchData )
 {
     bool retval = EDA_ITEM::Replace( aSearchData, m_text );
 

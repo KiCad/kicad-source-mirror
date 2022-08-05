@@ -46,7 +46,14 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     // Build parameters list:
-    m_params.emplace_back( new PARAM<int>( "find_replace.flags", &m_FindReplace.flags, 1 ) );
+    m_params.emplace_back(
+            new PARAM<int>( "find_replace.match_mode", &m_FindReplace.match_mode, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "find_replace.match_case", &m_FindReplace.match_case, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.search_and_replace",
+                                            &m_FindReplace.search_and_replace, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "find_replace.find_string",
             &m_FindReplace.find_string, "" ) );

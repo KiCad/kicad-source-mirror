@@ -521,13 +521,24 @@ bool SCH_FIELD::IsVoid() const
 }
 
 
-bool SCH_FIELD::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
+    bool searchHiddenFields = false;
+    bool searchAndReplace = false;
+    bool replaceReferences = false;
+
+    try
+    {
+        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData ); // downcast
+        searchHiddenFields = schSearchData.searchAllFields;
+        searchAndReplace = schSearchData.searchAndReplace;
+        replaceReferences = schSearchData.replaceReferences;
+    }
+    catch( const std::bad_cast& e )
+    {
+    }
+
     wxString text = GetShownText();
-    int      flags = aSearchData.GetFlags();
-    bool     searchHiddenFields = flags & FR_SEARCH_ALL_FIELDS;
-    bool     searchAndReplace = flags & FR_SEARCH_REPLACE;
-    bool     replaceReferences = flags & FR_REPLACE_REFERENCES;
 
     wxLogTrace( traceFindItem, wxT( "    child item " )
                     + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
@@ -589,8 +600,19 @@ bool SCH_FIELD::IsReplaceable() const
 }
 
 
-bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 {
+    bool replaceReferences = false;
+
+    try
+    {
+        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
+        replaceReferences = schSearchData.replaceReferences;
+    }
+    catch( const std::bad_cast& e )
+    {
+    }
+
     wxString text;
     bool     resolve = false;    // Replace in source text, not shown text
     bool     isReplaced = false;
@@ -604,7 +626,7 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
         case REFERENCE_FIELD:
             wxCHECK_MSG( aAuxData, false, wxT( "Need sheetpath to replace in refdes." ) );
 
-            if( !( aSearchData.GetFlags() & FR_REPLACE_REFERENCES ) )
+            if( !replaceReferences )
                 return false;
 
             text = parentSymbol->GetRef( (SCH_SHEET_PATH*) aAuxData );

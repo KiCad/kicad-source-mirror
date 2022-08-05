@@ -310,7 +310,7 @@ int SCH_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
 
 
 // A dummy wxFindReplaceData signaling any marker should be found
-static wxFindReplaceData g_markersOnly;
+static EDA_SEARCH_DATA g_markersOnly;
 
 
 int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
@@ -322,7 +322,7 @@ int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData& data = m_frame->GetFindReplaceData();
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
 
     auto visit =
             [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
@@ -331,7 +331,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
                 // SelectedItemsModified we also get triggered when the find dialog is
                 // closed....so we need to double check the dialog is open.
                 if( m_frame->m_findReplaceDialog != nullptr
-                    && !data.GetFindString().IsEmpty()
+                    && !data.findString.IsEmpty()
                     && aItem->Matches( data, aSheet ) )
                 {
                     aItem->SetForceVisible( true );
@@ -375,7 +375,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 
 
 SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet,
-                                         SCH_ITEM* aAfter, wxFindReplaceData& aData )
+                                         SCH_ITEM* aAfter, EDA_SEARCH_DATA& aData )
 {
     bool past_item = true;
 
@@ -464,23 +464,31 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
 
 int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 {
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
+    bool searchAllSheets = false;
+    try
+    {
+        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
+        searchAllSheets = !( schSearchData.searchCurrentSheetOnly );
+    }
+    catch( const std::bad_cast& e )
+    {
+    }
+
     // A timer during which a subsequent FindNext will result in a wrap-around
     static wxTimer wrapAroundTimer;
 
-    wxFindReplaceData& data = m_frame->GetFindReplaceData();
-
     if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
     {
-        g_markersOnly.SetFlags( data.GetFlags() );
+       // g_markersOnly.SetFlags( data.GetFlags() );
 
-        data = g_markersOnly;
+       // data = g_markersOnly;
     }
-    else if( data.GetFindString().IsEmpty() )
+    else if( data.findString.IsEmpty() )
     {
         return FindAndReplace( ACTIONS::find.MakeEvent() );
     }
 
-    bool          searchAllSheets = !( data.GetFlags() & FR_CURRENT_SHEET_ONLY );
     EE_SELECTION& selection       = m_selectionTool->GetSelection();
     SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
     SCH_ITEM*     item            = nullptr;
@@ -572,7 +580,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
 bool SCH_EDITOR_CONTROL::HasMatch()
 {
-    wxFindReplaceData& data = m_frame->GetFindReplaceData();
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
 
     return item && item->Matches( data, &m_frame->GetCurrentSheet() );
@@ -581,11 +589,11 @@ bool SCH_EDITOR_CONTROL::HasMatch()
 
 int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData& data = m_frame->GetFindReplaceData();
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
     EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
     SCH_SHEET_PATH*    sheet = &m_frame->GetCurrentSheet();
 
-    if( data.GetFindString().IsEmpty() )
+    if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
     if( item && item->Matches( data, sheet ) )
@@ -610,15 +618,25 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData& data = m_frame->GetFindReplaceData();
-    bool               currentSheetOnly = ( data.GetFlags() & FR_CURRENT_SHEET_ONLY ) > 0;
-    bool               modified = false;
+    EDA_SEARCH_DATA& data = m_frame->GetFindReplaceData();
+    bool             currentSheetOnly = false;
 
-    if( data.GetFindString().IsEmpty() )
+    try
+    {
+        const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
+        currentSheetOnly = schSearchData.searchCurrentSheetOnly;
+    }
+    catch( const std::bad_cast& e )
+    {
+    }
+
+    bool modified = false;
+
+    if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
     auto doReplace =
-            [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, wxFindReplaceData& aData )
+            [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, EDA_SEARCH_DATA& aData )
             {
                 m_frame->SaveCopyInUndoList( aSheet->LastScreen(), aItem, UNDO_REDO::CHANGED,
                                              modified );

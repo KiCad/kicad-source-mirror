@@ -106,7 +106,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight( this );
     m_userUnits           = EDA_UNITS::MILLIMETRES;
     m_polarCoords         = false;
-    m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
+    m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
 
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
@@ -190,8 +190,6 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 
     delete m_currentScreen;
     m_currentScreen = nullptr;
-
-    delete m_findReplaceData;
 
     m_auimgr.UnInit();
 
@@ -648,9 +646,12 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_galDisplayOptions.ReadConfig( *cmnCfg, *window, this );
 
-    m_findReplaceData->SetFlags( aCfg->m_FindReplace.flags );
-    m_findReplaceData->SetFindString( aCfg->m_FindReplace.find_string );
-    m_findReplaceData->SetReplaceString( aCfg->m_FindReplace.replace_string );
+    m_findReplaceData->findString = aCfg->m_FindReplace.find_string;
+    m_findReplaceData->replaceString = aCfg->m_FindReplace.replace_string;
+    m_findReplaceData->matchMode =
+            static_cast<EDA_SEARCH_MATCH_MODE>( aCfg->m_FindReplace.match_mode );
+    m_findReplaceData->matchCase = aCfg->m_FindReplace.match_case;
+    m_findReplaceData->searchAndReplace = aCfg->m_FindReplace.search_and_replace;
 
     for( auto& s : aCfg->m_FindReplace.find_history )
         m_findStringHistoryList.Add( s );
@@ -672,9 +673,10 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     m_galDisplayOptions.WriteConfig( *window );
 
-    aCfg->m_FindReplace.flags = m_findReplaceData->GetFlags();
-    aCfg->m_FindReplace.find_string = m_findReplaceData->GetFindString();
-    aCfg->m_FindReplace.replace_string = m_findReplaceData->GetReplaceString();
+    aCfg->m_FindReplace.search_and_replace = m_findReplaceData->searchAndReplace;
+
+    aCfg->m_FindReplace.find_string = m_findReplaceData->findString;
+    aCfg->m_FindReplace.replace_string = m_findReplaceData->replaceString;
 
     aCfg->m_FindReplace.find_history.clear();
     aCfg->m_FindReplace.replace_history.clear();

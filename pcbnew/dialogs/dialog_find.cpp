@@ -134,7 +134,6 @@ void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 void DIALOG_FIND::search( bool aDirection )
 {
     PCB_SCREEN* screen = m_frame->GetScreen();
-    int         flags;
     int         index;
     wxString    msg;
     wxString    searchString;
@@ -177,9 +176,6 @@ void DIALOG_FIND::search( bool aDirection )
 
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
-
-    // Update search flags
-    flags = 0;
 
     if( FindOptionCase != m_matchCase->GetValue() )
     {
@@ -232,17 +228,17 @@ void DIALOG_FIND::search( bool aDirection )
     }
 
     if( FindOptionCase )
-        flags |= wxFR_MATCHCASE;
+        m_frame->GetFindReplaceData().matchCase = true;
 
     if( FindOptionWords )
-        flags |= wxFR_WHOLEWORD;
-
-    if( FindOptionWildcards )
-        flags |= FR_MATCH_WILDCARD;
+        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
+    else if( FindOptionWildcards )
+        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+    else
+        m_frame->GetFindReplaceData().matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
     // Search parameters
-    m_frame->GetFindReplaceData().SetFindString( searchString );
-    m_frame->GetFindReplaceData().SetFlags( flags );
+    m_frame->GetFindReplaceData().findString = searchString;
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );

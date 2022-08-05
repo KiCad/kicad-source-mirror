@@ -68,7 +68,7 @@ public:
     void SetVisible( bool aVisible ) override { /* do nothing */}
     bool IsVisible() const override { return true; }
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );
     }

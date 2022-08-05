@@ -158,7 +158,7 @@ public:
         return m_parent;
     }
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
 private:
     friend class NETINFO_LIST;

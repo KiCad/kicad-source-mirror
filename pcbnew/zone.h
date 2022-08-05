@@ -118,7 +118,7 @@ public:
     wxString GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetZoneName(), aSearchData );
     }

@@ -887,7 +887,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 }
 
 
-bool SCH_SHEET::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+bool SCH_SHEET::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 

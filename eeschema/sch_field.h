@@ -194,9 +194,9 @@ public:
     {
     }
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = nullptr ) override;
+    bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData = nullptr ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

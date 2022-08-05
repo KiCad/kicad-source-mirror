@@ -236,6 +236,15 @@ public:
         WINDOW_SETTINGS window;
     };
 
+    struct FIND_REPLACE_EXTRA
+    {
+        bool search_all_fields;
+        bool search_all_pins;
+        bool search_current_sheet_only;
+
+        bool replace_references;
+    };
+
     EESCHEMA_SETTINGS();
 
     virtual ~EESCHEMA_SETTINGS() {}
@@ -266,6 +275,8 @@ public:
     AUI_PANELS m_AuiPanels;
 
     DRAWING m_Drawing;
+
+    FIND_REPLACE_EXTRA m_FindReplaceExtra;
 
     INPUT m_Input;
 

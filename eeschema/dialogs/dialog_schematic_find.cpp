@@ -28,7 +28,7 @@
 #include <tools/sch_editor_control.h>
 
 
-DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
+DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
                                   const wxPoint& aPosition, const wxSize& aSize, int aStyle ) :
     DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
@@ -50,20 +50,15 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aD
         m_checkWildcardMatch->Show( false );  // Wildcard replace is not implemented.
     }
 
-    int flags = m_findReplaceData->GetFlags();
-    m_radioForward->SetValue( flags & wxFR_DOWN );
-    m_radioBackward->SetValue( ( flags & wxFR_DOWN ) == 0 );
-    m_checkMatchCase->SetValue( flags & wxFR_MATCHCASE );
-    m_checkWholeWord->SetValue( flags & wxFR_WHOLEWORD );
+    m_checkMatchCase->SetValue( m_findReplaceData->matchCase );
+    m_checkWholeWord->SetValue( m_findReplaceData->matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD );
+    m_checkWildcardMatch->SetValue( m_findReplaceData->matchMode
+                                    == EDA_SEARCH_MATCH_MODE::WILDCARD );
 
-    /* Whole word and wild card searches are mutually exclusive. */
-    if( !( flags & wxFR_WHOLEWORD ) )
-        m_checkWildcardMatch->SetValue( flags & FR_MATCH_WILDCARD );
-
-    m_checkAllFields->SetValue( flags & FR_SEARCH_ALL_FIELDS );
-    m_checkReplaceReferences->SetValue( flags & FR_REPLACE_REFERENCES );
-    m_checkAllPins->SetValue( flags & FR_SEARCH_ALL_PINS );
-    m_checkCurrentSheetOnly->SetValue( flags & FR_CURRENT_SHEET_ONLY );
+    m_checkAllFields->SetValue( m_findReplaceData->searchAllFields );
+    m_checkReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
+    m_checkAllPins->SetValue( m_findReplaceData->searchAllPins );
+    m_checkCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
 
     m_buttonFind->SetDefault();
     SetInitialFocus( m_comboFind );
@@ -139,14 +134,14 @@ void DIALOG_SCH_FIND::OnChar( wxKeyEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnSearchForText( wxCommandEvent& aEvent )
 {
-    m_findReplaceData->SetFindString( m_comboFind->GetValue() );
+    m_findReplaceData->findString = m_comboFind->GetValue();
     m_findDirty = true;
 }
 
 
 void DIALOG_SCH_FIND::OnSearchForSelect( wxCommandEvent& aEvent )
 {
-    m_findReplaceData->SetFindString( m_comboFind->GetValue() );
+    m_findReplaceData->findString = m_comboFind->GetValue();
 
     // Move the search string to the top of the list if it isn't already there.
     if( aEvent.GetSelection() != 0 )
@@ -163,13 +158,13 @@ void DIALOG_SCH_FIND::OnSearchForSelect( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnReplaceWithText( wxCommandEvent& aEvent )
 {
-    m_findReplaceData->SetReplaceString( m_comboReplace->GetValue() );
+    m_findReplaceData->replaceString = m_comboReplace->GetValue();
 }
 
 
 void DIALOG_SCH_FIND::OnReplaceWithSelect( wxCommandEvent& aEvent )
 {
-    m_findReplaceData->SetReplaceString( m_comboReplace->GetValue() );
+    m_findReplaceData->replaceString = m_comboReplace->GetValue();
 
     // Move the replace string to the top of the list if it isn't already there.
     if( aEvent.GetSelection() != 0 )
@@ -203,33 +198,38 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
 void DIALOG_SCH_FIND::updateFlags()
 {
     // Rebuild the search flags in m_findReplaceData from dialog settings
-    int flags = 0;
-
-    if( m_radioForward->GetValue() )
-        flags |= wxFR_DOWN;
 
     if( m_checkMatchCase->GetValue() )
-        flags |= wxFR_MATCHCASE;
+        m_findReplaceData->matchCase = true;
+    else
+        m_findReplaceData->matchCase = false;
 
     if( m_checkWholeWord->GetValue() )
-        flags |= wxFR_WHOLEWORD;
-
-    if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
-        flags |= FR_MATCH_WILDCARD;
+        m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
+    else if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
+        m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+    else
+        m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
 
     if( m_checkAllFields->GetValue() )
-        flags |= FR_SEARCH_ALL_FIELDS;
+        m_findReplaceData->searchAllFields = true;
+    else
+        m_findReplaceData->searchAllFields = false;
 
     if( m_checkAllPins->GetValue() )
-        flags |= FR_SEARCH_ALL_PINS;
+        m_findReplaceData->searchAllPins = true;
+    else
+        m_findReplaceData->searchAllPins = false;
 
     if( m_checkCurrentSheetOnly->GetValue() )
-        flags |= FR_CURRENT_SHEET_ONLY;
+        m_findReplaceData->searchCurrentSheetOnly = true;
+    else
+        m_findReplaceData->searchCurrentSheetOnly = false;
 
     if( m_checkReplaceReferences->GetValue() )
-        flags |= FR_REPLACE_REFERENCES;
-
-    m_findReplaceData->SetFlags( flags );
+        m_findReplaceData->replaceReferences = true;
+    else
+        m_findReplaceData->replaceReferences = false;
 }
 
 

@@ -160,9 +160,12 @@ void SCH_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-bool SCH_PIN::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) const
+bool SCH_PIN::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxDat ) const
 {
-    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )
+    const SCH_SEARCH_DATA& schSearchData =
+            dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
+
+    if( !schSearchData.searchAllPins )
         return false;
 
     return EDA_ITEM::Matches( GetName(), aSearchData )
@@ -170,7 +173,7 @@ bool SCH_PIN::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) con
 }
 
 
-bool SCH_PIN::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_PIN::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 

@@ -605,7 +605,7 @@ public:
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 

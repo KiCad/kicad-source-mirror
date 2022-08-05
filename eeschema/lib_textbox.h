@@ -67,12 +67,12 @@ public:
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
         return LIB_ITEM::Matches( GetText(), aSearchData );
     }
 
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) override
     {
         return EDA_TEXT::Replace( aSearchData );
     }

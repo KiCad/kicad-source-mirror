@@ -100,15 +100,17 @@ struct WINDOW_SETTINGS
 class APP_SETTINGS_BASE : public JSON_SETTINGS
 {
 public:
-
-
     struct FIND_REPLACE
     {
-        int                   flags;
         wxString              find_string;
         std::vector<wxString> find_history;
         wxString              replace_string;
         std::vector<wxString> replace_history;
+
+        bool search_and_replace;
+
+        bool match_case;
+        int match_mode;
     };
 
     struct GRAPHICS

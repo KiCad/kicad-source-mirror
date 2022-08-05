@@ -30,13 +30,13 @@
 
 #include <outline_mode.h>
 #include <eda_rect.h>
+#include <eda_search_data.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 
 class OUTPUTFORMATTER;
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
-class wxFindReplaceData;
 
 
 namespace KIGFX
@@ -167,11 +167,11 @@ public:
      *
      * Perform a text replace using the find and replace criteria in \a aSearchData.
      *
-     * @param aSearchData A reference to a wxFindReplaceData object containing the
+     * @param aSearchData A reference to a EDA_SEARCH_DATA object containing the
      *                    search and replace criteria.
      * @return True if the text item was modified, otherwise false.
      */
-    bool Replace( const wxFindReplaceData& aSearchData );
+    bool Replace( const EDA_SEARCH_DATA& aSearchData );
 
     bool IsDefaultFormatting() const;
 

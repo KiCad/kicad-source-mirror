@@ -320,7 +320,7 @@ public:
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
     bool IsReplaceable() const override { return true; }
 

@@ -125,6 +125,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_findReplaceDialog = nullptr;
 
+    m_findReplaceData = std::make_unique<SCH_SEARCH_DATA>();
+
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -1045,8 +1047,9 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
-    m_findReplaceDialog= new DIALOG_SCH_FIND( this, m_findReplaceData, wxDefaultPosition,
-                                              wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
+    m_findReplaceDialog = new DIALOG_SCH_FIND(
+            this, static_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() ), wxDefaultPosition,
+            wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
 
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );

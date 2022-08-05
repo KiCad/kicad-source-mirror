@@ -118,9 +118,9 @@ public:
     /// @return the pin's position in global coordinates.
     VECTOR2I GetTransformedPosition() const;
 
-    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
+    bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) override;
 
     /*
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,

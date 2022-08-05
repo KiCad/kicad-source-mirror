@@ -1585,7 +1585,7 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter )
 }
 
 
-bool SCH_SYMBOL::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
