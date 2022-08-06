@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-31 13:00-0700\n"
-"PO-Revision-Date: 2022-08-02 18:17+0000\n"
+"PO-Revision-Date: 2022-08-07 03:19+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
@@ -4744,7 +4744,7 @@ msgstr "회로도 편집기"
 #: pcbnew/menubar_pcb_editor.cpp:187 pcbnew/pcb_edit_frame.cpp:178
 #: pcbnew/pcb_edit_frame.cpp:1346 pcbnew/pcbnew_config.cpp:56
 msgid "PCB Editor"
-msgstr "PCB 에디터"
+msgstr "PCB 편집기"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:110
 #: pagelayout_editor/menubar.cpp:89 pagelayout_editor/pl_editor_frame.cpp:487
@@ -15820,7 +15820,7 @@ msgstr "라이브러리로부터 다른 심볼을 할당"
 
 #: eeschema/tools/ee_actions.cpp:431
 msgid "Update Symbols from Library..."
-msgstr "라리브러리에서 심볼 업데이트..."
+msgstr "라이브러리에서 심볼 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:432
 msgid "Update symbols to include any changes from the library"
@@ -16275,7 +16275,7 @@ msgstr "그리드에 요소 정렬"
 
 #: eeschema/tools/ee_actions.cpp:779
 msgid "Save Current Sheet Copy As..."
-msgstr "현재의 시트 복사본을 다음으로 저장..."
+msgstr "현재 시트를 다른이름으로 저장..."
 
 #: eeschema/tools/ee_actions.cpp:779
 msgid "Save a copy of the current sheet to another location or name"
@@ -23611,7 +23611,7 @@ msgstr "참조 지정자"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
-msgstr "옆:"
+msgstr "면:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Unlock footprint"
@@ -36316,7 +36316,7 @@ msgstr "여러 전자 관련 계산을 위한 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB 편집기 (스탠드얼론)"
+msgstr "KiCad PCB 편집기 (독립실행)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
