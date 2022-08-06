@@ -27,10 +27,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-02 15:49+0000\n"
-"Last-Translator: 이윤성 <yunslee@student.42seoul.kr>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2022-08-08 11:16+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4037,7 +4037,7 @@ msgstr "기본값"
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:189
 #: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1403
 msgid "PCB Editor"
-msgstr "PCB 에디터"
+msgstr "PCB 편집기"
 
 #: common/eda_base_frame.cpp:1043
 msgid "Action Plugins"
@@ -16355,7 +16355,7 @@ msgstr "라이브러리로부터 다른 심볼을 할당"
 
 #: eeschema/tools/ee_actions.cpp:452
 msgid "Update Symbols from Library..."
-msgstr "라리브러리에서 심볼 업데이트..."
+msgstr "라이브러리에서 심볼 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Update symbols to include any changes from the library"
@@ -16931,7 +16931,7 @@ msgstr "그리드에 요소 정렬"
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Save Current Sheet Copy As..."
-msgstr "현재의 시트 복사본을 다음으로 저장..."
+msgstr "현재 시트를 다른이름으로 저장..."
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Save a copy of the current sheet to another location or name"
@@ -24798,7 +24798,7 @@ msgstr "90"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:150
 msgid "Side:"
-msgstr "옆:"
+msgstr "면:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
@@ -39094,7 +39094,7 @@ msgstr "여러 전자 관련 계산을 위한 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB 편집기 (스탠드얼론)"
+msgstr "KiCad PCB 편집기 (독립실행)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
