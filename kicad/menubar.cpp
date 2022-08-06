@@ -129,6 +129,19 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( nullptr, "KiCad" );
 
+    //-- Edit menu -----------------------------------------------------------
+    //
+
+    ACTION_MENU* editMenu = new ACTION_MENU( false, controlTool );
+
+    /*
+     * While we don't presently use these, they need to be here so that cut/copy/paste work
+     * in things like search boxes in file open dialogs.
+     */
+    editMenu->Add( ACTIONS::cut );
+    editMenu->Add( ACTIONS::copy );
+    editMenu->Add( ACTIONS::paste );
+
     //-- View menu -----------------------------------------------------------
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, controlTool );
@@ -198,6 +211,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu,  _( "&File" ) );
+    menuBar->Append( editMenu,  _( "&Edit" ) );
     menuBar->Append( viewMenu,  _( "&View" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );

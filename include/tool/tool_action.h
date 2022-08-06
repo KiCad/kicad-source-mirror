@@ -127,7 +127,20 @@ public:
      *
      * @return The unique ID number for use in the user interface system.
      */
-    int GetUIId() const { return m_id + ACTION_BASE_UI_ID; }
+    int GetUIId() const
+    {
+        // Hack for wxWidgets' use in stuff like search controls in standard file dialogs.  If
+        // it doesn't find these specific IDs somewhere in the menus then it won't enable
+        // cut/copy/paste.
+        if( m_param == (void*) wxID_CUT )
+            return wxID_CUT;
+        else if( m_param == (void*) wxID_COPY )
+            return wxID_COPY;
+        else if( m_param == (void*) wxID_PASTE )
+            return wxID_PASTE;
+
+        return m_id + ACTION_BASE_UI_ID;
+    }
 
     /*
      * Get the base value used to offset the user interface IDs for the actions.

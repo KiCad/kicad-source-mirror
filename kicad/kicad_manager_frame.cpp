@@ -257,14 +257,24 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
             return m_active_project;
         };
 
+#define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
+
     ACTION_CONDITIONS activeProjectCond;
     activeProjectCond.Enable( activeProject );
 
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
 
+    // These are just here for text boxes, search boxes, etc. in places such as the standard
+    // file dialogs.
+    manager->SetConditions( ACTIONS::cut,     ENABLE( SELECTION_CONDITIONS::ShowNever ) );
+    manager->SetConditions( ACTIONS::copy,    ENABLE( SELECTION_CONDITIONS::ShowNever ) );
+    manager->SetConditions( ACTIONS::paste,   ENABLE( SELECTION_CONDITIONS::ShowNever ) );
+
     // TODO: Switch this to an action
     RegisterUIUpdateHandler( ID_SAVE_AND_ZIP_FILES, activeProjectCond );
+
+#undef ENABLE
 }
 
 

@@ -151,19 +151,19 @@ TOOL_ACTION ACTIONS::cut( "common.Interactive.cut",
         AS_GLOBAL,
         MD_CTRL + 'X', LEGACY_HK_NAME( "Cut" ),
         _( "Cut" ), _( "Cut selected item(s) to clipboard" ),
-        BITMAPS::cut );
+        BITMAPS::cut, AF_NONE, (void*) wxID_CUT );
 
 TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
         AS_GLOBAL,
         MD_CTRL + 'C', LEGACY_HK_NAME( "Copy" ),
         _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
-        BITMAPS::copy );
+        BITMAPS::copy, AF_NONE, (void*) wxID_COPY );
 
 TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         AS_GLOBAL,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
         _( "Paste" ), _( "Paste item(s) from clipboard" ),
-        BITMAPS::paste );
+        BITMAPS::paste, AF_NONE, (void*) wxID_PASTE );
 
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
         AS_GLOBAL,
