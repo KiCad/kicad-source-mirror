@@ -41,14 +41,11 @@
 static std::mutex                                           rng_mutex;
 
 // Static rng and generators are used because the overhead of constant seeding is expensive
-// We break out the rng separately from the generator because we want to control seeding in cases like unit tests
-#if BOOST_VERSION >= 106700
-static boost::uuids::detail::random_provider                seeder; // required to ensure the rng has a random initial seed
-#else
-static boost::uuids::detail::seed_rng                       seeder; // required to ensure the rng has a random initial seed
-#endif
-static boost::mt19937                                       rng( seeder );
-static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( rng );
+// We rely on the default non-arg constructor of basic_random_generator to provide a random seed.
+// We use a separate rng object for cases where we want to control the basic_random_generator
+// initial seed by calling SeedGenerator from unit tests and other special cases.
+static boost::mt19937                                       rng;
+static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator;
 
 // These don't have the same performance penalty, but we might as well be consistent
 static boost::uuids::string_generator                       stringGenerator;
@@ -279,6 +276,7 @@ void KIID::CreateNilUuids( bool aNil )
 void KIID::SeedGenerator( unsigned int aSeed )
 {
     rng.seed( aSeed );
+    randomGenerator = boost::uuids::basic_random_generator<boost::mt19937>( rng );
 }
 
 
