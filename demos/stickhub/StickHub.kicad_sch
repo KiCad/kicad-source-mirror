@@ -1,4 +1,4 @@
-(kicad_sch (version 20220404) (generator eeschema)
+(kicad_sch (version 20220622) (generator eeschema)
 
   (uuid 468c1611-b068-4724-babd-2f440b5886f5)
 
@@ -1268,7 +1268,7 @@
       )
       (symbol "+3.3V_1_1"
         (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+3V3" (effects (font (size 1.27 1.27))))
+          (name "+3.3V" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
         )
       )
@@ -2270,6 +2270,11 @@
     (stroke (width 0) (type solid))
     (uuid 3dc5610c-60ed-4001-867b-d5f6fcb08152)
   )
+  (polyline (pts (xy 146.05 342.9) (xy 71.12 342.9))
+    (stroke (width 0) (type solid))
+    (uuid 3e2334d5-01d1-4eec-a5b2-6fbe6cabbd35)
+  )
+
   (wire (pts (xy 227.33 127) (xy 227.33 128.27))
     (stroke (width 0) (type solid))
     (uuid 3e2927a6-0a48-4912-8fc6-29d701708396)
@@ -2418,6 +2423,11 @@
     (stroke (width 0) (type solid))
     (uuid 50fc8278-f722-4b24-a753-ae083f6e0a24)
   )
+  (polyline (pts (xy 71.12 314.96) (xy 146.05 314.96))
+    (stroke (width 0) (type solid))
+    (uuid 5101155e-01b1-4924-bb50-2c1c2f9743b5)
+  )
+
   (wire (pts (xy 95.25 288.29) (xy 95.25 289.56))
     (stroke (width 0) (type solid))
     (uuid 51444caf-bea7-4506-b44f-e8fcab3dd713)
@@ -3054,11 +3064,6 @@
     (stroke (width 0) (type solid))
     (uuid a28b1f86-19aa-4b98-b28b-9fb3c423be8f)
   )
-  (polyline (pts (xy 146.05 342.9) (xy 71.12 342.9))
-    (stroke (width 0) (type solid))
-    (uuid a390798c-3631-42b8-8022-0d94ec3bcb51)
-  )
-
   (wire (pts (xy 199.39 246.38) (xy 199.39 247.65))
     (stroke (width 0) (type solid))
     (uuid a407ff33-c011-4d99-b6df-2788c25af08a)
@@ -3115,6 +3120,11 @@
     (stroke (width 0) (type solid))
     (uuid af787b49-7752-47be-9a28-e468eeb51027)
   )
+  (polyline (pts (xy 146.05 314.96) (xy 146.05 342.9))
+    (stroke (width 0) (type solid))
+    (uuid af89cd30-443f-4fcf-96df-39a00159cb22)
+  )
+
   (wire (pts (xy 209.55 217.17) (xy 209.55 218.44))
     (stroke (width 0) (type solid))
     (uuid b0246593-0556-48db-9528-35148876ba08)
@@ -3423,11 +3433,6 @@
     (stroke (width 0) (type solid))
     (uuid dd850bb3-154c-4447-add6-7c5fcec941b9)
   )
-  (polyline (pts (xy 146.05 314.96) (xy 146.05 342.9))
-    (stroke (width 0) (type solid))
-    (uuid dde64993-9b85-4c50-9719-ca70b5afc858)
-  )
-
   (wire (pts (xy 227.33 158.75) (xy 232.41 158.75))
     (stroke (width 0) (type solid))
     (uuid de09e464-1f4b-415f-a446-1ae4da72e38f)
@@ -3456,11 +3461,6 @@
     (stroke (width 0) (type solid))
     (uuid e0549699-4e0b-4882-926f-cdcac1a65958)
   )
-  (polyline (pts (xy 71.12 314.96) (xy 71.12 342.9))
-    (stroke (width 0) (type solid))
-    (uuid e07cedce-6287-4fc9-a6d5-cf7b71c33720)
-  )
-
   (wire (pts (xy 133.35 281.94) (xy 133.35 283.21))
     (stroke (width 0) (type solid))
     (uuid e157763b-7fa4-40f6-b71a-49666b54936e)
@@ -3537,11 +3537,6 @@
     (stroke (width 0) (type solid))
     (uuid e9951774-6c6e-4c13-b85e-031d76ef19c0)
   )
-  (polyline (pts (xy 71.12 314.96) (xy 146.05 314.96))
-    (stroke (width 0) (type solid))
-    (uuid e9e5d2d7-6917-4bf6-acbe-4f0bd31c4500)
-  )
-
   (wire (pts (xy 210.82 62.23) (xy 227.33 62.23))
     (stroke (width 0) (type solid))
     (uuid eb0c8c37-b766-4a06-bd48-1778a36eb10c)
@@ -3626,6 +3621,11 @@
     (stroke (width 0) (type solid))
     (uuid f3da1b85-7a3e-420f-b38e-176be90ed6e3)
   )
+  (polyline (pts (xy 71.12 314.96) (xy 71.12 342.9))
+    (stroke (width 0) (type solid))
+    (uuid f4229581-7017-4cee-a3f6-dc3ad4bbd1f0)
+  )
+
   (wire (pts (xy 199.39 215.9) (xy 199.39 217.17))
     (stroke (width 0) (type solid))
     (uuid f45e0436-2ac1-4d3a-b595-c69a68a8cd24)
