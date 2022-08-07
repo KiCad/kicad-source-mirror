@@ -497,8 +497,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         if( fp->IsNetTie() && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T ) )
             testClearance = false;
 
-        // No hole testing within a footprint
-        testHoles = false;
+        if( other->Type() == PCB_PAD_T && pad->SameLogicalPadAs( static_cast<PAD*>( other ) ) )
+            testHoles = false;
     }
 
     PAD*     otherPad = nullptr;
