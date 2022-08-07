@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2022-08-08 11:16+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -106,24 +106,24 @@ msgid "Last render time %.0f ms"
 msgstr "最終レンダリング時間 %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "ネット %s\tネットクラス %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s と %s"
+msgstr "パッド %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "ルールエリア ( %s 上)"
+msgstr "ルールエリア %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "ゾーン "
+msgstr "ゾーン %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -274,9 +274,8 @@ msgid "&Preferences"
 msgstr "設定 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "ビューポート(Alt+Tab):"
+msgstr "ビューポート(Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -6038,9 +6037,8 @@ msgid "Show Grid"
 msgstr "グリッドを表示"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "編集ウィンドウでグリッドの点または線を表示"
+msgstr "編集ウィンドウでバックグラウンドグリッドを表示"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9861,18 +9859,16 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "シミュレーターには回路図の完全なアノテーションが必要です。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "すべての変更を保存"
+msgstr "すべての電圧を保存"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
 msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "全てのライブラリーを保存"
+msgstr "全ての電流を保存"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
@@ -10828,28 +10824,26 @@ msgid "Add signal by name:"
 msgstr "名前で信号を追加:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "シンボル ライブラリー ファイル '%s' を作成できませんでした。"
+msgstr "モデルライブラリー '%s' を読み込めませんでした。"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:711
-#, fuzzy
 msgid "Browse Models"
-msgstr "ファイルを開く"
+msgstr "モデルを参照"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "ライブラリーでのフットプリント名"
+msgstr "ライブラリに '%s' という名前のモデルがありません。"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:27
 msgid "Source"
 msgstr "ソース"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "インダクタンス:"
+msgstr "インスタンス"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10860,7 +10854,6 @@ msgid "Model:"
 msgstr "モデル:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
 msgstr "上書き"
 
@@ -10871,7 +10864,7 @@ msgstr "モデル"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Device:"
-msgstr ""
+msgstr "デバイス:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10893,29 +10886,24 @@ msgid "Parameters"
 msgstr "パラメーター"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "Dコード:"
+msgstr "コード"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "シンボル ユニット"
+msgstr "シンボル ピン"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "モデル"
+msgstr "モデルピン"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "代替ピンの割り当て"
+msgstr "ピンの割り当て"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "シミュレーションでシンボルを無効化"
+msgstr "シミュレーションからシンボルを除外する"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -11858,14 +11846,14 @@ msgstr ""
 "が開始できます"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "ネットのハイライトをクリア"
+msgstr "<ESC> ネットのハイライトをクリア"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
+msgstr "選択ツールの最初の <ESC> "
+"は選択をクリアし、次はネットのハイライト表示をクリアします"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -13256,9 +13244,9 @@ msgstr ""
 "シミュレーションの前にアノテーションを行って修正してください。"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "ライブラリー ファイル %s が見つかりません。"
+msgstr "ライブラリファイル '%s' が見つかりませんでした。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14857,14 +14845,14 @@ msgid "Discard New Sheet"
 msgstr "新規シートを破棄"
 
 #: eeschema/sim/sim_model.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "'%s' をパース出来ません ('%s' 中)"
+msgstr "パラメータ '%s' を '%s' に設定することに失敗しました"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s は、 %lu ピンを表していて、期待値は %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
 #, fuzzy, c-format
@@ -15124,9 +15112,8 @@ msgid "Voltage (measured)"
 msgstr "電圧 (measured)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "不明なメソッド"
+msgstr "不明な SIM_VALUE タイプ"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -17096,9 +17083,8 @@ msgid "Edit '%s' Field"
 msgstr "フィールド'%s'を編集"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
-#, fuzzy
 msgid "<empty>"
-msgstr "空"
+msgstr "<空>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -20454,7 +20440,6 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
 msgstr "導体の抵抗率:"
 
@@ -21263,9 +21248,8 @@ msgid "mur:"
 msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
-#, fuzzy
 msgid "relative permeability"
-msgstr "サブストレートの比透磁率 (μ)"
+msgstr "比透磁率"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -23330,30 +23314,26 @@ msgstr "ティアドロップのプロパティ"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:226
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "一般ピン設定"
+msgstr "変換設定"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:99
 #: pcbnew/tools/convert_tool.cpp:68
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "線幅を太く"
+msgstr "ソースオブジェクトの線幅を無視する"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:111
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:72
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "消しゴムでオブジェクトを削除"
+msgstr "変換後にソースオブジェクトを削除する"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "導体ゾーンへの接続"
+msgstr "導体ゾーンへの変換"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:429
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23377,7 +23357,6 @@ msgid "No layer selected."
 msgstr "レイヤーが未選択です。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:957
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
 msgstr "<ネットなし>を選択すると、孤立した導体部分ができる原因となります。"
 
@@ -25865,59 +25844,51 @@ msgid "Line Segment Properties"
 msgstr "配線セグメントのプロパティ"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "円のプロパティ"
+msgstr "曲線のプロパティ"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
 msgstr "図形のプロパティを変更"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
 msgstr "円弧の角度は0にできません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "不正な円弧 (半径 %f 、角度 %f )"
+msgstr "不正な円弧 (半径 %f 、角度 %f )。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
-#, fuzzy
 msgid "Line width must be greater than zero."
-msgstr "半径は０より大きくなければなりません。"
+msgstr "線幅は０より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
-msgstr "半径は０より大きくなければなりません。"
+msgstr "半径は０より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "塗りつぶされていない図形の場合、線幅を0にすることはできません。"
+msgstr "塗りつぶされていない円の場合は、線幅を 0 より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
 msgid "Rectangle cannot be empty."
 msgstr "矩形は空にすることができません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr "塗りつぶされていない図形の場合、線幅を0にすることはできません。"
+msgstr "塗りつぶされていない四角形の線幅は 0 より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "塗りつぶされていない図形の場合、線幅を0にすることはできません。"
+msgstr "塗りつぶされていない多角形の場合、線幅を0より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr "塗りつぶされていない図形の場合、線幅を0にすることはできません。"
+msgstr "塗りつぶされていない曲線の場合、線幅を0より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
@@ -26318,9 +26289,8 @@ msgid "Import Netlist"
 msgstr "ネットリストをインポート"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:120
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "導体ゾーンへの接続"
+msgstr "非導体ゾーンへの変換"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -27870,9 +27840,8 @@ msgid "Push Pad Properties"
 msgstr "パッドのプロパティをプッシュ"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "ピン設定:"
+msgstr "変換の設定:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 msgid "Convert to Rule Area"
@@ -29546,9 +29515,8 @@ msgstr ""
 "口部としてプロットされます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
-#, fuzzy
 msgid "Solder mask to copper clearance:"
-msgstr "ハンダ マスクのクリアランス:"
+msgstr "ハンダ マスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -30906,9 +30874,8 @@ msgid "Missing severity name."
 msgstr "深刻度の名前がありません。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "ビア、アニュラーリングをチェック..."
+msgstr "パッドとビアのアニュラーリングをチェック..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -32103,14 +32070,12 @@ msgid "Invalid R_load."
 msgstr "不正な R_load."
 
 #: pcbnew/ibis/ibis_parser.cpp:408
-#, fuzzy
 msgid "Invalid falling dv/dt."
-msgstr "不正な長さ"
+msgstr "不正な下降 dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:413
-#, fuzzy
 msgid "Invalid rising dv/dt."
-msgstr "不正な抵抗値"
+msgstr "不正な上昇 dv/dt."
 
 #: pcbnew/ibis/ibis_parser.cpp:428
 msgid "Model name cannot be empty"
@@ -32129,9 +32094,8 @@ msgid "Invalid Vinh value."
 msgstr "不正な Vinh 値。"
 
 #: pcbnew/ibis/ibis_parser.cpp:449
-#, fuzzy
 msgid "Invalid Vinl value."
-msgstr "不正な遅延値"
+msgstr "不正な Vinl 値."
 
 #: pcbnew/ibis/ibis_parser.cpp:454
 msgid "Invalid R_ref value."
@@ -32170,14 +32134,12 @@ msgid "Invalid pullup."
 msgstr "不正なプルアップ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:520
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "不正な Y スケール値"
+msgstr "不正な POWER クランプ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:525
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "不正な Y スケール値"
+msgstr "不正な GND クランプ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:534
 #, fuzzy
@@ -32194,7 +32156,7 @@ msgstr "[IBIS Ver] がありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:554
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "パーサーはこのIBISのバージョンを扱わない"
 
 #: pcbnew/ibis/ibis_parser.cpp:560
 msgid "Missing [File Rev]"
@@ -32426,18 +32388,16 @@ msgid "Can't read a R, L or C value for a pin."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
-#, fuzzy
 msgid "Invalid field name in [Pin]"
-msgstr "不正なピン名の定義"
+msgstr "[Pin] の無効なフィールド名"
 
 #: pcbnew/ibis/ibis_parser.cpp:2218
-#, fuzzy
 msgid "Missing argument in [Pin]"
-msgstr "親なし"
+msgstr "[Pin] の無効な引数"
 
 #: pcbnew/ibis/ibis_parser.cpp:2253
 msgid "Wrong number of columns for pin mapping."
-msgstr ""
+msgstr "ピン マッピングの列数が間違っています。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
 #, fuzzy
@@ -32445,22 +32405,20 @@ msgid "Incorrect diff pin name"
 msgstr "無効な倍率です"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
-#, fuzzy
 msgid "Incorrect inv_pin name"
-msgstr "無効な倍率です"
+msgstr "inv_pin名が正しくありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:2377
-#, fuzzy
 msgid "Unknown waveform type"
-msgstr "未知のビア形状です: %d"
+msgstr "未知の波形タイプです"
 
 #: pcbnew/ibis/ibis_parser.cpp:2388
 msgid "Internal error detected, a waveform should exist"
-msgstr ""
+msgstr "内部エラーが検出されました。波形が存在する必要があります"
 
 #: pcbnew/ibis/ibis_parser.cpp:2453
 msgid "Internal error: Bad parser context."
-msgstr ""
+msgstr "内部エラー: パーサー コンテキストが正しくありません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2490
 msgid "Missing keyword."
@@ -32491,7 +32449,8 @@ msgstr "テンポラリファイル作成に失敗しました"
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr ""
+msgstr "KibisはまだDUT値をサポートしていません。https://ibis.org/summits/nov16a/chen."
+"pdf"
 
 #: pcbnew/ibis/kibis.cpp:726
 msgid "Rising edge is longer than on time."
@@ -32503,11 +32462,11 @@ msgstr ""
 
 #: pcbnew/ibis/kibis.cpp:822
 msgid "Model has only one waveform pair, reduced accuracy"
-msgstr ""
+msgstr "モデルには波形ペアが 1 つしかないため、精度が低下します"
 
 #: pcbnew/ibis/kibis.cpp:842 pcbnew/ibis/kibis.cpp:1026
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
+msgstr "ドライバーは少なくともプルアップまたはプルダウンが必要です"
 
 #: pcbnew/ibis/kibis.cpp:1009 pcbnew/ibis/kibis.cpp:1018
 msgid ""
@@ -33695,14 +33654,14 @@ msgid "Full Length"
 msgstr "全長"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "幅の制約: 最小 %s; 最適 %s; 最大 %s."
+msgstr "幅の制約: 最小 %s, 最大 %s."
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "穴の制約: 最小 %s."
+msgstr "幅の制約: 最小 %s."
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -36454,9 +36413,8 @@ msgid "Draw an arc"
 msgstr "円弧を描画"
 
 #: pcbnew/tools/drawing_tool.cpp:706
-#, fuzzy
 msgid "Place an image"
-msgstr "画像として保存"
+msgstr "画像を配置する"
 
 #: pcbnew/tools/drawing_tool.cpp:953
 msgid "Place a text"
@@ -37500,7 +37458,6 @@ msgid "Toggle net highlighting"
 msgstr "ネットのハイライトを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:771
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "選択されたネットをハイライト表示"
 
@@ -38178,34 +38135,28 @@ msgid "Footprint Name"
 msgstr "フットプリント名"
 
 #: pcbnew/tools/pcb_control.cpp:1265
-#, fuzzy
 msgid "Resolved clearance"
-msgstr "解決済みクリアランス: %s."
+msgstr "解決済みクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1270
-#, fuzzy
 msgid "Actual clearance"
-msgstr "パッド抜きのクリアランス"
+msgstr "実際のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1311
-#, fuzzy
 msgid "Resolved hole clearance"
-msgstr "解決済みクリアランス: %s."
+msgstr "解決済みの穴のクリアランス: %s."
 
 #: pcbnew/tools/pcb_control.cpp:1316
-#, fuzzy
 msgid "Actual hole clearance"
-msgstr "穴から穴へのクリアランス:"
+msgstr "実際の穴のクリアランス:"
 
 #: pcbnew/tools/pcb_control.cpp:1348
-#, fuzzy
 msgid "Resolved edge clearance"
-msgstr "解決済みクリアランス: %s."
+msgstr "解決済みのエッジクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1353
-#, fuzzy
 msgid "Resolved margin clearance"
-msgstr "解決済みクリアランス: %s."
+msgstr "解決済みのマージンクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1362
 msgid "Selected Items"
@@ -38404,9 +38355,8 @@ msgid "Images"
 msgstr "画像"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show user images"
-msgstr "反転したイメージで表示"
+msgstr "ユーザー画像を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Front"
