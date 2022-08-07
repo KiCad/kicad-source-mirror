@@ -113,8 +113,7 @@ int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
     {
         DIALOG_CONFIGURE_PATHS dlg( m_frame, nullptr );
 
-        // Use QuasiModal so that HTML help window will work
-        if( dlg.ShowQuasiModal() == wxID_OK )
+        if( dlg.ShowModal() == wxID_OK )
             m_frame->Kiway().CommonSettingsChanged( true, false );
     }
 

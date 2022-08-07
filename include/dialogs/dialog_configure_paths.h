@@ -32,7 +32,7 @@
 
 
 class FILENAME_RESOLVER;
-class HTML_MESSAGE_BOX;
+class HTML_WINDOW;
 
 
 class DIALOG_CONFIGURE_PATHS: public DIALOG_CONFIGURE_PATHS_BASE
@@ -74,7 +74,8 @@ private:
     int                 m_gridWidth;
     bool                m_gridWidthsDirty;
 
-    HTML_MESSAGE_BOX*   m_helpDialog;
+    HTML_WINDOW*        m_helpBox;
+    int                 m_heightBeforeHelp;
 };
 
 #endif    // _DIALOG_CONFIGURE_PATHS_H_
