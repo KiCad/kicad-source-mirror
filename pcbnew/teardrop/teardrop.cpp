@@ -52,10 +52,16 @@ TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
 
 
 // Build a zone teardrop
+static ZONE_SETTINGS s_default_settings;      // Use zone default settings for teardrop
+
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
                                         std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack) const
 {
     ZONE* teardrop = new ZONE( m_board );
+
+    // teardrop settings are the last zone settings used by a zone dialog.
+    // override them by default.
+    s_default_settings.ExportSetting( *teardrop, false );
 
     // Add zone properties (priority will be fixed later)
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ?
@@ -77,7 +83,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     for( VECTOR2I pt: aPoints )
         outline->Append(pt.x, pt.y);
 
-    // Can be useful:
+    // Used in priority calculations:
     teardrop->CalculateFilledArea();
 
     return teardrop;
