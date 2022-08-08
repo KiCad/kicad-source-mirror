@@ -193,7 +193,7 @@ namespace SIM_VALUE_GRAMMAR
     struct garbageSuffix;
 
     template <> struct garbageSuffix<NOTATION::SI> : seq<> {};
-    template <> struct garbageSuffix<NOTATION::SPICE> : star<alnum> {};
+    template <> struct garbageSuffix<NOTATION::SPICE> : star<alpha> {};
 
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>

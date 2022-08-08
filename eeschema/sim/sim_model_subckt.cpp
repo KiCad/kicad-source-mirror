@@ -68,8 +68,6 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
         THROW_IO_ERROR( e.what() );
     }
 
-    wxASSERT( root );
-
     for( const auto& node : root->children )
     {
         if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )

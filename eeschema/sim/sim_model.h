@@ -62,6 +62,14 @@ namespace SIM_MODEL_GRAMMAR
                               quotedStringContent,
                               one<'"'>> {};
 
+    struct fieldFloatValue : seq<star<space>,
+                                 number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
+                                 star<not_at<space>, any>, // Garbage suffix.
+                                 star<space>> {};
+
+    struct fieldFloatValueGrammar : must<fieldFloatValue,
+                                         tao::pegtl::eof> {};
+
     struct param : plus<alnum> {};
 
     struct fieldParamValuePair : seq<param,
