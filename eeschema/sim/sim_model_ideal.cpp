@@ -23,8 +23,8 @@
  */
 
 #include <sim/sim_model_ideal.h>
-#include <tao/pegtl.hpp>
-#include <tao/pegtl/contrib/parse_tree.hpp>
+#include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 
 using PARAM = SIM_MODEL::PARAM;
 
