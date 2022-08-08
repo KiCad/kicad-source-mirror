@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,7 +68,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer3->Add( m_trackWidthsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_trackWidthsSortButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3->Add( m_trackWidthsSortButton, 0, wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( m_trackWidthsSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer3->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -128,7 +128,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer4->Add( m_viaSizesAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_viaSizesSortButton = new wxBitmapButton( sbSizer5->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer4->Add( m_viaSizesSortButton, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 5 );
+	bSizer4->Add( m_viaSizesSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer4->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -190,7 +190,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizer5->Add( m_diffPairsAddButton, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_diffPairsSortButton = new wxBitmapButton( sbSizer6->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer5->Add( m_diffPairsSortButton, 0, wxALIGN_LEFT|wxALIGN_RIGHT, 5 );
+	bSizer5->Add( m_diffPairsSortButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );

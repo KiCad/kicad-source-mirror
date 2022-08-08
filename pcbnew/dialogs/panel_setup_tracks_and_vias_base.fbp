@@ -274,7 +274,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Add track width</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -312,7 +312,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxLEFT|wxRIGHT</property>
+                                            <property name="flag">wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBitmapButton" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -348,7 +348,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Sort track widths</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -432,7 +432,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Delete track width</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -619,7 +619,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Add via size</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -657,7 +657,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_LEFT|wxALIGN_RIGHT</property>
+                                            <property name="flag">wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBitmapButton" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -693,7 +693,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Sort via sizes</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -777,7 +777,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Delete via size</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -964,7 +964,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Add diff pair</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -1002,7 +1002,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_LEFT|wxALIGN_RIGHT</property>
+                                            <property name="flag">wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBitmapButton" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -1038,7 +1038,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Sort diff pairs</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
@@ -1122,7 +1122,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">MyButton</property>
+                                                <property name="label">Delete diff pair</property>
                                                 <property name="margins"></property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
