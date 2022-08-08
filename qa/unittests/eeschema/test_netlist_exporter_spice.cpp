@@ -246,10 +246,12 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 
 // Incomplete. TODO.
 
-/*BOOST_AUTO_TEST_CASE( Passives )
+BOOST_AUTO_TEST_CASE( Rlc )
 {
-    TestNetlist( "passives" );
-}*/
+    TestNetlist( "rlc" );
+    TestTranPoint( 9.43e-3, { { "V(/Vp)", -19e-3 }, { "I(Rs)", 19e-3 } } );
+    TestTranPoint( 9.74e-3, { { "V(/Vp)", 19e-3 }, { "I(Rs)", -19e-3 } } );
+}
 
 
 BOOST_AUTO_TEST_CASE( Tlines )
