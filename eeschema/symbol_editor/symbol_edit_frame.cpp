@@ -1232,8 +1232,12 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
 {
     if( !m_symbol )
     {
-        return BOX2I( VECTOR2I( Mils2iu( -100 ), Mils2iu( -100 ) ),
-                      VECTOR2I( Mils2iu( 200 ), Mils2iu( 200 ) ) );
+        // Gives a reasonable drawing area size
+        int width = Millimeter2iu( 50 );
+        int height = Millimeter2iu( 30 );
+
+        return BOX2I( VECTOR2I( -width/2, -height/2 ),
+                      VECTOR2I( width, height ) );
     }
     else
     {
