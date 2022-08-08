@@ -85,7 +85,7 @@ public:
     {
         // Our simulator is actually Ngspice.
         NGSPICE* ngspice = dynamic_cast<NGSPICE*>( m_simulator.get() );
-        BOOST_TEST_CHECK( ngspice );
+        BOOST_REQUIRE( ngspice );
 
         ngspice->SetReporter( m_reporter.get() );
 
@@ -158,7 +158,7 @@ public:
                         maxError = aMaxRelError;
                     }
 
-                    BOOST_REQUIRE_LE( abs( yVector[i] - refValue ), maxError );
+                    BOOST_CHECK_LE( abs( yVector[i] - refValue ), maxError );
                 }
             }
         }
