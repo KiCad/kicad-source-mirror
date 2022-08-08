@@ -474,6 +474,13 @@ if( KICAD_SPICE )
         PRIVATE
             ${NGSPICE_LIBRARY}
         )
+
+    if( MSVC )
+        # Allow for MSVC to debug ngspice from the build directory
+        add_custom_command( TARGET eeschema_kiface POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:eeschema_kiface>"
+            )
+    endif()
 endif()
 
 set_target_properties( eeschema_kiface PROPERTIES

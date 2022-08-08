@@ -99,6 +99,7 @@ add_executable( qa_eeschema
 )
 
 target_link_libraries( qa_eeschema
+PRIVATE
     eeschema_kiface_objects
     common
     pcbcommon
@@ -109,6 +110,14 @@ target_link_libraries( qa_eeschema
     ${GDI_PLUS_LIBRARIES}
     ${Boost_LIBRARIES}
 )
+
+if( KICAD_SPICE AND MSVC )
+    # Allow for MSVC to run from the build directory
+    add_custom_command( TARGET qa_eeschema POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:qa_eeschema>"
+        )
+endif()
+
 
 # Eeschema tests, so pretend to be eeschema (for units, etc)
 target_compile_definitions( qa_eeschema

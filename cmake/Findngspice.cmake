@@ -125,6 +125,14 @@ if( WIN32 AND MSYS )
     else()
         message( STATUS ": libngspice shared lib found: ${NGSPICE_DLL}\n" )
     endif()
+elseif( WIN32 AND MSVC )
+    find_file( NGSPICE_DLL NAMES ngspice.dll 
+            PATHS
+                ${NGSPICE_ROOT_DIR}
+            PATH_SUFFIXES
+                bin
+                lib
+            )
 else()
     set( NGSPICE_DLL "${NGSPICE_LIBRARY}" )
 endif()
