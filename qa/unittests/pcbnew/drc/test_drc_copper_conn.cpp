@@ -99,7 +99,8 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
                                                      itemMap ) );
             }
 
-            BOOST_ERROR( wxString::Format( "DRC connection width: %s, failed", test.first ) );
+            BOOST_ERROR( wxString::Format( "DRC connection width: %s, failed (violations found %d expected %d)",
+                                            test.first, (int)violations.size(), test.second ) );
         }
     }
 }
