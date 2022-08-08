@@ -307,8 +307,6 @@ void PAGED_DIALOG::UpdateResetButton( int aPage )
 {
     wxWindow* panel = m_treebook->GetPage( aPage );
 
-    wxCHECK( panel, /* void */ );
-
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
     {
@@ -317,7 +315,7 @@ void PAGED_DIALOG::UpdateResetButton( int aPage )
             m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
                                                        m_treebook->GetPageText( aPage ) ) );
             m_resetButton->SetToolTip( panel->GetHelpTextAtPoint( wxPoint( -INT_MAX, INT_MAX ),
-                                       wxHelpEvent::Origin_Unknown ) );
+                                                                  wxHelpEvent::Origin_Unknown ) );
             m_resetButton->Enable( true );
         }
         else
