@@ -92,21 +92,12 @@ public:
         return m_sourceVector->at( aIndex );
     }
 
-
     void DeleteItem( int aIndex, bool aDeep ) override
     {
         if( aDeep )
         {
             auto item = m_sourceVector->at( aIndex );
             m_sourceVector->erase( m_sourceVector->begin() + aIndex );
-        }
-    }
-
-    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override
-    {
-        if( aDeep )
-        {
-            m_sourceVector->clear();
         }
     }
 

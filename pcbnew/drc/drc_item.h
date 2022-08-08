@@ -231,8 +231,6 @@ public:
 
     void DeleteItem( int aIndex, bool aDeep ) override;
 
-    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override;
-
 private:
     BOARD*                   m_board;
     MARKER_BASE::TYPEMARKER  m_markerType;

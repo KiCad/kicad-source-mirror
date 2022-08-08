@@ -267,8 +267,6 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     m_frame->RecordDRCExclusions();
     deleteAllMarkers( true );
-    m_unconnectedTreeModel->DeleteItems( false, true, true );
-    m_footprintWarningsTreeModel->DeleteItems( false, true, true );
 
     std::vector<std::reference_wrapper<RC_ITEM>> violations = DRC_ITEM::GetItemsWithSeverities();
     m_ignoredList->DeleteAllItems();
@@ -998,7 +996,11 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markersTreeModel->DeleteItems( false, aIncludeExclusions, true );
+    m_markersTreeModel->DeleteItems( false, aIncludeExclusions, false );
+    m_unconnectedTreeModel->DeleteItems( false, aIncludeExclusions, false );
+    m_footprintWarningsTreeModel->DeleteItems( false, aIncludeExclusions, false );
+
+    m_frame->GetBoard()->DeleteMARKERs( true, aIncludeExclusions );
 }
 
 

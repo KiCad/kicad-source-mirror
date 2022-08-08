@@ -61,8 +61,6 @@ public:
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
 
-    virtual void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) = 0;
-
     virtual ~RC_ITEMS_PROVIDER() { }
 };
 

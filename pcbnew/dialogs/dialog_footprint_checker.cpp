@@ -354,7 +354,8 @@ void DIALOG_FOOTPRINT_CHECKER::deleteAllMarkers()
     // Clear current selection list to avoid selection of deleted items
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_markersTreeModel->DeleteItems( false, true, true );
+    m_markersTreeModel->DeleteItems( false, true, false );
+    m_frame->GetBoard()->DeleteMARKERs( true, true );
 }
 
 

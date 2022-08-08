@@ -379,13 +379,3 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
 }
 
 
-void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteAllItems( bool aIncludeExclusions, bool aDeep )
-{
-    // Filtered list was already handled through DeleteItem() by the tree control
-
-    if( aDeep )
-    {
-        SCH_SCREENS screens( m_schematic->Root() );
-        screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, aIncludeExclusions );
-    }
-}

@@ -204,8 +204,6 @@ public:
 
     void DeleteItem( int aIndex, bool aDeep ) override;
 
-    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override;
-
 private:
 
     void visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const;

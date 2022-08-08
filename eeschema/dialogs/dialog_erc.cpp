@@ -908,7 +908,10 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
     // Clear current selection list to avoid selection of deleted items
     m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_markerTreeModel->DeleteItems( false, aIncludeExclusions, true );
+    m_markerTreeModel->DeleteItems( false, aIncludeExclusions, false );
+
+    SCH_SCREENS screens( m_parent->Schematic().Root() );
+    screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, aIncludeExclusions );
 }
 
 

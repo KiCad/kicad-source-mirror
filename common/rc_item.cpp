@@ -539,8 +539,8 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
             ItemDeleted( parentItem, markerItem );
         }
 
-        // Only deep delete the current item here; others will be done through the
-        // DeleteAllItems() call below, which is more efficient.
+        // Only deep delete the current item here; others will be done by the caller, which
+        // can more efficiently delete all markers on the board.
         m_rcItemsProvider->DeleteItem( i, aDeep && aCurrentOnly );
 
         if( lastGood > i )
@@ -554,9 +554,6 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
     for( RC_TREE_NODE* item : to_delete )
         delete( item );
-
-    if( !aCurrentOnly && aDeep )
-        m_rcItemsProvider->DeleteAllItems( aIncludeExclusions, aDeep );
 
     if( m_view )
         m_view->Thaw();

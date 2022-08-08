@@ -484,11 +484,3 @@ void DRC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
         m_board->Delete( marker );
 }
 
-
-void DRC_ITEMS_PROVIDER::DeleteAllItems( bool aIncludeExclusions, bool aDeep )
-{
-    // Filtered list was already handled through DeleteItem() by the tree control
-
-    if( aDeep )
-        m_board->DeleteMARKERs( true, aIncludeExclusions );
-}
