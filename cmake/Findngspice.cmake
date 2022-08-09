@@ -1,7 +1,7 @@
 # CMake script for finding libngspice
 
 # Copyright (C) 2016 CERN
-# Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2022 Kicad Developers, see AUTHORS.txt for contributors.
 #
 # Author: Maciej Suminski <maciej.suminski@cern.ch>
 #
@@ -133,6 +133,12 @@ elseif( WIN32 AND MSVC )
                 bin
                 lib
             )
+
+    find_path(NGSPICE_CM_DIR
+        NAMES analog.cm digital.cm spice2poly.cm
+        PATH_SUFFIXES
+            lib/ngspice
+    )
 else()
     set( NGSPICE_DLL "${NGSPICE_LIBRARY}" )
 endif()

@@ -128,6 +128,10 @@ if( KICAD_SPICE AND MSVC )
     add_custom_command( TARGET qa_eeschema POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:qa_eeschema>"
         )
+
+    add_custom_command( TARGET qa_eeschema POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${NGSPICE_CM_DIR}" "$<TARGET_FILE_DIR:qa_eeschema>/ngspice"
+        )
 endif()
 
 

@@ -480,6 +480,10 @@ if( KICAD_SPICE )
         add_custom_command( TARGET eeschema_kiface POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${NGSPICE_DLL}" "$<TARGET_FILE_DIR:eeschema_kiface>"
             )
+
+        add_custom_command( TARGET eeschema_kiface POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${NGSPICE_CM_DIR}" "$<TARGET_FILE_DIR:eeschema_kiface>/ngspice"
+            )
     endif()
 endif()
 
