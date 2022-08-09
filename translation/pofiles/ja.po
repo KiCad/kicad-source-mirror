@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-08 11:16+0000\n"
+"PO-Revision-Date: 2022-08-09 13:20+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -30675,9 +30675,8 @@ msgid "Assertion failure"
 msgstr "アサーション失敗"
 
 #: pcbnew/drc/drc_item.cpp:200
-#, fuzzy
 msgid "Copper sliver"
-msgstr "導体レイヤー:"
+msgstr "導体スライバー"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Solder mask aperture bridges items with different nets"
@@ -33589,7 +33588,7 @@ msgstr "違反"
 
 #: pcbnew/pcb_marker.cpp:143
 msgid "Severity"
-msgstr "重大度"
+msgstr "深刻度"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
