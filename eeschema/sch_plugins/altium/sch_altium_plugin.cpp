@@ -381,7 +381,8 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
         case ALTIUM_SCH_RECORD::HARNESS_ENTRY:
             ParseHarnessEntry( properties );
             break;
-        case ALTIUM_SCH_RECORD::RECORD_217:
+        case ALTIUM_SCH_RECORD::HARNESS_TYPE:
+            ParseHarnessType( properties ); 
             break;
         case ALTIUM_SCH_RECORD::SIGNAL_HARNESS:
             ParseSignalHarness( properties );
@@ -1573,6 +1574,37 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& a
         sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
     }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseHarnessType( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_HARNESS_TYPE elem( aProperties );
+
+    const auto& sheetIt = m_sheets.find( m_harnessEntryParent );
+
+    if( sheetIt == m_sheets.end() )
+    {
+        m_reporter->Report( wxString::Format( _( "Harness type's parent (%d) not found." ),
+                                              m_harnessEntryParent ),
+                RPT_SEVERITY_ERROR );
+        return;
+    }
+
+    SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
+
+    sheetNameField.SetPosition( elem.location + m_sheetOffset );
+    sheetNameField.SetText( elem.text );
+    sheetNameField.SetVisible( true ); // Always set as visible so user is aware about ( !elem.isHidden );
+    SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
+    sheetNameField.SetTextColor( GetColorFromInt( elem.color ) );
+
+    m_reporter->Report(
+            wxString::Format( _( "Altium's Harness Connector (%s) was imported as "
+                                 "Hierarchical sheet. Please review imported schematic, as "
+                                 "KiCad does natively support these Altium elements." ),
+                              elem.text ),
+            RPT_SEVERITY_WARNING );
 }
 
 

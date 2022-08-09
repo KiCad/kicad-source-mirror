@@ -101,7 +101,7 @@ enum class ALTIUM_SCH_RECORD
     COMPILE_MASK        = 211,
     HARNESS_CONNECTOR   = 215,
     HARNESS_ENTRY       = 216,
-    RECORD_217          = 217,
+    HARNESS_TYPE        = 217,
     SIGNAL_HARNESS      = 218,
     RECORD_226          = 226,
 };
@@ -472,6 +472,26 @@ struct ASCH_HARNESS_ENTRY
     ASCH_SHEET_ENTRY_SIDE side;
 
     explicit ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aProps );
+};
+
+
+struct ASCH_HARNESS_TYPE
+{
+    //int ownerindex; // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead!
+    int ownerpartid; // Always -1, presumably safe to remuve
+
+    int color;
+    int indexInSheet;
+    int fontId;
+
+    bool isHidden;
+    bool ownerIndexAdditionalList; // what is that?
+    
+    VECTOR2I location;
+    
+    wxString text;
+
+    explicit ASCH_HARNESS_TYPE( const std::map<wxString, wxString>& aProps );
 };
 
 

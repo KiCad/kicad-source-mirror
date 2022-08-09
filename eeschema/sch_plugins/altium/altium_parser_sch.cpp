@@ -473,6 +473,27 @@ ASCH_HARNESS_ENTRY::ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aPro
 }
 
 
+ASCH_HARNESS_TYPE::ASCH_HARNESS_TYPE( const std::map<wxString, wxString>& aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_TYPE );
+
+    //ownerindex = ReadOwnerIndex( aProps ); // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead!
+    ownerpartid = ReadOwnerPartId( aProps );
+
+    text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
+
+    location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+                         -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+
+    isHidden = ALTIUM_PARSER::ReadBool( aProps, "ISHIDDEN", false );
+    ownerIndexAdditionalList = ALTIUM_PARSER::ReadBool( aProps, "OWNERINDEXADDITIONALLIST", true );
+
+    indexInSheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+    color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    fontId = ALTIUM_PARSER::ReadInt( aProps, "TEXTFONTID", 0 );
+}
+
+
 ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::RECTANGLE );
