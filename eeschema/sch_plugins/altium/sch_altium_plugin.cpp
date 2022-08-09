@@ -2227,6 +2227,10 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
         break;
     }
 
+    label->AutoplaceFields( screen, false );
+    // Default "Sheet References" field should be hidden, at least for now
+    label->GetFields()[0].SetVisible( false );
+
     label->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( label );
 
