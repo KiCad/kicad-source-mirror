@@ -184,6 +184,12 @@ void remove_duplicates( _Container& __c )
     __c.erase( std::unique( __c.begin(), __c.end() ), __c.end() );
 }
 
+template <class _Container, class _Function>
+void remove_duplicates( _Container& __c, _Function&& __f )
+{
+    __c.erase( std::unique( __c.begin(), __c.end(), std::forward<_Function>( __f ) ), __c.end() );
+}
+
 /**
  * @brief Integral version of std::signbit that works all compilers.
  */

@@ -31,7 +31,7 @@
 #include <symbol_library.h>
 #include <string_utils.h>
 #include <connection_graph.h>
-#include <string_utils.h>
+#include <core/kicad_algo.h>
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 
@@ -586,13 +586,13 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
         pinList.clear();
         lcomp->GetPins( pinList, 0, 0 );
 
-        /* we must erase redundant Pins references in pinList
-         * These redundant pins exist because some pins
-         * are found more than one time when a symbol has
-         * multiple parts per package or has 2 representations (DeMorgan conversion)
-         * For instance, a 74ls00 has DeMorgan conversion, with different pin shapes,
-         * and therefore each pin  appears 2 times in the list.
-         * Common pins (VCC, GND) can also be found more than once.
+        /*
+         * We must erase redundant Pins references in pinList
+         * These redundant pins exist because some pins are found more than one time when a
+         * symbol has multiple parts per package or has 2 representations (DeMorgan conversion).
+         * For instance, a 74ls00 has DeMorgan conversion, with different pin shapes, and
+         * therefore each pin  appears 2 times in the list. Common pins (VCC, GND) can also be
+         * found more than once.
          */
         sort( pinList.begin(), pinList.end(), sortPinsByNumber );
         for( int ii = 0; ii < (int)pinList.size()-1; ii++ )
@@ -720,31 +720,28 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
-                   []( const NET_NODE& a, const NET_NODE& b )
-                   {
-                       wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
-                       wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
+        []( const NET_NODE& a, const NET_NODE& b )
+                {
+                    wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
+                    wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
 
-                       if( refA == refB )
-                           return a.m_Pin->GetShownNumber() < b.m_Pin->GetShownNumber();
+                    if( refA == refB )
+                        return a.m_Pin->GetShownNumber() < b.m_Pin->GetShownNumber();
 
-                       return refA < refB;
-                   } );
+                    return refA < refB;
+                } );
 
-        // Some duplicates can exist, for example on multi-unit parts with duplicated
-        // pins across units.  If the user connects the pins on each unit, they will
-        // appear on separate subgraphs.  Remove those here:
-        net_record->m_Nodes.erase(
-                std::unique( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
-                        []( const NET_NODE& a, const NET_NODE& b )
-                        {
-                            wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
-                            wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
+        // Some duplicates can exist, for example on multi-unit parts with duplicated pins across
+        // units.  If the user connects the pins on each unit, they will appear on separate
+        // subgraphs.  Remove those here:
+        alg::remove_duplicates( net_record->m_Nodes,
+                []( const NET_NODE& a, const NET_NODE& b )
+                {
+                    wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
+                    wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
 
-                            return refA == refB
-                                        && a.m_Pin->GetShownNumber() == b.m_Pin->GetShownNumber();
-                        } ),
-                net_record->m_Nodes.end() );
+                    return refA == refB && a.m_Pin->GetShownNumber() == b.m_Pin->GetShownNumber();
+                } );
 
         for( const NET_NODE& netNode : net_record->m_Nodes )
         {
@@ -761,7 +758,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
                 xnets->AddChild( xnet = node( wxT( "net" ) ) );
                 xnet->AddAttribute( wxT( "code" ), netCodeTxt );
-                xnet->AddAttribute( wxT( "name" ), net_record->m_Name );
+                xnet->AddAttribute( wxT( "name" ), EscapeString( net_record->m_Name, CTX_NETNAME ) );
 
                 added = true;
             }
