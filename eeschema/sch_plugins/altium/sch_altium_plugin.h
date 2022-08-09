@@ -122,6 +122,7 @@ private:
     void ParseArc( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
+    void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
@@ -169,6 +170,9 @@ private:
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
     std::map<int, int>              m_altiumImplementationList;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
+
+    int m_harnessOwnerIndexOffset; // Add offset to all harness ownerIndex'es after parsing FileHeader
+    int m_harnessEntryParent; // used to identify harness connector for harness entry element
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_

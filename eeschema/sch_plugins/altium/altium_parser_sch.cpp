@@ -433,6 +433,21 @@ ASCH_SIGNAL_HARNESS::ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aP
 }
 
 
+ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxString>& aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_CONNECTOR );
+
+    ownerpartid = ReadOwnerPartId( aProps );
+
+    location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+                         -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+    size = wxSize( ReadKiCadUnitFrac( aProps, "XSIZE" ), ReadKiCadUnitFrac( aProps, "YSIZE" ) );
+
+    color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    areaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+}
+
+
 ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::RECTANGLE );

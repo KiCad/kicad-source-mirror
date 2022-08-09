@@ -99,7 +99,7 @@ enum class ALTIUM_SCH_RECORD
     RECORD_48           = 48,
     NOTE                = 209,
     COMPILE_MASK        = 211,
-    RECORD_215          = 215,
+    HARNESS_CONNECTOR   = 215,
     RECORD_216          = 216,
     RECORD_217          = 217,
     SIGNAL_HARNESS      = 218,
@@ -422,6 +422,26 @@ struct ASCH_SIGNAL_HARNESS
     explicit ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps );
 };
 
+
+struct ASCH_HARNESS_CONNECTOR
+{
+    int ownerpartid; // always -1, can be safely ignored I think
+
+    VECTOR2I location;
+    wxSize   size;
+
+    int areaColor;
+    int color;
+    int indexInSheet; // Keeps increasing nicely
+    int lineWidth;
+    //int locationX; // keep just in case
+    //int locationY;
+    int locationPrimaryConnectionPosition;
+    //int xSize;     // keep just in case
+    //int ySize;
+
+    explicit ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxString>& aProps );
+};
 
 
 struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE

@@ -375,7 +375,8 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
         // see: https://github.com/vadmium/python-altium/blob/master/format.md
         switch( record )
         {
-        case ALTIUM_SCH_RECORD::RECORD_215:
+        case ALTIUM_SCH_RECORD::HARNESS_CONNECTOR:
+            ParseHarnessConnector( index, properties );
             break;
         case ALTIUM_SCH_RECORD::RECORD_216:
             break;
@@ -1479,6 +1480,46 @@ void SCH_ALTIUM_PLUGIN::ParseSignalHarness( const std::map<wxString, wxString>& 
     {
         // No clue if this situation can ever exist
         m_reporter->Report( _( "Signal harness, belonging to the part is not currently supported." ), RPT_SEVERITY_ERROR );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_HARNESS_CONNECTOR elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+    SCH_SHEET* sheet = new SCH_SHEET(
+            /* aParent */ m_currentSheet,
+            /* aPosition */ elem.location + m_sheetOffset,
+            /* aSize */ elem.size );
+    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+
+    sheet->SetBackgroundColor( GetColorFromInt( elem.areaColor ) );
+    sheet->SetBorderColor( GetColorFromInt( elem.color ) );
+
+    sheet->SetScreen( screen );
+
+    sheet->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( sheet );
+
+    SCH_SHEET_PATH sheetpath;
+    m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+    sheetpath.push_back( sheet );
+
+    sheet->AddInstance( sheetpath );
+    sheet->SetPageNumber( sheetpath, "Harness #" );
+
+    m_harnessEntryParent = aIndex + m_harnessOwnerIndexOffset;
+    m_sheets.insert( { m_harnessEntryParent, sheet } );
+    }
+    else
+    {
+        // I have no clue if this situation can ever exist
+        m_reporter->Report(
+                _( "Harness connector, belonging to the part is not currently supported." ),
+                RPT_SEVERITY_ERROR );
     }
 }
 
