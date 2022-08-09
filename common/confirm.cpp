@@ -281,7 +281,7 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
 {
     if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
     {
-        wxLogDebug( "%s", aText );
+        wxLogError( "%s", aText );
         return;
     }
 
@@ -300,7 +300,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 {
     if( !wxTheApp || !wxTheApp->IsMainLoopRunning() )
     {
-        wxLogDebug( "%s %s", aText, aExtraInfo );
+        wxLogError( "%s %s", aText, aExtraInfo );
         return;
     }
 
