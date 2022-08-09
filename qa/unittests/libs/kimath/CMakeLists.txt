@@ -22,7 +22,7 @@
 #
 # Unit tests for KiCad math routines.
 
-set( KIMATH_SRCS
+set( QA_KIMATH_SRCS
     kimath_test_module.cpp
 
     test_kimath.cpp
@@ -43,7 +43,21 @@ set( KIMATH_SRCS
     math/test_util.cpp
 )
 
-add_executable( qa_kimath ${KIMATH_SRCS} )
+if( WIN32 )
+    # We want to declare a resource manifest on Windows to enable UTF8 mode
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    if( MINGW )
+        # QA_KIMATH_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_kimath )
+    else()
+        set( QA_KIMATH_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_kimath.rc )
+    endif()
+endif()
+
+add_executable( qa_kimath
+    ${QA_KIMATH_SRCS}
+    ${QA_KIMATH_RESOURCES}
+)
 
 target_link_libraries( qa_kimath
     qa_utils

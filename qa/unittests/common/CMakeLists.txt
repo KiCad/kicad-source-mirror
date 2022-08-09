@@ -21,7 +21,7 @@
 
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-set( common_srcs
+set( QA_COMMON_SRCS
     # This is needed for the global mock objects
     ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
@@ -54,7 +54,7 @@ set( common_srcs
     view/test_zoom_controller.cpp
 )
 
-set( common_libs
+set( QA_COMMON_LIBS
     common
     libcontext
     gal
@@ -62,10 +62,23 @@ set( common_libs
     ${wxWidgets_LIBRARIES}
 )
 
+if( WIN32 )
+    # We want to declare a resource manifest on Windows to enable UTF8 mode
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    if( MINGW )
+        # QA_COMMON_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_common )
+    else()
+        set( QA_COMMON_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_common.rc )
+    endif()
+endif()
+
 
 # Test executable for non-program-specific code
-add_executable( qa_common ${common_srcs} )
-target_link_libraries( qa_common ${common_libs} )
+add_executable( qa_common
+    ${QA_COMMON_SRCS}
+    ${QA_COMMON_RESOURCES} )
+target_link_libraries( qa_common ${QA_COMMON_LIBS} )
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

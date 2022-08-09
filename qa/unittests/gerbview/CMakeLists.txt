@@ -28,13 +28,20 @@ set( QA_GERBVIEW_SRCS
     ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_format_units.cpp
 )
 
+if( WIN32 )
+    # We want to declare a resource manifest on Windows to enable UTF8 mode
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    if( MINGW )
+        # QA_GERBVIEW_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_gerbview )
+    else()
+        set( QA_GERBVIEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_gerbview.rc )
+    endif()
+endif()
+
 add_executable( qa_gerbview
     ${QA_GERBVIEW_SRCS}
-
-    # In order to enable this, the actual Gerbview kiface build must be updated to match pcbnew's
-    # Older CMakes cannot link OBJECT libraries
-    # https://cmake.org/pipermail/cmake/2013-November/056263.html
-    $<TARGET_OBJECTS:gerbview_kiface_objects>
+    ${QA_GERBVIEW_RESOURCES}
 )
 
 # Gerbview tests, so pretend to be gerbview (for units, etc)
@@ -52,6 +59,7 @@ target_include_directories( qa_gerbview PRIVATE
 add_dependencies( qa_gerbview gerbview )
 
 target_link_libraries( qa_gerbview
+    gerbview_kiface_objects
     pcbcommon
     gal
     common

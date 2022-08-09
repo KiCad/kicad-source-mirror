@@ -55,8 +55,20 @@ set( QA_PCBNEW_SRCS
     group_saveload.cpp
 )
 
+if( WIN32 )
+    # We want to declare a resource manifest on Windows to enable UTF8 mode
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    if( MINGW )
+        # QA_PCBNEW_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_pcbnew )
+    else()
+        set( QA_PCBNEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_pcbnew.rc )
+    endif()
+endif()
+
 add_executable( qa_pcbnew
     ${QA_PCBNEW_SRCS}
+    ${QA_PCBNEW_RESOURCES}
 )
 
 # Pcbnew tests, so pretend to be pcbnew (for units, etc)

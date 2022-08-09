@@ -1,0 +1,7 @@
+icon_qa_common ICON "../resources/bitmaps_png/icons/icon_kicad.ico"
+
+#define RC_VER_FILE_DESCRIPTION "KiCad QA KiMath " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "qa_kimath"
+#define RC_VER_ORIGINALFILENAME "qa_kimath.exe"
+
+#include "kiwin32.rc"

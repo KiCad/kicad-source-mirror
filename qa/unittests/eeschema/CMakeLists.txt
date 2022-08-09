@@ -94,8 +94,20 @@ if( KICAD_SPICE )
     )
 endif()
 
+if( WIN32 )
+    # We want to declare a resource manifest on Windows to enable UTF8 mode
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    if( MINGW )
+        # QA_EESCHEMA_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( qa_eeschema )
+    else()
+        set( QA_EESCHEMA_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/qa_eeschema.rc )
+    endif()
+endif()
+
 add_executable( qa_eeschema
     ${QA_EESCHEMA_SRCS}
+    ${QA_EESCHEMA_RESOURCES}
 )
 
 target_link_libraries( qa_eeschema

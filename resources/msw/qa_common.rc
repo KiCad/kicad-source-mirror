@@ -1,0 +1,7 @@
+icon_qa_common ICON "../resources/bitmaps_png/icons/icon_kicad.ico"
+
+#define RC_VER_FILE_DESCRIPTION "KiCad QA Common " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "qa_common"
+#define RC_VER_ORIGINALFILENAME "qa_common.exe"
+
+#include "kiwin32.rc"

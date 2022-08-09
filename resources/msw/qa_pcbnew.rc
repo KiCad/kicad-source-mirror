@@ -1,0 +1,6 @@
+icon_qa_pcbnew ICON "../resources/bitmaps_png/icons/icon_pcbnew.ico"
+
+#define RC_VER_FILE_DESCRIPTION "KiCad QA PCB Editor " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "qa_pcbnew"
+#define RC_VER_ORIGINALFILENAME "qa_pcbnew.exe"
+#include "kiwin32.rc"
