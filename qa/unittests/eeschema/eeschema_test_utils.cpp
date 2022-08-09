@@ -71,11 +71,12 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     wxFileName pro( fn );
     pro.SetExt( ProjectFileExtension );
 
+    // Schematic must be reset before a project is reloaded
+    m_schematic.Reset();
     m_manager.LoadProject( pro.GetFullPath() );
 
     m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
 
-    m_schematic.Reset();
     m_schematic.SetProject( &m_manager.Prj() );
     m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
 
