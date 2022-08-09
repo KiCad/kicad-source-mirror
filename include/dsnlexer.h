@@ -89,7 +89,7 @@ public:
      * @param aFile is an open file, which will be closed when this is destructed.
      * @param aFileName is the name of the file
      */
-    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
               FILE* aFile, const wxString& aFileName );
 
     /**
@@ -101,7 +101,7 @@ public:
      * @param aSExpression is text to feed through a STRING_LINE_READER
      * @param aSource is a description of aSExpression, used for error reporting.
      */
-    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
               const std::string& aSExpression, const wxString& aSource = wxEmptyString );
 
     /**
@@ -126,7 +126,7 @@ public:
      * @param aLineReader is any subclassed instance of LINE_READER, such as
      *  #STRING_LINE_READER or #FILE_LINE_READER.  No ownership is taken.
      */
-    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
               LINE_READER* aLineReader = nullptr );
 
     virtual ~DSNLEXER();
@@ -530,7 +530,7 @@ protected:
 
     const KEYWORD*      keywords;               ///< table sorted by CMake for bsearch()
     unsigned            keywordCount;           ///< count of keywords table
-    KEYWORD_MAP         keyword_hash;           ///< fast, specialized "C string" hashtable
+    const KEYWORD_MAP*  keywordsLookup;         ///< fast, specialized "C string" hashtable
 #endif // SWIG
 };
 

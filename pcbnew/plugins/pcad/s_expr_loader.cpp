@@ -60,7 +60,7 @@ static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
     fseek( fp, 0, SEEK_SET );
 
     // lexer now owns fp, will close on exception or return
-    DSNLEXER lexer( empty_keywords, 0, fp,  aFileName );
+    DSNLEXER lexer( empty_keywords, 0, nullptr, fp,  aFileName );
 
     iNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "www.lura.sk" ) );
 

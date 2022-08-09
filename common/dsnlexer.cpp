@@ -49,27 +49,11 @@ void DSNLEXER::init()
     commentsAreTokens = false;
 
     curOffset = 0;
-
-#if 1
-    if( keywordCount > 11 )
-    {
-        // resize the hashtable bucket count
-        keyword_hash.reserve( keywordCount );
-    }
-
-    // fill the specialized "C string" hashtable from keywords[]
-    const KEYWORD*  it  = keywords;
-    const KEYWORD*  end = it + keywordCount;
-
-    for( ; it < end; ++it )
-    {
-        keyword_hash[it->name] = it->token;
-    }
-#endif
 }
 
 
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    const KEYWORD_MAP* aKeywordMap,
                     FILE* aFile, const wxString& aFilename ) :
     iOwnReaders( true ),
     start( nullptr ),
@@ -77,7 +61,8 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     limit( nullptr ),
     reader( nullptr ),
     keywords( aKeywordTable ),
-    keywordCount( aKeywordCount )
+    keywordCount( aKeywordCount ),
+    keywordsLookup( aKeywordMap )
 {
     FILE_LINE_READER* fileReader = new FILE_LINE_READER( aFile, aFilename );
     PushReader( fileReader );
@@ -86,6 +71,7 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 
 
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    const KEYWORD_MAP* aKeywordMap,
                     const std::string& aClipboardTxt, const wxString& aSource ) :
     iOwnReaders( true ),
     start( nullptr ),
@@ -93,7 +79,8 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     limit( nullptr ),
     reader( nullptr ),
     keywords( aKeywordTable ),
-    keywordCount( aKeywordCount )
+    keywordCount( aKeywordCount ),
+    keywordsLookup( aKeywordMap )
 {
     STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, aSource.IsEmpty() ?
                                         wxString( FMT_CLIPBOARD ) : aSource );
@@ -103,6 +90,7 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 
 
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    const KEYWORD_MAP* aKeywordMap,
                     LINE_READER* aLineReader ) :
     iOwnReaders( false ),
     start( nullptr ),
@@ -110,7 +98,8 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     limit( nullptr ),
     reader( nullptr ),
     keywords( aKeywordTable ),
-    keywordCount( aKeywordCount )
+    keywordCount( aKeywordCount ),
+    keywordsLookup( aKeywordMap )
 {
     if( aLineReader )
         PushReader( aLineReader );
@@ -127,7 +116,8 @@ DSNLEXER::DSNLEXER( const std::string& aSExpression, const wxString& aSource ) :
     limit( nullptr ),
     reader( nullptr ),
     keywords( empty_keywords ),
-    keywordCount( 0 )
+    keywordCount( 0 ),
+    keywordsLookup( nullptr )
 {
     STRING_LINE_READER* stringReader = new STRING_LINE_READER( aSExpression, aSource.IsEmpty() ?
                                         wxString( FMT_CLIPBOARD ) : aSource );
@@ -239,10 +229,13 @@ LINE_READER* DSNLEXER::PopReader()
 
 int DSNLEXER::findToken( const std::string& tok ) const
 {
-    KEYWORD_MAP::const_iterator it = keyword_hash.find( tok.c_str() );
+    if( keywordsLookup != nullptr )
+    {
+        KEYWORD_MAP::const_iterator it = keywordsLookup->find( tok.c_str() );
 
-    if( it != keyword_hash.end() )
-        return it->second;
+        if( it != keywordsLookup->end() )
+            return it->second;
+    }
 
     return DSN_SYMBOL;      // not a keyword, some arbitrary symbol.
 }

@@ -238,6 +238,7 @@ class ${LEXERCLASS} : public DSNLEXER
 {
     /// Auto generated lexer keywords table and length:
     static const KEYWORD  keywords[];
+    static const KEYWORD_MAP keywords_hash;
     static const unsigned keyword_count;
 
 public:
@@ -248,7 +249,7 @@ public:
      *   If left empty, then _(\"clipboard\") is used.
      */
     ${LEXERCLASS}( const std::string& aSExpression, const wxString& aSource = wxEmptyString ) :
-        DSNLEXER( keywords, keyword_count, aSExpression, aSource )
+        DSNLEXER( keywords, keyword_count, &keywords_hash, aSExpression, aSource )
     {
     }
 
@@ -262,7 +263,7 @@ public:
      * @param aFilename is the name of the opened file, needed for error reporting.
      */
     ${LEXERCLASS}( FILE* aFile, const wxString& aFilename ) :
-        DSNLEXER( keywords, keyword_count, aFile, aFilename )
+        DSNLEXER( keywords, keyword_count, &keywords_hash, aFile, aFilename )
     {
     }
 
@@ -278,7 +279,7 @@ public:
      *  STRING_LINE_READER or FILE_LINE_READER.  No ownership is taken of aLineReader.
      */
     ${LEXERCLASS}( LINE_READER* aLineReader ) :
-        DSNLEXER( keywords, keyword_count, aLineReader )
+        DSNLEXER( keywords, keyword_count, &keywords_hash, aLineReader )
     {
     }
 
@@ -394,3 +395,30 @@ const char* ${LEXERCLASS}::TokenName( T aTok )
 }
 "
 )
+
+
+file( APPEND "${outCppFile}" 
+"
+
+const KEYWORD_MAP ${LEXERCLASS}::keywords_hash({
+"
+)
+
+set( TOKEN_NUM 0 )
+
+math( EXPR tokensAfter "${tokensAfter} - 1" )
+
+foreach( token ${tokens} )
+    file(APPEND "${outCppFile}" "    { \"${token}\", ${TOKEN_NUM} }" )
+    
+    if( TOKEN_NUM EQUAL tokensAfter )
+        file( APPEND "${outCppFile}" "\n" )
+    else( TOKEN_NUM EQUAL tokensAfter )
+        file( APPEND "${outCppFile}" ",\n" )
+    endif()
+
+    math( EXPR TOKEN_NUM "${TOKEN_NUM} + 1" )
+endforeach()
+
+file( APPEND "${outCppFile}"
+"});")

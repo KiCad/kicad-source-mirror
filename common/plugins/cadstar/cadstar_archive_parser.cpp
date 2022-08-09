@@ -2341,7 +2341,7 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
     long fileSize = ftell( fp );
     rewind( fp );
 
-    DSNLEXER lexer( emptyKeywords, 0, fp, aFileName );
+    DSNLEXER lexer( emptyKeywords, 0, nullptr,  fp, aFileName );
 
     auto currentProgress =  [&]() -> double
                             {
