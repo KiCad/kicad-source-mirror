@@ -48,6 +48,13 @@ struct ASCH_STORAGE_FILE
     explicit ASCH_STORAGE_FILE( ALTIUM_PARSER& aReader );
 };
 
+struct ASCH_ADDITIONAL_FILE
+{
+    wxString          filename;
+    std::vector<char> data;
+
+    explicit ASCH_ADDITIONAL_FILE( ALTIUM_PARSER& aReader );
+};
 
 enum class ALTIUM_SCH_RECORD
 {
@@ -95,7 +102,7 @@ enum class ALTIUM_SCH_RECORD
     RECORD_215          = 215,
     RECORD_216          = 216,
     RECORD_217          = 217,
-    RECORD_218          = 218,
+    SIGNAL_HARNESS      = 218,
     RECORD_226          = 226,
 };
 
@@ -399,6 +406,24 @@ struct ASCH_LINE
 };
 
 
+struct ASCH_SIGNAL_HARNESS
+{
+    int ownerpartid;  // always -1, can be safely ignored I think
+
+    VECTOR2I point1;
+    VECTOR2I point2;
+
+    std::vector<VECTOR2I> points;
+
+    int color;
+    int indexinsheet;
+    int lineWidth;
+
+    explicit ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps );
+};
+
+
+
 struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
     VECTOR2I bottomLeft;
@@ -600,6 +625,7 @@ struct ASCH_SHEET_FONT
 
     int size;
     int rotation;
+    int areaColor;
 
     bool italic;
     bool bold;

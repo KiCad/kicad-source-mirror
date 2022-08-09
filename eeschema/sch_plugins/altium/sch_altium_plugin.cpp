@@ -296,6 +296,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     {
         ParseStorage( altiumSchFile ); // we need this before parsing the FileHeader
         ParseFileHeader( altiumSchFile );
+        ParseAdditional( altiumSchFile ); // we need to parse "Additional" becaus sheet is set up during "FileHeader" parsing
     }
     catch( CFB::CFBException& exception )
     {
@@ -337,6 +338,64 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile
                                               reader.GetRemainingBytes() ),
                             RPT_SEVERITY_ERROR );
     }
+}
+
+void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
+{
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "Additional" } );
+
+    if( file == nullptr )
+        return;
+
+    ALTIUM_PARSER reader( aAltiumSchFile, file );
+
+
+    if( reader.GetRemainingBytes() <= 0 )
+    {
+        THROW_IO_ERROR( "Additional section does not contain any data" );
+    }
+    else
+    {
+        std::map<wxString, wxString> properties = reader.ReadProperties();
+
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        ALTIUM_SCH_RECORD record = static_cast<ALTIUM_SCH_RECORD>( recordId );
+
+        if( record != ALTIUM_SCH_RECORD::HEADER )
+            THROW_IO_ERROR( "Header expected" );
+    }
+
+   for( int index = 0; reader.GetRemainingBytes() > 0; index++ )
+    {
+        std::map<wxString, wxString> properties = reader.ReadProperties();
+
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        ALTIUM_SCH_RECORD record = static_cast<ALTIUM_SCH_RECORD>( recordId );
+
+        // see: https://github.com/vadmium/python-altium/blob/master/format.md
+        switch( record )
+        {
+        case ALTIUM_SCH_RECORD::RECORD_215:
+            break;
+        case ALTIUM_SCH_RECORD::RECORD_216:
+            break;
+        case ALTIUM_SCH_RECORD::RECORD_217:
+            break;
+        case ALTIUM_SCH_RECORD::SIGNAL_HARNESS:
+            ParseSignalHarness( properties );
+            break;
+        default:
+            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record found inside \"Additional\" section, Record id: %d." ), recordId ),
+                                RPT_SEVERITY_ERROR );
+            break;
+        }
+    }
+
+    if( reader.HasParsingError() )
+        THROW_IO_ERROR( "stream was not parsed correctly!" );
+
+    if( reader.GetRemainingBytes() != 0 )
+        THROW_IO_ERROR( "stream is not fully parsed" );
 }
 
 
@@ -496,18 +555,12 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
         case ALTIUM_SCH_RECORD::COMPILE_MASK:
             m_reporter->Report( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
             break;
-        case ALTIUM_SCH_RECORD::RECORD_215:
-            break;
-        case ALTIUM_SCH_RECORD::RECORD_216:
-            break;
-        case ALTIUM_SCH_RECORD::RECORD_217:
-            break;
-        case ALTIUM_SCH_RECORD::RECORD_218:
-            break;
         case ALTIUM_SCH_RECORD::RECORD_226:
             break;
         default:
-            m_reporter->Report( wxString::Format( _( "Unknown Record id: %d." ), recordId ),
+            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record found inside "
+                                                     "\"FileHeader\" section, Record id: %d." ),
+                                                  recordId ),
                                 RPT_SEVERITY_ERROR );
             break;
         }
@@ -1401,6 +1454,31 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, symbol ) );
 
         line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseSignalHarness( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_SIGNAL_HARNESS elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
+
+        for( VECTOR2I& point : elem.points )
+            poly->AddPoint( point + m_sheetOffset );
+
+        poly->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID,
+                                        GetColorFromInt( elem.color ) ) );
+        poly->SetFlags( IS_NEW );
+
+        m_currentSheet->GetScreen()->Append( poly );
+    }
+    else
+    {
+        // No clue if this situation can ever exist
+        m_reporter->Report( _( "Signal harness, belonging to the part is not currently supported." ), RPT_SEVERITY_ERROR );
     }
 }
 

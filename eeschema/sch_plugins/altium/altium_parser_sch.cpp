@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,18 @@ ASCH_STORAGE_FILE::ASCH_STORAGE_FILE( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
         THROW_IO_ERROR( "Storage stream was not parsed correctly" );
+}
+
+
+ASCH_ADDITIONAL_FILE::ASCH_ADDITIONAL_FILE( ALTIUM_PARSER& aReader )
+{
+    aReader.Skip( 5 );
+    filename = aReader.ReadWxString();
+    uint32_t dataSize = aReader.Read<uint32_t>();
+    data = aReader.ReadVector( dataSize );
+
+    if( aReader.HasParsingError() )
+        THROW_IO_ERROR( "Additional stream was not parsed correctly" );
 }
 
 
@@ -395,6 +407,28 @@ ASCH_LINE::ASCH_LINE( const std::map<wxString, wxString>& aProps )
     point2 = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                        -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
+    lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+}
+
+
+ASCH_SIGNAL_HARNESS::ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::SIGNAL_HARNESS );
+
+    ownerpartid = ReadOwnerPartId( aProps );
+
+    int locationCount = ALTIUM_PARSER::ReadInt( aProps, "LOCATIONCOUNT", 0 );
+
+    for( int i = 1; i <= locationCount; i++ )
+    {
+        const wxString si = std::to_string( i );
+        points.emplace_back( ReadKiCadUnitFrac( aProps, "X" + si ),
+                             -ReadKiCadUnitFrac( aProps, "Y" + si ) );
+    }
+
+    indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+
+    color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
     lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
 }
 

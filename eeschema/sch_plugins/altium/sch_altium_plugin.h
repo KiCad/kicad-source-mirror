@@ -103,6 +103,7 @@ public:
 
     void ParseAltiumSch( const wxString& aFileName );
     void ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
+    void ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     void ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
 
 private:
@@ -120,6 +121,7 @@ private:
     void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseArc( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
+    void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
@@ -162,6 +164,7 @@ private:
 
     std::map<wxString, LIB_SYMBOL*> m_powerSymbols;
     std::vector<ASCH_STORAGE_FILE>  m_altiumStorage;
+    std::vector<ASCH_ADDITIONAL_FILE>  m_altiumAdditional;
 
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
     std::map<int, int>              m_altiumImplementationList;
