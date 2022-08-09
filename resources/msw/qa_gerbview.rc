@@ -1,4 +1,4 @@
-icon_qa_gerbview ICON "../resources/bitmaps_png/icons/icon_gerbview.ico"
+icon_qa_gerbview ICON "../../resources/bitmaps_png/icons/icon_gerbview.ico"
 
 #define RC_VER_FILE_DESCRIPTION "QA Gerber Viewer " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "qa_gerbview"

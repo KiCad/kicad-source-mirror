@@ -1,4 +1,4 @@
-icon_qa_kicad2step ICON "../resources/bitmaps_png/icons/icon_kicad.ico"
+icon_qa_kicad2step ICON "../../../resources/bitmaps_png/icons/icon_kicad.ico"
 
 #define RC_VER_FILE_DESCRIPTION "QA KiCad2Step " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "qa_kicad2step"

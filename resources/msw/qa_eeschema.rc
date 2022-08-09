@@ -1,4 +1,4 @@
-icon_qa_eeschema ICON "../resources/bitmaps_png/icons/icon_eeschema.ico"
+icon_qa_eeschema ICON "../../resources/bitmaps_png/icons/icon_eeschema.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad QA Schematic Editor " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "qa_eeschema"
