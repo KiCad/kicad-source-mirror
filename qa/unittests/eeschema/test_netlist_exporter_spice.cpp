@@ -24,6 +24,7 @@
 #ifdef KICAD_SPICE
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <eeschema_test_utils.h>
 #include <netlist_exporter_spice.h>
 #include <sim/ngspice.h>
@@ -37,9 +38,14 @@ class TEST_NETLIST_EXPORTER_SPICE_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE
 public:
     class SPICE_TEST_REPORTER : public SPICE_REPORTER
     {
+    public:
+        SPICE_TEST_REPORTER( std::shared_ptr<wxString> aLog ) : m_log( std::move( aLog ) ) {}
+
         REPORTER& Report( const wxString& aText,
                           SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
         {
+            *m_log << aText << "\n";
+
             // You can add a debug trace here.
             return *this;
         }
@@ -49,14 +55,28 @@ public:
         void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) override
         {
         }
+
+    private:
+        std::shared_ptr<wxString> m_log;
     };
 
     TEST_NETLIST_EXPORTER_SPICE_FIXTURE() :
-        TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>(),
-        m_simulator( SPICE_SIMULATOR::CreateInstance( "ngspice" ) ),
-        m_reporter( std::make_unique<SPICE_TEST_REPORTER>() )
+            TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>(),
+            m_simulator( SPICE_SIMULATOR::CreateInstance( "ngspice" ) ),
+            m_log( std::make_shared<wxString>() ),
+            m_reporter( std::make_unique<SPICE_TEST_REPORTER>( m_log ) )
     {
-        
+    }
+
+    ~TEST_NETLIST_EXPORTER_SPICE_FIXTURE()
+    {
+        using namespace boost::unit_test;
+
+        test_case::id_t id = framework::current_test_case().p_id;
+        test_results    results = results_collector.results( id );
+
+        // Output a log if the test has failed.
+        BOOST_CHECK_MESSAGE( results.passed(), "\nNGSPICE LOG\n===========\n" << *m_log );
     }
 
     wxFileName GetSchematicPath( const wxString& aBaseName ) override
@@ -102,6 +122,16 @@ public:
 
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );
+
+        // Display all vectors in case we need them for debugging.
+        ngspice->Command( "echo Available Vectors" );
+        ngspice->Command( "echo -----------------" );
+        ngspice->Command( "display" );
+
+        // Display an expanded netlist in case we need it for debugging.
+        ngspice->Command( "echo Expanded Netlist" );
+        ngspice->Command( "echo ----------------" );
+        ngspice->Command( "listing runnable" );
     }
 
     void TestNetlist( const wxString& aBaseName )
@@ -129,9 +159,9 @@ public:
             {
                 double inf = std::numeric_limits<double>::infinity();
 
-                double leftDelta = ( aXValue - ( i-1 >= 0 ? xVector[i-1] : -inf ) );
+                double leftDelta = ( aXValue - ( i >= 1 ? xVector[i - 1] : -inf ) );
                 double middleDelta = ( aXValue - xVector[i] );
-                double rightDelta = ( aXValue - ( i+1 < xVector.size() ? xVector[i+1] : inf ) );
+                double rightDelta = ( aXValue - ( i < xVector.size() - 1 ? xVector[i + 1] : inf ) );
 
                 // Check if this point is the closest one.
                 if( abs( middleDelta ) <= abs( leftDelta )
@@ -146,6 +176,8 @@ public:
             for( auto&& [vectorName, refValue] : aTestVectorsAndValues )
             {
                 std::vector<double> yVector = ngspice->GetMagPlot( vectorName );
+
+                BOOST_REQUIRE_GE( yVector.size(), i + 1 );
 
                 BOOST_TEST_CONTEXT( "Y vector name: " << vectorName
                                     << ", Ref value: " << refValue
@@ -193,8 +225,9 @@ public:
                | NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
     }
 
-    std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
     std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
+    std::shared_ptr<wxString>            m_log;
+    std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
 };
 
 
