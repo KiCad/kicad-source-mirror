@@ -97,6 +97,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     m_nets.clear();
     m_items.clear();
+    m_libParts.clear();
 
     for( unsigned sheetIndex = 0; sheetIndex < m_schematic->GetSheets().size(); ++sheetIndex )
     {
@@ -226,7 +227,7 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
 
     if( field )
         path = field->GetShownText();
-    
+
     if( path.IsEmpty() )
         return;
 
@@ -240,7 +241,7 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
     {
         DisplayErrorMessage( nullptr, wxString::Format( "Failed reading model library '%s'.",
                                                         absolutePath ),
-                             e.What() ); 
+                             e.What() );
     }
 
     aItem.libraryPath = path;
@@ -366,7 +367,7 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
         // Look for the library in known search locations.
         fullPath = ResolveFile( expandedPath, &Pgm().GetLocalEnvVariables(),
                                 &m_schematic->Prj() );
-        
+
         if( fullPath.IsEmpty() )
         {
             DisplayErrorMessage( nullptr,
