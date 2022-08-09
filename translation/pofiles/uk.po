@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-05 14:22+0000\n"
+"PO-Revision-Date: 2022-08-11 16:15+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -16310,41 +16310,41 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:851 pcbnew/tools/drawing_tool.cpp:685
 #, c-format
 msgid "Could not load image from '%s'."
-msgstr ""
+msgstr "Не вдалося завантажити зображення з '%s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:725
 #: eeschema/tools/sch_drawing_tools.cpp:1353
 msgid "No new hierarchical labels found."
-msgstr ""
+msgstr "Нових ієрархічних міток не знайдено."
 
 #: eeschema/tools/sch_drawing_tools.cpp:809
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "В точці з'єднання є провідники і/або контакти, що не можна підключити"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1230
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:177
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни створення елементу."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1341
 msgid "Click over a sheet."
-msgstr ""
+msgstr "Натисніть на лист"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1753
 msgid "Press <ESC> to cancel sheet creation."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни створення листа."
 
 #: eeschema/tools/sch_edit_tool.cpp:82
 msgid "Symbol Unit"
-msgstr ""
+msgstr "Одиниці виміру"
 
 #: eeschema/tools/sch_edit_tool.cpp:102
 msgid "no symbol selected"
-msgstr ""
+msgstr "символ не вибрано"
 
 #: eeschema/tools/sch_edit_tool.cpp:111
 msgid "symbol is not multi-unit"
-msgstr ""
+msgstr "символ не має багато частин"
 
 #: eeschema/tools/sch_edit_tool.cpp:383 eeschema/tools/sch_edit_tool.cpp:424
 #: eeschema/tools/sch_edit_tool.cpp:462
@@ -16357,57 +16357,57 @@ msgstr "Змінити на"
 
 #: eeschema/tools/sch_edit_tool.cpp:1013
 msgid "Label value cannot go below zero"
-msgstr ""
+msgstr "Позначка значення не може бути нижче нуля"
 
 #: eeschema/tools/sch_edit_tool.cpp:1273 eeschema/tools/sch_edit_tool.cpp:1276
 #: eeschema/tools/symbol_editor_edit_tool.cpp:536
 #, c-format
 msgid "Edit %s Field"
-msgstr ""
+msgstr "Редагувати %s поле"
 
 #: eeschema/tools/sch_edit_tool.cpp:1278
 #: eeschema/tools/symbol_editor_edit_tool.cpp:538
 #, c-format
 msgid "Edit '%s' Field"
-msgstr ""
+msgstr "Редагувати поле '%s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1816
 msgid "<empty>"
-msgstr ""
+msgstr "<порожній>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2106
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr ""
+msgstr "Видалити незадіяні виводи з цього листа?"
 
 #: eeschema/tools/sch_edit_tool.cpp:2166
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr ""
+msgstr "Введіть номер сторінки для листа%s"
 
 #: eeschema/tools/sch_edit_tool.cpp:2169
 msgid "Edit Sheet Page Number"
-msgstr ""
+msgstr "Редагувати номер сторінки"
 
 #: eeschema/tools/sch_editor_control.cpp:140
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr ""
+msgstr "Відновити '%s' (і всі вкладені таблиці) до збереженої останньої версії?"
 
 #: eeschema/tools/sch_editor_control.cpp:564
 msgid "Reached end of schematic."
-msgstr ""
+msgstr "Досягнуто кінця схеми."
 
 #: eeschema/tools/sch_editor_control.cpp:565
 msgid "Reached end of sheet."
-msgstr ""
+msgstr "Досягнуто кінця листа."
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Find again to wrap around to the start."
-msgstr ""
+msgstr "Почати пошук знову з початку."
 
 #: eeschema/tools/sch_editor_control.cpp:1036
 msgid "Error: duplicate sub-sheet names found in current sheet."
-msgstr ""
+msgstr "Помилка: дубльовані назви вкладених листів, виявлено в поточному листі."
 
 #: eeschema/tools/sch_editor_control.cpp:1128
 msgid "Net must be labeled to assign a netclass."
@@ -16436,133 +16436,138 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
+"Вставка листа '%s'\n"
+"було відхиллено, оскільки місце призначення вже має аркуш або один із його "
+"вкладених аркушів як батьківський."
 
 #: eeschema/tools/sch_editor_control.cpp:2354
 #: pcbnew/tools/board_editor_control.cpp:588
 #: pcbnew/tools/footprint_editor_control.cpp:719
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr ""
+msgstr "%d дублікати IDв замінено.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2361
 #: pcbnew/tools/board_editor_control.cpp:603
 #: pcbnew/tools/footprint_editor_control.cpp:734
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d потенційні проблеми вирішені."
 
 #: eeschema/tools/sch_editor_control.cpp:2368
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
-msgstr ""
+msgstr "Помилок не знайдено."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:115
 msgid "No bus selected"
-msgstr ""
+msgstr "Не виділено шини"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Bus has no members"
-msgstr ""
+msgstr "Шина не має сигналів"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:722
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни креслення."
 
 #: eeschema/tools/sch_move_tool.cpp:751
 msgid "Press <ESC> to cancel drag."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни перетягування."
 
 #: eeschema/tools/sch_move_tool.cpp:753
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни переміщення."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
-msgstr ""
+msgstr "Бібліотека символів не вибрана."
 
 #: eeschema/tools/symbol_editor_control.cpp:312
 #: pcbnew/tools/footprint_editor_control.cpp:400
 msgid "New name:"
-msgstr ""
+msgstr "Нове ім'я:"
 
 #: eeschema/tools/symbol_editor_control.cpp:312
 msgid "Change Symbol Name"
-msgstr ""
+msgstr "Змінити назву символу"
 
 #: eeschema/tools/symbol_editor_control.cpp:322
 msgid "Symbol name cannot be empty."
-msgstr ""
+msgstr "Ім'я символу не може бути незаповненим."
 
 #: eeschema/tools/symbol_editor_control.cpp:517
 #: eeschema/tools/symbol_editor_control.cpp:555
 msgid "No symbol to export"
-msgstr ""
+msgstr "Немає символу для експорту"
 
 #: eeschema/tools/symbol_editor_control.cpp:526
 msgid "Image File Name"
-msgstr ""
+msgstr "Назва файлу зображення"
 
 #: eeschema/tools/symbol_editor_control.cpp:537
 #, c-format
 msgid "Can't save file '%s'."
-msgstr ""
+msgstr "Не вдалося зберегти файл '%s."
 
 #: eeschema/tools/symbol_editor_control.cpp:564
 msgid "SVG File Name"
-msgstr ""
+msgstr "Назва SVG файлу"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:534
 msgid "Edit Symbol Name"
-msgstr ""
+msgstr "Редагувати назву символу"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:652
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Символ не унаслідується з іншого символу."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr ""
+msgstr "Ця позиція вже зайнята іншою контактом, у частині %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:240
 msgid "Place Pin Anyway"
-msgstr ""
+msgstr "Розмістити вивід в будь-якому випадку"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 #: eeschema/widgets/legacyfiledlg_save_project.h:34
 msgid "Create a new project for this schematic"
-msgstr ""
+msgstr "Створити новий проект для цієї схеми"
 
 #: eeschema/widgets/legacyfiledlg_save_project.h:36
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
+"Створення проекту увімкне такі функції, як текстові змінні, класи зв'язків і "
+"ERC винятки"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:37
 msgid "Do not update library tables"
-msgstr ""
+msgstr "Не вдалося оновити таблицю бібліотеки"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:42
 msgid "Update existing library table entry"
-msgstr ""
+msgstr "Оновити існуючий запис в бібліотечну таблицю"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:48
 msgid "Add new global library table entry"
-msgstr ""
+msgstr "Додати новий глобальний елемент бібліотеки"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:39
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:54
 msgid "Add new project library table entry"
-msgstr ""
+msgstr "Додати новий запис в бібліотеку проекту"
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:39
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Не виконувати будь-які операції після збереження бібліотеки."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:43
 msgid ""
@@ -16570,6 +16575,9 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
+"Оновіть запис таблиці бібліотеки символів на нову бібліотеку.\n"
+"\n"
+"Оригінальна бібліотека більше не буде доступною для використання."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
 msgid ""
@@ -17435,156 +17443,154 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
-msgstr ""
+msgstr "Відкрити файли свердління Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr ""
+msgstr "Відкрити файли свердління Excellon на новому шарі."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
-msgstr ""
+msgstr "Відкрити робочий Gerber файл..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr ""
+msgstr "Відкрийте файл завдання Gerber та пов'язані з ним файли"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open Zip Archive File..."
-msgstr ""
+msgstr "Відкрити файл Zip-архіву..."
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr ""
+msgstr "Відкрити за архівованого архіву (Gerber і Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
-msgstr ""
+msgstr "Показати менеджер шарів"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Show or hide the layer manager"
-msgstr ""
+msgstr "Показати або приховати менеджер шарів"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "List DCodes..."
-msgstr ""
+msgstr "Список Dкодів..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "List D-codes defined in Gerber files"
-msgstr ""
+msgstr "Список D-кодів визначених у файлах Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Show Source..."
-msgstr ""
+msgstr "Показати джерело..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Show source file for the current layer"
-msgstr ""
+msgstr "Показати вихідний файл для поточного шару"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Export to PCB Editor..."
-msgstr ""
+msgstr "Експорт до PCB редактора..."
 
 #: gerbview/tools/gerbview_actions.cpp:88
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Експортувати дані як PCB файл KiCad"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 #: gerbview/widgets/gerbview_layer_widget.cpp:155
 msgid "Clear Current Layer..."
-msgstr ""
+msgstr "Очистити поточний шар..."
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear the selected graphic layer"
-msgstr ""
+msgstr "Очистити вибраний графічний шар"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Clear All Layers"
-msgstr ""
+msgstr "Очистити всі шари"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Clear all layers. All data will be deleted"
-msgstr ""
+msgstr "Очистити всі шари. Усі дані буде видалено"
 
 #: gerbview/tools/gerbview_actions.cpp:104
 msgid "Reload All Layers"
-msgstr ""
+msgstr "Перезавантажити всі шари"
 
 #: gerbview/tools/gerbview_actions.cpp:105
 msgid "Reload all layers. All data will be reloaded"
-msgstr ""
+msgstr "Перезавантажити всі шари. Усі дані буде перезавантажено"
 
 #: gerbview/tools/gerbview_actions.cpp:114
 msgid "Clear Highlight"
-msgstr ""
+msgstr "Очистити підсвітку"
 
 #: gerbview/tools/gerbview_actions.cpp:124
 msgid "Highlight Component"
-msgstr ""
+msgstr "Підсвічувати компонент"
 
 #: gerbview/tools/gerbview_actions.cpp:129
 msgid "Highlight Attribute"
-msgstr ""
+msgstr "Підсвітити атрибут"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Highlight DCode"
-msgstr ""
+msgstr "Підсвічувати D-код"
 
 #: gerbview/tools/gerbview_actions.cpp:140
 msgid "Next Layer"
-msgstr ""
+msgstr "Наступний шар"
 
 #: gerbview/tools/gerbview_actions.cpp:145
 msgid "Previous Layer"
-msgstr ""
+msgstr "Попередній шар"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Move Layer Up"
-msgstr "Перемістити плату вгору"
+msgstr "Перемістити шар вгору"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
 msgid "Move Current Layer Up"
-msgstr ""
+msgstr "Перемістити поточний шар вгору"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Move Layer Down"
-msgstr "Перемістити плату вниз"
+msgstr "Перемістити шар до низу"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:152
 msgid "Move Current Layer Down"
-msgstr ""
+msgstr "Перемістити поточний шар донизу"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Sketch Lines"
-msgstr ""
+msgstr "Контурний режим"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show lines in outline mode"
-msgstr ""
+msgstr "Показувати лінії в режимі обрису"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Sketch Flashed Items"
-msgstr ""
+msgstr "Елементи засвітки в контурному режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show flashed items in outline mode"
-msgstr ""
+msgstr "Показувати підсвічені елементи в контурному режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:174
 msgid "Sketch Polygons"
-msgstr ""
+msgstr "Ескіз полігонів"
 
 #: gerbview/tools/gerbview_actions.cpp:174
 msgid "Show polygons in outline mode"
-msgstr ""
+msgstr "Показувати полігони в контурному режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:180
 msgid "Ghost Negative Objects"
-msgstr ""
+msgstr "Прозорі негативні об'єкти"
 
 #: gerbview/tools/gerbview_actions.cpp:180
 msgid "Show negative objects in ghost color"
@@ -17592,39 +17598,39 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:186
 msgid "Show DCodes"
-msgstr ""
+msgstr "Показати D-коди"
 
 #: gerbview/tools/gerbview_actions.cpp:186
 msgid "Show dcode number"
-msgstr ""
+msgstr "Показувати номер d-кода"
 
 #: gerbview/tools/gerbview_actions.cpp:191
 msgid "Show in Differential Mode"
-msgstr ""
+msgstr "Показати в диференційному режимі"
 
 #: gerbview/tools/gerbview_actions.cpp:191
 msgid "Show layers in diff (compare) mode"
-msgstr ""
+msgstr "Відображати шари в диференційному режимі (порівняння)"
 
 #: gerbview/tools/gerbview_actions.cpp:196
 msgid "Flip Gerber View"
-msgstr ""
+msgstr "Перевернути перегляд Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:196
 msgid "Show as mirror image"
-msgstr ""
+msgstr "Показати зображення у віддзеркаленому режимі"
 
 #: gerbview/tools/gerbview_control.cpp:119
 msgid "None of the Gerber layers contain any data"
-msgstr ""
+msgstr "Жоден з Gerber шарів не містить жодних даних"
 
 #: gerbview/tools/gerbview_control.cpp:126
 msgid "Board File Name"
-msgstr ""
+msgstr "Назва файлу плати"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
-msgstr ""
+msgstr "D коди"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, c-format
