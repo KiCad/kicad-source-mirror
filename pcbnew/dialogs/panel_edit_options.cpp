@@ -89,6 +89,8 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
+
+    m_escClearsNetHighlight->SetValue( aCfg->m_ESCClearsNetHighlight );
 }
 
 
@@ -152,6 +154,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
 
         cfg->m_FlipLeftRight = m_flipLeftRight->GetValue();
+        cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
         cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
         cfg->m_AllowFreePads = m_allowFreePads->GetValue();
         cfg->m_ShowPageLimits = m_showPageLimits->GetValue();

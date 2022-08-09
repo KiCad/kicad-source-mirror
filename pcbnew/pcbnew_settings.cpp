@@ -70,6 +70,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_CtrlClickHighlight( false ),
           m_Use45DegreeLimit( false ),
           m_FlipLeftRight( false ),
+          m_ESCClearsNetHighlight( true ),
           m_PolarCoords( false ),
           m_RotationAngle( ANGLE_90 ),
           m_ShowPageLimits( true ),
@@ -108,6 +109,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
             &m_FlipLeftRight, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.esc_clears_net_highlight",
+            &m_ESCClearsNetHighlight, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );

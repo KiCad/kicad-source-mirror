@@ -59,6 +59,7 @@ using namespace std::placeholders;
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
+#include <tools/board_inspection_tool.h>
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <wx/event.h>
@@ -438,9 +439,21 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
 
             if( m_enteredGroup )
+            {
                 ExitGroup();
+                ClearSelection();
+            }
+            else if( !GetSelection().Empty() )
+            {
+                ClearSelection();
+            }
+            else if( evt->FirstResponder() == this && evt->GetCommandId() == (int) WXK_ESCAPE )
+            {
+                BOARD_INSPECTION_TOOL* controller = m_toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
 
-            ClearSelection();
+                if( controller && m_frame->GetPcbNewSettings()->m_ESCClearsNetHighlight )
+                    controller->ClearHighlight( *evt );
+            }
         }
         else
         {

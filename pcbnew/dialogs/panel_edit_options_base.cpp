@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,6 +71,9 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_allowFreePads->SetToolTip( _("If checked, pads can be moved with respect to the rest of the footprint.") );
 
 	bSizerUniversal->Add( m_allowFreePads, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_escClearsNetHighlight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerUniversal->Add( m_escClearsNetHighlight, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

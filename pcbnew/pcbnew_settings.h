@@ -368,6 +368,8 @@ public:
                                         // vertical and 45deg
     bool m_FlipLeftRight;               // True: Flip footprints across Y axis
 
+    bool m_ESCClearsNetHighlight;
+
     bool m_PolarCoords;
 
     EDA_ANGLE m_RotationAngle;

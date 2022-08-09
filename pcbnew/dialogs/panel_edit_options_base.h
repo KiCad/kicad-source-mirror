@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,6 +45,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxTextCtrl* m_rotationAngleCtrl;
 		wxStaticText* m_rotationAngleUnits;
 		wxCheckBox* m_allowFreePads;
+		wxCheckBox* m_escClearsNetHighlight;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
 		wxRadioBox* m_rbCtrlClickAction;
