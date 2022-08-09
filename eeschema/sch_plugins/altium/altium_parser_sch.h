@@ -100,7 +100,7 @@ enum class ALTIUM_SCH_RECORD
     NOTE                = 209,
     COMPILE_MASK        = 211,
     HARNESS_CONNECTOR   = 215,
-    RECORD_216          = 216,
+    HARNESS_ENTRY       = 216,
     RECORD_217          = 217,
     SIGNAL_HARNESS      = 218,
     RECORD_226          = 226,
@@ -337,6 +337,15 @@ enum class ASCH_POLYLINE_LINESTYLE
 };
 
 
+enum class ASCH_SHEET_ENTRY_SIDE
+{
+    LEFT   = 0,
+    RIGHT  = 1,
+    TOP    = 2,
+    BOTTOM = 3
+};
+
+
 struct ASCH_POLYLINE
 {
     int ownerindex;
@@ -444,6 +453,28 @@ struct ASCH_HARNESS_CONNECTOR
 };
 
 
+struct ASCH_HARNESS_ENTRY
+{
+    // int ownerindex; // Completely random, mostly this entry exists, but not always, should not be used!
+    int ownerpartid; // always -1, can be safely ignored I think
+
+    int areaColor;
+    int color;
+    int distanceFromTop;
+    int indexInSheet;
+    int textColor;
+    int textFontId;
+    int textStyle;
+
+    bool ownerIndexAdditionalList; // what is that?
+
+    wxString name;
+    ASCH_SHEET_ENTRY_SIDE side;
+
+    explicit ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aProps );
+};
+
+
 struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
     VECTOR2I bottomLeft;
@@ -466,15 +497,6 @@ struct ASCH_SHEET_SYMBOL
     int areacolor;
 
     explicit ASCH_SHEET_SYMBOL( const std::map<wxString, wxString>& aProps );
-};
-
-
-enum class ASCH_SHEET_ENTRY_SIDE
-{
-    LEFT   = 0,
-    RIGHT  = 1,
-    TOP    = 2,
-    BOTTOM = 3
 };
 
 

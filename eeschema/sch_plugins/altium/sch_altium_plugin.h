@@ -123,6 +123,7 @@ private:
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
+    void ParseHarnessEntry( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );

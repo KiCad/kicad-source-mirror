@@ -448,6 +448,31 @@ ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxStrin
 }
 
 
+// Based on "ASCH_SHEET_ENTRY" import
+ASCH_HARNESS_ENTRY::ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_ENTRY );
+
+    // ownerindex = ReadOwnerIndex( aProps ); // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead, because this property sometimes does not exist in altium file!
+    ownerpartid = ReadOwnerPartId( aProps );
+
+    indexInSheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+
+    distanceFromTop = ReadKiCadUnitFrac1( aProps, "DISTANCEFROMTOP" );
+
+    side = ReadEnum<ASCH_SHEET_ENTRY_SIDE>( aProps, "SIDE", 0, 3, ASCH_SHEET_ENTRY_SIDE::LEFT );
+
+    name = ALTIUM_PARSER::ReadString( aProps, "NAME", "" );
+
+    ownerIndexAdditionalList = ALTIUM_PARSER::ReadBool( aProps, "OWNERINDEXADDITIONALLIST", true );
+
+    color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    areaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    textColor = ALTIUM_PARSER::ReadInt( aProps, "TEXTCOLOR", 0 );
+    textFontId = ALTIUM_PARSER::ReadInt( aProps, "TEXTFONTID", 0 );
+}
+
+
 ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::RECTANGLE );

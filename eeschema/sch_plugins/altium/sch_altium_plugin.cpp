@@ -378,7 +378,8 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
         case ALTIUM_SCH_RECORD::HARNESS_CONNECTOR:
             ParseHarnessConnector( index, properties );
             break;
-        case ALTIUM_SCH_RECORD::RECORD_216:
+        case ALTIUM_SCH_RECORD::HARNESS_ENTRY:
+            ParseHarnessEntry( properties );
             break;
         case ALTIUM_SCH_RECORD::RECORD_217:
             break;
@@ -565,6 +566,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
                                 RPT_SEVERITY_ERROR );
             break;
         }
+        SCH_ALTIUM_PLUGIN::m_harnessOwnerIndexOffset = index;
     }
 
     if( reader.HasParsingError() )
@@ -1520,6 +1522,56 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
         m_reporter->Report(
                 _( "Harness connector, belonging to the part is not currently supported." ),
                 RPT_SEVERITY_ERROR );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_HARNESS_ENTRY elem( aProperties );
+
+    const auto& sheetIt = m_sheets.find( m_harnessEntryParent );
+
+    if( sheetIt == m_sheets.end() )
+    {
+        m_reporter->Report( wxString::Format( _( "Harness entry's paren (%d) not found." ),
+                                              SCH_ALTIUM_PLUGIN::m_harnessEntryParent ),
+                RPT_SEVERITY_ERROR );
+        return;
+    }
+
+    SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheetIt->second );
+    sheetIt->second->AddPin( sheetPin );
+
+    sheetPin->SetText( elem.name );
+    sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+
+    VECTOR2I pos = sheetIt->second->GetPosition();
+    wxSize   size = sheetIt->second->GetSize();
+
+    switch( elem.side )
+    {
+    default:
+    case ASCH_SHEET_ENTRY_SIDE::LEFT:
+        sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+        sheetPin->SetSide( SHEET_SIDE::LEFT );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::RIGHT:
+        sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+        sheetPin->SetSide( SHEET_SIDE::RIGHT );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::TOP:
+        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
+        sheetPin->SetSide( SHEET_SIDE::TOP );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
+        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
+        sheetPin->SetSide( SHEET_SIDE::BOTTOM );
+        break;
     }
 }
 
