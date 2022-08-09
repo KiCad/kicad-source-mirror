@@ -32,6 +32,7 @@
 
 bool init_unit_test()
 {
+    KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Gerbview module tests";
     return wxInitialize();
 }
@@ -39,7 +40,6 @@ bool init_unit_test()
 
 int main( int argc, char* argv[] )
 {
-    KIPLATFORM::APP::Init();
     int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
