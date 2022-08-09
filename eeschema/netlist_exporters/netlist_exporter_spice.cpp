@@ -69,6 +69,9 @@ bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigne
 
 bool NETLIST_EXPORTER_SPICE::GenerateNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
+    // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
+    m_rawIncludes.clear();
+
     // Default title.
     m_title = "KiCad schematic";
 
@@ -330,7 +333,7 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
         wxString path = model->GetParam( libParamIndex ).value->ToString();
 
         if( path != "" )
-            m_rawIncludes.push_back( path );
+            m_rawIncludes.insert( path );
     }
 
     return true;

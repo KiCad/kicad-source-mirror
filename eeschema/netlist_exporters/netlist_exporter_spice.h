@@ -121,12 +121,12 @@ private:
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
-    wxString                m_title;       ///< Spice simulation title found in the schematic sheet
-    std::vector<wxString>   m_directives;  ///< Spice directives found in the schematic sheet
+    wxString                m_title;        ///< Spice simulation title found in the schematic sheet
+    std::vector<wxString>   m_directives;   ///< Spice directives found in the schematic sheet
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
-    std::vector<wxString>   m_rawIncludes;
+    std::set<wxString>      m_rawIncludes;  ///< include directives found in symbols
     std::set<wxString>      m_nets;
-    std::list<SPICE_ITEM>   m_items;  ///< Items representing schematic symbols in Spice world
+    std::list<SPICE_ITEM>   m_items;        ///< Items representing schematic symbols in Spice world
 };
 
 
