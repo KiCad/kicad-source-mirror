@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-09 13:20+0000\n"
+"PO-Revision-Date: 2022-08-11 16:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9864,7 +9864,7 @@ msgstr "すべての電圧を保存"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "全ての電圧を保存する指示を書く（.save all）"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
 msgid "Save all currents"
@@ -9872,7 +9872,7 @@ msgstr "全ての電流を保存"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "全ての電流を保存する指示を書く (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -13542,9 +13542,8 @@ msgstr "前に選択したシートに戻る"
 
 #: eeschema/sch_field.cpp:854 eeschema/sch_label.cpp:183
 #: eeschema/sch_label.cpp:1120
-#, fuzzy
 msgid "Sheet References"
-msgstr "シート間のリファレンス"
+msgstr "シートのリファレンス"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -14855,9 +14854,9 @@ msgid "%s describes %lu pins, expected %u"
 msgstr "%s は、 %lu ピンを表していて、期待値は %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "フォルダー '%s' の作成に失敗しました。"
+msgstr "値 '%s' からモデルを推論できませんでした。"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15780,15 +15779,14 @@ msgid "KiCad Symbol Library Viewer"
 msgstr "KiCad シンボル ライブラリー ビューアー"
 
 #: eeschema/symbol_viewer_frame.cpp:180
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"フットプリント名、キーワード、説明、パッド数でフィルターします。\n"
-"検索語はスペースで区切られます。  検索語はすべて一致しなければなりません。\n"
-"数値の検索語はパッドカウントに対しても一致します。"
+"シンボル名、キーワード、説明、ピン数でフィルターします。\n"
+"検索語はスペースで区切ります。  全ての検索語が一致しなければなりません。\n"
+"数値の検索語はピン数に対しても一致します。"
 
 #: eeschema/symbol_viewer_frame.cpp:1155 pcbnew/footprint_viewer_frame.cpp:1178
 #: pcbnew/footprint_viewer_frame.cpp:1183
@@ -20711,7 +20709,7 @@ msgstr "4本の抵抗の解:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:228
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "ヒューズ時間が長いために、現在の計算結果は過小評価されています。"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
 msgid "Ambient temperature:"
@@ -20739,9 +20737,8 @@ msgid "Track thickness:"
 msgstr "配線の銅箔厚:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "時間ステップ:"
+msgstr "ヒューズするまでの時間:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
 msgid "s"
@@ -21239,9 +21236,8 @@ msgid "er:"
 msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr "サブストレート比誘電率"
+msgstr "比誘電率(誘電率)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
@@ -25313,7 +25309,7 @@ msgstr "ドリル/配置ファイルの原点を使用"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "最下層のフットプリントに負のX座標を使用する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -26490,21 +26486,18 @@ msgstr ""
 "す。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1359
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "エラー: パッドにレイヤーがありません。"
+msgstr "エラー: 台形のデルタが大きすぎます。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid "Error: Through hole pad has no hole."
 msgstr "エラー:スルーホール パッドに穴がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr ""
-"警告: 通常、コネクターのパッドにはハンダ ペーストはありません。代わりにSMD"
-"パッドを使用してください。"
+msgstr "警告: 通常、コネクターのパッドにはハンダ "
+"ペーストはありません。代わりにSMDパッドを使用してください。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1384
 msgid "Error: SMD pad has a hole."
@@ -29461,13 +29454,11 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
-msgstr ""
-"ハンダ マスクのクリアランスと最小ウェブ幅については、基板メーカーの推奨値を使"
-"用してください。"
+msgstr "ハンダ マスクの拡張と最小ウェブ幅については、基板メーカーの推奨値を使用してく"
+"ださい。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -29520,12 +29511,12 @@ msgstr "ハンダ マスクと導体間のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
+msgstr "フットプリント内のパッド間のハンダマスクアパーチャー（開口部）をブリッジさせ"
+"ることを許可する"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "ビア禁止"
+msgstr "ビアのテンティング"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
