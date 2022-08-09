@@ -425,7 +425,7 @@ struct ASCH_SIGNAL_HARNESS
     std::vector<VECTOR2I> points;
 
     int color;
-    int indexinsheet;
+    int indexInSheet;
     int lineWidth;
 
     explicit ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps );
@@ -602,6 +602,12 @@ struct ASCH_PORT
     VECTOR2I location;
     int      width;
     int      height;
+    int      areaColor;
+    int      color;
+    int      textColor;
+    int      fontId;
+
+    ASCH_TEXT_FRAME_ALIGNMENT alignment;
 
     ASCH_PORT_IOTYPE iotype;
     ASCH_PORT_STYLE  style;

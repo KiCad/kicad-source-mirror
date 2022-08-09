@@ -125,6 +125,7 @@ private:
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseHarnessEntry( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessType( const std::map<wxString, wxString>& aProperties );
+    void ParseHarnessPort( const ASCH_PORT& aElem );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
@@ -172,9 +173,15 @@ private:
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
     std::map<int, int>              m_altiumImplementationList;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
+    std::vector<ASCH_PORT>          m_altiumHarnessPortsCurrentSheet; // parse harness ports after "FileHeader" was parsed, in 2nd run
 
     int m_harnessOwnerIndexOffset; // Add offset to all harness ownerIndex'es after parsing FileHeader
     int m_harnessEntryParent; // used to identify harness connector for harness entry element
+
+    // Harness ports are drawn the same colors as harness connectors, discarding port local
+    // settings found in altium's file, so keep color settings to draw harness ports correctly
+    COLOR4D m_harnessConnectorBackgroundColor; 
+    COLOR4D m_harnessConnectorBorderColor;
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_

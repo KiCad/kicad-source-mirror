@@ -48,6 +48,7 @@
 #include <sch_label.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <sch_textbox.h>
 
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
@@ -393,6 +394,10 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             break;
         }
     }
+
+    // Handle harness Ports
+    for( const ASCH_PORT& port : m_altiumHarnessPortsCurrentSheet )
+        ParseHarnessPort( port );
 
     if( reader.HasParsingError() )
         THROW_IO_ERROR( "stream was not parsed correctly!" );
@@ -1499,8 +1504,13 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
             /* aSize */ elem.size );
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
-    sheet->SetBackgroundColor( GetColorFromInt( elem.areaColor ) );
-    sheet->SetBorderColor( GetColorFromInt( elem.color ) );
+    // Harness ports are drawn the same colors as harness connectors, discarding properties, found in Altium's file,
+    // so keep color settings for use in harness ports
+    m_harnessConnectorBackgroundColor = GetColorFromInt( elem.areaColor );
+    m_harnessConnectorBorderColor = GetColorFromInt( elem.color );
+
+    sheet->SetBackgroundColor( m_harnessConnectorBackgroundColor );
+    sheet->SetBorderColor( m_harnessConnectorBorderColor );
 
     sheet->SetScreen( screen );
 
@@ -1520,8 +1530,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
     else
     {
         // I have no clue if this situation can ever exist
-        m_reporter->Report(
-                _( "Harness connector, belonging to the part is not currently supported." ),
+        m_reporter->Report( _( "Harness connector, belonging to the part is not currently supported." ),
                 RPT_SEVERITY_ERROR );
     }
 }
@@ -1535,7 +1544,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& a
 
     if( sheetIt == m_sheets.end() )
     {
-        m_reporter->Report( wxString::Format( _( "Harness entry's paren (%d) not found." ),
+        m_reporter->Report( wxString::Format( _( "Harness entry's parent (%d) not found." ),
                                               SCH_ALTIUM_PLUGIN::m_harnessEntryParent ),
                 RPT_SEVERITY_ERROR );
         return;
@@ -1599,12 +1608,11 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessType( const std::map<wxString, wxString>& aP
     SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
     sheetNameField.SetTextColor( GetColorFromInt( elem.color ) );
 
-    m_reporter->Report(
-            wxString::Format( _( "Altium's Harness Connector (%s) was imported as "
+    m_reporter->Report( wxString::Format( _( "Altium's Harness Connector (%s) was imported as "
                                  "Hierarchical sheet. Please review imported schematic, as "
-                                 "KiCad does natively support these Altium elements." ),
-                              elem.text ),
-            RPT_SEVERITY_WARNING );
+                                 "KiCad does not natively support these Altium elements." ),
+                                 elem.text ),
+                                 RPT_SEVERITY_WARNING );
 }
 
 
@@ -2059,9 +2067,73 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 }
 
 
+void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
+{
+    SCH_TEXTBOX* textBox = new SCH_TEXTBOX();
+
+    textBox->SetText( aElem.name );
+    textBox->SetTextColor( GetColorFromInt( aElem.textColor ) );
+
+    int height = aElem.height;
+    if( height <= 0 )
+        height = Mils2iu( 100 ); //  chose default 50 grid
+
+    textBox->SetStartX( ( aElem.location + m_sheetOffset ).x );
+    textBox->SetStartY( ( aElem.location + m_sheetOffset ).y - ( height / 2 ) );
+    textBox->SetEndX( ( aElem.location + m_sheetOffset ).x + ( aElem.width ) );
+    textBox->SetEndY( ( aElem.location + m_sheetOffset ).y + ( height / 2 ) );
+
+    textBox->SetFillColor( m_harnessConnectorBackgroundColor );
+    textBox->SetFilled( true );
+
+    textBox->SetStroke( STROKE_PARAMS( 2, PLOT_DASH_TYPE::DEFAULT, m_harnessConnectorBorderColor ) );
+
+    switch( aElem.alignment )
+    {
+    default:
+    case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        break;
+    case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        break;
+    case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        break;
+    }
+
+    size_t fontId = static_cast<int>( aElem.fontId );
+
+    if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
+    {
+        const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
+        textBox->SetItalic( font.italic );
+        textBox->SetBold( font.bold );
+        textBox->SetTextSize( { font.size / 2, font.size / 2 } );
+        //textBox->SetFont(  //how to set font, we have a font mane here: ( font.fontname );
+    }
+
+    textBox->SetFlags( IS_NEW );
+
+    m_currentSheet->GetScreen()->Append( textBox );
+
+        m_reporter->Report( wxString::Format( _( "Altium's Harness port (%s) was imported as "
+                                 "Text box. Please review imported schematic, as "
+                                 "KiCad does not natively support these Altium elements." ),
+                                 aElem.name ),
+							     RPT_SEVERITY_WARNING );
+}
+
+
 void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 {
-    bool    isHarness = !aElem.harnessType.IsEmpty();
+    if( !aElem.harnessType.IsEmpty() )
+    {
+        // Parse harness ports after "Additional" compound section is parsed
+        m_altiumHarnessPortsCurrentSheet.emplace_back( aElem );
+        return;
+    }
+
     VECTOR2I start = aElem.location + m_sheetOffset;
     VECTOR2I end = start;
 
@@ -2098,7 +2170,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
                             || endIsWireTerminal
                             || endIsBusTerminal;
 
-    if( !isHarness && !connectionFound )
+    if( !connectionFound )
     {
         m_reporter->Report( wxString::Format( _( "Port %s has no connections." ), aElem.name ),
                             RPT_SEVERITY_WARNING );
@@ -2108,26 +2180,13 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     VECTOR2I        position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
     SCH_LABEL_BASE* label;
 
-    if( isHarness )
-    {
-        label = new SCH_DIRECTIVE_LABEL( position );
-
-        std::vector<SCH_FIELD>& fields = label->GetFields();
-
-        fields.emplace_back( SCH_FIELD( { 0, 0 }, 0, label, wxT( "Harness" ) ) );
-        fields[0].SetText( aElem.harnessType );
-        fields[0].SetVisible( true );
-    }
     // TODO: detect correct label type depending on sheet settings, etc.
     //{
     //    label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
     //}
-    else
-    {
-
-        label = new SCH_GLOBALLABEL( position, aElem.name );
-    }
-
+    
+    label = new SCH_GLOBALLABEL( position, aElem.name );
+    
     switch( aElem.iotype )
     {
     default:

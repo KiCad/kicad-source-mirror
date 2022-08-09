@@ -426,7 +426,7 @@ ASCH_SIGNAL_HARNESS::ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aP
                              -ReadKiCadUnitFrac( aProps, "Y" + si ) );
     }
 
-    indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+    indexInSheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
 
     color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
     lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
@@ -587,6 +587,13 @@ ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProps )
 
     iotype = ReadEnum<ASCH_PORT_IOTYPE>( aProps, "IOTYPE", 0, 3, ASCH_PORT_IOTYPE::UNSPECIFIED );
     style = ReadEnum<ASCH_PORT_STYLE>( aProps, "STYLE", 0, 7, ASCH_PORT_STYLE::NONE_HORIZONTAL );
+
+    areaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    fontId = ALTIUM_PARSER::ReadInt( aProps, "TEXTFONTID", 0 );
+    textColor = ALTIUM_PARSER::ReadInt( aProps, "TEXTCOLOR", 0 );
+
+    alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3, ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
 }
 
 
@@ -698,6 +705,8 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProps, in
     italic    = ALTIUM_PARSER::ReadBool( aProps, "ITALIC" + sid, false );
     bold      = ALTIUM_PARSER::ReadBool( aProps, "BOLD" + sid, false );
     underline = ALTIUM_PARSER::ReadBool( aProps, "UNDERLINE" + sid, false );
+    
+    areaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR" + sid, 0 );
 }
 
 VECTOR2I ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize )
