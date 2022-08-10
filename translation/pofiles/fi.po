@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"PO-Revision-Date: 2022-08-11 16:14+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,24 +124,24 @@ msgid "Last render time %.0f ms"
 msgstr "Viimeisin renderointiaika %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Verkko %s Verkkoluokka %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s ja %s"
+msgstr "Antura %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Sääntöalue päällä %s"
+msgstr "Sääntöalue %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Täytöt"
+msgstr "Vyöhyke %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -292,9 +292,8 @@ msgid "&Preferences"
 msgstr "&Asetukset"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Näkymät (Alt+Sarkain):"
+msgstr "Näkymät (Shift+Sarkain):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
@@ -6078,9 +6077,8 @@ msgid "Show Grid"
 msgstr "Näytä ruudukko"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Näytä ruudukon pisteet tai viivat muokkausikkunassa"
+msgstr "Näytä taustaristikko muokkausikkunassa"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9899,22 +9897,20 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulaattori vaatii täysin merkityn kytkentäkaavion."
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Tallenna kaikki muutokset"
+msgstr "Tallenna kaikki jännitteet"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Kirjoita ohje kaikkien jännitteiden tallentamiseksi (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "Tyhjennä kaikki kerrokset"
+msgstr "Tallenna kaikki virrat"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Kirjoita ohje kaikkien virtojen tallentamiseksi (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:346
 msgid "External simulator command:"
@@ -10872,28 +10868,26 @@ msgid "Add signal by name:"
 msgstr "Lisää signaali nimen mukaan:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "Symbolikirjastotiedoston '%s' luominen epäonnistui."
+msgstr "Mallikirjaston '%s' lukeminen epäonnistui."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:711
-#, fuzzy
 msgid "Browse Models"
-msgstr "Selaa dokumentaatiotiedostoja"
+msgstr "Selaa Malleja"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Verkon nimi '%s' on jo käytössä."
+msgstr "Ei mallia nimeltä '%s' kirjastossa."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:27
 msgid "Source"
 msgstr "Lähde"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Induktanssi:"
+msgstr "Instanssi"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10904,9 +10898,8 @@ msgid "Model:"
 msgstr "Malli:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "Korvaa"
+msgstr "Ohita"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -10914,9 +10907,8 @@ msgid "Model"
 msgstr "Malli"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Device:"
-msgstr "Laite"
+msgstr "Laite:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10925,9 +10917,8 @@ msgid "Type:"
 msgstr "Tyyppi:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Sivu 1"
+msgstr "Sivu"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10939,29 +10930,24 @@ msgid "Parameters"
 msgstr "Parametrit"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "DKoodi():"
+msgstr "Koodi"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Symboliyksikkö"
+msgstr "Symbolinasta"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Malli"
+msgstr "Mallinasta"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Vaihtoehtoiset nastojen määritykset"
+msgstr "Nastojen määritykset"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "Poista symboli käytöstä simulointia varten"
+msgstr "Poista symboli simulaatiosta"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -13318,9 +13304,9 @@ msgstr ""
 "Merkinnät pitää korjata ennen simulointia."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Kirjastotiedostoa %s ei löydy."
+msgstr "Kirjastotiedostoa %s ei löydy"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -14922,19 +14908,19 @@ msgid "Discard New Sheet"
 msgstr "Hylkää Uusi Lehti"
 
 #: eeschema/sim/sim_model.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Kohteen %s jäsentäminen ryhmässä %s ei onnistu"
+msgstr "Parametrin \"%s\" asettaminen arvoksi \"%s\" epäonnistui"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
 msgid "%s describes %lu pins, expected %u"
-msgstr ""
+msgstr "%s kuvaa %lu nastat, odotettu %u"
 
 #: eeschema/sim/sim_model_ideal.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "Epäonnistui luoda kansiota '%s'."
+msgstr "Epäonnistui päätellä malli Luvusta '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15187,9 +15173,8 @@ msgid "Voltage (measured)"
 msgstr "Jännite (mitattu)"
 
 #: eeschema/sim/sim_value.cpp:385
-#, fuzzy
 msgid "Unknown SIM_VALUE type"
-msgstr "Tuntematon Malli_tyyppi "
+msgstr "Tuntematon SIM_ARVO tyyppi"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -20507,9 +20492,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "Kuparin resistiivisyys:"
+msgstr "Johtimen resistanssi:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -23397,30 +23381,26 @@ msgstr "Kyynelpisara Ominaisuudet"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:226
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "Pad-luettelon asetukset"
+msgstr "Muutosasetukset"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:99
 #: pcbnew/tools/convert_tool.cpp:68
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "Lisää viivanleveyttä"
+msgstr "Ohita lähdeobjektin viivaleveydet"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:111
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:72
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "Poista kohteita"
+msgstr "Poista lähdeobjektit muuntamisen jälkeen"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "Yhteys kuparivyöhykkeisiin"
+msgstr "Muunna kuparivyöhykkeeksi"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:429
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23444,9 +23424,8 @@ msgid "No layer selected."
 msgstr "Kerrosta ei ole valittu."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:957
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "Valitsemalla <ei verkkoa> luodaan irrallinen kuparisaareke."
+msgstr "<ei verkkoa> johtaa eristettyyn kuparisaarekkeeseen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -25409,6 +25388,7 @@ msgstr "Käytä pora / paikka-tiedoston alkuperää"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
 msgstr ""
+"Käytä negatiivisia X-koordinaatteja jalanjäljille alimmaisella kerroksella"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -26397,9 +26377,8 @@ msgid "Import Netlist"
 msgstr "Tuo Netlist"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:120
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "Yhteys kuparivyöhykkeisiin"
+msgstr "Muunna ei-kuparialueeksi"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -27952,9 +27931,8 @@ msgid "Push Pad Properties"
 msgstr "Työntöanturan -ominaisuudet"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "&Anturan asetukset"
+msgstr "Muutosasetukset:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 msgid "Convert to Rule Area"
@@ -31055,9 +31033,8 @@ msgid "Missing severity name."
 msgstr "Puuttuva vakavuuden nimi."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Tarkistetaan läpivientien liitosalueita..."
+msgstr "Tarkistetaan antura & läpivienti kuparirenkaat.."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -33806,14 +33783,14 @@ msgid "Full Length"
 msgstr "Täysipituinen"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Leveysrajoitukset: min %s, max %s"
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "Reiän rajoitus: min %s."
+msgstr "Leveysrajoitus: min %s"
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -36148,19 +36125,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Ratkaistu leveysrajoitukset: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
-msgstr "Liitostyyppi:"
+msgstr "Liitosleveys"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Lämpöpinnan leveyden tarkkuus:"
+msgstr "Yhteyden leveysresoluutio:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "Ratkaistu vyöhykeyhteystyyppi: %s."
+msgstr "Ratkaistu vähimmäisyhteyden leveyden rajoitus: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
