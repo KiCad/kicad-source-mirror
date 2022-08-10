@@ -704,46 +704,46 @@
 
   (symbol_instances
     (path "/34aa6f33-c05e-4723-9e74-afc1625c9501"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/3ec19414-af4c-48f9-b3c1-0967946aad57"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/40f72e93-2e7b-4041-9908-4ceb8cc5968e"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/487d173e-6d23-410c-bf91-75aa1396dec9"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/916e7603-28f1-49c3-8465-04b0add34ac6"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
     )
     (path "/e7e2ccf3-0a39-44c0-9068-a7e83432702d"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0102") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/916e7603-28f1-49c3-8465-04b0add34ac6"
+      (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/3ec19414-af4c-48f9-b3c1-0967946aad57"
+      (reference "#PWR0104") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/487d173e-6d23-410c-bf91-75aa1396dec9"
+      (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/40f72e93-2e7b-4041-9908-4ceb8cc5968e"
+      (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
     )
     (path "/4dbe17b3-8286-49ce-adaf-3c794ad8274c"
-      (reference "Cp") (unit 1) (value "100uF") (footprint "")
+      (reference "Cp1") (unit 1) (value "100uF") (footprint "")
     )
     (path "/134b0945-6312-494f-b15e-86844b1af56b"
-      (reference "Cs") (unit 1) (value "100uF") (footprint "")
+      (reference "Cs1") (unit 1) (value "100uF") (footprint "")
     )
     (path "/6f3941ed-3978-4d28-b217-551f8904977b"
-      (reference "IPULSE") (unit 1) (value "y2=1 tw=1u") (footprint "")
+      (reference "IPULSE1") (unit 1) (value "y2=1 tw=1u") (footprint "")
     )
     (path "/23a20b7d-be56-4b4b-b6ae-be89f2c401db"
-      (reference "Lp") (unit 1) (value "100uH") (footprint "")
+      (reference "Lp1") (unit 1) (value "100uH") (footprint "")
     )
     (path "/86f0bff3-c028-492d-8a21-44716128e6e8"
-      (reference "Ls") (unit 1) (value "100uH") (footprint "")
+      (reference "Ls1") (unit 1) (value "100uH") (footprint "")
     )
     (path "/21bd30c7-8dd9-4b17-b22c-5b93a2f6ec2b"
-      (reference "Rp") (unit 1) (value "1KΩ") (footprint "")
+      (reference "Rp1") (unit 1) (value "1KΩ") (footprint "")
     )
     (path "/32a99710-4056-4181-85bb-64e2153c9cb4"
-      (reference "Rs") (unit 1) (value "1mΩ") (footprint "")
+      (reference "Rs1") (unit 1) (value "1mΩ") (footprint "")
     )
     (path "/7ba34897-97ee-4909-8ec6-27586fb15817"
-      (reference "VPULSE") (unit 1) (value "y2=1 tw=1u") (footprint "")
+      (reference "VPULSE1") (unit 1) (value "y2=1 tw=1u") (footprint "")
     )
   )
 )

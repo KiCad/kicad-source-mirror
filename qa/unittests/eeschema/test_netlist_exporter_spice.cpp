@@ -262,7 +262,7 @@ BOOST_AUTO_TEST_CASE( Opamp )
     TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
     TestTranPoint( 250e-6, { { "V(/in)", 500e-3 }, { "V(/out)", 1 } } );
     TestTranPoint( 500e-6, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
-    TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } ); 
+    TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } );
     TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
 }
 
@@ -282,8 +282,8 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 BOOST_AUTO_TEST_CASE( Rlc )
 {
     TestNetlist( "rlc" );
-    TestTranPoint( 9.43e-3, { { "V(/Vp)", -19e-3 }, { "I(Rs)", 19e-3 } } );
-    TestTranPoint( 9.74e-3, { { "V(/Vp)", 19e-3 }, { "I(Rs)", -19e-3 } } );
+    TestTranPoint( 9.43e-3, { { "V(/Vp)", -19e-3 }, { "I(Rs1)", 19e-3 } } );
+    TestTranPoint( 9.74e-3, { { "V(/Vp)", 19e-3 }, { "I(Rs1)", -19e-3 } } );
 }
 
 
