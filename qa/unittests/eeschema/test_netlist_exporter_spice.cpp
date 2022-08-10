@@ -337,8 +337,11 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver" );
+    // Test D1 current before the pulse
     TestTranPoint( 95e-9, { { "I(D1)", 0 } } );
-    TestTranPoint( 110e-9, { { "I(D1)", 725e-3 } } );
+    // Test D1 current during the pulse
+    TestTranPoint( 110e-9, { { "I(D1)", 0.770 } }, 0.1 );
+    // Test D1 current after the pulse
     TestTranPoint( 150e-9, { { "I(D1)", 0 } } );
 }
 
