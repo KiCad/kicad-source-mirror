@@ -128,7 +128,7 @@ bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
                                 SIM_VALUE::TYPE aValueType,
                                 NOTATION aNotation )
 {
-    tao::pegtl::string_input<> in( aString.ToStdString(), "from_content" );
+    tao::pegtl::string_input<> in( aString.ToUTF8(), "from_content" );
 
     try
     {
@@ -192,7 +192,7 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
 {
     LOCALE_IO toggle;
 
-    tao::pegtl::string_input<> in( aString.ToStdString(), "from_content" );
+    tao::pegtl::string_input<> in( aString.ToUTF8(), "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
     PARSE_RESULT result;
 

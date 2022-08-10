@@ -180,7 +180,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
             else
                 continue;
 
-            tao::pegtl::string_input<> in( text.ToStdString() + "\n", "from_content" );
+            tao::pegtl::string_input<> in( ( text + "\n" ).ToUTF8(), "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
             try
@@ -320,8 +320,8 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
         catch( const IO_ERROR& e )
         {
             DisplayErrorMessage( nullptr,
-                wxString::Format( "Failed reading %s simulation model.", aItem.refName ),
-                e.What() );
+                    wxString::Format( _( "Failed reading %s simulation model." ), aItem.refName ),
+                    e.What() );
             return false;
         }
     }

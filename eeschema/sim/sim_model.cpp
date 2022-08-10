@@ -380,9 +380,9 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 }
 
 
-TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
+TYPE SIM_MODEL::ReadTypeFromSpiceCode( const wxString& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
+    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -584,7 +584,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
     case TYPE::TLINE_Z0:
         try
         {
-            tao::pegtl::string_input<> in( aValue.ToStdString(), "Value" );
+            tao::pegtl::string_input<> in( aValue.ToUTF8(), "Value" );
             auto root = tao::pegtl::parse_tree::parse<
                 SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
                 SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -700,7 +700,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCou
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::string& aSpiceCode )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const wxString& aSpiceCode )
 {
     std::unique_ptr<SIM_MODEL> model = create( ReadTypeFromSpiceCode( aSpiceCode ) );
 
@@ -837,12 +837,12 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldNa
 }
 
 
-void SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
+void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
 {
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
 
-    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
+    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -1260,7 +1260,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
 {
     LOCALE_IO toggle;
 
-    tao::pegtl::string_input<> in( aParamsField.ToStdString(), "Sim_Params" );
+    tao::pegtl::string_input<> in( aParamsField.ToUTF8(), "Sim_Params" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -1329,7 +1329,7 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsF
 
     LOCALE_IO toggle;
 
-    tao::pegtl::string_input<> in( aPinsField.ToStdString(), PINS_FIELD );
+    tao::pegtl::string_input<> in( aPinsField.ToUTF8(), PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try

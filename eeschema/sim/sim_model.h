@@ -373,7 +373,7 @@ public:
                   DIR aDir = DIR_INOUT,
                   SIM_VALUE::TYPE aType = SIM_VALUE::TYPE_FLOAT,
                   FLAGS aFlags = {},
-                  std::string aUnit = "",
+                  const wxString& aUnit = "",
                   CATEGORY aCategory = CATEGORY::PRINCIPAL,
                   const wxString& aDefaultValue = "",
                   const wxString& aDefaultValueOfOtherVariant = "",
@@ -415,7 +415,7 @@ public:
     static SPICE_INFO SpiceInfo( TYPE aType );
 
 
-    static TYPE ReadTypeFromSpiceCode( const std::string& aSpiceCode );
+    static TYPE ReadTypeFromSpiceCode( const wxString& aSpiceCode );
 
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
@@ -427,7 +427,7 @@ public:
 
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount = 0 );
-    static std::unique_ptr<SIM_MODEL> Create( const std::string& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL> Create( const wxString& aSpiceCode );
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
                                               unsigned         aSymbolPinCount );
 
@@ -456,7 +456,7 @@ public:
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
 
-    virtual void ReadSpiceCode( const std::string& aSpiceCode );
+    virtual void ReadSpiceCode( const wxString& aSpiceCode );
 
     template <typename T>
     void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );

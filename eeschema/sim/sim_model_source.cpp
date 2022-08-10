@@ -113,7 +113,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
         case TYPE::V_PWL:
         case TYPE::I_PWL:
         {
-            tao::pegtl::string_input<> in( GetParam( 0 ).value->ToString().ToStdString(),
+            tao::pegtl::string_input<> in( GetParam( 0 ).value->ToString().ToUTF8(),
                                            "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 

@@ -52,9 +52,9 @@ SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType )
 }
 
 
-void SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
+void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
+    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try

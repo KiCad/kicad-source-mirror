@@ -127,7 +127,7 @@ void SIM_MODEL_IDEAL::inferredReadDataFields( unsigned aSymbolPinCount, const st
         {
             wxString value = GetFieldValue( aFields, VALUE_FIELD );
 
-            tao::pegtl::string_input<> in( value.ToStdString(), "Value" );
+            tao::pegtl::string_input<> in( value.ToUTF8(), "Value" );
             auto root = tao::pegtl::parse_tree::parse<
                 SIM_MODEL_PARSER::fieldFloatValueGrammar,
                 SIM_MODEL_PARSER::fieldFloatValueSelector>

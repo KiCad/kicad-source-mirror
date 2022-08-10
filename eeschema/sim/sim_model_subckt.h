@@ -33,7 +33,7 @@ class SIM_MODEL_SUBCKT : public SIM_MODEL
 public:
     SIM_MODEL_SUBCKT( TYPE aType );
 
-    void ReadSpiceCode( const std::string& aSpiceCode ) override;
+    void ReadSpiceCode( const wxString& aSpiceCode ) override;
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
