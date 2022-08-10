@@ -758,7 +758,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
                 xnets->AddChild( xnet = node( wxT( "net" ) ) );
                 xnet->AddAttribute( wxT( "code" ), netCodeTxt );
-                xnet->AddAttribute( wxT( "name" ), EscapeString( net_record->m_Name, CTX_NETNAME ) );
+                xnet->AddAttribute( wxT( "name" ), net_record->m_Name );
 
                 added = true;
             }
