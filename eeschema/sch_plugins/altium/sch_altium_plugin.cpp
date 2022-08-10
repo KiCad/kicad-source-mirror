@@ -928,9 +928,9 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            textItem->SetItalic( font.italic );
-            textItem->SetBold( font.bold );
-            textItem->SetTextSize( { font.size / 2, font.size / 2 } );
+            textItem->SetItalic( font.Italic );
+            textItem->SetBold( font.Bold );
+            textItem->SetTextSize( { font.Size / 2, font.Size / 2 } );
         }
 
         textItem->SetFlags(IS_NEW );
@@ -964,9 +964,9 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            textItem->SetItalic( font.italic );
-            textItem->SetBold( font.bold );
-            textItem->SetTextSize( { font.size / 2, font.size / 2 } );
+            textItem->SetItalic( font.Italic );
+            textItem->SetBold( font.Bold );
+            textItem->SetTextSize( { font.Size / 2, font.Size / 2 } );
         }
     }
 }
@@ -1002,9 +1002,9 @@ void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aPro
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        text->SetItalic( font.italic );
-        text->SetBold( font.bold );
-        text->SetTextSize( { font.size / 2, font.size / 2 } );
+        text->SetItalic( font.Italic );
+        text->SetBold( font.Bold );
+        text->SetTextSize( { font.Size / 2, font.Size / 2 } );
     }
 
     text->SetFlags( IS_NEW );
@@ -1044,9 +1044,9 @@ void SCH_ALTIUM_PLUGIN::ParseNote( const std::map<wxString, wxString>& aProperti
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        text->SetItalic( font.italic );
-        text->SetBold( font.bold );
-        text->SetTextSize( { font.size / 2, font.size / 2 } );
+        text->SetItalic( font.Italic );
+        text->SetBold( font.Bold );
+        text->SetTextSize( { font.Size / 2, font.Size / 2 } );
     }
 
     text->SetFlags( IS_NEW );
@@ -1471,15 +1471,15 @@ void SCH_ALTIUM_PLUGIN::ParseSignalHarness( const std::map<wxString, wxString>& 
 {
     ASCH_SIGNAL_HARNESS elem( aProperties );
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
 
-        for( VECTOR2I& point : elem.points )
+        for( VECTOR2I& point : elem.Points )
             poly->AddPoint( point + m_sheetOffset );
 
-        poly->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID,
-                                        GetColorFromInt( elem.color ) ) );
+        poly->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID,
+                                        GetColorFromInt( elem.Color ) ) );
         poly->SetFlags( IS_NEW );
 
         m_currentSheet->GetScreen()->Append( poly );
@@ -1496,18 +1496,18 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
 {
     ASCH_HARNESS_CONNECTOR elem( aProperties );
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
     SCH_SHEET* sheet = new SCH_SHEET(
             /* aParent */ m_currentSheet,
-            /* aPosition */ elem.location + m_sheetOffset,
-            /* aSize */ elem.size );
+            /* aPosition */ elem.Location + m_sheetOffset,
+            /* aSize */ elem.Size );
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
     // Harness ports are drawn the same colors as harness connectors, discarding properties, found in Altium's file,
     // so keep color settings for use in harness ports
-    m_harnessConnectorBackgroundColor = GetColorFromInt( elem.areaColor );
-    m_harnessConnectorBorderColor = GetColorFromInt( elem.color );
+    m_harnessConnectorBackgroundColor = GetColorFromInt( elem.AreaColor );
+    m_harnessConnectorBorderColor = GetColorFromInt( elem.Color );
 
     sheet->SetBackgroundColor( m_harnessConnectorBackgroundColor );
     sheet->SetBorderColor( m_harnessConnectorBorderColor );
@@ -1553,32 +1553,32 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& a
     SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheetIt->second );
     sheetIt->second->AddPin( sheetPin );
 
-    sheetPin->SetText( elem.name );
+    sheetPin->SetText( elem.Name );
     sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
 
     VECTOR2I pos = sheetIt->second->GetPosition();
     wxSize   size = sheetIt->second->GetSize();
 
-    switch( elem.side )
+    switch( elem.Side )
     {
     default:
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
-        sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetPosition( { pos.x, pos.y + elem.DistanceFromTop } );
         sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
         sheetPin->SetSide( SHEET_SIDE::LEFT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
-        sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.DistanceFromTop } );
         sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
         sheetPin->SetSide( SHEET_SIDE::RIGHT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::TOP:
-        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
+        sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y } );
         sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
         sheetPin->SetSide( SHEET_SIDE::TOP );
         break;
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
-        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
+        sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y + size.y } );
         sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
         sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
@@ -1602,16 +1602,16 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessType( const std::map<wxString, wxString>& aP
 
     SCH_FIELD& sheetNameField = sheetIt->second->GetFields()[SHEETNAME];
 
-    sheetNameField.SetPosition( elem.location + m_sheetOffset );
-    sheetNameField.SetText( elem.text );
+    sheetNameField.SetPosition( elem.Location + m_sheetOffset );
+    sheetNameField.SetText( elem.Text );
     sheetNameField.SetVisible( true ); // Always set as visible so user is aware about ( !elem.isHidden );
     SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
-    sheetNameField.SetTextColor( GetColorFromInt( elem.color ) );
+    sheetNameField.SetTextColor( GetColorFromInt( elem.Color ) );
 
     m_reporter->Report( wxString::Format( _( "Altium's Harness Connector (%s) was imported as "
                                  "Hierarchical sheet. Please review imported schematic, as "
                                  "KiCad does not natively support these Altium elements." ),
-                                 elem.text ),
+                                 elem.Text ),
                                  RPT_SEVERITY_WARNING );
 }
 
@@ -2071,24 +2071,24 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
 {
     SCH_TEXTBOX* textBox = new SCH_TEXTBOX();
 
-    textBox->SetText( aElem.name );
-    textBox->SetTextColor( GetColorFromInt( aElem.textColor ) );
+    textBox->SetText( aElem.Name );
+    textBox->SetTextColor( GetColorFromInt( aElem.TextColor ) );
 
-    int height = aElem.height;
+    int height = aElem.Height;
     if( height <= 0 )
         height = Mils2iu( 100 ); //  chose default 50 grid
 
-    textBox->SetStartX( ( aElem.location + m_sheetOffset ).x );
-    textBox->SetStartY( ( aElem.location + m_sheetOffset ).y - ( height / 2 ) );
-    textBox->SetEndX( ( aElem.location + m_sheetOffset ).x + ( aElem.width ) );
-    textBox->SetEndY( ( aElem.location + m_sheetOffset ).y + ( height / 2 ) );
+    textBox->SetStartX( ( aElem.Location + m_sheetOffset ).x );
+    textBox->SetStartY( ( aElem.Location + m_sheetOffset ).y - ( height / 2 ) );
+    textBox->SetEndX( ( aElem.Location + m_sheetOffset ).x + ( aElem.Width ) );
+    textBox->SetEndY( ( aElem.Location + m_sheetOffset ).y + ( height / 2 ) );
 
     textBox->SetFillColor( m_harnessConnectorBackgroundColor );
     textBox->SetFilled( true );
 
     textBox->SetStroke( STROKE_PARAMS( 2, PLOT_DASH_TYPE::DEFAULT, m_harnessConnectorBorderColor ) );
 
-    switch( aElem.alignment )
+    switch( aElem.Alignment )
     {
     default:
     case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
@@ -2102,14 +2102,14 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
         break;
     }
 
-    size_t fontId = static_cast<int>( aElem.fontId );
+    size_t fontId = static_cast<int>( aElem.FontID );
 
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        textBox->SetItalic( font.italic );
-        textBox->SetBold( font.bold );
-        textBox->SetTextSize( { font.size / 2, font.size / 2 } );
+        textBox->SetItalic( font.Italic );
+        textBox->SetBold( font.Bold );
+        textBox->SetTextSize( { font.Size / 2, font.Size / 2 } );
         //textBox->SetFont(  //how to set font, we have a font mane here: ( font.fontname );
     }
 
@@ -2120,37 +2120,37 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
         m_reporter->Report( wxString::Format( _( "Altium's Harness port (%s) was imported as "
                                  "Text box. Please review imported schematic, as "
                                  "KiCad does not natively support these Altium elements." ),
-                                 aElem.name ),
+                                 aElem.Name ),
 							     RPT_SEVERITY_WARNING );
 }
 
 
 void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 {
-    if( !aElem.harnessType.IsEmpty() )
+    if( !aElem.HarnessType.IsEmpty() )
     {
         // Parse harness ports after "Additional" compound section is parsed
         m_altiumHarnessPortsCurrentSheet.emplace_back( aElem );
         return;
     }
 
-    VECTOR2I start = aElem.location + m_sheetOffset;
+    VECTOR2I start = aElem.Location + m_sheetOffset;
     VECTOR2I end = start;
 
-    switch( aElem.style )
+    switch( aElem.Style )
     {
     default:
     case ASCH_PORT_STYLE::NONE_HORIZONTAL:
     case ASCH_PORT_STYLE::LEFT:
     case ASCH_PORT_STYLE::RIGHT:
     case ASCH_PORT_STYLE::LEFT_RIGHT:
-        end.x += aElem.width;
+        end.x += aElem.Width;
         break;
     case ASCH_PORT_STYLE::NONE_VERTICAL:
     case ASCH_PORT_STYLE::TOP:
     case ASCH_PORT_STYLE::BOTTOM:
     case ASCH_PORT_STYLE::TOP_BOTTOM:
-        end.y -= aElem.width;
+        end.y -= aElem.Width;
         break;
     }
 
@@ -2172,7 +2172,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 
     if( !connectionFound )
     {
-        m_reporter->Report( wxString::Format( _( "Port %s has no connections." ), aElem.name ),
+        m_reporter->Report( wxString::Format( _( "Port %s has no connections." ), aElem.Name ),
                             RPT_SEVERITY_WARNING );
     }
 
@@ -2185,9 +2185,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     //    label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
     //}
     
-    label = new SCH_GLOBALLABEL( position, aElem.name );
+    label = new SCH_GLOBALLABEL( position, aElem.Name );
     
-    switch( aElem.iotype )
+    switch( aElem.IOtype )
     {
     default:
     case ASCH_PORT_IOTYPE::UNSPECIFIED:
@@ -2204,7 +2204,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
         break;
     }
 
-    switch( aElem.style )
+    switch( aElem.Style )
     {
     default:
     case ASCH_PORT_STYLE::NONE_HORIZONTAL:
