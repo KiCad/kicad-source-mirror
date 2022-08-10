@@ -1413,8 +1413,10 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         PAD dummy_pad( *pad );
         dummy_pad.SetOrientation( spokesAngle );
 
-        // Spokes are from center of pad, not from hole
-        dummy_pad.SetPosition( -1 * pad->GetOffset() );
+        // Spokes are from center of pad shape, not from hole. So the dummy pad
+        // (the pad shape) has no offset and is at position 0,0
+        dummy_pad.SetPosition( VECTOR2I( 0, 0 ) );
+        dummy_pad.SetOffset( VECTOR2I( 0, 0 ) );
 
         BOX2I reliefBB = dummy_pad.GetBoundingBox();
         reliefBB.Inflate( thermalReliefGap + epsilon );
