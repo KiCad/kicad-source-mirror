@@ -117,8 +117,8 @@ public:
         //ngspice->Init();
         ngspice->Command( "set ngbehavior=ps" );
         ngspice->Command( "setseed 1" );
-        ngspice->LoadNetlist( netlist.ToStdString() );
-        ngspice->Run();
+        BOOST_REQUIRE( ngspice->LoadNetlist( netlist.ToStdString() ) );
+        BOOST_REQUIRE( ngspice->Run() );
 
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );

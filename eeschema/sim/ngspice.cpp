@@ -296,12 +296,12 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
 
     Command( "remcirc" );
-    m_ngSpice_Circ( lines.data() );
+    bool success = !m_ngSpice_Circ( lines.data() );
 
     for( auto line : lines )
         free( line );
 
-    return true;
+    return success;
 }
 
 
@@ -345,8 +345,7 @@ bool NGSPICE::Command( const string& aCmd )
 {
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     validate();
-    m_ngSpice_Command( (char*) aCmd.c_str() );
-    return true;
+    return !m_ngSpice_Command( (char*) aCmd.c_str() );
 }
 
 
