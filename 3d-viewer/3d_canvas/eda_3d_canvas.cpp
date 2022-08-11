@@ -521,6 +521,14 @@ void EDA_3D_CANVAS::DoRePaint()
         render_pivot( curtime_delta_s, scale );
     }
 
+#if defined( KICAD_USE_3DCONNEXION )
+    if( m_render3dmousePivot )
+    {
+        const float scale = glm::min( m_camera.GetZoom(), 1.0f );
+        render3dmousePivot( scale );
+    }
+#endif
+
     // "Swaps the double-buffer of this window, making the back-buffer the
     //  front-buffer and vice versa, so that the output of the previous OpenGL
     //  commands is displayed on the window."

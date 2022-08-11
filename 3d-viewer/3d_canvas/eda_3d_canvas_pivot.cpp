@@ -73,7 +73,7 @@ static void pivot_render_triangles( float t )
 }
 
 
-void EDA_3D_CANVAS::render_pivot( float t , float aScale )
+void EDA_3D_CANVAS::render_pivot( float t, float aScale )
 {
     wxASSERT( aScale >= 0.0f );
     wxASSERT( t >= 0.0f );
@@ -118,3 +118,46 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
     pivot_render_triangles( t  * 0.5f );
     glPopMatrix();
 }
+
+
+#if defined( KICAD_USE_3DCONNEXION )
+void EDA_3D_CANVAS::render3dmousePivot( float aScale )
+{
+    wxASSERT( aScale >= 0.0f );
+
+    glDisable( GL_LIGHTING );
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_CULL_FACE );
+
+    // Set projection and modelview matrixes
+    glMatrixMode( GL_PROJECTION );
+    glLoadMatrixf( glm::value_ptr( m_camera.GetProjectionMatrix() ) );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    glLoadMatrixf( glm::value_ptr( m_camera.GetViewMatrix() ) );
+
+    glEnable( GL_COLOR_MATERIAL );
+    glColor4f( 0.0f, 0.667f, 0.902f, 0.75f );
+
+    // Translate to the look at position
+    glTranslatef( m_3dmousePivotPos.x, m_3dmousePivotPos.y, m_3dmousePivotPos.z );
+
+    glPointSize( 16.0f );
+    glEnable( GL_POINT_SMOOTH );
+    glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
+
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    glScalef( aScale, aScale, aScale );
+
+    // Draw a point at the look at position.
+    glBegin( GL_POINTS );
+    glVertex3f( 0, 0, 0 );
+    glEnd();
+
+    glDisable( GL_BLEND );
+    glDisable( GL_POINT_SMOOTH );
+}
+#endif

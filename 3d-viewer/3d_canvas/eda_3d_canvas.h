@@ -178,6 +178,39 @@ public:
      */
     void SetRenderPivot( bool aValue ) { m_render_pivot = aValue; }
 
+
+#if defined( KICAD_USE_3DCONNEXION )
+    /**
+     * Get a value indicating whether to render the 3dmouse pivot.
+     */
+    bool GetRender3dmousePivot()
+    {
+        return m_render3dmousePivot;
+    }
+
+
+    /**
+     * Set aValue indicating whether to render the 3dmouse pivot.
+     *
+     * @param aValue true will cause the pivot to be rendered on the next redraw.
+     */
+    void SetRender3dmousePivot( bool aValue )
+    {
+        m_render3dmousePivot = aValue;
+    }
+
+
+    /**
+     *  Set the position of the the 3dmouse pivot.
+     *
+     *  @param aPos is the position of the 3dmouse rotation pivot
+     */
+    void Set3dmousePivotPos( const SFVEC3F& aPos )
+    {
+        m_3dmousePivotPos = aPos;
+    }
+#endif
+
 private:
     /**
      * Called by a wxPaintEvent event
@@ -245,6 +278,15 @@ private:
      */
     void render_pivot( float t, float aScale );
 
+#if defined( KICAD_USE_3DCONNEXION )
+    /**
+     * Render the 3dmouse pivot cursor.
+     *
+     * @param aScale scale to apply on the cursor.
+     */
+    void render3dmousePivot( float aScale );
+#endif
+
     /**
      * @return true if OpenGL initialization succeeded.
      */
@@ -288,6 +330,11 @@ private:
     ACCELERATOR_3D*        m_accelerator3DShapes;    // used for mouse over searching
 
     BOARD_ITEM*            m_currentRollOverItem;
+
+#if defined( KICAD_USE_3DCONNEXION )
+    bool    m_render3dmousePivot = false; // Render the 3dmouse pivot
+    SFVEC3F m_3dmousePivotPos;            // The position of the 3dmouse pivot
+#endif
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

@@ -459,16 +459,11 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position
 {
     SFVEC3F pivotPos = SFVEC3F( position.x, position.y, position.z );
 
-    // Set the pivot icon position .
-    m_camera->SetLookAtPos_T1( pivotPos );
+    // Set the 3dmouse pivot position.
+    m_canvas->Set3dmousePivotPos( pivotPos );
 
-#if 0
-    // Set the trackball pivot to the same position as the 3DMouse pivot.
-    glm::mat4 m = m_camera->GetViewMatrix();
-    m_camera->SetLookAtPos( pivotPos );
-    m_camera->SetViewMatrix( std::move( m ) );
-    m_camera->Update();
-#endif
+    // Set the camera lookat pos.
+    m_camera->SetLookAtPos_T1( pivotPos );
 
     m_canvas->Request_refresh();
 
@@ -478,7 +473,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position
 
 long NL_3D_VIEWER_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
 {
-    visible = m_canvas->GetRenderPivot();
+    visible = m_canvas->GetRender3dmousePivot();
 
     return 0;
 }
@@ -486,7 +481,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
 
 long NL_3D_VIEWER_PLUGIN_IMPL::SetPivotVisible( bool visible )
 {
-    m_canvas->SetRenderPivot( visible );
+    m_canvas->SetRender3dmousePivot( visible );
 
     m_canvas->Request_refresh();
 
