@@ -123,12 +123,20 @@ public:
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );
 
-        // Display all vectors in case we need them for debugging.
+
+        // Debug info.
+
+        // Display all vectors.
         ngspice->Command( "echo Available Vectors" );
         ngspice->Command( "echo -----------------" );
         ngspice->Command( "display" );
 
-        // Display an expanded netlist in case we need it for debugging.
+        // Display the original netlist.
+        *m_log << "Original Netlist\n";
+        *m_log << "----------------\n";
+        *m_log << netlist << "\n";
+
+        // Display the expanded netlist.
         ngspice->Command( "echo Expanded Netlist" );
         ngspice->Command( "echo ----------------" );
         ngspice->Command( "listing runnable" );
