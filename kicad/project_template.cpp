@@ -79,7 +79,7 @@ public:
         m_exclude( exclude )
     { }
 
-    virtual wxDirTraverseResult OnFile( const wxString& filename )
+    virtual wxDirTraverseResult OnFile( const wxString& filename ) override
     {
         if( !filename.StartsWith( m_exclude ) )
             m_files.emplace_back( wxFileName( filename ) );
@@ -87,7 +87,7 @@ public:
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir( const wxString& dirname )
+    virtual wxDirTraverseResult OnDir( const wxString& dirname ) override
     {
         if( !dirname.StartsWith( m_exclude ) )
             m_files.emplace_back( wxFileName::DirName( dirname ) );
