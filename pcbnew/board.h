@@ -1082,6 +1082,11 @@ public:
     void RemoveListener( BOARD_LISTENER* aListener );
 
     /**
+     * Remove all listeners
+     */
+    void RemoveAllListeners();
+
+    /**
       * Notify the board and its listeners that an item on the board has
       * been modified in some way.
       */

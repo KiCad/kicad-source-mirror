@@ -448,7 +448,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
         m_toolManager->ShutdownAllTools();
 
     if( GetBoard() )
-        GetBoard()->RemoveListener( m_appearancePanel );
+        GetBoard()->RemoveAllListeners();
 
     delete m_selectionFilterPanel;
     delete m_appearancePanel;

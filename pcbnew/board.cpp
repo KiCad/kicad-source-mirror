@@ -1966,6 +1966,12 @@ void BOARD::RemoveListener( BOARD_LISTENER* aListener )
 }
 
 
+void BOARD::RemoveAllListeners()
+{
+    m_listeners.clear();
+}
+
+
 void BOARD::OnItemChanged( BOARD_ITEM* aItem )
 {
     InvokeListeners( &BOARD_LISTENER::OnBoardItemChanged, *this, aItem );
