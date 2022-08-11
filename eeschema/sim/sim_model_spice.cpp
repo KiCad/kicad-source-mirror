@@ -25,7 +25,15 @@
 #include <sim/sim_model_spice.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <locale_io.h>
+
+
+namespace SIM_MODEL_SPICE_PARSER
+{
+    using namespace SIM_MODEL_GRAMMAR;
+
+    template <typename Rule> struct legacyPinSequenceSelector : std::false_type {};
+    template <> struct legacyPinSequenceSelector<legacyPinNumber> : std::true_type {};
+}
 
 
 SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType )
@@ -38,25 +46,17 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType )
 }
 
 
-void SIM_MODEL_SPICE::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+void SIM_MODEL_SPICE::ReadDataSchFields( unsigned aSymbolPinCount,
+                                         const std::vector<SCH_FIELD>* aFields )
 {
-    LOCALE_IO toggle;
-
-    for( unsigned i = 0; i < aSymbolPinCount; ++i )
-        AddPin( { wxString::Format( "%d", i + 1 ), i + 1 } );
-
     SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
     readLegacyDataFields( aSymbolPinCount, aFields );
 }
 
 
-void SIM_MODEL_SPICE::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+void SIM_MODEL_SPICE::ReadDataLibFields( unsigned aSymbolPinCount,
+                                         const std::vector<LIB_FIELD>* aFields )
 {
-    LOCALE_IO toggle;
-
-    for( unsigned i = 0; i < aSymbolPinCount; ++i )
-        AddPin( { wxString::Format( "%d", i + 1 ), i + 1 } );
-
     SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
     readLegacyDataFields( aSymbolPinCount, aFields );
 }
@@ -118,6 +118,13 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemLine( const wxString& aRefName,
 
     result << GetParam( static_cast<unsigned>( SPICE_PARAM::MODEL ) ).value->ToString() << "\n";
     return result;
+}
+
+
+void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
+{
+    for( unsigned i = 0; i < aSymbolPinCount; ++i )
+        AddPin( { "", PIN::NOT_CONNECTED } );
 }
 
 
@@ -206,31 +213,55 @@ void SIM_MODEL_SPICE::readLegacyDataFields( unsigned aSymbolPinCount, const std:
 {
     // Fill in the blanks with the legacy parameters.
 
-    if( GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString().IsEmpty() )
+    if( GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString() == "" )
     {
         SetParamValue( static_cast<int>( SPICE_PARAM::TYPE ),
                        GetFieldValue( aFields, LEGACY_TYPE_FIELD ) );
     }
 
     if( GetFieldValue( aFields, PINS_FIELD ) == "" )
-        ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, LEGACY_PINS_FIELD ) );
+        parseLegacyPinsField( aSymbolPinCount, GetFieldValue( aFields, LEGACY_PINS_FIELD ) );
 
-    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString().IsEmpty() )
+    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString() == "" )
     {
         SetParamValue( static_cast<int>( SPICE_PARAM::MODEL ),
                        GetFieldValue( aFields, LEGACY_MODEL_FIELD ) );
     }
 
     // If model param is still empty, then use Value field.
-    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString().IsEmpty() )
+    if( GetParam( static_cast<int>( SPICE_PARAM::MODEL ) ).value->ToString() == "" )
     {
         SetParamValue( static_cast<int>( SPICE_PARAM::MODEL ),
                        GetFieldValue( aFields, SIM_MODEL::VALUE_FIELD ) );
     }
 
-    if( GetParam( static_cast<int>( SPICE_PARAM::LIB ) ).value->ToString().IsEmpty() )
+    if( GetParam( static_cast<int>( SPICE_PARAM::LIB ) ).value->ToString() == "" )
     {
         SetParamValue( static_cast<int>( SPICE_PARAM::LIB ),
                        GetFieldValue( aFields, LEGACY_LIB_FIELD ) );
+    }
+}
+
+
+void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aPinsField )
+{
+    tao::pegtl::string_input<> in( aPinsField.ToUTF8(), PINS_FIELD );
+    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+
+    try
+    {
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::legacyPinSequenceGrammar,
+                                             SIM_MODEL_SPICE_PARSER::legacyPinSequenceSelector>
+                ( in );
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        THROW_IO_ERROR( e.what() );
+    }
+
+    for( unsigned i = 0; i < root->children.size(); ++i )
+    {
+        SetPinSymbolPinNumber( std::stoi( root->children.at( i )->string() ) - 1,
+                               static_cast<int>( i + 1 ) );
     }
 }

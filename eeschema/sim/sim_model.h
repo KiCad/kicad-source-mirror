@@ -46,8 +46,16 @@ namespace SIM_MODEL_GRAMMAR
     struct sep : plus<space> {};
 
 
+    struct legacyPinNumber : digits {};
+    struct legacyPinSequence : seq<opt<legacyPinNumber>,
+                                   star<sep,
+                                        legacyPinNumber>> {};
+
+    struct legacyPinSequenceGrammar : must<legacyPinSequence, tao::pegtl::eof> {};
+
+
     struct pinNumber : sor<digits, one<'X'>> {};
-    struct pinSequence : opt<pinNumber,
+    struct pinSequence : seq<opt<pinNumber>,
                              star<sep,
                                   pinNumber>> {};
 
@@ -69,6 +77,7 @@ namespace SIM_MODEL_GRAMMAR
 
     struct fieldFloatValueGrammar : must<fieldFloatValue,
                                          tao::pegtl::eof> {};
+
 
     struct param : plus<alnum> {};
 
@@ -544,6 +553,8 @@ public:
 
 protected:
     SIM_MODEL( TYPE aType );
+
+    virtual void CreatePins( unsigned aSymbolPinCount );
 
     template <typename T>
     void WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const;

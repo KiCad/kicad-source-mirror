@@ -1192,6 +1192,21 @@ SIM_MODEL::SIM_MODEL( TYPE aType ) : m_baseModel( nullptr ), m_type( aType ),
 }
 
 
+void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
+{
+    // Default pin sequence: model pins are the same as symbol pins.
+    // Excess model pins are set as Not Connected.
+    // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
+    for( unsigned i = 0; i < getPinNames().size(); ++i )
+    {
+        if( i < aSymbolPinCount )
+            AddPin( { getPinNames().at( i ), i + 1 } );
+        else
+            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
+    }
+}
+
+
 template void SIM_MODEL::WriteInferredDataFields( std::vector<SCH_FIELD>& aFields,
                                                   const wxString& aValue ) const;
 template void SIM_MODEL::WriteInferredDataFields( std::vector<LIB_FIELD>& aFields,
@@ -1314,20 +1329,10 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
 
 void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField )
 {
-    // Default pin sequence: model pins are the same as symbol pins.
-    // Excess model pins are set as Not Connected.
-    for( unsigned i = 0; i < getPinNames().size(); ++i )
-    {
-        if( i < aSymbolPinCount )
-            AddPin( { getPinNames().at( i ), i + 1 } );
-        else
-            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
-    }
+    CreatePins( aSymbolPinCount );
 
     if( aPinsField == "" )
         return;
-
-    LOCALE_IO toggle;
 
     tao::pegtl::string_input<> in( aPinsField.ToUTF8(), PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
