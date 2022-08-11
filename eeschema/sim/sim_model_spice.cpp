@@ -124,7 +124,7 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemLine( const wxString& aRefName,
 void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned i = 0; i < aSymbolPinCount; ++i )
-        AddPin( { "", PIN::NOT_CONNECTED } );
+        AddPin( { "", i + 1 } );
 }
 
 
@@ -243,9 +243,17 @@ void SIM_MODEL_SPICE::readLegacyDataFields( unsigned aSymbolPinCount, const std:
 }
 
 
-void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aPinsField )
+void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
+                                            const wxString& aLegacyPinsField )
 {
-    tao::pegtl::string_input<> in( aPinsField.ToUTF8(), PINS_FIELD );
+    if( aLegacyPinsField == "" )
+        return;
+
+    // Initially set all pins to Not Connected to match the legacy behavior.
+    for( unsigned i = 0; i < GetPinCount(); ++i )
+        SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
+
+    tao::pegtl::string_input<> in( aLegacyPinsField.ToUTF8(), PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -261,7 +269,7 @@ void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount, const wxSt
 
     for( unsigned i = 0; i < root->children.size(); ++i )
     {
-        SetPinSymbolPinNumber( std::stoi( root->children.at( i )->string() ) - 1,
-                               static_cast<int>( i + 1 ) );
+        SetPinSymbolPinNumber( static_cast<int>( i ),
+                               std::stoi( root->children.at( i )->string() ) );
     }
 }

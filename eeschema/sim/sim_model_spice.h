@@ -73,7 +73,7 @@ private:
     template <typename T>
     void readLegacyDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
-    void parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
+    void parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aLegacyPinsField );
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };
