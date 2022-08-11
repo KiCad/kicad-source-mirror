@@ -394,6 +394,17 @@ BOOST_AUTO_TEST_CASE( LegacySallenKey )
 }*/
 
 
+BOOST_AUTO_TEST_CASE( LegacyOpamp )
+{
+    TestNetlist( "legacy_opamp" );
+    TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+    TestTranPoint( 250e-6, { { "V(/in)", 500e-3 }, { "V(/out)", 1 } } );
+    TestTranPoint( 500e-6, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+    TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } );
+    TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 #endif // KICAD_SPICE
