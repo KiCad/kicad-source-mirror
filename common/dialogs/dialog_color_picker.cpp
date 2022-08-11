@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -396,13 +396,18 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
+    #if wxCHECK_VERSION( 3, 1, 7 )
+    // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+    bitmapDC.SetDeviceOrigin( half_size, -half_size );
+    #else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
+    #endif
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize/2;
 
     // Draw the 3 RGB cursors, using white color to make them always visible:
-    wxPen pen( wxColor( 255, 255, 255 ) );
+    wxPen pen( wxColor( 255, 255, 255 ), 2 );       // use 2 pixels for pen size
     wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
     bitmapDC.SetPen( pen );
     bitmapDC.SetBrush( brush );
@@ -461,7 +466,12 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
 
     // Use Y axis from bottom to top and origin to center
     bitmapDC.SetAxisOrientation( true, true );
+    #if wxCHECK_VERSION( 3, 1, 7 )
+    // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+    bitmapDC.SetDeviceOrigin( half_size, -half_size );
+    #else
     bitmapDC.SetDeviceOrigin( half_size, half_size );
+    #endif
 
     // Reserve room to draw cursors inside the bitmap
     half_size -= m_cursorsSize / 2;
@@ -470,7 +480,7 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
     m_cursorBitmapHSV.x = cos( m_hue * M_PI / 180.0 ) * half_size * m_sat;
     m_cursorBitmapHSV.y = sin( m_hue * M_PI / 180.0 ) * half_size * m_sat;
 
-    wxPen pen( wxColor( 0, 0, 0 ) );
+    wxPen pen( wxColor( 0, 0, 0 ), 2 );     // Use 2 pixels as pensize
     wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
     bitmapDC.SetPen( pen );
     bitmapDC.SetBrush( brush );
