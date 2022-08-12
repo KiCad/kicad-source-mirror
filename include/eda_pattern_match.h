@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,6 +112,13 @@ protected:
 };
 
 
+class EDA_PATTERN_MATCH_REGEX_EXPLICIT : public EDA_PATTERN_MATCH_REGEX
+{
+public:
+    virtual bool SetPattern( const wxString& aPattern ) override;
+};
+
+
 class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 {
 public:
@@ -167,10 +174,17 @@ protected:
 };
 
 
+enum COMBINED_MATCHER_CONTEXT
+{
+    CTX_LIBITEM,
+    CTX_NETCLASS
+};
+
+
 class EDA_COMBINED_MATCHER
 {
 public:
-    EDA_COMBINED_MATCHER( const wxString& aPattern );
+    EDA_COMBINED_MATCHER( const wxString& aPattern, COMBINED_MATCHER_CONTEXT aContext );
 
     /*
      * Look in all existing matchers, return the earliest match of any of

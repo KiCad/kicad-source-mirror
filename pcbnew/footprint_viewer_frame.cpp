@@ -202,7 +202,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // In viewer, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0
     // The footprint or pad specific clearance will be shown
-    GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
+    GetBoard()->GetDesignSettings().m_NetSettings->m_DefaultNetClass->SetClearance( 0 );
 
     // Don't show the default board solder mask clearance in the footprint viewer.  Only the
     // footprint or pad clearance setting should be shown if it is not 0.
@@ -477,7 +477,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
         while( tokenizer.HasMoreTokens() )
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term );
+            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
             int                  matches, position;
 
             for( const wxString& nickname : nicknames )
@@ -554,7 +554,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         while( tokenizer.HasMoreTokens() )
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term );
+            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
             int                  matches, position;
 
             for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )

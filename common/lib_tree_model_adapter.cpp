@@ -191,7 +191,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
                 term = term.AfterFirst( ':' );
             }
 
-            EDA_COMBINED_MATCHER matcher( term );
+            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
 
             m_tree.UpdateScore( matcher, lib );
         }

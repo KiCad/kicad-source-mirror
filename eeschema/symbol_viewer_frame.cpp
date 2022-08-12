@@ -610,7 +610,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         while( tokenizer.HasMoreTokens() )
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term );
+            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
             int                  matches, position;
 
             for( const wxString& lib : libs )
@@ -683,7 +683,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         while( tokenizer.HasMoreTokens() )
         {
             const wxString       term = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( term );
+            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
             int                  matches, position;
 
             for( LIB_SYMBOL* symbol : symbols )

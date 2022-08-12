@@ -222,7 +222,7 @@ void FOOTPRINT_FILTER::FilterByTextPattern( wxString const& aPattern )
     while( tokenizer.HasMoreTokens() )
     {
         const wxString term = tokenizer.GetNextToken().Lower();
-        m_pattern_filters.push_back( std::make_unique<EDA_COMBINED_MATCHER>( term ) );
+        m_pattern_filters.push_back( std::make_unique<EDA_COMBINED_MATCHER>( term, CTX_LIBITEM ) );
     }
 
     m_filter_type |= FILTERING_BY_TEXT_PATTERN;
