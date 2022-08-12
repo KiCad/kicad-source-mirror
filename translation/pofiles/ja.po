@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-11 16:15+0000\n"
+"PO-Revision-Date: 2022-08-15 08:15+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -14856,7 +14856,7 @@ msgstr "%s は、 %lu ピンを表していて、期待値は %u"
 #: eeschema/sim/sim_model_ideal.cpp:115
 #, c-format
 msgid "Failed to infer model from Value '%s'"
-msgstr "値 '%s' からモデルを推論できませんでした。"
+msgstr "値 '%s' からモデルを推論できませんでした"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -20457,9 +20457,9 @@ msgid "Linear resistance:"
 msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "100% の表皮深さの場合の周波数:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Ampacity:"
@@ -21342,6 +21342,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"この計算機は、小さな配線が短時間の大電流を処理できるかどうかを確認するために"
+"使用できます。<br>\n"
+"このツールで配線のヒューズを設計することができますが、見積りに限定して使用し"
+"てください。\n"
+"\n"
+"この計算機では、位相の変化に必要なエネルギーと<br>\n"
+"配線を融点まで加熱するのに必要なエネルギーを見積もることができます。<br>\n"
+"また、このエネルギーは配線の抵抗によって消費されるエネルギーと比較されます。"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "General system design"
@@ -21360,9 +21368,8 @@ msgid "Electrical Spacing"
 msgstr "導体間隔"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
-#, fuzzy
 msgid "Fusing Current"
-msgstr "電流"
+msgstr "溶断電流"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:97
 msgid "Cable Size"
@@ -23594,13 +23601,11 @@ msgid "Export Settings to Other Similar Zones"
 msgstr "他の同じようなゾーンに設定をエクスポートする"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr ""
-"このゾーンの設定 (レイヤーとネットの選択を除く) を他の全ての導体ゾーンにエク"
-"スポートします。"
+msgstr "このゾーンの設定 (レイヤーとネットの選択を除く) を他の類似した導体ゾーン(ティ"
+"アドロップまたは通常の導体ゾーン)にエクスポートします。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 msgid "Copper Zone Properties"
@@ -24919,12 +24924,12 @@ msgstr "部品表から除外"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "コートヤード要件から除外"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "\"コートヤードがない(missing courtyard\" DRC違反を発生させない"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -24986,7 +24991,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "パッド間のハンダ マスクアパーチャを許容する"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -24996,7 +25001,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "ハンダ ペーストの絶対クリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -25005,12 +25009,12 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランスで"
-"す。\n"
+"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランスです。"
+"\n"
 "この値は、パッドのローカル値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
-"す。\n"
-"負値の場合、パッド サイズよりも小さなマスクが使用されます。"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"。\n"
+"負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
@@ -29588,7 +29592,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29886,7 +29889,7 @@ msgstr ""
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### ルール句\n"
 "\n"
@@ -29896,13 +29899,16 @@ msgstr ""
 "\n"
 "    (layer \"<layer_name>\")\n"
 "\n"
+"    (severity <severity_name>)\n"
 "\n"
-"<br><br>\n"
+"\n"
+"<br>\n"
 "\n"
 "### 制約タイプ\n"
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -29911,26 +29917,54 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
+" * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
 " * silk\\_clearance\n"
 " * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
-"<br><br>\n"
+"注: `clearance` と "
+"`hole_clearance`のルールは同一ネットにあるアイテムで動作しません; "
+"`physical_clearance` と `physical_hole_clearance` "
+"のルールについても同様です。\n"
+"<br>\n"
 "\n"
 "### アイテムタイプ\n"
 "\n"
-" * buried_via\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
 " * via\n"
 " * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### ゾーンの接続\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### 深刻度名\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -29958,17 +29992,22 @@ msgstr ""
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### 注\n"
 "\n"
-"version句ははじめの句でなければなりません。  ファイルの文法のバージョンを示"
-"し、\n"
-"将来のルールパーサーが自動的なアップデートをできるようするためです。\n"
-"ここには\"1\"を設定します。\n"
+"Version句は最初の句でなければなりません。  "
+"これはファイルの文法のバージョンを示し、\n"
+"将来のルールパーサーが自動的にアップデート可能にするためです。\n"
+"\"1\"を設定しなければなりません。\n"
 "\n"
 "ルールは特異性の順に並べます。\n"
-"後ろにあるルールは前にあるものより優先されます。\n"
+"後にあるルールは前にあるルールよりも優先されます。\n"
 "一度マッチするルールが見つかれば、他のルールはチェックされません。\n"
 "\n"
 "Ctrl+/ の操作で行をコメント化/非コメント化できます。\n"
@@ -29976,8 +30015,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
@@ -30019,19 +30058,17 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
 "`A`が与えられたレイヤー状にある場合、真になります。\n"
 "レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、正規化名(例: "
 "`F.Cu`)が使えます。\n"
 "\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
-"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の"
-"句をルールの中で使います。\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
+"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\""
+")`の句をルールの中で使います。\n"
 "<br><br><br>\n"
 "\n"
-"### More Examples\n"
+"### さらなる例\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
@@ -30050,34 +30087,36 @@ msgstr ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint clearance (min 0.8mm))\n"
-"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -30085,12 +30124,59 @@ msgstr ""
 "    # 特定の差動ペアに最適なギャップを指定する\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # 差動ペアの周りにより大きなクリアランスを指定する\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # ヒートシンクパッド上にサーマルリリーフを使わないようにする\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # 親のゾーンに接続するためにサーマルリリーフスポークを4つ全て要求する\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # 全てのゾーンに対してサーマルリリーフギャップとスポーク幅を設定する\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # "
+"GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅を上書きする\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # SMDパッドからハンダが漏れるのを防ぐ\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # ハンダマスクのマージンの上書きを許可しない\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # 部品と基板端間の物理的クリアランスを強制する\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # 電流容量のチェック\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31176,9 +31262,8 @@ msgid "Checking solder mask to silk clearance..."
 msgstr "ハンダマスクとシルク間のクリアランスをチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:708
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "フットプリントをチェック..."
+msgstr "ハンダ マスクのウェブの整合性をチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
@@ -31972,16 +32057,16 @@ msgstr "doc url"
 #: pcbnew/ibis/ibis_parser.cpp:53 pcbnew/ibis/ibis_parser.cpp:82
 #: pcbnew/ibis/ibis_parser.cpp:105
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "行列の次元は >= 1 でなければならない。"
 
 #: pcbnew/ibis/ibis_parser.cpp:59
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "帯行列のバンド幅は >= 1 でなければならない。"
 
 #: pcbnew/ibis/ibis_parser.cpp:67 pcbnew/ibis/ibis_parser.cpp:90
 #: pcbnew/ibis/ibis_parser.cpp:113
 msgid "There are NaN elements in a matrix."
-msgstr ""
+msgstr "行列に NaN の要素があります。"
 
 #: pcbnew/ibis/ibis_parser.cpp:149
 msgid "Invalid R_pkg value."
@@ -32045,15 +32130,15 @@ msgstr "コンポーネント:ピンがありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:336
 msgid "Cannot interpolate the current based on this IV table."
-msgstr ""
+msgstr "このIVテーブルに基づいて電流を補間することはできません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:354
 msgid "There is a Nan voltage in an IV table"
-msgstr ""
+msgstr "IVテーブルに Nan 電圧があります"
 
 #: pcbnew/ibis/ibis_parser.cpp:361
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "IV テーブルに無効な電流があります"
 
 #: pcbnew/ibis/ibis_parser.cpp:404
 msgid "Invalid R_load."
@@ -32132,9 +32217,8 @@ msgid "Invalid GND clamp."
 msgstr "不正な GND クランプ。"
 
 #: pcbnew/ibis/ibis_parser.cpp:534
-#, fuzzy
 msgid "Invalid Ramp"
-msgstr "不正"
+msgstr "不正な Ramp"
 
 #: pcbnew/ibis/ibis_parser.cpp:544
 msgid "Checking Header..."
@@ -32181,39 +32265,32 @@ msgid "Empty pin number"
 msgstr "ピン番号が空です"
 
 #: pcbnew/ibis/ibis_parser.cpp:633
-#, fuzzy
 msgid "Resistance matrix is incorrect"
-msgstr "単位長あたりの抵抗"
+msgstr "抵抗の行列が不正です"
 
 #: pcbnew/ibis/ibis_parser.cpp:641
-#, fuzzy
 msgid "Capacitance matrix is undefined"
-msgstr "単位長あたりの静電容量"
+msgstr "静電容量行列が未定義です"
 
 #: pcbnew/ibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Capacitance matrix is incorrect"
-msgstr "単位長あたりの静電容量"
+msgstr "静電容量行列が正しくありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:653
-#, fuzzy
 msgid "Capacitance matrix is nullptr"
-msgstr "単位長あたりの静電容量"
+msgstr "静電容量行列が nullptr です"
 
 #: pcbnew/ibis/ibis_parser.cpp:661
-#, fuzzy
 msgid "Inductance matrix is undefined"
-msgstr "単位長さあたりのインダクタンス"
+msgstr "インダクタンス行列が未定義です"
 
 #: pcbnew/ibis/ibis_parser.cpp:667
-#, fuzzy
 msgid "Inductance matrix is incorrect"
-msgstr "単位長さあたりのインダクタンス"
+msgstr "インダクタンス行列が正しくありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:673
-#, fuzzy
 msgid "Inductance matrix is nullptr"
-msgstr "単位長さあたりのインダクタンス"
+msgstr "インダクタンス行列は nullptr です"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
 msgid "Cannot open file "
@@ -32228,28 +32305,24 @@ msgid "Unexpected end of file. Missing [END] ?"
 msgstr "予期しないファイルの終端です。 [END] が無いのては?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "エラー リスト"
+msgstr "ラインにあるエラー "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
-#, fuzzy
 msgid "A line did not end properly.."
-msgstr "インポートされたファイルにあるアイテムは正しく扱うことができません。"
+msgstr "行が正しく終了しませんでした.."
 
 #: pcbnew/ibis/ibis_parser.cpp:890 pcbnew/ibis/ibis_parser.cpp:907
 msgid "Line exceeds maximum length."
 msgstr "行の長さが最大値を超えています。"
 
 #: pcbnew/ibis/ibis_parser.cpp:933
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "フォルダー '%s' の作成に失敗しました。"
+msgstr "double の読み取りに失敗しました。"
 
 #: pcbnew/ibis/ibis_parser.cpp:939 pcbnew/ibis/ibis_parser.cpp:983
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "'%s' のロードに失敗しました。"
+msgstr "word の読み取りに失敗しました。"
 
 #: pcbnew/ibis/ibis_parser.cpp:976
 msgid "Number is not an integer"
@@ -32261,121 +32334,113 @@ msgstr "文字列が読めません。入力が空です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1068
 msgid "New comment character is invalid."
-msgstr ""
+msgstr "新しいコメント文字は不正です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1081
 msgid "Invalid syntax. Should be |_char or &_char, etc..."
-msgstr ""
+msgstr "構文が不正です。|_char または &_char などでなければなりません..."
 
 #: pcbnew/ibis/ibis_parser.cpp:1093
-#, fuzzy
 msgid "No extra argument was expected"
-msgstr "ネットが未選択です"
+msgstr "余分な引数は想定されていません"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
 msgid "Unknown keyword in "
 msgstr "不明なキーワードがあります "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "ステップ テキスト:"
+msgstr " コンテキスト: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
-#, fuzzy
 msgid "Invalid ramp data"
-msgstr "不正な配線幅"
+msgstr "不正な ramp データ"
 
 #: pcbnew/ibis/ibis_parser.cpp:1405
 msgid "Cannot specify a bandwidth for that kind of matrix"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1424
-#, fuzzy
 msgid "Invalid row in matrix"
-msgstr "不正な行の定義"
+msgstr "行列の不正な行"
 
 #: pcbnew/ibis/ibis_parser.cpp:1454
 msgid "Too much data for this matrix row."
-msgstr ""
+msgstr "この行列の行データが多すぎます。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1462
-#, fuzzy
 msgid "Too much data for this matrix."
-msgstr "このフットプリントにはパッドがありません。"
+msgstr "この行列のデータが多すぎます。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1467 pcbnew/ibis/ibis_parser.cpp:1497
 msgid "Can't read a matrix element"
-msgstr ""
+msgstr "行列の要素を読み取れません"
 
 #: pcbnew/ibis/ibis_parser.cpp:1502
 msgid "Can't read a matrix index"
-msgstr ""
+msgstr "マトリックスインデックスを読み取れません"
 
 #: pcbnew/ibis/ibis_parser.cpp:1570
-#, fuzzy
 msgid "Unknown matrix type"
-msgstr "未知のビア形状です: %d"
+msgstr "不明な行列タイプ"
 
 #: pcbnew/ibis/ibis_parser.cpp:1578
-#, fuzzy
 msgid "Missing matrix type"
-msgstr "最大値がありません。"
+msgstr "行列タイプがありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:1584
 msgid " Matrix is already init. But m_continue was not set ( internal error )"
-msgstr ""
+msgstr " 行列はすでに初期化されています。しかし、m_continue "
+"は設定されていません（内部エラー）"
 
 #: pcbnew/ibis/ibis_parser.cpp:1610
 msgid "Tried to read a row from an undefined matrix"
-msgstr ""
+msgstr "未定義の行列から行を読み込もうとしました"
 
 #: pcbnew/ibis/ibis_parser.cpp:1616
 msgid "matrix pointer is null"
-msgstr ""
+msgstr "行列のポインタがnullです"
 
 #: pcbnew/ibis/ibis_parser.cpp:1770
 msgid "Typ-Min-Max Values requires at least Typ."
-msgstr ""
+msgstr "Typ-Min-Max 値には、少なくとも Typ が必要です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "不明なメソッド"
+msgstr "不明なModel_type "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
 msgstr "model_typeの読み込み中に内部エラーが発生"
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "不明な PCad レイヤー %u"
+msgstr "不明な Enable: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
-msgstr ""
+msgstr "Enable の読み取り中に内部エラーが発生しました"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "未知のプリミティブ"
+msgstr "未知の極性 "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr ""
+msgstr "開始されていないモデルの読み取りを続行しました。( 内部エラー )"
 
 #: pcbnew/ibis/ibis_parser.cpp:2125
 msgid "A [Package] line requires exactly 4 elements."
-msgstr ""
+msgstr "[Package] 行にはちょうど4つの要素が必要です。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2178
 msgid "Invalid pin entry: 6 values from a table with only 3."
-msgstr ""
+msgstr "不正なピン要素です:3つの値しかないテーブルから6つの値を参照しようとしています"
+"。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2188
 msgid "Can't read a R, L or C value for a pin."
-msgstr ""
+msgstr "ピンのR、L、C値が読めません。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2211
 msgid "Invalid field name in [Pin]"
@@ -32390,9 +32455,8 @@ msgid "Wrong number of columns for pin mapping."
 msgstr "ピン マッピングの列数が間違っています。"
 
 #: pcbnew/ibis/ibis_parser.cpp:2292
-#, fuzzy
 msgid "Incorrect diff pin name"
-msgstr "無効な倍率です"
+msgstr "diff pin 名が正しくありません"
 
 #: pcbnew/ibis/ibis_parser.cpp:2297
 msgid "Incorrect inv_pin name"
@@ -32415,9 +32479,8 @@ msgid "Missing keyword."
 msgstr "キーワードがありません。"
 
 #: pcbnew/ibis/kibis.cpp:396
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "形状に点がありません。"
+msgstr "波形のポイントが2つ未満"
 
 #: pcbnew/ibis/kibis.cpp:595 pcbnew/ibis/kibis.cpp:657
 msgid "Cannot remove temporary input file"
@@ -32466,20 +32529,20 @@ msgstr ""
 
 #: pcbnew/ibis/kibis.cpp:1109
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
-msgstr ""
+msgstr "モデルには波形のペアがなく、代わりに[Ramp]を使用しているため、精度が悪くなり"
+"ます"
 
 #: pcbnew/ibis/kibis.cpp:1122
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "モデルには2つ以上の波形のペアがあるため、最初の2つを使用します。"
 
 #: pcbnew/ibis/kibis.cpp:1157
 msgid "Invalid model type for a driver."
-msgstr ""
+msgstr "ドライバのモデルタイプが無効です。"
 
 #: pcbnew/ibis/kibis.cpp:1209
-#, fuzzy
 msgid "Invalid model type for a device"
-msgstr "不正な遅延値"
+msgstr "デバイスのモデルタイプが無効です"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
@@ -33530,7 +33593,8 @@ msgstr "フットプリントに裏面のコートヤードがありません。
 #: pcbnew/pcb_expr_evaluator.cpp:611
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
-msgstr ""
+msgstr "%s に対するルールエリア識別子の引数 (A、B、またはルールエリア名) "
+"がありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:714
 #, c-format
@@ -35658,6 +35722,8 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"ティアドロップを作成するためのパッド/ビアサイズと配線幅の最大比率。\n"
+"100は常にティアドロップを作成します。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:96
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:165
@@ -35989,19 +36055,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "幅の制約: 最小 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
-msgstr "接続タイプ:"
+msgstr "接続幅"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "スポーク幅の解決:"
+msgstr "接続幅の解像度:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "解決されたゾーンの接続タイプ: %s."
+msgstr "最小接続幅の制約を解決: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
