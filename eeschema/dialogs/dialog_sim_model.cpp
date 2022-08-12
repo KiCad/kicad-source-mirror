@@ -629,12 +629,10 @@ wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
     if( symbolPin )
         name = symbolPin->GetShownName();
 
-    LOCALE_IO toggle;
-
     if( name.IsEmpty() )
         return wxString::Format( "%d", symbolPinNumber );
     else
-        return wxString::Format( "%d (%s)", symbolPinNumber, symbolPin->GetShownName() );
+        return wxString::Format( "%d (%s)", symbolPinNumber, name );
 }
 
 
@@ -642,8 +640,6 @@ template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getModelPinString( int modelPinNumber ) const
 {
     const wxString& pinName = curModel().GetPin( modelPinNumber - 1 ).name;
-
-    LOCALE_IO toggle;
 
     if( pinName.IsEmpty() )
         return wxString::Format( "%d", modelPinNumber, pinName );

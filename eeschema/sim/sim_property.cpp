@@ -118,7 +118,7 @@ void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
     // and wxPropertyGrid::AddActionTrigger() don't work for it. So instead we translate it to an
     // (up or down) arrow key, which has proper handling (select next or previous property) defined
     // by the aforementioned functions.
-    
+
     if( aEvent.GetKeyCode() == WXK_TAB )
     {
         // However, before that, if this is the first or last property, we instead want to navigate
@@ -150,7 +150,7 @@ void SIM_VALIDATOR::onKeyDown( wxKeyEvent& aEvent )
             navigate( wxNavigationKeyEvent::IsBackward );
             return;
         }
-        
+
         if( isLast && !aEvent.ShiftDown() )
         {
             navigate( wxNavigationKeyEvent::IsForward );
@@ -191,9 +191,11 @@ SIM_STRING_VALIDATOR::SIM_STRING_VALIDATOR( SIM_VALUE::TYPE aValueType,
                                             SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : SIM_VALIDATOR(),
       m_valueType( aValueType ),
-      m_notation( aNotation )
+      m_notation( aNotation ),
+      m_prevInsertionPoint( 0 )
 {
     wxTextEntry* textEntry = getTextEntry();
+
     if( !textEntry )
         return;
 

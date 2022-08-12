@@ -1569,7 +1569,11 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 
 unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack ) const
 {
-    const PCB_VIA*         via = dynamic_cast<const PCB_VIA*>( aTrack );
+    const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( aTrack );
+
+    if( !via )
+        return 0;
+
     BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
     // calculate the via length individually from the board stackup and via's start and end layer.
