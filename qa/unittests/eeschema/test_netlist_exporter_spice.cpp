@@ -120,6 +120,14 @@ public:
         BOOST_REQUIRE( ngspice->LoadNetlist( netlist.ToStdString() ) );
         BOOST_REQUIRE( ngspice->Run() );
 
+        // Test if ngspice cannot run a simulation (missing code models).
+        // in this case the log contains "MIF-ERROR" and/or "Error: circuit not parsed"
+        // when the simulation is not run the spice command "linearize" crashes.
+        bool err_found = m_log->Find( wxT( "Error: circuit not parsed" ) ) != wxNOT_FOUND;
+
+        if( err_found )
+            return;
+
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );
 
