@@ -534,18 +534,12 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            sheet->UpdateAllScreenReferences();
-
             item = nextMatch( sheet->LastScreen(), sheet, nullptr, data );
 
             if( item )
             {
                 m_frame->Schematic().SetCurrentSheet( *sheet );
-
-                sheet->LastScreen()->TestDanglingEnds();
-
-                m_frame->SetScreen( sheet->LastScreen() );
-                m_frame->UpdateHierarchyNavigator();
+                m_frame->DisplayCurrentSheet();
                 UpdateFind( ACTIONS::updateFind.MakeEvent() );
 
                 break;
