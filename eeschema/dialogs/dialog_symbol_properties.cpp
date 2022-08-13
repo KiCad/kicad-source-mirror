@@ -712,8 +712,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         for( const SCH_PIN& model_pin : *m_dataModel )
         {
             // map from the edited copy back to the "real" pin in the symbol.
-            SCH_PIN* src_pin = m_symbol->GetPin( model_pin.GetLibPin() );
-            src_pin->SetAlt( model_pin.GetAlt() );
+            SCH_PIN* src_pin = m_symbol->GetPin( model_pin.GetNumber() );
+
+            if( src_pin )
+                src_pin->SetAlt( model_pin.GetAlt() );
         }
     }
 
