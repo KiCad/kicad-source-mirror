@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-06-17 08:17+0000\n"
+"PO-Revision-Date: 2022-08-15 08:15+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -109,14 +109,14 @@ msgid "Last render time %.0f ms"
 msgstr "Darrer temps de renderització %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Xarxa %s\tClasse de arxa %s"
+msgstr "Xarxa %s\tClasse de xarxa %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "Forma del pad"
+msgstr "Pad %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
 #, fuzzy, c-format
@@ -10968,9 +10968,8 @@ msgid "Source"
 msgstr "Font"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Inductància:"
+msgstr "Instància"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -11015,9 +11014,8 @@ msgid "Parameters"
 msgstr "Paràmetres"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Codi"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
 #, fuzzy
@@ -11834,9 +11832,8 @@ msgid "Wire & Bus Properties"
 msgstr "Propietats de línia, cable, i bus"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Notació de la unitat del símbol:"
+msgstr "Anotació del símbol"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
 #, fuzzy
@@ -20795,9 +20792,8 @@ msgid "Wire properties"
 msgstr "Propietats del cercle"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Tipus estàndard"
+msgstr "Mida estàndard:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -20846,9 +20842,8 @@ msgstr "Aplicacions de recolzament"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Corrent"
+msgstr "Intensitat:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
 #, fuzzy
@@ -21130,9 +21125,8 @@ msgid "deg C"
 msgstr "°C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Punt d'operació"
+msgstr "Punt de fusió:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
@@ -25963,9 +25957,8 @@ msgid "Map File Format"
 msgstr "Format del fitxer Map"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Crea una assignació de perforacions en PS, HPGL o bé en altres formats"
+msgstr "Crea un mapa de perforacions en PDF o en altres formats"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -28413,9 +28406,8 @@ msgid "Push Pad Properties"
 msgstr "Propietats del pad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
-#, fuzzy
 msgid "Conversion settings:"
-msgstr "Ajusts de la pàgina"
+msgstr "Ajustaments de conversió:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 #, fuzzy
@@ -32700,9 +32692,8 @@ msgid "Reading file "
 msgstr "S'estan carregant els fitxers..."
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Acabament de fitxer inesperat."
+msgstr "Acabament de fitxer inesperat. Falta [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
 #, fuzzy
@@ -32755,9 +32746,8 @@ msgid "Unknown keyword in "
 msgstr "Id de registre desconegut: %d."
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "Pas del text:"
+msgstr " context: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
 #, fuzzy
