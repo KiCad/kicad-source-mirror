@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,7 +51,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid->SetColSize( 12, 48 );
 	m_fieldsGrid->EnableDragColMove( false );
 	m_fieldsGrid->EnableDragColSize( true );
-	m_fieldsGrid->SetColLabelSize( 22 );
 	m_fieldsGrid->SetColLabelValue( 0, _("Name") );
 	m_fieldsGrid->SetColLabelValue( 1, _("Value") );
 	m_fieldsGrid->SetColLabelValue( 2, _("Show") );
@@ -65,6 +64,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_fieldsGrid->SetColLabelValue( 10, _("Y Position") );
 	m_fieldsGrid->SetColLabelValue( 11, _("Font") );
 	m_fieldsGrid->SetColLabelValue( 12, _("Color") );
+	m_fieldsGrid->SetColLabelSize( 22 );
 	m_fieldsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -269,12 +269,12 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_pinGrid->SetColSize( 4, 140 );
 	m_pinGrid->EnableDragColMove( false );
 	m_pinGrid->EnableDragColSize( true );
-	m_pinGrid->SetColLabelSize( 24 );
 	m_pinGrid->SetColLabelValue( 0, _("Pin Number") );
 	m_pinGrid->SetColLabelValue( 1, _("Base Pin Name") );
 	m_pinGrid->SetColLabelValue( 2, _("Alternate Assignment") );
 	m_pinGrid->SetColLabelValue( 3, _("Electrical Type") );
 	m_pinGrid->SetColLabelValue( 4, _("Graphic Style") );
+	m_pinGrid->SetColLabelSize( 24 );
 	m_pinGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -352,7 +352,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnDeleteField ), NULL, this );
-	m_unitChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_unitChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUnitChoice ), NULL, this );
 	m_cbAlternateSymbol->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_orientationCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_mirrorCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
@@ -382,7 +382,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::~DIALOG_SYMBOL_PROPERTIES_BASE()
 	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveUp ), NULL, this );
 	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnMoveDown ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnDeleteField ), NULL, this );
-	m_unitChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_unitChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnUnitChoice ), NULL, this );
 	m_cbAlternateSymbol->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_orientationCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_mirrorCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );

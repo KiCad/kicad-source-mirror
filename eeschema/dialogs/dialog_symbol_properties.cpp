@@ -1188,7 +1188,29 @@ void DIALOG_SYMBOL_PROPERTIES::OnCheckBox( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_PROPERTIES::OnChoice( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
 {
+    if( m_dataModel )
+    {
+        int unit_selection = m_unitChoice->GetSelection() + 1;
+
+        // We need to select a new unit to build the new unit pin list
+        // but we should not change the symbol, so the initial unit will be selected
+        // after rebuilding the pin list
+        int old_unit = m_symbol->GetUnit();
+        m_symbol->SetUnit( unit_selection );
+
+        // Rebuild a copy of the pins of the new unit for editing
+        m_dataModel->clear();
+
+        for( const std::unique_ptr<SCH_PIN>& pin : m_symbol->GetRawPins() )
+            m_dataModel->push_back( *pin );
+
+        m_dataModel->SortRows( COL_NUMBER, true );
+        m_dataModel->BuildAttrs();
+
+        m_symbol->SetUnit(old_unit );
+    }
+
     OnModify();
 }
