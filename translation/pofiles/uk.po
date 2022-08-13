@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-11 16:15+0000\n"
+"PO-Revision-Date: 2022-08-15 08:16+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -19432,184 +19432,181 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr ""
+msgstr "Мін. проміжок"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "Перех.отв.: (діаметр - свердло)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diam - drill)"
-msgstr ""
+msgstr "Мет. конт. площ.: (діаметр - свердло)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
 msgid "NP Pad: (diam - drill)"
-msgstr ""
+msgstr "Немет. конт. площ.: (діаметр - свердло)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:105
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "Електричний опір в Ом*м"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Властивості лінії"
+msgstr "Властивості провідника"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Стандартно"
+msgstr "Стандартний розмір:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
 msgid "Area:"
-msgstr ""
+msgstr "Площа:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "мм^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 msgid "Conductor resistivity:"
-msgstr ""
+msgstr "Питомий опір провідника:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -19620,45 +19617,40 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:661
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:88
-#, fuzzy
 msgid "Linear resistance:"
-msgstr "Неправильне значення опору"
+msgstr "Лінійний опір:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
-msgstr ""
+msgstr "Частота для 100% проникнення глибини:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
-#, fuzzy
 msgid "Ampacity:"
 msgstr "Непрозорість:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:130
-#, fuzzy
 msgid "Application"
-msgstr "Допоміжні програми"
+msgstr "Застосунки"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Струм"
+msgstr "Струм:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Length:"
-msgstr "Довжина"
+msgstr "Довжина:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
-msgstr ""
+msgstr "Опір:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:168
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -19673,129 +19665,128 @@ msgstr "Ом"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
 msgid "Voltage drop:"
-msgstr ""
+msgstr "Падіння напруги:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
-msgstr ""
+msgstr "Розсіювана потужність:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 msgid "mW"
-msgstr ""
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
-msgstr ""
+msgstr "10% / 5%"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
 msgid "Tolerance"
-msgstr ""
+msgstr "Точність"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
-msgstr ""
+msgstr "1-а полоса"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:38
 msgid "2nd Band"
-msgstr ""
+msgstr "2-а полоса"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:42
 msgid "3rd Band"
-msgstr ""
+msgstr "3-я полоса"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:46
 msgid "4th Band"
-msgstr ""
+msgstr "4-а полоса"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:50
 msgid "Multiplier"
-msgstr ""
+msgstr "Множник"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
-msgstr ""
+msgstr "Напруга > 500 В:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:39
 msgid "Update Values"
-msgstr ""
+msgstr "Оновити значення"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:47
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr ""
+msgstr "Примітка: є мінімальними значеннями (із IPC 2221)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:72
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:73
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:74
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:75
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:77
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:78
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:94
 msgid "0 .. 15 V"
-msgstr ""
+msgstr "0 .. 15 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:95
 msgid "16 .. 30 V"
-msgstr ""
+msgstr "16 .. 30 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:96
 msgid "31 .. 50 V"
-msgstr ""
+msgstr "31 .. 50 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:97
 msgid "51 .. 100 V"
-msgstr ""
+msgstr "51 .. 100 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:98
 msgid "101 .. 150 V"
-msgstr ""
+msgstr "101 .. 150 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:99
 msgid "151 .. 170 V"
-msgstr ""
+msgstr "151 .. 170 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:100
 msgid "171 .. 250 V"
-msgstr ""
+msgstr "171 .. 250 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:101
 msgid "251 .. 300 V"
-msgstr ""
+msgstr "251 .. 300 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:102
 msgid "301 .. 500 V"
-msgstr ""
+msgstr "301 .. 500 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:103
 msgid " > 500 V"
-msgstr ""
+msgstr " > 500 В"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:113
 msgid ""
@@ -19809,14 +19800,24 @@ msgid ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 msgstr ""
+"*  B1 - Внутрішні провідники\n"
+"*  B2 - Зовнішні провідники без ізоляції, до 3050м над рівнем моря\n"
+"*  B3 - Зовнішні провідники без ізоляції, вище 3050м\n"
+"*  B4 - Зовнішні провідники, з постійним полімерним покриттям (будь яка "
+"висота)\n"
+"*  A5 - Зовнішні провідники, з конформним покриттям поверх збірки (будь яка "
+"висота)\n"
+"*  A6 - Зовнішні провідники пайка/виводи, без покриття\n"
+"*  A7 - Зовнішні провідники, пайка/виводи, з конформним покриттям (будь-який "
+"висота)"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:21
 msgid "Inputs"
-msgstr ""
+msgstr "Вхідні дані"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:29
 msgid "Required resistance:"
-msgstr ""
+msgstr "Необхідний опір:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:36
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:47
@@ -19824,94 +19825,90 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:92
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:106
 msgid "kOhm"
-msgstr ""
+msgstr "кОм"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:40
 msgid "Exclude value 1:"
-msgstr ""
+msgstr "Виключити значення 1:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:51
 msgid "Exclude value 2:"
-msgstr ""
+msgstr "Виключити значення 2:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:71
 msgid "E1"
-msgstr ""
+msgstr "E1"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:74
 msgid "E3"
-msgstr ""
+msgstr "E3"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:77
 msgid "E6"
-msgstr ""
+msgstr "E6"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:81
 msgid "E12"
-msgstr ""
+msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
 msgid "E24"
-msgstr ""
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
-msgstr ""
+msgstr "Рішення"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:102
 msgid "Simple solution:"
-msgstr ""
+msgstr "Просте рішення:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:109
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:129
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:147
 msgid "Approximation:"
-msgstr ""
+msgstr "Приблизна точність:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:120
 msgid "3R solution:"
-msgstr ""
+msgstr "3R рішення:"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:140
 msgid "4R solution:"
-msgstr ""
+msgstr "4R рішення:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:228
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Розрахунок зниження струму через тривалий час термоплавлення."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:34
-#, fuzzy
 msgid "Ambient temperature:"
-msgstr "Зовнішнє освітлення камери:"
+msgstr "Навколишня температура:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:56
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:49
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:176
 msgid "deg C"
-msgstr ""
+msgstr "°C"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:49
-#, fuzzy
 msgid "Melting point:"
-msgstr "Робоча Точка"
+msgstr "Точка плавлення:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr ""
+msgstr "Ширина доріжки:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Товщина сітки:"
+msgstr "Товщина доріжки:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
-#, fuzzy
 msgid "Time to fuse:"
-msgstr "Період:"
+msgstr "Час до плавлення:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:114
 msgid "s"
@@ -19919,41 +19916,41 @@ msgstr "сек"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
 msgid "PCB Calculator data file"
-msgstr ""
+msgstr "Файл для PCB калькулятора"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:161
 msgid "Select PCB Calculator Data File"
-msgstr ""
+msgstr "Вибір файлу PCB калькулятора"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:176
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr ""
+msgstr "Завантажити цей файл і замінити поточний список регуляторів?"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:193
 #, c-format
 msgid "Unable to read data file '%s'."
-msgstr ""
+msgstr "Не вдалося прочитати файл даних '%s."
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:221
 msgid "This regulator is already in list. Aborted"
-msgstr ""
+msgstr "Цей регулятор вже у списку. Перервано"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:253
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:223
 msgid "Remove Regulator"
-msgstr ""
+msgstr "Видалити регулятор"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:338
 msgid "Vout must be greater than vref"
-msgstr ""
+msgstr "Vout повинен бути більшим за vref"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:344
 msgid "Vref set to 0 !"
-msgstr ""
+msgstr "Vref встановлено на 0!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
-msgstr ""
+msgstr "Невірне значення для R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -19962,231 +19959,237 @@ msgid ""
 "- regulators which have a dedicated sense pin for the voltage regulation.\n"
 "- 3 terminal pins."
 msgstr ""
+"Тип регулятора.\n"
+"Є 2 види:\n"
+"- регулятори, які мають спеціалізований контакт для регулювання напруги.\n"
+"- 3 клемні контакти."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 msgid "Standard Type"
-msgstr ""
+msgstr "Стандартний тип"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 msgid "3 Terminal Type"
-msgstr ""
+msgstr "3-х вивідний тип"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Vout:"
-msgstr ""
+msgstr "Vout:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:127
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref:"
-msgstr ""
+msgstr "Vref:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:129
 msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
+"Внутрішня опорна напруга регулятора.\n"
+"Не має бути 0."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 msgid "Iadj:"
-msgstr ""
+msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:145
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr ""
+msgstr "Для 3 термінальних регуляторів, регулювання струму контакту."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:152
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 msgid "uA"
-msgstr ""
+msgstr "мкА"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:185
 msgid "Regulator"
-msgstr ""
+msgstr "Стабілізатор"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:192
 msgid "Regulators data file:"
-msgstr ""
+msgstr "Файл даних стабілізаторів:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:194
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
+msgstr "Ім'я файлу даних для збереження параметрів стабілізаторів."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:204
 msgid "Browse"
-msgstr ""
+msgstr "Переглянути"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:213
 msgid "Edit Regulator"
-msgstr ""
+msgstr "Редагувати стабілізатор"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:214
 msgid "Edit the current selected regulator."
-msgstr ""
+msgstr "Редагувати поточний вибраний стабілізатор."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:218
 msgid "Add Regulator"
-msgstr ""
+msgstr "Додати стабілізатор"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:219
 msgid "Enter a new item to the current list of available regulators"
-msgstr ""
+msgstr "Введіть новий елемент до поточного списку доступних регуляторів"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:224
 msgid "Remove an item from the current list of available regulators"
-msgstr ""
+msgstr "Видалити елемент з поточного списку доступних регуляторів"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
-msgstr ""
+msgstr "Підвищення температури"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 msgid "Current (I):"
-msgstr ""
+msgstr "Струм (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
 msgid "Temperature rise:"
-msgstr ""
+msgstr "Підвищення температури:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:53
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:54
 msgid "Conductor length:"
-msgstr ""
+msgstr "Довжина провідника:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:66
 msgid "Copper resistivity:"
-msgstr ""
+msgstr "Питомий опір міді:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:75
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:142
 msgid "ohm-meter"
-msgstr ""
+msgstr "Ом-метр"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
 msgid "External Layer Traces"
-msgstr ""
+msgstr "Доріжки на зовнішньому шарі"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
 msgid "Trace width (W):"
-msgstr ""
+msgstr "Ширина доріжки (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
 msgid "Trace thickness (H):"
-msgstr ""
+msgstr "Товщина доріжки (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
 msgid "Cross-section area:"
-msgstr ""
+msgstr "Площа поперечного перерізу:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:146
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:244
 msgid "mm ^ 2"
-msgstr ""
+msgstr "мм²"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:174
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:272
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:248
 msgid "Power loss:"
-msgstr ""
+msgstr "Втрата потужності:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:182
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:280
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:256
 msgid "W"
-msgstr ""
+msgstr "Вт"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:193
 msgid "Internal Layer Traces"
-msgstr ""
+msgstr "Доріжки внутрішнього шару"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Microstrip Line"
-msgstr ""
+msgstr "Мікрополоскова лінія"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide"
-msgstr ""
+msgstr "Компланарний хвилевід"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide w/ ground plane"
-msgstr ""
+msgstr "Компланарний хвилевід із заземленою площиною"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Rectangular Waveguide"
-msgstr ""
+msgstr "Прямокутний хвилевід"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coaxial Line"
-msgstr ""
+msgstr "Коаксіальна лінія"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coupled Microstrip Line"
-msgstr ""
+msgstr "Зв'язана мікросмугова лінія"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Stripline"
-msgstr ""
+msgstr "Смугова лінія"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Twisted Pair"
-msgstr ""
+msgstr "Вита пара"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Transmission Line Type"
-msgstr ""
+msgstr "Тип лінії передач"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:41
 msgid "Substrate Parameters"
-msgstr ""
+msgstr "Параметри підкладки"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:49
 msgid "Er:"
-msgstr ""
+msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 msgid "Tan delta:"
-msgstr ""
+msgstr "Тангенс дельти:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:87
 msgid "Rho:"
-msgstr ""
+msgstr "Rho:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
 msgid "Specific resistance in ohms * meters"
-msgstr ""
+msgstr "Питомий опір в омах * метрів"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:108
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:120
 msgid "H_t:"
-msgstr ""
+msgstr "H_t:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:132
 msgid "T:"
-msgstr ""
+msgstr "T:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:144
 msgid "Rough:"
-msgstr ""
+msgstr "Шорсткість:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:156
 msgid "Insulator mu:"
-msgstr ""
+msgstr "Ізолятор mu:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:168
 msgid "Conductor mu:"
-msgstr ""
+msgstr "Mu провідника:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:187
 msgid "Component Parameters"
-msgstr ""
+msgstr "Параметри компонента"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:27
@@ -20195,107 +20198,107 @@ msgstr "Частота:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:229
 msgid "Physical Parameters"
-msgstr ""
+msgstr "Фізичні параметри"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:297
 msgid "Analyze"
-msgstr ""
+msgstr "Аналізувати"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:300
 msgid "Synthesize"
-msgstr ""
+msgstr "Синтезувати"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:313
 msgid "Electrical Parameters"
-msgstr ""
+msgstr "Електричні параметри"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:364
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:215
 msgid "Results"
-msgstr ""
+msgstr "Результати"
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:92
 #: pcb_calculator/calculator_panels/panel_wavelength.cpp:257
 #: pcb_calculator/transline_dlg_funct.cpp:43
 msgid "Relative Dielectric Constants"
-msgstr ""
+msgstr "Відносна діелектричної проникності"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
-msgstr ""
+msgstr "Фінальний діаметр отвору (D):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:45
 msgid "Plating thickness (T):"
-msgstr ""
+msgstr "Товщина металізації (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr ""
+msgstr "Довжина пер. отвору:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr ""
+msgstr "Довжина отвору — це товщина плати для крізного отвору"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr ""
+msgstr "Діаметр конт. пл. перехідного отвору:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr ""
+msgstr "Діаметр площадки, що оточує отвір (кільцеподібне кільце)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr ""
+msgstr "Діаметр зазору отвору:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr ""
+msgstr "Діаметр зазору в площині (площинах) земляного полігону"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
-msgstr ""
+msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
-msgstr ""
+msgstr "Типовий повний опір провідника"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr ""
+msgstr "Прикладний струм:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
-msgstr ""
+msgstr "Питомий опір пластини:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Відносна діелектрична проникність підкладки:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
-msgstr ""
+msgstr "Відносна діелектрична проникність (епсилон r)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
-msgstr ""
+msgstr "Максимальне допустиме підвищення температури"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:180
 msgid "Pulse rise time:"
-msgstr ""
+msgstr "Час підвищення імпульсу:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:182
 msgid "Pulse rise time to calculate reactance"
-msgstr ""
+msgstr "Час наростання імпульсу для розрахунку реактивного опору"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:189
 #: pcb_calculator/widgets/unit_selector.cpp:269
 msgid "ns"
-msgstr ""
+msgstr "нс"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:191
 msgid "nanoseconds"
-msgstr ""
+msgstr "наносекунди"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
 msgid ""
@@ -20303,79 +20306,82 @@ msgid ""
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
+"Увага:\n"
+"Діаметр прокладки >= Діаметр зазору.\n"
+"Деякі параметри неможливо розрахувати для отвору всередині мідної зони."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
-msgstr ""
+msgstr "Термальний опір:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr ""
+msgstr "Використання теплової провідності 401 Ватт/(метер-Кельвін)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:270
 msgid "deg C/W"
-msgstr ""
+msgstr "°C/Вт"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:274
 msgid "Estimated ampacity:"
-msgstr ""
+msgstr "Розрахункова ємність:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Based on temperature rise"
-msgstr ""
+msgstr "З врахуванням підвищення температури"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:288
 msgid "Capacitance:"
-msgstr ""
+msgstr "Ємність:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:296
 msgid "pF"
-msgstr ""
+msgstr "пФ"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:298
 msgid "pico-Farad"
-msgstr ""
+msgstr "піко-Фарад"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:302
 msgid "Rise time degradation:"
-msgstr ""
+msgstr "Деградація часу наростання:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "Зменшення часу наростання для заданого Z0 і розрахункової ємності"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 #: pcb_calculator/widgets/unit_selector.cpp:270
 msgid "ps"
-msgstr ""
+msgstr "пс"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:314
 msgid "picoseconds"
-msgstr ""
+msgstr "пікосекунд"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:318
 msgid "Inductance:"
-msgstr ""
+msgstr "Індуктивність:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:326
 msgid "nH"
-msgstr ""
+msgstr "нГн"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:328
 msgid "nano-Henry"
-msgstr ""
+msgstr "нано-Генрі"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:332
 msgid "Reactance:"
-msgstr ""
+msgstr "Реактивний опір:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "Індуктивна реакція на підйом часу та обчислена індукції"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
-msgstr ""
+msgstr "Вид зверху на пер. отвір"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
 msgid "Period:"
@@ -20383,61 +20389,60 @@ msgstr "Період:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr ""
+msgstr "Довжина хвилі у вакуумі:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
-msgstr ""
+msgstr "Довжина хвилі в середовищі:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr ""
+msgstr "Швидкість в середовищі:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
-#, fuzzy
 msgid "er:"
-msgstr "Інший:"
+msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
 msgid "relative permittivity (dielectric constant)"
-msgstr ""
+msgstr "відносна діелектрична проникність (діелектрична проникність)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
-msgstr ""
+msgstr "mur:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
 msgid "relative permeability"
-msgstr ""
+msgstr "відносна проникність"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
-msgstr ""
+msgstr "Помилка файлу даних."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr ""
+msgstr "В"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
-msgstr ""
+msgstr "Виділений сенсорний вивід"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
-msgstr ""
+msgstr "потрійний регулятор"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:59
 msgid "Regulator Parameters"
-msgstr ""
+msgstr "Параметри стабілізатора"
 
 #: pcb_calculator/eserie.cpp:440 pcb_calculator/eserie.cpp:459
 #: pcb_calculator/eserie.cpp:485
 msgid "Exact"
-msgstr ""
+msgstr "Точно"
 
 #: pcb_calculator/eserie.cpp:468 pcb_calculator/eserie.cpp:491
 msgid "Not worth using"
-msgstr ""
+msgstr "Не варто використовувати"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -20483,72 +20488,71 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "General system design"
-msgstr ""
+msgstr "Загальні налаштування"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:82
 msgid "Regulators"
-msgstr ""
+msgstr "Стабілізатори"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Power, current and isolation"
-msgstr ""
+msgstr "Потужність, струм і ізоляція"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:87
 msgid "Electrical Spacing"
-msgstr ""
+msgstr "Електричний інтервал"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
-#, fuzzy
 msgid "Fusing Current"
-msgstr "Струм"
+msgstr "Струм плавлення"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:97
-#, fuzzy
 msgid "Cable Size"
-msgstr "Розмір перехідних отворів"
+msgstr "Розмір кабелю"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:99
 msgid "High speed"
-msgstr ""
+msgstr "Висока швидкість"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
-msgstr "Інтервал:"
+msgstr "Довжина хвилі"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
-msgstr ""
+msgstr "Атенюатори RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:107
 msgid "Transmission Lines"
-msgstr ""
+msgstr "Лінії передач"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:109
 msgid "Memo"
-msgstr ""
+msgstr "Примітка"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:112
 msgid "E-Series"
-msgstr ""
+msgstr "E-серія"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:114
 msgid "Color Code"
-msgstr ""
+msgstr "Код кольору"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:116
 msgid "Board Classes"
-msgstr ""
+msgstr "Класи плати"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:265
 msgid "Write Data Failed"
-msgstr ""
+msgstr "Помилка запису даних"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:269
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"Немає імені файлу даних для збереження змін.\n"
+"Бажаєте вийти та скасувати зміни?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:279
 #, c-format
@@ -20556,6 +20560,8 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"Неможливо записати файл \"%s\"\n"
+"Бажаєте вийти та скасувати зміни?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -20585,29 +20591,30 @@ msgstr ""
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
-msgstr ""
+msgstr "Коефіцієнт діелектричних втрат"
 
 #: pcb_calculator/transline_dlg_funct.cpp:79
 msgid "Specific Resistance"
-msgstr ""
+msgstr "Питомий опір"
 
 #: pcb_calculator/transline_ident.cpp:92
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr ""
+msgstr "Відносна діелектрична проникність підкладки (діелектрична проникність)"
 
 #: pcb_calculator/transline_ident.cpp:96
 msgid "Dielectric loss (dissipation factor)"
-msgstr ""
+msgstr "Діелектричні втрати (коефіцієнт дисипації)"
 
 #: pcb_calculator/transline_ident.cpp:102
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
 msgstr ""
+"Питомий електричний опір або питомий електричний опір провідника (Ом*метр)"
 
 #: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency of the input signal"
-msgstr ""
+msgstr "Частота вхідного сигналу"
 
 #: pcb_calculator/transline_ident.cpp:118
 #: pcb_calculator/transline_ident.cpp:160
@@ -20618,7 +20625,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:384
 #, c-format
 msgid "Effective %s:"
-msgstr ""
+msgstr "Ефективно %s:"
 
 #: pcb_calculator/transline_ident.cpp:119
 #: pcb_calculator/transline_ident.cpp:161
@@ -20628,7 +20635,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:351
 #: pcb_calculator/transline_ident.cpp:385
 msgid "Conductor losses:"
-msgstr ""
+msgstr "Втрати провідника:"
 
 #: pcb_calculator/transline_ident.cpp:120
 #: pcb_calculator/transline_ident.cpp:162
@@ -20638,7 +20645,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:352
 #: pcb_calculator/transline_ident.cpp:386
 msgid "Dielectric losses:"
-msgstr ""
+msgstr "Діелектричні втрати:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:163
@@ -20646,8 +20653,9 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:353
 #: pcb_calculator/transline_ident.cpp:387
+#, fuzzy
 msgid "Skin depth:"
-msgstr ""
+msgstr "Глибина проникнення"
 
 #: pcb_calculator/transline_ident.cpp:124
 #: pcb_calculator/transline_ident.cpp:166
@@ -20655,12 +20663,12 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:312
 #: pcb_calculator/transline_ident.cpp:356
 msgid "Height of substrate"
-msgstr ""
+msgstr "Товщина підкладки"
 
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:314
 msgid "Height of box top"
-msgstr ""
+msgstr "Висота коробки зверху"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -20668,25 +20676,25 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:361
 msgid "Strip thickness"
-msgstr ""
+msgstr "Товщина смуги"
 
 #: pcb_calculator/transline_ident.cpp:131
 #: pcb_calculator/transline_ident.cpp:318
 msgid "Roughness"
-msgstr ""
+msgstr "Шорсткість"
 
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:319
 msgid "Conductor roughness"
-msgstr ""
+msgstr "Шорсткість провідника"
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
-msgstr ""
+msgstr "підкладка"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
-msgstr ""
+msgstr "Відносна проникність (mu) підкладки"
 
 #: pcb_calculator/transline_ident.cpp:139
 #: pcb_calculator/transline_ident.cpp:171
@@ -20697,7 +20705,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:364
 #: pcb_calculator/transline_ident.cpp:394
 msgid "conductor"
-msgstr ""
+msgstr "провідник"
 
 #: pcb_calculator/transline_ident.cpp:140
 #: pcb_calculator/transline_ident.cpp:172
@@ -20708,7 +20716,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:365
 #: pcb_calculator/transline_ident.cpp:395
 msgid "Relative permeability (mu) of conductor"
-msgstr ""
+msgstr "Відносна проникність (mu) провідника"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
@@ -20716,7 +20724,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Line width"
-msgstr ""
+msgstr "Ширина лінії"
 
 #: pcb_calculator/transline_ident.cpp:146
 #: pcb_calculator/transline_ident.cpp:180
@@ -20725,7 +20733,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:331
 #: pcb_calculator/transline_ident.cpp:370
 msgid "Line length"
-msgstr ""
+msgstr "Довжина лінії"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:183
@@ -20746,152 +20754,152 @@ msgstr "Хвильовий опір"
 #: pcb_calculator/transline_ident.cpp:376
 #: pcb_calculator/transline_ident.cpp:415
 msgid "Electrical length"
-msgstr ""
+msgstr "Електрична довжина"
 
 #: pcb_calculator/transline_ident.cpp:178
 #: pcb_calculator/transline_ident.cpp:212
 #: pcb_calculator/transline_ident.cpp:329
 msgid "Gap width"
-msgstr ""
+msgstr "Ширина зазору"
 
 #: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
-msgstr ""
+msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:233
 #: pcb_calculator/transline_ident.cpp:268
 msgid "TE-modes:"
-msgstr ""
+msgstr "TE-режими:"
 
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:269
 msgid "TM-modes:"
-msgstr ""
+msgstr "TM-режими:"
 
 #: pcb_calculator/transline_ident.cpp:238
 #: pcb_calculator/transline_ident.cpp:273
 msgid "insulator"
-msgstr ""
+msgstr "ізолятор"
 
 #: pcb_calculator/transline_ident.cpp:239
 #: pcb_calculator/transline_ident.cpp:274
 msgid "Relative permeability (mu) of insulator"
-msgstr ""
+msgstr "Відносна проникність (mu) ізолятора"
 
 #: pcb_calculator/transline_ident.cpp:247
 msgid "Width of waveguide"
-msgstr ""
+msgstr "Ширина хвилеводу"
 
 #: pcb_calculator/transline_ident.cpp:249
 msgid "Height of waveguide"
-msgstr ""
+msgstr "Висота хвилеводу"
 
 #: pcb_calculator/transline_ident.cpp:251
 msgid "Waveguide length"
-msgstr ""
+msgstr "Довжина хвилеводу"
 
 #: pcb_calculator/transline_ident.cpp:282
 #: pcb_calculator/transline_ident.cpp:403
 msgid "Din"
-msgstr ""
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
 msgid "Inner diameter (conductor)"
-msgstr ""
+msgstr "Внутрішній діаметр (провідник)"
 
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
 msgid "Dout"
-msgstr ""
+msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:407
 msgid "Outer diameter (insulator)"
-msgstr ""
+msgstr "Зовнішній діаметр (ізолятор)"
 
 #: pcb_calculator/transline_ident.cpp:302
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "Ефективно %s (парна мода):"
 
 #: pcb_calculator/transline_ident.cpp:303
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "Ефективно %s (непарна мода):"
 
 #: pcb_calculator/transline_ident.cpp:304
 msgid "Conductor losses (even):"
-msgstr ""
+msgstr "Втрати провідника (парна мода):"
 
 #: pcb_calculator/transline_ident.cpp:305
 msgid "Conductor losses (odd):"
-msgstr ""
+msgstr "Втрати провідника (непарна мода):"
 
 #: pcb_calculator/transline_ident.cpp:306
 msgid "Dielectric losses (even):"
-msgstr ""
+msgstr "Діелектричні втрати (парна мода):"
 
 #: pcb_calculator/transline_ident.cpp:307
 msgid "Dielectric losses (odd):"
-msgstr ""
+msgstr "Діелектричні втрати (непарна мода):"
 
 #: pcb_calculator/transline_ident.cpp:309
 msgid "Differential Impedance (Zd):"
-msgstr ""
+msgstr "Диференціальний імпеданс (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr ""
+msgstr "Імпеданс парної моди (лінії що керуються загальною напругою)"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
-msgstr ""
+msgstr "Z не парне"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
+msgstr "Імпеданс непарної моди (лінії що керуються (диференційною) напругою)"
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr ""
+msgstr "Відстань між смугою і верхнім металом"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
-msgstr ""
+msgstr "Скручування"
 
 #: pcb_calculator/transline_ident.cpp:391
 msgid "Number of twists per length"
-msgstr ""
+msgstr "Кількість скручувань по довжині"
 
 #: pcb_calculator/transline_ident.cpp:399
 msgid "environment"
-msgstr ""
+msgstr "середовище"
 
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Relative permittivity of environment"
-msgstr ""
+msgstr "Відносна проникність навколишнього середовища"
 
 #: pcb_calculator/transline_ident.cpp:409
 msgid "Cable length"
-msgstr ""
+msgstr "Довжина кабеля"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr ""
+msgstr "мкм"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 #: pcb_calculator/widgets/unit_selector.cpp:210
 msgid "cm"
-msgstr ""
+msgstr "см"
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
 msgid "mil"
-msgstr ""
+msgstr "миль"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcb_calculator/widgets/unit_selector.cpp:213
@@ -20900,19 +20908,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr ""
+msgstr "дюйм"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
-msgstr ""
+msgstr "ГГц"
 
 #: pcb_calculator/widgets/unit_selector.cpp:101
 msgid "MHz"
-msgstr ""
+msgstr "МГц"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
-msgstr ""
+msgstr "кГц"
 
 #: pcb_calculator/widgets/unit_selector.cpp:103
 msgid "Hz"
@@ -20920,62 +20928,61 @@ msgstr "Гц"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
-msgstr ""
+msgstr "радіан"
 
 #: pcb_calculator/widgets/unit_selector.cpp:211
-#, fuzzy
 msgid "m"
-msgstr "мм"
+msgstr "м"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
 msgid "km"
-msgstr ""
+msgstr "км"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "фут"
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "м/с"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "фут/с"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "км/г"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "миль/г"
 
 #: pcbnew/array_creator.cpp:214
 msgid "Create an array"
-msgstr ""
+msgstr "Створити масив"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:889
 msgid "Autoplacing components..."
-msgstr ""
+msgstr "Автоматичне розміщення компонентів..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:905
 #, c-format
 msgid "Autoplacing %s"
-msgstr ""
+msgstr "Автоматичне розміщення %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "Контури плати повинні бути визначені на шарі %s ."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
-msgstr ""
+msgstr "Автоматичне розміщення компонентів"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
-msgstr ""
+msgstr "Автоматичне розміщення компонентів"
 
 #: pcbnew/board.cpp:109
 msgid "This is the default net class."
@@ -20983,11 +20990,11 @@ msgstr "Це клас звʼязків за замовчуванням."
 
 #: pcbnew/board.cpp:644 pcbnew/drc/drc_cache_generator.cpp:146
 msgid "Tessellating copper zones..."
-msgstr ""
+msgstr "Складання мідних зон..."
 
 #: pcbnew/board.cpp:885
 msgid "PCB"
-msgstr ""
+msgstr "PCB"
 
 #: pcbnew/board.cpp:1261 pcbnew/dialogs/dialog_board_statistics.cpp:711
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
@@ -21013,7 +21020,7 @@ msgstr "Перехідні отвори"
 
 #: pcbnew/board.cpp:1263 pcbnew/pcb_draw_panel_gal.cpp:527
 msgid "Track Segments"
-msgstr ""
+msgstr "Сегменти доріжки"
 
 #: pcbnew/board.cpp:1264 pcbnew/pcb_draw_panel_gal.cpp:528
 #: pcbnew/widgets/appearance_controls.cpp:986
@@ -21025,7 +21032,7 @@ msgstr "Звʼязки"
 
 #: pcbnew/board.cpp:1265 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Unrouted"
-msgstr ""
+msgstr "Немаршрутизований"
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetName"
@@ -21037,25 +21044,25 @@ msgstr "Клас звʼязків"
 
 #: pcbnew/board_item.cpp:107
 msgid "all copper layers"
-msgstr ""
+msgstr "всі шари міді"
 
 #: pcbnew/board_item.cpp:121
 msgid "and others"
-msgstr ""
+msgstr "та іншими"
 
 #: pcbnew/board_item.cpp:129
 msgid "no layers"
-msgstr ""
+msgstr "без шарів"
 
 #: pcbnew/board_item.cpp:258 pcbnew/pcb_track.cpp:1243
 #: pcbnew/pcb_track.cpp:1260
 msgid "Position X"
-msgstr ""
+msgstr "Позиція X"
 
 #: pcbnew/board_item.cpp:260 pcbnew/pcb_track.cpp:1246
 #: pcbnew/pcb_track.cpp:1263
 msgid "Position Y"
-msgstr ""
+msgstr "Позиція Y"
 
 #: pcbnew/board_item.cpp:264 pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
@@ -21072,76 +21079,76 @@ msgstr ""
 #: pcbnew/pcb_shape.cpp:220 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:304
 #: pcbnew/pcb_track.cpp:908 pcbnew/zone.cpp:544
 msgid "Locked"
-msgstr ""
+msgstr "Заблоковано"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:288
 #, c-format
 msgid "Dielectric %d"
-msgstr ""
+msgstr "Діалектрик %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:519
 msgid "Top Silk Screen"
-msgstr ""
+msgstr "Шовкографія зверху"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:527
 msgid "Top Solder Paste"
-msgstr ""
+msgstr "Паяльна паста зверху"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:535
 msgid "Top Solder Mask"
-msgstr ""
+msgstr "Паяльна маска зверху"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:579
 msgid "Bottom Solder Mask"
-msgstr ""
+msgstr "Паяльна маска знизу"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:587
 msgid "Bottom Solder Paste"
-msgstr ""
+msgstr "Паяльна паста знизу"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:595
 msgid "Bottom Silk Screen"
-msgstr ""
+msgstr "Шовкографія знизу"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
-msgstr ""
+msgstr "Невірне значення Епсилон R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:51
 msgid "Incorrect value for Loss Tangent"
-msgstr ""
+msgstr "Невірне значення для тангенса діалектичних втрат"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:93
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
 msgid "Material"
-msgstr ""
+msgstr "Матеріал"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:282
 msgid "Epsilon R"
-msgstr ""
+msgstr "Епсилон R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 msgid "Loss Tg"
-msgstr ""
+msgstr "Тангенс кута діалектичних втрат"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr ""
+msgstr "Епсилон R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tg:"
-msgstr ""
+msgstr "Танг. кута діал. втрат:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
-msgstr ""
+msgstr "Загальні матеріали:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
 msgid "Dielectric Material Characteristics"
-msgstr ""
+msgstr "Характеристики діелектричного матеріалу"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
