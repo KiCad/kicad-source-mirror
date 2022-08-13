@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-08 11:16+0000\n"
+"PO-Revision-Date: 2022-08-15 08:15+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -8680,7 +8680,7 @@ msgstr "수평 중앙 정렬"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:116
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:491
 msgid "Align right"
-msgstr "오른쪽으로 정렬"
+msgstr "오른쪽 정렬"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:136
@@ -8688,7 +8688,7 @@ msgstr "오른쪽으로 정렬"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:131
 #: eeschema/sch_label.cpp:792 eeschema/sch_text.cpp:494
 msgid "Align top"
-msgstr "위쪽으로 정렬"
+msgstr "위쪽 정렬"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:141
@@ -8703,7 +8703,7 @@ msgstr "수직 중앙 정렬"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:121
 #: eeschema/sch_label.cpp:790 eeschema/sch_text.cpp:492
 msgid "Align bottom"
-msgstr "아래쪽으로 정렬"
+msgstr "아래쪽 정렬"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:194
@@ -28086,7 +28086,7 @@ msgstr "사용하지 않는 패드 제거"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr "심볼리 없는 풋프린트 삭제"
+msgstr "심볼이 없는 풋프린트 삭제"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
