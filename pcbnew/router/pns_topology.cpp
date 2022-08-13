@@ -74,11 +74,10 @@ const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( JOINT* aStart )
 
         for( ITEM* item : current->LinkList() )
         {
-            if( item->OfKind( ITEM::SEGMENT_T ) )
+            if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
             {
-                SEGMENT* seg = static_cast<SEGMENT*>( item );
-                JOINT* a = m_world->FindJoint( seg->Seg().A, seg );
-                JOINT* b = m_world->FindJoint( seg->Seg().B, seg );
+                JOINT* a = m_world->FindJoint( item->Anchor( 0 ), item );;
+                JOINT* b = m_world->FindJoint( item->Anchor( 1 ), item );;
                 JOINT* next = ( *a == *current ) ? b : a;
 
                 if( processed.find( next ) == processed.end() )
