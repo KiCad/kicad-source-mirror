@@ -29,6 +29,8 @@
 #include <boost/uuid/uuid.hpp>
 #include <macros_swig.h>
 
+#include <string>
+
 class wxString;
 
 /**
@@ -46,6 +48,8 @@ class KIID
 public:
     KIID();
     KIID( int null );
+    KIID( const std::string& aString );
+    KIID( const char* aString );
     KIID( const wxString& aString );
     KIID( timestamp_t aTimestamp );
 

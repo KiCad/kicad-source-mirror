@@ -33,6 +33,7 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
+#include <cctype>
 #include <mutex>
 
 #include <wx/log.h>
@@ -104,16 +105,21 @@ KIID::KIID( int null ) : m_uuid( nilGenerator() ), m_cached_timestamp( 0 )
 }
 
 
-KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
+KIID::KIID( const std::string& aString ) : m_uuid(), m_cached_timestamp( 0 )
 {
-    if( aString.length() == 8 )
+    if( aString.length() == 8
+        && std::all_of( aString.begin(), aString.end(),
+                        []( unsigned char c )
+                        {
+                            return std::isxdigit( c );
+                        } ) )
     {
         // A legacy-timestamp-based UUID has only the last 4 octets filled in.
         // Convert them individually to avoid stepping in the little-endian/big-endian
         // doo-doo.
         for( int i = 0; i < 4; ++i )
         {
-            wxString octet      = aString.substr( i * 2, 2 );
+            std::string octet = aString.substr( i * 2, 2 );
             m_uuid.data[i + 12] = strtol( octet.data(), nullptr, 16 );
         }
 
@@ -123,7 +129,7 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
     {
         try
         {
-            m_uuid = stringGenerator( aString.wc_str() );
+            m_uuid = stringGenerator( aString );
 
             if( IsLegacyTimestamp() )
                 m_cached_timestamp = strtol( aString.substr( 28 ).c_str(), nullptr, 16 );
@@ -149,6 +155,16 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
 #endif
         }
     }
+}
+
+
+KIID::KIID( const const char* aString ) : KIID( std::string( aString ) )
+{
+}
+
+
+KIID::KIID( const wxString& aString ) : KIID( std::string( aString.ToUTF8() ) )
+{
 }
 
 
