@@ -594,16 +594,27 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
                   FormatInternalUnits( dsnSettings.m_SolderMaskExpansion ).c_str() );
 
     if( dsnSettings.m_SolderMaskMinWidth )
+    {
         m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
                       FormatInternalUnits( dsnSettings.m_SolderMaskMinWidth ).c_str() );
+    }
 
     if( dsnSettings.m_SolderPasteMargin != 0 )
+    {
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
                       FormatInternalUnits( dsnSettings.m_SolderPasteMargin ).c_str() );
+    }
 
     if( dsnSettings.m_SolderPasteMarginRatio != 0 )
+    {
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
                       Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
+    }
+
+    if( dsnSettings.m_AllowSoldermaskBridgesInFPs )
+    {
+        m_out->Print( aNestLevel+1, "(allow_soldermask_bridges_in_footprints yes)\n" );
+    }
 
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 

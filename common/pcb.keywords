@@ -30,6 +30,7 @@ aligned
 allowed
 allow_missing_courtyard
 allow_soldermask_bridges
+allow_soldermask_bridges_in_footprints
 anchor
 angle
 arc

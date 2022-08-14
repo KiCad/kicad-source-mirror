@@ -2131,6 +2131,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_allow_soldermask_bridges_in_footprints:
+            bds.m_AllowSoldermaskBridgesInFPs = parseBool();
+            NeedRIGHT();
+            break;
+
         case T_aux_axis_origin:
         {
             int x = parseBoardUnits( "auxiliary origin X" );

@@ -376,6 +376,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
     if( aItem->IsConnected() )
         itemNet = static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
+    BOARD_DESIGN_SETTINGS& bds = aItem->GetBoard()->GetDesignSettings();
     PAD*                   pad = dynamic_cast<PAD*>( aItem );
     PCB_VIA*               via = dynamic_cast<PCB_VIA*>( aItem );
     std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aRefLayer );
@@ -397,10 +398,15 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 if( isNullAperture( other ) )
                     return false;
 
-                if( itemFP && itemFP == other->GetParentFootprint()
-                    && ( itemFP->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+                if( itemFP && itemFP == other->GetParentFootprint() )
                 {
-                    return false;
+                    // Board-wide exclusion
+                    if( bds.m_AllowSoldermaskBridgesInFPs )
+                        return false;
+
+                    // Footprint-specific exclusion
+                    if( ( itemFP->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+                        return false;
                 }
 
                 if( pad && otherPad && pad->SameLogicalPadAs( otherPad ) )

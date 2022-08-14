@@ -688,6 +688,7 @@ public:
     int        m_SolderPasteMargin;           // Solder paste margin absolute value
     double     m_SolderPasteMarginRatio;      // Solder mask margin ratio value of pad size
                                               // The final margin is the sum of these 2 values
+    bool       m_AllowSoldermaskBridgesInFPs;
 
     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 

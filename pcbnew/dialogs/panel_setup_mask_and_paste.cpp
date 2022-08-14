@@ -62,6 +62,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
     m_pasteMargin.SetValue( m_BrdSettings->m_SolderPasteMargin );
     m_pasteMarginRatio.SetDoubleValue( m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
 
+    m_allowBridges->SetValue( m_BrdSettings->m_AllowSoldermaskBridgesInFPs );
+
     return true;
 }
 
@@ -76,6 +78,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
 
     m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetValue();
     m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;
+
+    m_BrdSettings->m_AllowSoldermaskBridgesInFPs = m_allowBridges->GetValue();
 
     return true;
 }

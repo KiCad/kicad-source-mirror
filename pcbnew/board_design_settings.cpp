@@ -204,6 +204,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // Usually < 0 because the mask is smaller than pad
     m_SolderPasteMarginRatio = DEFAULT_SOLDERPASTE_RATIO;
 
+    m_AllowSoldermaskBridgesInFPs = false;
+
     // Layer thickness for 3D viewer
     m_boardThickness = Millimeter2iu( DEFAULT_BOARD_THICKNESS_MM );
 
