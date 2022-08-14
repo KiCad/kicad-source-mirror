@@ -422,29 +422,6 @@ LIB_ITEM* SCH_SEXPR_PARSER::ParseDrawItem()
 }
 
 
-double SCH_SEXPR_PARSER::parseDouble()
-{
-    // In case the file got saved with the wrong locale.
-    if( strchr( CurText(), ',' ) != nullptr )
-    {
-        THROW_PARSE_ERROR( _( "Floating point number with incorrect locale" ), CurSource(),
-                           CurLine(), CurLineNumber(), CurOffset() );
-    }
-
-    double                 dval{};
-    const std::string&     str = CurStr();
-    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
-
-    if( res.ec != std::errc() )
-    {
-        THROW_PARSE_ERROR( _( "Invalid floating point number" ), CurSource(), CurLine(),
-                           CurLineNumber(), CurOffset() );
-    }
-
-    return dval;
-}
-
-
 int SCH_SEXPR_PARSER::parseInternalUnits()
 {
     auto retval = parseDouble() * IU_PER_MM;

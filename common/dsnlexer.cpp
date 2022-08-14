@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <charconv>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>         // bsearch()
@@ -819,4 +819,52 @@ wxArrayString* DSNLEXER::ReadCommentLines()
     SetCommentsAreTokens( cmt_setting );
 
     return ret;
+}
+
+
+double DSNLEXER::parseDouble()
+{
+#if ( defined( __GNUC__ ) && __GNUC__ < 11 ) || ( defined( __clang__ ) && __clang_major__ < 13 )
+    // GCC older than 11 "supports" C++17 without supporting the C++17 std::from_chars for doubles
+    // clang is similar
+
+    char* tmp;
+
+    errno = 0;
+
+    double fval = strtod( CurText(), &tmp );
+
+    if( errno )
+    {
+        wxString error;
+        error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource(), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
+    if( CurText() == tmp )
+    {
+        wxString error;
+        error.Printf( _( "Missing floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource(), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
+    return fval;
+#else
+    // Use std::from_chars which is designed to be locale independent and performance oriented for data interchange
+    double                 dval{};
+    const std::string&     str = CurStr();
+    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
+
+    if( res.ec != std::errc() )
+    {
+        THROW_PARSE_ERROR( _( "Invalid floating point number" ), CurSource(), CurLine(),
+                           CurLineNumber(), CurOffset() );
+    }
+
+    return dval;
+#endif
 }

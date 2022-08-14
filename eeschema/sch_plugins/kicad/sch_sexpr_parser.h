@@ -117,26 +117,6 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
         return parseInt();
     }
 
-    /**
-     * Parse the current token as an ASCII numeric string with possible leading
-     * whitespace into a double precision floating point number.
-     *
-     * @throw IO_ERROR if an error occurs attempting to convert the current token.
-     * @return The result of the parsed token.
-     */
-    double parseDouble();
-
-    inline double parseDouble( const char* aExpected )
-    {
-        NeedNUMBER( aExpected );
-        return parseDouble();
-    }
-
-    inline double parseDouble( TSCHEMATIC_T::T aToken )
-    {
-        return parseDouble( GetTokenText( aToken ) );
-    }
-
     int parseInternalUnits();
 
     int parseInternalUnits( const char* aExpected );

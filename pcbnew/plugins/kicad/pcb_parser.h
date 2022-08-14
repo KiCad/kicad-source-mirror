@@ -282,18 +282,6 @@ private:
      * @return The result of the parsed token.
      * @throw IO_ERROR if an error occurs attempting to convert the current token.
      */
-    double parseDouble();
-
-    inline double parseDouble( const char* aExpected )
-    {
-        NeedNUMBER( aExpected );
-        return parseDouble();
-    }
-
-    inline double parseDouble( PCB_KEYS_T::T aToken )
-    {
-        return parseDouble( GetTokenText( aToken ) );
-    }
 
     int parseBoardUnits();
 

@@ -498,6 +498,27 @@ protected:
         return false;
     }
 
+    /**
+     * Parse the current token as an ASCII numeric string with possible leading
+     * whitespace into a double precision floating point number.
+     *
+     * @throw IO_ERROR if an error occurs attempting to convert the current token.
+     * @return The result of the parsed token.
+     */
+    double parseDouble();
+
+    double parseDouble( const char* aExpected )
+    {
+        NeedNUMBER( aExpected );
+        return parseDouble();
+    }
+
+    template <typename T>
+    inline double parseDouble( T aToken )
+    {
+        return parseDouble( GetTokenText( aToken ) );
+    }
+
     bool                iOwnReaders;            ///< on readerStack, should I delete them?
     const char*         start;
     const char*         next;

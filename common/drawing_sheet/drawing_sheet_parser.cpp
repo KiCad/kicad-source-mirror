@@ -849,20 +849,8 @@ double DRAWING_SHEET_PARSER::parseDouble()
     if( token != T_NUMBER )
         Expecting( T_NUMBER );
 
-    double                 dval{};
-    const std::string&     str = CurStr();
-    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
 
-    if( res.ec != std::errc() )
-    {
-        wxString error;
-        error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
-                      CurSource(), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
-    }
-
-    return dval;
+    return DSNLEXER::parseDouble();
 }
 
 // defaultDrawingSheet is the default drawing sheet using the S expr.
