@@ -1514,7 +1514,16 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
             pad->SetPosition( padpos + aFootprint->GetPosition() );
 
-            aFootprint->Add( pad.release() );
+            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            {
+                aFootprint->Add( pad.release() );
+            }
+            else
+            {
+                wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                            m_reader->GetSource() );
+            }
+
             return;     // preferred exit
         }
     }

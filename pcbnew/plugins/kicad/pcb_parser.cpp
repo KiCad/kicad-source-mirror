@@ -3893,12 +3893,14 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_pad:
         {
-            PAD* pad = parsePAD( footprint.get() );
-            pt       = pad->GetPos0();
+            if( PAD* pad = parsePAD( footprint.get() ) )
+            {
+                pt       = pad->GetPos0();
+                RotatePoint( pt, footprint->GetOrientation() );
+                pad->SetPosition( pt + footprint->GetPosition() );
+                footprint->Add( pad, ADD_MODE::APPEND, true );
+            }
 
-            RotatePoint( pt, footprint->GetOrientation() );
-            pad->SetPosition( pt + footprint->GetPosition() );
-            footprint->Add( pad, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -5034,6 +5036,14 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         // At some point it was possible to assign a number to aperture pads so we need to clean
         // those out here.
         pad->SetNumber( wxEmptyString );
+    }
+
+    // Zero-sized pads are not really selectable and likely cause crashes.
+    // They are not supported by KiCad and are removed on loading
+    if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
+    {
+        wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), CurSource() );
+        return nullptr;
     }
 
     return pad.release();

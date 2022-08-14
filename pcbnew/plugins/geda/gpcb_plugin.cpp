@@ -539,7 +539,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            PAD* pad = new PAD( footprint.get() );
+            std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
 
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
@@ -607,7 +607,16 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                     pad->SetShape( PAD_SHAPE::OVAL );
             }
 
-            footprint->Add( pad );
+            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            {
+                footprint->Add( pad.release() );
+            }
+            else
+            {
+                wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                            aLineReader->GetSource() );
+            }
+
             continue;
         }
 
