@@ -158,7 +158,7 @@ KIID::KIID( const std::string& aString ) : m_uuid(), m_cached_timestamp( 0 )
 }
 
 
-KIID::KIID( const const char* aString ) : KIID( std::string( aString ) )
+KIID::KIID( const char* aString ) : KIID( std::string( aString ) )
 {
 }
 
