@@ -1543,7 +1543,11 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
             pad->SetPosition( padpos + aFootprint->GetPosition() );
 
-            aFootprint->Add( pad.release() );
+            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            {
+                aFootprint->Add( pad.release() );
+            }
+
             return;     // preferred exit
         }
     }

@@ -43,6 +43,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <macros.h>
+#include <wx/debug.h>
 #include <wx/log.h>
 
 #include <limits> // std::numeric_limits
@@ -801,7 +802,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             if( !found )
                 anchorPad = aComponent.ComponentPads.at( compCopper.AssociatedPadIDs.front() );
 
-            PAD* pad = new PAD( aFootprint );
+            std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( LSET( 1, copperLayer ) );
             pad->SetNumber( anchorPad.Identifier.IsEmpty()
@@ -814,6 +815,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             PADCODE anchorpadcode = getPadCode( anchorPad.PadCodeID );
             int     anchorSize = getKiCadLength( anchorpadcode.Shape.Size );
             wxPoint anchorPos = getKiCadPoint( anchorPad.Position );
+
+            if( anchorSize <= 0 )
+                anchorSize = 1;
 
             pad->SetShape( PAD_SHAPE::CUSTOM );
             pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
@@ -828,7 +832,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             shapePolys.Move( aFootprint->GetPosition() - anchorPos );
             pad->AddPrimitivePoly( shapePolys, 0, true );
 
-            aFootprint->Add( pad, ADD_MODE::APPEND ); // Append so that we get the correct behaviour
+            aFootprint->Add( pad.release(), ADD_MODE::APPEND ); // Append so that we get the correct behaviour
                                                       // when finding pads by PAD_ID. See loadNets()
 
             m_librarycopperpads[aComponent.ID][anchorPad.ID].push_back( aFootprint->Pads().size() );
@@ -905,9 +909,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
 {
     for( std::pair<PAD_ID, COMPONENT_PAD> padPair : aComponent.ComponentPads )
     {
-        PAD* pad = getKiCadPad( padPair.second, aFootprint );
-        aFootprint->Add( pad, ADD_MODE::APPEND ); // Append so that we get correct behaviour
-                                                  // when finding pads by PAD_ID - see loadNets()
+        if( PAD* pad = getKiCadPad( padPair.second, aFootprint ) )
+            aFootprint->Add( pad, ADD_MODE::APPEND ); // Append so that we get correct behaviour
+                    // when finding pads by PAD_ID - see loadNets()
     }
 }
 
@@ -917,7 +921,10 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
     wxString errorMSG;
 
-    PAD* pad = new PAD( aParent );
+    if( csPadcode.Shape.Size <= 0)
+        return nullptr;
+
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
     LSET padLayerSet;
 
     switch( aCadstarPad.Side )
@@ -1238,7 +1245,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         m_padcodesTested.insert( csPadcode.ID );
     }
 
-    return pad;
+    return pad.release();
 }
 
 
@@ -1713,11 +1720,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                 wxString padNumber = kiPad->GetNumber();
 
                 delete kiPad;
-                kiPad = getKiCadPad( csPad, footprint );
-                kiPad->SetNumber( padNumber );
 
-                // Change the pointer in the footprint to the newly created pad
-                getPadReference( footprint, padEx.ID ) = kiPad;
+                if( kiPad = getKiCadPad( csPad, footprint ) )
+                {
+                    kiPad->SetNumber( padNumber );
+
+                    // Change the pointer in the footprint to the newly created pad
+                    getPadReference( footprint, padEx.ID ) = kiPad;
+                }
             }
         }
 

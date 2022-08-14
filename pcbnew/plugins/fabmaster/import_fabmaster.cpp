@@ -2238,7 +2238,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     auto net_it = netinfo.find( netname );
 
-                    PAD* newpad = new PAD( fp );
+                    std::unique_ptr<PAD> newpad = std::make_unique<PAD>( fp );
 
                     if( net_it != netinfo.end() )
                         newpad->SetNet( net_it->second );
@@ -2256,8 +2256,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( padstack == pads.end() )
                     {
-                        ///TODO:Warning
-                        delete newpad;
+                        wxLogError( _( "Unable to locate padstack %s in file %s\n" ),
+                                      pin->padstack.c_str(), aBoard->GetFileName().wc_str() );
                         continue;
                     }
                     else
@@ -2409,7 +2409,10 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     else
                         newpad->SetOrientation( ( src->rotate - pin->rotation ) * 10.0 );
 
-                    fp->Add( newpad, ADD_MODE::APPEND );
+                    if( newpad->GetSizeX() > 0 || newpad->GetSizeY() > 0 )
+                    {
+                        fp->Add( newpad.release(), ADD_MODE::APPEND );
+                    }
                 }
             }
 

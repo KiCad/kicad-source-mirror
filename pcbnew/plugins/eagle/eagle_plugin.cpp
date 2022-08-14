@@ -1892,9 +1892,8 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     int shape = EPAD::UNDEF;
     int eagleDrillz = e.drill.ToPcbUnits();
 
-    PAD* pad = new PAD( aFootprint );
-    aFootprint->Add( pad );
-    transferPad( e, pad );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
+    transferPad( e, pad.get() );
 
     if( e.first && *e.first && m_rules->psFirst != EPAD::UNDEF )
         shape = m_rules->psFirst;
@@ -1979,6 +1978,11 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     if( e.rot )
     {
         pad->SetOrientation( e.rot->degrees * 10 );
+    }
+
+    if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+    {
+        aFootprint->Add( pad.release() );
     }
 }
 

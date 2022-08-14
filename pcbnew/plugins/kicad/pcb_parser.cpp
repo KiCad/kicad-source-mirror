@@ -3479,12 +3479,14 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_pad:
         {
-            PAD* pad = parsePAD( footprint.get() );
-            pt       = pad->GetPos0();
+            if( PAD* pad = parsePAD( footprint.get() ) )
+            {
+                pt       = pad->GetPos0();
+                RotatePoint( &pt, footprint->GetOrientation() );
+                pad->SetPosition( pt + footprint->GetPosition() );
+                footprint->Add( pad, ADD_MODE::APPEND );
+            }
 
-            RotatePoint( &pt, footprint->GetOrientation() );
-            pad->SetPosition( pt + footprint->GetPosition() );
-            footprint->Add( pad, ADD_MODE::APPEND );
             break;
         }
 
@@ -4497,6 +4499,11 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
     if( !pad->GetRemoveUnconnected() )
         pad->SetKeepTopBottom( true );
+
+    // Zero-sized pads are not really selectable and likely cause crashes.
+    // They are not supported by KiCad and are removed on loading
+    if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
+        return nullptr;
 
     return pad.release();
 }
