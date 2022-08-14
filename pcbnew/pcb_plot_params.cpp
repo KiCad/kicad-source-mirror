@@ -22,6 +22,7 @@
  */
 
 #include <board_design_settings.h>
+#include <charconv>
 #include <convert_to_biu.h>
 #include <layer_ids.h>
 #include <macros.h>
@@ -659,9 +660,20 @@ double PCB_PLOT_PARAMS_PARSER::parseDouble()
     if( token != T_NUMBER )
         Expecting( T_NUMBER );
 
-    double val = strtod( CurText(), nullptr );
+    double                 dval{};
+    const std::string&     str = CurStr();
+    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
 
-    return val;
+    if( res.ec != std::errc() )
+    {
+        wxString error;
+        error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource(), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
+    return dval;
 }
 
 

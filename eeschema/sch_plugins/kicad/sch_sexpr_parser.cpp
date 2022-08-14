@@ -27,6 +27,8 @@
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code.
+#include <charconv>
+
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
@@ -422,8 +424,6 @@ LIB_ITEM* SCH_SEXPR_PARSER::ParseDrawItem()
 
 double SCH_SEXPR_PARSER::parseDouble()
 {
-    char* tmp;
-
     // In case the file got saved with the wrong locale.
     if( strchr( CurText(), ',' ) != nullptr )
     {
@@ -431,23 +431,17 @@ double SCH_SEXPR_PARSER::parseDouble()
                            CurLine(), CurLineNumber(), CurOffset() );
     }
 
-    errno = 0;
+    double                 dval{};
+    const std::string&     str = CurStr();
+    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
 
-    double fval = strtod( CurText(), &tmp );
-
-    if( errno )
+    if( res.ec != std::errc() )
     {
         THROW_PARSE_ERROR( _( "Invalid floating point number" ), CurSource(), CurLine(),
                            CurLineNumber(), CurOffset() );
     }
 
-    if( CurText() == tmp )
-    {
-        THROW_PARSE_ERROR( _( "Missing floating point number" ), CurSource(), CurLine(),
-                           CurLineNumber(), CurOffset() );
-    }
-
-    return fval;
+    return dval;
 }
 
 

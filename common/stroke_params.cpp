@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <macros.h>
 #include <base_units.h>
+#include <charconv>>
 #include <string_utils.h>
 #include <eda_rect.h>
 #include <render_settings.h>
@@ -316,9 +316,20 @@ double STROKE_PARAMS_PARSER::parseDouble( const char* aText )
     if( token != T_NUMBER )
         Expecting( aText );
 
-    double val = strtod( CurText(), NULL );
+    double                 dval{};
+    const std::string&     str = CurStr();
+    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
 
-    return val;
+    if( res.ec != std::errc() )
+    {
+        wxString error;
+        error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
+                      CurSource(), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
+
+    return dval;
 }
 
 

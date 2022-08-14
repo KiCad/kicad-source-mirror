@@ -28,6 +28,7 @@
  */
 
 #include <cerrno>
+#include <charconv>
 #include <confirm.h>
 #include <macros.h>
 #include <title_block.h>
@@ -176,13 +177,11 @@ void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
 
 double PCB_PARSER::parseDouble()
 {
-    char* tmp;
+    double                 dval{};
+    const std::string&     str = CurStr();
+    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
 
-    errno = 0;
-
-    double fval = strtod( CurText(), &tmp );
-
-    if( errno )
+    if( res.ec != std::errc() )
     {
         wxString error;
         error.Printf( _( "Invalid floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
@@ -191,16 +190,7 @@ double PCB_PARSER::parseDouble()
         THROW_IO_ERROR( error );
     }
 
-    if( CurText() == tmp )
-    {
-        wxString error;
-        error.Printf( _( "Missing floating point number in\nfile: '%s'\nline: %d\noffset: %d" ),
-                      CurSource(), CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
-    }
-
-    return fval;
+    return dval;
 }
 
 
