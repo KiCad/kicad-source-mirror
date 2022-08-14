@@ -36,7 +36,12 @@
 
 // Fall back to getc() when getc_unlocked() is not available on the target platform.
 #if !defined( HAVE_FGETC_NOLOCK )
+#ifdef _MSC_VER
+//getc is not a macro on windows and adds a tiny overhead for the indirection to eventually calling fgetc
+#define getc_unlocked fgetc
+#else
 #define getc_unlocked getc
+#endif
 #endif
 
 
