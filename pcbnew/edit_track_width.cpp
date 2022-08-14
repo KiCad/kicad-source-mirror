@@ -42,7 +42,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
     initial_width = aTrackItem->GetWidth();
 
     if( aUseNetclassValue )
-        new_width = aTrackItem->GetNetClass()->GetTrackWidth();
+        new_width = aTrackItem->GetEffectiveNetClass()->GetTrackWidth();
     else
         new_width = GetDesignSettings().GetCurrentTrackWidth();
 
@@ -55,8 +55,8 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
 
         if( aUseNetclassValue || via->GetViaType() == VIATYPE::MICROVIA )
         {
-            new_width = aTrackItem->GetNetClass()->GetViaDiameter();
-            new_drill = aTrackItem->GetNetClass()->GetViaDrill();
+            new_width = aTrackItem->GetEffectiveNetClass()->GetViaDiameter();
+            new_drill = aTrackItem->GetEffectiveNetClass()->GetViaDrill();
         }
         else
         {

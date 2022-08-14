@@ -176,16 +176,9 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 COLOR4D SCH_BUS_ENTRY_BASE::GetBusEntryColor() const
 {
     if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
-    {
         m_lastResolvedColor = m_stroke.GetColor();
-    }
     else if( IsConnectable() && !IsConnectivityDirty() )
-    {
-        NETCLASSPTR netclass = NetClass();
-
-        if( netclass )
-            m_lastResolvedColor = netclass->GetSchematicColor();
-    }
+        m_lastResolvedColor = GetEffectiveNetClass()->GetSchematicColor();
 
     return m_lastResolvedColor;
 }
@@ -208,16 +201,9 @@ void SCH_BUS_ENTRY_BASE::SetBusEntryColor( const COLOR4D& aColor )
 PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetLineStyle() const
 {
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-    {
         m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
-    }
     else if( IsConnectable() && !IsConnectivityDirty() )
-    {
-        NETCLASSPTR netclass = NetClass();
-
-        if( netclass )
-            m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
-    }
+        m_lastResolvedLineStyle = (PLOT_DASH_TYPE) GetEffectiveNetClass()->GetLineStyle();
 
     return m_lastResolvedLineStyle;
 }
@@ -233,16 +219,9 @@ void SCH_BUS_ENTRY_BASE::SetLineStyle( PLOT_DASH_TYPE aStyle )
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
     if( m_stroke.GetWidth() > 0 )
-    {
         m_lastResolvedWidth = m_stroke.GetWidth();
-    }
     else if( IsConnectable() && !IsConnectivityDirty() )
-    {
-        NETCLASSPTR netclass = NetClass();
-
-        if( netclass )
-            m_lastResolvedWidth = netclass->GetWireWidth();
-    }
+        m_lastResolvedWidth = GetEffectiveNetClass()->GetWireWidth();
 
     return m_lastResolvedWidth;
 }
@@ -251,16 +230,9 @@ int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
     if( m_stroke.GetWidth() > 0 )
-    {
         m_lastResolvedWidth = m_stroke.GetWidth();
-    }
     else if( IsConnectable() && !IsConnectivityDirty() )
-    {
-        NETCLASSPTR netclass = NetClass();
-
-        if( netclass )
-            m_lastResolvedWidth = netclass->GetBusWidth();
-    }
+        m_lastResolvedWidth = GetEffectiveNetClass()->GetBusWidth();
 
     return m_lastResolvedWidth;
 }
@@ -538,16 +510,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         conn->AppendInfoToMsgPanel( aList );
 
         if( !conn->IsBus() )
-        {
-            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            wxString netname = conn->Name();
-            wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
-
-            if( netSettings.m_NetClassAssignments.count( netname ) )
-                netclassName = netSettings.m_NetClassAssignments[ netname ];
-
-            aList.emplace_back( _( "Assigned Netclass" ), netclassName );
-        }
+            aList.emplace_back( _( "Resolved Netclass" ), GetEffectiveNetClass()->GetName() );
     }
 }
 

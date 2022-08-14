@@ -458,11 +458,11 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             if( m_netClassRegex.Matches( last ) )
             {
-                BOARD*                 board = m_frame->GetBoard();
-                BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+                BOARD_DESIGN_SETTINGS&         bds = m_frame->GetBoard()->GetDesignSettings();
+                std::shared_ptr<NET_SETTINGS>& netSettings = bds.m_NetSettings;
 
-                for( const std::pair<const wxString, NETCLASSPTR>& entry : bds.GetNetClasses() )
-                    tokens += wxT( "|" ) + entry.first;
+                for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+                    tokens += wxT( "|" ) + name;
             }
             else if( m_netNameRegex.Matches( last ) )
             {

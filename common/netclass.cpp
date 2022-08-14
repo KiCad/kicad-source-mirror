@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
- * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,90 +76,3 @@ NETCLASS::~NETCLASS()
 }
 
 
-NETCLASSES::NETCLASSES()
-{
-    m_default = std::make_shared<NETCLASS>( NETCLASS::Default );
-}
-
-
-NETCLASSES::~NETCLASSES()
-{
-}
-
-
-bool NETCLASSES::Add( const NETCLASSPTR& aNetClass )
-{
-    const wxString& name = aNetClass->GetName();
-
-    if( name == NETCLASS::Default )
-    {
-        m_default = aNetClass;
-        return true;
-    }
-
-    // Test for an existing netclass:
-    if( !Find( name ) )
-    {
-        // name not found, take ownership
-        m_NetClasses[name] = aNetClass;
-
-        return true;
-    }
-    else
-    {
-        // name already exists
-        // do not "take ownership" and return false telling caller such.
-        return false;
-    }
-}
-
-
-NETCLASSPTR NETCLASSES::Remove( const wxString& aNetName )
-{
-    NETCLASS_MAP::iterator found = m_NetClasses.find( aNetName );
-
-    if( found != m_NetClasses.end() )
-    {
-        std::shared_ptr<NETCLASS> netclass = found->second;
-        m_NetClasses.erase( found );
-        return netclass;
-    }
-
-    return NETCLASSPTR();
-}
-
-
-NETCLASSPTR NETCLASSES::Find( const wxString& aName ) const
-{
-    if( aName == NETCLASS::Default )
-        return GetDefault();
-
-    NETCLASS_MAP::const_iterator found = m_NetClasses.find( aName );
-
-    if( found == m_NetClasses.end() )
-        return NETCLASSPTR();
-    else
-        return found->second;
-}
-
-
-#if defined(DEBUG)
-
-void NETCLASS::Show( int nestLevel, std::ostream& os ) const
-{
-    // for now, make it look like XML:
-    //NestedSpace( nestLevel, os )
-
-    os << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    for( const_iterator i = begin();  i!=end();  ++i )
-    {
-        // NestedSpace( nestLevel+1, os ) << *i;
-        os << TO_UTF8( *i );
-    }
-
-    // NestedSpace( nestLevel, os )
-    os << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
-#endif

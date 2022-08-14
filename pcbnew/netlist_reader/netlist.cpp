@@ -88,9 +88,6 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
 
 void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand )
 {
-    std::string dummyPayload;
-    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_CLEAN_NETCLASSES, dummyPayload, this );
-
     BOARD* board = GetBoard();
 
     SetMsgPanel( board );

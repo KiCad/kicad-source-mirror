@@ -30,6 +30,7 @@
 #include <dialogs/dialog_paste_special.h>
 #include <dialogs/dialog_plot_schematic.h>
 #include <dialogs/dialog_symbol_remap.h>
+#include <dialogs/dialog_assign_netclass.h>
 #include <project_rescue.h>
 #include <erc.h>
 #include <invoke_sch_dialog.h>
@@ -1152,53 +1153,9 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             netNames.Add( conn->Name() );
         }
 
-        NET_SETTINGS& netSettings = m_frame->Schematic().Prj().GetProjectFile().NetSettings();
-        wxString      netclassName = netSettings.GetNetclassName( netNames.front() );
+        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netNames.front() );
 
-        wxArrayString headers;
-        std::vector<wxArrayString> items;
-
-        headers.Add( _( "Netclasses" ) );
-
-        wxArrayString defaultItem;
-        defaultItem.Add( _( "Default" ) );
-        items.emplace_back( defaultItem );
-
-        for( const std::pair<const wxString, NETCLASSPTR>& ii : netSettings.m_NetClasses )
-        {
-            wxArrayString item;
-            item.Add( ii.first );
-            items.emplace_back( item );
-        }
-
-        EDA_LIST_DIALOG dlg( m_frame, _( "Assign Netclass" ), headers, items, netclassName );
-        dlg.SetListLabel( _( "Select netclass:" ) );
-
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            netclassName = dlg.GetTextSelection();
-
-            for( const wxString& netName : netNames )
-            {
-                // Remove from old netclass membership list
-                if( netSettings.m_NetClassAssignments.count( netName ) )
-                {
-                    const wxString oldNetclassName = netSettings.m_NetClassAssignments[netName];
-                    NETCLASSPTR    oldNetclass = netSettings.m_NetClasses.Find( oldNetclassName );
-
-                    if( oldNetclass )
-                        oldNetclass->Remove( netName );
-                }
-
-                // Add to new netclass membership list
-                NETCLASSPTR newNetclass = netSettings.m_NetClasses.Find( netclassName );
-
-                if( newNetclass )
-                    newNetclass->Add( netName );
-
-                netSettings.m_NetClassAssignments[netName] = netclassName;
-            }
-        }
+        dlg.ShowModal();
     }
 
     highlightNet( m_toolMgr, CLEAR );

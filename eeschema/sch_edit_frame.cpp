@@ -1271,56 +1271,6 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_LABEL_BASE* aItem )
-{
-    if( CONNECTION_SUBGRAPH::GetDriverPriority( aItem ) == CONNECTION_SUBGRAPH::PRIORITY::NONE )
-        return;
-
-    // Netclasses are assigned to subgraphs by association with their netname.  However, when
-    // a new label is attached to an existing subgraph (with an existing netclass association),
-    // the association will be lost as the label will drive its name on to the graph.
-    //
-    // Here we find the previous driver of the subgraph and if it had a netclass we associate
-    // the new netname with that netclass as well.
-    //
-    SCHEMATIC*           schematic = aItem->Schematic();
-    CONNECTION_SUBGRAPH* subgraph = schematic->ConnectionGraph()->GetSubgraphForItem( aItem );
-
-    std::map<wxString, wxString>& netclassAssignments =
-                            schematic->Prj().GetProjectFile().NetSettings().m_NetClassAssignments;
-
-    if( subgraph )
-    {
-        SCH_ITEM* previousDriver = nullptr;
-        CONNECTION_SUBGRAPH::PRIORITY priority = CONNECTION_SUBGRAPH::PRIORITY::INVALID;
-
-        for( SCH_ITEM* item : subgraph->m_drivers )
-        {
-            if( item == aItem )
-                continue;
-
-            CONNECTION_SUBGRAPH::PRIORITY p = CONNECTION_SUBGRAPH::GetDriverPriority( item );
-
-            if( p > priority )
-            {
-                priority = p;
-                previousDriver = item;
-            }
-        }
-
-        if( previousDriver )
-        {
-            wxString path = aSheetPath.PathHumanReadable();
-            wxString oldDrivenName = path + subgraph->GetNameForDriver( previousDriver );
-            wxString drivenName = path + subgraph->GetNameForDriver( aItem );
-
-            if( netclassAssignments.count( oldDrivenName ) )
-                netclassAssignments[ drivenName ] = netclassAssignments[ oldDrivenName ];
-        }
-    }
-}
-
-
 void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
                                                  bool aUndoAppend )
 {
@@ -1376,12 +1326,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
         // Update connectivity info for new item
         if( !aItem->IsMoving() )
-        {
             RecalculateConnections( LOCAL_CLEANUP );
-
-            if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aItem ) )
-                inheritNetclass( GetCurrentSheet(), label );
-        }
     }
 
     aItem->ClearFlags( IS_NEW );

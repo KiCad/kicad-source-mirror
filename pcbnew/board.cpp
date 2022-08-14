@@ -105,8 +105,8 @@ BOARD::BOARD() :
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
     // Initialize default netclass.
-    NETCLASS* defaultClass = bds.GetDefault();
-    defaultClass->SetDescription( _( "This is the default net class." ) );
+    bds.m_NetSettings->m_DefaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default );
+    bds.m_NetSettings->m_DefaultNetClass->SetDescription( _( "This is the default net class." ) );
 
     bds.UseCustomTrackViaSize( false );
 
@@ -181,10 +181,14 @@ void BOARD::SetProject( PROJECT* aProject )
         // list at this point. If we loaded anything into it from a legacy board file then we
         // want to transfer it over to the project netclasses list.
         if( m_LegacyNetclassesLoaded )
-            project.NetSettings().m_NetClasses = GetDesignSettings().GetNetClasses();
+        {
+            std::shared_ptr<NET_SETTINGS> legacySettings = GetDesignSettings().m_NetSettings;
+            project.NetSettings()->m_DefaultNetClass = legacySettings->m_DefaultNetClass;
+            project.NetSettings()->m_NetClasses = legacySettings->m_NetClasses;
+        }
 
         // Now update the DesignSettings' netclass pointer to point into the project.
-        GetDesignSettings().SetNetClasses( &project.NetSettings().m_NetClasses );
+        GetDesignSettings().m_NetSettings = project.NetSettings();
     }
 }
 
@@ -1500,19 +1504,11 @@ void BOARD::SynchronizeNetsAndNetClasses()
     if( !m_project )
         return;
 
-    NET_SETTINGS* netSettings     = m_project->GetProjectFile().m_NetSettings.get();
-    NETCLASSES&   netClasses      = netSettings->m_NetClasses;
-    NETCLASSPTR   defaultNetClass = netClasses.GetDefault();
+    BOARD_DESIGN_SETTINGS&     bds = GetDesignSettings();
+    std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->m_DefaultNetClass;
 
     for( NETINFO_ITEM* net : m_NetInfo )
-    {
-        const wxString& netname = net->GetNetname();
-        const wxString& netclassName = netSettings->GetNetclassName( netname );
-
-        net->SetNetClass( netClasses.Find( netclassName ) );
-    }
-
-    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+        net->SetNetClass( bds.m_NetSettings->GetEffectiveNetClass( net->GetNetname() ) );
 
     // Set initial values for custom track width & via size to match the default
     // netclass settings

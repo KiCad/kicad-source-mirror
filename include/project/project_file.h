@@ -93,9 +93,9 @@ public:
         return m_boards;
     }
 
-    NET_SETTINGS& NetSettings()
+    std::shared_ptr<NET_SETTINGS>& NetSettings()
     {
-        return *m_NetSettings;
+        return m_NetSettings;
     }
 
 protected:

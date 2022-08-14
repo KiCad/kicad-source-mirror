@@ -546,9 +546,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                                                   psid ) );
             }
 
-            NETCLASSPTR netclass = aBoard->GetDesignSettings().GetNetClasses().GetDefault();
+            std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-            int via_drill_default = netclass->GetViaDrill();
+            int via_drill_default = netSettings->m_DefaultNetClass->GetViaDrill();
 
             for( unsigned v = 0; v < wire_via->vertexes.size(); ++v )
             {

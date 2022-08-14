@@ -163,22 +163,24 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
 }
 
 
-NETCLASSPTR SCH_ITEM::NetClass( const SCH_SHEET_PATH* aSheet ) const
+std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* aSheet ) const
 {
-    if( m_connection_map.size() )
+    static std::shared_ptr<NETCLASS> nullNetclass = std::make_shared<NETCLASS>( wxEmptyString );
+
+    SCHEMATIC* schematic = Schematic();
+
+    if( schematic )
     {
-        SCH_CONNECTION* connection = Connection( aSheet );
+        std::shared_ptr<NET_SETTINGS>& netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
+        SCH_CONNECTION*                connection = Connection( aSheet );
 
         if( connection )
-        {
-            NET_SETTINGS&   netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            const wxString& netclassName = netSettings.GetNetclassName( connection->Name() );
-
-            return netSettings.m_NetClasses.Find( netclassName );
-        }
+            return netSettings->GetEffectiveNetClass( connection->Name() );
+        else
+            return netSettings->m_DefaultNetClass;
     }
 
-    return nullptr;
+    return nullNetclass;
 }
 
 

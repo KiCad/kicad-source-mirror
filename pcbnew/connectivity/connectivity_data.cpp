@@ -34,7 +34,8 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
-
+#include <project/net_settings.h>
+#include <board_design_settings.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <ratsnest/ratsnest_data.h>
@@ -103,6 +104,8 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->KeepRefreshing( false );
     }
 
+    std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard, aReporter );
 
@@ -110,6 +113,8 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
+        net->SetNetClass( netSettings->GetEffectiveNetClass( net->GetNetname() ) );
+
         if( net->GetNetClass()->GetName() != NETCLASS::Default )
             m_netclassMap[ net->GetNetCode() ] = net->GetNetClass()->GetName();
     }

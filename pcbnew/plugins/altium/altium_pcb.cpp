@@ -1084,19 +1084,26 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
         {
-            NETCLASSPTR nc = std::make_shared<NETCLASS>( elem.name );
+            std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( elem.name );
 
-            for( const auto& name : elem.names )
+            for( const wxString& name : elem.names )
             {
-                // TODO: it seems it can happen that we have names not attached to any net.
-                nc->Add( name );
+                m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                        {
+                            std::make_unique<EDA_COMBINED_MATCHER>( name, CTX_NETCLASS ),
+                            nc->GetName()
+                        } );
             }
 
-            if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
+            if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
             {
                 // Name conflict, this is likely a bad board file.
                 // unique_ptr will delete nc on this code path
                 THROW_IO_ERROR( wxString::Format( _( "Duplicate netclass name '%s'." ), elem.name ) );
+            }
+            else
+            {
+                m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
             }
         }
     }

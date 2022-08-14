@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -60,7 +60,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, &project.NetSettings().m_NetClasses,
+    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, project.NetSettings(),
                                                schematic.GetNetClassAssignmentCandidates(), true );
 
     /*
@@ -152,7 +152,7 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         m_severities->ImportSettingsFrom( file.m_ErcSettings->m_Severities );
 
     if( importDlg.m_NetClassesOpt->GetValue() )
-        m_netclasses->ImportSettingsFrom( &file.m_NetSettings->m_NetClasses );
+        m_netclasses->ImportSettingsFrom( file.m_NetSettings );
 
     m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }

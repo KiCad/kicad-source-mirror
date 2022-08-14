@@ -116,6 +116,8 @@ public:
 
     const wxString GetNameForDriver( SCH_ITEM* aItem ) const;
 
+    const wxString GetNetclassForDriver( SCH_ITEM* aItem ) const;
+
     /// Combines another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );
 
@@ -390,7 +392,7 @@ private:
      * and then the connection for the chosen driver is propagated to all the
      * other items in the subgraph.
      */
-    void buildConnectionGraph();
+    void buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler );
 
     /**
      * Generates individual item subgraphs on a per-sheet basis
@@ -474,6 +476,8 @@ private:
      * @return  true for no errors, false for errors
      */
     bool ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph );
+
+    bool ercCheckNetclassConflicts( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs );
 
     /**
      * Checks one subgraph for conflicting connections between net and bus labels

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,25 +156,12 @@ public:
      * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
      *       std::shared_ptr stuff shows up large in performance profiling.
      */
-    virtual NETCLASS* GetNetClass() const;
+    virtual NETCLASS* GetEffectiveNetClass() const;
 
     /**
-     * Return the NETCLASS for this item, or the default netclass if none is defined.
-     *
-     * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
-     *       std::shared_ptr stuff shows up large in performance profiling.
+     * Returns the name of the effective netclass.  Primarily for the use of the property system.
      */
-    virtual NETCLASS* GetEffectiveNetclass() const;
-
-    /**
-     * Returns the netclass of the zone.
-     *
-     * If the net is not found (can happen when a netlist is reread) and the net name does not
-     * exist, return the default net class (should not return a null pointer).
-     *
-     * @return the net class name of this item.
-     */
-    virtual wxString GetNetClassName() const;
+    wxString GetNetClassName() const;
 
     void SetLocalRatsnestVisible( bool aVisible )
     {

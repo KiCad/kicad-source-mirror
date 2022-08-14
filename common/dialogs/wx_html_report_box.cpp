@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,7 +28,8 @@
 WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, long style ) :
         HTML_WINDOW( parent, id, pos, size, style ),
-        m_units( EDA_UNITS::MILLIMETRES ), m_immediateMode( false )
+        m_units( EDA_UNITS::MILLIMETRES ),
+        m_immediateMode( false )
 {
     Flush();
 

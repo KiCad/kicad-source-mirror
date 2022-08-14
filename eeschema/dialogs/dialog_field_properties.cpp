@@ -461,6 +461,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
         m_field( aField )
 {
+    static KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
+
     m_isSheetFilename = false;
 
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
@@ -488,6 +490,10 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
             break;
         }
     }
+    else if( aField->GetParent() && aField->GetParent()->IsType( labelTypes ) )
+    {
+        m_fieldId = LABELUSERFIELD_V;
+    }
 
     // show text variable cross-references in a human-readable format
     m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
@@ -496,14 +502,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_isPower = false;
 
-    wxString translated_fieldname;
-
-    if( m_field->GetId() < MANDATORY_FIELDS )
-        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_field->GetId(), DO_TRANSLATE );
-    else
-        translated_fieldname = m_field->GetName();
-
-    m_textLabel->SetLabel( translated_fieldname + ":" );
+    m_textLabel->SetLabel( aField->GetName() + ":" );
 
     m_position = m_field->GetPosition();
 

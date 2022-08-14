@@ -86,8 +86,6 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        Prj().GetProjectFile().NetSettings().RebuildNetClassAssignments();
-
         SaveProjectSettings();
 
         Kiway().CommonSettingsChanged( false, true );
@@ -112,11 +110,11 @@ int SCH_EDIT_FRAME::GetSchematicJunctionSize()
 {
     std::vector<double>& sizeMultipliers = eeconfig()->m_Drawing.junction_size_mult_list;
 
-    NETCLASSPTR defaultNetclass = Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
-    int         sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
-    int         junctionSize = defaultNetclass->GetWireWidth() * sizeMultipliers[ sizeChoice ];
+    const std::shared_ptr<NET_SETTINGS>& netSettings = Prj().GetProjectFile().NetSettings();
+    int sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
+    int dotSize = netSettings->m_DefaultNetClass->GetWireWidth() * sizeMultipliers[ sizeChoice ];
 
-    return std::max( junctionSize, 1 );
+    return std::max( dotSize, 1 );
 }
 
 

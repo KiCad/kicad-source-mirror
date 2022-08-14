@@ -841,11 +841,11 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    BOARD_DESIGN_SETTINGS& bds              = m_board->GetDesignSettings();
-    ZONE_SETTINGS          zs               = m_board->GetZoneSettings();
-    NETCLASS*              netclass_default = bds.GetDefault();
-    char*                  line;
-    char*                  saveptr;
+    BOARD_DESIGN_SETTINGS&    bds             = m_board->GetDesignSettings();
+    ZONE_SETTINGS             zoneSettings    = m_board->GetZoneSettings();
+    std::shared_ptr<NETCLASS> defaultNetclass = bds.m_NetSettings->m_DefaultNetClass;
+    char*                     line;
+    char*                     saveptr;
 
     m_board->m_LegacyDesignSettingsLoaded = true;
 
@@ -897,7 +897,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "TrackWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackWidth" ) );
-            netclass_default->SetTrackWidth( tmp );
+            defaultNetclass->SetTrackWidth( tmp );
         }
         else if( TESTLINE( "TrackWidthList" ) )
         {
@@ -907,7 +907,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "TrackClearence" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackClearence" ) );
-            netclass_default->SetClearance( tmp );
+            defaultNetclass->SetClearance( tmp );
         }
         else if( TESTLINE( "TrackMinWidth" ) )
         {
@@ -917,7 +917,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "ZoneClearence" ) )
         {
             BIU tmp = biuParse( line + SZ( "ZoneClearence" ) );
-            zs.m_ZoneClearance = tmp;
+            zoneSettings.m_ZoneClearance = tmp;
         }
         else if( TESTLINE( "Zone_45_Only" ) )   // No longer used
         {
@@ -959,12 +959,12 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "ViaSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaSize" ) );
-            netclass_default->SetViaDiameter( tmp );
+            defaultNetclass->SetViaDiameter( tmp );
         }
         else if( TESTLINE( "ViaDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaDrill" ) );
-            netclass_default->SetViaDrill( tmp );
+            defaultNetclass->SetViaDrill( tmp );
         }
         else if( TESTLINE( "ViaMinDrill" ) )
         {
@@ -974,12 +974,12 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "MicroViaSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaSize" ) );
-            netclass_default->SetuViaDiameter( tmp );
+            defaultNetclass->SetuViaDiameter( tmp );
         }
         else if( TESTLINE( "MicroViaDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaDrill" ) );
-            netclass_default->SetuViaDrill( tmp );
+            defaultNetclass->SetuViaDrill( tmp );
         }
         else if( TESTLINE( "MicroViaMinDrill" ) )
         {
@@ -1082,7 +1082,7 @@ void LEGACY_PLUGIN::loadSETUP()
         }
         else if( TESTLINE( "$EndSETUP" ) )
         {
-            m_board->SetZoneSettings( zs );
+            m_board->SetZoneSettings( zoneSettings );
 
             // Very old *.brd file does not have  NETCLASSes
             // "TrackWidth", "ViaSize", "ViaDrill", "ViaMinSize", and "TrackClearence" were
@@ -2253,7 +2253,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // yet since that would bypass duplicate netclass name checking within the BOARD.
     // store it temporarily in an unique_ptr until successfully inserted into the BOARD
     // just before returning.
-    NETCLASSPTR nc = std::make_shared<NETCLASS>( wxEmptyString );
+    std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( wxEmptyString );
 
     while( ( line = READLINE( m_reader ) ) != nullptr )
     {
@@ -2262,7 +2262,12 @@ void LEGACY_PLUGIN::loadNETCLASS()
             // e.g. "AddNet "V3.3D"\n"
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
             netname = ConvertToNewOverbarNotation( FROM_UTF8( buf ) );
-            nc->Add( netname );
+
+            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                    {
+                        std::make_unique<EDA_COMBINED_MATCHER>( netname, CTX_NETCLASS ),
+                        nc->GetName()
+                    } );
         }
         else if( TESTLINE( "Clearance" ) )
         {
@@ -2306,15 +2311,19 @@ void LEGACY_PLUGIN::loadNETCLASS()
         }
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
+            if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
 
                 // unique_ptr will delete nc on this code path
 
-                m_error.Printf( _( "Duplicate NETCLASS name '%s'." ), nc->GetName().GetData() );
+                m_error.Printf( _( "Duplicate NETCLASS name '%s'." ), nc->GetName() );
                 THROW_IO_ERROR( m_error );
+            }
+            else
+            {
+                m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
             }
 
             return;     // preferred exit

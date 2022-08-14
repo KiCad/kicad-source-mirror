@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,7 +288,9 @@ private:
     std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
     std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
 
-    std::map<wxString, NETCLASSPTR>  m_classMap;       ///< Eagle class number to KiCad netclass
+    ///< Eagle class number to KiCad netclass
+    std::map<wxString, std::shared_ptr<NETCLASS>>  m_classMap;
+
     wxString                         m_customRules;
 
     ERULES*       m_rules;          ///< Eagle design rules.

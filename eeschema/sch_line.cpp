@@ -23,6 +23,7 @@
  */
 
 #include <bitmaps.h>
+#include <string_utils.h>
 #include <core/mirror.h>
 #include <sch_painter.h>
 #include <plotters/plotter.h>
@@ -236,23 +237,11 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 COLOR4D SCH_LINE::GetLineColor() const
 {
     if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
-    {
         m_lastResolvedColor = m_stroke.GetColor();
-    }
-    else if( IsConnectable() )
-    {
-        if( !IsConnectivityDirty() )
-        {
-            NETCLASSPTR netclass = NetClass();
-
-            if( netclass )
-                m_lastResolvedColor = netclass->GetSchematicColor();
-        }
-    }
-    else
-    {
+    else if( !IsConnectable() )
         m_lastResolvedColor = COLOR4D::UNSPECIFIED;
-    }
+    else if( !IsConnectivityDirty() )
+        m_lastResolvedColor = GetEffectiveNetClass()->GetSchematicColor();
 
     return m_lastResolvedColor;
 }
@@ -283,23 +272,11 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
 {
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-    {
         m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
-    }
-    else if( IsConnectable() )
-    {
-        if( !IsConnectivityDirty() )
-        {
-            NETCLASSPTR netclass = NetClass();
-
-            if( netclass )
-                m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
-        }
-    }
-    else
-    {
+    else if( !IsConnectable() )
         m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
-    }
+    else if( !IsConnectivityDirty() )
+        m_lastResolvedLineStyle = (PLOT_DASH_TYPE) GetEffectiveNetClass()->GetLineStyle();
 
     return m_lastResolvedLineStyle;
 }
@@ -315,7 +292,6 @@ void SCH_LINE::SetLineWidth( const int aSize )
 int SCH_LINE::GetPenWidth() const
 {
     SCHEMATIC*  schematic = Schematic();
-    NETCLASSPTR netclass;
 
     switch ( m_layer )
     {
@@ -330,37 +306,17 @@ int SCH_LINE::GetPenWidth() const
 
     case LAYER_WIRE:
         if( m_stroke.GetWidth() > 0 )
-        {
             m_lastResolvedWidth = m_stroke.GetWidth();
-        }
         else if( !IsConnectivityDirty() )
-        {
-            netclass = NetClass();
-
-            if( !netclass && schematic  )
-                netclass = schematic->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
-
-            if( netclass )
-                m_lastResolvedWidth = netclass->GetWireWidth();
-        }
+            m_lastResolvedWidth = GetEffectiveNetClass()->GetWireWidth();
 
         return m_lastResolvedWidth;
 
     case LAYER_BUS:
         if( m_stroke.GetWidth() > 0 )
-        {
             m_lastResolvedWidth = m_stroke.GetWidth();
-        }
         else if( !IsConnectivityDirty() )
-        {
-            netclass = NetClass();
-
-            if( !netclass && schematic )
-                netclass = schematic->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
-
-            if( netclass )
-                m_lastResolvedWidth = netclass->GetBusWidth();
-        }
+            m_lastResolvedWidth = GetEffectiveNetClass()->GetBusWidth();
 
         return m_lastResolvedWidth;
     }
@@ -922,14 +878,8 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
         if( !conn->IsBus() )
         {
-            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            wxString netname = conn->Name();
-            wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
-
-            if( netSettings.m_NetClassAssignments.count( netname ) )
-                netclassName = netSettings.m_NetClassAssignments[ netname ];
-
-            aList.emplace_back( _( "Assigned Netclass" ), netclassName );
+            aList.emplace_back( _( "Resolved Netclass" ),
+                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
         }
     }
 }

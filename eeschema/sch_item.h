@@ -405,7 +405,7 @@ public:
 
     virtual void SetLastResolvedState( const SCH_ITEM* aItem ) { }
 
-    NETCLASSPTR NetClass( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+    std::shared_ptr<NETCLASS> GetEffectiveNetClass( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**
      * Return whether the fields have been automatically placed.

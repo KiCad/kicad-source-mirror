@@ -91,13 +91,8 @@ SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
         // connected wire width:
         if( !IsConnectivityDirty() )
         {
-            NETCLASSPTR netclass = NetClass();
-
-            if( netclass )
-            {
-                m_lastResolvedDiameter = std::max( m_lastResolvedDiameter,
-                                                   KiROUND( netclass->GetWireWidth() * 1.7 ) );
-            }
+            m_lastResolvedDiameter = std::max<int>( m_lastResolvedDiameter,
+                                                    GetEffectiveNetClass()->GetWireWidth() * 1.7 );
         }
     }
 
@@ -183,16 +178,9 @@ void SCH_JUNCTION::SetDiameter( int aDiameter )
 COLOR4D SCH_JUNCTION::GetJunctionColor() const
 {
     if( m_color != COLOR4D::UNSPECIFIED )
-    {
         m_lastResolvedColor = m_color;
-    }
     else if( !IsConnectivityDirty() )
-    {
-        NETCLASSPTR netclass = NetClass();
-
-        if( netclass )
-            m_lastResolvedColor = netclass->GetSchematicColor();
-    }
+        m_lastResolvedColor = GetEffectiveNetClass()->GetSchematicColor();
 
     return m_lastResolvedColor;
 }

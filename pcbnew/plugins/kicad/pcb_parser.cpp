@@ -1858,9 +1858,9 @@ void PCB_PARSER::parseSetup()
     wxCHECK_RET( CurTok() == T_setup,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    NETCLASS*              defaultNetClass = bds.GetDefault();
-    ZONE_SETTINGS&         zoneSettings = bds.GetDefaultZoneSettings();
+    BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
+    std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->m_DefaultNetClass;
+    ZONE_SETTINGS&             zoneSettings = bds.GetDefaultZoneSettings();
 
     // Missing soldermask min width value means that the user has set the value to 0 and
     // not the default value (0.25mm)
@@ -2379,7 +2379,7 @@ void PCB_PARSER::parseNETCLASS()
 
     T token;
 
-    NETCLASSPTR nc = std::make_shared<NETCLASS>( wxEmptyString );
+    std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( wxEmptyString );
 
     // Read netclass name (can be a name or just a number like track width)
     NeedSYMBOLorNUMBER();
@@ -2429,16 +2429,24 @@ void PCB_PARSER::parseNETCLASS()
             break;
 
         case T_add_net:
+        {
             NeedSYMBOLorNUMBER();
+
+            wxString netName = FromUTF8();
 
             // Convert overbar syntax from `~...~` to `~{...}`.  These were left out of the
             // first merge so the version is a bit later.
             if( m_requiredVersion < 20210606 )
-                nc->Add( ConvertToNewOverbarNotation( FromUTF8() ) );
-            else
-                nc->Add( FromUTF8() );
+                netName = ConvertToNewOverbarNotation( FromUTF8() );
+
+            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                    {
+                        std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
+                        nc->GetName()
+                    } );
 
             break;
+        }
 
         default:
             Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, "
@@ -2448,18 +2456,19 @@ void PCB_PARSER::parseNETCLASS()
         NeedRIGHT();
     }
 
-    if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
+    if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
     {
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
-
-        // unique_ptr will delete nc on this code path
-
         wxString error;
         error.Printf( _( "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d." ),
                       nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(),
                       CurOffset() );
         THROW_IO_ERROR( error );
+    }
+    else
+    {
+        m_board->GetDesignSettings().m_NetSettings->m_NetClasses[ nc->GetName() ] = nc;
     }
 }
 

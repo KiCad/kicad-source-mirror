@@ -154,8 +154,8 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
 
     NETINFO_LIST& netInfo = brd.GetNetInfo();
 
-    NETCLASSPTR netclass1( new NETCLASS( "HV" ) );
-    NETCLASSPTR netclass2( new NETCLASS( "otherClass" ) );
+    std::shared_ptr<NETCLASS> netclass1( new NETCLASS( "HV" ) );
+    std::shared_ptr<NETCLASS> netclass2( new NETCLASS( "otherClass" ) );
 
     auto net1info = new NETINFO_ITEM( &brd, "net1", 1 );
     auto net2info = new NETINFO_ITEM( &brd, "net2", 2 );

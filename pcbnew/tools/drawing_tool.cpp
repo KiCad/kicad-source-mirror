@@ -3167,7 +3167,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 via->SetLayerPair( first_layer, last_layer );
 
                 // Update diameter and hole size, which where set previously for normal vias
-                NETCLASS* netClass = via->GetNetClass();
+                NETCLASS* netClass = via->GetEffectiveNetClass();
 
                 via->SetWidth( netClass->GetuViaDiameter() );
                 via->SetDrill( netClass->GetuViaDrill() );

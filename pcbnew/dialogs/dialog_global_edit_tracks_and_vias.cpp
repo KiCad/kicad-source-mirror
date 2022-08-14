@@ -201,13 +201,13 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
         m_netFilter->SetSelectedNetcode( *m_brd->GetHighLightNetCodes().begin() );
 
     // Populate the netclass filter list with netclass names
-    wxArrayString netclassNames;
-    NETCLASSES&   netclasses = m_brd->GetDesignSettings().GetNetClasses();
+    wxArrayString                  netclassNames;
+    std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
 
-    netclassNames.push_back( netclasses.GetDefaultPtr()->GetName() );
+    netclassNames.push_back( settings->m_DefaultNetClass->GetName() );
 
-    for( NETCLASSES::const_iterator nc = netclasses.begin(); nc != netclasses.end(); ++nc )
-        netclassNames.push_back( nc->second->GetName() );
+    for( const auto& [ name, netclass ] : settings->m_NetClasses )
+        netclassNames.push_back( name );
 
     m_netclassFilter->Set( netclassNames );
     m_netclassFilter->SetStringSelection( m_brd->GetDesignSettings().GetCurrentNetClassName() );
@@ -223,38 +223,42 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 {
-#define SET_NETCLASS_VALUE( row, col, val ) \
-        m_netclassGrid->SetCellValue( row, col, StringFromValue( m_parent->GetUserUnits(), val, true ) )
+    EDA_UNITS units = m_parent->GetUserUnits();
+    int       row = 0;
 
-    m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track Width" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Diameter" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via Hole" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIASIZE, _( "uVia Diameter" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia Hole" ) );
+    m_netclassGrid->SetCellValue( row, GRID_TRACKSIZE, _( "Track Width" ) );
+    m_netclassGrid->SetCellValue( row, GRID_VIASIZE, _( "Via Diameter" ) );
+    m_netclassGrid->SetCellValue( row, GRID_VIADRILL, _( "Via Hole" ) );
+    m_netclassGrid->SetCellValue( row, GRID_uVIASIZE, _( "uVia Diameter" ) );
+    m_netclassGrid->SetCellValue( row, GRID_uVIADRILL, _( "uVia Hole" ) );
+    row++;
 
-    NETCLASSES& netclasses = m_brd->GetDesignSettings().GetNetClasses();
-    NETCLASS*   defaultNetclass = m_brd->GetDesignSettings().GetDefault();
-    m_netclassGrid->AppendRows( netclasses.GetCount() + 1 );
+    auto setNetclassValue =
+            [&]( int row, int col, int value )
+            {
+                m_netclassGrid->SetCellValue( row, col, StringFromValue( units, value, true ) );
+            };
 
-    m_netclassGrid->SetCellValue( 1, GRID_NAME, defaultNetclass->GetName() );
-    SET_NETCLASS_VALUE( 1, GRID_TRACKSIZE, defaultNetclass->GetTrackWidth() );
-    SET_NETCLASS_VALUE( 1, GRID_VIASIZE, defaultNetclass->GetViaDiameter() );
-    SET_NETCLASS_VALUE( 1, GRID_VIADRILL, defaultNetclass->GetViaDrill() );
-    SET_NETCLASS_VALUE( 1, GRID_uVIASIZE, defaultNetclass->GetuViaDiameter() );
-    SET_NETCLASS_VALUE( 1, GRID_uVIADRILL, defaultNetclass->GetuViaDrill() );
+    auto buildRow =
+            [&]( int row, const std::shared_ptr<NETCLASS>& nc )
+            {
+                m_netclassGrid->SetCellValue( row, GRID_NAME, nc->GetName() );
+                setNetclassValue( row, GRID_TRACKSIZE, nc->GetTrackWidth() );
+                setNetclassValue( row, GRID_VIASIZE, nc->GetViaDiameter() );
+                setNetclassValue( row, GRID_VIADRILL, nc->GetViaDrill() );
+                setNetclassValue( row, GRID_uVIASIZE, nc->GetuViaDiameter() );
+                setNetclassValue( row, GRID_uVIADRILL, nc->GetuViaDrill() );
+            };
 
-    int row = 2;
+    const std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;
 
-    for( const std::pair<const wxString, std::shared_ptr<NETCLASS>>& netclass : netclasses )
-    {
-        m_netclassGrid->SetCellValue( row, GRID_NAME, netclass.first );
-        SET_NETCLASS_VALUE( row, GRID_TRACKSIZE, netclass.second->GetTrackWidth() );
-        SET_NETCLASS_VALUE( row, GRID_VIASIZE, netclass.second->GetViaDiameter() );
-        SET_NETCLASS_VALUE( row, GRID_VIADRILL, netclass.second->GetViaDrill() );
-        SET_NETCLASS_VALUE( row, GRID_uVIASIZE, netclass.second->GetuViaDiameter() );
-        SET_NETCLASS_VALUE( row, GRID_uVIADRILL, netclass.second->GetuViaDrill() );
-        row++;
-    }
+    m_netclassGrid->AppendRows( 1 );
+    buildRow( row++, settings->m_DefaultNetClass );
+
+    m_netclassGrid->AppendRows( settings->m_NetClasses.size() );
+
+    for( const auto& [ name, netclass ] : settings->m_NetClasses )
+        buildRow( row++, netclass );
 }
 
 
@@ -270,7 +274,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
         m_netclassFilterOpt->SetValue( true );
     else if( item )
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClassName() );
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClass()->GetName() );
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != nullptr )
     {
@@ -283,7 +287,9 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     }
 
     if( g_filterByLayer && m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
+    {
         m_layerFilterOpt->SetValue( true );
+    }
     else if( item )
     {
         if( item->Type() == PCB_ZONE_T ) // a zone can be on more than one layer
@@ -391,7 +397,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList
 
     if( m_netclassFilterOpt->GetValue() && !m_netclassFilter->GetStringSelection().IsEmpty() )
     {
-        if( aItem->GetNetClassName() != m_netclassFilter->GetStringSelection() )
+        if( aItem->GetEffectiveNetClass()->GetName() != m_netclassFilter->GetStringSelection() )
             return;
     }
 

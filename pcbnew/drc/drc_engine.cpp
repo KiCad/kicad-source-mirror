@@ -230,7 +230,7 @@ void DRC_ENGINE::loadImplicitRules()
     std::vector<std::shared_ptr<DRC_RULE>> netclassItemSpecificRules;
 
     auto makeNetclassRules =
-            [&]( const NETCLASSPTR& nc, bool isDefault )
+            [&]( const std::shared_ptr<NETCLASS>& nc, bool isDefault )
             {
                 wxString ncName = nc->GetName();
                 wxString expr;
@@ -372,10 +372,10 @@ void DRC_ENGINE::loadImplicitRules()
             };
 
     m_board->SynchronizeNetsAndNetClasses();
-    makeNetclassRules( bds.GetNetClasses().GetDefault(), true );
+    makeNetclassRules( bds.m_NetSettings->m_DefaultNetClass, true );
 
-    for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
-        makeNetclassRules( netclass.second, false );
+    for( const auto& [ name, netclass ] : bds.m_NetSettings->m_NetClasses )
+        makeNetclassRules( netclass, false );
 
     // The netclass clearance rules have to be sorted by min clearance so the right one fires
     // if 'A' and 'B' belong to two different netclasses.

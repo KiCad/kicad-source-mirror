@@ -542,7 +542,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     t->SetEnd( wxPoint( t->GetEnd().x, m_trackEndY.GetValue() ) );
 
                 if( m_trackNetclass->IsChecked() )
-                    t->SetWidth( t->GetNetClass()->GetTrackWidth() );
+                    t->SetWidth( t->GetEffectiveNetClass()->GetTrackWidth() );
                 else if( !m_trackWidth.IsIndeterminate() )
                     t->SetWidth( m_trackWidth.GetValue() );
 
@@ -617,6 +617,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( m_viaNetclass->IsChecked() )
                 {
+                    NETCLASS* netclass = v->GetEffectiveNetClass();
+
                     switch( v->GetViaType() )
                     {
                     default:
@@ -625,13 +627,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     case VIATYPE::THROUGH:
                     case VIATYPE::BLIND_BURIED:
-                        v->SetWidth( v->GetNetClass()->GetViaDiameter() );
-                        v->SetDrill( v->GetNetClass()->GetViaDrill() );
+                        v->SetWidth( netclass->GetViaDiameter() );
+                        v->SetDrill( netclass->GetViaDrill() );
                         break;
 
                     case VIATYPE::MICROVIA:
-                        v->SetWidth( v->GetNetClass()->GetuViaDiameter() );
-                        v->SetDrill( v->GetNetClass()->GetuViaDrill() );
+                        v->SetWidth( netclass->GetuViaDiameter() );
+                        v->SetDrill( netclass->GetuViaDrill() );
                         break;
                     }
                 }

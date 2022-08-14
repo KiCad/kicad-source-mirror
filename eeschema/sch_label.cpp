@@ -472,11 +472,10 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 
         if( connection )
         {
-            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            *token = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
+            PROJECT_FILE&                  projectFile = Schematic()->Prj().GetProjectFile();
+            std::shared_ptr<NET_SETTINGS>& netSettings = projectFile.NetSettings();
 
-            if( netSettings.m_NetClassAssignments.count( connection->Name() ) )
-                *token = netSettings.m_NetClassAssignments[ connection->Name() ];
+            *token = UnescapeString( netSettings->GetEffectiveNetClass( connection->Name() )->GetName() );
         }
 
         return true;
@@ -842,14 +841,8 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
         if( !conn->IsBus() )
         {
-            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-            const wxString& netname = conn->Name( true );
-
-            if( netSettings.m_NetClassAssignments.count( netname ) )
-            {
-                const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
-                aList.emplace_back( _( "Assigned Netclass" ), netclassName );
-            }
+            aList.emplace_back( _( "Resolved Netclass" ),
+                                UnescapeString( GetEffectiveNetClass()->GetName() ) );
         }
     }
 }
@@ -1140,7 +1133,16 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
 wxString SCH_DIRECTIVE_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Directive Label" ), ShortenedShownText() );
+    if( m_fields.empty() )
+    {
+        return _( "Directive Label" );
+    }
+    else
+    {
+        return wxString::Format( _( "Directive Label [%s %s]" ),
+                                 m_fields[0].GetName(),
+                                 m_fields[0].GetShownText() );
+    }
 }
 
 

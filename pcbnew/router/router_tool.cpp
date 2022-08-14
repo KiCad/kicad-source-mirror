@@ -43,6 +43,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_algo.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <string_utils.h>
 #include <painter.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
@@ -2066,8 +2067,10 @@ void ROUTER_TOOL::UpdateMessagePanel()
         NETINFO_ITEM* netInfo = board()->FindNet( m_startItem->Net() );
         wxASSERT( netInfo );
 
-        items.emplace_back( wxString::Format( description, netInfo->GetNetname() ),
-                            wxString::Format( _( "Net Class: %s" ), netInfo->GetNetClassName() ) );
+        items.emplace_back( wxString::Format( description,
+                                              UnescapeString( netInfo->GetNetname() ) ),
+                            wxString::Format( _( "Resolved Netclass: %s" ),
+                                              UnescapeString( netInfo->GetNetClass()->GetName() ) ) );
     }
     else
     {

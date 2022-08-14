@@ -115,7 +115,7 @@ private:
     std::map<SYMDEF_ID, ASSOCIATED_COPPER_PADS> m_librarycopperpads;
 
     std::map<NET_ID, NETINFO_ITEM*>       m_netMap;      ///< Map between Cadstar and KiCad Nets
-    std::map<std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID>, NETCLASSPTR>
+    std::map<std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID>, std::shared_ptr<NETCLASS>>
                                  m_netClassMap; ///< Map between Cadstar and KiCad classes
     std::map<TEMPLATE_ID, ZONE*> m_zonesMap;             ///< Map between Cadstar and KiCad zones
     std::vector<LAYER_ID> m_powerPlaneLayers;            ///< List of layers that are marked as

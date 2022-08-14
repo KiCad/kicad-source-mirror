@@ -40,6 +40,8 @@
 #define SHEETFILENAME_V  101    //   overlap with REFERENCE_FIELD and VALUE_FIELD
 #define SHEETUSERFIELD_V 102
 
+#define LABELUSERFIELD_V 200
+
 /**
  * A text control validator used for validating the text allowed in library and
  * schematic symbol fields.

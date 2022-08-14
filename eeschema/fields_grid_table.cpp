@@ -261,12 +261,13 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     if( editFrame )
     {
         // Load the combobox with existing existingNetclassNames
-        NET_SETTINGS& netSettings = editFrame->Schematic().Prj().GetProjectFile().NetSettings();
+        PROJECT_FILE&                        projectFile = editFrame->Prj().GetProjectFile();
+        const std::shared_ptr<NET_SETTINGS>& settings = projectFile.NetSettings();
 
-        existingNetclasses.push_back( netSettings.m_NetClasses.GetDefault()->GetName() );
+        existingNetclasses.push_back( settings->m_DefaultNetClass->GetName() );
 
-        for( const std::pair<const wxString, NETCLASSPTR>& pair : netSettings.m_NetClasses )
-            existingNetclasses.push_back( pair.second->GetName() );
+        for( const auto& [ name, netclass ] : settings->m_NetClasses )
+            existingNetclasses.push_back( name );
     }
 
     m_netclassAttr = new wxGridCellAttr;

@@ -464,14 +464,14 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 {
     // Add the Design Rules section in JSON format to m_JSONbuffer
     // Job file support a few design rules:
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
-    NETCLASS                     defaultNC = *dsnSettings.GetDefault();
-    int                          minclearanceOuter = defaultNC.GetClearance();
-    bool                         hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_pcb->GetDesignSettings().m_NetSettings;
+
+    int  minclearanceOuter = netSettings->m_DefaultNetClass->GetClearance();
+    bool hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
 
     // Search a smaller clearance in other net classes, if any.
-    for( const std::pair<const wxString, NETCLASSPTR>& entry : dsnSettings.GetNetClasses() )
-        minclearanceOuter = std::min( minclearanceOuter, entry.second->GetClearance() );
+    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+        minclearanceOuter = std::min( minclearanceOuter, netclass->GetClearance() );
 
     // job file knows different clearance types.
     // Kicad knows only one clearance for pads and tracks
@@ -480,8 +480,8 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     // However, pads can have a specific clearance defined for a pad or a footprint,
     // and min clearance can be dependent on layers.
     // Search for a minimal pad clearance:
-    int minPadClearanceOuter = defaultNC.GetClearance();
-    int minPadClearanceInner = defaultNC.GetClearance();
+    int minPadClearanceOuter = netSettings->m_DefaultNetClass->GetClearance();
+    int minPadClearanceInner = netSettings->m_DefaultNetClass->GetClearance();
 
     for( FOOTPRINT* footprint : m_pcb->Footprints() )
     {

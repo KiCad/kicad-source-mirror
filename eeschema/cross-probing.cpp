@@ -607,42 +607,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
         break;
 
-    case MAIL_SCH_CLEAN_NETCLASSES:
-    {
-        NET_SETTINGS& netSettings = Prj().GetProjectFile().NetSettings();
-
-        netSettings.m_NetClassAssignments.clear();
-
-        // Establish the set of nets which is currently valid
-        for( const wxString& name : Schematic().GetNetClassAssignmentCandidates() )
-            netSettings.m_NetClassAssignments[ name ] = "Default";
-
-        // Copy their netclass assignments, dropping any assignments to non-current nets.
-        for( auto& ii : netSettings.m_NetClasses )
-        {
-            for( const wxString& member : *ii.second )
-            {
-                if( netSettings.m_NetClassAssignments.count( member ) )
-                    netSettings.m_NetClassAssignments[ member ] = ii.first;
-            }
-
-            ii.second->Clear();
-        }
-
-        // Update the membership lists to contain only the current nets.
-        for( const std::pair<const wxString, wxString>& ii : netSettings.m_NetClassAssignments )
-        {
-            if( ii.second == "Default" )
-                continue;
-
-            NETCLASSPTR netclass = netSettings.m_NetClasses.Find( ii.second );
-
-            if( netclass )
-                netclass->Add( ii.first );
-        }
-    }
-        break;
-
     case MAIL_IMPORT_FILE:
     {
         // Extract file format type and path (plugin type and path separated with \n)

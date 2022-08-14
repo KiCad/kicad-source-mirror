@@ -58,12 +58,12 @@ Load() TODO's
 #include <wx/log.h>
 #include <wx/wfstream.h>
 
+#include <eda_pattern_match.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <core/arraydim.h>
 #include <geometry/geometry_utils.h>
 #include <string_utils.h>
 #include <locale_io.h>
-#include <macros.h>
 #include <properties.h>
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND
@@ -407,31 +407,31 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
         loadAllSections( doc );
 
-        BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-        if( m_min_trace < designSettings.m_TrackMinWidth )
-            designSettings.m_TrackMinWidth = m_min_trace;
+        if( m_min_trace < bds.m_TrackMinWidth )
+            bds.m_TrackMinWidth = m_min_trace;
 
-        if( m_min_via < designSettings.m_ViasMinSize )
-            designSettings.m_ViasMinSize = m_min_via;
+        if( m_min_via < bds.m_ViasMinSize )
+            bds.m_ViasMinSize = m_min_via;
 
-        if( m_min_hole < designSettings.m_MinThroughDrill )
-            designSettings.m_MinThroughDrill = m_min_hole;
+        if( m_min_hole < bds.m_MinThroughDrill )
+            bds.m_MinThroughDrill = m_min_hole;
 
-        if( m_min_annulus < designSettings.m_ViasMinAnnularWidth )
-            designSettings.m_ViasMinAnnularWidth = m_min_annulus;
+        if( m_min_annulus < bds.m_ViasMinAnnularWidth )
+            bds.m_ViasMinAnnularWidth = m_min_annulus;
 
         if( m_rules->mdWireWire )
-            designSettings.m_MinClearance = KiROUND( m_rules->mdWireWire );
+            bds.m_MinClearance = KiROUND( m_rules->mdWireWire );
 
         NETCLASS defaults( wxT( "dummy" ) );
 
         auto finishNetclass =
-                [&]( NETCLASSPTR netclass )
+                [&]( std::shared_ptr<NETCLASS> netclass )
                 {
                     // If Eagle has a clearance matrix then we'll build custom rules from that.
                     // Netclasses should just be the board minimum clearance.
-                    netclass->SetClearance( KiROUND( designSettings.m_MinClearance ) );
+                    netclass->SetClearance( KiROUND( bds.m_MinClearance ) );
 
                     if( netclass->GetTrackWidth() == INT_MAX )
                         netclass->SetTrackWidth( defaults.GetTrackWidth() );
@@ -443,10 +443,12 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
                         netclass->SetViaDrill( defaults.GetViaDrill() );
                 };
 
-        finishNetclass( designSettings.GetNetClasses().GetDefault() );
+        std::shared_ptr<NET_SETTINGS>& netSettings = bds.m_NetSettings;
 
-        for( const std::pair<const wxString, NETCLASSPTR>& entry : designSettings.GetNetClasses() )
-            finishNetclass( entry.second );
+        finishNetclass( netSettings->m_DefaultNetClass );
+
+        for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+            finishNetclass( netclass );
 
         m_board->m_LegacyNetclassesLoaded = true;
         m_board->m_LegacyDesignSettingsLoaded = true;
@@ -2582,17 +2584,17 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
     {
         checkpoint();
 
-        ECLASS      eClass( classNode );
-        NETCLASSPTR netclass;
+        ECLASS                    eClass( classNode );
+        std::shared_ptr<NETCLASS> netclass;
 
         if( eClass.name.CmpNoCase( wxT( "default" ) ) == 0 )
         {
-            netclass = bds.GetNetClasses().GetDefault();
+            netclass = bds.m_NetSettings->m_DefaultNetClass;
         }
         else
         {
             netclass.reset( new NETCLASS( eClass.name ) );
-            m_board->GetDesignSettings().GetNetClasses().Add( netclass );
+            bds.m_NetSettings->m_NetClasses[ eClass.name ] = netclass;
         }
 
         netclass->SetTrackWidth( INT_MAX );
@@ -2651,15 +2653,20 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
         zones.clear();
 
-        const wxString& netName = escapeName( net->GetAttribute( "name" ) );
-        NETINFO_ITEM*   netInfo = new NETINFO_ITEM( m_board, netName, netCode );
-        NETCLASSPTR     netclass;
+        const wxString&           netName = escapeName( net->GetAttribute( "name" ) );
+        NETINFO_ITEM*             netInfo = new NETINFO_ITEM( m_board, netName, netCode );
+        std::shared_ptr<NETCLASS> netclass;
 
         if( net->HasAttribute( "class" ) )
         {
             netclass = m_classMap[ net->GetAttribute( "class" ) ];
 
-            netclass->Add( netName );
+            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                    {
+                        std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
+                        netclass->GetName()
+                    } );
+
             netInfo->SetNetClass( netclass );
         }
 

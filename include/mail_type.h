@@ -50,8 +50,6 @@ enum MAIL_T
     MAIL_PCB_GET_NETLIST,          // Fetch a netlist from PCB layout
     MAIL_PCB_UPDATE_LINKS,         // Update the schematic symbol paths in the PCB's footprints
     MAIL_SCH_REFRESH,              // Tell the schematic editor to refresh the display.
-    MAIL_SCH_CLEAN_NETCLASSES,     // Tell the schematic editor to clean stale nets out of
-                                   //   the netclass membership lists
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT
 };

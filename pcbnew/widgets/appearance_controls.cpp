@@ -24,6 +24,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <eda_list_dialog.h>
+#include <string_utils.h>
 #include <footprint_edit_frame.h>
 #include <menus_helpers.h>
 #include <pcb_display_options.h>
@@ -882,7 +883,8 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
 {
     m_netsGrid->SelectRow( event.GetRow() );
 
-    wxString netName = m_netsGrid->GetCellValue( event.GetRow(), NET_GRID_TABLE::COL_LABEL );
+    wxString netName = UnescapeString( m_netsGrid->GetCellValue( event.GetRow(),
+                                                                 NET_GRID_TABLE::COL_LABEL ) );
     wxMenu menu;
 
     menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR, _( "Set Net Color" ), wxEmptyString,
@@ -2240,7 +2242,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
     m_netclassOuterSizer->Clear( true );
 
     auto appendNetclass =
-            [&]( int aId, const NETCLASSPTR& aClass, bool isDefaultClass = false )
+            [&]( int aId, const std::shared_ptr<NETCLASS>& aClass, bool isDefaultClass = false )
             {
                 wxString name = aClass->GetName();
 
@@ -2297,6 +2299,7 @@ void APPEARANCE_CONTROLS::rebuildNets()
                         [&, name, isDefaultClass]( wxMouseEvent& aEvent )
                         {
                             m_contextMenuNetclass = name;
+                            wxString escapedName = UnescapeString( name );
 
                             wxMenu menu;
 
@@ -2308,15 +2311,16 @@ void APPEARANCE_CONTROLS::rebuildNets()
                             }
 
                             menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                         wxString::Format( _( "Highlight Nets in %s" ), name ),
-                                                         wxEmptyString, wxITEM_NORMAL ) );
+                                         wxString::Format( _( "Highlight Nets in %s" ),
+                                                           escapedName ),
+                                         wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
                                          wxString::Format( _( "Select Tracks and Vias in %s" ),
-                                                           name ),
+                                                           escapedName ),
                                          wxEmptyString, wxITEM_NORMAL ) );
                             menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
                                          wxString::Format( _( "Unselect Tracks and Vias in %s" ),
-                                                           name ),
+                                                           escapedName ),
                                          wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
@@ -2340,12 +2344,12 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 setting->ctl_text->Bind( wxEVT_RIGHT_DOWN, menuHandler );
             };
 
-    const NETCLASS_MAP& classes = board->GetDesignSettings().GetNetClasses().NetClasses();
+    std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
 
     std::vector<wxString> names;
 
-    for( const auto& pair : classes )
-        names.emplace_back( pair.first );
+    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
+        names.emplace_back( name );
 
     std::sort( names.begin(), names.end() );
 
@@ -2353,15 +2357,13 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     int idx = wxID_HIGHEST;
 
-    NETCLASSPTR defaultClass = board->GetDesignSettings().GetNetClasses().GetDefault();
-
-    m_netclassIdMap[idx] = defaultClass->GetName();
-    appendNetclass( idx++, defaultClass, true );
+    m_netclassIdMap[idx] = netSettings->m_DefaultNetClass->GetName();
+    appendNetclass( idx++, netSettings->m_DefaultNetClass, true );
 
     for( const wxString& name : names )
     {
         m_netclassIdMap[idx] = name;
-        appendNetclass( idx++, classes.at( name ) );
+        appendNetclass( idx++, netSettings->m_NetClasses.at( name ) );
     }
 
     int      hotkey;
@@ -2926,50 +2928,19 @@ void APPEARANCE_CONTROLS::onNetclassVisibilityChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 {
-    BOARD*        board    = m_frame->GetBoard();
-    NETINFO_LIST& nets     = board->GetNetInfo();
-    NETCLASSES&   classes  = board->GetDesignSettings().GetNetClasses();
-    NETCLASSPTR   netclass = classes.Find( aClassName );
-    TOOL_MANAGER* manager  = m_frame->GetToolManager();
-
-    if( !netclass )
-        return;
-
-    NETCLASS* defaultClass = classes.GetDefaultPtr();
-
-    if( netclass == classes.GetDefault() )
+    for( NETINFO_ITEM* net : m_frame->GetBoard()->GetNetInfo() )
     {
-        const TOOL_ACTION& action = aShow ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
-
-        for( NETINFO_ITEM* net : nets )
+        if( net->GetNetClass()->GetName() == aClassName )
         {
-            if( net->GetNetClass() == defaultClass )
-            {
-                manager->RunAction( action, true, static_cast<intptr_t>( net->GetNetCode() ) );
+            m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNet
+                                                        : PCB_ACTIONS::hideNet,
+                                                  true,
+                                                  static_cast<intptr_t>( net->GetNetCode() ) );
 
-                int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
+            int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
 
-                if( row >= 0 )
-                    m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
-            }
-        }
-    }
-    else
-    {
-        const TOOL_ACTION& action = aShow ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
-
-        for( const wxString& member : *netclass )
-        {
-            if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
-            {
-                int code = net->GetNetCode();
-                manager->RunAction( action, true, static_cast<intptr_t>( code ) );
-
-                int row = m_netsTable->GetRowByNetcode( code );
-
-                if( row >= 0 )
-                    m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
-            }
+            if( row >= 0 )
+                m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
         }
     }
 
@@ -3052,30 +3023,20 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* rs =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    BOARD*        board    = m_frame->GetBoard();
-    NETINFO_LIST& nets     = board->GetNetInfo();
-    NETCLASSES&   classes  = board->GetDesignSettings().GetNetClasses();
-    NETCLASSPTR   netclass = classes.Find( m_contextMenuNetclass );
+    BOARD*                         board            = m_frame->GetBoard();
+    std::shared_ptr<NET_SETTINGS>& netSettings      = board->GetDesignSettings().m_NetSettings;
+
 
     APPEARANCE_SETTING* setting = m_netclassSettingsMap.count( m_contextMenuNetclass ) ?
                                   m_netclassSettingsMap.at( m_contextMenuNetclass ) : nullptr;
 
-    NETCLASSPTR defaultClass     = classes.GetDefault();
-    wxString    defaultClassName = defaultClass->GetName();
-
     auto runOnNetsOfClass =
-            [&]( NETCLASSPTR aClass, std::function<void( NETINFO_ITEM* )> aFunction )
+            [&]( const wxString& netClassName, std::function<void( NETINFO_ITEM* )> aFunction )
             {
-                if( aClass == defaultClass )
+                for( NETINFO_ITEM* net : board->GetNetInfo() )
                 {
-                    for( NETINFO_ITEM* net : nets )
-                        if( net->GetNetClass() == defaultClass.get() )
-                            aFunction( net );
-                }
-                else
-                {
-                    for( const wxString& netName : *aClass )
-                        aFunction( nets.GetNetItem( netName ) );
+                    if( net->GetNetClass()->GetName() == netClassName )
+                        aFunction( net );
                 }
             };
 
@@ -3104,14 +3065,11 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
         case ID_HIGHLIGHT_NET:
         {
-            if( netclass )
+            if( !m_contextMenuNetclass.IsEmpty() )
             {
-                runOnNetsOfClass( netclass,
+                runOnNetsOfClass( m_contextMenuNetclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
-                            if( !aItem )
-                                return;
-
                             static bool first = true;
                             int code = aItem->GetNetCode();
 
@@ -3137,18 +3095,17 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         case ID_SELECT_NET:
         case ID_DESELECT_NET:
         {
-            if( netclass )
+            if( !m_contextMenuNetclass.IsEmpty() )
             {
-                TOOL_ACTION& action = aEvent.GetId() == ID_SELECT_NET ? PCB_ACTIONS::selectNet :
-                                                                        PCB_ACTIONS::deselectNet;
-                runOnNetsOfClass( netclass,
+                TOOL_MANAGER* toolMgr = m_frame->GetToolManager();
+                TOOL_ACTION&  action = aEvent.GetId() == ID_SELECT_NET ? PCB_ACTIONS::selectNet
+                                                                       : PCB_ACTIONS::deselectNet;
+
+                runOnNetsOfClass( m_contextMenuNetclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
-                            if( !aItem )
-                                return;
-
-                            intptr_t code = static_cast<intptr_t>( aItem->GetNetCode() );
-                            m_frame->GetToolManager()->RunAction( action, true, code );
+                            toolMgr->RunAction( action, true,
+                                                static_cast<intptr_t>( aItem->GetNetCode() ) );
                         } );
             }
             break;
@@ -3156,16 +3113,16 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
         case ID_SHOW_ALL_NETS:
         {
-            showNetclass( defaultClassName );
-            wxASSERT( m_netclassSettingsMap.count( defaultClassName ) );
-            m_netclassSettingsMap.at( defaultClassName )->ctl_visibility->SetValue( true );
+            showNetclass( NETCLASS::Default );
+            wxASSERT( m_netclassSettingsMap.count( NETCLASS::Default ) );
+            m_netclassSettingsMap.at( NETCLASS::Default )->ctl_visibility->SetValue( true );
 
-            for( const auto& pair : classes.NetClasses() )
+            for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
             {
-                showNetclass( pair.first );
+                showNetclass( name );
 
-                if( m_netclassSettingsMap.count( pair.first ) )
-                    m_netclassSettingsMap.at( pair.first )->ctl_visibility->SetValue( true );
+                if( m_netclassSettingsMap.count( name ) )
+                    m_netclassSettingsMap.at( name )->ctl_visibility->SetValue( true );
             }
 
             break;
@@ -3173,19 +3130,19 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 
         case ID_HIDE_OTHER_NETS:
         {
-            bool showDefault = m_contextMenuNetclass == defaultClassName;
-            showNetclass( defaultClassName, showDefault );
-            wxASSERT( m_netclassSettingsMap.count( defaultClassName ) );
-            m_netclassSettingsMap.at( defaultClassName )->ctl_visibility->SetValue( showDefault );
+            bool showDefault = m_contextMenuNetclass == NETCLASS::Default;
+            showNetclass( NETCLASS::Default, showDefault );
+            wxASSERT( m_netclassSettingsMap.count( NETCLASS::Default ) );
+            m_netclassSettingsMap.at( NETCLASS::Default )->ctl_visibility->SetValue( showDefault );
 
-            for( const auto& pair : classes.NetClasses() )
+            for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
             {
-                bool show = pair.first == m_contextMenuNetclass;
+                bool show = ( name == m_contextMenuNetclass );
 
-                showNetclass( pair.first, show );
+                showNetclass( name, show );
 
-                if( m_netclassSettingsMap.count( pair.first ) )
-                    m_netclassSettingsMap.at( pair.first )->ctl_visibility->SetValue( show );
+                if( m_netclassSettingsMap.count( name ) )
+                    m_netclassSettingsMap.at( name )->ctl_visibility->SetValue( show );
             }
 
             break;

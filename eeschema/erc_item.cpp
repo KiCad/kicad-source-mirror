@@ -110,6 +110,10 @@ ERC_ITEM ERC_ITEM::multipleNetNames( ERCE_DRIVER_CONFLICT,
         _( "More than one name given to this bus or net" ),
         wxT( "multiple_net_names" ) );
 
+ERC_ITEM ERC_ITEM::netclassConflict( ERCE_NETCLASS_CONFLICT,
+        _( "Conflicting netclass assignments" ),
+        wxT( "conflicting_netclasses" ) );
+
 ERC_ITEM ERC_ITEM::netNotBusMember( ERCE_BUS_ENTRY_CONFLICT,
         _( "Net is graphically connected to a bus but not a bus member" ),
         wxT( "net_not_bus_member" ) );
@@ -219,6 +223,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_LABEL_ERROR:         return std::make_shared<ERC_ITEM>( busLabelSyntax );
     case ERCE_BUS_TO_BUS_CONFLICT:     return std::make_shared<ERC_ITEM>( busToBusConflict );
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
+    case ERCE_NETCLASS_CONFLICT:       return std::make_shared<ERC_ITEM>( netclassConflict );
     case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );

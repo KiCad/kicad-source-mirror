@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,21 +102,13 @@ public:
         return new NETINFO_ITEM( *this );
     }
 
-    void SetNetClass( const NETCLASSPTR& aNetClass );
+    void SetNetClass( const std::shared_ptr<NETCLASS>& aNetClass );
 
     /**
      * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
      *       std::shared_ptr stuff shows up large in performance profiling.
      */
-    NETCLASS* GetNetClass()
-    {
-        return m_netClass.get();
-    }
-
-    wxString GetNetClassName() const
-    {
-        return m_netClass ? m_netClass->GetName() : NETCLASS::Default;
-    }
+    NETCLASS* GetNetClass() { return m_netClass.get(); }
 
     int GetNetCode() const { return m_netCode; }
     void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }
@@ -159,10 +151,7 @@ public:
     /**
      * Set all fields to their default values.
      */
-    void Clear()
-    {
-        SetNetClass( NETCLASSPTR());
-    }
+    void Clear();
 
     BOARD* GetParent() const
     {
@@ -178,7 +167,7 @@ private:
     wxString    m_netname;         ///< Full net name like /sheet/subsheet/vout used by Eeschema.
     wxString    m_shortNetname;    ///< short net name, like vout from /sheet/subsheet/vout.
 
-    NETCLASSPTR m_netClass;
+    std::shared_ptr<NETCLASS> m_netClass;
 
     bool        m_isCurrent;       ///< Indicates the net is currently in use.  We still store
                                    ///< those that are not during a session for undo/redo and to

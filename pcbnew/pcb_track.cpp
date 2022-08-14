@@ -187,7 +187,7 @@ int PCB_VIA::GetDrillValue() const
         return m_drill;
 
     // Use the default value from the Netclass
-    NETCLASS* netclass = GetNetClass();
+    NETCLASS* netclass = GetEffectiveNetClass();
 
     if( GetViaType() == VIATYPE::MICROVIA )
         return netclass->GetuViaDrill();
@@ -888,7 +888,8 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 {
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "Net Class" ), UnescapeString( GetNetClass()->GetName() ) );
+    aList.emplace_back( _( "Resolved Netclass" ),
+                        UnescapeString( GetEffectiveNetClass()->GetName() ) );
 
 #if 0   // Enable for debugging
     if( GetBoard() )

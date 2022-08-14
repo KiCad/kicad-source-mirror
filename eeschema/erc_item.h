@@ -88,6 +88,7 @@ private:
     static ERC_ITEM differentUnitNet;
     static ERC_ITEM busDefinitionConflict;
     static ERC_ITEM multipleNetNames;
+    static ERC_ITEM netclassConflict;
     static ERC_ITEM netNotBusMember;
     static ERC_ITEM busLabelSyntax;
     static ERC_ITEM busToBusConflict;

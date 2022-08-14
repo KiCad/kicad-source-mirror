@@ -644,7 +644,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
                 {
                     return wxString::Format( _( "Net %s\tNet class %s" ),
                                              aItem->GetNet()->GetNetname(),
-                                             aItem->GetNet()->GetNetClassName() );
+                                             aItem->GetNet()->GetNetClass()->GetName() );
                 };
 
         if( rollOverItem )

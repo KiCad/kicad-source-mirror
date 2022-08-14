@@ -85,22 +85,6 @@ public:
         return !GetIsRuleArea();
     }
 
-    NETCLASS* GetNetClass() const override
-    {
-        if( GetIsRuleArea() )
-            return nullptr;
-
-        return BOARD_CONNECTED_ITEM::GetNetClass();
-    }
-
-    wxString GetNetClassName() const override
-    {
-        if( GetIsRuleArea() )
-            return "UNDEFINED";
-
-        return BOARD_CONNECTED_ITEM::GetNetClassName();
-    }
-
     /**
      * Copy aZone data to me
      */

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
- * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,58 +65,6 @@ public:
     const wxString GetName() const { return m_Name; }
     void SetName( const wxString& aName ) { m_Name = aName; }
 
-    /**
-     * Return the number of nets in this NETCLASS, i.e. using these rules.
-     */
-    unsigned GetCount() const
-    {
-        return m_Members.size();
-    }
-
-    /**
-     * Empties the collection of members.
-     */
-    void Clear()
-    {
-        m_Members.clear();
-    }
-
-    /**
-     * Adds \a aNetname to this NETCLASS if it is not already in this NETCLASS.
-     *
-     * It is harmless to try and add a second identical name.
-     */
-    void Add( const wxString& aNetname )
-    {
-        m_Members.insert( aNetname );
-    }
-
-    typedef STRINGSET::iterator iterator;
-    iterator begin() { return m_Members.begin(); }
-    iterator end()   { return m_Members.end();   }
-
-    typedef STRINGSET::const_iterator const_iterator;
-    const_iterator begin() const { return m_Members.begin(); }
-    const_iterator end()   const { return m_Members.end();   }
-
-    /**
-     * Remove NET \a aName from the collection of members.
-     */
-    void Remove( iterator aName )
-    {
-        m_Members.erase( aName );
-    }
-
-    /**
-     * Remove NET \a aName from the collection of members.
-     */
-    void Remove( const wxString& aName )
-    {
-        m_Members.erase( aName );
-    }
-
-    STRINGSET& NetNames()                   { return m_Members; }       ///< for SWIG
-
     const wxString& GetDescription() const  { return m_Description; }
     void  SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
@@ -171,15 +119,9 @@ public:
     int     GetLineStyle() const            { return m_lineStyle; }
     void    SetLineStyle( int aStyle )      { m_lineStyle = aStyle; }
 
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;
-#endif
-
 protected:
     wxString    m_Name;                 ///< Name of the net class
     wxString    m_Description;          ///< what this NETCLASS is for.
-
-    STRINGSET   m_Members;              ///< names of NET members of this class
 
     /// The units on these parameters is Internal Units (1 nm)
 
@@ -205,93 +147,5 @@ protected:
 };
 
 
-DECL_SPTR_FOR_SWIG( NETCLASSPTR, NETCLASS )
-DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR )
-
-
-/**
- * A container for NETCLASS instances.
- *
- * It owns all its NETCLASSes.  This container will always have a default NETCLASS with the
- * name given by const NETCLASS::Default.
- */
-class NETCLASSES
-{
-public:
-    NETCLASSES();
-    ~NETCLASSES();
-
-    /**
-     * Destroy any contained NETCLASS instances except the default one, and clears any
-     * members from the default one.
-     */
-    void Clear()
-    {
-        m_NetClasses.clear();
-        m_default->Clear();
-    }
-
-    typedef NETCLASS_MAP::iterator iterator;
-    iterator begin() { return m_NetClasses.begin(); }
-    iterator end()   { return m_NetClasses.end(); }
-
-    typedef NETCLASS_MAP::const_iterator const_iterator;
-    const_iterator begin() const { return m_NetClasses.begin(); }
-    const_iterator end()   const { return m_NetClasses.end(); }
-
-    /**
-     * @return the number of netclasses excluding the default one.
-     */
-    unsigned GetCount() const
-    {
-        return m_NetClasses.size();
-    }
-
-    /**
-     * @return the default net class.
-     */
-    NETCLASSPTR GetDefault() const
-    {
-        return m_default;
-    }
-
-    NETCLASS* GetDefaultPtr() const
-    {
-        return m_default.get();
-    }
-
-    /**
-     * Add \a aNetclass and puts it into this NETCLASSES container.
-     *
-     * @param aNetclass is netclass to add
-     * @return true if the name within aNetclass is unique and it could be inserted OK,
-     *         else false because the name was not unique.
-     */
-    bool Add( const NETCLASSPTR& aNetclass );
-
-    /**
-     * Remove a #NETCLASS from this container but does not destroy/delete it.
-     *
-     * @param aNetName is the name of the net to delete, and it may not be NETCLASS::Default.
-     * @return a pointer to the #NETCLASS associated with \a aNetName if found and removed,
-     *         else NULL.
-     */
-    NETCLASSPTR Remove( const wxString& aNetName );
-
-    /**
-     * Search this container for a NETCLASS given by \a aName.
-     *
-     * @param aName is the name of the #NETCLASS to search for.
-     * @return a pointer to the #NETCLASS if found, else NULL.
-     */
-    NETCLASSPTR Find( const wxString& aName ) const;
-
-    /// Provide public access to m_NetClasses so it gets swigged.
-    NETCLASS_MAP&   NetClasses()       { return m_NetClasses; }
-
-private:
-    NETCLASS_MAP    m_NetClasses;   // All the netclasses EXCEPT the default one
-    NETCLASSPTR     m_default;
-};
 
 #endif  // CLASS_NETCLASS_H

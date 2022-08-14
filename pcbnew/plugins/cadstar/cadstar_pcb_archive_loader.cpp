@@ -663,7 +663,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 {
-    BOARD_DESIGN_SETTINGS&                 ds           = m_board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&                 bds          = m_board->GetDesignSettings();
     std::map<SPACINGCODE_ID, SPACINGCODE>& spacingCodes = Assignments.Codedefs.SpacingCodes;
 
     auto applyRule =
@@ -677,27 +677,28 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     //Note: for details on the different spacing codes see SPACINGCODE::ID
 
-    applyRule( "T_T", &ds.m_MinClearance );
-    applyRule( "C_B", &ds.m_CopperEdgeClearance );
-    applyRule( "H_H", &ds.m_HoleToHoleMin );
+    applyRule( "T_T", &bds.m_MinClearance );
+    applyRule( "C_B", &bds.m_CopperEdgeClearance );
+    applyRule( "H_H", &bds.m_HoleToHoleMin );
 
-    ds.m_TrackMinWidth = getKiCadLength( Assignments.Technology.MinRouteWidth );
-    ds.m_ViasMinSize = ds.m_TrackMinWidth; // Not specified, assumed same as track width
-    ds.m_ViasMinAnnularWidth = ds.m_TrackMinWidth / 2; // Not specified, assumed half track width
-    ds.m_MinThroughDrill = PCB_IU_PER_MM * 0.0508; // CADSTAR does not specify a minimum hole size
+    bds.m_TrackMinWidth = getKiCadLength( Assignments.Technology.MinRouteWidth );
+    bds.m_ViasMinSize = bds.m_TrackMinWidth; // Not specified, assumed same as track width
+    bds.m_ViasMinAnnularWidth = bds.m_TrackMinWidth / 2; // Not specified, assumed half track width
+    bds.m_MinThroughDrill = PCB_IU_PER_MM * 0.0508; // CADSTAR does not specify a minimum hole size
                                                    // so set to minimum permitted in KiCad (2 mils)
-    ds.m_HoleClearance = 0; // Testing suggests cadstar might not have a copper-to-hole clearance
+    bds.m_HoleClearance = 0; // Testing suggests cadstar might not have a copper-to-hole clearance
 
-    auto applyNetClassRule = [&]( wxString aID, NETCLASS* aNetClassPtr,
-                                     void ( NETCLASS::*aFunc )( int ) ) {
-        int value = -1;
-        applyRule( aID, &value );
+    auto applyNetClassRule =
+            [&]( wxString aID, std::shared_ptr<NETCLASS>& aNetClassPtr )
+            {
+                int value = -1;
+                applyRule( aID, &value );
 
-        if( value != -1 )
-            ( aNetClassPtr->*aFunc )( value );
-    };
+                if( value != -1 )
+                    aNetClassPtr->SetClearance( value );
+            };
 
-    applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
+    applyNetClassRule( "T_T", bds.m_NetSettings->m_DefaultNetClass );
 
     wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
                      "design rules were imported. It is recommended that you review the design "
@@ -3953,10 +3954,11 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
             m_doneSpacingClassWarning = true;
         }
 
-        NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, newName, ++m_numNets );
-        NETCLASSPTR   netclass;
+        std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+        NETINFO_ITEM*                  netInfo = new NETINFO_ITEM( m_board, newName, ++m_numNets );
+        std::shared_ptr<NETCLASS>      netclass;
 
-         std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID> key = { csNet.RouteCodeID,
+        std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID> key = { csNet.RouteCodeID,
                                                                         csNet.NetClassID,
                                                                         csNet.SpacingClassID };
 
@@ -3967,7 +3969,6 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         else
         {
             wxString  netClassName;
-
 
             ROUTECODE rc = getRouteCode( csNet.RouteCodeID );
             netClassName += wxT( "Route code: " ) + rc.Name;
@@ -3984,14 +3985,19 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 netClassName += wxT( " | Spacing class: " ) + sp.Name;
             }
 
-            netclass.reset( new NETCLASS( *m_board->GetDesignSettings().GetDefault() ) );
+            netclass.reset( new NETCLASS( *netSettings->m_DefaultNetClass ) );
             netclass->SetName( netClassName );
-            m_board->GetDesignSettings().GetNetClasses().Add( netclass );
+            netSettings->m_NetClasses[ netClassName ] = netclass;
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
             m_netClassMap.insert( { key, netclass } );
         }
 
-        netclass->Add( newName );
+        m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                {
+                    std::make_unique<EDA_COMBINED_MATCHER>( newName, CTX_NETCLASS ),
+                    netclass->GetName()
+                } );
+
         netInfo->SetNetClass( netclass );
         m_board->Add( netInfo, ADD_MODE::APPEND );
         m_netMap.insert( { aCadstarNetID, netInfo } );

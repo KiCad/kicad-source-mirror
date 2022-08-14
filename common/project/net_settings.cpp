@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -21,7 +21,6 @@
 
 #include <nlohmann/json.hpp>
 
-
 #include <project/net_settings.h>
 #include <settings/parameters.h>
 #include <settings/json_settings_internals.h>
@@ -32,7 +31,8 @@
 
 // const int netSettingsSchemaVersion = 0;
 // const int netSettingsSchemaVersion = 1;     // new overbar syntax
-const int netSettingsSchemaVersion = 2;        // exclude buses from netclass members
+// const int netSettingsSchemaVersion = 2;     // exclude buses from netclass members
+const int netSettingsSchemaVersion = 3;        // netclass assignment patterns
 
 
 static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
@@ -55,84 +55,123 @@ static int getInSchUnits( const nlohmann::json& aObj, const std::string& aKey, i
 
 
 NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
-        NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath ),
-        m_NetClasses()
+        NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath )
 {
+    m_DefaultNetClass = std::make_shared<NETCLASS>( NETCLASS::Default );
+    m_DefaultNetClass->SetDescription( _( "This is the default net class." ) );
+
+    auto saveNetclass =
+            []( nlohmann::json& json_array, const std::shared_ptr<NETCLASS>& nc )
+            {
+                // Note: we're in common/, but we do happen to know which of these
+                // fields are used in which units system.
+                nlohmann::json nc_json = {
+                    { "name",            nc->GetName().ToUTF8() },
+                    { "wire_width",      SchIu2Mils( nc->GetWireWidth() ) },
+                    { "bus_width",       SchIu2Mils( nc->GetBusWidth() ) },
+                    { "line_style",      nc->GetLineStyle() },
+                    { "schematic_color", nc->GetSchematicColor() },
+                    { "pcb_color",       nc->GetPcbColor() }
+                };
+
+                auto saveInPcbUnits =
+                        []( nlohmann::json& json, const std::string& aKey, int aValue )
+                        {
+                            json.push_back( { aKey, PcbIu2mm( aValue ) } );
+                        };
+
+                if( nc->HasClearance() )
+                    saveInPcbUnits( nc_json, "clearance", nc->GetClearance() );
+
+                if( nc->HasTrackWidth() )
+                    saveInPcbUnits( nc_json, "track_width", nc->GetTrackWidth() );
+
+                if( nc->HasViaDiameter() )
+                    saveInPcbUnits( nc_json, "via_diameter", nc->GetViaDiameter() );
+
+                if( nc->HasViaDrill() )
+                    saveInPcbUnits( nc_json, "via_drill", nc->GetViaDrill() );
+
+                if( nc->HasuViaDiameter() )
+                    saveInPcbUnits( nc_json, "microvia_diameter", nc->GetuViaDiameter() );
+
+                if( nc->HasuViaDrill() )
+                    saveInPcbUnits( nc_json, "microvia_drill", nc->GetuViaDrill()  );
+
+                if( nc->HasDiffPairWidth() )
+                    saveInPcbUnits( nc_json, "diff_pair_width", nc->GetDiffPairWidth() );
+
+                if( nc->HasDiffPairGap() )
+                    saveInPcbUnits( nc_json, "diff_pair_gap", nc->GetDiffPairGap() );
+
+                if( nc->HasDiffPairViaGap() )
+                    saveInPcbUnits( nc_json, "diff_pair_via_gap", nc->GetDiffPairViaGap() );
+
+                json_array.push_back( nc_json );
+            };
+
+    auto readNetClass =
+            []( const nlohmann::json& entry )
+            {
+                wxString name = entry["name"];
+
+                std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( name );
+
+                if( auto value = getInPcbUnits( entry, "clearance" ) )
+                    nc->SetClearance( *value );
+
+                if( auto value = getInPcbUnits( entry, "track_width" ) )
+                    nc->SetTrackWidth( *value );
+
+                if( auto value = getInPcbUnits( entry, "via_diameter" ) )
+                    nc->SetViaDiameter( *value );
+
+                if( auto value = getInPcbUnits( entry, "via_drill" ) )
+                    nc->SetViaDrill( *value );
+
+                if( auto value = getInPcbUnits( entry, "microvia_diameter" ) )
+                    nc->SetuViaDiameter( *value );
+
+                if( auto value = getInPcbUnits( entry, "microvia_drill" ) )
+                    nc->SetuViaDrill( *value );
+
+                if( auto value = getInPcbUnits( entry, "diff_pair_width" ) )
+                    nc->SetDiffPairWidth( *value );
+
+                if( auto value = getInPcbUnits( entry, "diff_pair_gap" ) )
+                    nc->SetDiffPairGap( *value );
+
+                if( auto value = getInPcbUnits( entry, "diff_pair_via_gap" ) )
+                    nc->SetDiffPairViaGap( *value );
+
+                nc->SetWireWidth( getInSchUnits( entry, "wire_width", nc->GetWireWidth() ) );
+                nc->SetBusWidth( getInSchUnits( entry, "bus_width", nc->GetBusWidth() ) );
+
+                if( entry.contains( "line_style" ) && entry["line_style"].is_number() )
+                    nc->SetLineStyle( entry["line_style"].get<int>() );
+
+                if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
+                    nc->SetPcbColor( entry["pcb_color"].get<KIGFX::COLOR4D>() );
+
+                if( entry.contains( "schematic_color" )
+                        && entry["schematic_color"].is_string() )
+                {
+                    nc->SetSchematicColor( entry["schematic_color"].get<KIGFX::COLOR4D>() );
+                }
+
+                return nc;
+            };
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "classes",
             [&]() -> nlohmann::json
             {
                 nlohmann::json ret = nlohmann::json::array();
 
-                NETCLASSPTR                nc    = m_NetClasses.GetDefault();
-                NETCLASSES::const_iterator nc_ii = m_NetClasses.begin();
+                if( m_DefaultNetClass )
+                    saveNetclass( ret, m_DefaultNetClass );
 
-                for( unsigned int idx = 0; idx <= m_NetClasses.GetCount(); idx++ )
-                {
-                    if( idx > 0 )
-                    {
-                        nc = nc_ii->second;
-                        ++nc_ii;
-                    }
-
-                    // Note: we're in common/, but we do happen to know which of these fields
-                    // are used in which units system.
-                    nlohmann::json nc_json = {
-                        { "name",            nc->GetName().ToUTF8() },
-                        { "wire_width",      SchIu2Mils( nc->GetWireWidth() ) },
-                        { "bus_width",       SchIu2Mils( nc->GetBusWidth() ) },
-                        { "line_style",      nc->GetLineStyle() },
-                        { "schematic_color", nc->GetSchematicColor() },
-                        { "pcb_color",       nc->GetPcbColor() }
-                    };
-
-                    auto saveInPcbUnits =
-                            []( nlohmann::json& json, const std::string& aKey, int aValue )
-                            {
-                                json.push_back( { aKey, PcbIu2mm( aValue ) } );
-                            };
-
-                    if( nc->HasClearance() )
-                        saveInPcbUnits( nc_json, "clearance", nc->GetClearance() );
-
-                    if( nc->HasTrackWidth() )
-                        saveInPcbUnits( nc_json, "track_width", nc->GetTrackWidth() );
-
-                    if( nc->HasViaDiameter() )
-                        saveInPcbUnits( nc_json, "via_diameter", nc->GetViaDiameter() );
-
-                    if( nc->HasViaDrill() )
-                        saveInPcbUnits( nc_json, "via_drill", nc->GetViaDrill() );
-
-                    if( nc->HasuViaDiameter() )
-                        saveInPcbUnits( nc_json, "microvia_diameter", nc->GetuViaDiameter() );
-
-                    if( nc->HasuViaDrill() )
-                        saveInPcbUnits( nc_json, "microvia_drill", nc->GetuViaDrill()  );
-
-                    if( nc->HasDiffPairWidth() )
-                        saveInPcbUnits( nc_json, "diff_pair_width", nc->GetDiffPairWidth() );
-
-                    if( nc->HasDiffPairGap() )
-                        saveInPcbUnits( nc_json, "diff_pair_gap", nc->GetDiffPairGap() );
-
-                    if( nc->HasDiffPairViaGap() )
-                        saveInPcbUnits( nc_json, "diff_pair_via_gap", nc->GetDiffPairViaGap() );
-
-                    if( idx > 0 )   // No need to store members of Default nc
-                    {
-                        nlohmann::json membersJson = nlohmann::json::array();
-
-                        for( const wxString& member : *nc )
-                        {
-                            if( !member.empty() )
-                                membersJson.push_back( member );
-                        }
-
-                        nc_json["nets"] = membersJson;
-                    }
-
-                    ret.push_back( nc_json );
-                }
+                for( const auto& [ name, netclass ] : m_NetClasses )
+                    saveNetclass( ret, netclass );
 
                 return ret;
             },
@@ -141,95 +180,19 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 if( !aJson.is_array() )
                     return;
 
-                m_NetClasses.Clear();
-                m_NetClassAssignments.clear();
-                NETCLASSPTR nc;
-                NETCLASSPTR defaultClass = m_NetClasses.GetDefault();
+                m_NetClasses.clear();
 
                 for( const nlohmann::json& entry : aJson )
                 {
                     if( !entry.is_object() || !entry.contains( "name" ) )
                         continue;
 
-                    wxString name = entry["name"];
+                    std::shared_ptr<NETCLASS> nc = readNetClass( entry );
 
-                    if( name == defaultClass->GetName() )
-                        nc = defaultClass;
+                    if( nc->GetName() == NETCLASS::Default )
+                        m_DefaultNetClass = nc;
                     else
-                        nc = std::make_shared<NETCLASS>( name );
-
-                    if( auto value = getInPcbUnits( entry, "clearance" ) )
-                        nc->SetClearance( *value );
-
-                    if( auto value = getInPcbUnits( entry, "track_width" ) )
-                        nc->SetTrackWidth( *value );
-
-                    if( auto value = getInPcbUnits( entry, "via_diameter" ) )
-                        nc->SetViaDiameter( *value );
-
-                    if( auto value = getInPcbUnits( entry, "via_drill" ) )
-                        nc->SetViaDrill( *value );
-
-                    if( auto value = getInPcbUnits( entry, "microvia_diameter" ) )
-                        nc->SetuViaDiameter( *value );
-
-                    if( auto value = getInPcbUnits( entry, "microvia_drill" ) )
-                        nc->SetuViaDrill( *value );
-
-                    if( auto value = getInPcbUnits( entry, "diff_pair_width" ) )
-                        nc->SetDiffPairWidth( *value );
-
-                    if( auto value = getInPcbUnits( entry, "diff_pair_gap" ) )
-                        nc->SetDiffPairGap( *value );
-
-                    if( auto value = getInPcbUnits( entry, "diff_pair_via_gap" ) )
-                        nc->SetDiffPairViaGap( *value );
-
-                    nc->SetWireWidth( getInSchUnits( entry, "wire_width", nc->GetWireWidth() ) );
-                    nc->SetBusWidth( getInSchUnits( entry, "bus_width", nc->GetBusWidth() ) );
-
-                    if( entry.contains( "line_style" ) && entry["line_style"].is_number() )
-                        nc->SetLineStyle( entry["line_style"].get<int>() );
-
-                    if( entry.contains( "nets" ) && entry["nets"].is_array() )
-                    {
-                        for( const auto& net : entry["nets"].items() )
-                        {
-                            wxString netname = net.value().get<wxString>();
-
-                            if( m_schemaVersion < 2 )
-                            {
-                                // Strip out buses from older 5.99 implementations.  They were
-                                // a world of hurt, never fully functional, and are functionally
-                                // replaced by assigning a netclass to a bus on the canvas.
-                                wxString unescaped = UnescapeString( netname );
-                                wxString prefix;
-                                std::vector<wxString> members;
-
-                                if( ParseBusVector( unescaped, &prefix, &members ) )
-                                    continue;
-                                else if( ParseBusGroup( unescaped, &prefix, &members ) )
-                                    continue;
-                            }
-
-                            nc->Add( netname );
-                        }
-                    }
-
-                    if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
-                        nc->SetPcbColor( entry["pcb_color"].get<KIGFX::COLOR4D>() );
-
-                    if( entry.contains( "schematic_color" )
-                            && entry["schematic_color"].is_string() )
-                    {
-                        nc->SetSchematicColor( entry["schematic_color"].get<KIGFX::COLOR4D>() );
-                    }
-
-                    if( nc != defaultClass )
-                        m_NetClasses.Add( nc );
-
-                    for( const wxString& net : *nc )
-                        m_NetClassAssignments[ net ] = nc->GetName();
+                        m_NetClasses[ nc->GetName() ] = nc;
                 }
             },
             {} ) );
@@ -239,10 +202,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             {
                 nlohmann::json ret = {};
 
-                for( const auto& pair : m_PcbNetColors )
+                for( const auto& [ netname, color ] : m_NetColorAssignments )
                 {
-                    std::string key( pair.first.ToUTF8() );
-                    ret[key] = pair.second;
+                    std::string key( netname.ToUTF8() );
+                    ret[key] = color;
                 }
 
                 return ret;
@@ -252,17 +215,91 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 if( !aJson.is_object() )
                     return;
 
-                m_PcbNetColors.clear();
+                m_NetColorAssignments.clear();
 
                 for( const auto& pair : aJson.items() )
                 {
                     wxString key( pair.key().c_str(), wxConvUTF8 );
-                    m_PcbNetColors[key] = pair.value().get<KIGFX::COLOR4D>();
+                    m_NetColorAssignments[key] = pair.value().get<KIGFX::COLOR4D>();
+                }
+            },
+            {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_assignments",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const auto& [ netname, netclassName ] : m_NetClassLabelAssignments )
+                {
+                    std::string key( netname.ToUTF8() );
+                    ret[key] = netclassName;
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_NetClassLabelAssignments.clear();
+
+                for( const auto& pair : aJson.items() )
+                {
+                    wxString key( pair.key().c_str(), wxConvUTF8 );
+                    m_NetClassLabelAssignments[key] = pair.value().get<wxString>();
+                }
+            },
+            {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_patterns",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const auto& [ matcher, netclassName ] :  m_NetClassPatternAssignments )
+                {
+                    nlohmann::json pattern_json = {
+                        { "pattern",  matcher->GetPattern().ToUTF8() },
+                        { "netclass", netclassName.ToUTF8() }
+                    };
+
+                    ret.push_back( pattern_json );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_array() )
+                    return;
+
+                m_NetClassPatternAssignments.clear();
+
+                for( const nlohmann::json& entry : aJson )
+                {
+                    if( !entry.is_object() )
+                        continue;
+
+                    if( entry.contains( "pattern" ) && entry["pattern"].is_string()
+                            && entry.contains( "netclass" ) && entry["netclass"].is_string() )
+                    {
+                        wxString pattern = entry["pattern"].get<wxString>();
+                        wxString netclass = entry["netclass"].get<wxString>();
+
+                        m_NetClassPatternAssignments.push_back(
+                                {
+                                    std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ),
+                                    netclass
+                                } );
+                    }
                 }
             },
             {} ) );
 
     registerMigration( 0, 1, std::bind( &NET_SETTINGS::migrateSchema0to1, this ) );
+    registerMigration( 2, 3, std::bind( &NET_SETTINGS::migrateSchema2to3, this ) );
 }
 
 
@@ -299,16 +336,67 @@ bool NET_SETTINGS::migrateSchema0to1()
 }
 
 
-const wxString& NET_SETTINGS::GetNetclassName( const wxString& aNetName ) const
+bool NET_SETTINGS::migrateSchema2to3()
 {
-    static wxString defaultNetname = NETCLASS::Default;
+    if( m_internals->contains( "classes" ) && m_internals->At( "classes" ).is_array() )
+    {
+        nlohmann::json patterns = nlohmann::json::array();
 
-    auto it = m_NetClassAssignments.find( aNetName );
+        for( auto& netClass : m_internals->At( "classes" ).items() )
+        {
+            if( netClass.value().contains( "name" )
+                    && netClass.value().contains( "nets" )
+                    && netClass.value()["nets"].is_array() )
+            {
+                wxString netClassName = netClass.value()["name"].get<wxString>();
 
-    if( it == m_NetClassAssignments.end() )
-        return defaultNetname;
-    else
-        return it->second;
+                for( auto& net : netClass.value()["nets"].items() )
+                {
+                    nlohmann::json pattern_json = {
+                        { "pattern",  net.value().get<wxString>() },
+                        { "netclass", netClassName }
+                    };
+
+                    patterns.push_back( pattern_json );
+                }
+            }
+        }
+
+        m_internals->SetFromString( "netclass_patterns", patterns );
+    }
+
+    return true;
+}
+
+
+std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aNetName ) const
+{
+    auto getNetclass =
+            [&]( const wxString& netclass )
+            {
+                auto ii = m_NetClasses.find( netclass );
+
+                if( ii == m_NetClasses.end() )
+                    return m_DefaultNetClass;
+                else
+                    return ii->second;
+            };
+
+    auto it = m_NetClassLabelAssignments.find( aNetName );
+
+    if( it != m_NetClassLabelAssignments.end() )
+        return getNetclass( it->second );
+
+    for( const auto& [ matcher, netclassName ] :  m_NetClassPatternAssignments )
+    {
+        int matches;
+        int offset;
+
+        if( matcher->Find( aNetName, matches, offset ) && offset == 0 )
+            return getNetclass( netclassName );
+    }
+
+    return m_DefaultNetClass;
 }
 
 
@@ -533,16 +621,4 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     }
 
     return false;
-}
-
-
-void NET_SETTINGS::RebuildNetClassAssignments()
-{
-    m_NetClassAssignments.clear();
-
-    for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses )
-    {
-        for( const wxString& net : *netclass.second )
-            m_NetClassAssignments[ net ] = netclass.second->GetName();
-    }
 }

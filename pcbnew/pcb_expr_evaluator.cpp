@@ -1035,29 +1035,23 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
 LIBEVAL::VALUE PCB_EXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
-    BOARD_ITEM* item = GetObject( aCtx );
+    BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( GetObject( aCtx ) );
 
     if( !item )
         return LIBEVAL::VALUE();
 
-    if( item->IsConnected() )
-        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetClassName() );
-    else
-        return LIBEVAL::VALUE();
+    return LIBEVAL::VALUE( item->GetEffectiveNetClass()->GetName() );
 }
 
 
 LIBEVAL::VALUE PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
-    BOARD_ITEM* item = GetObject( aCtx );
+    BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( GetObject( aCtx ) );
 
     if( !item )
         return LIBEVAL::VALUE();
 
-    if( item->IsConnected() )
-        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetname() );
-    else
-        return LIBEVAL::VALUE();
+    return LIBEVAL::VALUE( item->GetNetname() );
 }
 
 

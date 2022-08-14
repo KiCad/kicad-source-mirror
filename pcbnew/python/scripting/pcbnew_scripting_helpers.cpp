@@ -163,9 +163,6 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     {
         brd->SetProject( project );
 
-        if( brd->m_LegacyDesignSettingsLoaded )
-            project->GetProjectFile().NetSettings().RebuildNetClassAssignments();
-
         // Move legacy view settings to local project settings
         if( !brd->m_LegacyVisibleLayers.test( Rescue ) )
             project->GetLocalSettings().m_VisibleLayers = brd->m_LegacyVisibleLayers;

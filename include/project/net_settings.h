@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
 
 #include <netclass.h>
 #include <settings/nested_settings.h>
+#include <eda_pattern_match.h>
 
 /**
  * NET_SETTINGS stores various net-related settings in a project context.  These settings are
@@ -37,11 +38,13 @@ public:
     virtual ~NET_SETTINGS();
 
 public:
-    NETCLASSES m_NetClasses;
+    std::map<wxString, std::shared_ptr<NETCLASS>> m_NetClasses;
+    std::shared_ptr<NETCLASS>                     m_DefaultNetClass;
 
-    // Runtime map of label to netclass-name for quick lookup.  Includes both composite labels
-    // (buses) and atomic net names (including individual bus members).
-    std::map<wxString, wxString> m_NetClassAssignments;
+    std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
+                                                  m_NetClassPatternAssignments;
+
+    std::map<wxString, wxString>                  m_NetClassLabelAssignments;
 
     /**
      * A map of fully-qualified net names to colors used in the board context.
@@ -49,10 +52,10 @@ public:
      * Only nets that the user has assigned custom colors to will be in this list.
      * Nets that no longer exist will be deleted during a netlist read in Pcbnew.
      */
-    std::map<wxString, KIGFX::COLOR4D> m_PcbNetColors;
+    std::map<wxString, KIGFX::COLOR4D>            m_NetColorAssignments;
 
 public:
-    const wxString& GetNetclassName( const wxString& aNetName ) const;
+    std::shared_ptr<NETCLASS> GetEffectiveNetClass( const wxString& aNetName ) const;
 
     /**
      * Parse a bus vector (e.g. A[7..0]) into name, begin, and end.
@@ -78,13 +81,9 @@ public:
     static bool ParseBusGroup( const wxString& aGroup, wxString* name,
                                std::vector<wxString>* aMemberList );
 
-    /**
-     * Rebuild netclass assignments from the netclass membership lists.
-     */
-    void RebuildNetClassAssignments();
-
 private:
     bool migrateSchema0to1();
+    bool migrateSchema2to3();
 
     // TODO: Add diff pairs, bus information, etc.
 };

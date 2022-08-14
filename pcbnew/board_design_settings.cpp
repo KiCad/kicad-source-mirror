@@ -33,7 +33,6 @@
 #include <settings/parameters.h>
 #include <project/project_file.h>
 #include <advanced_config.h>
-#include <board_design_settings.h>
 #include <pcbnew.h>
 
 const int bdsSchemaVersion = 2;
@@ -46,11 +45,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // initialized by the board file parser before NESTED_SETTINGS::LoadFromFile is called.
     m_resetParamsIfMissing = false;
 
-    // Create a default NETCLASS list so that things don't break horribly if there's no project
+    // Create a default NET_SETTINGS so that things don't break horribly if there's no project
     // loaded.  This also is used during file load for legacy boards that have netclasses stored
     // in the file.  After load, this information will be moved to the project and the pointer
     // updated.
-    m_netClasses = &m_internalNetClasses;
+    m_NetSettings = std::make_shared<NET_SETTINGS>( nullptr, "" );
 
     m_HasStackup = false;                   // no stackup defined by default
 
@@ -883,15 +882,9 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_boardThickness         = aOther.m_boardThickness;
     m_currentNetClassName    = aOther.m_currentNetClassName;
     m_stackup                = aOther.m_stackup;
-
-    // Only take the pointer from the other if it isn't the default
-    if( aOther.m_netClasses == &aOther.m_internalNetClasses )
-        m_netClasses = &m_internalNetClasses;
-    else
-        m_netClasses = aOther.m_netClasses;
-
-    m_Pad_Master          = std::make_unique<PAD>( *aOther.m_Pad_Master );
-    m_defaultZoneSettings = aOther.m_defaultZoneSettings;
+    m_NetSettings            = aOther.m_NetSettings;
+    m_Pad_Master             = std::make_unique<PAD>( *aOther.m_Pad_Master );
+    m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
 }
 
 
@@ -1049,28 +1042,12 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
 
 int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 {
-    int clearance = GetDefault()->GetClearance();
+    int clearance = m_NetSettings->m_DefaultNetClass->GetClearance();
 
-    for( const std::pair<const wxString, NETCLASSPTR>& netclass : GetNetClasses().NetClasses() )
-        clearance = std::min( clearance, netclass.second->GetClearance() );
+    for( const auto& [ name, netclass ] : m_NetSettings->m_NetClasses )
+        clearance = std::min( clearance, netclass->GetClearance() );
 
     return clearance;
-}
-
-
-int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaSize()
-{
-    NETCLASSPTR netclass = GetNetClasses().Find( m_currentNetClassName );
-
-    return netclass->GetuViaDiameter();
-}
-
-
-int BOARD_DESIGN_SETTINGS::GetCurrentMicroViaDrill()
-{
-    NETCLASSPTR netclass = GetNetClasses().Find( m_currentNetClassName );
-
-    return netclass->GetuViaDrill();
 }
 
 
@@ -1086,7 +1063,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaSize() const
     if( m_useCustomTrackVia )
         return m_customViaSize.m_Diameter;
     else if( m_viaSizeIndex == 0 )
-        return GetNetClasses().GetDefaultPtr()->GetViaDiameter();
+        return m_NetSettings->m_DefaultNetClass->GetViaDiameter();
     else
         return m_ViasDimensionsList[ m_viaSizeIndex ].m_Diameter;
 }
@@ -1099,7 +1076,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
     if( m_useCustomTrackVia )
         drill = m_customViaSize.m_Drill;
     else if( m_viaSizeIndex == 0 )
-        drill = GetNetClasses().GetDefaultPtr()->GetViaDrill();
+        drill = m_NetSettings->m_DefaultNetClass->GetViaDrill();
     else
         drill = m_ViasDimensionsList[ m_viaSizeIndex ].m_Drill;
 
@@ -1119,7 +1096,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
     if( m_useCustomTrackVia )
         return m_customTrackWidth;
     else if( m_trackWidthIndex == 0 )
-        return GetNetClasses().GetDefaultPtr()->GetTrackWidth();
+        return m_NetSettings->m_DefaultNetClass->GetTrackWidth();
     else
         return m_TrackWidthList[ m_trackWidthIndex ];
 }
@@ -1145,10 +1122,10 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairWidth() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( GetNetClasses().GetDefaultPtr()->HasDiffPairWidth() )
-            return GetNetClasses().GetDefaultPtr()->GetDiffPairWidth();
+        if( m_NetSettings->m_DefaultNetClass->HasDiffPairWidth() )
+            return m_NetSettings->m_DefaultNetClass->GetDiffPairWidth();
         else
-            return GetNetClasses().GetDefaultPtr()->GetTrackWidth();
+            return m_NetSettings->m_DefaultNetClass->GetTrackWidth();
     }
     else
     {
@@ -1165,10 +1142,10 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairGap() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( GetNetClasses().GetDefaultPtr()->HasDiffPairGap() )
-            return GetNetClasses().GetDefaultPtr()->GetDiffPairGap();
+        if( m_NetSettings->m_DefaultNetClass->HasDiffPairGap() )
+            return m_NetSettings->m_DefaultNetClass->GetDiffPairGap();
         else
-            return GetNetClasses().GetDefaultPtr()->GetClearance();
+            return m_NetSettings->m_DefaultNetClass->GetClearance();
     }
     else
     {
@@ -1185,8 +1162,8 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairViaGap() const
     }
     else if( m_diffPairIndex == 0 )
     {
-        if( GetNetClasses().GetDefaultPtr()->HasDiffPairViaGap() )
-            return GetNetClasses().GetDefaultPtr()->GetDiffPairViaGap();
+        if( m_NetSettings->m_DefaultNetClass->HasDiffPairViaGap() )
+            return m_NetSettings->m_DefaultNetClass->GetDiffPairViaGap();
         else
             return GetCurrentDiffPairGap();
     }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -682,7 +682,7 @@ template bool JSON_SETTINGS::fromLegacy<int>( wxConfigBase*, const std::string&,
                                               const std::string& );
 
 template bool JSON_SETTINGS::fromLegacy<double>( wxConfigBase*, const std::string&,
-                                              const std::string& );
+                                                 const std::string& );
 
 template bool JSON_SETTINGS::fromLegacy<bool>( wxConfigBase*, const std::string&,
                                                const std::string& );
@@ -749,7 +749,7 @@ void JSON_SETTINGS::AddNestedSettings( NESTED_SETTINGS* aSettings )
 
 void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
 {
-    if( !aSettings )
+    if( !aSettings || !m_manager )
         return;
 
     auto it = std::find_if( m_nested_settings.begin(), m_nested_settings.end(),

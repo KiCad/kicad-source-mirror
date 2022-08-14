@@ -1099,7 +1099,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 {
     PCB_TYPE_COLLECTOR     items;
 
-    static const KICAD_T    scanMODULEs[] = { PCB_FOOTPRINT_T, EOT };
+    static const KICAD_T   scanMODULEs[] = { PCB_FOOTPRINT_T, EOT };
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
     // Not all boards are exportable.  Check that all reference Ids are unique.
     // Unless they are unique, we cannot import the session file which comes
@@ -1206,12 +1208,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<rules>--------------------------------------------------------
     {
         char      rule[80];
-        NETCLASS* defaultClass = aBoard->GetDesignSettings().GetDefault();
-
-        int       defaultTrackWidth   = defaultClass->GetTrackWidth();
-        int       defaultClearance    = defaultClass->GetClearance();
-
-        double    clearance = scale( defaultClearance );
+        int       defaultTrackWidth = netSettings->m_DefaultNetClass->GetTrackWidth();
+        int       defaultClearance  = netSettings->m_DefaultNetClass->GetClearance();
+        double    clearance         = scale( defaultClearance );
 
         STRINGS&  rules = m_pcb->structure->rules->rules;
 
@@ -1608,8 +1607,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----< output vias used in netclasses >-----------------------------------
     {
-        NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
-
         // Assume the netclass vias are all the same kind of thru, blind, or buried vias.
         // This is in lieu of either having each netclass via have its own layer pair in
         // the netclass dialog, or such control in the specctra export dialog.
@@ -1621,9 +1618,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
 
-        NETCLASSPTR netclass = nclasses.GetDefault();
-
-        PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
+        PADSTACK*   via = makeVia( netSettings->m_DefaultNetClass->GetViaDiameter(),
+                                   netSettings->m_DefaultNetClass->GetViaDrill(),
                                    m_top_via_layer, m_bot_via_layer );
 
         // we AppendVia() this first one, there is no way it can be a duplicate,
@@ -1636,10 +1632,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // pcb->library->spareViaIndex = pcb->library->vias.size();
 
         // output the non-Default netclass vias
-        for( NETCLASSES::iterator nc = nclasses.begin(); nc != nclasses.end(); ++nc )
+        for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
         {
-            netclass = nc->second;
-
             via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
                            m_top_via_layer, m_bot_via_layer );
 
@@ -1781,19 +1775,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
     //-----<output NETCLASSs>----------------------------------------------------
-    NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
 
-    exportNETCLASS( nclasses.GetDefault(), aBoard );
+    exportNETCLASS( netSettings->m_DefaultNetClass, aBoard );
 
-    for( NETCLASSES::iterator nc = nclasses.begin(); nc != nclasses.end(); ++nc )
-    {
-        NETCLASSPTR netclass = nc->second;
+    for( const auto& [ name, netclass ] : netSettings->m_NetClasses )
         exportNETCLASS( netclass, aBoard );
-    }
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
+void SPECCTRA_DB::exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BOARD* aBoard )
 {
     /*  From page 11 of specctra spec:
      *
@@ -1829,13 +1819,15 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
     m_pcb->network->classes.push_back( clazz );
 
-    // freerouter creates a class named 'default' anyway, and if we
-    // try and use that, we end up with two 'default' via rules so use
-    // something else as the name of our default class.
+    // Freerouter creates a class named 'default' anyway, and if we try to use that we end up
+    // with two 'default' via rules so use something else as the name of our default class.
     clazz->class_id = TO_UTF8( aNetClass->GetName() );
 
-    for( NETCLASS::iterator net = aNetClass->begin(); net != aNetClass->end(); ++net )
-        clazz->net_ids.push_back( TO_UTF8( *net ) );
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+    {
+        if( net->GetNetClass()->GetName() == clazz->class_id )
+            clazz->net_ids.push_back( TO_UTF8( net->GetNetname() ) );
+    }
 
     clazz->rules = new RULE( clazz, T_rule );
 
@@ -1850,14 +1842,11 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
     clazz->rules->rules.push_back( text );
 
     if( aNetClass->GetName() == NETCLASS::Default )
-    {
         clazz->class_id = "kicad_default";
-    }
 
-    // the easiest way to get the via name is to create a via (which generates
-    // the name internal to the PADSTACK), and then grab the name and then
-    // delete the via.  There are not that many netclasses so
-    // this should never become a performance issue.
+    // The easiest way to get the via name is to create a temporary via (which generates the
+    // name internal to the PADSTACK), and then grab the name and delete the via.  There are not
+    // that many netclasses so this should never become a performance issue.
 
     PADSTACK* via = makeVia( aNetClass->GetViaDiameter(), aNetClass->GetViaDrill(),
                              m_top_via_layer, m_bot_via_layer );
@@ -1871,10 +1860,9 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
 void SPECCTRA_DB::FlipFOOTPRINTs( BOARD* aBoard )
 {
-    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
-    // top view.
-    // Note: to export footprints, the footprints must be flipped around the X axis,
-    // otherwise the rotation angle is not good
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.
+    // Note: to export footprints, the footprints must be flipped around the X axis, otherwise
+    // the rotation angle is not good.
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         footprint->SetFlag( 0 );
