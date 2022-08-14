@@ -623,14 +623,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
     {
         LAYER* curLayer = &Assignments.Layerdefs.Layers.at( layerPair.first );
 
-        //Only remap layers that we aren't sure about
-        if( curLayer->Type == LAYER_TYPE::DOC
-                || ( curLayer->Type == LAYER_TYPE::NONELEC
-                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_NONE )
-                || ( curLayer->Type == LAYER_TYPE::NONELEC
-                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_ROUT )
-                || ( curLayer->Type == LAYER_TYPE::NONELEC
-                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_CLEARANCE ) )
+        //Only remap documentation and non-electrical layers
+        if( curLayer->Type == LAYER_TYPE::NONELEC || curLayer->Type == LAYER_TYPE::DOC )
         {
             INPUT_LAYER_DESC iLdesc;
             iLdesc.Name            = curLayer->Name;
