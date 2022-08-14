@@ -533,14 +533,17 @@ void PANEL_SETUP_NETCLASSES::OnAddNetclassClick( wxCommandEvent& event )
     {
         for( int col = GRID_FIRST_EESCHEMA; col < GRID_END; col++ )
         {
-            col -= GRID_FIRST_EESCHEMA;
-            m_netclassGrid->SetCellValue( row, col, m_netclassGrid->GetCellValue( 0, col ) );
+            wxString defaultValue = m_netclassGrid->GetCellValue( 0, col - EESCHEMA_COL_OFFSET );
+            m_netclassGrid->SetCellValue( row, col - EESCHEMA_COL_OFFSET, defaultValue );
         }
     }
     else
     {
         for( int col = GRID_FIRST_PCBNEW; col < GRID_FIRST_EESCHEMA; col++ )
-            m_netclassGrid->SetCellValue( row, col, m_netclassGrid->GetCellValue( 0, col ) );
+        {
+            wxString defaultValue = m_netclassGrid->GetCellValue( 0, col );
+            m_netclassGrid->SetCellValue( row, col, defaultValue );
+        }
     }
 
     m_netclassGrid->MakeCellVisible( row, 0 );
