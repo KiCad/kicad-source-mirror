@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
+"PO-Revision-Date: 2022-08-15 08:15+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -94,24 +94,24 @@ msgid "Last render time %.0f ms"
 msgstr "เวลาเรนเดอร์ล่าสุด %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "เน็ต %s เน็ตคลาส %s"
+msgstr "เน็ต %s\tเน็ตคลาส %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s และ %s"
+msgstr "แพ็ด %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "พื้นที่กฎบน %s"
+msgstr "กฎพื้นที่ %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "โซน"
+msgstr "โซน %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -128,7 +128,7 @@ msgstr "อ่าน OpenGL: เลเยอร์"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:577
 #, c-format
 msgid "Load OpenGL layer %d"
-msgstr "อ่านเลเยอร์ OpenGL %d"
+msgstr "อ่าน OpenGL เลเยอร์ %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:676
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:789
