@@ -161,6 +161,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
                    "re-use block information has been discarded during the import." ) );
     }
 
+    wxLogWarning( _( "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+                     "in alignment issues that may cause DRC errors. Please review the imported "
+                     "text elements carefully and correct manually if required." ) );
+
     wxLogMessage(
             _( "The CADSTAR design has been imported successfully.\n"
                "Please review the import errors and warnings (if any)." ) );
