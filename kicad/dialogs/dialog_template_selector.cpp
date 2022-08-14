@@ -24,6 +24,7 @@
 
 #include "dialog_template_selector.h"
 #include <bitmaps.h>
+#include <wx_filename.h>
 #include <wx/dir.h>
 #include <wx/dirdlg.h>
 #include <wx/settings.h>
@@ -182,7 +183,7 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplatesPage( const wxString& aTitle, wxFileN
 {
     wxNotebookPage* newPage = new wxNotebookPage( m_notebook, wxID_ANY );
 
-    aPath.Normalize();
+    aPath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     wxString path = aPath.GetFullPath();    // caller ensures this ends with file separator.
 
     TEMPLATE_SELECTION_PANEL* tpanel = new TEMPLATE_SELECTION_PANEL( newPage, path );
@@ -246,7 +247,7 @@ void DIALOG_TEMPLATE_SELECTOR::onDirectoryBrowseClicked( wxCommandEvent& event )
 {
     wxFileName fn;
     fn.AssignDir( m_tcTemplatePath->GetValue() );
-    fn.Normalize();
+    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     wxString currPath = fn.GetFullPath();
 
     wxDirDialog dirDialog( this, _( "Select Templates Directory" ), currPath,
@@ -275,7 +276,7 @@ void DIALOG_TEMPLATE_SELECTOR::onReload( wxCommandEvent& event )
 
     wxFileName fn;
     fn.AssignDir( m_tcTemplatePath->GetValue() );
-    fn.Normalize();
+    fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     currPath = fn.GetFullPath();
     m_tcTemplatePath->SetValue( currPath );
 

@@ -26,7 +26,6 @@
 #include <mutex>
 #include <sstream>
 
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 #include <pgm_base.h>
@@ -34,6 +33,7 @@
 
 #include "common.h"
 #include "filename_resolver.h"
+#include <wx_filename.h>
 
 // configuration file version
 #define CFGFILE_VERSION 1
@@ -66,7 +66,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
 
     wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), "" );
 
-    cfgdir.Normalize();
+    cfgdir.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !cfgdir.DirExists() )
         return false;
@@ -87,7 +87,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
 
     wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), "" );
 
-    projdir.Normalize();
+    projdir.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !projdir.DirExists() )
         return false;
@@ -187,7 +187,7 @@ bool FILENAME_RESOLVER::createPathList()
             else
             {
                 fndummy.Assign( pathVal, "" );
-                fndummy.Normalize();
+                fndummy.Normalize( FN_NORMALIZE_FLAGS );
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
 
@@ -267,7 +267,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // working directory (which is not necessarily the current project directory)
     if( tmpFN.FileExists() )
     {
-        tmpFN.Normalize();
+        tmpFN.Normalize( FN_NORMALIZE_FLAGS );
         tname = tmpFN.GetFullPath();
 
         // special case: if a path begins with ${ENV_VAR} but is not in the resolver's path list
@@ -314,7 +314,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( wxFileName::FileExists( fullPath ) )
         {
             tmpFN.Assign( fullPath );
-            tmpFN.Normalize();
+            tmpFN.Normalize( FN_NORMALIZE_FLAGS );
             tname = tmpFN.GetFullPath();
             return tname;
         }
@@ -331,7 +331,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
         fpath.Assign( fullPath );
 
-        if( fpath.Normalize() && fpath.FileExists() )
+        if( fpath.Normalize( FN_NORMALIZE_FLAGS ) && fpath.FileExists() )
         {
             tname = fpath.GetFullPath();
             return tname;
@@ -379,7 +379,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
                 wxFileName tmp( fullPath );
 
-                if( tmp.Normalize() )
+                if( tmp.Normalize( FN_NORMALIZE_FLAGS ) )
                     tname = tmp.GetFullPath();
 
                 return tname;
@@ -420,7 +420,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), "" );
 
-    path.Normalize();
+    path.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !path.DirExists() )
     {
@@ -494,7 +494,11 @@ bool FILENAME_RESOLVER::readPathList()
     }
 
     wxFileName cfgpath( m_configDir, RESOLVER_CONFIG );
-    cfgpath.Normalize();
+
+    // This should be the same as wxWidgets 3.0 wxPATH_NORM_ALL which is deprecated in 3.1.
+    // There are known issues with environment variable expansion so maybe we should be using
+    // our own ExpandEnvVarSubstitutions() here instead.
+    cfgpath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     wxString cfgname = cfgpath.GetFullPath();
 
     size_t nitems = m_paths.size();
@@ -714,7 +718,7 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
     wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), "" );
 
     wxUniChar psep = tmpFN.GetPathSeparator();
-    tmpFN.Normalize();
+    tmpFN.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !tmpFN.DirExists() )
         return;

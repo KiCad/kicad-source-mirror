@@ -31,13 +31,12 @@
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
 
-#include <wx/filename.h>
 #include <wx/wxcrtvararg.h>
 
 #include <memory>
 #include <string>
 
-
+#include <wx_filename.h>
 
 
 KICADPCB::KICADPCB( const wxString& aPcbName )
@@ -92,7 +91,7 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
         return false;
     }
 
-    fname.Normalize();
+    fname.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     m_filename = fname.GetFullPath();
 
     try

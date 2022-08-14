@@ -65,6 +65,7 @@
 #include <locale_io.h>
 
 #include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 #include <sch_sheet_path.h>
 #include <wx/filedlg.h>
 
@@ -1843,7 +1844,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( !fn.IsAbsolute() )
             {
                 wxFileName currentSheetFileName = pasteRoot.LastScreen()->GetFileName();
-                fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
+                fn.Normalize(  FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
+                               currentSheetFileName.GetPath() );
             }
 
             // Try to find the screen for the pasted sheet by several means

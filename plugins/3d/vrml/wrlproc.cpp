@@ -24,10 +24,10 @@
 
 #include <iostream>
 #include <sstream>
-#include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/log.h>
 #include "wrlproc.h"
+#include <wx_filename.h>
 
 #define GETLINE                                                                                \
     do                                                                                         \
@@ -78,7 +78,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     wxFileName fn( tname );
 
     if( fn.IsRelative() )
-        fn.Normalize();
+        fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     m_filedir = fn.GetPathWithSep().ToUTF8();
 

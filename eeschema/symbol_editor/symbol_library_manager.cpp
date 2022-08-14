@@ -31,6 +31,7 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <profile.h>
+#include <wx_filename.h>
 #include <sch_io_mgr.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <symbol_lib_table.h>
@@ -210,10 +211,10 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         if( row )
         {
             original = row->GetFullURI( true );
-            original.Normalize();
+            original.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
         }
 
-        destination.Normalize();
+        destination.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
         if( res && original == destination )
             libBuf.ClearDeletedBuffer();

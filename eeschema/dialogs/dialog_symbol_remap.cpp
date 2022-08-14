@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 #include <wx_html_report_panel.h>
 
 #include <symbol_library.h>
@@ -201,7 +202,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             wxFileName tmpFn = fullFileName;
 
             // Don't add symbol libraries that do not exist.
-            if( tmpFn.Normalize() && tmpFn.FileExists() )
+            if( tmpFn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS ) && tmpFn.FileExists() )
             {
                 msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
                             libName,
