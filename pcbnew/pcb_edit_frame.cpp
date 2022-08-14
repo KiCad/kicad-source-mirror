@@ -1767,8 +1767,7 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     {
         DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );
 
-        // We use quasi modal to allow displaying help dialogs.
-        dlg.ShowQuasiModal();
+        dlg.ShowModal();
         retvalue = dlg.GetReturnValue();
     }
 
