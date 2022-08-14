@@ -26,8 +26,9 @@
 #include <sstream>
 #include <utility>
 #include <wx/string.h>
-#include <wx/filename.h>
 #include <wx/log.h>
+
+#include <wx_filename.h>
 
 #include "vrml2_base.h"
 #include "vrml2_transform.h"
@@ -128,7 +129,7 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
         fn.Assign( fname );
     }
 
-    if( !fn.Normalize() )
+    if( !fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS ) )
     {
         m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, nullptr ) );
         return nullptr;

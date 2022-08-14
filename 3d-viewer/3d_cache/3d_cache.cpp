@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 
 #include <wx/datetime.h>
 #include <wx/dir.h>
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 
@@ -55,6 +54,7 @@
 #include <project.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <wx_filename.h>
 
 
 #define MASK_3D_CACHE "3D_CACHE"
@@ -514,7 +514,7 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
 
     wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), wxEmptyString );
 
-    cfgdir.Normalize();
+    cfgdir.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !cfgdir.DirExists() )
     {

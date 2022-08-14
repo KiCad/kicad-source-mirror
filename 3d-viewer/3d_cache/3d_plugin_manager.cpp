@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,13 +29,13 @@
 
 #include <wx/dir.h>
 #include <wx/dynlib.h>
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
 #include <common.h>
 #include <paths.h>
+#include <wx_filename.h>
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
@@ -288,7 +288,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
 
     wxFileName path( ExpandEnvVarSubstitutions( aPath, nullptr ) );
 
-    path.Normalize();
+    path.Normalize( FN_NORMALIZE_FLAGS );
 
     // determine if the path is already in the list
     wxString wxpath = path.GetFullPath();
@@ -326,7 +326,7 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
     else
         path.Assign( aPath, wxEmptyString );
 
-    path.Normalize();
+    path.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !wxFileName::DirExists( path.GetFullPath() ) )
         return;

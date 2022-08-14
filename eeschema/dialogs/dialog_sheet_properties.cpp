@@ -29,6 +29,7 @@
 #include <wx/tooltip.h>
 #include <confirm.h>
 #include <validators.h>
+#include <wx_filename.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/tab_traversal.h>
 #include <sch_edit_frame.h>
@@ -425,7 +426,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     // SCH_SCREEN file names are always absolute.
     wxFileName currentScreenFileName = currentScreen->GetFileName();
 
-    if( !screenFileName.Normalize( wxPATH_NORM_ALL, currentScreenFileName.GetPath() ) )
+    if( !screenFileName.Normalize(  FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
+                                    currentScreenFileName.GetPath() ) )
     {
         msg = wxString::Format( _( "Cannot normalize new sheet schematic file path:\n"
                                    "'%s'\n"

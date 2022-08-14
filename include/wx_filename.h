@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,18 @@
 #define WX_FILENAME_H
 
 #include <wx/filename.h>
+
+/**
+ * Default flags to pass to wxFileName::Normalize().
+ *
+ * @note wxPATH_NORM_ALL is deprecated in wxWidgets 3.1 and later.  wxPATH_NORM_ENV_VARS
+ *       is not included because it has some known issues and we typically use our own
+ *       ExpandEnvVarSubstitutions() for handling environment variable expansion.  If
+ *       ExpandEnvVarSubstitutions() is not used, logically or wxPATH_NORM_ENV_VARS to
+ *       this.
+ */
+#define FN_NORMALIZE_FLAGS ( wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE | \
+                             wxPATH_NORM_LONG | wxPATH_NORM_SHORTCUT )
 
 /**
  * A wrapper around a wxFileName which is much more performant with a subset of the API.

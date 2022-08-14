@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -52,6 +52,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <dialog_shim.h>
+#include <wx_filename.h>
 
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
@@ -1123,7 +1124,7 @@ wxString SIM_PLOT_FRAME::getDefaultPath()
 {
     wxFileName path = m_simulator->Settings()->GetWorkbookFilename();
 
-    path.Normalize( wxPATH_NORM_ALL, Prj().GetProjectPath() );
+    path.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, Prj().GetProjectPath() );
     return path.GetPath();
 }
 

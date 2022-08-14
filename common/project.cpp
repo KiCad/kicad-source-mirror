@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,7 +273,7 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
     if( !fn.IsAbsolute() )
     {
         wxString pro_dir = wxPathOnly( GetProjectFullName() );
-        fn.Normalize( wxPATH_NORM_ALL, pro_dir );
+        fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, pro_dir );
     }
 
     return fn.GetFullPath();

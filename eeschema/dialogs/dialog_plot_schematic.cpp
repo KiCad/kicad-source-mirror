@@ -4,7 +4,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <trace_helpers.h>
 #include <settings/settings_manager.h>
 #include <drawing_sheet/ds_painter.h>
+#include <wx_filename.h>
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
@@ -1283,7 +1284,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             fn.SetName( wxEmptyString );
             fn.SetExt( wxEmptyString );
 
-            if( fn.Normalize() )
+            if( fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS ) )
             {
                 path = fn.GetPath();
             }
@@ -1318,7 +1319,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
         // Build the absolute path of current output directory and the project path.
         fn.SetPath( Prj().GetProjectPath() + path );
 
-        if( fn.Normalize() )
+        if( fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS ) )
         {
             path = fn.GetPath();
         }

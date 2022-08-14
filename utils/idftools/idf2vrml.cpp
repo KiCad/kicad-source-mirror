@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017  Cirilo Bernardo
+ * Copyright (C) 2014-2017 Cirilo Bernardo
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +36,6 @@
 #include <wx/cmdline.h>
 #include <wx/log.h>
 #include <wx/string.h>
-#include <wx/filename.h>
 
 #include <iostream>
 #include <iomanip>
@@ -52,6 +52,8 @@
 #include <cstring>
 #include <algorithm>
 #include <boost/ptr_container/ptr_map.hpp>
+
+#include <wx_filename.h>
 
 #include "idf_helpers.h"
 #include "idf_common.h"
@@ -259,7 +261,7 @@ int IDF2VRML::OnRun()
     // Create the VRML file and write the header
     wxFileName fname( m_filename );
     fname.SetExt( wxT( "wrl" ) );
-    fname.Normalize();
+    fname.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     wxLogMessage( wxT( "Writing file: '%s'" ), fname.GetFullName() );
 
     OPEN_OSTREAM( ofile, fname.GetFullPath().ToUTF8() );

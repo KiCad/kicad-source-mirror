@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <filename_resolver.h>
 #include <pcbnew/footprint.h>
+#include <wx_filename.h>
 
 #include <wx/filedlg.h>
 
@@ -164,7 +165,7 @@ bool DIALOG_SELECT_3DMODEL::TransferDataFromWindow()
     // file selection mode: retrieve the filename and specify a
     // path relative to one of the config paths
     wxFileName fname = m_FileTree->GetFilePath();
-    fname.Normalize();
+    fname.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     m_model->m_Filename = m_resolver->ShortenPath( fname.GetFullPath() );
 
     return true;

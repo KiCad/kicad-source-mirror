@@ -30,6 +30,7 @@
 #include "pgm_base.h"
 #include "picosha2.h"
 #include "settings/settings_manager.h"
+#include <wx_filename.h>
 
 #include <fstream>
 #include <iomanip>
@@ -73,8 +74,8 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 
     // Read and store pcm schema
     wxFileName schema_file( PATHS::GetStockDataPath( true ), wxT( "pcm.v1.schema.json" ) );
-    schema_file.Normalize();
-    schema_file.AppendDir( wxT( "schemas" ) );
+    schema_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    schema_file.AppendDir( "schemas" );
 
     std::ifstream  schema_stream( schema_file.GetFullPath().ToUTF8() );
     nlohmann::json schema;

@@ -30,11 +30,12 @@
 #include <sstream>
 
 #include <wx/fileconf.h>
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/thread.h>
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
+
+#include <wx_filename.h>
 
 #include "3d_resolver.h"
 
@@ -138,7 +139,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     {
         if( tmpFN.FileExists() )
         {
-            tmpFN.Normalize();
+            tmpFN.Normalize( FN_NORMALIZE_FLAGS );
             return tmpFN.GetFullPath();
         }
         else
@@ -149,7 +150,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
 
     // this case covers full paths, leading expanded vars, and paths relative to the current
     // working directory (which is not necessarily the current project directory)
-    tmpFN.Normalize();
+    tmpFN.Normalize( FN_NORMALIZE_FLAGS );
 
     if( tmpFN.FileExists() )
     {
@@ -194,7 +195,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
             fullPath = expandVars( fullPath );
 
         tmpFN.Assign( fullPath );
-        tmpFN.Normalize();
+        tmpFN.Normalize( FN_NORMALIZE_FLAGS );
 
         if( tmpFN.FileExists() )
         {
@@ -217,7 +218,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
         fullPath.Append( tname );
         fullPath = expandVars( fullPath );
         fpath.Assign( fullPath );
-        fpath.Normalize();
+        fpath.Normalize( FN_NORMALIZE_FLAGS );
 
         if( fpath.FileExists() )
         {
@@ -258,7 +259,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
                 fullPath = expandVars( fullPath );
 
             wxFileName tmp( fullPath );
-            tmp.Normalize();
+            tmp.Normalize( FN_NORMALIZE_FLAGS );
 
             if( tmp.FileExists() )
             {
@@ -295,8 +296,8 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #endif
 
-    wxFileName path( tpath.m_Pathvar, wxEmptyString );
-    path.Normalize();
+    wxFileName path( tpath.m_Pathvar, wxT( "" ) );
+    path.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     if( !path.DirExists() )
     {
@@ -364,7 +365,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 bool S3D_RESOLVER::readPathList( void )
 {
     wxFileName cfgpath( wxStandardPaths::Get().GetTempDir(), S3D_RESOLVER_CONFIG );
-    cfgpath.Normalize();
+    cfgpath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     wxString cfgname = cfgpath.GetFullPath();
 
     size_t nitems = m_Paths.size();
@@ -487,7 +488,7 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
     lpath.m_Pathvar = lpath.m_Alias;
     wxFileName tmpFN( lpath.m_Alias, wxEmptyString );
     wxUniChar psep = tmpFN.GetPathSeparator();
-    tmpFN.Normalize();
+    tmpFN.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     if( !tmpFN.DirExists() )
         return;
