@@ -1723,7 +1723,7 @@ bool DRC_ENGINE::IsNetTie( BOARD_ITEM* aItem )
 
 DRC_TEST_PROVIDER* DRC_ENGINE::GetTestProvider( const wxString& name ) const
 {
-    for( auto prov : m_testProviders )
+    for( DRC_TEST_PROVIDER* prov : m_testProviders )
     {
         if( name == prov->GetName() )
             return prov;

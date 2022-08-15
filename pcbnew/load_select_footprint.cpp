@@ -391,10 +391,10 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 
     oldName = fpname;
 
-    for( auto mod : aPcb->Footprints() )
+    for( FOOTPRINT* fp : aPcb->Footprints() )
     {
-        if( fpname == mod->GetReference() )
-            return mod;
+        if( fpname == fp->GetReference() )
+            return fp;
     }
 
     return nullptr;

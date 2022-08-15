@@ -725,7 +725,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
     PCB_LAYER_COLLECTOR collector;
     LSEQ newLayerSeq = newLayers.Seq();
 
-    for( auto layer_id : curLayers.Seq() )
+    for( PCB_LAYER_ID layer_id : curLayers.Seq() )
     {
         if( IsCopperLayer( layer_id ) ) // Copper layers are not taken into account here
             continue;

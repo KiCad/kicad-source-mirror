@@ -128,7 +128,7 @@ bool FABMASTER::Read( const std::string& aFile )
 
     bool quoted = false;
 
-    for( auto ch : buffer )
+    for( auto& ch : buffer )
     {
         switch( ch )
         {

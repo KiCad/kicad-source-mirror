@@ -129,7 +129,7 @@ void PCB_GROUP::SetPosition( const VECTOR2I& aNewpos )
 
 void PCB_GROUP::SetLayerRecursive( PCB_LAYER_ID aLayer, int aDepth )
 {
-    for( auto item : m_items )
+    for( BOARD_ITEM* item : m_items )
     {
         if( ( item->Type() == PCB_GROUP_T ) && ( aDepth > 0 ) )
         {

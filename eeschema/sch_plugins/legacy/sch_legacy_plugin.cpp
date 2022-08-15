@@ -244,7 +244,7 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             aSheet->GetScreen()->SetFileReadOnly( !fileName.IsFileWritable() );
             aSheet->GetScreen()->SetFileExists( true );
 
-            for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+            for( SCH_ITEM* aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
             {
                 wxCHECK2( aItem->Type() == SCH_SHEET_T, continue );
                 auto sheet = static_cast<SCH_SHEET*>( aItem );
@@ -1466,7 +1466,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
     auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
-    for( auto item : screen->Items() )
+    for( SCH_ITEM* item : screen->Items() )
         save_map.insert( item );
 
 

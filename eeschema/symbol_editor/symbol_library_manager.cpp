@@ -1209,7 +1209,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
             aSymbolBuf->SetOriginal( new LIB_SYMBOL( *libSymbol ) );
 
             // Save the derived symbols.
-            for( auto entry : derivedSymbols )
+            for( const wxString& entry : derivedSymbols )
             {
                 std::shared_ptr<SYMBOL_BUFFER> symbol = GetBuffer( entry );
 
@@ -1241,7 +1241,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
 std::shared_ptr<SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER>
 SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetBuffer( const wxString& aAlias ) const
 {
-    for( auto entry : m_symbols )
+    for( std::shared_ptr<SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER> entry : m_symbols )
     {
         if( entry->GetSymbol()->GetName() == aAlias )
             return entry;
@@ -1253,7 +1253,7 @@ SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetBuffer( const wxString& aAlias ) const
 
 bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
 {
-    for( auto entry : m_symbols )
+    for( auto& entry : m_symbols )
     {
         if( entry->GetSymbol()->IsAlias() )
         {
@@ -1288,7 +1288,7 @@ size_t SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString
 {
     wxCHECK( !aSymbolName.IsEmpty(), 0 );
 
-    for( auto entry : m_symbols )
+    for( auto& entry : m_symbols )
     {
         if( entry->GetSymbol()->IsAlias() )
         {

@@ -433,7 +433,7 @@ public:
 
     void ClearDirtyFlags()
     {
-        for( auto item : m_items )
+        for( CN_ITEM* item : m_items )
             item->SetDirty( false );
 
         SetDirty( false );

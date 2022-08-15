@@ -73,9 +73,7 @@ NGSPICE::NGSPICE() :
 }
 
 
-NGSPICE::~NGSPICE()
-{
-}
+NGSPICE::~NGSPICE() = default;
 
 
 void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
@@ -595,7 +593,7 @@ bool NGSPICE::loadSpinit( const string& aFileName )
     if( !file.Open( aFileName ) )
         return false;
 
-    for( auto cmd = file.GetFirstLine(); !file.Eof(); cmd = file.GetNextLine() )
+    for( wxString& cmd = file.GetFirstLine(); !file.Eof(); cmd = file.GetNextLine() )
         Command( cmd.ToStdString() );
 
     return true;

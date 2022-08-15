@@ -174,7 +174,7 @@ int LIB_ID::HasIllegalChars( const UTF8& aLibItemName )
 {
     int offset = 0;
 
-    for( auto ch : aLibItemName )
+    for( auto& ch : aLibItemName )
     {
         if( !isLegalChar( ch ) )
             return offset;

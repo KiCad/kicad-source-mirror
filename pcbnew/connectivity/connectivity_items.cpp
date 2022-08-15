@@ -387,7 +387,7 @@ bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
 
 void CN_CLUSTER::Dump()
 {
-    for( auto item : m_items )
+    for( CN_ITEM* item : m_items )
     {
         wxLogTrace( wxT( "CN" ), wxT( " - item : %p bitem : %p type : %d inet %s\n" ),
                     item,

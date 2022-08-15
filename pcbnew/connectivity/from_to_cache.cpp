@@ -59,7 +59,7 @@ enum PATH_STATUS {
 
 static bool isVertexVisited( CN_ITEM* v, const std::vector<CN_ITEM*>& path )
 {
-    for( auto u : path )
+    for( CN_ITEM* u : path )
     {
         if ( u == v )
             return true;
@@ -95,11 +95,11 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
             pathFound = true;
         }
 
-        for( auto ci : last->ConnectedItems() )
+        for( CN_ITEM* ci : last->ConnectedItems() )
         {
             bool vertexVisited = isVertexVisited( ci, path );
 
-            for( auto& p : Q )
+            for( std::vector<CN_ITEM*>& p : Q )
                 if( isVertexVisited( ci, p ) )
                 {
                     vertexVisited = true;

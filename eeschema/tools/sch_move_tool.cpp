@@ -584,7 +584,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                     // Update our cache of the connected items.
 
                                     // First, re-attach our drag labels to the original line being re-merged.
-                                    for( auto possibleLabel : m_lineConnectionCache[bendLine] )
+                                    for( EDA_ITEM* possibleLabel : m_lineConnectionCache[bendLine] )
                                     {
                                         switch( possibleLabel->Type() )
                                         {
@@ -684,7 +684,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                                 // Update our cache of the connected items.
                                 // First, attach our drag labels to the line left behind.
-                                for( auto possibleLabel : m_lineConnectionCache[line] )
+                                for( EDA_ITEM* possibleLabel : m_lineConnectionCache[line] )
                                 {
                                     switch( possibleLabel->Type() )
                                     {
@@ -1588,7 +1588,7 @@ void SCH_MOVE_TOOL::setTransitions()
 
 void SCH_MOVE_TOOL::commitDragLines()
 {
-    for( auto newLine : m_newDragLines )
+    for( SCH_LINE* newLine : m_newDragLines )
     {
         newLine->ClearEditFlags();
         saveCopyInUndoList( newLine, UNDO_REDO::NEWITEM, true );
@@ -1596,7 +1596,7 @@ void SCH_MOVE_TOOL::commitDragLines()
 
     // These lines have been changed, but aren't selected. We need
     // to manually clear these edit flags or they'll stick around.
-    for( auto oldLine : m_changedDragLines )
+    for( SCH_LINE* oldLine : m_changedDragLines )
     {
         oldLine->ClearEditFlags();
     }

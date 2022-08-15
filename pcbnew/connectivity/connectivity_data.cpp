@@ -824,11 +824,11 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItemsAtA
     std::vector<BOARD_CONNECTED_ITEM*> rv;
     SEG::ecoord                        maxErrorSq = (SEG::ecoord) aMaxError * aMaxError;
 
-    for( auto cnItem : entry.GetItems() )
+    for( CN_ITEM* cnItem : entry.GetItems() )
     {
-        for( auto connected : cnItem->ConnectedItems() )
+        for( CN_ITEM* connected : cnItem->ConnectedItems() )
         {
-            for( auto anchor : connected->Anchors() )
+            for( std::shared_ptr<CN_ANCHOR>& anchor : connected->Anchors() )
             {
                 if( ( anchor->Pos() - aAnchor ).SquaredEuclideanNorm() <= maxErrorSq )
                 {
@@ -995,7 +995,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
     std::set<const PAD*> pads;
     std::vector<CN_EDGE> edges;
 
-    for( auto pad : aComponent->Pads() )
+    for( PAD* pad : aComponent->Pads() )
     {
         nets.insert( pad->GetNetCode() );
         pads.insert( pad );

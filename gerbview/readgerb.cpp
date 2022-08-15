@@ -102,7 +102,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
             // (maybe convert geometry into positives?)
         }
 
-        for( auto item : gerber->GetItems() )
+        for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
             GetCanvas()->GetView()->Add( (KIGFX::VIEW_ITEM*) item );
     }
 

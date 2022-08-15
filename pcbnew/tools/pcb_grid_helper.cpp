@@ -133,7 +133,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& a
 
     int min_d = std::numeric_limits<int>::max();
 
-    for( auto pt : { aArc.GetP0(), aArc.GetP1() } )
+    for( VECTOR2I& pt : { aArc.GetP0(), aArc.GetP1() } )
     {
         int d = ( pt - aPoint ).EuclideanNorm();
 
