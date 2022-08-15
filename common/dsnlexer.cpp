@@ -855,9 +855,19 @@ double DSNLEXER::parseDouble()
     return fval;
 #else
     // Use std::from_chars which is designed to be locale independent and performance oriented for data interchange
+
+    const std::string& str = CurStr();
+
+    // Offset any leading whitespace, this is one thing from_chars does not handle
+    int woff = 0;
+    while( std::isspace( str[woff] ) && woff < str.length() )
+    {
+        woff++;
+    }
+
     double                 dval{};
-    const std::string&     str = CurStr();
-    std::from_chars_result res = std::from_chars( str.data(), str.data() + str.size(), dval );
+    std::from_chars_result res =
+            std::from_chars( str.data() + woff, str.data() + str.size(), dval );
 
     if( res.ec != std::errc() )
     {
