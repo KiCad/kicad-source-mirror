@@ -535,6 +535,11 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
     std::set<ITEM*> visited;
     std::deque<ITEM*> pending;
 
+    COLLISION_SEARCH_OPTIONS opts;
+
+    opts.m_differentNetsOnly = false;
+    opts.m_overrideClearance = 0;
+
     pending.push_back( aStart );
 
     while( !pending.empty() )
@@ -546,7 +551,7 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
         visited.insert( top );
 
-        m_world->QueryColliding( top, obstacles, ITEM::ANY_T, -1, false, 0 ); // only query touching objects
+        m_world->QueryColliding( top, obstacles, opts ); // only query touching objects
 
         for( OBSTACLE& obs : obstacles )
         {
