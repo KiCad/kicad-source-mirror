@@ -437,6 +437,15 @@ public:
     }
 
     /**
+     * Return buses and wires passing through aPosition.
+     *
+     * @param aPosition Position to search for
+     * @param aIgnoreEndpoints If true, ignore wires/buses with end points matching aPosition
+     * @return Buses and wires
+    */
+    std::vector<SCH_LINE*> GetBusesAndWires( const VECTOR2I& aPosition, bool aIgnoreEndpoints = false ) const;
+
+    /**
      * Return a label item located at \a aPosition.
      *
      * @param[in] aPosition The VECTOR2I to test for label items.

@@ -1382,6 +1382,29 @@ SCH_LINE* SCH_SCREEN::GetLine( const VECTOR2I& aPosition, int aAccuracy, int aLa
 }
 
 
+std::vector<SCH_LINE*> SCH_SCREEN::GetBusesAndWires( const VECTOR2I& aPosition,
+                                                     bool            aIgnoreEndpoints ) const
+{
+    std::vector<SCH_LINE*> retVal;
+
+    for( SCH_ITEM* item : Items().Overlapping( SCH_LINE_T, aPosition ) )
+    {
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+            if( aIgnoreEndpoints && wire->IsEndPoint( aPosition ) )
+                continue;
+
+            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), aPosition ) )
+                retVal.push_back( wire );
+        }
+    }
+
+    return retVal;
+}
+
+
 SCH_LABEL_BASE* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )

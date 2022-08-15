@@ -325,24 +325,9 @@ bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen 
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
-    bool                   brokenSegments = false;
-    std::vector<SCH_LINE*> wires;
+    bool brokenSegments = false;
 
-    for( SCH_ITEM* item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
-    {
-        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
-        {
-            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
-
-            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), aPoint )
-                    && !wire->IsEndPoint( aPoint ) )
-            {
-                wires.push_back( wire );
-            }
-        }
-    }
-
-    for( SCH_LINE* wire : wires )
+    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPoint, true ) )
     {
         BreakSegment( wire, aPoint, nullptr, aScreen );
         brokenSegments = true;
