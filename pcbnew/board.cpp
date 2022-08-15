@@ -207,6 +207,7 @@ void BOARD::ClearProject()
         project.m_BoardSettings = nullptr;
     }
 
+    GetDesignSettings().m_NetSettings = nullptr;
     GetDesignSettings().SetParent( nullptr );
     m_project = nullptr;
 }
