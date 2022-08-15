@@ -83,8 +83,8 @@ public:
      * @param title is the title of the notebook page.
      * @param id_NetType is the netlist ID type.
      */
-    NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
-                         NETLIST_TYPE_ID id_NetType );
+    NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& aTitle,
+                         NETLIST_TYPE_ID aIdNetType, bool aCustom );
     ~NETLIST_PAGE_DIALOG() { };
 
     /**
@@ -103,8 +103,12 @@ public:
     wxBoxSizer*       m_RightOptionsBoxSizer;
     wxBoxSizer*       m_LowBoxSizer;
 
+    bool IsCustom() const { return m_custom; }
+
 private:
     wxString          m_pageNetFmtName;
+
+    bool              m_custom;
 };
 
 
@@ -125,6 +129,8 @@ private:
     void InstallPageSpice();
     bool TransferDataFromWindow() override;
     void NetlistUpdateOpt();
+
+    void updateGeneratorButtons();
 
     // Called when changing the notebook page (and therefore the current netlist format)
     void OnNetlistTypeSelection( wxNotebookEvent& event ) override;
@@ -208,18 +214,19 @@ BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
 END_EVENT_TABLE()
 
 
-NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
-                                          NETLIST_TYPE_ID id_NetType ) :
-        wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
+NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& aTitle,
+                                          NETLIST_TYPE_ID aIdNetType, bool aCustom ) :
+        wxPanel( aParent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 {
-    m_IdNetType           = id_NetType;
-    m_pageNetFmtName      = title;
+    m_IdNetType           = aIdNetType;
+    m_pageNetFmtName      = aTitle;
     m_CommandStringCtrl   = nullptr;
     m_TitleStringCtrl     = nullptr;
     m_SaveAllVoltages     = nullptr;
     m_SaveAllCurrents     = nullptr;
+    m_custom              = aCustom;
 
-    parent->AddPage( this, title, false );
+    aParent->AddPage( this, aTitle, false );
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( MainBoxSizer );
@@ -248,14 +255,14 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
         page = nullptr;
 
     // Add notebook pages:
-    m_PanelNetType[PANELPCBNEW] = new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "KiCad" ),
-                                                           NET_TYPE_PCBNEW );
+    m_PanelNetType[PANELPCBNEW] =
+            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
 
-    m_PanelNetType[PANELORCADPCB2] = new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "OrcadPCB2" ),
-                                                              NET_TYPE_ORCADPCB2 );
+    m_PanelNetType[PANELORCADPCB2] =
+            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "OrcadPCB2" ), NET_TYPE_ORCADPCB2, false );
 
-    m_PanelNetType[PANELCADSTAR] = new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "CadStar" ),
-                                                            NET_TYPE_CADSTAR );
+    m_PanelNetType[PANELCADSTAR] =
+            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
 
     InstallPageSpice();
     InstallCustomPages();
@@ -274,6 +281,8 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    updateGeneratorButtons();
 }
 
 
@@ -325,7 +334,7 @@ void NETLIST_DIALOG::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
 void NETLIST_DIALOG::InstallPageSpice()
 {
     NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
-                    new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE );
+                    new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
@@ -397,7 +406,7 @@ NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString& aTitle,
                                                        const wxString& aCommandString,
                                                        NETLIST_TYPE_ID aNetTypeId )
 {
-    NETLIST_PAGE_DIALOG* currPage = new NETLIST_PAGE_DIALOG( m_NoteBook, aTitle, aNetTypeId );
+    NETLIST_PAGE_DIALOG* currPage = new NETLIST_PAGE_DIALOG( m_NoteBook, aTitle, aNetTypeId, true );
 
     currPage->m_LowBoxSizer->Add( new wxStaticText( currPage, -1, _( "Title:" ) ), 0,
                                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -425,12 +434,7 @@ NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString& aTitle,
 
 void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 {
-    NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
-
-    if( currPage == nullptr )
-        return;
-
-    m_buttonDelGenerator->Enable( currPage->m_IdNetType >= NET_TYPE_CUSTOM1 );
+    updateGeneratorButtons();
 }
 
 
@@ -606,6 +610,9 @@ void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
 {
     NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
+    if( !currPage->IsCustom() )
+        return;
+
     currPage->m_CommandStringCtrl->SetValue( wxEmptyString );
     currPage->m_TitleStringCtrl->SetValue( wxEmptyString );
 
@@ -727,6 +734,17 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
     // Propose a default value if empty ( i.e. the short filename of the script)
     if( m_textCtrlName->GetValue().IsEmpty() )
         m_textCtrlName->SetValue( fn.GetName() );
+}
+
+
+void NETLIST_DIALOG::updateGeneratorButtons()
+{
+    NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+
+    if( currPage == nullptr )
+        return;
+
+    m_buttonDelGenerator->Enable( currPage->IsCustom() );
 }
 
 
