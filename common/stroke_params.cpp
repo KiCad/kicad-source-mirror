@@ -18,7 +18,7 @@
  */
 #include <macros.h>
 #include <base_units.h>
-#include <charconv>>
+#include <charconv>
 #include <string_utils.h>
 #include <eda_rect.h>
 #include <render_settings.h>
