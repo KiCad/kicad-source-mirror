@@ -123,11 +123,15 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
     {
         if( aUseClearance )
         {
-            SEGMENT test( SEG( aP, aP ), -1 );
+            NODE::OBSTACLES          obs;
+            SEGMENT                  test( SEG( aP, aP ), -1 );
+            COLLISION_SEARCH_OPTIONS opts;
+
             test.SetWidth( 1 );
             test.SetLayers( LAYER_RANGE::All() );
-            NODE::OBSTACLES obs;
-            m_world->QueryColliding( &test, obs, ITEM::ANY_T, -1, false );
+
+            opts.m_differentNetsOnly = false;
+            m_world->QueryColliding( &test, obs, opts );
 
             PNS::ITEM_SET ret;
 
@@ -629,8 +633,8 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
                 int  clearance;
                 bool removeOriginal = true;
-                bool holeOnly       = ( ( itemToMark->Marker() & MK_HOLE )
-                                        && !( itemToMark->Marker() & MK_VIOLATION ) );
+                bool holeOnly       = false; // JEY TODO ( ( itemToMark->Marker() & MK_HOLE )
+                                        //&& !( itemToMark->Marker() & MK_VIOLATION ) );
 
                 if( holeOnly )
                     clearance = aNode->GetHoleClearance( currentItem, itemToMark );
@@ -673,7 +677,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
     {
         NODE::OBSTACLES obstacles;
 
-        aNode->QueryColliding( item, obstacles, ITEM::ANY_T );
+        aNode->QueryColliding( item, obstacles );
 
         if( item->OfKind( ITEM::LINE_T ) )
         {
@@ -682,7 +686,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
             if( l->EndsWithVia() )
             {
                 VIA v( l->Via() );
-                aNode->QueryColliding( &v, obstacles, ITEM::ANY_T );
+                aNode->QueryColliding( &v, obstacles );
             }
         }
 

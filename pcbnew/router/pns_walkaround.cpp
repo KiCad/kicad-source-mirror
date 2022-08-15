@@ -42,8 +42,13 @@ void WALKAROUND::start( const LINE& aInitialPath )
 
 NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 {
-    NODE::OPT_OBSTACLE obs = m_world->NearestObstacle(
-            &aPath, m_itemMask, m_restrictedSet.empty() ? nullptr : &m_restrictedSet, false );
+    COLLISION_SEARCH_OPTIONS opts;
+    opts.m_useClearanceEpsilon = false;
+
+    NODE::OPT_OBSTACLE obs = m_world->NearestObstacle( &aPath, m_itemMask,
+                                                       m_restrictedSet.empty() ? nullptr
+                                                                               : &m_restrictedSet,
+                                                       opts );
 
     if( m_restrictedSet.empty() )
         return obs;
@@ -86,10 +91,14 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
 
     SHAPE_LINE_CHAIN path_walk;
 
-    bool s_cw = aPath.Walkaround( current_obs->m_hull, path_walk, aWindingDirection );
+
+    SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance,
+                                                       current_obs->m_walkaroundThickness );
+
+    bool s_cw = aPath.Walkaround( hull, path_walk, aWindingDirection );
 
     PNS_DBG( Dbg(), BeginGroup, "hull/walk", 1 );
-    PNS_DBG( Dbg(), AddShape, &current_obs->m_hull, RED, 0, wxString::Format( "hull-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
+    PNS_DBG( Dbg(), AddShape, &hull, RED, 0, wxString::Format( "hull-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
     PNS_DBG( Dbg(), AddShape, &aPath.CLine(), GREEN, 0, wxString::Format( "path-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
     PNS_DBG( Dbg(), AddShape, &path_walk, BLUE, 0, wxString::Format( "result-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Stat cw %d" ), !!s_cw ) );
@@ -100,8 +109,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
 
     // If the end of the line is inside an obstacle, additional walkaround iterations are not
     // going to help.  Exit now to prevent pegging the iteration limiter and causing lag.
-    if( current_obs && current_obs->m_hull.PointInside( initialLast ) &&
-        !current_obs->m_hull.PointOnEdge( initialLast ) )
+    if( current_obs && hull.PointInside( initialLast ) && !hull.PointOnEdge( initialLast ) )
     {
         return ALMOST_DONE;
     }

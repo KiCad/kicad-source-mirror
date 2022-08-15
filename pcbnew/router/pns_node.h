@@ -104,6 +104,11 @@ public:
 
     virtual void ClearCacheForItem( const ITEM* aItem ) {}
     virtual void ClearCaches() {}
+
+    virtual int ClearanceEpsilon() const { return m_clearanceEpsilon; }
+
+protected:
+    int m_clearanceEpsilon = 0;
 };
 
 /**
@@ -111,11 +116,15 @@ public:
  */
 struct OBSTACLE
 {
-    const ITEM*      m_head;           ///< Item we search collisions with
-
+    const ITEM*      m_head;           ///< Line we search collisions against
     ITEM*            m_item;           ///< Item found to be colliding with m_head
-    SHAPE_LINE_CHAIN m_hull;           ///< Hull of the colliding m_item
     VECTOR2I         m_ipFirst;        ///< First intersection between m_head and m_hull
+    int              m_clearance;
+    int              m_actual;
+    int              m_walkaroundThickness;
+    bool             m_headIsHole = false;
+    bool             m_itemIsHole = false;
+    VECTOR2I         m_pos;
     int              m_distFirst;      ///< ... and the distance thereof
     int              m_maxFanoutWidth; ///< worst case (largest) width of the tracks connected to the item
 };
@@ -220,8 +229,8 @@ public:
      * @param aLimitCount stop looking for collisions after finding this number of colliding items
      * @return number of obstacles found
      */
-    int QueryColliding( const ITEM* aItem, OBSTACLES& aObstacles, int aKindMask = ITEM::ANY_T,
-                        int aLimitCount = -1, bool aDifferentNetsOnly = true, int aOverrideClearance = -1 );
+    int QueryColliding( const ITEM* aItem, OBSTACLES& aObstacles,
+                        const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() );
 
     int QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints,
                      LAYER_RANGE aLayerMask = LAYER_RANGE::All(), int aKindMask = ITEM::ANY_T );
@@ -233,12 +242,11 @@ public:
      * @param aLine the item to find collisions with
      * @param aKindMask mask of obstacle types to take into account
      * @param aRestrictedSet is an optional set of items that should be considered as obstacles
-     * @param aUseClearanceEpsilon determines if the epsilon is subtracted from the hull size
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE NearestObstacle( const LINE* aLine, int aKindMask = ITEM::ANY_T,
                                   const std::set<ITEM*>* aRestrictedSet = nullptr,
-                                  bool aUseClearanceEpsilon = true );
+                                  const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() );
 
     /**
      * Check if the item collides with anything else in the world, and if found, returns the
@@ -389,7 +397,7 @@ public:
 
     void AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
 
-    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION | MK_HOLE );
+    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
 
     void RemoveByMarker( int aMarker );
 

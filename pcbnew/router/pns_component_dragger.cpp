@@ -143,7 +143,7 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             {
                 LINKED_ITEM* li = static_cast<LINKED_ITEM*>( extraJoint->LinkList()[0].item );
 
-                if( li->Collide( solid, nullptr, m_world ) )
+                if( li->Collide( solid, m_world ) )
                     addLinked( solid, extraJoint, li, extraJoint->Pos() - solid->Pos() );
             }
         }

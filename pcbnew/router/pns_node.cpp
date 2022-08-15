@@ -211,23 +211,16 @@ bool OBSTACLE_VISITOR::visit( ITEM* aCandidate )
 // function object that visits potential obstacles and performs the actual collision refining
 struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 {
-    OBSTACLES& m_tab;
+    OBSTACLES&                      m_tab;
+    int                             m_matchCount;
+    const COLLISION_SEARCH_OPTIONS& m_opts;
 
-    int        m_kindMask;          ///<  (solids, vias, segments, etc...)
-    int        m_limitCount;
-    int        m_matchCount;
-    bool       m_differentNetsOnly;
-    int        m_overrideClearance;
-
-    DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem, int aKindMask,
-                              bool aDifferentNetsOnly, int aOverrideClearance ) :
+    DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem,
+                              const COLLISION_SEARCH_OPTIONS& aOpts ) :
         OBSTACLE_VISITOR( aItem ),
         m_tab( aTab ),
-        m_kindMask( aKindMask ),
-        m_limitCount( -1 ),
-        m_matchCount( 0 ),
-        m_differentNetsOnly( aDifferentNetsOnly ),
-        m_overrideClearance( aOverrideClearance )
+        m_opts( aOpts ),
+        m_matchCount( 0 )
     {
     }
 
@@ -235,33 +228,28 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
     {
     }
 
-    void SetCountLimit( int aLimit )
-    {
-        m_limitCount = aLimit;
-    }
-
     bool operator()( ITEM* aCandidate ) override
     {
-        if( !aCandidate->OfKind( m_kindMask ) )
+        if( !aCandidate->OfKind( m_opts.m_kindMask ) )
             return true;
 
         if( visit( aCandidate ) )
             return true;
 
-        if( !aCandidate->Collide( m_item, m_node, m_differentNetsOnly, m_overrideClearance ) )
+        if( !aCandidate->Collide( m_item, m_node, m_opts ) )
             return true;
 
         OBSTACLE obs;
 
-        obs.m_item = aCandidate;
         obs.m_head = m_item;
+        obs.m_item = aCandidate;
         obs.m_distFirst = INT_MAX;
         obs.m_maxFanoutWidth = 0;
         m_tab.push_back( obs );
 
         m_matchCount++;
 
-        if( m_limitCount > 0 && m_matchCount >= m_limitCount )
+        if( m_opts.m_limitCount > 0 && m_matchCount >= m_opts.m_limitCount )
             return false;
 
         return true;
@@ -269,28 +257,26 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 };
 
 
-int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aKindMask,
-                          int aLimitCount, bool aDifferentNetsOnly, int aOverrideClearance )
+int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
+                          const COLLISION_SEARCH_OPTIONS& aOpts )
 {
     /// By default, virtual items cannot collide
     if( aItem->IsVirtual() )
         return 0;
 
-    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly,
-                                      aOverrideClearance );
+    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aOpts );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );
 #endif
 
-    visitor.SetCountLimit( aLimitCount );
     visitor.SetWorld( this, nullptr );
 
     // first, look for colliding items in the local index
     m_index->Query( aItem, m_maxClearance, visitor );
 
     // if we haven't found enough items, look in the root branch as well.
-    if( !isRoot() && ( visitor.m_matchCount < aLimitCount || aLimitCount < 0 ) )
+    if( !isRoot() && ( visitor.m_matchCount < aOpts.m_limitCount || aOpts.m_limitCount < 0 ) )
     {
         visitor.SetWorld( m_root, this );
         m_root->m_index->Query( aItem, m_maxClearance, visitor );
@@ -302,8 +288,9 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
 
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                                           const std::set<ITEM*>* aRestrictedSet,
-                                          bool aUseClearanceEpsilon )
+                                          const COLLISION_SEARCH_OPTIONS& aOpts )
 {
+    const int clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
     OBSTACLES obstacleList;
     obstacleList.reserve( 100 );
 
@@ -314,11 +301,11 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         // Disabling the cache will lead to slowness.
 
         const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &s, obstacleList, aKindMask );
+        QueryColliding( &s, obstacleList, aOpts );
     }
 
     if( aLine->EndsWithVia() )
-        QueryColliding( &aLine->Via(), obstacleList, aKindMask );
+        QueryColliding( &aLine->Via(), obstacleList, aOpts );
 
     if( obstacleList.empty() )
         return OPT_OBSTACLE();
@@ -340,10 +327,12 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                     nearest.m_distFirst = dist;
                     nearest.m_ipFirst = pt.p;
                     nearest.m_item = obstacle;
-                    nearest.m_hull = hull;
+                    nearest.m_itemIsHole = isHole;
+                    // JEY TODO: are these no longer needed?
+                    //nearest.m_hull = hull;
 
-                    obstacle->Mark( isHole ? obstacle->Marker() | MK_HOLE
-                                           : obstacle->Marker() & ~MK_HOLE );
+                    //obstacle->Mark( isHole ? obstacle->Marker() | MK_HOLE
+                    //                       : obstacle->Marker() & ~MK_HOLE );
                 }
             };
 
@@ -358,7 +347,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
             continue;
 
         int clearance =
-            GetClearance( obstacle.m_item, aLine, aUseClearanceEpsilon ) + aLine->Width() / 2;
+            GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon ) + aLine->Width() / 2;
 
         obstacleHull = obstacle.m_item->Hull( clearance, 0, layer );
         //debugDecorator->AddLine( obstacleHull, 2, 40000, "obstacle-hull-test" );
@@ -381,10 +370,10 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
             int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
-            int viaClearance = GetClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+            int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                                + via.Diameter() / 2;
-            int holeClearance =
-                    GetHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon ) + viaHoleRadius;
+            int holeClearance = GetHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
+                               + viaHoleRadius;
 
             if( holeClearance > viaClearance )
                 viaClearance = holeClearance;
@@ -406,8 +395,8 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                                                                            layer ) )
             && obstacle.m_item->Hole() )
         {
-            clearance = GetHoleClearance( obstacle.m_item, aLine, aUseClearanceEpsilon );
-            int copperClearance = GetClearance( obstacle.m_item, aLine, aUseClearanceEpsilon );
+            clearance = GetHoleClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon );
+            int copperClearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon );
 
             clearance = std::max( clearance, copperClearance );
 
@@ -425,12 +414,12 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 // Don't use via.Drill(); it doesn't include the plating thickness
                 int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
-                int viaClearance = GetClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                                    + via.Diameter() / 2;
-                int holeClearance = GetHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                int holeClearance = GetHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                                     + viaHoleRadius;
                 int holeToHole =
-                        GetHoleToHoleClearance( obstacle.m_item, &via, aUseClearanceEpsilon )
+                        GetHoleToHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                         + viaHoleRadius;
 
                 if( holeClearance > viaClearance )
@@ -475,6 +464,11 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM_SET& aSet, int aKindMask )
 NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 {
     OBSTACLES obs;
+    COLLISION_SEARCH_OPTIONS opts;
+
+    opts.m_kindMask = aKindMask;
+    opts.m_limitCount = 1;
+    opts.m_overrideClearance = 1;
 
     obs.reserve( 100 );
 
@@ -491,7 +485,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
             // Disabling the cache will lead to slowness.
 
             const SEGMENT s( *line, l.CSegment( i ) );
-            n += QueryColliding( &s, obs, aKindMask, 1 );
+            n += QueryColliding( &s, obs, opts );
 
             if( n )
                 return OPT_OBSTACLE( obs[0] );
@@ -499,13 +493,13 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 
         if( line->EndsWithVia() )
         {
-            n += QueryColliding( &line->Via(), obs, aKindMask, 1 );
+            n += QueryColliding( &line->Via(), obs, opts );
 
             if( n )
                 return OPT_OBSTACLE( obs[0] );
         }
     }
-    else if( QueryColliding( aItemA, obs, aKindMask, 1 ) > 0 )
+    else if( QueryColliding( aItemA, obs, opts ) > 0 )
     {
         return OPT_OBSTACLE( obs[0] );
     }

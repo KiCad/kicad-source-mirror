@@ -41,10 +41,20 @@ enum LineMarker {
     MK_HEAD         = ( 1 << 0 ),
     MK_VIOLATION    = ( 1 << 3 ),
     MK_LOCKED       = ( 1 << 4 ),
-    MK_DP_COUPLED   = ( 1 << 5 ),
-    MK_HOLE         = ( 1 << 6 )
+    MK_DP_COUPLED   = ( 1 << 5 )
 };
 
+struct OBSTACLE;
+
+
+struct COLLISION_SEARCH_OPTIONS
+{
+    bool m_differentNetsOnly = true;
+    int m_overrideClearance = -1;
+    int m_limitCount = -1;
+    int m_kindMask = -1;
+    bool m_useClearanceEpsilon = true;
+};
 
 /**
  * Base class for PNS router board items.
@@ -194,7 +204,9 @@ public:
      * @param aOther is the item to check collision against.
      * @return true, if a collision was found.
      */
-    bool Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly = true, int aOverrideClearance = -1 ) const;
+    bool Collide( const ITEM* aOther, const NODE* aNode,
+                  const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS(),
+                  OBSTACLE *aObsInfo = nullptr ) const;
 
     /**
      * Return the geometrical shape of the item. Used for collision detection and spatial indexing.
@@ -248,7 +260,9 @@ public:
     virtual const std::string Format() const;
 
 private:
-    bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly, int aOverrideClearance ) const;
+    bool collideSimple( const ITEM* aOther, const NODE* aNode,
+                        const COLLISION_SEARCH_OPTIONS& aOpts,
+                        OBSTACLE *aObsInfo = nullptr ) const;
 
 protected:
     PnsKind       m_kind;
