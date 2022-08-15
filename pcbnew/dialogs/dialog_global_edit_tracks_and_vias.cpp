@@ -234,20 +234,20 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     row++;
 
     auto setNetclassValue =
-            [&]( int row, int col, int value )
+            [this, units]( int aRow, int aCol, int aVal )
             {
-                m_netclassGrid->SetCellValue( row, col, StringFromValue( units, value, true ) );
+                m_netclassGrid->SetCellValue( aRow, aCol, StringFromValue( units, aVal, true ) );
             };
 
     auto buildRow =
-            [&]( int row, const std::shared_ptr<NETCLASS>& nc )
+            [this, &setNetclassValue]( int aRow, const std::shared_ptr<NETCLASS>& aNc )
             {
-                m_netclassGrid->SetCellValue( row, GRID_NAME, nc->GetName() );
-                setNetclassValue( row, GRID_TRACKSIZE, nc->GetTrackWidth() );
-                setNetclassValue( row, GRID_VIASIZE, nc->GetViaDiameter() );
-                setNetclassValue( row, GRID_VIADRILL, nc->GetViaDrill() );
-                setNetclassValue( row, GRID_uVIASIZE, nc->GetuViaDiameter() );
-                setNetclassValue( row, GRID_uVIADRILL, nc->GetuViaDrill() );
+                m_netclassGrid->SetCellValue( aRow, GRID_NAME, aNc->GetName() );
+                setNetclassValue( aRow, GRID_TRACKSIZE, aNc->GetTrackWidth() );
+                setNetclassValue( aRow, GRID_VIASIZE, aNc->GetViaDiameter() );
+                setNetclassValue( aRow, GRID_VIADRILL, aNc->GetViaDrill() );
+                setNetclassValue( aRow, GRID_uVIASIZE, aNc->GetuViaDiameter() );
+                setNetclassValue( aRow, GRID_uVIADRILL, aNc->GetuViaDrill() );
             };
 
     const std::shared_ptr<NET_SETTINGS>& settings = m_brd->GetDesignSettings().m_NetSettings;

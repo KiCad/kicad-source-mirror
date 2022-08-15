@@ -338,44 +338,44 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     int       row = 0;
 
     auto getCell =
-            [&]( int aRow, int aCol ) -> long long int
+            [this, units]( int aRow, int aCol ) -> long long int
             {
                 return ValueFromString( units, m_netclassGrid->GetCellValue( aRow, aCol ) );
             };
 
     auto getCellStr =
-            [&]( int aRow, int aCol ) -> wxString
+            [this]( int aRow, int aCol ) -> wxString
             {
                 return m_netclassGrid->GetCellValue( aRow, aCol );
             };
 
     auto gridRowToNetclass =
-            [&]( int row, const std::shared_ptr<NETCLASS>& nc )
+            [&]( int aRow, const std::shared_ptr<NETCLASS>& nc )
             {
-                nc->SetName( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
+                nc->SetName( m_netclassGrid->GetCellValue( aRow, GRID_NAME ) );
 
                 if( m_isEEschema )
                 {
-                    nc->SetWireWidth( getCell( row, GRID_WIREWIDTH - EESCHEMA_COL_OFFSET ) );
-                    nc->SetBusWidth( getCell( row, GRID_BUSWIDTH - EESCHEMA_COL_OFFSET ) );
+                    nc->SetWireWidth( getCell( aRow, GRID_WIREWIDTH - EESCHEMA_COL_OFFSET ) );
+                    nc->SetBusWidth( getCell( aRow, GRID_BUSWIDTH - EESCHEMA_COL_OFFSET ) );
 
-                    wxString color = getCellStr( row, GRID_SCHEMATIC_COLOR - EESCHEMA_COL_OFFSET );
+                    wxString color = getCellStr( aRow, GRID_SCHEMATIC_COLOR - EESCHEMA_COL_OFFSET );
                     nc->SetSchematicColor( wxColour( color ) );
 
-                    wxString lineStyle = getCellStr( row, GRID_LINESTYLE - EESCHEMA_COL_OFFSET );
+                    wxString lineStyle = getCellStr( aRow, GRID_LINESTYLE - EESCHEMA_COL_OFFSET );
                     nc->SetLineStyle( g_lineStyleNames.Index( lineStyle ) );
                     wxASSERT_MSG( nc->GetLineStyle() >= 0, "Line style name not found." );
                 }
                 else
                 {
-                    nc->SetClearance( getCell( row, GRID_CLEARANCE ) );
-                    nc->SetTrackWidth( getCell( row, GRID_TRACKSIZE ) );
-                    nc->SetViaDiameter( getCell( row, GRID_VIASIZE ) );
-                    nc->SetViaDrill( getCell( row, GRID_VIADRILL ) );
-                    nc->SetuViaDiameter( getCell( row, GRID_uVIASIZE ) );
-                    nc->SetuViaDrill( getCell( row, GRID_uVIADRILL ) );
-                    nc->SetDiffPairWidth( getCell( row, GRID_DIFF_PAIR_WIDTH ) );
-                    nc->SetDiffPairGap( getCell( row, GRID_DIFF_PAIR_GAP ) );
+                    nc->SetClearance( getCell( aRow, GRID_CLEARANCE ) );
+                    nc->SetTrackWidth( getCell( aRow, GRID_TRACKSIZE ) );
+                    nc->SetViaDiameter( getCell( aRow, GRID_VIASIZE ) );
+                    nc->SetViaDrill( getCell( aRow, GRID_VIADRILL ) );
+                    nc->SetuViaDiameter( getCell( aRow, GRID_uVIASIZE ) );
+                    nc->SetuViaDrill( getCell( aRow, GRID_uVIADRILL ) );
+                    nc->SetDiffPairWidth( getCell( aRow, GRID_DIFF_PAIR_WIDTH ) );
+                    nc->SetDiffPairGap( getCell( aRow, GRID_DIFF_PAIR_GAP ) );
                 }
             };
 
