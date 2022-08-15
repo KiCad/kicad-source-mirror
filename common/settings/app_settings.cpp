@@ -42,7 +42,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
-    m_LibTree.column_width = 360;
+    m_LibTree.column_width = 300;
     m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     // Build parameters list:
@@ -73,13 +73,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_ColorPicker.default_tab, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "lib_tree.column_width",
-            &m_LibTree.column_width, 360 ) );
-
-    // Now that we allow hiding/showing of the tree control, it's never terribly useful to
-    // decrease the width to nothing, and wxWidgets appears to have some bugs where it sets it
-    // way too narrow.
-    if( m_LibTree.column_width < 360 )
-        m_LibTree.column_width = 360;
+            &m_LibTree.column_width, 300 ) );
 
     m_params.emplace_back( new PARAM<bool>( "printing.background",
             &m_Printing.background, false ) );

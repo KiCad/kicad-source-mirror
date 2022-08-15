@@ -43,7 +43,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int pcbnewSchemaVersion = 2;
+const int pcbnewSchemaVersion = 3;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
@@ -578,6 +578,20 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
                 return true;
             } );
 
+
+    registerMigration( 2, 3,
+            [&]() -> bool
+            {
+                // We used to have a bug on GTK which would set the lib tree column width way
+                // too narrow.
+                if( OPT<int> optval = Get<int>( "lib_tree.column_width" ) )
+                {
+                    if( optval < 150 )
+                        Set( "lib_tree.column_width",  300 );
+                }
+
+                return true;
+            } );
 }
 
 

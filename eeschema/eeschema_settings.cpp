@@ -40,7 +40,7 @@
 using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
 
 ///! Update the schema version whenever a migration is required
-const int eeschemaSchemaVersion = 1;
+const int eeschemaSchemaVersion = 2;
 
 /// Default value for bom.plugins
 const nlohmann::json defaultBomPlugins =
@@ -445,6 +445,21 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             {
                 // Version 0 to 1: BOM plugin settings moved from sexpr to JSON
                 return migrateBomSettings();
+            } );
+
+
+    registerMigration( 1, 2,
+            [&]() -> bool
+            {
+                // We used to have a bug on GTK which would set the lib tree column width way
+                // too narrow.
+                if( OPT<int> optval = Get<int>( "lib_tree.column_width" ) )
+                {
+                    if( optval < 150 )
+                        Set( "lib_tree.column_width",  300 );
+                }
+
+                return true;
             } );
 }
 
