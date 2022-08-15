@@ -293,7 +293,7 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
 
 wxString DS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Imported Shape" ) );
+    return _( "Imported Shape" );
 }
 
 

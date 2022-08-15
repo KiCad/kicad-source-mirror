@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
+#include "core/kicad_algo.h"
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <board.h>
@@ -438,11 +439,11 @@ void DRC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
-        if( marker->GetMarkerType() != m_markerType )
-            continue;
-
-        if( marker->GetSeverity() & m_severities )
+        if( alg::contains( m_markerTypes, marker->GetMarkerType() )
+                && ( marker->GetSeverity() & m_severities ) > 0 )
+        {
             m_filteredMarkers.push_back( marker );
+        }
     }
 }
 
@@ -456,11 +457,11 @@ int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
-        if( marker->GetMarkerType() != m_markerType )
-            continue;
-
-        if( ( marker->GetSeverity() & aSeverity ) > 0 )
+        if( alg::contains( m_markerTypes, marker->GetMarkerType() )
+                && ( marker->GetSeverity() & aSeverity ) > 0 )
+        {
             count++;
+        }
     }
 
     return count;

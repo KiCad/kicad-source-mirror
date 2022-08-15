@@ -153,7 +153,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
         zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
     }
 
-    m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet());
+    m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet() );
 
     if( aTestFootprints && !Kiface().IsSingle() )
     {
@@ -172,10 +172,9 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     m_drcEngine->SetProgressReporter( aProgressReporter );
 
     m_drcEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, PCB_LAYER_ID aLayer )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
             {
-                PCB_MARKER* marker = new PCB_MARKER( aItem, aPos );
-                marker->SetLayer( aLayer );
+                PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
                 commit.Add( marker );
             } );
 
@@ -213,7 +212,8 @@ void DRC_TOOL::updatePointers()
     if( m_drcDialog )  // Use dialog list boxes only in DRC_TOOL dialog
     {
         m_drcDialog->SetMarkersProvider( new DRC_ITEMS_PROVIDER( m_pcb,
-                                                                 MARKER_BASE::MARKER_DRC ) );
+                                                                 MARKER_BASE::MARKER_DRC,
+                                                                 MARKER_BASE::MARKER_DRAWING_SHEET ) );
         m_drcDialog->SetRatsnestProvider( new DRC_ITEMS_PROVIDER( m_pcb,
                                                                   MARKER_BASE::MARKER_RATSNEST ) );
         m_drcDialog->SetFootprintsProvider( new DRC_ITEMS_PROVIDER( m_pcb,

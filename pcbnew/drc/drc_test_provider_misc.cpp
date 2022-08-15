@@ -324,9 +324,9 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-            drcItem->SetItems( text );
+            drcItem->SetItems( drawingSheet );
 
-            reportViolation( drcItem, text->GetPosition(), UNDEFINED_LAYER );
+            reportViolation( drcItem, text->GetPosition(), LAYER_DRAWINGSHEET );
         }
     }
 }

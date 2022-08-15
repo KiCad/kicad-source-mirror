@@ -1492,7 +1492,7 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 
 
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                                  PCB_LAYER_ID aMarkerLayer )
+                                  int aMarkerLayer )
 {
     static std::mutex globalLock;
 

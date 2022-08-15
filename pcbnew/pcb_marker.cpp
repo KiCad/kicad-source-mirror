@@ -44,31 +44,39 @@
 
 
 
-PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition,
-                        PCB_LAYER_ID aLayer ) :
-    BOARD_ITEM( nullptr, PCB_MARKER_T, aLayer ),  // parent set during BOARD::Add()
-    MARKER_BASE( SCALING_FACTOR, aItem )
+PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition, int aLayer ) :
+        BOARD_ITEM( nullptr, PCB_MARKER_T, F_Cu ),  // parent set during BOARD::Add()
+        MARKER_BASE( SCALING_FACTOR, aItem )
 {
     if( m_rcItem )
     {
         m_rcItem->SetParent( this );
 
-        switch( m_rcItem->GetErrorCode() )
+        if( aLayer == LAYER_DRAWINGSHEET )
         {
-        case DRCE_UNCONNECTED_ITEMS:
-            SetMarkerType( MARKER_BASE::MARKER_RATSNEST );
-            break;
+            SetMarkerType( MARKER_BASE::MARKER_DRAWING_SHEET );
+        }
+        else
+        {
+            switch( m_rcItem->GetErrorCode() )
+            {
+            case DRCE_UNCONNECTED_ITEMS:
+                SetMarkerType( MARKER_BASE::MARKER_RATSNEST );
+                break;
 
-        case DRCE_MISSING_FOOTPRINT:
-        case DRCE_DUPLICATE_FOOTPRINT:
-        case DRCE_EXTRA_FOOTPRINT:
-        case DRCE_NET_CONFLICT:
-            SetMarkerType( MARKER_BASE::MARKER_PARITY );
-            break;
+            case DRCE_MISSING_FOOTPRINT:
+            case DRCE_DUPLICATE_FOOTPRINT:
+            case DRCE_EXTRA_FOOTPRINT:
+            case DRCE_NET_CONFLICT:
+                SetMarkerType( MARKER_BASE::MARKER_PARITY );
+                break;
 
-        default:
-            SetMarkerType( MARKER_BASE::MARKER_DRC );
-            break;
+            default:
+                SetMarkerType( MARKER_BASE::MARKER_DRC );
+                break;
+            }
+
+            SetLayer( ToLAYER_ID( aLayer ) );
         }
     }
 
@@ -89,23 +97,41 @@ wxString PCB_MARKER::Serialize() const
     wxString lastItem;
 
     if( m_rcItem->GetErrorCode() == DRCE_COPPER_SLIVER )
-        lastItem = LayerName( m_layer );
+    {
+        return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
+                                 m_rcItem->GetSettingsKey(),
+                                 m_Pos.x,
+                                 m_Pos.y,
+                                 m_rcItem->GetMainItemID().AsString(),
+                                 LayerName( m_layer ) );
+    }
+    else if( m_rcItem->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
+            && m_rcItem->GetParent()->GetMarkerType() == MARKER_DRAWING_SHEET )
+    {
+        return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
+                                 m_rcItem->GetSettingsKey(),
+                                 m_Pos.x,
+                                 m_Pos.y,
+                                 // Drawing sheet KIIDs aren't preserved between runs
+                                 wxEmptyString,
+                                 wxEmptyString );
+    }
     else
-        lastItem = m_rcItem->GetAuxItemID().AsString();
-
-    return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
-                             m_rcItem->GetSettingsKey(),
-                             m_Pos.x,
-                             m_Pos.y,
-                             m_rcItem->GetMainItemID().AsString(),
-                             lastItem );
+    {
+        return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
+                                 m_rcItem->GetSettingsKey(),
+                                 m_Pos.x,
+                                 m_Pos.y,
+                                 m_rcItem->GetMainItemID().AsString(),
+                                 m_rcItem->GetAuxItemID().AsString() );
+    }
 }
 
 
 PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
-    PCB_LAYER_ID  markerLayer = F_Cu;
+    int           markerLayer = F_Cu;
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
@@ -122,10 +148,16 @@ PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
         {
             if( LayerName( ToLAYER_ID( layer ) ) == props[4] )
             {
-                markerLayer = ToLAYER_ID( layer );
+                markerLayer = layer;
                 break;
             }
         }
+    }
+    else if( drcItem->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
+            && props[3].IsEmpty() && props[4].IsEmpty() )
+    {
+        // Note: caller must load our item pointer with the drawing sheet proxy item
+        markerLayer = LAYER_DRAWINGSHEET;
     }
     else
     {
@@ -143,24 +175,31 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Severity" ), GetSeverity() == RPT_SEVERITY_ERROR ? _( "Error" )
                                                                              : _( "Warning" ) );
 
-    wxString  mainText;
-    wxString  auxText;
-    EDA_ITEM* mainItem = nullptr;
-    EDA_ITEM* auxItem = nullptr;
+    if( GetMarkerType() == MARKER_DRAWING_SHEET )
+    {
+        aList.emplace_back( _( "Drawing Sheet" ), wxEmptyString );
+    }
+    else
+    {
+        wxString  mainText;
+        wxString  auxText;
+        EDA_ITEM* mainItem = nullptr;
+        EDA_ITEM* auxItem = nullptr;
 
-    if( m_rcItem->GetMainItemID() != niluuid )
-        mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
+        if( m_rcItem->GetMainItemID() != niluuid )
+            mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
 
-    if( m_rcItem->GetAuxItemID() != niluuid )
-        auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
+        if( m_rcItem->GetAuxItemID() != niluuid )
+            auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
 
-    if( mainItem )
-        mainText = mainItem->GetSelectMenuText( aFrame->GetUserUnits() );
+        if( mainItem )
+            mainText = mainItem->GetSelectMenuText( aFrame->GetUserUnits() );
 
-    if( auxItem )
-        auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
+        if( auxItem )
+            auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
 
-    aList.emplace_back( mainText, auxText );
+        aList.emplace_back( mainText, auxText );
+    }
 }
 
 

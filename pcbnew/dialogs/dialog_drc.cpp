@@ -32,6 +32,7 @@
 #include <drc/drc_item.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
@@ -352,8 +353,6 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
     BOARD*        board = m_frame->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
-    const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
-    BOARD_ITEM*   item = board->GetItem( itemID );
 
     auto getActiveLayers =
             []( BOARD_ITEM* aItem ) -> LSET
@@ -377,124 +376,154 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 }
             };
 
+    if( !node )
+    {
+        // list is being freed; don't do anything with null ptrs
+
+        aEvent.Skip();
+        return;
+    }
+
     if( m_centerMarkerOnIdle )
     {
         // we already came from a cross-probe of the marker in the document; don't go
         // around in circles
+
+        aEvent.Skip();
+        return;
     }
-    else if( node && item && item != DELETED_BOARD_ITEM::GetInstance() )
+
+    std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
+
+    if( rc_item->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
+            && rc_item->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
     {
-        PCB_LAYER_ID             principalLayer;
-        LSET                     violationLayers;
-        std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
-        BOARD_ITEM*              a = board->GetItem( rc_item->GetMainItemID() );
-        BOARD_ITEM*              b = board->GetItem( rc_item->GetAuxItemID() );
-        BOARD_ITEM*              c = board->GetItem( rc_item->GetAuxItem2ID() );
-        BOARD_ITEM*              d = board->GetItem( rc_item->GetAuxItem3ID() );
+        m_frame->FocusOnLocation( node->m_RcItem->GetParent()->GetPos() );
 
-        if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
+        aEvent.Skip();
+        return;
+    }
+
+    const KIID& itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
+    BOARD_ITEM* item = board->GetItem( itemID );
+
+    if( !item || item == DELETED_BOARD_ITEM::GetInstance() )
+    {
+        // nothing to highlight / focus on
+
+        aEvent.Skip();
+        return;
+    }
+
+    PCB_LAYER_ID principalLayer;
+    LSET         violationLayers;
+    BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
+    BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
+    BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
+    BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+
+    if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
+    {
+        if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
+              && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
         {
-            if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
-                  && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
-            {
-                principalLayer = B_CrtYd;
-            }
-            else
-            {
-                principalLayer = F_CrtYd;
-            }
-        }
-        else if (rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
-        {
-            principalLayer = Edge_Cuts;
-        }
-        else
-        {
-            principalLayer = UNDEFINED_LAYER;
-
-            if( a || b || c || d )
-                violationLayers = LSET::AllLayersMask();
-
-            // Try to initialize principalLayer to a valid layer.  Note that some markers have
-            // a layer set to UNDEFINED_LAYER, so we may need to keep looking.
-
-            for( BOARD_ITEM* it: { a, b, c, d } )
-            {
-                if( !it )
-                    continue;
-
-                LSET layersList = getActiveLayers( it );
-                violationLayers &= layersList;
-
-                if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
-                    principalLayer = layersList.Seq().front();
-            }
-        }
-
-        if( violationLayers.count() )
-            principalLayer = violationLayers.Seq().front();
-        else if( !(principalLayer <= UNDEFINED_LAYER ) )
-            violationLayers.set( principalLayer );
-
-        WINDOW_THAWER thawer( m_frame );
-
-        if( principalLayer > UNDEFINED_LAYER && ( violationLayers & board->GetVisibleLayers() ) == 0 )
-            m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
-
-        if( principalLayer > UNDEFINED_LAYER && board->GetVisibleLayers().test( principalLayer ) )
-            m_frame->SetActiveLayer( principalLayer );
-
-        if( rc_item->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
-        {
-            if( !m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest )
-                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showRatsnest, true );
-
-            std::vector<CN_EDGE> edges;
-            m_frame->GetBoard()->GetConnectivity()->GetUnconnectedEdges( edges );
-
-            for( const CN_EDGE& edge : edges )
-            {
-                if( edge.GetSourceNode()->Parent() == a  && edge.GetTargetNode()->Parent() == b )
-                {
-                    if( item == a )
-                        m_frame->FocusOnLocation( edge.GetSourcePos() );
-                    else
-                        m_frame->FocusOnLocation( edge.GetTargetPos() );
-
-                    break;
-                }
-            }
-        }
-        else if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
-        {
-            BOARD_CONNECTED_ITEM*    track = dynamic_cast<PCB_TRACK*>( item );
-            std::vector<BOARD_ITEM*> items;
-
-            if( track )
-            {
-                int net = track->GetNetCode();
-
-                wxASSERT( net > 0 );    // Without a net how can it be a diff-pair?
-
-                for( const KIID& id : rc_item->GetIDs() )
-                {
-                    auto* candidate = dynamic_cast<BOARD_CONNECTED_ITEM*>( board->GetItem( id ) );
-
-                    if( candidate && candidate->GetNetCode() == net )
-                        items.push_back( candidate );
-                }
-            }
-            else
-            {
-                items.push_back( item );
-            }
-
-            m_frame->FocusOnItems( items, principalLayer );
+            principalLayer = B_CrtYd;
         }
         else
         {
-            m_frame->FocusOnItem( item, principalLayer );
+            principalLayer = F_CrtYd;
         }
+    }
+    else if (rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
+    {
+        principalLayer = Edge_Cuts;
+    }
+    else
+    {
+        principalLayer = UNDEFINED_LAYER;
+
+        if( a || b || c || d )
+            violationLayers = LSET::AllLayersMask();
+
+        // Try to initialize principalLayer to a valid layer.  Note that some markers have
+        // a layer set to UNDEFINED_LAYER, so we may need to keep looking.
+
+        for( BOARD_ITEM* it: { a, b, c, d } )
+        {
+            if( !it )
+                continue;
+
+            LSET layersList = getActiveLayers( it );
+            violationLayers &= layersList;
+
+            if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
+                principalLayer = layersList.Seq().front();
+        }
+    }
+
+    if( violationLayers.count() )
+        principalLayer = violationLayers.Seq().front();
+    else if( !(principalLayer <= UNDEFINED_LAYER ) )
+        violationLayers.set( principalLayer );
+
+    WINDOW_THAWER thawer( m_frame );
+
+    if( principalLayer > UNDEFINED_LAYER && ( violationLayers & board->GetVisibleLayers() ) == 0 )
+        m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
+
+    if( principalLayer > UNDEFINED_LAYER && board->GetVisibleLayers().test( principalLayer ) )
+        m_frame->SetActiveLayer( principalLayer );
+
+    if( rc_item->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+    {
+        if( !m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest )
+            m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showRatsnest, true );
+
+        std::vector<CN_EDGE> edges;
+        m_frame->GetBoard()->GetConnectivity()->GetUnconnectedEdges( edges );
+
+        for( const CN_EDGE& edge : edges )
+        {
+            if( edge.GetSourceNode()->Parent() == a  && edge.GetTargetNode()->Parent() == b )
+            {
+                if( item == a )
+                    m_frame->FocusOnLocation( edge.GetSourcePos() );
+                else
+                    m_frame->FocusOnLocation( edge.GetTargetPos() );
+
+                break;
+            }
+        }
+    }
+    else if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+    {
+        BOARD_CONNECTED_ITEM*    track = dynamic_cast<PCB_TRACK*>( item );
+        std::vector<BOARD_ITEM*> items;
+
+        if( track )
+        {
+            int net = track->GetNetCode();
+
+            wxASSERT( net > 0 );    // Without a net how can it be a diff-pair?
+
+            for( const KIID& id : rc_item->GetIDs() )
+            {
+                auto* candidate = dynamic_cast<BOARD_CONNECTED_ITEM*>( board->GetItem( id ) );
+
+                if( candidate && candidate->GetNetCode() == net )
+                    items.push_back( candidate );
+            }
+        }
+        else
+        {
+            items.push_back( item );
+        }
+
+        m_frame->FocusOnItems( items, principalLayer );
+    }
+    else
+    {
+        m_frame->FocusOnItem( item, principalLayer );
     }
 
     aEvent.Skip();

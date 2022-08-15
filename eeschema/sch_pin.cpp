@@ -191,8 +191,8 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 
 wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s %s",
-                             GetParentSymbol()->GetSelectMenuText( aUnits ),
+    return wxString::Format( "Symbol %s %s",
+                             GetParentSymbol()->GetField( REFERENCE_FIELD )->GetShownText(),
                              m_libPin->GetSelectMenuText( aUnits ) );
 }
 

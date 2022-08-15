@@ -53,6 +53,7 @@ public:
         MARKER_UNSPEC,
         MARKER_ERC,
         MARKER_DRC,
+        MARKER_DRAWING_SHEET,
         MARKER_RATSNEST,
         MARKER_PARITY,
         MARKER_SIMUL

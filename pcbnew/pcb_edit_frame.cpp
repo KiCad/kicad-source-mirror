@@ -881,7 +881,12 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
     BOARD_COMMIT commit( this );
 
     for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions() )
+    {
+        if( marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+            marker->GetRCItem()->SetItems( GetCanvas()->GetDrawingSheet() );
+
         commit.Add( marker );
+    }
 
     commit.Push( wxEmptyString, SKIP_UNDO | SKIP_SET_DIRTY );
 

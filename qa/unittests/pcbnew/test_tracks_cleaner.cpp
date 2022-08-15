@@ -179,7 +179,7 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
         bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
         bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, PCB_LAYER_ID aLayer )
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
                 {
                     if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
                         violations.push_back( *aItem );

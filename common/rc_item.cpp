@@ -378,10 +378,17 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:
-    {
-        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
-    }
+        if( rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+        {
+            aVariant = _( "Drawing Sheet" );
+            break;
+        }
+        else
+        {
+            EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        }
+
         break;
 
     case RC_TREE_NODE::AUX_ITEM:

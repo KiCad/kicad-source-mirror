@@ -63,9 +63,9 @@ class DRC_RULE;
 class DRC_CONSTRAINT;
 
 
-typedef
-std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
-                    const VECTOR2I& aPos, PCB_LAYER_ID aLayer )> DRC_VIOLATION_HANDLER;
+typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
+                            const VECTOR2I& aPos,
+                            int aLayer )> DRC_VIOLATION_HANDLER;
 
 
 /**
@@ -165,7 +165,7 @@ public:
     bool RulesValid() { return m_rulesValid; }
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
-                          PCB_LAYER_ID aMarkerLayer );
+                          int aMarkerLayer );
 
     bool KeepRefreshing( bool aWait = false );
     void AdvanceProgress();
