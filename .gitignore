@@ -78,7 +78,6 @@ pcbnew/Info.plist
 *.o.*
 *.a
 *.a.*
-*.cmake
 *.orig
 *.rej
 *.so
