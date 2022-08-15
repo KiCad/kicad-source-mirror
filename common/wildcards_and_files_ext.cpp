@@ -62,7 +62,7 @@ wxString formatWildcardExt( const wxString& aWildcard )
     wxString wc;
 #if defined( __WXGTK__ )
 
-    for( auto& ch : aWildcard )
+    for( const auto& ch : aWildcard )
     {
         if( wxIsalpha( ch ) )
             wc += wxString::Format( "[%c%c]", wxTolower( ch ), wxToupper( ch ) );
