@@ -2017,9 +2017,6 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     if( e.rot )
         pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
 
-
-    VECTOR2I sz = pad->GetSize();
-
     if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
     {
         aFootprint->Add( pad.release() );
