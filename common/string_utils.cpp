@@ -1123,14 +1123,3 @@ std::string Double2Str( double aValue )
 
     return std::string( buf, len );
 }
-
-
-wxString AngleToStringDegrees( double aAngle )
-{
-    wxString text;
-
-    text.Printf( wxT( "%.3f" ), aAngle / 10.0 );
-    StripTrailingZeros( text, 1 );
-
-    return text;
-}

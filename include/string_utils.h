@@ -354,9 +354,4 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
  */
 std::string Double2Str( double aValue );
 
-/**
- * A helper to convert the \a double \a aAngle (in internal unit) to a string in degrees.
- */
-wxString AngleToStringDegrees( double aAngle );
-
 #endif  // STRING_UTILS_H
