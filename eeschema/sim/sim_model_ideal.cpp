@@ -136,7 +136,7 @@ void SIM_MODEL_IDEAL::inferredReadDataFields( unsigned aSymbolPinCount, const st
             // The grammar and selector must guarantee having at least one child.
             SetParamValue( 0, root->children[0]->string() );
         }
-        catch( const tao::pegtl::parse_error& e )
+        catch( const tao::pegtl::parse_error& )
         {
             THROW_IO_ERROR( wxString::Format( _( "Failed to infer model from Value '%s'" ),
                                               GetFieldValue( aFields, VALUE_FIELD ) ) );

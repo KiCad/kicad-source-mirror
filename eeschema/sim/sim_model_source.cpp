@@ -123,7 +123,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
                                                      SIM_MODEL_SOURCE_PARSER::pwlValuesSelector>
                     ( in );
             }
-            catch( const tao::pegtl::parse_error& e )
+            catch( const tao::pegtl::parse_error& )
             {
                 break;
             }

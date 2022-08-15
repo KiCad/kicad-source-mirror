@@ -134,7 +134,7 @@ bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
     {
         CALL_INSTANCE( aValueType, aNotation, doIsValid, in );
     }
-    catch( const tao::pegtl::parse_error& e )
+    catch( const tao::pegtl::parse_error& )
     {
         return false;
     }
@@ -200,7 +200,7 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
     {
         CALL_INSTANCE( aValueType, aNotation, root = doParse, in );
     }
-    catch( tao::pegtl::parse_error& e )
+    catch( tao::pegtl::parse_error& )
     {
         result.isOk = false;
         return result;
@@ -353,7 +353,7 @@ wxString SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aRedu
         aReductionExponent = 18;
         return "E";
     }
-    
+
     aReductionExponent = 0;
     return "";
 }
@@ -381,7 +381,7 @@ std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType )
     case TYPE_FLOAT_VECTOR:   return std::make_unique<SIM_VALUE_INST<double>>();
     case TYPE_COMPLEX_VECTOR: return std::make_unique<SIM_VALUE_INST<std::complex<double>>>();
     }
-    
+
     wxFAIL_MSG( _( "Unknown SIM_VALUE type" ) );
     return nullptr;
 }
@@ -484,7 +484,7 @@ bool SIM_VALUE_INST<double>::FromString( const wxString& aString, NOTATION aNota
     {
         m_value = std::stod( parseResult.significand ) * std::pow( 10, exponent );
     }
-    catch( const std::invalid_argument& e )
+    catch( const std::invalid_argument& )
     {
         return false;
     }

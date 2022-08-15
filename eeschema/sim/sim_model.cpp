@@ -117,7 +117,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
-    { 
+    {
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
@@ -139,7 +139,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SW_I:                 return { DEVICE_TYPE_::SW,     "I",              "Current-controlled"         };
 
     case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
-    
+
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
@@ -261,7 +261,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::L:                    return { "L", ""        };
     //case TYPE::L_ADV:                return { "L", "l"       };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
-    
+
     case TYPE::TLINE_Z0:             return { "T"  };
     case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
 
@@ -602,7 +602,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
                 }
             }
         }
-        catch( const tao::pegtl::parse_error& e )
+        catch( const tao::pegtl::parse_error& )
         {
         }
 
@@ -925,7 +925,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 
         if( valueStr.IsEmpty() )
             continue;
-        
+
         wxString append = " " + param.info.name + "=" + valueStr;
 
         if( line.Length() + append.Length() > 60 )
@@ -974,7 +974,7 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
         for( unsigned i = 0; i < aPinNetNames.size(); ++i )
         {
             unsigned symbolPinNumber = i + 1;
-            
+
             if( symbolPinNumber == pin.symbolPinNumber )
                 result << aPinNetNames[i] << " ";
         }
@@ -1142,7 +1142,7 @@ bool SIM_MODEL::SetParamValue( const wxString& aParamName, const wxString& aValu
                             {
                                 return param.info.name == aParamName.Lower();
                             } );
-    
+
     if( it == params.end() )
         return false;
 
@@ -1281,7 +1281,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
     try
     {
         // Using parse tree instead of actions because we don't care about performance that much,
-        // and having a tree greatly simplifies some things. 
+        // and having a tree greatly simplifies some things.
         root = tao::pegtl::parse_tree::parse<
             SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
             SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -1300,7 +1300,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
             paramName = node->string();
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>() 
+        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>()
             || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
@@ -1400,7 +1400,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::V_BEHAVIORAL:
     case TYPE::I_BEHAVIORAL:
         return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
-    
+
     case TYPE::TLINE_Z0:
     case TYPE::TLINE_RLGC:
         return std::make_unique<SIM_MODEL_TLINE>( aType );
