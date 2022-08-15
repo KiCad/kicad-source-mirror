@@ -359,7 +359,11 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
 
 void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
 {
-    m_colWidths[NAME_COL] = m_col_part->GetWidth();
+    // On GTK, this value in not immediately available, so don't
+    // set it to zero just because we haven't fully initialized
+    if( m_col_part->GetWidth() > 0 )
+        m_colWidths[NAME_COL] = m_col_part->GetWidth();
+
     m_col_desc->SetWidth( m_colWidths[DESC_COL] );
 
     // Mandatory in any wxSizeEvent handler:
