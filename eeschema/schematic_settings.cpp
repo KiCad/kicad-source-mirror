@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -219,15 +219,16 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_NgspiceSimulatorSettings =
         std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );
 
-    registerMigration( 0, 1, [&]() -> bool
-    {
-        OPT<double> tor = Get<double>( "drawing.text_offset_ratio" );
+    registerMigration( 0, 1,
+            [&]() -> bool
+            {
+                OPT<double> tor = Get<double>( "drawing.text_offset_ratio" );
 
-        if( tor.is_initialized() )
-            Set( "drawing.label_size_ratio", tor.get() );
+                if( tor.is_initialized() )
+                    Set( "drawing.label_size_ratio", tor.get() );
 
-        return true;
-    } );
+                return true;
+            } );
 }
 
 

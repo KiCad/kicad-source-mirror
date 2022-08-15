@@ -43,16 +43,17 @@ using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keyword
 const int eeschemaSchemaVersion = 1;
 
 /// Default value for bom.plugins
-const nlohmann::json defaultBomPlugins = {
+const nlohmann::json defaultBomPlugins =
         {
-            { "name", "bom_csv_grouped_by_value" },
-            { "path", "bom_csv_grouped_by_value.py" }
-        },
-        {
-            { "name", "bom_csv_grouped_by_value_with_fp" },
-            { "path", "bom_csv_grouped_by_value_with_fp.py" }
-        },
-    };
+            {
+                { "name", "bom_csv_grouped_by_value" },
+                { "path", "bom_csv_grouped_by_value.py" }
+            },
+            {
+                { "name", "bom_csv_grouped_by_value_with_fp" },
+                { "path", "bom_csv_grouped_by_value_with_fp.py" }
+            },
+        };
 
 
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :

@@ -232,7 +232,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
             [&]()
             {
                 // Fix LAYER_VIA_HOLES color - before version 2, this setting had no effect
-                nlohmann::json::json_pointer ptr( "/board/via_hole");
+                nlohmann::json::json_pointer ptr( "/board/via_hole" );
 
                 ( *m_internals )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
 
