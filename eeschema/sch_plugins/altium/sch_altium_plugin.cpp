@@ -130,6 +130,8 @@ SCH_ALTIUM_PLUGIN::SCH_ALTIUM_PLUGIN()
     m_rootSheet    = nullptr;
     m_currentSheet = nullptr;
     m_schematic    = nullptr;
+    m_harnessOwnerIndexOffset = 0;
+    m_harnessEntryParent      = 0;
 
     m_reporter     = &WXLOG_REPORTER::GetInstance();
 }
@@ -383,7 +385,7 @@ void SCH_ALTIUM_PLUGIN::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             ParseHarnessEntry( properties );
             break;
         case ALTIUM_SCH_RECORD::HARNESS_TYPE:
-            ParseHarnessType( properties ); 
+            ParseHarnessType( properties );
             break;
         case ALTIUM_SCH_RECORD::SIGNAL_HARNESS:
             ParseSignalHarness( properties );
@@ -2169,9 +2171,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     //{
     //    label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
     //}
-    
+
     label = new SCH_GLOBALLABEL( position, aElem.Name );
-    
+
     switch( aElem.IOtype )
     {
     default:

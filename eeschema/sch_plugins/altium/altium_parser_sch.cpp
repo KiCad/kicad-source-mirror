@@ -452,6 +452,10 @@ ASCH_HARNESS_CONNECTOR::ASCH_HARNESS_CONNECTOR( const std::map<wxString, wxStrin
 
     Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+
+    IndexInSheet = 0;
+    LineWidth = 0;;
+    LocationPrimaryConnectionPosition = 0;
 }
 
 
@@ -477,6 +481,7 @@ ASCH_HARNESS_ENTRY::ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aPro
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
     TextColor = ALTIUM_PARSER::ReadInt( aProps, "TEXTCOLOR", 0 );
     TextFontID = ALTIUM_PARSER::ReadInt( aProps, "TEXTFONTID", 0 );
+    TextStyle = 0;
 }
 
 
@@ -712,7 +717,7 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProps, in
     Italic    = ALTIUM_PARSER::ReadBool( aProps, "ITALIC" + sid, false );
     Bold      = ALTIUM_PARSER::ReadBool( aProps, "BOLD" + sid, false );
     Underline = ALTIUM_PARSER::ReadBool( aProps, "UNDERLINE" + sid, false );
-    
+
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR" + sid, 0 );
 }
 
