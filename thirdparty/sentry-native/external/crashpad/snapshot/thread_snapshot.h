@@ -17,9 +17,7 @@
 
 #include <stdint.h>
 
-#ifdef CLIENT_STACKTRACES_ENABLED
 #include <string>
-#endif
 #include <vector>
 
 namespace crashpad {
@@ -72,6 +70,9 @@ class ThreadSnapshot {
   //! %Thread identifiers are at least unique within a process, and may be
   //! unique system-wide.
   virtual uint64_t ThreadID() const = 0;
+
+  //! \brief Returns the thread's name.
+  virtual std::string ThreadName() const = 0;
 
   //! \brief Returns the thread’s suspend count.
   //!

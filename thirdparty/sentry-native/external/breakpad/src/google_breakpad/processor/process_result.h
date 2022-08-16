@@ -56,9 +56,13 @@ enum ProcessResult {
   PROCESS_ERROR_DUPLICATE_REQUESTING_THREADS,  // There was more than one
                                                // requesting thread.
 
-  PROCESS_SYMBOL_SUPPLIER_INTERRUPTED          // The dump processing was
+  PROCESS_SYMBOL_SUPPLIER_INTERRUPTED,         // The dump processing was
                                                // interrupted by the
                                                // SymbolSupplier(not fatal).
+
+  PROCESS_ERROR_GETTING_THREAD_NAME,           // There was an error getting one
+                                               // thread's name from the dump.
+
 };
 
 }  // namespace google_breakpad

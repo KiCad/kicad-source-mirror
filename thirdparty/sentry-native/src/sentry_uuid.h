@@ -3,7 +3,6 @@
 
 #include "sentry_boot.h"
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 /**
  * Converts a sentry UUID to a string representation used for internal
  * sentry UUIDs such as event IDs.
@@ -21,6 +20,4 @@ void sentry__span_uuid_as_string(const sentry_uuid_t *uuid, char str[17]);
  * Create a new UUID from the windows-native GUID type.
  */
 sentry_uuid_t sentry__uuid_from_native(const GUID *guid);
-#endif
-
 #endif

@@ -1,7 +1,6 @@
 #ifndef SENTRY_TRACING_H_INCLUDED
 #define SENTRY_TRACING_H_INCLUDED
 
-#include "sentry_boot.h"
 #include "sentry_value.h"
 
 /**

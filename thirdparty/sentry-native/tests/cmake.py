@@ -175,7 +175,7 @@ def cmake(cwd, targets, options=None):
     buildcmd.append("--parallel")
     if "code-checker" in os.environ.get("RUN_ANALYZER", ""):
         buildcmd = [
-            "CodeChecker",
+            "codechecker",
             "log",
             "--output",
             "compilation.json",
@@ -206,7 +206,7 @@ def cmake(cwd, targets, options=None):
         ]
         disables = ["--disable={}".format(d) for d in disable]
         checkcmd = [
-            "CodeChecker",
+            "codechecker",
             "check",
             "--jobs",
             str(os.cpu_count()),

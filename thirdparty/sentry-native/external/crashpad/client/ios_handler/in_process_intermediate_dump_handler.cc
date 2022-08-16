@@ -21,7 +21,8 @@
 #include <sys/sysctl.h>
 #include <time.h>
 
-#include "base/cxx17_backports.h"
+#include <iterator>
+
 #include "build/build_config.h"
 #include "snapshot/snapshot_constants.h"
 #include "util/ios/ios_intermediate_dump_writer.h"
@@ -428,7 +429,7 @@ void CaptureMemoryPointedToByThreadState(IOSIntermediateDumpWriter* writer,
   MaybeCaptureMemoryAround(writer, thread_state.__rip);
 #elif defined(ARCH_CPU_ARM_FAMILY)
   MaybeCaptureMemoryAround(writer, thread_state.__pc);
-  for (size_t i = 0; i < base::size(thread_state.__x); ++i) {
+  for (size_t i = 0; i < std::size(thread_state.__x); ++i) {
     MaybeCaptureMemoryAround(writer, thread_state.__x[i]);
   }
 #endif
@@ -598,7 +599,7 @@ void InProcessIntermediateDumpHandler::WriteProcessInfo(
   kinfo_proc kern_proc_info;
   int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()};
   size_t len = sizeof(kern_proc_info);
-  if (sysctl(mib, base::size(mib), &kern_proc_info, &len, nullptr, 0) == 0) {
+  if (sysctl(mib, std::size(mib), &kern_proc_info, &len, nullptr, 0) == 0) {
     WriteProperty(
         writer, IntermediateDumpKey::kPID, &kern_proc_info.kp_proc.p_pid);
     WriteProperty(writer,
@@ -646,7 +647,7 @@ void InProcessIntermediateDumpHandler::WriteProcessInfo(
                   IntermediateDumpKey::kSystemTime,
                   &task_thread_times.system_time);
   } else {
-    CRASHPAD_RAW_LOG("task_info task_basic_info");
+    CRASHPAD_RAW_LOG("task_info thread_times_info");
   }
 
   if (!annotations.empty()) {
@@ -810,6 +811,22 @@ void InProcessIntermediateDumpHandler::WriteThreadInfo(
       CRASHPAD_RAW_LOG_ERROR(kr, "thread_info::THREAD_BASIC_INFO");
     }
 
+    thread_extended_info extended_info;
+    count = THREAD_EXTENDED_INFO_COUNT;
+    kr = thread_info(thread,
+                     THREAD_EXTENDED_INFO,
+                     reinterpret_cast<thread_info_t>(&extended_info),
+                     &count);
+    if (kr == KERN_SUCCESS) {
+      WritePropertyBytes(
+          writer,
+          IntermediateDumpKey::kThreadName,
+          reinterpret_cast<const void*>(extended_info.pth_name),
+          strnlen(extended_info.pth_name, sizeof(extended_info.pth_name)));
+    } else {
+      CRASHPAD_RAW_LOG_ERROR(kr, "thread_info::THREAD_EXTENDED_INFO");
+    }
+
     thread_precedence_policy precedence;
     count = THREAD_PRECEDENCE_POLICY_COUNT;
     boolean_t get_default = FALSE;
@@ -962,10 +979,12 @@ void InProcessIntermediateDumpHandler::WriteModuleInfo(
       return;
     }
 
-    WriteProperty(writer,
-                  IntermediateDumpKey::kName,
-                  image->imageFilePath,
-                  strlen(image->imageFilePath));
+    if (image->imageFilePath) {
+      WriteProperty(writer,
+                    IntermediateDumpKey::kName,
+                    image->imageFilePath,
+                    strlen(image->imageFilePath));
+    }
     uint64_t address = FromPointerCast<uint64_t>(image->imageLoadAddress);
     WriteProperty(writer, IntermediateDumpKey::kAddress, &address);
     WriteProperty(
@@ -975,7 +994,12 @@ void InProcessIntermediateDumpHandler::WriteModuleInfo(
 
   {
     IOSIntermediateDumpWriter::ScopedArrayMap modules(writer);
-    WriteProperty(writer, IntermediateDumpKey::kName, image_infos->dyldPath);
+    if (image_infos->dyldPath) {
+      WriteProperty(writer,
+                    IntermediateDumpKey::kName,
+                    image_infos->dyldPath,
+                    strlen(image_infos->dyldPath));
+    }
     uint64_t address =
         FromPointerCast<uint64_t>(image_infos->dyldImageLoadAddress);
     WriteProperty(writer, IntermediateDumpKey::kAddress, &address);

@@ -28,12 +28,13 @@ namespace {
 constexpr base::FilePath::CharType kAttachmentsDirectory[] =
     FILE_PATH_LITERAL("attachments");
 
-bool AttachmentNameIsOK(const std::string& name) {
-  for (const char c : name) {
-    if (c != '_' && c != '-' && c != '.' && !isalnum(c))
-      return false;
-  }
-  return true;
+std::string FixAttachmentName(std::string name) {
+  std::replace_if(name.begin(), name.end(), [&](char c) 
+  { 
+      return c != '_' && c != '-' && c != '.' && !isalnum(c);
+  }, '_');
+  
+  return name;
 }
 }  // namespace
 
@@ -68,7 +69,7 @@ bool CrashReportDatabase::NewReport::Initialize(
     return false;
   }
 
-#if defined(OS_WIN)
+#if BUILDFLAG(IS_WIN)
   const std::wstring uuid_string = uuid_.ToWString();
 #else
   const std::string uuid_string = uuid_.ToString();
@@ -94,19 +95,15 @@ FileReaderInterface* CrashReportDatabase::NewReport::Reader() {
 
 FileWriter* CrashReportDatabase::NewReport::AddAttachment(
     const std::string& name) {
-  if (!AttachmentNameIsOK(name)) {
-    LOG(ERROR) << "invalid name for attachment " << name;
-    return nullptr;
-  }
   base::FilePath report_attachments_dir = database_->AttachmentsPath(uuid_);
   if (!LoggingCreateDirectory(
           report_attachments_dir, FilePermissions::kOwnerOnly, true)) {
     return nullptr;
   }
-#if defined(OS_WIN)
-  const std::wstring name_string = base::UTF8ToWide(name);
+#if BUILDFLAG(IS_WIN)
+  const std::wstring name_string = base::UTF8ToWide(FixAttachmentName(name));
 #else
-  const std::string name_string = name;
+  const std::string name_string = FixAttachmentName(name);
 #endif
   base::FilePath attachment_path = report_attachments_dir.Append(name_string);
   auto writer = std::make_unique<FileWriter>();
@@ -137,7 +134,7 @@ void CrashReportDatabase::UploadReport::InitializeAttachments() {
       continue;
     }
     attachment_readers_.emplace_back(std::move(file_reader));
-#if defined(OS_WIN)
+#if BUILDFLAG(IS_WIN)
     const std::string name_string = base::WideToUTF8(filename.value());
 #else
     const std::string name_string = filename.value();
@@ -177,7 +174,7 @@ CrashReportDatabase::OperationStatus CrashReportDatabase::RecordUploadComplete(
 }
 
 base::FilePath CrashReportDatabase::AttachmentsPath(const UUID& uuid) {
-#if defined(OS_WIN)
+#if BUILDFLAG(IS_WIN)
   const std::wstring uuid_string = uuid.ToWString();
 #else
   const std::string uuid_string = uuid.ToString();

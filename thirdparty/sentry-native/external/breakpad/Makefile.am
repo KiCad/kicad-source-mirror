@@ -168,6 +168,7 @@ src_client_linux_libbreakpad_client_a_SOURCES = \
 	src/client/linux/minidump_writer/linux_dumper.cc \
 	src/client/linux/minidump_writer/linux_ptrace_dumper.cc \
 	src/client/linux/minidump_writer/minidump_writer.cc \
+	src/client/linux/minidump_writer/pe_file.cc \
 	src/client/minidump_file_writer-inl.h \
 	src/client/minidump_file_writer.cc \
 	src/client/minidump_file_writer.h \
@@ -491,6 +492,7 @@ src_client_linux_linux_client_unittest_shlib_SOURCES = \
 	src/client/linux/minidump_writer/linux_ptrace_dumper_unittest.cc \
 	src/client/linux/minidump_writer/minidump_writer_unittest.cc \
 	src/client/linux/minidump_writer/minidump_writer_unittest_utils.cc \
+	src/client/linux/minidump_writer/pe_file.cc \
 	src/client/linux/minidump_writer/proc_cpuinfo_reader_unittest.cc \
 	src/common/linux/elf_core_dump.cc \
 	src/common/linux/linux_libc_support_unittest.cc \

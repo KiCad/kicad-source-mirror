@@ -23,6 +23,7 @@
 #include "minidump/minidump_extensions.h"
 #include "snapshot/memory_map_region_snapshot.h"
 #include "snapshot/minidump/minidump_simple_string_dictionary_reader.h"
+#include "snapshot/minidump/minidump_string_reader.h"
 #include "util/file/file_io.h"
 
 namespace crashpad {
@@ -323,7 +324,7 @@ bool ProcessSnapshotMinidump::InitializeMiscInfo() {
       full_version_ = base::UTF16ToUTF8(info.BuildString);
 #endif
       full_version_ = full_version_.substr(0, full_version_.find(';'));
-      FALLTHROUGH;
+      [[fallthrough]];
     case sizeof(MINIDUMP_MISC_INFO_3):
     case sizeof(MINIDUMP_MISC_INFO_2):
     case sizeof(MINIDUMP_MISC_INFO):
@@ -576,16 +577,85 @@ bool ProcessSnapshotMinidump::InitializeThreads() {
     return false;
   }
 
+  if (!InitializeThreadNames()) {
+    return false;
+  }
+
   for (uint32_t thread_index = 0; thread_index < thread_count; ++thread_index) {
     const RVA thread_rva = stream_it->second->Rva + sizeof(thread_count) +
                            thread_index * sizeof(MINIDUMP_THREAD);
 
     auto thread = std::make_unique<internal::ThreadSnapshotMinidump>();
-    if (!thread->Initialize(file_reader_, thread_rva, arch_)) {
+    if (!thread->Initialize(file_reader_, thread_rva, arch_, thread_names_)) {
       return false;
     }
 
     threads_.push_back(std::move(thread));
+  }
+
+  return true;
+}
+
+bool ProcessSnapshotMinidump::InitializeThreadNames() {
+  const auto& stream_it = stream_map_.find(kMinidumpStreamTypeThreadNameList);
+  if (stream_it == stream_map_.end()) {
+    return true;
+  }
+
+  if (stream_it->second->DataSize < sizeof(MINIDUMP_THREAD_NAME_LIST)) {
+    LOG(ERROR) << "thread_name_list size mismatch";
+    return false;
+  }
+
+  if (!file_reader_->SeekSet(stream_it->second->Rva)) {
+    return false;
+  }
+
+  uint32_t thread_name_count;
+  if (!file_reader_->ReadExactly(&thread_name_count,
+                                 sizeof(thread_name_count))) {
+    return false;
+  }
+
+  if (sizeof(MINIDUMP_THREAD_NAME_LIST) +
+          thread_name_count * sizeof(MINIDUMP_THREAD_NAME) !=
+      stream_it->second->DataSize) {
+    LOG(ERROR) << "thread_name_list size mismatch";
+    return false;
+  }
+
+  for (uint32_t thread_name_index = 0; thread_name_index < thread_name_count;
+       ++thread_name_index) {
+    const RVA thread_name_rva =
+        stream_it->second->Rva + sizeof(thread_name_count) +
+        thread_name_index * sizeof(MINIDUMP_THREAD_NAME);
+    if (!file_reader_->SeekSet(thread_name_rva)) {
+      return false;
+    }
+    MINIDUMP_THREAD_NAME minidump_thread_name;
+    if (!file_reader_->ReadExactly(&minidump_thread_name,
+                                   sizeof(minidump_thread_name))) {
+      return false;
+    }
+    std::string name;
+    if (!internal::ReadMinidumpUTF16String(
+            file_reader_, minidump_thread_name.RvaOfThreadName, &name)) {
+      return false;
+    }
+
+    // XXX sentry maintainers:
+    //    the upstream line
+    //
+    //    thread_names_.emplace(minidump_thread_name.ThreadId, std::move(name));
+    //
+    //    fails to compile on GCC (which is untested/-supported by the crashpad
+    //    maintainers). emplace() takes its parameters as rvalue-references
+    //    which is illegal when referencing a bitfield (or packed struct).
+    //
+    //    Creating an explicit copy by-passes the issue, trading for more
+    //    (typically two) instructions per thread-name.
+    uint32_t thread_id = minidump_thread_name.ThreadId;
+    thread_names_.emplace(thread_id, std::move(name));
   }
 
   return true;

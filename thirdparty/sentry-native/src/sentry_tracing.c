@@ -1,9 +1,7 @@
-#include "sentry_boot.h"
-
+#include "sentry_tracing.h"
 #include "sentry_alloc.h"
 #include "sentry_logger.h"
 #include "sentry_string.h"
-#include "sentry_tracing.h"
 #include "sentry_utils.h"
 #include "sentry_value.h"
 #include <string.h>

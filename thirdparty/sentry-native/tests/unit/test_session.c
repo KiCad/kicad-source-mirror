@@ -2,7 +2,6 @@
 #include "sentry_session.h"
 #include "sentry_testsupport.h"
 #include "sentry_value.h"
-#include <sentry.h>
 
 static void
 send_envelope(const sentry_envelope_t *envelope, void *data)
@@ -61,6 +60,12 @@ SENTRY_TEST(session_basics)
     sentry_options_set_transport(
         options, sentry_new_function_transport(send_envelope, &called));
     sentry_options_set_release(options, "my_release");
+
+    // the default environment is always `production` if not overwritten by the
+    // OS environment variable `SENTRY_ENVIRONMENT`
+    // (see https://develop.sentry.dev/sdk/event-payloads/#optional-attributes)
+    TEST_CHECK_STRING_EQUAL(
+        sentry_options_get_environment(options), "production");
     sentry_options_set_environment(options, "my_environment");
     sentry_init(options);
 

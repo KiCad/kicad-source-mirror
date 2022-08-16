@@ -1,6 +1,6 @@
 #include "sentry_core.h"
 #include "sentry_testsupport.h"
-#include <sentry.h>
+
 #include <sentry_sync.h>
 
 static void

@@ -18,9 +18,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <tuple>
 #include <utility>
 
-#include "base/ignore_result.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "client/settings.h"
@@ -257,8 +257,16 @@ class CrashReportDatabaseGeneric : public CrashReportDatabase {
   // Writes the metadata for report to the filesystem at path.
   static bool WriteMetadata(const base::FilePath& path, const Report& report);
 
+  Settings& SettingsInternal() {
+    if (!settings_init_)
+      settings_.Initialize(base_dir_.Append(kSettings));
+    settings_init_ = true;
+    return settings_;
+  }
+
   base::FilePath base_dir_;
   Settings settings_;
+  bool settings_init_ = false;
   InitializationStateDcheck initialized_;
 };
 
@@ -289,10 +297,6 @@ bool CrashReportDatabaseGeneric::Initialize(const base::FilePath& path,
     return false;
   }
 
-  if (!settings_.Initialize(base_dir_.Append(kSettings))) {
-    return false;
-  }
-
   INITIALIZATION_STATE_SET_VALID(initialized_);
   return true;
 }
@@ -317,7 +321,7 @@ base::FilePath CrashReportDatabaseGeneric::DatabasePath() {
 
 Settings* CrashReportDatabaseGeneric::GetSettings() {
   INITIALIZATION_STATE_DCHECK_VALID(initialized_);
-  return &settings_;
+  return &SettingsInternal();
 }
 
 OperationStatus CrashReportDatabaseGeneric::PrepareNewCrashReport(
@@ -356,14 +360,14 @@ OperationStatus CrashReportDatabaseGeneric::FinishedWritingCrashReport(
     return kFileSystemError;
   }
   // We've moved the report to pending, so it no longer needs to be removed.
-  ignore_result(report->file_remover_.release());
+  std::ignore = report->file_remover_.release();
 
   // Close all the attachments and disarm their removers too.
   for (auto& writer : report->attachment_writers_) {
     writer->Close();
   }
   for (auto& remover : report->attachment_removers_) {
-    ignore_result(remover.release());
+    std::ignore = remover.release();
   }
 
   *uuid = report->ReportID();
@@ -588,7 +592,7 @@ OperationStatus CrashReportDatabaseGeneric::RecordUploadAttempt(
     return kDatabaseError;
   }
 
-  if (!settings_.SetLastUploadAttemptTime(now)) {
+  if (!SettingsInternal().SetLastUploadAttemptTime(now)) {
     return kDatabaseError;
   }
 
@@ -600,7 +604,7 @@ base::FilePath CrashReportDatabaseGeneric::ReportPath(const UUID& uuid,
   DCHECK_NE(state, kUninitialized);
   DCHECK_NE(state, kSearchable);
 
-#if defined(OS_WIN)
+#if BUILDFLAG(IS_WIN)
   const std::wstring uuid_string = uuid.ToWString();
 #else
   const std::string uuid_string = uuid.ToString();

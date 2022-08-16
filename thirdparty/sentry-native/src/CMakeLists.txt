@@ -10,6 +10,7 @@ sentry_target_sources_cwd(sentry
 	sentry_database.h
 	sentry_envelope.c
 	sentry_envelope.h
+	sentry_info.c
 	sentry_json.c
 	sentry_json.h
 	sentry_logger.c
@@ -42,6 +43,8 @@ sentry_target_sources_cwd(sentry
 	sentry_uuid.h
 	sentry_value.c
 	sentry_value.h
+	sentry_tracing.c
+	sentry_tracing.h
 	path/sentry_path.c
 	transports/sentry_disk_transport.c
 	transports/sentry_disk_transport.h
@@ -149,13 +152,5 @@ if(SENTRY_INTEGRATION_QT)
 	sentry_target_sources_cwd(sentry
 		integrations/sentry_integration_qt.cpp
 		integrations/sentry_integration_qt.h
-	)
-endif()
-
-if(SENTRY_BUILD_EXAMPLES)
-	target_compile_definitions(sentry PRIVATE SENTRY_PERFORMANCE_MONITORING)
-	sentry_target_sources_cwd(sentry
-	sentry_tracing.c
-	sentry_tracing.h
 	)
 endif()

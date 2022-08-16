@@ -20,7 +20,6 @@ typedef struct sentry_scope_s {
     sentry_level_t level;
     sentry_value_t client_sdk;
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
     // The span attached to this scope, if any.
     //
     // Conceptually, every transaction is a span, so it should be possible to
@@ -31,7 +30,6 @@ typedef struct sentry_scope_s {
     // `name` property nested in transaction_object or span.
     sentry_transaction_t *transaction_object;
     sentry_span_t *span;
-#endif
 } sentry_scope_t;
 
 /**
@@ -98,9 +96,7 @@ void sentry__scope_apply_to_event(const sentry_scope_t *scope,
 
 #endif
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 // this is only used in unit tests
 #ifdef SENTRY_UNITTEST
 sentry_value_t sentry__scope_get_span_or_transaction();
-#endif
 #endif

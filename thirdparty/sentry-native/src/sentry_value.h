@@ -118,9 +118,7 @@ typedef struct sentry_jsonwriter_s sentry_jsonwriter_t;
 void sentry__jsonwriter_write_value(
     sentry_jsonwriter_t *jw, sentry_value_t value);
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 sentry_value_t sentry__value_new_span_uuid(const sentry_uuid_t *uuid);
 
 sentry_value_t sentry__value_new_internal_uuid(const sentry_uuid_t *uuid);
-#endif
 #endif

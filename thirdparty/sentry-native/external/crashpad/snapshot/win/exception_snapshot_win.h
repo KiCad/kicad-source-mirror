@@ -72,7 +72,8 @@ class ExceptionSnapshotWin final : public ExceptionSnapshot {
   //!     an appropriate message logged.
   bool Initialize(ProcessReaderWin* process_reader,
                   DWORD thread_id,
-                  WinVMAddress exception_pointers);
+                  WinVMAddress exception_pointers,
+                  uint32_t* gather_indirectly_referenced_memory_cap);
 
   // ExceptionSnapshot:
 
@@ -92,7 +93,7 @@ class ExceptionSnapshotWin final : public ExceptionSnapshot {
       ProcessReaderWin* process_reader,
       WinVMAddress exception_pointers_address,
       DWORD exception_thread_id,
-      void (*native_to_cpu_context)(const ContextType& context_record,
+      void (*native_to_cpu_context)(const ContextType* context_record,
                                     CPUContext* context,
                                     CPUContextUnion* context_union));
 

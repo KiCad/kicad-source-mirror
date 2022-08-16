@@ -16,7 +16,8 @@
 
 #include <sys/utsname.h>
 
-#include "base/cxx17_backports.h"
+#include <iterator>
+
 #include "base/files/file_path.h"
 #include "build/build_config.h"
 #include "client/annotation.h"
@@ -25,6 +26,7 @@
 #include "client/simple_string_dictionary.h"
 #include "gtest/gtest.h"
 #include "snapshot/ios/process_snapshot_ios_intermediate_dump.h"
+#include "test/scoped_set_thread_name.h"
 #include "test/scoped_temp_dir.h"
 #include "test/test_paths.h"
 #include "util/file/filesystem.h"
@@ -48,6 +50,7 @@ class InProcessIntermediateDumpHandlerTest : public testing::Test {
   }
 
   void TearDown() override {
+    EXPECT_TRUE(writer_->Close());
     writer_.reset();
     EXPECT_FALSE(IsRegularFile(path_));
   }
@@ -74,7 +77,7 @@ class InProcessIntermediateDumpHandlerTest : public testing::Test {
         mach_thread_self(),
         kSimulatedException,
         code,
-        base::size(code),
+        std::size(code),
         MACHINE_THREAD_STATE,
         reinterpret_cast<ConstThreadState>(&cpu_context),
         MACHINE_THREAD_STATE_COUNT);
@@ -103,12 +106,18 @@ TEST_F(InProcessIntermediateDumpHandlerTest, TestSystem) {
   EXPECT_STREQ(system->CPUVendor().c_str(), "GenuineIntel");
 #elif defined(ARCH_CPU_ARM64)
   EXPECT_EQ(system->GetCPUArchitecture(), kCPUArchitectureARM64);
-  utsname uts;
-  ASSERT_EQ(uname(&uts), 0);
-  EXPECT_STREQ(system->MachineDescription().c_str(), uts.machine);
 #else
 #error Port to your CPU architecture
 #endif
+#if TARGET_OS_SIMULATOR
+  EXPECT_EQ(system->MachineDescription().substr(0, 13),
+            std::string("iOS Simulator"));
+#elif TARGET_OS_IPHONE
+  utsname uts;
+  ASSERT_EQ(uname(&uts), 0);
+  EXPECT_STREQ(system->MachineDescription().c_str(), uts.machine);
+#endif
+
   EXPECT_EQ(system->GetOperatingSystem(), SystemSnapshot::kOperatingSystemIOS);
 }
 
@@ -198,6 +207,8 @@ TEST_F(InProcessIntermediateDumpHandlerTest, TestAnnotations) {
 }
 
 TEST_F(InProcessIntermediateDumpHandlerTest, TestThreads) {
+  const ScopedSetThreadName scoped_set_thread_name("TestThreads");
+
   WriteReport();
   internal::ProcessSnapshotIOSIntermediateDump process_snapshot;
   ASSERT_TRUE(process_snapshot.InitializeWithFilePath(path(), {}));
@@ -213,6 +224,7 @@ TEST_F(InProcessIntermediateDumpHandlerTest, TestThreads) {
                         &count),
             0);
   EXPECT_EQ(threads[0]->ThreadID(), identifier_info.thread_id);
+  EXPECT_EQ(threads[0]->ThreadName(), "TestThreads");
 }
 
 TEST_F(InProcessIntermediateDumpHandlerTest, TestProcess) {

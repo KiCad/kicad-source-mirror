@@ -184,9 +184,7 @@ string DwarfCFIToModule::RegisterName(int i) {
     return register_names_[reg];
 
   reporter_->UnnamedRegister(entry_offset_, reg);
-  char buf[30];
-  sprintf(buf, "unnamed_register%u", reg);
-  return buf;
+  return string("unnamed_register") + std::to_string(reg);
 }
 
 void DwarfCFIToModule::Record(Module::Address address, int reg,

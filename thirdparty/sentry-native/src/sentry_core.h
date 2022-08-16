@@ -29,22 +29,19 @@
  */
 bool sentry__should_skip_upload(void);
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 /**
  * Given a well-formed event, returns whether an event is a transaction or not.
  * Defaults to false, which will also be returned if the event is malformed.
  */
 bool sentry__event_is_transaction(sentry_value_t event);
-#endif
 
 /**
  * Convert the given event into an envelope. This assumes that the event
  * being passed in is not a transaction.
  *
  * More specifically, it will do the following things:
- * - sample the event, possibly discarding it,
  * - apply the scope to it,
- * - call the before_send hook on it,
+ * - call the before_send hook on it (if invoke_before_send == true),
  * - add the event to a new envelope,
  * - record errors on the current session,
  * - add any attachments to the envelope as well
@@ -53,14 +50,13 @@ bool sentry__event_is_transaction(sentry_value_t event);
  * `event_id` out-parameter.
  */
 sentry_envelope_t *sentry__prepare_event(const sentry_options_t *options,
-    sentry_value_t event, sentry_uuid_t *event_id);
+    sentry_value_t event, sentry_uuid_t *event_id, bool invoke_before_send);
 
 /**
  * Sends a sentry event, regardless of its type.
  */
 sentry_uuid_t sentry__capture_event(sentry_value_t event);
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 /**
  * Convert the given transaction into an envelope. This assumes that the
  * event being passed in is a transaction.
@@ -78,7 +74,6 @@ sentry_uuid_t sentry__capture_event(sentry_value_t event);
  */
 sentry_envelope_t *sentry__prepare_transaction(const sentry_options_t *options,
     sentry_value_t transaction, sentry_uuid_t *event_id);
-#endif
 
 /**
  * This function will submit the `envelope` to the given `transport`, first
@@ -122,9 +117,7 @@ void sentry__options_unlock(void);
 // these for now are only needed outside of core for tests
 #ifdef SENTRY_UNITTEST
 bool sentry__roll_dice(double probability);
-#    ifdef SENTRY_PERFORMANCE_MONITORING
 bool sentry__should_send_transaction(sentry_value_t tx_cxt);
-#    endif
 #endif
 
 #endif

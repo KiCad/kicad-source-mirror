@@ -71,6 +71,8 @@
 #include "client/linux/minidump_writer/line_reader.h"
 #include "client/linux/minidump_writer/linux_dumper.h"
 #include "client/linux/minidump_writer/linux_ptrace_dumper.h"
+#include "client/linux/minidump_writer/pe_file.h"
+#include "client/linux/minidump_writer/pe_structs.h"
 #include "client/linux/minidump_writer/proc_cpuinfo_reader.h"
 #include "client/minidump_file_writer.h"
 #include "common/linux/file_id.h"
@@ -83,9 +85,9 @@ namespace {
 
 using google_breakpad::AppMemoryList;
 using google_breakpad::auto_wasteful_vector;
+using google_breakpad::elf::kDefaultBuildIdSize;
 using google_breakpad::ExceptionHandler;
 using google_breakpad::CpuSet;
-using google_breakpad::kDefaultBuildIdSize;
 using google_breakpad::LineReader;
 using google_breakpad::LinuxDumper;
 using google_breakpad::LinuxPtraceDumper;
@@ -95,8 +97,11 @@ using google_breakpad::MappingInfo;
 using google_breakpad::MappingList;
 using google_breakpad::MinidumpFileWriter;
 using google_breakpad::PageAllocator;
+using google_breakpad::PEFile;
+using google_breakpad::PEFileFormat;
 using google_breakpad::ProcCpuInfoReader;
 using google_breakpad::RawContextCPU;
+using google_breakpad::RSDS_DEBUG_FORMAT;
 using google_breakpad::ThreadInfo;
 using google_breakpad::TypedMDRVA;
 using google_breakpad::UContextReader;
@@ -632,39 +637,87 @@ class MinidumpWriter {
     mod->base_of_image = mapping.start_addr;
     mod->size_of_image = mapping.size;
 
-    auto_wasteful_vector<uint8_t, kDefaultBuildIdSize> identifier_bytes(
-        dumper_->allocator());
+    char file_name[NAME_MAX];
+    char file_path[NAME_MAX];
 
-    if (identifier) {
-      // GUID was provided by caller.
-      identifier_bytes.insert(identifier_bytes.end(),
-                              identifier,
-                              identifier + sizeof(MDGUID));
+    dumper_->GetMappingEffectiveNameAndPath(mapping, file_path,
+                                            sizeof(file_path), file_name,
+                                            sizeof(file_name));
+
+    RSDS_DEBUG_FORMAT rsds;
+    PEFileFormat file_format = PEFile::TryGetDebugInfo(file_path, &rsds);
+
+    if (file_format == PEFileFormat::notPeCoff) {
+      // The module is not a PE/COFF file, process as an ELF.
+      auto_wasteful_vector<uint8_t, kDefaultBuildIdSize> identifier_bytes(
+          dumper_->allocator());
+
+      if (identifier) {
+        // GUID was provided by caller.
+        identifier_bytes.insert(identifier_bytes.end(), identifier,
+                                identifier + sizeof(MDGUID));
+      } else {
+        // Note: ElfFileIdentifierForMapping() can manipulate the
+        // |mapping.name|, that is why we need to call the method
+        // GetMappingEffectiveNameAndPath again.
+        dumper_->ElfFileIdentifierForMapping(mapping, member, mapping_id,
+                                             identifier_bytes);
+        dumper_->GetMappingEffectiveNameAndPath(mapping, file_path,
+                                                sizeof(file_path), file_name,
+                                                sizeof(file_name));
+      }
+
+      if (!identifier_bytes.empty()) {
+        UntypedMDRVA cv(&minidump_writer_);
+        if (!cv.Allocate(MDCVInfoELF_minsize + identifier_bytes.size()))
+          return false;
+
+        const uint32_t cv_signature = MD_CVINFOELF_SIGNATURE;
+        cv.Copy(&cv_signature, sizeof(cv_signature));
+        cv.Copy(cv.position() + sizeof(cv_signature), &identifier_bytes[0],
+                identifier_bytes.size());
+
+        mod->cv_record = cv.location();
+      }
     } else {
-      // Note: ElfFileIdentifierForMapping() can manipulate the |mapping.name|.
-      dumper_->ElfFileIdentifierForMapping(mapping,
-                                           member,
-                                           mapping_id,
-                                           identifier_bytes);
-    }
-
-    if (!identifier_bytes.empty()) {
-      UntypedMDRVA cv(&minidump_writer_);
-      if (!cv.Allocate(MDCVInfoELF_minsize + identifier_bytes.size()))
+      // The module is a PE/COFF file. Create MDCVInfoPDB70 struct for it.
+      size_t file_name_length = strlen(file_name);
+      TypedMDRVA<MDCVInfoPDB70> cv(&minidump_writer_);
+      if (!cv.AllocateObjectAndArray(file_name_length + 1, sizeof(uint8_t)))
         return false;
-
-      const uint32_t cv_signature = MD_CVINFOELF_SIGNATURE;
-      cv.Copy(&cv_signature, sizeof(cv_signature));
-      cv.Copy(cv.position() + sizeof(cv_signature), &identifier_bytes[0],
-              identifier_bytes.size());
+      if (!cv.CopyIndexAfterObject(0, file_name, file_name_length))
+        return false;
+      MDCVInfoPDB70* cv_ptr = cv.get();
+      cv_ptr->cv_signature = MD_CVINFOPDB70_SIGNATURE;
+      if (file_format == PEFileFormat::peWithBuildId) {
+        // Populate BuildId and age using RSDS instance.
+        cv_ptr->signature.data1 = static_cast<uint32_t>(rsds.guid[0]) << 24 |
+                                  static_cast<uint32_t>(rsds.guid[1]) << 16 |
+                                  static_cast<uint32_t>(rsds.guid[2]) << 8 |
+                                  static_cast<uint32_t>(rsds.guid[3]);
+        cv_ptr->signature.data2 =
+            static_cast<uint16_t>(rsds.guid[4]) << 8 | rsds.guid[5];
+        cv_ptr->signature.data3 =
+            static_cast<uint16_t>(rsds.guid[6]) << 8 | rsds.guid[7];
+        cv_ptr->signature.data4[0] = rsds.guid[8];
+        cv_ptr->signature.data4[1] = rsds.guid[9];
+        cv_ptr->signature.data4[2] = rsds.guid[10];
+        cv_ptr->signature.data4[3] = rsds.guid[11];
+        cv_ptr->signature.data4[4] = rsds.guid[12];
+        cv_ptr->signature.data4[5] = rsds.guid[13];
+        cv_ptr->signature.data4[6] = rsds.guid[14];
+        cv_ptr->signature.data4[7] = rsds.guid[15];
+        // The Age field should be reverted as well.
+        cv_ptr->age = static_cast<uint32_t>(rsds.age[0]) << 24 |
+                      static_cast<uint32_t>(rsds.age[1]) << 16 |
+                      static_cast<uint32_t>(rsds.age[2]) << 8 |
+                      static_cast<uint32_t>(rsds.age[3]);
+      } else {
+        cv_ptr->age = 0;
+      }
 
       mod->cv_record = cv.location();
     }
-
-    char file_name[NAME_MAX];
-    char file_path[NAME_MAX];
-    dumper_->GetMappingEffectiveNameAndPath(
-        mapping, file_path, sizeof(file_path), file_name, sizeof(file_name));
 
     MDLocationDescriptor ld;
     if (!minidump_writer_.WriteString(file_path, my_strlen(file_path), &ld))

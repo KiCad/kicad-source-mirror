@@ -15,11 +15,15 @@
 #include "snapshot/capture_memory.h"
 
 #include <stdint.h>
+#include <windows.h>
 
+// dbghelp must be after windows.h.
+#include <dbghelp.h>
+
+#include <iterator>
 #include <limits>
 #include <memory>
 
-#include "base/cxx17_backports.h"
 #include "base/logging.h"
 #include "snapshot/memory_snapshot.h"
 
@@ -86,6 +90,7 @@ void CaptureMemory::PointedToByContext(const CPUContext& context,
     MaybeCaptureMemoryAround(delegate, context.x86_64->r14);
     MaybeCaptureMemoryAround(delegate, context.x86_64->r15);
     MaybeCaptureMemoryAround(delegate, context.x86_64->rip);
+    // Note: Shadow stack region is directly captured.
   } else {
     MaybeCaptureMemoryAround(delegate, context.x86->eax);
     MaybeCaptureMemoryAround(delegate, context.x86->ebx);
@@ -99,17 +104,17 @@ void CaptureMemory::PointedToByContext(const CPUContext& context,
 #elif defined(ARCH_CPU_ARM_FAMILY)
   if (context.architecture == kCPUArchitectureARM64) {
     MaybeCaptureMemoryAround(delegate, context.arm64->pc);
-    for (size_t i = 0; i < base::size(context.arm64->regs); ++i) {
+    for (size_t i = 0; i < std::size(context.arm64->regs); ++i) {
       MaybeCaptureMemoryAround(delegate, context.arm64->regs[i]);
     }
   } else {
     MaybeCaptureMemoryAround(delegate, context.arm->pc);
-    for (size_t i = 0; i < base::size(context.arm->regs); ++i) {
+    for (size_t i = 0; i < std::size(context.arm->regs); ++i) {
       MaybeCaptureMemoryAround(delegate, context.arm->regs[i]);
     }
   }
 #elif defined(ARCH_CPU_MIPS_FAMILY)
-  for (size_t i = 0; i < base::size(context.mipsel->regs); ++i) {
+  for (size_t i = 0; i < std::size(context.mipsel->regs); ++i) {
     MaybeCaptureMemoryAround(delegate, context.mipsel->regs[i]);
   }
 #else

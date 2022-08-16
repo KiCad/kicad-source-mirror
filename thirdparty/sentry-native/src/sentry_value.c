@@ -1009,7 +1009,6 @@ sentry__value_new_hexstring(const uint8_t *bytes, size_t len)
     return sentry__value_new_string_owned(buf);
 }
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 sentry_value_t
 sentry__value_new_span_uuid(const sentry_uuid_t *uuid)
 {
@@ -1033,7 +1032,6 @@ sentry__value_new_internal_uuid(const sentry_uuid_t *uuid)
     buf[32] = '\0';
     return sentry__value_new_string_owned(buf);
 }
-#endif
 
 sentry_value_t
 sentry__value_new_uuid(const sentry_uuid_t *uuid)
@@ -1202,12 +1200,16 @@ sentry_event_add_thread(sentry_value_t event, sentry_value_t thread)
 }
 
 void
-sentry_event_value_add_stacktrace(sentry_value_t event, void **ips, size_t len)
+sentry_value_set_stacktrace(sentry_value_t value, void **ips, size_t len)
 {
     sentry_value_t stacktrace = sentry_value_new_stacktrace(ips, len);
+    sentry_value_set_by_key(value, "stacktrace", stacktrace);
+}
 
+void
+sentry_event_value_add_stacktrace(sentry_value_t event, void **ips, size_t len)
+{
     sentry_value_t thread = sentry_value_new_object();
-    sentry_value_set_by_key(thread, "stacktrace", stacktrace);
-
+    sentry_value_set_stacktrace(thread, ips, len);
     sentry_event_add_thread(event, thread);
 }

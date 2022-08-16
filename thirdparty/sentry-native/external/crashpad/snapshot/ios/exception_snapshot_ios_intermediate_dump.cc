@@ -66,6 +66,13 @@ using Key = IntermediateDumpKey;
 
 ExceptionSnapshotIOSIntermediateDump::ExceptionSnapshotIOSIntermediateDump()
     : ExceptionSnapshot(),
+#if defined(ARCH_CPU_X86_64)
+      context_x86_64_(),
+#elif defined(ARCH_CPU_ARM64)
+      context_arm64_(),
+#else
+#error Port to your CPU architecture
+#endif
       context_(),
       codes_(),
       thread_id_(0),
@@ -131,9 +138,15 @@ bool ExceptionSnapshotIOSIntermediateDump::InitializeFromSignal(
 #endif
   }
 
-  GetDataValueFromMap(exception_data, Key::kSignalNumber, &exception_);
-  GetDataValueFromMap(exception_data, Key::kSignalCode, &exception_info_);
+  exception_ = EXC_SOFT_SIGNAL;
+  GetDataValueFromMap(exception_data, Key::kSignalNumber, &exception_info_);
   GetDataValueFromMap(exception_data, Key::kSignalAddress, &exception_address_);
+
+  codes_.push_back(exception_);
+  codes_.push_back(exception_info_);
+  uint32_t code;
+  GetDataValueFromMap(exception_data, Key::kSignalCode, &code);
+  codes_.push_back(code);
 
   INITIALIZATION_STATE_SET_VALID(initialized_);
   return true;
@@ -373,11 +386,9 @@ void ExceptionSnapshotIOSIntermediateDump::
   }
 
 #if defined(ARCH_CPU_X86_64)
-  context_x86_64_ = {};
   context_x86_64_.rip = frames[0];  // instruction pointer
   context_x86_64_.rsp = frames[1];
 #elif defined(ARCH_CPU_ARM64)
-  context_arm64_ = {};
   context_arm64_.sp = 0;
   context_arm64_.pc = frames[0];
   context_arm64_.regs[30] = frames[1];  // link register

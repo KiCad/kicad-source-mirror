@@ -23,6 +23,54 @@
 #    define sleep_s(SECONDS) sleep(SECONDS)
 #endif
 
+static sentry_value_t
+before_send_callback(sentry_value_t event, void *hint, void *closure)
+{
+    (void)hint;
+    (void)closure;
+
+    // make our mark on the event
+    sentry_value_set_by_key(
+        event, "adapted_by", sentry_value_new_string("before_send"));
+
+    // tell the backend to proceed with the event
+    return event;
+}
+
+static sentry_value_t
+discarding_before_send_callback(sentry_value_t event, void *hint, void *closure)
+{
+    (void)hint;
+    (void)closure;
+
+    // discard event and signal backend to stop further processing
+    sentry_value_decref(event);
+    return sentry_value_new_null();
+}
+
+static sentry_value_t
+discarding_on_crash_callback(
+    const sentry_ucontext_t *uctx, sentry_value_t event, void *closure)
+{
+    (void)uctx;
+    (void)closure;
+
+    // discard event and signal backend to stop further processing
+    sentry_value_decref(event);
+    return sentry_value_new_null();
+}
+
+static sentry_value_t
+on_crash_callback(
+    const sentry_ucontext_t *uctx, sentry_value_t event, void *closure)
+{
+    (void)uctx;
+    (void)closure;
+
+    // tell the backend to retain the event
+    return event;
+}
+
 static void
 print_envelope(sentry_envelope_t *envelope, void *unused_state)
 {
@@ -65,6 +113,10 @@ main(int argc, char **argv)
 {
     sentry_options_t *options = sentry_options_new();
 
+    if (has_arg(argc, argv, "disable-backend")) {
+        sentry_options_set_backend(options, NULL);
+    }
+
     // this is an example. for real usage, make sure to set this explicitly to
     // an app specific cache location.
     sentry_options_set_database_path(options, ".sentry-native");
@@ -93,7 +145,6 @@ main(int argc, char **argv)
             options, sentry_transport_new(print_envelope));
     }
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
     if (has_arg(argc, argv, "capture-transaction")) {
         sentry_options_set_traces_sample_rate(options, 1.0);
     }
@@ -101,7 +152,24 @@ main(int argc, char **argv)
     if (has_arg(argc, argv, "child-spans")) {
         sentry_options_set_max_spans(options, 5);
     }
-#endif
+
+    if (has_arg(argc, argv, "before-send")) {
+        sentry_options_set_before_send(options, before_send_callback, NULL);
+    }
+
+    if (has_arg(argc, argv, "discarding-before-send")) {
+        sentry_options_set_before_send(
+            options, discarding_before_send_callback, NULL);
+    }
+
+    if (has_arg(argc, argv, "on-crash")) {
+        sentry_options_set_on_crash(options, on_crash_callback, NULL);
+    }
+
+    if (has_arg(argc, argv, "discarding-on-crash")) {
+        sentry_options_set_on_crash(
+            options, discarding_on_crash_callback, NULL);
+    }
 
     sentry_init(options);
 
@@ -209,8 +277,7 @@ main(int argc, char **argv)
         sentry_value_t exc = sentry_value_new_exception(
             "ParseIntError", "invalid digit found in string");
         if (has_arg(argc, argv, "add-stacktrace")) {
-            sentry_value_t stacktrace = sentry_value_new_stacktrace(NULL, 0);
-            sentry_value_set_by_key(exc, "stacktrace", stacktrace);
+            sentry_value_set_stacktrace(exc, NULL, 0);
         }
         sentry_value_t event = sentry_value_new_event();
         sentry_event_add_exception(event, exc);
@@ -218,7 +285,6 @@ main(int argc, char **argv)
         sentry_capture_event(event);
     }
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
     if (has_arg(argc, argv, "capture-transaction")) {
         sentry_transaction_context_t *tx_ctx
             = sentry_transaction_context_new("little.teapot",
@@ -253,7 +319,6 @@ main(int argc, char **argv)
 
         sentry_transaction_finish(tx);
     }
-#endif
 
     // make sure everything flushes
     sentry_close();

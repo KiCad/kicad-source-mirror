@@ -3,7 +3,6 @@
 #include "sentry_transport.h"
 #include "sentry_utils.h"
 #include "sentry_value.h"
-#include <sentry.h>
 
 SENTRY_TEST(basic_http_request_preparation_for_event)
 {

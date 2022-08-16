@@ -1,5 +1,4 @@
 #include "sentry_testsupport.h"
-#include <sentry.h>
 
 SENTRY_TEST(uninitialized)
 {

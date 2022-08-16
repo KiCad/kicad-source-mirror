@@ -1,5 +1,4 @@
 #include "sentry_scope.h"
-#include "sentry.h"
 #include "sentry_backend.h"
 #include "sentry_core.h"
 #include "sentry_database.h"
@@ -8,6 +7,7 @@
 #include "sentry_string.h"
 #include "sentry_symbolizer.h"
 #include "sentry_sync.h"
+#include "sentry_tracing.h"
 #include "sentry_value.h"
 
 #include <stdlib.h>
@@ -18,10 +18,6 @@
 #    define SENTRY_BACKEND "breakpad"
 #elif defined(SENTRY_BACKEND_INPROC)
 #    define SENTRY_BACKEND "inproc"
-#endif
-
-#ifdef SENTRY_PERFORMANCE_MONITORING
-#    include "sentry_tracing.h"
 #endif
 
 static bool g_scope_initialized = false;
@@ -80,11 +76,8 @@ get_scope(void)
     g_scope.breadcrumbs = sentry_value_new_list();
     g_scope.level = SENTRY_LEVEL_ERROR;
     g_scope.client_sdk = get_client_sdk();
-
-#ifdef SENTRY_PERFORMANCE_MONITORING
     g_scope.transaction_object = NULL;
     g_scope.span = NULL;
-#endif
 
     g_scope_initialized = true;
 
@@ -105,11 +98,8 @@ sentry__scope_cleanup(void)
         sentry_value_decref(g_scope.contexts);
         sentry_value_decref(g_scope.breadcrumbs);
         sentry_value_decref(g_scope.client_sdk);
-
-#ifdef SENTRY_PERFORMANCE_MONITORING
         sentry__transaction_decref(g_scope.transaction_object);
         sentry__span_decref(g_scope.span);
-#endif
     }
     sentry__mutex_unlock(&g_lock);
 }
@@ -241,7 +231,6 @@ sentry__symbolize_stacktrace(sentry_value_t stacktrace)
     }
 }
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
 sentry_value_t
 sentry__get_span_or_transaction(const sentry_scope_t *scope)
 {
@@ -254,7 +243,7 @@ sentry__get_span_or_transaction(const sentry_scope_t *scope)
     }
 }
 
-#    ifdef SENTRY_UNITTEST
+#ifdef SENTRY_UNITTEST
 sentry_value_t
 sentry__scope_get_span_or_transaction()
 {
@@ -263,7 +252,6 @@ sentry__scope_get_span_or_transaction()
     }
     return sentry_value_new_null();
 }
-#    endif
 #endif
 
 void
@@ -328,7 +316,6 @@ sentry__scope_apply_to_event(const sentry_scope_t *scope,
 
     sentry_value_t contexts = sentry__value_clone(scope->contexts);
 
-#ifdef SENTRY_PERFORMANCE_MONITORING
     // prep contexts sourced from scope; data about transaction on scope needs
     // to be extracted and inserted
     sentry_value_t scope_trace = sentry__value_get_trace_context(
@@ -339,7 +326,6 @@ sentry__scope_apply_to_event(const sentry_scope_t *scope,
         }
         sentry_value_set_by_key(contexts, "trace", scope_trace);
     }
-#endif
 
     // merge contexts sourced from scope into the event
     sentry_value_t event_contexts = sentry_value_get_by_key(event, "contexts");
