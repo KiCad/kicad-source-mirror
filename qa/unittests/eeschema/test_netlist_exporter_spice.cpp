@@ -103,6 +103,8 @@ public:
 
     void CompareNetlists() override
     {
+        m_abort = false;
+
         // Our simulator is actually Ngspice.
         NGSPICE* ngspice = dynamic_cast<NGSPICE*>( m_simulator.get() );
         BOOST_REQUIRE( ngspice );
@@ -126,7 +128,16 @@ public:
         bool err_found = m_log->Find( wxT( "Error: circuit not parsed" ) ) != wxNOT_FOUND;
 
         if( err_found )
+        {
+            if( m_log->Find( wxT( "MIF-ERROR" ) ) != wxNOT_FOUND )
+                wxLogWarning( wxT( "Cannot run ngspice. test skipped. Missing code model files?" ) );
+            else
+                wxLogWarning( wxT( "Cannot run ngspice. test skipped. Install error?" ) );
+
+            m_abort = true;
+
             return;
+        }
 
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );
@@ -244,6 +255,7 @@ public:
     std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
     std::shared_ptr<wxString>            m_log;
     std::unique_ptr<SPICE_TEST_REPORTER> m_reporter;
+    bool m_abort;       // set to true to force abort durint a test
 };
 
 
@@ -353,6 +365,10 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver" );
+
+    if( m_abort )
+        return;
+
     // Test D1 current before the pulse
     TestTranPoint( 95e-9, { { "I(D1)", 0 } } );
     // Test D1 current during the pulse
@@ -383,6 +399,10 @@ BOOST_AUTO_TEST_CASE( LegacyRectifier )
 BOOST_AUTO_TEST_CASE( LegacySallenKey )
 {
     TestNetlist( "legacy_sallen_key" );
+
+    if( m_abort )
+        return;
+
     TestACPoint( 1, { { "V(/lowpass)", pow( 10, 0.0 / 20 ) } } );
     TestACPoint( 1e3, { { "V(/lowpass)", pow( 10, -2.9 / 20 ) } } );
 }
