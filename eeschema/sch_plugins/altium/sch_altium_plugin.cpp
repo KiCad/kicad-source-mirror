@@ -975,82 +975,67 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_TEXT_FRAME elem( aProperties );
-
-    SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
-
-    switch( elem.alignment )
-    {
-    default:
-    case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
-        break;
-    case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
-        // No support for centered text in Eeschema yet...
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
-        break;
-    case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::LEFT );
-        break;
-    }
-
-    // JEY TODO: set size and word-wrap once KiCad supports wrapped text.
-
-    // JEY TODO: set border and background color once KiCad supports them.
-
-    size_t fontId = static_cast<int>( elem.fontId );
-
-    if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
-    {
-        const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        text->SetItalic( font.Italic );
-        text->SetBold( font.Bold );
-        text->SetTextSize( { font.Size / 2, font.Size / 2 } );
-    }
-
-    text->SetFlags( IS_NEW );
-    m_currentSheet->GetScreen()->Append( text );
+    AddTextBox( &elem );
 }
 
 
 void SCH_ALTIUM_PLUGIN::ParseNote( const std::map<wxString, wxString>& aProperties )
-{
+    {
     ASCH_NOTE elem( aProperties );
+    AddTextBox( static_cast<ASCH_TEXT_FRAME*>( &elem ) );
 
-    SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
+    // TODO: need some sort of property system for storing author....
+}
 
-    switch( elem.alignment )
+
+void SCH_ALTIUM_PLUGIN::AddTextBox(const ASCH_TEXT_FRAME *aElem )
+    {
+    SCH_TEXTBOX* textBox = new SCH_TEXTBOX();
+
+    VECTOR2I sheetTopRight = aElem->TopRight + m_sheetOffset;
+    VECTOR2I sheetBottomLeft = aElem->BottomLeft + m_sheetOffset;
+    textBox->SetStart( sheetTopRight );
+    textBox->SetEnd( sheetBottomLeft );
+
+    textBox->SetText( aElem->Text );
+
+    textBox->SetFillColor( GetColorFromInt( aElem->AreaColor ) );
+    textBox->SetFilled( aElem->IsSolid );
+
+    if( aElem->ShowBorder )
+        textBox->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
+    else
+        textBox->SetStroke( STROKE_PARAMS( -1, PLOT_DASH_TYPE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
+
+    switch( aElem->Alignment )
     {
     default:
     case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
-        // No support for centered text in Eeschema yet...
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
-        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::LEFT );
+        textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     }
 
-    // TODO: set size and word-wrap once KiCad supports wrapped text.
+    // JEY TODO: word-wrap once KiCad supports wrapped text.
 
-    // TODO: set border and background color once KiCad supports them.
-
-    // TODO: need some sort of property system for storing author....
-
-    size_t fontId = static_cast<int>( elem.fontId );
+    size_t fontId = static_cast<int>( aElem->FontID );
 
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        text->SetItalic( font.Italic );
-        text->SetBold( font.Bold );
-        text->SetTextSize( { font.Size / 2, font.Size / 2 } );
+        textBox->SetItalic( font.Italic );
+        textBox->SetBold( font.Bold );
+        textBox->SetTextSize( { font.Size / 2, font.Size / 2 } );
+        //textBox->SetFont(  //how to set font, we have a font mane here: ( font.fontname );
     }
 
-    text->SetFlags( IS_NEW );
-    m_currentSheet->GetScreen()->Append( text );
+    textBox->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( textBox );
 }
 
 

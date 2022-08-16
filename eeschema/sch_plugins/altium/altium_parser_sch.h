@@ -289,18 +289,24 @@ struct ASCH_LABEL
 
 struct ASCH_TEXT_FRAME
 {
-    VECTOR2I location;
-    wxSize   size;
+    VECTOR2I Location;
+    wxSize   Size;
+    // have both coordinates, for convenience
+    VECTOR2I BottomLeft;
+    VECTOR2I TopRight;
 
-    wxString text;
+    wxString Text;
 
-    int  fontId;
-    bool isWordWrapped;
-    bool border;
-    int  textMargin;
-    int  areaColor;
+    bool IsWordWrapped; // to do when kicad supports this
+    bool ShowBorder;
+    bool IsSolid;
 
-    ASCH_TEXT_FRAME_ALIGNMENT alignment;
+    int  FontID;
+    int  TextMargin; // to do when kicad supports this
+    int  AreaColor;
+    int  BorderColor;
+
+    ASCH_TEXT_FRAME_ALIGNMENT Alignment;
 
     explicit ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps );
 };

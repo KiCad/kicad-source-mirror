@@ -249,22 +249,29 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps )
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::NOTE
               || ReadRecord( aProps ) == ALTIUM_SCH_RECORD::TEXT_FRAME );
 
-    location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+    BottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    size = wxSize( ReadKiCadUnitFrac( aProps, "CORNER.X" ) - location.x,
-                   -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) - location.y );
+    TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
+                         -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
-    text.Replace( "~1", "\n", true );
+    Location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+                         -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+    Size = wxSize( ReadKiCadUnitFrac( aProps, "CORNER.X" ) - Location.x,
+                   -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) - Location.y );
 
-    fontId = ALTIUM_PARSER::ReadInt( aProps, "FONTID", 0 );
-    isWordWrapped = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", false );
-    border = ALTIUM_PARSER::ReadBool( aProps, "SHOWBORDER", false );
-    textMargin = ReadKiCadUnitFrac( aProps, "TEXTMARGIN" );
-    areaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    Text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
+    Text.Replace( "~1", "\n", true );
 
-    alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
-                                                     ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
+    FontID = ALTIUM_PARSER::ReadInt( aProps, "FONTID", 0 );
+    IsWordWrapped = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", false );
+    ShowBorder = ALTIUM_PARSER::ReadBool( aProps, "SHOWBORDER", false );
+    TextMargin = ReadKiCadUnitFrac( aProps, "TEXTMARGIN" );
+    AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    BorderColor = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+
+    IsSolid = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", true );
+
+    Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3, ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
 }
 
 

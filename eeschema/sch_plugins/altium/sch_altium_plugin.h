@@ -109,6 +109,7 @@ public:
 private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
+    void AddTextBox( const ASCH_TEXT_FRAME* aElem );
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
