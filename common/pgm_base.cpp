@@ -315,7 +315,7 @@ void PGM_BASE::sentryInit()
 #if !KICAD_IS_NIGHTLY
         sentry_options_set_release( options, KICAD_SEMANTIC_VERSION );
 #else
-        sentry_options_set_release( options, KICAD_MAJOR_MINOR_VERSION );
+        sentry_options_set_release( options, KICAD_COMMIT_HASH );
 #endif
 
         sentry_init( options );

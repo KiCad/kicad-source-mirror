@@ -67,6 +67,7 @@ set( _wvh_new_version_text
 #ifndef __KICAD_VERSION_H__
 #define __KICAD_VERSION_H__
 
+#define KICAD_COMMIT_HASH               \"${KICAD_COMMIT_HASH}\"
 #define KICAD_VERSION_FULL              \"${KICAD_VERSION_FULL}\"
 #define KICAD_SEMANTIC_VERSION          \"${KICAD_SEMANTIC_VERSION}\"
 #define KICAD_MAJOR_VERSION             \"${KICAD_MAJOR_VERSION}\"

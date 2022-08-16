@@ -51,6 +51,15 @@ macro( create_git_version_header _git_src_path )
             RESULT_VARIABLE _git_log_result
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+        execute_process(
+            COMMAND
+            ${GIT_EXECUTABLE} rev-parse HEAD
+            WORKING_DIRECTORY ${_git_src_path}
+            OUTPUT_VARIABLE _git_REV_PARSE_HEAD
+            ERROR_VARIABLE _git_log_error
+            RESULT_VARIABLE _git_log_result
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
         set( ENV{LC_ALL} ${_Git_SAVED_LC_ALL} )
     endif( GIT_FOUND )
 
@@ -58,6 +67,10 @@ macro( create_git_version_header _git_src_path )
     # to KiCadVersion.cmake as the revision level.
     if( _git_DESCRIBE )
         set( KICAD_VERSION "(${_git_DESCRIBE})" )
+    endif()
+
+    if( _git_DESCRIBE )
+        set( KICAD_COMMIT_HASH "${_git_REV_PARSE_HEAD}" )
     endif()
 
     if( _git_REV_COUNT )
