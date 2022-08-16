@@ -105,8 +105,10 @@ std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
     }
     else if( GetShape() == SHAPE_T::POLY )
     {
+        VECTOR2I offset = getParentPosition();
+
         for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
-            pts.emplace_back( pt );
+            pts.emplace_back( pt + offset );
     }
     else
     {
