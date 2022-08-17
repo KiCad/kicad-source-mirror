@@ -894,6 +894,7 @@ PNS_KICAD_IFACE::PNS_KICAD_IFACE()
     m_tool = nullptr;
     m_view = nullptr;
     m_previewItems = nullptr;
+    m_commitFlags = 0;
 }
 
 
@@ -1699,7 +1700,7 @@ void PNS_KICAD_IFACE::Commit()
 
     m_fpOffsets.clear();
 
-    m_commit->Push( _( "Interactive Router" ) );
+    m_commit->Push( _( "Interactive Router" ), m_commitFlags );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 

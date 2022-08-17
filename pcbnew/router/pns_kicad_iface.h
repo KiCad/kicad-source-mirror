@@ -126,6 +126,8 @@ public:
 
     EDA_UNITS GetUnits() const override;
 
+    void SetCommitFlags( int aCommitFlags ) { m_commitFlags = aCommitFlags; }
+
 private:
     struct OFFSET
     {
@@ -139,6 +141,7 @@ private:
 
     PCB_TOOL_BASE*                  m_tool;
     std::unique_ptr<BOARD_COMMIT>   m_commit;
+    int                             m_commitFlags;
 };
 
 
