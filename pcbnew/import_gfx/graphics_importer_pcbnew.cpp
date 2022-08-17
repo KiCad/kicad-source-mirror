@@ -125,7 +125,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
 {
     std::vector<VECTOR2I> convertedPoints;
-    convertedPoints.reserve( convertedPoints.size() );
+    convertedPoints.reserve( aVertices.size() );
 
     for( const VECTOR2D& precisePoint : aVertices )
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
