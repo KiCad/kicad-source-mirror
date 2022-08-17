@@ -1431,6 +1431,24 @@ void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 }
 
 
+void SCH_SCREEN::SetLegacySymbolInstanceData()
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        // Add missing value and footprint instance data for legacy schematics.
+        for( const SYMBOL_INSTANCE_REFERENCE& instance : symbol->GetInstanceReferences() )
+        {
+            symbol->AddHierarchicalReference( instance.m_Path, instance.m_Reference,
+                                              instance.m_Unit,
+                                              symbol->GetField( VALUE_FIELD )->GetText(),
+                                              symbol->GetField( FOOTPRINT_FIELD )->GetText() );
+        }
+    }
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -1820,4 +1838,12 @@ void SCH_SCREENS::BuildClientSheetPathList()
             }
         }
     }
+}
+
+
+void SCH_SCREENS::SetLegacySymbolInstanceData()
+{
+
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->SetLegacySymbolInstanceData();
 }

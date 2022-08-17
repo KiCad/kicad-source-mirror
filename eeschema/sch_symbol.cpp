@@ -543,7 +543,8 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     }
 
     if( !found )
-        AddHierarchicalReference( path, ref, m_unit );
+        AddHierarchicalReference( path, ref, m_unit, GetField( VALUE_FIELD )->GetText(),
+                                  GetField( FOOTPRINT_FIELD )->GetText() );
 
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( sheet );

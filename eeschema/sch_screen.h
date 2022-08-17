@@ -498,6 +498,11 @@ public:
 
     void AssignNewUuid() { m_uuid = KIID(); }
 
+    /**
+     * Update the symbol value and footprint instance data for legacy designs.
+     */
+    void SetLegacySymbolInstanceData();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -715,6 +720,11 @@ public:
      * @return true if \a aSchematicFileName would cause an issue.
      */
     bool CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const;
+
+    /**
+     * Update the symbol value and footprint instance data for legacy designs.
+     */
+    void SetLegacySymbolInstanceData();
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

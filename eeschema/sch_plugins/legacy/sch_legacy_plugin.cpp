@@ -1204,7 +1204,6 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
             symbol->AddHierarchicalReference( path, reference, (int)tmp );
             symbol->GetField( REFERENCE_FIELD )->SetText( reference );
-
         }
         else if( strCompare( "F", line, &line ) )
         {

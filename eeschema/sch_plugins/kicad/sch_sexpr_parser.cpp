@@ -2297,14 +2297,18 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             // polyline keyword is used in eeschema both for SCH_SHAPE and SCH_LINE items.
             // In symbols it describes a polygon, having n corners and can be filled
             // In schematic it describes a line (with no fill descr), but could be extended to a
-            // polygon (for instance when importing files) because the schematic handles all SCH_SHAPE.
+            // polygon (for instance when importing files) because the schematic handles all
+            // SCH_SHAPE.
+
             // parseSchPolyLine() returns always a SCH_SHAPE, io convert it to a simple SCH_LINE
             // For compatibility reasons, keep SCH_SHAPE for a polygon and convert to SCH_LINE
             // when the item has only 2 corners, similar to a SCH_LINE
             SCH_SHAPE* poly = parseSchPolyLine();
 
             if( poly->GetPointCount() > 2 )
+            {
                 screen->Append( poly );
+            }
             else
             {
                 // For SCH_SHAPE having only 2 points, this is a "old" SCH_LINE entity.
@@ -2382,6 +2386,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
     }
 
     screen->UpdateLocalLibSymbolLinks();
+
+    if( m_requiredVersion < 20200828 )
+        screen->SetLegacySymbolInstanceData();
 }
 
 
