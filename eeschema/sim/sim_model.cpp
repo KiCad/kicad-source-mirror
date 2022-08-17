@@ -853,6 +853,8 @@ void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
     }
     catch( tao::pegtl::parse_error& e )
     {
+        wxString msg;
+        msg.Printf( _( "Error parsing spice code <%s>\n%s" ), aSpiceCode, e.what() );
         THROW_IO_ERROR( e.what() );
     }
 
@@ -1274,7 +1276,6 @@ wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
 void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
 {
     LOCALE_IO toggle;
-
     tao::pegtl::string_input<> in( aParamsField.ToUTF8(), "Sim_Params" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
@@ -1289,7 +1290,9 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        THROW_IO_ERROR( e.what() );
+        wxString msg;
+        msg.Printf( _( "Error parsing param <%s>\n%s" ), aParamsField, e.what() );
+        THROW_IO_ERROR( msg );
     }
 
     wxString paramName = "";
@@ -1344,6 +1347,8 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsF
     }
     catch( const tao::pegtl::parse_error& e )
     {
+        wxString msg;
+        msg.Printf( _( "Error parsing pin field <%s>\n%s" ), aPinsField, e.what() );
         THROW_IO_ERROR( e.what() );
     }
 
