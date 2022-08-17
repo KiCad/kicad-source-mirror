@@ -466,7 +466,7 @@ void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 
 void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep )
 {
-    RC_TREE_NODE* current_node = ToNode( m_view->GetCurrentItem() );
+    RC_TREE_NODE* current_node = m_view ? ToNode( m_view->GetCurrentItem() ) : nullptr;
     const std::shared_ptr<RC_ITEM> current_item = current_node ? current_node->m_RcItem : nullptr;
 
     /// Keep a vector of elements to free after wxWidgets is definitely done accessing them
