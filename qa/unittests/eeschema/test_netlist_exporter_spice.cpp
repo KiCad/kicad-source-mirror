@@ -64,7 +64,8 @@ public:
             TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>(),
             m_simulator( SPICE_SIMULATOR::CreateInstance( "ngspice" ) ),
             m_log( std::make_shared<wxString>() ),
-            m_reporter( std::make_unique<SPICE_TEST_REPORTER>( m_log ) )
+            m_reporter( std::make_unique<SPICE_TEST_REPORTER>( m_log ) ),
+            m_abort( false )
     {
     }
 
@@ -125,7 +126,8 @@ public:
         // Test if ngspice cannot run a simulation (missing code models).
         // in this case the log contains "MIF-ERROR" and/or "Error: circuit not parsed"
         // when the simulation is not run the spice command "linearize" crashes.
-        bool err_found = m_log->Find( wxT( "Error: circuit not parsed" ) ) != wxNOT_FOUND;
+        bool err_found = m_log->Find( wxT( "Error: circuit not parsed" ) ) != wxNOT_FOUND
+                         || m_log->Find( wxT( "MIF-ERROR" ) ) != wxNOT_FOUND;
 
         if( err_found )
         {
