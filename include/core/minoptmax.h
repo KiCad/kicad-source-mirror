@@ -46,9 +46,9 @@ public:
 
 private:
     bool m_isNull;
-    T m_min;
-    T m_opt;
-    T m_max;
+    T    m_min{};
+    T    m_opt{};
+    T    m_max{};
     bool m_hasMin = false;
     bool m_hasOpt = false;
     bool m_hasMax = false;
