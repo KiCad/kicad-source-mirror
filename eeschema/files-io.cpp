@@ -456,6 +456,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Legacy schematic can have duplicate time stamps so fix that before converting
             // to the s-expression format.
             schematic.ReplaceDuplicateTimeStamps();
+            schematic.SetLegacySymbolInstanceData();
 
             // Allow the schematic to be saved to new file format without making any edits.
             OnModify();

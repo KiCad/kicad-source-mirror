@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -169,6 +169,14 @@ public:
      */
     SCH_SHEET_LIST& GetFullHierarchy() const;
 
+    /**
+     * Update the symbol value and footprint instance data for legacy designs.
+     *
+     * Prior to schematic file format version 20200828 and legacy file format version, only
+     * symbol reference field and unit were saved in the instance data.  The value and footprint
+     * fields must be carried forward from the original symbol to prevent data loss.
+     */
+    void SetLegacySymbolInstanceData();
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

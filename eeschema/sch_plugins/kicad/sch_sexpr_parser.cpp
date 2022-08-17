@@ -2193,6 +2193,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
     }
 
     screen->UpdateLocalLibSymbolLinks();
+
+    if( m_requiredVersion < 20200828 )
+        screen->SetLegacySymbolInstanceData();
 }
 
 
