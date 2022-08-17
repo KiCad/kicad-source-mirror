@@ -2248,7 +2248,7 @@ bool IbisParser::readPinMapping()
     {
         if( fields.size() != 0 )
         {
-            if( fields.size() > 6 && fields.size() < 3 )
+            if( fields.size() > 6 || fields.size() < 3 )
             {
                 Report( _( "Wrong number of columns for pin mapping." ), RPT_SEVERITY_ERROR );
                 status = false;
