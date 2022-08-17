@@ -1281,7 +1281,13 @@ void ROUTER_TOOL::performRouting()
                 int currentLayer = m_router->GetCurrentLayer();
 
                 // Commit whatever we've fixed and restart routing from the other end
-                m_router->CommitRouting();
+                if( m_router->Placer()->HasPlacedAnything() )
+                {
+                    m_router->CommitRouting();
+                    m_iface->SetCommitFlags( APPEND_UNDO );
+                }
+                else
+                    m_router->StopRouting();
 
                 if( otherEndLayers.Overlaps( currentLayer ) )
                     m_router->StartRouting( otherEnd, &current, currentLayer );
@@ -1397,6 +1403,8 @@ void ROUTER_TOOL::performRouting()
     }
 
     m_router->CommitRouting();
+    // Reset to normal for next route
+    m_iface->SetCommitFlags( 0 );
 
     finishInteractive();
 }
