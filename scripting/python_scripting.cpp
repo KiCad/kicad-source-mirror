@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <wx_filename.h>
 
 #include <kiplatform/environment.h>
 
@@ -120,7 +121,9 @@ bool SCRIPTING::scriptingSetup()
 
     pyHome.Assign( Pgm().GetExecutablePath() );
 
-    pyHome.Normalize();
+    // @warning Do we want to use our own ExpandEnvVarSubstitutions() here rather than depend
+    //          on wxFileName::Normalize() to expand environment variables.
+    pyHome.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
     // MUST be called before Py_Initialize so it will to create valid default lib paths
     if( !wxGetEnv( wxT( "KICAD_USE_EXTERNAL_PYTHONHOME" ), nullptr ) )

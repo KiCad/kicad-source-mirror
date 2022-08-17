@@ -188,7 +188,7 @@ bool FILENAME_RESOLVER::createPathList()
             }
             else
             {
-                fndummy.Assign( pathVal, "" );
+                fndummy.Assign( pathVal, wxEmptyString );
                 fndummy.Normalize( FN_NORMALIZE_FLAGS );
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
