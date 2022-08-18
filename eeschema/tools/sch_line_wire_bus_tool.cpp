@@ -1291,12 +1291,6 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
     std::vector<VECTOR2I> pts;
     std::vector<VECTOR2I> connections = screen->GetConnections();
 
-    std::set<SCH_LINE*> lines;
-    BOX2I bb = aSelection->GetBoundingBox();
-
-    for( EDA_ITEM* item : screen->Items().Overlapping( SCH_LINE_T, bb ) )
-        lines.insert( static_cast<SCH_LINE*>( item ) );
-
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
         SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
