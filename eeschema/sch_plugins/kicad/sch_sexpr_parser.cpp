@@ -187,9 +187,20 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
     name = FromUTF8();
 
     LIB_ID id;
+    int bad_pos = id.Parse( name );
 
-    if( id.Parse( name ) >= 0 )
+    if( bad_pos >= 0 )
     {
+        if( static_cast<int>( name.size() ) > bad_pos )
+        {
+            wxString msg = wxString::Format(
+                    _( "Symbol %s contains invalid character '%c'" ), name,
+                    name[bad_pos] );
+
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+        }
+
+
         THROW_PARSE_ERROR( _( "Invalid library identifier" ), CurSource(), CurLine(),
                            CurLineNumber(), CurOffset() );
     }
@@ -2443,9 +2454,20 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 Expecting( "symbol|number" );
 
             LIB_ID libId;
+            wxString name = FromUTF8();
+            int bad_pos = libId.Parse( name );
 
-            if( libId.Parse( FromUTF8() ) >= 0 )
+            if( bad_pos >= 0 )
             {
+                if( static_cast<int>( name.size() ) > bad_pos )
+                {
+                    wxString msg = wxString::Format(
+                            _( "Symbol %s contains invalid character '%c'" ), name,
+                            name[bad_pos] );
+
+                    THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+                }
+
                 THROW_PARSE_ERROR( _( "Invalid symbol library ID" ), CurSource(), CurLine(),
                                    CurLineNumber(), CurOffset() );
             }
