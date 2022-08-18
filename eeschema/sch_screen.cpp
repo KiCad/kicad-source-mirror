@@ -1405,6 +1405,32 @@ std::vector<SCH_LINE*> SCH_SCREEN::GetBusesAndWires( const VECTOR2I& aPosition,
 }
 
 
+std::vector<VECTOR2I> SCH_SCREEN::GetConnections() const
+{
+    std::vector<VECTOR2I> retval;
+
+    for( SCH_ITEM* item : Items() )
+    {
+        // Avoid items that are changing
+        if( !( item->GetEditFlags() & ( IS_MOVING | IS_DELETED ) ) )
+        {
+            std::vector<VECTOR2I> pts = item->GetConnectionPoints();
+            retval.insert( retval.end(), pts.begin(), pts.end() );
+        }
+    }
+
+    // We always have some overlapping connection points.  Drop duplicates here
+    std::sort( retval.begin(), retval.end(),
+               []( const VECTOR2I& a, const VECTOR2I& b ) -> bool
+               {
+                   return a.x < b.x || ( a.x == b.x && a.y < b.y );
+               } );
+    retval.erase( std::unique( retval.begin(), retval.end() ), retval.end() );
+
+    return retval;
+}
+
+
 SCH_LABEL_BASE* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )

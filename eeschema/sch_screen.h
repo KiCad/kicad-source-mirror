@@ -446,6 +446,13 @@ public:
     std::vector<SCH_LINE*> GetBusesAndWires( const VECTOR2I& aPosition, bool aIgnoreEndpoints = false ) const;
 
     /**
+     * Collect a unique list of all possible connection points in the schematic.
+     *
+     * @return vector of connections
+     */
+    std::vector<VECTOR2I> GetConnections() const;
+
+    /**
      * Return a label item located at \a aPosition.
      *
      * @param[in] aPosition The VECTOR2I to test for label items.

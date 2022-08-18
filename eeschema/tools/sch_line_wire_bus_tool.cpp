@@ -1138,7 +1138,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     simplifyWireList();
 
     // Collect the possible connection points for the new lines
-    std::vector<VECTOR2I> connections = m_frame->GetSchematicConnections();
+    std::vector<VECTOR2I> connections = screen->GetConnections();
     std::vector<VECTOR2I> new_ends;
 
     // Check each new segment for possible junctions and add/split if needed
@@ -1286,13 +1286,15 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
 
 int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
 {
+    SCH_SCREEN*   screen = m_frame->GetScreen();
+
     std::vector<VECTOR2I> pts;
-    std::vector<VECTOR2I> connections = m_frame->GetSchematicConnections();
+    std::vector<VECTOR2I> connections = screen->GetConnections();
 
     std::set<SCH_LINE*> lines;
     BOX2I bb = aSelection->GetBoundingBox();
 
-    for( EDA_ITEM* item : m_frame->GetScreen()->Items().Overlapping( SCH_LINE_T, bb ) )
+    for( EDA_ITEM* item : screen->Items().Overlapping( SCH_LINE_T, bb ) )
         lines.insert( static_cast<SCH_LINE*>( item ) );
 
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
@@ -1330,7 +1332,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
 
     for( const VECTOR2I& point : pts )
     {
-        if( m_frame->GetScreen()->IsExplicitJunctionNeeded( point ) )
+        if( screen->IsExplicitJunctionNeeded( point ) )
             m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
     }
 

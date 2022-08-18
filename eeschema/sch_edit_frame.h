@@ -504,13 +504,6 @@ public:
      */
     bool TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
-    /**
-     * Collect a unique list of all possible connection points in the schematic.
-     *
-     * @return vector of connections
-     */
-    std::vector<VECTOR2I> GetSchematicConnections();
-
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnUpdatePCB( wxCommandEvent& event );

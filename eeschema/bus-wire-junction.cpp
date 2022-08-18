@@ -41,31 +41,6 @@
 #include <trigo.h>
 
 
-std::vector<VECTOR2I> SCH_EDIT_FRAME::GetSchematicConnections()
-{
-    std::vector<VECTOR2I> retval;
-
-    for( SCH_ITEM* item : GetScreen()->Items() )
-    {
-        // Avoid items that are changing
-        if( !( item->GetEditFlags() & ( IS_MOVING | IS_DELETED ) ) )
-        {
-            std::vector<VECTOR2I> pts = item->GetConnectionPoints();
-            retval.insert( retval.end(), pts.begin(), pts.end() );
-        }
-    }
-
-    // We always have some overlapping connection points.  Drop duplicates here
-    std::sort( retval.begin(), retval.end(),
-            []( const VECTOR2I& a, const VECTOR2I& b ) -> bool
-            { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
-    retval.erase(
-            std::unique( retval.begin(), retval.end() ), retval.end() );
-
-    return retval;
-}
-
-
 void SCH_EDIT_FRAME::TestDanglingEnds()
 {
     std::function<void( SCH_ITEM* )> changeHandler =
