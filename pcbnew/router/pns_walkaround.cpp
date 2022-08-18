@@ -135,7 +135,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
     // iteration limit causes lag, so we can exit out early if the walkaround path gets very long
     // compared with the initial path.  If the length exceeds the initial length times this factor,
     // fail out.
-    const int maxWalkDistFactor = 10;
+    const int maxWalkDistFactor = 3;
     long long lengthLimit       = aInitialPath.CLine().Length() * maxWalkDistFactor;
 
     while( m_iteration < m_iterationLimit )
@@ -161,9 +161,28 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
             break;
 
-        // Safety valve
-        if( path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )
+
+        double lcw = path_cw.Line().Length() / (double)aInitialPath.CLine().Length();
+        double lccw = path_ccw.Line().Length() / (double)aInitialPath.CLine().Length();
+
+        bool cwLimitHit = path_cw.Line().Length() > lengthLimit;
+        bool ccwLimitHit = path_ccw.Line().Length() > lengthLimit;
+        bool bothInProgress = s_ccw == IN_PROGRESS && s_cw == IN_PROGRESS;
+
+        // Safety valve, somewhat refined. If both walkaround paths get too long,
+        // just stop, otherwise consider only the threshold for the path still being 'in progress'.
+        if( bothInProgress )
+        {
+            if( cwLimitHit && ccwLimitHit )
             break;
+        }
+        else
+        {
+            if( s_cw == IN_PROGRESS && cwLimitHit )
+                break;
+            if( s_ccw == IN_PROGRESS && ccwLimitHit )
+                break;
+        }
 
         m_iteration++;
     }
