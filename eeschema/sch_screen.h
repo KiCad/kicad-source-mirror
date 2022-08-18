@@ -453,6 +453,14 @@ public:
     std::vector<VECTOR2I> GetConnections() const;
 
     /**
+     * Return the unique set of points belonging to aItems where a junction is needed.
+     *
+     * @param aItems List of objects to check
+     * @return Points where a junction is needed
+    */
+    std::vector<VECTOR2I> GetNeededJunctions( const std::deque<EDA_ITEM*>& aItems ) const;
+
+    /**
      * Return a label item located at \a aPosition.
      *
      * @param[in] aPosition The VECTOR2I to test for label items.

@@ -1431,6 +1431,56 @@ std::vector<VECTOR2I> SCH_SCREEN::GetConnections() const
 }
 
 
+std::vector<VECTOR2I> SCH_SCREEN::GetNeededJunctions( const std::deque<EDA_ITEM*>& aItems ) const
+{
+    std::vector<VECTOR2I> pts;
+    std::vector<VECTOR2I> connections = GetConnections();
+
+    for( const EDA_ITEM* edaItem : aItems )
+    {
+        const SCH_ITEM* item = dynamic_cast<const SCH_ITEM*>( edaItem );
+
+        if( !item || !item->IsConnectable() )
+            continue;
+
+        std::vector<VECTOR2I> new_pts = item->GetConnectionPoints();
+        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
+
+        // If the item is a line, we also add any connection points from the rest of the schematic
+        // that terminate on the line after it is moved.
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = (SCH_LINE*) item;
+
+            for( const VECTOR2I& pt : connections )
+            {
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
+                    pts.push_back( pt );
+            }
+        }
+    }
+
+    // We always have some overlapping connection points.  Drop duplicates here
+    std::sort( pts.begin(), pts.end(),
+               []( const VECTOR2I& a, const VECTOR2I& b ) -> bool
+               {
+                   return a.x < b.x || ( a.x == b.x && a.y < b.y );
+               } );
+
+    pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
+
+    // We only want the needed junction points, remove all the others
+    pts.erase( std::remove_if( pts.begin(), pts.end(),
+                               [this]( const VECTOR2I& a ) -> bool
+                               {
+                                   return !IsExplicitJunctionNeeded( a );
+                               } ),
+               pts.end() );
+
+    return pts;
+}
+
+
 SCH_LABEL_BASE* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )

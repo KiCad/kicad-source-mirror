@@ -1288,47 +1288,8 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
 {
     SCH_SCREEN*   screen = m_frame->GetScreen();
 
-    std::vector<VECTOR2I> pts;
-    std::vector<VECTOR2I> connections = screen->GetConnections();
-
-    for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
-    {
-        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
-
-        if( !item || !item->IsConnectable() )
-            continue;
-
-        std::vector<VECTOR2I> new_pts = item->GetConnectionPoints();
-        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
-
-        // If the item is a line, we also add any connection points from the rest of the schematic
-        // that terminate on the line after it is moved.
-        if( item->Type() == SCH_LINE_T )
-        {
-            SCH_LINE* line = (SCH_LINE*) item;
-
-            for( const VECTOR2I& pt : connections )
-            {
-                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
-                    pts.push_back( pt );
-            }
-        }
-    }
-
-    // We always have some overlapping connection points.  Drop duplicates here
-    std::sort( pts.begin(), pts.end(),
-               []( const VECTOR2I& a, const VECTOR2I& b ) -> bool
-               {
-                   return a.x < b.x || ( a.x == b.x && a.y < b.y );
-               } );
-
-    pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
-
-    for( const VECTOR2I& point : pts )
-    {
-        if( screen->IsExplicitJunctionNeeded( point ) )
-            m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
-    }
+    for( const VECTOR2I& point : screen->GetNeededJunctions( aSelection->Items() ) )
+        m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
 
     return 0;
 }
