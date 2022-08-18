@@ -235,7 +235,7 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
 
     if( a == b )
     {
-        int xx2 = KiROUND( 2.0 * ( 1.0 - M_SQRT2 ) * d );
+        int xx2 = KiROUND( 2.0 * ( 1.0 - M_SQRT1_2 ) * d );
 
         return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
                               VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
