@@ -806,7 +806,7 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
     m_frame->SetFocus();
     wxSafeYield();
 
-    DIALOG_PCM pcm( m_frame );
+    DIALOG_PCM pcm( m_frame, m_frame->GetPcm() );
     pcm.ShowModal();
 
     return 0;

@@ -38,6 +38,7 @@
 #include <panel_hotkeys_editor.h>
 #include <paths.h>
 #include <confirm.h>
+#include <panel_pcm_settings.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
@@ -1074,6 +1075,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddSubPage( CREATE_PANEL( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_DS_COLORS ), _( "Colors" ) );
 
+    book->AddPage( new PANEL_PCM_SETTINGS( book ), _( "Plugin and Content Manager" ) );
 
     // Update all of the action hotkeys. The process of loading the actions through
     // the KiFACE will only get us the default hotkeys

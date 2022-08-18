@@ -61,16 +61,48 @@ class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
 };
 
 
-PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( aParent )
+class STATUS_TEXT_REPORTER : public PROGRESS_REPORTER_BASE
 {
-    // Get 3rd party path
-    const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( "KICAD6_3RD_PARTY" );
+public:
+    STATUS_TEXT_REPORTER( std::function<void( const wxString )> aStatusCallback ) :
+            PROGRESS_REPORTER_BASE( 1 ), m_statusCallback( aStatusCallback )
+    {
+    }
 
-    if( it != env.end() && !it->second.GetValue().IsEmpty() )
-        m_3rdparty_path = it->second.GetValue();
-    else
-        m_3rdparty_path = PATHS::GetDefault3rdPartyPath();
+    void SetTitle( const wxString& aTitle ) override
+    {
+        m_title = aTitle;
+        m_report = wxT( "" );
+    }
+
+    void Report( const wxString& aMessage ) override
+    {
+        m_report = wxString::Format( ": %s", aMessage );
+    }
+
+    void Cancel() { m_cancelled.store( true ); }
+
+private:
+    bool updateUI() override
+    {
+        m_statusCallback( wxString::Format( "%s%s", m_title, m_report ) );
+        return true;
+    }
+
+    const std::function<void( const wxString )> m_statusCallback;
+
+    wxString m_title;
+    wxString m_report;
+};
+
+
+PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
+        std::function<void( int )>            aAvailableUpdateCallback,
+        std::function<void( const wxString )> aStatusCallback ) :
+        m_dialog( nullptr ),
+        m_availableUpdateCallback( aAvailableUpdateCallback ), m_statusCallback( aStatusCallback )
+{
+    ReadEnvVar();
 
     // Read and store pcm schema
     wxFileName schema_file( PATHS::GetStockDataPath( true ), "pcm.v1.schema.json" );
@@ -185,9 +217,22 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 }
 
 
+void PLUGIN_CONTENT_MANAGER::ReadEnvVar()
+{
+    // Get 3rd party path
+    const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
+    auto               it = env.find( "KICAD6_3RD_PARTY" );
+
+    if( it != env.end() && !it->second.GetValue().IsEmpty() )
+        m_3rdparty_path = it->second.GetValue();
+    else
+        m_3rdparty_path = PATHS::GetDefault3rdPartyPath();
+}
+
+
 bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostream* aOutput,
-                                               WX_PROGRESS_REPORTER* aReporter,
-                                               const size_t          aSizeLimit )
+                                               PROGRESS_REPORTER* aReporter,
+                                               const size_t       aSizeLimit )
 {
     bool size_exceeded = false;
 
@@ -228,10 +273,13 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
 
     if( code != CURLE_OK )
     {
-        if( code == CURLE_ABORTED_BY_CALLBACK && size_exceeded )
-            wxMessageBox( _( "Download is too large." ) );
-        else if( code != CURLE_ABORTED_BY_CALLBACK )
-            wxLogError( wxString( curl.GetErrorText( code ) ) );
+        if( m_dialog )
+        {
+            if( code == CURLE_ABORTED_BY_CALLBACK && size_exceeded )
+                wxMessageBox( _( "Download is too large." ) );
+            else if( code != CURLE_ABORTED_BY_CALLBACK )
+                wxLogError( wxString( curl.GetErrorText( code ) ) );
+        }
 
         return false;
     }
@@ -241,7 +289,7 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
 
 
 bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITORY& aRepository,
-                                              WX_PROGRESS_REPORTER* aReporter )
+                                              PROGRESS_REPORTER* aReporter )
 {
     std::stringstream repository_stream;
 
@@ -249,7 +297,9 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
 
     if( !DownloadToStream( aUrl, &repository_stream, aReporter, 20480 ) )
     {
-        wxLogError( _( "Unable to load repository url" ) );
+        if( m_dialog )
+            wxLogError( _( "Unable to load repository url" ) );
+
         return false;
     }
 
@@ -265,7 +315,9 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
     }
     catch( const std::exception& e )
     {
-        wxLogError( wxString::Format( _( "Unable to parse repository:\n\n%s" ), e.what() ) );
+        if( m_dialog )
+            wxLogError( wxString::Format( _( "Unable to parse repository:\n\n%s" ), e.what() ) );
+
         return false;
     }
 
@@ -284,7 +336,7 @@ void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
 bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUrl,
                                             const boost::optional<wxString>& aHash,
                                             std::vector<PCM_PACKAGE>&        aPackages,
-                                            WX_PROGRESS_REPORTER*            aReporter )
+                                            PROGRESS_REPORTER*               aReporter )
 {
     std::stringstream packages_stream;
 
@@ -292,7 +344,9 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
 
     if( !DownloadToStream( aUrl, &packages_stream, aReporter ) )
     {
-        wxLogError( _( "Unable to load repository packages url." ) );
+        if( m_dialog )
+            wxLogError( _( "Unable to load repository packages url." ) );
+
         return false;
     }
 
@@ -300,7 +354,9 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
 
     if( aHash && !VerifyHash( isstream, aHash.get() ) )
     {
-        wxLogError( _( "Packages hash doesn't match. Repository may be corrupted." ) );
+        if( m_dialog )
+            wxLogError( _( "Packages hash doesn't match. Repository may be corrupted." ) );
+
         return false;
     }
 
@@ -313,7 +369,10 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
     }
     catch( std::exception& e )
     {
-        wxLogError( wxString::Format( _( "Unable to parse packages metadata:\n\n%s" ), e.what() ) );
+        if( m_dialog )
+            wxLogError(
+                    wxString::Format( _( "Unable to parse packages metadata:\n\n%s" ), e.what() ) );
+
         return false;
     }
 
@@ -363,8 +422,12 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     nlohmann::json js;
     PCM_REPOSITORY current_repo;
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> reporter =
-            std::make_unique<WX_PROGRESS_REPORTER>( m_dialog, wxT( "" ), 1 );
+    std::shared_ptr<PROGRESS_REPORTER> reporter;
+
+    if( m_dialog )
+        reporter = std::make_shared<WX_PROGRESS_REPORTER>( m_dialog, wxT( "" ), 1 );
+    else
+        reporter = m_statusReporter;
 
     if( !FetchRepository( url, current_repo, reporter.get() ) )
         return false;
@@ -394,8 +457,11 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
                 packages_cache_stream >> js;
                 saved_repo.package_list = js["packages"].get<std::vector<PCM_PACKAGE>>();
 
-                std::for_each( saved_repo.package_list.begin(), saved_repo.package_list.end(),
-                               &preparePackage );
+                for( size_t i = 0; i < saved_repo.package_list.size(); i++ )
+                {
+                    preparePackage( saved_repo.package_list[i] );
+                    saved_repo.package_map[saved_repo.package_list[i].identifier] = i;
+                }
 
                 m_repository_cache[aRepositoryId] = std::move( saved_repo );
 
@@ -403,8 +469,9 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
             }
             catch( ... )
             {
-                wxLogError( _( "Packages cache for current repository is "
-                               "corrupted, it will be redownloaded." ) );
+                if( m_dialog )
+                    wxLogError( _( "Packages cache for current repository is "
+                                   "corrupted, it will be redownloaded." ) );
             }
         }
     }
@@ -418,8 +485,11 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
             return false;
         }
 
-        std::for_each( current_repo.package_list.begin(), current_repo.package_list.end(),
-                       &preparePackage );
+        for( size_t i = 0; i < current_repo.package_list.size(); i++ )
+        {
+            preparePackage( current_repo.package_list[i] );
+            current_repo.package_map[current_repo.package_list[i].identifier] = i;
+        }
 
         repo_cache.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
@@ -468,9 +538,11 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
                 if( resources.sha256 && !VerifyHash( read_stream, resources.sha256.get() ) )
                 {
                     read_stream.close();
-                    wxLogError(
-                            _( "Resources file hash doesn't match and will not be used. Repository "
-                               "may be corrupted." ) );
+
+                    if( m_dialog )
+                        wxLogError( _( "Resources file hash doesn't match and will not be used. "
+                                       "Repository may be corrupted." ) );
+
                     wxRemoveFile( resource_file.GetFullPath() );
                 }
             }
@@ -482,7 +554,67 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
         }
     }
 
+    updateInstalledPackagesMetadata( aRepositoryId );
+
     return true;
+}
+
+
+void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aRepositoryId )
+{
+    const PCM_REPOSITORY& repository = getCachedRepository( aRepositoryId );
+
+    for( auto& entry : m_installed )
+    {
+        PCM_INSTALLATION_ENTRY& installation_entry = entry.second;
+
+        // If current package is not from this repository, skip it
+        if( installation_entry.repository_id != aRepositoryId )
+            continue;
+
+        // If current package is no longer in this repository, keep it as is
+        if( repository.package_map.count( installation_entry.package.identifier ) == 0 )
+            continue;
+
+        boost::optional<PACKAGE_VERSION> current_version;
+
+        auto current_version_it =
+                std::find_if( installation_entry.package.versions.begin(),
+                              installation_entry.package.versions.end(),
+                              [&]( const PACKAGE_VERSION& version )
+                              {
+                                  return version.version == installation_entry.current_version;
+                              } );
+
+        if( current_version_it != installation_entry.package.versions.end() )
+            current_version = *current_version_it; // copy
+
+        // Copy repository metadata into installation entry
+        installation_entry.package = repository.package_list[repository.package_map.at(
+                installation_entry.package.identifier )];
+
+        // Insert current version if it's missing from repository metadata
+        current_version_it =
+                std::find_if( installation_entry.package.versions.begin(),
+                              installation_entry.package.versions.end(),
+                              [&]( const PACKAGE_VERSION& version )
+                              {
+                                  return version.version == installation_entry.current_version;
+                              } );
+
+        if( current_version_it == installation_entry.package.versions.end() )
+        {
+            installation_entry.package.versions.emplace_back( current_version.get() );
+
+            // Re-sort the versions by descending version
+            std::sort( installation_entry.package.versions.begin(),
+                       installation_entry.package.versions.end(),
+                       []( const PACKAGE_VERSION& a, const PACKAGE_VERSION& b )
+                       {
+                           return a.parsed_version > b.parsed_version;
+                       } );
+        }
+    }
 }
 
 
@@ -605,8 +737,8 @@ void PLUGIN_CONTENT_MANAGER::DiscardRepositoryCache( const wxString& aRepository
     if( m_repository_cache.count( aRepositoryId ) > 0 )
         m_repository_cache.erase( aRepositoryId );
 
-    wxFileName repo_cache( m_3rdparty_path, "" );
-    repo_cache.AppendDir( "cache" );
+    wxFileName repo_cache = wxFileName( PATHS::GetUserCachePath(), "" );
+    repo_cache.AppendDir( "pcm" );
     repo_cache.AppendDir( aRepositoryId );
 
     if( repo_cache.DirExists() )
@@ -652,16 +784,10 @@ PCM_PACKAGE_STATE PLUGIN_CONTENT_MANAGER::GetPackageState( const wxString& aRepo
 
     const PCM_REPOSITORY& repo = getCachedRepository( aRepositoryId );
 
-    auto pkg_it = std::find_if( repo.package_list.begin(), repo.package_list.end(),
-                                [&aPackageId]( const PCM_PACKAGE& pkg )
-                                {
-                                    return pkg.identifier == aPackageId;
-                                } );
-
-    if( pkg_it == repo.package_list.end() )
+    if( repo.package_map.count( aPackageId ) == 0 )
         return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
 
-    const PCM_PACKAGE& pkg = *pkg_it;
+    const PCM_PACKAGE& pkg = repo.package_list[repo.package_map.at( aPackageId )];
 
     if( installed )
     {
@@ -720,10 +846,8 @@ time_t PLUGIN_CONTENT_MANAGER::getCurrentTimestamp() const
 }
 
 
-PLUGIN_CONTENT_MANAGER::~PLUGIN_CONTENT_MANAGER()
+void PLUGIN_CONTENT_MANAGER::SaveInstalledPackages()
 {
-    // Save current installed packages list.
-
     try
     {
         nlohmann::json js;
@@ -919,4 +1043,85 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
     }
 
     return bitmaps;
+}
+
+
+void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
+{
+    m_statusReporter = std::make_shared<STATUS_TEXT_REPORTER>( m_statusCallback );
+
+    m_updateThread = std::thread(
+            [this]()
+            {
+                if( m_installed.size() == 0 )
+                    return;
+
+                // Only fetch repositories that have installed packages
+                std::unordered_set<wxString> repo_ids;
+
+                for( auto& entry : m_installed )
+                    repo_ids.insert( entry.second.repository_id );
+
+                for( const auto& entry : m_repository_list )
+                {
+                    const wxString& repository_id = std::get<0>( entry );
+
+                    if( repo_ids.count( repository_id ) == 0 )
+                        continue;
+
+                    CacheRepository( repository_id );
+
+                    if( m_statusReporter->IsCancelled() )
+                        break;
+                }
+
+                if( m_statusReporter->IsCancelled() )
+                    return;
+
+                // Count packages with updates
+                int availableUpdateCount = 0;
+
+                for( auto& entry : m_installed )
+                {
+                    PCM_INSTALLATION_ENTRY& installed_package = entry.second;
+
+                    if( m_repository_cache.find( installed_package.repository_id )
+                        != m_repository_cache.end() )
+                    {
+                        PCM_PACKAGE_STATE state =
+                                GetPackageState( installed_package.repository_id,
+                                                 installed_package.package.identifier );
+
+                        if( state == PPS_UPDATE_AVAILABLE )
+                            availableUpdateCount++;
+                    }
+
+                    if( m_statusReporter->IsCancelled() )
+                        return;
+                }
+
+                // Update the badge on PCM button
+                m_availableUpdateCallback( availableUpdateCount );
+
+                m_statusCallback( availableUpdateCount > 0 ? _( "Package updates are available" )
+                                                           : _( "No package updates available" ) );
+            } );
+}
+
+
+void PLUGIN_CONTENT_MANAGER::StopBackgroundUpdate()
+{
+    if( m_updateThread.joinable() )
+    {
+        m_statusReporter->Cancel();
+        m_updateThread.join();
+    }
+}
+
+
+PLUGIN_CONTENT_MANAGER::~PLUGIN_CONTENT_MANAGER()
+{
+    // By the time object is being destroyed the thread should be
+    // stopped already but just in case do it here too.
+    StopBackgroundUpdate();
 }

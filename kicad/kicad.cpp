@@ -41,6 +41,7 @@
 #include <paths.h>
 #include <richio.h>
 #include <settings/settings_manager.h>
+#include <settings/kicad_settings.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
@@ -49,7 +50,6 @@
 
 #include "pgm_kicad.h"
 #include "kicad_manager_frame.h"
-#include "kicad_settings.h"
 
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>

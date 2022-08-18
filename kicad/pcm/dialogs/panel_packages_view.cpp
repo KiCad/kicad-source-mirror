@@ -21,10 +21,10 @@
 #include "panel_packages_view.h"
 #include <grid_tricks.h>
 #include <html_window.h>
-#include <kicad_settings.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <settings/kicad_settings.h>
 #include <string_utils.h>
 #include <widgets/wx_panel.h>
 #include <widgets/wx_splitter_window.h>
@@ -113,6 +113,7 @@ void PANEL_PACKAGES_VIEW::ClearData()
     unsetPackageDetails();
 
     m_currentSelected = nullptr;
+    m_updateablePackages.clear();
     m_packagePanels.clear();
     m_packageInitialOrder.clear();
     m_packageListWindow->GetSizer()->Clear( true ); // Delete panels
@@ -148,9 +149,13 @@ void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackag
 
         m_packagePanels.insert( { data.package.identifier, package_panel } );
         m_packageInitialOrder.push_back( data.package.identifier );
+
+        if( data.state == PPS_UPDATE_AVAILABLE )
+            m_updateablePackages.insert( data.package.identifier );
     }
 
     updatePackageList();
+    updateCommonState();
 }
 
 
@@ -426,7 +431,7 @@ bool PANEL_PACKAGES_VIEW::canRunAction() const
 
 
 void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
-                                           const PCM_PACKAGE_STATE aState ) const
+                                           const PCM_PACKAGE_STATE aState )
 {
     auto it = m_packagePanels.find( aPackageId );
 
@@ -439,6 +444,17 @@ void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
             wxMouseEvent dummy;
             m_currentSelected->OnClick( dummy );
         }
+
+        if( aState == PPS_UPDATE_AVAILABLE )
+        {
+            m_updateablePackages.insert( aPackageId );
+        }
+        else
+        {
+            m_updateablePackages.erase( aPackageId );
+        }
+
+        updateCommonState();
     }
 }
 
@@ -759,4 +775,32 @@ void PANEL_PACKAGES_VIEW::SetSashOnIdle( wxIdleEvent& aEvent )
 
     m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
                              NULL, this );
+}
+
+
+void PANEL_PACKAGES_VIEW::updateCommonState()
+{
+    m_buttonUpdateAll->Enable( m_updateablePackages.size() > 0 );
+}
+
+
+void PANEL_PACKAGES_VIEW::OnUpdateAllClicked( wxCommandEvent& event )
+{
+    // The map will be modified by the callback so we copy the list here
+    std::vector<wxString> packages;
+
+    std::copy( m_updateablePackages.begin(), m_updateablePackages.end(),
+               std::back_inserter( packages ) );
+
+    for( const wxString& pkg_id : packages )
+    {
+        auto it = m_packagePanels.find( pkg_id );
+
+        if( it != m_packagePanels.end() )
+        {
+            const PACKAGE_VIEW_DATA& data = it->second->GetPackageData();
+
+            m_actionCallback( data, PPA_UPDATE, data.update_version );
+        }
+    }
 }

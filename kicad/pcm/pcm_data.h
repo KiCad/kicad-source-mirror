@@ -128,6 +128,8 @@ struct PCM_REPOSITORY
 
     // Not serialized fields
     std::vector<PCM_PACKAGE> package_list;
+    // pkg id to index of package from package_list for quick lookup
+    std::unordered_map<wxString, size_t> package_map;
 };
 
 
@@ -139,6 +141,9 @@ struct PCM_INSTALLATION_ENTRY
     wxString    repository_id;
     wxString    repository_name;
     uint64_t    install_timestamp;
+
+    // Not serialized fields
+    bool update_available;
 };
 
 

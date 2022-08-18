@@ -21,16 +21,16 @@ class WX_PANEL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
 #include <wx/grid.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		WX_SPLITTER_WINDOW* m_splitter1;
 		WX_PANEL* m_panelList;
 		wxSearchCtrl* m_searchCtrl;
+		wxButton* m_buttonUpdateAll;
 		wxScrolledWindow* m_packageListWindow;
 		wxPanel* m_panelDetails;
 		wxScrolledWindow* m_infoScrollWindow;
@@ -58,6 +59,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		wxButton* m_buttonAction;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnUpdateAllClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeInfoBox( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnURLClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnInfoMouseWheel( wxMouseEvent& event ) { event.Skip(); }

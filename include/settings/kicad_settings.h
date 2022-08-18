@@ -36,10 +36,30 @@ public:
 
     int m_LeftWinWidth;
 
+    /**
+     * @brief General setting for various update checks
+     *
+     * A one time popup asks user to allow/disallow update checks on startup.
+     * This is currently used by PCM.
+     *
+     * See enum below for meaning of values.
+     */
+    int m_updateCheck;
+
+    enum UPDATE_CHECK {
+        UNINITIALIZED = 0,
+        NOT_ALLOWED = 1,
+        ALLOWED = 2
+    };
+
     std::vector<wxString> m_OpenProjects;
 
     std::vector<std::pair<wxString, wxString>> m_PcmRepositories;
     wxString                                   m_PcmLastDownloadDir;
+
+    // This controls background update check for PCM.
+    // It is set according to m_updateCheck on first start.
+    bool m_PcmUpdateCheck;
 
 protected:
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }

@@ -22,7 +22,7 @@
 #include "bitmaps/bitmap_types.h"
 #include "bitmaps/bitmaps_list.h"
 #include "grid_tricks.h"
-#include "kicad_settings.h"
+#include "settings/kicad_settings.h"
 #include "widgets/wx_grid.h"
 
 

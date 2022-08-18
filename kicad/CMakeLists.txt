@@ -24,7 +24,6 @@ set( KICAD_SRCS
     import_project.cpp
     kicad.cpp
     kicad_manager_frame.cpp
-    kicad_settings.cpp
     menubar.cpp
     project_template.cpp
     project_tree_pane.cpp

@@ -29,6 +29,8 @@
 #include <wx/process.h>
 #include <kiway_player.h>
 #include <wx/dnd.h>
+#include "pcm.h"
+#include "widgets/bitmap_button.h"
 
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
@@ -151,6 +153,10 @@ public:
 
     wxWindow* GetToolCanvas() const override;
 
+    std::shared_ptr<PLUGIN_CONTENT_MANAGER> GetPcm() { return m_pcm; };
+
+    void SetPcmButton( BITMAP_BUTTON* aButton );
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -176,15 +182,19 @@ private:
 
     void language_change( wxCommandEvent& event );
 
-    bool m_openSavedWindows;
+    void updatePcmButtonBadge();
 
-private:
+    bool m_openSavedWindows;
+    int  m_leftWinWidth;
+    bool m_active_project;
+
     PROJECT_TREE_PANE*    m_leftWin;
     PANEL_KICAD_LAUNCHER* m_launcher;
     ACTION_TOOLBAR*       m_mainToolBar;
 
-    int                 m_leftWinWidth;
-    bool                m_active_project;
+    std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
+    BITMAP_BUTTON*                          m_pcmButton;
+    int                                     m_pcmUpdateCount;
 };
 
 

@@ -52,7 +52,7 @@ public:
      * @param aPackageId id of the package
      * @param aState new state
      */
-    void SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState ) const;
+    void SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState );
 
     ///< Destroys package panels
     void ClearData();
@@ -83,12 +83,18 @@ public:
     ///< Replacement of wxFormBuilder's ill-advised m_splitter1OnIdle
     void SetSashOnIdle( wxIdleEvent& );
 
+    ///< Enqueues all available package updates
+    void OnUpdateAllClicked( wxCommandEvent& event ) override;
+
 private:
     ///< Updates package listing according to search term
     void updatePackageList();
 
     ///< Updates buttons below the package details: Download and Install
     void updateDetailsButtons();
+
+    ///< Called when package state changes, currently used to calculate Update All button state
+    void updateCommonState();
 
     ///< Updates details panel
     void setPackageDetails( const PACKAGE_VIEW_DATA& aPackageData );
@@ -113,6 +119,7 @@ private:
     std::unordered_map<wxString, PANEL_PACKAGE*> m_packagePanels;
     std::vector<wxString>                        m_packageInitialOrder;
     PANEL_PACKAGE*                               m_currentSelected;
+    std::unordered_set<wxString>                 m_updateablePackages;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>      m_pcm;
 
     enum PACKAGE_VERSIONS_GRID_COLUMNS

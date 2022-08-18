@@ -27,9 +27,9 @@
 #include "dialog_pcm.h"
 #include "grid_tricks.h"
 #include "ki_exception.h"
-#include "kicad_settings.h"
 #include "pcm_task_manager.h"
 #include "pgm_base.h"
+#include "settings/kicad_settings.h"
 #include "settings/settings_manager.h"
 #include "thread"
 #include "widgets/wx_grid.h"
@@ -53,11 +53,13 @@ static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
 };
 
 
-DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
+DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm ) :
+        DIALOG_PCM_BASE( parent ), m_pcm( pcm )
 {
     m_defaultBitmap = KiBitmap( BITMAPS::icon_pcm );
 
-    m_pcm = std::make_shared<PLUGIN_CONTENT_MANAGER>( this );
+    m_pcm->SetDialogWindow( this );
+    m_pcm->StopBackgroundUpdate();
 
     m_gridPendingActions->PushEventHandler( new GRID_TRICKS( m_gridPendingActions ) );
 
@@ -142,11 +144,6 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     m_sdbSizer1Cancel->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
     m_sdbSizer1Apply->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
-
-    m_pcm->SetRepositoryList( app_settings->m_PcmRepositories );
-
     setRepositoryListFromPcm();
 
     for( int col = 0; col < m_gridPendingActions->GetNumberCols(); col++ )
@@ -165,6 +162,10 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
 DIALOG_PCM::~DIALOG_PCM()
 {
+    m_pcm->SaveInstalledPackages();
+    m_pcm->SetDialogWindow( nullptr );
+    m_pcm->RunBackgroundUpdate();
+
     m_gridPendingActions->PopEventHandler( true );
 }
 
@@ -391,6 +392,12 @@ void DIALOG_PCM::setInstalledPackages()
             package_data.bitmap = &m_installedBitmaps.at( package_data.package.identifier );
         else
             package_data.bitmap = &m_defaultBitmap;
+
+        package_data.state =
+                m_pcm->GetPackageState( entry.repository_id, entry.package.identifier );
+
+        if( package_data.state == PPS_UPDATE_AVAILABLE )
+            package_data.update_version = m_pcm->GetPackageUpdateVersion( entry.package );
 
         package_list.emplace_back( package_data );
     }

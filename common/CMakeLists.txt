@@ -435,6 +435,7 @@ set( COMMON_SRCS
     settings/nested_settings.cpp
     settings/parameters.cpp
     settings/settings_manager.cpp
+    settings/kicad_settings.cpp
 
     project/board_project_settings.cpp
     project/net_settings.cpp
@@ -460,6 +461,7 @@ target_link_libraries( common
     threadpool
     pybind11::embed
     compoundfilereader
+    pcm_settings
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}

@@ -27,6 +27,7 @@
 
 #include <wx/bitmap.h>
 #include <wx/panel.h>
+#include <wx/colour.h>
 
 
 /**
@@ -104,6 +105,16 @@ public:
      */
     void AcceptDragInAsClick( bool aAcceptDragIn = true );
 
+    void SetShowBadge( bool aShowBadge ) { m_showBadge = aShowBadge; }
+
+    void SetBadgeText( const wxString& aText ) { m_badgeText = aText; }
+
+    void SetBadgeColors( const wxColor& aBadgeColor, const wxColor& aBadgeTextColor )
+    {
+        m_badgeColor = aBadgeColor;
+        m_badgeTextColor = aBadgeTextColor;
+    }
+
 protected:
     void setupEvents();
 
@@ -135,6 +146,11 @@ private:
     wxBitmap  m_disabledBitmap;
 
     bool      m_isRadioButton;
+    bool      m_showBadge;
+    wxString  m_badgeText;
+    wxColor   m_badgeColor;
+    wxColor   m_badgeTextColor;
+    wxFont    m_badgeFont;
     int       m_buttonState;
     int       m_padding;
     wxSize    m_unadjustedMinSize;

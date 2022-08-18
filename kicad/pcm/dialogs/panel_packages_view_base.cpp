@@ -25,12 +25,21 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPanelListSizer;
 	bPanelListSizer = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_searchCtrl = new wxSearchCtrl( m_panelList, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifndef __WXMAC__
 	m_searchCtrl->ShowSearchButton( true );
 	#endif
 	m_searchCtrl->ShowCancelButton( false );
-	bPanelListSizer->Add( m_searchCtrl, 0, wxEXPAND|wxALL, 5 );
+	bSizer8->Add( m_searchCtrl, 1, wxEXPAND|wxALL, 5 );
+
+	m_buttonUpdateAll = new wxButton( m_panelList, wxID_ANY, _("Update All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_buttonUpdateAll, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
+
+
+	bPanelListSizer->Add( bSizer8, 0, wxEXPAND, 5 );
 
 	m_packageListWindow = new wxScrolledWindow( m_panelList, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE|wxVSCROLL );
 	m_packageListWindow->SetScrollRate( 5, 5 );
@@ -137,6 +146,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	bSizer1->Fit( this );
 
 	// Connect Events
+	m_buttonUpdateAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnUpdateAllClicked ), NULL, this );
 	m_infoScrollWindow->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
 	m_infoText->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_PACKAGES_VIEW_BASE::OnURLClicked ), NULL, this );
 	m_infoText->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInfoMouseWheel ), NULL, this );
@@ -149,6 +159,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 PANEL_PACKAGES_VIEW_BASE::~PANEL_PACKAGES_VIEW_BASE()
 {
 	// Disconnect Events
+	m_buttonUpdateAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnUpdateAllClicked ), NULL, this );
 	m_infoScrollWindow->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
 	m_infoText->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_PACKAGES_VIEW_BASE::OnURLClicked ), NULL, this );
 	m_infoText->Disconnect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInfoMouseWheel ), NULL, this );

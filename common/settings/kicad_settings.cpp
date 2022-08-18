@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kicad_settings.h"
+#include "settings/kicad_settings.h"
 #include <nlohmann/json.hpp>
 #include <settings/parameters.h>
 
@@ -41,6 +41,8 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "system.open_projects", &m_OpenProjects, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "system.check_for_updates", &m_updateCheck, 0 ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",
@@ -77,6 +79,9 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back(
             new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcm.check_for_updates", &m_PcmUpdateCheck, true ) );
 }
 
 

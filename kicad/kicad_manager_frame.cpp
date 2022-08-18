@@ -32,7 +32,9 @@
 #include <dialogs/panel_kicad_launcher.h>
 #include <eda_base_frame.h>
 #include <filehistory.h>
+#include <policy_keys.h>
 #include <kiplatform/app.h>
+#include <kiplatform/policy.h>
 #include <kicad_build_version.h>
 #include <kiway.h>
 #include <kiway_express.h>
@@ -65,7 +67,7 @@
 #endif
 
 #include "kicad_manager_frame.h"
-#include "kicad_settings.h"
+#include "settings/kicad_settings.h"
 
 
 #define SEP()   wxFileName::GetPathSeparator()
@@ -124,7 +126,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     wxXmlDocument dummy;
 
     // Create the status line (bottom of the frame).  Left half is for project name; right half
-    // is for Reporter (currently used by archiver/unarchiver).
+    // is for Reporter (currently used by archiver/unarchiver and PCM).
     CreateStatusBar( 2 );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
@@ -152,6 +154,28 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Load the settings
     LoadSettings( config() );
+
+    m_pcmButton = nullptr;
+    m_pcmUpdateCount = 0;
+    m_pcm = std::make_shared<PLUGIN_CONTENT_MANAGER>(
+            [this]( int aUpdateCount )
+            {
+                m_pcmUpdateCount = aUpdateCount;
+                CallAfter(
+                        [this]()
+                        {
+                            updatePcmButtonBadge();
+                        } );
+            },
+            [this]( const wxString aText )
+            {
+                CallAfter(
+                        [aText, this]()
+                        {
+                            SetStatusText( aText, 1 );
+                        } );
+            } );
+    m_pcm->SetRepositoryList( kicadSettings()->m_PcmRepositories );
 
     // Left window: is the box which display tree project
     m_leftWin = new PROJECT_TREE_PANE( this );
@@ -214,6 +238,8 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
+
+    m_pcm->StopBackgroundUpdate();
 
     delete m_actions;
     delete m_toolManager;
@@ -656,6 +682,11 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
+    if( aEnvVarsChanged )
+    {
+        m_pcm->ReadEnvVar();
+    }
 }
 
 
@@ -792,4 +823,55 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
 
     // clear file states regardless if we opened windows or not due to setting
     Prj().GetLocalSettings().ClearFileState();
+
+    KICAD_SETTINGS* settings = kicadSettings();
+
+    if( settings->m_updateCheck == KICAD_SETTINGS::UPDATE_CHECK::UNINITIALIZED )
+    {
+        if( wxMessageBox( _( "Would you like to automatically check for updates on startup?" ),
+                          _( "Check for updates" ), wxICON_QUESTION | wxYES_NO, this )
+            == wxYES )
+        {
+            settings->m_updateCheck = KICAD_SETTINGS::UPDATE_CHECK::ALLOWED;
+            settings->m_PcmUpdateCheck = true;
+        }
+        else
+        {
+            settings->m_updateCheck = KICAD_SETTINGS::UPDATE_CHECK::NOT_ALLOWED;
+            settings->m_PcmUpdateCheck = false;
+        }
+    }
+
+    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::STATE::DISABLED
+        && settings->m_PcmUpdateCheck )
+    {
+        m_pcm->RunBackgroundUpdate();
+    }
+}
+
+
+void KICAD_MANAGER_FRAME::SetPcmButton( BITMAP_BUTTON* aButton )
+{
+    m_pcmButton = aButton;
+
+    updatePcmButtonBadge();
+}
+
+
+void KICAD_MANAGER_FRAME::updatePcmButtonBadge()
+{
+    if( m_pcmButton )
+    {
+        if( m_pcmUpdateCount > 0 )
+        {
+            m_pcmButton->SetShowBadge( true );
+            m_pcmButton->SetBadgeText( wxString::Format( "%d", m_pcmUpdateCount ) );
+        }
+        else
+        {
+            m_pcmButton->SetShowBadge( false );
+        }
+
+        m_pcmButton->Refresh();
+    }
 }

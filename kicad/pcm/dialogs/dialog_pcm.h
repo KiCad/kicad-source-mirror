@@ -36,7 +36,7 @@ class DIALOG_PCM : public DIALOG_PCM_BASE
 {
 public:
     /** Constructor */
-    DIALOG_PCM( wxWindow* parent );
+    DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm );
     ~DIALOG_PCM();
 
     ///< Closes the window, asks user confirmation if there are pending actions
