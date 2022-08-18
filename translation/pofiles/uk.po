@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-15 08:16+0000\n"
+"PO-Revision-Date: 2022-08-19 23:15+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -13414,7 +13414,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2414
 #, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr ""
+msgstr "Власник посадкового місця (%d) не знайдено."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13694,36 +13694,36 @@ msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2450
 msgid "Invalid symbol library name"
-msgstr ""
+msgstr "Неприпустиме ім'я бібліотеки символів"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2470
 msgid "Invalid symbol library ID"
-msgstr ""
+msgstr "Неправильний ID бібліотеки символів"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1348
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2099
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr ""
+msgstr "Бібліотека символів '%s' вже існує."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1374
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2125
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr ""
+msgstr "Бібліотека символів '%s' не може бути видалена."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:84
 msgid "Unexpected end of file."
-msgstr ""
+msgstr "Неочікуваний кінець файлу."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:170
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
+msgstr "Недостатньо прав для читання бібліотеки '%s."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:179
 msgid "symbol document library file is empty"
-msgstr ""
+msgstr "файл бібліотеки документів порожній"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:551
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:585
@@ -13737,43 +13737,43 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:257
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:276
 msgid "unexpected end of line"
-msgstr ""
+msgstr "неочікуваний кінець рядка"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:362
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr ""
+msgstr "'%s' не схожий на файл Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:392
 msgid "Missing 'EELAYER END'"
-msgstr ""
+msgstr "Не знайдено 'EELAYER END'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:440
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:712
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:720
 msgid "unexpected end of file"
-msgstr ""
+msgstr "неочікуваний кінець файлу"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:675
 msgid "Unexpected end of file"
-msgstr ""
+msgstr "Неочікуваний кінець файлу"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1011
 msgid "expected 'Italics' or '~'"
-msgstr ""
+msgstr "очікувалось 'Курсив' або '~'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1275
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr ""
+msgstr "атрибути поля символів має містити 3 символи в ширину"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:222
 msgid "expected unquoted string"
-msgstr ""
+msgstr "очікувався нецитований рядок"
 
 #: eeschema/sch_screen.cpp:882 eeschema/sch_screen.cpp:974
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
+msgstr "Установка ідентифікатора бібліотеки '%s %s на ' '%s'."
 
 #: eeschema/sch_screen.cpp:898
 #, c-format
@@ -17635,21 +17635,21 @@ msgstr "D коди"
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, c-format
 msgid "Source file '%s' not found."
-msgstr ""
+msgstr "Вихідний файл '%s' не знайдено."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
 #, c-format
 msgid "No file loaded on the active layer %d."
-msgstr ""
+msgstr "Файл не завантажено на активний шар %d."
 
 #: gerbview/tools/gerbview_selection_tool.cpp:46
 msgid "Highlight"
-msgstr ""
+msgstr "ПІдсвітити"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr ""
+msgstr "Підсвічувати елементи компонента '%s"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
@@ -17659,12 +17659,12 @@ msgstr "Підсвічувати елементи звʼязку '%s"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr ""
+msgstr "Підсвічувати тип апертури '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr ""
+msgstr "Підсвічувати DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:535
@@ -17675,33 +17675,33 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:984
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
-msgstr ""
+msgstr "Шари"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:80
 #: gerbview/widgets/layer_widget.cpp:557
 msgid "Items"
-msgstr ""
+msgstr "Елементи"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:95
 msgid "DCodes"
-msgstr ""
+msgstr "D коди"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:96
 msgid "Show DCodes identification"
-msgstr ""
+msgstr "Показувати ідентифікатори D кодів"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:97
 msgid "Negative Objects"
-msgstr ""
+msgstr "Негативні об'єкти"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 msgid "Show negative objects in this color"
-msgstr ""
+msgstr "Показати негативні об'єкти в цьому кольорі"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show the (x,y) grid dots"
-msgstr ""
+msgstr "Показати точки сітки (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "Show drawing sheet border and title block"
@@ -26359,69 +26359,71 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
-msgstr ""
+msgstr "Стиль заокруглення:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
-msgstr ""
+msgstr "45°"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "arc"
-msgstr ""
+msgstr "дуга"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:157
 msgid "Miter radius (r):"
-msgstr ""
+msgstr "Радіус закруглення (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
-msgstr ""
+msgstr "Налаштування довжини трасування"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr ""
+msgstr "DRC порушення: виділіть перешкоду"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr ""
+msgstr "DRC порушення: змістити доріжки і отвори"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr ""
+msgstr "DRC порушення: долати перешкоди"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
-msgstr ""
+msgstr "Підсвічувати колізії"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
-msgstr ""
+msgstr "Розштовхувати"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
-msgstr ""
+msgstr "Оминати перешкоди"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
-msgstr ""
+msgstr "Режим"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:28
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "Вільний режим кута (без змішення/подолання перешкод)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
-msgstr ""
+msgstr "Розштовхувати отвори"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:33
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
+"Якщо вимкнено, отвори розглядаються як нерухливі об'єкти і оточується "
+"замість розштовхуваня."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
 msgid "Jump over obstacles"
-msgstr ""
+msgstr "Перескочити через перешкоди"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid ""
@@ -26431,7 +26433,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:42
 msgid "Remove redundant tracks"
-msgstr ""
+msgstr "Видаляти зайві доріжки"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:43
 msgid ""
@@ -26443,7 +26445,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
-msgstr ""
+msgstr "Оптимізувати з’єднання з контактними площадками"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:48
 msgid ""
@@ -26453,7 +26455,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
-msgstr ""
+msgstr "Згладжувати сегменти при перетягуванні"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:53
 msgid ""
@@ -26463,7 +26465,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid "Allow DRC violations"
-msgstr ""
+msgstr "Дозволити порушення DRC"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:58
 msgid ""
@@ -26473,11 +26475,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr ""
+msgstr "Запитувати про завершення доріжки"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
-msgstr ""
+msgstr "Оптимізувати доріжку при переміщенні"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:68
 msgid ""
@@ -26488,7 +26490,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Напрям мишки визначає нахил доріжки"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
@@ -26498,7 +26500,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Фіксувати всі сегменти по натиску мишкою"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:78
 msgid ""
@@ -26509,66 +26511,66 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
-msgstr ""
+msgstr "Налаштування інтерактивного трасування"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:163
 msgid "Reset to the current distance from the reference position."
-msgstr ""
+msgstr "Скидання на поточну відстань від опірної точки."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:164
 msgid "Reset to the current angle from the reference position."
-msgstr ""
+msgstr "Скидання до поточного кута з опірною точкою."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:168
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
 msgid "Offset X:"
-msgstr ""
+msgstr "Зміщення по X:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:169
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:84
 msgid "Offset Y:"
-msgstr ""
+msgstr "Зміщення по Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
 msgid "Reset to the current X offset from the reference position."
-msgstr ""
+msgstr "Скинути до поточного зміщення по X з опірною точкою."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:172
 msgid "Reset to the current Y offset from the reference position."
-msgstr ""
+msgstr "Скинути до поточного зміщення по Y з опірною точкою."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:231
 msgid "Reference location: grid origin"
-msgstr ""
+msgstr "Рекомендоване положення: початок сітки"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
 msgid "Reference location: local coordinates origin"
-msgstr ""
+msgstr "Рекомендоване положення: центр локальних координат"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:246
 msgid "<none selected>"
-msgstr ""
+msgstr "<не вибрано>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
 #, c-format
 msgid "Reference item: %s"
-msgstr ""
+msgstr "Базове значення: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
-msgstr ""
+msgstr "Базове значення: <не вибрано>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
 msgid "Use Local Origin"
-msgstr ""
+msgstr "Використовувати локальні координати"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
 msgid "Use Grid Origin"
-msgstr ""
+msgstr "Використовувати базову сітку"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid "Select Item..."
-msgstr ""
+msgstr "Вибрати елемент..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:42
 msgid ""
@@ -26578,69 +26580,69 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr ""
+msgstr "Позиція відносна до базового елемента"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Клацніть правою кнопкою миші для вибору шару."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
-msgstr ""
+msgstr "Друкувати по вкладці вигляду на менеджер зовнішнього вигляду"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:233
 msgid "No drill mark"
-msgstr ""
+msgstr "Свердління не відмічено"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Small mark"
-msgstr ""
+msgstr "Мала позначка"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "Real drill"
-msgstr ""
+msgstr "Реальні отвори свердління"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
 msgid "Select Manufacturer"
-msgstr ""
+msgstr "Вибрати виробника"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
 #, c-format
 msgid "from %s"
-msgstr ""
+msgstr "з %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
 #, c-format
 msgid "Details: %s"
-msgstr ""
+msgstr "Докладно: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 msgid "Send project directly"
-msgstr ""
+msgstr "Безпосереднє надсилання проекту"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Надіслати виробничі файли з KiCad"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Виробити PCB"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Відправити PCB до виробництва"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:49
 msgid "Change Pads on Current Footprint"
-msgstr ""
+msgstr "Змінити контактні площадки в поточному посадковому місці"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:50
 msgid "Change Pads on Identical Footprints"
-msgstr ""
+msgstr "Змінити контактні площадки в таких же посадкових місцях"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr ""
+msgstr "Не змінювати посадкові місця з іншою формою"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
@@ -26661,11 +26663,11 @@ msgstr "Використовувати властивості посадково
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:95
 #, fuzzy
 msgid "Conversion settings:"
-msgstr "Параметри моделювання"
+msgstr "Параметри конвертації"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:112
 msgid "Convert to Rule Area"
-msgstr ""
+msgstr "Конвертувати в правила області"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:207
 msgid "No layers selected."
@@ -26683,7 +26685,7 @@ msgstr "Ім'я області:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr ""
+msgstr "Унікальне ім'я для цієї області правила для використання в правилах DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -26695,7 +26697,7 @@ msgstr "Утримувати доріжки"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
-msgstr ""
+msgstr "Заборонити трасування в цій області"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
@@ -26719,11 +26721,11 @@ msgstr "Заборонити заповнення міддю"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Зони що не будуть залиті мідною областю"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
 msgid "Keep out footprints"
-msgstr ""
+msgstr "Заборонити посадкові місця"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
@@ -26731,60 +26733,60 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:70
 msgid "Rule Area Properties"
-msgstr ""
+msgstr "Властивості області правил"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
-msgstr ""
+msgstr "Перемістити елементи:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:50
 msgid "To layer:"
-msgstr ""
+msgstr "На шар:"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 msgid "Swap Layers"
-msgstr ""
+msgstr "Поміняти шари між собою"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Modified alignment target"
-msgstr ""
+msgstr "Заміна цілі вирівнювання"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
-msgstr ""
+msgstr "Форма:"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:54
 msgid "Target Properties"
-msgstr ""
+msgstr "Параметри цілі"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Reference Properties"
-msgstr ""
+msgstr "Властивості позначення посадкового місця"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:85
 msgid "Footprint Value Properties"
-msgstr ""
+msgstr "Властивості значення посадкового місця"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:86
 msgid "Footprint Text Properties"
-msgstr ""
+msgstr "Властивості тексту посадкового місця"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:91
 msgid "Reference:"
-msgstr ""
+msgstr "Позначення:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:245
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr ""
+msgstr "Посадкового місце %s (%s), %s, повернуто на %.1f градусів"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:420
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:353
@@ -26792,58 +26794,65 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
+"Товщина тексту завелика для розміру тексту.\n"
+"Він буде стиснутим."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:445
 msgid "Change text properties"
-msgstr ""
+msgstr "Змінити властивості тексту"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:59
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "Введіть текст, який необхідно розмістити на вибраному шарі."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
 msgid "Knockout"
-msgstr ""
+msgstr "Перекриття"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
-msgstr ""
+msgstr "Тримати текст вертикально"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:252
 msgid "Parent footprint description"
-msgstr ""
+msgstr "Опис похідного посадкового місця"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:410
 msgid "Change text box properties"
-msgstr ""
+msgstr "Змінити властивості текстового поля"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
 msgid "Text Width:"
-msgstr ""
+msgstr "Ширина тексту:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:153
 msgid "Text Height:"
-msgstr ""
+msgstr "Висота тексту:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
 msgid "Border style:"
-msgstr ""
+msgstr "Стиль рамки:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:447
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr ""
+"Змінивши зв'язок необхідно також оновити %s контактну площадку %s на %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:456
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
+"Змінивши зв'язок необхідно також оновити %s контактну площадку %s і %s "
+"контактну площадку %s в %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:465
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
+"Змінивши зв'язок необхідно також оновити %lu підключену контактну площадку "
+"на %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:471
 msgid "Change Nets"
@@ -26856,15 +26865,15 @@ msgstr "Залишити незмінним"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:492
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
-msgstr ""
+msgstr "Розмір отвору повинно бути меншим за діаметр отвору"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:501
 msgid "Via start layer and end layer cannot be the same"
-msgstr ""
+msgstr "Початковий і кінцевий шари не повинні співпадати"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:659
 msgid "Edit track/via properties"
-msgstr ""
+msgstr "Редагувати властивості доріжку/отвору"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:724
 msgid "Updating nets"
@@ -26882,23 +26891,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
-msgstr ""
+msgstr "Початкова точка X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:71
 msgid "Start point Y:"
-msgstr ""
+msgstr "Початкова точка Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:82
 msgid "End point X:"
-msgstr ""
+msgstr "Кінцева точка X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:93
 msgid "End point Y:"
-msgstr ""
+msgstr "Кінцева точка Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:104
 msgid "Pre-defined widths:"
-msgstr ""
+msgstr "Попередньо встановлена ширина:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
@@ -26906,17 +26915,18 @@ msgstr "Використовувати ширини класу звʼязків"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
-msgstr ""
+msgstr "Попередньо визначені розміри:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr ""
+msgstr "Діаметр перехідного отвору:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
+#, fuzzy
 msgid "Via hole:"
-msgstr ""
+msgstr "Свердло перехідного отвору"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -26924,92 +26934,95 @@ msgstr "Використовувати розміри класу звʼязкі�
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
-msgstr ""
+msgstr "Тип перехідного отвору:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1221
 msgid "Through"
-msgstr ""
+msgstr "Наскрізь"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1223
 msgid "Micro"
-msgstr ""
+msgstr "Мікро"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1222
 msgid "Blind/buried"
-msgstr ""
+msgstr "Сліпе/приховане"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:263
 msgid "Start layer:"
-msgstr ""
+msgstr "Початковий шар:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:270
 msgid "End layer:"
-msgstr ""
+msgstr "Кінцевий шар:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
+#, fuzzy
 msgid "Annular rings:"
-msgstr ""
+msgstr "Кільцеподібні кільця"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Start, end, and connected layers"
-msgstr ""
+msgstr "Початковий, кінцевий та підключені шари"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr ""
+msgstr "Властивості доріжки & перехідного отвору"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
-msgstr ""
+msgstr "Розміри доріжки і перехідного отвору"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
-msgstr ""
+msgstr "Встановити властивості невикористаної контактної площадки"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr ""
+msgstr "&перехідні отвори"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr ""
+msgstr "&Контактні площадки"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
-msgstr ""
+msgstr "&Видалити невикористані шари"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "Res&tore unused layers"
-msgstr ""
+msgstr "Відновити невикористані шари"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
-msgstr ""
+msgstr "&Тільки виділене"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
-msgstr ""
+msgstr "Залишити зовнішні шари"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
-msgstr ""
+msgstr "Видалити невикористані контактні площадки"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr ""
+msgstr "Видалити посадкові місця що не мають символів"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 msgstr ""
+"Видалити з плати незаблоковані посадкові місця що не мають зв'язків з "
+"символом схеми."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr ""
+msgstr "Замінити посадкові місця на зазначені в схемі"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -27020,24 +27033,24 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
-msgstr ""
+msgstr "Оновлення PCB з схеми"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Do not show"
-msgstr ""
+msgstr "Не показувати"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads"
-msgstr ""
+msgstr "Показувати контактні площадки"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr ""
+msgstr "Відобразити доріжки"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr ""
+msgstr "Відобразити посадкові місця і доріжки"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -27051,35 +27064,36 @@ msgstr ""
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:876
 msgid "Show pad numbers"
-msgstr ""
+msgstr "Відобразити номери контактної площадки"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
-msgstr ""
+msgstr "Показати контактну площадку <не підключено>"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
-msgstr ""
+msgstr "Зазор для контура"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing"
-msgstr ""
+msgstr "Показувати під час маршрутизації"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing w/ via clearance at end"
 msgstr ""
+"Показувати відступи і краї при маршрутизації/створення перехідного отвору"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
-msgstr ""
+msgstr "Показати при маршрутизації та редагуванні"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
-msgstr ""
+msgstr "Показувати завжди"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track && Via Clearances"
-msgstr ""
+msgstr "Зазори доріжок && перехідних отворів"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27089,21 +27103,19 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr ""
+msgstr "Показати зазор для контактної площадки"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Highlight footprints when symbols selected"
-msgstr "Підсвічувати виділений звʼязок"
+msgstr "Підсвічувати посадкове місце якщо вибраний символ"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:78
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Призначити посадкове місце для виділеного символу"
+msgstr "Підсвітити посадкове місце якщо відповідні вибраним символам"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr ""
+msgstr "Забезпечити видимість посадкових місць в поточному вигляді"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -27111,7 +27123,7 @@ msgstr "Виділяти звʼязки, коли вони виділяютьс�
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:98
 msgid "Refresh 3D view automatically"
-msgstr ""
+msgstr "Автоматично оновлювати 3D перегляд"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:99
 msgid ""
@@ -27129,40 +27141,43 @@ msgstr "Магнітна графіка"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Flip board items L/R (default is T/B)"
-msgstr ""
+msgstr "Переверніть елементи плати L/R (типово T/B)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:53
 msgid "Step for &rotate commands:"
-msgstr ""
+msgstr "Крок для команд &обертання:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
+"Встановити інкремент обертання(у градусах) для контекстного меню та гарячих "
+"клавіш."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Allow free pads"
-msgstr ""
+msgstr "Дозволити вільні контактні площадки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:71
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
+"Якщо увімкнено, то контактні площадки можуть вільно переміщатися відносно "
+"посадкового місця."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:169
 msgid "No modifier"
-msgstr ""
+msgstr "Без змін"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:174
 msgid "Select item(s)."
-msgstr ""
+msgstr "Вибрані елементи."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Toggle selection."
-msgstr "Перемкнути реалістичний режим"
+msgstr "Перемкнути виділення."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
@@ -27172,11 +27187,11 @@ msgstr "Підсвічувати звʼязки (для контактних п�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Graphics Editing"
-msgstr ""
+msgstr "Редагування графіки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:247
 msgid "Constrain to H, V, 45 degrees"
-msgstr ""
+msgstr "Обмеження за H, V, 45 градусів"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:264
 msgid "Magnetic Points"
@@ -27184,52 +27199,52 @@ msgstr "Магнітні точки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:271
 msgid "Snap to pads:"
-msgstr ""
+msgstr "Прикріплення до контактної площадки:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:273
 #: pcbnew/dialogs/panel_edit_options_base.cpp:281
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
+msgstr "Захоплювати курсор коли мишка входить в область контактної площадки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:277
 #: pcbnew/dialogs/panel_edit_options_base.cpp:291
 msgid "When creating tracks"
-msgstr ""
+msgstr "Під час створення доріжок"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:285
 msgid "Snap to tracks:"
-msgstr ""
+msgstr "Прив'язка до доріжок:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:287
 #: pcbnew/dialogs/panel_edit_options_base.cpp:295
 msgid "Capture cursor when the mouse approaches a track"
-msgstr ""
+msgstr "Захоплювати курсор при наближенні миші до доріжки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:299
 msgid "Snap to graphics:"
-msgstr ""
+msgstr "Пристосувати до графіки:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:301
 #: pcbnew/dialogs/panel_edit_options_base.cpp:309
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr ""
+msgstr "Захоплювати курсор миші при наближенні графічних точок"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:322
 msgid "Always show selected ratsnest"
-msgstr ""
+msgstr "Завжди показувати вибрані зв'язки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:325
 #: pcbnew/tools/pcb_actions.cpp:835
 msgid "Show ratsnest with curved lines"
-msgstr ""
+msgstr "Показувати зв'язки вигнутими лініями"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Track Editing"
-msgstr ""
+msgstr "Редагування доріжки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid "Mouse drag track behavior:"
-msgstr ""
+msgstr "Поведінка доріжки при перетягування миші:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:336
 msgid ""
@@ -27243,7 +27258,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:1430
 msgid "Drag (45 degree mode)"
-msgstr ""
+msgstr "Перетягування (режим 45°)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:349
 #: pcbnew/tools/pcb_actions.cpp:1431
@@ -27253,7 +27268,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:353
 #: pcbnew/tools/pcb_actions.cpp:1437
 msgid "Drag (free angle)"
-msgstr ""
+msgstr "Перетягування (вільний кут)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:354
 #: pcbnew/tools/pcb_actions.cpp:1438
@@ -27263,7 +27278,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:367
 msgid "Limit actions to 45 degrees from start"
-msgstr ""
+msgstr "Обмежити дії до 45 градусів від початкової точки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:378
 msgid "Draw an outline to show the sheet size."
@@ -27271,7 +27286,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid "Auto-refill zones"
-msgstr ""
+msgstr "Автоматичне заливання зон"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:384
 msgid ""
