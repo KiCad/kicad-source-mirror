@@ -770,8 +770,6 @@ public:
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
-    void FixupJunctions();
-
     int GetSchematicJunctionSize();
 
     void FocusOnItem( SCH_ITEM* aItem );

@@ -202,6 +202,12 @@ public:
      */
     void RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLABEL* )>& aItemCallback );
 
+    /**
+     * Add junctions to this schematic where required. This function is needed for some plugins
+     * (e.g. Legacy and Cadstar) in order to retain connectivity after loading.
+     */
+    void FixupJunctions();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

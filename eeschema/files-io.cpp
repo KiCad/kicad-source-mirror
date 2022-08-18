@@ -487,12 +487,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     RecomputeIntersheetRefs();
     GetCurrentSheet().UpdateAllScreenReferences();
 
-    // re-create junctions if needed. Eeschema optimizes wires by merging
+    // Re-create junctions if needed. Eeschema optimizes wires by merging
     // colinear segments. If a schematic is saved without a valid
     // cache library or missing installed libraries, this can cause connectivity errors
     // unless junctions are added.
+    //
+    // TODO: (RFB) This really needs to be put inside the Load() function of the SCH_LEGACY_PLUGIN
+    // I can't put it right now because of the extra code that is above to convert legacy bus-bus
+    // entries to bus wires
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
-        FixupJunctions();
+        Schematic().FixupJunctions();
 
     SyncView();
     GetScreen()->ClearDrawingState();
@@ -1253,13 +1257,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             Schematic().Root().SetFileName( newfilename.GetFullName() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetContentModified();
-
-            // Only fix junctions for CADSTAR importer for now as it may cause issues with
-            // other importers
-            if( fileType == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
-            {
-                FixupJunctions();
-            }
 
             RecalculateConnections( GLOBAL_CLEANUP );
 

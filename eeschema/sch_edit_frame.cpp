@@ -1651,42 +1651,6 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void SCH_EDIT_FRAME::FixupJunctions()
-{
-    // Save the current sheet, to retrieve it later
-    SCH_SHEET_PATH oldsheetpath = GetCurrentSheet();
-
-    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
-
-    for( const SCH_SHEET_PATH& sheet : sheetList )
-    {
-        size_t num_undos = m_undoList.m_CommandsList.size();
-
-        SetCurrentSheet( sheet );
-        GetCurrentSheet().UpdateAllScreenReferences();
-
-        SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
-
-        EE_SELECTION allItems;
-
-        for( auto item : screen->Items() )
-            allItems.Add( item );
-
-        m_toolManager->GetTool<SCH_LINE_WIRE_BUS_TOOL>()->AddJunctionsIfNeeded( &allItems );
-
-        // Check if we modified anything during this routine
-        // Needs to happen for every sheet to set the proper modified flag
-        if( m_undoList.m_CommandsList.size() > num_undos )
-            OnModify();
-    }
-
-    // Reselect the initial sheet:
-    SetCurrentSheet( oldsheetpath );
-    GetCurrentSheet().UpdateAllScreenReferences();
-    SetScreen( GetCurrentSheet().LastScreen() );
-}
-
-
 bool SCH_EDIT_FRAME::IsContentModified() const
 {
     return Schematic().GetSheets().IsModified();

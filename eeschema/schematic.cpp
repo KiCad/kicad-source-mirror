@@ -25,6 +25,8 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <schematic.h>
+#include <sch_junction.h>
+#include <sch_line.h>
 #include <sch_screen.h>
 #include <sim/spice_settings.h>
 #include <sch_label.h>
@@ -556,6 +558,34 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 
             CurrentSheet().LastScreen()->Update( globalLabel );
             aItemCallback( globalLabel );
+        }
+    }
+}
+
+
+void SCHEMATIC::FixupJunctions()
+{
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        std::deque<EDA_ITEM*> allItems;
+
+        for( auto item : screen->Items() )
+            allItems.push_back( item );
+
+        // Add missing junctions and breakup wires as needed
+        for( const VECTOR2I& point : screen->GetNeededJunctions( allItems ) )
+        {
+            SCH_JUNCTION* junction = new SCH_JUNCTION( point );
+            screen->Append( junction );
+
+            // Breakup wires
+            for( SCH_LINE* wire : screen->GetBusesAndWires( point, true ) )
+            {
+                SCH_LINE* newSegment = wire->BreakAt( point );
+                screen->Append( newSegment );
+            }
         }
     }
 }

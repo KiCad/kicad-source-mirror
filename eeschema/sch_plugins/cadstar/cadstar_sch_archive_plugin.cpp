@@ -140,6 +140,9 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
 
     sch_plugin->SaveLibrary( libFileName.GetFullPath() );
 
+    // Need to fix up junctions after import to retain connectivity
+    aSchematic->FixupJunctions();
+
     return rootSheet;
 }
 

@@ -102,7 +102,6 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     sheets.AnnotatePowerSymbols();
 
     // NOTE: This is required for multi-unit symbols to be correct
-    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();
 

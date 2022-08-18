@@ -107,7 +107,6 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     sheets.AnnotatePowerSymbols();
 
     // NOTE: This is required for multi-unit symbols to be correct
-    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();
 
