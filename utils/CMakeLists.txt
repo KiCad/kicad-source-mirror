@@ -5,7 +5,4 @@ if( COMPILER_SUPPORTS_WARNINGS )
 endif()
 
 add_subdirectory( idftools )
-
-if( KICAD_USE_OCC )
-    add_subdirectory( kicad2step )
-endif( KICAD_USE_OCC )
+add_subdirectory( kicad2step )

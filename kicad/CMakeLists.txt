@@ -128,9 +128,7 @@ if( APPLE )
         set( BUNDLE_FIX_DIRS ${BUNDLE_FIX_DIRS} ${MACOS_EXTRA_BUNDLE_FIX_DIRS} ) # TODO: where should we document MACOS_EXTRA_BUNDLE_FIX_DIRS?
     endif()
 
-    if( KICAD_USE_OCC )
-        set( BUNDLE_FIX_DIRS ${BUNDLE_FIX_DIRS} ${OCC_LIBRARY_DIR} )
-    endif()
+    set( BUNDLE_FIX_DIRS ${BUNDLE_FIX_DIRS} ${OCC_LIBRARY_DIR} )
 
     # make main bundle relocatable
     install( CODE "

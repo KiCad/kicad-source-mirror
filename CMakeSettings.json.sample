@@ -37,11 +37,6 @@
           "type": "STRING"
         },
         {
-          "name": "KICAD_USE_OCC",
-          "value": "ON",
-          "type": "BOOL"
-        },
-        {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
           "type": "BOOL"
@@ -69,11 +64,6 @@
           "name": "KICAD_SPICE",
           "value": "ON",
           "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCC",
-          "value": "ON",
-          "type": "BOOL"
         },
         {
           "name": "KICAD_BUILD_QA_TESTS",
@@ -105,11 +95,6 @@
           "type": "STRING"
         },
         {
-          "name": "KICAD_USE_OCC",
-          "value": "ON",
-          "type": "BOOL"
-        },
-        {
           "name": "KICAD_BUILD_QA_TESTS",
           "value": "False",
           "type": "BOOL"
@@ -137,11 +122,6 @@
           "name": "KICAD_SPICE",
           "value": "ON",
           "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCC",
-          "value": "ON",
-          "type": "BOOL"
         },
         {
           "name": "KICAD_BUILD_QA_TESTS",
@@ -181,11 +161,6 @@
           "name": "KICAD_SPICE",
           "value": "ON",
           "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCC",
-          "value": "OFF",
-          "type": "BOOL"
         },
         {
           "name": "KICAD_BUILD_QA_TESTS",

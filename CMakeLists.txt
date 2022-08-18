@@ -62,10 +62,6 @@ option( KICAD_SCRIPTING_WXPYTHON
     ON )
 mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
 
-option( KICAD_USE_OCC
-    "Build tools and plugins related to OpenCascade Technology (default ON)"
-    ON )
-
 option( KICAD_INSTALL_DEMOS
     "Install KiCad demos and examples (default ON)"
     ON )
@@ -516,10 +512,6 @@ if( KICAD_SPICE )
     add_definitions( -DKICAD_SPICE )
 endif()
 
-if( KICAD_USE_OCC )
-    add_definitions( -DKICAD_USE_OCC )
-endif()
-
 if( KICAD_SIGNAL_INTEGRITY )
     add_definitions( -DKICAD_SIGNAL_INTEGRITY )
 endif()
@@ -797,21 +789,19 @@ if( KICAD_SPICE )
 endif()
 
 # Find OpenCascade, required for STEP plugin and tools
-if( KICAD_USE_OCC )
-    find_package(OCC)
-    if( NOT OCC_FOUND )
-        MESSAGE( FATAL_ERROR "================================================================\n"
-                             " KICAD_USE_OCC=True but OpenCASCADE was not found!\n"
-                             "================================================================\n")
-    endif()
-    if( OCC_VERSION_STRING VERSION_LESS 7.3.0 )
-        MESSAGE( FATAL_ERROR "================================================================\n"
-                             "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
-                             "  KiCad requires a minimum version of 7.3.0\n"
-                             "================================================================\n")
-    endif()
-    include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
+find_package(OCC)
+if( NOT OCC_FOUND )
+    MESSAGE( FATAL_ERROR "================================================================\n"
+                         " OpenCASCADE was not found!\n"
+                         "================================================================\n")
 endif()
+if( OCC_VERSION_STRING VERSION_LESS 7.3.0 )
+    MESSAGE( FATAL_ERROR "================================================================\n"
+                         "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
+                         "  KiCad requires a minimum version of 7.3.0\n"
+                         "================================================================\n")
+endif()
+include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
 
 # Assist with header file searching optimization:
 # INC_BEFORE and INC_AFTER are two lists which go at the front and back of the
