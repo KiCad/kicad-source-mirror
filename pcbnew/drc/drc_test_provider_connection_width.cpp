@@ -88,8 +88,8 @@ private:
 class POLYGON_TEST
 {
 public:
-    POLYGON_TEST( int aLimit ) :
-        m_limit( aLimit )
+    POLYGON_TEST( int aLimit, int aErrorLimit ) :
+        m_limit( aLimit ), m_max_error( aErrorLimit )
     {
     };
 
@@ -339,16 +339,28 @@ private:
             p = p0->next;
         }
 
-        while( p0 != aB && checked < total_pts && directions != 15 )
+        while( p0 != aB && checked < total_pts && directions != 0b1111 )
         {
-            int bit2x = std::signbit( p->x - p0->x );
-            int bit2y = std::signbit( p->y - p0->y );
-            directions |= ( 1 << ( 2 + bit2x ) ) + ( 1 << bit2y );
+            double diff_x = std::abs( p->x - p0->x );
+            double diff_y = std::abs( p->y - p0->y );
 
-            p0 = p;
-            if( same_point( p0, p0->nextZ ) )
+            // Floating point zeros can have a negative sign, so we need to
+            // ensure that only substantive diversions count for a direction
+            // change
+            if( diff_x > m_max_error )
+                directions |= ( 1 << ( 2 + std::signbit( p->x - p0->x ) ) );
+
+            if( diff_y > m_max_error )
+                directions |= ( 1 << std::signbit( p->y - p0->y ) );
+
+            // In the case of a circle, we need to eventually get the direction
+            // so keep the p0 at the same point
+            if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
+                p0 = p;
+
+            if( same_point( p, p->nextZ ) )
                 p = p->nextZ->next;
-            else if( same_point( p0, p0->prevZ ) )
+            else if( same_point( p, p->prevZ ) )
                 p = p->prevZ->next;
             else
                 p = p->next;
@@ -383,13 +395,24 @@ private:
         directions = 0;
         checked = 0;
 
-        while( p0 != aB && checked < total_pts && directions != 15 )
+        while( p0 != aB && checked < total_pts && directions != 0b1111 )
         {
-            int bit2x = std::signbit( p->x - p0->x );
-            int bit2y = std::signbit( p->y - p0->y );
-            directions |= ( 1 << ( 2 + bit2x ) ) + ( 1 << bit2y );
+            double diff_x = std::abs( p->x - p0->x );
+            double diff_y = std::abs( p->y - p0->y );
 
-            p0 = p;
+            // Floating point zeros can have a negative sign, so we need to
+            // ensure that only substantive diversions count for a direction
+            // change
+            if( diff_x > m_max_error )
+                directions |= ( 1 << ( 2 + std::signbit( p->x - p0->x ) ) );
+
+            if( diff_y > m_max_error )
+                directions |= ( 1 << std::signbit( p->y - p0->y ) );
+
+            // In the case of a circle, we need to eventually get the direction
+            // so keep the p0 at the same point
+            if( diff_x > m_max_error || diff_y > m_max_error || p == aB )
+                p0 = p;
 
             if( same_point( p, p->nextZ ) )
                 p = p->nextZ->prev;
@@ -550,6 +573,7 @@ private:
 
 private:
     int                             m_limit;
+    double                          m_max_error;
     BOX2I                           m_bbox;
     std::deque<Vertex>              m_vertices;
     std::set<std::pair<int, int>>   m_hits;
@@ -637,7 +661,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                POLYGON_TEST test( aMinWidth );
+                POLYGON_TEST test( aMinWidth, m_drcEngine->GetDesignSettings()->m_MaxError );
 
                 for( int ii = 0; ii < aDataset.poly.OutlineCount(); ++ii )
                 {
@@ -660,6 +684,13 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                         {
                             if( item->HitTest( location, aMinWidth ) )
                                 items.push_back( item );
+                        }
+
+                        for( auto& [ zone, rtree ] : board->m_CopperZoneRTreeCache )
+                        {
+                            if( !rtree->GetObjectsAt( location, aLayer, aMinWidth ).empty() &&
+                                    zone->HitTestFilledArea( aLayer, location, aMinWidth ) )
+                                items.push_back( zone );
                         }
 
                         if( !items.empty() )
