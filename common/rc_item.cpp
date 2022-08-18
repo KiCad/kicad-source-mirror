@@ -378,7 +378,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:
-        if( rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+        if( rcItem->GetParent() && rcItem->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
         {
             aVariant = _( "Drawing Sheet" );
             break;
