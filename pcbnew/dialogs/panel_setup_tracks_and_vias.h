@@ -39,8 +39,7 @@ class BOARD_DESIGN_SETTINGS;
 class PANEL_SETUP_TRACKS_AND_VIAS : public PANEL_SETUP_TRACKS_AND_VIAS_BASE
 {
 public:
-    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                                 PANEL_SETUP_CONSTRAINTS* aConstraintsPanel );
+    PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_TRACKS_AND_VIAS() override;
 
     bool TransferDataToWindow() override;
@@ -72,10 +71,6 @@ private:
     PCB_EDIT_FRAME*          m_Frame;
     BOARD*                   m_Pcb;
     BOARD_DESIGN_SETTINGS*   m_BrdSettings;
-
-    // We must validate against the current m_BrdSettings as they may have been
-    // changed but not yet committed.  Fetch them from the constraints panel.
-    PANEL_SETUP_CONSTRAINTS* m_ConstraintsPanel;
 };
 
 #endif //PANEL_SETUP_TRACKS_AND_VIAS_H

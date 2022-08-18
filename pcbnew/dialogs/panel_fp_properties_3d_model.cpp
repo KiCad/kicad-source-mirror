@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,7 @@
 
 #include <panel_fp_properties_3d_model.h>
 
-#include <confirm.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
-#include <board_design_settings.h>
 #include <bitmaps.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -43,7 +41,6 @@
 #include "dialogs/panel_preview_3d_model.h"
 #include "dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
-#include <kiway_holder.h>
 #include <wx/defs.h>
 
 enum MODELS_TABLE_COLUMNS
@@ -174,7 +171,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
     select3DModel( 0 );
 
     m_previewPane->UpdateDummyFootprint();
-    m_modelsGrid->SetColSize( COL_SHOWN, m_modelsGrid->GetVisibleWidth( COL_SHOWN, true, false, false ) );
+    m_modelsGrid->SetColSize( COL_SHOWN, m_modelsGrid->GetVisibleWidth( COL_SHOWN, true, false ) );
 
     Layout();
 }

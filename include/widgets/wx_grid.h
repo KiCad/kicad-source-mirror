@@ -85,7 +85,7 @@ public:
      * @param aKeep - Use the current size as a minimum value
      * @return The new size of the column
      */
-    int GetVisibleWidth( int aCol, bool aHeader = true, bool aContents = false, bool aKeep = true );
+    int GetVisibleWidth( int aCol, bool aHeader = true, bool aContents = true, bool aKeep = false );
 
     /**
      * Ensure the height of the row displaying the column labels is enough, even

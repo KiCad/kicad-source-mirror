@@ -82,7 +82,7 @@ void DIALOG_MANAGE_REPOSITORIES::setColumnWidths()
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
     {
         // Set the width to see the full contents
-        m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, false ) );
+        m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true ) );
     }
 }
 

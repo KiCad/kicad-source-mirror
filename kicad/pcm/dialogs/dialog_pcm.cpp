@@ -369,8 +369,7 @@ void DIALOG_PCM::updatePendingActionsTab()
     for( int col = 0; col < m_gridPendingActions->GetNumberCols(); col++ )
     {
         // Set the width to see the full contents
-        m_gridPendingActions->SetColSize(
-                col, m_gridPendingActions->GetVisibleWidth( col, true, true, false ) );
+        m_gridPendingActions->SetColSize( col, m_gridPendingActions->GetVisibleWidth( col ) );
     }
 }
 

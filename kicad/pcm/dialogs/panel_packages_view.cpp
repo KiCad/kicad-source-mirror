@@ -82,8 +82,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
         // Set the minimal width to the column label size.
         m_gridVersions->SetColMinimalWidth( col, headingWidth );
-        m_gridVersions->SetColSize( col,
-                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
+        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col ) );
     }
 
     // Most likely should be changed to wxGridSelectNone once WxWidgets>=3.1.5 is mandatory.
@@ -322,8 +321,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     for( int col = 0; col < m_gridVersions->GetNumberCols(); col++ )
     {
         // Set the width to see the full contents
-        m_gridVersions->SetColSize( col,
-                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
+        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col ) );
     }
 
     // Autoselect preferred or installed version

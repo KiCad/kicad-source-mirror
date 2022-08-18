@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,7 +268,7 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     for( int col = 0; col < m_graphicsGrid->GetNumberCols(); col++ )
     {
         // Set the minimal width to the column label size.
-        m_graphicsGrid->SetColMinimalWidth( col, m_graphicsGrid->GetVisibleWidth( col, true, false, false ) );
+        m_graphicsGrid->SetColMinimalWidth( col, m_graphicsGrid->GetVisibleWidth( col, true, false ) );
 
         // Set the width to see the full contents
         if( m_graphicsGrid->IsColShown( col ) )

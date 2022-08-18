@@ -310,10 +310,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {
-        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false,
-                                                                            false ) );
+        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false ) );
+
         // Adjust the column size.
-        int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
+        int col_size = m_itemsGrid->GetVisibleWidth( col );
 
         if( col == FPT_LAYER )  // This one's a drop-down.  Check all possible values.
         {
@@ -584,11 +584,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns()
     for( int i = 1; i < m_itemsGrid->GetNumberCols(); i++ )
         itemsWidth -= m_itemsGrid->GetColSize( i );
 
-    if( itemsWidth > 0 )
-    {
-        m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
-                m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
-    }
+    m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
+                                          m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths();

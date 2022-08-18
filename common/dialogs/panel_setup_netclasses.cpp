@@ -138,7 +138,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
     {
         // We calculate the column min size only from texts sizes, not using the initial col width
         // as this initial width is sometimes strange depending on the language (wxGrid bug?)
-        int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true, false );
+        int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true );
 
         if( i == GRID_LINESTYLE )
             min_best_width *= 1.5;
