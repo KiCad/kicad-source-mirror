@@ -1537,7 +1537,9 @@ const wxChar* FOOTPRINT::StringLibNameInvalidChars( bool aUserReadable )
 {
     // This list of characters is also duplicated in validators.cpp and
     // lib_id.cpp
-    // TODO: Unify forbidden character lists
+    // TODO: Unify forbidden character lists - Warning, invalid filename characters are not the same
+    // as invalid LIB_ID characters.  We will need to separate the FP filenames from FP names before this
+    // can be unified
     static const wxChar invalidChars[] = wxT("%$<>\t\n\r\"\\/:");
     static const wxChar invalidCharsReadable[] = wxT("% $ < > 'tab' 'return' 'line feed' \\ \" / :");
 
