@@ -45,7 +45,7 @@ public:
     bool IsNull() const { return m_isNull; }
 
 private:
-    bool m_isNull;
+    bool m_isNull = true;
     T    m_min{};
     T    m_opt{};
     T    m_max{};
