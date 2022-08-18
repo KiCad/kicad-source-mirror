@@ -10,21 +10,22 @@
 # Jan Straka <bach@email.cz>, 2020, 2021, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022.
+# Ondřej Čertík <ondrej@certik.us>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-06-12 08:49+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2022-08-19 23:15+0000\n"
+"Last-Translator: Ondřej Čertík <ondrej@certik.us>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3206,7 +3207,7 @@ msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Souhlasím s odesláním anonymních výkazů"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
 #, fuzzy
@@ -9236,7 +9237,7 @@ msgstr "Tečka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:171
 msgid "Diamond"
-msgstr ""
+msgstr "Diamant"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:181
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -11310,7 +11311,7 @@ msgstr "[Neuloženo]"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
 #, fuzzy
