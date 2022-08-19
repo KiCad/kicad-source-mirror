@@ -86,7 +86,7 @@ struct PACKAGE_VERSION
 
     // Not serialized fields
     std::tuple<int, int, int, int> parsed_version; // Full version tuple for sorting
-    bool                           compatible;
+    bool                           compatible = true;
 };
 
 

@@ -35,10 +35,13 @@
 BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
                               const wxSize& aSize, int aStyles ) :
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
-        m_isRadioButton( false ), m_buttonState( 0 ), m_padding( 0 ),
-        m_acceptDraggedInClicks( false ), m_showBadge( false ),
+        m_isRadioButton( false ),
+        m_showBadge( false ),
         m_badgeColor( wxColor( 210, 0, 0, 0 ) ), // dark red
-        m_badgeTextColor( wxColor( wxT( "white" ) ) )
+        m_badgeTextColor( wxColor( wxT( "white" ) ) ),
+        m_buttonState( 0 ),
+        m_padding( 0 ),
+        m_acceptDraggedInClicks( false )
 {
     if( aSize == wxDefaultSize )
         SetMinSize( wxButton::GetDefaultSize() + wxSize( m_padding * 2, m_padding * 2) );
@@ -53,6 +56,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap&
                               const wxPoint& aPos, const wxSize& aSize, int aStyles ) :
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
         m_isRadioButton( false ),
+        m_showBadge( false ),
         m_buttonState( 0 ),
         m_padding( 5 ),
         m_acceptDraggedInClicks( false )

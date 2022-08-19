@@ -1596,7 +1596,7 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item );
 
-    if( footprint->GetPath().empty() )
+    if( !footprint || footprint->GetPath().empty() )
         return 0;
 
     ClearSelection( true /*quiet mode*/ );
