@@ -92,6 +92,11 @@ function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}
     )
 
+    if(MSVC)
+        # lemon has a habit of generating empty switch cases which we can ignore
+        set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/${CONSUMING_FILE} PROPERTIES COMPILE_FLAGS /wd4065)
+    endif()
+
     # Mark the consuming file with a direct dependency on the generated grammar so that
     # it isn't compiled until the grammar is generated
     set_source_files_properties(
