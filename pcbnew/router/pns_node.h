@@ -91,6 +91,11 @@ public:
 
     virtual bool IsDiffPair( const ITEM* aA, const ITEM* aB ) = 0;
 
+    virtual bool IsInNetTie( const ITEM* aA ) = 0;
+    virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
+                                    const PNS::ITEM* aCollidingItem )= 0;
+
+
     virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) = 0;

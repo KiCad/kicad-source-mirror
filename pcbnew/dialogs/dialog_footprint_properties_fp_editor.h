@@ -88,6 +88,8 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnAddLayer( wxCommandEvent& event ) override;
     void OnDeleteLayer( wxCommandEvent& event ) override;
+    void OnAddPadGroup( wxCommandEvent& event ) override;
+    void OnRemovePadGroup( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName );

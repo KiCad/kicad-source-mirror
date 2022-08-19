@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,11 +86,15 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
+		wxStaticText* m_padGroupsLabel;
+		WX_GRID* m_padGroupsGrid;
+		wxBitmapButton* m_bpAddPadGroup;
+		wxBitmapButton* m_bpRemovePadGroup;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
@@ -99,11 +103,14 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnFootprintNameText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddPadGroup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemovePadGroup( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE();
 
 };

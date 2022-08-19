@@ -109,6 +109,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_localSolderPasteMargin         = aFootprint.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aFootprint.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aFootprint.m_zoneConnection;
+    m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -288,6 +289,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
+    m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
     // Move reference and value
     m_reference = aOther.m_reference;
@@ -384,6 +386,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
+    m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
     // Copy reference and value
     *m_reference = *aOther.m_reference;
@@ -2348,7 +2351,7 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
                 padOutline.BooleanSubtract( holeOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
                 if( padOutline.IsEmpty() )
-                    (aErrorHandler)( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
+                    aErrorHandler( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
             }
         }
     }
@@ -2387,16 +2390,165 @@ void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, cons
 
                 if( pad->GetBoundingBox().Intersects( other->GetBoundingBox() ) )
                 {
-
                     VECTOR2I pos;
                     SHAPE*   padShape = pad->GetEffectiveShape().get();
                     SHAPE*   otherShape = other->GetEffectiveShape().get();
 
                     if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+                        aErrorHandler( pad, other, pos );
+                }
+            }
+        }
+    }
+}
+
+
+void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
+                                                        const BOARD_ITEM* bItem,
+                                                        const BOARD_ITEM* cItem,
+                                                        const VECTOR2I& )>& aErrorHandler )
+{
+    // First build a map from pads to allowed-shorting-group indexes.  This ends up being
+    // something like O(3n), but it still beats O(n^2) for large numbers of pads.
+
+    std::unordered_map<const PAD*, int> padToGroupIdxMap;
+
+    for( const PAD* pad : m_pads )
+        padToGroupIdxMap[ pad ] = -1;
+
+    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
+    {
+        wxStringTokenizer groupParser( m_netTiePadGroups[ ii ], "," );
+
+        while( groupParser.HasMoreTokens() )
+        {
+            PAD* pad = FindPadByNumber( groupParser.GetNextToken().Trim( false ).Trim( true ) );
+
+            if( pad )
+                padToGroupIdxMap[ pad ] = ii;
+        }
+    }
+
+    // Now collect all the footprint items which are on copper layers
+
+    std::vector<BOARD_ITEM*> copperItems;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->IsOnCopperLayer() )
+            copperItems.push_back( item );
+    }
+
+    for( ZONE* zone : m_fp_zones )
+    {
+        if( !zone->GetIsRuleArea() && zone->IsOnCopperLayer() )
+            copperItems.push_back( zone );
+    }
+
+    if( m_reference->IsOnCopperLayer() )
+        copperItems.push_back( m_reference );
+
+    if( m_value->IsOnCopperLayer() )
+        copperItems.push_back( m_value );
+
+    for( PCB_LAYER_ID layer : { F_Cu, In1_Cu, B_Cu } )
+    {
+        // Next, build a polygon-set for the copper on this layer.  We don't really care about
+        // nets here, we just want to end up with a set of outlines describing the distinct
+        // copper polygons of the footprint.
+
+        SHAPE_POLY_SET                         copperOutlines;
+        std::map<int, std::vector<const PAD*>> outlineIdxToPadsMap;
+
+        for( BOARD_ITEM* item : copperItems )
+        {
+            if( item->IsOnLayer( layer ) )
+            {
+                item->TransformShapeWithClearanceToPolygon( copperOutlines, layer, 0,
+                                                            ARC_HIGH_DEF, ERROR_OUTSIDE );
+            }
+        }
+
+        copperOutlines.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+        // Index each pad to the outline in the set that it is part of.
+
+        for( const PAD* pad : m_pads )
+        {
+            for( int ii = 0; ii < copperOutlines.OutlineCount(); ++ii )
+            {
+                if( pad->GetEffectiveShape( layer )->Collide( &copperOutlines.Outline( ii ), 0 ) )
+                    outlineIdxToPadsMap[ ii ].emplace_back( pad );
+            }
+        }
+
+        // Finally, ensure that each outline which contains multiple pads has all its pads
+        // listed in an allowed-shorting group.
+
+        for( const auto& [ outlineIdx, pads ] : outlineIdxToPadsMap )
+        {
+            if( pads.size() > 1 )
+            {
+                const PAD* firstPad = pads[0];
+                int        firstGroupIdx = padToGroupIdxMap[ firstPad ];
+
+                for( size_t ii = 1; ii < pads.size(); ++ii )
+                {
+                    const PAD* thisPad = pads[ii];
+                    int        thisGroupIdx = padToGroupIdxMap[ thisPad ];
+
+                    if( thisGroupIdx < 0 || thisGroupIdx != firstGroupIdx )
                     {
-                        (aErrorHandler)( pad, other, pos );
+                        BOARD_ITEM* shortingItem = nullptr;
+                        VECTOR2I    pos = ( firstPad->GetPosition() + thisPad->GetPosition() ) / 2;
+
+                        pos = copperOutlines.Outline( outlineIdx ).NearestPoint( pos );
+
+                        for( BOARD_ITEM* item : copperItems )
+                        {
+                            if( item->HitTest( pos, 1 ) )
+                            {
+                                shortingItem = item;
+                                break;
+                            }
+                        }
+
+                        if( shortingItem )
+                            aErrorHandler( shortingItem, firstPad, thisPad, pos );
+                        else
+                            aErrorHandler( firstPad, thisPad, nullptr, pos );
                     }
                 }
+            }
+        }
+    }
+}
+
+
+void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler )
+{
+    std::set<wxString> padNumbers;
+
+    for( size_t ii = 0; ii < m_netTiePadGroups.size(); ++ii )
+    {
+        wxStringTokenizer groupParser( m_netTiePadGroups[ ii ], "," );
+
+        while( groupParser.HasMoreTokens() )
+        {
+            wxString   padNumber( groupParser.GetNextToken().Trim( false ).Trim( true ) );
+            const PAD* pad = FindPadByNumber( padNumber );
+
+            if( !pad )
+            {
+                aErrorHandler( wxString::Format( _( "(net-tie pad group contains unknown pad "
+                                                    "number %s)" ),
+                                                      padNumber ) );
+            }
+            else if( !padNumbers.insert( padNumber ).second )
+            {
+                aErrorHandler( wxString::Format( _( "(pad %s appears in more than one net-tie "
+                                                    "pad group)" ),
+                                                      padNumber ) );
             }
         }
     }

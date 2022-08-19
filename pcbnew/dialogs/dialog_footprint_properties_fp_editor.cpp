@@ -165,6 +165,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
     m_itemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_privateLayersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_padGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
@@ -202,6 +203,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_bpAddLayer->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDeleteLayer->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_bpAddPadGroup->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_bpRemovePadGroup->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
 
@@ -303,14 +306,22 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
     }
 
+    for( const wxString& group : m_footprint->GetNetTiePadGroups() )
+    {
+        if( !group.IsEmpty() )
+        {
+            m_padGroupsGrid->AppendRows( 1 );
+            m_padGroupsGrid->SetCellValue( m_padGroupsGrid->GetNumberRows() - 1, 0, group );
+        }
+    }
+
     // Items grid
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {
         // Adjust min size to the column label size
-        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false,
-                                                                            false ) );
+        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false ) );
         // Adjust the column size.
-        int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
+        int col_size = m_itemsGrid->GetVisibleWidth( col );
 
         if( col == FPT_LAYER )  // This one's a drop-down.  Check all possible values.
         {
@@ -410,8 +421,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
-    if( !m_itemsGrid->CommitPendingChanges() )
+    if( !m_itemsGrid->CommitPendingChanges()
+            || !m_privateLayersGrid->CommitPendingChanges()
+            || !m_padGroupsGrid->CommitPendingChanges() )
+    {
         return false;
+    }
 
     // This only commits the editor, model updating is done below so it is inside
     // the commit
@@ -515,6 +530,16 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     case 1:  m_footprint->SetZoneConnection( ZONE_CONNECTION::FULL );      break;
     case 2:  m_footprint->SetZoneConnection( ZONE_CONNECTION::THERMAL );   break;
     case 3:  m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
+    }
+
+    m_footprint->ClearNetTiePadGroups();
+
+    for( int ii = 0; ii < m_padGroupsGrid->GetNumberRows(); ++ii )
+    {
+        wxString group = m_padGroupsGrid->GetCellValue( ii, 0 );
+
+        if( !group.IsEmpty() )
+            m_footprint->AddNetTiePadGroup( group );
     }
 
     // Copy the models from the panel to the footprint
@@ -649,9 +674,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
     int curRow = m_privateLayersGrid->GetGridCursorRow();
 
     if( curRow < 0 )
-    {
         return;
-    }
 
     m_privateLayers->erase( m_privateLayers->begin() + curRow );
 
@@ -669,6 +692,46 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
 }
 
 
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddPadGroup( wxCommandEvent& event )
+{
+    if( !m_padGroupsGrid->CommitPendingChanges() )
+        return;
+
+    m_padGroupsGrid->AppendRows( 1 );
+
+    m_padGroupsGrid->SetFocus();
+    m_padGroupsGrid->MakeCellVisible( m_padGroupsGrid->GetNumberRows() - 1, 0 );
+    m_padGroupsGrid->SetGridCursor( m_padGroupsGrid->GetNumberRows() - 1, 0 );
+
+    m_padGroupsGrid->EnableCellEditControl( true );
+    m_padGroupsGrid->ShowCellEditControl();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnRemovePadGroup( wxCommandEvent& event )
+{
+    if( !m_padGroupsGrid->CommitPendingChanges() )
+        return;
+
+    wxArrayInt selectedRows = m_padGroupsGrid->GetSelectedRows();
+    int        curRow = m_padGroupsGrid->GetGridCursorRow();
+
+    if( selectedRows.empty() && curRow >= 0 && curRow < m_padGroupsGrid->GetNumberRows() )
+        selectedRows.Add( curRow );
+
+    for( int ii = selectedRows.Count() - 1; ii >= 0; --ii )
+    {
+        int row = selectedRows.Item( ii );
+        m_padGroupsGrid->DeleteRows( row, 1 );
+        curRow = std::min( curRow, row );
+    }
+
+    curRow = std::max( 0, curRow - 1 );
+    m_padGroupsGrid->MakeCellVisible( curRow, m_padGroupsGrid->GetGridCursorCol() );
+    m_padGroupsGrid->SetGridCursor( curRow, m_padGroupsGrid->GetGridCursorCol() );
+}
+
+
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
 {
     // Account for scroll bars
@@ -679,11 +742,16 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
     for( int i = 1; i < m_itemsGrid->GetNumberCols(); i++ )
         itemsWidth -= m_itemsGrid->GetColSize( i );
 
-    if( itemsWidth > 0 )
-    {
-        m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
-                                 m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
-    }
+    m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
+                                          m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
+
+    // Update the width private layers grid
+    m_privateLayersGrid->SetColSize( 0, std::max( m_privateLayersGrid->GetClientSize().x,
+                                                  m_privateLayersGrid->GetVisibleWidth( 0 ) ) );
+
+    // Update the width net tie pad groups grid
+    m_padGroupsGrid->SetColSize( 0, std::max( m_padGroupsGrid->GetClientSize().x,
+                                              m_padGroupsGrid->GetVisibleWidth( 0 ) ) );
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths();

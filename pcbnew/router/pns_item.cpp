@@ -132,19 +132,29 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
 
     if( clearance >= 0 )
     {
-        if( m_parent && m_parent->GetLayer() == Edge_Cuts )
+        bool checkCastellation = ( m_parent && m_parent->GetLayer() == Edge_Cuts );
+        bool checkNetTie = aNode->GetRuleResolver()->IsInNetTie( this );
+
+        if( checkCastellation || checkNetTie )
         {
+            // Slow method
             int      actual;
             VECTOR2I pos;
 
-            if( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos )
-                        && !aNode->QueryEdgeExclusions( pos ) )
+            if( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos ) )
             {
+                if( checkCastellation && aNode->QueryEdgeExclusions( pos ) )
+                    return false;
+
+                if( checkNetTie && aNode->GetRuleResolver()->IsNetTieExclusion( aOther, pos, this ) )
+                    return false;
+
                 return true;
             }
         }
         else
         {
+            // Fast method
             if( shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB ) )
                 return true;
         }

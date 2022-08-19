@@ -190,6 +190,7 @@ name
 net
 net_class
 net_name
+net_tie_pad_groups
 nets
 no
 no_connects

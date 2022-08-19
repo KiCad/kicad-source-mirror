@@ -1189,11 +1189,15 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     }
 
     if( m_ctl & CTL_OMIT_LIBNAME )
+    {
         m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().GetLibItemName() ).c_str() );
+    }
     else
+    {
         m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
+    }
 
     if( !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
         m_out->Print( 0, " (version %d) (generator pcbnew)\n ", SEXPR_BOARD_FILE_VERSION );
@@ -1223,12 +1227,16 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     }
 
     if( !aFootprint->GetDescription().IsEmpty() )
+    {
         m_out->Print( aNestLevel+1, "(descr %s)\n",
                       m_out->Quotew( aFootprint->GetDescription() ).c_str() );
+    }
 
     if( !aFootprint->GetKeywords().IsEmpty() )
+    {
         m_out->Print( aNestLevel+1, "(tags %s)\n",
                       m_out->Quotew( aFootprint->GetKeywords() ).c_str() );
+    }
 
     const std::map<wxString, wxString>& props = aFootprint->GetProperties();
 
@@ -1240,28 +1248,40 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     }
 
     if( !( m_ctl & CTL_OMIT_PATH ) && !aFootprint->GetPath().empty() )
+    {
         m_out->Print( aNestLevel+1, "(path %s)\n",
                       m_out->Quotew( aFootprint->GetPath().AsString() ).c_str() );
+    }
 
     if( aFootprint->GetLocalSolderMaskMargin() != 0 )
+    {
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
                       FormatInternalUnits( aFootprint->GetLocalSolderMaskMargin() ).c_str() );
+    }
 
     if( aFootprint->GetLocalSolderPasteMargin() != 0 )
+    {
         m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
                       FormatInternalUnits( aFootprint->GetLocalSolderPasteMargin() ).c_str() );
+    }
 
     if( aFootprint->GetLocalSolderPasteMarginRatio() != 0 )
+    {
         m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
                       Double2Str( aFootprint->GetLocalSolderPasteMarginRatio() ).c_str() );
+    }
 
     if( aFootprint->GetLocalClearance() != 0 )
+    {
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
                       FormatInternalUnits( aFootprint->GetLocalClearance() ).c_str() );
+    }
 
     if( aFootprint->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
+    {
         m_out->Print( aNestLevel+1, "(zone_connect %d)\n",
                                     static_cast<int>( aFootprint->GetZoneConnection() ) );
+    }
 
     // Attributes
     if( aFootprint->GetAttributes() )
@@ -1300,6 +1320,19 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         {
             wxString canonicalName( LSET::Name( layer ) );
             m_out->Print( 0, " \"%s\"", canonicalName.ToStdString().c_str() );
+        }
+
+        m_out->Print( 0, ")\n" );
+    }
+
+    if( aFootprint->IsNetTie() )
+    {
+        m_out->Print( aNestLevel+1, "(net_tie_pad_groups" );
+
+        for( const wxString& group : aFootprint->GetNetTiePadGroups() )
+        {
+            m_out->Print( 0, " \"%s\"",
+                          EscapeString( group, CTX_QUOTED_STR ).ToStdString().c_str() );
         }
 
         m_out->Print( 0, ")\n" );

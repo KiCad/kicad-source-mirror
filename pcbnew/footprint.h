@@ -250,10 +250,31 @@ public:
     void IncrementFlag() { m_arflag += 1; }
     int GetFlag() const { return m_arflag; }
 
-    // A bit of a hack until net ties are supported as first class citizens
     bool IsNetTie() const
     {
-        return GetKeywords().StartsWith( wxT( "net tie" ) );
+        for( const wxString& group : m_netTiePadGroups )
+        {
+            if( !group.IsEmpty() )
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Return a list of pad groups, each of which is allowed to short nets within their group.
+     * A pad group is a comma-separated list of pad numbers.
+     */
+    const std::vector<wxString>& GetNetTiePadGroups() const { return m_netTiePadGroups; }
+
+    void ClearNetTiePadGroups()
+    {
+        m_netTiePadGroups.clear();
+    }
+
+    void AddNetTiePadGroup( const wxString& aGroup )
+    {
+        m_netTiePadGroups.emplace_back( aGroup );
     }
 
     /**
@@ -369,8 +390,28 @@ public:
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
+    void CheckOverlappingPads( const std::function<void( const PAD*,
+                                                         const PAD*,
                                                          const VECTOR2I& )>& aErrorHandler );
+
+    /**
+     * Check for un-allowed shorting of pads in net-tie footprints.  If two pads are shorted,
+     * they must both appear in one of the allowed-shorting lists.
+     *
+     * @param aErrorHandler callback to handle the error messages generated
+     */
+    void CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
+                                                 const BOARD_ITEM* bItem,
+                                                 const BOARD_ITEM* cItem,
+                                                 const VECTOR2I& )>& aErrorHandler );
+
+    /**
+     * Sanity check net-tie pad groups.  Pads cannot be listed more than once, and pad numbers
+     * must correspond to a pad.
+     *
+     * @param aErrorHandler callback to handle the error messages generated
+     */
+    void CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler );
 
     /**
      * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to
@@ -763,6 +804,10 @@ private:
     mutable int            m_textExcludedBBoxCacheTimeStamp;
     mutable SHAPE_POLY_SET m_cachedHull;
     mutable int            m_hullCacheTimeStamp;
+
+    // A list of pad groups, each of which is allowed to short nets within their group.
+    // A pad group is a comma-separated list of pad numbers.
+    std::vector<wxString> m_netTiePadGroups;
 
     ZONE_CONNECTION m_zoneConnection;
     int             m_localClearance;

@@ -103,15 +103,15 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     }
 
     auto errorHandler =
-            [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, int aErrorCode,
-                 const wxString& aMsg, const VECTOR2I& aPt )
+            [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, const BOARD_ITEM* aItemC,
+                 int aErrorCode, const wxString& aMsg, const VECTOR2I& aPt )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
                 if( !aMsg.IsEmpty() )
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
 
-                drcItem->SetItems( aItemA, aItemB );
+                drcItem->SetItems( aItemA, aItemB, aItemC );
 
                 PCB_MARKER* marker = new PCB_MARKER( drcItem, aPt );
                 board->Add( marker );
@@ -121,7 +121,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     OUTLINE_ERROR_HANDLER outlineErrorHandler =
             [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
             {
-                errorHandler( aItemA, aItemB, DRCE_MALFORMED_COURTYARD, aMsg, aPt );
+                errorHandler( aItemA, aItemB, nullptr, DRCE_MALFORMED_COURTYARD, aMsg, aPt );
             };
 
     footprint->BuildCourtyardCaches( &outlineErrorHandler );
@@ -129,20 +129,39 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     footprint->CheckFootprintAttributes(
             [&]( const wxString& aMsg )
             {
-                errorHandler( footprint, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, aMsg, { 0, 0 } );
+                errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, aMsg,
+                              { 0, 0 } );
             } );
 
     footprint->CheckPads(
             [&]( const PAD* aPad, int aErrorCode, const wxString& aMsg )
             {
-                errorHandler( aPad, nullptr, aErrorCode, aMsg, aPad->GetPosition() );
+                errorHandler( aPad, nullptr, nullptr, aErrorCode, aMsg, aPad->GetPosition() );
             } );
 
     footprint->CheckOverlappingPads(
             [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
             {
-                errorHandler( aPadA, aPadB, DRCE_OVERLAPPING_PADS, wxEmptyString, aPosition );
+                errorHandler( aPadA, aPadB, nullptr, DRCE_OVERLAPPING_PADS, wxEmptyString,
+                              aPosition );
             } );
+
+    if( footprint->IsNetTie() )
+    {
+        footprint->CheckNetTiePadGroups(
+                [&]( const wxString& aMsg )
+                {
+                    errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT, aMsg, { 0, 0 } );
+                } );
+
+        footprint->CheckNetTies(
+                [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, const BOARD_ITEM* aItemC,
+                     const VECTOR2I& aPosition )
+                {
+                    errorHandler( aItemA, aItemB, aItemC, DRCE_SHORTING_ITEMS, wxEmptyString,
+                                  aPosition );
+                } );
+    }
 
     m_checksRun = true;
 

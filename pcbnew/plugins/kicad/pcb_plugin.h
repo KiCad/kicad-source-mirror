@@ -125,10 +125,13 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20220427  // Exclude Edge.Cuts & Margin from fp private layers
 //#define SEXPR_BOARD_FILE_VERSION    20220609  // Add teardrop keywords to identify teardrop zones
 //#define SEXPR_BOARD_FILE_VERSION    20220621  // Add Image support
-#define SEXPR_BOARD_FILE_VERSION      20220815  // Add allow-soldermask-bridges-in-FPs flag
+//#define SEXPR_BOARD_FILE_VERSION    20220815  // Add allow-soldermask-bridges-in-FPs flag
+#define SEXPR_BOARD_FILE_VERSION      20220818  // First-class storage for net-ties
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
+#define LEGACY_NET_TIES               20220815  ///< These were the last to use the keywords field
+                                                ///<   to indicate a net-tie.
 
 #define CTL_OMIT_PAD_NETS           (1 << 1)    ///< Omit pads net names (useless in library)
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)

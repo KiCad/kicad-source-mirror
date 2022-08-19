@@ -114,6 +114,10 @@ public:
     virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
     virtual bool IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
 
+    virtual bool IsInNetTie( const PNS::ITEM* aA ) override;
+    virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
+                                    const PNS::ITEM* aCollidingItem ) override;
+
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) override;
@@ -204,6 +208,35 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 
     if( aB->Net() == net_p && aA->Net() == net_n )
         return true;
+
+    return false;
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::IsInNetTie( const PNS::ITEM* aA )
+{
+    BOARD_ITEM* item = aA->Parent();
+    BOARD_ITEM* parentFootprint = item ? item->GetParentFootprint() : nullptr;
+
+    if( parentFootprint )
+        return static_cast<FOOTPRINT*>( parentFootprint )->IsNetTie();
+
+    return false;
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
+                                                  const VECTOR2I& aCollisionPos,
+                                                  const PNS::ITEM* aCollidingItem )
+{
+    std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
+    BOARD_ITEM*                 collidingItem = aCollidingItem->Parent();
+
+    if( drcEngine && collidingItem )
+    {
+        return drcEngine->IsNetTieExclusion( aItem->Net(), ToLAYER_ID( aItem->Layer() ),
+                                             aCollisionPos, collidingItem );
+    }
 
     return false;
 }
@@ -1333,9 +1366,6 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
         for( FP_ZONE* zone : footprint->Zones() )
             syncZone( aWorld, zone, boardOutline );
-
-        if( footprint->IsNetTie() )
-            continue;
 
         for( BOARD_ITEM* mgitem : footprint->GraphicalItems() )
         {

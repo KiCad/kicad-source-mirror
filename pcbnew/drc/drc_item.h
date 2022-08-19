@@ -77,6 +77,7 @@ enum PCB_DRC_CODE {
     DRCE_LIB_FOOTPRINT_MISMATCH,         // footprint does not match the current library
     DRCE_PAD_TH_WITH_NO_HOLE,            // footprint has Plated Through-Hole with no hole
     DRCE_OVERLAPPING_PADS,               // footprint with overlapping pads
+    DRCE_FOOTPRINT,                      // error in footprint definition
 
     DRCE_UNRESOLVED_VARIABLE,
     DRCE_ASSERTION_FAILURE,              // user-defined (custom rule) assertion
@@ -203,6 +204,7 @@ private:
     static DRC_ITEM tooManyVias;
     static DRC_ITEM diffPairGapOutOfRange;
     static DRC_ITEM diffPairUncoupledLengthTooLong;
+    static DRC_ITEM footprint;
     static DRC_ITEM footprintTypeMismatch;
     static DRC_ITEM footprintTHPadhasNoHole;
     static DRC_ITEM footprintOverlappingPads;

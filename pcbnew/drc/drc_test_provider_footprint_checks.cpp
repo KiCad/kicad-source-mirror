@@ -33,7 +33,9 @@
     - DRCE_FOOTPRINT_TYPE_MISMATCH,
     - DRCE_OVERLAPPING_PADS,
     - DRCE_PAD_TH_WITH_NO_HOLE,
-    - DRCE_PADSTACK
+    - DRCE_PADSTACK,
+    - DRCE_FOOTPRINT (unknown or duplicate pads in net-tie pad groups),
+    - DRCE_SHORTING_ITEMS
 */
 
 class DRC_TEST_PROVIDER_FOOTPRINT_CHECKS : public DRC_TEST_PROVIDER
@@ -68,15 +70,15 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
         return false;   // DRC cancelled
 
     auto errorHandler =
-            [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, int aErrorCode,
-                 const wxString& aMsg, const VECTOR2I& aPt, PCB_LAYER_ID aLayer )
+            [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, const BOARD_ITEM* aItemC,
+                 int aErrorCode, const wxString& aMsg, const VECTOR2I& aPt, PCB_LAYER_ID aLayer )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
                 if( !aMsg.IsEmpty() )
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
 
-                drcItem->SetItems( aItemA, aItemB );
+                drcItem->SetItems( aItemA, aItemB, aItemC );
                 reportViolation( drcItem, aPt, aLayer );
             };
 
@@ -87,8 +89,8 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
             footprint->CheckFootprintAttributes(
                     [&]( const wxString& aMsg )
                     {
-                        errorHandler( footprint, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, aMsg,
-                                      footprint->GetPosition(), footprint->GetLayer() );
+                        errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH,
+                                      aMsg, footprint->GetPosition(), footprint->GetLayer() );
                     } );
         }
 
@@ -100,8 +102,8 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                     {
                         if( !m_drcEngine->IsErrorLimitExceeded( aErrorCode ) )
                         {
-                            errorHandler( aPad, nullptr, aErrorCode, aMsg, aPad->GetPosition(),
-                                          aPad->GetPrincipalLayer() );
+                            errorHandler( aPad, nullptr, nullptr, aErrorCode, aMsg,
+                                          aPad->GetPosition(), aPad->GetPrincipalLayer() );
                         }
                     } );
         }
@@ -111,8 +113,29 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
             footprint->CheckOverlappingPads(
                     [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
                     {
-                        errorHandler( aPadA, aPadB, DRCE_OVERLAPPING_PADS, wxEmptyString,
+                        errorHandler( aPadA, aPadB, nullptr, DRCE_OVERLAPPING_PADS, wxEmptyString,
                                       aPosition, aPadA->GetPrincipalLayer() );
+                    } );
+        }
+
+        if( footprint->IsNetTie() )
+        {
+            if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS ) )
+            {
+                footprint->CheckNetTies(
+                        [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
+                             const BOARD_ITEM* aItemC, const VECTOR2I& aPosition )
+                        {
+                            errorHandler( aItemA, aItemB, aItemC, DRCE_SHORTING_ITEMS,
+                                          wxEmptyString, aPosition, footprint->GetLayer() );
+                        } );
+            }
+
+            footprint->CheckNetTiePadGroups(
+                    [&]( const wxString& aMsg )
+                    {
+                        errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT, aMsg,
+                                      footprint->GetPosition(), footprint->GetLayer() );
                     } );
         }
     }

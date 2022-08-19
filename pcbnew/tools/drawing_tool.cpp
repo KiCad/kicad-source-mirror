@@ -2789,11 +2789,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
         {
-            // It would really be better to know what particular nets a nettie should allow,
-            // but for now it is what it is.
-            if( DRC_ENGINE::IsNetTie( aOther ) )
-                return false;
-
             DRC_CONSTRAINT constraint;
 
             if( ( aOther->Type() == PCB_ZONE_T || aOther->Type() == PCB_FP_ZONE_T )

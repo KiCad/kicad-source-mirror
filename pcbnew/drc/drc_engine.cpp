@@ -1712,10 +1712,24 @@ bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, 
 }
 
 
-bool DRC_ENGINE::IsNetTie( BOARD_ITEM* aItem )
+bool DRC_ENGINE::IsNetTieExclusion( int aTrackNetCode, PCB_LAYER_ID aTrackLayer,
+                                    const VECTOR2I& aCollisionPos, BOARD_ITEM* aCollidingItem )
 {
-    if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
-        return static_cast<FOOTPRINT*>( aItem->GetParent() )->IsNetTie();
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( aCollidingItem->GetParentFootprint() );
+
+    if( parentFootprint && parentFootprint->IsNetTie() )
+    {
+        for( PAD* pad : parentFootprint->Pads() )
+        {
+            if( aTrackNetCode == pad->GetNetCode() )
+            {
+                std::shared_ptr<SHAPE> otherShape = pad->GetEffectiveShape( aTrackLayer );
+
+                if( otherShape->Collide( aCollisionPos, 0 ) )
+                    return true;
+            }
+        }
+    }
 
     return false;
 }

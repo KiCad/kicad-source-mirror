@@ -245,6 +245,10 @@ DRC_ITEM DRC_ITEM::diffPairUncoupledLengthTooLong( DRCE_DIFF_PAIR_UNCOUPLED_LENG
         _( "Differential uncoupled length too long" ),
         wxT( "diff_pair_uncoupled_length_too_long" ) );
 
+DRC_ITEM DRC_ITEM::footprint( DRCE_FOOTPRINT,
+        _( "Footprint is not valid" ),
+        wxT( "footprint" ) );
+
 DRC_ITEM DRC_ITEM::footprintTypeMismatch( DRCE_FOOTPRINT_TYPE_MISMATCH,
         _( "Footprint component type doesn't match footprint pads" ),
         wxT( "footprint_type_mismatch" ) );
@@ -308,6 +312,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::itemsNotAllowed,
             DRC_ITEM::zonesIntersect,
             DRC_ITEM::isolatedCopper,
+            DRC_ITEM::footprint,
             DRC_ITEM::padstack,
             DRC_ITEM::pthInsideCourtyard,
             DRC_ITEM::npthInsideCourtyard,
@@ -375,6 +380,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_TOO_MANY_VIAS:            return std::make_shared<DRC_ITEM>( tooManyVias );
     case DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE:          return std::make_shared<DRC_ITEM>( diffPairGapOutOfRange );
     case DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG: return std::make_shared<DRC_ITEM>( diffPairUncoupledLengthTooLong );
+    case DRCE_FOOTPRINT:                return std::make_shared<DRC_ITEM>( footprint );
     case DRCE_FOOTPRINT_TYPE_MISMATCH:  return std::make_shared<DRC_ITEM>( footprintTypeMismatch );
     case DRCE_PAD_TH_WITH_NO_HOLE:      return std::make_shared<DRC_ITEM>( footprintTHPadhasNoHole );
     case DRCE_OVERLAPPING_PADS:         return std::make_shared<DRC_ITEM>( footprintOverlappingPads );

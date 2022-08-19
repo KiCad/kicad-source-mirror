@@ -87,6 +87,8 @@ private:
     bool checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem, PCB_LAYER_ID aTestLayer,
                             int aTestNet, BOARD_ITEM** aCollidingItem );
 
+    bool checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet );
+
 private:
     DRC_RULE m_bridgeRule;
 
@@ -366,6 +368,38 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 }
 
 
+bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aTestNet )
+{
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( aMaskItem->GetParentFootprint() );
+
+    if( fp && ( fp->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES ) > 0 )
+    {
+        // If we're allowing bridges then we're allowing bridges.  Nothing to check.
+        return false;
+    }
+
+    // Graphic items are used to implement net-ties between pads of a group within a net-tie
+    // footprint.  They must be allowed to intrude into their pad's mask aperture.
+    if( aTestNet < 0 && aMaskItem->Type() == PCB_PAD_T && fp->IsNetTie() )
+    {
+        wxString padNumber = static_cast<PAD*>( aMaskItem )->GetNumber();
+
+        for( const wxString& group : fp->GetNetTiePadGroups() )
+        {
+            wxStringTokenizer groupParser( group, "," );
+
+            while( groupParser.HasMoreTokens() )
+            {
+                if( groupParser.GetNextToken().Trim( false ).Trim( true ) == padNumber )
+                    return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                                                           const EDA_RECT& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer,
@@ -505,7 +539,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                             reportViolation( drce, pos, aTargetLayer );
                         }
                     }
-                    else
+                    else if( checkItemMask( other, itemNet ) )
                     {
                         auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 

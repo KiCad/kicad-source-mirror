@@ -3729,6 +3729,12 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
         }
 
+        case T_net_tie_pad_groups:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                footprint->AddNetTiePadGroup( CurStr() );
+
+            break;
+
         case T_solder_mask_margin:
             footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin "
                                                                   "value" ) );
@@ -3931,6 +3937,25 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     {
         for( PAD* pad : footprint->Pads() )
             pad->SetLocked( footprint->IsLocked() || footprint->LegacyPadsLocked() );
+    }
+
+    if( m_requiredVersion <= LEGACY_NET_TIES )
+    {
+        if( footprint->GetKeywords().StartsWith( wxT( "net tie" ) ) )
+        {
+            wxString padGroup;
+
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( !padGroup.IsEmpty() )
+                    padGroup += wxS( ", " );
+
+                padGroup += pad->GetNumber();
+            }
+
+            if( !padGroup.IsEmpty() )
+                footprint->AddNetTiePadGroup( padGroup );
+        }
     }
 
     footprint->SetAttributes( attributes );

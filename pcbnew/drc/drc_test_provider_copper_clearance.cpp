@@ -210,22 +210,30 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
         if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-            wxString msg;
+            if( m_drcEngine->IsNetTieExclusion( track->GetNetCode(), layer, pos, other ) )
+            {
+                // Collision occurred as track was entering a pad marked as a net-tie.  We
+                // allow these.
+            }
+            else
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                wxString msg;
 
-            msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( userUnits(), clearance ),
-                          MessageTextFromValue( userUnits(), actual ) );
+                msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), clearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-            drce->SetItems( track, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                drce->SetItems( track, other );
+                drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, pos, layer );
+                reportViolation( drce, pos, layer );
 
-            if( !m_drcEngine->GetReportAllTrackErrors() )
-                return false;
+                if( !m_drcEngine->GetReportAllTrackErrors() )
+                    return false;
+            }
         }
     }
 
@@ -433,11 +441,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
-                        // It would really be better to know what particular nets a nettie
-                        // should allow, but for now it is what it is.
-                        if( DRC_ENGINE::IsNetTie( other ) )
-                            return false;
-
                         auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
 
                         if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )

@@ -376,6 +376,11 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection() );
 #endif
 
+    TEST( GetNetTiePadGroups().size(), aLibFootprint->GetNetTiePadGroups().size() );
+
+    for( size_t ii = 0; ii < GetNetTiePadGroups().size(); ++ii )
+        TEST( GetNetTiePadGroups()[ii], aLibFootprint->GetNetTiePadGroups()[ii] );
+
     // Text items are really problematic.  We don't want to test the reference, but after that
     // it gets messy.
     //
