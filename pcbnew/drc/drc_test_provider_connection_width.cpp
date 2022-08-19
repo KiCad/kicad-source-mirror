@@ -478,7 +478,7 @@ private:
 
         // first look for points in increasing z-order
         Vertex* p = aPt->nextZ;
-        long min_dist = std::numeric_limits<long>::max();
+        int64_t min_dist = std::numeric_limits<int64_t>::max();
         Vertex* retval = nullptr;
 
         while( p && p->z <= maxZ )
