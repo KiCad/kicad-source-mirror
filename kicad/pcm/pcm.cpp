@@ -1048,6 +1048,10 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
 
 void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
 {
+    // If the thread is already running don't create it again
+    if( m_updateThread.joinable() )
+        return;
+
     m_statusReporter = std::make_shared<STATUS_TEXT_REPORTER>( m_statusCallback );
 
     m_updateThread = std::thread(
