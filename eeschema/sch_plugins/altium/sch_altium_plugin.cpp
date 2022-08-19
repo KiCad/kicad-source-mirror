@@ -1002,7 +1002,11 @@ void SCH_ALTIUM_PLUGIN::AddTextBox(const ASCH_TEXT_FRAME *aElem )
     textBox->SetText( aElem->Text );
 
     textBox->SetFillColor( GetColorFromInt( aElem->AreaColor ) );
-    textBox->SetFilled( aElem->IsSolid );
+
+    if( aElem->IsSolid)
+        textBox->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+    else
+        textBox->SetFilled( false );
 
     if( aElem->ShowBorder )
         textBox->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::DEFAULT, GetColorFromInt( aElem->BorderColor ) ) );
@@ -2071,7 +2075,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
     textBox->SetEndY( ( aElem.Location + m_sheetOffset ).y + ( height / 2 ) );
 
     textBox->SetFillColor( m_harnessConnectorBackgroundColor );
-    textBox->SetFilled( true );
+    textBox->SetFillMode( FILL_T::FILLED_WITH_COLOR );
 
     textBox->SetStroke( STROKE_PARAMS( 2, PLOT_DASH_TYPE::DEFAULT, m_harnessConnectorBorderColor ) );
 
