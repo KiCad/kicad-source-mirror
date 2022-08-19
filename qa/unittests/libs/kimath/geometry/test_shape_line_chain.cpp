@@ -106,6 +106,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
     base_chain.ClearArcs();
 
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
+    BOOST_CHECK_EQUAL( base_chain.CPoints().size(), base_chain.CShapes().size() );
     BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 ); // We should have the same number of points
     BOOST_CHECK_EQUAL( base_chain.ArcCount(), 0 ); // All arcs should have been removed
     BOOST_CHECK_EQUAL( base_chain.Area(), areaPriorToArcRemoval ); // Area should not have changed
@@ -130,7 +131,27 @@ BOOST_AUTO_TEST_CASE( SetClosedDuplicatePoint )
 
     // CLOSED CHAIN
     chain.SetClosed( true );
+    BOOST_CHECK_EQUAL( chain.CPoints().size(), chain.CShapes().size() );
     BOOST_CHECK_EQUAL( chain.PointCount(), 30 ); // (-1) should have removed coincident points
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+}
+
+// Test that duplicate point gets removed when we call simplify
+BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
+{
+    SHAPE_LINE_CHAIN chain;
+
+    chain.Append( { 100, 100 } );
+    chain.Append( { 100, 100 }, true ); //duplicate point to simplify
+    chain.Append( { 200, 100 } );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 3 );
+
+    chain.Simplify();
+
+    BOOST_CHECK_EQUAL( chain.CPoints().size(), chain.CShapes().size() );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 2 ); // (-1) should have removed coincident points
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
 }
 

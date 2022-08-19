@@ -1696,7 +1696,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
     else if( PointCount() == 3 )
     {
         if( m_points[0] == m_points[1] )
-            m_points.pop_back();
+            Remove( 1 );
 
         return *this;
     }
