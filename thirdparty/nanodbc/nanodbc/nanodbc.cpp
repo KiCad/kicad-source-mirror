@@ -995,6 +995,15 @@ public:
         if (!success(rc) && (event_handle == nullptr || rc != SQL_STILL_EXECUTING))
             NANODBC_THROW_DATABASE_ERROR(dbc_, SQL_HANDLE_DBC);
 
+        int cursorType = SQL_CURSOR_KEYSET_DRIVEN;
+        NANODBC_CALL_RC(
+                SQLSetConnectAttr,
+                rc,
+                dbc_,
+                SQL_ATTR_CURSOR_TYPE,
+                (SQLPOINTER)(std::intptr_t)cursorType,
+                0);
+
         connected_ = success(rc);
 
         return rc;
@@ -1044,6 +1053,15 @@ public:
             SQL_DRIVER_NOPROMPT);
         if (!success(rc) && (event_handle == nullptr || rc != SQL_STILL_EXECUTING))
             NANODBC_THROW_DATABASE_ERROR(dbc_, SQL_HANDLE_DBC);
+
+        int cursorType = SQL_CURSOR_KEYSET_DRIVEN;
+        NANODBC_CALL_RC(
+                SQLSetConnectAttr,
+                rc,
+                dbc_,
+                SQL_ATTR_CURSOR_TYPE,
+                (SQLPOINTER)(std::intptr_t)cursorType,
+                0);
 
         connected_ = success(rc);
 
