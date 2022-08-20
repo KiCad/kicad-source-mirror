@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-15 08:15+0000\n"
+"PO-Revision-Date: 2022-08-20 00:54+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -137,9 +137,9 @@ msgid "Net %s\tNet class %s"
 msgstr "네트 %s\t네트클래스 %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s와%s"
+msgstr "패드 %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
 #, fuzzy, c-format
@@ -147,9 +147,9 @@ msgid "Rule area %s\t"
 msgstr "%s의 규칙 영역"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "영역"
+msgstr "영역 %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -10812,7 +10812,7 @@ msgstr "소스"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
 #, fuzzy
 msgid "Instance"
-msgstr "인덕턴스:"
+msgstr "인스턴스"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10835,7 +10835,7 @@ msgstr "모델"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 #, fuzzy
 msgid "Device:"
-msgstr "디바이스"
+msgstr "장치:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10858,9 +10858,8 @@ msgid "Parameters"
 msgstr "매개변수"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "D코드:"
+msgstr "코드"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
 #, fuzzy
@@ -25232,7 +25231,7 @@ msgstr "드릴/파일 배치 원점을 사용"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "하단 레이어의 풋 프린트에 음수 X 좌표 사용"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
@@ -33563,14 +33562,14 @@ msgid "Full Length"
 msgstr "총 길이"
 
 #: pcbnew/pcb_track.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "너비 제한: 최소 %s, 최대 %s"
 
 #: pcbnew/pcb_track.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "홀 제약: 최소 %s."
+msgstr "너비 제한: 최소 %s"
 
 #: pcbnew/pcb_track.cpp:851
 msgid "Micro Via"
@@ -35904,7 +35903,7 @@ msgstr "해결된 너비 제약 조건: 최소 %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:321
 #, fuzzy
 msgid "Connection Width"
-msgstr "연결 유형:"
+msgstr "연결 폭"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #, fuzzy
