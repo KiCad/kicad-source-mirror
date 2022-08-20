@@ -34,18 +34,29 @@
 #include <tools/footprint_editor_control.h>
 
 
+static FOOTPRINT* g_lastFootprint = nullptr;
+static bool       g_lastChecksRun = false;
+
+
 DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParent ) :
         DIALOG_FOOTPRINT_CHECKER_BASE( aParent ),
         m_frame( aParent ),
         m_checksRun( false ),
-        m_markersProvider( nullptr ),
         m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
+    m_markersProvider = new DRC_ITEMS_PROVIDER( m_frame->GetBoard(), MARKER_BASE::MARKER_DRC );
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markersDataView );
     m_markersDataView->AssociateModel( m_markersTreeModel );
 
     m_markersTreeModel->SetSeverities( -1 );
+    m_markersTreeModel->SetProvider( m_markersProvider );
+
+    if( m_frame->GetBoard()->GetFirstFootprint() == g_lastFootprint )
+    {
+        m_checksRun = g_lastChecksRun;
+        updateDisplayedCounts();
+    }
 
     SetupStandardButtons( { { wxID_OK,     _( "Run Checks" ) },
                             { wxID_CANCEL, _( "Close" )      } } );
@@ -58,6 +69,11 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_CHECKER::~DIALOG_FOOTPRINT_CHECKER()
 {
+    m_frame->FocusOnItem( nullptr );
+
+    g_lastFootprint = m_frame->GetBoard()->GetFirstFootprint();
+    g_lastChecksRun = m_checksRun;
+
     m_markersTreeModel->DecRef();
 }
 
@@ -174,6 +190,9 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 
 void DIALOG_FOOTPRINT_CHECKER::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
 {
+    // TreeModel owns the provider, not us
+    // delete m_markersProvider;
+
     m_markersProvider = aProvider;
     m_markersTreeModel->SetProvider( aProvider );
     updateDisplayedCounts();

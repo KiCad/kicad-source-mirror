@@ -29,8 +29,9 @@
 #include <fp_lib_table.h>
 #include <functional>
 #include <kiway_express.h>
-#include <pcbnew_id.h>
-#include <ratsnest/ratsnest_data.h>
+#include <pcb_marker.h>
+#include <pad.h>
+#include <zone.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -285,6 +286,7 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->Refresh();
 }
 
+
 bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     if( !Clear_Pcb( true ) )
@@ -354,6 +356,6 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     default:
-        ;
+        break;
     }
 }
