@@ -112,9 +112,6 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
     }
 
-    if( wxWindow* blocking_win = frame->Kiway().GetBlockingDialog() )
-        blocking_win->Close( true );
-
     m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_GET_NETLIST, aNetlist );
     return true;
 }
