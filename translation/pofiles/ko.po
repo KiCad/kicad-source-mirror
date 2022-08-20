@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
 "PO-Revision-Date: 2022-08-20 02:03+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: YunJiSang <js_7744@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -30271,7 +30271,7 @@ msgstr "%s의 결합되지 않은 최대 길이 확인중: %s."
 #: pcbnew/drc/drc_engine.cpp:866
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "%s 최대 왜곡 확인 : %s."
+msgstr "확인 중 %s 최대 왜곡구간: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, c-format
