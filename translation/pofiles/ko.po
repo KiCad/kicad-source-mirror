@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
 "PO-Revision-Date: 2022-08-20 02:03+0000\n"
-"Last-Translator: 이기형 <oddlight0@gmail.com>\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -132,7 +132,7 @@ msgid "Last render time %.0f ms"
 msgstr "마지막 렌더링 시간 %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "네트 %s\t네트클래스 %s"
 
@@ -144,7 +144,7 @@ msgstr "패드 %s\t"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
 #, fuzzy, c-format
 msgid "Rule area %s\t"
-msgstr "%s의 규칙 영역"
+msgstr "%s의 규칙 영역\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:702
 #, c-format
@@ -300,9 +300,8 @@ msgid "&Preferences"
 msgstr "설정 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "뷰포트(Alt+Tab):"
+msgstr "뷰포트(Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2679
