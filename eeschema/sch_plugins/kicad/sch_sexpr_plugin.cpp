@@ -682,9 +682,11 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         m_out->Print( 0, ")" );
     }
 
-    // The symbol unit is always set to the default instance regardless of the sheet instance
-    // to prevent file churn.
-    int unit = aSymbol->GetDefaultInstance().m_Unit;
+    // The symbol unit is always set to the first instance regardless of the current sheet
+    // instance to prevent file churn.
+    int unit = ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+               aSymbol->GetUnit() :
+               aSymbol->GetInstanceReferences()[0].m_Unit;
 
     m_out->Print( 0, " (unit %d)", unit );
 
@@ -702,6 +704,17 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSymbol->m_Uuid.AsString() ) );
+
+    // On the first save, if the default instance is not set, use the first instance data as
+    // the default.
+    if( aSymbol->GetDefaultInstance().m_Reference == wxEmptyString &&
+        aSymbol->GetDefaultInstance().m_Unit == -1 &&
+        aSymbol->GetDefaultInstance().m_Value == wxEmptyString &&
+        aSymbol->GetDefaultInstance().m_Footprint == wxEmptyString )
+    {
+        if( !aSymbol->GetInstanceReferences().empty() )
+            aSymbol->SetDefaultInstance( aSymbol->GetInstanceReferences()[0] );
+    }
 
     m_out->Print( aNestLevel + 1,
                   "(default_instance (reference %s) (unit %d) (value %s) (footprint %s))\n",

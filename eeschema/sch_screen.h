@@ -100,8 +100,9 @@ public:
      * Gets the full RTree, usually for iterating.
      * N.B. The iteration order of the RTree is not readily apparent and will change
      * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
-     * RTree contents to the user MUST be sorted before being presented.  See SCH_SEXPR_PLUGIN::Format
-     * or SCH_EDITOR_CONTROL::nextMatch for examples.
+     * RTree contents to the user MUST be sorted before being presented.  See
+     * SCH_SEXPR_PLUGIN::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
+     *
      * @return Complete RTree of the screen's items
      */
     EE_RTREE& Items() { return m_rtree; }
@@ -502,6 +503,18 @@ public:
      * Update the symbol value and footprint instance data for legacy designs.
      */
     void SetLegacySymbolInstanceData();
+
+    /**
+     * Check all symbol default instance to see if they are not set yet.
+     */
+    bool AllSymbolDefaultInstancesNotSet();
+
+    /**
+     * Set symbol default instances to the first instance in the instance list.
+     *
+     * @warning The schematic symbol instance data must be loaded before this method is called.
+     */
+    void SetAllSymbolDefaultInstances();
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

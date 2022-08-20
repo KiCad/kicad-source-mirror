@@ -1437,6 +1437,46 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
 }
 
 
+bool SCH_SCREEN::AllSymbolDefaultInstancesNotSet()
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        SYMBOL_INSTANCE_REFERENCE symbolDefaultReference = symbol->GetDefaultInstance();
+
+        const std::unique_ptr<LIB_SYMBOL>& libSymbol = symbol->GetLibSymbolRef();
+
+        if( !libSymbol )
+            continue;
+
+        if( symbolDefaultReference.m_Unit != 1 ||
+            symbolDefaultReference.m_Reference != symbol->GetPrefix() ||
+            symbolDefaultReference.m_Value != libSymbol->GetValueField().GetText() ||
+            symbolDefaultReference.m_Footprint != libSymbol->GetFootprintField().GetText() )
+            return false;
+    }
+
+    return true;
+}
+
+
+void SCH_SCREEN::SetAllSymbolDefaultInstances()
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        if( !symbol->GetInstanceReferences().empty() )
+            symbol->SetDefaultInstance( symbol->GetInstanceReferences()[0] );
+    }
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {

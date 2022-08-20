@@ -131,10 +131,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
 
     // Set initial default symbol instance data from library symbol and initial unit.
-    m_defaultInstance.m_Reference = m_prefix;
-    m_defaultInstance.m_Unit = aUnit;
-    m_defaultInstance.m_Value = m_part->GetValueField().GetText();
-    m_defaultInstance.m_Footprint = m_part->GetFootprintField().GetText();
+    m_defaultInstance.m_Unit = -1;
 
     if( aSheet )
     {
@@ -224,7 +221,6 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     }
 
     m_prefix = wxString( wxT( "U" ) );
-    m_defaultInstance.m_Reference = m_prefix;
     m_isInNetlist = true;
     m_inBom = true;
     m_onBoard = true;
@@ -240,8 +236,8 @@ EDA_ITEM* SCH_SYMBOL::Clone() const
 void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 7;
-    aLayers[0]  = LAYER_DANGLING;       // Pins are drawn by their parent symbol, so the parent
-                                        // symbol needs to draw to LAYER_DANGLING
+    aLayers[0] = LAYER_DANGLING;       // Pins are drawn by their parent symbol, so the parent
+                                       // symbol needs to draw to LAYER_DANGLING
     aLayers[1] = LAYER_DEVICE;
     aLayers[2] = LAYER_REFERENCEPART;
     aLayers[3] = LAYER_VALUEPART;
