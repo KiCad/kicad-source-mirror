@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
 "PO-Revision-Date: 2022-08-20 02:37+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -142,7 +142,7 @@ msgid "Pad %s\t"
 msgstr "패드 %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
 msgstr "%s의 규칙 영역\t"
 
@@ -6033,9 +6033,8 @@ msgid "Show Grid"
 msgstr "그리드 표시"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "편집 창에 그리드 점 및 선 표시"
+msgstr "편집 창에 그리드 표시"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -9824,18 +9823,16 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "시뮬레이터는 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
-#, fuzzy
 msgid "Save all voltages"
-msgstr "모든 변경 사항 저장"
+msgstr "모든 전압 저장"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "Write a directive to save all voltages (.save all)"
 msgstr "모든 전압을 저장하는 지시문 작성(.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:339
-#, fuzzy
 msgid "Save all currents"
-msgstr "모든 변경 사항 저장"
+msgstr "모든 전류 저장"
 
 #: eeschema/dialogs/dialog_netlist.cpp:340
 msgid "Write a directive to save all currents (.probe alli)"
@@ -10790,26 +10787,24 @@ msgid "Add signal by name:"
 msgstr "이름으로 신호 추가:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "심볼 라이브러리 파일 '%s'을(를) 만들지 못했습니다."
+msgstr "모델 라이브러리 '%s'을(를) 읽지 못했습니다."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:711
-#, fuzzy
 msgid "Browse Models"
-msgstr "파일 찾아보기 (&B)"
+msgstr "모델 찾아보기"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "네트 이름 '%s'은(는) 이미 사용 중입니다."
+msgstr "라이브러리에 '%s' 모델이 없습니다."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:27
 msgid "Source"
 msgstr "소스"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
 msgstr "인스턴스"
 
@@ -10822,9 +10817,8 @@ msgid "Model:"
 msgstr "모델:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "덮어쓰기"
+msgstr "재정의"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -10832,7 +10826,6 @@ msgid "Model"
 msgstr "모델"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Device:"
 msgstr "장치:"
 
@@ -10843,9 +10836,8 @@ msgid "Type:"
 msgstr "유형:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "페이지 크기"
+msgstr "페이지"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10861,14 +10853,12 @@ msgid "Code"
 msgstr "코드"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "심볼 단위"
+msgstr "심볼 핀"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "모델"
+msgstr "모델 핀"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
 #, fuzzy
