@@ -143,6 +143,12 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         except:
             self.this = this
 
+    # Convert these to lists to keep users from using them to delete
+    # items in the iterable while looping over it
+    def GetFootprints(self):          return list(self.Footprints())
+    def GetDrawings(self):            return list(self.Drawings())
+    def GetTracks(self):              return list(self.Tracks())
+
     def Save(self,filename):
         return SaveBoard(filename,self)
 

@@ -54,8 +54,19 @@ class COLLECTORS_GUIDE
 public:
     virtual     ~COLLECTORS_GUIDE() {}
 
+    /**
+     * @return true if the given layer is visible, else false.
+     */
     virtual     bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
+
+    /**
+     * @return the preferred layer for HitTest()ing.
+     */
     virtual     PCB_LAYER_ID GetPreferredLayer() const = 0;
+
+    /**
+     * @return true if should ignore locked items, else false.
+     */
     virtual     bool IgnoreLockedItems() const = 0;
 
     /**
@@ -70,26 +81,82 @@ public:
      */
     virtual     bool IgnoreHiddenFPText() const = 0;
 
+    /**
+     * @return true if should ignore footprint text on back layers
+     */
     virtual     bool IgnoreFPTextOnBack() const = 0;
+
+    /**
+     * @return true if should ignore footprint text on front layers.
+     */
     virtual     bool IgnoreFPTextOnFront() const = 0;
+
+    /**
+     * @return true if should ignore FOOTPRINTs on Back Side.
+     */
     virtual     bool IgnoreFootprintsOnBack() const = 0;
+
+    /**
+     * @return true if should ignore FOOTPRINTs on Front Side.
+     */
     virtual     bool IgnoreFootprintsOnFront() const = 0;
+
+    /**
+     * @return true if should ignore Pads on Back Side.
+     */
     virtual     bool IgnorePadsOnBack() const = 0;
+
+    /**
+     * @return true if should ignore PADSs on Front Side.
+     */
     virtual     bool IgnorePadsOnFront() const = 0;
+
+    /**
+     * @return true if should ignore through-hole PADSs.
+     */
     virtual     bool IgnoreThroughHolePads() const = 0;
 
+    /**
+     * @return true if should ignore PADSs on Front side and Back side.
+     */
     virtual     bool IgnorePads() const
     {
         return IgnorePadsOnFront() && IgnorePadsOnBack() && IgnoreThroughHolePads();
     }
 
+    /**
+     * @return true if should ignore footprint values.
+     */
     virtual     bool IgnoreFPValues() const = 0;
+
+    /**
+     * @return true if should ignore footprint references.
+     */
     virtual     bool IgnoreFPReferences() const = 0;
 
+    /**
+     * @return true if should ignore through-hole vias
+     */
     virtual     bool IgnoreThroughVias() const = 0;
+
+    /**
+     * @return true if should ignore blind/buried vias
+     */
     virtual     bool IgnoreBlindBuriedVias() const = 0;
+
+    /**
+     * @return true if should ignore micro vias
+     */
     virtual     bool IgnoreMicroVias() const = 0;
+
+    /**
+     * @return true if should ignore tracks
+     */
     virtual     bool IgnoreTracks() const = 0;
+
+    /**
+     * @return true if should ignore the interiors of zones
+     */
     virtual     bool IgnoreZoneFills() const = 0;
 
     virtual     double OnePixelInIU() const = 0;
@@ -157,15 +224,45 @@ public:
     static const std::initializer_list<KICAD_T> AllBoardItems;
 
     /**
+     * A scan list for zones outlines only
+     */
+    static const std::initializer_list<KICAD_T> Zones;
+
+    /**
      * A scan list for all primary board items, omitting items which are subordinate to
      * a FOOTPRINT, such as PAD and FP_TEXT.
      */
     static const std::initializer_list<KICAD_T> BoardLevelItems;
 
     /**
+     * A scan list for only FOOTPRINTs
+     */
+    static const std::initializer_list<KICAD_T> Footprints;
+
+    /**
+     * A scan list for PADs, TRACKs, or VIAs
+     */
+    static const std::initializer_list<KICAD_T> PadsOrTracks;
+
+    /**
      * A scan list for primary footprint items.
      */
     static const std::initializer_list<KICAD_T> FootprintItems;
+
+    /**
+     * A scan list for only TRACKs and ARCs
+     */
+    static const std::initializer_list<KICAD_T> Tracks;
+
+    /**
+     * A scan list for TRACKs, VIAs, FOOTPRINTs
+     */
+    static const std::initializer_list<KICAD_T> LockableItems;
+
+    /**
+     * A scan list for dimensions
+     */
+    static const std::initializer_list<KICAD_T> Dimensions;
 
     /**
      * A scan list for items that can be dragged

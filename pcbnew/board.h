@@ -1011,6 +1011,15 @@ public:
     std::tuple<int, double, double> GetTrackLength( const PCB_TRACK& aTrack ) const;
 
     /**
+     * Collect all the TRACKs and VIAs that are members of a net given by aNetCode.
+     * Used from python.
+     *
+     * @param aNetCode gives the id of the net.
+     * @return list of track which are in the net identified by @a aNetCode.
+     */
+    TRACKS TracksInNet( int aNetCode );
+
+    /**
      * Get a footprint by its bounding rectangle at \a aPosition on \a aLayer.
      *
      * If more than one footprint is at \a aPosition, then the closest footprint on the

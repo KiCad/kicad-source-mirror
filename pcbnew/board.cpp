@@ -321,6 +321,29 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
     Visit( inspector, nullptr, GENERAL_COLLECTOR::BoardLevelItems );
 }
 
+
+TRACKS BOARD::TracksInNet( int aNetCode )
+{
+    TRACKS ret;
+
+    INSPECTOR_FUNC inspector = [aNetCode, &ret]( EDA_ITEM* item, void* testData )
+                               {
+                                   PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
+
+                                   if( t->GetNetCode() == aNetCode )
+                                       ret.push_back( t );
+
+                                   return INSPECT_RESULT::CONTINUE;
+                               };
+
+    // visit this BOARD's PCB_TRACKs and PCB_VIAs with above TRACK INSPECTOR which
+    // appends all in aNetCode to ret.
+    Visit( inspector, nullptr, GENERAL_COLLECTOR::Tracks );
+
+    return ret;
+}
+
+
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
     if( unsigned( aIndex ) < arrayDim( m_layers ) )

@@ -83,6 +83,19 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
 };
 
 
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Footprints = {
+    PCB_FOOTPRINT_T
+};
+
+
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
+    PCB_PAD_T,
+    PCB_VIA_T,
+    PCB_TRACE_T,
+    PCB_ARC_T
+};
+
+
 const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_MARKER_T,
     PCB_FP_TEXT_T,
@@ -97,6 +110,42 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_FP_ZONE_T,
     PCB_GROUP_T,
     PCB_BITMAP_T
+    };
+
+
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Tracks = {
+    PCB_TRACE_T,
+    PCB_ARC_T,
+    PCB_VIA_T
+};
+
+
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
+    PCB_FOOTPRINT_T,
+    PCB_GROUP_T,  // Can a group be locked?
+    PCB_TRACE_T,
+    PCB_ARC_T,
+    PCB_VIA_T
+};
+
+
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Zones = {
+    PCB_ZONE_T,
+    PCB_FP_ZONE_T
+};
+
+
+const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
+    PCB_DIM_ALIGNED_T,
+    PCB_DIM_LEADER_T,
+    PCB_DIM_ORTHOGONAL_T,
+    PCB_DIM_CENTER_T,
+    PCB_DIM_RADIAL_T,
+    PCB_FP_DIM_ALIGNED_T,
+    PCB_FP_DIM_LEADER_T,
+    PCB_FP_DIM_ORTHOGONAL_T,
+    PCB_FP_DIM_CENTER_T,
+    PCB_FP_DIM_RADIAL_T
 };
 
 
