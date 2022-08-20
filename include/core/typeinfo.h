@@ -78,8 +78,6 @@ enum KICAD_T
 {
     NOT_USED = -1, ///< the 3d code uses this value
 
-    EOT = 0, ///< search types array terminator (End Of Types)
-
     TYPE_NOT_INIT = 0,
     PCB_T,
     SCREEN_T, ///< not really an item, used to identify a screen
