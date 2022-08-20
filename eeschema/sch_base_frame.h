@@ -96,8 +96,7 @@ public:
                     const wxPoint& aPosition, const wxSize& aSize, long aStyle,
                     const wxString & aFrameName );
 
-    virtual ~SCH_BASE_FRAME()
-    { }
+    virtual ~SCH_BASE_FRAME();
 
     void createCanvas();
 
@@ -264,7 +263,7 @@ protected:
 
 private:
 #if defined( KICAD_USE_3DCONNEXION )
-    std::unique_ptr<NL_SCHEMATIC_PLUGIN> m_spaceMouse;
+    NL_SCHEMATIC_PLUGIN* m_spaceMouse;
 #endif
 };
 
