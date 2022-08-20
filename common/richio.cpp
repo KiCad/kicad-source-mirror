@@ -26,6 +26,7 @@
 #include <cstdarg>
 #include <config.h> // HAVE_FGETC_NOLOCK
 
+#include <kiplatform/io.h>
 #include <core/ignore.h>
 #include <richio.h>
 #include <errno.h>
@@ -209,7 +210,7 @@ FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName, unsigned aStartin
                                     unsigned aMaxLineLength ):
     LINE_READER( aMaxLineLength ), m_iOwn( true )
 {
-    m_fp = wxFopen( aFileName, wxT( "rt" ) );
+    m_fp = KIPLATFORM::IO::SeqFOpen( aFileName, wxT( "rt" ) );
 
     if( !m_fp )
     {
