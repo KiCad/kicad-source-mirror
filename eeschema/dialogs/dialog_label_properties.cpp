@@ -239,8 +239,9 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_LABEL_T )
     {
         // Load the combobox with the existing labels of the same type
-        std::set<wxString> existingLabels;
-        SCH_SCREENS        allScreens( m_Parent->Schematic().Root() );
+        std::set<wxString>                      existingLabels;
+        std::vector<std::shared_ptr<BUS_ALIAS>> busAliases;
+        SCH_SCREENS                             allScreens( m_Parent->Schematic().Root() );
 
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
         {
@@ -249,7 +250,14 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 const SCH_LABEL_BASE* label = static_cast<const SCH_LABEL_BASE*>( item );
                 existingLabels.insert( UnescapeString( label->GetText() ) );
             }
+
+            std::unordered_set<std::shared_ptr<BUS_ALIAS>> sheetAliases = screen->GetBusAliases();
+            busAliases.insert( busAliases.end(), sheetAliases.begin(), sheetAliases.end() );
         }
+
+        // Add bus aliases to label list
+        for( const std::shared_ptr<BUS_ALIAS>& busAlias : busAliases )
+            existingLabels.insert( wxT( "{" ) + busAlias->GetName() + wxT( "}" ) );
 
         wxArrayString existingLabelArray;
 
