@@ -1378,6 +1378,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
     std::list<FOOTPRINT*> footprintList;
+    bool isRootSheet = aSheetPath == wxT( "/" );
 
     // store all footprints that are on that sheet path
     for( FOOTPRINT* footprint : board()->Footprints() )
@@ -1387,11 +1388,21 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 
         wxString footprint_path = footprint->GetPath().AsString().BeforeLast('/');
 
-        if( aSheetPath.IsEmpty() )
-            aSheetPath += '/';
+        if( footprint_path.IsEmpty() )
+            footprint_path += '/';
 
-        if( footprint_path.StartsWith( aSheetPath ) )
+        if( isRootSheet )
+        {
+            // We are in the root sheet, so it makes no sense to select all footprints
+            // on board. So we select only footprints leaving in the root sheet
+            if( footprint_path == aSheetPath )
+                footprintList.push_back( footprint );
+        }
+        else if( footprint_path.StartsWith( aSheetPath ) )
+        {
+            // We are in a subsheet, select all footprints in this sheet and its subsheets
             footprintList.push_back( footprint );
+        }
     }
 
     // Generate a list of all pads, and of all nets they belong to.
