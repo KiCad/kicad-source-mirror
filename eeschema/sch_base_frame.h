@@ -59,7 +59,7 @@ class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 
 #if defined( KICAD_USE_3DCONNEXION )
-class NL_SCHEMATIC_PLUGIN;
+#include "navlib/nl_schematic_plugin.h"
 #endif
 
 /**

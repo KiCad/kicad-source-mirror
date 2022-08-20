@@ -544,8 +544,6 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 INSPECT_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
                                       const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T stype;
-
     if( IsType( aScanTypes ) )
     {
         if( INSPECT_RESULT::QUIT == aInspector( this, nullptr ) )
