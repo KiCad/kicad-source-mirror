@@ -215,6 +215,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     m_preview->GetGAL()->SetAxesEnabled( false );
 
+    KIGFX::SCH_RENDER_SETTINGS* settings = m_preview->GetRenderSettings();
+    settings->m_IsSymbolEditor = true;
+
     m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
     m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
     m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );

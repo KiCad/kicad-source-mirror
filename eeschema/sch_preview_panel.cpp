@@ -54,7 +54,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 
-    auto* renderSettings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( m_painter->GetSettings() );
+    KIGFX::SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings();
     renderSettings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
     renderSettings->m_ShowPinsElectricalType = false;
     renderSettings->m_TextOffsetRatio = 0.35;
@@ -86,6 +86,12 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
 
 SCH_PREVIEW_PANEL::~SCH_PREVIEW_PANEL()
 {
+}
+
+
+KIGFX::SCH_RENDER_SETTINGS* SCH_PREVIEW_PANEL::GetRenderSettings() const
+{
+    return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( m_painter->GetSettings() );
 }
 
 

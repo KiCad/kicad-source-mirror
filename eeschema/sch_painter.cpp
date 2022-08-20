@@ -869,7 +869,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
+        if( m_schSettings.m_IsSymbolEditor || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
