@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-20 02:37+0000\n"
-"Last-Translator: gurqja3810 <gurqja3810@naver.com>\n"
+"PO-Revision-Date: 2022-08-21 02:52+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10861,12 +10861,10 @@ msgid "Model Pin"
 msgstr "모델 핀"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "대체 핀 할당"
+msgstr "핀 할당"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
 msgstr "시뮬레이션에서 심볼 비활성화"
 
@@ -14786,9 +14784,9 @@ msgid "Discard New Sheet"
 msgstr "새로운 시트 버리기"
 
 #: eeschema/sim/sim_model.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
-msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
+msgstr "매개변수 '%s'를 '%s'로 설정 실패"
 
 #: eeschema/sim/sim_model.cpp:1347
 #, c-format
@@ -20356,9 +20354,8 @@ msgid "mm^2"
 msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
-#, fuzzy
 msgid "Conductor resistivity:"
-msgstr "구리 저항:"
+msgstr "도체 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:79
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
@@ -23230,30 +23227,26 @@ msgstr "눈물 방울 속성"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:226
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:57
-#, fuzzy
 msgid "Conversion Settings"
-msgstr "패드 열거 설정"
+msgstr "변환 설정"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:230
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:99
 #: pcbnew/tools/convert_tool.cpp:68
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "선의 폭 늘리기"
+msgstr "소스 개체 선 너비 무시"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:111
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:103
 #: pcbnew/tools/convert_tool.cpp:72
-#, fuzzy
 msgid "Delete source objects after conversion"
-msgstr "파일 및 해당 내용 삭제"
+msgstr "변환 후 소스 개체 삭제"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Convert to Copper Zone"
-msgstr "구리 영역 연결"
+msgstr "구리 영역으로 변환"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:429
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
@@ -23277,9 +23270,8 @@ msgid "No layer selected."
 msgstr "선택한 레이어가 없습니다."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:957
-#, fuzzy
 msgid "<no net> will result in an isolated copper island."
-msgstr "<no net>을 선택하면 고립된 구리 영역이 생성됩니다."
+msgstr "<no net>은 고립된 구리 영역을 생성합니다."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
@@ -26191,9 +26183,8 @@ msgid "Import Netlist"
 msgstr "네트리스트 불러오기"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:120
-#, fuzzy
 msgid "Convert to Non Copper Zone"
-msgstr "구리 영역 연결"
+msgstr "비 구리 영역으로 변환"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
@@ -30817,9 +30808,8 @@ msgid "Missing severity name."
 msgstr "심각도 이름이 없음."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "비아 환형 고리 확인 중..."
+msgstr "패드와 비아 환형 링 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -35897,19 +35887,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "해결된 너비 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
-#, fuzzy
 msgid "Connection Width"
 msgstr "연결 폭"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "스포크 폭 해상도:"
+msgstr "연결 폭 해상도:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "해결 영역 연결 유형: %s."
+msgstr "해결된 최소 연결 폭 제약 조건: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:1106
@@ -36073,23 +36061,22 @@ msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "%s로 더 큰 물리적 유격에 의해 재정의 됨; 유격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "%s로 더 큰 단열판으로 재정의 됨; 유격: %s."
+msgstr "%s에서 더 큰 물리적 구멍 간격으로 재정의됨; 간격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:767
 msgid "Diff Pair"
 msgstr "차동 쌍"
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "다음을 위한 클리어런스 계산:"
+msgstr "차동 쌍 간격 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:773
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 간격 제약조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:781
 msgid "Diff pair max uncoupled length resolution for:"
@@ -38215,7 +38202,7 @@ msgstr "댕글링 비아 제거 중..."
 
 #: pcbnew/tracks_cleaner.cpp:148
 msgid "Checking collinear tracks..."
-msgstr "동일선상 트랙 확인 중..."
+msgstr "동일선상의 트랙 확인 중..."
 
 #: pcbnew/tracks_cleaner.cpp:150
 msgid "Merging collinear tracks..."
