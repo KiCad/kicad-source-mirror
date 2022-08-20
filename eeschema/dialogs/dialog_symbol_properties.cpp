@@ -681,11 +681,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     for( unsigned i = 0;  i < m_fields->size();  ++i )
         m_fields->at( i ).Offset( m_symbol->GetPosition() );
 
-    LIB_SYMBOL* entry = GetParent()->GetLibSymbol( m_symbol->GetLibId() );
-
-    if( entry && entry->IsPower() )
-        m_fields->at( VALUE_FIELD ).SetText( m_symbol->GetLibId().GetLibItemName() );
-
     SCH_FIELDS& fields = m_symbol->GetFields();
 
     fields.clear();

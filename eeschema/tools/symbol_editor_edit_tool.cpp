@@ -527,11 +527,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     LIB_SYMBOL* parent = aField->GetParent();
     wxCHECK( parent, /* void */ );
 
-    // Editing the symbol value field is equivalent to creating a new symbol based on the
-    // current symbol.  Set the dialog message to inform the user.
-    if( aField->GetId() == VALUE_FIELD )
-        caption = _( "Edit Symbol Name" );
-    else if( aField->GetId() < MANDATORY_FIELDS )
+    if( aField->GetId() < MANDATORY_FIELDS )
         caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
     else
         caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
@@ -545,27 +541,15 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 
     wxString newFieldValue = EscapeString( dlg.GetText(), CTX_LIBID );
     wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
-    bool     renamed = aField->GetId() == VALUE_FIELD && newFieldValue != oldFieldValue;
 
-    if( renamed )
-        saveCopyInUndoList( parent, UNDO_REDO::LIB_RENAME );
-    else
-        saveCopyInUndoList( parent, UNDO_REDO::LIBEDIT );
+    saveCopyInUndoList( parent, UNDO_REDO::LIBEDIT );
 
     dlg.UpdateField( aField );
 
-    if( renamed )
-    {
-        parent->SetName( newFieldValue );
-        m_frame->UpdateAfterSymbolProperties( &oldFieldValue );
-    }
-    else
-    {
-        updateItem( aField, true );
-        m_frame->GetCanvas()->Refresh();
-        m_frame->OnModify();
-        m_frame->UpdateSymbolMsgPanelInfo();
-    }
+    updateItem( aField, true );
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
+    m_frame->UpdateSymbolMsgPanelInfo();
 }
 
 

@@ -871,10 +871,7 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             }
             else if( id == VALUE_FIELD )
             {
-                if( aResetOtherFields )
-                    SetValue( aPath, UnescapeString( m_lib_id.GetLibItemName() ) ); // alias-specific value
-                else
-                    SetValue( aPath, UnescapeString( libField->GetText() ) );
+                SetValue( aPath, UnescapeString( libField->GetText() ) );
             }
             else if( id == FOOTPRINT_FIELD )
             {

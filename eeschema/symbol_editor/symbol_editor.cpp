@@ -480,7 +480,8 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
                 break;
 
             case VALUE_FIELD:
-                field->SetText( name );
+                if( parent->IsPower() )
+                    field->SetText( name );
                 break;
 
             case FOOTPRINT_FIELD:

@@ -305,8 +305,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_grid->CommitPendingChanges() )
         return false;
 
-    // We need to keep the name and the value the same at the moment!
-    wxString   newName = EscapeString( m_fields->at( VALUE_FIELD ).GetText(), CTX_LIBID );
+    wxString   newName = EscapeString( m_SymbolNameCtrl->GetValue(), CTX_LIBID );
     wxString   oldName = m_libEntry->GetName();
 
     if( oldName != newName )
@@ -363,7 +362,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_libEntry->SetParent( newParent );
     }
 
-    // We need to keep the name and the value the same at the moment!
     m_libEntry->SetName( newName );
     m_libEntry->SetDescription( m_DescCtrl->GetValue() );
     m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
@@ -374,9 +372,15 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_Parent->SetShowDeMorgan( m_AsConvertButt->GetValue() );
 
     if( m_OptionPower->GetValue() )
+    {
         m_libEntry->SetPower();
+        // Power symbols must have value matching name for now
+        m_libEntry->GetValueField().SetText( newName );
+    }
     else
+    {
         m_libEntry->SetNormal();
+    }
 
     m_libEntry->SetIncludeInBom( !m_excludeFromBomCheckBox->GetValue() );
     m_libEntry->SetIncludeOnBoard( !m_excludeFromBoardCheckBox->GetValue() );
@@ -442,10 +446,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
             }
         }
     }
-    else if( event.GetRow() == VALUE_FIELD && event.GetCol() == FDC_VALUE )
-    {
-        m_SymbolNameCtrl->ChangeValue( event.GetString() );
-    }
 
     editor->DecRef();
 }
@@ -453,7 +453,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
-    if( !m_Parent->IsSymbolFromSchematic() || m_OptionPower->IsChecked() )
+    if( m_OptionPower->IsChecked() )
         m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 }
 
@@ -736,7 +736,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( row == VALUE_FIELD && col == FDC_VALUE )
+        if( row == VALUE_FIELD && col == FDC_VALUE && m_OptionPower->IsChecked() )
         {
             wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
             m_SymbolNameCtrl->ChangeValue( editor->GetValue() );
