@@ -1237,12 +1237,12 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 
 
 INSPECT_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
-                                 const KICAD_T aFilterTypes[] )
+                                  const std::initializer_list<KICAD_T>& aScanTypes )
 {
     // The part itself is never inspected, only its children
     for( LIB_ITEM& item : m_drawings )
     {
-        if( item.IsType( aFilterTypes ) )
+        if( item.IsType( aScanTypes ) )
         {
             if( aInspector( &item, aTestData ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;

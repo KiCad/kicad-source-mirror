@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,20 +28,9 @@
 class GERBER_COLLECTOR : public COLLECTOR
 {
 public:
-    /**
-     * A scan list for all selectable gerber items
-     */
-    static const KICAD_T AllItems[];
-
     GERBER_COLLECTOR()
     {
-        m_PrimaryLength = 0;
-        SetScanTypes( AllItems );
-    }
-
-    void Empty2nd()
-    {
-        m_List2nd.clear();
+        SetScanTypes( { GERBER_LAYOUT_T, GERBER_IMAGE_T, GERBER_DRAW_ITEM_T } );
     }
 
     /**
@@ -59,11 +48,6 @@ public:
     }
 
     /**
-     * @return The number if items which met the primary search criteria.
-     */
-    int GetPrimaryCount() { return m_PrimaryLength; }
-
-    /**
      * The examining function within the INSPECTOR which is passed to the Iterate function.
      *
      * @param testItem An EDA_ITEM to examine.
@@ -76,29 +60,12 @@ public:
      * Scan an EDA_ITEM using this class's Inspector method, which does the collection.
      *
      * @param aItem An EDA_ITEM to scan
-     * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs
-     *                  what is to be collected and the priority order of the resultant
-     *                  collection in "m_list".
+     * @param aScanList A list of KICAD_Ts that specs what is to be collected and the priority
+     *                  order of the resultant collection in "m_list".
      * @param aRefPos A VECTOR2I to use in hit-testing.
-     * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
-                  const VECTOR2I& aRefPos /*, const COLLECTORS_GUIDE& aGuide */ );
-
-protected:
-    /**
-     * A place to hold collected objects which don't match precisely the search
-     * criteria, but would be acceptable if nothing else is found.
-     * "2nd" choice, which will be appended to the end of COLLECTOR's prime
-     * "list" at the end of the search.
-     */
-    std::vector<EDA_ITEM*> m_List2nd;
-
-    /**
-     * The number of items that were originally in the primary list before the
-     * m_List2nd was concatenated onto the end of it.
-     */
-    int m_PrimaryLength;
+    void Collect( EDA_ITEM* aItem, const std::initializer_list<KICAD_T>& aScanList,
+                  const VECTOR2I& aRefPos );
 };
 
 #endif

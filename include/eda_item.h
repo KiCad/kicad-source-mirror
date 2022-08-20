@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,14 +190,11 @@ public:
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
-    virtual bool IsType( const KICAD_T aScanTypes[] ) const
+    virtual bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const
     {
-        if( aScanTypes[0] == SCH_LOCATE_ANY_T )
-            return true;
-
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( m_structType == *p )
+            if( scanType == SCH_LOCATE_ANY_T || scanType == m_structType )
                 return true;
         }
 
@@ -295,32 +292,34 @@ public:
      * May be re-implemented for each derived class in order to handle all the types given
      * by its member data.
      *
-     * Implementations should call inspector->Inspect() on types in scanTypes[], and may use
+     * Implementations should call inspector->Inspect() on types in aScanTypes, and may use
      * #IterateForward() to do so on lists of such data.
      *
      * @param inspector An #INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which# KICAD_T types are of interest and the order
-     *                  is significant too, terminated by EOT.
+     * @param aScanTypes Which #KICAD_T types are of interest and the order in which they should
+     *                   be processed.
      * @return #SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
      *         else #SCAN_CONTINUE, and determined by the inspector.
      */
-    virtual INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
+    virtual INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
+                                  const std::initializer_list<KICAD_T>& aScanTypes );
 
     /**
      * This changes first parameter to avoid the DList and use the main queue instead.
      */
     template< class T >
-    static INSPECT_RESULT IterateForward( std::deque<T>&  aList,
-                                         INSPECTOR       inspector,
-                                         void*           testData,
-                                         const KICAD_T   scanTypes[] )
+    static INSPECT_RESULT IterateForward( std::deque<T>& aList, INSPECTOR inspector, void* testData,
+                                          const std::initializer_list<KICAD_T>& scanTypes )
     {
-        for( auto it : aList )
+        for( const auto& it : aList )
         {
-            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
-                    == INSPECT_RESULT::QUIT )
+            if( static_cast<EDA_ITEM*>( it )->Visit( inspector,
+                                                     testData,
+                                                     scanTypes ) == INSPECT_RESULT::QUIT )
+            {
                 return INSPECT_RESULT::QUIT;
+            }
         }
 
         return INSPECT_RESULT::CONTINUE;
@@ -330,14 +329,18 @@ public:
      * Change first parameter to avoid the DList and use std::vector instead.
      */
     template <class T>
-    static INSPECT_RESULT IterateForward(
-            std::vector<T>& aList, INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+    static INSPECT_RESULT IterateForward( std::vector<T>& aList, INSPECTOR inspector,
+                                          void* testData,
+                                          const std::initializer_list<KICAD_T>& scanTypes )
     {
-        for( auto it : aList )
+        for( const auto& it : aList )
         {
-            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
-                    == INSPECT_RESULT::QUIT )
+            if( static_cast<EDA_ITEM*>( it )->Visit( inspector,
+                                                     testData,
+                                                     scanTypes ) == INSPECT_RESULT::QUIT )
+            {
                 return INSPECT_RESULT::QUIT;
+            }
         }
 
         return INSPECT_RESULT::CONTINUE;

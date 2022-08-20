@@ -1782,10 +1782,8 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
         // DragArcTrack(), so PCB_ARC_T should never occur here.
         if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
         {
-            static const KICAD_T footprints[] = { PCB_FOOTPRINT_T, EOT };
-
             // Footprints cannot be dragged freely.
-            if( item->IsType( footprints ) )
+            if( item->IsType( { PCB_FOOTPRINT_T } ) )
                 return !( aDragMode & PNS::DM_FREE_ANGLE );
             else
                 return true;

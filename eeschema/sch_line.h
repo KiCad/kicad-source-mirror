@@ -67,20 +67,20 @@ public:
      */
     wxString GetNetname(const SCH_SHEET_PATH &aSheet);
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes  )
         {
-            if( *p == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
+            if( scanType == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
                 return true;
 
-            if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
+            if ( scanType == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
                 return true;
 
-            if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
+            if ( scanType == SCH_ITEM_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
                 return true;
         }
 

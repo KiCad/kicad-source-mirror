@@ -34,7 +34,6 @@
 #include <pcb_edit_frame.h>
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
-#include <trigo.h>              // RotatePoint()
 #include <locale_io.h>
 #include <macros.h>
 #include <math/util.h>          // for KiROUND
@@ -63,23 +62,19 @@
 using namespace DSN;
 
 // comment the line #define EXPORT_CUSTOM_PADS_CONVEX_HULL to export CUSTOM pads exact shapes.
-// Keep in mind shapes can be non convex polygons with holes (linked to outline)
-// that can create issues.
+// Shapes can be non convex polygons with holes (linked to outline) that can create issues.
 // Especially Freerouter does not handle them very well:
 // - too complex shapes are not accepted, especially shapes with holes (dsn files are not loaded).
-// - and Freerouter actually uses something like a convex hull of the shape (that works not very
-// well).
+// - and Freerouter actually uses something like a convex hull of the shape (that works poorly).
 // I am guessing non convex polygons with holes linked could create issues with any Router.
 #define EXPORT_CUSTOM_PADS_CONVEX_HULL
 
-// Add .1 mil to the requested clearances as a safety margin.
-// There has been disagreement about interpretation of clearance in the past
-// between KiCad and Freerouter, so keep this safetyMargin until the
-// disagreement is resolved and stable.  Freerouter seems to be moving
-// (protected) traces upon loading the DSN file, and even though it seems to sometimes
-// add its own 0.1 to the clearances, I believe this is happening after
-// the load process (and moving traces) so I am of the opinion this is
-// still needed.
+// Add .1 mil to the requested clearances as a safety margin.  There has been disagreement about
+// interpretation of clearance in the past between KiCad and Freerouter, so keep this safetyMargin
+// until the disagreement is resolved and stable.  Freerouter seems to be moving (protected)
+// traces upon loading the DSN file, and even though it seems to sometimes add its own 0.1 to the
+// clearances, I believe this is happening after the load process (and moving traces) so I am of
+// the opinion this is still needed.
 static const double safetyMargin = 0.1;
 
 
@@ -102,20 +97,15 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
         errorText = ioe.What();
     }
 
-    // The two calls to FOOTPRINT::Flip() in ExportBoardToSpecctraFile both set the
-    // modified flag, yet their actions cancel each other out, so it should
-    // be ok to clear the modify flag.
+    // The two calls to FOOTPRINT::Flip() in ExportBoardToSpecctraFile both set the modified flag,
+    // yet their actions cancel each other out, so it should be ok to clear the flag.
     if( !wasModified )
         screen->SetContentModified( false );
 
     if( ok )
-    {
         SetStatusText( wxString( _( "BOARD exported OK." ) ) );
-    }
     else
-    {
         DisplayErrorMessage( this, _( "Unable to export, please fix and try again" ), errorText );
-    }
 
     return ok;
 }
@@ -145,8 +135,8 @@ void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
         db.ExportPCB( aFullFilename, true );
         db.RevertFOOTPRINTs( aBoard );
 
-        // if an exception is thrown by FromBOARD or ExportPCB(), then
-        // ~SPECCTRA_DB() will close the file.
+        // if an exception is thrown by FromBOARD() or ExportPCB(), then ~SPECCTRA_DB() will
+        // close the file.
     }
     catch( ... )
     {
@@ -158,15 +148,11 @@ void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
 
 namespace DSN {
 
-const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
-
-// "specctra reported units" are what we tell the external router that our
-// exported lengths are in.
-
+// "specctra reported units" are what we tell the external router that our exported lengths are in
 
 /**
- * Convert a distance from Pcbnew internal units to the reported Specctra DSN units
- * in floating point format.
+ * Convert a distance from Pcbnew internal units to the reported Specctra DSN units in floating
+ * point format.
  */
 static inline double scale( int kicadDist )
 {
@@ -305,8 +291,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         dsnOffset = mapPt( offset );
 
-        // using '(' or ')' would cause padstack name to be quote wrapped,
-        // so use other brackets, and {} locks freerouter.
+        // using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
         sprintf( offsetTxt, "[%.6g,%.6g]", dsnOffset.x, dsnOffset.y );
 
         uniqifier += offsetTxt;
@@ -619,7 +604,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
     PCB_TYPE_COLLECTOR  fpItems;
 
     // get all the FOOTPRINT's pads.
-    fpItems.Collect( aFootprint, scanPADs );
+    fpItems.Collect( aFootprint, { PCB_PAD_T } );
 
     IMAGE*  image = new IMAGE( 0 );
 
@@ -710,10 +695,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
-    static const KICAD_T scanEDGEs[] = { PCB_FP_SHAPE_T, EOT };
-
     // get all the FOOTPRINT's FP_SHAPEs and convert those to DSN outlines.
-    fpItems.Collect( aFootprint, scanEDGEs );
+    fpItems.Collect( aFootprint, { PCB_FP_SHAPE_T } );
 
     for( int i = 0; i < fpItems.GetCount(); ++i )
     {
@@ -1097,29 +1080,20 @@ typedef std::pair<STRINGSET::iterator, bool>    STRINGSET_PAIR;
 
 void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 {
-    PCB_TYPE_COLLECTOR     items;
-
-    static const KICAD_T   scanMODULEs[] = { PCB_FOOTPRINT_T, EOT };
-
     std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-    // Not all boards are exportable.  Check that all reference Ids are unique.
-    // Unless they are unique, we cannot import the session file which comes
-    // back to us later from the router.
+    // Not all boards are exportable.  Check that all reference Ids are unique, or we won't be
+    // able to import the session file which comes back to us later from the router.
     {
-        items.Collect( aBoard, scanMODULEs );
+        STRINGSET refs;       // holds footprint reference designators
 
-        STRINGSET       refs;       // holds footprint reference designators
-
-        for( int i=0;  i<items.GetCount();  ++i )
+        for( FOOTPRINT* footprint : aBoard->Footprints() )
         {
-            FOOTPRINT* footprint = (FOOTPRINT*) items[i];
-
             if( footprint->GetReference() == wxEmptyString )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Symbol with value of '%s' has empty reference id." ),
-                        footprint->GetValue() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Footprint with value of '%s' has an empty "
+                                                     "reference designator." ),
+                                                  footprint->GetValue() ) );
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
@@ -1127,9 +1101,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             if( !refpair.second )      // insert failed
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Multiple symbols have identical reference IDs of '%s'." ),
-                        footprint->GetReference() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Multiple footprints have the reference "
+                                                     "designator '%s'." ),
+                                                  footprint->GetReference() ) );
             }
         }
     }
@@ -1139,9 +1113,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<layer_descriptor>-----------------------------------------------
     {
-        // specctra wants top physical layer first, then going down to the
-        // bottom most physical layer in physical sequence.
-        // @question : why does KiCad not display layers in that order?
+        // Specctra wants top physical layer first, then going down to the bottom most physical
+        // layer in physical sequence.
 
         buildLayerMaps( aBoard );
 
@@ -1185,9 +1158,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
-        // tell freerouter to use "tenths of micrometers",
-        // which is 100 nm resolution.  Possibly more resolution is possible
-        // in freerouter, but it would need testing.
+        // Tell freerouter to use "tenths of micrometers", which is 100 nm resolution.  Possibly
+        // more resolution is possible in freerouter, but it would need testing.
 
         m_pcb->unit->units = T_um;
         m_pcb->resolution->units  = T_um;
@@ -1196,9 +1168,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<boundary_descriptor>------------------------------------------
     {
-        // Because fillBOUNDARY() can throw an exception, we link in an
-        // empty boundary so the BOUNDARY does not get lost in the event of
-        // of an exception.
+        // Because fillBOUNDARY() can throw an exception, we link in an empty boundary so the
+        // BOUNDARY does not get lost in the event of of an exception.
         BOUNDARY* boundary = new BOUNDARY( 0 );
 
         m_pcb->structure->SetBOUNDARY( boundary );
@@ -1220,14 +1191,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         sprintf( rule, "(clearance %.6g)", clearance + safetyMargin );
         rules.push_back( rule );
 
-        // On a high density board (a board with 4 mil tracks, 4 mil spacing)
-        // a typical solder mask clearance will be 2-3 mils.
-        // This exposes 2 to 3 mils of bare board around each pad, and would
-        // leave only 1 to 2 mils of solder mask between the solder mask's boundary
-        // to the edge of any trace within "clearance" of the pad.  So we need at least
-        // 2 mils *extra* clearance for traces which would come near a pad on
-        // a different net.  So if the baseline trace to trace clearance was say 4 mils, then
-        // the SMD to trace clearance should be at least 6 mils.
+        // On a high density board (4 mil tracks, 4 mil spacing) a typical solder mask clearance
+        // will be 2-3 mils.  This exposes 2 to 3 mils of bare board around each pad, and would
+        // leave only 1 to 2 mils of solder mask between the solder mask's boundary and the edge of
+        // any trace within "clearance" of the pad.  So we need at least 2 mils *extra* clearance
+        // for traces which would come near a pad on a different net.  So if the baseline trace to
+        // trace clearance was 4 mils, then the SMD to trace clearance should be at least 6 mils.
         double default_smd = clearance + safetyMargin;
 
         if( default_smd <= 6.0 )
@@ -1237,9 +1206,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         rules.push_back( rule );
 
-        // Pad to pad spacing on a single SMT part can be closer than our
-        // clearance, we don't want freerouter complaining about that, so
-        // output a significantly smaller pad to pad clearance to freerouter.
+        // Pad to pad spacing on a single SMT part can be closer than our clearance. We don't want
+        // freerouter complaining about that, so output a significantly smaller pad to pad
+        // clearance to freerouter.
         clearance = scale( defaultClearance ) / 4;
 
         sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
@@ -1251,29 +1220,23 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     {
         int netlessZones = 0;
 
-        static const KICAD_T scanZONEs[] = { PCB_ZONE_T, EOT };
-        items.Collect( aBoard, scanZONEs );
-
-        for( int i = 0; i < items.GetCount(); ++i )
+        for( ZONE* zone : aBoard->Zones() )
         {
-            ZONE* item = (ZONE*) items[i];
-
-            if( item->GetIsRuleArea() )
+            if( zone->GetIsRuleArea() )
                 continue;
 
             // Currently, we export only copper layers
-            if( ! IsCopperLayer( item->GetLayer() ) )
+            if( ! IsCopperLayer( zone->GetLayer() ) )
                 continue;
 
             COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->structure );
 
             m_pcb->structure->planes.push_back( plane );
 
-            PATH* mainPolygon = new     PATH( plane, T_polygon );
+            PATH* mainPolygon = new PATH( plane, T_polygon );
 
             plane->SetShape( mainPolygon );
-
-            plane->name = TO_UTF8( item->GetNetname() );
+            plane->name = TO_UTF8( zone->GetNetname() );
 
             if( plane->name.size() == 0 )
             {
@@ -1293,14 +1256,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 plane->name = no_net->net_id;
             }
 
-            mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
+            mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
 
             // Handle the main outlines
             SHAPE_POLY_SET::ITERATOR iterator;
             wxPoint startpoint;
             bool is_first_point = true;
 
-            for( iterator = item->IterateWithHoles(); iterator; iterator++ )
+            for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
             {
                 wxPoint point( iterator->x, iterator->y );
 
@@ -1333,14 +1296,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 {
                     is_first_point = true;
                     window = new WINDOW( plane );
-
                     plane->AddWindow( window );
 
                     cutout = new PATH( window, T_polygon );
-
                     window->SetShape( cutout );
-
-                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
+                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
                 }
 
                 // If the point in this iteration is the last of the contour, the next iteration
@@ -1369,32 +1329,26 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<zones flagged keepout areas become keepout>--------------------------------
     {
-        static const KICAD_T  scanZONEs[] = { PCB_ZONE_T, EOT };
-        items.Collect( aBoard, scanZONEs );
-
-        for( int i = 0; i < items.GetCount(); ++i )
+        for( ZONE* zone : aBoard->Zones() )
         {
-            ZONE* item = (ZONE*) items[i];
-
-            if( !item->GetIsRuleArea() )
+            if( !zone->GetIsRuleArea() )
                 continue;
 
-            // keepout areas have a type. types are
-            // T_place_keepout, T_via_keepout, T_wire_keepout,
+            // Keepout areas have a type: T_place_keepout, T_via_keepout, T_wire_keepout,
             // T_bend_keepout, T_elongate_keepout, T_keepout.
             // Pcbnew knows only T_keepout, T_via_keepout and T_wire_keepout
             DSN_T keepout_type;
 
-            if( item->GetDoNotAllowVias() && item->GetDoNotAllowTracks() )
+            if( zone->GetDoNotAllowVias() && zone->GetDoNotAllowTracks() )
                 keepout_type = T_keepout;
-            else if( item->GetDoNotAllowVias() )
+            else if( zone->GetDoNotAllowVias() )
                 keepout_type = T_via_keepout;
-            else if( item->GetDoNotAllowTracks() )
+            else if( zone->GetDoNotAllowTracks() )
                 keepout_type = T_wire_keepout;
             else
                 keepout_type = T_keepout;
 
-            // Now, build keepout polygon on each copper layer where the item
+            // Now, build keepout polygon on each copper layer where the zone
             // keepout is living (keepout zones can live on many copper layers)
             const int copperCount = aBoard->GetCopperLayerCount();
 
@@ -1403,7 +1357,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 if( layer == copperCount - 1 )
                     layer = B_Cu;
 
-                if( !item->IsOnLayer( PCB_LAYER_ID( layer ) ) )
+                if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
                     continue;
 
                 KEEPOUT*   keepout = new KEEPOUT( m_pcb->structure, keepout_type );
@@ -1419,7 +1373,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 bool is_first_point = true;
                 wxPoint startpoint;
 
-                for( iterator = item->IterateWithHoles(); iterator; iterator++ )
+                for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
                 {
                     wxPoint point( iterator->x, iterator->y );
 
@@ -1454,10 +1408,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                         keepout->AddWindow( window );
 
                         cutout = new PATH( window, T_polygon );
-
                         window->SetShape( cutout );
-
-                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
                     }
 
                     isStartContour = iterator.IsEndContour();
@@ -1485,14 +1437,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<build the images, components, and netlist>-----------------------
     {
-        PIN_REF empty( m_pcb->network );
-
-        std::string componentId;
-
-        // find the highest numbered netCode within the board.
+        PIN_REF       empty( m_pcb->network );
+        std::string   componentId;
         int           highestNetCode = 0;
         NETINFO_LIST& netInfo = aBoard->GetNetInfo();
 
+        // find the highest numbered netCode within the board.
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
             highestNetCode = std::max( highestNetCode, i->GetNetCode() );
 
@@ -1510,31 +1460,24 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 m_nets[i->GetNetCode()]->net_id = TO_UTF8( i->GetNetname() );
         }
 
-        items.Collect( aBoard, scanMODULEs );
-
         m_padstackset.clear();
 
-        for( int m = 0; m < items.GetCount(); ++m )
+        for( FOOTPRINT* footprint : aBoard->Footprints() )
         {
-            FOOTPRINT* footprint = (FOOTPRINT*) items[m];
-
-            IMAGE*  image = makeIMAGE( aBoard, footprint );
+            IMAGE* image = makeIMAGE( aBoard, footprint );
 
             componentId = TO_UTF8( footprint->GetReference() );
 
-            // create a net list entry for all the actual pins in the image
-            // for the current footprint.  location of this code is critical
-            // because we fabricated some pin names to ensure unique-ness
-            // of pin names within a footprint, do not move this code because
-            // the life of this 'IMAGE* image' is not necessarily long.  The
-            // exported netlist will have some fabricated pin names in it.
-            // If you don't like fabricated pin names, then make sure all pads
-            // within your FOOTPRINTs are uniquely named!
+            // Create a net list entry for all the actual pins in the current footprint.
+            // Location of this code is critical because we fabricated some pin names to ensure
+            // unique-ness within a footprint, and the life of this 'IMAGE* image' is not
+            // necessarily long.  The exported netlist will have some fabricated pin names in it.
+            // If you don't like fabricated pin names, then make sure all pads within your
+            // FOOTPRINTs are uniquely named!
             for( unsigned p = 0; p < image->pins.size(); ++p )
             {
-                PIN*    pin = &image->pins[p];
-
-                int     netcode = pin->kiNetCode;
+                PIN* pin = &image->pins[p];
+                int  netcode = pin->kiNetCode;
 
                 if( netcode > 0 )
                 {
@@ -1560,7 +1503,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             }
 
             COMPONENT*  comp = m_pcb->placement->LookupCOMPONENT( image->GetImageId() );
-
             PLACE*      place = new PLACE( comp );
 
             comp->places.push_back( place );
@@ -1611,7 +1553,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // This is in lieu of either having each netclass via have its own layer pair in
         // the netclass dialog, or such control in the specctra export dialog.
 
-
         m_top_via_layer = 0;       // first specctra cu layer is number zero.
         m_bot_via_layer = aBoard->GetCopperLayerCount()-1;
 
@@ -1647,12 +1588,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<create the wires from tracks>-----------------------------------
     {
-        // export all of them for now, later we'll decide what controls we need
-        // on this.
-        static const KICAD_T scanTRACKs[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
-
-        items.Collect( aBoard, scanTRACKs );
-
+        // export all of them for now, later we'll decide what controls we need on this.
         std::string netname;
         WIRING*     wiring = m_pcb->wiring;
         PATH*       path = 0;
@@ -1661,17 +1597,20 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         int old_width = -1;
         int old_layer = UNDEFINED_LAYER;
 
-        for( int i = 0; i < items.GetCount(); ++i )
+        for( PCB_TRACK* track : aBoard->Tracks() )
         {
-            PCB_TRACK*  track = static_cast<PCB_TRACK*>( items[i] );
-            int         netcode = track->GetNetCode();
+            if( !track->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
+                continue;
+
+            int netcode = track->GetNetCode();
 
             if( netcode == 0 )
                 continue;
 
-            if( old_netcode != netcode || old_width != track->GetWidth() ||
-                old_layer != track->GetLayer() ||
-                ( path && path->points.back() != mapPt(track->GetStart() ) ) )
+            if( old_netcode != netcode
+                    || old_width != track->GetWidth()
+                    || old_layer != track->GetLayer()
+                    || ( path && path->points.back() != mapPt( track->GetStart() ) ) )
             {
                 old_width   = track->GetWidth();
                 old_layer   = track->GetLayer();
@@ -1698,12 +1637,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 int pcbLayer = m_kicadLayer2pcb[kiLayer];
 
                 path = new PATH( wire );
-
                 wire->SetShape( path );
-
                 path->layer_id = m_layerIds[pcbLayer];
                 path->aperture_width = scale( old_width );
-
                 path->AppendPoint( mapPt( track->GetStart() ) );
             }
 
@@ -1715,15 +1651,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     //-----<export the existing real BOARD instantiated vias>-----------------
     {
         // Export all vias, once per unique size and drill diameter combo.
-        static const KICAD_T scanVIAs[] = { PCB_VIA_T, EOT };
-
-        items.Collect( aBoard, scanVIAs );
-
-        for( int i = 0; i<items.GetCount(); ++i )
+        for( PCB_TRACK* track : aBoard->Tracks() )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( items[i] );
-            wxASSERT( via->Type() == PCB_VIA_T );
+            if( track->Type() != PCB_VIA_T )
+                continue;
 
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
             int      netcode = via->GetNetCode();
 
             if( netcode == 0 )
@@ -1735,9 +1668,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             // if the one looked up is not our padstack, then delete our padstack
             // since it was a duplicate of one already registered.
             if( padstack != registered )
-            {
                 delete padstack;
-            }
 
             WIRE_VIA* dsnVia = new WIRE_VIA( m_pcb->wiring );
 
@@ -1760,18 +1691,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<via_descriptor>-------------------------------------------------
     {
-        // The pcb->library will output <padstack_descriptors> which is a combined
-        // list of part padstacks and via padstacks.  specctra dsn uses the
-        // <via_descriptors> to say which of those padstacks are vias.
+        // The pcb->library will output <padstack_descriptors> which is a combined list of part
+        // padstacks and via padstacks.  specctra dsn uses the <via_descriptors> to say which of
+        // those padstacks are vias.
 
-        // Output the vias in the padstack list here, by name only.  This must
-        // be done after exporting existing vias as WIRE_VIAs.
+        // Output the vias in the padstack list here, by name only.  This must be done after
+        // exporting existing vias as WIRE_VIAs.
         VIA* vias = m_pcb->structure->via;
 
         for( unsigned viaNdx = 0; viaNdx < m_pcb->library->vias.size(); ++viaNdx )
-        {
             vias->AppendVia( m_pcb->library->vias[viaNdx].padstack_id.c_str() );
-        }
     }
 
     //-----<output NETCLASSs>----------------------------------------------------

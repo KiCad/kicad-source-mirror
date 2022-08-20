@@ -52,13 +52,11 @@ using namespace DSN;
 
 bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
 {
-    // To avoid issues with undo/redo lists (dangling pointers)
-    // clear the lists
+    // To avoid issues with undo/redo lists (dangling pointers) clear the lists
     // todo: use undo/redo feature
     ClearUndoRedoList();
 
-    // Remove existing tracks from view. They will be readded later after loading
-    // new tracks.
+    // Remove existing tracks from view. They will be readded later after loading new tracks.
     if( GetCanvas() )    // clear view:
     {
         for( PCB_TRACK* track : GetBoard()->Tracks() )
@@ -113,8 +111,7 @@ namespace DSN {
  * Function scale
  * converts a session file distance to KiCad units of deci-mils.
  * @param distance The session file length to convert.
- * @param aResolution The session UNIT_RES which holds the engineering unit
- *  specifier
+ * @param aResolution The session UNIT_RES which holds the engineering unit specifier
  * @return int - The KiCad length in internal unit
  */
 static int scale( double distance, UNIT_RES* aResolution )
@@ -125,26 +122,14 @@ static int scale( double distance, UNIT_RES* aResolution )
     switch( aResolution->GetEngUnits() )
     {
     default:
-    case T_inch:
-        factor = 25.4e6;        // nanometers per inch
-        break;
-    case T_mil:
-        factor = 25.4e3;        // nanometers per mil
-        break;
-    case T_cm:
-        factor = 1e7;           // nanometers per cm
-        break;
-    case T_mm:
-        factor = 1e6;           // nanometers per mm
-        break;
-    case T_um:
-        factor = 1e3;           // nanometers per um
-        break;
+    case T_inch: factor = 25.4e6; break;     // nanometers per inch
+    case T_mil:  factor = 25.4e3; break;     // nanometers per mil
+    case T_cm:   factor = 1e7;    break;     // nanometers per cm
+    case T_mm:   factor = 1e6;    break;     // nanometers per mm
+    case T_um:   factor = 1e3;    break;     // nanometers per um
     }
 
-    int ret = KiROUND( factor * distance / resValue );
-
-    return ret;
+    return KiROUND( factor * distance / resValue );
 }
 
 
@@ -257,9 +242,12 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
     {
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
+
         if( type != T_circle )
-            THROW_IO_ERROR(
-                    wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ),
+                                              GetTokenString( type ) ) );
+        }
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, m_routeResolution );
@@ -282,9 +270,12 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         {
             shape = (SHAPE*) (*aPadstack)[i];
             DSN_T type = shape->shape->Type();
+
             if( type != T_circle )
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ),
+                                                  GetTokenString( type ) ) );
+            }
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
@@ -292,8 +283,8 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
             if( layerNdx == -1 )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Session file uses invalid layer id \"%s\"" ), layerName ) );
+                THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'" ),
+                                                  layerName ) );
             }
 
             if( layerNdx > topLayerNdx )
@@ -310,18 +301,18 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
         via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
 
-        if( (topLayerNdx==0 && botLayerNdx==1)
-         || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
+        if( ( topLayerNdx == 0 && botLayerNdx == 1 )
+                || ( topLayerNdx == copperLayerCount-2 && botLayerNdx == copperLayerCount-1 ) )
+        {
             via->SetViaType( VIATYPE::MICROVIA );
+        }
         else
+        {
             via->SetViaType( VIATYPE::BLIND_BURIED );
+        }
 
         via->SetWidth( viaDiam );
-
-        PCB_LAYER_ID topLayer = m_pcbLayer2kicad[topLayerNdx];
-        PCB_LAYER_ID botLayer = m_pcbLayer2kicad[botLayerNdx];
-
-        via->SetLayerPair( topLayer, botLayer );
+        via->SetLayerPair( m_pcbLayer2kicad[ topLayerNdx ], m_pcbLayer2kicad[ botLayerNdx ] );
     }
 
     wxASSERT( via );
@@ -356,8 +347,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     if( !m_session->route->library )
         THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
-    // delete all the old tracks and vias but save locked tracks/vias
-    // they will be re-added later
+    // delete the old tracks and vias but save locked tracks/vias; they will be re-added later
     std::vector<PCB_TRACK*> locked;
 
     while( !aBoard->Tracks().empty() )
@@ -378,9 +368,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     // Add locked tracks: because they are exported as Fix tracks, they are not
     // in .ses file.
     for( PCB_TRACK* track: locked )
-    {
         aBoard->Add( track );
-    }
 
     if( m_session->placement )
     {
@@ -388,6 +376,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         // each COMPONENT, reposition and re-orient each component and put on
         // correct side of the board.
         COMPONENTS& components = m_session->placement->components;
+
         for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
         {
             PLACES& places = comp->places;
@@ -462,13 +451,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
             if( netinfo )
-            {
                 netoutCode = netinfo->GetNetCode();
-            }
-            else  // else netCode remains 0
-            {
-                // int breakhere = 1;
-            }
         }
 
         WIRES& wires = net->wires;
@@ -479,17 +462,16 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
             if( shape != T_path )
             {
-                /*  shape == T_polygon is expected from freerouter if you have
-                    a zone on a non "power" type layer, i.e. a T_signal layer
-                    and the design does a round trip back in as session here.
-                    We kept our own zones in the BOARD, so ignore this so called
-                    'wire'.
+                /*
+                 * shape == T_polygon is expected from freerouter if you have a zone on a non-
+                 * "power" type layer, i.e. a T_signal layer and the design does a round-trip
+                 * back in as session here.  We kept our own zones in the BOARD, so ignore this
+                 * so called 'wire'.
 
                 wxString netId = FROM_UTF8( wire->net_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _("Unsupported wire shape: '%s' for net: '%s'"),
+                THROW_IO_ERROR( wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
                                                     DLEX::GetTokenString(shape).GetData(),
-                                                    netId.GetData()
-                    ) );
+                                                    netId.GetData() ) );
                 */
             }
             else
@@ -506,6 +488,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
         WIRE_VIAS& wire_vias = net->wire_vias;
         LIBRARY& library = *m_session->route->library;
+
         for( unsigned i=0;  i<wire_vias.size();  ++i )
         {
             int         netCode = 0;
@@ -518,8 +501,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                 if( netvia )
                     netCode = netvia->GetNetCode();
-
-                // else netCode remains 0
             }
 
             WIRE_VIA* wire_via = &wire_vias[i];
@@ -530,16 +511,11 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             if( !padstack )
             {
                 // Dick  Feb 29, 2008:
-                // Freerouter has a bug where it will not round trip all vias.
-                // Vias which have a (use_via) element will be round tripped.
-                // Vias which do not, don't come back in in the session library,
-                // even though they may be actually used in the pre-routed,
-                // protected wire_vias. So until that is fixed, create the
-                // padstack from its name as a work around.
-
-
-                // Could use a STRING_FORMATTER here and convert the entire
-                // wire_via to text and put that text into the exception.
+                // Freerouter has a bug where it will not round trip all vias.  Vias which have
+                // a (use_via) element will be round tripped.  Vias which do not, don't come back
+                // in in the session library, even though they may be actually used in the
+                // pre-routed, protected wire_vias. So until that is fixed, create the padstack
+                // from its name as a work around.
                 wxString psid( FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
 
                 THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ),

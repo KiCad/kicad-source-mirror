@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -39,15 +39,11 @@ class SCH_SYMBOL;
 class EE_COLLECTOR : public COLLECTOR
 {
 public:
-    static const KICAD_T AllItems[];
-    static const KICAD_T EditableItems[];
-    static const KICAD_T MovableItems[];
-    static const KICAD_T SymbolsOnly[];
-    static const KICAD_T SheetsOnly[];
-    static const KICAD_T WiresOnly[];
-    static const KICAD_T FieldOwners[];
+    static const std::initializer_list<KICAD_T> EditableItems;
+    static const std::initializer_list<KICAD_T> MovableItems;
+    static const std::initializer_list<KICAD_T> FieldOwners;
 
-    EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
+    EE_COLLECTOR( const std::initializer_list<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
         m_Unit( 0 ),
         m_Convert( 0 ),
         m_ShowPinElectricalTypes( false )
@@ -75,29 +71,27 @@ public:
      * Scan a #EDA_ITEM using this class's Inspector method which does the collection.
      *
      * @param aScreen The eeschema screen to use for scanning
-     * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
-     *                    what is to be collected and the priority order of the resulting
-     *                    collection.
+     * @param aFilterList A list of #KICAD_T types that determines what is to be collected and
+     *                    the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor)
      */
-    void Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const VECTOR2I& aPos,
-                  int aUnit = 0, int aConvert = 0 );
+    void Collect( SCH_SCREEN* aScreen, const std::initializer_list<KICAD_T>& aFilterList,
+                  const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Scan an #EDA_ITEM using this class's Inspector method which does the collection.
      *
      * @param aItems is a LIB_SYMBOL multivector holding the symbol items.
-     * @param aFilterList is a list of #KICAD_T types with a terminating #EOT, that determines
-     *                    what is to be collected and the priority order of the resulting
-     *                    collection.
+     * @param aFilterList is a list of #KICAD_T types that determines what is to be collected
+     *                    and the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor).
      */
-    void Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[], const VECTOR2I& aPos,
-                  int aUnit = 0, int aConvert = 0 );
+    void Collect( LIB_ITEMS_CONTAINER& aItems, const std::initializer_list<KICAD_T>& aFilterList,
+                  const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Test if the collected items form a corner of two line segments.

@@ -74,19 +74,20 @@ EESCHEMA_SETTINGS* eeconfig()
 }
 
 
-KICAD_T SCH_PAINTER::g_ScaledSelectionTypes[] = { SCH_MARKER_T,
-                                                  SCH_JUNCTION_T,
-                                                  SCH_NO_CONNECT_T,
-                                                  SCH_BUS_WIRE_ENTRY_T,
-                                                  SCH_BUS_BUS_ENTRY_T,
-                                                  SCH_LINE_T,
-                                                  LIB_SHAPE_T, SCH_SHAPE_T,
-                                                  SCH_BITMAP_T,
-                                                  SCH_DIRECTIVE_LABEL_T,
-                                                  LIB_SYMBOL_T, SCH_SYMBOL_T,
-                                                  SCH_SHEET_T,
-                                                  LIB_PIN_T, SCH_PIN_T,
-                                                  EOT };
+std::initializer_list<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
+    SCH_MARKER_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LINE_T,
+    LIB_SHAPE_T, SCH_SHAPE_T,
+    SCH_BITMAP_T,
+    SCH_DIRECTIVE_LABEL_T,
+    LIB_SYMBOL_T, SCH_SYMBOL_T,
+    SCH_SHEET_T,
+    LIB_PIN_T, SCH_PIN_T
+};
 
 
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
@@ -99,8 +100,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_OverrideItemColors( false ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
-        m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
-        m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
+        m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 )
 {
     SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS );
     SetDashLengthRatio( 12 );       // From ISO 128-2

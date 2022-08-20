@@ -92,13 +92,12 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    FRAME_T aWindowType,
-                    const wxString& aTitle,
-                    const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle, const wxString & aFrameName );
+    SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType, const wxString& aTitle,
+                    const wxPoint& aPosition, const wxSize& aSize, long aStyle,
+                    const wxString & aFrameName );
 
-    virtual ~SCH_BASE_FRAME();
+    virtual ~SCH_BASE_FRAME()
+    { }
 
     void createCanvas();
 
@@ -197,8 +196,6 @@ public:
                                             int aUnit, int aConvert );
 
     virtual void RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
-
-    virtual void CenterScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
 
     void HardRedraw() override;
 

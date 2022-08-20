@@ -176,7 +176,7 @@ bool SCH_EDIT_TOOL::Init()
                 return sheet->HasUndefinedPins();
             };
 
-    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
+    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -325,44 +325,58 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
-    static KICAD_T allTextTypes[] = { SCH_LABEL_T,
-                                      SCH_DIRECTIVE_LABEL_T,
-                                      SCH_GLOBAL_LABEL_T,
-                                      SCH_HIER_LABEL_T,
-                                      SCH_TEXT_T,
-                                      SCH_TEXTBOX_T,
-                                      EOT };
+    static std::initializer_list<KICAD_T> allTextTypes = { SCH_LABEL_LOCATE_ANY_T,
+                                                           SCH_TEXT_T,
+                                                           SCH_TEXTBOX_T };
 
     auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toLabelTypes[] = { SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
-    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
+    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_DIRECTIVE_LABEL_T,
+                                                                   SCH_GLOBAL_LABEL_T,
+                                                                   SCH_HIER_LABEL_T,
+                                                                   SCH_TEXT_T,
+                                                                   SCH_TEXTBOX_T } ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toCLabelTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
-    auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toCLabelTypes ) )
+    auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
+                                                                    SCH_HIER_LABEL_T,
+                                                                    SCH_GLOBAL_LABEL_T,
+                                                                    SCH_TEXT_T,
+                                                                    SCH_TEXTBOX_T } ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toHLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
-    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLabelTypes ) )
+    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
+                                                                    SCH_DIRECTIVE_LABEL_T,
+                                                                    SCH_GLOBAL_LABEL_T,
+                                                                    SCH_TEXT_T,
+                                                                    SCH_TEXTBOX_T } ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toGLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, SCH_TEXTBOX_T, EOT };
-    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLabelTypes ) )
+    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
+                                                                    SCH_DIRECTIVE_LABEL_T,
+                                                                    SCH_HIER_LABEL_T,
+                                                                    SCH_TEXT_T,
+                                                                    SCH_TEXTBOX_T } ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXTBOX_T, EOT };
-    auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
+    auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
+                                                                  SCH_DIRECTIVE_LABEL_T,
+                                                                  SCH_GLOBAL_LABEL_T,
+                                                                  SCH_HIER_LABEL_T,
+                                                                  SCH_TEXTBOX_T } ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T toTextBoxTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextBoxTypes ) )
+    auto toTextBoxCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_LABEL_T,
+                                                                     SCH_DIRECTIVE_LABEL_T,
+                                                                     SCH_GLOBAL_LABEL_T,
+                                                                     SCH_HIER_LABEL_T,
+                                                                     SCH_TEXT_T } ) )
                                    || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allTextTypes ) );
 
-    static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
-    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
+    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_BUS_WIRE_ENTRY_T,
+                                                                  SCH_BUS_BUS_ENTRY_T} );
 
-    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
+    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
 
     //
     // Add edit actions to the move tool menu
@@ -509,7 +523,7 @@ bool SCH_EDIT_TOOL::Init()
 }
 
 
-const KICAD_T rotatableItems[] = {
+const std::initializer_list<KICAD_T> rotatableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -526,8 +540,7 @@ const KICAD_T rotatableItems[] = {
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    EOT
+    SCH_NO_CONNECT_T
 };
 
 
@@ -1067,7 +1080,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 }
 
 
-static KICAD_T deletableItems[] =
+static std::initializer_list<KICAD_T> deletableItems =
 {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -1086,8 +1099,7 @@ static KICAD_T deletableItems[] =
     SCH_SHEET_PIN_T,
     SCH_SYMBOL_T,
     SCH_FIELD_T, // Will be hidden
-    SCH_BITMAP_T,
-    EOT
+    SCH_BITMAP_T
 };
 
 
@@ -1298,19 +1310,14 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T Nothing[]        = { EOT };
-    static KICAD_T CmpOrReference[] = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T, EOT };
-    static KICAD_T CmpOrValue[]     = { SCH_FIELD_LOCATE_VALUE_T,     SCH_SYMBOL_T, EOT };
-    static KICAD_T CmpOrFootprint[] = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T, EOT };
-
-    KICAD_T* filter = Nothing;
+    std::initializer_list<KICAD_T> filter = {};
 
     if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-        filter = CmpOrReference;
+        filter = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T };
     else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-        filter = CmpOrValue;
+        filter = { SCH_FIELD_LOCATE_VALUE_T, SCH_SYMBOL_T };
     else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-        filter = CmpOrFootprint;
+        filter = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T };
 
     EE_SELECTION& selection = m_selectionTool->RequestSelection( filter );
 
@@ -1405,7 +1412,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 {
     SCH_SYMBOL* selectedSymbol = nullptr;
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
     if( !selection.Empty() )
         selectedSymbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
@@ -1428,7 +1435,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
     if( selection.Empty() )
         return 0;
@@ -1770,14 +1777,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
     KICAD_T       convertTo = aEvent.Parameter<KICAD_T>();
-    KICAD_T       allTextTypes[] = { SCH_LABEL_T,
-                                     SCH_GLOBAL_LABEL_T,
-                                     SCH_HIER_LABEL_T,
-                                     SCH_DIRECTIVE_LABEL_T,
-                                     SCH_TEXT_T,
-                                     SCH_TEXTBOX_T,
-                                     EOT };
-    EE_SELECTION  selection = m_selectionTool->RequestSelection( allTextTypes );
+    EE_SELECTION  selection = m_selectionTool->RequestSelection( { SCH_LABEL_LOCATE_ANY_T,
+                                                                   SCH_TEXT_T,
+                                                                   SCH_TEXTBOX_T } );
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
@@ -2056,7 +2058,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
     wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::WiresOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
 
     std::vector<SCH_LINE*> lines;
 
@@ -2097,7 +2099,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
     SCH_SHEET*    sheet = (SCH_SHEET*) selection.Front();
 
     if( !sheet || !sheet->HasUndefinedPins() )
@@ -2122,7 +2124,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
 
     if( selection.GetSize() > 1 )
         return 0;

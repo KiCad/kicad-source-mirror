@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -70,8 +70,7 @@ bool SELECTION::Contains( EDA_ITEM* aItem ) const
 /// Returns the center point of the selection area bounding box.
 VECTOR2I SELECTION::GetCenter() const
 {
-    KICAD_T textTypes[] = { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T, EOT };
-    bool    hasOnlyText = true;
+    bool hasOnlyText = true;
 
     // If the selection contains only texts calculate the center as the mean of all positions
     // instead of using the center of the total bounding box. Otherwise rotating the selection will
@@ -79,7 +78,7 @@ VECTOR2I SELECTION::GetCenter() const
 
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( textTypes ) )
+        if( !item->IsType( { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T } ) )
         {
             hasOnlyText = false;
             break;
@@ -101,7 +100,7 @@ VECTOR2I SELECTION::GetCenter() const
 
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( textTypes ) )
+        if( !item->IsType( { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T } ) )
             bbox.Merge( item->GetBoundingBox() );
     }
 

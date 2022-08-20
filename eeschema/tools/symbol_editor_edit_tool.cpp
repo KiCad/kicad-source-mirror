@@ -239,14 +239,13 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 }
 
 
-static KICAD_T nonFields[] =
+static std::initializer_list<KICAD_T> nonFields =
 {
-        LIB_SYMBOL_T,
-        LIB_SHAPE_T,
-        LIB_TEXT_T,
-        LIB_TEXTBOX_T,
-        LIB_PIN_T,
-        EOT
+    LIB_SYMBOL_T,
+    LIB_SHAPE_T,
+    LIB_TEXT_T,
+    LIB_TEXTBOX_T,
+    LIB_PIN_T
 };
 
 

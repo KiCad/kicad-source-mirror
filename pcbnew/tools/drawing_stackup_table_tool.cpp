@@ -100,7 +100,6 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
 
         for( const PCB_TEXT* cell : col )
         {
-
             if( j >= nbRows )
                 break;
 
@@ -109,7 +108,6 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
             rowHeight[j] = rowHeight[j] > height ? rowHeight[j] : height;
             colWidth[i]  = colWidth[i] > width ? colWidth[i] : width;
             j++;
-
         }
 
         i++;
@@ -132,20 +130,16 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
         {
             line = new PCB_SHAPE;
             line->SetLayer( aLayer );
-            line->SetStartX( origin.x );
-            line->SetStartY( y );
-            line->SetEndX( origin.x + width );
-            line->SetEndY( y );
+            line->SetStart( VECTOR2I( origin.x, y ) );
+            line->SetEnd( VECTOR2I( origin.x + width, y ) );
             y += rowHeight[i];
             table.push_back( line );
         }
 
         line = new PCB_SHAPE;
         line->SetLayer( aLayer );
-        line->SetStartX( origin.x );
-        line->SetStartY( y );
-        line->SetEndX( origin.x + width );
-        line->SetEndY( y );
+        line->SetStart( VECTOR2I( origin.x, y ) );
+        line->SetEnd( VECTOR2I( origin.x + width, y ) );
         table.push_back( line );
         int x = origin.x;
 
@@ -153,20 +147,16 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
         {
             line = new PCB_SHAPE;
             line->SetLayer( aLayer );
-            line->SetStartX( x );
-            line->SetStartY( origin.y );
-            line->SetEndX( x );
-            line->SetEndY( origin.y + height );
+            line->SetStart( VECTOR2I( x, origin.y ) );
+            line->SetEnd( VECTOR2I( x, origin.y + height ) );
             x += colWidth[i];
             table.push_back( line );
         }
 
         line = new PCB_SHAPE;
         line->SetLayer( aLayer );
-        line->SetStartX( x );
-        line->SetStartY( origin.y );
-        line->SetEndX( x );
-        line->SetEndY( origin.y + height );
+        line->SetStart( VECTOR2I( x, origin.y ) );
+        line->SetEnd( VECTOR2I( x, origin.y + height ) );
         table.push_back( line );
     }
 
@@ -198,6 +188,7 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
         pos.x = pos.x + colWidth[i];
         i++;
     }
+
     return table;
 }
 
@@ -306,7 +297,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
                     ly_name = m_frame->GetBoard()->GetLayerName( stackup_item->GetBrdLayerId() );
 
                 if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                   ly_name = _( "Dielectric" );
+                    ly_name = _( "Dielectric" );
 
                 t->SetText( ly_name );
             }
@@ -536,7 +527,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
 
     if( aDrawNow )
     {
-        for( auto item : objects )
+        for( BOARD_ITEM* item : objects )
             commit.Add( item );
 
         commit.Push( wxT( "Board Characteristics" ) );
@@ -699,18 +690,17 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
 {
     VECTOR2I tableSize;
 
-    LSET     layerSet = ( layerSet.AllCuMask() | layerSet.AllTechMask() );
-    layerSet          = static_cast<LSET>( layerSet.set( Edge_Cuts ).set( Margin ) );
-    layerSet          = static_cast<LSET>( layerSet.reset( F_Fab ).reset( B_Fab ) );
+    LSET layerSet = ( layerSet.AllCuMask() | layerSet.AllTechMask() );
+    layerSet = layerSet.set( Edge_Cuts ).set( Margin );
+    layerSet = layerSet.reset( F_Fab ).reset( B_Fab );
 
     PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
     if( ( layerSet & LSET( layer ) ).count() ) // if layer is a forbidden layer
         m_frame->SetActiveLayer( Cmts_User );
 
-    std::vector<BOARD_ITEM*> table = DrawBoardCharacteristics( wxPoint( 0, 0 ),
-                                                               m_frame->GetActiveLayer(), false,
-                                                               &tableSize );
+    std::vector<BOARD_ITEM*> table = DrawBoardCharacteristics( { 0, 0 }, m_frame->GetActiveLayer(),
+                                                               false, &tableSize );
     std::vector<BOARD_ITEM*> preview;
     std::vector<BOARD_ITEM*> items;
 
@@ -719,25 +709,17 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     PCB_SHAPE* line3 = new PCB_SHAPE;
     PCB_SHAPE* line4 = new PCB_SHAPE;
 
-    line1->SetStartX( 0 );
-    line1->SetStartY( 0 );
-    line1->SetEndX( tableSize.x );
-    line1->SetEndY( 0 );
+    line1->SetStart( VECTOR2I( 0, 0 ) );
+    line1->SetEnd( VECTOR2I( tableSize.x, 0 ) );
 
-    line2->SetStartX( 0 );
-    line2->SetStartY( 0 );
-    line2->SetEndX( 0 );
-    line2->SetEndY( tableSize.y );
+    line2->SetStart( VECTOR2I( 0, 0 ) );
+    line2->SetEnd( VECTOR2I( 0, tableSize.y ) );
 
-    line3->SetStartX( tableSize.x );
-    line3->SetStartY( 0 );
-    line3->SetEndX( tableSize.x );
-    line3->SetEndY( tableSize.y );
+    line3->SetStart( VECTOR2I( tableSize.x, 0 ) );
+    line3->SetEnd( tableSize );
 
-    line4->SetStartX( 0 );
-    line4->SetStartY( tableSize.y );
-    line4->SetEndX( tableSize.x );
-    line4->SetEndY( tableSize.y );
+    line4->SetStart( VECTOR2I( 0, tableSize.y ) );
+    line4->SetEnd( tableSize );
 
     line1->SetLayer( m_frame->GetActiveLayer() );
     line2->SetLayer( m_frame->GetActiveLayer() );
@@ -770,9 +752,9 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
 {
     VECTOR2I tableSize;
 
-    LSET     layerSet = ( layerSet.AllCuMask() | layerSet.AllTechMask() );
-    layerSet          = static_cast<LSET>( layerSet.set( Edge_Cuts ).set( Margin ) );
-    layerSet          = static_cast<LSET>( layerSet.reset( F_Fab ).reset( B_Fab ) );
+    LSET layerSet = ( layerSet.AllCuMask() | layerSet.AllTechMask() );
+    layerSet = layerSet.set( Edge_Cuts ).set( Margin );
+    layerSet = layerSet.reset( F_Fab ).reset( B_Fab );
 
     PCB_LAYER_ID layer      = m_frame->GetActiveLayer();
     PCB_LAYER_ID savedLayer = layer;
@@ -794,25 +776,17 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
     PCB_SHAPE* line3 = new PCB_SHAPE;
     PCB_SHAPE* line4 = new PCB_SHAPE;
 
-    line1->SetStartX( 0 );
-    line1->SetStartY( 0 );
-    line1->SetEndX( tableSize.x );
-    line1->SetEndY( 0 );
+    line1->SetStart( VECTOR2I( 0, 0 ) );
+    line1->SetEnd( VECTOR2I( tableSize.x, 0 ) );
 
-    line2->SetStartX( 0 );
-    line2->SetStartY( 0 );
-    line2->SetEndX( 0 );
-    line2->SetEndY( tableSize.y );
+    line2->SetStart( VECTOR2I( 0, 0 ) );
+    line2->SetEnd( VECTOR2I( 0, tableSize.y ) );
 
-    line3->SetStartX( tableSize.x );
-    line3->SetStartY( 0 );
-    line3->SetEndX( tableSize.x );
-    line3->SetEndY( tableSize.y );
+    line3->SetStart( VECTOR2I( tableSize.x, 0 ) );
+    line3->SetEnd( tableSize );
 
-    line4->SetStartX( 0 );
-    line4->SetStartY( tableSize.y );
-    line4->SetEndX( tableSize.x );
-    line4->SetEndY( tableSize.y );
+    line4->SetStart( VECTOR2I( 0, tableSize.y ) );
+    line4->SetEnd( tableSize );
 
     line1->SetLayer( m_frame->GetActiveLayer() );
     line2->SetLayer( m_frame->GetActiveLayer() );
@@ -825,7 +799,7 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
     preview.push_back( line4 );
 
     PCB_GROUP* group = new PCB_GROUP( m_board );
-    group->SetName("group-boardStackUp");
+    group->SetName( "group-boardStackUp" );
 
     for( BOARD_ITEM* item : table )
         group->AddItem( item );

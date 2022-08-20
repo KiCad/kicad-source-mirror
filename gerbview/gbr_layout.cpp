@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,24 +75,17 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
 }
 
 
-INSPECT_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData,
+                                  const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T        stype;
-    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
-    const KICAD_T* p    = scanTypes;
-    bool           done = false;
-
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    while( !done )
+    for( KICAD_T scanType : aScanTypes )
     {
-        stype = *p;
-
-        switch( stype )
+        if( scanType == GERBER_LAYOUT_T )
         {
-        case GERBER_LAYOUT_T:
             for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
             {
                 GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
@@ -100,23 +93,11 @@ INSPECT_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KIC
                 if( gerber == nullptr )    // Graphic layer not yet used
                     continue;
 
-                result = gerber->Visit( inspector, testData, p );
-
-                if( result == INSPECT_RESULT::QUIT )
-                    break;
+                if( gerber->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+                    return INSPECT_RESULT::QUIT;
             }
-
-            ++p;
-            break;
-
-        default:        // catch EOT or ANY OTHER type here and return.
-            done = true;
-            break;
         }
-
-        if( result == INSPECT_RESULT::QUIT )
-            break;
     }
 
-    return result;
+    return INSPECT_RESULT::CONTINUE;
 }

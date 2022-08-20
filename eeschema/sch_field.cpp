@@ -90,11 +90,6 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 }
 
 
-SCH_FIELD::~SCH_FIELD()
-{
-}
-
-
 SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 {
     EDA_TEXT::operator=( aField );
@@ -125,8 +120,6 @@ EDA_ITEM* SCH_FIELD::Clone() const
 
 void SCH_FIELD::SetId( int aId )
 {
-    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-
     m_id = aId;
 
     if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -147,7 +140,7 @@ void SCH_FIELD::SetId( int aId )
         default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
-    else if( m_parent && m_parent->IsType( labelTypes ) )
+    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         // We can't use defined IDs for labels because there can be multiple net class
         // assignments.
@@ -164,8 +157,6 @@ void SCH_FIELD::SetId( int aId )
 
 wxString SCH_FIELD::GetShownText( int aDepth ) const
 {
-    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
@@ -223,7 +214,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 text = ExpandTextVars( text, &symbolResolver, nullptr, project );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver, nullptr, project );
-            else if( m_parent && m_parent->IsType( labelTypes ) )
+            else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
                 text = ExpandTextVars( text, &labelResolver, nullptr, project );
             else
                 text = ExpandTextVars( text, project );
@@ -790,8 +781,6 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
-    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         if( m_id >= 0 && m_id < MANDATORY_FIELDS )
@@ -810,7 +799,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
         else
             return m_name;
     }
-    else if( m_parent && m_parent->IsType( labelTypes ) )
+    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         return SCH_LABEL_BASE::GetDefaultFieldName( m_name, aUseDefaultName );
     }
@@ -824,8 +813,6 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
 wxString SCH_FIELD::GetCanonicalName() const
 {
-    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         switch( m_id )
@@ -846,7 +833,7 @@ wxString SCH_FIELD::GetCanonicalName() const
         default:             return m_name;
         }
     }
-    else if( m_parent && m_parent->IsType( labelTypes ) )
+    else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         // These should be stored in canonical format, but just in case:
         if( m_name == _( "Net Class" ) )

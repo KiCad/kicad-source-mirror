@@ -103,7 +103,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
                 return editor->IsSymbolEditable() && !editor->IsSymbolAlias();
             };
 
-    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyType( LIB_PIN_T );
+    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyTypes( { LIB_PIN_T } );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 

@@ -151,20 +151,14 @@ bool NETINFO_ITEM::Matches( const wxFindReplaceData& aSearchData, void* aAuxData
 
 const EDA_RECT NETINFO_ITEM::GetBoundingBox() const
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_T, PCB_PAD_T, EOT };
-    auto              connectivity = GetBoard()->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> conn = GetBoard()->GetConnectivity();
+    EDA_RECT                           bbox;
 
-    std::vector<BOARD_CONNECTED_ITEM*> items = connectivity->GetNetItems( m_netCode, types );
-    EDA_RECT                           bbox = EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
-
-    if( items.size() >= 1 )
+    for( BOARD_ITEM* item : conn->GetNetItems( m_netCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                            PCB_ZONE_T, PCB_PAD_T } ) )
     {
-        bbox = items.at( 0 )->GetBoundingBox();
-
-        for( BOARD_CONNECTED_ITEM* item : items )
-        {
-            bbox.Merge( item->GetBoundingBox() );
-        }
+        bbox.Merge( item->GetBoundingBox() );
     }
+
     return bbox;
 }

@@ -89,8 +89,6 @@ void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
 
 int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T fieldsOnly[] = { LIB_FIELD_T, EOT };
-
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     m_anchorPos = { 0, 0 };
@@ -98,8 +96,8 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     EE_SELECTION& selection = m_frame->IsSymbolAlias()
-                                                ? m_selectionTool->RequestSelection( fieldsOnly )
-                                                : m_selectionTool->RequestSelection();
+                                            ? m_selectionTool->RequestSelection( { LIB_FIELD_T } )
+                                            : m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
     if( !m_frame->IsSymbolEditable() || selection.Empty() )

@@ -223,7 +223,7 @@ bool GERBVIEW_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere )
     GERBER_COLLECTOR collector;
     EDA_ITEM*        model = getModel<EDA_ITEM>();
 
-    collector.Collect( model, GERBER_COLLECTOR::AllItems, wxPoint( aWhere.x, aWhere.y ) );
+    collector.Collect( model, { GERBER_LAYOUT_T, GERBER_IMAGE_T, GERBER_DRAW_ITEM_T }, aWhere );
 
     // Remove unselectable items
     for( int i = collector.GetCount() - 1; i >= 0; --i )

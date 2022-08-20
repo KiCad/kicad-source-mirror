@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,6 @@
 #include <tools/sch_edit_tool.h>
 #include <widgets/unit_binder.h>
 #include <widgets/font_choice.h>
-#include "font/kicad_font_name.h"
 
 static bool       g_modifyReferences;
 static bool       g_modifyValues;
@@ -423,18 +422,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         }
     }
 
-    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T,
-                                   SCH_LABEL_LOCATE_WIRE_T,
-                                   EOT };
-    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T,
-                                  SCH_LABEL_LOCATE_BUS_T,
-                                  EOT };
-    static KICAD_T schTextAndGraphics[] = { SCH_TEXT_T,
-                                            SCH_TEXTBOX_T,
-                                            SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
-                                            SCH_SHAPE_T,
-                                            EOT };
-
     if( aItem->Type() == SCH_SYMBOL_T )
     {
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
@@ -520,16 +507,30 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             }
         }
     }
-    else if( m_wires->GetValue() && aItem->IsType( wireTypes ) )
+    else if( m_wires->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_WIRE_T,
+                                                     SCH_LABEL_LOCATE_WIRE_T } ) )
+    {
         processItem( aSheetPath, aItem );
-    else if( m_buses->GetValue() && aItem->IsType( busTypes ) )
+    }
+    else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
+                                                     SCH_LABEL_LOCATE_BUS_T } ) )
+    {
         processItem( aSheetPath, aItem );
+    }
     else if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
+    {
         processItem( aSheetPath, aItem );
+    }
     else if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
+    {
         processItem( aSheetPath, aItem );
-    else if( m_schTextAndGraphics->GetValue() && aItem->IsType( schTextAndGraphics ) )
+    }
+    else if( m_schTextAndGraphics->GetValue() && aItem->IsType( { SCH_TEXT_T, SCH_TEXTBOX_T,
+                                                                  SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
+                                                                  SCH_SHAPE_T } ) )
+    {
         processItem( aSheetPath, aItem );
+    }
 }
 
 

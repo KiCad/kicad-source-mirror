@@ -1330,7 +1330,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     SCH_HIERLABEL* label = nullptr;
                     SCH_SHEET*     sheet = nullptr;
 
-                    if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &i ) )
+                    if( m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i ) )
                         sheet = dynamic_cast<SCH_SHEET*>( i );
 
                     m_selectionTool->ClearSelection();

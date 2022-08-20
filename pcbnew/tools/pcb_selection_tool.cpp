@@ -1344,10 +1344,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
 void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
-    auto connectivity = board()->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
 
-    for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
+    for( BOARD_ITEM* item : conn->GetNetItems( aNetCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
     {
         if( itemPassesFilter( item, true ) )
             aSelect ? select( item ) : unselect( item );
@@ -1469,20 +1468,17 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
 
     // now we need to find all footprints that are connected to each of these nets then we need
     // to determine if these footprints are in the list of footprints
-    std::vector<int>  removeCodeList;
-    constexpr KICAD_T padType[] = { PCB_PAD_T, EOT };
+    std::vector<int>                   removeCodeList;
+    std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* mitem :
-             board()->GetConnectivity()->GetNetItems( netCode, padType ) )
+        for( BOARD_CONNECTED_ITEM* pad : conn->GetNetItems( netCode, { PCB_PAD_T } ) )
         {
-            if( mitem->Type() == PCB_PAD_T
-                && !std::binary_search( padList.begin(), padList.end(), mitem ) )
+            if( !std::binary_search( padList.begin(), padList.end(), pad ) )
             {
-                // if we cannot find the pad in the padList then we can
-                // assume that that pad should not be used, therefore
-                // invalidate this netcode.
+                // if we cannot find the pad in the padList then we can assume that that pad
+                // should not be used, therefore invalidate this netcode.
                 removeCodeList.push_back( netCode );
                 break;
             }
@@ -1490,25 +1486,18 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
     }
 
     for( int removeCode : removeCodeList )
-    {
         netcodeList.remove( removeCode );
-    }
 
-    std::vector<BOARD_CONNECTED_ITEM*> localConnectionList;
-    constexpr KICAD_T                  trackViaType[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
+    std::unordered_set<BOARD_ITEM*> localConnectionList;
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* item :
-             board()->GetConnectivity()->GetNetItems( netCode, trackViaType ) )
-            localConnectionList.push_back( item );
+        for( BOARD_ITEM* item : conn->GetNetItems( netCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+            localConnectionList.insert( item );
     }
 
-    for( BOARD_CONNECTED_ITEM* i : localConnectionList )
-    {
-        if( i != nullptr )
-            select( i );
-    }
+    for( BOARD_ITEM* item : localConnectionList )
+        select( item );
 }
 
 

@@ -63,7 +63,7 @@ bool SCH_MOVE_TOOL::Init()
     auto moveCondition =
             []( const SELECTION& aSel )
             {
-                if( aSel.Empty() || SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T )( aSel ) )
+                if( aSel.Empty() || SELECTION_CONDITIONS::OnlyTypes( { SCH_MARKER_T } )( aSel ) )
                     return false;
 
                 if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )

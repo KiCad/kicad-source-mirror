@@ -85,7 +85,7 @@ bool PAD_TOOL::Init()
 
         SELECTION_CONDITION padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
         SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 ) &&
-                                           SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
+                                           SELECTION_CONDITIONS::OnlyTypes( { PCB_PAD_T } );
 
         auto explodeCondition =
                 [&]( const SELECTION& aSel )
@@ -279,9 +279,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     if( !board()->GetFirstFootprint() || board()->GetFirstFootprint()->Pads().empty() )
         return 0;
 
-    GENERAL_COLLECTOR collector;
-    const KICAD_T types[] = { PCB_PAD_T, EOT };
-
+    GENERAL_COLLECTOR        collector;
     GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
     guide.SetIgnoreMTextsMarkedNoShow( true );
     guide.SetIgnoreMTextsOnBack( true );
@@ -384,7 +382,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             for( int j = 0; j < segments; ++j )
             {
                 wxPoint testpoint( cursorPos.x - j * line_step.x, cursorPos.y - j * line_step.y );
-                collector.Collect( board(), types, testpoint, guide );
+                collector.Collect( board(), { PCB_PAD_T }, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
                     selectedPads.push_back( static_cast<PAD*>( collector[i] ) );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,6 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
     EDA_ITEM( nullptr, GERBER_IMAGE_T )
 {
     m_GraphicLayer = aLayer;        // Graphic layer Number
-    m_IsVisible    = true;          // must be drawn
     m_PositiveDrawColor  = WHITE;   // The color used to draw positive items for this image
 
     m_Selected_Tool = 0;
@@ -99,7 +98,6 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 
 GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
-
     for( GERBER_DRAW_ITEM* item : GetItems() )
         delete item;
 
@@ -269,21 +267,6 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
 }
 
 
-void GERBER_FILE_IMAGE::InitToolTable()
-{
-    for( int count = 0; count < TOOLS_MAX_COUNT; count++ )
-    {
-        if( m_Aperture_List[count] == nullptr )
-            continue;
-
-        m_Aperture_List[count]->m_Num_Dcode = count + FIRST_DCODE;
-        m_Aperture_List[count]->Clear_D_CODE_Data();
-    }
-
-    m_aperture_macros.clear();
-}
-
-
 /**
  * Function StepAndRepeatItem
  * Gerber format has a command Step an Repeat
@@ -405,38 +388,17 @@ void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
 }
 
 
-INSPECT_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData,
+                                         const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T        stype;
-    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
-    const KICAD_T* p    = scanTypes;
-    bool           done = false;
-
-    while( !done )
+    for( KICAD_T scanType : aScanTypes )
     {
-        stype = *p;
-
-        switch( stype )
+        if( scanType == GERBER_DRAW_ITEM_T )
         {
-        case GERBER_IMAGE_T:
-        case GERBER_LAYOUT_T:
-            ++p;
-            break;
-
-        case GERBER_DRAW_ITEM_T:
-            result = IterateForward( GetItems(), inspector, testData, p );
-            ++p;
-            break;
-
-        case EOT:
-        default:        // catch EOT or ANY OTHER type here and return.
-            done = true;
-            break;
+            if( IterateForward( GetItems(), inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
         }
-
-        if( result == INSPECT_RESULT::QUIT )
-            break;
     }
 
-    return result;
+    return INSPECT_RESULT::CONTINUE;
 }

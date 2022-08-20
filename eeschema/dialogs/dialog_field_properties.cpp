@@ -461,8 +461,6 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
         m_field( aField )
 {
-    static KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-
     m_isSheetFilename = false;
 
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
@@ -490,7 +488,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
             break;
         }
     }
-    else if( aField->GetParent() && aField->GetParent()->IsType( labelTypes ) )
+    else if( aField->GetParent() && aField->GetParent()->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         m_fieldId = LABELUSERFIELD_V;
     }

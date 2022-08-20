@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,7 +188,7 @@ int SCH_NAVIGATE_TOOL::ChangeSheet( const TOOL_EVENT& aEvent )
 int SCH_NAVIGATE_TOOL::EnterSheet( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    const EE_SELECTION& selection = selTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+    const EE_SELECTION& selection = selTool->RequestSelection( { SCH_SHEET_T } );
 
     if( selection.GetSize() == 1 )
     {

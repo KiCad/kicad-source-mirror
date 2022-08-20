@@ -148,12 +148,10 @@ void PL_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
 int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T pointTypes[] = { WSG_LINE_T, WSG_RECT_T, EOT };
-
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     const PL_SELECTION&   selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
+    if( selection.Size() != 1 || !selection.Front()->IsType( { WSG_LINE_T, WSG_RECT_T } ) )
         return 0;
 
     EDA_ITEM* item = (EDA_ITEM*) selection.Front();

@@ -1724,21 +1724,19 @@ wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 
 INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
-                                 const KICAD_T aFilterTypes[] )
+                                  const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T     stype;
-
-    for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
+    for( KICAD_T scanType : aScanTypes )
     {
-        if( stype == SCH_LOCATE_ANY_T
-          || ( stype == SCH_SYMBOL_T )
-          || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
+        if( scanType == SCH_LOCATE_ANY_T
+            || ( scanType == SCH_SYMBOL_T )
+            || ( scanType == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( INSPECT_RESULT::QUIT == aInspector( this, aTestData ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == SCH_FIELD_T )
         {
             for( SCH_FIELD& field : m_fields )
             {
@@ -1747,32 +1745,32 @@ INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
             }
         }
 
-        if( stype == SCH_FIELD_LOCATE_REFERENCE_T )
+        if( scanType == SCH_FIELD_LOCATE_REFERENCE_T )
         {
             if( INSPECT_RESULT::QUIT == aInspector( GetField( REFERENCE_FIELD ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_FIELD_LOCATE_VALUE_T
-                || ( stype == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
+        if( scanType == SCH_FIELD_LOCATE_VALUE_T
+            || ( scanType == SCH_SYMBOL_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( INSPECT_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
+        if( scanType == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
             if( INSPECT_RESULT::QUIT == aInspector( GetField( FOOTPRINT_FIELD ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_FIELD_LOCATE_DATASHEET_T )
+        if( scanType == SCH_FIELD_LOCATE_DATASHEET_T )
         {
             if( INSPECT_RESULT::QUIT == aInspector( GetField( DATASHEET_FIELD ), (void*) this ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_PIN_T )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == SCH_PIN_T )
         {
             for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
             {

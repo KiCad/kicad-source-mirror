@@ -402,18 +402,6 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 }
 
 
-void GERBER_DRAW_ITEM::MoveAB( const VECTOR2I& aMoveVector )
-{
-    VECTOR2I xymove = GetXYPosition( aMoveVector );
-
-    m_Start     += xymove;
-    m_End       += xymove;
-    m_ArcCentre += xymove;
-
-    m_Polygon.Move( xymove );
-}
-
-
 void GERBER_DRAW_ITEM::MoveXY( const VECTOR2I& aMoveVector )
 {
     m_Start     += aMoveVector;
@@ -997,15 +985,15 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
-                                       const KICAD_T scanTypes[] )
+                                        const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T stype = *scanTypes;
-
-    // If caller wants to inspect my type
-    if( stype == Type() )
+    for( KICAD_T scanType : aScanTypes )
     {
-        if( INSPECT_RESULT::QUIT == inspector( this, testData ) )
-            return INSPECT_RESULT::QUIT;
+        if( scanType == Type() )
+        {
+            if( INSPECT_RESULT::QUIT == inspector( this, testData ) )
+                return INSPECT_RESULT::QUIT;
+        }
     }
 
     return INSPECT_RESULT::CONTINUE;
@@ -1014,9 +1002,7 @@ INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
 
 wxString GERBER_DRAW_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString layerName;
-
-    layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
+    wxString layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
 
     return wxString::Format( _( "%s (D%d) on layer %d: %s" ),
                              ShowGBRShape(),

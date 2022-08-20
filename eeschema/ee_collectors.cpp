@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -36,13 +36,7 @@
 #include "sch_reference_list.h"
 
 
-const KICAD_T EE_COLLECTOR::AllItems[] = {
-    SCH_LOCATE_ANY_T,
-    EOT
-};
-
-
-const KICAD_T EE_COLLECTOR::EditableItems[] = {
+const std::initializer_list<KICAD_T> EE_COLLECTOR::EditableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -62,19 +56,7 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
 };
 
 
-const KICAD_T EE_COLLECTOR::SymbolsOnly[] = {
-    SCH_SYMBOL_T,
-    EOT
-};
-
-
-const KICAD_T EE_COLLECTOR::SheetsOnly[] = {
-    SCH_SHEET_T,
-    EOT
-};
-
-
-const KICAD_T EE_COLLECTOR::MovableItems[] =
+const std::initializer_list<KICAD_T> EE_COLLECTOR::MovableItems =
 {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -98,20 +80,10 @@ const KICAD_T EE_COLLECTOR::MovableItems[] =
 };
 
 
-const KICAD_T EE_COLLECTOR::WiresOnly[] = {
-    SCH_LINE_T,
-    EOT
-};
-
-
-const KICAD_T EE_COLLECTOR::FieldOwners[] = {
+const std::initializer_list<KICAD_T> EE_COLLECTOR::FieldOwners = {
     SCH_SYMBOL_T,
     SCH_SHEET_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_DIRECTIVE_LABEL_T,
-    EOT
+    SCH_LABEL_LOCATE_ANY_T
 };
 
 
@@ -146,8 +118,9 @@ INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const VECTOR2I& aPos,
-                            int aUnit, int aConvert )
+void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen,
+                            const std::initializer_list<KICAD_T>& aFilterList,
+                            const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty(); // empty the collection just in case
 
@@ -166,7 +139,8 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 }
 
 
-void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[],
+void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems,
+                            const std::initializer_list<KICAD_T>& aFilterList,
                             const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case

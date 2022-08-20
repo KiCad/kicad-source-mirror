@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,13 +18,6 @@
  */
 
 #include "gerber_collectors.h"
-
-const KICAD_T GERBER_COLLECTOR::AllItems[] = {
-    GERBER_LAYOUT_T,
-    GERBER_IMAGE_T,
-    GERBER_DRAW_ITEM_T,
-    EOT
-};
 
 
 /**
@@ -43,13 +36,10 @@ INSPECT_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 }
 
 
-void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
-                                const VECTOR2I& aRefPos /*, const COLLECTORS_GUIDE& aGuide*/ )
+void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const std::initializer_list<KICAD_T>& aScanList,
+                                const VECTOR2I& aRefPos )
 {
     Empty();        // empty the collection, primary criteria list
-
-    // remember guide, pass it to Inspect()
-    //SetGuide( &aGuide );
 
     SetScanTypes( aScanList );
 
@@ -58,7 +48,4 @@ void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
     SetRefPos( aRefPos );
 
     aItem->Visit( m_inspector, nullptr, m_scanTypes );
-
-    // record the length of the primary list before concatenating on to it.
-    m_PrimaryLength = m_list.size();
 }

@@ -846,8 +846,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     bool                success = false;
 
     // Get all the PCB and FP shapes into 'items', then keep only those on layer == Edge_Cuts.
-    static const KICAD_T  scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
-    items.Collect( aBoard, scan_graphics );
+    items.Collect( aBoard, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
 
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector<PCB_SHAPE*> segList;
@@ -1072,8 +1071,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
     bool                success = false;
 
     // Get all the SHAPEs into 'items', then keep only those on layer == Edge_Cuts.
-    static const KICAD_T scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
-    items.Collect( aBoard, scan_graphics );
+    items.Collect( aBoard, { PCB_SHAPE_T, PCB_FP_SHAPE_T } );
 
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector<PCB_SHAPE*> segList;

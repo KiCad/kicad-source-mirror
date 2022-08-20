@@ -56,7 +56,6 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     GetRenderSettings()->m_LabelSizeRatio  = settings.m_LabelSizeRatio;
     GetRenderSettings()->m_TextOffsetRatio = settings.m_TextOffsetRatio;
     GetRenderSettings()->m_PinSymbolSize   = settings.m_PinSymbolSize;
-    GetRenderSettings()->m_JunctionSize    = settings.m_JunctionSize;
 
     GetRenderSettings()->SetDashLengthRatio( settings.m_DashedLineDashRatio );
     GetRenderSettings()->SetGapLengthRatio( settings.m_DashedLineGapRatio );
@@ -94,7 +93,6 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         GetRenderSettings()->m_LabelSizeRatio  = Schematic().Settings().m_LabelSizeRatio;
         GetRenderSettings()->m_TextOffsetRatio = Schematic().Settings().m_TextOffsetRatio;
         GetRenderSettings()->m_PinSymbolSize   = Schematic().Settings().m_PinSymbolSize;
-        GetRenderSettings()->m_JunctionSize    = Schematic().Settings().m_JunctionSize;
 
         GetRenderSettings()->SetDashLengthRatio( Schematic().Settings().m_DashedLineDashRatio );
         GetRenderSettings()->SetGapLengthRatio( Schematic().Settings().m_DashedLineGapRatio );

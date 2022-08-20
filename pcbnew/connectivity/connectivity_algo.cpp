@@ -291,11 +291,17 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
     if( aMode == CSM_PROPAGATE )
+    {
         return SearchClusters( aMode,
-        { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T }, -1 );
+                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T },
+                               -1 );
+    }
     else
+    {
         return SearchClusters( aMode,
-        { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T, PCB_FOOTPRINT_T }, -1 );
+                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T, PCB_FOOTPRINT_T },
+                               -1 );
+    }
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,14 +64,14 @@ public:
         return aItem && aItem->Type() == PCB_FP_TEXT_T;
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( *p == PCB_LOCATE_TEXT_T )
+            if( scanType == PCB_LOCATE_TEXT_T )
                 return true;
         }
 

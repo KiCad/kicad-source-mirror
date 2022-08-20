@@ -144,6 +144,23 @@ EE_SELECTION_TOOL::~EE_SELECTION_TOOL()
 using E_C = EE_CONDITIONS;
 
 
+static std::initializer_list<KICAD_T> connectedTypes =
+{
+    SCH_SYMBOL_LOCATE_POWER_T,
+    SCH_PIN_T,
+    SCH_ITEM_LOCATE_WIRE_T,
+    SCH_ITEM_LOCATE_BUS_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_DIRECTIVE_LABEL_T,
+    SCH_JUNCTION_T
+};
+
+
 bool EE_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
@@ -162,25 +179,12 @@ bool EE_SELECTION_TOOL::Init()
         m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
-    static KICAD_T wireOrBusTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
-    static KICAD_T connectedTypes[] = { SCH_ITEM_LOCATE_WIRE_T,
-                                        SCH_ITEM_LOCATE_BUS_T,
-                                        SCH_GLOBAL_LABEL_T,
-                                        SCH_HIER_LABEL_T,
-                                        SCH_LABEL_T,
-                                        SCH_DIRECTIVE_LABEL_T,
-                                        SCH_SHEET_PIN_T,
-                                        SCH_PIN_T,
-                                        EOT };
-
-    static KICAD_T crossProbingTypes[] = { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T, EOT };
-
-    auto wireSelection =         E_C::Count( 1 )    && E_C::OnlyType( SCH_ITEM_LOCATE_WIRE_T );
-    auto busSelection =          E_C::Count( 1 )    && E_C::OnlyType( SCH_ITEM_LOCATE_BUS_T );
-    auto wireOrBusSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( wireOrBusTypes );
+    auto wireSelection =         E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T } );
+    auto busSelection =          E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_BUS_T  });
+    auto wireOrBusSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } );
     auto connectedSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedTypes );
-    auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
-    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( crossProbingTypes );
+    auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_SHEET_T } );
+    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -188,7 +192,7 @@ bool EE_SELECTION_TOOL::Init()
                 if( m_isSymbolEditor || m_isSymbolViewer )
                     return false;
 
-                return E_C::LessThan( 2 )( aSel ) && E_C::OnlyType( SCH_SHEET_T )( aSel );
+                return E_C::LessThan( 2 )( aSel ) && E_C::OnlyTypes( { SCH_SHEET_T } )( aSel );
             };
 
     auto schEditCondition =
@@ -304,24 +308,6 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-const KICAD_T movableSymbolItems[] =
-{
-    LIB_SHAPE_T,
-    LIB_TEXT_T,
-    LIB_TEXTBOX_T,
-    LIB_PIN_T,
-    LIB_FIELD_T,
-    EOT
-};
-
-
-const KICAD_T movableSymbolAliasItems[] =
-{
-    LIB_FIELD_T,
-    EOT
-};
-
-
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -416,7 +402,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
             {
                 ClearSelection();
-                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, &selCancelled );
+                SelectPoint( evt->Position(), { SCH_LOCATE_ANY_T }, nullptr, &selCancelled );
                 m_selection.SetIsHover( true );
             }
             // If the cursor has moved off the bounding box of the selection by more than
@@ -432,7 +418,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 for( EDA_ITEM* item : saved_selection )
                     RemoveItemFromSel( item, true );
 
-                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, &selCancelled );
+                SelectPoint( evt->Position(), { SCH_LOCATE_ANY_T }, nullptr, &selCancelled );
 
                 if( m_selection.Empty() )
                 {
@@ -507,9 +493,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( m_isSymbolEditor )
                 {
                     if( static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->IsSymbolAlias() )
-                        m_selection = RequestSelection( movableSymbolAliasItems );
+                    {
+                        m_selection = RequestSelection( { LIB_FIELD_T } );
+                    }
                     else
-                        m_selection = RequestSelection( movableSymbolItems );
+                    {
+                        m_selection = RequestSelection( { LIB_SHAPE_T,
+                                                          LIB_TEXT_T,
+                                                          LIB_TEXTBOX_T,
+                                                          LIB_PIN_T,
+                                                          LIB_FIELD_T } );
+                    }
                 }
                 else
                 {
@@ -747,7 +741,7 @@ int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
                        keyboardState.AltDown() );
 
     m_skip_heuristics = true;
-    SelectPoint( m_originalCursor, EE_COLLECTOR::AllItems, nullptr, &m_canceledMenu, false,
+    SelectPoint( m_originalCursor, { SCH_LOCATE_ANY_T }, nullptr, &m_canceledMenu, false,
                  m_additive, m_subtractive, m_exclusive_or );
     m_skip_heuristics = false;
 
@@ -783,7 +777,7 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 
 
 bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
-                                     const KICAD_T* aFilterList )
+                                     const std::initializer_list<KICAD_T>& aFilterList )
 {
     int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2 );
@@ -938,7 +932,8 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
 }
 
 
-bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
+bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
+                                     const std::initializer_list<KICAD_T>& aFilterList,
                                      EDA_ITEM** aItem, bool* aSelectionCancelledFlag,
                                      bool aCheckLocked, bool aAdd, bool aSubtract,
                                      bool aExclusiveOr )
@@ -1147,7 +1142,8 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 }
 
 
-EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
+EE_SELECTION&
+EE_SELECTION_TOOL::RequestSelection( const std::initializer_list<KICAD_T>& aFilterList )
 {
     if( m_selection.Empty() )
     {
@@ -1417,24 +1413,6 @@ bool EE_SELECTION_TOOL::selectMultiple()
 }
 
 
-static KICAD_T nodeTypes[] =
-{
-    SCH_SYMBOL_LOCATE_POWER_T,
-    SCH_PIN_T,
-    SCH_ITEM_LOCATE_WIRE_T,
-    SCH_ITEM_LOCATE_BUS_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_SHEET_PIN_T,
-    SCH_DIRECTIVE_LABEL_T,
-    SCH_JUNCTION_T,
-    EOT
-};
-
-
 EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
     EE_COLLECTOR collector;
@@ -1447,7 +1425,7 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
     for( int threshold : { 0, thresholdMax/4, thresholdMax/2, thresholdMax } )
     {
         collector.m_Threshold = threshold;
-        collector.Collect( m_frame->GetScreen(), nodeTypes, aPosition );
+        collector.Collect( m_frame->GetScreen(), connectedTypes, aPosition );
 
         if( collector.GetCount() > 0 )
             break;
@@ -1461,7 +1439,7 @@ int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 {
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition( false );
 
-    SelectPoint( cursorPos, nodeTypes  );
+    SelectPoint( cursorPos, connectedTypes );
 
     return 0;
 }
@@ -1469,9 +1447,7 @@ int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
-
-    RequestSelection( wiresAndBuses );
+    RequestSelection( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } );
 
     if( m_selection.Empty() )
         return 0;
@@ -1484,8 +1460,11 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : conns )
     {
-        if( item->IsType( wiresAndBuses ) && !item->IsSelected() )
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
+                && !item->IsSelected() )
+        {
             done = true;
+        }
 
         select( item );
     }

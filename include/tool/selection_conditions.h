@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -70,55 +70,31 @@ class SELECTION_CONDITIONS
 public:
     /**
      * The default condition function (always returns true).
-     *
-     * @param aSelection is the selection to be tested.
-     * @return Always true.
      */
-    static bool ShowAlways( const SELECTION& aSelection )
-    {
-        return true;
-    }
+    static bool ShowAlways( const SELECTION& aSelection ) { return true; }
 
     /**
      * Always returns false.
-     *
-     * @param aSelection is the selection to be tested.
-     * @return Always false.
      */
-    static bool ShowNever( const SELECTION& aSelection )
-    {
-        return false;
-    }
+    static bool ShowNever( const SELECTION& aSelection ) { return false; }
 
     /**
      * Test if there are any items selected.
-     *
-     * @param aSelection is the selection to be tested.
-     * @return True if there is at least one item selected.
      */
     static bool NotEmpty( const SELECTION& aSelection );
 
     /**
      * Test if there are no items selected.
-     *
-     * @param aSelection is the selection to be tested.
-     * @return True if there are no items selected.
      */
     static bool Empty( const SELECTION& aSelection );
 
     /**
      * Test if there no items selected or being edited.
-     *
-     * @param aSelection is the selection to be tested.
-     * @return True if there are no items being edited or no items selected.
      */
     static bool Idle( const SELECTION& aSelection );
 
     /**
      * Test if all selected items are not being edited.
-     *
-     * @param aSelection is the selection to be tested.
-     * @return True if no selected items are being edited.
      */
     static bool IdleSelection( const SELECTION& aSelection );
 
@@ -135,28 +111,18 @@ public:
      * Create a functor that tests if among the selected items there is at least one of a
      * given types.
      *
-     * @param aTypes is an array containing types that are searched. It has to be ended with
-     *               #KICAD_T::EOT as end marker.
+     * @param aTypes is an array containing types that are searched.
      * @return Functor testing for presence of items of a given types.
      */
-    static SELECTION_CONDITION HasTypes( const KICAD_T aTypes[] );
-
-    /**
-     * Create a functor that tests if the selected items are *only* of given type.
-     *
-     * @param aType is the type that is searched.
-     * @return Functor testing if selected items are exclusively of one type.
-     */
-    static SELECTION_CONDITION OnlyType( KICAD_T aType );
+    static SELECTION_CONDITION HasTypes( const std::initializer_list<KICAD_T>& aTypes );
 
     /**
      * Create a functor that tests if the selected items are *only* of given types.
      *
-     * @param aTypes is an array containing types that are searched. It has to be ended with
-     *               #KICAD_T::EOT as end marker.
+     * @param aTypes is an array containing types that are searched.
      * @return Functor testing if selected items are exclusively of the requested types.
      */
-    static SELECTION_CONDITION OnlyTypes( const KICAD_T aTypes[] );
+    static SELECTION_CONDITION OnlyTypes( const std::initializer_list<KICAD_T>& aTypes );
 
     /**
      * Create a functor that tests if the number of selected items is equal to the value given as
@@ -190,13 +156,12 @@ private:
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
 
     ///< Helper function used by HasTypes()
-    static bool hasTypesFunc( const SELECTION& aSelection, const KICAD_T aTypes[] );
-
-    ///< Helper function used by OnlyType()
-    static bool onlyTypeFunc( const SELECTION& aSelection, KICAD_T aType );
+    static bool hasTypesFunc( const SELECTION& aSelection,
+                              const std::initializer_list<KICAD_T>& aTypes );
 
     ///< Helper function used by OnlyTypes()
-    static bool onlyTypesFunc( const SELECTION& aSelection, const KICAD_T aTypes[] );
+    static bool onlyTypesFunc( const SELECTION& aSelection,
+                               const std::initializer_list<KICAD_T>& aTypes );
 
     ///< Helper function used by Count()
     static bool countFunc( const SELECTION& aSelection, int aNumber );
@@ -229,7 +194,7 @@ private:
 
     ///< Helper function used by operator||
     static bool orBoolFunc( const SELECTION_CONDITION& aConditionA,
-                             SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
+                            SELECTION_BOOL& aConditionB, const SELECTION& aSelection )
     {
         return aConditionA( aSelection ) || aConditionB( aSelection );
     }

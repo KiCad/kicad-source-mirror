@@ -207,18 +207,12 @@ std::vector<DRILL_LAYER_PAIR> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
 {
     wxASSERT( m_pcb );
 
-    static const KICAD_T interesting_stuff_to_collect[] = {
-        PCB_VIA_T,
-        EOT
-    };
-
     PCB_TYPE_COLLECTOR  vias;
 
-    vias.Collect( m_pcb, interesting_stuff_to_collect );
+    vias.Collect( m_pcb, { PCB_VIA_T } );
 
-    std::set< DRILL_LAYER_PAIR >  unique;
-
-    DRILL_LAYER_PAIR  layer_pair;
+    std::set<DRILL_LAYER_PAIR> unique;
+    DRILL_LAYER_PAIR           layer_pair;
 
     for( int i = 0; i < vias.GetCount(); ++i )
     {
@@ -229,17 +223,15 @@ std::vector<DRILL_LAYER_PAIR> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
         // only make note of blind buried.
         // thru hole is placed unconditionally as first in fetched list.
         if( layer_pair != DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
-        {
             unique.insert( layer_pair );
-        }
     }
 
-    std::vector<DRILL_LAYER_PAIR>    ret;
+    std::vector<DRILL_LAYER_PAIR> ret;
 
     ret.emplace_back( F_Cu, B_Cu );      // always first in returned list
 
-    for( std::set<DRILL_LAYER_PAIR>::const_iterator it = unique.begin(); it != unique.end(); ++it )
-        ret.push_back( *it );
+    for( const DRILL_LAYER_PAIR& pair : unique )
+        ret.push_back( pair );
 
     return ret;
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,8 +319,6 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
 
 bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen )
 {
-    static const KICAD_T wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
-
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
@@ -329,12 +327,12 @@ bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen 
 
     for( SCH_ITEM* item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
     {
-        if( item->IsType( wiresAndBuses ) )
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
         {
             SCH_LINE* wire = static_cast<SCH_LINE*>( item );
 
             if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), aPoint )
-              && !wire->IsEndPoint( aPoint ) )
+                    && !wire->IsEndPoint( aPoint ) )
             {
                 wires.push_back( wire );
             }
@@ -380,13 +378,13 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     SCH_SCREEN*        screen = GetScreen();
     PICKED_ITEMS_LIST  undoList;
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    KICAD_T            wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
 
-    auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
-    {
-        aItem->SetFlags( STRUCT_DELETED );
-        undoList.PushItem( ITEM_PICKER( screen, aItem, UNDO_REDO::DELETED ) );
-    };
+    auto remove_item =
+            [&]( SCH_ITEM* aItem ) -> void
+            {
+                aItem->SetFlags( STRUCT_DELETED );
+                undoList.PushItem( ITEM_PICKER( screen, aItem, UNDO_REDO::DELETED ) );
+            };
 
     remove_item( aJunction );
     RemoveFromScreen( aJunction, screen );
@@ -399,9 +397,12 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-        if( line->IsType( wiresAndBuses ) && line->IsEndPoint( aJunction->GetPosition() )
+        if( line->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
+                && line->IsEndPoint( aJunction->GetPosition() )
                 && !( line->GetEditFlags() & STRUCT_DELETED ) )
+        {
             lines.push_back( line );
+        }
     }
 
     alg::for_all_pairs( lines.begin(), lines.end(),

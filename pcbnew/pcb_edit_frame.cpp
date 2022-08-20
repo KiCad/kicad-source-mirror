@@ -773,18 +773,18 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::highlightNetSelection, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
     mgr->SetConditions( PCB_ACTIONS::selectNet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::deselectNet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
-                        ENABLE( SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) ) );
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) ) );
 
 
     SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
+                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } );
 
     SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
+                                    && SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } );
 
     mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );

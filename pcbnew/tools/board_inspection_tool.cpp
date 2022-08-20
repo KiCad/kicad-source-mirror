@@ -79,8 +79,11 @@ bool BOARD_INSPECTION_TOOL::Init()
     auto netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
     netSubMenu->SetTool( this );
 
-    static KICAD_T connectedTypes[] = { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T,
-                                        EOT };
+    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T,
+                                                             PCB_VIA_T,
+                                                             PCB_ARC_T,
+                                                             PCB_PAD_T,
+                                                             PCB_ZONE_T };
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
@@ -1342,10 +1345,11 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         guide.SetPreferredLayer( activeLayer );
 
         GENERAL_COLLECTOR collector;
-        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, aPosition, guide );
+        collector.Collect( board, { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T }, aPosition,
+                           guide );
 
         if( collector.GetCount() == 0 )
-            collector.Collect( board, GENERAL_COLLECTOR::Zones, aPosition, guide );
+            collector.Collect( board, { PCB_ZONE_T, PCB_FP_ZONE_T }, aPosition, guide );
 
         // Apply the active selection filter, except we want to allow picking locked items for
         // highlighting even if the user has disabled them for selection

@@ -201,8 +201,7 @@ public:
      */
     unsigned int GetUnconnectedCount() const;
 
-    bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem,
-                             int aLayer,
+    bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem, int aLayer,
                              const std::initializer_list<KICAD_T>& aTypes = {},
                              bool aCheckOptionalFlashing = false ) const;
 
@@ -226,11 +225,10 @@ public:
      * @param aMaxError Maximum distance of the found items' anchors to aAnchor in IU
      * @return
      */
-    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItemsAtAnchor(
-            const BOARD_CONNECTED_ITEM* aItem,
-            const VECTOR2I& aAnchor,
-            const KICAD_T aTypes[],
-            const int& aMaxError = 0 ) const;
+    const std::vector<BOARD_CONNECTED_ITEM*>
+    GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor,
+                               const std::initializer_list<KICAD_T>& aTypes,
+                               const int& aMaxError = 0 ) const;
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 
@@ -257,10 +255,7 @@ public:
                                  const CONNECTIVITY_DATA* aDynamicData,
                                  VECTOR2I aInternalOffset = { 0, 0 } );
 
-    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const
-    {
-        return m_dynamicRatsnest;
-    }
+    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const { return m_dynamicRatsnest; }
 
     /**
      * Function GetConnectedItems()
@@ -268,8 +263,10 @@ public:
      * @param aItem is the reference item to find other connected items.
      * @param aTypes allows one to filter by item types.
      */
-    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
-            const std::initializer_list<KICAD_T>& aTypes, bool aIgnoreNetcodes = false ) const;
+    const std::vector<BOARD_CONNECTED_ITEM*>
+    GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+                       const std::initializer_list<KICAD_T>& aTypes,
+                       bool aIgnoreNetcodes = false ) const;
 
     /**
      * Function GetNetItems()
@@ -277,28 +274,19 @@ public:
      * @param aNetCode is the net code.
      * @param aTypes allows one to filter by item types.
      */
-    const std::vector<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
-            const KICAD_T aTypes[] ) const;
+    const std::vector<BOARD_CONNECTED_ITEM*>
+    GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const;
 
     void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 
-    std::shared_ptr<CN_CONNECTIVITY_ALGO> GetConnectivityAlgo() const
-    {
-        return m_connAlgo;
-    }
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> GetConnectivityAlgo() const { return m_connAlgo; }
 
-    KISPINLOCK& GetLock()
-    {
-        return m_lock;
-    }
+    KISPINLOCK& GetLock() { return m_lock; }
 
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
-    const std::map<int, wxString>& GetNetclassMap() const
-    {
-        return m_netclassMap;
-    }
+    const std::map<int, wxString>& GetNetclassMap() const { return m_netclassMap; }
 
     void AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
     void RemoveExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
@@ -312,10 +300,7 @@ public:
                                                         bool aSkipInternalConnections = false );
 #endif
 
-    std::shared_ptr<FROM_TO_CACHE> GetFromToCache()
-    {
-        return m_fromToCache;
-    }
+    std::shared_ptr<FROM_TO_CACHE> GetFromToCache() { return m_fromToCache; }
 
 private:
     void    updateRatsnest();

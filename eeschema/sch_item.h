@@ -157,20 +157,20 @@ public:
         return wxT( "SCH_ITEM" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( EDA_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( *p == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
+            if( scanType == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
                 return true;
 
-            if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
+            if ( scanType == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
                 return true;
 
-            if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T
+            if ( scanType == SCH_ITEM_LOCATE_GRAPHIC_LINE_T
                     && Type() == SCH_LINE_T && m_layer == LAYER_NOTES )
             {
                 return true;

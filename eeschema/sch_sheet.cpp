@@ -943,20 +943,19 @@ std::vector<VECTOR2I> SCH_SHEET::GetConnectionPoints() const
 }
 
 
-INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICAD_T aFilterTypes[] )
+INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData,
+                                 const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T stype;
-
-    for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
+    for( KICAD_T scanType : aScanTypes )
     {
         // If caller wants to inspect my type
-        if( stype == SCH_LOCATE_ANY_T || stype == Type() )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == Type() )
         {
             if( INSPECT_RESULT::QUIT == aInspector( this, nullptr ) )
                 return INSPECT_RESULT::QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == SCH_FIELD_T )
         {
             // Test the sheet fields.
             for( SCH_FIELD& field : m_fields )
@@ -966,7 +965,7 @@ INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KIC
             }
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_SHEET_PIN_T )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == SCH_SHEET_PIN_T )
         {
             // Test the sheet labels.
             for( SCH_SHEET_PIN* sheetPin : m_pins )

@@ -1353,8 +1353,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
         if( connected )
         {
-            static KICAD_T autoRotatableLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T };
-            if( aItem->IsType( autoRotatableLabelTypes ) )
+            if( aItem->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
             {
                 auto label = static_cast<SCH_LABEL_BASE*>( aItem );
                 if( label->AutoRotateOnPlacement() )

@@ -139,7 +139,7 @@ bool EDIT_TOOL::Init()
                 return m_isFootprintEditor;
             };
 
-    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T )
+    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
                                         && SELECTION_CONDITIONS::Count( 1 );
 
     auto noActiveToolCondition =
@@ -167,13 +167,13 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
-                                                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+                                                      && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle,     SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
-                                                      && !SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) );
-    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+                                                      && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
+    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -295,14 +295,16 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 // drop a knee between two segments to a single segment
                 if( aCollector.GetCount() == 2 && dynamic_cast<PCB_TRACK*>( aCollector[0] ) )
                 {
-                    static KICAD_T types[] = { PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
-
                     PCB_TRACK*  a = static_cast<PCB_TRACK*>( aCollector[0] );
                     PCB_TRACK*  b = static_cast<PCB_TRACK*>( aCollector[1] );
                     const auto& c = aCollector[0]->GetBoard()->GetConnectivity();
 
                     int  dist = a->GetWidth() / 2;
-                    auto connectedItems = c->GetConnectedItemsAtAnchor( a, aPt, types, dist );
+                    auto connectedItems = c->GetConnectedItemsAtAnchor( a, aPt,
+                                                                        { PCB_VIA_T,
+                                                                          PCB_TRACE_T,
+                                                                          PCB_ARC_T },
+                                                                        dist );
 
                     if( alg::contains( connectedItems, b ) )
                         aCollector.Remove( b );
@@ -366,12 +368,10 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     tanEnd.A = tanIntersect;
     tanEnd.B = theArc->GetEnd();
 
-    KICAD_T track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
-
     auto getUniqueTrackAtAnchorCollinear =
             [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> PCB_TRACK*
             {
-                auto conn = board()->GetConnectivity();
+                std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
 
                 // Allow items at a distance within the width of the arc track
                 int allowedDeviation = theArc->GetWidth();
@@ -380,7 +380,9 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
                 for( int i = 0; i < 3; i++ )
                 {
-                    itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types,
+                    itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor,
+                                                                     { PCB_PAD_T, PCB_VIA_T,
+                                                                       PCB_TRACE_T, PCB_ARC_T },
                                                                      allowedDeviation );
                     allowedDeviation /= 2;
 
@@ -797,14 +799,13 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     };
 
     std::vector<FILLET_OP> filletOperations;
-    KICAD_T                track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
     bool                   operationPerformedOnAtLeastOne = false;
     bool                   didOneAttemptFail              = false;
     std::set<PCB_TRACK*>   processedTracks;
 
-    for( auto it = selection.begin(); it != selection.end(); it++ )
+    for( EDA_ITEM* item : selection )
     {
-        PCB_TRACK* track = dyn_cast<PCB_TRACK*>( *it );
+        PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item );
 
         if( !track || track->Type() != PCB_TRACE_T || track->GetLength() == 0 )
         {
@@ -814,10 +815,14 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         auto processFilletOp =
                 [&]( bool aStartPoint )
                 {
-                    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
-                    VECTOR2I anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
-                    auto itemsOnAnchor = connectivity->GetConnectedItemsAtAnchor( track, anchor,
-                                                                                  track_types );
+                    std::shared_ptr<CONNECTIVITY_DATA> c = board()->GetConnectivity();
+                    VECTOR2I                           anchor = aStartPoint ? track->GetStart()
+                                                                            : track->GetEnd();
+                    std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
+
+                    itemsOnAnchor = c->GetConnectedItemsAtAnchor( track, anchor,
+                                                                  { PCB_PAD_T, PCB_VIA_T,
+                                                                    PCB_TRACE_T, PCB_ARC_T } );
 
                     if( itemsOnAnchor.size() > 0
                             && selection.Contains( itemsOnAnchor.at( 0 ) )
@@ -958,7 +963,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             } );
 
     // Tracks & vias are treated in a special way:
-    if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
+    if( ( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )( selection ) )
     {
         DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
         dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR

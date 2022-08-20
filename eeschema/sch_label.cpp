@@ -190,17 +190,14 @@ const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool 
 }
 
 
-bool SCH_LABEL_BASE::IsType( const KICAD_T aScanTypes[] ) const
+bool SCH_LABEL_BASE::IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const
 {
-    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T, EOT };
-    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T, EOT };
-
     if( SCH_TEXT::IsType( aScanTypes ) )
         return true;
 
-    for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+    for( KICAD_T scanType : aScanTypes )
     {
-        if( *p == SCH_LABEL_LOCATE_ANY_T )
+        if( scanType == SCH_LABEL_LOCATE_ANY_T )
             return true;
     }
 
@@ -213,22 +210,22 @@ bool SCH_LABEL_BASE::IsType( const KICAD_T aScanTypes[] ) const
 
     const SCH_ITEM_SET& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
 
-    for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+    for( KICAD_T scanType : aScanTypes )
     {
-        if( *p == SCH_LABEL_LOCATE_WIRE_T )
+        if( scanType == SCH_LABEL_LOCATE_WIRE_T )
         {
             for( SCH_ITEM* connection : item_set )
             {
-                if( connection->IsType( wireTypes ) )
+                if( connection->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T } ) )
                     return true;
             }
         }
 
-        if ( *p == SCH_LABEL_LOCATE_BUS_T )
+        if ( scanType == SCH_LABEL_LOCATE_BUS_T )
         {
             for( SCH_ITEM* connection : item_set )
             {
-                if( connection->IsType( busTypes ) )
+                if( connection->IsType( { SCH_ITEM_LOCATE_BUS_T } ) )
                     return true;
             }
         }
@@ -545,19 +542,19 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 
 
 INSPECT_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
-                                     const KICAD_T aFilterTypes[] )
+                                      const std::initializer_list<KICAD_T>& aScanTypes )
 {
     KICAD_T stype;
 
-    if( IsType( aFilterTypes ) )
+    if( IsType( aScanTypes ) )
     {
         if( INSPECT_RESULT::QUIT == aInspector( this, nullptr ) )
             return INSPECT_RESULT::QUIT;
     }
 
-    for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
+    for( KICAD_T scanType : aScanTypes )
     {
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        if( scanType == SCH_LOCATE_ANY_T || scanType == SCH_FIELD_T )
         {
             for( SCH_FIELD& field : m_fields )
             {

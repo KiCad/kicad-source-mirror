@@ -94,8 +94,7 @@ private:
     {
         SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetToolHolder();
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        KICAD_T            busType[] = { SCH_ITEM_LOCATE_BUS_T, EOT };
-        EE_SELECTION&      selection = selTool->RequestSelection( busType );
+        EE_SELECTION&      selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
         SCH_LINE*          bus = (SCH_LINE*) selection.Front();
 
         Clear();
@@ -106,7 +105,7 @@ private:
             frame->RecalculateConnections( NO_CLEANUP );
 
             // Pick up the pointer again because it may have been changed by SchematicCleanUp
-            selection = selTool->RequestSelection( busType );
+            selection = selTool->RequestSelection( { SCH_ITEM_LOCATE_BUS_T } );
             bus = (SCH_LINE*) selection.Front();
         }
 
@@ -200,7 +199,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
             };
 
     auto busSelection = EE_CONDITIONS::MoreThan( 0 )
-                            && EE_CONDITIONS::OnlyType( SCH_ITEM_LOCATE_BUS_T );
+                            && EE_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_BUS_T } );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -264,22 +263,22 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 
 bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
 {
-    static KICAD_T graphicLineType[] = { SCH_ITEM_LOCATE_GRAPHIC_LINE_T, EOT };
-    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( graphicLineType );
+    return IsDrawingLineWireOrBus( aSelection )
+                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
 }
 
 
 bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire( const SELECTION& aSelection )
 {
-    static KICAD_T wireType[] = { SCH_ITEM_LOCATE_WIRE_T, EOT };
-    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( wireType );
+    return IsDrawingLineWireOrBus( aSelection )
+                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_WIRE_T } );
 }
 
 
 bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus( const SELECTION& aSelection )
 {
-    static KICAD_T busType[] = { SCH_ITEM_LOCATE_BUS_T, EOT };
-    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( busType );
+    return IsDrawingLineWireOrBus( aSelection )
+                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_BUS_T } );
 }
 
 

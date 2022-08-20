@@ -806,12 +806,12 @@ public:
      * to do so on lists of such data.
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order
-     *  is significant too, terminated by EOT.
+     * @param scanTypes Which KICAD_T types are of interest and the order to process them in.
      * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE, and
      *         determined by the inspector.
      */
-    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
+                          const std::initializer_list<KICAD_T>& scanTypes ) override;
 
     /**
      * Search for a FOOTPRINT within this board with the given reference designator.
@@ -1011,15 +1011,6 @@ public:
     std::tuple<int, double, double> GetTrackLength( const PCB_TRACK& aTrack ) const;
 
     /**
-     * Collect all the TRACKs and VIAs that are members of a net given by aNetCode.
-     * Used from python.
-     *
-     * @param aNetCode gives the id of the net.
-     * @return list of track which are in the net identified by @a aNetCode.
-     */
-    TRACKS TracksInNet( int aNetCode );
-
-    /**
      * Get a footprint by its bounding rectangle at \a aPosition on \a aLayer.
      *
      * If more than one footprint is at \a aPosition, then the closest footprint on the
@@ -1033,11 +1024,6 @@ public:
      */
     FOOTPRINT* GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked = false ) const;
-
-    /**
-     * Reset all items' netcodes to 0 (no net).
-     */
-    void ClearAllNetCodes();
 
     /**
      * Map all nets in the given board to nets with the same name (if any) in the destination

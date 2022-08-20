@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,8 +212,6 @@ public:
         m_messagesList.Add( aMessage );
     }
 
-    void InitToolTable();
-
     /**
      * Return the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm).
      *
@@ -299,7 +297,8 @@ public:
     void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
 
     ///< @copydoc EDA_ITEM::Visit()
-    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
+                          const std::initializer_list<KICAD_T>& aScanTypes ) override;
 
 #if defined(DEBUG)
 
@@ -356,78 +355,58 @@ private:
      * @param gerber_file Which file to read from for continuation.
      * @return true if a macro was read in successfully, else false.
      */
-    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
-                            char* & text, FILE * gerber_file );
+    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize, char*& text, FILE* gerber_file );
 
     // functions to execute G commands or D basic commands:
     bool Execute_G_Command( char*& text, int G_command );
     bool Execute_DCODE_Command( char*& text, int D_command );
 
 public:
-    bool               m_InUse;                          // true if this image is currently in use
-                                                         // (a file is loaded in it)
+    bool               m_InUse;                ///< true if this image is currently in use (a file
+                                               ///<   is loaded in it)
+                                               ///< false if it must be not drawn
+    COLOR4D            m_PositiveDrawColor;    ///< The color used to draw positive items
+    wxString           m_FileName;             ///< Full File Name for this layer
+    wxString           m_ImageName;            ///< Image name, from IN <name>* command
 
-    ///< True if the draw layer is visible and must be drawn.
-    bool               m_IsVisible;
-                                                         // false if it must be not drawn
-    COLOR4D            m_PositiveDrawColor;              // The color used to draw positive items
-    wxString           m_FileName;                       // Full File Name for this layer
-    wxString           m_ImageName;                      // Image name, from IN <name>* command
+    bool               m_IsX2_file;            ///< True if a X2 gerber attribute was found in file
+    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction; ///< file function parameters, found in a %TF
+                                               ///<   command or a G04
+    wxString           m_MD5_value;            ///< MD5 value found in a %TF.MD5 command
+    wxString           m_PartString;           ///< string found in a %TF.Part command
+    int                m_GraphicLayer;         ///< Graphic layer Number
+    bool               m_ImageNegative;        ///< true = Negative image
 
-    ///< True if a X2 gerber attribute was found in file.
-    bool               m_IsX2_file;
-    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction;           // file function parameters, found in a
-                                                         //  %TF command or a G04
-    wxString           m_MD5_value;                      // MD5 value found in a %TF.MD5 command
-    wxString           m_PartString;                     // string found in a %TF.Part command
-    int                m_GraphicLayer;                   // Graphic layer Number
-    bool               m_ImageNegative;                  // true = Negative image
+    bool               m_ImageJustifyXCenter;  ///< Image Justify Center on X axis (default = false)
+    bool               m_ImageJustifyYCenter;  ///< Image Justify Center on Y axis (default = false)
+    VECTOR2I           m_ImageJustifyOffset;   ///< Image Justify Offset on XY axis (default = 0,0)
 
-    ///< Image Justify Center on X axis (default = false).
-    bool               m_ImageJustifyXCenter;
+    bool               m_GerbMetric;           ///< false = Inches, true = metric
+    bool               m_Relative;             ///< false = absolute Coord, true = relative Coord.
+    bool               m_NoTrailingZeros;      ///< true: remove tailing zeros.
+    VECTOR2I           m_ImageOffset;          ///< Coord Offset, from IO command
+    wxSize             m_FmtScale;             ///< Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
+    wxSize             m_FmtLen;               ///< Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
 
-    ///< Image Justify Center on Y axis (default = false).
-    bool               m_ImageJustifyYCenter;
+    int                m_ImageRotation;        ///< Image rotation (0, 90, 180, 270 only) in degrees
+    double             m_LocalRotation;        ///< Local rotation added to m_ImageRotation
+                                               ///< @note This value is stored in 0.1 degrees
 
-    ///< Image Justify Offset on XY axis (default = 0,0).
-    VECTOR2I            m_ImageJustifyOffset;
-    bool               m_GerbMetric;                     // false = Inches, true = metric
-
-    ///< false = absolute Coord, true = relative Coord.
-    bool               m_Relative;
-    bool               m_NoTrailingZeros;                // true: remove tailing zeros.
-    VECTOR2I            m_ImageOffset;                   // Coord Offset, from IO command
-
-    ///< Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4.
-    wxSize             m_FmtScale;
-
-    ///< Nb chars per coord. ex fmt 2.3, m_FmtLen = 5.
-    wxSize             m_FmtLen;
-
-    ///< Image rotation (0, 90, 180, 270 only) in degrees.
-    int                m_ImageRotation;
-
-    ///< Local rotation in degrees added to m_ImageRotation.
-    ///< @note This value is stored in 0.1 degrees.
-    double             m_LocalRotation;
-    VECTOR2I           m_Offset;                         // Coord Offset, from OF command
-    VECTOR2I           m_Scale;                          // scale (X and Y) of layer.
-    bool               m_SwapAxis;                       // false (default) if A = X and B = Y
-                                                         // true if A = Y, B = X
-    bool               m_MirrorA;                        // true: mirror / axis A (X)
-    bool               m_MirrorB;                        // true: mirror / axis B (Y)
-    int                m_Iterpolation;                   // Linear, 90 arc, Circ.
-    int                m_Current_Tool;                   // Current Tool (Dcode) number selected
-
-    ///< Current or last pen state (0..9, set by Dn option with n < 10.
-    int                m_Last_Pen_Command;
-    int                m_CommandState;                   // state of gerber analysis command.
-
-    ///< Line number of the gerber file while reading.
-    int                m_LineNum;
-    VECTOR2I           m_CurrentPos;                     // current specified coord for plot
-    VECTOR2I           m_PreviousPos;                    // old current specified coord for plot
-    VECTOR2I           m_IJPos;                          // IJ coord (for arcs & circles )
+    VECTOR2I           m_Offset;               ///< Coord Offset, from OF command
+    VECTOR2I           m_Scale;                ///< scale (X and Y) of layer.
+    bool               m_SwapAxis;             ///< false if A = X and B = Y (default); true if
+                                               ///<   A = Y, B = X
+    bool               m_MirrorA;              ///< true: mirror / axis A (X)
+    bool               m_MirrorB;              ///< true: mirror / axis B (Y)
+    int                m_Iterpolation;         ///< Linear, 90 arc, Circ.
+    int                m_Current_Tool;         ///< Current Tool (Dcode) number selected
+    int                m_Last_Pen_Command;     ///< Current or last pen state (0..9, set by Dn
+                                               ///<   option with n < 10
+    int                m_CommandState;         ///< state of gerber analysis command
+    int                m_LineNum;              ///< Line number of the gerber file while reading.
+    VECTOR2I           m_CurrentPos;           ///< current specified coord for plot
+    VECTOR2I           m_PreviousPos;          ///< old current specified coord for plot
+    VECTOR2I           m_IJPos;                ///< IJ coord (for arcs & circles )
 
     ///< True if a IJ coord was read (for arcs & circles ).
     bool               m_LastCoordIsIJPos;

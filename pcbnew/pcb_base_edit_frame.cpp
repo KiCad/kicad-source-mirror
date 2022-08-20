@@ -240,7 +240,16 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
                     return INSPECT_RESULT::CONTINUE;
                 };
 
-        board->Visit( inspector, nullptr, GENERAL_COLLECTOR::Dimensions );
+        board->Visit( inspector, nullptr, { PCB_DIM_ALIGNED_T,
+                                            PCB_DIM_LEADER_T,
+                                            PCB_DIM_ORTHOGONAL_T,
+                                            PCB_DIM_CENTER_T,
+                                            PCB_DIM_RADIAL_T,
+                                            PCB_FP_DIM_ALIGNED_T,
+                                            PCB_FP_DIM_LEADER_T,
+                                            PCB_FP_DIM_ORTHOGONAL_T,
+                                            PCB_FP_DIM_CENTER_T,
+                                            PCB_FP_DIM_RADIAL_T } );
 
         if( selectedItemModified )
             m_toolManager->PostEvent( EVENTS::SelectedItemsModified );

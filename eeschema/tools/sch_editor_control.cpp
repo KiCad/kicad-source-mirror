@@ -729,12 +729,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 #ifdef KICAD_SPICE
 
-static KICAD_T wires[] = { SCH_ITEM_LOCATE_WIRE_T, EOT };
-static KICAD_T wiresAndPins[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
-static KICAD_T fieldsAndSymbols[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
-
 #define HITTEST_THRESHOLD_PIXELS 5
-
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
@@ -835,7 +830,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         simFrame->AddCurrentPlot( name );
                     }
                 }
-                else if( item->IsType( wires ) )
+                else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
@@ -854,7 +849,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             {
                 EE_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( m_frame->GetScreen(), wiresAndPins, (wxPoint) aPos );
+                collector.Collect( m_frame->GetScreen(), { SCH_ITEM_LOCATE_WIRE_T,
+                                                           SCH_PIN_T,
+                                                           SCH_SHEET_PIN_T }, aPos );
 
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -935,7 +932,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
             {
                 EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 EDA_ITEM*          item = nullptr;
-                selTool->SelectPoint( aPosition, fieldsAndSymbols, &item );
+                selTool->SelectPoint( aPosition, { SCH_SYMBOL_T, SCH_FIELD_T }, &item );
 
                 if( !item )
                     return false;
@@ -970,7 +967,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
             {
                 EE_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( m_frame->GetScreen(), fieldsAndSymbols, (wxPoint) aPos );
+                collector.Collect( m_frame->GetScreen(), { SCH_SYMBOL_T, SCH_FIELD_T }, aPos );
 
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -2000,7 +1997,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
+    EE_SELECTION&      selection = selTool->RequestSelection( { SCH_SYMBOL_T } );
     SCH_SYMBOL*        symbol = nullptr;
     SYMBOL_EDIT_FRAME* symbolEditor;
 

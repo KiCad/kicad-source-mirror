@@ -489,7 +489,8 @@ void CONNECTIVITY_DATA::Clear()
 
 const std::vector<BOARD_CONNECTED_ITEM*>
 CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
-        const std::initializer_list<KICAD_T>& aTypes, bool aIgnoreNetcodes ) const
+                                      const std::initializer_list<KICAD_T>& aTypes,
+                                      bool aIgnoreNetcodes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> rv;
     CN_CONNECTIVITY_ALGO::CLUSTER_SEARCH_MODE searchMode;
@@ -518,24 +519,26 @@ CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
 }
 
 
-const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
-        const KICAD_T aTypes[] ) const
+const std::vector<BOARD_CONNECTED_ITEM*>
+CONNECTIVITY_DATA::GetNetItems( int aNetCode, const std::initializer_list<KICAD_T>& aTypes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> items;
     items.reserve( 32 );
 
     std::bitset<MAX_STRUCT_TYPE_ID> type_bits;
 
-    for( unsigned int i = 0; aTypes[i] != EOT; ++i )
+    for( KICAD_T scanType : aTypes )
     {
-        wxASSERT( aTypes[i] < MAX_STRUCT_TYPE_ID );
-        type_bits.set( aTypes[i] );
+        wxASSERT( scanType < MAX_STRUCT_TYPE_ID );
+        type_bits.set( scanType );
     }
 
-    m_connAlgo->ForEachItem( [&]( CN_ITEM& aItem ) {
-        if( aItem.Valid() && ( aItem.Net() == aNetCode ) && type_bits[aItem.Parent()->Type()] )
-            items.push_back( aItem.Parent() );
-    } );
+    m_connAlgo->ForEachItem(
+            [&]( CN_ITEM& aItem )
+            {
+                if( aItem.Valid() && ( aItem.Net() == aNetCode ) && type_bits[aItem.Parent()->Type()] )
+                    items.push_back( aItem.Parent() );
+            } );
 
     std::sort( items.begin(), items.end() );
     items.erase( std::unique( items.begin(), items.end() ), items.end() );
@@ -568,8 +571,8 @@ bool CONNECTIVITY_DATA::CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& a
 }
 
 
-const std::vector<PCB_TRACK*> CONNECTIVITY_DATA::GetConnectedTracks(
-                                                        const BOARD_CONNECTED_ITEM* aItem ) const
+const std::vector<PCB_TRACK*>
+CONNECTIVITY_DATA::GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem ) const
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
 
@@ -584,7 +587,9 @@ const std::vector<PCB_TRACK*> CONNECTIVITY_DATA::GetConnectedTracks(
                     ( connected->Parent()->Type() == PCB_TRACE_T ||
                             connected->Parent()->Type() == PCB_VIA_T ||
                             connected->Parent()->Type() == PCB_ARC_T ) )
+            {
                 tracks.insert( static_cast<PCB_TRACK*> ( connected->Parent() ) );
+            }
         }
     }
 
@@ -814,27 +819,27 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* 
 }
 
 
-const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItemsAtAnchor(
-        const BOARD_CONNECTED_ITEM* aItem,
-        const VECTOR2I& aAnchor,
-        const KICAD_T aTypes[],
-        const int& aMaxError ) const
+const std::vector<BOARD_CONNECTED_ITEM*>
+CONNECTIVITY_DATA::GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
+                                              const VECTOR2I& aAnchor,
+                                              const std::initializer_list<KICAD_T>& aTypes,
+                                              const int& aMaxError ) const
 {
-    auto&                              entry = m_connAlgo->ItemEntry( aItem );
-    std::vector<BOARD_CONNECTED_ITEM*> rv;
-    SEG::ecoord                        maxErrorSq = (SEG::ecoord) aMaxError * aMaxError;
+    CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY& entry = m_connAlgo->ItemEntry( aItem );
+    std::vector<BOARD_CONNECTED_ITEM*>    rv;
+    SEG::ecoord                           maxError_sq = (SEG::ecoord) aMaxError * aMaxError;
 
     for( CN_ITEM* cnItem : entry.GetItems() )
     {
         for( CN_ITEM* connected : cnItem->ConnectedItems() )
         {
-            for( std::shared_ptr<CN_ANCHOR>& anchor : connected->Anchors() )
+            for( const std::shared_ptr<CN_ANCHOR>& anchor : connected->Anchors() )
             {
-                if( ( anchor->Pos() - aAnchor ).SquaredEuclideanNorm() <= maxErrorSq )
+                if( ( anchor->Pos() - aAnchor ).SquaredEuclideanNorm() <= maxError_sq )
                 {
-                    for( int i = 0; aTypes[i] > 0; i++ )
+                    for( KICAD_T type : aTypes )
                     {
-                        if( connected->Valid() && connected->Parent()->Type() == aTypes[i] )
+                        if( connected->Valid() && connected->Parent()->Type() == type )
                         {
                             rv.push_back( connected->Parent() );
                             break;

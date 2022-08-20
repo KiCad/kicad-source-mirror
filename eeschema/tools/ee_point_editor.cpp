@@ -406,17 +406,6 @@ void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
 int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T supportedTypes[] = {
-        LIB_SHAPE_T,
-        LIB_TEXTBOX_T,
-        SCH_SHAPE_T,
-        SCH_TEXTBOX_T,
-        SCH_SHEET_T,
-        SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
-        SCH_BITMAP_T,
-        EOT
-    };
-
     if( !m_selectionTool )
         return 0;
 
@@ -430,8 +419,14 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || !selection.Front()->IsType( supportedTypes ) )
+    if( selection.Size() != 1 || !selection.Front()->IsType( { LIB_SHAPE_T, SCH_SHAPE_T,
+                                                               LIB_TEXTBOX_T, SCH_TEXTBOX_T,
+                                                               SCH_SHEET_T,
+                                                               SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
+                                                               SCH_BITMAP_T } ) )
+    {
         return 0;
+    }
 
     // Wait till drawing tool is done
     if( selection.Front()->IsNew() )

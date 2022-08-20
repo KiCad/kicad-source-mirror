@@ -89,14 +89,14 @@ EDA_ITEM* EDA_ITEM::Clone() const
 
 // see base_struct.h
 // many classes inherit this method, be careful:
-//TODO (snh): Fix this to use std::set instead of C-style vector
-INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData,
+                                const std::initializer_list<KICAD_T>& aScanTypes )
 {
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    if( IsType( scanTypes ) )
+    if( IsType( aScanTypes ) )
     {
         if( INSPECT_RESULT::QUIT == inspector( this, testData ) )
             return INSPECT_RESULT::QUIT;

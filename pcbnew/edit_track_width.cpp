@@ -64,14 +64,11 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
             new_drill = GetDesignSettings().GetCurrentViaDrill();
         }
 
-        // Old versions set a drill value <= 0, when the default netclass it used
-        // but it could be better to set the drill value to the actual value
-        // to avoid issues for existing vias, if the default drill value is modified
-        // in the netclass, and not in current vias.
+        // Old versions set a drill value <= 0, when the default netclass it used but it could
+        // be better to set the drill value to the actual value to avoid issues for existing vias,
+        // if the default drill value is modified in the netclass, and not in current vias.
         if( via->GetDrill() <= 0 )      // means default netclass drill value used
-        {
             initial_drill  = -1;        // Force drill vias re-initialization
-        }
     }
 
     if( initial_width != new_width || initial_drill != new_drill )

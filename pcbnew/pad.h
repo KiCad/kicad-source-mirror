@@ -82,20 +82,20 @@ public:
         return aItem && PCB_PAD_T == aItem->Type();
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_CONNECTED_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( m_drill.x > 0 && m_drill.y > 0 )
+            if( HasHole() )
             {
-                if( *p == PCB_LOCATE_HOLE_T )
+                if( scanType == PCB_LOCATE_HOLE_T )
                     return true;
-                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB::NPTH )
+                else if( scanType == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB::NPTH )
                     return true;
-                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB::NPTH )
+                else if( scanType == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB::NPTH )
                     return true;
             }
         }

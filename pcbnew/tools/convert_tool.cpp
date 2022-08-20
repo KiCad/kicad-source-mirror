@@ -150,27 +150,22 @@ bool CONVERT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::convert );
     m_menu->SetTitle( _( "Create from Selection" ) );
 
-    static KICAD_T convertibleTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
-    static KICAD_T zones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
-
-    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT,
-                                                        SHAPE_T::RECT,
-                                                        SHAPE_T::CIRCLE,
-                                                        SHAPE_T::ARC } )
+    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT, SHAPE_T::RECT,
+                                                        SHAPE_T::CIRCLE, SHAPE_T::ARC } )
                                 && P_S_C::SameLayer();
 
     auto graphicToTrack = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT, SHAPE_T::ARC } );
 
-    auto trackLines   = S_C::MoreThan( 1 ) && S_C::OnlyTypes( convertibleTracks )
-                                && P_S_C::SameLayer();
+    auto trackLines = S_C::MoreThan( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T } )
+                            && P_S_C::SameLayer();
 
-    auto anyLines     = graphicLines || trackLines;
-    auto anyPolys     = S_C::OnlyTypes( zones )
+    auto anyLines = graphicLines || trackLines;
+    auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } )
                             || P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::POLY, SHAPE_T::RECT } );
 
     auto lineToArc = S_C::Count( 1 )
                          && ( P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT } )
-                                || S_C::OnlyType( PCB_TRACE_T ) );
+                                || S_C::OnlyTypes( { PCB_TRACE_T } ) );
 
     auto showConvert       = anyPolys || anyLines || lineToArc;
     auto canCreatePolyType = anyLines || anyPolys;

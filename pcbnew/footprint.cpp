@@ -1241,50 +1241,51 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 
 
 // see footprint.h
-INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
+                                 const std::initializer_list<KICAD_T>& aScanTypes )
 {
-    KICAD_T        stype;
-    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
-    const KICAD_T* p    = scanTypes;
-    bool           done = false;
-
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    while( !done )
-    {
-        stype = *p;
+    bool drawingsScanned = false;
 
-        switch( stype )
+    for( KICAD_T scanType : aScanTypes )
+    {
+        switch( scanType )
         {
         case PCB_FOOTPRINT_T:
-            result = inspector( this, testData );  // inspect me
-            ++p;
+            if( inspector( this, testData ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
+
             break;
 
         case PCB_PAD_T:
-            result = IterateForward<PAD*>( m_pads, inspector, testData, p );
-            ++p;
+            if( IterateForward<PAD*>( m_pads, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
             break;
 
         case PCB_FP_ZONE_T:
-            result = IterateForward<FP_ZONE*>( m_fp_zones, inspector, testData, p );
-            ++p;
+            if( IterateForward<FP_ZONE*>( m_fp_zones, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
             break;
 
         case PCB_FP_TEXT_T:
-            result = inspector( m_reference, testData );
+            if( inspector( m_reference, testData ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
 
-            if( result == INSPECT_RESULT::QUIT )
-                break;
+            if( inspector( m_value, testData ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
 
-            result = inspector( m_value, testData );
-
-            if( result == INSPECT_RESULT::QUIT )
-                break;
-
-            // Intentionally fall through since m_Drawings can hold PCB_FP_SHAPE_T also
+            // Intentionally fall through since m_Drawings can hold PCB_FP_TEXT_T also
             KI_FALLTHROUGH;
 
         case PCB_FP_DIM_ALIGNED_T:
@@ -1294,47 +1295,34 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICA
         case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXTBOX_T:
-            result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
-
-            // skip over any types handled in the above call.
-            for( ; ; )
+            if( !drawingsScanned )
             {
-                switch( stype = *++p )
+                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, aScanTypes )
+                        == INSPECT_RESULT::QUIT )
                 {
-                case PCB_FP_TEXT_T:
-                case PCB_FP_TEXTBOX_T:
-                case PCB_FP_SHAPE_T:
-                case PCB_FP_DIM_ALIGNED_T:
-                case PCB_FP_DIM_LEADER_T:
-                case PCB_FP_DIM_CENTER_T:
-                case PCB_FP_DIM_RADIAL_T:
-                case PCB_FP_DIM_ORTHOGONAL_T:
-                    continue;
-
-                default:
-                    ;
+                    return INSPECT_RESULT::QUIT;
                 }
 
-                break;
+                drawingsScanned = true;
             }
 
             break;
 
         case PCB_GROUP_T:
-            result = IterateForward<PCB_GROUP*>( m_fp_groups, inspector, testData, p );
-            ++p;
+            if( IterateForward<PCB_GROUP*>( m_fp_groups, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
             break;
 
         default:
-            done = true;
             break;
         }
-
-        if( result == INSPECT_RESULT::QUIT )
-            break;
     }
 
-    return result;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 

@@ -54,7 +54,8 @@ public:
 
     SCH_FIELD( const SCH_FIELD& aText );
 
-    ~SCH_FIELD();
+    ~SCH_FIELD()
+    { }
 
     SCH_FIELD& operator=( const SCH_FIELD& aField );
 
@@ -68,20 +69,20 @@ public:
         return wxT( "SCH_FIELD" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( *p == SCH_FIELD_LOCATE_REFERENCE_T && m_id == REFERENCE_FIELD )
+            if( scanType == SCH_FIELD_LOCATE_REFERENCE_T && m_id == REFERENCE_FIELD )
                 return true;
-            else if ( *p == SCH_FIELD_LOCATE_VALUE_T && m_id == VALUE_FIELD )
+            else if ( scanType == SCH_FIELD_LOCATE_VALUE_T && m_id == VALUE_FIELD )
                 return true;
-            else if ( *p == SCH_FIELD_LOCATE_FOOTPRINT_T && m_id == FOOTPRINT_FIELD )
+            else if ( scanType == SCH_FIELD_LOCATE_FOOTPRINT_T && m_id == FOOTPRINT_FIELD )
                 return true;
-            else if ( *p == SCH_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET_FIELD )
+            else if ( scanType == SCH_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET_FIELD )
                 return true;
         }
 

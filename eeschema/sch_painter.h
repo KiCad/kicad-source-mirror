@@ -122,9 +122,7 @@ public:
     double m_LabelSizeRatio;         // Proportion of font size to label box
     double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
                                      // wires, buses, etc.
-
     int    m_PinSymbolSize;
-    int    m_JunctionSize;
 };
 
 
@@ -140,15 +138,9 @@ public:
     virtual bool Draw( const VIEW_ITEM*, int ) override;
 
     /// @copydoc PAINTER::GetSettings()
-    virtual SCH_RENDER_SETTINGS* GetSettings() override
-    {
-        return &m_schSettings;
-    }
+    virtual SCH_RENDER_SETTINGS* GetSettings() override { return &m_schSettings; }
 
-    void SetSchematic( SCHEMATIC* aSchematic )
-    {
-        m_schematic = aSchematic;
-    }
+    void SetSchematic( SCHEMATIC* aSchematic ) { m_schematic = aSchematic; }
 
 private:
     void draw( LIB_PIN* aPin, int aLayer );
@@ -195,21 +187,19 @@ private:
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
 
-    void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
+    void triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes );
     void bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes );
-    void boxText( const wxString& aText, const VECTOR2D& aPosition,
-                  const TEXT_ATTRIBUTES& aAttrs );
+    void boxText( const wxString& aText, const VECTOR2D& aPosition, const TEXT_ATTRIBUTES& aAttrs );
 
 public:
-    static KICAD_T g_ScaledSelectionTypes[];
+    static std::initializer_list<KICAD_T> g_ScaledSelectionTypes;
 
 private:
     SCH_RENDER_SETTINGS m_schSettings;
-
-    SCHEMATIC* m_schematic;
+    SCHEMATIC*          m_schematic;
 };
 
 }; // namespace KIGFX

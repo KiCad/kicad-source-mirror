@@ -106,11 +106,6 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 }
 
 
-SCH_BASE_FRAME::~SCH_BASE_FRAME()
-{
-}
-
-
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
 {
     return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen();
@@ -187,10 +182,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
                  MessageTextFromValue( GetUserUnits(), hypot( d.x, d.y ), false ) );
     SetStatusText( line, 3 );
 
-    // refresh grid display
     DisplayGridMsg();
-
-    // refresh units display
     DisplayUnitsMsg();
 }
 
@@ -250,17 +242,6 @@ void SCH_BASE_FRAME::RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPoint
 
     if( aWarpPointer )
         GetCanvas()->GetViewControls()->CenterOnCursor();
-
-    GetCanvas()->Refresh();
-}
-
-
-void SCH_BASE_FRAME::CenterScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer )
-{
-    GetCanvas()->GetView()->SetCenter( aCenterPoint );
-
-    if( aWarpPointer )
-        GetCanvas()->GetViewControls()->WarpMouseCursor( aCenterPoint, true );
 
     GetCanvas()->Refresh();
 }
@@ -342,15 +323,7 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
             GetCanvas()->GetView()->Update( aItem );
 
         // Some children are drawn from their parents.  Mark them for re-paint.
-        static KICAD_T parentTypes[] = { SCH_SYMBOL_T,
-                                         SCH_SHEET_T,
-                                         SCH_LABEL_T,
-                                         SCH_GLOBAL_LABEL_T,
-                                         SCH_HIER_LABEL_T,
-                                         SCH_DIRECTIVE_LABEL_T,
-                                         EOT };
-
-        if( parent && parent->IsType( parentTypes ) )
+        if( parent && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T } ) )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 

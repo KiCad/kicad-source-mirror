@@ -211,7 +211,7 @@ bool BOARD_EDITOR_CONTROL::Init()
 
         menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
 
-        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_T ), 200 );
+        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyTypes( { PCB_ZONE_T } ), 200 );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
@@ -680,16 +680,16 @@ int BOARD_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
-    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    if( m_frame->ToolStackIsEmpty()
+        && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
         BOARD_COMMIT commit( this );
 
         for( EDA_ITEM* item : selection )
         {
-            if( item->Type() == PCB_TRACE_T )
+            if( item->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
@@ -715,7 +715,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
 
     if( routerTool && routerTool->IsToolActive()
-            && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+        && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
         int widthIndex = designSettings.GetDiffPairIndex() + 1;
 
@@ -760,16 +760,16 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
-    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    if( m_frame->ToolStackIsEmpty()
+        && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
         BOARD_COMMIT commit( this );
 
         for( EDA_ITEM* item : selection )
         {
-            if( item->Type() == PCB_TRACE_T )
+            if( item->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
@@ -840,10 +840,10 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
-    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    if( m_frame->ToolStackIsEmpty()
+        && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
         BOARD_COMMIT commit( this );
 
@@ -889,10 +889,10 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
-    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    if( m_frame->ToolStackIsEmpty()
+        && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
         BOARD_COMMIT commit( this );
 

@@ -24,11 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_screen.cpp
- * @brief Implementation of SCH_SCREEN and SCH_SCREENS classes.
- */
-
 #include <wx/filefn.h>
 
 #include <eda_item.h>
@@ -92,7 +87,7 @@ SCH_SCREEN::~SCH_SCREEN()
 SCHEMATIC* SCH_SCREEN::Schematic() const
 {
     wxCHECK_MSG( GetParent() && GetParent()->Type() == SCHEMATIC_T, nullptr,
-            "SCH_SCREEN must have a SCHEMATIC parent!" );
+                 wxT( "SCH_SCREEN must have a SCHEMATIC parent!" ) );
 
     return static_cast<SCHEMATIC*>( GetParent() );
 }
@@ -123,8 +118,7 @@ void SCH_SCREEN::IncRefCount()
 
 void SCH_SCREEN::DecRefCount()
 {
-    wxCHECK_RET( m_refCount != 0,
-                 wxT( "Screen reference count already zero.  Bad programmer!" ) );
+    wxCHECK_RET( m_refCount != 0, wxT( "Screen reference count already zero.  Bad programmer!" ) );
     m_refCount--;
 }
 
@@ -1284,17 +1278,9 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
 void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const
 {
-    static KICAD_T hierarchicalTypes[] = { SCH_SYMBOL_T,
-                                           SCH_SHEET_T,
-                                           SCH_LABEL_T,
-                                           SCH_HIER_LABEL_T,
-                                           SCH_DIRECTIVE_LABEL_T,
-                                           SCH_GLOBAL_LABEL_T,
-                                           EOT };
-
     for( SCH_ITEM* item : Items() )
     {
-        if( item->IsType( hierarchicalTypes ) )
+        if( item->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T } ) )
             aItems->push_back( item );
     }
 }
@@ -1317,7 +1303,9 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems ) const
                     return a->GetPosition().y < b->GetPosition().y;
                 }
                 else
+                {
                     return a->GetPosition().x < b->GetPosition().x;
+                }
             } );
 }
 

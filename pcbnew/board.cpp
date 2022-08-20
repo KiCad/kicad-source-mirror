@@ -310,62 +310,16 @@ void BOARD::SetPosition( const VECTOR2I& aPos )
 
 void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 {
-    // @todo : anything like this elsewhere?  maybe put into GENERAL_COLLECTOR class.
-    static const KICAD_T top_level_board_stuff[] = {
-        PCB_MARKER_T,
-        PCB_BITMAP_T,
-        PCB_TEXT_T,
-        PCB_TEXTBOX_T,
-        PCB_SHAPE_T,
-        PCB_DIM_ALIGNED_T,
-        PCB_DIM_ORTHOGONAL_T,
-        PCB_DIM_CENTER_T,
-        PCB_DIM_RADIAL_T,
-        PCB_DIM_LEADER_T,
-        PCB_TARGET_T,
-        PCB_VIA_T,
-        PCB_TRACE_T,
-        PCB_ARC_T,
-        PCB_FOOTPRINT_T,
-        PCB_ZONE_T,
-        EOT
-    };
+    INSPECTOR_FUNC inspector =
+            [&] ( EDA_ITEM* item, void* testData )
+            {
+                // aMoveVector was snapshotted, don't need "data".
+                static_cast<BOARD_ITEM*>( item )->Move( aMoveVector );
+                return INSPECT_RESULT::CONTINUE;
+            };
 
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
-    {
-        BOARD_ITEM* brd_item = (BOARD_ITEM*) item;
-
-        // aMoveVector was snapshotted, don't need "data".
-        brd_item->Move( aMoveVector );
-
-        return INSPECT_RESULT::CONTINUE;
-    };
-
-    Visit( inspector, nullptr, top_level_board_stuff );
+    Visit( inspector, nullptr, GENERAL_COLLECTOR::BoardLevelItems );
 }
-
-
-TRACKS BOARD::TracksInNet( int aNetCode )
-{
-    TRACKS ret;
-
-    INSPECTOR_FUNC inspector = [aNetCode, &ret]( EDA_ITEM* item, void* testData )
-                               {
-                                   PCB_TRACK* t = static_cast<PCB_TRACK*>( item );
-
-                                   if( t->GetNetCode() == aNetCode )
-                                       ret.push_back( t );
-
-                                   return INSPECT_RESULT::CONTINUE;
-                               };
-
-    // visit this BOARD's PCB_TRACKs and PCB_VIAs with above TRACK INSPECTOR which
-    // appends all in aNetCode to ret.
-    Visit( inspector, nullptr, GENERAL_COLLECTOR::Tracks );
-
-    return ret;
-}
-
 
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
@@ -1272,27 +1226,25 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 }
 
 
-INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
+                             const std::initializer_list<KICAD_T>& scanTypes )
 {
-    KICAD_T        stype;
-    INSPECT_RESULT  result = INSPECT_RESULT::CONTINUE;
-    const KICAD_T* p      = scanTypes;
-    bool           done   = false;
-
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    while( !done )
-    {
-        stype = *p;
+    bool footprintsScanned = false;
+    bool drawingsScanned = false;
+    bool tracksScanned = false;
 
-        switch( stype )
+    for( KICAD_T scanType : scanTypes )
+    {
+        switch( scanType )
         {
         case PCB_T:
-            result = inspector( this, testData );  // inspect me
-            // skip over any types handled in the above call.
-            ++p;
+            if( inspector( this, testData ) == INSPECT_RESULT::QUIT )
+                return INSPECT_RESULT::QUIT;
+
             break;
 
         /*
@@ -1312,33 +1264,15 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
         case PCB_FP_DIM_RADIAL_T:
         case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_ZONE_T:
-
-            // this calls FOOTPRINT::Visit() on each footprint.
-            result = IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, p );
-
-            // skip over any types handled in the above call.
-            for( ; ; )
+            if( !footprintsScanned )
             {
-                switch( stype = *++p )
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
+                        == INSPECT_RESULT::QUIT )
                 {
-                case PCB_FOOTPRINT_T:
-                case PCB_PAD_T:
-                case PCB_FP_TEXT_T:
-                case PCB_FP_TEXTBOX_T:
-                case PCB_FP_SHAPE_T:
-                case PCB_FP_DIM_ALIGNED_T:
-                case PCB_FP_DIM_LEADER_T:
-                case PCB_FP_DIM_CENTER_T:
-                case PCB_FP_DIM_RADIAL_T:
-                case PCB_FP_DIM_ORTHOGONAL_T:
-                case PCB_FP_ZONE_T:
-                    continue;
-
-                default:
-                    ;
+                    return INSPECT_RESULT::QUIT;
                 }
 
-                break;
+                footprintsScanned = true;
             }
 
             break;
@@ -1353,84 +1287,68 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
-            result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
-
-            // skip over any types handled in the above call.
-            for( ; ; )
+            if( !drawingsScanned )
             {
-                switch( stype = *++p )
+                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, scanTypes )
+                        == INSPECT_RESULT::QUIT )
                 {
-                case PCB_SHAPE_T:
-                case PCB_BITMAP_T:
-                case PCB_TEXT_T:
-                case PCB_TEXTBOX_T:
-                case PCB_DIM_ALIGNED_T:
-                case PCB_DIM_CENTER_T:
-                case PCB_DIM_RADIAL_T:
-                case PCB_DIM_ORTHOGONAL_T:
-                case PCB_DIM_LEADER_T:
-                case PCB_TARGET_T:
-                    continue;
-
-                default:
-                    ;
+                    return INSPECT_RESULT::QUIT;
                 }
 
-                break;
+                drawingsScanned = true;
             }
 
             break;
 
         case PCB_VIA_T:
-            result = IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, p );
-            ++p;
-            break;
-
         case PCB_TRACE_T:
         case PCB_ARC_T:
-            result = IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, p );
-            ++p;
+            if( !tracksScanned )
+            {
+                if( IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, scanTypes )
+                        == INSPECT_RESULT::QUIT )
+                {
+                    return INSPECT_RESULT::QUIT;
+                }
+
+                tracksScanned = true;
+            }
+
             break;
 
         case PCB_MARKER_T:
             for( PCB_MARKER* marker : m_markers )
             {
-                result = marker->Visit( inspector, testData, p );
-
-                if( result == INSPECT_RESULT::QUIT )
-                    break;
+                if( marker->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+                    return INSPECT_RESULT::QUIT;
             }
 
-            ++p;
             break;
 
         case PCB_ZONE_T:
             for( ZONE* zone : m_zones)
             {
-                result = zone->Visit( inspector, testData, p );
-
-                if( result == INSPECT_RESULT::QUIT )
-                    break;
+                if( zone->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+                    return INSPECT_RESULT::QUIT;
             }
 
-            ++p;
             break;
 
         case PCB_GROUP_T:
-            result = IterateForward<PCB_GROUP*>( m_groups, inspector, testData, p );
-            ++p;
+            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
             break;
 
-        default:        // catch EOT or ANY OTHER type here and return.
-            done = true;
+        default:
             break;
         }
-
-        if( result == INSPECT_RESULT::QUIT )
-            break;
     }
 
-    return result;
+    return INSPECT_RESULT::CONTINUE;
 }
 
 
@@ -1979,13 +1897,6 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
         items.push_back( zone );
 
     return items;
-}
-
-
-void BOARD::ClearAllNetCodes()
-{
-    for( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
-        item->SetNetCode( 0 );
 }
 
 

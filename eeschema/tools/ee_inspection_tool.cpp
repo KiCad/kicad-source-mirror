@@ -283,7 +283,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
-        EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SymbolsOnly );
+        EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
         if( selection.Empty() )
             return 0;

@@ -58,9 +58,7 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     auto checkKeepout =
             []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
             {
-                constexpr KICAD_T TRACK_TYPES[] = { PCB_ARC_T, PCB_TRACE_T, EOT };
-
-                if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( TRACK_TYPES ) )
+                if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( { PCB_ARC_T, PCB_TRACE_T } ) )
                     return true;
 
                 if( aKeepout->GetDoNotAllowVias() && aOther->Type() == PCB_VIA_T )

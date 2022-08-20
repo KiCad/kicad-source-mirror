@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,16 +50,16 @@ public:
         return aItem && PCB_FP_SHAPE_T == aItem->Type();
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( *p == PCB_LOCATE_GRAPHIC_T )
+            if( scanType == PCB_LOCATE_GRAPHIC_T )
                 return true;
-            else if( *p == PCB_LOCATE_BOARD_EDGE_T )
+            else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
                 return m_layer == Edge_Cuts;
         }
 

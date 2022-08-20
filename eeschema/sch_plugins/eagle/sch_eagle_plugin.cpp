@@ -2355,12 +2355,11 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 
 void SCH_EAGLE_PLUGIN::moveLabels( SCH_LINE* aWire, const VECTOR2I& aNewEndPoint )
 {
-    static KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
-    SCH_SCREEN*    screen = m_currentSheet->GetScreen();
+    SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
     for( SCH_ITEM* item : screen->Items().Overlapping( aWire->GetBoundingBox() ) )
     {
-        if( !item->IsType( labelTypes ) )
+        if( !item->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
             continue;
 
         if( TestSegmentHit( item->GetPosition(), aWire->GetStartPoint(), aWire->GetEndPoint(), 0 ) )

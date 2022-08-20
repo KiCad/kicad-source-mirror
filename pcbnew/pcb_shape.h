@@ -57,23 +57,23 @@ public:
         return wxT( "PCB_SHAPE" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override
+    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_ITEM::IsType( aScanTypes ) )
             return true;
 
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        for( KICAD_T scanType : aScanTypes )
         {
-            if( *p == PCB_LOCATE_GRAPHIC_T )
+            if( scanType == PCB_LOCATE_GRAPHIC_T )
                 return true;
-            else if( *p == PCB_LOCATE_BOARD_EDGE_T )
+            else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
                 return m_layer == Edge_Cuts;
         }
 
         return false;
     }
 
-    void    SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
+    void SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
     VECTOR2I GetPosition() const override { return getPosition(); }
 
     VECTOR2I GetCenter() const override { return getCenter(); }
