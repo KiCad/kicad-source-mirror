@@ -84,6 +84,7 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
 
 
 const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
+    PCB_MARKER_T,
     PCB_FP_TEXT_T,
     PCB_FP_TEXTBOX_T,
     PCB_FP_SHAPE_T,

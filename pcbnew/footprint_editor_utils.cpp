@@ -34,6 +34,7 @@
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/footprint_editor_control.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
 #include <pcb_layer_box_selector.h>
@@ -252,6 +253,10 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
     case PCB_GROUP_T:
         m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        break;
+
+    case PCB_MARKER_T:
+        m_toolManager->GetTool<FOOTPRINT_EDITOR_CONTROL>()->CrossProbe( static_cast<PCB_MARKER*>( aItem ) );
         break;
 
     default:

@@ -73,6 +73,7 @@ public:
     int EditTextAndGraphics( const TOOL_EVENT& aEvent );
 
     int CheckFootprint( const TOOL_EVENT& aEvent );
+    void CrossProbe( const PCB_MARKER* aMarker );
     void DestroyCheckerDialog();
 
     int CleanupGraphics( const TOOL_EVENT& aEvent );

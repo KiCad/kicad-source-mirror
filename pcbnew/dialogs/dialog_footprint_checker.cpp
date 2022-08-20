@@ -39,6 +39,7 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
         m_frame( aParent ),
         m_checksRun( false ),
         m_markersProvider( nullptr ),
+        m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markersDataView );
@@ -179,6 +180,25 @@ void DIALOG_FOOTPRINT_CHECKER::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider 
 }
 
 
+void DIALOG_FOOTPRINT_CHECKER::SelectMarker( const PCB_MARKER* aMarker )
+{
+    m_markersTreeModel->SelectMarker( aMarker );
+
+    // wxWidgets on some platforms fails to correctly ensure that a selected item is
+    // visible, so we have to do it in a separate idle event.
+    m_centerMarkerOnIdle = aMarker;
+    Bind( wxEVT_IDLE, &DIALOG_FOOTPRINT_CHECKER::centerMarkerIdleHandler, this );
+}
+
+
+void DIALOG_FOOTPRINT_CHECKER::centerMarkerIdleHandler( wxIdleEvent& aEvent )
+{
+    m_markersTreeModel->CenterMarker( m_centerMarkerOnIdle );
+    m_centerMarkerOnIdle = nullptr;
+    Unbind( wxEVT_IDLE, &DIALOG_FOOTPRINT_CHECKER::centerMarkerIdleHandler, this );
+}
+
+
 void DIALOG_FOOTPRINT_CHECKER::OnRunChecksClick( wxCommandEvent& aEvent )
 {
     m_checksRun = false;
@@ -193,6 +213,15 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
     const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
     BOARD_ITEM*   item = board->GetItem( itemID );
+
+    if( m_centerMarkerOnIdle )
+    {
+        // we already came from a cross-probe of the marker in the document; don't go
+        // around in circles
+
+        aEvent.Skip();
+        return;
+    }
 
     if( node && item )
     {

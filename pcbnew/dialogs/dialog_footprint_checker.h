@@ -29,6 +29,7 @@
 #include <rc_item.h>
 
 class FOOTPRINT_EDIT_FRAME;
+class PCB_MARKER;
 
 
 class DIALOG_FOOTPRINT_CHECKER: public DIALOG_FOOTPRINT_CHECKER_BASE
@@ -39,11 +40,15 @@ public:
 
     void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
 
+    void SelectMarker( const PCB_MARKER* aMarker );
+
 private:
     void syncCheckboxes();
     void updateDisplayedCounts();
 
     void runChecks();
+
+    void centerMarkerIdleHandler( wxIdleEvent& aEvent );
 
     void deleteAllMarkers();
     void refreshEditor();
@@ -68,6 +73,8 @@ private:
 
     RC_TREE_MODEL*        m_markersTreeModel;
     RC_ITEMS_PROVIDER*    m_markersProvider;
+
+    const PCB_MARKER*     m_centerMarkerOnIdle;
 
     int                   m_severities;
 };

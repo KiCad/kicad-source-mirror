@@ -653,7 +653,20 @@ int FOOTPRINT_EDITOR_CONTROL::CheckFootprint( const TOOL_EVENT& aEvent )
 
         m_checkerDialog->Show( true );
     }
+
     return 0;
+}
+
+
+void FOOTPRINT_EDITOR_CONTROL::CrossProbe( const PCB_MARKER* aMarker )
+{
+    if( !m_checkerDialog )
+        m_checkerDialog = new DIALOG_FOOTPRINT_CHECKER( m_frame );
+
+    if( !m_checkerDialog->IsShown() )
+        m_checkerDialog->Show( true );
+
+    m_checkerDialog->SelectMarker( aMarker );
 }
 
 
