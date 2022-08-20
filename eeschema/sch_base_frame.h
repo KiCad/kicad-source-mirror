@@ -57,10 +57,7 @@ class LIB_ID;
 class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
-
-#if defined( KICAD_USE_3DCONNEXION )
-#include "navlib/nl_schematic_plugin.h"
-#endif
+class NL_SCHEMATIC_PLUGIN;
 
 /**
  * Load symbol from symbol library table.
