@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-02 08:53-0700\n"
-"PO-Revision-Date: 2022-08-05 14:22+0000\n"
+"PO-Revision-Date: 2022-08-21 02:52+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -23394,9 +23394,8 @@ msgid "Cleanup Graphics"
 msgstr "Оптимизация графики"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:81
-#, fuzzy
 msgid "Build Changes"
-msgstr "Отменить изменения"
+msgstr "Применить изменения"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:152
@@ -23498,9 +23497,8 @@ msgstr "Параметры нумерации конт.пл."
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:99
 #: pcbnew/tools/convert_tool.cpp:68
-#, fuzzy
 msgid "Ignore source object line widths"
-msgstr "Увеличить ширину линии"
+msgstr "Игнорировать ширину линий исходного объекта"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:111
