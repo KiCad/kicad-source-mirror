@@ -27,6 +27,9 @@
  * @brief General wrappers for geometry/shape headers
  */
 
+/* Warning 509: Overloaded method ignored */
+#pragma SWIG nowarn=509
+
 %include <std_shared_ptr.i>
 %include <std_vector.i>
 
