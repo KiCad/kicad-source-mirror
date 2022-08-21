@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-08 09:02+0200\n"
+"POT-Creation-Date: 2022-08-21 10:05+0200\n"
+"PO-Revision-Date: 2022-08-21 12:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1569,6 +1569,7 @@ msgstr "Confirmation"
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:240
 #: common/widgets/widget_hotkey_list.cpp:474 eeschema/sch_symbol.cpp:1510
+#: eeschema/sch_symbol_modifie.cpp:1525
 #: eeschema/symbol_editor/symbol_editor.cpp:592
 #: eeschema/symbol_editor/symbol_editor.cpp:1293
 #: eeschema/symbol_viewer_frame.cpp:442 include/lib_table_grid.h:185
@@ -1952,7 +1953,9 @@ msgstr "Variables d'Environnement"
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/fields_grid_table.cpp:336 eeschema/lib_pin.cpp:1086
 #: eeschema/sch_pin.cpp:216 eeschema/sch_symbol.cpp:1474
-#: eeschema/sch_symbol.cpp:1519 eeschema/symbol_editor/symbol_editor.cpp:1265
+#: eeschema/sch_symbol.cpp:1519 eeschema/sch_symbol_modifie.cpp:1489
+#: eeschema/sch_symbol_modifie.cpp:1534
+#: eeschema/symbol_editor/symbol_editor.cpp:1265
 #: eeschema/symbol_viewer_frame.cpp:440
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -3621,7 +3624,7 @@ msgstr "La net class par défaut est obligatoire."
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Nets correspondant à '%s' :</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3704,14 +3707,12 @@ msgstr ""
 "Kicad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Assignation de la schématique"
+msgstr "Assignation de Netcalsses:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Forme hachurée"
+msgstr "Motif"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -4264,7 +4265,8 @@ msgid "Screen"
 msgstr "Ecran"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
-#: eeschema/sch_symbol.cpp:1507 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1507 eeschema/sch_symbol_modifie.cpp:1522
+#: pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:905
@@ -7055,7 +7057,8 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' n’est pas une empreinte valide."
 
 #: cvpcb/cvpcb_mainframe.cpp:757 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1511 eeschema/symbol_editor/symbol_editor.cpp:1294
+#: eeschema/sch_symbol.cpp:1511 eeschema/sch_symbol_modifie.cpp:1526
+#: eeschema/symbol_editor/symbol_editor.cpp:1294
 #: eeschema/symbol_viewer_frame.cpp:443 pcbnew/footprint.cpp:2835
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -7067,6 +7070,8 @@ msgstr "Nombre de Pin"
 
 #: cvpcb/cvpcb_mainframe.cpp:786 eeschema/sch_symbol.cpp:1494
 #: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:1528
+#: eeschema/sch_symbol_modifie.cpp:1509 eeschema/sch_symbol_modifie.cpp:1513
+#: eeschema/sch_symbol_modifie.cpp:1543
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1213
 msgid "Library"
@@ -7189,7 +7194,8 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
 #: eeschema/fields_grid_table.cpp:337 eeschema/sch_symbol.cpp:1473
-#: eeschema/sch_symbol.cpp:1518
+#: eeschema/sch_symbol.cpp:1518 eeschema/sch_symbol_modifie.cpp:1488
+#: eeschema/sch_symbol_modifie.cpp:1533
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7671,7 +7677,7 @@ msgstr "Annotation de la Schématique"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Nets actuellement correspondants :</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -10556,6 +10562,7 @@ msgstr "Mesure Prise"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1023
 #: eeschema/sch_symbol.cpp:1472 eeschema/sch_symbol.cpp:1516
+#: eeschema/sch_symbol_modifie.cpp:1487 eeschema/sch_symbol_modifie.cpp:1531
 #: pcbnew/footprint.cpp:2815 pcbnew/fp_text.cpp:267
 msgid "Reference"
 msgstr "Référence"
@@ -11023,14 +11030,12 @@ msgid "Model"
 msgstr "Modèle"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-msgid "Device:"
-msgstr ""
+msgid "Spice device:"
+msgstr "Dispositif Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
-#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-msgid "Type:"
-msgstr "Type:"
+msgid "Spice type:"
+msgstr "Type Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -12833,9 +12838,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Plus d’un nom donné à ce bus ou équipotentielle"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Attribution des empreintes"
+msgstr "Affectations de netclasses en conflit"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13203,6 +13207,7 @@ msgstr ""
 "affiché chaque fois que l’éditeur de schémas est lancé."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1490
+#: eeschema/sch_symbol_modifie.cpp:1505
 msgid "Alias of"
 msgstr "Alias de"
 
@@ -13470,9 +13475,9 @@ msgstr ""
 "La numérotation doit être corrigée avant de simuler."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "Échec de la lecture de la librairie de modèles '%s'."
+msgstr "Échec de la lecture du modèle de simulation %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:377
 #, c-format
@@ -13675,9 +13680,8 @@ msgstr "Type Entrée de Bus"
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_label.cpp:839
 #: eeschema/sch_line.cpp:881 pcbnew/pad.cpp:920 pcbnew/pcb_track.cpp:892
 #: pcbnew/zone.cpp:533
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "NetClasses Assignées"
+msgstr "NetClasses Résolues"
 
 #: eeschema/sch_connection.cpp:409
 msgid "Connection Name"
@@ -13817,9 +13821,9 @@ msgid "Label '%s'"
 msgstr "Label '%s'"
 
 #: eeschema/sch_label.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Label de Directive"
+msgstr "Label de Directive [%s %s]"
 
 #: eeschema/sch_label.cpp:1414
 #, c-format
@@ -13949,6 +13953,8 @@ msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
 msgstr ""
+"Enregistrement inconnu ou inattendu trouvé dans la section \"Additional\" , "
+"Record id: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13960,6 +13966,8 @@ msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 msgstr ""
+"Enregistrement inconnu ou inattendu trouvé dans la section \"FileHeader\" , "
+"Record id: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
@@ -14024,24 +14032,26 @@ msgid "Line's owner (%d) not found."
 msgstr "Propriétaire de ligne (%d) introuvable."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1477
-#, fuzzy
 msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Arcs dans le schéma non pris en charge actuellement."
+msgstr ""
+"Le harnais de signaux, appartenant à l'élément, n'est pas pris en charge "
+"actuellement."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1520
-#, fuzzy
 msgid "Harness connector, belonging to the part is not currently supported."
-msgstr "Arcs dans le schéma non pris en charge actuellement."
+msgstr ""
+"Le connecteur du harnais, appartenant à l'élément, n'est pas pris en charge "
+"actuellement."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Harness entry's parent (%d) not found."
-msgstr "Propriétaire de l'entrée de feuille (%d) non trouvé."
+msgstr "Parent de l'entrée du harnais (%d) non trouvé."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1584
-#, fuzzy, c-format
+#, c-format
 msgid "Harness type's parent (%d) not found."
-msgstr "Propriétaire de ligne (%d) introuvable."
+msgstr "Parent du type de harnais (%d) non trouvé."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1598
 #, c-format
@@ -14050,6 +14060,9 @@ msgid ""
 "review imported schematic, as KiCad does not natively support these Altium "
 "elements."
 msgstr ""
+"Le connecteur de harnais d'Altium (%s) a été importé en tant que feuille "
+"hiérarchique. Veuillez revoir le schéma importé, car KiCad ne supporte pas "
+"nativement ces éléments Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1631
 #, c-format
@@ -14078,6 +14091,9 @@ msgid ""
 "Altium's Harness port (%s) was imported as Text box. Please review imported "
 "schematic, as KiCad does not natively support these Altium elements."
 msgstr ""
+"Le harnais d'Altium (%s) a été importé en tant que boite de texte. Veuillez "
+"revoir le schéma importé, car KiCad ne supporte pas nativement ces éléments "
+"Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
 #, c-format
@@ -14175,6 +14191,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"Les polices CADSTAR sont différentes de celles de KiCad. Cela entraînera "
+"probablement des problèmes d'alignement. Veuillez examiner attentivement les "
+"éléments de texte importés et les corriger manuellement si nécessaire."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:264
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14363,9 +14382,9 @@ msgstr "Nom de symbole invalide"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:197
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Symbole %s non trouvée en librairie '%s'."
+msgstr "Le symbole %s contient un caractère invalide '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:204
 msgid "Invalid library identifier"
@@ -14600,36 +14619,36 @@ msgstr "(Élément Supprimé)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Pins de Hiérarchie %s"
 
-#: eeschema/sch_symbol.cpp:1468
+#: eeschema/sch_symbol.cpp:1468 eeschema/sch_symbol_modifie.cpp:1483
 msgid "Power symbol"
 msgstr "Symbole d'alimentation"
 
-#: eeschema/sch_symbol.cpp:1478
+#: eeschema/sch_symbol.cpp:1478 eeschema/sch_symbol_modifie.cpp:1493
 msgid "flags"
 msgstr "flags"
 
-#: eeschema/sch_symbol.cpp:1483
+#: eeschema/sch_symbol.cpp:1483 eeschema/sch_symbol_modifie.cpp:1498
 msgid "Missing parent"
 msgstr "Parent manquant"
 
-#: eeschema/sch_symbol.cpp:1498
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol_modifie.cpp:1513
 msgid "Undefined!!!"
 msgstr "Non Défini!!!"
 
-#: eeschema/sch_symbol.cpp:1505
+#: eeschema/sch_symbol.cpp:1505 eeschema/sch_symbol_modifie.cpp:1520
 msgid "<Unknown>"
 msgstr "<Inconnu>"
 
-#: eeschema/sch_symbol.cpp:1524
+#: eeschema/sch_symbol.cpp:1524 eeschema/sch_symbol_modifie.cpp:1539
 msgid "No library defined!"
 msgstr "Pas de librairie définie!"
 
-#: eeschema/sch_symbol.cpp:1526
+#: eeschema/sch_symbol.cpp:1526 eeschema/sch_symbol_modifie.cpp:1541
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbole non trouvé en '%s'!"
 
-#: eeschema/sch_symbol.cpp:1717
+#: eeschema/sch_symbol.cpp:1717 eeschema/sch_symbol_modifie.cpp:1732
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbole %s [%s]"
@@ -15151,12 +15170,12 @@ msgid "Discard New Sheet"
 msgstr "Abandonner Nouvelle Feuille"
 
 #: eeschema/sim/sim_model.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing spice code <%s>\n"
 "%s"
 msgstr ""
-"Erreur lors du chargement du fichier \"%s\".\n"
+"Erreur d'analyse du code Spice <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:888
@@ -15165,21 +15184,21 @@ msgid "Failed to set parameter '%s' to '%s'"
 msgstr "Impossible de définir le paramètre '%s' à '%s'"
 
 #: eeschema/sim/sim_model.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing param <%s>\n"
 "%s"
 msgstr ""
-"Erreur en sauvegarde du fichier PCB '%s'.\n"
+"Erreur d'analyse du paramètre <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing pin field <%s>\n"
 "%s"
 msgstr ""
-"Erreur en sauvegarde du fichier PCB '%s'.\n"
+"Erreur d'analyse du champ de pin <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1357
@@ -19078,13 +19097,14 @@ msgid "Restoring '%s'"
 msgstr "Restauration '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
-msgid "Would you like to automatically check for updates on startup?"
+msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
+"Voulez-vous vérifier automatiquement les mises à jour des plugins au "
+"démarrage ?"
 
 #: kicad/kicad_manager_frame.cpp:832
-#, fuzzy
 msgid "Check for updates"
-msgstr "Test empreintes"
+msgstr "Vérifier les mises à jour"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -19393,9 +19413,8 @@ msgid "Pending"
 msgstr "En attente"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Mise à jour"
+msgstr "Mise à jour pour tous"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -19419,7 +19438,7 @@ msgstr "Téléchargement"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Vérifier les mises à jour des paquets au démarrage"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19512,11 +19531,11 @@ msgstr "Fichier local"
 
 #: kicad/pcm/pcm.cpp:1110
 msgid "Package updates are available"
-msgstr ""
+msgstr "Des mises à jour des paquets sont disponibles"
 
 #: kicad/pcm/pcm.cpp:1111
 msgid "No package updates available"
-msgstr ""
+msgstr "Aucune mise à jour de paquet disponible"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
@@ -21175,6 +21194,11 @@ msgstr "Vref réglé à 0 !"
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:350
 msgid "Incorrect value for R1 R2"
 msgstr "Valeur incorrecte pour R1 R2"
+
+#: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
+#: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
+msgid "Type:"
+msgstr "Type:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:29
 msgid ""
@@ -25645,13 +25669,12 @@ msgstr ""
 "dans les Propriétés du Pad, onglet Isolations et Options locales."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
-#, fuzzy
 msgid "Net Ties"
-msgstr "Fil"
+msgstr "\"Net Ties\""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Groupes de pads autorisés à court-circuiter différents nets :"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -31353,9 +31376,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Longueur de Paire non couplée trop longue"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "Identificateur d'empreinte '%s' non valide."
+msgstr "Empreinte non valide"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -31596,7 +31618,7 @@ msgstr "Vérification des définitions des zone d'occupation des empreintes..."
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:150
 msgid "Checking footprints for overlapping courtyards..."
 msgstr ""
-"Vérification des epreintes pour le recouvrement des zones d'occupation.."
+"Vérification des empreintes pour le recouvrement des zones d'occupation.."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:438
 #, c-format
@@ -32244,11 +32266,12 @@ msgstr " (Le trou du pad métallisé traversant ne laisse pas de cuivre)"
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
+"(le groupe de pads de \"net-tie\" contient un numéro de pad inconnu %s)"
 
 #: pcbnew/footprint.cpp:2537
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(le pad %s apparaît dans plus d'un groupe de pad de \"net-tie\")"
 
 #: pcbnew/footprint.cpp:2822 pcbnew/pad.cpp:1740 pcbnew/zone.cpp:1300
 msgid "Clearance Override"
@@ -34716,6 +34739,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"Les polices CADSTAR sont différentes de celles de KiCad. Cela entraînera "
+"probablement des problèmes d'alignement susceptibles de provoquer des "
+"erreurs de DRC. Veuillez examiner attentivement les éléments de texte "
+"importés et les corriger manuellement si nécessaire."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -34777,6 +34804,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Le pad de taille zéro non valide est ignoré dans le\n"
+"fichier : %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:996
 #, c-format
@@ -35273,9 +35302,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Élément dupliqué pour l'ID %d et séquence %d en ligne %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2262
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "Impossible de créer le fichier archive '%s'.\n"
+msgstr "Impossible de localiser la pile de pad %s en fichier %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2333
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2362
@@ -36152,9 +36181,9 @@ msgid "Routing Track: %s"
 msgstr "Routage Piste: %s"
 
 #: pcbnew/router/router_tool.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Isolation résolue: %s."
+msgstr "Netclasse Résolue: %s"
 
 #: pcbnew/router/router_tool.cpp:2226
 msgid "Routing Track"
@@ -36210,14 +36239,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Impossible d'exporter, fixer le problème et recommencer"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Le symbole de valeur '%s' a une référence vide."
+msgstr "L'empreinte de valeur '%s' a une référence schématique vide."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Mise à jour empreintes en accord avec la référence schématique:"
+msgstr "De multiple empreintes ont la référence identique  '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -36252,9 +36281,9 @@ msgid "Unsupported via shape: %s"
 msgstr "Forme via non supportée: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "Le Fichier Session utilise une couche invalide id '%s'."
+msgstr "Le fichier Session utilise une couche invalide id '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
@@ -38772,21 +38801,24 @@ msgstr "Enlever le dernier segment de la piste en cours."
 
 #: pcbnew/tools/pcb_actions.cpp:1424
 msgid "Route From Other End"
-msgstr ""
+msgstr "Route depuis l'autre extrémité"
 
 #: pcbnew/tools/pcb_actions.cpp:1425
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Enregistrer les segments actuels et commencer le segment suivant à partir de "
+"l'extrémité du chevelu la plus proche."
 
 #: pcbnew/tools/pcb_actions.cpp:1430
-#, fuzzy
 msgid "Attempt Finish"
-msgstr "Tentative de réparation"
+msgstr "Tentative pour Finir"
 
 #: pcbnew/tools/pcb_actions.cpp:1431
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
+"Tente de compléter la route actuelle jusqu'à la fin du chevelu le plus "
+"proche."
 
 #: pcbnew/tools/pcb_actions.cpp:1436
 msgid ""
@@ -39850,6 +39882,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -39860,9 +39897,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -39876,9 +39914,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -39888,9 +39927,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -39905,6 +39944,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -39917,6 +39960,11 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -39928,10 +39976,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -39986,6 +40030,15 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "Edit Symbol Name"
+#~ msgstr "Éditer Nom du Symbole"
+
+#~ msgid "Multiple symbols have identical reference IDs of '%s'."
+#~ msgstr "De multiple composants ont une référence identique  '%s'."
+
+#~ msgid "Session file uses invalid layer id \"%s\""
+#~ msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
+
 #~ msgid "Filter Nets"
 #~ msgstr "Filtrage Nets"
 
@@ -40007,7 +40060,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Assign To Selected Nets"
 #~ msgstr "Attribuer aux Nets Sélectionnés"
 
-#, c-format
 #~ msgid "Unknown Record id: %d."
 #~ msgstr "Code de block inconnu %d."
 
@@ -40026,32 +40078,14 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Select netclass:"
 #~ msgstr "Sélection netclasse:"
 
-#~ msgid "Edit Symbol Name"
-#~ msgstr "Éditer Nom du Symbole"
-
 #~ msgid "Auto-finish Track"
 #~ msgstr "Finir Automatiquement Piste"
 
 #~ msgid "Automatically finishes laying the current track."
 #~ msgstr "Finit automatiquement la piste en cours de routage."
 
-#, c-format
 #~ msgid "Net Class: %s"
 #~ msgstr "Netclasse: %s"
-
-#, c-format
-#~ msgid "Multiple symbols have identical reference IDs of '%s'."
-#~ msgstr "De multiple composants ont une référence identique  '%s'."
-
-#, c-format
-#~ msgid "Session file uses invalid layer id \"%s\""
-#~ msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Environment Variable Help"
 #~ msgstr "Aide sur Variables d'Environnement"
