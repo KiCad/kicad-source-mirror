@@ -193,8 +193,6 @@ public:
      */
     int GetLocalClearance( wxString* aSource ) const override;
 
-    MINOPTMAX<int> GetWidthConstraint( wxString* aSource ) const;
-
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAPS GetMenuImage() const override;
