@@ -47,21 +47,6 @@ struct iequal_to
 /// taken from: http://www.boost.org/doc/libs/1_53_0/libs/unordered/examples/fnv1.hpp
 struct fnv_1a
 {
-    /* not used, std::string is too slow:
-    std::size_t operator()( std::string const& text ) const
-    {
-        std::size_t hash = 2166136261u;
-
-        for( std::string::const_iterator it = text.begin(), end = text.end();
-                it != end;  ++it )
-        {
-            hash ^= *it;
-            hash *= 16777619;
-        }
-        return hash;
-    }
-    */
-
     std::size_t operator()( const char* it ) const
     {
         std::size_t hash = 2166136261u;
@@ -69,24 +54,6 @@ struct fnv_1a
         for( ; *it; ++it )
         {
             hash ^= (unsigned char) *it;
-            hash *= 16777619;
-        }
-        return hash;
-    }
-};
-
-
-/// Hash function for wxString, counterpart of std::string hash
-struct WXSTRING_HASH
-{
-    std::size_t operator()( const wxString& aString ) const
-    {
-        std::size_t hash = 2166136261u;
-
-        for( const wxUniChar c : aString )
-        {
-            unsigned ch = static_cast<unsigned>( c );
-            hash ^= ch;
             hash *= 16777619;
         }
         return hash;
