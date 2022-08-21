@@ -78,6 +78,8 @@ private:
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
     int                   m_hoveredCol;         // Column being hovered over, for tooltips
     wxString              m_lastPattern;
+
+    int                   m_lastNetclassGridWidth;
 };
 
 #endif //PANEL_SETUP_NETCLASSES_H

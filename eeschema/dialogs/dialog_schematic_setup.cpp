@@ -24,6 +24,7 @@
 #include <dialog_sch_import_settings.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_setup_severities.h>
+#include <dialogs/panel_setup_buses.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
 #include <erc_item.h>
@@ -63,6 +64,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, project.NetSettings(),
                                                schematic.GetNetClassAssignmentCandidates(), true );
 
+    m_buses = new PANEL_SETUP_BUSES( m_treebook, aFrame );
+
     /*
      * WARNING: If you change page names you MUST update calls to ShowSchematicSetupDialog().
      */
@@ -77,6 +80,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Project" ) );
     m_treebook->AddSubPage( m_netclasses, _( "Net Classes" ) );
+    m_treebook->AddSubPage( m_buses, _( "Bus Alias Definitions" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )

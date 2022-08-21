@@ -83,7 +83,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
         m_isEEschema( aIsEEschema ),
         m_netSettings( aNetSettings ),
         m_netNames( aNetNames ),
-        m_hoveredCol( -1 )
+        m_hoveredCol( -1 ),
+        m_lastNetclassGridWidth( -1 )
 {
     // Clear and re-load each time.  Language (or darkmode) might have changed.
     g_lineStyleIcons.clear();
@@ -593,16 +594,21 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
 
 void PANEL_SETUP_NETCLASSES::AdjustNetclassGridColumns( int aWidth )
 {
-    // Account for scroll bars
-    aWidth -= ( m_netclassGrid->GetSize().x - m_netclassGrid->GetClientSize().x );
-
-    for( int i = 1; i < m_netclassGrid->GetNumberCols(); i++ )
+    if( aWidth != m_lastNetclassGridWidth )
     {
-        m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
-        aWidth -= m_originalColWidths[ i ];
-    }
+        m_lastNetclassGridWidth = aWidth;
 
-    m_netclassGrid->SetColSize( 0, std::max( aWidth - 2, m_originalColWidths[ 0 ] ) );
+        // Account for scroll bars
+        aWidth -= ( m_netclassGrid->GetSize().x - m_netclassGrid->GetClientSize().x );
+
+        for( int i = 1; i < m_netclassGrid->GetNumberCols(); i++ )
+        {
+            m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
+            aWidth -= m_originalColWidths[ i ];
+        }
+
+        m_netclassGrid->SetColSize( 0, std::max( aWidth - 2, m_originalColWidths[ 0 ] ) );
+    }
 }
 
 
@@ -640,14 +646,15 @@ void PANEL_SETUP_NETCLASSES::OnRemoveAssignmentClick( wxCommandEvent& event )
     int curRow = m_assignmentGrid->GetGridCursorRow();
 
     if( curRow < 0 )
-    {
         return;
-    }
 
     m_assignmentGrid->DeleteRows( curRow, 1 );
 
-    m_assignmentGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_assignmentGrid->GetGridCursorCol() );
-    m_assignmentGrid->SetGridCursor( std::max( 0, curRow-1 ), m_assignmentGrid->GetGridCursorCol() );
+    if( m_assignmentGrid->GetNumberRows() > 0 )
+    {
+        m_assignmentGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
+        m_assignmentGrid->SetGridCursor( std::max( 0, curRow-1 ), 0 );
+    }
 }
 
 

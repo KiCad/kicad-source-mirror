@@ -1310,22 +1310,20 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    std::initializer_list<KICAD_T> filter = {};
+    EE_SELECTION sel;
 
     if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-        filter = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T };
+        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T } );
     else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-        filter = { SCH_FIELD_LOCATE_VALUE_T, SCH_SYMBOL_T };
+        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_VALUE_T, SCH_SYMBOL_T } );
     else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-        filter = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T };
+        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T } );
 
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( filter );
-
-    if( selection.Size() != 1 )
+    if( sel.Size() != 1 )
         return 0;
 
-    bool      clearSelection = selection.IsHover();
-    EDA_ITEM* item = selection.Front();
+    bool      clearSelection = sel.IsHover();
+    EDA_ITEM* item = sel.Front();
 
     if( item->Type() == SCH_SYMBOL_T )
     {

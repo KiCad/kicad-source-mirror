@@ -638,11 +638,6 @@ TOOL_ACTION EE_ACTIONS::remapSymbols( "eeschema.EditorControl.remapSymbols",
         _( "Remap library symbol references in legacy schematics to the symbol library table" ),
         BITMAPS::rescue );
 
-TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
-        AS_GLOBAL, 0, "",
-        _( "Bus Definitions..." ), _( "Manage bus definitions" ),
-        BITMAPS::bus_definition_tool );
-
 TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( "eeschema.EditorControl.drawSheetOnClipboard",
         AS_GLOBAL, 0, "",
         _( "Export Drawing to Clipboard" ), _( "Export drawing of current sheet to clipboard" ),

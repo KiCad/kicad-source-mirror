@@ -69,8 +69,6 @@ int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 /// DIALOG_BOM::ShowModal() returns.
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
-/// Create and show DIALOG_BUS_MANAGER
-void InvokeDialogBusManager( SCH_EDIT_FRAME* aCaller );
 
 /**
  * Create and shows NETLIST_DIALOG and returns whatever

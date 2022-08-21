@@ -49,7 +49,9 @@ void PANEL_SETUP_FORMATTING::onCheckBoxIref( wxCommandEvent& event )
 
     m_radioFormatStandard->Enable( enabled );
     m_radioFormatAbbreviated->Enable( enabled );
+    m_prefixLabel->Enable( enabled );
     m_prefixCtrl->Enable( enabled );
+    m_suffixLabel->Enable( enabled );
     m_suffixCtrl->Enable( enabled );
     m_listOwnPage->Enable( enabled );
 }
@@ -86,7 +88,9 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
     m_radioFormatStandard->Enable( settings.m_IntersheetRefsShow );
     m_radioFormatAbbreviated->Enable( settings.m_IntersheetRefsShow );
+    m_prefixLabel->Enable( settings.m_IntersheetRefsShow );
     m_prefixCtrl->Enable( settings.m_IntersheetRefsShow );
+    m_suffixLabel->Enable( settings.m_IntersheetRefsShow );
     m_suffixCtrl->Enable( settings.m_IntersheetRefsShow );
     m_listOwnPage->Enable( settings.m_IntersheetRefsShow );
 

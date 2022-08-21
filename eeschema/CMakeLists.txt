@@ -61,7 +61,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_assign_netclass_base.cpp
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
-    dialogs/dialog_bus_manager.cpp
     dialogs/dialog_change_symbols.cpp
     dialogs/dialog_change_symbols_base.cpp
     dialogs/dialog_choose_symbol.cpp
@@ -139,6 +138,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_annotation_options_base.cpp
     dialogs/panel_eeschema_editing_options.cpp
     dialogs/panel_eeschema_editing_options_base.cpp
+    dialogs/panel_setup_buses.cpp
+    dialogs/panel_setup_buses_base.cpp
     dialogs/panel_setup_formatting.cpp
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_pinmap.cpp
