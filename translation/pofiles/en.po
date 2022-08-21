@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-31 13:00-0700\n"
+"POT-Creation-Date: 2022-08-20 20:10-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -26416,6 +26416,32 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+#~ "in alignment issues. Please review the imported text elements carefully "
+#~ "and correct manually if required."
+#~ msgstr ""
+#~ "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+#~ "in alignment issues. Please review the imported text elements carefully "
+#~ "and correct manually if required."
+
+#~ msgid ""
+#~ "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+#~ "in alignment issues that may cause DRC errors. Please review the imported "
+#~ "text elements carefully and correct manually if required."
+#~ msgstr ""
+#~ "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+#~ "in alignment issues that may cause DRC errors. Please review the imported "
+#~ "text elements carefully and correct manually if required."
+
+#, c-format
+#~ msgid "Width Constraints: min %s, max %s"
+#~ msgstr "Width Constraints: min %s, max %s"
+
+#, c-format
+#~ msgid "Width Constraints: min %s"
+#~ msgstr "Width Constraints: min %s"
 
 #~ msgid "The radius cannot be zero."
 #~ msgstr "The radius cannot be zero."
