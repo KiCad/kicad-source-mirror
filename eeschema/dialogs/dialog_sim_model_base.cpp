@@ -79,18 +79,18 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer16->SetFlexibleDirection( wxBOTH );
 	fgSizer16->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText127 = new wxStaticText( m_parametersPanel, wxID_ANY, _("Device:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText127->Wrap( -1 );
-	fgSizer16->Add( m_staticText127, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextDevType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Spice device:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDevType->Wrap( -1 );
+	fgSizer16->Add( m_staticTextDevType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxArrayString m_deviceTypeChoiceChoices;
 	m_deviceTypeChoice = new wxChoice( m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_deviceTypeChoiceChoices, 0 );
 	m_deviceTypeChoice->SetSelection( 0 );
 	fgSizer16->Add( m_deviceTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_staticText8 = new wxStaticText( m_parametersPanel, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	fgSizer16->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextSpiceType = new wxStaticText( m_parametersPanel, wxID_ANY, _("Spice type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSpiceType->Wrap( -1 );
+	fgSizer16->Add( m_staticTextSpiceType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxArrayString m_typeChoiceChoices;
 	m_typeChoice = new wxChoice( m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_typeChoiceChoices, 0 );

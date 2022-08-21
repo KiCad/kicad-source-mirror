@@ -63,9 +63,9 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_overrideCheckbox;
 		wxNotebook* m_notebook4;
 		wxPanel* m_parametersPanel;
-		wxStaticText* m_staticText127;
+		wxStaticText* m_staticTextDevType;
 		wxChoice* m_deviceTypeChoice;
-		wxStaticText* m_staticText8;
+		wxStaticText* m_staticTextSpiceType;
 		wxChoice* m_typeChoice;
 		wxPropertyGridManager* m_paramGridMgr;
 		wxPropertyGridPage* m_paramGrid;
