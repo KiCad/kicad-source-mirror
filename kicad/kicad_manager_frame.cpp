@@ -828,7 +828,7 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
 
     if( settings->m_updateCheck == KICAD_SETTINGS::UPDATE_CHECK::UNINITIALIZED )
     {
-        if( wxMessageBox( _( "Would you like to automatically check for updates on startup?" ),
+        if( wxMessageBox( _( "Would you like to automatically check for plugin updates on startup?" ),
                           _( "Check for updates" ), wxICON_QUESTION | wxYES_NO, this )
             == wxYES )
         {
