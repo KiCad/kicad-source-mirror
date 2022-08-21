@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,9 +307,15 @@ int ERC_TESTER::TestConflictingBusAliases()
 
         for( const std::shared_ptr<BUS_ALIAS>& alias : screen_aliases )
         {
+            std::vector<wxString> aliasMembers = alias->Members();
+            std::sort( aliasMembers.begin(), aliasMembers.end() );
+
             for( const std::shared_ptr<BUS_ALIAS>& test : aliases )
             {
-                if( alias->GetName() == test->GetName() && alias->Members() != test->Members() )
+                std::vector<wxString> testMembers = test->Members();
+                std::sort( testMembers.begin(), testMembers.end() );
+
+                if( alias->GetName() == test->GetName() && aliasMembers != testMembers )
                 {
                     msg.Printf( _( "Bus alias %s has conflicting definitions on %s and %s" ),
                                 alias->GetName(),

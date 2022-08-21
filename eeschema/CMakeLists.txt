@@ -185,7 +185,6 @@ set( EESCHEMA_SRCS
     annotate.cpp
     autoplace_fields.cpp
     bom_plugins.cpp
-    bus_alias.cpp
     bus-wire-junction.cpp
     cmp_library_lexer.cpp
     component_references_lister.cpp

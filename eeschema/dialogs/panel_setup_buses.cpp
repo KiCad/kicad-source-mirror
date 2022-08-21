@@ -55,17 +55,17 @@ bool PANEL_SETUP_BUSES::TransferDataToWindow()
     auto contains =
             [&]( const std::shared_ptr<BUS_ALIAS>& alias ) -> bool
             {
-                wxString      aName = alias->GetName();
-                wxArrayString aMembers = alias->Members();
+                wxString              aName = alias->GetName();
+                std::vector<wxString> aMembers = alias->Members();
 
-                aMembers.Sort();
+                std::sort( aMembers.begin(), aMembers.end() );
 
                 for( const std::shared_ptr<BUS_ALIAS>& candidate : m_aliases )
                 {
-                    wxString      bName = candidate->GetName();
-                    wxArrayString bMembers = candidate->Members();
+                    wxString              bName = candidate->GetName();
+                    std::vector<wxString> bMembers = candidate->Members();
 
-                    bMembers.Sort();
+                    std::sort( bMembers.begin(), bMembers.end() );
 
                     if( aName == bName && aMembers == bMembers )
                         return true;
@@ -253,7 +253,7 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
 
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
 
-        alias->ClearMembers();
+        alias->Members().clear();
 
         for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
         {
@@ -263,33 +263,41 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
                 wxStringTokenizer tok( name, " " );
 
                 while( tok.HasMoreTokens() )
-                    alias->AddMember( tok.GetNextToken() );
+                    alias->Members().push_back( tok.GetNextToken() );
             }
             else
             {
-                alias->AddMember( m_membersGrid->GetCellValue( ii, 0 ) );
+                alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
             }
         }
 
-        Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembers, this );
+        Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
     }
 }
 
 
-void PANEL_SETUP_BUSES::reloadMembers( wxIdleEvent& aEvent )
+void PANEL_SETUP_BUSES::doReloadMembersGrid()
 {
     if( m_lastAlias >= 0 && m_lastAlias < m_aliasesGrid->GetNumberRows() )
     {
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
 
         m_membersGrid->ClearRows();
-        m_membersGrid->AppendRows( alias->GetMemberCount() );
+        m_membersGrid->AppendRows( alias->Members().size() );
 
-        for( int ii = 0; ii < alias->GetMemberCount(); ++ii )
-            m_membersGrid->SetCellValue( ii, 0, alias->Members()[ii] );
+        int ii = 0;
+
+        for( const wxString& member : alias->Members() )
+            m_membersGrid->SetCellValue( ii++, 0, member );
     }
+}
 
-    Unbind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembers, this );
+
+void PANEL_SETUP_BUSES::reloadMembersGridOnIdle( wxIdleEvent& aEvent )
+{
+    doReloadMembersGrid();
+
+    Unbind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
 }
 
 
@@ -388,11 +396,7 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
                 m_source->SetLabel( wxEmptyString );
             }
 
-            m_membersGrid->ClearRows();
-            m_membersGrid->AppendRows( alias->GetMemberCount() );
-
-            for( int ii = 0; ii < alias->GetMemberCount(); ++ii )
-                m_membersGrid->SetCellValue( ii, 0, alias->Members()[ii] );
+            doReloadMembersGrid();
 
             m_lastAlias = row;
             m_lastAliasName = aliasName;

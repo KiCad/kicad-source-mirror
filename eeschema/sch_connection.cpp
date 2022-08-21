@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jon Evans <jon@craftyjon.com>
  *
@@ -32,6 +32,7 @@
 #include <string_utils.h>
 
 #include <sch_connection.h>
+#include <boost/algorithm/string/join.hpp>
 
 /**
  *
@@ -408,14 +409,10 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
 
     aList.emplace_back( _( "Connection Name" ), UnescapeString( Name() ) );
 
-    if( auto alias = m_graph->GetBusAlias( m_name ) )
+    if( std::shared_ptr<BUS_ALIAS> alias = m_graph->GetBusAlias( m_name ) )
     {
         msg.Printf( _( "Bus Alias %s Members" ), m_name );
-
-        for( const wxString& member : alias->Members() )
-            members << member << " ";
-
-        aList.emplace_back( msg, members );
+        aList.emplace_back( msg, boost::algorithm::join( alias->Members(), " " ) );
     }
     else if( NET_SETTINGS::ParseBusGroup( m_name, &group_name, &group_members ) )
     {
@@ -424,11 +421,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
             if( std::shared_ptr<BUS_ALIAS> group_alias = m_graph->GetBusAlias( group_member ) )
             {
                 msg.Printf( _( "Bus Alias %s Members" ), group_alias->GetName() );
-
-                for( const wxString& member : group_alias->Members() )
-                    members << member << " ";
-
-                aList.emplace_back( msg, members );
+                aList.emplace_back( msg, boost::algorithm::join( group_alias->Members(), " " ) );
             }
         }
     }

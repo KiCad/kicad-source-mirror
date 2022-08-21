@@ -50,7 +50,9 @@ protected:
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void reloadMembers( wxIdleEvent& aEvent );
+    void reloadMembersGridOnIdle( wxIdleEvent& aEvent );
+
+    void doReloadMembersGrid();
 
 private:
     SCH_EDIT_FRAME* m_frame;

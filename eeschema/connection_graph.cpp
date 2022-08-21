@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jon Evans <jon@craftyjon.com>
  *
@@ -1725,11 +1725,11 @@ int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
 
 void CONNECTION_GRAPH::assignNetCodesToBus( SCH_CONNECTION* aConnection )
 {
-    auto connections_to_check( aConnection->Members() );
+    std::vector< std::shared_ptr<SCH_CONNECTION>>& connections_to_check( aConnection->Members() );
 
     for( unsigned i = 0; i < connections_to_check.size(); i++ )
     {
-        auto member = connections_to_check[i];
+        const std::shared_ptr<SCH_CONNECTION>& member = connections_to_check[i];
 
         if( member->IsBus() )
         {

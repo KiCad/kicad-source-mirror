@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
 #define _BUS_ALIAS_H
 
 #include <memory>
+#include <vector>
 #include <wx/string.h>
-#include <wx/arrstr.h>
 
 
 class SCH_SCREEN;
@@ -33,67 +33,33 @@ class SCH_SCREEN;
 class BUS_ALIAS
 {
 public:
-    BUS_ALIAS( SCH_SCREEN* aParent = nullptr );
+    BUS_ALIAS( SCH_SCREEN* aParent = nullptr )
+    { }
 
-    ~BUS_ALIAS();
+    ~BUS_ALIAS()
+    { }
 
-    std::shared_ptr< BUS_ALIAS > Clone() const
+    std::shared_ptr<BUS_ALIAS> Clone() const
     {
-        return std::make_shared< BUS_ALIAS >( *this );
+        return std::make_shared<BUS_ALIAS>( *this );
     }
 
-    wxString GetName()
-    {
-        return m_name;
-    }
+    wxString GetName() { return m_name; }
+    void SetName( const wxString& aName ) { m_name = aName; }
 
-    void SetName( const wxString& aName )
-    {
-        m_name = aName;
-    }
+    const std::vector<wxString>& Members() const { return m_members; }
+    std::vector<wxString>& Members() { return m_members; }
 
-    void ClearMembers()
-    {
-        m_members.clear();
-    }
-
-    void AddMember( const wxString& aName )
-    {
-        m_members.push_back( aName );
-    }
-
-    int GetMemberCount()
-    {
-        return m_members.size();
-    }
-
-    wxArrayString& Members()
-    {
-        return m_members;
-    }
-
-    bool Contains( const wxString& aName );
-
-    SCH_SCREEN* GetParent()
-    {
-        return m_parent;
-    }
-
-    void SetParent( SCH_SCREEN* aParent )
-    {
-        m_parent = aParent;
-    }
+    SCH_SCREEN* GetParent() { return m_parent; }
+    void SetParent( SCH_SCREEN* aParent ) { m_parent = aParent; }
 
 protected:
-
-    wxString m_name;
-
-    wxArrayString m_members;
+    wxString              m_name;
+    std::vector<wxString> m_members;
 
     /**
-     * The bus alias editor dialog can edit aliases from all open sheets.
-     * This means we have to store a reference back to our parent so that
-     * the dialog can update the parent if aliases are changed or removed.
+     * Schematic Setup can edit aliases from all sheets, so we have to store a reference back
+     * to our parent so that the dialog can update the parent if aliases are changed or removed.
      */
     SCH_SCREEN* m_parent;
 };

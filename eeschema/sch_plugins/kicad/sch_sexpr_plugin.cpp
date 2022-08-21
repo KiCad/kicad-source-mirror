@@ -46,9 +46,7 @@
 #include <schematic.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_screen.h>
-#include <symbol_library.h>
 #include <lib_shape.h>
-#include <lib_field.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <lib_textbox.h>
@@ -63,6 +61,7 @@
 #include <string_utils.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
 #include <progress_reporter.h>
+#include <boost/algorithm/string/join.hpp>
 
 using namespace TSCHEMATIC_T;
 
@@ -1175,19 +1174,9 @@ void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNes
 {
     wxCHECK_RET( aAlias != nullptr, "BUS_ALIAS* is NULL" );
 
-    wxString members;
-
-    for( auto member : aAlias->Members() )
-    {
-        if( members.IsEmpty() )
-            members = m_out->Quotew( member );
-        else
-            members += " " + m_out->Quotew( member );
-    }
-
     m_out->Print( aNestLevel, "(bus_alias %s (members %s))\n",
                   m_out->Quotew( aAlias->GetName() ).c_str(),
-                  TO_UTF8( members ) );
+                  TO_UTF8( boost::algorithm::join( aAlias->Members(), " " ) ) );
 }
 
 

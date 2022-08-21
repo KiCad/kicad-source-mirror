@@ -1376,9 +1376,7 @@ std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader
         parseUnquotedString( buf, aReader, line, &line, true );
 
         if( buf.Len() > 0 )
-        {
-            busAlias->AddMember( buf );
-        }
+            busAlias->Members().push_back( buf );
     }
 
     return busAlias;

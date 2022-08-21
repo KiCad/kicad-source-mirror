@@ -27,6 +27,7 @@
 
 #include <bus_alias.h>
 #include <core/mirror.h>
+#include <core/kicad_algo.h>
 #include <eda_text.h>
 #include <lib_shape.h>
 #include <lib_text.h>
@@ -915,8 +916,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             NET_SCH::BUS_TERM busTerm = busPair.second;
             BUS               bus     = Schematic.Buses.at( busTerm.BusID );
 
-            if( !m_busesMap.at( bus.ID )->Contains( netName ) )
-                m_busesMap.at( bus.ID )->AddMember( netName );
+            if( !alg::contains( m_busesMap.at( bus.ID )->Members(), netName ) )
+                m_busesMap.at( bus.ID )->Members().push_back( netName );
 
             SCH_BUS_WIRE_ENTRY* busEntry =
                     new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );
