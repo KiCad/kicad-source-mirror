@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-15 08:15+0000\n"
+"PO-Revision-Date: 2022-08-23 17:52+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3647,14 +3647,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "色を透過に設定すると、KiCadのデフォルトの色を使用します。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "回路図の割り当て"
+msgstr "ネットクラスの割り当て:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "ハッチング パターン"
+msgstr "パターン"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -12651,9 +12649,8 @@ msgid "More than one name given to this bus or net"
 msgstr "このバスまたはネットに与えられた複数の名前"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "フットプリント割り当て"
+msgstr "競合しているネットクラスの割り当て"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13273,9 +13270,9 @@ msgstr ""
 "シミュレーションの前にアノテーションを行って修正してください。"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "モデルライブラリー '%s' を読み込めませんでした。"
+msgstr "シミュレーションモデル %s を読み込めませんでした。"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:377
 #, c-format
@@ -13476,9 +13473,8 @@ msgstr "バス エントリー タイプ"
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_label.cpp:839
 #: eeschema/sch_line.cpp:881 pcbnew/pad.cpp:920 pcbnew/pcb_track.cpp:892
 #: pcbnew/zone.cpp:533
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "割り当てられたネットクラス"
+msgstr "解決されたネットクラス"
 
 #: eeschema/sch_connection.cpp:409
 msgid "Connection Name"
@@ -13618,9 +13614,9 @@ msgid "Label '%s'"
 msgstr "ラベル '%s'"
 
 #: eeschema/sch_label.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "指示ラベル"
+msgstr "指示ラベル [%s %s]"
 
 #: eeschema/sch_label.cpp:1414
 #, c-format
@@ -14150,9 +14146,9 @@ msgstr "不正なシンボル名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:197
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "シンボル '%s' がライブラリー '%s' に見つかりません。"
+msgstr "シンボル %s に不正な文字 '%c' が含まれています"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:204
 msgid "Invalid library identifier"
@@ -18826,12 +18822,11 @@ msgstr "'%s' を復元しています"
 
 #: kicad/kicad_manager_frame.cpp:831
 msgid "Would you like to automatically check for updates on startup?"
-msgstr ""
+msgstr "起動時に自動的にアップデートを確認しますか？"
 
 #: kicad/kicad_manager_frame.cpp:832
-#, fuzzy
 msgid "Check for updates"
-msgstr "フットプリントをチェック"
+msgstr "アップデートを確認する"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -19139,9 +19134,8 @@ msgid "Pending"
 msgstr "保留中"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "更新"
+msgstr "すべて更新"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -19165,7 +19159,7 @@ msgstr "ダウンロード"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "起動時にパッケージのアップデートを確認する"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19259,11 +19253,11 @@ msgstr "ローカルファイル"
 
 #: kicad/pcm/pcm.cpp:1110
 msgid "Package updates are available"
-msgstr ""
+msgstr "パッケージのアップデートが可能"
 
 #: kicad/pcm/pcm.cpp:1111
 msgid "No package updates available"
-msgstr ""
+msgstr "パッケージのアップデートはありません"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
