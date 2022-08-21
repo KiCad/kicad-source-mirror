@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-02 08:53-0700\n"
+"POT-Creation-Date: 2022-08-20 20:17-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1198,9 +1198,6 @@ msgstr ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 
-msgid "Environment Variable Help"
-msgstr "Environment Variable Help"
-
 msgid "Environment Variables"
 msgstr "Environment Variables"
 
@@ -2218,6 +2215,10 @@ msgstr "Schematic wire line style"
 msgid "The default net class is required."
 msgstr "The default net class is required."
 
+#, c-format
+msgid "<b>Nets matching '%s':</b>"
+msgstr "<b>Nets matching '%s':</b>"
+
 msgid "Net Class"
 msgstr "Net Class"
 
@@ -2260,35 +2261,11 @@ msgstr "Default"
 msgid "Set color to transparent to use KiCad default color."
 msgstr "Set color to transparent to use KiCad default color."
 
-msgid "Filter Nets"
-msgstr "Filter Nets"
+msgid "Netclass assignments:"
+msgstr "Netclass assignments:"
 
-msgid "Net class filter:"
-msgstr "Net class filter:"
-
-msgid "Net name filter:"
-msgstr "Net name filter:"
-
-msgid "Show All Nets"
-msgstr "Show All Nets"
-
-msgid "Apply Filters"
-msgstr "Apply Filters"
-
-msgid "Assign Net Class"
-msgstr "Assign Net Class"
-
-msgid "New net class:"
-msgstr "New net class:"
-
-msgid "Assign To All Listed Nets"
-msgstr "Assign To All Listed Nets"
-
-msgid "Assign To Selected Nets"
-msgstr "Assign To Selected Nets"
-
-msgid "Net"
-msgstr "Net"
+msgid "Pattern"
+msgstr "Pattern"
 
 msgid "Ignore"
 msgstr "Ignore"
@@ -2453,6 +2430,33 @@ msgstr "Un-terminated delimited string"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "String delimiter must be a single character of ', \", or $"
 
+#, c-format
+msgid ""
+"Invalid floating point number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Invalid floating point number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+
+#, c-format
+msgid ""
+"Missing floating point number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Missing floating point number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+
+msgid "Invalid floating point number"
+msgstr "Invalid floating point number"
+
 msgid "&About KiCad"
 msgstr "&About KiCad"
 
@@ -2528,6 +2532,9 @@ msgstr "Excellon Options"
 
 msgid "Drawing Sheet Editor"
 msgstr "Drawing Sheet Editor"
+
+msgid "Plugin and Content Manager"
+msgstr "Plugin and Content Manager"
 
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
@@ -3435,6 +3442,9 @@ msgstr "Invalid Arc with radius %f and angle %f"
 
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
+
+msgid "This is the default net class."
+msgstr "This is the default net class."
 
 msgid "Could not open archive file."
 msgstr "Could not open archive file."
@@ -4899,6 +4909,9 @@ msgstr "Clear Annotation"
 
 msgid "Annotate Schematic"
 msgstr "Annotate Schematic"
+
+msgid "<b>Currently matching nets:</b>"
+msgstr "<b>Currently matching nets:</b>"
 
 msgid "Generate"
 msgstr "Generate"
@@ -8396,6 +8409,9 @@ msgstr "Conflict between bus alias definitions across schematic sheets"
 msgid "More than one name given to this bus or net"
 msgstr "More than one name given to this bus or net"
 
+msgid "Conflicting netclass assignments"
+msgstr "Conflicting netclass assignments"
+
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr "Net is graphically connected to a bus but not a bus member"
 
@@ -8842,6 +8858,10 @@ msgstr ""
 "Annotation must be corrected before simulating."
 
 #, c-format
+msgid "Failed reading %s simulation model."
+msgstr "Failed reading %s simulation model."
+
+#, c-format
 msgid "Could not find library file '%s'"
 msgstr "Could not find library file '%s'"
 
@@ -8990,8 +9010,8 @@ msgstr "Bus"
 msgid "Bus Entry Type"
 msgstr "Bus Entry Type"
 
-msgid "Assigned Netclass"
-msgstr "Assigned Netclass"
+msgid "Resolved Netclass"
+msgstr "Resolved Netclass"
 
 msgid "Connection Name"
 msgstr "Connection Name"
@@ -9093,6 +9113,10 @@ msgid "Label '%s'"
 msgstr "Label '%s'"
 
 #, c-format
+msgid "Directive Label [%s %s]"
+msgstr "Directive Label [%s %s]"
+
+#, c-format
 msgid "Global Label '%s'"
 msgstr "Global Label '%s'"
 
@@ -9186,12 +9210,24 @@ msgstr ""
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Storage file not fully parsed (%d bytes remaining)."
 
+#, c-format
+msgid ""
+"Unknown or unexpected record found inside \"Additional\" section, Record id: "
+"%d."
+msgstr ""
+"Unknown or unexpected record found inside \"Additional\" section, Record id: "
+"%d."
+
 msgid "Compile mask not currently supported."
 msgstr "Compile mask not currently supported."
 
 #, c-format
-msgid "Unknown Record id: %d."
-msgstr "Unknown Record id: %d."
+msgid ""
+"Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
+"%d."
+msgstr ""
+"Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
+"%d."
 
 #, c-format
 msgid "Pin's owner (%d) not found."
@@ -9241,6 +9277,30 @@ msgstr "Arc's owner (%d) not found."
 msgid "Line's owner (%d) not found."
 msgstr "Line's owner (%d) not found."
 
+msgid "Signal harness, belonging to the part is not currently supported."
+msgstr "Signal harness, belonging to the part is not currently supported."
+
+msgid "Harness connector, belonging to the part is not currently supported."
+msgstr "Harness connector, belonging to the part is not currently supported."
+
+#, c-format
+msgid "Harness entry's parent (%d) not found."
+msgstr "Harness entry's parent (%d) not found."
+
+#, c-format
+msgid "Harness type's parent (%d) not found."
+msgstr "Harness type's parent (%d) not found."
+
+#, c-format
+msgid ""
+"Altium's Harness Connector (%s) was imported as Hierarchical sheet. Please "
+"review imported schematic, as KiCad does not natively support these Altium "
+"elements."
+msgstr ""
+"Altium's Harness Connector (%s) was imported as Hierarchical sheet. Please "
+"review imported schematic, as KiCad does not natively support these Altium "
+"elements."
+
 #, c-format
 msgid "Rectangle's owner (%d) not found."
 msgstr "Rectangle's owner (%d) not found."
@@ -9255,6 +9315,14 @@ msgstr "Power Port has unknown style, use bar instead."
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power symbol creates a global label with name '%s'"
+
+#, c-format
+msgid ""
+"Altium's Harness port (%s) was imported as Text box. Please review imported "
+"schematic, as KiCad does not natively support these Altium elements."
+msgstr ""
+"Altium's Harness port (%s) was imported as Text box. Please review imported "
+"schematic, as KiCad does not natively support these Altium elements."
 
 #, c-format
 msgid "Port %s has no connections."
@@ -9327,6 +9395,15 @@ msgid ""
 msgstr ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
+
+msgid ""
+"CADSTAR fonts are different to the ones in KiCad. This will likely result in "
+"alignment issues. Please review the imported text elements carefully and "
+"correct manually if required."
+msgstr ""
+"CADSTAR fonts are different to the ones in KiCad. This will likely result in "
+"alignment issues. Please review the imported text elements carefully and "
+"correct manually if required."
 
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
@@ -9480,6 +9557,10 @@ msgstr "library %s does not contain a symbol named %s"
 msgid "Invalid symbol name"
 msgstr "Invalid symbol name"
 
+#, c-format
+msgid "Symbol %s contains invalid character '%c'"
+msgstr "Symbol %s contains invalid character '%c'"
+
 msgid "Invalid library identifier"
 msgstr "Invalid library identifier"
 
@@ -9508,15 +9589,6 @@ msgstr "Invalid symbol unit number %s"
 #, c-format
 msgid "Invalid symbol convert number %s"
 msgstr "Invalid symbol convert number %s"
-
-msgid "Floating point number with incorrect locale"
-msgstr "Floating point number with incorrect locale"
-
-msgid "Invalid floating point number"
-msgstr "Invalid floating point number"
-
-msgid "Missing floating point number"
-msgstr "Missing floating point number"
 
 msgid "Invalid pin names definition"
 msgstr "Invalid pin names definition"
@@ -10151,8 +10223,32 @@ msgid "Discard New Sheet"
 msgstr "Discard New Sheet"
 
 #, c-format
+msgid ""
+"Error parsing spice code <%s>\n"
+"%s"
+msgstr ""
+"Error parsing spice code <%s>\n"
+"%s"
+
+#, c-format
 msgid "Failed to set parameter '%s' to '%s'"
 msgstr "Failed to set parameter '%s' to '%s'"
+
+#, c-format
+msgid ""
+"Error parsing param <%s>\n"
+"%s"
+msgstr ""
+"Error parsing param <%s>\n"
+"%s"
+
+#, c-format
+msgid ""
+"Error parsing pin field <%s>\n"
+"%s"
+msgstr ""
+"Error parsing pin field <%s>\n"
+"%s"
 
 #, c-format
 msgid "%s describes %lu pins, expected %u"
@@ -11842,15 +11938,6 @@ msgstr "Net must be labeled to assign a netclass."
 msgid "Bus has no members to assign netclass to."
 msgstr "Bus has no members to assign netclass to."
 
-msgid "Netclasses"
-msgstr "Netclasses"
-
-msgid "Assign Netclass"
-msgstr "Assign Netclass"
-
-msgid "Select netclass:"
-msgstr "Select netclass:"
-
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -11911,9 +11998,6 @@ msgstr "Can't save file '%s'."
 
 msgid "SVG File Name"
 msgstr "SVG File Name"
-
-msgid "Edit Symbol Name"
-msgstr "Edit Symbol Name"
 
 msgid "Symbol is not derived from another symbol."
 msgstr "Symbol is not derived from another symbol."
@@ -12975,6 +13059,12 @@ msgstr "Restoring session"
 msgid "Restoring '%s'"
 msgstr "Restoring '%s'"
 
+msgid "Would you like to automatically check for updates on startup?"
+msgstr "Would you like to automatically check for updates on startup?"
+
+msgid "Check for updates"
+msgstr "Check for updates"
+
 msgid "Clear Recent Projects"
 msgstr "Clear Recent Projects"
 
@@ -13075,9 +13165,6 @@ msgid ""
 msgstr ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-
-msgid "Plugin and Content Manager"
-msgstr "Plugin and Content Manager"
 
 msgid "Choose package file"
 msgstr "Choose package file"
@@ -13201,6 +13288,9 @@ msgstr "Install package"
 msgid "Pending"
 msgstr "Pending"
 
+msgid "Update All"
+msgstr "Update All"
+
 msgid "Download Size"
 msgstr "Download Size"
 
@@ -13215,6 +13305,9 @@ msgstr "Show all versions"
 
 msgid "Download"
 msgstr "Download"
+
+msgid "Check for package updates on startup"
+msgstr "Check for package updates on startup"
 
 #, c-format
 msgid "schema file '%s' not found"
@@ -13287,6 +13380,12 @@ msgstr ""
 
 msgid "Local file"
 msgstr "Local file"
+
+msgid "Package updates are available"
+msgstr "Package updates are available"
+
+msgid "No package updates available"
+msgstr "No package updates available"
 
 msgid "Unable to create download directory!"
 msgstr "Unable to create download directory!"
@@ -15275,9 +15374,6 @@ msgstr "Autoplace Components"
 msgid "Autoplace components"
 msgstr "Autoplace components"
 
-msgid "This is the default net class."
-msgstr "This is the default net class."
-
 msgid "Tessellating copper zones..."
 msgstr "Tessellating copper zones..."
 
@@ -15298,6 +15394,9 @@ msgstr "Nets"
 
 msgid "Unrouted"
 msgstr "Unrouted"
+
+msgid "Net"
+msgstr "Net"
 
 msgid "NetName"
 msgstr "NetName"
@@ -17670,6 +17769,12 @@ msgstr ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 
+msgid "Net Ties"
+msgstr "Net Ties"
+
+msgid "Pad groups allowed to short different nets:"
+msgstr "Pad groups allowed to short different nets:"
+
 msgid "All footprint generator scripts were loaded"
 msgstr "All footprint generator scripts were loaded"
 
@@ -18371,6 +18476,9 @@ msgstr "Delete all nets in group '%s'?"
 
 msgid "Report file"
 msgstr "Report file"
+
+msgid "Net name filter:"
+msgstr "Net name filter:"
 
 msgid "Show zero pad nets"
 msgstr "Show zero pad nets"
@@ -21889,6 +21997,9 @@ msgstr "Differential pair gap out of range"
 msgid "Differential uncoupled length too long"
 msgstr "Differential uncoupled length too long"
 
+msgid "Footprint is not valid"
+msgstr "Footprint is not valid"
+
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Footprint component type doesn't match footprint pads"
 
@@ -22525,6 +22636,14 @@ msgstr "(PTH pad has no copper layers)"
 
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH pad's hole leaves no copper)"
+
+#, c-format
+msgid "(net-tie pad group contains unknown pad number %s)"
+msgstr "(net-tie pad group contains unknown pad number %s)"
+
+#, c-format
+msgid "(pad %s appears in more than one net-tie pad group)"
+msgstr "(pad %s appears in more than one net-tie pad group)"
 
 msgid "Clearance Override"
 msgstr "Clearance Override"
@@ -23413,11 +23532,11 @@ msgstr "Add Microwave Shape"
 msgid "Auto-Place Footprints"
 msgstr "Auto-Place Footprints"
 
-msgid "Add Teardrops"
-msgstr "Add Teardrops"
+msgid "Add Teardrops..."
+msgstr "Add Teardrops..."
 
-msgid "Remove Teardrops"
-msgstr "Remove Teardrops"
+msgid "Remove Teardrops..."
+msgstr "Remove Teardrops..."
 
 msgid "External Plugins"
 msgstr "External Plugins"
@@ -24371,6 +24490,15 @@ msgstr ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 
+msgid ""
+"CADSTAR fonts are different to the ones in KiCad. This will likely result in "
+"alignment issues that may cause DRC errors. Please review the imported text "
+"elements carefully and correct manually if required."
+msgstr ""
+"CADSTAR fonts are different to the ones in KiCad. This will likely result in "
+"alignment issues that may cause DRC errors. Please review the imported text "
+"elements carefully and correct manually if required."
+
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
@@ -24413,6 +24541,14 @@ msgstr ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
+
+#, c-format
+msgid ""
+"Invalid zero-sized pad ignored in\n"
+"file: %s"
+msgstr ""
+"Invalid zero-sized pad ignored in\n"
+"file: %s"
 
 #, c-format
 msgid ""
@@ -24813,6 +24949,10 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Duplicate item for ID %d and sequence %d in row %zu."
 
 #, c-format
+msgid "Unable to locate padstack %s in file %s\n"
+msgstr "Unable to locate padstack %s in file %s\n"
+
+#, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr "Invalid custom pad '%s'. Replacing with circular pad."
 
@@ -24859,30 +24999,6 @@ msgstr "Unexpected file '%s' found in library '%s'."
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Footprint library '%s' cannot be deleted."
-
-#, c-format
-msgid ""
-"Invalid floating point number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
-msgstr ""
-"Invalid floating point number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
-
-#, c-format
-msgid ""
-"Missing floating point number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
-msgstr ""
-"Missing floating point number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
 
 #, c-format
 msgid "Cannot interpret date code %d"
@@ -25341,12 +25457,6 @@ msgstr "Finish Track"
 msgid "Stops laying the current track."
 msgstr "Stops laying the current track."
 
-msgid "Auto-finish Track"
-msgstr "Auto-finish Track"
-
-msgid "Automatically finishes laying the current track."
-msgstr "Automatically finishes laying the current track."
-
 msgid "Place Through Via"
 msgstr "Place Through Via"
 
@@ -25518,8 +25628,8 @@ msgid "Routing Track: %s"
 msgstr "Routing Track: %s"
 
 #, c-format
-msgid "Net Class: %s"
-msgstr "Net Class: %s"
+msgid "Resolved Netclass: %s"
+msgstr "Resolved Netclass: %s"
 
 msgid "Routing Track"
 msgstr "Routing Track"
@@ -25562,12 +25672,12 @@ msgid "Unable to export, please fix and try again"
 msgstr "Unable to export, please fix and try again"
 
 #, c-format
-msgid "Symbol with value of '%s' has empty reference id."
-msgstr "Symbol with value of '%s' has empty reference id."
+msgid "Footprint with value of '%s' has an empty reference designator."
+msgstr "Footprint with value of '%s' has an empty reference designator."
 
 #, c-format
-msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr "Multiple symbols have identical reference IDs of '%s'."
+msgid "Multiple footprints have the reference designator '%s'."
+msgstr "Multiple footprints have the reference designator '%s'."
 
 msgid ""
 "Board may be corrupted, do not save it.\n"
@@ -25595,8 +25705,8 @@ msgid "Unsupported via shape: %s"
 msgstr "Unsupported via shape: %s"
 
 #, c-format
-msgid "Session file uses invalid layer id \"%s\""
-msgstr "Session file uses invalid layer id “%s”"
+msgid "Session file uses invalid layer id '%s'"
+msgstr "Session file uses invalid layer id '%s'"
 
 msgid "Session file is missing the \"session\" section"
 msgstr "Session file is missing the “session” section"
@@ -25623,26 +25733,17 @@ msgstr "%d Teardrops created"
 msgid "%d Teardrops removed."
 msgstr "%d Teardrops removed."
 
-msgid "Round shapes"
-msgstr "Round shapes"
+msgid "Round shapes:"
+msgstr "Round shapes:"
 
-msgid "Max length"
-msgstr "Max length"
+msgid "Best length:"
+msgstr "Best length:"
 
-msgid "Max height"
-msgstr "Max height"
+msgid "Best height:"
+msgstr "Best height:"
 
-msgid "Best length"
-msgstr "Best length"
-
-msgid "Best height"
-msgstr "Best height"
-
-msgid "percent of d"
-msgstr "percent of d"
-
-msgid "Max height/d"
-msgstr "Max height/d"
+msgid "Max length:"
+msgstr "Max length:"
 
 msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
@@ -25651,11 +25752,17 @@ msgstr ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 
-msgid "percent of H/d"
-msgstr "percent of H/d"
+msgid "Straight lines"
+msgstr "Straight lines"
 
-msgid "Rect shapes"
-msgstr "Rect shapes"
+msgid "Curved"
+msgstr "Curved"
+
+msgid "Rect shapes:"
+msgstr "Rect shapes:"
+
+msgid "Tracks:"
+msgstr "Tracks:"
 
 msgid "Vias and PTH pads"
 msgstr "Vias and PTH pads"
@@ -25669,8 +25776,8 @@ msgstr "Round pads only"
 msgid "Add teardrops to round shapes only "
 msgstr "Add teardrops to round shapes only "
 
-msgid "Not drilled pads"
-msgstr "Not drilled pads"
+msgid "SMD pads"
+msgstr "SMD pads"
 
 msgid "Add teardrops to not driiled pads, like SMD"
 msgstr "Add teardrops to not driiled pads, like SMD"
@@ -25681,23 +25788,8 @@ msgstr "Track to track"
 msgid "Add teardrops to two connected tracks of different widths"
 msgstr "Add teardrops to two connected tracks of different widths"
 
-msgid "Straight lines"
-msgstr "Straight lines"
-
-msgid "Curved"
-msgstr "Curved"
-
-msgid "Style for round shapes"
-msgstr "Style for round shapes"
-
-msgid "Style for rect shapes"
-msgstr "Style for rect shapes"
-
-msgid "Style for tracks"
-msgstr "Style for tracks"
-
-msgid "Allows use two tracks"
-msgstr "Allows use two tracks"
+msgid "Allow teardrops to span two track segments"
+msgstr "Allow teardrops to span two track segments"
 
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
@@ -25706,8 +25798,8 @@ msgstr ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 
-msgid "Teardrop on pads in zones"
-msgstr "Teardrop on pads in zones"
+msgid "Place teardrops on pads in zones"
+msgstr "Place teardrops on pads in zones"
 
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
@@ -25716,14 +25808,14 @@ msgstr ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 
-msgid "Curve points"
-msgstr "Curve points"
+msgid "Curve points:"
+msgstr "Curve points:"
 
 msgid "Number of segments to build a teardrop with curved shape"
 msgstr "Number of segments to build a teardrop with curved shape"
 
-msgid "Teardrop Settings"
-msgstr "Teardrop Settings"
+msgid "Add Teardrops"
+msgstr "Add Teardrops"
 
 msgid "Add teardrops"
 msgstr "Add teardrops"
@@ -27451,6 +27543,20 @@ msgstr "Tune skew of a differential pair"
 msgid "Walks the current track back one segment."
 msgstr "Walks the current track back one segment."
 
+msgid "Route From Other End"
+msgstr "Route From Other End"
+
+msgid ""
+"Commits current segments and starts next segment from nearest ratsnest end."
+msgstr ""
+"Commits current segments and starts next segment from nearest ratsnest end."
+
+msgid "Attempt Finish"
+msgstr "Attempt Finish"
+
+msgid "Attempts to complete current route to nearest ratsnest end."
+msgstr "Attempts to complete current route to nearest ratsnest end."
+
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
@@ -27853,6 +27959,9 @@ msgstr "Select Tracks and Vias in %s"
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Unselect Tracks and Vias in %s"
+
+msgid "Show All Nets"
+msgstr "Show All Nets"
 
 msgid "Hide All Other Nets"
 msgstr "Hide All Other Nets"
@@ -28316,6 +28425,131 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Environment Variable Help"
+#~ msgstr "Environment Variable Help"
+
+#~ msgid "Filter Nets"
+#~ msgstr "Filter Nets"
+
+#~ msgid "Net class filter:"
+#~ msgstr "Net class filter:"
+
+#~ msgid "Apply Filters"
+#~ msgstr "Apply Filters"
+
+#~ msgid "Assign Net Class"
+#~ msgstr "Assign Net Class"
+
+#~ msgid "New net class:"
+#~ msgstr "New net class:"
+
+#~ msgid "Assign To All Listed Nets"
+#~ msgstr "Assign To All Listed Nets"
+
+#~ msgid "Assign To Selected Nets"
+#~ msgstr "Assign To Selected Nets"
+
+#~ msgid "Assigned Netclass"
+#~ msgstr "Assigned Netclass"
+
+#, c-format
+#~ msgid "Unknown Record id: %d."
+#~ msgstr "Unknown Record id: %d."
+
+#~ msgid "Floating point number with incorrect locale"
+#~ msgstr "Floating point number with incorrect locale"
+
+#~ msgid "Missing floating point number"
+#~ msgstr "Missing floating point number"
+
+#~ msgid "Netclasses"
+#~ msgstr "Netclasses"
+
+#~ msgid "Assign Netclass"
+#~ msgstr "Assign Netclass"
+
+#~ msgid "Select netclass:"
+#~ msgstr "Select netclass:"
+
+#~ msgid "Edit Symbol Name"
+#~ msgstr "Edit Symbol Name"
+
+#~ msgid "Remove Teardrops"
+#~ msgstr "Remove Teardrops"
+
+#~ msgid "Auto-finish Track"
+#~ msgstr "Auto-finish Track"
+
+#~ msgid "Automatically finishes laying the current track."
+#~ msgstr "Automatically finishes laying the current track."
+
+#, c-format
+#~ msgid "Net Class: %s"
+#~ msgstr "Net Class: %s"
+
+#, c-format
+#~ msgid "Symbol with value of '%s' has empty reference id."
+#~ msgstr "Symbol with value of '%s' has empty reference id."
+
+#, c-format
+#~ msgid "Multiple symbols have identical reference IDs of '%s'."
+#~ msgstr "Multiple symbols have identical reference IDs of '%s'."
+
+#, c-format
+#~ msgid "Session file uses invalid layer id \"%s\""
+#~ msgstr "Session file uses invalid layer id “%s”"
+
+#~ msgid "Round shapes"
+#~ msgstr "Round shapes"
+
+#~ msgid "Max length"
+#~ msgstr "Max length"
+
+#~ msgid "Max height"
+#~ msgstr "Max height"
+
+#~ msgid "Best length"
+#~ msgstr "Best length"
+
+#~ msgid "Best height"
+#~ msgstr "Best height"
+
+#~ msgid "percent of d"
+#~ msgstr "percent of d"
+
+#~ msgid "Max height/d"
+#~ msgstr "Max height/d"
+
+#~ msgid "percent of H/d"
+#~ msgstr "percent of H/d"
+
+#~ msgid "Rect shapes"
+#~ msgstr "Rect shapes"
+
+#~ msgid "Not drilled pads"
+#~ msgstr "Not drilled pads"
+
+#~ msgid "Style for round shapes"
+#~ msgstr "Style for round shapes"
+
+#~ msgid "Style for rect shapes"
+#~ msgstr "Style for rect shapes"
+
+#~ msgid "Style for tracks"
+#~ msgstr "Style for tracks"
+
+#~ msgid "Allows use two tracks"
+#~ msgstr "Allows use two tracks"
+
+#~ msgid "Teardrop on pads in zones"
+#~ msgstr "Teardrop on pads in zones"
+
+#~ msgid "Curve points"
+#~ msgstr "Curve points"
+
+#~ msgid "Teardrop Settings"
+#~ msgstr "Teardrop Settings"
 
 #, c-format
 #~ msgid "Net %s\tNetClass %s\tPadName %s"
