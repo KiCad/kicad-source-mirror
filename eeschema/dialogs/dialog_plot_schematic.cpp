@@ -144,6 +144,8 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         // Set plot or not frame reference option
         setPlotDrawingSheet( cfg->m_PlotPanel.frame_reference );
 
+        setOpenFileAfterPlot( cfg->m_PlotPanel.open_file_after_plot );
+
         // HPGL plot origin and unit system configuration
         m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
 
@@ -299,6 +301,8 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
             selection = m_pageSizeSelect;
         }
 
+        m_openFileAfterPlot->Enable( fmt == PLOT_FORMAT::PDF );
+
         m_paperSizeOption->Set( paperSizes );
         m_paperSizeOption->SetSelection( selection );
 
@@ -336,6 +340,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.format           = static_cast<int>( GetPlotFileFormat() );
         cfg->m_PlotPanel.hpgl_origin      = m_plotOriginOpt->GetSelection();
         cfg->m_PlotPanel.hpgl_paper_size  = m_HPGLPaperSizeSelect;
+        cfg->m_PlotPanel.open_file_after_plot = getOpenFileAfterPlot();
 
         // HPGL Pen Size is stored in mm in config
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
@@ -877,6 +882,9 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
     reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
     restoreEnvironment( plotter, oldsheetpath );
+
+    if( getOpenFileAfterPlot())
+        wxLaunchDefaultApplication( plotFileName.GetFullPath() );
 }
 
 

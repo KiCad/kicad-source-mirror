@@ -215,6 +215,7 @@ public:
         int      hpgl_paper_size;
         double   hpgl_pen_size;
         int      hpgl_origin;
+        bool     open_file_after_plot;
     };
 
     struct PANEL_SYM_CHOOSER

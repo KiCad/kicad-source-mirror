@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -116,6 +116,9 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_optionsSizer->Add( sbOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
+	wxBoxSizer* bOptionsRight;
+	bOptionsRight = new wxBoxSizer( wxVERTICAL );
+
 	m_HPGLOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizer2;
@@ -150,7 +153,21 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_HPGLOptionsSizer->Add( gbSizer2, 1, wxEXPAND, 5 );
 
 
-	m_optionsSizer->Add( m_HPGLOptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bOptionsRight->Add( m_HPGLOptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other options") ), wxVERTICAL );
+
+	m_openFileAfterPlot = new wxCheckBox( m_otherOptions->GetStaticBox(), wxID_ANY, _("Open file after plot"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_openFileAfterPlot->Enable( false );
+	m_openFileAfterPlot->SetToolTip( _("Open output file with associated application after successful plot") );
+
+	m_otherOptions->Add( m_openFileAfterPlot, 0, wxALL, 5 );
+
+
+	bOptionsRight->Add( m_otherOptions, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+
+	m_optionsSizer->Add( bOptionsRight, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

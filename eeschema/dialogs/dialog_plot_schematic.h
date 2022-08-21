@@ -4,7 +4,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,9 @@ private:
 
     bool getPlotDrawingSheet() { return m_plotDrawingSheet->GetValue(); }
     void setPlotDrawingSheet( bool aPlot) { m_plotDrawingSheet->SetValue( aPlot ); }
+
+    bool getOpenFileAfterPlot() { return m_openFileAfterPlot->GetValue(); }
+    void setOpenFileAfterPlot( bool aOpenFileAfterPlot ) { m_openFileAfterPlot->SetValue( aOpenFileAfterPlot ); }
 
     void plotSchematic( bool aPlotAll );
 
