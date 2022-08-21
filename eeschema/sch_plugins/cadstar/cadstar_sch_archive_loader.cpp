@@ -255,11 +255,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     checkPoint();
 
-    m_reporter->Report( _( "CADSTAR fonts are different to the ones in KiCad. This will likely "
-                           "result in alignment issues. Please review the imported text elements "
-                           "carefully and correct manually if required." ),
-                        RPT_SEVERITY_WARNING );
-
     m_reporter->Report( _( "The CADSTAR design has been imported successfully.\n"
                            "Please review the import errors and warnings (if any)." ) );
 }
