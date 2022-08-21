@@ -44,7 +44,7 @@ public:
     // Abstract class
     virtual wxString GetClass() const override = 0;
 
-    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override;
+    bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
@@ -120,7 +120,7 @@ public:
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::initializer_list<KICAD_T>& scanTypes ) override;
+                          const std::vector<KICAD_T>& scanTypes ) override;
 
     VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 

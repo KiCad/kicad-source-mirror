@@ -389,7 +389,7 @@ void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
 
 
 INSPECT_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData,
-                                         const std::initializer_list<KICAD_T>& aScanTypes )
+                                         const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {

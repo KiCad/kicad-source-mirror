@@ -144,7 +144,7 @@ EE_SELECTION_TOOL::~EE_SELECTION_TOOL()
 using E_C = EE_CONDITIONS;
 
 
-static std::initializer_list<KICAD_T> connectedTypes =
+static std::vector<KICAD_T> connectedTypes =
 {
     SCH_SYMBOL_LOCATE_POWER_T,
     SCH_PIN_T,
@@ -777,7 +777,7 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 
 
 bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
-                                     const std::initializer_list<KICAD_T>& aFilterList )
+                                     const std::vector<KICAD_T>& aScanTypes )
 {
     int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2 );
@@ -791,11 +791,11 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
         if( !symbol )
             return false;
 
-        aCollector.Collect( symbol->GetDrawItems(), aFilterList, aWhere, m_unit, m_convert );
+        aCollector.Collect( symbol->GetDrawItems(), aScanTypes, aWhere, m_unit, m_convert );
     }
     else
     {
-        aCollector.Collect( m_frame->GetScreen(), aFilterList, aWhere, m_unit, m_convert );
+        aCollector.Collect( m_frame->GetScreen(), aScanTypes, aWhere, m_unit, m_convert );
 
         if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
         {
@@ -933,14 +933,14 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
 
 
 bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
-                                     const std::initializer_list<KICAD_T>& aFilterList,
+                                     const std::vector<KICAD_T>& aScanTypes,
                                      EDA_ITEM** aItem, bool* aSelectionCancelledFlag,
                                      bool aCheckLocked, bool aAdd, bool aSubtract,
                                      bool aExclusiveOr )
 {
     EE_COLLECTOR collector;
 
-    if( !CollectHits( collector, aWhere, aFilterList ) )
+    if( !CollectHits( collector, aWhere, aScanTypes ) )
         return false;
 
     narrowSelection( collector, aWhere, aCheckLocked );
@@ -1142,15 +1142,14 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 }
 
 
-EE_SELECTION&
-EE_SELECTION_TOOL::RequestSelection( const std::initializer_list<KICAD_T>& aFilterList )
+EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& aScanTypes )
 {
     if( m_selection.Empty() )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
 
         ClearSelection();
-        SelectPoint( cursorPos, aFilterList );
+        SelectPoint( cursorPos, aScanTypes );
         m_selection.SetIsHover( true );
         m_selection.ClearReferencePoint();
     }
@@ -1164,7 +1163,7 @@ EE_SELECTION_TOOL::RequestSelection( const std::initializer_list<KICAD_T>& aFilt
             EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
             isMoving |= static_cast<SCH_ITEM*>( item )->IsMoving();
 
-            if( !item->IsType( aFilterList ) )
+            if( !item->IsType( aScanTypes ) )
             {
                 unselect( item );
                 anyUnselected = true;

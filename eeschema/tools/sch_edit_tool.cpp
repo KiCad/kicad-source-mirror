@@ -325,9 +325,7 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
-    static std::initializer_list<KICAD_T> allTextTypes = { SCH_LABEL_LOCATE_ANY_T,
-                                                           SCH_TEXT_T,
-                                                           SCH_TEXTBOX_T };
+    static std::vector<KICAD_T> allTextTypes = { SCH_LABEL_LOCATE_ANY_T, SCH_TEXT_T, SCH_TEXTBOX_T };
 
     auto toChangeCondition = ( E_C::OnlyTypes( allTextTypes ) );
 
@@ -523,7 +521,7 @@ bool SCH_EDIT_TOOL::Init()
 }
 
 
-const std::initializer_list<KICAD_T> rotatableItems = {
+const std::vector<KICAD_T> rotatableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -1080,7 +1078,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 }
 
 
-static std::initializer_list<KICAD_T> deletableItems =
+static std::vector<KICAD_T> deletableItems =
 {
     SCH_MARKER_T,
     SCH_JUNCTION_T,

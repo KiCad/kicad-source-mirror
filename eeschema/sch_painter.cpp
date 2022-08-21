@@ -74,7 +74,7 @@ EESCHEMA_SETTINGS* eeconfig()
 }
 
 
-std::initializer_list<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
+std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,

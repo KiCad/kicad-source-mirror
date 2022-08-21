@@ -90,7 +90,7 @@ EDA_ITEM* EDA_ITEM::Clone() const
 // see base_struct.h
 // many classes inherit this method, be careful:
 INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData,
-                                const std::initializer_list<KICAD_T>& aScanTypes )
+                                const std::vector<KICAD_T>& aScanTypes )
 {
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';

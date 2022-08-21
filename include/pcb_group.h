@@ -162,7 +162,7 @@ public:
 
     ///< @copydoc EDA_ITEM::Visit
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
-                          const std::initializer_list<KICAD_T>& aScanTypes ) override;
+                          const std::vector<KICAD_T>& aScanTypes ) override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLayers
     void ViewGetLayers( int aLayers[], int& aCount ) const override;

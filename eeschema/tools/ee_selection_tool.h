@@ -81,16 +81,18 @@ public:
     /**
      * Return either an existing selection (filtered), or the selection at the current
      * cursor if the existing selection is empty.
+     *
+     * @param aScanTypes an optional type filter indicating the legal KICAD_Ts to be returned.
+     * @return either the current selection or, if empty, the selection at the cursor.
      */
-    EE_SELECTION&
-    RequestSelection( const std::initializer_list<KICAD_T>& aFilterList = { SCH_LOCATE_ANY_T } );
+    EE_SELECTION& RequestSelection( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } );
 
     /**
      * This overload of SelectPoint will create an EE_COLLECTOR and collect hits at location aWhere
      * before calling the primary SelectPoint method.
      *
      * @param aWhere is the location where the item(s) should be collected
-     * @param aFilterList is a list of items that are acceptable for collection
+     * @param aScanTypes is a list of items that are acceptable for collection
      * @param aItem is set to the newly selected item if only one was selected, otherwise is
      *              unchanged.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
@@ -102,7 +104,7 @@ public:
      * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
      */
     bool SelectPoint( const VECTOR2I& aWhere,
-                      const std::initializer_list<KICAD_T>& aFilterList = { SCH_LOCATE_ANY_T },
+                      const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T },
                       EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr,
                       bool aCheckLocked = false, bool aAdd = false, bool aSubtract = false,
                       bool aExclusiveOr = false );
@@ -153,11 +155,11 @@ public:
      *
      * @param aCollector is the collector object that will store found item(s)
      * @param aWhere is the place where the item should be selected.
-     * @param aFilterList is a list of items that are acceptable for collection
+     * @param aScanTypes is a list of items that are acceptable for collection
      * @param aCheckLocked indicates if locked items should be excluded.
      */
     bool CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
-                      const std::initializer_list<KICAD_T>& aFilterList = { SCH_LOCATE_ANY_T } );
+                      const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } );
 
 protected:
     SELECTION& selection() override { return m_selection; }

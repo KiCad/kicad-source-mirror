@@ -36,7 +36,7 @@
 #include "sch_reference_list.h"
 
 
-const std::initializer_list<KICAD_T> EE_COLLECTOR::EditableItems = {
+const std::vector<KICAD_T> EE_COLLECTOR::EditableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
@@ -55,7 +55,7 @@ const std::initializer_list<KICAD_T> EE_COLLECTOR::EditableItems = {
 };
 
 
-const std::initializer_list<KICAD_T> EE_COLLECTOR::MovableItems =
+const std::vector<KICAD_T> EE_COLLECTOR::MovableItems =
 {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -78,7 +78,7 @@ const std::initializer_list<KICAD_T> EE_COLLECTOR::MovableItems =
 };
 
 
-const std::initializer_list<KICAD_T> EE_COLLECTOR::FieldOwners = {
+const std::vector<KICAD_T> EE_COLLECTOR::FieldOwners = {
     SCH_SYMBOL_T,
     SCH_SHEET_T,
     SCH_LABEL_LOCATE_ANY_T
@@ -116,8 +116,7 @@ INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen,
-                            const std::initializer_list<KICAD_T>& aFilterList,
+void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFilterList,
                             const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty(); // empty the collection just in case
@@ -137,8 +136,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen,
 }
 
 
-void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems,
-                            const std::initializer_list<KICAD_T>& aFilterList,
+void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aFilterList,
                             const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case

@@ -811,7 +811,7 @@ public:
      *         determined by the inspector.
      */
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::initializer_list<KICAD_T>& scanTypes ) override;
+                          const std::vector<KICAD_T>& scanTypes ) override;
 
     /**
      * Search for a FOOTPRINT within this board with the given reference designator.

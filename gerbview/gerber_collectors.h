@@ -60,11 +60,11 @@ public:
      * Scan an EDA_ITEM using this class's Inspector method, which does the collection.
      *
      * @param aItem An EDA_ITEM to scan
-     * @param aScanList A list of KICAD_Ts that specs what is to be collected and the priority
-     *                  order of the resultant collection in "m_list".
+     * @param aScanTypes A list of KICAD_Ts that specs what is to be collected and the priority
+     *                   order of the resultant collection in "m_list".
      * @param aRefPos A VECTOR2I to use in hit-testing.
      */
-    void Collect( EDA_ITEM* aItem, const std::initializer_list<KICAD_T>& aScanList,
+    void Collect( EDA_ITEM* aItem, const std::vector<KICAD_T>& aScanTypes,
                   const VECTOR2I& aRefPos );
 };
 

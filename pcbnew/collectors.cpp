@@ -38,7 +38,7 @@
 #include <math/util.h>      // for KiROUND
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_MARKER_T,           // in m_markers
     PCB_TEXT_T,             // in m_drawings
     PCB_BITMAP_T,           // in m_drawings
@@ -62,7 +62,7 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
     PCB_MARKER_T,
     PCB_BITMAP_T,
     PCB_TEXT_T,
@@ -83,12 +83,12 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Footprints = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::Footprints = {
     PCB_FOOTPRINT_T
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
     PCB_PAD_T,
     PCB_VIA_T,
     PCB_TRACE_T,
@@ -96,7 +96,7 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_MARKER_T,
     PCB_FP_TEXT_T,
     PCB_FP_TEXTBOX_T,
@@ -113,14 +113,14 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Tracks = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::Tracks = {
     PCB_TRACE_T,
     PCB_ARC_T,
     PCB_VIA_T
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
     PCB_FOOTPRINT_T,
     PCB_GROUP_T,  // Can a group be locked?
     PCB_TRACE_T,
@@ -129,13 +129,13 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Zones = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::Zones = {
     PCB_ZONE_T,
     PCB_FP_ZONE_T
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
     PCB_DIM_ALIGNED_T,
     PCB_DIM_LEADER_T,
     PCB_DIM_ORTHOGONAL_T,
@@ -149,7 +149,7 @@ const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
 };
 
 
-const std::initializer_list<KICAD_T> GENERAL_COLLECTOR::DraggableItems = {
+const std::vector<KICAD_T> GENERAL_COLLECTOR::DraggableItems = {
     PCB_TRACE_T,
     PCB_VIA_T,
     PCB_FOOTPRINT_T,
@@ -593,8 +593,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 }
 
 
-void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem,
-                                 const std::initializer_list<KICAD_T>& aScanTypes,
+void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const std::vector<KICAD_T>& aScanTypes,
                                  const VECTOR2I& aRefPos, const COLLECTORS_GUIDE& aGuide )
 {
     Empty();        // empty the collection, primary criteria list
@@ -629,7 +628,7 @@ INSPECT_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 }
 
 
-void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const std::initializer_list<KICAD_T>& aTypes )
+void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const std::vector<KICAD_T>& aTypes )
 {
     Empty();
     aBoard->Visit( m_inspector, nullptr, aTypes );
@@ -647,7 +646,7 @@ INSPECT_RESULT PCB_LAYER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData 
 }
 
 
-void PCB_LAYER_COLLECTOR::Collect( BOARD_ITEM* aBoard, const std::initializer_list<KICAD_T>& aTypes )
+void PCB_LAYER_COLLECTOR::Collect( BOARD_ITEM* aBoard, const std::vector<KICAD_T>& aTypes )
 {
     Empty();
     aBoard->Visit( m_inspector, nullptr, aTypes );

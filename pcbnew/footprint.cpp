@@ -1242,7 +1242,7 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 
 // see footprint.h
 INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
-                                 const std::initializer_list<KICAD_T>& aScanTypes )
+                                 const std::vector<KICAD_T>& aScanTypes )
 {
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';

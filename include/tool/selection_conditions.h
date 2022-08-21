@@ -114,7 +114,7 @@ public:
      * @param aTypes is an array containing types that are searched.
      * @return Functor testing for presence of items of a given types.
      */
-    static SELECTION_CONDITION HasTypes( const std::initializer_list<KICAD_T>& aTypes );
+    static SELECTION_CONDITION HasTypes( std::vector<KICAD_T> aTypes );
 
     /**
      * Create a functor that tests if the selected items are *only* of given types.
@@ -122,7 +122,7 @@ public:
      * @param aTypes is an array containing types that are searched.
      * @return Functor testing if selected items are exclusively of the requested types.
      */
-    static SELECTION_CONDITION OnlyTypes( const std::initializer_list<KICAD_T>& aTypes );
+    static SELECTION_CONDITION OnlyTypes( std::vector<KICAD_T> aTypes );
 
     /**
      * Create a functor that tests if the number of selected items is equal to the value given as
@@ -156,12 +156,10 @@ private:
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
 
     ///< Helper function used by HasTypes()
-    static bool hasTypesFunc( const SELECTION& aSelection,
-                              const std::initializer_list<KICAD_T>& aTypes );
+    static bool hasTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes );
 
     ///< Helper function used by OnlyTypes()
-    static bool onlyTypesFunc( const SELECTION& aSelection,
-                               const std::initializer_list<KICAD_T>& aTypes );
+    static bool onlyTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes );
 
     ///< Helper function used by Count()
     static bool countFunc( const SELECTION& aSelection, int aNumber );

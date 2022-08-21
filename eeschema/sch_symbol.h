@@ -639,7 +639,7 @@ public:
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::initializer_list<KICAD_T>& aScanTypes ) override;
+                          const std::vector<KICAD_T>& aScanTypes ) override;
 
     /**
      * Return the symbol library item at \a aPosition that is part of this symbol.

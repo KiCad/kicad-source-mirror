@@ -64,13 +64,13 @@ SELECTION_CONDITION SELECTION_CONDITIONS::HasType( KICAD_T aType )
 }
 
 
-SELECTION_CONDITION SELECTION_CONDITIONS::HasTypes( const std::initializer_list<KICAD_T>& aTypes )
+SELECTION_CONDITION SELECTION_CONDITIONS::HasTypes( std::vector<KICAD_T> aTypes )
 {
     return std::bind( &SELECTION_CONDITIONS::hasTypesFunc, _1, aTypes );
 }
 
 
-SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const std::initializer_list<KICAD_T>& aTypes )
+SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( std::vector<KICAD_T> aTypes )
 {
     return std::bind( &SELECTION_CONDITIONS::onlyTypesFunc, _1, aTypes );
 }
@@ -109,8 +109,7 @@ bool SELECTION_CONDITIONS::hasTypeFunc( const SELECTION& aSelection, KICAD_T aTy
 }
 
 
-bool SELECTION_CONDITIONS::hasTypesFunc( const SELECTION& aSelection,
-                                         const std::initializer_list<KICAD_T>& aTypes )
+bool SELECTION_CONDITIONS::hasTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes )
 {
     if( aSelection.Empty() )
         return false;
@@ -125,8 +124,7 @@ bool SELECTION_CONDITIONS::hasTypesFunc( const SELECTION& aSelection,
 }
 
 
-bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection,
-                                          const std::initializer_list<KICAD_T>& aTypes )
+bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, std::vector<KICAD_T> aTypes )
 {
     if( aSelection.Empty() )
         return false;

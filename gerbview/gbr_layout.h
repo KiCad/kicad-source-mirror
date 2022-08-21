@@ -79,7 +79,7 @@ public:
 
     ///< @copydoc EDA_ITEM::Visit()
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::initializer_list<KICAD_T>& aScanTypes ) override;
+                          const std::vector<KICAD_T>& aScanTypes ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

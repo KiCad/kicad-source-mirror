@@ -76,7 +76,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
 
 
 INSPECT_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData,
-                                  const std::initializer_list<KICAD_T>& aScanTypes )
+                                  const std::vector<KICAD_T>& aScanTypes )
 {
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';

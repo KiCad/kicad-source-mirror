@@ -503,7 +503,7 @@ public:
     const LIB_ITEMS_CONTAINER& GetDrawItems() const { return m_drawings; }
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::initializer_list<KICAD_T>& aScanTypes ) override;
+                          const std::vector<KICAD_T>& aScanTypes ) override;
 
     /**
      * Set the units per symbol count.

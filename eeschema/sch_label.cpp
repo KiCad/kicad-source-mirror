@@ -190,7 +190,7 @@ const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool 
 }
 
 
-bool SCH_LABEL_BASE::IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const
+bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 {
     if( SCH_TEXT::IsType( aScanTypes ) )
         return true;
@@ -542,7 +542,7 @@ void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFun
 
 
 INSPECT_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
-                                      const std::initializer_list<KICAD_T>& aScanTypes )
+                                      const std::vector<KICAD_T>& aScanTypes )
 {
     if( IsType( aScanTypes ) )
     {

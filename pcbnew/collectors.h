@@ -52,74 +52,74 @@
 class COLLECTORS_GUIDE
 {
 public:
-    virtual     ~COLLECTORS_GUIDE() {}
+    virtual ~COLLECTORS_GUIDE() {}
 
     /**
      * @return true if the given layer is visible, else false.
      */
-    virtual     bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
+    virtual bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
 
     /**
      * @return the preferred layer for HitTest()ing.
      */
-    virtual     PCB_LAYER_ID GetPreferredLayer() const = 0;
+    virtual PCB_LAYER_ID GetPreferredLayer() const = 0;
 
     /**
      * @return true if should ignore locked items, else false.
      */
-    virtual     bool IgnoreLockedItems() const = 0;
+    virtual bool IgnoreLockedItems() const = 0;
 
     /**
      * Determine if the secondary criteria or 2nd choice items should be included.
      *
      * @return true if should include, else false.
      */
-    virtual     bool IncludeSecondary() const = 0;
+    virtual bool IncludeSecondary() const = 0;
 
     /**
      * @return true if footprint texts marked as "no show" should be ignored.
      */
-    virtual     bool IgnoreHiddenFPText() const = 0;
+    virtual bool IgnoreHiddenFPText() const = 0;
 
     /**
      * @return true if should ignore footprint text on back layers
      */
-    virtual     bool IgnoreFPTextOnBack() const = 0;
+    virtual bool IgnoreFPTextOnBack() const = 0;
 
     /**
      * @return true if should ignore footprint text on front layers.
      */
-    virtual     bool IgnoreFPTextOnFront() const = 0;
+    virtual bool IgnoreFPTextOnFront() const = 0;
 
     /**
      * @return true if should ignore FOOTPRINTs on Back Side.
      */
-    virtual     bool IgnoreFootprintsOnBack() const = 0;
+    virtual bool IgnoreFootprintsOnBack() const = 0;
 
     /**
      * @return true if should ignore FOOTPRINTs on Front Side.
      */
-    virtual     bool IgnoreFootprintsOnFront() const = 0;
+    virtual bool IgnoreFootprintsOnFront() const = 0;
 
     /**
      * @return true if should ignore Pads on Back Side.
      */
-    virtual     bool IgnorePadsOnBack() const = 0;
+    virtual bool IgnorePadsOnBack() const = 0;
 
     /**
      * @return true if should ignore PADSs on Front Side.
      */
-    virtual     bool IgnorePadsOnFront() const = 0;
+    virtual bool IgnorePadsOnFront() const = 0;
 
     /**
      * @return true if should ignore through-hole PADSs.
      */
-    virtual     bool IgnoreThroughHolePads() const = 0;
+    virtual bool IgnoreThroughHolePads() const = 0;
 
     /**
      * @return true if should ignore PADSs on Front side and Back side.
      */
-    virtual     bool IgnorePads() const
+    virtual bool IgnorePads() const
     {
         return IgnorePadsOnFront() && IgnorePadsOnBack() && IgnoreThroughHolePads();
     }
@@ -127,39 +127,39 @@ public:
     /**
      * @return true if should ignore footprint values.
      */
-    virtual     bool IgnoreFPValues() const = 0;
+    virtual bool IgnoreFPValues() const = 0;
 
     /**
      * @return true if should ignore footprint references.
      */
-    virtual     bool IgnoreFPReferences() const = 0;
+    virtual bool IgnoreFPReferences() const = 0;
 
     /**
      * @return true if should ignore through-hole vias
      */
-    virtual     bool IgnoreThroughVias() const = 0;
+    virtual bool IgnoreThroughVias() const = 0;
 
     /**
      * @return true if should ignore blind/buried vias
      */
-    virtual     bool IgnoreBlindBuriedVias() const = 0;
+    virtual bool IgnoreBlindBuriedVias() const = 0;
 
     /**
      * @return true if should ignore micro vias
      */
-    virtual     bool IgnoreMicroVias() const = 0;
+    virtual bool IgnoreMicroVias() const = 0;
 
     /**
      * @return true if should ignore tracks
      */
-    virtual     bool IgnoreTracks() const = 0;
+    virtual bool IgnoreTracks() const = 0;
 
     /**
      * @return true if should ignore the interiors of zones
      */
-    virtual     bool IgnoreZoneFills() const = 0;
+    virtual bool IgnoreZoneFills() const = 0;
 
-    virtual     double OnePixelInIU() const = 0;
+    virtual double OnePixelInIU() const = 0;
 };
 
 
@@ -221,53 +221,53 @@ public:
     /**
      * A scan list for all editable board items
      */
-    static const std::initializer_list<KICAD_T> AllBoardItems;
+    static const std::vector<KICAD_T> AllBoardItems;
 
     /**
      * A scan list for zones outlines only
      */
-    static const std::initializer_list<KICAD_T> Zones;
+    static const std::vector<KICAD_T> Zones;
 
     /**
      * A scan list for all primary board items, omitting items which are subordinate to
      * a FOOTPRINT, such as PAD and FP_TEXT.
      */
-    static const std::initializer_list<KICAD_T> BoardLevelItems;
+    static const std::vector<KICAD_T> BoardLevelItems;
 
     /**
      * A scan list for only FOOTPRINTs
      */
-    static const std::initializer_list<KICAD_T> Footprints;
+    static const std::vector<KICAD_T> Footprints;
 
     /**
      * A scan list for PADs, TRACKs, or VIAs
      */
-    static const std::initializer_list<KICAD_T> PadsOrTracks;
+    static const std::vector<KICAD_T> PadsOrTracks;
 
     /**
      * A scan list for primary footprint items.
      */
-    static const std::initializer_list<KICAD_T> FootprintItems;
+    static const std::vector<KICAD_T> FootprintItems;
 
     /**
      * A scan list for only TRACKs and ARCs
      */
-    static const std::initializer_list<KICAD_T> Tracks;
+    static const std::vector<KICAD_T> Tracks;
 
     /**
      * A scan list for TRACKs, VIAs, FOOTPRINTs
      */
-    static const std::initializer_list<KICAD_T> LockableItems;
+    static const std::vector<KICAD_T> LockableItems;
 
     /**
      * A scan list for dimensions
      */
-    static const std::initializer_list<KICAD_T> Dimensions;
+    static const std::vector<KICAD_T> Dimensions;
 
     /**
      * A scan list for items that can be dragged
      */
-    static const std::initializer_list<KICAD_T> DraggableItems;
+    static const std::vector<KICAD_T> DraggableItems;
 
     GENERAL_COLLECTOR() :
             m_Guide( nullptr )
@@ -313,7 +313,7 @@ public:
      * @param aRefPos A wxPoint to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Collect( BOARD_ITEM* aItem, const std::initializer_list<KICAD_T>& aScanList,
+    void Collect( BOARD_ITEM* aItem, const std::vector<KICAD_T>& aScanList,
                   const VECTOR2I& aRefPos, const COLLECTORS_GUIDE& aGuide );
 };
 
@@ -537,7 +537,7 @@ public:
      * @param aBoard The BOARD_ITEM to scan.
      * @param aTypes The KICAD_Ts to gather up.
      */
-    void Collect( BOARD_ITEM* aBoard, const std::initializer_list<KICAD_T>& aTypes );
+    void Collect( BOARD_ITEM* aBoard, const std::vector<KICAD_T>& aTypes );
 };
 
 
@@ -570,7 +570,7 @@ public:
      * @param aBoard The BOARD_ITEM to scan.
      * @param aTypes The KICAD_Ts to gather up.
      */
-    void Collect( BOARD_ITEM* aBoard, const std::initializer_list<KICAD_T>& aTypes );
+    void Collect( BOARD_ITEM* aBoard, const std::vector<KICAD_T>& aTypes );
 
 private:
     PCB_LAYER_ID m_layer_id;

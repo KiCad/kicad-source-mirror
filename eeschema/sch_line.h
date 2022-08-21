@@ -67,7 +67,7 @@ public:
      */
     wxString GetNetname(const SCH_SHEET_PATH &aSheet);
 
-    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
+    bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )
             return true;

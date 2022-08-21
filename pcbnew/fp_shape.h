@@ -50,7 +50,7 @@ public:
         return aItem && PCB_FP_SHAPE_T == aItem->Type();
     }
 
-    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
+    bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_ITEM::IsType( aScanTypes ) )
             return true;

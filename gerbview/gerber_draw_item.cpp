@@ -985,7 +985,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
-                                        const std::initializer_list<KICAD_T>& aScanTypes )
+                                        const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {

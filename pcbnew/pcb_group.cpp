@@ -234,7 +234,7 @@ const EDA_RECT PCB_GROUP::GetBoundingBox() const
 
 
 INSPECT_RESULT PCB_GROUP::Visit( INSPECTOR aInspector, void* aTestData,
-                                 const std::initializer_list<KICAD_T>& aScanTypes )
+                                 const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {

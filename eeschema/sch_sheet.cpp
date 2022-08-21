@@ -944,7 +944,7 @@ std::vector<VECTOR2I> SCH_SHEET::GetConnectionPoints() const
 
 
 INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData,
-                                 const std::initializer_list<KICAD_T>& aScanTypes )
+                                 const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {

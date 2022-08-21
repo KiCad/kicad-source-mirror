@@ -230,9 +230,6 @@ bool PAD::FlashLayer( LSET aLayers ) const
 
 bool PAD::FlashLayer( int aLayer ) const
 {
-    static std::initializer_list<KICAD_T> types
-    { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
-
     if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
@@ -276,7 +273,17 @@ bool PAD::FlashLayer( int aLayer ) const
             return true;
 
         if( const BOARD* board = GetBoard() )
+        {
+            // Must be static to keep from raising its ugly head in performance profiles
+            static std::initializer_list<KICAD_T> types = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                            PCB_PAD_T };
+
+            // Do not check zones.  Doing so results in race conditions when the via collides with
+            // two different zones of different priorities.
+            // See https://gitlab.com/kicad/code/kicad/-/issues/11299.
+
             return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types, true );
+        }
     }
 
     return true;

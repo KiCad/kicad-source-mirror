@@ -1250,7 +1250,7 @@ void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
 
 INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
-                             const std::initializer_list<KICAD_T>& scanTypes )
+                             const std::vector<KICAD_T>& scanTypes )
 {
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';

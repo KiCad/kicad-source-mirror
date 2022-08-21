@@ -39,11 +39,11 @@ class SCH_SYMBOL;
 class EE_COLLECTOR : public COLLECTOR
 {
 public:
-    static const std::initializer_list<KICAD_T> EditableItems;
-    static const std::initializer_list<KICAD_T> MovableItems;
-    static const std::initializer_list<KICAD_T> FieldOwners;
+    static const std::vector<KICAD_T> EditableItems;
+    static const std::vector<KICAD_T> MovableItems;
+    static const std::vector<KICAD_T> FieldOwners;
 
-    EE_COLLECTOR( const std::initializer_list<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
+    EE_COLLECTOR( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
         m_Unit( 0 ),
         m_Convert( 0 ),
         m_ShowPinElectricalTypes( false )
@@ -71,26 +71,26 @@ public:
      * Scan a #EDA_ITEM using this class's Inspector method which does the collection.
      *
      * @param aScreen The eeschema screen to use for scanning
-     * @param aFilterList A list of #KICAD_T types that determines what is to be collected and
-     *                    the priority order of the resulting collection.
+     * @param aScanTypes A list of #KICAD_T types that determines what is to be collected and
+     *                   the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor)
      */
-    void Collect( SCH_SCREEN* aScreen, const std::initializer_list<KICAD_T>& aFilterList,
+    void Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aScanTypes,
                   const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Scan an #EDA_ITEM using this class's Inspector method which does the collection.
      *
      * @param aItems is a LIB_SYMBOL multivector holding the symbol items.
-     * @param aFilterList is a list of #KICAD_T types that determines what is to be collected
-     *                    and the priority order of the resulting collection.
+     * @param aScanTypes is a list of #KICAD_T types that determines what is to be collected
+     *                   and the priority order of the resulting collection.
      * @param aPos are the coordinates to use in hit testing.
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor).
      */
-    void Collect( LIB_ITEMS_CONTAINER& aItems, const std::initializer_list<KICAD_T>& aFilterList,
+    void Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD_T>& aScanTypes,
                   const VECTOR2I& aPos, int aUnit = 0, int aConvert = 0 );
 
     /**

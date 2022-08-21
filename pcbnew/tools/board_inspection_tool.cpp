@@ -79,11 +79,11 @@ bool BOARD_INSPECTION_TOOL::Init()
     auto netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
     netSubMenu->SetTool( this );
 
-    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T,
-                                                             PCB_VIA_T,
-                                                             PCB_ARC_T,
-                                                             PCB_PAD_T,
-                                                             PCB_ZONE_T };
+    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
+                                                   PCB_VIA_T,
+                                                   PCB_ARC_T,
+                                                   PCB_PAD_T,
+                                                   PCB_ZONE_T };
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 

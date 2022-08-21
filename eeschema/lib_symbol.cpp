@@ -1238,7 +1238,7 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 
 
 INSPECT_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
-                                  const std::initializer_list<KICAD_T>& aScanTypes )
+                                  const std::vector<KICAD_T>& aScanTypes )
 {
     // The part itself is never inspected, only its children
     for( LIB_ITEM& item : m_drawings )

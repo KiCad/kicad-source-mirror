@@ -190,7 +190,7 @@ public:
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
-    virtual bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const
+    virtual bool IsType( const std::vector<KICAD_T>& aScanTypes ) const
     {
         for( KICAD_T scanType : aScanTypes )
         {
@@ -303,14 +303,14 @@ public:
      *         else #SCAN_CONTINUE, and determined by the inspector.
      */
     virtual INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                                  const std::initializer_list<KICAD_T>& aScanTypes );
+                                  const std::vector<KICAD_T>& aScanTypes );
 
     /**
      * This changes first parameter to avoid the DList and use the main queue instead.
      */
     template< class T >
     static INSPECT_RESULT IterateForward( std::deque<T>& aList, INSPECTOR inspector, void* testData,
-                                          const std::initializer_list<KICAD_T>& scanTypes )
+                                          const std::vector<KICAD_T>& scanTypes )
     {
         for( const auto& it : aList )
         {
@@ -330,8 +330,7 @@ public:
      */
     template <class T>
     static INSPECT_RESULT IterateForward( std::vector<T>& aList, INSPECTOR inspector,
-                                          void* testData,
-                                          const std::initializer_list<KICAD_T>& scanTypes )
+                                          void* testData, const std::vector<KICAD_T>& scanTypes )
     {
         for( const auto& it : aList )
         {

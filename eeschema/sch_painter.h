@@ -195,7 +195,7 @@ private:
     void boxText( const wxString& aText, const VECTOR2D& aPosition, const TEXT_ATTRIBUTES& aAttrs );
 
 public:
-    static std::initializer_list<KICAD_T> g_ScaledSelectionTypes;
+    static std::vector<KICAD_T> g_ScaledSelectionTypes;
 
 private:
     SCH_RENDER_SETTINGS m_schSettings;

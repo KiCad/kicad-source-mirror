@@ -1717,7 +1717,7 @@ wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 
 INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
-                                  const std::initializer_list<KICAD_T>& aScanTypes )
+                                  const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {

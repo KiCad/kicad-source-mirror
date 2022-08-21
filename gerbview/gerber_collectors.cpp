@@ -36,12 +36,12 @@ INSPECT_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 }
 
 
-void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const std::initializer_list<KICAD_T>& aScanList,
+void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const std::vector<KICAD_T>& aScanTypes,
                                 const VECTOR2I& aRefPos )
 {
     Empty();        // empty the collection, primary criteria list
 
-    SetScanTypes( aScanList );
+    SetScanTypes( aScanTypes );
 
     // remember where the snapshot was taken from and pass refPos to
     // the Inspect() function.

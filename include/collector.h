@@ -209,7 +209,7 @@ public:
      *
      * @param aScanTypes A list of KICAD_Ts.
      */
-    void SetScanTypes( const std::initializer_list<KICAD_T>& aTypes ) { m_scanTypes = aTypes; }
+    void SetScanTypes( const std::vector<KICAD_T>& aTypes ) { m_scanTypes = aTypes; }
 
     void SetRefPos( const VECTOR2I& aRefPos ) { m_refPos = aRefPos; }
 
@@ -240,14 +240,14 @@ public:
     bool           m_MenuCancelled;      // Indicates selection disambiguation menu was canceled
 
 protected:
-    std::vector<EDA_ITEM*>         m_list;       // Primary list of most likely items
-    std::vector<EDA_ITEM*>         m_backupList; // Secondary list with items removed by heuristics
+    std::vector<EDA_ITEM*> m_list;       // Primary list of most likely items
+    std::vector<EDA_ITEM*> m_backupList; // Secondary list with items removed by heuristics
 
-    std::initializer_list<KICAD_T> m_scanTypes;
-    INSPECTOR_FUNC                 m_inspector;
+    std::vector<KICAD_T>   m_scanTypes;
+    INSPECTOR_FUNC         m_inspector;
 
-    VECTOR2I                       m_refPos;     // Reference pos used to generate the collection.
-    EDA_RECT                       m_refBox;     // Selection rect used to generate the collection.
+    VECTOR2I               m_refPos;     // Reference pos used to generate the collection.
+    EDA_RECT               m_refBox;     // Selection rect used to generate the collection.
 };
 
 #endif  // COLLECTOR_H

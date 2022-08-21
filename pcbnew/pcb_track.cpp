@@ -370,7 +370,7 @@ void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 // see class_track.h
 INSPECT_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData,
-                                 const std::initializer_list<KICAD_T>& aScanTypes )
+                                 const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {
@@ -579,7 +579,8 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         return true;
 
     // Must be static to keep from raising its ugly head in performance profiles
-    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
+    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                             PCB_PAD_T };
 
     // Do not check zones.  Doing so results in race conditions when the via collides with
     // two different zones of different priorities.

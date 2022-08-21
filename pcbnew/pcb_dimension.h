@@ -97,7 +97,7 @@ class PCB_DIMENSION_BASE : public BOARD_ITEM
 public:
     PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
 
-    bool IsType( const std::initializer_list<KICAD_T>& aScanTypes ) const override
+    bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
         if( BOARD_ITEM::IsType( aScanTypes ) )
             return true;
