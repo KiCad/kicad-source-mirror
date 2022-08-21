@@ -191,15 +191,40 @@ private:
     /// create a font size (fontz) from an eagle font size scalar and KiCad font thickness
     wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
 
-    /// Generate mapping between Eagle na KiCad layers
-    void mapEagleLayersToKicad();
+    /**
+     * Generate mapping between Eagle and KiCad layers.
+     *
+     * @warning It is imperative that this gets called correctly because footprint libraries
+     *          do not get remapped by the user on load.  Otherwise, Pcbnew will crash when
+     *          attempting to load footprint libraries that contain layers that do not exist
+     *          in the #EAGLE_LAYER definitions.
+     *
+     * @param aIsLibraryCache is the flag to indicate when mapping the footprint library cache
+     *                        layers rather than the board layers.
+     */
+    void mapEagleLayersToKicad( bool aIsLibraryCache = false );
 
     /// Convert an Eagle layer to a KiCad layer.
     PCB_LAYER_ID kicad_layer( int aLayer ) const;
 
-    /// Get default KiCad layer corresponding to an Eagle layer of the board,
-    /// a set of sensible layer mapping options and required flag
-    std::tuple<PCB_LAYER_ID, LSET, bool> defaultKicadLayer( int aEagleLayer ) const;
+    /**
+     * Get the default KiCad layer corresponding to an Eagle layer of the board,
+     * a set of sensible layer mapping options and required flag
+     *
+     * @note The Eagle MILLING, TTEST, BTEST, and HOLES layers are set to #UNDEFINED_LAYER
+     *       for historical purposes.  All other Eagle layers that do not directly map to
+     *       KiCad layers will be set to the #Dwg_User layer when loading Eagle footprint
+     *       libraries to prevent data loss.
+     *
+     * @see #EAGLE_LAYER and defaultKiCadLayer().
+     *
+     * @param aEagleLayer is the Eagle layer to map.
+     * @param aIsLibraryCache is a flag to indicate if the mapping is for board or footprint
+     *                        library cache objects.
+     * @return a tuple containing the mapped layer.
+     */
+    std::tuple<PCB_LAYER_ID, LSET, bool> defaultKicadLayer( int aEagleLayer,
+                                                            bool aIsLibraryCache = false ) const;
 
     /// Get Eagle layer name by its number
     const wxString& eagle_layer_name( int aLayer ) const;

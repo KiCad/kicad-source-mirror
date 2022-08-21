@@ -2920,7 +2920,7 @@ std::map<wxString, PCB_LAYER_ID> EAGLE_PLUGIN::DefaultLayerMappingCallback(
 }
 
 
-void EAGLE_PLUGIN::mapEagleLayersToKicad()
+void EAGLE_PLUGIN::mapEagleLayersToKicad( bool aIsLibraryCache )
 {
     std::vector<INPUT_LAYER_DESC> inputDescs;
 
@@ -2930,7 +2930,7 @@ void EAGLE_PLUGIN::mapEagleLayersToKicad()
 
         INPUT_LAYER_DESC layerDesc;
         std::tie( layerDesc.AutoMapLayer, layerDesc.PermittedLayers, layerDesc.Required ) =
-                defaultKicadLayer( eLayer.number );
+                defaultKicadLayer( eLayer.number, aIsLibraryCache );
 
         if( layerDesc.AutoMapLayer == UNDEFINED_LAYER )
             continue; // Ignore unused copper layers
@@ -2957,7 +2957,8 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 }
 
 
-std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagleLayer ) const
+std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagleLayer,
+                                                                      bool aIsLibraryCache ) const
 {
     // eagle copper layer:
     if( aEagleLayer >= 1 && aEagleLayer < int( arrayDim( m_cu_map ) ) )
@@ -3078,7 +3079,19 @@ std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagle
     case EAGLE_LAYER::BTEST:
     case EAGLE_LAYER::HOLES:
     default:
-        kiLayer = UNDEFINED_LAYER;
+        if( aIsLibraryCache )
+        {
+            if( aEagleLayer != EAGLE_LAYER::MILLING && aEagleLayer != EAGLE_LAYER::TTEST &&
+                aEagleLayer != EAGLE_LAYER::BTEST && aEagleLayer != EAGLE_LAYER::HOLES )
+                kiLayer = Dwgs_User;
+            else
+                kiLayer = UNDEFINED_LAYER;
+        }
+        else
+        {
+            kiLayer = UNSELECTED_LAYER;
+        }
+
         break;
     }
 
@@ -3191,7 +3204,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             m_xpath->push( "eagle.drawing.layers" );
             wxXmlNode* layers  = drawingChildren["layers"];
             loadLayerDefs( layers );
-            mapEagleLayersToKicad();
+            mapEagleLayersToKicad( true );
             m_xpath->pop();
 
             m_xpath->push( "eagle.drawing.library" );
