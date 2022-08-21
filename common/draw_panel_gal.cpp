@@ -24,7 +24,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
 #include <confirm.h>
 #include <eda_draw_frame.h>
 #include <kiface_base.h>
@@ -53,6 +52,7 @@
 
 #include <profile.h>
 
+#include <pgm_base.h>
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
@@ -94,7 +94,15 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
-    ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+    if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
+    {
+        ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+    }
+    else
+    {
+        ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+    }
+
     EnableScrolling( false, false ); // otherwise Zoom Auto disables GAL canvas
     KIPLATFORM::UI::SetOverlayScrolling( this, false ); // Prevent excessive repaint on GTK
 

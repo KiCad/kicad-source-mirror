@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -115,39 +115,51 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
 	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	wxBoxSizer* bSizer81;
+	bSizer81 = new wxBoxSizer( wxVERTICAL );
+
 	m_checkBoxIconsInMenus = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbUserInterface->Add( m_checkBoxIconsInMenus, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	bSizer81->Add( m_checkBoxIconsInMenus, 0, wxALIGN_LEFT|wxBOTTOM, 5 );
+
+	m_showScrollbars = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Show scrollbars in editors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showScrollbars->SetValue(true);
+	m_showScrollbars->SetToolTip( _("This change takes effect when relaunching the editor.") );
+
+	bSizer81->Add( m_showScrollbars, 0, wxALIGN_LEFT|wxBOTTOM, 5 );
+
+
+	m_gbUserInterface->Add( bSizer81, wxGBPosition( 0, 0 ), wxGBSpan( 2, 4 ), wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxEXPAND, 5 );
 
 	m_stIconTheme = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Icon theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stIconTheme->Wrap( -1 );
-	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbIconThemeLight = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Light"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbIconThemeLight->SetToolTip( _("Use icons designed for light window backgrounds") );
 
-	m_gbUserInterface->Add( m_rbIconThemeLight, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_rbIconThemeLight, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbIconThemeDark = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Dark"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeDark->SetToolTip( _("Use icons designed for dark window backgrounds") );
 
-	m_gbUserInterface->Add( m_rbIconThemeDark, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_rbIconThemeDark, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbIconThemeAuto = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeAuto->SetValue( true );
 	m_rbIconThemeAuto->SetToolTip( _("Automatically choose light or dark icons based on the system color theme") );
 
-	m_gbUserInterface->Add( m_rbIconThemeAuto, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+	m_gbUserInterface->Add( m_rbIconThemeAuto, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
 	m_staticTextCanvasScale = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCanvasScale->Wrap( -1 );
-	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_canvasScaleCtrl = new wxSpinCtrlDouble( m_sbUserInterface->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
 	m_canvasScaleCtrl->SetDigits( 0 );
-	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_canvasScaleAuto = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 15 );
+	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 15 );
 
 
 	m_sbUserInterface->Add( m_gbUserInterface, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );

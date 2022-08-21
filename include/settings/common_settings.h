@@ -49,6 +49,7 @@ class COMMON_SETTINGS : public JSON_SETTINGS
 public:
     struct APPEARANCE
     {
+        bool       show_scrollbars;
         double     canvas_scale;
         int        icon_scale;
         ICON_THEME icon_theme;

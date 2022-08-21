@@ -24,7 +24,7 @@
 #ifndef KICAD_DIALOG_SUITE_OPTIONS_H
 #define KICAD_DIALOG_SUITE_OPTIONS_H
 
-#include "panel_common_settings_base.h"
+#include <dialogs/panel_common_settings_base.h>
 
 
 class COMMON_SETTINGS;

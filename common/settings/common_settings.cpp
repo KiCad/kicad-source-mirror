@@ -105,6 +105,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_Appearance.apply_icon_scale_to_fonts = false;
 #endif
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_scrollbars",
+            &m_Appearance.show_scrollbars, 1 ) );
+
     m_params.emplace_back( new PARAM<double>( "appearance.hicontrast_dimming_factor",
             &m_Appearance.hicontrast_dimming_factor, 0.8f ) );
 
