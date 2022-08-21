@@ -152,17 +152,6 @@ public:
 
     inline double AsRadians() const { return m_value * DEGREES_TO_RADIANS; }
 
-    inline double AsAngleType( EDA_ANGLE_T aAngleType ) const
-    {
-        switch( aAngleType )
-        {
-        case TENTHS_OF_A_DEGREE_T: return AsTenthsOfADegree();
-        case DEGREES_T:            return AsDegrees();
-        case RADIANS_T:            return AsRadians();
-        default: assert( false );
-        }
-    }
-
     static constexpr double DEGREES_TO_RADIANS = M_PI / 180.0;
 
     /**
