@@ -191,7 +191,12 @@ wxString KIUI::EllipsizeStatusText( wxWindow* aWindow, const wxString& aString )
     msg.Replace( wxT( "\t" ), wxT( " " ) );
 
     wxClientDC dc( aWindow );
-    return wxControl::Ellipsize( msg, dc, wxELLIPSIZE_END, aWindow->GetSize().GetWidth() / 3 );
+    int        statusWidth = aWindow->GetSize().GetWidth();
+
+    // 30% of the first 800 pixels plus 60% of the remaining width
+    int textWidth = std::min( statusWidth, 800 ) * 0.3 + std::max( statusWidth - 800, 0 ) * 0.6;
+
+    return wxControl::Ellipsize( msg, dc, wxELLIPSIZE_END, textWidth );
 }
 
 
