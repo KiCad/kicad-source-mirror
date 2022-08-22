@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-15 08:15+0000\n"
+"PO-Revision-Date: 2022-08-23 17:52+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3606,7 +3606,7 @@ msgstr "Oletusarvoinen verkkoluokka vaaditaan."
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Verkot, jotka vastaavat '%s':</b>'"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3687,14 +3687,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Aseta väri läpinäkyväksi käyttääksesi KiCadin oletusväriä."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Kytkentäkaavion määritys"
+msgstr "Verkkoluokan määritykset:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Täyttöviiva kuvio"
+msgstr "Kuvio"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -7617,9 +7615,8 @@ msgid "Annotate Schematic"
 msgstr "Lisää selitteet Kytkentäkaaviolle"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
-#, fuzzy
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Nykyiset yleiset asetukset:</b><br>"
+msgstr "<b>Tällä hetkellä vastaavat verkot:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -12706,9 +12703,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Tälle väylälle tai verkolle on annettu useampi kuin yksi nimi"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Jalanjäljen määritykset"
+msgstr "Ristiriitaiset verkkoluokkamääritykset"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13333,9 +13329,9 @@ msgstr ""
 "Merkinnät pitää korjata ennen simulointia."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "Mallikirjaston '%s' lukeminen epäonnistui."
+msgstr "Simulaatiomallin %s lukeminen epäonnistui."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:377
 #, c-format
@@ -13534,9 +13530,8 @@ msgstr "Väylän Liitäntätyyppi"
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_label.cpp:839
 #: eeschema/sch_line.cpp:881 pcbnew/pad.cpp:920 pcbnew/pcb_track.cpp:892
 #: pcbnew/zone.cpp:533
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Määritetty verkkoluokka"
+msgstr "Ratkaistu Verkkoluokka"
 
 #: eeschema/sch_connection.cpp:409
 msgid "Connection Name"
@@ -13678,9 +13673,9 @@ msgid "Label '%s'"
 msgstr "Tunniste \"%s\""
 
 #: eeschema/sch_label.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Asetusnimike"
+msgstr "Direktiivin Nimike [%s %s]"
 
 #: eeschema/sch_label.cpp:1414
 #, c-format
@@ -13811,6 +13806,8 @@ msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
 msgstr ""
+"Tuntematon tai odottamaton tietue löytyi \"Lisätiedot\"-osiosta, Tietueen "
+"tunnus: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13822,6 +13819,8 @@ msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 msgstr ""
+"Tuntematon tai odottamaton tietue löytyi \"FileHeader\"-osiosta, Tietueen "
+"tunnus: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
@@ -13886,24 +13885,22 @@ msgid "Line's owner (%d) not found."
 msgstr "Viivan omistajaa (%d) ei löydy."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1477
-#, fuzzy
 msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Ei kaaviota auki tällä hetkellä."
+msgstr "Osaan kuuluvaa signaalijohtosarjaa ei tueta tällä hetkellä."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1520
-#, fuzzy
 msgid "Harness connector, belonging to the part is not currently supported."
-msgstr "Ei kaaviota auki tällä hetkellä."
+msgstr "Osaan kuuluvaa johtosarjan liitintä ei tueta tällä hetkellä."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Harness entry's parent (%d) not found."
-msgstr "Sivun merkinnän omistajaa (%d) ei löydy."
+msgstr "Johtosarjan vanhempaa merkintää (%d) ei löydy."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1584
-#, fuzzy, c-format
+#, c-format
 msgid "Harness type's parent (%d) not found."
-msgstr "Viivan omistajaa (%d) ei löydy."
+msgstr "Johtosarjatyypin omistajaa (%d) ei löydy."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1598
 #, c-format
@@ -13912,6 +13909,9 @@ msgid ""
 "review imported schematic, as KiCad does not natively support these Altium "
 "elements."
 msgstr ""
+"Altiumin johtosarjan liitin (%s) tuotiin Hierarkkisena sivuna. Ole hyvä ja "
+"tarkista tuotu kytkentäkaavio, koska KiCad ei tue alkuperäisesti näitä "
+"Altium-elementtejä."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1631
 #, c-format
@@ -13938,6 +13938,8 @@ msgid ""
 "Altium's Harness port (%s) was imported as Text box. Please review imported "
 "schematic, as KiCad does not natively support these Altium elements."
 msgstr ""
+"Altiumin johtosarjaportti (%s) tuotiin tekstilaatikkona. Tarkista tuotu "
+"kytkentäkaavio, koska KiCad ei tue alkuperäisesti näitä Altium-elementtejä."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
 #, c-format
@@ -14034,6 +14036,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"CADSTAR-kirjasimet ovat erilaisia kuin KiCadissa. Tämä johtaa "
+"todennäköisesti kohdistusongelmiin. Tarkista tuodut tekstielementit "
+"huolellisesti ja korjaa tarvittaessa manuaalisesti."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:264
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14214,9 +14219,9 @@ msgstr "Virheellinen symbolinimi"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:197
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Symbolia %s ei löydy kirjastosta '%s'."
+msgstr "Symboli %s sisältää virheellisen merkin '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:204
 msgid "Invalid library identifier"
@@ -14994,12 +14999,12 @@ msgid "Discard New Sheet"
 msgstr "Hylkää Uusi Lehti"
 
 #: eeschema/sim/sim_model.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing spice code <%s>\n"
 "%s"
 msgstr ""
-"Virhe kaavion \"%s\" lataamisessa.\n"
+"Virhe jäsennettäessä spice-koodia <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:888
@@ -15008,21 +15013,21 @@ msgid "Failed to set parameter '%s' to '%s'"
 msgstr "Parametrin \"%s\" asettaminen arvoksi \"%s\" epäonnistui"
 
 #: eeschema/sim/sim_model.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing param <%s>\n"
 "%s"
 msgstr ""
-"Virhe tallennettaessa piirilevytiedostoa '%s'.\n"
+"Virhe jäsennettäessä parametria <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing pin field <%s>\n"
 "%s"
 msgstr ""
-"Virhe tallennettaessa piirilevytiedostoa '%s'.\n"
+"Virhe jäsennettäessä nasta-kenttää <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1357
@@ -18883,11 +18888,11 @@ msgstr "Palautetaan '%s'"
 #: kicad/kicad_manager_frame.cpp:831
 msgid "Would you like to automatically check for updates on startup?"
 msgstr ""
+"Haluatko tarkistaa päivitykset automaattisesti käynnistyksen yhteydessä?"
 
 #: kicad/kicad_manager_frame.cpp:832
-#, fuzzy
 msgid "Check for updates"
-msgstr "Etsi liitoskuvaa"
+msgstr "Tarkista päivitykset"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -19196,9 +19201,8 @@ msgid "Pending"
 msgstr "Odottavat"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Päivitä"
+msgstr "Päivitä Kaikki"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -19222,7 +19226,7 @@ msgstr "Lataa"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Tarkista pakettipäivitykset käynnistyksen yhteydessä"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19314,12 +19318,11 @@ msgstr "Paikallinen tiedosto"
 
 #: kicad/pcm/pcm.cpp:1110
 msgid "Package updates are available"
-msgstr ""
+msgstr "Pakettipäivitykset ovat saatavilla"
 
 #: kicad/pcm/pcm.cpp:1111
-#, fuzzy
 msgid "No package updates available"
-msgstr "Ei vielä saatavilla..."
+msgstr "Pakettipäivityksiä ei ole saatavilla"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
@@ -25406,11 +25409,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
 #, fuzzy
 msgid "Net Ties"
-msgstr "Verkkotyökalut"
+msgstr "Verkkosidonnat"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Anturaryhmät saavat lyhentää erilaisia verkkoja:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -25806,7 +25809,7 @@ msgstr "Markkerit"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Clear board"
-msgstr "Pyyhi piirilevy"
+msgstr "Tyhjennä piirilevy"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
@@ -31033,9 +31036,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Differentiaalisen erotuksen pituus on liian pitkä"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "Jalanjälkitunnus '%s' ei kelpaa."
+msgstr "Jalanjälki ei kelpaa"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -31913,12 +31915,12 @@ msgstr "(PTH anturan reikään ei jää kuparia)"
 #: pcbnew/footprint.cpp:2531
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr ""
+msgstr "(verkkosidosanturaryhmä sisältää tuntemattoman anturanumeron %s)"
 
 #: pcbnew/footprint.cpp:2537
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(antura %s esiintyy useammassa kuin yhdessä verkkosidosryhmässä)"
 
 #: pcbnew/footprint.cpp:2822 pcbnew/pad.cpp:1740 pcbnew/zone.cpp:1300
 msgid "Clearance Override"
@@ -33092,14 +33094,12 @@ msgid "Auto-Place Footprints"
 msgstr "Aseta jalanjäljet automaattisesti"
 
 #: pcbnew/menubar_pcb_editor.cpp:413
-#, fuzzy
 msgid "Add Teardrops..."
-msgstr "Lisää Kyynelpisarat"
+msgstr "Lisää Kyynelpisarat..."
 
 #: pcbnew/menubar_pcb_editor.cpp:414
-#, fuzzy
 msgid "Remove Teardrops..."
-msgstr "Poista Kyynelpisarat"
+msgstr "Poista Kyynelpisarat..."
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -34349,6 +34349,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"CADSTAR-kirjasimet ovat erilaisia kuin KiCadissa. Tämä johtaa "
+"todennäköisesti kohdistusongelmiin, jotka voivat aiheuttaa DRC-virheitä. "
+"Tarkista tuodut tekstielementit huolellisesti ja korjaa tarvittaessa "
+"manuaalisesti."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -34409,6 +34413,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Virheellinen nollakokoinen antura ohitettu\n"
+"tiedostossa: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:996
 #, c-format
@@ -34890,9 +34896,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Kopioi kohde tunnukselle %d ja sekvenssille %d rivillä %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2262
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "Arkistotiedostoa \"%s\" ei voitu luoda\n"
+msgstr "anturapinoa %s ei löydy tiedostosta %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2333
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2362
@@ -35764,9 +35770,9 @@ msgid "Routing Track: %s"
 msgstr "Reititetään Johdinta: %s"
 
 #: pcbnew/router/router_tool.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Ratkaistu Välys: %s."
+msgstr "Ratkaistu Verkkoluokka: %s"
 
 #: pcbnew/router/router_tool.cpp:2226
 msgid "Routing Track"
@@ -35822,14 +35828,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Vienti ei onnistu, ole hyvä, korjaa ja yritä uudelleen"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Symboli jonka arvossa '%s', on tyhjä viitenumero."
+msgstr "Jalanjäljellä, jonka arvo on '%s' kohteella on tyhjä viitetunnus."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Päivitä viitenumeroa vastaavat jalanjäljet:"
+msgstr "Useilla jalanjäljillä on viitetunnus \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -35864,9 +35870,9 @@ msgid "Unsupported via shape: %s"
 msgstr "Ei tuettu läpiviennin muoto: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "Istuntotiedosto käyttää virheellistä kerrostunnusta %s."
+msgstr "Istuntotiedosto käyttää virheellistä tunnusta '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
@@ -35901,30 +35907,26 @@ msgid "%d Teardrops removed."
 msgstr "%d Kyynelpisarat poistettu."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "Pyöreät muodot"
+msgstr "Pyöreät muodot:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "Paras pituus"
+msgstr "Paras pituus:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "Paras korkeus"
+msgstr "Paras korkeus:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:280
-#, fuzzy
 msgid "Max length:"
-msgstr "Maksimi pituus"
+msgstr "Maksimi pituus:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:105
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:209
@@ -35950,9 +35952,8 @@ msgid "Curved"
 msgstr "Kaareva"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "Suorakulmaiset muodot"
+msgstr "Suorakulmaiset muodot:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
 msgid "Tracks:"
@@ -35975,9 +35976,8 @@ msgid "Add teardrops to round shapes only "
 msgstr "Lisää kynelpisaroita ainoastaan pyöreisiin muotoihin "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
-#, fuzzy
 msgid "SMD pads"
-msgstr "SMD anturat takana"
+msgstr "Pintaliitosanturat"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
@@ -35992,11 +35992,8 @@ msgid "Add teardrops to two connected tracks of different widths"
 msgstr "Lisää kyynelpisaran kahteen yhdistettyn eri levyiseen johtimeen"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr ""
-"Sallii kyynelpisaran leviämisen yli 2 johtimen, jos ensimmäinen "
-"johdinsegmentti on liian lyhyt"
+msgstr "Anna kyynelpisaroiden kattaa kaksi johdinosaa"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
@@ -36007,9 +36004,8 @@ msgstr ""
 "johdinsegmentti on liian lyhyt"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
-#, fuzzy
 msgid "Place teardrops on pads in zones"
-msgstr "Anturalla oleva kyynelpisara vyöhykkeillä"
+msgstr "Aseta kyynelpisarat vyöhykkeen anturoille"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
@@ -36021,9 +36017,8 @@ msgstr ""
 "Valitse tämä vaihtoehto salliaksesi kyynelpisarat näille anturoille."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "Kaaripisteet"
+msgstr "Kaaripisteet:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -38367,20 +38362,22 @@ msgstr "Siirtää nykyisen johtimen yhden osion taakse päin."
 
 #: pcbnew/tools/pcb_actions.cpp:1424
 msgid "Route From Other End"
-msgstr ""
+msgstr "Reititä toisesta päästä"
 
 #: pcbnew/tools/pcb_actions.cpp:1425
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Sitouttaa nykyiset segmentit ja aloittaa seuraavan segmentin lähimmästä rats-"
+"verkon päästä."
 
 #: pcbnew/tools/pcb_actions.cpp:1430
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Yritä lopettaa"
 
 #: pcbnew/tools/pcb_actions.cpp:1431
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr ""
+msgstr "Yritetään suorittaa nykyinen reitti lähimpään rats-verkon päähän."
 
 #: pcbnew/tools/pcb_actions.cpp:1436
 msgid ""
