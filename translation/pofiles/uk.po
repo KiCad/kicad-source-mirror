@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-21 02:52+0000\n"
+"PO-Revision-Date: 2022-08-23 17:52+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3577,7 +3577,7 @@ msgstr "Клас зв'язків по замовчуванні обов'язко
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Відповідність зв'язків '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3659,13 +3659,12 @@ msgstr ""
 "Встановіть прозорий колір для використання кольору KiCad за замовчуванням."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Відповідність у схемі"
+msgstr "Відповідність у схемі:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
 msgid "Pattern"
-msgstr ""
+msgstr "Шаблон"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -3943,6 +3942,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Некоректне число з плаваючою точкою в\n"
+"файл: '%s'\n"
+"строка: %d\n"
+"позиція: %d"
 
 #: common/dsnlexer.cpp:849
 #, c-format
@@ -3952,6 +3955,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Відсутнє число с плаваючою точкою\n"
+"файл: '%s'\n"
+"строка: %d\n"
+"позиція: %d"
 
 #: common/dsnlexer.cpp:874
 msgid "Invalid floating point number"
@@ -4091,7 +4098,7 @@ msgstr "Редактор форматних рамок"
 #: common/eda_base_frame.cpp:1078 kicad/pcm/dialogs/dialog_pcm.cpp:184
 #: kicad/tools/kicad_manager_actions.cpp:116
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Управління плагінами і контентом"
 
 #: common/eda_base_frame.cpp:1120
 #, c-format
@@ -7580,7 +7587,7 @@ msgstr "Позначити компоненти схеми"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Поточні відповідні зв'язки:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -16349,19 +16356,19 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:648
 msgid "Export Drawing to Clipboard"
-msgstr ""
+msgstr "Експортувати зображення в буфер обміну"
 
 #: eeschema/tools/ee_actions.cpp:648
 msgid "Export drawing of current sheet to clipboard"
-msgstr ""
+msgstr "Експортувати зображення поточного листа в буфер обміну"
 
 #: eeschema/tools/ee_actions.cpp:653
 msgid "Switch to PCB Editor"
-msgstr ""
+msgstr "Перейти до редактора PCB"
 
 #: eeschema/tools/ee_actions.cpp:653
 msgid "Open PCB in board editor"
-msgstr ""
+msgstr "Відкрити PCB у редакторі плат"
 
 #: eeschema/tools/ee_actions.cpp:658
 msgid "Export Netlist..."
@@ -16374,43 +16381,43 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:663
 msgid "Generate BOM..."
-msgstr ""
+msgstr "Згенерувати BOM..."
 
 #: eeschema/tools/ee_actions.cpp:663
 msgid "Generate a bill of materials for the current schematic"
-msgstr ""
+msgstr "Згенерувати список компонентів для поточної схеми"
 
 #: eeschema/tools/ee_actions.cpp:668
 msgid "Select on PCB"
-msgstr ""
+msgstr "Вибрати на PCB"
 
 #: eeschema/tools/ee_actions.cpp:669
 msgid "Select corresponding items in PCB editor"
-msgstr ""
+msgstr "Обрати відповідні елементи в PCB редакторі"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Show Hidden Pins"
-msgstr ""
+msgstr "Показувати приховані виводи"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Toggle display of hidden pins"
-msgstr ""
+msgstr "Перемкнути відображення прихованих виводів"
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Show Hidden Fields"
-msgstr ""
+msgstr "Показати приховані поля"
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Toggle display of hidden text fields"
-msgstr ""
+msgstr "Перемкнути відображення полів прихованого тексту"
 
 #: eeschema/tools/ee_actions.cpp:683
 msgid "Show ERC Warnings"
-msgstr ""
+msgstr "Показувати попередження ERC"
 
 #: eeschema/tools/ee_actions.cpp:683
 msgid "Show markers for electrical rules checker warnings"
-msgstr ""
+msgstr "Показувати маркери попереджень при перевірці електричних правил"
 
 #: eeschema/tools/ee_actions.cpp:687
 msgid "Show ERC Errors"
@@ -16463,95 +16470,95 @@ msgstr "Відновити схему"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr ""
+msgstr "Виконати варіант діагностики та спробувати відновити схему"
 
 #: eeschema/tools/ee_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:814
 msgid "Scripting Console"
-msgstr ""
+msgstr "Консоль скриптів"
 
 #: eeschema/tools/ee_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:814
 msgid "Show the Python scripting console"
-msgstr ""
+msgstr "Показати консоль скриптів Python"
 
 #: eeschema/tools/ee_actions.cpp:735 eeschema/tools/ee_actions.cpp:740
 msgid "Enter Sheet"
-msgstr ""
+msgstr "Відкрити лист"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr ""
+msgstr "Змініть вміст наданого аркуша в редакторі схем"
 
 #: eeschema/tools/ee_actions.cpp:740
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr ""
+msgstr "Відобразити вміст вибраного листа у редакторі схем"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Leave Sheet"
-msgstr ""
+msgstr "Залишити лист"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Display the parent sheet in the schematic editor"
-msgstr ""
+msgstr "Відображати батьківську аркуш у редакторі схем"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Navigate Up"
-msgstr ""
+msgstr "Перейти вгору"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Navigate up one sheet in the hierarchy"
-msgstr ""
+msgstr "Перейти на один аркуш вгору в ієрархії"
 
 #: eeschema/tools/ee_actions.cpp:757
 msgid "Navigate Back"
-msgstr ""
+msgstr "Перейти назад"
 
 #: eeschema/tools/ee_actions.cpp:757
 msgid "Move forward in sheet navigation history"
-msgstr ""
+msgstr "Перейти вперед в історії навігації аркуша"
 
 #: eeschema/tools/ee_actions.cpp:763
 msgid "Navigate Forward"
-msgstr ""
+msgstr "Перейти вперед"
 
 #: eeschema/tools/ee_actions.cpp:763
 msgid "Move backward in sheet navigation history"
-msgstr ""
+msgstr "Перейти назад в історії навігації аркуша"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Previous Sheet"
-msgstr ""
+msgstr "Попередній аркуш"
 
 #: eeschema/tools/ee_actions.cpp:769
 msgid "Move to previous sheet by number"
-msgstr ""
+msgstr "Перейти до попереднього аркуша за номером"
 
 #: eeschema/tools/ee_actions.cpp:775
 msgid "Next Sheet"
-msgstr ""
+msgstr "Наступний аркуш"
 
 #: eeschema/tools/ee_actions.cpp:775
 msgid "Move to next sheet by number"
-msgstr ""
+msgstr "Перехід до наступного аркуша за номером"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Hierarchy Navigator"
-msgstr ""
+msgstr "Навігатор в ієрархії"
 
 #: eeschema/tools/ee_actions.cpp:781
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr ""
+msgstr "Показати або приховати навігатор ієрархії схем"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Navigate to page"
-msgstr ""
+msgstr "Перейти на сторінку"
 
 #: eeschema/tools/ee_actions.cpp:793
 msgid "Add Junctions to Selection where needed"
-msgstr ""
+msgstr "Додати точки з'єднання, які необхідні"
 
 #: eeschema/tools/ee_actions.cpp:806
 msgid "Add Wire"
-msgstr ""
+msgstr "Додати провідник"
 
 #: eeschema/tools/ee_actions.cpp:806
 msgid "Add a wire"
@@ -16585,7 +16592,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:838
 msgid "Switch Segment Posture"
-msgstr ""
+msgstr "Змінити частину сегменту"
 
 #: eeschema/tools/ee_actions.cpp:838
 msgid "Switches posture of the current segment."
@@ -16632,31 +16639,31 @@ msgstr ""
 #: eeschema/tools/ee_actions.cpp:868 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Moves the selected item(s)"
-msgstr ""
+msgstr "Перемістити вибраний(і) об'єкт"
 
 #: eeschema/tools/ee_actions.cpp:873 pcbnew/tools/edit_tool_move_fct.cpp:809
 msgid "Drag"
-msgstr ""
+msgstr "Перетягнути"
 
 #: eeschema/tools/ee_actions.cpp:873
 msgid "Drags the selected item(s)"
-msgstr ""
+msgstr "Пересунити обраний елемент(и)"
 
 #: eeschema/tools/ee_actions.cpp:877
 msgid "Move Activate"
-msgstr ""
+msgstr "Активувати переміщення"
 
 #: eeschema/tools/ee_actions.cpp:881
 msgid "Symbol Move Activate"
-msgstr ""
+msgstr "Активувати переміщення символу"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Align Elements to Grid"
-msgstr ""
+msgstr "Вирівняти елементи по сітці"
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Save Current Sheet Copy As..."
-msgstr ""
+msgstr "Зберегти копію поточного листа як..."
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Save a copy of the current sheet to another location or name"
@@ -17524,77 +17531,77 @@ msgstr ""
 #: gerbview/files.cpp:524
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr ""
+msgstr "<b>Не вдається створити тимчасовий файл '%s'.</b>"
 
 #: gerbview/files.cpp:549
 #, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr ""
+msgstr "Пропущений файл '%s' (невідомий тип)."
 
 #: gerbview/files.cpp:586
 #, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr ""
+msgstr "<b>помилка читання %s розархівованого файла</b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
-msgstr ""
+msgstr "Відкрити ZIP-файл"
 
 #: gerbview/files.cpp:668 gerbview/job_file_reader.cpp:242
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:153
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:202
 msgid "Messages"
-msgstr ""
+msgstr "Повідомлення"
 
 #: gerbview/gerber_draw_item.cpp:645
 msgid "Attribute"
-msgstr ""
+msgstr "Атрибути"
 
 #: gerbview/gerber_draw_item.cpp:648 gerbview/gerber_draw_item.cpp:658
 msgid "No attribute"
-msgstr ""
+msgstr "Немає атрибутів"
 
 #: gerbview/gerber_draw_item.cpp:654
 #, c-format
 msgid "D Code %d"
-msgstr ""
+msgstr "D-код %d"
 
 #: gerbview/gerber_draw_item.cpp:667
 msgid "Graphic Layer"
-msgstr ""
+msgstr "Шар графіки"
 
 #: gerbview/gerber_draw_item.cpp:678
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:239
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr ""
+msgstr "Позиція"
 
 #: gerbview/gerber_draw_item.cpp:683
 msgid "Start"
-msgstr ""
+msgstr "Початок"
 
 #: gerbview/gerber_draw_item.cpp:686
 msgid "End"
-msgstr ""
+msgstr "Кінець"
 
 #: gerbview/gerber_draw_item.cpp:697
 msgid "Clear"
-msgstr ""
+msgstr "Очистити"
 
 #: gerbview/gerber_draw_item.cpp:698 gerbview/gerber_file_image.cpp:340
 msgid "Polarity"
-msgstr ""
+msgstr "Полярність"
 
 #: gerbview/gerber_draw_item.cpp:703 pcbnew/fp_text.cpp:292
 #: pcbnew/fp_textbox.cpp:313 pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:307
 #: pcbnew/tools/edit_tool.cpp:1280 pcbnew/tools/pcb_actions.cpp:325
 msgid "Mirror"
-msgstr ""
+msgstr "Відзеркалити"
 
 #: gerbview/gerber_draw_item.cpp:707
 msgid "AB axis"
-msgstr ""
+msgstr "Вісь AB"
 
 #: gerbview/gerber_draw_item.cpp:719 gerbview/toolbars_gerber.cpp:142
 #: gerbview/toolbars_gerber.cpp:145
@@ -17605,168 +17612,174 @@ msgstr "Звʼязок:"
 #: gerbview/gerber_draw_item.cpp:732
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr ""
+msgstr "Компонент: %s  Контакт: %s"
 
 #: gerbview/gerber_draw_item.cpp:738
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr ""
+msgstr "Компонент: %s  Контакт: %s  Тип %s"
 
 #: gerbview/gerber_draw_item.cpp:747 gerbview/toolbars_gerber.cpp:129
 #: gerbview/toolbars_gerber.cpp:132
 msgid "Cmp:"
-msgstr ""
+msgstr "Компонент:"
 
 #: gerbview/gerber_draw_item.cpp:1007
 #, c-format
 msgid "%s (D%d) on layer %d: %s"
-msgstr ""
+msgstr "%s (D%d) на шарі %d: %s"
 
 #: gerbview/gerber_file_image.cpp:322
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
-msgstr ""
+msgstr "Формат"
 
 #: gerbview/gerber_file_image.cpp:327
 msgid "Image name"
-msgstr ""
+msgstr "Ім'я зображення"
 
 #: gerbview/gerber_file_image.cpp:332
 msgid "Graphic layer"
-msgstr ""
+msgstr "Графічний шар"
 
 #: gerbview/gerber_file_image.cpp:336
 msgid "Img Rot."
-msgstr ""
+msgstr "Обертати зображення"
 
 #: gerbview/gerber_file_image.cpp:344
 msgid "X Justify"
-msgstr ""
+msgstr "Вирівняти по X"
 
 #: gerbview/gerber_file_image.cpp:347
 msgid "Y Justify"
-msgstr ""
+msgstr "Вирівняти по Y"
 
 #: gerbview/gerber_file_image.cpp:370
 msgid "Image Justify Offset"
-msgstr ""
+msgstr "Зміщення зображення"
 
 #: gerbview/gerber_file_image_list.cpp:196
 #, c-format
 msgid "Graphic layer %d"
-msgstr ""
+msgstr "Графічний шар %d"
 
 #: gerbview/gerbview_frame.cpp:63 gerbview/menubar.cpp:135
 #: gerbview/menubar.cpp:141
 msgid "Clear Recent Zip Files"
-msgstr ""
+msgstr "Очистити останні zip-файли"
 
 #: gerbview/gerbview_frame.cpp:65 gerbview/menubar.cpp:93
 #: gerbview/menubar.cpp:99
 msgid "Clear Recent Drill Files"
-msgstr ""
+msgstr "Очистити останні файли Drill"
 
 #: gerbview/gerbview_frame.cpp:67 gerbview/menubar.cpp:113
 #: gerbview/menubar.cpp:120
 msgid "Clear Recent Job Files"
-msgstr ""
+msgstr "Очистити останні файли завдань"
 
 #: gerbview/gerbview_frame.cpp:84
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
-msgstr ""
+msgstr "Перегляд KiCad Gerber файлів"
 
 #: gerbview/gerbview_frame.cpp:607
 msgid "Drawing layer not in use"
-msgstr ""
+msgstr "Графічний шар не використовується"
 
 #: gerbview/gerbview_frame.cpp:624
 msgid "(with X2 attributes)"
-msgstr ""
+msgstr "(з атрибутами X2)"
 
 #: gerbview/gerbview_frame.cpp:633
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
-msgstr ""
+msgstr "Назва зображення: \"%s\"  Назва шару: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:649
 msgid "X2 attr"
-msgstr ""
+msgstr "X2 атрибути"
 
 #: gerbview/job_file_reader.cpp:156
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr ""
+"Цей файл завдання використовує застарілий формат. Будь ласка, відтворіть "
+"його."
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr ""
+msgstr "Відкрити файл завдання Gerber"
 
 #: gerbview/menubar.cpp:69 gerbview/menubar.cpp:76
 msgid "Clear Recent Gerber Files"
-msgstr ""
+msgstr "Очистити нещодавні файли Gerber"
 
 #: gerbview/menubar.cpp:75 gerbview/menubar.cpp:98
 msgid "Open Recent Gerber File"
-msgstr ""
+msgstr "Відкрити нещодавній Gerber файл"
 
 #: gerbview/menubar.cpp:89
 msgid "Open Recent Drill File"
-msgstr ""
+msgstr "Відкрити нещодавній Drill файл"
 
 #: gerbview/menubar.cpp:119
 msgid "Open Recent Job File"
-msgstr ""
+msgstr "Відкрити останній файл завдання"
 
 #: gerbview/menubar.cpp:140
 msgid "Open Recent Zip File"
-msgstr ""
+msgstr "Відкрити нещодавній ZIP-файл"
 
 #: gerbview/readgerb.cpp:63
 #, c-format
 msgid "File '%s' not found"
-msgstr ""
+msgstr "Файл '%s' не знайдено"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"Попередження: цей файл не має визначення D-коду\n"
+"Тому розмір деяких елементів не визначений"
 
 #: gerbview/readgerb.cpp:91
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"Попередження: у цьому файлі відсутні деякі визначення D-коду\n"
+"Тому розмір деяких елементів не визначений"
 
 #: gerbview/rs274d.cpp:413
 msgid "Invalid Code Number"
-msgstr ""
+msgstr "Невірний код"
 
 #: gerbview/rs274d.cpp:621
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr ""
+msgstr "Неправильний формат файлу Gerber: відсутня команда G74 або G75"
 
 #: gerbview/rs274x.cpp:230
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr ""
+msgstr "RS274X: Неприпустима команда формату GERBER '%c' в рядку %d: \"%s"
 
 #: gerbview/rs274x.cpp:233
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr ""
+msgstr "GERBER файл \"%s\" може не відображатися, як необхідно."
 
 #: gerbview/rs274x.cpp:541
 msgid "RS274X: Command \"IR\" rotation value not allowed"
-msgstr ""
+msgstr "RS274X: командне IR\" має недопустиму значення кута повороту"
 
 #: gerbview/rs274x.cpp:649
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr ""
+msgstr "RS274X: Команда KNOCKOUT ігнорується GerbView"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
-msgstr ""
+msgstr "Підсвітити елементи, що належать даному компоненту"
 
 #: gerbview/toolbars_gerber.cpp:144
 msgid "Highlight items belonging to this net"
@@ -17774,35 +17787,35 @@ msgstr "Підсвітити елементи, що належать до цьо
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
-msgstr ""
+msgstr "Атрибут:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
-msgstr ""
+msgstr "Підсвітити компоненти, що мають таку ж саме апертуру"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
-msgstr ""
+msgstr "D-код:"
 
 #: gerbview/toolbars_gerber.cpp:290
 msgid "<No selection>"
-msgstr ""
+msgstr "<Не вибрано>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Autodetected File(s)..."
-msgstr ""
+msgstr "Відкрити автоматично виявлені файли..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "Відкрити автоматично файли на новому шарі."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
-msgstr ""
+msgstr "Відкрити файли Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr ""
+msgstr "Відкрити файл Gerber на новому шарі."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
@@ -17957,7 +17970,7 @@ msgstr "Прозорі негативні об'єкти"
 
 #: gerbview/tools/gerbview_actions.cpp:180
 msgid "Show negative objects in ghost color"
-msgstr ""
+msgstr "Показати негативні об'єкти в кольорі"
 
 #: gerbview/tools/gerbview_actions.cpp:186
 msgid "Show DCodes"
@@ -18068,50 +18081,50 @@ msgstr "Показати точки сітки (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "Show drawing sheet border and title block"
-msgstr ""
+msgstr "Показати форматну рамку і заголовок блоку"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "Show drawing sheet page limits"
-msgstr ""
+msgstr "Показати обмеження сторінки"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:107
 msgid "PCB Background"
-msgstr ""
+msgstr "Фон для PCB"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:1735
 msgid "Show All Layers"
-msgstr ""
+msgstr "Показати всі шари"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 #: pcbnew/widgets/appearance_controls.cpp:1722
 msgid "Hide All Layers But Active"
-msgstr ""
+msgstr "Приховати всі шари, крім активних"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:134
 msgid "Always Hide All Layers But Active"
-msgstr ""
+msgstr "Завжди приховувати всі шари, крім активних"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 #: pcbnew/widgets/appearance_controls.cpp:1738
 msgid "Hide All Layers"
-msgstr ""
+msgstr "Приховати всі шари"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
 msgid "Sort Layers if X2 Mode"
-msgstr ""
+msgstr "Сортувати шари, якщо режим X2"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:145
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "Сортувати шари за розширенням файлу"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
-msgstr ""
+msgstr "Змінити колір шару для"
 
 #: gerbview/widgets/layer_widget.cpp:186
 msgid "Change Render Color for"
-msgstr ""
+msgstr "Змінити колір візуалізації для"
 
 #: gerbview/widgets/layer_widget.cpp:340
 #: pcbnew/widgets/appearance_controls.cpp:2053
@@ -18119,102 +18132,104 @@ msgstr ""
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr ""
+"Двічі клацніть лівою кнопкою миші або клацніть середньою кнопкою миші, щоб "
+"змінити колір, клацніть правою кнопкою миші, щоб відкрити меню"
 
 #: gerbview/widgets/layer_widget.cpp:350
 msgid "Enable this for visibility"
-msgstr ""
+msgstr "Дозволити для перегляду"
 
 #: gerbview/widgets/layer_widget.cpp:445
 msgid "Left double click or middle click for color change"
-msgstr ""
+msgstr "Натискання двічі на ліву або середню кнопку для зміни кольору"
 
 #: include/base_units.h:48
 msgid "-- mixed values --"
-msgstr ""
+msgstr "-- змішані значення -"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr ""
+msgstr "Скинути всі кольори у цій теми за замовчуванням KiCad"
 
 #: include/kiway_player.h:242
 msgid "This file is already open."
-msgstr ""
+msgstr "Цей файл вже відкритий."
 
 #: include/lib_table_grid.h:180
 msgid "Library Path"
-msgstr ""
+msgstr "Шлях до бібліотеки"
 
 #: include/lib_table_grid.h:183
 msgid "Library Format"
-msgstr ""
+msgstr "Формат бібліотеки"
 
 #: include/lib_table_grid.h:186
 msgid "Active"
-msgstr ""
+msgstr "Активний"
 
 #: include/libeval_compiler/libeval_compiler.h:336
 msgid "Malformed expression"
-msgstr ""
+msgstr "Неправильний вираз"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr ""
+msgstr "Скинути всі гарячі клавіші на стандартні налаштування KiCad"
 
 #: include/project.h:41
 msgid "untitled"
-msgstr ""
+msgstr "без назви"
 
 #: include/stroke_params.h:80
 msgid "Leave unchanged"
-msgstr ""
+msgstr "Залишити без змін"
 
 #: include/widgets/infobar.h:117
 msgid "Hide this message."
-msgstr ""
+msgstr "Сховати це повідомлення."
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
-msgstr ""
+msgstr "Скинути всі параметри на цій сторінці за замовчуванням"
 
 #: include/wxstream_helper.h:49
 msgid "Failed to output data"
-msgstr ""
+msgstr "Помилка виведення даних"
 
 #: kicad/dialogs/dialog_template_selector.cpp:148
 msgid "<h1>Template Selector</h1>"
-msgstr ""
+msgstr "<h1>Вибір шаблону</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:253
 msgid "Select Templates Directory"
-msgstr ""
+msgstr "Виберіть каталог шаблонів"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:22
 msgid "Folder:"
-msgstr ""
+msgstr "Тека:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:127
 msgid "Project Template Title"
-msgstr ""
+msgstr "Заголовок шаблону проекту"
 
 #: kicad/dialogs/dialog_template_selector_base.h:67
 msgid "Project Template Selector"
-msgstr ""
+msgstr "Вибір шаблону проекту"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
-msgstr ""
+msgstr "Редагувати схему проекту"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr ""
+msgstr "Редагувати глобальні бібліотеки символів та/або проекту"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Редагувати PCB проекту"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr ""
+msgstr "Редагування глобальних та/або проектів PCB бібліотек розташування"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
@@ -18223,10 +18238,11 @@ msgstr "Попередній перегляд файлів Gerber"
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr ""
+"Перетворення растрових зображень в схематичні символи або посадкове місце"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr ""
+msgstr "Показати інструменти для розрахунку опору, потужності струму тощо."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:158
 msgid ""
