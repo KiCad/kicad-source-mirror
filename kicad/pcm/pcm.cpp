@@ -562,7 +562,17 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
 
 void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aRepositoryId )
 {
-    const PCM_REPOSITORY& repository = getCachedRepository( aRepositoryId );
+    const PCM_REPOSITORY* repository;
+
+    try
+    {
+        repository = &getCachedRepository( aRepositoryId );
+    }
+    catch( ... )
+    {
+        wxLogDebug( "Invalid/Missing repository " + aRepositoryId );
+        return;
+    }
 
     for( auto& entry : m_installed )
     {
@@ -573,7 +583,7 @@ void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aR
             continue;
 
         // If current package is no longer in this repository, keep it as is
-        if( repository.package_map.count( installation_entry.package.identifier ) == 0 )
+        if( repository->package_map.count( installation_entry.package.identifier ) == 0 )
             continue;
 
         boost::optional<PACKAGE_VERSION> current_version;
@@ -590,7 +600,7 @@ void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aR
             current_version = *current_version_it; // copy
 
         // Copy repository metadata into installation entry
-        installation_entry.package = repository.package_list[repository.package_map.at(
+        installation_entry.package = repository->package_list[repository->package_map.at(
                 installation_entry.package.identifier )];
 
         // Insert current version if it's missing from repository metadata
@@ -699,7 +709,16 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
 const std::vector<PCM_PACKAGE>&
 PLUGIN_CONTENT_MANAGER::GetRepositoryPackages( const wxString& aRepositoryId ) const
 {
-    return getCachedRepository( aRepositoryId ).package_list;
+    static std::vector<PCM_PACKAGE> empty{};
+
+    try
+    {
+        return getCachedRepository( aRepositoryId ).package_list;
+    }
+    catch( ... )
+    {
+        return empty;
+    }
 }
 
 
@@ -757,10 +776,17 @@ void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const w
     entry.current_version = aVersion;
     entry.repository_id = aRepositoryId;
 
-    if( !aRepositoryId.IsEmpty() )
-        entry.repository_name = getCachedRepository( aRepositoryId ).name;
-    else
-        entry.repository_name = _( "Local file" );
+    try
+    {
+        if( !aRepositoryId.IsEmpty() )
+            entry.repository_name = getCachedRepository( aRepositoryId ).name;
+        else
+            entry.repository_name = _( "Local file" );
+    }
+    catch( ... )
+    {
+        entry.repository_name = _( "Unknown" );
+    }
 
     entry.install_timestamp = getCurrentTimestamp();
 
@@ -782,12 +808,22 @@ PCM_PACKAGE_STATE PLUGIN_CONTENT_MANAGER::GetPackageState( const wxString& aRepo
     if( aRepositoryId.IsEmpty() || !CacheRepository( aRepositoryId ) )
         return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
 
-    const PCM_REPOSITORY& repo = getCachedRepository( aRepositoryId );
+    const PCM_REPOSITORY* repo;
 
-    if( repo.package_map.count( aPackageId ) == 0 )
+    try
+    {
+        repo = &getCachedRepository( aRepositoryId );
+
+    }
+    catch( ... )
+    {
+        return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
+    }
+
+    if( repo->package_map.count( aPackageId ) == 0 )
         return installed ? PPS_INSTALLED : PPS_UNAVAILABLE;
 
-    const PCM_PACKAGE& pkg = repo.package_list[repo.package_map.at( aPackageId )];
+    const PCM_PACKAGE& pkg = repo->package_list[repo->package_map.at( aPackageId )];
 
     if( installed )
     {
