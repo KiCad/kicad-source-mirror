@@ -3017,17 +3017,9 @@ std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagle
     case EAGLE_LAYER::HOLES:
     default:
         if( aIsLibraryCache )
-        {
-            if( aEagleLayer != EAGLE_LAYER::MILLING && aEagleLayer != EAGLE_LAYER::TTEST &&
-                aEagleLayer != EAGLE_LAYER::BTEST && aEagleLayer != EAGLE_LAYER::HOLES )
-                kiLayer = Dwgs_User;
-            else
-                kiLayer = UNDEFINED_LAYER;
-        }
+            kiLayer = UNDEFINED_LAYER;
         else
-        {
             kiLayer = UNSELECTED_LAYER;
-        }
 
         break;
     }

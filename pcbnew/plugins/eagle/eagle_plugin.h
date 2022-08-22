@@ -213,8 +213,9 @@ private:
      *
      * @note The Eagle MILLING, TTEST, BTEST, and HOLES layers are set to #UNDEFINED_LAYER
      *       for historical purposes.  All other Eagle layers that do not directly map to
-     *       KiCad layers will be set to the #Dwg_User layer when loading Eagle footprint
-     *       libraries to prevent data loss.
+     *       KiCad layers will be set to #UNDEFINED_LAYER when loading Eagle footprint
+     *       libraries.  This should be addressed in the future because in some cases this
+     *       will cause data loss.
      *
      * @see #EAGLE_LAYER and defaultKiCadLayer().
      *
