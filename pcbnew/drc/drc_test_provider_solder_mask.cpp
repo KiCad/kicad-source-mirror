@@ -105,7 +105,7 @@ private:
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
     // first object+net that bridges their aperture (after which any other nets will generate
     // violations).
-    std::map< std::pair<BOARD_ITEM*, PCB_LAYER_ID>, std::pair<BOARD_ITEM*, int> > m_maskApertureNetMap;
+    std::unordered_map<PTR_LAYER_CACHE_KEY, std::pair<BOARD_ITEM*, int>> m_maskApertureNetMap;
 };
 
 
@@ -345,7 +345,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
         return false;
     }
 
-    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aMaskItem, aTestLayer };
+    PTR_LAYER_CACHE_KEY key = { aMaskItem, aTestLayer };
 
     auto ii = m_maskApertureNetMap.find( key );
 

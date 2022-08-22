@@ -167,6 +167,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     reportAux( wxT( "Worst clearance : %d nm" ), m_largestEdgeClearance );
 
+    /*
+     * Build an RTree of the various edges (including NPTH holes) and margins found on the board.
+     */
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;
     DRC_RTREE                               edgesTree;
 
@@ -246,6 +249,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         }
     }
 
+    /*
+     * Test copper and silk items against the set of edges.
+     */
     const int progressDelta = 200;
     int       count = 0;
     int       ii = 0;

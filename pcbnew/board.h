@@ -75,6 +75,17 @@ struct PTR_PTR_CACHE_KEY
     }
 };
 
+struct PTR_LAYER_CACHE_KEY
+{
+    BOARD_ITEM*  A;
+    PCB_LAYER_ID Layer;
+
+    bool operator==(const PTR_LAYER_CACHE_KEY& other) const
+    {
+        return A == other.A && Layer == other.Layer;
+    }
+};
+
 struct PTR_PTR_LAYER_CACHE_KEY
 {
     BOARD_ITEM*  A;
@@ -99,11 +110,22 @@ namespace std
     };
 
     template <>
+    struct hash<PTR_LAYER_CACHE_KEY>
+    {
+        std::size_t operator()( const PTR_LAYER_CACHE_KEY& k ) const
+        {
+            constexpr std::size_t prime = 19937;
+
+            return hash<void*>()( k.A ) ^ ( hash<int>()( k.Layer ) * prime );
+        }
+    };
+
+    template <>
     struct hash<PTR_PTR_LAYER_CACHE_KEY>
     {
         std::size_t operator()( const PTR_PTR_LAYER_CACHE_KEY& k ) const
         {
-            const std::size_t prime = 19937;
+            constexpr std::size_t prime = 19937;
 
             return hash<void*>()( k.A ) ^ hash<void*>()( k.B ) ^ ( hash<int>()( k.Layer ) * prime );
         }

@@ -29,7 +29,6 @@
 
 #include <wx/debug.h>
 
-#include <advanced_config.h>
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
@@ -56,6 +55,33 @@
     Errors generated:
     - DRCE_CONNECTION_WIDTH
 */
+
+struct NETCODE_LAYER_CACHE_KEY
+{
+    int          Netcode;
+    PCB_LAYER_ID Layer;
+
+    bool operator==(const NETCODE_LAYER_CACHE_KEY& other) const
+    {
+        return Netcode == other.Netcode && Layer == other.Layer;
+    }
+};
+
+
+namespace std
+{
+    template <>
+    struct hash<NETCODE_LAYER_CACHE_KEY>
+    {
+        std::size_t operator()( const NETCODE_LAYER_CACHE_KEY& k ) const
+        {
+            constexpr std::size_t prime = 19937;
+
+            return hash<int>()( k.Netcode ) ^ ( hash<int>()( k.Layer ) * prime );
+        }
+    };
+}
+
 
 class DRC_TEST_PROVIDER_CONNECTION_WIDTH : public DRC_TEST_PROVIDER
 {
@@ -597,7 +623,12 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     LSET          copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
     LSEQ          copperLayers = copperLayerSet.Seq();
     BOARD*        board = m_drcEngine->GetBoard();
-    DRC_RTREE*    tree = board->m_CopperItemRTreeCache.get();
+
+    /*
+     * Build a set of distinct minWidths specified by various DRC rules.  We'll run a test for
+     * each distinct minWidth, and then decide if any copper which failed that minWidth actually
+     * was required to abide by it or not.
+     */
     std::set<int> distinctMinWidths
                         = m_drcEngine->QueryDistinctConstraints( CONNECTION_WIDTH_CONSTRAINT );
 
@@ -606,11 +637,11 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
     struct ITEMS_POLY
     {
-        std::set<BOARD_ITEM*> items;
-        SHAPE_POLY_SET        poly;
+        std::set<BOARD_ITEM*> Items;
+        SHAPE_POLY_SET        Poly;
     };
 
-    std::map< std::pair<int, PCB_LAYER_ID>, ITEMS_POLY > dataset;
+    std::unordered_map<NETCODE_LAYER_CACHE_KEY, ITEMS_POLY> dataset;
     std::atomic<size_t> done( 1 );
 
     auto calc_effort =
@@ -634,72 +665,91 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 return effort;
             };
 
+    /*
+     * For each net, on each layer, build a polygonSet which contains all the copper associated
+     * with that net on that layer.
+     */
     auto build_netlayer_polys =
             [&]( int aNetcode, const PCB_LAYER_ID aLayer ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                ITEMS_POLY& data = dataset[ { aNetcode, aLayer } ];
+                ITEMS_POLY& itemsPoly = dataset[ { aNetcode, aLayer } ];
 
-                for( BOARD_ITEM* item : data.items )
+                for( BOARD_ITEM* item : itemsPoly.Items )
                 {
-                    item->TransformShapeWithClearanceToPolygon( data.poly, aLayer, 0,
+                    item->TransformShapeWithClearanceToPolygon( itemsPoly.Poly, aLayer, 0,
                                                                 ARC_HIGH_DEF, ERROR_OUTSIDE );
                 }
 
-                data.poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                itemsPoly.Poly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-                done.fetch_add( calc_effort( data.items, aLayer ) );
+                done.fetch_add( calc_effort( itemsPoly.Items, aLayer ) );
 
                 return 1;
             };
 
+    /*
+     * Examine all necks in a given polygonSet which fail a given minWidth.
+     */
     auto min_checker =
-            [&]( const ITEMS_POLY& aDataset, const PCB_LAYER_ID aLayer, int aMinWidth ) -> size_t
+            [&]( const ITEMS_POLY& aItemsPoly, const PCB_LAYER_ID aLayer, int aMinWidth ) -> size_t
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
                 POLYGON_TEST test( aMinWidth, m_drcEngine->GetDesignSettings()->m_MaxError );
 
-                for( int ii = 0; ii < aDataset.poly.OutlineCount(); ++ii )
+                for( int ii = 0; ii < aItemsPoly.Poly.OutlineCount(); ++ii )
                 {
-                    const SHAPE_LINE_CHAIN& chain = aDataset.poly.COutline( ii );
+                    const SHAPE_LINE_CHAIN& chain = aItemsPoly.Poly.COutline( ii );
 
                     test.FindPairs( chain );
                     auto& ret = test.GetVertices();
 
                     for( const std::pair<int, int>& pt : ret )
                     {
-                        SEG span( chain.CPoint( pt.first ), chain.CPoint( pt.second ) );
+                        /*
+                         * We've found a neck that fails the given aMinWidth.  We now need to know
+                         * if the objects the produced the copper at this location are required to
+                         * abide by said aMinWidth or not.  (If so, we have a violation.)
+                         *
+                         * We find the contributingItems by hit-testing at the choke point (the
+                         * centre point of the neck), and then run the rules engine on those
+                         * contributingItems.  If the reported constraint matches aMinWidth, then
+                         * we've got a violation.
+                         */
+                        SEG      span( chain.CPoint( pt.first ), chain.CPoint( pt.second ) );
                         VECTOR2I location = ( span.A + span.B ) / 2;
-                        int dist = ( span.A - span.B ).EuclideanNorm();
-                        std::set<BOARD_ITEM*> nearbyItems = tree->GetObjectsAt( location, aLayer,
-                                                                                aMinWidth );
+                        int      dist = ( span.A - span.B ).EuclideanNorm();
 
-                        std::vector<BOARD_ITEM*> items;
+                        std::vector<BOARD_ITEM*> contributingItems;
 
-                        for( BOARD_ITEM* item : nearbyItems )
+                        for( auto* item : board->m_CopperItemRTreeCache->GetObjectsAt( location,
+                                                                                       aLayer,
+                                                                                       aMinWidth ) )
                         {
                             if( item->HitTest( location, aMinWidth ) )
-                                items.push_back( item );
+                                contributingItems.push_back( item );
                         }
 
                         for( auto& [ zone, rtree ] : board->m_CopperZoneRTreeCache )
                         {
-                            if( !rtree->GetObjectsAt( location, aLayer, aMinWidth ).empty() &&
-                                    zone->HitTestFilledArea( aLayer, location, aMinWidth ) )
-                                items.push_back( zone );
+                            if( !rtree->GetObjectsAt( location, aLayer, aMinWidth ).empty()
+                                    && zone->HitTestFilledArea( aLayer, location, aMinWidth ) )
+                            {
+                                contributingItems.push_back( zone );
+                            }
                         }
 
-                        if( !items.empty() )
+                        if( !contributingItems.empty() )
                         {
+                            BOARD_ITEM* item1 = contributingItems[0];
+                            BOARD_ITEM* item2 = contributingItems.size() > 1 ? contributingItems[1]
+                                                                             : nullptr;
                             DRC_CONSTRAINT c = m_drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT,
-                                                                       items[0],
-                                                                       items.size() > 1 ? items[1]
-                                                                                        : nullptr,
-                                                                       aLayer );
+                                                                       item1, item2, aLayer );
 
                             if( c.Value().Min() == aMinWidth )
                             {
@@ -713,7 +763,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                                 drce->SetErrorMessage( msg + wxS( " " ) + layerDesc( aLayer ) );
                                 drce->SetViolatingRule( c.GetParentRule() );
 
-                                for( BOARD_ITEM* item : items )
+                                for( BOARD_ITEM* item : contributingItems )
                                     drce->AddItem( item );
 
                                 reportViolation( drce, location, aLayer );
@@ -722,7 +772,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                     }
                 }
 
-                done.fetch_add( calc_effort( aDataset.items, aLayer ) );
+                done.fetch_add( calc_effort( aItemsPoly.Items, aLayer ) );
 
                 return 1;
             };
@@ -732,7 +782,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         for( ZONE* zone : board->m_DRCCopperZones )
         {
             if( !zone->GetIsRuleArea() && zone->IsOnLayer( layer ) )
-                dataset[ { zone->GetNetCode(), layer } ].items.emplace( zone );
+                dataset[ { zone->GetNetCode(), layer } ].Items.emplace( zone );
         }
 
         for( PCB_TRACK* track : board->Tracks() )
@@ -740,11 +790,11 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( track ) )
             {
                 if( via->FlashLayer( static_cast<int>( layer ) ) )
-                    dataset[ { via->GetNetCode(), layer } ].items.emplace( via );
+                    dataset[ { via->GetNetCode(), layer } ].Items.emplace( via );
             }
             else if( track->IsOnLayer( layer ) )
             {
-                dataset[ { track->GetNetCode(), layer } ].items.emplace( track );
+                dataset[ { track->GetNetCode(), layer } ].Items.emplace( track );
             }
         }
 
@@ -753,7 +803,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             for( PAD* pad : fp->Pads() )
             {
                 if( pad->FlashLayer( static_cast<int>( layer ) ) )
-                    dataset[ { pad->GetNetCode(), layer } ].items.emplace( pad );
+                    dataset[ { pad->GetNetCode(), layer } ].Items.emplace( pad );
             }
 
             // Footprint zones are also in the m_DRCCopperZones cache
@@ -764,17 +814,16 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     std::vector<std::future<size_t>> returns;
     size_t                           total_effort = 0;
 
-    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
-        total_effort += calc_effort( netLayer.second.items, netLayer.first.second );
+    for( const auto& [ netLayer, itemsPoly ] : dataset )
+        total_effort += calc_effort( itemsPoly.Items, netLayer.Layer );
 
     total_effort += std::max( (size_t) 1, total_effort ) * distinctMinWidths.size();
 
     returns.reserve( dataset.size() );
 
-    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
+    for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
-        returns.emplace_back( tp.submit( build_netlayer_polys, netLayer.first.first,
-                                         netLayer.first.second ) );
+        returns.emplace_back( tp.submit( build_netlayer_polys, netLayer.Netcode, netLayer.Layer ) );
     }
 
     for( std::future<size_t>& retval : returns )
@@ -792,13 +841,10 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     returns.clear();
     returns.reserve( dataset.size() * distinctMinWidths.size() );
 
-    for( const std::pair<const std::pair<int, PCB_LAYER_ID>, ITEMS_POLY>& netLayer : dataset )
+    for( const auto& [ netLayer, itemsPoly ] : dataset )
     {
         for( int minWidth : distinctMinWidths )
-        {
-            returns.emplace_back( tp.submit( min_checker, netLayer.second, netLayer.first.second,
-                                             minWidth ) );
-        }
+            returns.emplace_back( tp.submit( min_checker, itemsPoly, netLayer.Layer, minWidth ) );
     }
 
     for( std::future<size_t>& retval : returns )
