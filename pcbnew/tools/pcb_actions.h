@@ -203,6 +203,9 @@ public:
 
     static TOOL_ACTION routerContinueFromEnd;
     static TOOL_ACTION routerAttemptFinish;
+    static TOOL_ACTION routerRouteSelected;
+    static TOOL_ACTION routerRouteSelectedFromEnd;
+    static TOOL_ACTION routerAutorouteSelected;
 
     /// Activation of the Push and Shove settings dialogs
     static TOOL_ACTION routerSettingsDialog;

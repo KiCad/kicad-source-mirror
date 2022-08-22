@@ -1454,6 +1454,27 @@ TOOL_ACTION PCB_ACTIONS::routerAttemptFinish( "pcbnew.InteractiveRouter.AttemptF
         _( "Attempt Finish" ),
         _( "Attempts to complete current route to nearest ratsnest end." ) );
 
+TOOL_ACTION PCB_ACTIONS::routerRouteSelected( "pcbnew.InteractiveRouter.RouteSelected",
+        AS_GLOBAL,
+        MD_SHIFT + 'X', "",
+        _( "Route Selected" ),
+        _( "Sequentially route selected items from ratsnest anchor." ),
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+
+TOOL_ACTION PCB_ACTIONS::routerRouteSelectedFromEnd( "pcbnew.InteractiveRouter.RouteSelectedFromEnd",
+        AS_GLOBAL,
+        MD_SHIFT + 'E', "",
+        _( "Route Selected From Other End" ),
+        _( "Sequentially route selected items from other end of ratsnest anchor." ),
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+
+TOOL_ACTION PCB_ACTIONS::routerAutorouteSelected( "pcbnew.InteractiveRouter.Autoroute",
+        AS_GLOBAL,
+        MD_SHIFT + 'F', "",
+        _( "Attempt Finish Selected (Autoroute)" ),
+        _( "Sequentially attempt to automatically route all selected pads." ),
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE, (void *) PNS::PNS_MODE_ROUTE_SINGLE);
+
 TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         AS_GLOBAL, 0, "",
         _( "Break Track" ),

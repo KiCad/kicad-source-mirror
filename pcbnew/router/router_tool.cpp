@@ -1309,6 +1309,10 @@ void ROUTER_TOOL::performRouting()
             else
             {
                 VECTOR2I moveResultPoint;
+                bool*    autoRouted = evt->Parameter<bool*>();
+
+                if( autoRouted != nullptr )
+                    *autoRouted = false;
 
                 // Keep moving until we don't change position
                 do
@@ -1322,11 +1326,28 @@ void ROUTER_TOOL::performRouting()
                     && otherEndLayers.Overlaps( m_router->GetCurrentLayer() ) )
                 {
                     if( m_router->FixRoute( otherEnd, &current, false ) )
+                    {
+                        // When we're routing a group of signals automatically we want
+                        // to break up the undo stack every time we have to manually route
+                        // so the user gets nice checkpoints. Remove the APPEND_UNDO flag.
+                        if( autoRouted != nullptr )
+                        {
+                            *autoRouted = true;
+                        }
+
                         break;
+                    }
+                    // This acts as check if we were called by the autorouter; we don't want
+                    // to reset APPEND_UNDO if we're auto finishing after route-other-end
+                    else if( autoRouted != nullptr )
+                        m_iface->SetCommitFlags( 0 );
                 }
                 // Otherwise warp the mouse so the user is at the point we managed to route to
                 else
+                {
+                    m_iface->SetCommitFlags( 0 );
                     controls()->WarpMouseCursor( moveResultPoint, true, true );
+                }
             }
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
@@ -1487,6 +1508,129 @@ void ROUTER_TOOL::breakTrack()
 {
     if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
         m_router->BreakSegment( m_startItem, m_startSnapPoint );
+}
+
+
+int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
+{
+    PNS::ROUTER_MODE mode = aEvent.Parameter<PNS::ROUTER_MODE>();
+    PCB_EDIT_FRAME*  frame = getEditFrame<PCB_EDIT_FRAME>();
+    VIEW_CONTROLS*   controls = getViewControls();
+    PCB_LAYER_ID     originalLayer = frame->GetActiveLayer();
+    bool             autoRoute = aEvent.Matches( PCB_ACTIONS::routerAutorouteSelected.MakeEvent() );
+    bool             otherEnd  = aEvent.Matches( PCB_ACTIONS::routerRouteSelectedFromEnd.MakeEvent() );
+
+    if( m_router->RoutingInProgress() )
+        return 0;
+
+    // Save selection then clear it for interactive routing
+    PCB_SELECTION selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 0 )
+        return 0;
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    std::string tool = aEvent.GetCommandStr().value();
+    frame->PushTool( tool );
+
+    auto setCursor =
+            [&]()
+            {
+                frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
+
+    // Get all connected board items, adding pads for any footprints selected
+    std::vector<BOARD_CONNECTED_ITEM*> itemList;
+
+    for( EDA_ITEM* item : selection.GetItemsSortedBySelectionOrder() )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            const PADS& fpPads = ( static_cast<FOOTPRINT*>( item ) )->Pads();
+
+            for( PAD* pad : fpPads )
+                itemList.push_back( pad );
+        }
+        else if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) != nullptr )
+            itemList.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+    }
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = frame->GetBoard()->GetConnectivity();
+
+    // For putting sequential tracks that successfully autoroute into one undo commit
+    bool groupStart = true;
+
+    for( BOARD_CONNECTED_ITEM* item : itemList )
+    {
+        // This code is similar to GetRatsnestForPad() but it only adds the anchor for
+        // the side of the connectivity on this pad. It also checks for ratsnest points
+        // inside the pad (like a trace end) and counts them.
+        RN_NET* net = connectivity->GetRatsnestForNet( item->GetNetCode() );
+        std::vector<std::shared_ptr<CN_ANCHOR>> anchors;
+
+        for( const CN_EDGE& edge : net->GetEdges() )
+        {
+            std::shared_ptr<CN_ANCHOR> target = edge.GetTargetNode();
+            std::shared_ptr<CN_ANCHOR> source = edge.GetSourceNode();
+
+            if( source->Parent() == item )
+                anchors.push_back( edge.GetSourceNode() );
+            else if( target->Parent() == item )
+                anchors.push_back( edge.GetTargetNode() );
+        }
+
+        // Route them
+        for( std::shared_ptr<CN_ANCHOR> anchor : anchors )
+        {
+            // Try to return to the original layer as indicating the user's preferred
+            // layer for autorouting tracks. The layer can be changed by the user to
+            // finish tracks that can't complete automatically, but should be changed
+            // back after.
+            if( frame->GetActiveLayer() != originalLayer )
+                frame->SetActiveLayer( originalLayer );
+
+            VECTOR2I ignore;
+            m_startItem = m_router->GetWorld()->FindItemByParent( anchor->Parent() );
+            m_startSnapPoint = anchor->Pos();
+            m_router->SetMode( mode );
+
+            // Prime the interactive routing to attempt finish if we are autorouting
+            bool autoRouted = false;
+
+            if( autoRoute )
+                m_toolMgr->RunAction( PCB_ACTIONS::routerAttemptFinish, false, &autoRouted );
+            else if( otherEnd )
+                m_toolMgr->RunAction( PCB_ACTIONS::routerContinueFromEnd, false );
+
+            // We want autorouted tracks to all be in one undo group except for
+            // any tracks that need to be manually finished.
+            // The undo appending for manually finished tracks is handled in peformRouting()
+            if( groupStart )
+                groupStart = false;
+            else
+                m_iface->SetCommitFlags( APPEND_UNDO );
+
+            // Start interactive routing. Will automatically finish if possible.
+            performRouting();
+
+            // Route didn't complete automatically, need to a new undo commit
+            // for the next line so those can group as far as they autoroute
+            if( !autoRouted )
+                groupStart = true;
+        }
+    }
+
+    m_iface->SetCommitFlags( 0 );
+    frame->PopTool( tool );
+    return 0;
 }
 
 
@@ -2305,6 +2449,9 @@ void ROUTER_TOOL::setTransitions()
 
     Go( &ROUTER_TOOL::MainLoop,               PCB_ACTIONS::routeSingleTrack.MakeEvent() );
     Go( &ROUTER_TOOL::MainLoop,               PCB_ACTIONS::routeDiffPair.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerRouteSelected.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerRouteSelectedFromEnd.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerAutorouteSelected.MakeEvent() );
     Go( &ROUTER_TOOL::DpDimensionsDialog,     PCB_ACTIONS::routerDiffPairDialog.MakeEvent() );
     Go( &ROUTER_TOOL::SettingsDialog,         PCB_ACTIONS::routerSettingsDialog.MakeEvent() );
     Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerHighlightMode.MakeEvent() );

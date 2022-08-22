@@ -35,6 +35,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     int MainLoop( const TOOL_EVENT& aEvent );
+    int RouteSelected( const TOOL_EVENT& aEvent );
 
     int InlineBreakTrack( const TOOL_EVENT& aEvent );
     bool CanInlineDrag( int aDragMode );
