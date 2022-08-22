@@ -224,12 +224,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
-    m_tabbedPanel = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                       wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
-                                       wxAUI_NB_SCROLL_BUTTONS );
-
-    m_propertiesPanel = new PCB_PROPERTIES_PANEL( m_tabbedPanel, this );
-
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
@@ -248,7 +242,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+    if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
+        m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
+
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
@@ -290,10 +286,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
-                      .Left().Layer( 5 )
-                      .Caption( _( "Properties" ) ).PaneBorder( false )
-                      .MinSize( 240, -1 ).BestSize( 300, -1 ) );
+    if( ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel )
+    {
+        m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
+                          .Left().Layer( 5 ).Caption( _( "Properties" ) )
+                          .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
+    }
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
