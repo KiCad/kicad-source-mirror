@@ -51,10 +51,12 @@ namespace SIM_MODEL_GRAMMAR
                                    star<sep,
                                         legacyPinNumber>> {};
 
-    struct legacyPinSequenceGrammar : must<legacyPinSequence, tao::pegtl::eof> {};
+    struct legacyPinSequenceGrammar : must<legacyPinSequence,
+                                           tao::pegtl::eof> {};
 
 
-    struct pinNumber : sor<digits, one<'X'>> {};
+    struct pinNumber : plus<not_at<sep>,
+                            any> {};
     struct pinSequence : seq<opt<pinNumber>,
                              star<sep,
                                   pinNumber>> {};
@@ -64,16 +66,17 @@ namespace SIM_MODEL_GRAMMAR
                                      opt<sep>,
                                      tao::pegtl::eof> {};
 
-    struct unquotedString : plus<not_at<space>, any> {};
+
+    struct unquotedString : plus<not_at<sep>, any> {};
     struct quotedStringContent : star<not_at<one<'"'>>, any> {}; // TODO: Allow escaping '"'.
     struct quotedString : seq<one<'"'>,
                               quotedStringContent,
                               one<'"'>> {};
 
-    struct fieldFloatValue : seq<star<space>,
+    struct fieldFloatValue : seq<opt<sep>,
                                  number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
-                                 star<not_at<space>, any>, // Garbage suffix.
-                                 star<space>> {};
+                                 star<not_at<sep>, any>, // Garbage suffix.
+                                 opt<sep>> {};
 
     struct fieldFloatValueGrammar : must<fieldFloatValue,
                                          tao::pegtl::eof> {};
@@ -324,10 +327,10 @@ public:
 
     struct PIN
     {
-        static constexpr unsigned NOT_CONNECTED = 0;
-
         const wxString name;
-        unsigned symbolPinNumber;
+        wxString symbolPinNumber;
+
+        static constexpr auto NOT_CONNECTED = -1;
     };
 
 
@@ -489,8 +492,12 @@ public:
 
     virtual wxString GenerateSpiceItemName( const wxString& aRefName ) const;
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
+    wxString GenerateSpiceItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers ) const;
     virtual wxString GenerateSpiceItemLine( const wxString& aRefName,
                                             const wxString& aModelName,
+                                            const std::vector<wxString>& aSymbolPinNumbers,
                                             const std::vector<wxString>& aPinNetNames ) const;
 
     virtual wxString GenerateSpiceTuningLine( const wxString& aSymbol ) const;
@@ -501,7 +508,7 @@ public:
     virtual std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const;
 
     void AddPin( const PIN& aPin );
-    unsigned FindModelPinNumber( unsigned aSymbolPinNumber );
+    int FindModelPinIndex( const wxString& aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
     DEVICE_INFO GetDeviceTypeInfo() const { return DeviceTypeInfo( GetDeviceType() ); }
@@ -513,18 +520,18 @@ public:
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
     virtual void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
-    unsigned GetPinCount() const { return m_pins.size(); }
+    int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
     const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
 
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
 
-    void SetPinSymbolPinNumber( int aIndex, int aSymbolPinNumber )
+    void SetPinSymbolPinNumber( int aPinIndex, const wxString& aSymbolPinNumber )
     {
-        m_pins.at( aIndex ).symbolPinNumber = aSymbolPinNumber;
+        m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
     }
 
 
-    unsigned GetParamCount() const { return m_params.size(); }
+    int GetParamCount() const { return static_cast<int>( m_params.size() ); }
     const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
 
     const PARAM* FindParam( const wxString& aParamName ) const;

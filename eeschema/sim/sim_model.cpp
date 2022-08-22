@@ -117,7 +117,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
-    {
+    { 
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
@@ -139,7 +139,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SW_I:                 return { DEVICE_TYPE_::SW,     "I",              "Current-controlled"         };
 
     case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
-
+    
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
@@ -261,7 +261,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::L:                    return { "L", ""        };
     //case TYPE::L_ADV:                return { "L", "l"       };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
-
+    
     case TYPE::TLINE_Z0:             return { "T"  };
     case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
 
@@ -602,7 +602,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
                 }
             }
         }
-        catch( const tao::pegtl::parse_error& )
+        catch( const tao::pegtl::parse_error& e )
         {
         }
 
@@ -853,8 +853,6 @@ void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
     }
     catch( tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( _( "Error parsing spice code <%s>\n%s" ), aSpiceCode, e.what() );
         THROW_IO_ERROR( e.what() );
     }
 
@@ -925,18 +923,18 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 
         wxString valueStr = param.value->ToSpiceString();
 
-        if( valueStr.IsEmpty() )
+        if( valueStr == "" )
             continue;
+        
+        wxString appendix = " " + param.info.name + "=" + valueStr;
 
-        wxString append = " " + param.info.name + "=" + valueStr;
-
-        if( line.Length() + append.Length() > 60 )
+        if( line.Length() + appendix.Length() > 60 )
         {
-            result << line + "\n";
-            line = "+" + append;
+            result << line << "\n";
+            line = "+" + appendix;
         }
         else
-            line << append;
+            line << appendix;
     }
 
     result << line + " )\n";
@@ -956,16 +954,33 @@ wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
 wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const wxString& aModelName ) const
 {
-    std::vector<wxString> pinNames;
-    for( const PIN& pin : GetPins() )
-        pinNames.push_back( pin.name );
+    // Use linear symbol pin numbers enumeration. Used in model preview.
 
-    return GenerateSpiceItemLine( aRefName, aModelName, pinNames );
+    std::vector<wxString> pinNumbers;
+
+    for( int i = 0; i < GetPinCount(); ++i )
+        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
+
+    return GenerateSpiceItemLine( aRefName, aModelName, pinNumbers );
 }
 
 
 wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const wxString& aModelName,
+                                           const std::vector<wxString>& aSymbolPinNumbers ) const
+{
+    std::vector<wxString> pinNames;
+
+    for( const PIN& pin : GetPins() )
+        pinNames.push_back( pin.name );
+
+    return GenerateSpiceItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNames );
+}
+
+
+wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
+                                           const wxString& aModelName,
+                                           const std::vector<wxString>& aSymbolPinNumbers,
                                            const std::vector<wxString>& aPinNetNames ) const
 {
     wxString result = "";
@@ -973,12 +988,20 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
 
     for( const PIN& pin : GetPins() )
     {
-        for( unsigned i = 0; i < aPinNetNames.size(); ++i )
-        {
-            unsigned symbolPinNumber = i + 1;
+        int ncCounter = 0;
+        auto it = std::find( aSymbolPinNumbers.begin(),
+                             aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
 
-            if( symbolPinNumber == pin.symbolPinNumber )
-                result << aPinNetNames[i] << " ";
+        if( it == aSymbolPinNumbers.end() )
+        {
+            LOCALE_IO toggle;
+            result << wxString::Format( "__NC_%s_%s_%.2u", aRefName, aModelName, ncCounter++ );
+        }
+        else
+        {
+            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
+            result << aPinNetNames.at( symbolPinIndex ) << " ";
         }
     }
 
@@ -992,7 +1015,7 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
 
         wxString name = ( param.info.spiceInstanceName == "" ) ?
             param.info.name : param.info.spiceInstanceName;
-        wxString value = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+        wxString value = param.value->ToSpiceString();
 
         if( value != "" )
             result << name << "=" << value << " ";
@@ -1042,15 +1065,15 @@ void SIM_MODEL::AddPin( const PIN& aPin )
 }
 
 
-unsigned SIM_MODEL::FindModelPinNumber( unsigned aSymbolPinNumber )
+int SIM_MODEL::FindModelPinIndex( const wxString& aSymbolPinNumber )
 {
-    for( unsigned i = 0; i < GetPinCount(); ++i )
+    for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
     {
-        if( GetPin( i ).symbolPinNumber == aSymbolPinNumber )
-            return i + 1;
+        if( GetPin( modelPinIndex ).symbolPinNumber == aSymbolPinNumber )
+            return modelPinIndex;
     }
 
-    return 0;
+    return PIN::NOT_CONNECTED;
 }
 
 
@@ -1064,8 +1087,8 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
 {
     std::vector<std::reference_wrapper<const PIN>> pins;
 
-    for( unsigned i = 0; i < GetPinCount(); ++i )
-        pins.emplace_back( GetPin( i ) );
+    for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
+        pins.emplace_back( GetPin( modelPinIndex ) );
 
     return pins;
 }
@@ -1101,8 +1124,8 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams
 {
     std::vector<std::reference_wrapper<const PARAM>> params;
 
-    for( unsigned i = 0; i < GetParamCount(); ++i )
-        params.emplace_back( GetParam( i ) );
+    for( int i = 0; i < GetParamCount(); ++i )
+        params.push_back( GetParam( i ) );
 
     return params;
 }
@@ -1144,7 +1167,7 @@ bool SIM_MODEL::SetParamValue( const wxString& aParamName, const wxString& aValu
                             {
                                 return param.info.name == aParamName.Lower();
                             } );
-
+    
     if( it == params.end() )
         return false;
 
@@ -1199,12 +1222,12 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
     // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
-    for( unsigned i = 0; i < getPinNames().size(); ++i )
+    for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
     {
-        if( i < aSymbolPinCount )
-            AddPin( { getPinNames().at( i ), i + 1 } );
+        if( modelPinIndex < aSymbolPinCount )
+            AddPin( { getPinNames().at( modelPinIndex ), wxString::FromCDouble( modelPinIndex + 1 ) } );
         else
-            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
+            AddPin( { getPinNames().at( modelPinIndex ), "" } );
     }
 }
 
@@ -1218,8 +1241,8 @@ template <typename T>
 void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const
 {
     if( GetPinCount() == 2
-        && GetPin( 0 ).symbolPinNumber == 1
-        && GetPin( 1 ).symbolPinNumber == 2 )
+        && GetPin( 0 ).symbolPinNumber == "1"
+        && GetPin( 1 ).symbolPinNumber == "2" )
     {
         SetFieldValue( aFields, PINS_FIELD, "" );
     }
@@ -1276,13 +1299,14 @@ wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
 void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
 {
     LOCALE_IO toggle;
+
     tao::pegtl::string_input<> in( aParamsField.ToUTF8(), "Sim_Params" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
     {
         // Using parse tree instead of actions because we don't care about performance that much,
-        // and having a tree greatly simplifies some things.
+        // and having a tree greatly simplifies some things. 
         root = tao::pegtl::parse_tree::parse<
             SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
             SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -1290,9 +1314,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( _( "Error parsing param <%s>\n%s" ), aParamsField, e.what() );
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERROR( e.what() );
     }
 
     wxString paramName = "";
@@ -1303,7 +1325,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
             paramName = node->string();
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>()
+        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>() 
             || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
@@ -1347,12 +1369,10 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsF
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        wxString msg;
-        msg.Printf( _( "Error parsing pin field <%s>\n%s" ), aPinsField, e.what() );
         THROW_IO_ERROR( e.what() );
     }
 
-    if( root->children.size() != GetPinCount() )
+    if( static_cast<int>( root->children.size() ) != GetPinCount() )
     {
         THROW_IO_ERROR( wxString::Format( _( "%s describes %lu pins, expected %u" ),
                                           PINS_FIELD,
@@ -1360,13 +1380,12 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsF
                                           GetPinCount() ) );
     }
 
-    for( unsigned i = 0; i < root->children.size(); ++i )
+    for( int pinIndex = 0; pinIndex < static_cast<int>( root->children.size() ); ++pinIndex )
     {
-        if( root->children.at( i )->string() == "X" )
-            SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
+        if( root->children.at( pinIndex )->string() == "~" )
+            SetPinSymbolPinNumber( pinIndex, "" );
         else
-            SetPinSymbolPinNumber( static_cast<int>( i ),
-                                   std::stoi( root->children.at( i )->string() ) );
+            SetPinSymbolPinNumber( pinIndex, root->children.at( pinIndex )->string() );
     }
 }
 
@@ -1405,7 +1424,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::V_BEHAVIORAL:
     case TYPE::I_BEHAVIORAL:
         return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
-
+    
     case TYPE::TLINE_Z0:
     case TYPE::TLINE_RLGC:
         return std::make_unique<SIM_MODEL_TLINE>( aType );
@@ -1548,17 +1567,17 @@ wxString SIM_MODEL::generatePinsField() const
     wxString result = "";
     bool isFirst = true;
 
-    for( unsigned i = 0; i < GetPinCount(); ++i )
+    for( int pinIndex = 0; pinIndex < GetPinCount(); ++pinIndex )
     {
         if( isFirst )
             isFirst = false;
         else
             result << " ";
 
-        if( GetPin( i ).symbolPinNumber == PIN::NOT_CONNECTED )
-            result << "X";
+        if( GetPin( pinIndex ).symbolPinNumber == "" )
+            result << "~";
         else
-            result << GetPin( i ).symbolPinNumber;
+            result << GetPin( pinIndex ).symbolPinNumber; // Note that it's numbered from 1.
     }
 
     return result;

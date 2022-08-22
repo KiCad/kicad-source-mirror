@@ -59,6 +59,7 @@ public:
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
     bool SetParamValue( unsigned aParamIndex, const wxString& aValue,

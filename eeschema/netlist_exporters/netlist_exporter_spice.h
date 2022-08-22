@@ -35,7 +35,8 @@ struct SPICE_ITEM
 {
     wxString refName;
     wxString libraryPath;
-    std::vector<wxString> pins;
+    std::vector<wxString> pinNumbers;
+    std::vector<wxString> pinNetNames;
     std::unique_ptr<const SIM_MODEL> model;
     wxString modelName;
 };
@@ -112,7 +113,8 @@ private:
     bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                       std::set<wxString>& aRefNames );
     bool readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
-    void readPins( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem, int& notConnectedCounter );
+    void readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
+    void readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem, int& aNCCounter );
 
     void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
                        const wxString& aPath );

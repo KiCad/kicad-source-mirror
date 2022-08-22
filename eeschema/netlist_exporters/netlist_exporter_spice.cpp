@@ -37,6 +37,7 @@
 #include <string_utils.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <locale_io.h>
 
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
@@ -94,7 +95,7 @@ bool NETLIST_EXPORTER_SPICE::GenerateNetlist( OUTPUTFORMATTER& aFormatter, unsig
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions )
 {
     std::set<wxString> refNames; // Set of reference names to check for duplication.
-    int notConnectedCounter = 1;
+    int NCCounter = 1;
 
     ReadDirectives();
 
@@ -126,7 +127,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             if( !readModel( *symbol, spiceItem ) )
                 continue;
 
-            readPins( *symbol, spiceItem, notConnectedCounter );
+            readPinNumbers( *symbol, spiceItem );
+            readPinNetNames( *symbol, spiceItem, NCCounter );
 
             // TODO: transmission line handling?
 
@@ -211,8 +213,8 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
                     catch( const IO_ERROR& e )
                     {
                         DisplayErrorMessage( nullptr,
-                            wxString::Format( "Failed reading model library '%s'.", path ),
-                            e.What() );
+                                wxString::Format( "Failed reading model library '%s'.", path ),
+                                e.What() );
                     }
                 }
                 else
@@ -326,9 +328,9 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
         }
     }
 
+    // Special case for legacy models.
     if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
     {
-        // Special case for legacy models.
         unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
         wxString path = model->GetParam( libParamIndex ).value->ToString();
 
@@ -340,19 +342,28 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPins( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
-                                       int& notConnectedCounter )
+void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
-    for( const PIN_INFO& pin : m_sortedSymbolPinList )
+    for( const LIB_PIN* pin : aSymbol.GetLibPins() )
+        aItem.pinNumbers.push_back( pin->GetShownNumber() );
+}
+
+
+void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
+                                              int& aNCCounter )
+{
+    for( const PIN_INFO& pinInfo : m_sortedSymbolPinList )
     {
-        wxString netName = pin.netName;
+        wxString netName = pinInfo.netName;
         ReplaceForbiddenChars( netName );
         netName = UnescapeString( netName );
 
-        if( netName.IsEmpty() )
-            netName = wxString::Format( wxT( "NC_%.2u" ), notConnectedCounter++ );
+        LOCALE_IO toggle;
 
-        aItem.pins.push_back( netName );
+        if( netName == "" )
+            netName = wxString::Format( wxT( "__NC_%.2u" ), aNCCounter++ );
+
+        aItem.pinNetNames.push_back( netName );
         m_nets.insert( netName );
     }
 }
@@ -415,9 +426,11 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
         if( !item.model->IsEnabled() )
             continue;
 
-        aFormatter.Print( 0, "%s", TO_UTF8( item.model->GenerateSpiceItemLine( item.refName,
-                                                                               item.modelName,
-                                                                               item.pins ) ) );
+        aFormatter.Print( 0, "%s",
+                          TO_UTF8( item.model->GenerateSpiceItemLine( item.refName,
+                                                                      item.modelName,
+                                                                      item.pinNumbers,
+                                                                      item.pinNetNames ) ) );
     }
 }
 

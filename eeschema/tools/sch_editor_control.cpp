@@ -47,6 +47,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_view.h>
+#include <pin_numbers.h>
 #include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
@@ -62,7 +63,6 @@
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
 #include <eda_list_dialog.h>
-#include <locale_io.h>
 
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
@@ -733,7 +733,6 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    LOCALE_IO toggle;
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
@@ -760,12 +759,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
-                    std::vector<SCH_PIN*> pins = symbol->GetAllPins();
-
-                    int symbolPinNumber = static_cast<int>( std::distance( pins.begin(),
-                            std::find( pins.begin(), pins.end(), pin ) ) ) + 1;
+                    std::vector<LIB_PIN*> pins = symbol->GetLibPins();
 
                     // TODO: We need to unify this library-model inheritance stuff into one
                     // abstraction.
@@ -813,7 +809,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                     wxString ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
                     std::vector<wxString> currentNames = model->GenerateSpiceCurrentNames( ref );
-                    
+
                     if( currentNames.size() == 0 )
                         return true;
                     else if( currentNames.size() == 1 )
@@ -822,11 +818,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         return true;
                     }
 
-                    int modelPinNumber = model->FindModelPinNumber( symbolPinNumber );
+                    int modelPinIndex = model->FindModelPinIndex( pin->GetNumber() );
 
-                    if( modelPinNumber > 0 )
+                    if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
                     {
-                        wxString name = currentNames.at( modelPinNumber - 1 );
+                        wxString name = currentNames.at( modelPinIndex );
                         simFrame->AddCurrentPlot( name );
                     }
                 }

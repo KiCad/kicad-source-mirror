@@ -58,6 +58,7 @@ public:
     wxString GenerateSpiceItemName( const wxString& aRefName ) const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
 protected:

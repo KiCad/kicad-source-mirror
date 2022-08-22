@@ -467,6 +467,13 @@ public:
      */
     void GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const;
 
+    /**
+     * Return a vector with all the pins from the library object.
+     *
+     * @return List of the pins
+     */
+    std::vector<LIB_PIN*> GetLibPins() const;
+
     SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
 
     /**

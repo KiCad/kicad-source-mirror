@@ -81,7 +81,7 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
-                    AddPin( { subnode->string(), GetPinCount() + 1 } );
+                    AddPin( { subnode->string(), wxString::FromCDouble( GetPinCount() ) } );
                 }
                 else if( !hadParamValuePairs
                     && subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::paramValuePairs>() )
@@ -107,10 +107,10 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<
                         SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_INT,
-                                                        SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>()
+                            SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>()
                     || subnode->is_type<
                         SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
-                                                        SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
+                            SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
                 {
                     wxASSERT( m_paramInfos.size() > 0 );
                     m_paramInfos.back()->defaultValue = subnode->string();

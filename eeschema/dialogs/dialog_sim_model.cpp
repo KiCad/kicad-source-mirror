@@ -51,7 +51,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
+        m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetLibPins().size() ) );
 
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
@@ -129,7 +129,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         try
         {
             m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
-                = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
+                = SIM_MODEL::Create( m_symbol.GetLibPins().size(), m_fields );
         }
         catch( const IO_ERROR& e )
         {
@@ -266,7 +266,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         m_paramGrid->CollapseAll();
 
-        for( unsigned i = 0; i < curModel().GetParamCount(); ++i )
+        for( int i = 0; i < curModel().GetParamCount(); ++i )
             addParamPropertyIfRelevant( i );
 
         m_paramGrid->CollapseAll();
@@ -285,10 +285,10 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         wxColour bgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetBgCol();
         wxColour fgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetFgCol();
 
-        for( int i = 0; i < m_paramGridMgr->GetColumnCount(); ++i )
+        for( int col = 0; col < m_paramGridMgr->GetColumnCount(); ++col )
         {
-            prop->GetCell( i ).SetBgCol( bgCol );
-            prop->GetCell( i ).SetFgCol( fgCol );
+            prop->GetCell( col ).SetBgCol( bgCol );
+            prop->GetCell( col ).SetFgCol( fgCol );
         }
 
         // Model values other than the currently edited value may have changed. Update them.
@@ -329,38 +329,36 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
     // First reset the grid.
 
     m_pinAssignmentsGrid->ClearRows();
-    std::vector<SCH_PIN*> pinList = m_symbol.GetAllPins();
+    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_symbol.GetLibPins().size() ) );
 
-    m_pinAssignmentsGrid->AppendRows( static_cast<int>( pinList.size() ) );
-
-    for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
+    for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
     {
-        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::MODEL ),
+        m_pinAssignmentsGrid->SetCellValue( row, static_cast<int>( PIN_COLUMN::MODEL ),
                                             "Not Connected" );
     }
 
-    // Now set the grid values.
-    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
+    // Now set up the grid values in the Model column.
+    for( int modelPinIndex = 0; modelPinIndex < curModel().GetPinCount(); ++modelPinIndex )
     {
-        unsigned symbolPinNumber = curModel().GetPin( i ).symbolPinNumber;
+        wxString symbolPinNumber = curModel().GetPin( modelPinIndex ).symbolPinNumber;
 
-        if( symbolPinNumber == SIM_MODEL::PIN::NOT_CONNECTED )
+        if( symbolPinNumber == "" )
             continue;
 
-        wxString modelPinString = getModelPinString( i + 1 );
+        wxString modelPinString = getModelPinString( modelPinIndex );
         wxArrayString choices;
 
-        m_pinAssignmentsGrid->SetCellValue( static_cast<int>( symbolPinNumber - 1 ),
+        m_pinAssignmentsGrid->SetCellValue( findSymbolPinRow( symbolPinNumber ),
                                             static_cast<int>( PIN_COLUMN::MODEL ),
                                             modelPinString );
     }
 
     wxArrayString modelPinChoices = getModelPinChoices();
 
-    // Now set up cell editors, including dropdown options.
+    // Set up the Symbol column grid values and Model column cell editors with dropdown options.
     for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
     {
-        wxString symbolPinString = getSymbolPinString( i + 1 );
+        wxString symbolPinString = getSymbolPinString( i );
 
         m_pinAssignmentsGrid->SetReadOnly( i, static_cast<int>( PIN_COLUMN::SYMBOL ) );
         m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::SYMBOL ),
@@ -421,12 +419,12 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
                 //TODO: it's not cur model.
 
                 m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size(), m_fields ) );
+                        SIM_MODEL::Create( baseModel, m_symbol.GetLibPins().size(), m_fields ) );
             }
             else
             {
                 m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size() ) );
+                        SIM_MODEL::Create( baseModel, m_symbol.GetLibPins().size() ) );
             }
         }
     }
@@ -601,6 +599,21 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
 
 template <typename T>
+int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
+{
+    for( int row = 0; row < static_cast<int>( m_symbol.GetLibPins().size() ); ++row )
+    {
+        LIB_PIN* pin = m_symbol.GetLibPins()[row];
+
+        if( pin->GetNumber() == aSymbolPinNumber )
+            return row;
+    }
+
+    return -1;
+}
+
+
+template <typename T>
 SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
     return *curModelSharedPtr();
@@ -621,35 +634,43 @@ std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 
 
 template <typename T>
-wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
+wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
-    wxString name = "";
-    SCH_PIN* symbolPin = m_symbol.GetAllPins().at( symbolPinNumber - 1 );
+    LIB_PIN* pin = m_symbol.GetLibPins().at( symbolPinIndex );
+    wxString number;
+    wxString name;
 
-    if( symbolPin )
-        name = symbolPin->GetShownName();
+    if( pin )
+    {
+        number = pin->GetShownNumber();
+        name = pin->GetShownName();
+    }
 
-    if( name.IsEmpty() )
-        return wxString::Format( "%d", symbolPinNumber );
+    LOCALE_IO toggle;
+
+    if( name == "" )
+        return wxString::Format( "%s", number );
     else
-        return wxString::Format( "%d (%s)", symbolPinNumber, name );
+        return wxString::Format( "%s (%s)", number, name );
 }
 
 
 template <typename T>
-wxString DIALOG_SIM_MODEL<T>::getModelPinString( int modelPinNumber ) const
+wxString DIALOG_SIM_MODEL<T>::getModelPinString( int aModelPinIndex ) const
 {
-    const wxString& pinName = curModel().GetPin( modelPinNumber - 1 ).name;
+    const wxString& pinName = curModel().GetPin( aModelPinIndex ).name;
 
-    if( pinName.IsEmpty() )
-        return wxString::Format( "%d", modelPinNumber, pinName );
+    LOCALE_IO toggle;
+
+    if( pinName == "" )
+        return wxString::Format( "%d", aModelPinIndex + 1, pinName );
     else
-        return wxString::Format( "%d (%s)", modelPinNumber, pinName );
+        return wxString::Format( "%d (%s)", aModelPinIndex + 1, pinName );
 }
 
 
 template <typename T>
-unsigned DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
+int DIALOG_SIM_MODEL<T>::getModelPinIndex( const wxString& aModelPinString ) const
 {
     if( aModelPinString == "Not Connected" )
         return SIM_MODEL::PIN::NOT_CONNECTED;
@@ -662,7 +683,7 @@ unsigned DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString
     long result = 0;
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
-    return static_cast<unsigned>( result );
+    return static_cast<int>( result - 1 );
 }
 
 
@@ -672,21 +693,20 @@ wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
     wxArrayString modelPinChoices;
     bool          isFirst = true;
 
-    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
+    for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
         const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
-        int                   modelPinNumber = static_cast<int>( i + 1 );
 
-        if( modelPin.symbolPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
+        if( modelPin.symbolPinNumber != "" )
             continue;
 
         if( isFirst )
         {
-            modelPinChoices.Add( getModelPinString( modelPinNumber ) );
+            modelPinChoices.Add( getModelPinString( i ) );
             isFirst = false;
         }
         else
-            modelPinChoices.Add( getModelPinString( modelPinNumber ) );
+            modelPinChoices.Add( getModelPinString( i ) );
     }
 
     modelPinChoices.Add( "Not Connected" );
@@ -806,16 +826,19 @@ void DIALOG_SIM_MODEL<T>::onCodePreviewSetFocus( wxFocusEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
-    int symbolPinNumber = aEvent.GetRow() + 1;
-    unsigned oldModelPinNumber = getModelPinNumber( aEvent.GetString() );
-    unsigned modelPinNumber = getModelPinNumber(
+    int symbolPinIndex = aEvent.GetRow();
+    int oldModelPinIndex = getModelPinIndex( aEvent.GetString() );
+    int modelPinIndex = getModelPinIndex(
             m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() ) );
 
-    if( oldModelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
-        curModel().SetPinSymbolPinNumber( oldModelPinNumber - 1, SIM_MODEL::PIN::NOT_CONNECTED );
+    if( oldModelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+        curModel().SetPinSymbolPinNumber( oldModelPinIndex, "" );
 
-    if( modelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
-        curModel().SetPinSymbolPinNumber( modelPinNumber - 1, symbolPinNumber );
+    if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
+    {
+        curModel().SetPinSymbolPinNumber( modelPinIndex,
+                m_symbol.GetLibPins().at( symbolPinIndex )->GetShownNumber() );
+    }
 
     updatePinAssignmentsTab();
 

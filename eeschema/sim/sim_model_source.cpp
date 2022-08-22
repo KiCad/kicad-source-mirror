@@ -94,6 +94,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceModelLine( const wxString& aModelName ) 
 
 wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
                                                   const wxString& aModelName,
+                                                  const std::vector<wxString>& aSymbolPinNumbers,
                                                   const std::vector<wxString>& aPinNetNames ) const
 {
     wxString model;
@@ -230,7 +231,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
     else
         model << GetParam( 0 ).value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
-    return SIM_MODEL::GenerateSpiceItemLine( aRefName, model, aPinNetNames );
+    return SIM_MODEL::GenerateSpiceItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
 }
 
 
@@ -241,15 +242,15 @@ bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const wxString& aVal
     // them out automatically. If a value is nulled, delete everything after it.
     if( aValue == "" )
     {
-        for( unsigned i = aParamIndex; i < GetParamCount(); ++i )
-            SIM_MODEL::SetParamValue( i, "", aNotation );
+        for( int paramIndex = aParamIndex; paramIndex < GetParamCount(); ++paramIndex )
+            SIM_MODEL::SetParamValue( paramIndex, "", aNotation );
     }
     else
     {
-        for( unsigned i = 0; i < aParamIndex; ++i )
+        for( unsigned paramIndex = 0; paramIndex < aParamIndex; ++paramIndex )
         {
-            if( GetParam( i ).value->ToString() == "" )
-                SIM_MODEL::SetParamValue( i, "0", aNotation );
+            if( GetParam( paramIndex ).value->ToString() == "" )
+                SIM_MODEL::SetParamValue( paramIndex, "0", aNotation );
         }
     }
 

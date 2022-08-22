@@ -95,6 +95,7 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceModelLine( const wxString& aModelNam
 
 wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
                                                       const wxString& aModelName,
+                                                      const std::vector<wxString>& aSymbolPinNumbers,
                                                       const std::vector<wxString>& aPinNetNames ) const
 {
     LOCALE_IO toggle;

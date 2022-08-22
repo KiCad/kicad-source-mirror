@@ -85,12 +85,14 @@ private:
     void addParamPropertyIfRelevant( int aParamIndex );
     wxPGProperty* newParamProperty( int aParamIndex ) const;
 
+    int findSymbolPinRow( const wxString& aSymbolPinNumber ) const;
+
     SIM_MODEL& curModel() const;
     std::shared_ptr<SIM_MODEL> curModelSharedPtr() const;
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
-    wxString getModelPinString( int aModelPinNumber ) const;
-    unsigned getModelPinNumber( const wxString& aModelPinString ) const;
+    wxString getModelPinString( int aModelPinIndex ) const;
+    int getModelPinIndex( const wxString& aModelPinString ) const;
     wxArrayString getModelPinChoices() const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;

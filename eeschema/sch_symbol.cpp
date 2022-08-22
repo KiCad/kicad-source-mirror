@@ -920,6 +920,15 @@ void SCH_SYMBOL::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
 }
 
 
+std::vector<LIB_PIN*> SCH_SYMBOL::GetLibPins() const
+{
+    std::vector<LIB_PIN*> pinList;
+
+    GetLibPins( pinList );
+    return pinList;
+}
+
+
 SCH_PIN* SCH_SYMBOL::GetPin( LIB_PIN* aLibPin ) const
 {
     wxASSERT( m_pinMap.count( aLibPin ) );
@@ -947,17 +956,6 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
         pins.push_back( p.get() );
     }
-
-    return pins;
-}
-
-
-std::vector<SCH_PIN*> SCH_SYMBOL::GetAllPins() const
-{
-    std::vector<SCH_PIN*> pins;
-
-    for( const auto& p : m_pins )
-        pins.push_back( p.get() );
 
     return pins;
 }

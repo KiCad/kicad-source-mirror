@@ -100,20 +100,20 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemName( const wxString& aRefName ) cons
 
 wxString SIM_MODEL_SPICE::GenerateSpiceItemLine( const wxString& aRefName,
                                                  const wxString& aModelName,
+                                                 const std::vector<wxString>& aSymbolPinNumbers,
                                                  const std::vector<wxString>& aPinNetNames ) const
 {
-    wxString result = "";
+    wxString result;
     result << GenerateSpiceItemName( aRefName ) << " ";
 
-    for( unsigned i = 0; i < GetPinCount(); ++i )
+    for( const PIN& pin : GetPins() )
     {
-        for( unsigned j = 0; j < aPinNetNames.size(); ++j )
-        {
-            unsigned symbolPinNumber = j + 1;
+        auto it = std::find( aSymbolPinNumbers.begin(),
+                             aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
+        long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
 
-            if( symbolPinNumber == GetPin( i ).symbolPinNumber )
-                result << aPinNetNames[j] << " ";
-        }
+        result << aPinNetNames.at( symbolPinIndex ) << " ";
     }
 
     result << GetParam( static_cast<unsigned>( SPICE_PARAM::MODEL ) ).value->ToString() << "\n";
@@ -123,8 +123,8 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemLine( const wxString& aRefName,
 
 void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
-    for( unsigned i = 0; i < aSymbolPinCount; ++i )
-        AddPin( { "", i + 1 } );
+    for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
+        AddPin( { "", wxString::FromCDouble( symbolPinIndex + 1 ) } );
 }
 
 
@@ -132,15 +132,15 @@ bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
                                              const wxString& aParamValue,
                                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
-    unsigned i = 0;
+    int paramIndex = 0;
 
-    for(; i < GetParamCount(); ++i )
+    for(; paramIndex < GetParamCount(); ++paramIndex )
     {
-        if( GetParam( i ).info.name == aParamName.Lower() )
+        if( GetParam( paramIndex ).info.name == aParamName.Lower() )
             break;
     }
 
-    if( i == GetParamCount() )
+    if( paramIndex == GetParamCount() )
     {
         // No parameter with this name found. Create a new one.
         std::unique_ptr<PARAM::INFO> paramInfo = std::make_unique<PARAM::INFO>();
@@ -152,7 +152,7 @@ bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
         AddParam( *m_paramInfos.back() );
     }
 
-    return GetParam( i ).value->FromString( wxString( aParamValue ), aNotation );
+    return GetParam( paramIndex ).value->FromString( wxString( aParamValue ), aNotation );
 }
 
 
@@ -250,8 +250,8 @@ void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
         return;
 
     // Initially set all pins to Not Connected to match the legacy behavior.
-    for( unsigned i = 0; i < GetPinCount(); ++i )
-        SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
+    for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
+        SetPinSymbolPinNumber( static_cast<int>( modelPinIndex ), "" );
 
     tao::pegtl::string_input<> in( aLegacyPinsField.ToUTF8(), PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -267,9 +267,18 @@ void SIM_MODEL_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
         THROW_IO_ERROR( e.what() );
     }
 
-    for( unsigned i = 0; i < root->children.size(); ++i )
+    for( int pinIndex = 0; pinIndex < static_cast<int>( root->children.size() ); ++pinIndex )
     {
-        SetPinSymbolPinNumber( static_cast<int>( i ),
-                               std::stoi( root->children.at( i )->string() ) );
+        std::string symbolPinStr = root->children.at( pinIndex )->string();
+        int symbolPinIndex = std::stoi( symbolPinStr ) - 1;
+
+        if( symbolPinIndex < 0 || symbolPinIndex >= static_cast<int>( aSymbolPinCount ) )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Invalid symbol pin index: '%s'" ),
+                                              symbolPinStr ) );
+        }
+                                              
+
+        SetPinSymbolPinNumber( pinIndex, root->children.at( pinIndex )->string() );
     }
 }
