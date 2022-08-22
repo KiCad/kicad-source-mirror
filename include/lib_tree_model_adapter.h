@@ -393,7 +393,7 @@ protected:
     LIB_TREE_NODE_ROOT      m_tree;
 
 private:
-    EDA_BASE_FRAME*         m_parent;
+    [[maybe_unused]] EDA_BASE_FRAME*         m_parent;
 
     SYM_FILTER_TYPE         m_filter;
     bool                    m_show_units;

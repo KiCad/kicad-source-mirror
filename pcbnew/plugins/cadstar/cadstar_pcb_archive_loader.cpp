@@ -1730,7 +1730,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
                 delete kiPad;
 
-                if( kiPad = getKiCadPad( csPad, footprint ) )
+                if( ( kiPad = getKiCadPad( csPad, footprint ) ) )
                 {
                     kiPad->SetNumber( padNumber );
 
