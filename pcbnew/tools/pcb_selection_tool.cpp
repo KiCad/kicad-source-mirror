@@ -2678,7 +2678,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
     std::unordered_set<BOARD_ITEM*> toAdd;
 
     // Set TEMP_SELECTED on all parents which are included in the GENERAL_COLLECTOR.  This
-    // algorithm is O3n, whereas checking for the parent inclusion could potentially be On^2.
+    // algorithm is O(3n), whereas checking for the parent inclusion could potentially be O(n^2).
     for( int j = 0; j < aCollector.GetCount(); j++ )
     {
         if( aCollector[j]->GetParent() )
