@@ -33,7 +33,8 @@ class SCH_SCREEN;
 class BUS_ALIAS
 {
 public:
-    BUS_ALIAS( SCH_SCREEN* aParent = nullptr )
+    BUS_ALIAS( SCH_SCREEN* aParent = nullptr ) :
+        m_parent( aParent )
     { }
 
     ~BUS_ALIAS()

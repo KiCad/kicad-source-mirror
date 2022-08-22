@@ -27,7 +27,9 @@
 
 PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BUSES_BASE( aWindow ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_errorGrid( nullptr ),
+        m_errorRow( -1 )
 {
     m_membersLabelTemplate = m_membersLabel->GetLabel();
 
