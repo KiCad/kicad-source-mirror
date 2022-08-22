@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-21 02:52+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23520,7 +23520,7 @@ msgstr "Оптимизация графики"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:81
 msgid "Build Changes"
-msgstr "Применить изменения"
+msgstr "Построить изменения"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:152
