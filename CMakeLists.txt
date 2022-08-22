@@ -825,8 +825,8 @@ set( INC_AFTER
 # Find Python and other scripting resources
 #
 
-# SWIG 3.0 or later require for C++11 support.
-find_package( SWIG 3.0 REQUIRED )
+# SWIG 4.0 or later require for proper C++11 support.
+find_package( SWIG 4.0 REQUIRED )
 include( ${SWIG_USE_FILE} )
 
 set( PythonInterp_FIND_VERSION 3.6 )
