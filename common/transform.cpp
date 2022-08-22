@@ -29,6 +29,10 @@
 #include <math/util.h>      // for KiROUND
 #include <math/box2.h>
 
+// a transform matrix, to display symbols in lib editor
+TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
+
+
 bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const
 {
     return ( x1 == aTransform.x1 &&

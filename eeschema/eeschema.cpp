@@ -66,9 +66,6 @@
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
 
-// a transform matrix, to display symbols in lib editor
-TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
-
 
 namespace SCH {
 
