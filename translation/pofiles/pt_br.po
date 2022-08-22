@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-05 14:22+0000\n"
+"PO-Revision-Date: 2022-08-23 17:52+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -3625,7 +3625,7 @@ msgstr "A classe padrão da rede é necessária."
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Nets correspondentes'%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3706,14 +3706,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Defina a cor como transparente para usar a cor padrão do KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Atribuição do esquema"
+msgstr "Atribuições da netclass:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Padrão da hachura"
+msgstr "Padrão"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -7668,7 +7666,7 @@ msgstr "Anote o esquema"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Nets correspondentes atualmente:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -12796,9 +12794,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Foi dado mais de um nome a este barramento ou rede"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Atribuições do footprint"
+msgstr "Atribuições da netclass conflitante"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13438,9 +13435,9 @@ msgstr ""
 "A anotação deve ser corrigida antes da simulação."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "Houve uma falha ao ler o modelo da biblioteca '%s'."
+msgstr "Houve uma falha ao ler o modelo de simulação %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:377
 #, c-format
@@ -13645,9 +13642,8 @@ msgstr "Tipo da entrada do barramento"
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_label.cpp:839
 #: eeschema/sch_line.cpp:881 pcbnew/pad.cpp:920 pcbnew/pcb_track.cpp:892
 #: pcbnew/zone.cpp:533
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Netclass atribuído"
+msgstr "Netclass resolvido"
 
 #: eeschema/sch_connection.cpp:409
 msgid "Connection Name"
@@ -13787,9 +13783,9 @@ msgid "Label '%s'"
 msgstr "Rótulo '%s'"
 
 #: eeschema/sch_label.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Etiqueta diretiva"
+msgstr "Rótulo da directiva [%s %s]"
 
 #: eeschema/sch_label.cpp:1414
 #, c-format
@@ -13921,6 +13917,8 @@ msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
 msgstr ""
+"Um registro desconhecido ou inesperado foi encontrado na seção \"Adicional\""
+", ID do registro: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13932,6 +13930,8 @@ msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 msgstr ""
+"Um registro desconhecido ou inesperado foi encontrado na seção \"FileHeader\""
+", ID do registro: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
