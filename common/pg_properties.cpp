@@ -303,6 +303,10 @@ void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
     if( index < 0 )
         index = GetIndex();
 
+    // GetIndex can return -1 when the control hasn't been set up yet
+    if( index < 0 || index >= static_cast<int>( GetChoices().GetCount() ) )
+        return;
+
     wxString layer = GetChoices().GetLabel( index );
     wxColour color = GetColor( layer );
 
@@ -312,4 +316,6 @@ void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
     aDC.SetPen( *wxTRANSPARENT_PEN );
     aDC.SetBrush( wxBrush( color ) );
     aDC.DrawRectangle( aRect );
+
+    aPaintData.m_drawnWidth = aRect.width;
 }
