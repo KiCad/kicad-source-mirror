@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,7 +28,6 @@
 #include <wx/srchctrl.h>
 #include <wx/stc/stc.h>
 #include <wx/scrolbar.h>
-#include <wx/scrolwin.h>
 #include <wx/grid.h>
 #include <widgets/ui_common.h>
 
@@ -37,6 +36,7 @@
 #include <pgm_base.h>
 #include <wx/settings.h>
 #include <bitmaps/bitmap_types.h>
+#include <string_utils.h>
 
 int KIUI::GetStdMargin()
 {
@@ -179,6 +179,34 @@ bool KIUI::EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
     }
 
     return false;
+}
+
+
+wxString KIUI::EllipsizeStatusText( wxWindow* aWindow, const wxString& aString )
+{
+    wxString msg = UnescapeString( aString );
+
+    msg.Replace( wxT( "\n" ), wxT( " " ) );
+    msg.Replace( wxT( "\r" ), wxT( " " ) );
+    msg.Replace( wxT( "\t" ), wxT( " " ) );
+
+    wxClientDC dc( aWindow );
+    return wxControl::Ellipsize( msg, dc, wxELLIPSIZE_END, aWindow->GetSize().GetWidth() / 3 );
+}
+
+
+wxString KIUI::EllipsizeMenuText( const wxString& aString )
+{
+    wxString msg = UnescapeString( aString );
+
+    msg.Replace( wxT( "\n" ), wxT( " " ) );
+    msg.Replace( wxT( "\r" ), wxT( " " ) );
+    msg.Replace( wxT( "\t" ), wxT( " " ) );
+
+    if( msg.Length() > 36 )
+        msg = msg.Left( 34 ) + wxT( "..." );
+
+    return msg;
 }
 
 

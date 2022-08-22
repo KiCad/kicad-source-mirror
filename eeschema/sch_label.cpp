@@ -957,7 +957,7 @@ const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
 
 wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Label '%s'" ), ShortenedShownText() );
+    return wxString::Format( _( "Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
 
 
@@ -1411,7 +1411,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 
 wxString SCH_GLOBALLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Global Label '%s'" ), ShortenedShownText() );
+    return wxString::Format( _( "Global Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
 
 
@@ -1544,7 +1544,8 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 
 wxString SCH_HIERLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Hierarchical Label '%s'" ), ShortenedShownText() );
+    return wxString::Format( _( "Hierarchical Label '%s'" ),
+                             KIUI::EllipsizeMenuText( GetShownText() ) );
 }
 
 

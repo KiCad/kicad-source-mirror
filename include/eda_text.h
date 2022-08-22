@@ -88,22 +88,12 @@ public:
     virtual const wxString& GetText() const { return m_text; }
 
     /**
-     * Returns a shortened version (max 54 characters) of the shown text
-     */
-    wxString ShortenedText() const;
-
-    /**
      * Return the string actually shown after processing of the base text.
      *
      * @param aDepth is used to prevent infinite recursions and loops when expanding
      * text variables.
      */
     virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
-
-    /**
-     * Returns a shortened version (max 36 characters) of the shown text
-     */
-    wxString ShortenedShownText() const;
 
     /**
      * Indicates the ShownText has text var references which need to be processed.

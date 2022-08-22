@@ -130,7 +130,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     EDA_UNITS units = aFrame->GetUserUnits();
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "PCB Text" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "PCB Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
@@ -233,7 +233,9 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 wxString PCB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "PCB Text '%s' on %s"), ShortenedShownText(), GetLayerName() );
+    return wxString::Format( _( "PCB Text '%s' on %s"),
+                             KIUI::EllipsizeMenuText( GetShownText() ),
+                             GetLayerName() );
 }
 
 

@@ -390,7 +390,7 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     EDA_UNITS units = aFrame->GetUserUnits();
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text Box" ), UnescapeString( ShortenedText() ) );
+    aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
 

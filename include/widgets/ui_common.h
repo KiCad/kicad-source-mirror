@@ -78,6 +78,20 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = nullptr )
 void SelectReferenceNumber( wxTextEntry* aTextEntry );
 
 /**
+ * Ellipsize text (at the end) to be no more than 1/3 of the window width.
+ *
+ * @return shortened text ending with an ellipsis.
+ */
+wxString EllipsizeStatusText( wxWindow* aWindow, const wxString& aString );
+
+/**
+ * Ellipsize text (at the end) to be no more than 36 characters.
+ *
+ * @return shortened text ending with an ellipsis.
+ */
+wxString EllipsizeMenuText( const wxString& aString );
+
+/**
  * Check if a input control has focus.
  *
  * @param aFocus Control that has focus, if null, wxWidgets will be queried

@@ -316,7 +316,7 @@ wxString FP_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     default:
         return wxString::Format( _( "Footprint Text '%s' of %s" ),
-                                 ShortenedShownText(),
+                                 KIUI::EllipsizeMenuText( GetShownText() ),
                                  static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
     }
 }

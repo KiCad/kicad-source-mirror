@@ -383,7 +383,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
 wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
+    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
 
 
@@ -475,7 +475,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     wxString msg;
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Graphic Text" ), UnescapeString( ShortenedText() ) );
+    aList.emplace_back( _( "Graphic Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
 

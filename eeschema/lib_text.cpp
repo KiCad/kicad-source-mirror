@@ -422,7 +422,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 
 wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
+    return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
 
 

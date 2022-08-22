@@ -298,7 +298,7 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     EDA_UNITS units = aFrame->GetUserUnits();
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text Box" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
