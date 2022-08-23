@@ -368,6 +368,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstandalone-debug" )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstandalone-debug" )
     endif()
+    
+    # Suppress GCC warnings about unknown/unused attributes (e.g. cdecl, [[maybe_unused, etc)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes" )
+    endif()
 
     if( KICAD_SANITIZE_ADDRESS )
         add_definitions( -DKICAD_SANITIZE_ADDRESS )
