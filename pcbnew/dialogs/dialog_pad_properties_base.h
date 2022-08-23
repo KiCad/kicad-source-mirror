@@ -25,13 +25,13 @@ class wxListView;
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <widgets/net_selector.h>
-#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
-#include <wx/combobox.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/simplebook.h>
+#include <wx/combobox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -77,17 +77,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_posYLabel;
 		wxTextCtrl* m_posYCtrl;
 		wxStaticText* m_posYUnits;
-		wxCheckBox* m_locked;
 		wxStaticLine* m_staticline5;
-		wxStaticText* m_sizeXLabel;
-		wxTextCtrl* m_sizeXCtrl;
-		wxStaticText* m_sizeXUnits;
-		wxStaticText* m_sizeYLabel;
-		wxTextCtrl* m_sizeYCtrl;
-		wxStaticText* m_sizeYUnits;
-		wxStaticText* m_PadOrientText;
-		wxComboBox* m_cb_padrotation;
-		wxStaticText* m_orientationUnits;
+		wxStaticText* m_shapeLabel;
+		wxChoice* m_PadShapeSelector;
 		wxSimplebook* m_shapePropsBook;
 		wxPanel* m_emptyProps;
 		wxPanel* m_trapProps;
@@ -126,8 +118,15 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_mixedCornerRatioLabel;
 		TEXT_CTRL_EVAL* m_mixedCornerRatioCtrl;
 		wxStaticText* m_mixedCornerRatioUnits;
-		wxStaticText* m_shapeLabel;
-		wxChoice* m_PadShapeSelector;
+		wxStaticText* m_sizeXLabel;
+		wxTextCtrl* m_sizeXCtrl;
+		wxStaticText* m_sizeXUnits;
+		wxStaticText* m_sizeYLabel;
+		wxTextCtrl* m_sizeYCtrl;
+		wxStaticText* m_sizeYUnits;
+		wxStaticText* m_PadOrientText;
+		wxComboBox* m_cb_padrotation;
+		wxStaticText* m_orientationUnits;
 		wxStaticLine* m_staticline6;
 		wxGridBagSizer* m_gbSizerHole;
 		wxStaticText* m_holeShapeLabel;
@@ -148,6 +147,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_offsetYLabel;
 		wxTextCtrl* m_offsetYCtrl;
 		wxStaticText* m_offsetYUnits;
+		wxStaticLine* m_staticline71;
 		wxCheckBox* m_padToDieOpt;
 		wxStaticText* m_padToDieLabel;
 		wxTextCtrl* m_padToDieCtrl;
@@ -245,11 +245,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerRadiusChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOffsetCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadToDieCheckbox( wxCommandEvent& event ) { event.Skip(); }

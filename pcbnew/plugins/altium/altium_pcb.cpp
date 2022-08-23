@@ -2417,7 +2417,6 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     pad->SetNumber( aElem.name );
     pad->SetNetCode( GetNetCode( aElem.net ) );
-    pad->SetLocked( aElem.is_locked );
 
     pad->SetPosition( aElem.position );
     pad->SetOrientationDegrees( aElem.direction );

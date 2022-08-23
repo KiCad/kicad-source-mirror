@@ -215,9 +215,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_staticTextInfoPaste->SetFont( infoFont );
     m_staticTextPrimitiveListWarning->SetFont( infoFont );
 
-    // Do not allow locking items in the footprint editor
-    m_locked->Show( !m_isFpEditor );
-
     updateHoleControls();
     updatePadSizeControls();
 
@@ -488,7 +485,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
-        m_locked->SetValue( m_currentPad->IsLocked() );
         m_isFlipped = m_currentPad->IsFlipped();
 
         FOOTPRINT* footprint = m_currentPad->GetParent();
@@ -510,7 +506,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
     else
     {
-        m_locked->Hide();
         m_isFlipped = false;
     }
 
@@ -1025,10 +1020,6 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    // Enable/disable position
-    m_posX.Enable( !m_locked->GetValue() || m_isFpEditor );
-    m_posY.Enable( !m_locked->GetValue() || m_isFpEditor );
-
     bool hasHole = true;
     bool hasConnection = true;
 
@@ -1592,11 +1583,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
     m_currentPad->SetOrientation( m_padMaster->GetOrientation() );
-
-    m_currentPad->SetLocked( m_locked->GetValue() );
-
-    if( !m_locked->GetValue() || m_isFpEditor )
-        m_currentPad->SetPosition( m_padMaster->GetPosition() );
+    m_currentPad->SetPosition( m_padMaster->GetPosition() );
 
     VECTOR2I   size;
     FOOTPRINT* footprint = m_currentPad->GetParent();

@@ -3932,13 +3932,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     if( m_requiredVersion < 20200826 && attributes == 0 )
         attributes |= FP_THROUGH_HOLE;
 
-    // Legacy files controlled pad locking at the footprint level.
-    if( m_requiredVersion < 20210108 )
-    {
-        for( PAD* pad : footprint->Pads() )
-            pad->SetLocked( footprint->IsLocked() || footprint->LegacyPadsLocked() );
-    }
-
     if( m_requiredVersion <= LEGACY_NET_TIES )
     {
         if( footprint->GetKeywords().StartsWith( wxT( "net tie" ) ) )
@@ -4658,7 +4651,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     {
         if( token == T_locked )
         {
-            pad->SetLocked( true );
+            // Pad locking is now a session preference
             token = NextTok();
         }
 
@@ -5023,7 +5016,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
-            pad->SetLocked( true );
+            // Pad locking is now a session preference
             NeedRIGHT();
             break;
 

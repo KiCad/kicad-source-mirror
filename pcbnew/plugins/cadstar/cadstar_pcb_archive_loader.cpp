@@ -829,7 +829,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             pad->SetSize( { anchorSize, anchorSize } );
             pad->SetPosition( anchorPos );
             pad->SetLocalCoord();
-            pad->SetLocked( true ); // Cadstar pads are always locked with respect to the footprint
 
             SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( compCopper.Shape,
                                                                     lineThickness,
@@ -1240,8 +1239,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     pad->SetOrientation( padOrientation + getAngle( csPadcode.SlotOrientation ) );
 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
-
-    pad->SetLocked( true ); // Cadstar pads are always locked with respect to the footprint
 
     //log warnings:
     if( m_padcodesTested.find( csPadcode.ID ) == m_padcodesTested.end() && !errorMSG.IsEmpty() )
