@@ -341,6 +341,12 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case PCB_LOCATE_NPTH_T:
     case PCB_LOCATE_BOARD_EDGE_T:
 
+    case PCB_SHAPE_LOCATE_SEGMENT_T:
+    case PCB_SHAPE_LOCATE_RECT_T:
+    case PCB_SHAPE_LOCATE_CIRCLE_T:
+    case PCB_SHAPE_LOCATE_ARC_T:
+    case PCB_SHAPE_LOCATE_POLY_T:
+
     case PCB_DIMENSION_T:
 
     case SCH_SCREEN_T:
@@ -459,6 +465,11 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:
     case PCB_LOCATE_BOARD_EDGE_T:
+    case PCB_SHAPE_LOCATE_SEGMENT_T:
+    case PCB_SHAPE_LOCATE_RECT_T:
+    case PCB_SHAPE_LOCATE_CIRCLE_T:
+    case PCB_SHAPE_LOCATE_ARC_T:
+    case PCB_SHAPE_LOCATE_POLY_T:
         return true;
 
     default:
