@@ -1181,55 +1181,59 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : screen->Items() )
     {
-        SCH_CONNECTION* itemConn  = nullptr;
-        SCH_SYMBOL*     symbol    = nullptr;
-        bool            redraw    = item->IsBrightened();
-        bool            highlight = false;
+        bool redraw    = item->IsBrightened();
+        bool highlight = false;
 
-        if( item->Type() == SCH_SYMBOL_T )
-            symbol = static_cast<SCH_SYMBOL*>( item );
-
-        if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
-            itemConn = symbol->Connection();
-        else
-            itemConn = item->Connection();
-
-        if( selectedIsNoNet && selectedSubgraph )
+        if( selectedConn )
         {
-            for( SCH_ITEM* subgraphItem : selectedSubgraph->m_items )
+            SCH_CONNECTION* itemConn  = nullptr;
+            SCH_SYMBOL*     symbol    = nullptr;
+
+            if( item->Type() == SCH_SYMBOL_T )
+                symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
+                itemConn = symbol->Connection();
+            else
+                itemConn = item->Connection();
+
+            if( selectedIsNoNet && selectedSubgraph )
             {
-                if( item == subgraphItem )
+                for( SCH_ITEM* subgraphItem : selectedSubgraph->m_items )
                 {
-                    highlight = true;
-                    break;
+                    if( item == subgraphItem )
+                    {
+                        highlight = true;
+                        break;
+                    }
                 }
             }
-        }
-        else if( selectedIsBus && itemConn && itemConn->IsNet() )
-        {
-            for( const std::shared_ptr<SCH_CONNECTION>& member : selectedConn->Members() )
+            else if( selectedIsBus && itemConn && itemConn->IsNet() )
             {
-                if( member->Name() == itemConn->Name() )
+                for( const std::shared_ptr<SCH_CONNECTION>& member : selectedConn->Members() )
                 {
-                    highlight = true;
-                    break;
-                }
-                else if( member->IsBus() )
-                {
-                    for( const std::shared_ptr<SCH_CONNECTION>& child_member : member->Members() )
+                    if( member->Name() == itemConn->Name() )
                     {
-                        if( child_member->Name() == itemConn->Name() )
+                        highlight = true;
+                        break;
+                    }
+                    else if( member->IsBus() )
+                    {
+                        for( const std::shared_ptr<SCH_CONNECTION>& bus_member : member->Members() )
                         {
-                            highlight = true;
-                            break;
+                            if( bus_member->Name() == itemConn->Name() )
+                            {
+                                highlight = true;
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
-        else if( selectedConn && itemConn && selectedName == itemConn->Name() )
-        {
-            highlight = true;
+            else if( selectedConn && itemConn && selectedName == itemConn->Name() )
+            {
+                highlight = true;
+            }
         }
 
         if( highlight )
@@ -1239,9 +1243,10 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
         redraw |= item->IsBrightened();
 
-        // symbol is only non-null if the item is a SCH_SYMBOL_T
-        if( symbol )
+        if( item->Type() == SCH_SYMBOL_T )
         {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
             redraw |= symbol->HasBrightenedPins();
 
             symbol->ClearBrightenedPins();
