@@ -243,6 +243,10 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, 
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
 
+    // Ensure the "C" locale is temporary set, before saving any file
+    // It also avoid wxWidget alerts about locale issues, later, when using Python 3
+    LOCALE_IO dummy;
+
     try
     {
         IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
