@@ -22,6 +22,7 @@
 
 #include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
+#include <locale_io.h>
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
                                   const std::string& aPath ) :
@@ -115,6 +116,8 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     if( !m_parent )
         return false;
+
+    LOCALE_IO dummy;
 
     try
     {
