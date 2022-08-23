@@ -114,6 +114,9 @@ enum KICAD_T
     PCB_NETINFO_T,           ///< class NETINFO_ITEM, a description of a net
     PCB_GROUP_T,             ///< class PCB_GROUP, a set of BOARD_ITEMs
 
+    // Be prudent with these types:
+    // they should be used only to locate specific item sub-types
+    // N.B. If you add a type here, be sure to add it below to the BaseType()
     PCB_LOCATE_STDVIA_T,
     PCB_LOCATE_UVIA_T,
     PCB_LOCATE_BBVIA_T,
@@ -123,6 +126,13 @@ enum KICAD_T
     PCB_LOCATE_PTH_T,
     PCB_LOCATE_NPTH_T,
     PCB_LOCATE_BOARD_EDGE_T,
+
+    // Same for locating shapes types from PCB_SHAPE_T and PCB_FP_SHAPE_T items
+    PCB_SHAPE_LOCATE_SEGMENT_T,
+    PCB_SHAPE_LOCATE_RECT_T,
+    PCB_SHAPE_LOCATE_CIRCLE_T,
+    PCB_SHAPE_LOCATE_ARC_T,
+    PCB_SHAPE_LOCATE_POLY_T,
 
     // Schematic draw Items.  The order of these items effects the sort order.
     // It is currently ordered to mimic the old Eeschema locate behavior where
@@ -267,6 +277,13 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:
         return PCB_LOCATE_HOLE_T;
+
+    case PCB_SHAPE_LOCATE_SEGMENT_T:
+    case PCB_SHAPE_LOCATE_RECT_T:
+    case PCB_SHAPE_LOCATE_CIRCLE_T:
+    case PCB_SHAPE_LOCATE_ARC_T:
+    case PCB_SHAPE_LOCATE_POLY_T:
+        return PCB_SHAPE_T;
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:

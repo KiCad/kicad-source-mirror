@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -36,14 +36,6 @@ class PCB_SELECTION_CONDITIONS : public SELECTION_CONDITIONS
 {
 public:
     /**
-     * Test if selection contains exclusively connected items (pads, tracks, vias, zones).
-     *
-     * @param aSelection is the selection to be tested.
-     * @return True if there are only connected items connected.
-     */
-    static bool OnlyConnectedItems( const SELECTION& aSelection );
-
-    /**
      * Create a functor that tests if selection contains items belonging to the same net or are
      * unconnected if aAllowUnconnected == true.
      *
@@ -64,17 +56,6 @@ public:
      */
     static SELECTION_CONDITION SameLayer();
 
-    /**
-     * Create a functor that tests if the selection contains PCB_SHAPE* items of certain shapes.
-     *
-     * This implicitly includes an OnlyType( PCB_SHAPE_T ) as part of the test.
-     *
-     * @param aTypes is a list of allowed PCB_SHAPE shapes (@see SHAPE_T)
-     * @return functor testing if selected items match the given list of allowed shapes
-     */
-    static SELECTION_CONDITION OnlyGraphicShapeTypes( const std::set<SHAPE_T> aTypes );
-
-
 private:
     ///< Helper function used by SameNet()
     static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );
@@ -82,9 +63,6 @@ private:
     ///< Helper function used by SameLayer()
     static bool sameLayerFunc( const SELECTION& aSelection );
 
-    ///< Helper function used by OnlyGraphicShapeTypes()
-    static bool onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
-                                           const std::set<SHAPE_T> aTypes );
 };
 
 #endif /* PCB_SELECTION_CONDITIONS_H_ */

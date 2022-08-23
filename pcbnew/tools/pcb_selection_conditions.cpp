@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,48 +26,21 @@
 #include "pcb_selection_conditions.h"
 #include "pcb_selection_tool.h"
 #include <board_connected_item.h>
-#include <pcb_shape.h>
 
 #include <functional>
 using namespace std::placeholders;
 
-using S_C = SELECTION_CONDITION;
 
-
-bool PCB_SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    for( const auto &item : aSelection )
-    {
-        auto type = item->Type();
-
-        if( type != PCB_PAD_T && type != PCB_VIA_T && type != PCB_TRACE_T && type != PCB_ZONE_T )
-            return false;
-    }
-
-    return true;
-}
-
-
-S_C PCB_SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
+SELECTION_CONDITION PCB_SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
 }
 
 
-S_C PCB_SELECTION_CONDITIONS::SameLayer()
+SELECTION_CONDITION PCB_SELECTION_CONDITIONS::SameLayer()
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::sameLayerFunc, _1 );
 }
-
-
-S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<SHAPE_T> aTypes )
-{
-    return std::bind( &PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc, _1, aTypes );
-}
-
 
 
 bool PCB_SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected )
@@ -76,12 +50,11 @@ bool PCB_SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aA
 
     int netcode = -1;   // -1 stands for 'net code is not yet determined'
 
-    for( const auto& aitem : aSelection )
+    for( const EDA_ITEM* aitem : aSelection )
     {
         int current_netcode = -1;
 
-        const BOARD_CONNECTED_ITEM* item =
-            dynamic_cast<const BOARD_CONNECTED_ITEM*>( aitem );
+        const BOARD_CONNECTED_ITEM* item = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aitem );
 
         if( item )
         {
@@ -123,9 +96,9 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
     LSET layerSet;
     layerSet.set();
 
-    for( const auto& i : aSelection )
+    for( const EDA_ITEM* i : aSelection )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
+        const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( i );
         layerSet &= item->GetLayerSet();
 
         if( !layerSet.any() )       // there are no common layers left
@@ -136,22 +109,3 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 }
 
 
-bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
-                                                          const std::set<SHAPE_T> aTypes )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    for( const EDA_ITEM* item : aSelection )
-    {
-        if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
-            return false;
-
-        SHAPE_T shape = static_cast<const PCB_SHAPE*>( item )->GetShape();
-
-        if( !aTypes.count( shape ) )
-            return false;
-    }
-
-    return true;
-}

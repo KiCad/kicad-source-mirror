@@ -68,6 +68,16 @@ public:
                 return true;
             else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
                 return m_layer == Edge_Cuts;
+            else if( scanType == PCB_SHAPE_LOCATE_ARC_T )
+                return m_shape == SHAPE_T::ARC;
+            else if( scanType == PCB_SHAPE_LOCATE_CIRCLE_T )
+                return m_shape == SHAPE_T::CIRCLE;
+            else if( scanType == PCB_SHAPE_LOCATE_RECT_T )
+                return m_shape == SHAPE_T::RECT;
+            else if( scanType == PCB_SHAPE_LOCATE_SEGMENT_T )
+                return m_shape == SHAPE_T::SEGMENT;
+            else if( scanType == PCB_SHAPE_LOCATE_POLY_T )
+                return m_shape == SHAPE_T::POLY;
         }
 
         return false;

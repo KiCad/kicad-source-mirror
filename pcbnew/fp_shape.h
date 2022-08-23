@@ -52,16 +52,10 @@ public:
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
-        if( BOARD_ITEM::IsType( aScanTypes ) )
+        if( PCB_SHAPE::IsType( aScanTypes ) )
             return true;
 
-        for( KICAD_T scanType : aScanTypes )
-        {
-            if( scanType == PCB_LOCATE_GRAPHIC_T )
-                return true;
-            else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
-                return m_layer == Edge_Cuts;
-        }
+        // No special processing above and beyond PCB_SHAPE at present....
 
         return false;
     }

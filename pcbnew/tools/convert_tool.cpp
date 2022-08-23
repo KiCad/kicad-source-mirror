@@ -150,22 +150,20 @@ bool CONVERT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::convert );
     m_menu->SetTitle( _( "Create from Selection" ) );
 
-    auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT, SHAPE_T::RECT,
-                                                        SHAPE_T::CIRCLE, SHAPE_T::ARC } )
+    auto graphicLines = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
+                                          PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T } )
                                 && P_S_C::SameLayer();
 
-    auto graphicToTrack = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT, SHAPE_T::ARC } );
+    auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
 
     auto trackLines = S_C::MoreThan( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T } )
                             && P_S_C::SameLayer();
 
     auto anyLines = graphicLines || trackLines;
-    auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T } )
-                            || P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::POLY, SHAPE_T::RECT } );
+    auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_FP_ZONE_T,
+                                      PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } );
 
-    auto lineToArc = S_C::Count( 1 )
-                         && ( P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT } )
-                                || S_C::OnlyTypes( { PCB_TRACE_T } ) );
+    auto lineToArc = S_C::Count( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
 
     auto showConvert       = anyPolys || anyLines || lineToArc;
     auto canCreatePolyType = anyLines || anyPolys;
