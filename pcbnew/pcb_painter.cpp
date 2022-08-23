@@ -448,6 +448,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
         m_maxError = bds.m_MaxError;
         m_holePlatingThickness = bds.GetHolePlatingThickness();
+        m_lockedShadowMargin = bds.GetLineThickness( F_SilkS ) * 4;
 
         if( item->GetParentFootprint() && !board->IsFootprintHolder() )
         {
@@ -698,7 +699,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-            track_width = track_width * 1.5;
+            track_width = track_width + m_lockedShadowMargin;
 
         m_gal->DrawSegment( start, end, track_width );
     }
@@ -745,7 +746,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-            width = width * 1.5;
+            width = width + m_lockedShadowMargin;
 
         m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width,
                                m_maxError );
@@ -950,10 +951,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
     else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
     {
-        int ring_width = aVia->GetWidth() * 0.2;
-        m_gal->SetLineWidth( ring_width );
+        m_gal->SetLineWidth( m_lockedShadowMargin );
 
-        m_gal->DrawCircle( center, ( aVia->GetWidth() + ring_width ) / 2.0 );
+        m_gal->DrawCircle( center, ( aVia->GetWidth() + m_lockedShadowMargin ) / 2.0 );
     }
 
     // Clearance lines
@@ -1453,7 +1453,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         color = m_pcbSettings.GetColor( aShape, aLayer );
-        thickness = std::max( thickness * 3, Millimeter2iu( 0.2 ) );
+        thickness = thickness + m_lockedShadowMargin;
     }
 
     if( outline_mode )
@@ -1754,8 +1754,9 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         const COLOR4D color = m_pcbSettings.GetColor( aText, aLayer );
 
         m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
+        m_gal->SetIsStroke( true );
         m_gal->SetFillColor( color );
+        m_gal->SetLineWidth( m_lockedShadowMargin );
 
         SHAPE_POLY_SET poly;
         aText->TransformShapeWithClearanceToPolygon( poly, aText->GetLayer(), 0, m_maxError,
@@ -1897,7 +1898,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         const COLOR4D sh_color = m_pcbSettings.GetColor( aTextBox, aLayer );
         m_gal->SetFillColor( sh_color );
         m_gal->SetStrokeColor( sh_color );
-        attrs.m_StrokeWidth *= 3;
+        attrs.m_StrokeWidth += m_lockedShadowMargin;
     }
 
     if( cache )
@@ -2085,7 +2086,17 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
 #else
-        m_gal->DrawRectangle( aFootprint->GetBoundingBox( true, false ) );
+        EDA_RECT bbox = aFootprint->GetBoundingBox( false, false );
+        VECTOR2I topLeft = bbox.GetPosition();
+        VECTOR2I botRight = bbox.GetPosition() + bbox.GetSize();
+
+        m_gal->DrawRectangle( topLeft, botRight );
+
+        // Use segments to produce a margin with rounded corners
+        m_gal->DrawSegment( topLeft, VECTOR2I( botRight.x, topLeft.y ), m_lockedShadowMargin );
+        m_gal->DrawSegment( VECTOR2I( botRight.x, topLeft.y ), botRight, m_lockedShadowMargin );
+        m_gal->DrawSegment( botRight, VECTOR2I( topLeft.x, botRight.y ), m_lockedShadowMargin );
+        m_gal->DrawSegment( VECTOR2I( topLeft.x, botRight.y ), topLeft, m_lockedShadowMargin );
 #endif
     }
 

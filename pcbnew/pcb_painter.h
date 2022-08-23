@@ -219,6 +219,7 @@ protected:
 
     int                 m_maxError;
     int                 m_holePlatingThickness;
+    int                 m_lockedShadowMargin;
 };
 } // namespace KIGFX
 
