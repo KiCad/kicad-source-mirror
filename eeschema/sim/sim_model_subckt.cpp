@@ -81,7 +81,7 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
-                    AddPin( { subnode->string(), wxString::FromCDouble( GetPinCount() ) } );
+                    AddPin( { subnode->string(), wxString::FromCDouble( GetPinCount() + 1 ) } );
                 }
                 else if( !hadParamValuePairs
                     && subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::paramValuePairs>() )
@@ -159,4 +159,15 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
     // Same for parameters.
     for( const PARAM& param : GetBaseModel()->GetParams() )
         AddParam( param.info );
+}
+
+
+void SIM_MODEL_SUBCKT::CreatePins( unsigned aSymbolPinCount )
+{
+    SIM_MODEL::CreatePins( aSymbolPinCount );
+
+    // Reset the pins to Not Connected. Linear order is not as common, and reordering the pins is
+    // more effort in the GUI than assigning them from scratch.
+    for( int pinIndex = 0; pinIndex < GetPinCount(); ++pinIndex )
+        SetPinSymbolPinNumber( pinIndex, "" );
 }

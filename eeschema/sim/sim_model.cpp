@@ -64,7 +64,6 @@ namespace SIM_MODEL_SPICE_PARSER
 {
     using namespace SPICE_GRAMMAR;
 
-
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
     template <> struct spiceUnitSelector<dotModel> : std::true_type {};
@@ -1567,17 +1566,17 @@ wxString SIM_MODEL::generatePinsField() const
     wxString result = "";
     bool isFirst = true;
 
-    for( int pinIndex = 0; pinIndex < GetPinCount(); ++pinIndex )
+    for( const PIN& pin : GetPins() )
     {
         if( isFirst )
             isFirst = false;
         else
             result << " ";
 
-        if( GetPin( pinIndex ).symbolPinNumber == "" )
+        if( pin.symbolPinNumber == "" )
             result << "~";
         else
-            result << GetPin( pinIndex ).symbolPinNumber; // Note that it's numbered from 1.
+            result << pin.symbolPinNumber; // Note that it's numbered from 1.
     }
 
     return result;

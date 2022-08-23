@@ -38,6 +38,9 @@ public:
     std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
+protected:
+    void CreatePins( unsigned aSymbolPinCount ) override;
+
 private:
     bool requiresSpiceModel() const override { return true; }
 
