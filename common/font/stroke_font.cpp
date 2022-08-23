@@ -38,6 +38,8 @@
 // The "official" name of the building Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
 
+#include <mutex>
+
 using namespace KIFONT;
 
 
@@ -53,6 +55,7 @@ static constexpr int FONT_OFFSET = -10;
 bool                                g_defaultFontInitialized = false;
 std::vector<std::shared_ptr<GLYPH>> g_defaultFontGlyphs;
 std::vector<BOX2D>*                 g_defaultFontGlyphBoundingBoxes;
+std::mutex                          g_defaultFontLoadMutex;
 
 
 STROKE_FONT::STROKE_FONT() :
@@ -99,6 +102,9 @@ void buildGlyphBoundingBox( std::shared_ptr<STROKE_GLYPH>& aGlyph, double aGlyph
 
 void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize )
 {
+    // Protect the initialization sequence against multiple entries
+    std::lock_guard<std::mutex> lock( g_defaultFontLoadMutex );
+
     if( !g_defaultFontInitialized )
     {
         g_defaultFontGlyphs.reserve( aNewStrokeFontSize );
