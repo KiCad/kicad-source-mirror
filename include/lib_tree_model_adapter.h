@@ -393,7 +393,12 @@ protected:
     LIB_TREE_NODE_ROOT      m_tree;
 
 private:
-    [[maybe_unused]] EDA_BASE_FRAME*         m_parent;
+    #ifndef __clang__
+    // [[maybe_unused]] attribute is ignored by Gcc but generates a warning.
+    EDA_BASE_FRAME*         m_parent;
+    #else
+    [[maybe_unused]] EDA_BASE_FRAME* m_parent;
+    #endif
 
     SYM_FILTER_TYPE         m_filter;
     bool                    m_show_units;
