@@ -719,7 +719,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost

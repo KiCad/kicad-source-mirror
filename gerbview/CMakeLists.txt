@@ -156,7 +156,6 @@ target_link_libraries( gerbview_kiface
     gal
     common
     ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
     )
 set_source_files_properties( gerbview.cpp PROPERTIES
     # The KIFACE is in gerbview.cpp, export it:

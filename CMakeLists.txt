@@ -768,11 +768,6 @@ find_package( Fontconfig REQUIRED )
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
 
-if( WIN32 )
-    # we need the gdiplus library for cairo printing on windows
-    set( GDI_PLUS_LIBRARIES gdiplus )
-endif()
-
 # Find ngspice library, required for integrated circuit simulator
 if( KICAD_SPICE )
     find_package( ngspice REQUIRED )

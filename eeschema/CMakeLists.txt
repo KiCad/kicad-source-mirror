@@ -468,7 +468,6 @@ target_link_libraries( eeschema_kiface
         scripting
         sexpr
         ${wxWidgets_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
     )
 
 if( KICAD_SPICE )

@@ -44,6 +44,11 @@ set( GAL_SRCS
 
 add_library( gal STATIC ${GAL_SRCS} )
 
+if( WIN32 )
+    # we need the gdiplus library for cairo printing on windows
+    set( GDI_PLUS_LIBRARIES gdiplus )
+endif()
+
 target_link_libraries( gal
     common          # This is needed until the circular dependency is removed
     kimath

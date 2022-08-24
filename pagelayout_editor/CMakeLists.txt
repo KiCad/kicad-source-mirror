@@ -109,7 +109,6 @@ target_link_libraries( pl_editor_kiface
     gal
     common
     ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
     )
 set_target_properties( pl_editor_kiface PROPERTIES
     OUTPUT_NAME     pl_editor
