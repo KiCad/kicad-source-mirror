@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -21772,7 +21772,7 @@ msgstr "substrat"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
-msgstr "Relativ permeabilitet (mu) för substrat"
+msgstr "Relativ permeabilitet (my) för substrat"
 
 #: pcb_calculator/transline_ident.cpp:139
 #: pcb_calculator/transline_ident.cpp:171
@@ -21794,7 +21794,7 @@ msgstr "ledare"
 #: pcb_calculator/transline_ident.cpp:365
 #: pcb_calculator/transline_ident.cpp:395
 msgid "Relative permeability (mu) of conductor"
-msgstr "Relativ permeabilitet (mu) för ledare"
+msgstr "Relativ permeabilitet (my) för ledare"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
@@ -21862,7 +21862,7 @@ msgstr "isolator"
 #: pcb_calculator/transline_ident.cpp:239
 #: pcb_calculator/transline_ident.cpp:274
 msgid "Relative permeability (mu) of insulator"
-msgstr "Relativ permeabilitet (mu) för isolator"
+msgstr "Relativ permeabilitet (my) för isolator"
 
 #: pcb_calculator/transline_ident.cpp:247
 msgid "Width of waveguide"
@@ -25516,7 +25516,7 @@ msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
-"Skapar 2 filer: en för varje styrelsida eller\n"
+"Skapar 2 filer: en för varje sida av mönsterkortet eller\n"
 "Skapar bara en fil som innehåller alla fotavtryck att placera\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
@@ -25980,7 +25980,7 @@ msgstr "Håll dig upprätt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
 msgid "Set to layer default values:"
-msgstr "Ställ in som standardvärden för lager:"
+msgstr "Använd standardvärden för lager:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:230
 #: pcbnew/tools/board_inspection_tool.cpp:338
@@ -26263,11 +26263,11 @@ msgstr "Redigera kartläggning av importerade lager"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:122
 msgid "Top/Front layer:"
-msgstr "Topp / främre lager:"
+msgstr "Övre / främre lager:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:161
 msgid "Bottom/Back layer:"
-msgstr "Nedersta / bakre lagret:"
+msgstr "Nedre / bakre lagret:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:51
 msgid "Select Layer"
@@ -26713,7 +26713,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 msgid "Error: pad has no layer."
-msgstr "Fel: pad har inget lager."
+msgstr "Fel: lödytan har inget lager."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1353
 msgid ""
@@ -28374,7 +28374,7 @@ msgstr "Slutlager:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
 msgid "Annular rings:"
-msgstr "Årsringar:"
+msgstr "Kragar:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Start, end, and connected layers"
@@ -28911,7 +28911,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
-msgstr "Minsta via diameter:"
+msgstr "Minsta viadiameter:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:117
 msgid ""
@@ -28986,7 +28986,7 @@ msgstr "uVior"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:242
 msgid "Minimum uVia diameter:"
-msgstr "Minsta uVia-diameter:"
+msgstr "Minsta µVia-diameter:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:247
 msgid ""
@@ -29112,7 +29112,7 @@ msgid ""
 msgstr ""
 "Fotavtryck innehåller några objekt på borttagna lager:\n"
 "%s\n"
-"Dessa artiklar kommer inte längre att vara tillgängliga\n"
+"Dessa objekt kommer inte längre att vara tillgängliga\n"
 "Vill du fortsätta?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:473
@@ -29753,7 +29753,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
-msgstr "Avstånd mellan lödmask och koppar:"
+msgstr "Marginal mellan lödmask och koppar:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -36522,7 +36522,7 @@ msgstr "Via ringformad bredd"
 #: pcbnew/tools/board_inspection_tool.cpp:1135
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Årsringbreddsbegränsningar: min %s; opt %s; max %s."
+msgstr "Kragbreddsbegränsningar: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1177
 #, c-format
