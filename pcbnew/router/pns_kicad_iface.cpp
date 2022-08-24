@@ -584,6 +584,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetDiffPairWidth( diffPairWidth );
     aSizes.SetDiffPairGap( diffPairGap );
     aSizes.SetDiffPairViaGap( diffPairViaGap );
+    aSizes.SetDiffPairViaGapSameAsTraceGap( false );
 
     int      holeToHoleMin = bds.m_HoleToHoleMin;
     PNS::VIA dummyVia;
