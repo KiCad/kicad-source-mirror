@@ -81,7 +81,8 @@ class DS_DATA_MODEL_FILEIO : public DS_DATA_MODEL_IO
 {
 public:
     DS_DATA_MODEL_FILEIO( const wxString& aFilename ) :
-            DS_DATA_MODEL_IO()
+            DS_DATA_MODEL_IO(),
+            m_fileout( nullptr )
     {
         try
         {
