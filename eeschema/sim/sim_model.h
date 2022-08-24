@@ -579,7 +579,9 @@ protected:
                                             = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
     template <typename T>
-    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+    void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
+                                 bool aAllowOnlyFirstValue = false,
+                                 bool aAllowParamValuePairs = true );
 
     wxString m_spiceCode;
 
@@ -597,16 +599,17 @@ private:
     template <typename T>
     void doWriteFields( std::vector<T>& aFields ) const;
 
-
-    virtual std::vector<wxString> getPinNames() const { return {}; }
-
     wxString generateDeviceTypeField() const;
     wxString generateTypeField() const;
 
     wxString generatePinsField() const;
     wxString generateDisabledField() const;
 
+    wxString parseFieldFloatValue( wxString aFieldFloatValue );
+
     virtual bool requiresSpiceModel() const;
+
+    virtual std::vector<wxString> getPinNames() const { return {}; }
 
 
     const SIM_MODEL* m_baseModel;

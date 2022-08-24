@@ -54,7 +54,7 @@ void SIM_MODEL_SOURCE::ReadDataSchFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
     else
-        InferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields, true );
 }
 
 
@@ -64,7 +64,7 @@ void SIM_MODEL_SOURCE::ReadDataLibFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
     else
-        InferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields, true );
 }
 
 
@@ -242,8 +242,12 @@ bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const wxString& aVal
     // them out automatically. If a value is nulled, delete everything after it.
     if( aValue == "" )
     {
-        for( int paramIndex = aParamIndex; paramIndex < GetParamCount(); ++paramIndex )
+        for( int paramIndex = static_cast<int>( aParamIndex );
+             paramIndex < GetParamCount();
+             ++paramIndex )
+        {
             SIM_MODEL::SetParamValue( paramIndex, "", aNotation );
+        }
     }
     else
     {

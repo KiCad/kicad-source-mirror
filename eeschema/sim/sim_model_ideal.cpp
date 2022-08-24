@@ -29,16 +29,6 @@
 using PARAM = SIM_MODEL::PARAM;
 
 
-namespace SIM_MODEL_PARSER
-{
-    using namespace SIM_MODEL_GRAMMAR;
-
-    template <typename Rule> struct fieldFloatValueSelector : std::false_type {};
-    template <> struct fieldFloatValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>
-        : std::true_type {};
-};
-
-
 SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
     : SIM_MODEL( aType ),
       m_isInferred( false )
@@ -64,7 +54,7 @@ void SIM_MODEL_IDEAL::ReadDataSchFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
     else
-        inferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields, true, false );
 }
 
 
@@ -74,7 +64,7 @@ void SIM_MODEL_IDEAL::ReadDataLibFields( unsigned aSymbolPinCount,
     if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
         SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
     else
-        inferredReadDataFields( aSymbolPinCount, aFields );
+        InferredReadDataFields( aSymbolPinCount, aFields, true, false );
 }
 
 
@@ -113,42 +103,6 @@ wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
         return SIM_MODEL::GenerateSpiceItemLine( aRefName, valueStr, aSymbolPinNumbers, aPinNetNames );
     else
         return "";
-}
-
-
-template <typename T>
-void SIM_MODEL_IDEAL::inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
-{
-    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
-
-    if( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                  GetFieldValue( aFields, VALUE_FIELD ) ) == GetType() )
-    {
-        try
-        {
-            wxString value = GetFieldValue( aFields, VALUE_FIELD );
-
-            tao::pegtl::string_input<> in( value.ToUTF8(), "Value" );
-            auto root = tao::pegtl::parse_tree::parse<
-                SIM_MODEL_PARSER::fieldFloatValueGrammar,
-                SIM_MODEL_PARSER::fieldFloatValueSelector>
-                    ( in );
-
-            // The grammar and selector must guarantee having at least one child.
-            SetParamValue( 0, root->children[0]->string() );
-        }
-        catch( const tao::pegtl::parse_error& )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Failed to infer model from Value '%s'" ),
-                                              GetFieldValue( aFields, VALUE_FIELD ) ) );
-        }
-
-        m_isInferred = true;
-        return;
-    }
-
-    if( GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
-        m_isInferred = true;
 }
 
 

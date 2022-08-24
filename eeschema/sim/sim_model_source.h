@@ -63,7 +63,8 @@ public:
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
     bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
-                        SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
+                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI )
+        override;
 
     bool HasAutofill() const override { return true; }
 

@@ -55,6 +55,11 @@ namespace SIM_MODEL_PARSER
     template <> struct fieldParamValuePairsSelector<unquotedString> : std::true_type {};
 
 
+    template <typename Rule> struct fieldFloatValueSelector : std::false_type {};
+    template <> struct fieldFloatValueSelector<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>
+        : std::true_type {};
+
+
     template <typename Rule> struct pinSequenceSelector : std::false_type {};
     template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
 }
@@ -1316,7 +1321,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
         THROW_IO_ERROR( e.what() );
     }
 
-    wxString paramName = "";
+    wxString paramName;
 
     for( const auto& node : root->children )
     {
@@ -1516,26 +1521,52 @@ void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>
 
 
 template <typename T>
-void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
+void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
+                                        bool aAllowOnlyFirstValue,
+                                        bool aAllowParamValuePairs )
 {
     ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
 
     if( InferTypeFromRefAndValue( GetFieldValue( aFields, REFERENCE_FIELD ),
-                                  GetFieldValue( aFields, VALUE_FIELD ) ) == GetType() )
+                                  GetFieldValue( aFields, VALUE_FIELD ) ) != GetType() )
     {
-        ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) );
-        m_isInferred = true;
+        // Not an inferred model. Nothing to do here.
+        return;
     }
-    else if( GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+
+    wxString valueField = GetFieldValue( aFields, VALUE_FIELD );
+
+    if( aAllowParamValuePairs ) // The usual param-value pairs have precedence.
     {
-        m_isInferred = true;
+        try
+        {
+            ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) );
+        }
+        catch( const IO_ERROR& e )
+        {
+            if( aAllowOnlyFirstValue )
+                SetParamValue( 0, parseFieldFloatValue( valueField ) );
+            else
+                throw e;
+        }
     }
+    else if( aAllowOnlyFirstValue )
+    {
+        // This is reached only when model allows only the first value.
+        SetParamValue( 0, parseFieldFloatValue( valueField ) );
+    }
+
+    m_isInferred = true;
 }
 
 template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
-                                                 const std::vector<SCH_FIELD>* aFields );
+                                                 const std::vector<SCH_FIELD>* aFields,
+                                                 bool aAllowOnlyFirstValue,
+                                                 bool aAllowParamValuePairs );
 template void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount,
-                                                 const std::vector<LIB_FIELD>* aFields );
+                                                 const std::vector<LIB_FIELD>* aFields,
+                                                 bool aAllowOnlyFirstValue,
+                                                 bool aAllowParamValuePairs );
 
 
 template <typename T>
@@ -1586,6 +1617,26 @@ wxString SIM_MODEL::generatePinsField() const
 wxString SIM_MODEL::generateDisabledField() const
 {
     return m_isEnabled ? "" : "1";
+}
+
+
+wxString SIM_MODEL::parseFieldFloatValue( wxString aFieldFloatValue )
+{
+    try
+    {
+        tao::pegtl::string_input<> in( aFieldFloatValue.ToUTF8(), "Value" );
+        auto root = tao::pegtl::parse_tree::parse<
+                SIM_MODEL_PARSER::fieldFloatValueGrammar,
+                SIM_MODEL_PARSER::fieldFloatValueSelector>
+            ( in );
+
+        return root->children[0]->string();
+    }
+    catch( const tao::pegtl::parse_error& )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Failed to infer model from Value '%s'" ),
+                                          aFieldFloatValue ) );
+    }
 }
 
 

@@ -299,6 +299,8 @@ BOOST_AUTO_TEST_CASE( Opamp )
 
 BOOST_AUTO_TEST_CASE( NpnCeAmp )
 {
+    // This test intentionally uses non-inferred voltage sources to test them.
+
     TestNetlist( "npn_ce_amp" );
     TestTranPoint( 900e-6, { { "V(/in)", 0 }, { "V(/out)", 5.32 } } );
     TestTranPoint( 925e-6, { { "V(/in)", 10e-3 }, { "V(/out)", 5.30 } } );
