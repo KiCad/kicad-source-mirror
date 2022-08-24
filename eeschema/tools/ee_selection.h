@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ class SCH_REFERENCE_LIST;
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
 
+#include <unordered_set>
 #include <tool/selection.h>
 #include <sch_sheet_path.h> // SCH_MULTI_UNIT_REFERENCE_MAP
 
@@ -49,33 +50,6 @@ public:
 
     void SetScreen( SCH_SCREEN* aScreen ) { m_screen = aScreen; }
     SCH_SCREEN* GetScreen() { return m_screen; }
-
-    /**
-     * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the selection.
-     *
-     * @param aReferences List of references to populate.
-     * @param aSelectionPath The path to the sheet containing this selection.
-     * @param aIncludePowerSymbols set to false to only get normal symbols.
-     * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
-     *                                   in lib.   The normal option is false, and set to true
-     *                                   only to build the full list of symbols.
-     */
-    void GetSymbols( SCH_REFERENCE_LIST& aReferences, const SCH_SHEET_PATH& aSelectionPath,
-                     bool aIncludePowerSymbols = true, bool aForceIncludeOrphanSymbols = false );
-
-    /**
-     * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
-     * multi-unit parts in the selection.
-     *
-     * The map key for each element will be the reference designator.
-     *
-     * @param aRefList Map of reference designators to reference lists
-     * @param aSelectionPath The path to the sheet containing this selection.
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
-     */
-    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                              const SCH_SHEET_PATH& aSelectionPath,
-                              bool aIncludePowerSymbols = true );
 };
 
 #endif  //  EE_SELECTION_H

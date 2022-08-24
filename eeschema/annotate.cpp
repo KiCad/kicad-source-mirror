@@ -160,6 +160,37 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 }
 
 
+std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const EE_SELECTION& aSelection )
+{
+    std::unordered_set<SCH_SYMBOL*> symbols;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        switch( item->Type() )
+        {
+        case SCH_FIELD_T:
+        {
+            SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
+
+            if( field->GetId() == REFERENCE_FIELD && field->GetParent()->Type() == SCH_SYMBOL_T )
+                symbols.insert( static_cast<SCH_SYMBOL*>( field->GetParent() ) );
+
+            break;
+        }
+
+        case SCH_SYMBOL_T:
+            symbols.insert( static_cast<SCH_SYMBOL*>( item ) );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return symbols;
+}
+
+
 void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                                       ANNOTATE_ORDER_T  aSortOption,
                                       ANNOTATE_ALGO_T   aAlgoOption,
@@ -179,8 +210,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     SCH_SHEET_PATH     currentSheet = GetCurrentSheet();
 
 
-    // Store the selected sheets relative to the full hierarchy so we
-    // get the correct sheet numbers
+    // Store the selected sheets relative to the full hierarchy so we get the correct sheet numbers
     SCH_SHEET_LIST selectedSheets;
 
     for( EDA_ITEM* item : selection )
@@ -195,8 +225,8 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     }
 
 
-    // Like above, store subsheets relative to full hierarchy for
-    // recursive annotation from current sheet
+    // Like above, store subsheets relative to full hierarchy for recursive annotation from current
+    // sheet
     SCH_SHEET_LIST subSheets;
 
     std::vector<SCH_ITEM*> tempSubSheets;
@@ -211,15 +241,20 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     }
 
 
+    std::unordered_set<SCH_SYMBOL*> selectedSymbols;
+
+    if( aAnnotateScope == ANNOTATE_SELECTION )
+        selectedSymbols = getInferredSymbols( selection );
+
+
     // Map of locked symbols
     SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
 
     // Map of previous annotation for building info messages
     std::map<wxString, wxString> previousAnnotation;
 
-    // Test for and replace duplicate time stamps in symbols and sheets.  Duplicate
-    // time stamps can happen with old schematics, schematic conversions, or manual
-    // editing of files.
+    // Test for and replace duplicate time stamps in symbols and sheets.  Duplicate time stamps
+    // can happen with old schematics, schematic conversions, or manual editing of files.
     if( aRepairTimestamps )
     {
         int count = screens.ReplaceDuplicateTimeStamps();
@@ -244,7 +279,9 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         break;
 
     case ANNOTATE_SELECTION:
-        selection.GetMultiUnitSymbols( lockedSymbols, currentSheet );
+        for( SCH_SYMBOL* symbol : selectedSymbols )
+            currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol );
+
         break;
     }
 
@@ -262,18 +299,19 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         break;
 
     case ANNOTATE_CURRENT_SHEET:
-        GetCurrentSheet().GetSymbols( references );
+        currentSheet.GetSymbols( references );
 
         if( aRecursive )
-            subSheets.GetSymbolsWithinPath( references, currentSheet, true, true );
+            subSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
 
         break;
 
     case ANNOTATE_SELECTION:
-        selection.GetSymbols( references, currentSheet );
+        for( SCH_SYMBOL* symbol : selectedSymbols )
+            currentSheet.AppendSymbol( references, symbol, false, true );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, true, true );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
 
         break;
     }
@@ -443,7 +481,9 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
     case ANNOTATE_SELECTION:
         EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->RequestSelection();
-        selection.GetSymbols( referenceList, GetCurrentSheet(), includePowerSymbols );
+
+        for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
+            GetCurrentSheet().AppendSymbol( referenceList, symbol, false, true );
 
         if( aRecursive )
         {
@@ -463,7 +503,6 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
             for( SCH_SHEET_PATH sheet : selectedSheets )
                 sheet.GetSymbols( referenceList, includePowerSymbols );
         }
-
 
         break;
     }
