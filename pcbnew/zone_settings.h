@@ -78,7 +78,7 @@ public:
         SMOOTHING_LAST              // sentinel
     };
 
-    int             m_ZonePriority;          // Priority (0 ... N) of the zone
+    unsigned        m_ZonePriority;          // Priority (0 ... N) of the zone
 
     ZONE_FILL_MODE  m_FillMode;
     int             m_ZoneClearance;         // Minimal clearance value

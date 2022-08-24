@@ -68,6 +68,17 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 
+    // By default, new zones should have the highest available priority
+    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON
+            && ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
+    {
+        unsigned priority = 0;
+
+        for( ZONE* zone : board->Zones() )
+            priority = std::max( priority, zone->GetAssignedPriority() );
+
+        zoneInfo.m_ZonePriority = static_cast<int>( priority + 1 );
+    }
     // If we don't have a net from highlighting, maybe we can get one from the selection
     PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
 
