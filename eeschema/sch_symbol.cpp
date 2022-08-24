@@ -524,7 +524,8 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( sheet );
 
-    if( Schematic() && *sheet == Schematic()->CurrentSheet() )
+    // Schematic() is null for new components just added
+    if( !Schematic() || *sheet == Schematic()->CurrentSheet() )
         m_fields[ REFERENCE_FIELD ].SetText( ref );
 
     // Reinit the m_prefix member if needed
