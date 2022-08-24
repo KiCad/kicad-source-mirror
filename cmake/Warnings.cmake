@@ -168,6 +168,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( HAVE_WIMPLICIT_FLOAT_CONVERSION true )
     endif()
 
+    # Suppress GCC warnings about unknown/unused attributes (e.g. cdecl, [[maybe_unused, etc)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes" )
+    endif()
 
     # Avoid ABI warnings, specifically one about an ABI change on ppc64el from gcc5 to gcc 6.
     CHECK_CXX_COMPILER_FLAG( "-Wpsabi" COMPILER_SUPPORTS_WPSABI )
