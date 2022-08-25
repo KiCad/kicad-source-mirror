@@ -366,6 +366,18 @@ BOOST_AUTO_TEST_CASE( CmosNot )
 }*/
 
 
+BOOST_AUTO_TEST_CASE( FliegeFilter )
+{
+    // We test a multi-unit part here, as Fliege topology uses two op amps (power supply pins are a
+    // third part).
+
+    TestNetlist( "fliege_filter" );
+    TestACPoint( 0.8e3, { { "V(/in)", 1 }, { "V(/out)", 1 } } );
+    TestACPoint( 1.061e3, { { "V(/in)", 1 }, { "V(/out)", 0 } } );
+    TestACPoint( 1.2e3, { { "V(/in)", 1 }, { "V(/out)", 1 } } );
+}
+
+
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver" );
