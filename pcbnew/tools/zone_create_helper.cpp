@@ -65,7 +65,8 @@ void ZONE_CREATE_HELPER::setUniquePriority( ZONE_SETTINGS& aZoneInfo )
     for( ZONE* zone : board->Zones() )
     {
         if( zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_NONE
-                && ( zone->GetLayerSet() & LSET::AllCuMask() ).any() )
+                && ( zone->GetLayerSet() & LSET::AllCuMask() ).any()
+                && !zone->GetIsRuleArea() )
         {
             priorities.insert( zone->GetAssignedPriority() );
         }
