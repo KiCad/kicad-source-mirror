@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3566,7 +3566,7 @@ msgstr "デフォルトのネットクラスが必要です。"
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>%s' に一致するネット:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -7585,7 +7585,7 @@ msgstr "回路図をアノテーション"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>現在一致しているネット:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -13741,7 +13741,8 @@ msgstr "ストレージファイルは完全に読み込まれていません(%d
 msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
-msgstr ""
+msgstr "\"Additional\" セクション内の不明または予期しないレコード、レコード ID: "
+"%dが見つかりました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13752,7 +13753,8 @@ msgstr "コンパイルマスクは現在サポートされていません。"
 msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
-msgstr ""
+msgstr "\"FileHeader\" セクション内の不明または予期しないレコードが見つかりました, "
+"レコード ID: %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
@@ -30939,9 +30941,8 @@ msgid "Differential uncoupled length too long"
 msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "フットプリントID '%s' は有効ではありません。"
+msgstr "フットプリントが正しくありません。"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -33002,14 +33003,12 @@ msgid "Auto-Place Footprints"
 msgstr "フットプリントを自動配置"
 
 #: pcbnew/menubar_pcb_editor.cpp:413
-#, fuzzy
 msgid "Add Teardrops..."
-msgstr "ティアドロップを追加"
+msgstr "ティアドロップを追加…"
 
 #: pcbnew/menubar_pcb_editor.cpp:414
-#, fuzzy
 msgid "Remove Teardrops..."
-msgstr "ティアドロップを削除"
+msgstr "ティアドロップを削除…"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -35790,9 +35789,9 @@ msgid "Unsupported via shape: %s"
 msgstr "サポートされていないビア形状: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "セッション ファイルで不正なレイヤーID '%s' を使用しています。"
+msgstr "セッション ファイルで不正なレイヤーID '%s' を使用しています"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
@@ -35827,30 +35826,26 @@ msgid "%d Teardrops removed."
 msgstr "%d 個のティアドロップが削除されました。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "円形"
+msgstr "円形:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "最適な長さ"
+msgstr "最適な長さ:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "最適な高さ"
+msgstr "最適な高さ:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:280
-#, fuzzy
 msgid "Max length:"
-msgstr "最大長"
+msgstr "最大長:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:105
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:209
@@ -35875,9 +35870,8 @@ msgid "Curved"
 msgstr "曲線"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "四角形"
+msgstr "四角形:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
 msgid "Tracks:"
@@ -35933,9 +35927,8 @@ msgstr ""
 "容する"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
-#, fuzzy
 msgid "Place teardrops on pads in zones"
-msgstr "ゾーン内のパッド上のティアドロップ"
+msgstr "ゾーン内のパッド上にティアドロップを配置する"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
@@ -35947,9 +35940,8 @@ msgstr ""
 "す。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "ベジェ曲線の制御点"
+msgstr "ベジェ曲線の制御点:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -38345,11 +38337,11 @@ msgstr "実際のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1311
 msgid "Resolved hole clearance"
-msgstr "解決済みの穴のクリアランス: %s."
+msgstr "解決済みの穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1316
 msgid "Actual hole clearance"
-msgstr "実際の穴のクリアランス:"
+msgstr "実際の穴のクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1348
 msgid "Resolved edge clearance"
