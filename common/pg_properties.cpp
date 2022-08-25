@@ -25,6 +25,7 @@
 #include <wx/regex.h>
 
 #include <common.h>
+#include <macros.h>
 #include <validators.h>
 #include <convert_to_biu.h>
 #include <property.h>
@@ -63,6 +64,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 
     default:
         wxFAIL;
+        KI_FALLTHROUGH;
         /* fall through */
     case PROPERTY_DISPLAY::PT_DEFAULT:
     {
@@ -186,7 +188,7 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
             break;
 
         case EDA_UNITS::UNSCALED:
-            newValueIU = value;
+            newValueIU = KiROUND( value );
             break;
 
         default:
