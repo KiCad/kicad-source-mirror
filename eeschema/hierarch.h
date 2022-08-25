@@ -28,7 +28,6 @@
 #ifndef HIERARCH_H
 #define HIERARCH_H
 
-#include <dialog_shim.h>
 #include <wx/imaglist.h>
 #include <wx/object.h> // wxRTTI macros
 #include <wx/treectrl.h>
