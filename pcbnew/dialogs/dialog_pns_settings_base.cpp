@@ -29,7 +29,6 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bOptions->Add( m_freeAngleMode, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_shoveVias = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Shove vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_shoveVias->Enable( false );
 	m_shoveVias->SetToolTip( _("When disabled, vias are treated as un-movable objects and hugged instead of shoved.") );
 
 	bOptions->Add( m_shoveVias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );

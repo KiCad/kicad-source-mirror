@@ -880,7 +880,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         return SH_INCOMPLETE;
     }
 
-    if( aVia->IsLocked() )
+    if( Settings().ShoveVias() == false || aVia->IsLocked() )
         return SH_TRY_WALK;
 
     if( jt->IsLocked() )

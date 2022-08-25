@@ -55,7 +55,6 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
 
     // Don't show options that are not implemented
     m_suggestEnding->Hide();
-    m_shoveVias->Hide();
 
     SetDefaultItem( m_stdButtonsOK );
     GetSizer()->Fit( this );
