@@ -75,7 +75,10 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
         unsigned priority = 0;
 
         for( ZONE* zone : board->Zones() )
-            priority = std::max( priority, zone->GetAssignedPriority() );
+        {
+            if( zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_NONE )
+                priority = std::max( priority, zone->GetAssignedPriority() );
+        }
 
         zoneInfo.m_ZonePriority = static_cast<int>( priority + 1 );
     }
