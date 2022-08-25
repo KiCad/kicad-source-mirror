@@ -28,6 +28,7 @@
 PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BUSES_BASE( aWindow ),
         m_frame( aFrame ),
+        m_lastAlias( 0 ),
         m_errorGrid( nullptr ),
         m_errorRow( -1 )
 {

@@ -139,10 +139,14 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
     SCH_SEARCH_DATA* searchData = dynamic_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() );
-    searchData->replaceReferences = eeconfig()->m_FindReplaceExtra.replace_references;
-    searchData->searchAllFields = eeconfig()->m_FindReplaceExtra.search_all_fields;
-    searchData->searchAllPins = eeconfig()->m_FindReplaceExtra.search_all_pins;
-    searchData->searchCurrentSheetOnly = eeconfig()->m_FindReplaceExtra.search_current_sheet_only;
+
+    if( searchData )
+    {
+        searchData->replaceReferences = eeconfig()->m_FindReplaceExtra.replace_references;
+        searchData->searchAllFields = eeconfig()->m_FindReplaceExtra.search_all_fields;
+        searchData->searchAllPins = eeconfig()->m_FindReplaceExtra.search_all_pins;
+        searchData->searchCurrentSheetOnly = eeconfig()->m_FindReplaceExtra.search_current_sheet_only;
+    }
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
 }
@@ -164,11 +168,15 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         // hierarchy panel
 
         SCH_SEARCH_DATA* searchData = dynamic_cast<SCH_SEARCH_DATA*>( m_findReplaceData.get() );
-        eeconfig()->m_FindReplaceExtra.replace_references = searchData->replaceReferences;
-        eeconfig()->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
-        eeconfig()->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
-        eeconfig()->m_FindReplaceExtra.search_current_sheet_only =
-                searchData->searchCurrentSheetOnly;
+
+        if( searchData )
+        {
+            eeconfig()->m_FindReplaceExtra.replace_references = searchData->replaceReferences;
+            eeconfig()->m_FindReplaceExtra.search_all_fields = searchData->searchAllFields;
+            eeconfig()->m_FindReplaceExtra.search_all_pins = searchData->searchAllPins;
+            eeconfig()->m_FindReplaceExtra.search_current_sheet_only =
+                    searchData->searchCurrentSheetOnly;
+        }
     }
 }
 

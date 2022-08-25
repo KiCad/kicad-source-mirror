@@ -618,7 +618,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
     }
 
     // Init sync maps from the sync string
-    for( int i = 0; i < syncArray.size(); i++ )
+    for( size_t i = 0; i < syncArray.size(); i++ )
     {
         wxString syncEntry = syncArray[i];
 

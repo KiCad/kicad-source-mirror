@@ -169,7 +169,7 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
 
 
     // Conversion to internal units
-    long newValueIU;
+    long newValueIU = 0;
 
     switch( unit )
     {

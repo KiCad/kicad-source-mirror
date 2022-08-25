@@ -401,7 +401,8 @@ PCB_PAINTER::PCB_PAINTER( GAL* aGal, FRAME_T aFrameType ) :
     PAINTER( aGal ),
     m_frameType( aFrameType ),
     m_maxError( ARC_HIGH_DEF ),
-    m_holePlatingThickness( 0 )
+    m_holePlatingThickness( 0 ),
+    m_lockedShadowMargin( 0 )
 {
 }
 
