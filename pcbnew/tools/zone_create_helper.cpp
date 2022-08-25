@@ -54,6 +54,37 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 }
 
 
+void ZONE_CREATE_HELPER::setUniquePriority( ZONE_SETTINGS& aZoneInfo )
+{
+    PCB_BASE_EDIT_FRAME*  frame = m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD*                board = frame->GetBoard();
+
+    // By default, new zones get the first unused priority
+    std::set<unsigned> priorities;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_NONE
+                && ( zone->GetLayerSet() & LSET::AllCuMask() ).any() )
+        {
+            priorities.insert( zone->GetAssignedPriority() );
+        }
+    }
+
+    unsigned priority = 0;
+
+    for( unsigned exist_priority : priorities )
+    {
+        if( priority != exist_priority )
+            break;
+
+        ++priority;
+    }
+
+    aZoneInfo.m_ZonePriority = priority;
+}
+
+
 std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
     PCB_BASE_EDIT_FRAME*  frame = m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -68,20 +99,12 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 
-    // By default, new zones should have the highest available priority
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON
             && ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
     {
-        unsigned priority = 0;
-
-        for( ZONE* zone : board->Zones() )
-        {
-            if( zone->GetTeardropAreaType() == TEARDROP_TYPE::TD_NONE )
-                priority = std::max( priority, zone->GetAssignedPriority() );
-        }
-
-        zoneInfo.m_ZonePriority = static_cast<int>( priority + 1 );
+        setUniquePriority( zoneInfo );
     }
+
     // If we don't have a net from highlighting, maybe we can get one from the selection
     PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
 

@@ -117,6 +117,13 @@ public:
     void commitZone( std::unique_ptr<ZONE> aZone );
 
 private:
+
+    /**
+     * Choose a new priority for @aZoneInfo.  This will be the lowest unused zone priority number
+     * @param aZoneInfo ZONE_SETTINGS to apply the new priority number to
+     */
+    void setUniquePriority( ZONE_SETTINGS& aZoneInfo );
+
     DRAWING_TOOL& m_tool;
 
     ///< Parameters of the zone to be drawn
