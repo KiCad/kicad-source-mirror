@@ -220,6 +220,7 @@ void BOARD::IncrementTimeStamp()
     {
         std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
         m_InsideAreaCache.clear();
+        m_EntirelyInsideAreaCache.clear();
         m_InsideCourtyardCache.clear();
         m_InsideFCourtyardCache.clear();
         m_InsideBCourtyardCache.clear();

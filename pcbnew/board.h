@@ -1146,6 +1146,7 @@ public:
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideFCourtyardCache;
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideBCourtyardCache;
     std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_InsideAreaCache;
+    std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_EntirelyInsideAreaCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::unique_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;

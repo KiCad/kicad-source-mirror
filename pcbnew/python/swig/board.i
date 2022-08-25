@@ -77,6 +77,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %ignore BOARD::m_InsideFCourtyardCache;
 %ignore BOARD::m_InsideBCourtyardCache;
 %ignore BOARD::m_InsideAreaCache;
+%ignore BOARD::m_EntirelyInsideAreaCache;
 %ignore BOARD::m_LayerExpressionCache;
 %ignore BOARD::m_CopperZoneRTreeCache;
 %ignore BOARD::m_CopperItemRTreeCache;

@@ -146,6 +146,12 @@ True if any part of `A` lies within the given footprint's back courtyard.
 True if any part of `A` lies within the given zone's outline.
 <br><br>
 
+    A.entirelyInsideArea('<zone_name>')
+True if all of `A` lies within the given zone's outline.  
+
+NB: this is potentially a more expensive call than `insideArea()`.
+<br><br>
+
     A.isPlated()
 True if `A` has a hole which is plated.
 <br><br>

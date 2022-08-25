@@ -40,7 +40,7 @@
 #include <drc/drc_engine.h>
 #include <geometry/shape_circle.h>
 
-bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
+bool fromToFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
@@ -74,7 +74,7 @@ bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
+static void existsOnLayerFunc( LIBEVAL::CONTEXT* aCtx, void *self )
 {
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
@@ -169,7 +169,7 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 }
 
 
-static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
+static void isPlatedFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE* result = aCtx->AllocValue();
 
@@ -246,7 +246,7 @@ bool isInsideCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
 };
 
 
-static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
+static void insideCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -313,7 +313,7 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
+static void insideFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -380,7 +380,7 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
+static void insideBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -446,11 +446,11 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEXT* aCtx,
+bool collidesWithArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEXT* aCtx,
                        ZONE* aArea )
 {
     BOARD*                 board = aArea->GetBoard();
-    EDA_RECT               areaBBox = aArea->GetBoundingBox();
+    EDA_RECT               areaBBox = aArea->GetCachedBoundingBox();
     std::shared_ptr<SHAPE> shape;
 
     if( !areaBBox.Intersects( aItemBBox ) )
@@ -573,29 +573,132 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 }
 
 
+bool enclosedByArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_LAYER_ID layer, ZONE* aArea )
+{
+    BOARD*         board = aItem->GetBoard();
+    EDA_RECT       areaBBox = aArea->GetCachedBoundingBox();
+    SHAPE_POLY_SET itemShape;
+
+    if( !areaBBox.Intersects( aItemBBox ) )
+        return false;
+
+    aItem->TransformShapeWithClearanceToPolygon( itemShape, layer, 0,
+                                                 board->GetDesignSettings().m_MaxError,
+                                                 ERROR_OUTSIDE );
+
+    itemShape.BooleanSubtract( *aArea->Outline(), SHAPE_POLY_SET::PM_FAST );
+
+    return itemShape.IsEmpty();
+}
+
+
 bool isInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEXT* aCtx,
-                   ZONE* aArea )
+                   ZONE* aArea, bool aEntirely )
 {
     if( !aArea || aArea == aItem || aArea->GetParent() == aItem )
         return false;
 
     BOARD*                       board = aArea->GetBoard();
     std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+    auto&                        cache = aEntirely ? board->m_EntirelyInsideAreaCache
+                                                   : board->m_InsideAreaCache;
     PCB_LAYER_ID                 layer = aCtx->GetLayer();
     PTR_PTR_LAYER_CACHE_KEY      key = { aArea, aItem, layer };
-    auto                         i = board->m_InsideAreaCache.find( key );
+    auto                         i = cache.find( key );
 
-    if( i != board->m_InsideAreaCache.end() )
+    if( i != cache.end() )
         return i->second;
 
-    bool isInside = calcIsInsideArea( aItem, aItemBBox, aCtx, aArea );
+    bool isInside;
 
-    board->m_InsideAreaCache[ key ] = isInside;
+    if( aEntirely )
+        isInside = enclosedByArea( aItem, aItemBBox, layer, aArea );
+    else
+        isInside = collidesWithArea( aItem, aItemBBox, aCtx, aArea );
+
+    cache[ key ] = isInside;
+
     return isInside;
 }
 
 
-static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
+bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
+                         bool aEntirely )
+{
+    BOARD*   board = aItem->GetBoard();
+    EDA_RECT itemBBox;
+
+    if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
+        itemBBox = static_cast<ZONE*>( aItem )->GetCachedBoundingBox();
+    else
+        itemBBox = aItem->GetBoundingBox();
+
+    if( aArg == wxT( "A" ) )
+    {
+        ZONE* zone = dynamic_cast<ZONE*>( aCtx->GetItem( 0 ) );
+        return isInsideArea( aItem, itemBBox, aCtx, zone, aEntirely );
+    }
+    else if( aArg == wxT( "B" ) )
+    {
+        ZONE* zone = dynamic_cast<ZONE*>( aCtx->GetItem( 1 ) );
+        return isInsideArea( aItem, itemBBox, aCtx, zone, aEntirely );
+    }
+    else if( KIID::SniffTest( aArg ) )
+    {
+        KIID target( aArg );
+
+        for( ZONE* area : board->Zones() )
+        {
+            // Only a single zone can match the UUID; exit once we find a match whether
+            // "inside" or not
+            if( area->m_Uuid == target )
+                return isInsideArea( aItem, itemBBox, aCtx, area, aEntirely );
+        }
+
+        for( FOOTPRINT* footprint : board->Footprints() )
+        {
+            for( ZONE* area : footprint->Zones() )
+            {
+                // Only a single zone can match the UUID; exit once we find a match
+                // whether "inside" or not
+                if( area->m_Uuid == target )
+                    return isInsideArea( aItem, itemBBox, aCtx, area, aEntirely );
+            }
+        }
+
+        return 0.0;
+    }
+    else  // Match on zone name
+    {
+        for( ZONE* area : board->Zones() )
+        {
+            if( area->GetZoneName().Matches( aArg ) )
+            {
+                // Many zones can match the name; exit only when we find an "inside"
+                if( isInsideArea( aItem, itemBBox, aCtx, area, aEntirely ) )
+                    return true;
+            }
+        }
+
+        for( FOOTPRINT* footprint : board->Footprints() )
+        {
+            for( ZONE* area : footprint->Zones() )
+            {
+                // Many zones can match the name; exit only when we find an "inside"
+                if( area->GetZoneName().Matches( aArg ) )
+                {
+                    if( isInsideArea( aItem, itemBBox, aCtx, area, aEntirely ) )
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+
+static void insideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -625,81 +728,53 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD* board = item->GetBoard();
-                EDA_RECT itemBBox;
+                if( evalInsideAreaFunc( item, arg->AsString(), context, false ) )
+                    return 1.0;
 
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                    itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
-                else
-                    itemBBox = item->GetBoundingBox();
-
-                if( arg->AsString() == wxT( "A" ) )
-                {
-                    ZONE* zone = dynamic_cast<ZONE*>( context->GetItem( 0 ) );
-                    return isInsideArea( item, itemBBox, context, zone ) ? 1.0 : 0.0;
-                }
-                else if( arg->AsString() == wxT( "B" ) )
-                {
-                    ZONE* zone = dynamic_cast<ZONE*>( context->GetItem( 1 ) );
-                    return isInsideArea( item, itemBBox, context, zone ) ? 1.0 : 0.0;
-                }
-                else if( KIID::SniffTest( arg->AsString() ) )
-                {
-                    KIID target( arg->AsString());
-
-                    for( ZONE* area : board->Zones() )
-                    {
-                        // Only a single zone can match the UUID; exit once we find a match whether
-                        // "inside" or not
-                        if( area->m_Uuid == target )
-                            return isInsideArea( item, itemBBox, context, area ) ? 1.0 : 0.0;
-                    }
-
-                    for( FOOTPRINT* footprint : board->Footprints() )
-                    {
-                        for( ZONE* area : footprint->Zones() )
-                        {
-                            // Only a single zone can match the UUID; exit once we find a match
-                            // whether "inside" or not
-                            if( area->m_Uuid == target )
-                                return isInsideArea( item, itemBBox, context, area ) ? 1.0 : 0.0;
-                        }
-                    }
-
-                    return 0.0;
-                }
-                else  // Match on zone name
-                {
-                    for( ZONE* area : board->Zones())
-                    {
-                        if( area->GetZoneName().Matches( arg->AsString() ) )
-                        {
-                            // Many zones can match the name; exit only when we find an "inside"
-                            if( isInsideArea( item, itemBBox, context, area ) )
-                                return 1.0;
-                        }
-                    }
-
-                    for( FOOTPRINT* footprint : board->Footprints() )
-                    {
-                        for( ZONE* area : footprint->Zones() )
-                        {
-                            // Many zones can match the name; exit only when we find an "inside"
-                            if( area->GetZoneName().Matches( arg->AsString() ) )
-                            {
-                                if( isInsideArea( item, itemBBox, context, area ) )
-                                    return 1.0;
-                            }
-                        }
-                    }
-
-                    return 0.0;
-                }
+                return 0.0;
             } );
 }
 
 
-static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
+static void entirelyInsideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    LIBEVAL::VALUE*   arg = aCtx->Pop();
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing rule-area identifier argument "
+                                                    "(A, B, or rule-area name) to %s." ),
+                                                 wxT( "entirelyInsideArea()" ) ) );
+        }
+
+        return;
+    }
+
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg, context]() -> double
+            {
+                if( evalInsideAreaFunc( item, arg->AsString(), context, true ) )
+                    return 1.0;
+
+                return 0.0;
+            } );
+}
+
+
+static void memberOfFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE* arg = aCtx->Pop();
     LIBEVAL::VALUE* result = aCtx->AllocValue();
@@ -760,7 +835,7 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
+static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
@@ -776,7 +851,7 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
+static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT*     context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     BOARD_CONNECTED_ITEM* a = dynamic_cast<BOARD_CONNECTED_ITEM*>( context->GetItem( 0 ) );
@@ -812,7 +887,7 @@ static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
+static void inDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE*   argv   = aCtx->Pop();
     PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
@@ -863,7 +938,7 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void getField( LIBEVAL::CONTEXT* aCtx, void* self )
+static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE*   arg    = aCtx->Pop();
     PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
@@ -912,19 +987,20 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 {
     m_funcs.clear();
-    RegisterFunc( wxT( "existsOnLayer('x')" ), existsOnLayer );
-    RegisterFunc( wxT( "isPlated()" ), isPlated );
-    RegisterFunc( wxT( "insideCourtyard('x')" ), insideCourtyard );
-    RegisterFunc( wxT( "insideFrontCourtyard('x')" ), insideFrontCourtyard );
-    RegisterFunc( wxT( "insideBackCourtyard('x')" ), insideBackCourtyard );
-    RegisterFunc( wxT( "insideArea('x')" ), insideArea );
+    RegisterFunc( wxT( "existsOnLayer('x')" ), existsOnLayerFunc );
+    RegisterFunc( wxT( "isPlated()" ), isPlatedFunc );
+    RegisterFunc( wxT( "insideCourtyard('x')" ), insideCourtyardFunc );
+    RegisterFunc( wxT( "insideFrontCourtyard('x')" ), insideFrontCourtyardFunc );
+    RegisterFunc( wxT( "insideBackCourtyard('x')" ), insideBackCourtyardFunc );
+    RegisterFunc( wxT( "insideArea('x')" ), insideAreaFunc );
+    RegisterFunc( wxT( "entirelyInsideArea('x')" ), entirelyInsideAreaFunc );
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
-    RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedVia );
-    RegisterFunc( wxT( "memberOf('x')" ), memberOf );
-    RegisterFunc( wxT( "fromTo('x','y')" ), exprFromTo );
-    RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPair );
-    RegisterFunc( wxT( "inDiffPair('x')" ), inDiffPair );
-    RegisterFunc( wxT( "getField('x')" ), getField );
+    RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedViaFunc );
+    RegisterFunc( wxT( "memberOf('x')" ), memberOfFunc );
+    RegisterFunc( wxT( "fromTo('x','y')" ), fromToFunc );
+    RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPairFunc );
+    RegisterFunc( wxT( "inDiffPair('x')" ), inDiffPairFunc );
+    RegisterFunc( wxT( "getField('x')" ), getFieldFunc );
 }
 
 
