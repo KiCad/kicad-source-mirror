@@ -990,9 +990,10 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
     wxString result = "";
     result << GenerateSpiceItemName( aRefName ) << " ";
 
+    int ncCounter = 0;
+
     for( const PIN& pin : GetPins() )
     {
-        int ncCounter = 0;
         auto it = std::find( aSymbolPinNumbers.begin(),
                              aSymbolPinNumbers.end(),
                              pin.symbolPinNumber );
@@ -1000,7 +1001,7 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
         if( it == aSymbolPinNumbers.end() )
         {
             LOCALE_IO toggle;
-            result << wxString::Format( "__NC_%s_%s_%.2u", aRefName, aModelName, ncCounter++ );
+            result << wxString::Format( "NC-%s-%u ", aRefName, ncCounter++ );
         }
         else
         {

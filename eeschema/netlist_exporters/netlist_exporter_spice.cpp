@@ -344,8 +344,8 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 
 void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
-    for( const LIB_PIN* pin : aSymbol.GetLibPins() )
-        aItem.pinNumbers.push_back( pin->GetShownNumber() );
+    for( const PIN_INFO& pin : m_sortedSymbolPinList )
+        aItem.pinNumbers.push_back( pin.num );
 }
 
 
@@ -361,7 +361,7 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& a
         LOCALE_IO toggle;
 
         if( netName == "" )
-            netName = wxString::Format( wxT( "__NC_%.2u" ), aNCCounter++ );
+            netName = wxString::Format( wxT( "NC-%u" ), aNCCounter++ );
 
         aItem.pinNetNames.push_back( netName );
         m_nets.insert( netName );
