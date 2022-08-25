@@ -23,7 +23,7 @@
 #define __PNS_SIZES_SETTINGS_H
 
 #include <map>
-#include <core/optional.h>
+#include <optional>
 
 #include "pcb_track.h" // for VIATYPE_T
 
@@ -87,10 +87,10 @@ public:
     int ViaDrill() const { return m_viaDrill; }
     void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
 
-    OPT<int> PairedLayer( int aLayerId )
+    std::optional<int> PairedLayer( int aLayerId )
     {
         if( m_layerPairs.find(aLayerId) == m_layerPairs.end() )
-            return OPT<int>();
+            return std::optional<int>();
 
         return m_layerPairs[aLayerId];
     }

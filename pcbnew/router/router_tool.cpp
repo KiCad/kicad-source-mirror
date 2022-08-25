@@ -636,7 +636,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
         m_router->SwitchLayer( al );
     }
 
-    OPT<int> newLayer = m_router->Sizes().PairedLayer( cl );
+    std::optional<int> newLayer = m_router->Sizes().PairedLayer( cl );
 
     if( !newLayer )
         newLayer = m_router->Sizes().GetLayerTop();
@@ -1487,7 +1487,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     frame->PushTool( tool );
 
     auto setCursor =

@@ -28,7 +28,7 @@
 
 
 #include <gal/color4d.h>
-#include <core/optional.h>
+#include <optional>
 #include <macros_swig.h>
 
 class LINE_READER;
@@ -125,18 +125,18 @@ protected:
 
     /// The units on these parameters is Internal Units (1 nm)
 
-    OPT<int>    m_Clearance;            ///< clearance when routing
+    std::optional<int>    m_Clearance;            ///< clearance when routing
 
-    OPT<int>    m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    OPT<int>    m_ViaDia;               ///< via diameter
-    OPT<int>    m_ViaDrill;             ///< via drill hole diameter
+    std::optional<int>    m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    std::optional<int>    m_ViaDia;               ///< via diameter
+    std::optional<int>    m_ViaDrill;             ///< via drill hole diameter
 
-    OPT<int>    m_uViaDia;              ///< microvia diameter
-    OPT<int>    m_uViaDrill;            ///< microvia drill hole diameter
+    std::optional<int>    m_uViaDia;              ///< microvia diameter
+    std::optional<int>    m_uViaDrill;            ///< microvia drill hole diameter
 
-    OPT<int>    m_diffPairWidth;
-    OPT<int>    m_diffPairGap;
-    OPT<int>    m_diffPairViaGap;
+    std::optional<int>    m_diffPairWidth;
+    std::optional<int>    m_diffPairGap;
+    std::optional<int>    m_diffPairViaGap;
 
     int         m_wireWidth;
     int         m_busWidth;

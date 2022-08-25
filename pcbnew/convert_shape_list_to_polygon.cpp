@@ -812,7 +812,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 selfIntersecting = true;
             }
 
-            if( boost::optional<VECTOR2I> pt = seg1.Get().Intersect( seg2.Get(), true ) )
+            if( OPT_VECTOR2I pt = seg1.Get().Intersect( seg2.Get(), true ) )
             {
                 if( aErrorHandler )
                 {
@@ -820,7 +820,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     BOARD_ITEM* b = fetchOwner( *seg2 );
 
                     if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, pt.get() );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, pt.value() );
                 }
 
                 selfIntersecting = true;

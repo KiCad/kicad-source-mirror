@@ -197,7 +197,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     auto& view     = *getView();
     auto& controls = *getViewControls();
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     frame()->PushTool( tool );
 
     TWO_POINT_GEOMETRY_MANAGER twoPtMgr;

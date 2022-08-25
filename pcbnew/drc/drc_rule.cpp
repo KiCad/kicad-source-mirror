@@ -62,7 +62,7 @@ void DRC_RULE::AddConstraint( DRC_CONSTRAINT& aConstraint )
 }
 
 
-OPT<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
+std::optional<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
 {
     for( DRC_CONSTRAINT& c : m_Constraints)
     {
@@ -70,5 +70,5 @@ OPT<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
             return c;
     }
 
-    return OPT<DRC_CONSTRAINT>();
+    return std::optional<DRC_CONSTRAINT>();
 }

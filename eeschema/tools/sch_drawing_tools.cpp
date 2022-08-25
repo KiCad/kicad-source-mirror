@@ -144,7 +144,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( "PlaceSymbol(): unexpected request" );
     }
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto addSymbol =
@@ -250,7 +250,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = symbol
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( tool ) == 0;
+                                && evt->GetCommandStr().value().compare( tool ) == 0;
 
         if( evt->IsCancelInteractive() )
         {
@@ -394,10 +394,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( evt->GetCommandId().value() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && evt->GetCommandId().value() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
             {
-                int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = evt->GetCommandId().value() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( symbol )
                 {
@@ -457,7 +457,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -508,7 +508,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = image
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( tool ) == 0;
+                                && evt->GetCommandStr().value().compare( tool ) == 0;
 
         if( evt->IsCancelInteractive() )
         {
@@ -743,7 +743,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                                       aEvent.Position() :
                                       controls->GetMousePosition() );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1127,7 +1127,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     auto setCursor =
             [&]()
@@ -1200,7 +1200,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( tool ) == 0;
+                                && evt->GetCommandStr().value().compare( tool ) == 0;
 
         if( evt->IsCancelInteractive() )
         {
@@ -1479,7 +1479,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1516,7 +1516,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( tool ) == 0;
+                                && evt->GetCommandStr().value().compare( tool ) == 0;
 
         if( evt->IsCancelInteractive() )
         {
@@ -1686,7 +1686,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1723,7 +1723,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = sheet
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( tool ) == 0;
+                                && evt->GetCommandStr().value().compare( tool ) == 0;
 
         if( evt->IsCancelInteractive() )
         {

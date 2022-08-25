@@ -27,7 +27,7 @@
 
 #include <wx/string.h>
 #include <vector>
-#include <core/optional.h>
+#include <optional>
 
 namespace ENV_VAR
 {
@@ -63,29 +63,29 @@ namespace ENV_VAR
      * Get an environment variable as a specific type, if set correctly
      *
      * @param aEnvVarName the name of the environment variable
-     * @return an OPT containing the value, if set and parseable, otherwise empty.
+     * @return an std::optional containing the value, if set and parseable, otherwise empty.
      */
     template <typename VAL_TYPE>
-    OPT<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
+    std::optional<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
 
     /**
      * Get a string environment variable, if it is set.
      *
      * @param aEnvVarName the name of the environment variable
-     * @return an OPT containing the value, if set, otherwise empty.
+     * @return an std::optional containing the value, if set, otherwise empty.
      */
     template<>
-    OPT<wxString> GetEnvVar( const wxString& aEnvVarName );
+    std::optional<wxString> GetEnvVar( const wxString& aEnvVarName );
 
     /**
      * Get a double from an environment variable, if set
      *
      * @param aEnvVarName the name of the environment variable
-     * @return an OPT containing the value, if set and parseable as a double,
+     * @return an std::optional containing the value, if set and parseable as a double,
      * otherwise empty.
      */
     template <>
-    OPT<double> GetEnvVar( const wxString& aEnvVarName );
+    std::optional<double> GetEnvVar( const wxString& aEnvVarName );
 };
 
 #endif /* ENV_VARS_H */

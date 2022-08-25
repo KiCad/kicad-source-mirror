@@ -52,7 +52,7 @@ int main( int argc, char** argv )
         return -1;
     }
 
-    PROJECT_CONTEXT project = loadKicadProject( argv[1], argv[2] ? wxString( argv[2] ) : OPT<wxString>() );
+    PROJECT_CONTEXT project = loadKicadProject( argv[1], argv[2] ? wxString( argv[2] ) : std::optional<wxString>() );
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
     // but without it, Valgrind notices a lot of leaks from WX

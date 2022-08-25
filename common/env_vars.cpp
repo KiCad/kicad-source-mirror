@@ -117,7 +117,7 @@ wxString ENV_VAR::LookUpEnvVarHelp( const wxString& aEnvVar )
 
 
 template<>
-OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
+std::optional<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
     wxString env;
 
@@ -129,14 +129,14 @@ OPT<double> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
             return value;
     }
 
-    return NULLOPT;
+    return std::nullopt;
 }
 
 
 template<>
-OPT<wxString> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
+std::optional<wxString> ENV_VAR::GetEnvVar( const wxString& aEnvVarName )
 {
-    OPT<wxString> optValue;
+    std::optional<wxString> optValue;
 
     wxString env;
 

@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <core/optional.h>
+#include <optional>
 
 #include <math/box2.h>
 #include <math/vector2d.h>
@@ -578,7 +578,7 @@ const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
 
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
 {
-    OPT<SHAPE_LINE_CHAIN> picked;
+    std::optional<SHAPE_LINE_CHAIN> picked;
     int i;
     int d = 2;
 

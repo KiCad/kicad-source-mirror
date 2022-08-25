@@ -181,7 +181,7 @@ wxString Convert<wxString>( const wxString& aValue );
 /**
  * Model an optional XML attribute.
  *
- * This was implemented as an alternative to OPT. This class should be replaced with a
+ * This was implemented as an alternative to std::optional. This class should be replaced with a
  * simple typedef per type using std::optional when C++17 is published.
  */
 template <typename T>

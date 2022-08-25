@@ -467,7 +467,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             {
                 // We used to have a bug on GTK which would set the lib tree column width way
                 // too narrow.
-                if( OPT<int> optval = Get<int>( "lib_tree.column_width" ) )
+                if( std::optional<int> optval = Get<int>( "lib_tree.column_width" ) )
                 {
                     if( optval < 150 )
                         Set( "lib_tree.column_width",  300 );
@@ -487,7 +487,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // this index and the possible eeschema grids list that we have to subtract.
     std::string gridSizePtr = "window.grid.last_size";
 
-    if( OPT<int> currentSize = Get<int>( gridSizePtr ) )
+    if( std::optional<int> currentSize = Get<int>( gridSizePtr ) )
     {
         Set( gridSizePtr, *currentSize - 4 );
     }

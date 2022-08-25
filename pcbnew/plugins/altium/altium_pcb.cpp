@@ -1289,7 +1289,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
         VECTOR2I directionNormalVector = VECTOR2I( -direction.y, direction.x );
         SEG     segm1( referencePoint0, referencePoint0 + directionNormalVector );
         SEG     segm2( referencePoint1, referencePoint1 + direction );
-        VECTOR2I intersection( segm1.Intersect( segm2, true, true ).get() );
+        VECTOR2I intersection( segm1.Intersect( segm2, true, true ).value() );
         dimension->SetEnd( intersection );
 
         int height = static_cast<int>( EuclideanNorm( direction ) );

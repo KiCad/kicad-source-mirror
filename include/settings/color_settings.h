@@ -130,7 +130,7 @@ public:
         if( m_readOnly )
             return;
 
-        if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
+        if( std::optional<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
             ( *m_map )[ m_key ] = *optval;
         else if( aResetIfMissing )
             ( *m_map )[ m_key ] = m_default;
@@ -158,7 +158,7 @@ public:
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
-        if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
+        if( std::optional<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
             return m_map->count( m_key ) && ( *optval == m_map->at( m_key ) );
 
         // If the JSON doesn't exist, the map shouldn't exist either

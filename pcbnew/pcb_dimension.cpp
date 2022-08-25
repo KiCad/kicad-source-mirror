@@ -479,7 +479,7 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPol
     VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
 
     if( aPoly.Contains( start ) )
-        return NULLOPT;
+        return std::nullopt;
 
     for( SHAPE_POLY_SET::CONST_SEGMENT_ITERATOR seg = aPoly.CIterateSegments(); seg; ++seg )
     {
@@ -492,7 +492,7 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPol
     }
 
     if( start == endpoint )
-        return NULLOPT;
+        return std::nullopt;
 
     return OPT_VECTOR2I( endpoint );
 }
@@ -504,7 +504,7 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aS
     VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
 
     if( aCircle.Contains( start ) )
-        return NULLOPT;
+        return std::nullopt;
 
     std::vector<VECTOR2I> intersections = aCircle.Intersect( aSeg );
 
@@ -516,7 +516,7 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aS
     }
 
     if( start == endpoint )
-        return NULLOPT;
+        return std::nullopt;
 
     return OPT_VECTOR2I( endpoint );
 }
@@ -1018,8 +1018,8 @@ void PCB_DIM_LEADER::updateGeometry()
 
     SEG arrowSeg( m_start, m_end );
     SEG textSeg( m_end, m_text.GetPosition() );
-    OPT_VECTOR2I arrowSegEnd = boost::make_optional( false, VECTOR2I() );;
-    OPT_VECTOR2I textSegEnd = boost::make_optional( false, VECTOR2I() );
+    OPT_VECTOR2I arrowSegEnd;
+    OPT_VECTOR2I textSegEnd;
 
     if( m_textBorder == DIM_TEXT_BORDER::CIRCLE )
     {
@@ -1212,10 +1212,10 @@ void PCB_DIM_RADIAL::updateGeometry()
     OPT_VECTOR2I textSegEnd = segPolyIntersection( polyBox, textSeg );
 
     if( arrowSegEnd )
-        arrowSeg.B = arrowSegEnd.get();
+        arrowSeg.B = arrowSegEnd.value();
 
     if( textSegEnd )
-        textSeg.B = textSegEnd.get();
+        textSeg.B = textSegEnd.value();
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( arrowSeg ) );
 

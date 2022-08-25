@@ -27,7 +27,7 @@
 #include "property_mgr.h"
 #include "property.h"
 
-#include <boost/optional.hpp>
+#include <optional>
 
 /**
  * Class that other classes need to inherit from, in order to be inspectable.
@@ -101,12 +101,12 @@ public:
     }
 
     template<typename T>
-    boost::optional<T> Get( const wxString& aProperty ) const
+    std::optional<T> Get( const wxString& aProperty ) const
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
         PROPERTY_BASE* prop = propMgr.GetProperty( thisType, aProperty );
-        boost::optional<T> ret;
+        std::optional<T> ret;
 
         if( prop )
         {

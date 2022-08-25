@@ -558,8 +558,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     registerMigration( 0, 1,
             [&]()
             {
-                if( OPT<int> optval = Get<int>( "pcb_display.rotation_angle" ) )
-                    Set( "editing.rotation_angle", optval.get() );
+                if( std::optional<int> optval = Get<int>( "pcb_display.rotation_angle" ) )
+                    Set( "editing.rotation_angle", optval.value() );
 
                 try
                 {
@@ -587,7 +587,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             {
                 // We used to have a bug on GTK which would set the lib tree column width way
                 // too narrow.
-                if( OPT<int> optval = Get<int>( "lib_tree.column_width" ) )
+                if( std::optional<int> optval = Get<int>( "lib_tree.column_width" ) )
                 {
                     if( optval < 150 )
                         Set( "lib_tree.column_width",  300 );

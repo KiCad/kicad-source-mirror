@@ -1199,7 +1199,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    std::string  tool = aEvent.GetCommandStr().get();
+    std::string  tool = aEvent.GetCommandStr().value();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );

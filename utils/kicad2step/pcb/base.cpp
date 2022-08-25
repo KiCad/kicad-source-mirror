@@ -280,9 +280,9 @@ bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation )
 }
 
 
-OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem )
+std::optional<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem )
 {
-    OPT<std::string> layer;
+    std::optional<std::string> layer;
 
     if( aLayerElem.GetNumberOfChildren() == 2 )
     {

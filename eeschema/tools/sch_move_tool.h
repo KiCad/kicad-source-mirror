@@ -101,7 +101,7 @@ private:
     ///< of edit reference point).
     VECTOR2I              m_cursor;
 
-    boost::optional<VECTOR2I> m_anchorPos;
+    OPT_VECTOR2I          m_anchorPos;
 
     // A map of labels to scaling factors.  Used to scale the movement vector for labels that
     // are attached to wires which have only one end moving.

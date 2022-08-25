@@ -40,7 +40,7 @@
 #include <eda_draw_frame.h>
 
 #include <core/arraydim.h>
-#include <core/optional.h>
+#include <optional>
 #include <wx/log.h>
 #include <wx/stc/stc.h>
 #include <wx/settings.h>
@@ -177,7 +177,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 {
     BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
-    OPT<TOOL_EVENT> evt;
+    std::optional<TOOL_EVENT> evt;
     bool isClick = false;
 
 //    bool up = type == st->upEvent;
@@ -358,9 +358,9 @@ int translateSpecialCode( int aKeyCode )
 }
 
 
-OPT<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyIsSpecial )
+std::optional<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyIsSpecial )
 {
-    OPT<TOOL_EVENT> evt;
+    std::optional<TOOL_EVENT> evt;
     int             key = aKeyEvent->GetKeyCode();
     int             unicode_key = aKeyEvent->GetUnicodeKey();
 
@@ -443,7 +443,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool            motion = false;
     bool            buttonEvents = false;
     VECTOR2D        pos;
-    OPT<TOOL_EVENT> evt;
+    std::optional<TOOL_EVENT> evt;
     bool            keyIsEscape  = false;  // True if the keypress was the escape key
     bool            keyIsSpecial = false;  // True if the key is a special key code
     wxWindow*       focus = wxWindow::FindFocus();

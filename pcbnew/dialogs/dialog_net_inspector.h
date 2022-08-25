@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <core/optional.h>
+#include <optional>
 #include <dialog_net_inspector_base.h>
 
 class PCB_EDIT_FRAME;
@@ -102,7 +102,7 @@ private:
     void onUnitsChanged( wxCommandEvent& event );
     void onBoardChanged( wxCommandEvent& event );
 
-    void updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& aRow );
+    void updateDisplayedRowValues( const std::optional<LIST_ITEM_ITER>& aRow );
 
     // special zero-netcode item.  unconnected pads etc might use different
     // (dummy) NETINFO_ITEM.  redirect all of them to this item, which we get

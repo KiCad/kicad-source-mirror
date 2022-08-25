@@ -218,7 +218,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         }
         else if( text == "layer" )
         {
-            const OPT<std::string> layer = GetLayerName( *child );
+            const std::optional<std::string> layer = GetLayerName( *child );
 
             if( !layer )
             {

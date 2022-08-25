@@ -127,7 +127,7 @@ protected:
     std::vector<ANCHOR>    m_anchors;
 
     TOOL_MANAGER*          m_toolMgr;
-    OPT<VECTOR2I>          m_auxAxis;
+    std::optional<VECTOR2I>          m_auxAxis;
 
     int                    m_maskTypes;      // Mask of allowed snap types
 

@@ -117,7 +117,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         unique_peers.insert( drawItem->GetPeer() );
     }
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     Activate();
@@ -389,7 +389,7 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    std::string  tool = aEvent.GetCommandStr().get();
+    std::string  tool = aEvent.GetCommandStr().value();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running

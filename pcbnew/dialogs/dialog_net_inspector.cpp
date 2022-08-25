@@ -476,7 +476,7 @@ public:
         return *m_items.at( aRow );
     }
 
-    OPT<LIST_ITEM_ITER> findItem( int aNetCode )
+    std::optional<LIST_ITEM_ITER> findItem( int aNetCode )
     {
         auto i = std::lower_bound(
                 m_items.begin(), m_items.end(), aNetCode, LIST_ITEM_NETCODE_CMP_LESS() );
@@ -487,7 +487,7 @@ public:
         return { i };
     }
 
-    OPT<LIST_ITEM_ITER> findItem( NETINFO_ITEM* aNet )
+    std::optional<LIST_ITEM_ITER> findItem( NETINFO_ITEM* aNet )
     {
         if( aNet != nullptr )
             return findItem( aNet->GetNetCode() );
@@ -495,7 +495,7 @@ public:
             return {};
     }
 
-    OPT<LIST_ITEM_ITER> addItem( std::unique_ptr<LIST_ITEM> aItem )
+    std::optional<LIST_ITEM_ITER> addItem( std::unique_ptr<LIST_ITEM> aItem )
     {
         if( aItem == nullptr )
             return {};
@@ -654,7 +654,7 @@ public:
         }
     }
 
-    std::unique_ptr<LIST_ITEM> deleteItem( const OPT<LIST_ITEM_ITER>& aRow )
+    std::unique_ptr<LIST_ITEM> deleteItem( const std::optional<LIST_ITEM_ITER>& aRow )
     {
         if( !aRow )
             return {};
@@ -701,11 +701,11 @@ public:
         AfterReset();
     }
 
-    void updateItem( const OPT<LIST_ITEM_ITER>& aRow )
+    void updateItem( const std::optional<LIST_ITEM_ITER>& aRow )
     {
         if( aRow )
         {
-            const std::unique_ptr<LIST_ITEM>& listItem = *aRow.get();
+            const std::unique_ptr<LIST_ITEM>& listItem = *aRow.value();
 
             if( listItem->Parent() )
                 ItemChanged( wxDataViewItem( listItem->Parent() ) );
@@ -1257,7 +1257,7 @@ std::vector<CN_ITEM*> DIALOG_NET_INSPECTOR::relevantConnectivityItems() const
 }
 
 
-void DIALOG_NET_INSPECTOR::updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& aRow )
+void DIALOG_NET_INSPECTOR::updateDisplayedRowValues( const std::optional<LIST_ITEM_ITER>& aRow )
 {
     if( !aRow )
         return;
@@ -1318,14 +1318,14 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
     }
     else if( BOARD_CONNECTED_ITEM* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
-        OPT<LIST_ITEM_ITER> r = m_data_model->findItem( i->GetNet() );
+        std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( i->GetNet() );
 
         if( r )
         {
             // try to handle frequent operations quickly.
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( i ) )
             {
-                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int len = track->GetLength();
 
                 list_item->AddLayerWireLength( len, static_cast<int>( track->GetLayer() ) );
@@ -1348,7 +1348,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
     {
         for( const PAD* pad : footprint->Pads() )
         {
-            OPT<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
+            std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
 
             if( !r )
             {
@@ -1363,7 +1363,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
 
             if( r )
             {
-                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int len = pad->GetPadToDieLength();
 
                 list_item->AddPadCount( 1 );
@@ -1398,11 +1398,11 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
     {
         for( const PAD* pad : footprint->Pads() )
         {
-            OPT<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
+            std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
 
             if( r )
             {
-                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int len = pad->GetPadToDieLength();
 
                 list_item->SubPadCount( 1 );
@@ -1417,14 +1417,14 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
     }
     else if( BOARD_CONNECTED_ITEM* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
-        OPT<LIST_ITEM_ITER> r = m_data_model->findItem( i->GetNet() );
+        std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( i->GetNet() );
 
         if( r )
         {
             // try to handle frequent operations quickly.
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( i ) )
             {
-                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
                 int len = track->GetLength();
 
                 list_item->SubLayerWireLength( len, static_cast<int>( track->GetLayer() ) );
@@ -1490,7 +1490,7 @@ void DIALOG_NET_INSPECTOR::OnBoardHighlightNetChanged( BOARD& aBoard )
 
         for( int code : selected_codes )
         {
-            if( OPT<LIST_ITEM_ITER> r = m_data_model->findItem( code ) )
+            if( std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( code ) )
                 new_selection.Add( wxDataViewItem( &***r ) );
         }
 
@@ -1523,7 +1523,7 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
     // if the net had no pads before, it might not be in the displayed list yet.
     // if it had pads and now doesn't anymore, we might need to remove it from the list.
 
-    OPT<LIST_ITEM_ITER> cur_net_row = m_data_model->findItem( aNet );
+    std::optional<LIST_ITEM_ITER> cur_net_row = m_data_model->findItem( aNet );
 
     const unsigned int node_count = m_brd->GetNodesCount( aNet->GetNetCode() );
 
@@ -1542,7 +1542,7 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
         return;
     }
 
-    const std::unique_ptr<LIST_ITEM>& cur_list_item = *cur_net_row.get();
+    const std::unique_ptr<LIST_ITEM>& cur_list_item = *cur_net_row.value();
 
     if( cur_list_item->GetNetName() != new_list_item->GetNetName() )
     {
@@ -1766,7 +1766,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
         if( r )
         {
-            const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+            const std::unique_ptr<LIST_ITEM>& list_item = *r.value();
             sel.Add( wxDataViewItem( list_item.get() ) );
         }
         else
@@ -2108,7 +2108,7 @@ void DIALOG_NET_INSPECTOR::onRenameNet( wxCommandEvent& aEvent )
 
             new_item->SetChipWireLength( removed_item->GetChipWireLength() );
 
-            OPT<LIST_ITEM_ITER> added_row = m_data_model->addItem( std::move( new_item ) );
+            std::optional<LIST_ITEM_ITER> added_row = m_data_model->addItem( std::move( new_item ) );
 
             wxDataViewItemArray new_sel;
             new_sel.Add( wxDataViewItem( &***added_row ) );

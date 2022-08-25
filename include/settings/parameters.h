@@ -25,7 +25,7 @@
 #include <utility>
 #include <math/util.h>
 
-#include <core/optional.h>
+#include <optional>
 #include <settings/json_settings.h>
 
 
@@ -107,7 +107,7 @@ public:
         if( m_readOnly )
             return;
 
-        if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
         {
             ValueType val = *optval;
 
@@ -140,7 +140,7 @@ public:
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
-        if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
             return *optval == *m_ptr;
 
         return false;
@@ -184,7 +184,7 @@ public:
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
-        if( OPT<wxString> optval = aSettings->Get<wxString>( m_path ) )
+        if( std::optional<wxString> optval = aSettings->Get<wxString>( m_path ) )
             return fromFileFormat( *optval ) == *m_ptr;
 
         return false;
@@ -230,7 +230,7 @@ public:
         if( m_readOnly )
             return;
 
-        if( OPT<int> val = aSettings->Get<int>( m_path ) )
+        if( std::optional<int> val = aSettings->Get<int>( m_path ) )
         {
             if( *val >= static_cast<int>( m_min ) && *val <= static_cast<int>( m_max ) )
                 *m_ptr = static_cast<EnumType>( *val );
@@ -259,7 +259,7 @@ public:
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
-        if( OPT<int> val = aSettings->Get<int>( m_path ) )
+        if( std::optional<int> val = aSettings->Get<int>( m_path ) )
             return *val == static_cast<int>( *m_ptr );
 
         return false;
@@ -362,7 +362,7 @@ public:
 
         double dval = m_default * m_scale;
 
-        if( OPT<double> optval = aSettings->Get<double>( m_path ) )
+        if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
             dval = *optval;
         else if( !aResetIfMissing )
             return;
@@ -395,7 +395,7 @@ public:
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
-        if( OPT<double> optval = aSettings->Get<double>( m_path ) )
+        if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
             return *optval == ( *m_ptr * m_scale );
 
         return false;

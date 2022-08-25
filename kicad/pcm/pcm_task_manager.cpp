@@ -79,7 +79,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
             return;
         }
 
-        int code = downloadFile( file_path.GetFullPath(), find_pkgver->download_url.get() );
+        int code = downloadFile( file_path.GetFullPath(), find_pkgver->download_url.value() );
 
         if( code != CURLE_OK )
         {
@@ -162,13 +162,13 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
     if( isUpdate )
         compile_keep_on_update_regex( aPackage, *pkgver, keep_on_update );
 
-    const boost::optional<wxString>& hash = pkgver->download_sha256;
+    const std::optional<wxString>& hash = pkgver->download_sha256;
     bool                             hash_match = true;
 
     if( hash )
     {
         std::ifstream stream( aFilePath.GetFullPath().ToUTF8(), std::ios::binary );
-        hash_match = m_pcm->VerifyHash( stream, hash.get() );
+        hash_match = m_pcm->VerifyHash( stream, hash.value() );
     }
 
     if( !hash_match )

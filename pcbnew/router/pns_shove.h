@@ -94,7 +94,7 @@ public:
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
-    typedef OPT<LINE> OPT_LINE;
+    typedef std::optional<LINE> OPT_LINE;
     typedef std::pair<LINE, LINE> LINE_PAIR;
     typedef std::vector<LINE_PAIR> LINE_PAIR_VEC;
 

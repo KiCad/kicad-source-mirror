@@ -24,7 +24,7 @@
 
 #include <list>
 #include <memory>
-#include <core/optional.h>
+#include <optional>
 #include <math/box2.h>
 
 #include "pns_routing_settings.h"

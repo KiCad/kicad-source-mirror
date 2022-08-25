@@ -32,7 +32,7 @@
 #include <iterator>
 
 #include <math/vector2d.h>
-#include <core/optional.h>
+#include <optional>
 
 #include <tool/tool_action.h>
 
@@ -454,12 +454,12 @@ public:
         m_param = reinterpret_cast<void*>( aParam );
     }
 
-    OPT<int> GetCommandId() const
+    std::optional<int> GetCommandId() const
     {
         return m_commandId;
     }
 
-    OPT<std::string> GetCommandStr() const
+    std::optional<std::string> GetCommandStr() const
     {
         return m_commandStr;
     }
@@ -543,11 +543,11 @@ private:
     ///< The first tool to receive the event
     TOOL_BASE* m_firstResponder;
 
-    OPT<int> m_commandId;
-    OPT<std::string> m_commandStr;
+    std::optional<int> m_commandId;
+    std::optional<std::string> m_commandStr;
 };
 
-typedef OPT<TOOL_EVENT> OPT_TOOL_EVENT;
+typedef std::optional<TOOL_EVENT> OPT_TOOL_EVENT;
 
 /**
  * A list of TOOL_EVENTs, with overloaded || operators allowing for concatenating TOOL_EVENTs
@@ -587,7 +587,7 @@ public:
      */
     const std::string Format() const;
 
-    OPT<const TOOL_EVENT&> Matches( const TOOL_EVENT& aEvent ) const
+    OPT_TOOL_EVENT Matches( const TOOL_EVENT& aEvent ) const
     {
         for( const TOOL_EVENT& event : m_events )
         {
@@ -595,7 +595,7 @@ public:
                 return event;
         }
 
-        return OPT<const TOOL_EVENT&>();
+        return OPT_TOOL_EVENT();
     }
 
     /**

@@ -335,7 +335,7 @@ private:
      * @param aReporter progress dialog to use for download
      * @return true if packages were successfully downloaded, verified and parsed
      */
-    bool fetchPackages( const wxString& aUrl, const boost::optional<wxString>& aHash,
+    bool fetchPackages( const wxString& aUrl, const std::optional<wxString>& aHash,
                         std::vector<PCM_PACKAGE>& aPackages, PROGRESS_REPORTER* aReporter );
 
     /**

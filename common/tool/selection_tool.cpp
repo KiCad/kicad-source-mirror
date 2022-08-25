@@ -351,7 +351,7 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
                     unhighlight( current, BRIGHTENED, &highlightGroup );
                 }
 
-                OPT<int> id = evt->GetCommandId();
+                std::optional<int> id = evt->GetCommandId();
 
                 // User has selected the "Select All" option
                 if( id == limit + 1 )

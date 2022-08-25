@@ -32,7 +32,7 @@
 #include <sch_screen.h>
 #include <lib_item.h>
 #include <ee_collectors.h>
-#include <core/optional.h>
+#include <optional>
 
 class SCH_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;

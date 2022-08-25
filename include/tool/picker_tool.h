@@ -25,7 +25,7 @@
 #ifndef PICKER_TOOL_H
 #define PICKER_TOOL_H
 
-#include <core/optional.h>
+#include <optional>
 #include <gal/cursors.h>
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
@@ -113,12 +113,12 @@ protected:
     KICURSOR        m_cursor;
     bool            m_snap;
 
-    OPT<CLICK_HANDLER>    m_clickHandler;
-    OPT<MOTION_HANDLER>   m_motionHandler;
-    OPT<CANCEL_HANDLER>   m_cancelHandler;
-    OPT<FINALIZE_HANDLER> m_finalizeHandler;
+    std::optional<CLICK_HANDLER>    m_clickHandler;
+    std::optional<MOTION_HANDLER>   m_motionHandler;
+    std::optional<CANCEL_HANDLER>   m_cancelHandler;
+    std::optional<FINALIZE_HANDLER> m_finalizeHandler;
 
-    OPT<VECTOR2D>         m_picked;
+    std::optional<VECTOR2D>         m_picked;
 };
 
 

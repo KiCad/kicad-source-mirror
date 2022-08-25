@@ -93,7 +93,7 @@ bool SYMBOL_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // this index and the possible eeschema grids list that we have to subtract.
     std::string gridSizePtr = "window.grid.last_size";
 
-    if( OPT<int> currentSize = Get<int>( gridSizePtr ) )
+    if( std::optional<int> currentSize = Get<int>( gridSizePtr ) )
     {
         Set( gridSizePtr, *currentSize - 4 );
     }

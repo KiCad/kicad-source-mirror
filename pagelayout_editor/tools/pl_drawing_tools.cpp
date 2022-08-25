@@ -78,7 +78,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -226,7 +226,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =

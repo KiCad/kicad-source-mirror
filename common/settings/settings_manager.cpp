@@ -361,7 +361,7 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
                 aSettings->GetFilename(),
                 aNamespace );
 
-    OPT<nlohmann::json> backup = aSettings->GetJson( aNamespace );
+    std::optional<nlohmann::json> backup = aSettings->GetJson( aNamespace );
     wxString path = GetColorSettingsPath();
 
     aSettings->LoadFromFile( path );

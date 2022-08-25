@@ -252,7 +252,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
                                           "3d_viewer.silkscreen_bottom",
                                           "3d_viewer.solderpaste" } )
                 {
-                    if( OPT<COLOR4D> optval = Get<COLOR4D>( path ) )
+                    if( std::optional<COLOR4D> optval = Get<COLOR4D>( path ) )
                         Set( path, optval->WithAlpha( 1.0 ) );
                 }
 
@@ -262,11 +262,11 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     registerMigration( 3, 4,
             [&]()
             {
-                if( OPT<COLOR4D> optval = Get<COLOR4D>( "board.grid" ) )
-                    Set( "board.page_limits",  optval.get() );
+                if( std::optional<COLOR4D> optval = Get<COLOR4D>( "board.grid" ) )
+                    Set( "board.page_limits",  optval.value() );
 
-                if( OPT<COLOR4D> optval = Get<COLOR4D>( "schematic.grid" ) )
-                    Set( "schematic.page_limits", optval.get() );
+                if( std::optional<COLOR4D> optval = Get<COLOR4D>( "schematic.grid" ) )
+                    Set( "schematic.page_limits", optval.value() );
 
                 return true;
             } );

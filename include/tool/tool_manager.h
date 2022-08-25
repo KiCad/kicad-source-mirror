@@ -556,7 +556,7 @@ private:
     ACTION_MANAGER* m_actionMgr;
 
     ///< Original cursor position, if overridden by the context menu handler
-    std::map<TOOL_ID, OPT<VECTOR2D>> m_cursorSettings;
+    std::map<TOOL_ID, std::optional<VECTOR2D>> m_cursorSettings;
 
     EDA_ITEM*             m_model;
     KIGFX::VIEW*          m_view;

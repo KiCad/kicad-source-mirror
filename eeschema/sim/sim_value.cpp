@@ -101,10 +101,10 @@ namespace SIM_VALUE_PARSER
         bool isOk = true;
         bool isEmpty = true;
         std::string significand;
-        OPT<long> intPart;
-        OPT<long> fracPart;
-        OPT<long> exponent;
-        OPT<long> metricSuffixExponent;
+        std::optional<long> intPart;
+        std::optional<long> fracPart;
+        std::optional<long> exponent;
+        std::optional<long> metricSuffixExponent;
     };
 
     PARSE_RESULT Parse( const wxString& aString,
@@ -415,7 +415,7 @@ template <>
 bool SIM_VALUE_INST<bool>::FromString( const wxString& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
-    m_value = NULLOPT;
+    m_value = std::nullopt;
 
     if( !parseResult.isOk )
         return false;
@@ -441,7 +441,7 @@ template <>
 bool SIM_VALUE_INST<long>::FromString( const wxString& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
-    m_value = NULLOPT;
+    m_value = std::nullopt;
 
     if( !parseResult.isOk )
         return false;
@@ -464,7 +464,7 @@ template <>
 bool SIM_VALUE_INST<double>::FromString( const wxString& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
-    m_value = NULLOPT;
+    m_value = std::nullopt;
 
     if( !parseResult.isOk )
         return false;

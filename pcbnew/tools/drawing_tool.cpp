@@ -305,7 +305,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     PCB_SHAPE*       line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
-    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
+    std::optional<VECTOR2D>    startingPoint;
 
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetFlags( IS_NEW );
@@ -313,7 +313,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     Activate();
 
@@ -330,7 +330,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         }
         else
         {
-            startingPoint = NULLOPT;
+            startingPoint = std::nullopt;
         }
 
         line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
@@ -356,7 +356,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     PCB_SHAPE*       rect = nullptr;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
-    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
+    std::optional<VECTOR2D>    startingPoint;
 
     auto makeNew =
             [&]() -> PCB_SHAPE*
@@ -387,7 +387,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     Activate();
 
@@ -417,7 +417,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         rect->SetShape( SHAPE_T::RECT );
         rect->SetFilled( false );
         rect->SetFlags( IS_NEW );
-        startingPoint = NULLOPT;
+        startingPoint = std::nullopt;
     }
 
     return 0;
@@ -438,7 +438,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     PCB_SHAPE*       circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
-    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
+    std::optional<VECTOR2D>    startingPoint;
 
     circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( false );
@@ -447,7 +447,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     Activate();
 
@@ -469,7 +469,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         circle->SetFilled( false );
         circle->SetFlags( IS_NEW );
 
-        startingPoint = NULLOPT;
+        startingPoint = std::nullopt;
     }
 
     return 0;
@@ -490,12 +490,12 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
-    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, { 0, 0 } );
+    std::optional<VECTOR2D>    startingPoint;
 
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     Activate();
 
@@ -519,7 +519,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         arc->SetShape( SHAPE_T::ARC );
         arc->SetFlags( IS_NEW );
 
-        startingPoint = NULLOPT;
+        startingPoint = std::nullopt;
     }
 
     return 0;
@@ -553,7 +553,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     auto setCursor =
             [&]()
@@ -797,7 +797,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     Activate();
@@ -1079,7 +1079,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     Activate();
@@ -1560,7 +1560,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1659,7 +1659,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1760,7 +1760,7 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 
 
 bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
-                              OPT<VECTOR2D> aStartingPoint )
+                              std::optional<VECTOR2D> aStartingPoint )
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
 
@@ -1833,7 +1833,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
-        m_toolMgr->PrimeTool( aStartingPoint.get() );
+        m_toolMgr->PrimeTool( aStartingPoint.value() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1954,8 +1954,8 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 if( aStartingPoint )
                 {
-                    cursorPos = aStartingPoint.get();
-                    aStartingPoint = NULLOPT;
+                    cursorPos = aStartingPoint.value();
+                    aStartingPoint = std::nullopt;
                 }
 
                 // Init the new item attributes
@@ -2144,7 +2144,7 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 
 
 bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
-                            OPT<VECTOR2D> aStartingPoint )
+                            std::optional<VECTOR2D> aStartingPoint )
 {
     PCB_SHAPE*&  graphic = *aGraphic;
 
@@ -2193,7 +2193,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
-        m_toolMgr->PrimeTool(aStartingPoint.get() );
+        m_toolMgr->PrimeTool(aStartingPoint.value() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -2489,7 +2489,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -3106,8 +3106,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                     if( track->GetBoundingBox().Contains( viaPos ) )
                     {
-                        joint1 = trackSeg.Intersect( horiz, true, true ).get();
-                        joint2 = trackSeg.Intersect( vert, true, true ).get();
+                        joint1 = trackSeg.Intersect( horiz, true, true ).value();
+                        joint2 = trackSeg.Intersect( vert, true, true ).value();
 
                         insertChevron();
                         return true;
@@ -3198,7 +3198,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
 
-    doInteractiveItemPlacement( aEvent.GetCommandStr().get(), &placer, _( "Place via" ),
+    doInteractiveItemPlacement( aEvent.GetCommandStr().value(), &placer, _( "Place via" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;

@@ -25,7 +25,7 @@
  */
 
 #include <core/kicad_algo.h>
-#include <core/optional.h>
+#include <optional>
 #include <map>
 #include <stack>
 #include <trace_helpers.h>
@@ -879,7 +879,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
             if( vc.m_forceCursorPosition )
                 m_cursorSettings[idState.first] = vc.m_forcedPosition;
             else
-                m_cursorSettings[idState.first] = NULLOPT;
+                m_cursorSettings[idState.first] = std::nullopt;
         }
 
         if( m_viewControls )
@@ -916,7 +916,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = -1;
 
         // Restore cursor settings
-        for( const std::pair<const TOOL_ID, OPT<VECTOR2D>>& cursorSetting : m_cursorSettings )
+        for( const std::pair<const TOOL_ID, std::optional<VECTOR2D>>& cursorSetting : m_cursorSettings )
         {
             auto it = m_toolIdIndex.find( cursorSetting.first );
             wxASSERT( it != m_toolIdIndex.end() );
@@ -1103,13 +1103,13 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
             if( !curr.m_forceCursorPosition || curr.m_forcedPosition != m_menuCursor )
             {
                 if( !curr.m_forceCursorPosition )
-                    it->second = NULLOPT;
+                    it->second = std::nullopt;
                 else
                     it->second = curr.m_forcedPosition;
             }
             else
             {
-                OPT<VECTOR2D> cursor = it->second;
+                std::optional<VECTOR2D> cursor = it->second;
 
                 if( cursor )
                 {
@@ -1147,8 +1147,8 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         if( GetToolHolder() && !GetToolHolder()->GetDoImmediateActions() )
         {
             // An tool-selection-event has no position
-            if( mod_event.GetCommandStr().is_initialized()
-                    && mod_event.GetCommandStr().get() != GetToolHolder()->CurrentToolName()
+            if( mod_event.GetCommandStr()
+                    && mod_event.GetCommandStr().value() != GetToolHolder()->CurrentToolName()
                     && !mod_event.ForceImmediate() )
             {
                 mod_event.SetHasPosition( false );

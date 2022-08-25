@@ -35,8 +35,8 @@
 const int netSettingsSchemaVersion = 3;        // netclass assignment patterns
 
 
-static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
-                               OPT<int> aDefault = OPT<int>() )
+static std::optional<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
+                               std::optional<int> aDefault = std::optional<int>() )
 {
     if( aObj.contains( aKey ) && aObj[aKey].is_number() )
         return PcbMm2iu( aObj[aKey].get<double>() );

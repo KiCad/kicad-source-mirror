@@ -33,11 +33,11 @@ void PICKER_TOOL_BASE::reset()
     m_cursor = KICURSOR::ARROW;
     m_snap   = true;
 
-    m_picked = NULLOPT;
-    m_clickHandler = NULLOPT;
-    m_motionHandler = NULLOPT;
-    m_cancelHandler = NULLOPT;
-    m_finalizeHandler = NULLOPT;
+    m_picked = std::nullopt;
+    m_clickHandler = std::nullopt;
+    m_motionHandler = std::nullopt;
+    m_cancelHandler = std::nullopt;
+    m_finalizeHandler = std::nullopt;
 }
 
 

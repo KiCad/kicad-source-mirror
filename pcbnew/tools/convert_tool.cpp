@@ -400,7 +400,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
     {
         item->ClearFlags( SKIP_STRUCT );
 
-        if( OPT<SEG> seg = getStartEndPoints( item, nullptr ) )
+        if( std::optional<SEG> seg = getStartEndPoints( item, nullptr ) )
         {
             toCheck.push_back( item );
             connections[findInsertionPoint( seg->A )].emplace_back( std::make_pair( 0, item ) );
@@ -447,7 +447,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                     }
                     else
                     {
-                        OPT<SEG> nextSeg = getStartEndPoints( aItem, &width );
+                        std::optional<SEG> nextSeg = getStartEndPoints( aItem, &width );
                         wxASSERT( nextSeg );
 
                         VECTOR2I& point = ( aAnchor == nextSeg->A ) ? nextSeg->B : nextSeg->A;
@@ -471,7 +471,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 
                     insert( aItem, aAnchor, aDirection );
 
-                    OPT<SEG> anchors = getStartEndPoints( aItem, &width );
+                    std::optional<SEG> anchors = getStartEndPoints( aItem, &width );
                     wxASSERT( anchors );
 
                     VECTOR2I nextAnchor = ( aAnchor == anchors->A ) ? anchors->B : anchors->A;
@@ -485,7 +485,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                     }
                 };
 
-        OPT<SEG> anchors = getStartEndPoints( candidate, &width );
+        std::optional<SEG> anchors = getStartEndPoints( candidate, &width );
         wxASSERT( anchors );
 
         // Start with the first object and walk "right"
@@ -837,7 +837,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     // Offset the midpoint along the normal a little bit so that it's more obviously an arc
     const double offsetRatio = 0.1;
 
-    if( OPT<SEG> seg = getStartEndPoints( source, nullptr ) )
+    if( std::optional<SEG> seg = getStartEndPoints( source, nullptr ) )
     {
         start = seg->A;
         end   = seg->B;
@@ -901,7 +901,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 }
 
 
-OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
+std::optional<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
 {
     switch( aItem->Type() )
     {
@@ -916,16 +916,16 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
         case SHAPE_T::ARC:
         case SHAPE_T::POLY:
             if( shape->GetStart() == shape->GetEnd() )
-                return NULLOPT;
+                return std::nullopt;
 
             if( aWidth )
                 *aWidth = shape->GetWidth();
 
-            return boost::make_optional<SEG>( { VECTOR2I( shape->GetStart() ),
-                                                VECTOR2I( shape->GetEnd() ) } );
+            return std::make_optional<SEG>( VECTOR2I( shape->GetStart() ),
+                                            VECTOR2I( shape->GetEnd() ) );
 
         default:
-            return NULLOPT;
+            return std::nullopt;
         }
     }
 
@@ -936,8 +936,7 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
         if( aWidth )
             *aWidth = line->GetWidth();
 
-        return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
-                                            VECTOR2I( line->GetEnd() ) } );
+        return std::make_optional<SEG>( VECTOR2I( line->GetStart() ), VECTOR2I( line->GetEnd() ) );
     }
 
     case PCB_ARC_T:
@@ -947,12 +946,11 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
         if( aWidth )
             *aWidth = arc->GetWidth();
 
-        return boost::make_optional<SEG>( { VECTOR2I( arc->GetStart() ),
-                                            VECTOR2I( arc->GetEnd() ) } );
+        return std::make_optional<SEG>( VECTOR2I( arc->GetStart() ), VECTOR2I( arc->GetEnd() ) );
     }
 
     default:
-        return NULLOPT;
+        return std::nullopt;
     }
 }
 

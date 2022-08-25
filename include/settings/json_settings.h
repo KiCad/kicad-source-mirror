@@ -26,7 +26,8 @@
 #include <utility>
 #include <wx/string.h>
 
-#include <core/optional.h>
+#include <functional>
+#include <optional>
 #include <nlohmann/json_fwd.hpp>
 
 class wxConfigBase;
@@ -131,7 +132,7 @@ c     * @return true if the file was saved
      * @param aPath is a string containing one or more keys separated by '.'
      * @return a JSON object from within this one
      */
-    OPT<nlohmann::json> GetJson( const std::string& aPath ) const;
+    std::optional<nlohmann::json> GetJson( const std::string& aPath ) const;
 
     /**
      * Fetches a value from within the JSON document.
@@ -141,7 +142,7 @@ c     * @return true if the file was saved
      * @return a value from within this document
      */
     template<typename ValueType>
-    OPT<ValueType> Get( const std::string& aPath ) const;
+    std::optional<ValueType> Get( const std::string& aPath ) const;
 
     /**
      * Stores a value into the JSON document
@@ -324,7 +325,7 @@ protected:
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> OPT<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const;
+template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const;
 
 template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal );
 

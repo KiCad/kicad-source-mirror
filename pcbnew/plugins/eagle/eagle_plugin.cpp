@@ -1667,7 +1667,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
             aFPText->SetText( *a.value );
         }
 
-        if( a.x && a.y )    // OPT
+        if( a.x && a.y )    // std::optional
         {
             VECTOR2I pos( kicad_x( *a.x ), kicad_y( *a.y ) );
             aFPText->SetTextPos( pos );

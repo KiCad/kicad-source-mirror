@@ -23,7 +23,7 @@
 
 #include "core/wx_stl_compat.h"
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <map>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -73,15 +73,15 @@ struct PCM_CONTACT
 struct PACKAGE_VERSION
 {
     wxString                   version;
-    boost::optional<int>       version_epoch;
-    boost::optional<wxString>  download_url;
-    boost::optional<wxString>  download_sha256;
-    boost::optional<uint64_t>  download_size;
-    boost::optional<uint64_t>  install_size;
+    std::optional<int>         version_epoch;
+    std::optional<wxString>    download_url;
+    std::optional<wxString>    download_sha256;
+    std::optional<uint64_t>    download_size;
+    std::optional<uint64_t>    install_size;
     PCM_PACKAGE_VERSION_STATUS status;
     std::vector<std::string>   platforms;
     wxString                   kicad_version;
-    boost::optional<wxString>  kicad_version_max;
+    std::optional<wxString>    kicad_version_max;
     std::vector<std::string>   keep_on_update;
 
     // Not serialized fields
@@ -99,7 +99,7 @@ struct PCM_PACKAGE
     wxString                     identifier;
     PCM_PACKAGE_TYPE             type;
     PCM_CONTACT                  author;
-    boost::optional<PCM_CONTACT> maintainer;
+    std::optional<PCM_CONTACT>   maintainer;
     wxString                     license;
     STRING_MAP                   resources;
     std::vector<std::string>     tags;
@@ -111,20 +111,20 @@ struct PCM_PACKAGE
 ///< Repository reference to a resource
 struct PCM_RESOURCE_REFERENCE
 {
-    wxString                  url;
-    boost::optional<wxString> sha256;
-    uint64_t                  update_timestamp;
+    wxString                url;
+    std::optional<wxString> sha256;
+    uint64_t                update_timestamp;
 };
 
 
 ///< Repository metadata
 struct PCM_REPOSITORY
 {
-    wxString                                name;
-    PCM_RESOURCE_REFERENCE                  packages;
-    boost::optional<PCM_RESOURCE_REFERENCE> resources;
-    boost::optional<PCM_RESOURCE_REFERENCE> manifests;
-    boost::optional<PCM_CONTACT>            maintainer;
+    wxString                              name;
+    PCM_RESOURCE_REFERENCE                packages;
+    std::optional<PCM_RESOURCE_REFERENCE> resources;
+    std::optional<PCM_RESOURCE_REFERENCE> manifests;
+    std::optional<PCM_CONTACT>            maintainer;
 
     // Not serialized fields
     std::vector<PCM_PACKAGE> package_list;

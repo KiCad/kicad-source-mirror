@@ -25,7 +25,7 @@
 #define DRC_RULE_PROTO_H
 
 #include <core/typeinfo.h>
-#include <core/optional.h>
+#include <optional>
 #include <core/minoptmax.h>
 #include <layer_ids.h>
 #include <netclass.h>
@@ -102,7 +102,7 @@ public:
     };
 
     void AddConstraint( DRC_CONSTRAINT& aConstraint );
-    OPT<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_T aType );
+    std::optional<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_T aType );
 
 public:
     bool                        m_Unary;

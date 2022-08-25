@@ -27,7 +27,7 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
-#include <core/optional.h>
+#include <optional>
 #include <tool/tool_menu.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
@@ -229,7 +229,7 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawShape( const std::string& aTool, PCB_SHAPE** aGraphic, OPT<VECTOR2D> aStartingPoint );
+    bool drawShape( const std::string& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint );
 
     /**
      * Start drawing an arc.
@@ -239,7 +239,7 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, OPT<VECTOR2D> aStartingPoint );
+    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint );
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.

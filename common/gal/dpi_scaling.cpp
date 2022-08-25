@@ -23,7 +23,7 @@
 
 #include <gal/dpi_scaling.h>
 
-#include <core/optional.h>
+#include <optional>
 
 #include <env_vars.h>
 #include <settings/common_settings.h>
@@ -47,9 +47,9 @@ const wxChar* const traceHiDpi = wxT( "KICAD_TRACE_HIGH_DPI" );
  *
  * @return the scale factor, if set
  */
-static OPT<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
+static std::optional<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
 {
-    OPT<double> scale;
+    std::optional<double> scale;
     double      canvas_scale = aConfig.m_Appearance.canvas_scale;
 
     if( canvas_scale > 0.0 )
@@ -72,10 +72,10 @@ static OPT<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
  *
  * @return the scale factor, if set
  */
-static OPT<double> getEnvironmentScale()
+static std::optional<double> getEnvironmentScale()
 {
     const wxPortId port_id = wxPlatformInfo::Get().GetPortId();
-    OPT<double>    scale;
+    std::optional<double>    scale;
 
     if( port_id == wxPORT_GTK )
     {
@@ -100,7 +100,7 @@ DPI_SCALING::DPI_SCALING( COMMON_SETTINGS* aConfig, const wxWindow* aWindow )
 
 double DPI_SCALING::GetScaleFactor() const
 {
-    OPT<double> val;
+    std::optional<double> val;
 
     if( m_config )
     {
@@ -140,7 +140,7 @@ bool DPI_SCALING::GetCanvasIsAutoScaled() const
         return true;
     }
 
-    const bool automatic = getKiCadConfiguredScale( *m_config ) == boost::none;
+    const bool automatic = getKiCadConfiguredScale( *m_config ) == std::nullopt;
     wxLogTrace( traceHiDpi, "Scale is automatic: %d", automatic );
     return automatic;
 }

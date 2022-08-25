@@ -300,7 +300,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 
     DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -329,7 +329,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString  net;
     SCH_LINE* segment = nullptr;
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
     Activate();
 
@@ -350,7 +350,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
         {
             if( evt->Action() == TA_CHOICE_MENU_CHOICE )
             {
-                OPT<int> id = evt->GetCommandId();
+                std::optional<int> id = evt->GetCommandId();
 
                 if( id && ( *id > 0 ) )
                     net = *evt->Parameter<wxString*>();
@@ -645,7 +645,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = ( segment || m_busUnfold.in_progress )
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().get().compare( aTool ) == 0;
+                                && evt->GetCommandStr().value().compare( aTool ) == 0;
 
         setCursor();
         grid.SetMask( GRID_HELPER::ALL );
@@ -980,8 +980,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( evt->GetCommandId().get() >= ID_POPUP_SCH_UNFOLD_BUS
-                && evt->GetCommandId().get() <= ID_POPUP_SCH_UNFOLD_BUS_END )
+            if( evt->GetCommandId().value() >= ID_POPUP_SCH_UNFOLD_BUS
+                && evt->GetCommandId().value() <= ID_POPUP_SCH_UNFOLD_BUS_END )
             {
                 wxASSERT_MSG( !segment, "Bus unfold event received when already drawing!" );
 

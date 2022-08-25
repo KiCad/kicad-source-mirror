@@ -1635,7 +1635,7 @@ bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist ) con
 }
 
 
-const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() const
+const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() const
 {
     for( int s1 = 0; s1 < SegmentCount(); s1++ )
     {
@@ -1679,7 +1679,7 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
         }
     }
 
-    return OPT<SHAPE_LINE_CHAIN::INTERSECTION>();
+    return std::optional<SHAPE_LINE_CHAIN::INTERSECTION>();
 }
 
 

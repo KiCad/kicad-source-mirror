@@ -74,7 +74,7 @@ public:
     /**
      * Map a wxWidgets key event to a TOOL_EVENT.
      */
-    OPT<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
+    std::optional<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
 private:
     ///< The time threshold for a mouse button press that distinguishes between a single mouse

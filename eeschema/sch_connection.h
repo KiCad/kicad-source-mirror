@@ -25,7 +25,6 @@
 #include <memory>
 #include <unordered_set>
 
-#include <boost/optional.hpp>
 #include <wx/regex.h>
 #include <bus_alias.h>
 #include <sch_sheet_path.h>

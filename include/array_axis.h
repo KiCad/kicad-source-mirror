@@ -24,7 +24,7 @@
 #ifndef ARRAY_AXIS__H
 #define ARRAY_AXIS__H
 
-#include <core/optional.h>
+#include <optional>
 
 #include <wx/string.h>
 
@@ -107,7 +107,7 @@ private:
      * @param  str   a numbering string, say "B" or "5"
      * @return       the offset, if found, else empty
      */
-    OPT<int> getNumberingOffset( const wxString& str ) const;
+    std::optional<int> getNumberingOffset( const wxString& str ) const;
 
     NUMBERING_TYPE m_type;
     int            m_offset;

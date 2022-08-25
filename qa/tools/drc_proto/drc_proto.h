@@ -28,7 +28,7 @@
 
 #include <widgets/progress_reporter_base.h>
 #include <reporter.h>
-#include <core/optional.h>
+#include <optional>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/netlist_reader.h>
 
@@ -169,7 +169,7 @@ struct PROJECT_CONTEXT
     std::shared_ptr<NETLIST> netlist;
 };
 
-PROJECT_CONTEXT loadKicadProject( const wxString& filename, OPT<wxString> rulesFilePath );
+PROJECT_CONTEXT loadKicadProject( const wxString& filename, std::optional<wxString> rulesFilePath );
 
 int runDRCProto( PROJECT_CONTEXT project,
                  std::shared_ptr<KIGFX::VIEW_OVERLAY> aDebugOverlay = nullptr );

@@ -68,9 +68,9 @@ private:
      * Retrieve the start and end points for a generic item.
      *
      * @param aItem is an item that has a start and end point.
-     * @return a segment from start to end, or NULLOPT if invalid.
+     * @return a segment from start to end, or std::nullopt if invalid.
      */
-    static OPT<SEG> getStartEndPoints( EDA_ITEM* aItem, int* aWidth );
+    static std::optional<SEG> getStartEndPoints( EDA_ITEM* aItem, int* aWidth );
 
     /**
      * Try to make polygons from chained segments in the selected items.

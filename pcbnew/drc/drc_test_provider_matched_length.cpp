@@ -386,17 +386,17 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             }
 
 
-            OPT<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
 
             if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkLengths( *lengthConstraint, matchedConnections );
 
-            OPT<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );
 
             if( skewConstraint && skewConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkSkews( *skewConstraint, matchedConnections );
 
-            OPT<DRC_CONSTRAINT> viaCountConstraint = rule->FindConstraint( VIA_COUNT_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT> viaCountConstraint = rule->FindConstraint( VIA_COUNT_CONSTRAINT );
 
             if( viaCountConstraint && viaCountConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkViaCounts( *viaCountConstraint, matchedConnections );

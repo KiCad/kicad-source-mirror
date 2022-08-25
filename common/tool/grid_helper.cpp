@@ -74,7 +74,7 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
     }
     else
     {
-        m_auxAxis = OPT<VECTOR2I>();
+        m_auxAxis = std::optional<VECTOR2I>();
         m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
     }
 }

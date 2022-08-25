@@ -31,8 +31,8 @@
 #include <limits>
 #include <algorithm>
 
-// Needed for the OPT definition
-#include <core/optional.h>
+// Needed for the std::optional definition
+#include <optional>
 
 /**
  * A 2D bounding box built on top of an origin point and size vector.
@@ -506,7 +506,7 @@ private:
 typedef BOX2<VECTOR2I>    BOX2I;
 typedef BOX2<VECTOR2D>    BOX2D;
 
-typedef OPT<BOX2I> OPT_BOX2I;
+typedef std::optional<BOX2I> OPT_BOX2I;
 
 // FIXME should be removed to avoid multiple typedefs for the same type
 typedef BOX2D             DBOX;

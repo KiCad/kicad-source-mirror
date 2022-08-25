@@ -258,7 +258,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     write_contact( _( "Author" ), package.author );
 
     if( package.maintainer )
-        write_contact( _( "Maintainer" ), package.maintainer.get() );
+        write_contact( _( "Maintainer" ), package.maintainer.value() );
 
     if( package.resources.size() > 0 )
     {
@@ -383,12 +383,12 @@ void PANEL_PACKAGES_VIEW::unsetPackageDetails()
 }
 
 
-wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const boost::optional<uint64_t> size ) const
+wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const std::optional<uint64_t> size ) const
 {
     if( !size )
         return "-";
 
-    uint64_t b = size.get();
+    uint64_t b = size.value();
 
     if( b >= 1024 * 1024 )
         return wxString::Format( "%.1f MB", b / 1000.0 / 1000.0 );
@@ -497,7 +497,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
         return;
     }
 
-    const wxString& url = ver_it->download_url.get();
+    const wxString& url = ver_it->download_url.value();
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
@@ -527,7 +527,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
         {
             std::ifstream stream( path.ToUTF8(), std::ios_base::binary );
 
-            bool matches = m_pcm->VerifyHash( stream, ver_it->download_sha256.get() );
+            bool matches = m_pcm->VerifyHash( stream, ver_it->download_sha256.value() );
 
             stream.close();
 

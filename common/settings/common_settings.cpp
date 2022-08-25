@@ -471,7 +471,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "ZoomNoCenter",              "input.center_on_zoom" );
 
     // This was stored inverted in legacy config
-    if( OPT<bool> value = Get<bool>( "input.center_on_zoom" ) )
+    if( std::optional<bool> value = Get<bool>( "input.center_on_zoom" ) )
         Set( "input.center_on_zoom", !( *value ) );
 
     ret &= fromLegacy<int>( aCfg, "OpenGLAntialiasingMode", "graphics.opengl_antialiasing_mode" );

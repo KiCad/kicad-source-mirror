@@ -31,7 +31,7 @@
 #include <gal/gal_display_options.h>
 #include <lib_id.h>
 #include <kiway_player.h>
-#include <core/optional.h>
+#include <optional>
 
 #include <widgets/footprint_preview_widget.h>
 

@@ -185,7 +185,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
         PCB_TRACK* sp = dyn_cast<PCB_TRACK*>( itemP );
-        OPT<DIFF_PAIR_COUPLED_SEGMENTS> bestCoupled;
+        std::optional<DIFF_PAIR_COUPLED_SEGMENTS> bestCoupled;
         int bestGap = std::numeric_limits<int>::max();
 
         if( !sp )
@@ -348,9 +348,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         drc_dbg(10, wxT( "       coupled prims : %d\n" ), (int) it.second.coupled.size() );
 
-        OPT<DRC_CONSTRAINT> gapConstraint =
+        std::optional<DRC_CONSTRAINT> gapConstraint =
                 it.first.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-        OPT<DRC_CONSTRAINT> maxUncoupledConstraint =
+        std::optional<DRC_CONSTRAINT> maxUncoupledConstraint =
                 it.first.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
 
         for( BOARD_CONNECTED_ITEM* item : it.second.itemsN )

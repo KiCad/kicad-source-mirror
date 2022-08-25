@@ -30,7 +30,7 @@
 #ifndef KICADBASE_H
 #define KICADBASE_H
 
-#include <core/optional.h>
+#include <optional>
 
 #include <ostream>
 
@@ -129,6 +129,6 @@ bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation );
  * @param aLayerElem the s-expr element to get the name from.
  * @return the layer name if valid, else empty.
  */
-OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
+std::optional<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
 
 #endif  // KICADBASE_H

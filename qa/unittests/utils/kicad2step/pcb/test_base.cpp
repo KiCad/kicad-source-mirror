@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE( TestGetLayerName )
         {
             std::unique_ptr<SEXPR::SEXPR> sexpr( m_parser.Parse( c.m_sexp ) );
 
-            const OPT<std::string> ret = GetLayerName( *sexpr );
+            const std::optional<std::string> ret = GetLayerName( *sexpr );
 
             BOOST_CHECK_EQUAL( !!ret, c.m_valid );
 

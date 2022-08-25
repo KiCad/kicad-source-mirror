@@ -135,14 +135,14 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
     }
     else
     {
-        VECTOR2I pToA = aSegmentA.B - p.get();
-        VECTOR2I pToB = aSegmentB.B - p.get();
+        VECTOR2I pToA = aSegmentA.B - p.value();
+        VECTOR2I pToB = aSegmentB.B - p.value();
 
         if( pToA.EuclideanNorm() == 0 )
-            pToA = aSegmentA.A - p.get();
+            pToA = aSegmentA.A - p.value();
 
         if( pToB.EuclideanNorm() == 0 )
-            pToB = aSegmentB.A - p.get();
+            pToB = aSegmentB.A - p.value();
 
         EDA_ANGLE pToAangle( pToA );
         EDA_ANGLE pToBangle( pToB );
@@ -153,8 +153,8 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         EDA_ANGLE angPC  = pToAangle - alpha / 2;
         VECTOR2I  arcCenter;
 
-        arcCenter.x = p.get().x + KiROUND( distPC * angPC.Cos() );
-        arcCenter.y = p.get().y + KiROUND( distPC * angPC.Sin() );
+        arcCenter.x = p.value().x + KiROUND( distPC * angPC.Cos() );
+        arcCenter.y = p.value().y + KiROUND( distPC * angPC.Sin() );
 
         // The end points of the arc are the orthogonal projected lines from the line segments
         // to the center of the arc

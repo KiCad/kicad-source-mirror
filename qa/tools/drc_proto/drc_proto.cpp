@@ -56,7 +56,7 @@
 
 #include "drc_proto.h"
 
-PROJECT_CONTEXT loadKicadProject( const wxString& filename, OPT<wxString> rulesFilePath )
+PROJECT_CONTEXT loadKicadProject( const wxString& filename, std::optional<wxString> rulesFilePath )
 {
    PROJECT_CONTEXT rv;
 

@@ -62,10 +62,10 @@ const wxString& ARRAY_AXIS::GetAlphabet() const
 }
 
 
-OPT<int> ARRAY_AXIS::getNumberingOffset( const wxString& str ) const
+std::optional<int> ARRAY_AXIS::getNumberingOffset( const wxString& str ) const
 {
     if( str.length() == 0 )
-        return OPT<int>{};
+        return std::optional<int>{};
 
     const wxString& alphabet = GetAlphabet();
 
@@ -77,7 +77,7 @@ OPT<int> ARRAY_AXIS::getNumberingOffset( const wxString& str ) const
         int chIndex = alphabet.Find( str[i], false );
 
         if( chIndex == wxNOT_FOUND )
-            return OPT<int>{};
+            return std::optional<int>{};
 
         const bool start0 = schemeNonUnitColsStartAt0( m_type );
 
@@ -89,7 +89,7 @@ OPT<int> ARRAY_AXIS::getNumberingOffset( const wxString& str ) const
         offset += chIndex;
     }
 
-    return OPT<int>{ offset };
+    return std::optional<int>{ offset };
 }
 
 
@@ -101,7 +101,7 @@ void ARRAY_AXIS::SetAxisType( NUMBERING_TYPE aType )
 
 bool ARRAY_AXIS::SetOffset( const wxString& aOffsetName )
 {
-    OPT<int> offset = getNumberingOffset( aOffsetName );
+    std::optional<int> offset = getNumberingOffset( aOffsetName );
 
     // The string does not decode to a valid offset
     if( !offset )

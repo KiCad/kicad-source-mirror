@@ -26,7 +26,7 @@
 #define SIM_VALUE_H
 
 #include <wx/string.h>
-#include <core/optional.h>
+#include <optional>
 #include <memory>
 #include <pegtl.hpp>
 
@@ -118,7 +118,7 @@ public:
 private:
     wxString getMetricSuffix();
 
-    OPT<T> m_value = NULLOPT;
+    std::optional<T> m_value = std::nullopt;
 };
 
 typedef SIM_VALUE_INST<bool> SIM_VALUE_BOOL;

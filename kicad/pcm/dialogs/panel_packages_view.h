@@ -103,7 +103,7 @@ private:
     void unsetPackageDetails();
 
     ///< Bytes to Kb/Mb/Gb string or "-" if absent
-    wxString toHumanReadableSize( const boost::optional<uint64_t> size ) const;
+    wxString toHumanReadableSize( const std::optional<uint64_t> size ) const;
 
     ///< Returns true if it the download operation can be performed
     bool canDownload() const;

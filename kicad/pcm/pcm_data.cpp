@@ -22,7 +22,7 @@
 
 
 template <typename T>
-void to_optional( const json& j, const char* key, boost::optional<T>& dest )
+void to_optional( const json& j, const char* key, std::optional<T>& dest )
 {
     if( j.contains( key ) )
     {
@@ -40,25 +40,25 @@ void to_json( json& j, const PACKAGE_VERSION& v )
               { "kicad_version", v.kicad_version } };
 
     if( v.version_epoch )
-        j["version_epoch"] = v.version_epoch.get();
+        j["version_epoch"] = v.version_epoch.value();
 
     if( v.download_url )
-        j["download_url"] = v.download_url.get();
+        j["download_url"] = v.download_url.value();
 
     if( v.download_sha256 )
-        j["download_sha256"] = v.download_sha256.get();
+        j["download_sha256"] = v.download_sha256.value();
 
     if( v.download_size )
-        j["download_size"] = v.download_size.get();
+        j["download_size"] = v.download_size.value();
 
     if( v.install_size )
-        j["install_size"] = v.install_size.get();
+        j["install_size"] = v.install_size.value();
 
     if( v.platforms.size() > 0 )
         nlohmann::to_json( j["platforms"], v.platforms );
 
     if( v.kicad_version_max )
-        j["kicad_version_max"] = v.kicad_version_max.get();
+        j["kicad_version_max"] = v.kicad_version_max.value();
 
     if( v.keep_on_update.size() > 0 )
         nlohmann::to_json( j["keep_on_update"], v.keep_on_update );
@@ -99,7 +99,7 @@ void to_json( json& j, const PCM_PACKAGE& p )
               { "versions", p.versions } };
 
     if( p.maintainer )
-        j["maintainer"] = p.maintainer.get();
+        j["maintainer"] = p.maintainer.value();
 
     if( p.tags.size() > 0 )
         j["tags"] = p.tags;
@@ -136,7 +136,7 @@ void to_json( json& j, const PCM_RESOURCE_REFERENCE& r )
     j = json{ { "url", r.url }, { "update_timestamp", r.update_timestamp } };
 
     if( r.sha256 )
-        j["sha256"] = r.sha256.get();
+        j["sha256"] = r.sha256.value();
 }
 
 
@@ -154,13 +154,13 @@ void to_json( json& j, const PCM_REPOSITORY& r )
     j = json{ { "name", r.name }, { "packages", r.packages } };
 
     if( r.resources )
-        j["resources"] = r.resources.get();
+        j["resources"] = r.resources.value();
 
     if( r.manifests )
-        j["manifests"] = r.manifests.get();
+        j["manifests"] = r.manifests.value();
 
     if( r.maintainer )
-        j["maintainer"] = r.maintainer.get();
+        j["maintainer"] = r.maintainer.value();
 }
 
 

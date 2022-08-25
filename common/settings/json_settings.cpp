@@ -471,7 +471,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
-OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
+std::optional<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 {
     nlohmann::json::json_pointer ptr = m_internals->PointerFromString( aPath );
 
@@ -479,21 +479,21 @@ OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
     {
         try
         {
-            return OPT<nlohmann::json>{ m_internals->at( ptr ) };
+            return std::optional<nlohmann::json>{ m_internals->at( ptr ) };
         }
         catch( ... )
         {
         }
     }
 
-    return OPT<nlohmann::json>{};
+    return std::optional<nlohmann::json>{};
 }
 
 
 template<typename ValueType>
-OPT<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
+std::optional<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
 {
-    if( OPT<nlohmann::json> ret = GetJson( aPath ) )
+    if( std::optional<nlohmann::json> ret = GetJson( aPath ) )
     {
         try
         {
@@ -504,20 +504,20 @@ OPT<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
         }
     }
 
-    return NULLOPT;
+    return std::nullopt;
 }
 
 
 // Instantiate all required templates here to allow reducing scope of json.hpp
-template OPT<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
-template OPT<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
-template OPT<float> JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
-template OPT<int> JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
-template OPT<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
-template OPT<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
-template OPT<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
-template OPT<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
-template OPT<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
+template std::optional<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
+template std::optional<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
+template std::optional<float> JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
+template std::optional<int> JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
+template std::optional<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
+template std::optional<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
+template std::optional<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
+template std::optional<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
+template std::optional<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
 
 
 template<typename ValueType>
@@ -770,12 +770,12 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> OPT<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
+template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
 {
-    if( OPT<nlohmann::json> opt_json = GetJson( aPath ) )
+    if( std::optional<nlohmann::json> opt_json = GetJson( aPath ) )
         return wxString( opt_json->get<std::string>().c_str(), wxConvUTF8 );
 
-    return NULLOPT;
+    return std::nullopt;
 }
 
 

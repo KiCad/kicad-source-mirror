@@ -756,16 +756,16 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 // Schema 1 to 2: move mask and paste margin settings back to board.
                 // The parameters are removed, so we just have to manually load them here and
                 // they will get saved with the board
-                if( OPT<double> optval = Get<double>( "rules.solder_mask_clearance" ) )
+                if( std::optional<double> optval = Get<double>( "rules.solder_mask_clearance" ) )
                     m_SolderMaskExpansion = static_cast<int>( *optval * IU_PER_MM );
 
-                if( OPT<double> optval = Get<double>( "rules.solder_mask_min_width" ) )
+                if( std::optional<double> optval = Get<double>( "rules.solder_mask_min_width" ) )
                     m_SolderMaskMinWidth = static_cast<int>( *optval * IU_PER_MM );
 
-                if( OPT<double> optval = Get<double>( "rules.solder_paste_clearance" ) )
+                if( std::optional<double> optval = Get<double>( "rules.solder_paste_clearance" ) )
                     m_SolderPasteMargin = static_cast<int>( *optval * IU_PER_MM );
 
-                if( OPT<double> optval = Get<double>( "rules.solder_paste_margin_ratio" ) )
+                if( std::optional<double> optval = Get<double>( "rules.solder_paste_margin_ratio" ) )
                     m_SolderPasteMarginRatio = *optval;
 
                 try
@@ -967,7 +967,7 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
     std::string bp = "board.design_settings.rule_severities.";
     std::string rs = "rule_severities.";
 
-    if( OPT<bool> v = project->Get<bool>( bp + "legacy_no_courtyard_defined" ) )
+    if( std::optional<bool> v = project->Get<bool>( bp + "legacy_no_courtyard_defined" ) )
     {
         if( *v )
             Set( rs + drcName( DRCE_MISSING_COURTYARD ), "error" );
@@ -978,7 +978,7 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
         migrated = true;
     }
 
-    if( OPT<bool> v = project->Get<bool>( bp + "legacy_courtyards_overlap" ) )
+    if( std::optional<bool> v = project->Get<bool>( bp + "legacy_courtyards_overlap" ) )
     {
         if( *v )
             Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "error" );

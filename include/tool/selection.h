@@ -27,7 +27,7 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
-#include <core/optional.h>
+#include <optional>
 #include <core/typeinfo.h>
 #include <deque>
 #include <eda_rect.h>
@@ -228,7 +228,7 @@ public:
 
     bool HasReferencePoint() const
     {
-        return m_referencePoint != NULLOPT;
+        return m_referencePoint != std::nullopt;
     }
 
     VECTOR2I GetReferencePoint() const
@@ -246,7 +246,7 @@ public:
 
     void ClearReferencePoint()
     {
-        m_referencePoint = NULLOPT;
+        m_referencePoint = std::nullopt;
     }
 
     /**
@@ -263,7 +263,7 @@ public:
     bool OnlyContains( std::vector<KICAD_T> aList ) const;
 
 protected:
-    OPT<VECTOR2I>         m_referencePoint;
+    std::optional<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
     EDA_ITEM*             m_lastAddedItem;
     bool                  m_isHover;

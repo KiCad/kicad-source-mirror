@@ -362,7 +362,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
 
     //Ensure the tangent segments are in the correct orientation
-    VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd ).get();
+    VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd ).value();
     tanStart.A = tanIntersect;
     tanStart.B = theArc->GetStart();
     tanEnd.A = tanIntersect;
@@ -439,7 +439,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     }
 
     // Recalculate intersection point
-    tanIntersect = tanStart.IntersectLines( tanEnd ).get();
+    tanIntersect = tanStart.IntersectLines( tanEnd ).value();
 
     auto isTrackStartClosestToArcStart =
             [&]( PCB_TRACK* aTrack ) -> bool
@@ -1038,7 +1038,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    OPT<VECTOR2I> oldRefPt = boost::make_optional<VECTOR2I>( false, VECTOR2I( 0, 0 ) );
+    std::optional<VECTOR2I> oldRefPt;
     bool          is_hover = selection.IsHover();   // N.B. This must be saved before the second
                                                     // call to RequestSelection() below
 
@@ -1311,7 +1311,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    OPT<VECTOR2I> oldRefPt = boost::make_optional<VECTOR2I>( false, VECTOR2I( 0, 0 ) );
+    std::optional<VECTOR2I> oldRefPt;
 
     if( selection.HasReferencePoint() )
         oldRefPt = selection.GetReferencePoint();
@@ -1953,7 +1953,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-    OPT<VECTOR2I>    pickedPoint;
+    std::optional<VECTOR2I>    pickedPoint;
     bool             done = false;
 
     m_statusPopup->SetText( aTooltip );
@@ -2023,10 +2023,10 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     // Ensure statusPopup is hidden after use and before deleting it:
     m_statusPopup->Hide();
 
-    if( pickedPoint.is_initialized() )
-        aReferencePoint = pickedPoint.get();
+    if( pickedPoint )
+        aReferencePoint = pickedPoint.value();
 
-    return pickedPoint.is_initialized();
+    return pickedPoint.has_value();
 }
 
 

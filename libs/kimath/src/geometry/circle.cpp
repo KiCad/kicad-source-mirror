@@ -113,7 +113,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         // In this code, the prefix "h" denotes "the homothetic image"
         OPT_VECTOR2I intersectCalc = aLineA.IntersectLines( aLineB );
         wxCHECK_MSG( intersectCalc, *this, wxT( "Lines do not intersect but are not parallel?" ) );
-        intersectPoint = intersectCalc.get();
+        intersectPoint = intersectCalc.value();
 
         if( aP == intersectPoint )
         {
@@ -157,11 +157,11 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
             wxCHECK_MSG( actTanA, *this, wxT( "No solutions exist!" ) );
 
             // Find circle center by perpendicular intersection with the angle bisector
-            SEG          perpendicularToTanA = aLineA.PerpendicularSeg( actTanA.get() );
+            SEG          perpendicularToTanA = aLineA.PerpendicularSeg( actTanA.value() );
             OPT_VECTOR2I actCenter = perpendicularToTanA.IntersectLines( anglebisector );
             wxCHECK_MSG( actCenter, *this, wxT( "No solutions exist!" ) );
 
-            Center = actCenter.get();
+            Center = actCenter.value();
             Radius = aLineA.LineDistance( Center );
         }
         else
@@ -172,11 +172,11 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
             wxCHECK_MSG( actTanB, *this, wxT( "No solutions exist!" ) );
 
             // Find circle center by perpendicular intersection with the angle bisector
-            SEG          perpendicularToTanB = aLineB.PerpendicularSeg( actTanB.get() );
+            SEG          perpendicularToTanB = aLineB.PerpendicularSeg( actTanB.value() );
             OPT_VECTOR2I actCenter = perpendicularToTanB.IntersectLines( anglebisector );
             wxCHECK_MSG( actCenter, *this, wxT( "No solutions exist!" ) );
 
-            Center = actCenter.get();
+            Center = actCenter.value();
             Radius = aLineB.LineDistance( Center );
         }
     }

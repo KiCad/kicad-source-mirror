@@ -670,7 +670,7 @@ public:
      *
      * @return (optional) first found self-intersection point.
      */
-    const OPT<INTERSECTION> SelfIntersecting() const;
+    const std::optional<INTERSECTION> SelfIntersecting() const;
 
     /**
      * Simplify the line chain by removing colinear adjacent segments and duplicate vertices.

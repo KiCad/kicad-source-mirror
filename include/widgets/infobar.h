@@ -21,7 +21,8 @@
 #ifndef INFOBAR_H_
 #define INFOBAR_H_
 
-#include <core/optional.h>
+#include <functional>
+#include <optional>
 #include <wx/event.h>
 #include <wx/infobar.h>
 #include <wx/timer.h>
@@ -254,7 +255,7 @@ protected:
     wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
     MESSAGE_TYPE  m_type;           ///< The type of message being displayed
 
-    OPT<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
+    std::optional<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
 
     DECLARE_EVENT_TABLE()
 };

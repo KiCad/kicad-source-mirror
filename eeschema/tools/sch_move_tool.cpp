@@ -144,7 +144,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
-    std::string tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().value();
     m_frame->PushTool( tool );
 
     if( selection.Empty() )
@@ -803,11 +803,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( evt->GetCommandId().value() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && evt->GetCommandId().value() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
-                int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = evt->GetCommandId().value() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( symbol )
                 {
