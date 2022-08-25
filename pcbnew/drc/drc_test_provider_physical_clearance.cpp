@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 return true;
             } );
 
-    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LSET> checkedPairs;
     progressDelta = 100;
     ii = 0;
 
@@ -191,13 +191,15 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                     if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                                         std::swap( a, b );
 
-                                    if( checkedPairs.find( { a, b } ) != checkedPairs.end() )
+                                    auto it = checkedPairs.find( { a, b } );
+
+                                    if( it != checkedPairs.end() && it->second.test( layer ) )
                                     {
                                         return false;
                                     }
                                     else
                                     {
-                                        checkedPairs[ { a, b } ] = 1;
+                                        checkedPairs[ { a, b } ].set( layer );
                                         return true;
                                     }
                                 },

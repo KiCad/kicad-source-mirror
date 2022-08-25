@@ -100,7 +100,7 @@ private:
     std::unique_ptr<DRC_RTREE> m_tesselatedTree;
     std::unique_ptr<DRC_RTREE> m_itemTree;
 
-    std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, int> m_checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LSET> m_checkedPairs;
 
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
     // first object+net that bridges their aperture (after which any other nets will generate
@@ -455,13 +455,15 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                     std::swap( a, b );
 
-                if( m_checkedPairs.find( { a, b, aTargetLayer } ) != m_checkedPairs.end() )
+                auto it = m_checkedPairs.find( { a, b } );
+
+                if( it != m_checkedPairs.end() && it->second.test( aTargetLayer ) )
                 {
                     return false;
                 }
                 else
                 {
-                    m_checkedPairs[ { a, b, aTargetLayer } ] = 1;
+                    m_checkedPairs[ { a, b } ].set( aTargetLayer );
                     return true;
                 }
             },

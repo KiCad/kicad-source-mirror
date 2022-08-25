@@ -426,7 +426,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
-    std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
+    std::unordered_map<PTR_PTR_CACHE_KEY, LSET> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -454,13 +454,15 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                         if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                             std::swap( a, b );
 
-                        if( checkedPairs.find( { a, b } ) != checkedPairs.end() )
+                        auto it = checkedPairs.find( { a, b } );
+
+                        if( it != checkedPairs.end() && it->second.test( layer ) )
                         {
                             return false;
                         }
                         else
                         {
-                            checkedPairs[ { a, b } ] = 1;
+                            checkedPairs[ { a, b } ].set( layer );
                             return true;
                         }
                     },
