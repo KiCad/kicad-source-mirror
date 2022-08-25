@@ -45,6 +45,8 @@ DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* aParent,
                                                          "with '%s'." ),
                                                       aReplacement ) );
 
+    m_sdbSizerOK->SetFocus();
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
