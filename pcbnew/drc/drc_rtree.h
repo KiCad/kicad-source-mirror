@@ -39,6 +39,7 @@
 #include <geometry/shape_segment.h>
 #include <math/vector2d.h>
 #include "geometry/shape_null.h"
+#include "board.h"
 
 /**
  * Implement an R-tree for fast spatial and layer indexing of connectable items.
@@ -208,21 +209,19 @@ public:
      * clearance.  It's used when looking up the specific item-to-item clearance might be
      * expensive and should be deferred till we know we have a possible hit.
      */
-    int QueryColliding( BOARD_ITEM* aRefItem,
-                        PCB_LAYER_ID aRefLayer,
-                        PCB_LAYER_ID aTargetLayer,
+    int QueryColliding( BOARD_ITEM* aRefItem, PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer,
                         std::function<bool( BOARD_ITEM* )> aFilter = nullptr,
                         std::function<bool( BOARD_ITEM* )> aVisitor = nullptr,
                         int aClearance = 0 ) const
     {
-        // keep track of BOARD_ITEMs that have been already found to collide (some items
-        // might be build of COMPOUND/triangulated shapes and a single subshape collision
-        // means we have a hit)
+        // keep track of BOARD_ITEMs that have already been found to collide (some items might
+        // be built of COMPOUND/triangulated shapes and a single subshape collision means we have
+        // a hit)
         std::unordered_set<BOARD_ITEM*> collidingCompounds;
 
         // keep track of results of client filter so we don't ask more than once for compound
         // shapes
-        std::map<BOARD_ITEM*, bool> filterResults;
+        std::unordered_map<BOARD_ITEM*, bool> filterResults;
 
         EDA_RECT box = aRefItem->GetBoundingBox();
         box.Inflate( aClearance );
@@ -394,9 +393,10 @@ public:
      * @param aLayer Layer to search
      * @return vector of overlapping BOARD_ITEMS*
      */
-    std::set<BOARD_ITEM*> GetObjectsAt( const VECTOR2I& aPt, PCB_LAYER_ID aLayer, int aClearance = 0 )
+    std::unordered_set<BOARD_ITEM*> GetObjectsAt( const VECTOR2I& aPt, PCB_LAYER_ID aLayer,
+                                                  int aClearance = 0 )
     {
-        std::set<BOARD_ITEM*> retval;
+        std::unordered_set<BOARD_ITEM*> retval;
         int min[2] = { aPt.x - aClearance, aPt.y - aClearance };
         int max[2] = { aPt.x + aClearance, aPt.y + aClearance };
 
@@ -427,11 +427,9 @@ public:
         ITEM_WITH_SHAPE* testItem;
     };
 
-    int QueryCollidingPairs( DRC_RTREE* aRefTree,
-                             std::vector<LAYER_PAIR> aLayerPairs,
-                             std::function<bool( const LAYER_PAIR&,
-                                                 ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE*,
-                                                 bool* aCollision )> aVisitor,
+    int QueryCollidingPairs( DRC_RTREE* aRefTree, std::vector<LAYER_PAIR> aLayerPairs,
+                             std::function<bool( const LAYER_PAIR&, ITEM_WITH_SHAPE*,
+                                                 ITEM_WITH_SHAPE*, bool* aCollision )> aVisitor,
                              int aMaxClearance,
                              std::function<bool(int, int )> aProgressReporter ) const
     {
@@ -468,7 +466,7 @@ public:
         // keep track of BOARD_ITEMs pairs that have been already found to collide (some items
         // might be build of COMPOUND/triangulated shapes and a single subshape collision
         // means we have a hit)
-        std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> collidingCompounds;
+        std::unordered_map<PTR_PTR_CACHE_KEY, int> collidingCompounds;
 
         int progress = 0;
         int count = pairsToVisit.size();

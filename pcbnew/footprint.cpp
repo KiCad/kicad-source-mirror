@@ -2368,11 +2368,7 @@ void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, cons
             if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                 std::swap( a, b );
 
-            if( checkedPairs.count( { a, b } ) )
-            {
-                continue;
-            }
-            else
+            if( checkedPairs.find( { a, b } ) == checkedPairs.end() )
             {
                 checkedPairs[ { a, b } ] = 1;
 
@@ -2530,13 +2526,13 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
             {
                 aErrorHandler( wxString::Format( _( "(net-tie pad group contains unknown pad "
                                                     "number %s)" ),
-                                                      padNumber ) );
+                                                 padNumber ) );
             }
             else if( !padNumbers.insert( padNumber ).second )
             {
                 aErrorHandler( wxString::Format( _( "(pad %s appears in more than one net-tie "
                                                     "pad group)" ),
-                                                      padNumber ) );
+                                                 padNumber ) );
             }
         }
     }

@@ -451,12 +451,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 BOARD_ITEM* a = aItem;
                 BOARD_ITEM* b = other;
 
-                // store canonical order so we don't collide in both directions
-                // (a:b and b:a)
+                // store canonical order so we don't collide in both directions (a:b and b:a)
                 if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                     std::swap( a, b );
 
-                if( m_checkedPairs.count( { a, b, aTargetLayer } ) )
+                if( m_checkedPairs.find( { a, b, aTargetLayer } ) != m_checkedPairs.end() )
                 {
                     return false;
                 }

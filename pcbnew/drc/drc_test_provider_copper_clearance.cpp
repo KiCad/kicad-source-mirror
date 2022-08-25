@@ -454,7 +454,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                         if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                             std::swap( a, b );
 
-                        if( checkedPairs.count( { a, b } ) )
+                        if( checkedPairs.find( { a, b } ) != checkedPairs.end() )
                         {
                             return false;
                         }
@@ -721,7 +721,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                             if( static_cast<void*>( a ) > static_cast<void*>( b ) )
                                 std::swap( a, b );
 
-                            if( checkedPairs.count( { a, b } ) )
+                            if( checkedPairs.find( { a, b } ) != checkedPairs.end() )
                             {
                                 return false;
                             }

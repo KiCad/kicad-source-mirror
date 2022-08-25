@@ -105,7 +105,10 @@ namespace std
     {
         std::size_t operator()( const PTR_PTR_CACHE_KEY& k ) const
         {
-            return hash<void*>()( k.A ) ^ hash<void*>()( k.B );
+            constexpr std::size_t prime = 2166136261u;
+
+            return reinterpret_cast<uintptr_t>( k.A ) * prime
+                    ^ reinterpret_cast<uintptr_t>( k.B ) * prime;
         }
     };
 
@@ -114,9 +117,10 @@ namespace std
     {
         std::size_t operator()( const PTR_LAYER_CACHE_KEY& k ) const
         {
-            constexpr std::size_t prime = 19937;
+            constexpr std::size_t prime = 2166136261u;
 
-            return hash<void*>()( k.A ) ^ ( hash<int>()( k.Layer ) * prime );
+            return reinterpret_cast<uintptr_t>( k.A ) * prime
+                    ^ hash<int>()( k.Layer ) * prime;
         }
     };
 
@@ -125,9 +129,11 @@ namespace std
     {
         std::size_t operator()( const PTR_PTR_LAYER_CACHE_KEY& k ) const
         {
-            constexpr std::size_t prime = 19937;
+            constexpr std::size_t prime = 2166136261u;
 
-            return hash<void*>()( k.A ) ^ hash<void*>()( k.B ) ^ ( hash<int>()( k.Layer ) * prime );
+            return reinterpret_cast<uintptr_t>( k.A ) * prime
+                    ^ reinterpret_cast<uintptr_t>( k.B ) * prime
+                    ^ hash<int>()( k.Layer ) * prime;
         }
     };
 }
