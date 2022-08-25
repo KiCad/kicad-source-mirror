@@ -180,6 +180,14 @@ EDA_ITEM* ZONE::Clone() const
 
 bool ZONE::HigherPriority( const ZONE* aOther ) const
 {
+    // Teardrops are always higher priority than regular zones, so if one zone is a teardrop
+    // and the other is not, then return higher priority as the teardrop
+    if( ( m_teardropType == TEARDROP_TYPE::TD_NONE )
+            ^ ( aOther->m_teardropType == TEARDROP_TYPE::TD_NONE ) )
+    {
+        return static_cast<int>( m_teardropType ) > static_cast<int>( aOther->m_teardropType );
+    }
+
     if( m_priority != aOther->m_priority )
         return m_priority > aOther->m_priority;
 
