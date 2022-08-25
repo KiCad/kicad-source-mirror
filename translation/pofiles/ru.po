@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -125,24 +125,24 @@ msgid "Last render time %.0f ms"
 msgstr "Время последней визуализации %.0f мс"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Цепь %s\tКласс %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:677
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s и %s"
+msgstr "Конт.пл. %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Область запрета на %s"
+msgstr "Область запрета %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Зоны"
+msgstr "Зона %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -293,21 +293,18 @@ msgid "&Preferences"
 msgstr "Настройки"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Наборы (Ctrl+Tab):"
+msgstr "Визуализации (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2681
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Сохранить набор..."
+msgstr "Сохранить визуализацию..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2682
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Удалить набор..."
+msgstr "Удалить визуализацию..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
@@ -328,15 +325,13 @@ msgstr "Просмотрщик 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2730
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Имя области запрета:"
+msgstr "Имя визуализации:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2730
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Сохранить файл отчёта"
+msgstr "Сохранить визуализацию"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2768
@@ -350,9 +345,8 @@ msgstr "Удалить набор"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2778
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Выбор набора:"
+msgstr "Выбор визуализации:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:760
 msgid "3D Image File Name"
@@ -1494,9 +1488,8 @@ msgid "Warning"
 msgstr "Предупреждение"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Ошибка открытия файла"
+msgstr "Предупреждение об открываемом файле"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -3244,6 +3237,21 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad может анонимно сообщать о сбоях и передавать некоторые данные о "
+"событии разработчиками чтобы помочь им более эффективно определить условия "
+"возникновения критической ошибки в пользовательской среде, отследить "
+"последовательность действий приведших к сбою и понять как это исправить.\n"
+"\n"
+"Чтобы связать автоматически генерируемые отчёты с установленным экземпляром "
+"KiCad генерируется абсолютно случайный уникальный идентификатор, который "
+"используется только для сообщений об ошибках. Никакая персональная "
+"информация (включая IP адрес) не содержится в этом идентификаторе. Этот "
+"идентификатор можно сбросить в любой момент с помощью соответствующей кнопки."
+"\n"
+"\n"
+"Если Вы решите принять участие и помочь разработчикам, KiCad будет "
+"автоматически формировать и отправлять отчёт об ошибке при её возникновении. "
+"Файлы проекта, такие как схема или печатная плата, не передаются при этом."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
@@ -3609,7 +3617,7 @@ msgstr "Класс цепей \"default\" обязателен."
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Цепи соответствующие '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3690,14 +3698,12 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Установите прозрачный цвет для использования цвета KiCad по умолчанию."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Соответствие в схеме"
+msgstr "Присвоение класса цепей:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Штриховка"
+msgstr "Шаблон"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -5139,13 +5145,12 @@ msgid "Schematic text && graphics"
 msgstr "Надписи и графика"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Надписи и графика"
+msgstr "Приватные надписи и графика"
 
 #: common/layer_id.cpp:126
 msgid "Schematic text && graphics backgrounds"
-msgstr "Надписи и графика"
+msgstr "Надписи и фон"
 
 #: common/layer_id.cpp:127
 msgid "Pins"
@@ -5299,7 +5304,6 @@ msgid "Through vias"
 msgstr "Сквозные перех.отв."
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "Blind/Buried vias"
 msgstr "Глухие/внутр. перех.отв."
 
@@ -5360,26 +5364,23 @@ msgstr "Оси сетки"
 
 #: common/layer_id.cpp:185
 msgid "Locked item shadow"
-msgstr "Заблокированные элементы"
+msgstr "Подсветка заблокированных элементов"
 
 #: common/layer_id.cpp:186
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Проблемные метки"
+msgstr "Подсветка пересекающихся элементов"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
 msgstr "Найден недопустимый символ в логическом имени библиотеки"
 
 #: common/lib_table_grid_tricks.cpp:49
-#, fuzzy
 msgid "Activate selected"
-msgstr "файл не выбран"
+msgstr "Использовать выбранное"
 
 #: common/lib_table_grid_tricks.cpp:51
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Удалить выбранные ячейки"
+msgstr "Отключить выбранное"
 
 #: common/lib_tree_model.cpp:148
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5471,10 +5472,18 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad может анонимно сообщать о сбоях и передавать некоторые данные о "
+"событии разработчиками чтобы помочь им более эффективно определить условия "
+"возникновения критической ошибки в пользовательской среде, отследить "
+"последовательность действий приведших к сбою и понять как это исправить.\n"
+"Если Вы решите принять участие и помочь разработчикам, KiCad будет "
+"автоматически формировать и отправлять отчёт об ошибке при её возникновении."
+"\n"
+"Файлы проекта, такие как схема или печатная плата, не передаются при этом."
 
 #: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Запрос на сбор данных"
 
 #: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5757,9 +5766,8 @@ msgid "Save current document to another location"
 msgstr "Сохранить текущий документ в другом месте"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Сохранить копию как..."
+msgstr "Сохранить копию..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -5851,9 +5859,8 @@ msgid "Paste Special..."
 msgstr "Вставить как..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Вставить элементы из буфера с параметрами"
+msgstr "Вставить элементы из буфера с параметрами обозначений"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -6094,9 +6101,8 @@ msgid "Show Grid"
 msgstr "Показать сетку"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Показать точки или линии сетки в окне редактора"
+msgstr "Показать сетку в окне редактора"
 
 #: common/tool/actions.cpp:485
 msgid "Grid Properties..."
@@ -7210,9 +7216,8 @@ msgstr "Просмотрщик посад.мест"
 
 #: cvpcb/display_footprints_frame.cpp:325
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Назначить посад.места автоматически"
+msgstr "Авто-масштаб при смене посад.места"
 
 #: cvpcb/display_footprints_frame.cpp:413
 #, c-format
@@ -7625,7 +7630,7 @@ msgstr "Обозначить компоненты схемы"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Подходящие цепи:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -8647,15 +8652,15 @@ msgstr "Щёлкните по элементу чтобы подсветить �
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Нарушения (%d)"
+msgstr "Нарушения (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Не подключённые элементы (%d)"
+msgstr "Игнорируемые тесты (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8919,9 +8924,8 @@ msgid "Set To"
 msgstr "Новые значения"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Цвет цепей:"
+msgstr "Цвет текста:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9053,14 +9057,12 @@ msgid "Diameter:"
 msgstr "Диаметр:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
 msgstr "Установите 0 для использования размера точки соединения по умолчанию."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
 msgstr "Установите цвет прозрачным для использования цвета по умолчанию."
 
@@ -9222,9 +9224,8 @@ msgstr "Поз. Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:316
 #: pcbnew/pcb_dimension.cpp:337 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:310
-#, fuzzy
 msgid "Font"
-msgstr "Шрифт:"
+msgstr "Шрифт"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9322,7 +9323,6 @@ msgid "Standard"
 msgstr "Обычно"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
 msgstr "Альтернативная функция"
 
@@ -9574,9 +9574,8 @@ msgid "Style:"
 msgstr "Стиль:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:89
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
-msgstr "Установите 0 для использования значения по умолчанию."
+msgstr "Установите 0 для использования толщины линии по умолчанию."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:103
 msgid "Fill Style"
@@ -9642,7 +9641,7 @@ msgstr "Удалить альтернативное начертание (по �
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:319
 #: eeschema/tools/symbol_editor_control.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "Символ '%s' уже существует в библиотеке '%s'."
 
@@ -9855,9 +9854,8 @@ msgid "Text Box Properties"
 msgstr "Свойства надписи"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr "Установите ширину в 0 для использования ширины линии по умолчанию."
+msgstr "Установите 0 для использования ширины линии по умолчанию."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
@@ -9922,22 +9920,20 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Для симуляции требуется полностью обозначенная схема."
 
 #: eeschema/dialogs/dialog_netlist.cpp:342
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Сохранить все изменения"
+msgstr "Сохранить все напряжения"
 
 #: eeschema/dialogs/dialog_netlist.cpp:343
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Записать директиву для сохранения всех напряжений (.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
-#, fuzzy
 msgid "Save all currents"
-msgstr "Сохранить все изменения"
+msgstr "Сохранить все токи"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Записать директиву для сохранения всех напряжений (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "External simulator command:"
@@ -10033,7 +10029,6 @@ msgid "Exit sync pins mode"
 msgstr "Выход из режима синхронного редактирования выводов"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
@@ -10710,9 +10705,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties.cpp:78
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Примечание: цвета элементов переназначены в текущей цветовой теме."
+msgstr "Примечание: цвета некоторых элементов переназначены в настройках."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10722,12 +10716,10 @@ msgid "Filled shape"
 msgstr "Заполненная фигура"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "Установите 0 для использования значения по умолчанию."
+msgstr "Установите 0 для использования ширины линии по умолчанию."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Установите цвет прозрачным для использования цвета по умолчанию."
 
@@ -10903,28 +10895,26 @@ msgid "Add signal by name:"
 msgstr "Добавить сигнал с именем:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading model library '%s'."
-msgstr "Не удалось создать файл библиотеки символов '%s'."
+msgstr "Не удалось прочитать библиотеку моделей '%s'."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:707
-#, fuzzy
 msgid "Browse Models"
-msgstr "Модель из кода"
+msgstr "Выбор моделей"
 
 #: eeschema/dialogs/dialog_sim_model.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Имя цепи '%s' уже используется."
+msgstr "Нет модели с именем '%s' в библиотеке."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:27
 msgid "Source"
 msgstr "Источник"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Индуктивность:"
+msgstr "Элемент"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10935,9 +10925,8 @@ msgid "Model:"
 msgstr "Модель:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "Перезаписать"
+msgstr "Заменить"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -10955,9 +10944,8 @@ msgid "Type:"
 msgstr "Тип:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Первый лист"
+msgstr "Страница"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -10973,24 +10961,20 @@ msgid "Code"
 msgstr "Код"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Части символа"
+msgstr "Вывод символа"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Модель"
+msgstr "Вывод модели"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Альтернативные функции выводов"
+msgstr "Назначение выводов"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "Не симулировать символ"
+msgstr "Исключить символ из симуляции"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -11348,42 +11332,36 @@ msgid "Field name '%s' already in use."
 msgstr "Поле с именем '%s' уже используется."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1097
-#, fuzzy
 msgid "User Fields"
-msgstr "Поля пользователя:"
+msgstr "Поля пользователя"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1106
-#, fuzzy
 msgid "Delete Field"
 msgstr "Удалить поле"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1107
-#, fuzzy
 msgid "Select field:"
-msgstr "Поля листа"
+msgstr "Выбор поля:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1342
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Изменено]"
+msgstr "Данные не сохранены"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Изменения не сохранены. Экспортировать не сохранённые данные?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Сохранить как изображение"
+msgstr "Сохранить как CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
 msgstr "Добавить поле..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
-#, fuzzy
 msgid "Remove Field..."
-msgstr "Переименовать файл..."
+msgstr "Удалить файл..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:65
 msgid "Group symbols"
@@ -11394,9 +11372,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Группировать символы на основе общих свойств"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Экспорт символа в SVG..."
+msgstr "Экспорт в CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -11429,7 +11406,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "По умолчанию для всех экземпляров листа"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -11437,6 +11414,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Если отмечено, обозначение, значение и поад.место\n"
+"будет использоваться в качестве значения по умолчанию\n"
+"для этого символа на всех экземплярах листа."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -11765,28 +11745,24 @@ msgid "Wire/bus width:"
 msgstr "Ширина проводника/шины:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr ""
-"Установите в 0 для использования ширины проводника/шины из класса цепей."
+msgstr "Установите 0 для использования ширины проводника/шины из класса цепей."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
 msgstr "Свойства проводников и шин"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Обозначение части символа:"
+msgstr "Обозначение символов"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "Автоматически размещать поля символов"
+msgstr "Автоматически обозначать символы"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Рекурсивно обозначать вложенные листы"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11875,14 +11851,12 @@ msgid "Cross-probing"
 msgstr "Сквозное выделение"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Highlight symbols when footprints selected"
-msgstr "Для символа псевдонима нужно выбрать родителя"
+msgstr "Подсвечивать символ при выборе посад.места"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Подсветить все элементы меди выбранных цепей"
+msgstr "Подсвечивать символ соответствующий выбранному посад.месту"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
 #: pcbnew/dialogs/panel_display_options_base.cpp:82
@@ -11891,7 +11865,7 @@ msgstr "Центровать подсвеченный элемент на экр
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr ""
+msgstr "Обеспечить отображение подсвеченных элементов на экране"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
@@ -11945,14 +11919,15 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:43
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
-#, fuzzy
 msgid "<ESC> clears net highlighting"
-msgstr "Очистить подсветку цепей"
+msgstr "<ESC> отменить подсветку цепей"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:44
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"Первый <ESC> в режиме выделения отменяет выбор, следующий отменяет подсветку "
+"цепей"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12140,9 +12115,8 @@ msgstr ""
 "текста"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label margin:"
-msgstr "Размер глобальной метки:"
+msgstr "Отступ глобальной метки:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -12729,9 +12703,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Более одного имени присвоено шине или проводнику"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Соответствия символ/посад.место"
+msgstr "Назначение конфликтующих классов цепей"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13164,9 +13137,8 @@ msgid "Converted"
 msgstr "Преобразован"
 
 #: eeschema/lib_item.cpp:70
-#, fuzzy
 msgid "Private"
-msgstr "Печать слоёв"
+msgstr "Приватный"
 
 #: eeschema/lib_pin.cpp:1102 pcbnew/dialogs/dialog_pad_properties_base.cpp:1473
 msgid "Pos X"
@@ -13212,7 +13184,6 @@ msgid "Graphic Text '%s'"
 msgstr "Надпись '%s'"
 
 #: eeschema/lib_textbox.cpp:311 eeschema/sch_textbox.cpp:323
-#, fuzzy
 msgid "Graphic Text Box"
 msgstr "Надпись"
 
@@ -27244,9 +27215,7 @@ msgstr "Установка зазора"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:584
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr ""
-"Установите значение равным 0 для использования значений посад.мест или "
-"класса цепей."
+msgstr "Установите 0 для использования значений посад.мест или класса цепей."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid ""
@@ -39091,23 +39060,21 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Показать точку привязки посад.мест и текста крестиком"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
-#, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "Пропустить заблокированные элементы"
+msgstr "Подсветка заблокированных элементов"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
-#, fuzzy
 msgid "Show a shadow marker on locked items"
-msgstr "Показывать теневой маркер на заблокированных элементах"
+msgstr "Выделять заблокированные элементы подсветкой"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Пропустить заблокированные элементы"
+msgstr "Подсветка пересекающихся элементов"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show a shadow on overlapping courtyards while moving footprints"
 msgstr ""
+"Подсвечивать пересекающиеся области установки при перемещении посад.мест"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show drawing sheet borders and title block"
