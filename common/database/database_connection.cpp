@@ -21,7 +21,21 @@
 #include <boost/locale.hpp>
 #include <fmt/core.h>
 #include <nanodbc/nanodbc.h>
+
+// Some outdated definitions are used in sql.h
+// We need to define them for "recent" dev tools
+#define INT64 int64_t
+#define UINT64 uint64_t
+
+#ifdef __MINGW32__
+#define BYTE uint8_t
+#define WORD uint16_t
+#define DWORD uint32_t
+#define HWND uint32_t   /* dummy define */
+#endif
+
 #include <sql.h> // SQL_IDENTIFIER_QUOTE_CHAR
+
 #include <wx/log.h>
 
 #include <database/database_connection.h>
@@ -203,7 +217,7 @@ bool DATABASE_CONNECTION::cacheColumns()
                 std::string columnKey = toUTF8( columns.column_name() );
                 m_columnCache[tableIter.first][columnKey] = columns.data_type();
             }
-                
+
         }
         catch( nanodbc::database_error& e )
         {

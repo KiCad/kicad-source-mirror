@@ -23,7 +23,8 @@
 
 #include <fmt/core.h>
 #include <fmt/ostream.h>
-#include <wx/wx.h>
+
+#include <wx/string.h>
 
 // {fmt} formatter for wxString
 FMT_BEGIN_NAMESPACE
