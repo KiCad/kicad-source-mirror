@@ -1948,6 +1948,9 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
+            if( !graphic )
+                break;
+
             if( !started )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1959,10 +1962,13 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
                 }
 
                 // Init the new item attributes
-                graphic->SetShape( static_cast<SHAPE_T>( shape ) );
-                graphic->SetFilled( false );
-                graphic->SetStroke( m_stroke );
-                graphic->SetLayer( m_layer );
+                if( graphic )   // always true, but Coverity can't seem to figure that out
+                {
+                    graphic->SetShape( static_cast<SHAPE_T>( shape ) );
+                    graphic->SetFilled( false );
+                    graphic->SetStroke( m_stroke );
+                    graphic->SetLayer( m_layer );
+                }
 
                 if( FP_TEXTBOX* fp_textbox = dynamic_cast<FP_TEXTBOX*>( graphic ) )
                     fp_textbox->SetAttributes( m_textAttrs );
@@ -2044,8 +2050,8 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
             }
             else
             {
-                clampedCursorPos =
-                        getClampedDifferenceEnd( twoPointManager.GetOrigin(), cursorPos );
+                clampedCursorPos = getClampedDifferenceEnd( twoPointManager.GetOrigin(),
+                                                            cursorPos );
             }
 
             // 45 degree lines
@@ -2072,14 +2078,17 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
-            m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
-            graphic->SetStroke( m_stroke );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+            if( graphic )
+            {
+                m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
+                graphic->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
-            if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
+            if( graphic && (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
             {
                 m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
                 graphic->SetStroke( m_stroke );
