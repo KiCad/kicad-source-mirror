@@ -34,6 +34,10 @@
 #define HWND uint32_t   /* dummy define */
 #endif
 
+#ifdef WIN32
+#include <windows.h> // for sql.h
+#endif
+
 #include <sql.h> // SQL_IDENTIFIER_QUOTE_CHAR
 
 #include <wx/log.h>
