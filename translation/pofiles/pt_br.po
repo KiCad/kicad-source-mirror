@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -13996,24 +13996,25 @@ msgid "Line's owner (%d) not found."
 msgstr "O proprietário da linha (%d) não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1477
-#, fuzzy
 msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Os arcos no esquema no momento não são suportados."
+msgstr ""
+"Os chicotes do sinal pertencentes as partes, não são suportados no momento."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1520
-#, fuzzy
 msgid "Harness connector, belonging to the part is not currently supported."
-msgstr "Os arcos no esquema no momento não são suportados."
+msgstr ""
+"Os chicotes do conector pertencentes as partes, não são suportados no "
+"momento."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Harness entry's parent (%d) not found."
-msgstr "O proprietário da entrada da folha (%d) não foi encontrado."
+msgstr "O chicote da entrada principal (%d) não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1584
-#, fuzzy, c-format
+#, c-format
 msgid "Harness type's parent (%d) not found."
-msgstr "O proprietário da linha (%d) não foi encontrado."
+msgstr "O tipo do chicote principal (%d) não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1598
 #, c-format
@@ -14022,6 +14023,9 @@ msgid ""
 "review imported schematic, as KiCad does not natively support these Altium "
 "elements."
 msgstr ""
+"O chicote do conector da Altium (%s) foi importado como uma folha "
+"hierárquica. Revise o esquema que foi importado, pois o KiCad não suporta "
+"nativamente estes elementos do Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1631
 #, c-format
@@ -14049,6 +14053,9 @@ msgid ""
 "Altium's Harness port (%s) was imported as Text box. Please review imported "
 "schematic, as KiCad does not natively support these Altium elements."
 msgstr ""
+"A porta do chicote da Altium (%s) foi importada como uma caixa de texto. "
+"Revise o esquema que foi importado, pois o KiCad não suporta nativamente "
+"estes elementos do Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
 #, c-format
@@ -14146,6 +14153,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"As fontes CADSTAR são diferentes das do KiCad. Isso provavelmente resultará "
+"em problemas de alinhamento. Revise os elementos de texto que foram "
+"importados cuidadosamente e corrija manualmente, caso seja necessário."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:264
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14332,9 +14342,9 @@ msgstr "O nome do símbolo é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:197
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "O símbolo %s não foi encontrado na biblioteca '%s'."
+msgstr "O símbolo %s contém o caractere '%c' inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:204
 msgid "Invalid library identifier"
@@ -15124,12 +15134,12 @@ msgid "Discard New Sheet"
 msgstr "Descarte a folha nova"
 
 #: eeschema/sim/sim_model.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing spice code <%s>\n"
 "%s"
 msgstr ""
-"Erro ao carregar o esquema \"%s\".\n"
+"Houve um erro ao analisar o código do spice <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:888
@@ -15138,21 +15148,21 @@ msgid "Failed to set parameter '%s' to '%s'"
 msgstr "Houve uma falha ao definir o parâmetro '%s' para '%s'"
 
 #: eeschema/sim/sim_model.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing param <%s>\n"
 "%s"
 msgstr ""
-"Houve um erro ao salvar o arquivo de placa '%s'.\n"
+"Houve um erro ao analisar o parâmetro <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing pin field <%s>\n"
 "%s"
 msgstr ""
-"Houve um erro ao salvar o arquivo de placa '%s'.\n"
+"Houve um erro ao analisar o campo do pino <%s>\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:1357
@@ -19041,11 +19051,11 @@ msgstr "Restaurando '%s'"
 #: kicad/kicad_manager_frame.cpp:831
 msgid "Would you like to automatically check for updates on startup?"
 msgstr ""
+"Deseja verificar automaticamente durante a inicialização se há atualizações?"
 
 #: kicad/kicad_manager_frame.cpp:832
-#, fuzzy
 msgid "Check for updates"
-msgstr "Verificar footprint"
+msgstr "Verifique se há atualizações"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -19354,9 +19364,8 @@ msgid "Pending"
 msgstr "Pendente"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Atualize"
+msgstr "Atualizar tudo"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -19380,7 +19389,7 @@ msgstr "Download"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Verifique durante a inicialização se há atualizações dos pacotes"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19473,11 +19482,11 @@ msgstr "Arquivo local"
 
 #: kicad/pcm/pcm.cpp:1110
 msgid "Package updates are available"
-msgstr ""
+msgstr "Há atualizações disponíveis dos pacotes"
 
 #: kicad/pcm/pcm.cpp:1111
 msgid "No package updates available"
-msgstr ""
+msgstr "Não há nenhuma atualização disponível dos pacotes"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
@@ -25606,13 +25615,12 @@ msgstr ""
 "isolamento e nas configurações das propriedades da ilha."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
-#, fuzzy
 msgid "Net Ties"
-msgstr "Fio de Rede"
+msgstr "Amarras da net"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Grupos de ilhas autorizadas a encurtar as nets diferentes:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
@@ -31307,9 +31315,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Comprimento do diferencial desacoplado é muito longo"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "A ID do footprint '%s' não é válido."
+msgstr "O footprint não é válido"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -32199,11 +32206,13 @@ msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
+"(o grupo das ilhas das amarras da net contém uma quantidade de ilhas "
+"desconhecidas %s)"
 
 #: pcbnew/footprint.cpp:2537
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(a ilha %s aparece em mais de um grupo da ilha net-tie)"
 
 #: pcbnew/footprint.cpp:2822 pcbnew/pad.cpp:1740 pcbnew/zone.cpp:1300
 msgid "Clearance Override"
@@ -33387,14 +33396,12 @@ msgid "Auto-Place Footprints"
 msgstr "Disponha os footprints automaticamente"
 
 #: pcbnew/menubar_pcb_editor.cpp:413
-#, fuzzy
 msgid "Add Teardrops..."
-msgstr "Adiciona reforço nas junções"
+msgstr "Adiciona reforço nas junções..."
 
 #: pcbnew/menubar_pcb_editor.cpp:414
-#, fuzzy
 msgid "Remove Teardrops..."
-msgstr "Remove o reforço das junções"
+msgstr "Remove o reforço das junções..."
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -34658,6 +34665,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"As fontes CADSTAR são diferentes das do KiCad. Isso provavelmente resultará "
+"em problemas de alinhamento que podem causar erros de DRC. Revise os "
+"elementos de texto importados com cuidado e os corrija manualmente, caso "
+"seja necessário."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -34719,6 +34730,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Ilha inválida com tamanho zero foi ignorada em\n"
+"arquivo: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:996
 #, c-format
@@ -35219,9 +35232,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Um item duplicado para a ID %d e a sequência %d na linha %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2262
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "Não foi possível criar o ficheiro de arquivo zip \"%s\"\n"
+msgstr "Não foi possível localizar o padstack %s no arquivo %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2333
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2362
@@ -36104,9 +36117,9 @@ msgid "Routing Track: %s"
 msgstr "Roteamento da trilha : %s"
 
 #: pcbnew/router/router_tool.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Resolvendo o isolamento: %s."
+msgstr "Resolvendo o netclass: %s"
 
 #: pcbnew/router/router_tool.cpp:2226
 msgid "Routing Track"
@@ -36162,14 +36175,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Não foi possível exportar, favor corrigir e tentar novamente"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "O símbolo com valor '%s' tem uma referência vazia do id."
+msgstr "O footprint com o valor de '%s' tem um designador de referência vazio."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Atualiza os footprints que correspondam ao designador de referência:"
+msgstr "Vários footprints têm o designador de referência '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -36204,9 +36217,9 @@ msgid "Unsupported via shape: %s"
 msgstr "Formato da via sem suporte: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'"
-msgstr "O arquivo da sessão atual usa identificador de camada inválido: '%s'."
+msgstr "O arquivo de sessão usa uma ID inválida de camada '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:342
 msgid "Session file is missing the \"session\" section"
@@ -36241,30 +36254,26 @@ msgid "%d Teardrops removed."
 msgstr "%d reforço(s) na junção foi(ram) removido(s)."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "Formas redondas"
+msgstr "Formas redondas:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "Melhor comprimento"
+msgstr "Melhor comprimento:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "Melhor altura"
+msgstr "Melhor altura:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:280
-#, fuzzy
 msgid "Max length:"
-msgstr "Comprimento máximo"
+msgstr "Comprimento máximo:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:105
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:209
@@ -36290,14 +36299,12 @@ msgid "Curved"
 msgstr "Curvado"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "Formas retangulares"
+msgstr "Formas retangulares:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
-#, fuzzy
 msgid "Tracks:"
-msgstr "Trilhas"
+msgstr "Trilhas:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
@@ -36316,9 +36323,8 @@ msgid "Add teardrops to round shapes only "
 msgstr "Adiciona um reforço da junção apenas às formas redondas "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
-#, fuzzy
 msgid "SMD pads"
-msgstr "Ilhas SMD atrás"
+msgstr "Ilhas SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
@@ -36335,11 +36341,8 @@ msgstr ""
 "diferentes"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr ""
-"Permite que um reforço da junção se espalhe por 2 trilhas caso o primeiro "
-"segmento da trilha seja muito curto"
+msgstr "Permite que um reforço da junção se espalhe por 2 segmentos de trilhas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
@@ -36350,9 +36353,8 @@ msgstr ""
 "segmento da trilha seja muito curto"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
-#, fuzzy
 msgid "Place teardrops on pads in zones"
-msgstr "Reforce a junção nas ilhas das regiões"
+msgstr "Coloque um reforço na junção das ilhas nas regiões"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
@@ -36364,9 +36366,8 @@ msgstr ""
 "Marque esta opção para permitir que haja o reforço da junção nestas ilhas."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "Pontos de curva"
+msgstr "Pontos de curva:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -38737,20 +38738,22 @@ msgstr "Retorna a trilha atual para um segmento anterior."
 
 #: pcbnew/tools/pcb_actions.cpp:1424
 msgid "Route From Other End"
-msgstr ""
+msgstr "Faz a rota a partir da outra extremidade"
 
 #: pcbnew/tools/pcb_actions.cpp:1425
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Confirma os segmentos atuais e inicia o próximo segmento a partir da "
+"extremidade mais próxima do ratsnest."
 
 #: pcbnew/tools/pcb_actions.cpp:1430
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Tentativa de conclusão"
 
 #: pcbnew/tools/pcb_actions.cpp:1431
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr ""
+msgstr "Tenta completar a rota atual até o fim do ratsnest mais próximo."
 
 #: pcbnew/tools/pcb_actions.cpp:1436
 msgid ""
