@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
 "PO-Revision-Date: 2022-08-29 00:04+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -16386,14 +16386,12 @@ msgid "Add a net label"
 msgstr "Добавить метку цепи"
 
 #: eeschema/tools/ee_actions.cpp:312
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "Класс цепей"
+msgstr "Добавить директиву класса цепи"
 
 #: eeschema/tools/ee_actions.cpp:312
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "Добавить метку цепи"
+msgstr "Добавить метку директивы класса цепи"
 
 #: eeschema/tools/ee_actions.cpp:318
 msgid "Add Hierarchical Label"
@@ -16432,9 +16430,8 @@ msgid "Add text"
 msgstr "Добавить текст"
 
 #: eeschema/tools/ee_actions.cpp:351
-#, fuzzy
 msgid "Add a text box"
-msgstr "Добавить текстовую надпись"
+msgstr "Добавить текстовый блок"
 
 #: eeschema/tools/ee_actions.cpp:356 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
