@@ -116,7 +116,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
 
     for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
     {
-        if( tableIter.table == tableName )
+        if( tableIter.name == tableName )
         {
             table = &tableIter;
             break;
@@ -131,7 +131,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
 
     DATABASE_CONNECTION::ROW result;
 
-    if( !m_conn->SelectOne( tableName, std::make_pair( table->key_col, symbolName ), result ) )
+    if( !m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ), result ) )
     {
         wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) failed" ), table->key_col,
                     symbolName );
