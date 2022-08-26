@@ -216,8 +216,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 
@@ -226,7 +228,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     {
         addSymbol( symbol );
         annotate();
-        getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ));
+        getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ) );
     }
     else if( aEvent.HasPosition() )
     {
@@ -324,7 +326,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     cursorPos = getViewControls()->GetMousePosition();
                 }
 
-                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos );
+                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,
+                                         &m_frame->Schematic() );
                 addSymbol( symbol );
                 annotate();
 
@@ -482,8 +485,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 
@@ -756,8 +761,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 
@@ -1173,8 +1180,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 
@@ -1501,8 +1510,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 
@@ -1708,8 +1719,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             };
 
     Activate();
+
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+
     // Set initial cursor
     setCursor();
 

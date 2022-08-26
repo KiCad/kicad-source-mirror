@@ -105,8 +105,8 @@ SCH_SYMBOL::SCH_SYMBOL() :
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
                         const SCH_SHEET_PATH* aSheet, int aUnit, int aConvert,
-                        const VECTOR2I& aPosition ) :
-    SCH_ITEM( nullptr, SCH_SYMBOL_T )
+                        const VECTOR2I& aPosition, EDA_ITEM* aParent ) :
+    SCH_ITEM( aParent, SCH_SYMBOL_T )
 {
     Init( aPosition );
 
@@ -151,8 +151,9 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
-                        const PICKED_SYMBOL& aSel, const VECTOR2I& aPosition ) :
-    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition )
+                        const PICKED_SYMBOL& aSel, const VECTOR2I& aPosition,
+                        EDA_ITEM* aParent ) :
+    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition, aParent )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
