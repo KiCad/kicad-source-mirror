@@ -1610,7 +1610,7 @@ int SHAPE_POLY_SET::RemoveNullSegments()
 
     ITERATOR iterator = IterateWithHoles();
 
-    VECTOR2I    contourStart = *NormalizeAreaOutlinesiterator;
+    VECTOR2I    contourStart = *iterator;
     VECTOR2I    segmentStart, segmentEnd;
 
     VERTEX_INDEX indexStart;
