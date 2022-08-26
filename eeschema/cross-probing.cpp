@@ -840,6 +840,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         std::string prefix = "$SELECT: ";
 
         std::string paramStr = payload.substr( prefix.size() );
+
+        if( paramStr.size() < 2 )   // Empty/broken command: we need at least 2 chars for sync string.
+            break;
+
         std::string syncStr = paramStr.substr( 2 );
 
         bool focusOnFirst = ( paramStr[0] == '1' );

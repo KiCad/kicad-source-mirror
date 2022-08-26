@@ -911,7 +911,9 @@ void CVPCB_MAINFRAME::SendComponentSelectionToSch( bool aClearSelectionOnly )
     // Now select the corresponding symbol on the schematic:
     wxString ref = m_netlist.GetComponent( selection )->GetReference();
 
-    command += wxT( "F" ) + EscapeString( ref, CTX_IPC );
+    // The prefix 0,F before the reference is for selecting the symbol
+    // (one can select a pin with a different prefix)
+    command += wxT( "0,F" ) + EscapeString( ref, CTX_IPC );
 
     if( Kiface().IsSingle() )
         SendCommand( MSG_TO_SCH, command );
