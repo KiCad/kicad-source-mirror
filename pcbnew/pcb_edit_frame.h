@@ -21,8 +21,6 @@
 #ifndef  __PCB_EDIT_FRAME_H__
 #define  __PCB_EDIT_FRAME_H__
 
-#include <unordered_map>
-#include <map>
 #include "pcb_base_edit_frame.h"
 #include "zones.h"
 #include <mail_type.h>

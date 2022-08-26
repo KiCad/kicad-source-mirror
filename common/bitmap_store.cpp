@@ -28,7 +28,7 @@
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <bitmaps/bitmap_info.h>
-#include <hash_eda.h>
+#include <hash.h>
 #include <kiplatform/ui.h>
 #include <paths.h>
 #include <pgm_base.h>

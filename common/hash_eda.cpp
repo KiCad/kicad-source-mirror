@@ -24,7 +24,7 @@
  */
 
 #include <hash_eda.h>
-
+#include <hash.h>
 #include <footprint.h>
 #include <fp_text.h>
 #include <fp_textbox.h>
@@ -77,14 +77,11 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
 
-        ret = hash<int>{}( static_cast<int>( pad->GetShape() ) << 16 );
-        hash_combine( ret, pad->GetDrillShape() << 18 );
-        hash_combine( ret, pad->GetSize().x << 8 );
-        hash_combine( ret, pad->GetSize().y << 9 );
-        hash_combine( ret, pad->GetOffset().x << 6 );
-        hash_combine( ret, pad->GetOffset().y << 7 );
-        hash_combine( ret, pad->GetDelta().x << 4 );
-        hash_combine( ret, pad->GetDelta().y << 5 );
+        ret = hash<int>{}( static_cast<int>( pad->GetShape() ) );
+        hash_combine( ret, pad->GetDrillShape() );
+        hash_combine( ret, pad->GetSize().x, pad->GetSize().y );
+        hash_combine( ret, pad->GetOffset().x, pad->GetOffset().y );
+        hash_combine( ret, pad->GetDelta().x, pad->GetDelta().y );
 
         hash_combine( ret, hash_board_item( pad, aFlags ) );
 

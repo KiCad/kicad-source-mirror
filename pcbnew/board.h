@@ -28,6 +28,7 @@
 #include <board_item_container.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
+#include <hash.h>
 #include <layer_ids.h>
 #include <netinfo.h>
 #include <pcb_item_containers.h>
@@ -105,10 +106,9 @@ namespace std
     {
         std::size_t operator()( const PTR_PTR_CACHE_KEY& k ) const
         {
-            constexpr std::size_t prime = 2166136261u;
-
-            return reinterpret_cast<uintptr_t>( k.A ) * prime
-                    ^ reinterpret_cast<uintptr_t>( k.B ) * prime;
+            std::size_t seed = 0xa82de1c0;
+            hash_combine( seed, k.A, k.B );
+            return seed;
         }
     };
 
@@ -117,10 +117,9 @@ namespace std
     {
         std::size_t operator()( const PTR_LAYER_CACHE_KEY& k ) const
         {
-            constexpr std::size_t prime = 2166136261u;
-
-            return reinterpret_cast<uintptr_t>( k.A ) * prime
-                    ^ hash<int>()( k.Layer ) * prime;
+            std::size_t seed = 0xa82de1c0;
+            hash_combine( seed, k.A, k.Layer );
+            return seed;
         }
     };
 
@@ -129,11 +128,9 @@ namespace std
     {
         std::size_t operator()( const PTR_PTR_LAYER_CACHE_KEY& k ) const
         {
-            constexpr std::size_t prime = 2166136261u;
-
-            return reinterpret_cast<uintptr_t>( k.A ) * prime
-                    ^ reinterpret_cast<uintptr_t>( k.B ) * prime
-                    ^ hash<int>()( k.Layer ) * prime;
+            std::size_t seed = 0xa82de1c0;
+            hash_combine( seed, k.A, k.B, k.Layer );
+            return seed;
         }
     };
 }

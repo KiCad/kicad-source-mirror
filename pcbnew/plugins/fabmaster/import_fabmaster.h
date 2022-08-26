@@ -28,7 +28,6 @@
 
 #include <eda_text.h>
 #include <geometry/shape_arc.h>
-#include <hash_eda.h>
 #include <pad_shapes.h>
 
 #include <deque>

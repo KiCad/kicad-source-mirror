@@ -53,6 +53,7 @@
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
 #include <md5_hash.h>
+#include <hash.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 
@@ -1122,8 +1123,9 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
             std::size_t operator()(  const EDGE& aEdge ) const
             {
                 const SEG& a = aEdge.m_poly->CSegment( aEdge.m_index );
-
-                return (std::size_t) ( a.A.x + a.B.x + a.A.y + a.B.y );
+                std::size_t seed = 0xa82de1c0;
+                hash_combine( seed, a.A.x, a.B.x, a.A.y, a.B.y );
+                return seed;
             }
         };
     };
