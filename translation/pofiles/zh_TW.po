@@ -3,13 +3,14 @@
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # pondahai <dahai.pon@gmail.com>, 2022.
+# willliam <traderwilliam@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"Last-Translator: willliam <traderwilliam@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -3158,10 +3159,19 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad可以匿名向開發者報告崩潰和特殊事件數據，以幫助更有效地識別整個用戶羣的關"
+"鍵錯誤，並幫助剖析功能以指導改進。\n"
+"\n"
+"爲了連接來自同一KiCad安裝的自動報告，將生成一個完全隨機的唯一標識符，它僅用於"
+"崩潰報告的目的。包括IP地址在內的任何個人身份信息都不會被存儲或連接到該標識符"
+"。你可以在任何時候通過所提供的按鈕重新設置這個唯一標識符(ID)。\n"
+"\n"
+"如果您選擇自願參與，KiCad將在碰撞或事件發生時自動處理髮送上述報告。您的設計文"
+"件，如原理圖或PCB，在此過程中不會被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "我同意提供匿名報告"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
 #, fuzzy
@@ -3510,7 +3520,7 @@ msgstr "預設的網路類是必需的。"
 #: common/dialogs/panel_setup_netclasses.cpp:703
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>匹配 '%s'的網絡:</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -5355,10 +5365,14 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad可以匿名向開發者報告崩潰和特殊事件數據，以幫助更有效地識別整個用戶羣的關"
+"鍵錯誤，並幫助剖析功能以指導改進。\n"
+"如果您選擇自願參與，KiCad將在崩潰或事件發生時自動處理髮送上述報告。\n"
+"在此過程中，您的設計文件（如原理圖或PCB）不會被共享。"
 
 #: common/pgm_base.cpp:349
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "自願加入數據收集請求"
 
 #: common/pgm_base.cpp:398
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -7481,7 +7495,7 @@ msgstr "批註原理圖"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>當前匹配的網路:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -9750,7 +9764,7 @@ msgstr "儲存所有變更"
 
 #: eeschema/dialogs/dialog_netlist.cpp:343
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "編寫一個指令保存所有電壓(.save all)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #, fuzzy
@@ -9759,7 +9773,7 @@ msgstr "儲存所有符號庫"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "編寫一個指令已保存所有電流 (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "External simulator command:"
@@ -9892,11 +9906,11 @@ msgstr "同步引腳編輯模式"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "同步引腳模式。   新的引腳將被添加到所有單元中。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "同步引腳模式。 其他單元中的匹配引腳將被更新。"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -10755,7 +10769,7 @@ msgstr "模型"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Device:"
-msgstr ""
+msgstr "設備:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -11178,7 +11192,7 @@ msgstr "[未儲存]"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1343
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "更改未被保存。要輸出未保存的數據嗎？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
 #, fuzzy
@@ -11238,7 +11252,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "所有工作表實例的默認值"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
