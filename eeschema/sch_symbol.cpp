@@ -95,21 +95,22 @@ static LIB_SYMBOL* dummy()
 }
 
 
-SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPos, SCH_ITEM* aParent ) :
+SCH_SYMBOL::SCH_SYMBOL( const wxPoint& aPosition, EDA_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_SYMBOL_T )
 {
-    Init( aPos );
+    Init( aPosition );
 }
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
-                        const SCH_SHEET_PATH* aSheet, int unit, int convert, const wxPoint& pos ) :
-    SCH_ITEM( nullptr, SCH_SYMBOL_T )
+                        const SCH_SHEET_PATH* aSheet, int aUnit, int aConvert,
+                        const wxPoint& aPosition, EDA_ITEM* aParent ) :
+    SCH_ITEM( aParent, SCH_SYMBOL_T )
 {
-    Init( pos );
+    Init( aPosition );
 
-    m_unit      = unit;
-    m_convert   = convert;
+    m_unit      = aUnit;
+    m_convert   = aConvert;
     m_lib_id    = aLibId;
 
     std::unique_ptr< LIB_SYMBOL > part;
@@ -146,8 +147,8 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
-                        const PICKED_SYMBOL& aSel, const wxPoint& pos ) :
-    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+                        const PICKED_SYMBOL& aSel, const wxPoint& aPosition, EDA_ITEM* aParent ) :
+    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition, aParent )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )

@@ -269,7 +269,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     continue;
 
                 wxPoint pos( cursorPos );
-                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, pos );
+                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, pos,
+                                         &m_frame->Schematic() );
                 addSymbol( symbol );
 
                 // Update cursor now that we have a symbol

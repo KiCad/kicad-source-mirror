@@ -78,7 +78,7 @@ extern std::string toUTFTildaText( const wxString& txt );
 class SCH_SYMBOL : public SCH_ITEM
 {
 public:
-    SCH_SYMBOL( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = nullptr );
+    SCH_SYMBOL( const wxPoint& aPosition = wxPoint( 0, 0 ), EDA_ITEM* aParent = nullptr );
 
     /**
      * Create schematic symbol from library symbol object.
@@ -86,16 +86,16 @@ public:
      * @param aSymbol is the library symbol to create schematic symbol from.
      * @param aLibId is the #LIB_ID of alias to create.
      * @param aSheet is the schematic sheet the symbol is place into.
-     * @param unit is unit for symbols that have multiple parts per package.
-     * @param convert is the alternate body style for the schematic symbols.
-     * @param pos is the position of the symbol.
-     * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVING flags.
+     * @param aUnit is unit for symbols that have multiple parts per package.
+     * @param aConvert is the alternate body style for the schematic symbols.
+     * @param aPositions is the position of the symbol.
      */
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
-                int unit, int convert = 0, const wxPoint& pos = wxPoint( 0, 0 ) );
+                int aUnit, int aConvert = 0, const wxPoint& aPosition = wxPoint( 0, 0 ),
+                EDA_ITEM* aParent = nullptr );
 
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
-                const wxPoint& pos = wxPoint( 0, 0 ) );
+                const wxPoint& aPosition = wxPoint( 0, 0 ), EDA_ITEM* aParent = nullptr );
 
     /**
      * Clone \a aSymbol into a new schematic symbol object.
