@@ -28,6 +28,7 @@
 #include <widgets/wx_grid.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <wx/filedlg.h>
 
@@ -49,9 +50,17 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
+    m_sortedLibPins = m_symbol.GetLibPins();
+    std::sort( m_sortedLibPins.begin(), m_sortedLibPins.end(),
+               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               {
+                   // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+               } );
+
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetLibPins().size() ) );
+        m_models.push_back( SIM_MODEL::Create( type, m_sortedLibPins.size() ) );
 
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
@@ -128,8 +137,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
         try
         {
-            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
-                = SIM_MODEL::Create( m_symbol.GetLibPins().size(), m_fields );
+            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) ) =
+                    SIM_MODEL::Create( m_sortedLibPins.size(), m_fields );
         }
         catch( const IO_ERROR& e )
         {
@@ -329,7 +338,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
     // First reset the grid.
 
     m_pinAssignmentsGrid->ClearRows();
-    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_symbol.GetLibPins().size() ) );
+    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedLibPins.size() ) );
 
     for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
     {
@@ -419,12 +428,11 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
                 //TODO: it's not cur model.
 
                 m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_symbol.GetLibPins().size(), m_fields ) );
+                        SIM_MODEL::Create( baseModel, m_sortedLibPins.size(), m_fields ) );
             }
             else
             {
-                m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_symbol.GetLibPins().size() ) );
+                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_sortedLibPins.size() ) );
             }
         }
     }
@@ -601,9 +609,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 template <typename T>
 int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
 {
-    for( int row = 0; row < static_cast<int>( m_symbol.GetLibPins().size() ); ++row )
+    for( int row = 0; row < static_cast<int>( m_sortedLibPins.size() ); ++row )
     {
-        LIB_PIN* pin = m_symbol.GetLibPins()[row];
+        LIB_PIN* pin = m_sortedLibPins[row];
 
         if( pin->GetNumber() == aSymbolPinNumber )
             return row;
@@ -636,7 +644,7 @@ std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
-    LIB_PIN* pin = m_symbol.GetLibPins().at( symbolPinIndex );
+    LIB_PIN* pin = m_sortedLibPins.at( symbolPinIndex );
     wxString number;
     wxString name;
 
@@ -837,7 +845,7 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
     {
         curModel().SetPinSymbolPinNumber( modelPinIndex,
-                m_symbol.GetLibPins().at( symbolPinIndex )->GetShownNumber() );
+                                          m_sortedLibPins.at( symbolPinIndex )->GetShownNumber() );
     }
 
     updatePinAssignmentsTab();

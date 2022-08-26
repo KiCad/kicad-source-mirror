@@ -1227,6 +1227,10 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
     // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
+
+    // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by code that
+    // accesses them.
+
     for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
     {
         if( modelPinIndex < aSymbolPinCount )

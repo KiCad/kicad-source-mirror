@@ -123,9 +123,10 @@ private:
     SCH_SYMBOL& m_symbol;
     std::vector<T>& m_fields;
 
-    std::vector<std::shared_ptr<SIM_MODEL>> m_models;
+    std::vector<std::shared_ptr<SIM_MODEL>>            m_models;
+    std::vector<LIB_PIN*>                              m_sortedLibPins;
     std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
-    SIM_MODEL::TYPE m_curModelType = SIM_MODEL::TYPE::NONE;
+    SIM_MODEL::TYPE                                    m_curModelType = SIM_MODEL::TYPE::NONE;
 
     std::shared_ptr<SIM_LIBRARY> m_library;
     std::vector<std::shared_ptr<SIM_MODEL>> m_libraryModels;
