@@ -284,6 +284,19 @@ void PANEL_SETUP_BUSES::doReloadMembersGrid()
     if( m_lastAlias >= 0 && m_lastAlias < m_aliasesGrid->GetNumberRows() )
     {
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
+        wxString                          source;
+        wxString                          membersLabel;
+
+        if( alias->GetParent() )
+        {
+            wxFileName sheet_name( alias->GetParent()->GetFileName() );
+            source.Printf( wxS( "(" ) + sheet_name.GetFullName() + wxS( ")" ) );
+        }
+
+        membersLabel.Printf( m_membersLabelTemplate, m_lastAliasName );
+
+        m_source->SetLabel( source );
+        m_membersLabel->SetLabel( membersLabel );
 
         m_membersGrid->ClearRows();
         m_membersGrid->AppendRows( alias->Members().size() );
@@ -379,30 +392,16 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
         }
         else if( row != m_lastAlias || aliasName != m_lastAliasName )
         {
-            if( m_membersBook->GetSelection() != 0 )
-            {
-                m_membersBook->SetSelection( 0 );
-                m_membersBook->GetPage( 0 )->Layout();
-            }
+            m_lastAlias = row;
+            m_lastAliasName = aliasName;
+
+            m_membersBook->SetSelection( 0 );
+            m_membersBook->GetPage( 0 )->Layout();
 
             const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ row ];
             alias->SetName( aliasName );
-            m_membersLabel->SetLabel( wxString::Format( m_membersLabelTemplate, aliasName ) );
 
-            if( alias->GetParent() )
-            {
-                wxFileName sheet_name( alias->GetParent()->GetFileName() );
-                m_source->SetLabel( wxS( "(" ) + sheet_name.GetFullName() + wxS( ")" ) );
-            }
-            else
-            {
-                m_source->SetLabel( wxEmptyString );
-            }
-
-            doReloadMembersGrid();
-
-            m_lastAlias = row;
-            m_lastAliasName = aliasName;
+            Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
         }
     }
 }
