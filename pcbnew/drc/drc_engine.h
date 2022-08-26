@@ -243,7 +243,7 @@ protected:
     bool                       m_testFootprints;
 
     // constraint -> rule -> provider
-    std::unordered_map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
+    std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
     DRC_VIOLATION_HANDLER      m_violationHandler;
     REPORTER*                  m_reporter;

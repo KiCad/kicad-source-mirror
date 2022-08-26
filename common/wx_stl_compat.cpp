@@ -29,16 +29,6 @@ size_t std::hash<wxString>::operator()( const wxString& s ) const
 #endif
 
 #ifdef USE_KICAD_WXPOINT_LESS_AND_HASH
-size_t std::hash<wxPoint>::operator() ( const wxPoint& k ) const
-{
-    auto xhash = std::hash<int>()( k.x );
-
-    // 0x9e3779b9 is 2^33 / ( 1 + sqrt(5) )
-    // Adding this value ensures that consecutive bits of y will not be close to each other
-    // decreasing the likelihood of hash collision in similar values of x and y
-    return xhash ^ ( std::hash<int>()( k.y )  + 0x9e3779b9 + ( xhash << 6 ) + ( xhash >> 2 ) );
-}
-
 bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) const
 {
     if( aA.x == aB.x )

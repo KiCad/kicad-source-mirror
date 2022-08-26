@@ -43,7 +43,7 @@ namespace std
 {
     template <> struct hash<wxPoint>
     {
-        size_t operator() ( const wxPoint& k ) const;
+        size_t operator() ( const wxPoint& k ) const = delete;
     };
 }
 

@@ -1140,12 +1140,12 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     auto connectivity = board()->GetConnectivity();
 
-    std::unordered_map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
-    std::unordered_map<VECTOR2I, PCB_VIA*>                viaMap;
-    std::unordered_map<VECTOR2I, PAD*>                    padMap;
-    std::set<PAD*>                                        startPadSet;
-    std::vector<BOARD_CONNECTED_ITEM*>                    cleanupItems;
-    std::vector<std::pair<VECTOR2I, LSET>>                activePts;
+    std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
+    std::map<VECTOR2I, PCB_VIA*>                viaMap;
+    std::map<VECTOR2I, PAD*>                    padMap;
+    std::set<PAD*>                              startPadSet;
+    std::vector<BOARD_CONNECTED_ITEM*>          cleanupItems;
+    std::vector<std::pair<VECTOR2I, LSET>>      activePts;
 
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {

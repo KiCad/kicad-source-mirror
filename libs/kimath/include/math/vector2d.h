@@ -611,13 +611,17 @@ typedef VECTOR2<unsigned int> VECTOR2U;
 namespace std
 {
     // Required to enable correct use in std::map/unordered_map
+    // DO NOT USE hash tables with VECTOR2 elements.  It is inefficient
+    // and degenerates to a linear search.  Use the std::map/std::set
+    // trees instead that utilize the less operator below
+    // This function is purposely deleted after substantial testing
     template <>
     struct hash<VECTOR2I>
     {
-        size_t operator()( const VECTOR2I& k ) const;
+        size_t operator()( const VECTOR2I& k ) const = delete;
     };
 
-    // Required to enable use of std::hash with maps
+    // Required to enable use of std::hash with maps.
     template <>
     struct less<VECTOR2I>
     {

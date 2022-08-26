@@ -411,7 +411,7 @@ int ERC_TESTER::TestNoConnectPins()
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
     {
-        std::unordered_map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
+        std::map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {

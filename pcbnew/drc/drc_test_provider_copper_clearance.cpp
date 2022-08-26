@@ -854,7 +854,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 }
 
                 // Iterate through all the segments of refSmoothedPoly
-                std::unordered_map<VECTOR2I, int> conflictPoints;
+                std::map<VECTOR2I, int> conflictPoints;
 
                 for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
                 {

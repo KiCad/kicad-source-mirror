@@ -112,7 +112,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
     const std::vector<VIEW_ITEM*> drawList = updateDrawList();
 
-    std::unordered_map<int, std::vector<VIEW_ITEM*>> layer_item_map;
+    std::map<int, std::vector<VIEW_ITEM*>> layer_item_map;
 
     // Build a list of layers used by the items in the group
     for( VIEW_ITEM* item : drawList )
@@ -123,13 +123,6 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         for( int i = 0; i < item_layers_count; i++ )
         {
             wxCHECK2_MSG( item_layers[i] <= LAYER_ID_COUNT, continue, wxT( "Invalid item layer" ) );
-
-            if( layer_item_map.count( item_layers[i] ) == 0 )
-            {
-                layer_item_map.emplace( std::make_pair( item_layers[i],
-                                                        std::vector<VIEW_ITEM*>() ) );
-            }
-
             layer_item_map[ item_layers[i] ].push_back( item );
         }
     }
