@@ -1294,7 +1294,9 @@ int SHAPE_POLY_SET::NormalizeAreaOutlines()
         BooleanSubtract( holesBuffer, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 
-    RemoveNullSegments();
+    // In degenerate cases, simplify might return no outlines
+    if( OutlineCount() > 0 )
+        RemoveNullSegments();
 
     return OutlineCount();
 }

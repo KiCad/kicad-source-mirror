@@ -503,21 +503,22 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
             polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
             // Ensure there are no self intersecting polygons
-            polyset_areas.NormalizeAreaOutlines();
-
-            // Convert polygon with holes to a unique polygon
-            polyset_areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-            // Output current resulting polygon(s)
-            for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
+            if( polyset_areas.NormalizeAreaOutlines() )
             {
-                SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
-                outputOnePolygon( poly, getBoardLayerName( aModLayer ));
-            }
+                // Convert polygon with holes to a unique polygon
+                polyset_areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            polyset_areas.RemoveAllContours();
-            polyset_holes.RemoveAllContours();
-            main_outline = true;
+                // Output current resulting polygon(s)
+                for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
+                {
+                    SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
+                    outputOnePolygon( poly, getBoardLayerName( aModLayer ));
+                }
+
+                polyset_areas.RemoveAllContours();
+                polyset_holes.RemoveAllContours();
+                main_outline = true;
+            }
         }
 
         paths = paths->next;
