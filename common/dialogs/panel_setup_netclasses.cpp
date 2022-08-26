@@ -686,10 +686,14 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
         m_netclassesDirty = false;
     }
 
+    wxString pattern;
     int      row = m_assignmentGrid->GetGridCursorRow();
-    wxString pattern = m_assignmentGrid->GetCellValue( row, 0 );
+    int      col = m_assignmentGrid->GetGridCursorCol();
 
-    if( m_assignmentGrid->GetGridCursorCol() == 0 && m_assignmentGrid->IsCellEditControlShown() )
+    if( row >=0 )
+        pattern = m_assignmentGrid->GetCellValue( row, 0 );
+
+    if( col == 0 && m_assignmentGrid->IsCellEditControlShown() )
     {
         wxGridCellEditor* cellEditor = m_assignmentGrid->GetCellEditor( row, 0 );
 
