@@ -177,27 +177,46 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             continue;
         }
 
-        BOX2I frontBBox = frontA.BBoxFromCaches();
-        BOX2I backBBox = backA.BBoxFromCaches();
+        BOX2I frontA_worstCaseBBox = frontA.BBoxFromCaches();
+        BOX2I backA_worstCaseBBox = backA.BBoxFromCaches();
 
-        frontBBox.Inflate( m_largestCourtyardClearance );
-        backBBox.Inflate( m_largestCourtyardClearance );
+        frontA_worstCaseBBox.Inflate( m_largestCourtyardClearance );
+        backA_worstCaseBBox.Inflate( m_largestCourtyardClearance );
 
-        EDA_RECT fpABBox = fpA->GetBoundingBox();
+        EDA_RECT fpA_bbox = fpA->GetBoundingBox();
 
         for( auto itB = itA + 1; itB != m_board->Footprints().end(); itB++ )
         {
             FOOTPRINT*            fpB = *itB;
-            EDA_RECT              fpBBBox = fpB->GetBoundingBox();
             const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
             const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
-            DRC_CONSTRAINT        constraint;
-            int                   clearance;
-            int                   actual;
-            VECTOR2I              pos;
+
+            if( frontB.OutlineCount() == 0 && backB.OutlineCount() == 0
+                 && m_drcEngine->IsErrorLimitExceeded( DRCE_PTH_IN_COURTYARD )
+                 && m_drcEngine->IsErrorLimitExceeded( DRCE_NPTH_IN_COURTYARD ) )
+            {
+                // No courtyards defined and no hole testing against other footprint's courtyards
+                continue;
+            }
+
+            BOX2I frontB_worstCaseBBox = frontB.BBoxFromCaches();
+            BOX2I backB_worstCaseBBox = backB.BBoxFromCaches();
+
+            frontB_worstCaseBBox.Inflate( m_largestCourtyardClearance );
+            backB_worstCaseBBox.Inflate( m_largestCourtyardClearance );
+
+            EDA_RECT       fpB_bbox = fpB->GetBoundingBox();
+            DRC_CONSTRAINT constraint;
+            int            clearance;
+            int            actual;
+            VECTOR2I       pos;
+
+            //
+            // Check courtyard-to-courtyard collisions on front of board.
+            //
 
             if( frontA.OutlineCount() > 0 && frontB.OutlineCount() > 0
-                    && frontBBox.Intersects( frontB.BBoxFromCaches() ) )
+                    && frontA_worstCaseBBox.Intersects( frontB.BBoxFromCaches() ) )
             {
                 constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
                 clearance = constraint.GetValue().Min();
@@ -226,8 +245,12 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                 }
             }
 
+            //
+            // Check courtyard-to-courtyard collisions on back of board.
+            //
+
             if( backA.OutlineCount() > 0 && backB.OutlineCount() > 0
-                    && backBBox.Intersects( backB.BBoxFromCaches() ) )
+                    && backA_worstCaseBBox.Intersects( backB.BBoxFromCaches() ) )
             {
                 constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
                 clearance = constraint.GetValue().Min();
@@ -255,6 +278,13 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                     }
                 }
             }
+
+            //
+            // Check pad-hole-to-courtyard collisions on front and back of board.
+            //
+            // NB: via holes are not checked.  There is a presumption that a physical object goes
+            // through a pad hole, which is not the case for via holes.
+            //
 
             auto testPadAgainstCourtyards =
                     [&]( const PAD* pad, const FOOTPRINT* fp )
@@ -292,15 +322,15 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         }
                     };
 
-            if( ( frontA.OutlineCount() > 0 && frontA.BBoxFromCaches().Intersects( fpBBBox ) )
-                || ( backA.OutlineCount() > 0 && backA.BBoxFromCaches().Intersects( fpBBBox ) ) )
+            if( ( frontA.OutlineCount() > 0 && frontA_worstCaseBBox.Intersects( fpB_bbox ) )
+                || ( backA.OutlineCount() > 0 && backA_worstCaseBBox.Intersects( fpB_bbox ) ) )
             {
                 for( const PAD* padB : fpB->Pads() )
                     testPadAgainstCourtyards( padB, fpA );
             }
 
-            if( ( frontB.OutlineCount() > 0 && frontB.BBoxFromCaches().Intersects( fpABBox ) )
-                || ( backB.OutlineCount() > 0 && backB.BBoxFromCaches().Intersects( fpABBox ) ) )
+            if( ( frontB.OutlineCount() > 0 && frontB.BBoxFromCaches().Intersects( fpA_bbox ) )
+                || ( backB.OutlineCount() > 0 && backB.BBoxFromCaches().Intersects( fpA_bbox ) ) )
             {
                 for( const PAD* padA : fpA->Pads() )
                     testPadAgainstCourtyards( padA, fpB );

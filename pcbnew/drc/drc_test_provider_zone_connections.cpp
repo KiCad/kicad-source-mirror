@@ -92,8 +92,10 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( m_drcEngine->IsCancelled() )
                 return;
 
+            //
             // Quick tests for "connected":
             //
+
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
                 continue;
 
@@ -105,8 +107,10 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( !pad->FlashLayer( aLayer ) )
                 continue;
 
+            //
             // If those passed, do a thorough test:
             //
+
             constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
             ZONE_CONNECTION conn = constraint.m_ZoneConnection;
 
@@ -139,8 +143,10 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( spokes >= minCount )    // We already have enough
                 continue;
 
+            //
             // See if there are any other manual spokes added:
             //
+
             for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
             {
                 if( padOutline.PointInside( track->GetStart() ) )
@@ -155,8 +161,10 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 }
             }
 
+            //
             // And finally report it if there aren't enough:
             //
+
             if( spokes < minCount )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );

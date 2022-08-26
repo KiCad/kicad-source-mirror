@@ -298,7 +298,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             return;
     }
 
-    if( !aItem->GetBoundingBox().Intersects( aZone->GetCachedBoundingBox() ) )
+    EDA_RECT itemBBox = aItem->GetBoundingBox();
+    EDA_RECT worstCaseBBox = itemBBox;
+
+    worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
+
+    if( !worstCaseBBox.Intersects( aZone->GetCachedBoundingBox() ) )
         return;
 
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
@@ -307,55 +312,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     if( !testClearance && !testHoles )
         return;
 
-    DRC_RTREE*       zoneTree = m_board->m_CopperZoneRTreeCache[ aZone ].get();
-    EDA_RECT         itemBBox = aItem->GetBoundingBox();
-    DRC_CONSTRAINT   constraint;
-    DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
-    int              clearance = -1;
-    int              actual;
-    VECTOR2I         pos;
-    bool             unflashedPad = false;
-    bool             platedHole = false;
+    DRC_RTREE*  zoneTree = m_board->m_CopperZoneRTreeCache[ aZone ].get();
+
+    if( !zoneTree )
+        return;
+
+    DRC_CONSTRAINT constraint;
+    int            clearance = -1;
+    int            actual;
+    VECTOR2I       pos;
 
     if( aItem->Type() == PCB_PAD_T )
     {
-        unflashedPad = !static_cast<PAD*>( aItem )->FlashLayer( aLayer );
+        PAD* pad = static_cast<PAD*>( aItem );
+        bool flashedPad = pad->FlashLayer( aLayer );
+        bool platedHole = pad->HasHole() && pad->GetAttribute() == PAD_ATTRIB::PTH;
 
-        if( unflashedPad && !aItem->HasHole() )
-            return;
-
-        platedHole = static_cast<PAD*>( aItem )->GetAttribute() == PAD_ATTRIB::PTH;
+        if( !flashedPad && !platedHole )
+            testClearance = false;
     }
 
-    if( zoneTree && testClearance )
+    if( testClearance )
     {
-        if( unflashedPad && !platedHole )
-            constraintType = HOLE_CLEARANCE_CONSTRAINT;
-
-        constraint = m_drcEngine->EvalRules( constraintType, aItem, aZone, aLayer );
+        constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, aZone, aLayer );
         clearance = constraint.GetValue().Min();
     }
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
-        std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
+        std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer, FLASHING::DEFAULT );
 
-        if( unflashedPad )
-        {
-            std::shared_ptr<SHAPE_SEGMENT> hole = aItem->GetEffectiveHoleShape();
-            int                            size = hole->GetWidth();
-
-            // Note: drill size represents finish size, which means the actual hole size is
-            // 2x the plating thickness larger.
-            if( platedHole )
-                size += 2 * m_board->GetDesignSettings().GetHolePlatingThickness();
-
-            itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
-        }
-
-        if( zoneTree && zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
-                                                  std::max( 0, clearance - m_drcEpsilon ),
-                                                  &actual, &pos ) )
+        if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
+                                      std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
             wxString msg;
@@ -373,7 +361,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
         }
     }
 
-    if( zoneTree && testHoles && aItem->HasHole() )
+    if( testHoles && aItem->HasHole() )
     {
         std::shared_ptr<SHAPE_SEGMENT> holeShape;
 
@@ -433,7 +421,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
         if( !reportProgress( ii++, m_board->Tracks().size(), progressDelta ) )
             break;
 
-        for( PCB_LAYER_ID layer : track->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & LSET::AllCuMask() ).Seq() )
         {
             std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
