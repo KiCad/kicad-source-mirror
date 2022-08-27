@@ -139,7 +139,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     }
 
     m_hyperlinkCtrl->Append( wxT( "---------------------" ) );
-    m_hyperlinkCtrl->Append( wxT( "http(s)://..." ) );
+    m_hyperlinkCtrl->Append( wxT( "file://..." ) );
+    m_hyperlinkCtrl->Append( wxT( "http://..." ) );
+    m_hyperlinkCtrl->Append( wxT( "https://..." ) );
 
     SetupStandardButtons();
     Layout();
@@ -312,12 +314,26 @@ void DIALOG_TEXT_PROPERTIES::onHyperlinkCombo( wxCommandEvent& aEvent )
     {
         // user clicked outside dropdown; leave current value
     }
-    else if( sel == m_hyperlinkCtrl->GetCount() - 2 )
+    else if( sel == m_hyperlinkCtrl->GetCount() - 4 )
     {
         // separator (and wxWidgets already updated our value to it);
         // replace value with that saved in the dropdown event
         m_hyperlinkCtrl->ChangeValue( m_lastLink );
         m_hyperlinkCtrl->SetSelection( 0, m_hyperlinkCtrl->GetValue().Length() );
+    }
+    else if( sel == m_hyperlinkCtrl->GetCount() - 3 )
+    {
+        static wxString helper = wxT( "file://" );
+
+        m_hyperlinkCtrl->ChangeValue( helper );
+        m_hyperlinkCtrl->SetInsertionPointEnd();
+    }
+    else if( sel == m_hyperlinkCtrl->GetCount() - 2 )
+    {
+        static wxString helper = wxT( "http://" );
+
+        m_hyperlinkCtrl->ChangeValue( helper );
+        m_hyperlinkCtrl->SetInsertionPointEnd();
     }
     else if( sel == m_hyperlinkCtrl->GetCount() - 1 )
     {
