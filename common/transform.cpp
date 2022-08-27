@@ -91,7 +91,7 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
     y = aAngle1->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle1 = EDA_ANGLE( v );
-    aAngle1->Normalize();
+    aAngle1->Normalize180();
 
     // Transform the relative difference between the two angles
     x = delta.Cos();
