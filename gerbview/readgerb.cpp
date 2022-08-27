@@ -208,7 +208,7 @@ bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
             }
         }
     }
-    catch( IO_ERROR& e )
+    catch( IO_ERROR& )
     {
         return false;
     }

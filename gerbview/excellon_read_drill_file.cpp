@@ -422,7 +422,7 @@ bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
                     foundY = true;
         }
     }
-    catch( IO_ERROR& e )
+    catch( IO_ERROR& )
     {
         return false;
     }
