@@ -36,7 +36,7 @@
 LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType,
                       KICAD_T aType ) :
     LIB_ITEM( aType, aParent ),
-    EDA_SHAPE( aShape, aLineWidth, aFillType, true )
+    EDA_SHAPE( aShape, aLineWidth, aFillType )
 {
     m_editState = 0;
 }

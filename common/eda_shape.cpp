@@ -37,14 +37,13 @@
 #include <plotters/plotter.h>
 
 
-EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill, bool upsideDownCoords ) :
+EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_endsSwapped( false ),
         m_shape( aType ),
         m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_fill( aFill ),
         m_fillColor( COLOR4D::UNSPECIFIED ),
-        m_editState( 0 ),
-        m_upsideDownCoords( upsideDownCoords )
+        m_editState( 0 )
 {
 }
 
@@ -747,9 +746,6 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         EDA_ANGLE endAngle;
         CalcArcAngles( startAngle, endAngle );
 
-        if( m_upsideDownCoords && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
-            std::swap( startAngle, endAngle );
-
         EDA_ANGLE relPosAngle( relPos );
 
         startAngle.Normalize();
@@ -1034,9 +1030,6 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
     EDA_ANGLE t1, t2;
 
     CalcArcAngles( t1, t2 );
-
-    if( m_upsideDownCoords && ( t1 - t2 ).Normalize180() > ANGLE_0 )
-        std::swap( t1, t2 );
 
     t1.Normalize();
     t2.Normalize();
@@ -1448,7 +1441,6 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_poly );
     SWAPITEM( m_fill );
     SWAPITEM( m_fillColor );
-    SWAPITEM( m_upsideDownCoords );
     SWAPITEM( m_editState );
     SWAPITEM( m_endsSwapped );
     #undef SWAPITEM
