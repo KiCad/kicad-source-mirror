@@ -44,9 +44,11 @@ public:
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onSpinButton( wxCommandEvent &aEvent );
-    void onBorderChecked( wxCommandEvent& event ) override;
-    void onFillChecked( wxCommandEvent& event ) override;
+    void onBorderChecked( wxCommandEvent& aEvent ) override;
+    void onFillChecked( wxCommandEvent& aEvent ) override;
     void onHyperlinkChecked( wxCommandEvent& aEvent ) override;
+    void onHyperlinkDropdown( wxCommandEvent& aEvent ) override;
+    void onHyperlinkCombo( wxCommandEvent& aEvent ) override;
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
@@ -60,8 +62,11 @@ private:
     UNIT_BINDER           m_textSize;
     UNIT_BINDER           m_borderWidth;
     SCINTILLA_TRICKS*     m_scintillaTricks;
+    std::vector<wxString> m_pageNumbers;
 
     HTML_MESSAGE_BOX*     m_helpWindow;
+
+    wxString              m_lastLink;
 };
 
 

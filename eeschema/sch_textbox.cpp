@@ -38,6 +38,7 @@
 #include <core/kicad_algo.h>
 #include <trigo.h>
 #include <sch_textbox.h>
+#include <tools/sch_navigate_tool.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
 
@@ -316,6 +317,16 @@ bool SCH_TEXTBOX::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
+{
+    wxCHECK_MSG( IsHypertext(), /* void */,
+                 "Calling a hypertext menu on a SCH_TEXTBOX with no hyperlink?" );
+
+    SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
+    navTool->HypertextCommand( m_hyperlink );
 }
 
 

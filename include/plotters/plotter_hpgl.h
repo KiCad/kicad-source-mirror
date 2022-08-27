@@ -61,7 +61,7 @@ public:
     /**
      * At the start of the HPGL plot pen speed and number are requested.
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& aPageNumber ) override;
 
     /**
      * HPGL end of plot: sort and emit graphics, pen return and release.

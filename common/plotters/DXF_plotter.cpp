@@ -170,7 +170,7 @@ void DXF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
 }
 
 
-bool DXF_PLOTTER::StartPlot()
+bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 

@@ -66,6 +66,8 @@ public:
     int Next( const TOOL_EVENT& aEvent );
     int HypertextCommand( const TOOL_EVENT& aEvent );
 
+    void HypertextCommand( const wxString& href );
+
     bool CanGoBack();
     bool CanGoForward();
     bool CanGoUp();

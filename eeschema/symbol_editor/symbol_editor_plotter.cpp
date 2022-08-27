@@ -57,7 +57,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 
     LOCALE_IO   toggle;
 
-    plotter->StartPlot();
+    plotter->StartPlot( wxT( "1" ) );
 
     if( m_symbol )
     {

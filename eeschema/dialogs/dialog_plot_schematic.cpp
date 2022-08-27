@@ -565,7 +565,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDXF( const wxString&  aFileName,
 
     LOCALE_IO   toggle;
 
-    plotter->StartPlot();
+    plotter->StartPlot( m_parent->GetCurrentSheet().GetPageNumber() );
 
     if( aPlotFrameRef )
     {
@@ -756,7 +756,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
     // Pen num and pen speed are not initialized here.
     // Default HPGL driver values are used
     plotter->SetPenDiameter( m_HPGLPenSize );
-    plotter->StartPlot();
+    plotter->StartPlot( m_parent->GetCurrentSheet().GetPageNumber() );
 
     if( aPlotFrameRef )
     {
@@ -846,7 +846,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
 
                 // Open the plotter and do the first page
                 setupPlotPagePDF( plotter, screen );
-                plotter->StartPlot();
+                plotter->StartPlot( sheetList[i].GetPageNumber() );
             }
             catch( const IO_ERROR& e )
             {
@@ -865,7 +865,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
             setupPlotPagePDF( plotter, screen );
-            plotter->StartPage();
+            plotter->StartPage( sheetList[i].GetPageNumber() );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotDrawingSheet );
@@ -1088,7 +1088,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     LOCALE_IO toggle;       // Switch the locale to standard C
 
-    plotter->StartPlot();
+    plotter->StartPlot( m_parent->GetCurrentSheet().GetPageNumber() );
 
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
@@ -1221,7 +1221,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
 
     LOCALE_IO   toggle;
 
-    plotter->StartPlot();
+    plotter->StartPlot( m_parent->GetCurrentSheet().GetPageNumber() );
 
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {

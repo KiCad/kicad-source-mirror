@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,16 +26,17 @@ class WX_INFOBAR;
 #include <wx/stc/stc.h>
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
-#include <wx/checkbox.h>
-#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
+#include <wx/combobox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -55,9 +56,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textLabel;
 		wxStyledTextCtrl* m_textCtrl;
 		wxHyperlinkCtrl* m_syntaxHelp;
-		wxCheckBox* m_hyperlinkCb;
-		wxStaticText* m_hyperlinkDestinationLabel;
-		wxTextCtrl* m_hyperlinkCtrl;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
@@ -90,6 +88,8 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_fillColorLabel;
 		wxPanel* m_panelFillColor;
 		COLOR_SWATCH* m_fillColorSwatch;
+		wxCheckBox* m_hyperlinkCb;
+		wxComboBox* m_hyperlinkCtrl;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -98,14 +98,16 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
-		virtual void onHyperlinkChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHyperlinkChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHyperlinkCombo( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHyperlinkDropdown( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 778,449 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_TEXT_PROPERTIES_BASE();
 

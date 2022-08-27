@@ -293,6 +293,9 @@ const wxString& SCH_ITEM::GetDefaultFont() const
 
 bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 {
+    if( IsHypertext() )
+        return false;
+
     if( const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( this ) )
         return text->GetTextHeight() * aWorldScale < BITMAP_FONT_SIZE_THRESHOLD;
 

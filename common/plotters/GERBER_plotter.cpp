@@ -234,7 +234,7 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
 }
 
 
-bool GERBER_PLOTTER::StartPlot()
+bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
     m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use

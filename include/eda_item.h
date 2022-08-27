@@ -124,6 +124,11 @@ public:
     inline bool IsResized() const { return m_flags & IS_RESIZING; }
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
+    inline bool IsRollover() const
+    {
+        return ( m_flags & ( IS_ROLLOVER | IS_MOVING ) ) == IS_ROLLOVER;
+    }
+
     inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
     inline void SetSelected() { SetFlags( SELECTED ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }

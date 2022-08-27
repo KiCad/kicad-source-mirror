@@ -1174,7 +1174,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
             AddGerberX2Attribute( plotter, aBoard, aLayer, not useX2mode );
         }
 
-        plotter->StartPlot();
+        plotter->StartPlot( wxT( "1" ) );
 
         // Plot the frame reference if requested
         if( aPlotOpts->GetPlotFrameRef() )

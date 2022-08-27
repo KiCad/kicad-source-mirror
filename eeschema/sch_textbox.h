@@ -57,6 +57,13 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
+    bool IsHypertext() const override
+    {
+        return HasHyperlink();
+    }
+
+    void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
+
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;

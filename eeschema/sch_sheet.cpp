@@ -908,45 +908,22 @@ void SCH_SHEET::renumberPins()
 }
 
 
-int SCH_SHEET::guessPageFromParentScreen() const
+SCH_SHEET_PATH SCH_SHEET::getSheetPath() const
 {
     SCH_SCREEN*    parentScreen = static_cast<SCH_SCREEN*>( m_parent );
-    int            vPageNumParent = parentScreen->GetVirtualPageNumber();
+    size_t         vPageNumParent = parentScreen->GetVirtualPageNumber();
     SCH_SHEET_LIST sheets = parentScreen->Schematic()->GetSheets();
 
-    wxCHECK( sheets.size() >= vPageNumParent && vPageNumParent > 0, m_screen->GetVirtualPageNumber() );
-
     // We can use the virtual page number as an index to find the instance
-    SCH_SHEET_PATH parentSheetPath = sheets.at( vPageNumParent - 1 );
+    size_t         parentIdx = std::max<size_t>( 0, std::min( sheets.size(), vPageNumParent ) - 1 );
+    SCH_SHEET_PATH sheetPath = sheets.at( parentIdx );
 
     // Make sure our asumption about the virtual page number being the index-1 is correct
-    wxCHECK( parentSheetPath.LastScreen()->GetFileName() == parentScreen->GetFileName(),
-             m_screen->GetVirtualPageNumber() );
+    wxASSERT( sheetPath.LastScreen()->GetFileName() == parentScreen->GetFileName() );
 
-    KIID_PATH parentSheetKIIDPath = parentSheetPath.PathWithoutRootUuid();
+    sheetPath.push_back( const_cast<SCH_SHEET*>( this ) );
 
-    for( const SCH_SHEET_INSTANCE& instance : m_instances )
-    {
-        KIID_PATH instancePath = instance.m_Path;
-
-        if( instancePath.MakeRelativeTo( parentSheetKIIDPath ) && instancePath.size() == 1 )
-        {
-            // find the virtual page number of this path
-            auto isThePath = [&]( const SCH_SHEET_PATH& aPath ) -> bool
-                             {
-                                return aPath.PathWithoutRootUuid() == instance.m_Path;
-                             };
-
-            auto result = std::find_if( sheets.begin(), sheets.end(), isThePath );
-
-            wxCHECK( result != sheets.end(), m_screen->GetVirtualPageNumber() );
-
-            return result - sheets.begin() + 1;
-        }
-    }
-
-    wxFAIL_MSG( "Couldn't find a valid path?" );
-    return m_screen->GetVirtualPageNumber();
+    return sheetPath;
 }
 
 
@@ -1073,7 +1050,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( aBackground && !aPlotter->GetColorMode() )
         return;
 
-    VECTOR2I pos;
     auto*    settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     bool     override = settings ? settings->m_OverrideItemColors : false;
     COLOR4D  borderColor = GetBorderColor();
@@ -1102,9 +1078,9 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( !aBackground )
     {
         BOX2I    rect( m_pos, m_size );
-        int      virtualPage = guessPageFromParentScreen();
-        wxString hyperlinkDestination = EDA_TEXT::GotoPageHyperlinkString( virtualPage );
-        aPlotter->HyperlinkBox( rect, hyperlinkDestination );
+        wxString pageNum = GetPageNumber( getSheetPath() );
+
+        aPlotter->HyperlinkBox( rect, EDA_TEXT::GotoPageHref( pageNum ) );
     }
 
     // Plot sheet pins

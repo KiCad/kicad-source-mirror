@@ -29,7 +29,6 @@
 #include <plotters/plotter.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
-#include <eda_doc.h>
 #include <string_utils.h>
 #include <sch_text.h>
 #include <schematic.h>
@@ -43,7 +42,6 @@
 #include <project/net_settings.h>
 #include <core/mirror.h>
 #include <core/kicad_algo.h>
-#include <tools/ee_actions.h>
 #include <tools/sch_navigate_tool.h>
 #include <trigo.h>
 
@@ -385,55 +383,13 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 }
 
 
-void SCH_TEXT::DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const
+void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 {
     wxCHECK_MSG( IsHypertext(), /* void */,
                  "Calling a hypertext menu on a SCH_TEXT with no hyperlink?" );
 
-    int    destPage = -1;
-    wxMenu menu;
-
-    if( IsGotoPageHyperlink( m_hyperlink, &destPage ) && destPage > 0 )
-    {
-        std::map<int, wxString> sheetNames;
-        std::map<int, wxString> sheetPages;
-
-        for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
-        {
-            sheetPages[sheet.GetVirtualPageNumber()] = sheet.GetPageNumber();
-
-            if( sheet.size() == 1 )
-                sheetNames[sheet.GetVirtualPageNumber()] = _( "<root sheet>" );
-            else
-                sheetNames[sheet.GetVirtualPageNumber()] = sheet.Last()->GetName();
-        }
-
-        if( sheetPages.count( destPage ) > 0 )
-        {
-            menu.Append( 0, wxString::Format( _( "Go to Page %s (%s)" ),
-                                              sheetPages[destPage],
-                                              sheetNames[destPage] ) );
-
-            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
-            void* param = &destPage;
-
-            if( param )
-                aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
-        }
-        else
-        {
-            aFrame->ShowInfoBarError( wxString::Format( _( "Page sequence '%d' does not exist." ),
-                                                        destPage ) );
-        }
-    }
-    else
-    {
-        menu.Append( 1, wxString::Format( _( "Open %s" ), m_hyperlink ) );
-        int sel = aFrame->GetPopupMenuSelectionFromUser( menu );
-
-        if( sel == 1 )
-            GetAssociatedDocument( aFrame, m_hyperlink, &aFrame->Prj() );
-    }
+    SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
+    navTool->HypertextCommand( m_hyperlink );
 }
 
 

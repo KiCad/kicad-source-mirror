@@ -185,7 +185,7 @@ public:
      * BBox is the boundary box (position and size of the "client rectangle"
      * for drawings (page - margins) in mils (0.001 inch)
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& aPageNumber ) override;
     virtual bool EndPlot() override;
 
     /**
@@ -273,13 +273,13 @@ public:
      * The PDF engine supports multiple pages; the first one is opened 'for free' the following
      * are to be closed and reopened. Between each page parameters can be set.
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& aPageNumber ) override;
     virtual bool EndPlot() override;
 
     /**
      * Start a new page in the PDF document.
      */
-    virtual void StartPage();
+    virtual void StartPage( const wxString& aPageNumber );
 
     /**
      * Close the current page in the PDF document (and emit its compressed stream).
@@ -417,8 +417,11 @@ protected:
     FILE* m_workFile;               ///< Temporary file to construct the stream before zipping
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table
 
+    ///< List of user-space page numbers for resolving internal hyperlinks
+    std::vector<wxString>                     m_pageNumbers;
+
     ///< List of loaded hyperlinks in current page
-    std::vector<std::pair<BOX2I, wxString>> m_hyperlinksInPage;
+    std::vector<std::pair<BOX2I, wxString>>   m_hyperlinksInPage;
 
     ///< Handles for all the hyperlink objects that will be deferred
     std::map<int, std::pair<BOX2D, wxString>> m_hyperlinkHandles;
@@ -445,7 +448,7 @@ public:
     /**
      * Create SVG file header.
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& aPageNumber ) override;
     virtual bool EndPlot() override;
 
     /**

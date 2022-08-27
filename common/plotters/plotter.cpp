@@ -38,7 +38,6 @@
  */
 
 #include <trigo.h>
-#include <eda_item.h>
 #include <plotters/plotter.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>

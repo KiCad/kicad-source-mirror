@@ -1837,12 +1837,6 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         return;
     }
 
-    if( aText->IsHypertext() && ( aText->GetFlags() & IS_ROLLOVER ) && !drawingShadows
-        && !aText->IsMoving() )
-    {
-        color = m_schSettings.GetLayerColor( LAYER_HOVERED );
-    }
-
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
@@ -1864,6 +1858,13 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
         attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText );
+
+        if( aText->IsHypertext() && aText->IsRollover() )
+        {
+            m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+            m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+            attrs.m_Underlined = true;
+        }
 
         // Adjust text drawn in an outline font to more closely mimic the positioning of
         // SCH_FIELD text.
@@ -1889,7 +1890,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            cache = aText->GetRenderCache( shownText, text_offset );
+            if( !aText->IsHypertext() )
+                cache = aText->GetRenderCache( shownText, text_offset );
 
             if( cache )
             {
@@ -1922,9 +1924,17 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                 attrs.m_Angle = aTextBox->GetDrawRotation();
                 attrs.m_StrokeWidth = getTextThickness( aTextBox );
 
+                if( aTextBox->IsHypertext() && aTextBox->IsRollover() )
+                {
+                    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+                    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+                    attrs.m_Underlined = true;
+                }
+
                 std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-                cache = aTextBox->GetRenderCache( shownText );
+                if( !aTextBox->IsHypertext() )
+                    cache = aTextBox->GetRenderCache( shownText );
 
                 if( cache )
                 {
@@ -2167,12 +2177,6 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
         return;
 
-    if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0
-            && !drawingShadows && !aField->IsMoving() )
-    {
-        color = m_schSettings.GetLayerColor( LAYER_HOVERED );
-    }
-
     // Calculate the text orientation according to the parent orientation.
     EDA_ANGLE orient = aField->GetTextAngle();
 
@@ -2230,6 +2234,13 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         attributes.m_StrokeWidth = getTextThickness( aField );
         attributes.m_Angle = orient;
 
+        if( aField->IsHypertext() && aField->IsRollover() )
+        {
+            m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+            m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+            attributes.m_Underlined = true;
+        }
+
         if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
         {
             bitmapText( shownText, textpos, attributes );
@@ -2239,7 +2250,8 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            cache = aField->GetRenderCache( shownText, textpos, attributes );
+            if( !aField->IsHypertext() )
+                cache = aField->GetRenderCache( shownText, textpos, attributes );
 
             if( cache )
             {

@@ -61,7 +61,7 @@ public:
     /**
      * Open the DXF plot with a skeleton header.
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& aPageNumber ) override;
     virtual bool EndPlot() override;
 
     // For now we don't use 'thick' primitives, so no line width

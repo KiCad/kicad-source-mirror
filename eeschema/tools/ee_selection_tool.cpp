@@ -382,7 +382,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else if( collector[0]->IsHypertext() )
                 {
-                    collector[0]->DoHypertextMenu( m_frame );
+                    collector[ 0 ]->DoHypertextAction( m_frame );
                     selCancelled = true;
                 }
             }
@@ -620,9 +620,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( rolloverItem != lastRolloverItem )
         {
-            EDA_ITEM* item = m_frame->GetItem( lastRolloverItem );
-
-            if( item  )
+            if( EDA_ITEM* item = m_frame->GetItem( lastRolloverItem ) )
             {
                 item->ClearFlags( IS_ROLLOVER );
                 lastRolloverItem = niluuid;
@@ -632,10 +630,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                     m_frame->GetCanvas()->GetView()->Update( item );
             }
+        }
 
-            item = m_frame->GetItem( rolloverItem );
-
-            if( item )
+        if( EDA_ITEM* item = m_frame->GetItem( rolloverItem ) )
+        {
+            if( !( item->GetFlags() & IS_ROLLOVER ) )
             {
                 item->SetFlags( IS_ROLLOVER );
                 lastRolloverItem = rolloverItem;

@@ -109,7 +109,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // We need a BRDITEMS_PLOTTER to plot pads
     BRDITEMS_PLOTTER brd_plotter( &plotter, m_pcb, plotOpts );
 
-    plotter.StartPlot();
+    plotter.StartPlot( wxT( "1" ) );
 
     // Some tools in P&P files have the type and size defined.
     // they are position flash (round), pad1 flash (diamond), other pads flash (round)

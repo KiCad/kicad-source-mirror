@@ -123,7 +123,7 @@ public:
      */
     virtual PLOT_FORMAT GetPlotterType() const = 0;
 
-    virtual bool StartPlot() = 0;
+    virtual bool StartPlot( const wxString& aPageNumber ) = 0;
     virtual bool EndPlot() = 0;
 
     virtual void SetNegative( bool aNegative ) { m_negativeMode = aNegative; }

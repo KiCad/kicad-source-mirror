@@ -49,7 +49,7 @@ public:
     /**
      * Write GERBER header to file initialize global variable g_Plot_PlotOutputFile.
      */
-    virtual bool StartPlot() override;
+    virtual bool StartPlot( const wxString& pageNumber ) override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int aLineWidth, void* aData = nullptr ) override;
 

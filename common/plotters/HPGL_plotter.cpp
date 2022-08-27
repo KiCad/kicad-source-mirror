@@ -255,7 +255,7 @@ void HPGL_PLOTTER::SetTargetChordLength( double chord_len )
 }
 
 
-bool HPGL_PLOTTER::StartPlot()
+bool HPGL_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
     fprintf( m_outputFile, "IN;VS%d;PU;PA;SP%d;\n", m_penSpeed, m_penNumber );

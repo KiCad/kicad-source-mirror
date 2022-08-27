@@ -207,7 +207,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         gbrplotter->AddLineToHeader( text );
     }
 
-    plotter->StartPlot();
+    plotter->StartPlot( wxT( "1" ) );
 
     // Draw items on edge layer.
     // Not all, only items useful for drill map, i.e. board outlines.

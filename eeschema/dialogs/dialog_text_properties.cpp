@@ -126,6 +126,21 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
 
     m_separator3->SetIsSeparator();
 
+    SCH_SHEET_LIST sheetList = m_frame->Schematic().GetSheets();
+    sheetList.SortByPageNumbers( false );
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+    {
+        wxString sheetPageNum = sheet.GetPageNumber();
+        wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" ) : sheet.Last()->GetName();
+
+        m_hyperlinkCtrl->Append( wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
+        m_pageNumbers.push_back( sheetPageNum );
+    }
+
+    m_hyperlinkCtrl->Append( wxT( "---------------------" ) );
+    m_hyperlinkCtrl->Append( wxT( "http(s)://..." ) );
+
     SetupStandardButtons();
     Layout();
 
@@ -159,7 +174,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     SCHEMATIC& schematic = m_frame->Schematic();
 
     m_hyperlinkCb->SetValue( m_currentText->HasHyperlink() );
-    m_hyperlinkDestinationLabel->Enable( m_currentText->HasHyperlink() );
     m_hyperlinkCtrl->Enable( m_currentText->HasHyperlink() );
     m_hyperlinkCtrl->SetValue( m_currentText->GetHyperlink() );
 
@@ -241,7 +255,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_TEXT_PROPERTIES::onBorderChecked( wxCommandEvent& event )
+void DIALOG_TEXT_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
 {
     bool border = m_borderCheckbox->GetValue();
 
@@ -256,7 +270,7 @@ void DIALOG_TEXT_PROPERTIES::onBorderChecked( wxCommandEvent& event )
 }
 
 
-void DIALOG_TEXT_PROPERTIES::onFillChecked( wxCommandEvent& event )
+void DIALOG_TEXT_PROPERTIES::onFillChecked( wxCommandEvent& aEvent )
 {
     bool fill = m_filledCtrl->GetValue();
 
@@ -267,20 +281,56 @@ void DIALOG_TEXT_PROPERTIES::onFillChecked( wxCommandEvent& event )
 
 void DIALOG_TEXT_PROPERTIES::onHyperlinkChecked( wxCommandEvent& aEvent )
 {
-    if( aEvent.IsChecked() )
+    if( aEvent.IsChecked() && !m_hyperlinkCtrl->IsEnabled() )
     {
         m_hyperlinkCtrl->Enable( true );
-        m_hyperlinkDestinationLabel->Enable( true );
+        m_hyperlinkCtrl->ChangeValue( m_lastLink );
         m_hyperlinkCtrl->SetFocus();
     }
-    else
+    else if( !aEvent.IsChecked() && m_hyperlinkCtrl->IsEnabled() )
     {
         m_hyperlinkCtrl->Enable( false );
-        m_hyperlinkDestinationLabel->Enable( false );
+        m_lastLink = m_hyperlinkCtrl->GetValue();
         m_hyperlinkCtrl->SetValue( wxEmptyString );
     }
 
     aEvent.Skip();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onHyperlinkDropdown( wxCommandEvent& aEvent )
+{
+    m_lastLink = m_hyperlinkCtrl->GetValue();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onHyperlinkCombo( wxCommandEvent& aEvent )
+{
+    size_t sel = aEvent.GetSelection();
+
+    if( sel < 0 )
+    {
+        // user clicked outside dropdown; leave current value
+    }
+    else if( sel == m_hyperlinkCtrl->GetCount() - 2 )
+    {
+        // separator (and wxWidgets already updated our value to it);
+        // replace value with that saved in the dropdown event
+        m_hyperlinkCtrl->ChangeValue( m_lastLink );
+        m_hyperlinkCtrl->SetSelection( 0, m_hyperlinkCtrl->GetValue().Length() );
+    }
+    else if( sel == m_hyperlinkCtrl->GetCount() - 1 )
+    {
+        static wxString helper = wxT( "https://" );
+
+        m_hyperlinkCtrl->ChangeValue( helper );
+        m_hyperlinkCtrl->SetInsertionPointEnd();
+    }
+    else
+    {
+        m_hyperlinkCtrl->ChangeValue( wxT( "#" ) + m_pageNumbers[ sel ] );
+        m_hyperlinkCtrl->SetSelection( 0, m_hyperlinkCtrl->GetValue().Length() );
+    }
 }
 
 
@@ -406,7 +456,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !m_currentText->ValidateHyperlink( m_hyperlinkCtrl->GetValue() ) )
     {
         DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
-                               "(e.g. file:// or http(s)://) or \"goto:<page sequence>\" to create "
+                               "(e.g. file:// or http(s)://) or \"#<page number>\" to create "
                                "a hyperlink to a page in this schematic." ) );
         return false;
     }

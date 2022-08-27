@@ -762,7 +762,7 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-bool PS_PLOTTER::StartPlot()
+bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 
@@ -893,12 +893,14 @@ bool PS_PLOTTER::StartPlot()
         fputs( PSMacro[ii], m_outputFile );
     }
 
-    // The following string has been specified here (rather than within
-    // PSMacro[]) to highlight that it has been provided to ensure that the
-    // contents of the postscript file comply with the details specified
-    // within the Document Structuring Convention.
-    fputs( "%%Page: 1 1\n"
-           "%%BeginPageSetup\n"
+    // The following strings are output here (rather than within PSMacro[])
+    // to highlight that it has been provided to ensure that the contents of
+    // the postscript file comply with the Document Structuring Convention.
+    std::string page_num = encodeStringForPlotter( aPageNumber );
+
+    fprintf( m_outputFile, "%%Page: %s 1\n", page_num.c_str() );
+
+    fputs( "%%BeginPageSetup\n"
            "gsave\n"
            "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
            "linemode1\n", m_outputFile );

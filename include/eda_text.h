@@ -336,24 +336,26 @@ public:
     static bool ValidateHyperlink( const wxString& aURL );
 
     /**
-     * Check if aURL is a valid "goto" hyperlink.
+     * Check if aHref is a valid internal hyperlink.
      *
-     * @param aURL String to validate
-     * @param aDestinationIdx optional. pointer to populate with the page index destination
-     * @return true if aURL is a valid hyperlink
+     * @param aHref String to validate
+     * @param aDestination [optional] pointer to populate with the destination page
+     * @return true if aHref is a valid internal hyperlink.  Does *not* check if the destination
+     *         page actually exists.
      */
-    static bool IsGotoPageHyperlink( const wxString& aURL, int* aDestination = nullptr );
+    static bool IsGotoPageHref( const wxString& aHref, wxString* aDestination = nullptr );
 
     /**
-     * Generate a hyperlink string that goes to the page number specified
-     * @param aDestination Virtual page number to go to. Note that the root sheet is 1.
-     * @return A hyperlink String that goes to the page number specified
+     * Generate a href to a page in the current schematic.
+     *
+     * @param aDestination Destination sheet's page number.
+     * @return A hyperlink href string that goes to the specified page.
      */
-    static wxString GotoPageHyperlinkString( const int& aDestination );
+    static wxString GotoPageHref( const wxString& aDestination );
 
 protected:
     /**
-     * A hyperlink to a URL or file in the system. If empty, this text object is not a hyperlink
+     * A hyperlink URL.  If empty, this text object is not a hyperlink.
      */
     wxString m_hyperlink;
 

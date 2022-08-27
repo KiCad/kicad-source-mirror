@@ -156,9 +156,8 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     // Add the standard X2 FileFunction for drill files
     // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
     wxString text = BuildFileFunctionAttributeString( aLayerPair,
-                                                      aIsNpth
-                                                            ? TYPE_FILE::NPTH_FILE
-                                                            : TYPE_FILE::PTH_FILE );
+                                                      aIsNpth ? TYPE_FILE::NPTH_FILE
+                                                              : TYPE_FILE::PTH_FILE );
     plotter.AddLineToHeader( text );
 
     // Add file polarity (positive)
@@ -168,7 +167,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     if( !plotter.OpenFile( aFullFilename ) )
         return -1;
 
-    plotter.StartPlot();
+    plotter.StartPlot( wxT( "1" ) );
 
     holes_count = 0;
 

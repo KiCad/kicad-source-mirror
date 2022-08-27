@@ -34,7 +34,7 @@
 #include <wx/zstream.h>
 
 #include <advanced_config.h>
-#include <eda_text.h> // for IsGotoPageHyperlink
+#include <eda_text.h> // for IsGotoPageHref
 #include <ignore.h>
 #include <macros.h>
 #include <trigo.h>
@@ -670,10 +670,12 @@ void PDF_PLOTTER::closePdfStream()
 }
 
 
-void PDF_PLOTTER::StartPage()
+void PDF_PLOTTER::StartPage( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
+
+    m_pageNumbers.push_back( aPageNumber );
 
     // Compute the paper size in IUs
     m_paperSize = m_pageInfo.GetSizeMils();
@@ -701,11 +703,9 @@ void PDF_PLOTTER::ClosePage()
     // Close the page stream (and compress it)
     closePdfStream();
 
-    /* Page size is in 1/72 of inch (default user space units)
-       Works like the bbox in postscript but there is no need for
-       swapping the sizes, since PDF doesn't require a portrait page.
-       We use the MediaBox but PDF has lots of other less used boxes
-       to use */
+    // Page size is in 1/72 of inch (default user space units).  Works like the bbox in postscript
+    // but there is no need for swapping the sizes, since PDF doesn't require a portrait page.
+    // We use the MediaBox but PDF has lots of other less-used boxes that could be used.
     const double PTsPERMIL = 0.072;
     VECTOR2D     psPaperSize = VECTOR2D( m_pageInfo.GetSizeMils() ) * PTsPERMIL;
 
@@ -720,29 +720,8 @@ void PDF_PLOTTER::ClosePage()
     // Handle annotations (at the moment only "link" type objects)
     std::vector<int> hyperlinkHandles;
 
-    // Write out all hyperlinks for the page as annotation links
-    /*
-    for( const std::pair<BOX2I, wxString>& linkPair : m_urlHyperlinks )
-    {
-        const BOX2I&    box = linkPair.first;
-        const wxString& url = linkPair.second;
-
-        VECTOR2D bottomLeft = iuToPdfUserSpace( box.GetPosition() );
-        VECTOR2D topRight = iuToPdfUserSpace( box.GetEnd() );
-
-        hyperlinkHandles.push_back( startPdfObject() );
-        fprintf( m_outputFile,
-                 "<< /Type /Annot\n"
-                 "   /Subtype /Link\n"
-                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n"
-                 "   /A << /Type /Action /S /URI /URI %s >>\n"
-                 ">>\n",
-                 bottomLeft.x, bottomLeft.y, topRight.x, topRight.y,
-                 encodeStringForPlotter( url ).c_str() );
-        closePdfObject();
-    }*/
-
-    // Allocate all hyperlink objects for the page and calculate their position in user space coordinates
+    // Allocate all hyperlink objects for the page and calculate their position in user space
+    // coordinates
     for( const std::pair<BOX2I, wxString>& linkPair : m_hyperlinksInPage )
     {
         const BOX2I&    box = linkPair.first;
@@ -768,11 +747,16 @@ void PDF_PLOTTER::ClosePage()
         hyperLinkArrayHandle = startPdfObject();
         bool isFirst = true;
 
-        fprintf( m_outputFile, "[%d 0 R", hyperlinkHandles[0] );
+        fputs( "[", m_outputFile );
 
-        for( auto it = hyperlinkHandles.begin() + 1; it != hyperlinkHandles.end(); ++it )
+        for( int handle : hyperlinkHandles )
         {
-            fprintf( m_outputFile, " %d 0 R", *it );
+            if( isFirst )
+                isFirst = false;
+            else
+                fprintf( m_outputFile, " " );
+
+            fprintf( m_outputFile, "%d 0 R", handle );
         }
 
         fputs( "]\n", m_outputFile );
@@ -812,7 +796,7 @@ void PDF_PLOTTER::ClosePage()
 }
 
 
-bool PDF_PLOTTER::StartPlot()
+bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 
@@ -837,7 +821,7 @@ bool PDF_PLOTTER::StartPlot()
     /* Now, the PDF is read from the end, (more or less)... so we start
        with the page stream for page 1. Other more important stuff is written
        at the end */
-    StartPage();
+    StartPage( aPageNumber );
     return true;
 }
 
@@ -873,7 +857,6 @@ bool PDF_PLOTTER::EndPlot()
                  "<< /BaseFont %s\n"
                  "   /Type /Font\n"
                  "   /Subtype /Type1\n"
-
                  /* Adobe is so Mac-based that the nearest thing to Latin1 is
                     the Windows ANSI encoding! */
                  "   /Encoding /WinAnsiEncoding\n"
@@ -895,9 +878,9 @@ bool PDF_PLOTTER::EndPlot()
     fputs( ">>\n", m_outputFile );
     closePdfObject();
 
-    for( const std::pair<int,std::pair<BOX2D, wxString>>& handlePair : m_hyperlinkHandles )
+    for( const std::pair<const int, std::pair<BOX2D, wxString>>& handlePair : m_hyperlinkHandles )
     {
-        const int& linkhandle = handlePair.first;
+        const int&                        linkhandle = handlePair.first;
         const std::pair<BOX2D, wxString>& linkpair = handlePair.second;
         const BOX2D&                      box = linkpair.first;
         const wxString&                   url = linkpair.second;
@@ -907,22 +890,30 @@ bool PDF_PLOTTER::EndPlot()
         fprintf( m_outputFile,
                  "<< /Type /Annot\n"
                  "   /Subtype /Link\n"
-                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n",
+                 "   /Rect [%g %g %g %g]\n"
+                 "   /Border [16 16 0]\n",
                  box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
 
-        int pageIdx = -1;
+        wxString pageNumber;
+        bool     pageFound = false;
 
-        if( EDA_TEXT::IsGotoPageHyperlink( url, &pageIdx ) )
+        if( EDA_TEXT::IsGotoPageHref( url, &pageNumber ) )
         {
-            if( pageIdx <= m_pageHandles.size() && pageIdx > 0 )
+            for( size_t ii = 0; ii < m_pageNumbers.size(); ++ii )
             {
-                fprintf( m_outputFile,
-                         "   /Dest [%d 0 R] >>\n"
-                         ">>\n",
-                         m_pageHandles[pageIdx - 1] );
-                //todo: do we want to support specifying zoom factor/ position? e.g. /FitR
+                if( m_pageNumbers[ii] == pageNumber )
+                {
+                    fprintf( m_outputFile,
+                             "   /Dest [%d 0 R /FitB] >>\n"
+                             ">>\n",
+                             m_pageHandles[ii] );
+
+                    pageFound = true;
+                    break;
+                }
             }
-            else
+
+            if( !pageFound )
             {
                 // destination page is not being plotted, assign the NOP action to the link
                 fprintf( m_outputFile,

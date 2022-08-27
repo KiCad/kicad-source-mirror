@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,41 +81,15 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_textEntrySizer->Add( bSizer41, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_RIGHT|wxLEFT, 80 );
 
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_hyperlinkCb = new wxCheckBox( this, wxID_ANY, _("Hyperlink"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hyperlinkCb->SetToolTip( _("Make this text item a clickable hyperlink") );
-
-	bSizer11->Add( m_hyperlinkCb, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizer11->Add( 10, 0, 0, wxEXPAND, 5 );
-
-	m_hyperlinkDestinationLabel = new wxStaticText( this, wxID_ANY, _("Destination:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hyperlinkDestinationLabel->Wrap( -1 );
-	m_hyperlinkDestinationLabel->Enable( false );
-
-	bSizer11->Add( m_hyperlinkDestinationLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_hyperlinkCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_hyperlinkCtrl->Enable( false );
-	m_hyperlinkCtrl->SetToolTip( _("Please enter either a valid URL (e.g. file:// or http(s)://) or \"goto:<page sequence>\" to create a hyperlink to a page in this schematic.") );
-
-	bSizer11->Add( m_hyperlinkCtrl, 10, wxALL, 5 );
-
-
-	m_textEntrySizer->Add( bSizer11, wxGBPosition( 2, 0 ), wxGBSpan( 1, 6 ), wxEXPAND, 5 );
-
 	m_fontLabel = new wxStaticText( this, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	m_textEntrySizer->Add( m_fontCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	m_textEntrySizer->Add( m_fontCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizeCtrlSizer;
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -176,11 +150,11 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizeCtrlSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 3, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxTOP, 5 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 2, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxTOP, 5 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_textSizeLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_textSizeLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
@@ -213,14 +187,14 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer71->Add( m_panelBorderColor1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizer71, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizer71, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 2 );
+	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 2 );
 
 	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -253,19 +227,19 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer7->Add( m_panelBorderColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizer7, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizer7, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 8, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Background fill"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_filledCtrl, wxGBPosition( 6, 4 ), wxGBSpan( 1, 2 ), wxRIGHT, 80 );
+	m_textEntrySizer->Add( m_filledCtrl, wxGBPosition( 5, 4 ), wxGBSpan( 1, 2 ), wxRIGHT, 80 );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
@@ -288,12 +262,21 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer8->Add( m_panelFillColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizer8, wxGBPosition( 7, 4 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizer8, wxGBPosition( 6, 4 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+
+	m_hyperlinkCb = new wxCheckBox( this, wxID_ANY, _("Link:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hyperlinkCb->SetValue(true);
+	m_hyperlinkCb->SetToolTip( _("Make this text item a clickable hyperlink") );
+
+	m_textEntrySizer->Add( m_hyperlinkCb, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+
+	m_hyperlinkCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_textEntrySizer->Add( m_hyperlinkCtrl, wxGBPosition( 9, 1 ), wxGBSpan( 1, 6 ), wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_textEntrySizer->AddGrowableCol( 3 );
 
-	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxALL, 10 );
+	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -311,18 +294,21 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer4->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bSizer4, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_textCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
-	m_hyperlinkCb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
+	m_hyperlinkCb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
+	m_hyperlinkCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
+	m_hyperlinkCtrl->Connect( wxEVT_COMBOBOX_DROPDOWN, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkDropdown ), NULL, this );
 }
 
 DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
@@ -330,8 +316,10 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	// Disconnect Events
 	m_textCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
-	m_hyperlinkCb->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
+	m_hyperlinkCb->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
+	m_hyperlinkCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
+	m_hyperlinkCtrl->Disconnect( wxEVT_COMBOBOX_DROPDOWN, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkDropdown ), NULL, this );
 
 }

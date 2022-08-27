@@ -983,33 +983,19 @@ bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
 {
     wxURL url;
 
-    return aURL.IsEmpty() || url.SetURL( aURL ) == wxURL_NOERR || IsGotoPageHyperlink( aURL );
+    return aURL.IsEmpty() || url.SetURL( aURL ) == wxURL_NOERR || IsGotoPageHref( aURL );
 }
 
 
-bool EDA_TEXT::IsGotoPageHyperlink( const wxString& aURL, int* aDestination )
+bool EDA_TEXT::IsGotoPageHref( const wxString& aHref, wxString* aDestination )
 {
-    wxString dest;
-
-    if( !aURL.StartsWith( "goto:", &dest ) )
-        return false;
-
-    long num;
-    bool retval = dest.ToLong( &num );
-
-    if( !retval || num < 0 )
-        return false;
-
-    if( aDestination )
-        *aDestination = static_cast<int>( num );
-
-    return true;
+    return aHref.StartsWith( wxT( "#" ), aDestination );
 }
 
 
-wxString EDA_TEXT::GotoPageHyperlinkString( const int& aDestination )
+wxString EDA_TEXT::GotoPageHref( const wxString& aDestination )
 {
-    return wxString::Format( "goto:%d", aDestination );
+    return wxT( "#" ) + aDestination;
 }
 
 

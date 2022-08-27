@@ -26,7 +26,7 @@
 #include <eeschema_id.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_navigate_tool.h>
-
+#include "eda_doc.h"
 
 void SCH_NAVIGATE_TOOL::ResetHistory()
 {
@@ -78,6 +78,30 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
         goToPage( page );
 
     return 0;
+}
+
+
+void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
+{
+    wxString destPage;
+
+    if( EDA_TEXT::IsGotoPageHref( href, &destPage ) && !destPage.IsEmpty() )
+    {
+        for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+        {
+            if( sheet.GetPageNumber() == destPage )
+            {
+                changeSheet( sheet );
+                return;
+            }
+        }
+
+        m_frame->ShowInfoBarError( wxString::Format( _( "Page '%d' not found." ), destPage ) );
+    }
+    else
+    {
+        GetAssociatedDocument( m_frame, href, &m_frame->Prj() );
+    }
 }
 
 

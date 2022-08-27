@@ -711,7 +711,7 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-bool SVG_PLOTTER::StartPlot()
+bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
     wxASSERT( m_outputFile );
 
