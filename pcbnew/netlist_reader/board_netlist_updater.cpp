@@ -29,6 +29,7 @@
 
 #include <common.h>                         // for PAGE_INFO
 
+#include <base_units.h>
 #include <board.h>
 #include <netinfo.h>
 #include <footprint.h>
@@ -119,7 +120,7 @@ wxPoint BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
     else
     {
         // Position new components in the center of the page when the board is empty.
-        wxSize pageSize = m_board->GetPageSettings().GetSizeIU();
+        wxSize pageSize = m_board->GetPageSettings().GetSizeIU( IU_PER_MILS );
 
         bestPosition.x = pageSize.GetWidth() / 2;
         bestPosition.y = pageSize.GetHeight() / 2;

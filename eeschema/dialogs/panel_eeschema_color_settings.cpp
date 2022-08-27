@@ -501,7 +501,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
         view->SetScale( 1.0 );
         VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
 
-        VECTOR2I psize( m_page->GetWidthIU(), m_page->GetHeightIU() );
+        VECTOR2I psize( m_page->GetWidthIU( IU_PER_MILS ), m_page->GetHeightIU( IU_PER_MILS ) );
         double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
                                                     fabs( psize.y / screenSize.y ) );
 

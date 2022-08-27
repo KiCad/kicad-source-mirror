@@ -34,6 +34,7 @@
 #include <wx/mstream.h>
 #include <wx/tokenzr.h>
 
+#include <base_units.h>
 #include <lib_id.h>
 #include <lib_shape.h>
 #include <lib_pin.h>

@@ -344,6 +344,7 @@ set( COMMON_SRCS
     netclass.cpp
     observable.cpp
     origin_transforms.cpp
+    page_info.cpp
     paths.cpp
     printout.cpp
     project.cpp
@@ -507,7 +508,6 @@ set( PCB_COMMON_SRCS
     eda_shape.cpp
     fp_lib_table.cpp
     hash_eda.cpp
-    page_info.cpp
     pg_properties.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp

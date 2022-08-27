@@ -26,6 +26,7 @@
 #include "lib_pin.h"
 #include "pin_numbers.h"
 #include "pgm_base.h"
+#include <base_units.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <symbol_edit_frame.h>

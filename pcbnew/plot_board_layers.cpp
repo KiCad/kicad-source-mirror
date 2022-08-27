@@ -973,7 +973,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     const PAGE_INFO* sheet_info;
     double paperscale; // Page-to-paper ratio
     wxSize paperSizeIU;
-    wxSize pageSizeIU( pageInfo.GetSizeIU() );
+    wxSize           pageSizeIU( pageInfo.GetSizeIU( IU_PER_MILS ) );
     bool autocenter = false;
 
     // Special options: to fit the sheet to an A4 sheet replace the paper size. However there
@@ -984,7 +984,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     if( aPlotOpts->GetA4Output() )
     {
         sheet_info  = &pageA4;
-        paperSizeIU = pageA4.GetSizeIU();
+        paperSizeIU = pageA4.GetSizeIU( IU_PER_MILS );
         paperscale  = (double) paperSizeIU.x / pageSizeIU.x;
         autocenter  = true;
     }

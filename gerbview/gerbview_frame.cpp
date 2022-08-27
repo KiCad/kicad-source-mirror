@@ -19,6 +19,7 @@
  */
 
 #include <kiface_base.h>
+#include <base_units.h>
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
@@ -120,7 +121,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     SetVisibleLayers( LSET::AllLayersMask() );         // All draw layers visible.
 
-    SetScreen( new BASE_SCREEN( GetPageSettings().GetSizeIU() ) );
+    SetScreen( new BASE_SCREEN( GetPageSettings().GetSizeIU( IU_PER_MILS ) ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
@@ -821,7 +822,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     m_paper = aPageSettings;
 
     if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( IU_PER_MILS ) );
 
     GERBVIEW_DRAW_PANEL_GAL* drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
@@ -854,7 +855,7 @@ const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return GetPageSettings().GetSizeIU();
+    return GetPageSettings().GetSizeIU( IU_PER_MILS );
 }
 
 

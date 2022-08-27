@@ -755,7 +755,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     // Calculate the already placed items bounding box and the page size to determine
     // placement for the new symbols
-    wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU();
+    wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
     EDA_RECT sheetBbox  = getSheetBbox( m_rootSheet );
     VECTOR2I newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
     int      maxY = sheetBbox.GetY();
@@ -940,7 +940,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     targetSheetSize += VECTOR2I( Mils2iu( 1500 ), Mils2iu( 1500 ) );
 
     // Get current Eeschema sheet size.
-    wxSize    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
+    wxSize    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
     PAGE_INFO pageInfo   = m_currentSheet->GetScreen()->GetPageSettings();
 
     // Increase if necessary
@@ -953,7 +953,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     // Set the new sheet size.
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
 
-    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
+    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
     VECTOR2I sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
     VECTOR2I itemsCentre = sheetBoundingBox.Centre();
 

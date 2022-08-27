@@ -65,8 +65,8 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
         TRANSFORM      temp;                 // Uses default transform
         wxPoint        plotPos;
 
-        plotPos.x = pageInfo.GetWidthIU() / 2;
-        plotPos.y = pageInfo.GetHeightIU() / 2;
+        plotPos.x = pageInfo.GetWidthIU( IU_PER_MILS ) / 2;
+        plotPos.y = pageInfo.GetHeightIU( IU_PER_MILS ) / 2;
 
         m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp );
 
@@ -89,7 +89,7 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     if( !m_symbol )
         return;
 
-    wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU();
+    wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
 
     /* Plot item centered to the page
      * In symbol_editor, the symbol is centered at 0,0 coordinates.

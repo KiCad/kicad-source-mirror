@@ -423,7 +423,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     // Change scale factor and offset to print the whole page.
     bool printReference = cfg->m_Printing.title_block;
 
-    pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
+    pageSizeIU = aScreen->GetPageSettings().GetSizeIU( IU_PER_MILS );
     FitThisSizeToPaper( pageSizeIU );
 
     fitRect = GetLogicalPaperRect();

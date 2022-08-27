@@ -114,7 +114,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
+    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( IU_PER_MILS );
     SetScreen( new BASE_SCREEN( pageSizeIU ) );
 
     setupTools();
@@ -467,7 +467,7 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 
 const BOX2I PL_EDITOR_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU() );
+    BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU( IU_PER_MILS ) );
     return rv;
 }
 
@@ -563,7 +563,7 @@ void PL_EDITOR_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     m_pageLayout.SetPageSettings( aPageSettings );
 
     if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( IU_PER_MILS ) );
 }
 
 
@@ -578,7 +578,7 @@ const wxSize PL_EDITOR_FRAME::GetPageSizeIU() const
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_pageLayout.GetPageSettings().GetSizeIU();
+    return m_pageLayout.GetPageSettings().GetSizeIU( IU_PER_MILS );
 }
 
 
@@ -928,7 +928,7 @@ bool PL_EDITOR_FRAME::GetPageNumberOption() const
 #if 1
 void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
 {
-    VECTOR2D size = GetPageSettings().GetSizeIU();
+    VECTOR2D size = GetPageSettings().GetSizeIU( IU_PER_MILS );
 
     std::vector<MSG_PANEL_ITEM> msgItems;
     msgItems.emplace_back( _( "Page Width" ), MessageTextFromValue( GetUserUnits(), size.x ) );

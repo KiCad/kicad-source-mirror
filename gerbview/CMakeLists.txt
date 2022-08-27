@@ -77,7 +77,6 @@ set( GERBVIEW_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
     ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
     ${CMAKE_SOURCE_DIR}/common/lset.cpp
-    ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 
 if( WIN32 )

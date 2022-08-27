@@ -228,7 +228,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
 
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU( IU_PER_MILS ) ) );
 
     // PCB drawings start in the upper left corner.
     GetScreen()->m_Center = false;

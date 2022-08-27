@@ -24,6 +24,7 @@
 
 
 #include <sch_edit_frame.h>
+#include <base_units.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialog_annotate_base.h>

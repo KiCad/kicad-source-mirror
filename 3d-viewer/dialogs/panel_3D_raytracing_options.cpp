@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eda_3d_viewer_settings.h>
+#include <base_units.h>
 #include "panel_3D_raytracing_options.h"
 
 

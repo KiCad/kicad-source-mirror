@@ -31,9 +31,9 @@
 #define PAGE_INFO_H
 
 #include <wx/string.h>
+#include <math/vector2d.h>
 
 #include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
-#include <base_units.h>     // for IU_PER_MILS
 
 /// Min and max page sizes for clamping, in mils.
 #define MIN_PAGE_SIZE_MILS          1000
@@ -134,13 +134,35 @@ public:
 
     const VECTOR2I& GetSizeMils() const { return m_size; }
 
-    // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
-    // and either deci-mils or nanometers in PCBNew.
-#if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW) || defined(PL_EDITOR)
-    int GetWidthIU() const  { return IU_PER_MILS * GetWidthMils();  }
-    int GetHeightIU() const { return IU_PER_MILS * GetHeightMils(); }
-    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
-#endif
+    /**
+     * Gets the page width in IU
+     *
+     * @param aIUScale The IU scale, this is most likely always going to be IU_PER_MILS
+     * variable being passed. Note, this constexpr variable changes depending
+     * on application, hence why it is passed.
+     */
+    int GetWidthIU( double aIUScale ) const { return aIUScale * GetWidthMils(); }
+
+    /**
+     * Gets the page height in IU
+     *
+     * @param aIUScale The IU scale, this is most likely always going to be IU_PER_MILS
+     * variable being passed. Note, this constexpr variable changes depending
+     * on application, hence why it is passed.
+     */
+    int GetHeightIU( double aIUScale ) const { return aIUScale * GetHeightMils(); }
+
+    /**
+     * Gets the page size in internal units
+     *
+     * @param aIUScale The IU scale, this is most likely always going to be IU_PER_MILS
+     * variable being passed. Note, this constexpr variable changes depending
+     * on application, hence why it is passed.
+     */
+    const wxSize GetSizeIU( double aIUScale ) const
+    {
+        return wxSize( GetWidthIU( aIUScale ), GetHeightIU( aIUScale ) );
+    }
 
     /**
      * Set the width of Custom page in mils for any custom page constructed or made via

@@ -112,7 +112,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     case PLOT_FORMAT::SVG:
     {
         PAGE_INFO pageA4( wxT( "A4" ) );
-        wxSize    pageSizeIU = pageA4.GetSizeIU();
+        wxSize    pageSizeIU = pageA4.GetSizeIU( IU_PER_MILS );
 
         // Reserve a 10 mm margin around the page.
         int margin = Millimeter2iu( 10 );

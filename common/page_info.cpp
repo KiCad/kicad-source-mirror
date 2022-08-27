@@ -26,6 +26,7 @@
 #include <common.h>
 #include <page_info.h>
 #include <macros.h>
+#include <base_units.h>     // for Mm2mils
 
 
 // late arriving wxPAPER_A0, wxPAPER_A1

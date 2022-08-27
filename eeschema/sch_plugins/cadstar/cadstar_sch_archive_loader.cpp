@@ -232,7 +232,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // Set the new sheet size.
         sheet->GetScreen()->SetPageSettings( pageInfo );
 
-        wxSize  pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
+        wxSize   pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
         VECTOR2I sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
         VECTOR2I itemsCentre = sheetBoundingBox.Centre();
 

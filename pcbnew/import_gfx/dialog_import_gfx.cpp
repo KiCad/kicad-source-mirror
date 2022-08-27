@@ -25,6 +25,7 @@
 #include <dialogs/html_message_box.h>
 
 #include "dialog_import_gfx.h"
+#include <base_units.h>
 #include <kiface_base.h>
 #include <locale_io.h>
 #include <pcb_layer_box_selector.h>

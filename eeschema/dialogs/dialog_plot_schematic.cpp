@@ -657,8 +657,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFiles( bool aPlotAll, bool aPlotFrameRef,
 
         if( getPlotOriginAndUnits() == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
         {
-            plotOffset.x    = plotPage.GetWidthIU() / 2;
-            plotOffset.y    = -plotPage.GetHeightIU() / 2;
+            plotOffset.x = plotPage.GetWidthIU( IU_PER_MILS ) / 2;
+            plotOffset.y = -plotPage.GetHeightIU( IU_PER_MILS ) / 2;
         }
 
         try
@@ -899,8 +899,8 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScr
     if( m_plotBackgroundColor->GetValue() && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
-        wxPoint end( aPlotter->PageSettings().GetWidthIU(),
-                     aPlotter->PageSettings().GetHeightIU() );
+        wxPoint end( aPlotter->PageSettings().GetWidthIU( IU_PER_MILS ),
+                     aPlotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
         aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -1093,7 +1093,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU(), plotter->PageSettings().GetHeightIU() );
+        wxPoint end( plotter->PageSettings().GetWidthIU( IU_PER_MILS ),
+                     plotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
         plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -1225,8 +1226,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU(),
-                     plotter->PageSettings().GetHeightIU() );
+        wxPoint end( plotter->PageSettings().GetWidthIU( IU_PER_MILS ),
+                     plotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
         plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 

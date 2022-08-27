@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <base_units.h>
 #include <lib_pin.h>
 #include <sch_symbol.h>
 #include <sch_pin.h>

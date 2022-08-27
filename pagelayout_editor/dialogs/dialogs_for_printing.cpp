@@ -169,7 +169,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     // Change scale factor and offset to print the whole page.
 
-    pageSizeIU =  m_parent->GetPageSettings().GetSizeIU();
+    pageSizeIU = m_parent->GetPageSettings().GetSizeIU( IU_PER_MILS );
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();
 

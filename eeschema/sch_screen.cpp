@@ -73,7 +73,7 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     // Suitable for schematic only. For symbol_editor and viewlib, must be set to true
     m_Center = false;
 
-    InitDataPoints( m_paper.GetSizeIU() );
+    InitDataPoints( m_paper.GetSizeIU( IU_PER_MILS ) );
 }
 
 

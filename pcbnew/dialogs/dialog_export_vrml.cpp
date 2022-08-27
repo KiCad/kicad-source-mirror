@@ -28,6 +28,7 @@
 
 #include <wx/dir.h>
 
+#include <base_units.h>
 #include <board.h>
 #include <confirm.h>
 #include <kiface_base.h>

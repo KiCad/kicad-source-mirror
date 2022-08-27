@@ -528,7 +528,7 @@ void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     m_pcb->SetPageSettings( aPageSettings );
 
     if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( IU_PER_MILS ) );
 }
 
 
@@ -543,7 +543,7 @@ const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_pcb->GetPageSettings().GetSizeIU();
+    return m_pcb->GetPageSettings().GetSizeIU( IU_PER_MILS );
 }
 
 

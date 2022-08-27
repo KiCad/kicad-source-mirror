@@ -18,6 +18,7 @@
  */
 
 #include <advanced_config.h>
+#include <base_units.h>
 #include <macros.h>
 #include <schematic_lexer.h>
 #include "sch_sexpr_plugin_common.h"

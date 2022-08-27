@@ -23,6 +23,7 @@
 #include <utility>
 
 #include "pcbnew_settings.h"
+#include <base_units.h>
 #include <board.h>
 #include <footprint.h>
 #include <eda_draw_frame.h>

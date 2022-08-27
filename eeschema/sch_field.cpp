@@ -32,6 +32,7 @@
 
 #include <wx/log.h>
 #include <wx/menu.h>
+#include <base_units.h>
 #include <common.h>     // for ExpandTextVars
 #include <eda_item.h>
 #include <sch_edit_frame.h>
