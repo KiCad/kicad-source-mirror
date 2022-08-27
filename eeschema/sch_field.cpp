@@ -53,9 +53,8 @@
 #include <trigo.h>
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
+#include <tools/sch_navigate_tool.h>
 #include <font/outline_font.h>
-
 
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
@@ -740,53 +739,36 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 {
     constexpr int START_ID = 1;
 
-    static int back = -1;
-    wxMenu          menu;
-    SCH_TEXT*       label = dynamic_cast<SCH_TEXT*>( m_parent );
-
-    if( label && Schematic() )
+    if( IsHypertext() )
     {
-        auto it = Schematic()->GetPageRefsMap().find( label->GetText() );
+        SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        std::vector<std::pair<wxString, wxString>> pages;
+        wxMenu                                     menu;
+        wxString                                   href;
 
-        if( it != Schematic()->GetPageRefsMap().end() )
+        label->GetIntersheetRefs( &pages );
+
+        for( int i = 0; i < (int) pages.size(); ++i )
         {
-            std::vector<int> pageListCopy;
+            menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
+                                                         pages[i].first,
+                                                         pages[i].second ) );
+        }
 
-            pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
-            if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
-            {
-                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
-                alg::delete_matching( pageListCopy, currentPage );
+        menu.AppendSeparator();
+        menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
 
-                if( pageListCopy.empty() )
-                    return;
-            }
+        int sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
 
-            std::sort( pageListCopy.begin(), pageListCopy.end() );
+        if( sel >= 0 && sel < (int) pages.size() )
+            href = wxT( "#" ) + pages[ sel ].first;
+        else if( sel == 999 )
+            href = SCH_NAVIGATE_TOOL::g_BackLink;
 
-            std::map<int, wxString> sheetNames = Schematic()->GetVirtualPageToSheetNamesMap();
-            std::map<int, wxString> sheetPages = Schematic()->GetVirtualPageToSheetPagesMap();
-
-            for( int i = 0; i < (int) pageListCopy.size(); ++i )
-            {
-                menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
-                                                             sheetPages[ pageListCopy[i] ],
-                                                             sheetNames[ pageListCopy[i] ] ) );
-            }
-
-            menu.AppendSeparator();
-            menu.Append( 999 + START_ID, _( "Back to Previous Selected Sheet" ) );
-
-            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
-            void* param = nullptr;
-
-            if( sel >= 0 && sel < (int) pageListCopy.size() )
-                param = (void*) &pageListCopy[ sel ];
-            else if( sel == 999 )
-                param = (void*) &back;
-
-            if( param )
-                aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
+        if( !href.IsEmpty() )
+        {
+            SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
+            navTool->HypertextCommand( m_hyperlink );
         }
     }
 }
@@ -978,6 +960,20 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
                     penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
+
+    if( IsHypertext() )
+    {
+        SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        std::vector<std::pair<wxString, wxString>> pages;
+        std::vector<wxString>                      pageHrefs;
+
+        label->GetIntersheetRefs( &pages );
+
+        for( const std::pair<wxString, wxString>& page : pages )
+            pageHrefs.push_back( wxT( "#" ) + page.first );
+
+        aPlotter->HyperlinkMenu( GetBoundingBox(), pageHrefs );
+    }
 }
 
 

@@ -428,6 +428,39 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 }
 
 
+void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages )
+{
+    if( Schematic() )
+    {
+        auto it = Schematic()->GetPageRefsMap().find( GetText() );
+
+        if( it != Schematic()->GetPageRefsMap().end() )
+        {
+            std::vector<int> pageListCopy;
+
+            pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
+
+            if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
+            {
+                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
+                alg::delete_matching( pageListCopy, currentPage );
+
+                if( pageListCopy.empty() )
+                    return;
+            }
+
+            std::sort( pageListCopy.begin(), pageListCopy.end() );
+
+            std::map<int, wxString> sheetPages = Schematic()->GetVirtualPageToSheetPagesMap();
+            std::map<int, wxString> sheetNames = Schematic()->GetVirtualPageToSheetNamesMap();
+
+            for( int pageNum : pageListCopy )
+                pages->push_back( { sheetPages[ pageNum ], sheetNames[ pageNum ] } );
+        }
+    }
+}
+
+
 bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )

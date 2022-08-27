@@ -779,10 +779,6 @@ TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
         _( "Hierarchy Navigator" ), _( "Show or hide the schematic sheet hierarchy navigator" ),
         BITMAPS::hierarchy_nav );
 
-TOOL_ACTION EE_ACTIONS::hypertextCommand( "eeschema.NavigateTool.hypertextCommand",
-        AS_GLOBAL, 0, "",
-        _( "Navigate to page" ), _( "Navigate to page" ) );
-
 
 // SCH_LINE_WIRE_BUS_TOOL
 //

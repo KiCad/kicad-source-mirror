@@ -448,6 +448,17 @@ public:
     }
 
     /**
+     * Create a clickable hyperlink menu with a rectangular click area
+     *
+     * @aBox is the rectangular click target
+     * @aDestURLs is the list of target URLs for the menu
+     */
+    virtual void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs )
+    {
+        // NOP for most plotters.
+    }
+
+    /**
      * Draw a marker (used for the drill map).
      */
     static const unsigned MARKER_COUNT = 58;

@@ -64,7 +64,6 @@ public:
     int Previous( const TOOL_EVENT& aEvent );
     ///< Navigate to next sheet by numeric sheet number
     int Next( const TOOL_EVENT& aEvent );
-    int HypertextCommand( const TOOL_EVENT& aEvent );
 
     void HypertextCommand( const wxString& href );
 
@@ -73,6 +72,9 @@ public:
     bool CanGoUp();
     bool CanGoPrevious();
     bool CanGoNext();
+
+public:
+    static wxString g_BackLink;
 
 private:
     ///< Set up handlers for various events.

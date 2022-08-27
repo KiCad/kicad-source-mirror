@@ -352,13 +352,14 @@ public:
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
 
-    virtual void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL ) override;
+    void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL ) override;
+
+    void HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs ) override;
 
     /**
      * PDF images are handles as inline, not XObject streams...
      */
-    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos,
-                            double aScaleFactor ) override;
+    void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor ) override;
 
 
 protected:
@@ -418,13 +419,15 @@ protected:
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table
 
     ///< List of user-space page numbers for resolving internal hyperlinks
-    std::vector<wxString>                     m_pageNumbers;
+    std::vector<wxString>                                  m_pageNumbers;
 
     ///< List of loaded hyperlinks in current page
-    std::vector<std::pair<BOX2I, wxString>>   m_hyperlinksInPage;
+    std::vector<std::pair<BOX2I, wxString>>                m_hyperlinksInPage;
+    std::vector<std::pair<BOX2I, std::vector<wxString>>>   m_hyperlinkMenusInPage;
 
     ///< Handles for all the hyperlink objects that will be deferred
-    std::map<int, std::pair<BOX2D, wxString>> m_hyperlinkHandles;
+    std::map<int, std::pair<BOX2D, wxString>>              m_hyperlinkHandles;
+    std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
 };
 
 

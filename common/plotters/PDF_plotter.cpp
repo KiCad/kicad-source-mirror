@@ -739,6 +739,23 @@ void PDF_PLOTTER::ClosePage()
         m_hyperlinkHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, url } } );
     }
 
+    for( const std::pair<BOX2I, std::vector<wxString>>& menuPair : m_hyperlinkMenusInPage )
+    {
+        const BOX2I&                 box = menuPair.first;
+        const std::vector<wxString>& urls = menuPair.second;
+
+        VECTOR2D bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+        VECTOR2D topRight = iuToPdfUserSpace( box.GetEnd() );
+
+        BOX2D userSpaceBox;
+        userSpaceBox.SetOrigin( bottomLeft );
+        userSpaceBox.SetEnd( topRight );
+
+        hyperlinkHandles.push_back( allocPdfObject() );
+
+        m_hyperlinkMenuHandles.insert( { hyperlinkHandles.back(), { userSpaceBox, urls } } );
+    }
+
     int hyperLinkArrayHandle = -1;
 
     // If we have added any annotation links, create an array containing all the objects
@@ -793,6 +810,7 @@ void PDF_PLOTTER::ClosePage()
 
     // Clean up
     m_hyperlinksInPage.clear();
+    m_hyperlinkMenusInPage.clear();
 }
 
 
@@ -804,7 +822,9 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
     m_xrefTable.clear();
     m_xrefTable.push_back( 0 );
     m_hyperlinksInPage.clear();
+    m_hyperlinkMenusInPage.clear();
     m_hyperlinkHandles.clear();
+    m_hyperlinkMenuHandles.clear();
 
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
@@ -878,14 +898,12 @@ bool PDF_PLOTTER::EndPlot()
     fputs( ">>\n", m_outputFile );
     closePdfObject();
 
-    for( const std::pair<const int, std::pair<BOX2D, wxString>>& handlePair : m_hyperlinkHandles )
+    for( const auto& [ linkHandle, linkPair ] : m_hyperlinkHandles )
     {
-        const int&                        linkhandle = handlePair.first;
-        const std::pair<BOX2D, wxString>& linkpair = handlePair.second;
-        const BOX2D&                      box = linkpair.first;
-        const wxString&                   url = linkpair.second;
+        const BOX2D&    box = linkPair.first;
+        const wxString& url = linkPair.second;
 
-        startPdfObject( linkhandle );
+        startPdfObject( linkHandle );
 
         fprintf( m_outputFile,
                  "<< /Type /Annot\n"
@@ -904,7 +922,7 @@ bool PDF_PLOTTER::EndPlot()
                 if( m_pageNumbers[ii] == pageNumber )
                 {
                     fprintf( m_outputFile,
-                             "   /Dest [%d 0 R /FitB] >>\n"
+                             "   /Dest [%d 0 R /FitB]\n"
                              ">>\n",
                              m_pageHandles[ii] );
 
@@ -928,6 +946,60 @@ bool PDF_PLOTTER::EndPlot()
                      ">>\n",
                      encodeStringForPlotter( url ).c_str() );
         }
+
+        closePdfObject();
+    }
+
+    for( const auto& [ menuHandle, menuPair ] : m_hyperlinkMenuHandles )
+    {
+        const BOX2D&                 box = menuPair.first;
+        const std::vector<wxString>& urls = menuPair.second;
+
+        // We currently only support menu links for internal pages.  This vector holds the
+        // page names and numbers.
+        std::vector<std::pair<wxString, int>> pages;
+
+        for( const wxString& url : urls )
+        {
+            wxString pageNumber;
+
+            if( EDA_TEXT::IsGotoPageHref( url, &pageNumber ) )
+            {
+                for( size_t ii = 0; ii < m_pageNumbers.size(); ++ii )
+                {
+                    if( m_pageNumbers[ii] == pageNumber )
+                        pages.push_back( { pageNumber, ii } );
+                }
+            }
+        }
+
+        wxString js = wxT( "var aParams = [ " );
+
+        for( const std::pair<wxString, int>& page : pages )
+        {
+            js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%d' }, " ),
+                                    page.first,
+                                    page.second );
+        }
+
+        js += wxT( "]; " );
+
+        js += wxT( "var cChoice = app.popUpMenuEx.apply\\( app, aParams \\); " );
+        js += wxT( "if\\( cChoice != null \\) this.pageNum = cChoice; " );
+
+        startPdfObject( menuHandle );
+
+        fprintf( m_outputFile,
+                 "<< /Type /Annot\n"
+                 "   /Subtype /Link\n"
+                 "   /Rect [%g %g %g %g]\n"
+                 "   /Border [16 16 0]\n",
+                 box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+
+        fprintf( m_outputFile,
+                 "   /A << /Type /Action /S /JavaScript /JS (%s) >>\n"
+                 ">>\n",
+                 js.ToStdString().c_str() );
 
         closePdfObject();
     }
@@ -1079,3 +1151,8 @@ void PDF_PLOTTER::HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationU
     m_hyperlinksInPage.push_back( std::make_pair( aBox, aDestinationURL ) );
 }
 
+
+void PDF_PLOTTER::HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>& aDestURLs )
+{
+    m_hyperlinkMenusInPage.push_back( std::make_pair( aBox, aDestURLs ) );
+}

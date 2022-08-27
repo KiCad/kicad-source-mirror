@@ -113,6 +113,12 @@ public:
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
+    /**
+     * Builds an array of { pageNumber, pageName } pairs.
+     * @param pages [out] Array of { pageNumber, pageName } pairs.
+     */
+    void GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages );
+
     virtual bool ResolveTextVar( wxString* token, int aDepth ) const;
 
     wxString GetShownText( int aDepth = 0 ) const override;

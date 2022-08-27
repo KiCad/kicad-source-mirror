@@ -28,6 +28,10 @@
 #include <tools/sch_navigate_tool.h>
 #include "eda_doc.h"
 
+
+wxString SCH_NAVIGATE_TOOL::g_BackLink = wxT( "HYPERTEXT_BACK" );
+
+
 void SCH_NAVIGATE_TOOL::ResetHistory()
 {
     m_navHistory.clear();
@@ -53,39 +57,16 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
 }
 
 
-int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
-{
-    int* page = aEvent.Parameter<int*>();
-
-    wxCHECK( page, 0 );
-
-    auto goToPage =
-            [&]( int* aPage )
-            {
-                for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
-                {
-                    if( sheet.GetVirtualPageNumber() == *aPage )
-                    {
-                        changeSheet( sheet );
-                        return;
-                    }
-                }
-            };
-
-    if( *page == -1 )
-        Back( aEvent );
-    else
-        goToPage( page );
-
-    return 0;
-}
-
-
 void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
 {
     wxString destPage;
 
-    if( EDA_TEXT::IsGotoPageHref( href, &destPage ) && !destPage.IsEmpty() )
+    if( href == SCH_NAVIGATE_TOOL::g_BackLink )
+    {
+        TOOL_EVENT dummy;
+        Back( dummy );
+    }
+    else if( EDA_TEXT::IsGotoPageHref( href, &destPage ) && !destPage.IsEmpty() )
     {
         for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
         {
@@ -245,7 +226,6 @@ void SCH_NAVIGATE_TOOL::setTransitions()
     Go( &SCH_NAVIGATE_TOOL::ChangeSheet,           EE_ACTIONS::changeSheet.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::HypertextCommand,      EE_ACTIONS::hypertextCommand.MakeEvent() );
 
     Go( &SCH_NAVIGATE_TOOL::Up,                    EE_ACTIONS::navigateUp.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::Forward,               EE_ACTIONS::navigateForward.MakeEvent() );
