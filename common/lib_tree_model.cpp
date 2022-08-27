@@ -1,6 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
- *
+ *lib_tree_model
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
  * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.

@@ -89,6 +89,9 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     if( !GetIsEnabled() )
         extraOptions += "(disabled)";
 
+    if( !GetIsVisible() )
+        extraOptions += "(hidden)";
+
     out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s)%s)\n",
                 out->Quotew( GetNickName() ).c_str(),
                 out->Quotew( GetType() ).c_str(),
@@ -105,7 +108,8 @@ bool LIB_TABLE_ROW::operator==( const LIB_TABLE_ROW& r ) const
         && uri_user == r.uri_user
         && options == r.options
         && description == r.description
-        && enabled == r.enabled;
+        && enabled == r.enabled
+        && visible == r.visible;
 }
 
 

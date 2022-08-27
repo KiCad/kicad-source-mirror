@@ -129,7 +129,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
                 bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, nickname )
                                 || alg::contains( project.m_PinnedSymbolLibs, nickname );
 
-                modelAdapter->AddLibrary( nickname, pinned );
+                if( libs->FindRow( nickname )->GetIsVisible() )
+                    modelAdapter->AddLibrary( nickname, pinned );
             }
         }
 

@@ -419,6 +419,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                 attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
                 aGrid->SetColAttr( COL_ENABLED, attr );
 
+                // No visibility control for footprint libraries yet; this feature is primarily
+                // useful for database libraries and it's only implemented for schematic symbols
+                // at the moment.
+                aGrid->HideCol( COL_VISIBLE );
+
                 // all but COL_OPTIONS, which is edited with Option Editor anyways.
                 aGrid->AutoSizeColumn( COL_NICKNAME, false );
                 aGrid->AutoSizeColumn( COL_TYPE, false );

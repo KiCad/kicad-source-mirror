@@ -120,6 +120,9 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
         for( const std::pair<const wxString, std::vector<LIB_SYMBOL*>>& pair : loadedSymbols )
         {
+            if( !m_libs->FindRow( pair.first )->GetIsVisible() )
+                continue;
+
             std::vector<LIB_TREE_ITEM*> treeItems( pair.second.begin(), pair.second.end() );
             bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, pair.first )
                             || alg::contains( project.m_PinnedSymbolLibs, pair.first );

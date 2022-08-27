@@ -69,6 +69,7 @@ class LIB_TABLE_ROW : boost::noncopyable
 public:
     LIB_TABLE_ROW() :
         enabled( true ),
+        visible( true ),
         m_loaded( false ),
         m_parent( nullptr )
     {
@@ -83,6 +84,7 @@ public:
         nickName( aNick ),
         description( aDescr ),
         enabled( true ),
+        visible( true ),
         m_loaded( false ),
         m_parent( aParent )
     {
@@ -124,6 +126,10 @@ public:
      * Change the enabled status of this library
      */
     void SetEnabled( bool aEnabled = true ) { enabled = aEnabled; }
+
+    bool GetIsVisible() const { return visible; }
+
+    void SetVisible( bool aVisible = true ) { visible = aVisible; }
 
     /**
      * Return the type of library represented by this row.
@@ -205,6 +211,7 @@ protected:
         options( aRow.options ),
         description( aRow.description ),
         enabled( aRow.enabled ),
+        visible( aRow.visible ),
         m_loaded( aRow.m_loaded ),
         m_parent( aRow.m_parent )
     {
@@ -232,6 +239,7 @@ private:
     wxString          description;
 
     bool              enabled  = true;    ///< Whether the LIB_TABLE_ROW is enabled
+    bool              visible  = true;    ///< Whether the LIB_TABLE_ROW is visible in choosers
     bool              m_loaded = false;   ///< Whether the LIB_TABLE_ROW is loaded
     LIB_TABLE*        m_parent;           ///< Pointer to the table this row lives in (maybe null)
 

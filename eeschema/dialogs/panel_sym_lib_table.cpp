@@ -257,6 +257,11 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
                 aGrid->SetColAttr( COL_ENABLED, attr );
 
+                attr = new wxGridCellAttr;
+                attr->SetRenderer( new wxGridCellBoolRenderer() );
+                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+                aGrid->SetColAttr( COL_VISIBLE, attr );
+
                 // all but COL_OPTIONS, which is edited with Option Editor anyways.
                 aGrid->AutoSizeColumn( COL_NICKNAME, false );
                 aGrid->AutoSizeColumn( COL_TYPE, false );

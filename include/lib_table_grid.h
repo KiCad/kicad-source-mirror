@@ -31,6 +31,7 @@ const wxColour COLOUR_ROW_DISABLED( 100, 100, 100 );
 enum COL_ORDER
 {
     COL_ENABLED,
+    COL_VISIBLE,
     COL_NICKNAME,
     COL_URI,
     COL_TYPE,
@@ -68,6 +69,7 @@ public:
             case COL_OPTIONS:  return r->GetOptions();
             case COL_DESCR:    return r->GetDescr();
             case COL_ENABLED:  return r->GetIsEnabled() ? wxT( "1" ) : wxT( "0" );
+            case COL_VISIBLE:  return r->GetIsVisible() ? wxT( "1" ) : wxT( "0" );
             default:           return wxEmptyString;
             }
         }
@@ -79,6 +81,8 @@ public:
     {
         if( aRow < (int) size() && aCol == COL_ENABLED )
             return at( (size_t) aRow )->GetIsEnabled();
+        else if( aRow < (int) size() && aCol == COL_VISIBLE )
+            return at( (size_t) aRow )->GetIsVisible();
         else
             return false;
     }
@@ -97,6 +101,7 @@ public:
             case COL_OPTIONS:  r->SetOptions( aValue );                             break;
             case COL_DESCR:    r->SetDescr( aValue );                               break;
             case COL_ENABLED:  r->SetEnabled( aValue == wxT( "1" ) );               break;
+            case COL_VISIBLE:  r->SetVisible( aValue == wxT( "1" ) );               break;
             }
         }
     }
@@ -105,6 +110,8 @@ public:
     {
         if( aRow < (int) size() && aCol == COL_ENABLED )
             at( (size_t) aRow )->SetEnabled( aValue );
+        else if( aRow < (int) size() && aCol == COL_VISIBLE )
+            at( (size_t) aRow )->SetVisible( aValue );
     }
 
     bool IsEmptyCell( int aRow, int aCol ) override
@@ -184,6 +191,7 @@ public:
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
         case COL_ENABLED:   return _( "Active" );
+        case COL_VISIBLE:   return _( "Visible" );
 
         default:            return wxEmptyString;
         }

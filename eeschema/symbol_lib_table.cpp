@@ -150,6 +150,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         bool    sawDesc     = false;
         bool    sawUri      = false;
         bool    sawDisabled = false;
+        bool    sawHidden   = false;
 
         while( ( tok = in->NextTok() ) != T_RIGHT )
         {
@@ -200,6 +201,13 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
                     in->Duplicate( tok );
                 sawDisabled = true;
                 row->SetEnabled( false );
+                break;
+
+            case T_hidden:
+                if( sawHidden )
+                    in->Duplicate( tok );
+                sawHidden = true;
+                row->SetVisible( false );
                 break;
 
             default:
