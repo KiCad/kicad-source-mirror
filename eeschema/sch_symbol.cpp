@@ -1011,6 +1011,8 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
     aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
     aVars->push_back( wxT( "UNIT" ) );
+    aVars->push_back( wxT( "SYMBOL_LIBRARY" ) );
+    aVars->push_back( wxT( "SYMBOL_NAME" ) );
 }
 
 
