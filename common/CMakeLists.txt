@@ -282,6 +282,7 @@ set( COMMON_SRCS
     array_axis.cpp
     array_options.cpp
     asset_archive.cpp
+    base_screen.cpp
     base64.cpp
     bin_mod.cpp
     bitmap.cpp

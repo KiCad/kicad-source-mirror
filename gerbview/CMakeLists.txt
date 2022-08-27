@@ -72,7 +72,6 @@ set( GERBVIEW_SRCS
     )
 
 set( GERBVIEW_EXTRA_SRCS
-    ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
     ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
