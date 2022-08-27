@@ -981,9 +981,19 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
 bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
 {
-    wxURL url;
+    if( aURL.IsEmpty() || IsGotoPageHref( aURL ) )
+        return true;
 
-    return aURL.IsEmpty() || url.SetURL( aURL ) == wxURL_NOERR || IsGotoPageHref( aURL );
+    // Limit valid urls to http and https for now. Note wxURL doesn't support https
+    wxURI uri;
+
+    if( uri.Create( aURL ) && uri.HasScheme() )
+    {
+        wxString scheme = uri.GetScheme();
+        return scheme == wxT( "http" ) || scheme == wxT( "https" );
+    }
+
+    return false;
 }
 
 
