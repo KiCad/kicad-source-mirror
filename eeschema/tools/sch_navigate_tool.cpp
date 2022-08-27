@@ -81,7 +81,12 @@ void SCH_NAVIGATE_TOOL::HypertextCommand( const wxString& href )
     }
     else
     {
-        GetAssociatedDocument( m_frame, href, &m_frame->Prj() );
+        wxMenu menu;
+
+        menu.Append( 1, wxString::Format( _( "Open %s" ), href ) );
+
+        if( m_frame->GetPopupMenuSelectionFromUser( menu ) == 1 )
+            GetAssociatedDocument( m_frame, href, &m_frame->Prj() );
     }
 }
 
