@@ -821,7 +821,7 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
 
 TOOL_ACTION PCB_ACTIONS::showProperties( "pcbnew.Control.showProperties",
         AS_GLOBAL, 0, "",
-        _( "Show Properties" ), _( "Show/hide the properties panel" ),
+        _( "Show Properties Panel" ), _( "Show/hide the properties panel" ),
         BITMAPS::tools );
 
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
