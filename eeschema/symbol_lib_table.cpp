@@ -345,6 +345,8 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */  );
 
+    std::lock_guard<std::mutex> lock( row->GetMutex() );
+
     wxString options = row->GetOptions();
 
     if( aPowerSymbolsOnly )
@@ -375,7 +377,13 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
 
-    if( !row || !row->plugin || !row->GetIsLoaded() )
+    if( !row || !row->plugin )
+        return nullptr;
+
+    // If another thread is loading this library at the moment; continue
+    std::unique_lock<std::mutex> lock( row->GetMutex(), std::try_to_lock );
+
+    if( !lock.owns_lock() )
         return nullptr;
 
     LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,

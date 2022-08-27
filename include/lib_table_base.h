@@ -180,6 +180,8 @@ public:
 
     void SetParent( LIB_TABLE* aParent ) { m_parent = aParent; }
 
+    std::mutex& GetMutex() { return m_loadMutex; }
+
     /**
      * Return the constant #PROPERTIES for this library (#LIB_TABLE_ROW).  These are
      * the "options" in a table.
@@ -244,6 +246,8 @@ private:
     LIB_TABLE*        m_parent;           ///< Pointer to the table this row lives in (maybe null)
 
     std::unique_ptr< PROPERTIES > properties;
+
+    std::mutex        m_loadMutex;
 };
 
 
