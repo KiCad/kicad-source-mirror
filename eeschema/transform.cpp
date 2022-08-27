@@ -87,48 +87,34 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
     VECTOR2D v;
     bool     swap = false;
 
-    EDA_ANGLE delta = *aAngle2 - *aAngle1;
-
-    if( delta >= ANGLE_180 )
-    {
-        *aAngle1 -= epsilon;
-        *aAngle2 += epsilon;
-    }
+    EDA_ANGLE delta = ( *aAngle2 - *aAngle1 ).Normalize();
 
     x = aAngle1->Cos();
     y = aAngle1->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle1 = EDA_ANGLE( v );
-
-    x = aAngle2->Cos();
-    y = aAngle2->Sin();
-    v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
-    *aAngle2 = EDA_ANGLE( v );
-
     aAngle1->Normalize();
-    aAngle2->Normalize();
 
-    if( *aAngle2 < *aAngle1 )
-        *aAngle2 += ANGLE_360;
+    // Transform the relative difference between the two angles
+    x = delta.Cos();
+    y = delta.Sin();
+    v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
+    EDA_ANGLE deltaTransformed( v );
 
-    if( *aAngle2 - *aAngle1 > ANGLE_180 ) // Need to swap the two angles
+    // Calculate the second angle using the first one as an anchor
+    *aAngle2 = *aAngle1 + deltaTransformed;
+
+    if( sign( deltaTransformed.Normalize180().AsDegrees() )
+        != sign( delta.Normalize180().AsDegrees() ) )
     {
         std::swap( *aAngle1, *aAngle2 );
-
-        aAngle1->Normalize();
-        aAngle2->Normalize();
+        swap = true;
 
         if( *aAngle2 < *aAngle1 )
             *aAngle2 += ANGLE_360;
-
-        swap = true;
     }
 
-    if( delta >= ANGLE_180 )
-    {
-        *aAngle1 += epsilon;
-        *aAngle2 -= epsilon;
-    }
+    assert( ( *aAngle2 - *aAngle1 - delta ).Normalize() < epsilon );
 
     return swap;
 }
