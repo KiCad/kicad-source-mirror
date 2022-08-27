@@ -520,7 +520,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 nlohmann::json js = nlohmann::json::array();
 
-                for( int ii = 0; ii < m_TeardropParamsList.GetParametersCount(); ii++ )
+                for( size_t ii = 0; ii < m_TeardropParamsList.GetParametersCount(); ii++ )
                 {
                     nlohmann::json entry = {};
                     TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)ii );

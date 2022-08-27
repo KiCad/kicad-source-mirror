@@ -163,7 +163,7 @@ public:
     /**
      * @return the number of TEARDROP_PARAMETERS item. Should be 3
      */
-    int GetParametersCount()
+    size_t GetParametersCount()
     {
         return m_params_list.size();
     }
