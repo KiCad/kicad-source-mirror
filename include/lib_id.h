@@ -120,6 +120,16 @@ public:
     int SetLibItemName( const UTF8& aLibItemName );
 
     /**
+     * Some LIB_IDs can have a sub-library identifier in addition to a library nickname.
+     * This identifier is *not* part of the canonical LIB_ID and is not written out / parsed.
+     * It is only used for internal sorting/grouping, if present.
+     *
+     * @return the sub-library name for this LIB_ID, if one exists
+     */
+    UTF8 GetSubLibraryName() const { return m_subLibraryName; }
+    void SetSubLibraryName( const UTF8& aName ) { m_subLibraryName = aName; }
+
+    /**
      * @return the fully formatted text of the LIB_ID in a UTF8 string.
      */
     UTF8 Format() const;
@@ -253,6 +263,7 @@ protected:
 
     UTF8    m_libraryName;    ///< The nickname of the library or empty.
     UTF8    m_itemName;       ///< The name of the entry in the logical library.
+    UTF8    m_subLibraryName; ///< Optional sub-library name used for grouping within a library
 };
 
 

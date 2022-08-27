@@ -118,17 +118,55 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
         PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
 
+        auto addFunc =
+                [&]( const wxString& aLibName, std::vector<LIB_SYMBOL*> aSymbolList,
+                     const wxString& aDescription )
+                {
+                    std::vector<LIB_TREE_ITEM*> treeItems( aSymbolList.begin(), aSymbolList.end() );
+                    bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, aLibName )
+                                  || alg::contains( project.m_PinnedSymbolLibs, aLibName );
+
+                    DoAddLibrary( aLibName, aDescription, treeItems, pinned, false );
+                };
+
         for( const std::pair<const wxString, std::vector<LIB_SYMBOL*>>& pair : loadedSymbols )
         {
-            if( !m_libs->FindRow( pair.first )->GetIsVisible() )
+            SYMBOL_LIB_TABLE_ROW* row = m_libs->FindRow( pair.first );
+
+            if( !row->GetIsVisible() )
                 continue;
 
-            std::vector<LIB_TREE_ITEM*> treeItems( pair.second.begin(), pair.second.end() );
-            bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, pair.first )
-                            || alg::contains( project.m_PinnedSymbolLibs, pair.first );
+            if( row->SupportsSubLibraries() )
+            {
+                std::vector<wxString> subLibraries;
+                row->GetSubLibraryNames( subLibraries );
 
-            DoAddLibrary( pair.first, m_libs->GetDescription( pair.first ), treeItems, pinned,
-                          false );
+                wxString parentDesc = m_libs->GetDescription( pair.first );
+
+                for( const wxString& lib : subLibraries )
+                {
+                    wxString name = wxString::Format( wxT( "%s - %s" ), pair.first, lib );
+                    wxString desc;
+
+                    if( !parentDesc.IsEmpty() )
+                        desc = wxString::Format( wxT( "%s (%s)" ), parentDesc, lib );
+
+                    std::vector<LIB_SYMBOL*> symbols;
+
+                    std::copy_if( pair.second.begin(), pair.second.end(),
+                                  std::back_inserter( symbols ),
+                                  [&lib]( LIB_SYMBOL* aSym )
+                                  {
+                                      return lib.IsSameAs( aSym->GetLibId().GetSubLibraryName() );
+                                  } );
+
+                    addFunc( name, symbols, desc );
+                }
+            }
+            else
+            {
+                addFunc( pair.first, pair.second, m_libs->GetDescription( pair.first ) );
+            }
         }
     }
 

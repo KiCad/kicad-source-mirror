@@ -86,6 +86,15 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
 }
 
 
+void SYMBOL_LIB_TABLE_ROW::GetSubLibraryNames( std::vector<wxString>& aNames ) const
+{
+    if( !plugin )
+        return;
+
+    plugin->GetSubLibraryNames( aNames );
+}
+
+
 SYMBOL_LIB_TABLE::SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable ) :
     LIB_TABLE( aFallBackTable )
 {

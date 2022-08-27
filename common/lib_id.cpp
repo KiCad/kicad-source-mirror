@@ -43,6 +43,7 @@ void LIB_ID::clear()
 {
     m_libraryName.clear();
     m_itemName.clear();
+    m_subLibraryName.clear();
 }
 
 

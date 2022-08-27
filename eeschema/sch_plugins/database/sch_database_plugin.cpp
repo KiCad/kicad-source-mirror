@@ -142,6 +142,17 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
 }
 
 
+void SCH_DATABASE_PLUGIN::GetSubLibraryNames( std::vector<wxString>& aNames )
+{
+    ensureSettings( wxEmptyString );
+
+    aNames.clear();
+
+    for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
+        aNames.emplace_back( tableIter.name );
+}
+
+
 bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
 {
     // TODO: Implement this sometime; but CheckHeader isn't even called...
@@ -151,7 +162,7 @@ bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
 
 void SCH_DATABASE_PLUGIN::ensureSettings( const wxString& aSettingsPath )
 {
-    if( !m_settings )
+    if( !m_settings && !aSettingsPath.IsEmpty() )
     {
         std::string path( aSettingsPath.ToUTF8() );
         m_settings = std::make_unique<DATABASE_LIB_SETTINGS>( path );
@@ -166,7 +177,7 @@ void SCH_DATABASE_PLUGIN::ensureSettings( const wxString& aSettingsPath )
             THROW_IO_ERROR( msg );
         }
     }
-    else
+    else if( !m_settings )
     {
         wxASSERT_MSG( aSettingsPath == m_settings->GetFilename(),
                       "Path changed for database library without re-initializing plugin!" );
@@ -250,6 +261,8 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
     {
         symbol->SetName( aSymbolName );
     }
+
+    symbol->LibId().SetSubLibraryName( aTable.name );
 
     if( aRow.count( aTable.footprints_col ) )
     {

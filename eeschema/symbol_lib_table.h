@@ -80,6 +80,10 @@ public:
      */
     bool Refresh();
 
+    bool SupportsSubLibraries() const { return plugin ? plugin->SupportsSubLibraries() : false; }
+
+    void GetSubLibraryNames( std::vector<wxString>& aNames ) const;
+
 protected:
     SYMBOL_LIB_TABLE_ROW( const SYMBOL_LIB_TABLE_ROW& aRow ) :
         LIB_TABLE_ROW( aRow ),

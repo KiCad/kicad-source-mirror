@@ -444,6 +444,25 @@ public:
     virtual void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const;
 
     /**
+     * @return true if this plugin supports libraries that contain sub-libraries.
+     */
+    virtual bool SupportsSubLibraries() const { return false; }
+
+    /**
+     * Retrieves a list of sub-libraries in this library.
+     *
+     * Some types of symbol library support sub-libraries, which are a single-level organizational
+     * hierarchy that is implementation-defined per plugin.  Most of KiCad ignores sub-libraries and
+     * treats the hierarchy between library and symbol as flat, but the sub-libraries are used for
+     * sorting and grouping symbols in the symbol chooser.
+     *
+     * Has no effect if SupportsSubLibraries() returns false.
+     *
+     * @param aNames will be filled with a list of sub-libraries within this symbol library
+     */
+    virtual void GetSubLibraryNames( std::vector<wxString>& aNames ) {}
+
+    /**
      * Return true if the first line in @a aFileName begins with the expected header.
      *
      * @param aFileName is the name of the file to use as input

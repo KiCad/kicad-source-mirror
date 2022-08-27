@@ -73,6 +73,10 @@ public:
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                             const PROPERTIES* aProperties = nullptr ) override;
 
+    bool SupportsSubLibraries() const override { return true; }
+
+    void GetSubLibraryNames( std::vector<wxString>& aNames ) override;
+
     bool CheckHeader( const wxString& aFileName ) override;
 
     // Database libraries can never be written using the symbol editing API
