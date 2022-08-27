@@ -255,7 +255,6 @@ set( EESCHEMA_SRCS
     symbol_viewer_frame.cpp
     toolbars_sch_editor.cpp
     toolbars_symbol_viewer.cpp
-    transform.cpp
 
     netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
