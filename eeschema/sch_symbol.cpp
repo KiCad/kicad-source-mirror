@@ -1093,6 +1093,16 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         *token = LIB_SYMBOL::SubReference( unit );
         return true;
     }
+    else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )
+    {
+        *token = m_lib_id.GetLibNickname();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_NAME" ) ) )
+    {
+        *token = m_lib_id.GetLibItemName();
+        return true;
+    }
 
     return false;
 }
