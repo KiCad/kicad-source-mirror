@@ -983,9 +983,9 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     PAGED_DIALOG dlg( this, _( "Preferences" ), true );
     wxTreebook* book = dlg.GetTreebook();
 
-    PANEL_HOTKEYS_EDITOR*      hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
-    KIFACE*                    kiface = nullptr;
-    std::vector<int>           expand;
+    PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
+    KIFACE*                 kiface = nullptr;
+    std::vector<int>        expand;
 
     Kiway().GetActions( hotkeysPanel->ActionsList() );
 
@@ -999,83 +999,108 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
 #define CREATE_PANEL( key ) kiface->CreateWindow( book, key, &Kiway() )
 
-    kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+    // If a dll is not loaded, the loader will show an error message.
 
-    kiface->GetActions( hotkeysPanel->ActionsList() );
+    try
+    {
+        kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
 
-    if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-        expand.push_back( book->GetPageCount() );
+        kiface->GetActions( hotkeysPanel->ActionsList() );
 
-    book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SYM_COLORS ), _( "Colors" ) );
+        if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+            expand.push_back( book->GetPageCount() );
 
-    if( GetFrameType() == FRAME_SCH )
-        expand.push_back( book->GetPageCount() );
+        book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SYM_COLORS ), _( "Colors" ) );
 
-    book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SCH_COLORS ), _( "Colors" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+        if( GetFrameType() == FRAME_SCH )
+            expand.push_back( book->GetPageCount() );
 
-    kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+        book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_COLORS ), _( "Colors" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+    }
+    catch( ... )
+    {
+    }
 
-    kiface->GetActions( hotkeysPanel->ActionsList() );
+    try
+    {
+        kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
 
-    if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
-        expand.push_back( book->GetPageCount() );
+        kiface->GetActions( hotkeysPanel->ActionsList() );
 
-    book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_FP_COLORS ), _( "Colors" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
+        if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
+            expand.push_back( book->GetPageCount() );
 
-    if( GetFrameType() ==  FRAME_PCB_EDITOR )
-        expand.push_back( book->GetPageCount() );
+        book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_FP_COLORS ), _( "Colors" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
 
-    book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_PCB_COLORS ), _( "Colors" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
+        if( GetFrameType() ==  FRAME_PCB_EDITOR )
+            expand.push_back( book->GetPageCount() );
 
-    if( GetFrameType() == FRAME_PCB_DISPLAY3D )
-        expand.push_back( book->GetPageCount() );
+        book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_PCB_COLORS ), _( "Colors" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
 
-    book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_3DV_COLORS ), _( "Colors" ) );
+        if( GetFrameType() == FRAME_PCB_DISPLAY3D )
+            expand.push_back( book->GetPageCount() );
 
-    kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
+        book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_3DV_COLORS ), _( "Colors" ) );
+    }
+    catch( ... )
+    {
+    }
 
-    kiface->GetActions( hotkeysPanel->ActionsList() );
+    try
+    {
+        kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
 
-    if( GetFrameType() == FRAME_GERBER )
-        expand.push_back( book->GetPageCount() );
+        kiface->GetActions( hotkeysPanel->ActionsList() );
 
-    book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+        if( GetFrameType() == FRAME_GERBER )
+            expand.push_back( book->GetPageCount() );
 
-    kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+        book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+    }
+    catch( ... )
+    {
+    }
 
-    kiface->GetActions( hotkeysPanel->ActionsList() );
+    try
+    {
+        kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+        kiface->GetActions( hotkeysPanel->ActionsList() );
 
-    if( GetFrameType() == FRAME_PL_EDITOR )
-        expand.push_back( book->GetPageCount() );
+        if( GetFrameType() == FRAME_PL_EDITOR )
+            expand.push_back( book->GetPageCount() );
 
-    book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
-    book->AddSubPage( CREATE_PANEL( PANEL_DS_COLORS ), _( "Colors" ) );
+        book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_DS_COLORS ), _( "Colors" ) );
 
-    book->AddPage( new PANEL_PCM_SETTINGS( book ), _( "Plugin and Content Manager" ) );
+        book->AddPage( new PANEL_PCM_SETTINGS( book ), _( "Plugin and Content Manager" ) );
+    }
+    catch( ... )
+    {
+    }
 
     // Update all of the action hotkeys. The process of loading the actions through
     // the KiFACE will only get us the default hotkeys
