@@ -81,8 +81,6 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
     wxCHECK_MSG( aAngle1 != nullptr && aAngle2 != nullptr, false,
                  wxT( "Cannot map NULL point angles." ) );
 
-    static const EDA_ANGLE epsilon( 0.1, DEGREES_T );
-
     double   x, y;
     VECTOR2D v;
     bool     swap = false;
@@ -114,7 +112,16 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
             *aAngle2 += ANGLE_360;
     }
 
-    assert( ( *aAngle2 - *aAngle1 - delta ).Normalize() < epsilon );
+#ifdef DEBUG
+    // This check is only valid for coordinate inversions (y=-y). If we start using this function on
+    // more complex transforms (different x to y scaling), we should re-write it/re think it.
+    static const EDA_ANGLE epsilon( 0.1, DEGREES_T );
+
+    EDA_ANGLE residualError( *aAngle2 - *aAngle1 - delta );
+    residualError.Normalize();
+
+    assert( residualError < epsilon || residualError > epsilon.Invert().Normalize() );
+#endif // DEBUG
 
     return swap;
 }
