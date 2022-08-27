@@ -176,7 +176,8 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
     for( size_t i = 0; i < strings_list.GetCount(); i++ )
     {
         drawSingleLineText( aGal, nullptr, strings_list[i], positions[i], aAttrs.m_Size,
-                            aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, aAttrs.m_Italic );
+                            aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, aAttrs.m_Italic,
+                            aAttrs.m_Underlined );
     }
 }
 
@@ -245,7 +246,7 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
 void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxString& aText,
                                const VECTOR2I& aPosition, const VECTOR2I& aSize,
                                const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                               bool aItalic ) const
+                               bool aItalic, bool aUnderline ) const
 {
     if( !aGal )
         return;
@@ -254,6 +255,9 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
 
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
+
+    if( aUnderline )
+        textStyle |= TEXT_STYLE::UNDERLINE;
 
     std::vector<std::unique_ptr<GLYPH>> glyphs;
 

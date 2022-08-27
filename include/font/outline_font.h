@@ -84,6 +84,12 @@ public:
     double ComputeOverbarVerticalPosition( double aGlyphHeight ) const override;
 
     /**
+     * Compute the vertical position of an underline.  This is the distance between the text
+     * baseline and the underline.
+     */
+    double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const override;
+
+    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */
@@ -141,6 +147,8 @@ private:
     // For auto-generated subscript and superscript glyphs in outline fonts we split the difference
     // with 0.64.
     static constexpr double m_subscriptSuperscriptSize = 0.64;
+
+    static constexpr double m_underlineOffsetScaler = -0.16;
 
     int faceSize( int aSize ) const
     {

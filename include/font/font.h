@@ -46,7 +46,8 @@ enum TEXT_STYLE
     ITALIC = 1 << 1,
     SUBSCRIPT = 1 << 2,
     SUPERSCRIPT = 1 << 3,
-    OVERBAR = 1 << 4
+    OVERBAR = 1 << 4,
+    UNDERLINE = 1 << 5
 };
 
 
@@ -160,6 +161,12 @@ public:
     virtual double ComputeOverbarVerticalPosition( double aGlyphHeight ) const = 0;
 
     /**
+     * Compute the vertical position of an underline.  This is the distance between the text
+     * baseline and the underline.
+     */
+    virtual double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const = 0;
+
+    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */
@@ -218,7 +225,7 @@ protected:
     void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxString& aText,
                              const VECTOR2I& aPosition, const VECTOR2I& aSize,
                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                             bool aItalic ) const;
+                             bool aItalic, bool aUnderline ) const;
 
     /**
      * Computes the bounding box for a single line of text.

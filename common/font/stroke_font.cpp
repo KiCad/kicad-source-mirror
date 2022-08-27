@@ -46,6 +46,9 @@ using namespace KIFONT;
 ///< Factor that determines relative vertical position of the overbar.
 static constexpr double OVERBAR_POSITION_FACTOR = 1.33;
 
+///< Factor that determines relative vertical position of the underline.
+static constexpr double UNDERLINE_POSITION_FACTOR = -0.16;
+
 ///< Scale factor for a glyph
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
 
@@ -210,6 +213,12 @@ double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 }
 
 
+double STROKE_FONT::ComputeUnderlineVerticalPosition( double aGlyphHeight ) const
+{
+    return aGlyphHeight * UNDERLINE_POSITION_FACTOR;
+}
+
+
 VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                        const wxString& aText, const VECTOR2I& aSize,
                                        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
@@ -310,6 +319,29 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
             aGlyphs->push_back( overbarGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false,
                                                          aAngle, aMirror, aOrigin ) );
+        }
+    }
+
+    if( aTextStyle & TEXT_STYLE::UNDERLINE )
+    {
+        barOffset.y = ComputeUnderlineVerticalPosition( glyphSize.y );
+
+        if( aTextStyle & TEXT_STYLE::ITALIC )
+            barOffset.x = barOffset.y * ITALIC_TILT;
+
+        VECTOR2D barStart( aPosition.x + barOffset.x + barTrim, cursor.y - barOffset.y );
+        VECTOR2D barEnd( cursor.x + barOffset.x - barTrim, cursor.y - barOffset.y );
+
+        if( aGlyphs )
+        {
+            STROKE_GLYPH underlineGlyph;
+
+            underlineGlyph.AddPoint( barStart );
+            underlineGlyph.AddPoint( barEnd );
+            underlineGlyph.Finalize();
+
+            aGlyphs->push_back( underlineGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false,
+                                                          aAngle, aMirror, aOrigin ) );
         }
     }
 

@@ -71,6 +71,12 @@ public:
     double ComputeOverbarVerticalPosition( double aGlyphHeight ) const override;
 
     /**
+     * Compute the vertical position of an underline.  This is the distance between the text
+     * baseline and the underline.
+     */
+    double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const override;
+
+    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */

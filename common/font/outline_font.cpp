@@ -142,6 +142,16 @@ double OUTLINE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 
 
 /**
+ * Compute the vertical position of an underline.  This is the distance between the text
+ * baseline and the underline.
+ */
+double OUTLINE_FONT::ComputeUnderlineVerticalPosition( double aGlyphHeight ) const
+{
+    return aGlyphHeight * m_underlineOffsetScaler;
+}
+
+
+/**
  * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
  * the distance between baselines, not the space between line bounding boxes.
  */
