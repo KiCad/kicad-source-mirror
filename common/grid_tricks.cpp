@@ -77,9 +77,10 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
     if( isCheckbox )
     {
         if( !aPreserveSelection )
+        {
             m_grid->ClearSelection();
-
-        m_grid->SetGridCursor( aRow, aCol );
+            m_grid->SetGridCursor( aRow, aCol );
+        }
 
         wxGridTableBase* model = m_grid->GetTable();
 
@@ -154,11 +155,39 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
     // Don't make users click twice to toggle a checkbox or edit a text cell
     if( !aEvent.GetModifiers() )
     {
-        if( toggleCell( row, col ) )
+        bool toggled = false;
+
+        if( toggleCell( row, col, true ) )
+            toggled = true;
+        else if( showEditor( row, col ) )
             return;
 
-        if( showEditor( row, col ) )
-            return;
+        // Apply checkbox changes to multi-selection.
+        // Non-checkbox changes handled elsewhere
+        if( toggled )
+        {
+            getSelectedArea();
+
+            // We only want to apply this to whole rows.  If the grid allows selecting individual
+            // cells, and the selection contains dijoint cells, skip this logic.
+            if( !m_grid->GetSelectedCells().IsEmpty() || !m_sel_row_count )
+            {
+                // We preserved the selection in toggleCell above; so clear it now that we know
+                // we aren't doing a multi-select edit
+                m_grid->ClearSelection();
+                return;
+            }
+
+            wxString newVal = m_grid->GetCellValue( row, col );
+
+            for( int affectedRow = m_sel_row_start; affectedRow < m_sel_row_count; ++affectedRow )
+            {
+                if( affectedRow == row )
+                    continue;
+
+                m_grid->SetCellValue( affectedRow, col, newVal );
+            }
+        }
     }
 
     aEvent.Skip();
