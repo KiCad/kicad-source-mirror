@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -15909,7 +15909,7 @@ msgstr "Додати мітку звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:312
 msgid "Add Net Class Directive"
-msgstr "Додати директиву Класу звʼязку"
+msgstr "Додати директиву класу звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:312
 msgid "Add a net class directive label"
@@ -18448,28 +18448,28 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:61
 msgid "Manage Repositories"
-msgstr ""
+msgstr "Керування репозиторіями"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
 msgid "Plugins (%d)"
-msgstr ""
+msgstr "Плагіни (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
 msgid "Libraries (%d)"
-msgstr ""
+msgstr "Бібліотеки (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
 msgid "Color themes (%d)"
-msgstr ""
+msgstr "Кольорові теми (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:81 kicad/pcm/dialogs/dialog_pcm.cpp:352
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Репозиторій (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:100 kicad/pcm/dialogs/panel_package.cpp:88
 #: kicad/pcm/dialogs/panel_package.cpp:94
@@ -18477,21 +18477,21 @@ msgstr ""
 #: kicad/pcm/dialogs/panel_packages_view.cpp:690
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
 msgid "Install"
-msgstr ""
+msgstr "Інсталювати"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:114 kicad/pcm/dialogs/panel_package.cpp:64
 #: kicad/pcm/dialogs/panel_package.cpp:100
 #: kicad/pcm/dialogs/panel_packages_view.cpp:691
 msgid "Uninstall"
-msgstr ""
+msgstr "Видалити"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:140
 msgid "Apply Pending Changes"
-msgstr ""
+msgstr "Застосувати зміни"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:141
 msgid "Discard Pending Changes"
-msgstr ""
+msgstr "Відмінити зміни"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:182
 msgid ""
@@ -18501,23 +18501,23 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:263
 msgid "Choose package file"
-msgstr ""
+msgstr "Вибір файлу пакету"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:367
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Очікування (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:407
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Встановлено (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 msgid "Manage..."
-msgstr ""
+msgstr "Керування..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -18526,117 +18526,116 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:146
 #: pcbnew/dialogs/panel_edit_options_base.cpp:218
 msgid "Action"
-msgstr ""
+msgstr "Дія"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:86
 msgid "Package"
-msgstr ""
+msgstr "Пакет"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr ""
+msgstr "Репозиторій"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
-msgstr ""
+msgstr "Відмінити дію"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 msgid "Install from File..."
-msgstr ""
+msgstr "Встановити з файлу..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
 msgid "Open Package Directory"
-msgstr ""
+msgstr "Відкрити каталог пакунків"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Управління плагінами і контентом"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Переривання завдань, що залишилися."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
 #, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr ""
+msgstr "Звантажено %lld/%lld КБ"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
-msgstr ""
+msgstr "Перебіг завантаження"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
-msgstr ""
+msgstr "Очікуйте..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 msgid "Overall Progress"
-msgstr ""
+msgstr "Загальний прогрес"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Подробиці"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr ""
+msgstr "Застосування змін пакунка"
 
 #: kicad/pcm/dialogs/panel_package.cpp:106
 msgid "Install Pending"
-msgstr ""
+msgstr "Встановлення в процесі"
 
 #: kicad/pcm/dialogs/panel_package.cpp:112
 msgid "Uninstall Pending"
-msgstr ""
+msgstr "Очікування видалення"
 
 #: kicad/pcm/dialogs/panel_package.cpp:123
-#, fuzzy
 msgid "Update Pending"
-msgstr "Оновити плату"
+msgstr "Очікується оновлення"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
 msgid "Metadata"
-msgstr ""
+msgstr "Метадані"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:217
 msgid "Package identifier: "
-msgstr ""
+msgstr "Ідентифікатор пакета: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:218
 msgid "License: "
-msgstr ""
+msgstr "Ліцензія: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:232
 msgid "Tags: "
-msgstr ""
+msgstr "МІтки: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:258
 msgid "Author"
-msgstr ""
+msgstr "Автор"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:261
 msgid "Maintainer"
-msgstr ""
+msgstr "Супроводжувач"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:265
 msgid "Resources"
-msgstr ""
+msgstr "Ресурси"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:495
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "Не вказано url для завантаження пакунку"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:496
 msgid "Error downloading package"
-msgstr ""
+msgstr "Помилка завантаження пакунку"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:505
 msgid "Save package"
-msgstr ""
+msgstr "Зберегти пакунок"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:518
 msgid "Downloading package"
-msgstr ""
+msgstr "Завантаження пакунку"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:536
 msgid ""
@@ -18919,7 +18918,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:244
 msgid "Create New Directory"
-msgstr ""
+msgstr "Створити нову теку"
 
 #: kicad/project_tree_pane.cpp:688
 msgid "Switch to this Project"
@@ -19093,31 +19092,32 @@ msgstr ""
 #: kicad/tools/kicad_manager_actions.cpp:104
 #: pcb_calculator/pcb_calculator_frame.cpp:52
 msgid "Calculator Tools"
-msgstr ""
+msgstr "Розрахунок параметрів"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 msgid "Run component calculations, track width calculations, etc."
 msgstr ""
+"Запустити обчислення параметрів компонентів, обчислення ширини доріжки, тощо."
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
-msgstr ""
+msgstr "Редагування кордонів аркуша і блоку заголовка"
 
 #: kicad/tools/kicad_manager_actions.cpp:116
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Запустити менеджер плагінів і контента"
 
 #: kicad/tools/kicad_manager_actions.cpp:122
 msgid "Open Text Editor"
-msgstr ""
+msgstr "Відкрити текстовий редактор"
 
 #: kicad/tools/kicad_manager_actions.cpp:122
 msgid "Launch preferred text editor"
-msgstr ""
+msgstr "Запустити текстовий редактор"
 
 #: kicad/tools/kicad_manager_control.cpp:66
 msgid "Create New Project"
-msgstr ""
+msgstr "Створити новий проект"
 
 #: kicad/tools/kicad_manager_control.cpp:121
 msgid ""
@@ -19126,53 +19126,57 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"Вибрана папка не пуста. Рекомендується створювати проекти у власній порожній "
+"папці.\n"
+"\n"
+"Ви хочете продовжити?"
 
 #: kicad/tools/kicad_manager_control.cpp:148
 msgid "System Templates"
-msgstr ""
+msgstr "Системні шаблони"
 
 #: kicad/tools/kicad_manager_control.cpp:157
 msgid "User Templates"
-msgstr ""
+msgstr "Шаблони користувача"
 
 #: kicad/tools/kicad_manager_control.cpp:166
 msgid "No project template was selected.  Cannot generate new project."
-msgstr ""
+msgstr "Шаблон проекта не вибраний.  Не вдалося створити новий проект."
 
 #: kicad/tools/kicad_manager_control.cpp:174
 msgid "New Project Folder"
-msgstr ""
+msgstr "Нова тека проекту"
 
 #: kicad/tools/kicad_manager_control.cpp:232
 #: kicad/tools/kicad_manager_control.cpp:583
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
+msgstr "Недостатньо прав для запису в теку '%s."
 
 #: kicad/tools/kicad_manager_control.cpp:253
 msgid "Overwriting files:"
-msgstr ""
+msgstr "Перезаписані файли:"
 
 #: kicad/tools/kicad_manager_control.cpp:259
 msgid "Similar files already exist in the destination folder."
-msgstr ""
+msgstr "Схожі файли вже існують у теці призначення."
 
 #: kicad/tools/kicad_manager_control.cpp:278
 msgid "A problem occurred creating new project from template."
-msgstr ""
+msgstr "Сталася помилка при створенні нового проекту з шаблону."
 
 #: kicad/tools/kicad_manager_control.cpp:301
 msgid "Open Existing Project"
-msgstr ""
+msgstr "Відкрити існуючий проект"
 
 #: kicad/tools/kicad_manager_control.cpp:508
 #, c-format
 msgid "Cannot copy folder '%s'."
-msgstr ""
+msgstr "Не вдалося скопіювати теку '%s."
 
 #: kicad/tools/kicad_manager_control.cpp:554
 msgid "Save Project To"
-msgstr ""
+msgstr "Зберегти проект до"
 
 #: kicad/tools/kicad_manager_control.cpp:574
 #, c-format
@@ -19181,51 +19185,54 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
+"Не вдалося створити теку '%s'.\n"
+"\n"
+"Перевірте, чи має те дозвіл на це."
 
 #: kicad/tools/kicad_manager_control.cpp:585
 msgid "Error!"
-msgstr ""
+msgstr "Помилка!"
 
 #: kicad/tools/kicad_manager_control.cpp:641
 msgid "Create (or open) a project to edit a schematic."
-msgstr ""
+msgstr "Створити (або відкрити) проект для редагування схеми."
 
 #: kicad/tools/kicad_manager_control.cpp:647
 msgid "Create (or open) a project to edit a pcb."
-msgstr ""
+msgstr "Створити (або відкрити) проект для редагування pcb."
 
 #: kicad/tools/kicad_manager_control.cpp:666
 msgid "Application failed to load:\n"
-msgstr ""
+msgstr "Не вдалося завантажити додаток:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:666
 #: kicad/tools/kicad_manager_control.cpp:673 pcbnew/pcb_edit_frame.cpp:1670
 #: pcbnew/pcb_edit_frame.cpp:1700
 msgid "KiCad Error"
-msgstr ""
+msgstr "Помилка KiCad"
 
 #: kicad/tools/kicad_manager_control.cpp:673
 msgid "Application failed to load."
-msgstr ""
+msgstr "Не вдалося завантажити додаток."
 
 #: kicad/widgets/filedlg_new_project.h:32
 #: kicad/widgets/legacyfiledlg_new_project.h:34
 msgid "Create a new folder for the project"
-msgstr ""
+msgstr "Створити нову теку для проекту"
 
 #: libs/kiplatform/msw/environment.cpp:63
 #, c-format
 msgid "Error code: %d"
-msgstr ""
+msgstr "Код помилки: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
-msgstr ""
+msgstr "Макет"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "Розмір: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 msgid "-"
@@ -19233,30 +19240,30 @@ msgstr "-"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
-msgstr ""
+msgstr "Початок Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:44
 msgid "X start:"
-msgstr ""
+msgstr "Початок X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
 msgid "Origin"
-msgstr ""
+msgstr "Початок координат"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:274
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:327
 msgid "Upper Right"
-msgstr ""
+msgstr "Верхній правий"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:275
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:328
 msgid "Upper Left"
-msgstr ""
+msgstr "Верхній лівий"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -19264,7 +19271,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:276
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:329
 msgid "Lower Right"
-msgstr ""
+msgstr "Нижній правий"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -19272,96 +19279,96 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:326
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:330
 msgid "Lower Left"
-msgstr ""
+msgstr "Нижній лівий"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
-msgstr ""
+msgstr "Кінець X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:104
 msgid "Y end:"
-msgstr ""
+msgstr "Кінець Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
 msgid "New Item"
-msgstr ""
+msgstr "Новий елемент"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:233
 msgid "Print Drawing Sheet"
-msgstr ""
+msgstr "Друк форматної рамки"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:238
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr ""
+msgstr "Помилка при друці форматної рамки."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "Printing"
-msgstr ""
+msgstr "Друк"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:576
 msgid "Predefined Keywords"
-msgstr ""
+msgstr "Попередньо визначені ключові слова"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:579
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Текст може включати ключові слова."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:580
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Запис ключового слова ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:581
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Кожне ключове слово замінюється своїм значенням"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:582
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Ці вбудовані ключові слова завжди доступні:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:586
 msgid "(sheet number)"
-msgstr ""
+msgstr "(номер листа)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:587
 msgid "(sheet count)"
-msgstr ""
+msgstr "(кількість листів)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:593
 msgid "(paper size)"
-msgstr ""
+msgstr "(розмір паперу)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
-msgstr ""
+msgstr "Показати на всіх сторінках"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "First page only"
-msgstr ""
+msgstr "Лише на першій сторінці"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
-msgstr ""
+msgstr "Лише на наступних сторінках"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:473
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
 msgid "Text width:"
-msgstr ""
+msgstr "Ширина тексту:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:171
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:208
 msgid "Text height:"
-msgstr ""
+msgstr "Висота тексту:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:182
 msgid "Max width:"
-msgstr ""
+msgstr "Максимальна ширина:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:184
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:197
 msgid "Set to 0 to disable this constraint"
-msgstr ""
+msgstr "Встановіть 0 щоб вимкнути це обмеження"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:83
@@ -19371,110 +19378,110 @@ msgstr ""
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:311
 msgid "Max height:"
-msgstr ""
+msgstr "Максимальна висота:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 msgid "Set to 0 to use default values"
-msgstr ""
+msgstr "Встановіть 0 для використання значень за замовчуванням"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:232
 msgid "Comment:"
-msgstr ""
+msgstr "Коментар:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:269
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:322
 msgid "From:"
-msgstr ""
+msgstr "Від:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:292
 msgid "End Position"
-msgstr ""
+msgstr "Кінцева позиція"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:364
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1361
 msgid "Rotation:"
-msgstr ""
+msgstr "Обертання:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:371
 msgid "Bitmap DPI:"
-msgstr ""
+msgstr "DPI зображення:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:387
 msgid "Repeat Parameters"
-msgstr ""
+msgstr "Повторення параметрів"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:395
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 msgid "Count:"
-msgstr ""
+msgstr "Кількість:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:405
 msgid "Step text:"
-msgstr ""
+msgstr "Крок тексту:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:410
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr ""
+msgstr "Кількість символів або цифр для покрокового тексту для кожного повтору."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:417
 msgid "Step X:"
-msgstr ""
+msgstr "Крок X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:422
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "Відстань на осі X для кожного повторення."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:430
 msgid "Step Y:"
-msgstr ""
+msgstr "Крок Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:435
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "Відстань до кроку по осі Y для кожного повторення."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:449
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Apply"
-msgstr ""
+msgstr "Прийняти"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Item Properties"
-msgstr ""
+msgstr "Властивості елемента"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:138
 msgid "Line thickness:"
-msgstr ""
+msgstr "Товщина лінії:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:515
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Text thickness:"
-msgstr ""
+msgstr "Товщина тексту:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:535
 msgid "Set to Default"
-msgstr ""
+msgstr "Встановити за замовчуванням"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:542
 msgid "Page Margins"
-msgstr ""
+msgstr "Поля сторінки"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:550
 msgid "Left:"
-msgstr ""
+msgstr "Ліворуч:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:564
 msgid "Right:"
-msgstr ""
+msgstr "Праворуч:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:578
 msgid "Top:"
-msgstr ""
+msgstr "Вгорі:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:592
 msgid "Bottom:"
-msgstr ""
+msgstr "Знизу:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:621
 #: pcbnew/dialogs/dialog_plot_base.cpp:67
@@ -19487,200 +19494,207 @@ msgstr "Креслення файлу аркуша"
 
 #: pagelayout_editor/files.cpp:63 pagelayout_editor/files.cpp:107
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr ""
+msgstr "Поточна таблиця малювання була змінена. Зберегти зміни?"
 
 #: pagelayout_editor/files.cpp:79
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr ""
+msgstr "Файл \"%s\" завантажений"
 
 #: pagelayout_editor/files.cpp:129
 msgid "Append Existing Drawing Sheet"
-msgstr ""
+msgstr "Додати існуючу форматну рамку"
 
 #: pagelayout_editor/files.cpp:140 pagelayout_editor/files.cpp:165
 #, c-format
 msgid "Unable to load %s file"
-msgstr ""
+msgstr "Не вдалося завантажити файл %s"
 
 #: pagelayout_editor/files.cpp:147
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr ""
+msgstr "Файл \"%s\" вставлено"
 
 #: pagelayout_editor/files.cpp:155
 msgid "Open"
-msgstr ""
+msgstr "Відкрити"
 
 #: pagelayout_editor/files.cpp:171 pagelayout_editor/files.cpp:218
 #, c-format
 msgid "File \"%s\" saved."
-msgstr ""
+msgstr "Файл \"%s\" збережено."
 
 #: pagelayout_editor/files.cpp:180
 #, c-format
 msgid "Unable to write '%s'."
-msgstr ""
+msgstr "Не вдалося записати '%s'."
 
 #: pagelayout_editor/files.cpp:193
 msgid "Save As"
-msgstr ""
+msgstr "Зберегти як"
 
 #: pagelayout_editor/files.cpp:243
 msgid "Error reading drawing sheet"
-msgstr ""
+msgstr "Помилка читання форматної рамки"
 
 #: pagelayout_editor/files.cpp:265
 msgid "Layout file is read only."
-msgstr ""
+msgstr "Файл макету доступний тільки для читання."
 
 #: pagelayout_editor/pl_editor_frame.cpp:94
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "Редактор аркушів KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
-msgstr ""
+msgstr "початок координат: правий нижній кут сторінки"
 
 #: pagelayout_editor/pl_editor_frame.cpp:181
 msgid "Properties"
-msgstr ""
+msgstr "Властивості"
 
 #: pagelayout_editor/pl_editor_frame.cpp:334
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr ""
+msgstr "Помилка завантаження таблиці '%s'."
 
 #: pagelayout_editor/pl_editor_frame.cpp:439
 msgid "Error Init Printer info"
-msgstr ""
+msgstr "Помилка ініціалізації принтеру"
 
 #: pagelayout_editor/pl_editor_frame.cpp:541
 msgid "[no drawing sheet loaded]"
-msgstr ""
+msgstr "[немає завантаженого листа]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:749
 #, c-format
 msgid "coord origin: %s"
-msgstr ""
+msgstr "початок координат: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:889
 msgid "New drawing sheet file is unsaved"
-msgstr ""
+msgstr "Новий файл аркуша не збережений"
 
 #: pagelayout_editor/pl_editor_frame.cpp:893
 msgid "Drawing sheet changes are unsaved"
-msgstr ""
+msgstr "Зміни аркуша не збережено"
 
 #: pagelayout_editor/pl_editor_frame.cpp:934
 msgid "Page Width"
-msgstr ""
+msgstr "Ширина сторінки"
 
 #: pagelayout_editor/pl_editor_frame.cpp:937
 msgid "Page Height"
-msgstr ""
+msgstr "Висота сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:73
 msgid "Left Top paper corner"
-msgstr ""
+msgstr "Лівий верхній кут листа"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Right Bottom page corner"
-msgstr ""
+msgstr "Правий нижній кут сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Left Bottom page corner"
-msgstr ""
+msgstr "Лівий нижній кут сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:76
 msgid "Right Top page corner"
-msgstr ""
+msgstr "Правий верхній кут сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:77
 msgid "Left Top page corner"
-msgstr ""
+msgstr "Лівий верхній кут сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:88
 msgid "Origin of coordinates displayed to the status bar"
-msgstr ""
+msgstr "Початок координат, що відображається в рядку стану"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:103
 msgid "Page 1"
-msgstr ""
+msgstr "Сторінка 1"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:104
 msgid "Other pages"
-msgstr ""
+msgstr "Інші сторінки"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:114
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
+"Змоделюйте сторінку 1 або інші сторінки, щоб показати, як елементи\n"
+"відображаються не на всій сторінці"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
-msgstr ""
+msgstr "Додати рядок"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr ""
+msgstr "Додати рядок"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
-msgstr ""
+msgstr "Додати зображення"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add a bitmap image"
-msgstr ""
+msgstr "Додати растрове зображення"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
-msgstr ""
+msgstr "Додати існуючий лист..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 msgid "Append an existing drawing sheet file to current file"
-msgstr ""
+msgstr "Додати в існуючий файл форматної рамки в поточний файл"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
-msgstr ""
+msgstr "Показати інспектор дизайну"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in the drawing sheet"
-msgstr ""
+msgstr "Показати список елементів у аркуші"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
-msgstr ""
+msgstr "Налаштування попереднього перегляду сторінки..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
 msgstr ""
+"Редагувати дані попереднього перегляду для розміру та заголовку сторінки"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr ""
+msgstr "Показувати блок заголовків в режимі попереднього перегляду"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
+"Показати блок заголовка в режимі попереднього перегляду:\n"
+"текстові заповнювачі буде замінено даними попереднього перегляду."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr ""
+msgstr "Показувати блок заголовків в режимі редагування"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
+"Показати блок заголовка в режимі редагування:\n"
+"текстові заповнювачі відображаються як ${keyword} маркери."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:508
 msgid "Error writing objects to clipboard"
-msgstr ""
+msgstr "Помилка запису об'єктів в буфер обміну"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
@@ -19694,6 +19708,15 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
+"### Містовий Т-аттенюатора\n"
+"___a___ є затухання в dB<br>\n"
+"___Z<sub>in</sub>___ бажаний вхідний опір в &#x2126;<br>\n"
+"___Z<sub>out</sub>___ бажаний вихідний опір в &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>в</sub> = Z<sub>вихід</sub>___\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
@@ -19709,6 +19732,17 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
+"### Pi атенюатор\n"
+"___a___ є затухання в dB<br>\n"
+"___Z<sub>in</sub>___ бажаний вхідний опір в &#x2126;<br>\n"
+"___Z<sub>out</sub>___ бажаний вихідний опір в &#x2126;<br>\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>в</sub> &middot; Z<sub>вихід</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>в</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>вихід</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -19720,6 +19754,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
+"### Розділений атенюатор\n"
+"Згасання є 6 dB  \n"
+"___Z<sub>in</sub>___ бажаний вхідний опір в &#x2126;  \n"
+"___Z<sub>out</sub>___ бажаний вихідний опір в &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>в</sub> = Z<sub>вихід</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -19735,105 +19776,116 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
+"### Трійник Атенюатор\n"
+"___a___ — затухання в дБ<br>\n"
+"___Z<sub>in</sub>___ бажаний вхідний опір у &#x2126;<br>\n"
+"___Z<sub>out</sub>___ бажаний вихідний опір у &#x2126;<br>\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
 msgid "Attenuation more than %f dB"
-msgstr ""
+msgstr "Увага понад %f дБ"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Pi"
-msgstr ""
+msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
-msgstr ""
+msgstr "Тип Т"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Bridged tee"
-msgstr ""
+msgstr "Мостовий тип Т"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Resistive splitter"
-msgstr ""
+msgstr "Резистивний розгалужувач"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:23
 msgid "Attenuators"
-msgstr ""
+msgstr "Атенюатори"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
 msgid "Attenuation (a):"
-msgstr ""
+msgstr "Увага:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
-msgstr ""
+msgstr "дБ"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:59
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:70
 msgid "Zout:"
-msgstr ""
+msgstr "Zout:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:90
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:164
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:127
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:165
 msgid "Calculate"
-msgstr ""
+msgstr "Підрахувати"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:108
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:85
 msgid "R1:"
-msgstr ""
+msgstr "R1:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:99
 msgid "R2:"
-msgstr ""
+msgstr "R2:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:130
 msgid "R3:"
-msgstr ""
+msgstr "R3:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:170
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:55
 msgid "Formula"
-msgstr ""
+msgstr "Формула"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
-msgstr ""
+msgstr "Примітка: Значення є мінімальними значеннями"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
-msgstr ""
+msgstr "Клас 1"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:58
 msgid "Class 2"
-msgstr ""
+msgstr "Клас 2"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:59
 msgid "Class 3"
-msgstr ""
+msgstr "Клас 3"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:60
 msgid "Class 4"
-msgstr ""
+msgstr "Клас 4"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:61
 msgid "Class 5"
-msgstr ""
+msgstr "Клас 5"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:62
 msgid "Class 6"
-msgstr ""
+msgstr "Class 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr ""
+msgstr "Ширина ліній"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
@@ -20877,6 +20929,31 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"Серія E визначена в IEC 60063.\n"
+"\n"
+"Доступні значення приблизно однаково розподілені в логарифмічній шкалі.\n"
+"\n"
+"E24 (5%): 1,0 1,1 1,2 1,3 1,5 1,6 1,8 2,0 2,2 2,4 2,7 3,0 3,3 3,6 3,9 4,3 "
+"4,7 5,1 5,6 6,2 6,8 7,5 8,2 9,1\n"
+"E12 (10%): 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+"E6 (20%): 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
+"E3 (50%): 1,0 - - - 2,2 - - - 4,7 - - -\n"
+"E1 : 1,0 - - - - - - - - - - -\n"
+"\n"
+"- Цей калькулятор знаходить комбінації стандартних E-серії (між 10 Ом і 1 "
+"МОм) для створення довільних значень.\n"
+"- Ви можете ввести необхідний опір від 0,0025 до 4000 кОм.\n"
+"- Надаються рішення з використанням до 4 компонентів.\n"
+"\n"
+"Запитане значення завжди виключається з набору рішень.<br>\n"
+"За бажанням можна виключити до двох додаткових значень у разі проблем з "
+"доступністю компонентів.\n"
+"\n"
+"Рішення надаються в таких форматах:\n"
+"\n"
+"Резистори R1 + R2 +...+ Rn послідовно\n"
+"R1 | R2 |...| Резистори Rn паралельно\n"
+"R1 + (R2|R3)... будь-яка комбінація\n"
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -20890,6 +20967,14 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Ви можете скористатися цим калькулятором, щоб перевірити, чи невелика "
+"доріжка може витримати великий струм протягом короткого періоду часу.<br>\n"
+"Цей інструмент дозволяє розробити запобіжник колії, але його слід "
+"використовувати лише як оцінку.\n"
+"\n"
+"Калькулятор розраховує енергію, необхідну для нагрівання дроту<br>\n"
+"до точки плавлення, а також енергію, необхідну для зміни фази.<br>\n"
+"Ця енергія потім порівнюється з тією, що розсіюється опором дроту."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "General system design"
@@ -20993,6 +21078,28 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Якщо ви вкажете максимальний струм, то ширина слідів буде розрахована.\n"
+"\n"
+"Якщо вказати одну з ширин траси, буде розраховано максимальний струм, який "
+"вона може витримати. Потім буде розраховано ширину іншої траси, яка також "
+"оброблятиме цей струм.\n"
+"\n"
+"Контролююче значення виділено жирним шрифтом.\n"
+"\n"
+"Розрахунки дійсні для струмів до 35 A (зовнішній) або 17,5 A (внутрішній), "
+"підвищення температури до 100 °C і ширини до 400 mil (10 мм).\n"
+"\n"
+"Формула з IPC 2221\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (Ш &middot; "
+"В)<sup>0,725</sup>___</center>\n"
+"де:<br>\n"
+"___I___ максимальний струм в А<br>\n"
+"___&Delta;T___ це підвищення температури вище температури навколишнього "
+"середовища в &deg;C<br>\n"
+"___W___ — ширина в мілях<br>\n"
+"___H___ — товщина (висота) у мілях<br>\n"
+"___K___ становить 0,024 для внутрішніх слідів або 0,048 для зовнішніх "
+"слідів\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -21058,9 +21165,8 @@ msgstr "Діелектричні втрати:"
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:353
 #: pcb_calculator/transline_ident.cpp:387
-#, fuzzy
 msgid "Skin depth:"
-msgstr "Глибина проникнення"
+msgstr "Глибина проникнення:"
 
 #: pcb_calculator/transline_ident.cpp:124
 #: pcb_calculator/transline_ident.cpp:166
@@ -21560,31 +21666,31 @@ msgstr "Характеристики діелектричного матеріа
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr ""
+msgstr "Має зубчасті контактні площадки"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
-msgstr ""
+msgstr "Металізація краю плати"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr ""
+msgstr "Покриття міді:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr ""
+msgstr "Граничний роз'єм:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "Так, з фаскою"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr ""
+msgstr "Налаштування підключення граничного роз'єму."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "Core"
-msgstr ""
+msgstr "Ядро"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:118
 msgid "PrePreg"
@@ -21766,119 +21872,119 @@ msgstr "Тангенс діалектичних втрат"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
-msgstr ""
+msgstr "Товщина плати зі стеку:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
 msgid "Adjust Dielectric Thickness"
-msgstr ""
+msgstr "Підналаштування товщини діелектрика"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:38
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:39
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL без свинцю"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:42
 msgid "Hard gold"
-msgstr ""
+msgstr "Тверда позолота"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 msgid "Immersion tin"
-msgstr ""
+msgstr "Хімічне лудіння"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion nickel"
-msgstr ""
+msgstr "Імерсійний нікелем"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion silver"
-msgstr ""
+msgstr "Імерсійне срібло"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion gold"
-msgstr ""
+msgstr "Імерсійне золото"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
 msgid "User defined"
-msgstr ""
+msgstr "Визначено користувачем"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
 msgid "Green"
-msgstr ""
+msgstr "Зелений"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
 msgid "Red"
-msgstr ""
+msgstr "Червоний"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
 msgid "Blue"
-msgstr ""
+msgstr "Синій"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 msgid "Purple"
-msgstr ""
+msgstr "Пурпурний"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
 msgid "Black"
-msgstr ""
+msgstr "Чорний"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "White"
-msgstr ""
+msgstr "Білий"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Yellow"
-msgstr ""
+msgstr "Жовтий"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
-msgstr ""
+msgstr "Поліїмід"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Фенольний"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Алюміній"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 #: pcbnew/exporters/exporter_vrml.cpp:274
 #: pcbnew/exporters/exporter_vrml.cpp:283
 msgid "Not specified"
-msgstr ""
+msgstr "Не вказано"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
+msgstr "Не вдалося експортувати BOM: немає посадкових місць на PCB."
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
@@ -22010,6 +22116,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Зміни анотацій PCB повинні бути синхронізовані з схемою, використовуючи "
+"\"Оновити схему з PCB\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:303
 #, c-format
@@ -23007,71 +23115,75 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
+"Тип підключення панелі до зони за замовчуванням.\n"
+"Цей параметр можна замінити налаштуваннями локальної панелі"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/zone.cpp:1287
 msgid "Thermal reliefs"
-msgstr ""
+msgstr "Теплові бар'єри"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
-msgstr ""
+msgstr "Бар'єри для PTH"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Thermal relief gap:"
-msgstr ""
+msgstr "Тепловий рельєфний зазор:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Відстань, яка буде залишатися вільною між заповненою ділянкою зони та "
+"майданчиком, з’єднаним терморельєфними мостами."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr ""
+msgstr "Зазор між контактними площадками одного ланцюга і зонами міді"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
-msgstr ""
+msgstr "Ширина термічного мостика:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
-msgstr ""
+msgstr "Ширина міді в теплових рельєфах."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
 msgid "Fill"
-msgstr ""
+msgstr "Заливка"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
 msgid "Fill type:"
-msgstr ""
+msgstr "Ти заливки:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 msgid "Solid fill"
-msgstr ""
+msgstr "Суцільне заповнення"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 msgid "Hatch pattern"
-msgstr ""
+msgstr "Штриховка"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:307
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:149
 msgid "Hatch width:"
-msgstr ""
+msgstr "Ширина штриха:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:318
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:160
 msgid "Hatch gap:"
-msgstr ""
+msgstr "Ширина зазору:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:329
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
 msgid "Smoothing effort:"
-msgstr ""
+msgstr "Тип округлення:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:331
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:173
@@ -23082,11 +23194,16 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"Значення зусилля згладжування\n"
+"0 = відсутність згладжування\n"
+"1 = фаска\n"
+"2 = круглі кути\n"
+"3 = круглі кути (тонша форма)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:338
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:183
 msgid "Smoothing amount:"
-msgstr ""
+msgstr "Рівень закруглення:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:340
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:185
@@ -23095,61 +23212,66 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"Співвідношення між розміром згладжених кутів і проміжком між лініями\n"
+"0 = відсутність згладжування\n"
+"1,0 = максимальний радіус/розмір фаски (половина значення зазору)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 msgid "Remove islands:"
-msgstr ""
+msgstr "Видалити островки:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
+msgstr "Вибрати що робити з непов'язаними мідними островками"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 msgid "Below area limit"
-msgstr ""
+msgstr "Нижня межа області"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 msgid "Minimum island size:"
-msgstr ""
+msgstr "Мінімальний розмір островка:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Ізольовані островки менші ніж ці будуть видалені"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
 msgid "Export Settings to Other Similar Zones"
-msgstr ""
+msgstr "Експортувати налаштування в інші схожі зони"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
+"Експортувати налаштування цієї зони (виключаючи шар та мережевий відбірки) "
+"до інших подібних зон міді (краплі розривів або звичайні мідні зони)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 msgid "Copper Zone Properties"
-msgstr ""
+msgstr "Властивості мідної зони"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:133
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr ""
+msgstr "Числа (0,1,2,...,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:137
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr ""
+msgstr "Шістнадцятирічна (0,1,...,F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:141
 msgid "Alphabet, minus IOSQXZ"
-msgstr ""
+msgstr "Алфавіт, за виключенням IOSQXZ"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:145
 msgid "Alphabet, full 26 characters"
-msgstr ""
+msgstr "Абетка, всі 26 символів"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:269
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr ""
+msgstr "Помилкове числове значення для %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:305
 #, c-format
@@ -23157,30 +23279,32 @@ msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
+"Не вдалося визначити кількість початку з '%s': очікуване значення відповідає "
+"алфавіту%s."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:313
 msgid "step value"
-msgstr ""
+msgstr "значення кроку"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:335
 msgid "horizontal count"
-msgstr ""
+msgstr "кількість по горизонталі"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:336
 msgid "vertical count"
-msgstr ""
+msgstr "кількість по вертикалі"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:344
 msgid "stagger"
-msgstr ""
+msgstr "шахматність"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:400
 msgid "point count"
-msgstr ""
+msgstr "кількість точок"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:445
 msgid "Bad parameters"
-msgstr ""
+msgstr "Помилкові параметри"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:34
 msgid "Horizontal count:"
@@ -23188,35 +23312,35 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Vertical count:"
-msgstr ""
+msgstr "Кількість по вертикалі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:48
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "Інтервал по горизонталі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:59
 msgid "Vertical spacing:"
-msgstr ""
+msgstr "Вертикальний інтервал:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Horizontal offset:"
-msgstr ""
+msgstr "Горизонтальне зміщення:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Vertical offset:"
-msgstr ""
+msgstr "Вертикальне зміщення:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Stagger:"
-msgstr ""
+msgstr "Шахматність:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Rows"
-msgstr ""
+msgstr "Рядки"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Columns"
-msgstr ""
+msgstr "Стовпці"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:101
 msgid "Stagger Type"
@@ -23288,98 +23412,106 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
-msgstr ""
+msgstr "Центр по горизонталі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
 msgid "Vertical center:"
-msgstr ""
+msgstr "Центр по вертикалі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:238
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1251
 msgid "Radius:"
-msgstr ""
+msgstr "Радіус:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:255
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
+"Обертання проти годинникової стрілки має додатній кут. Якщо кут 0, буде "
+"ділитися на \"К-ть\" рівних частин."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 msgid "How many items in the array."
-msgstr ""
+msgstr "Скільки елементів у масиві."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:272
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
-msgstr ""
+msgstr "Обертати:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 msgstr ""
+"Повернути предмет, як і перемістити його - кілька виділень буде повертати "
+"разом"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:291
 msgid "Numbering Options"
-msgstr ""
+msgstr "Опції нумерації"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:295
 msgid "Initial Pad Number:"
-msgstr ""
+msgstr "Початковий номер контактної площадки:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Pad Numbering:"
-msgstr ""
+msgstr "Нумерація контактної площадки:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:341
 msgid "Circular Array"
-msgstr ""
+msgstr "Круговий масив"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
 msgid "Footprint Annotation"
-msgstr ""
+msgstr "Позначення посадкового місця"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 msgid "Keep existing reference designators"
-msgstr ""
+msgstr "Зберегти існуюче позначення"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
 msgid "Assign unique reference designators"
-msgstr ""
+msgstr "Присвоїти унікальне позначення"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Це може спричинити конфлікт в позначенні на схемі, які ще не були "
+"синхронізовані з платою."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
-msgstr ""
+msgstr "Створити масив"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
+"Цей елемент був на неіснуючому шарі.\n"
+"Його переміщено до першого існуючого шару."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
 msgid "Change dimension properties"
-msgstr ""
+msgstr "Змінити властивості розмірів"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
-msgstr ""
+msgstr "Формат ланки"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 msgid "Text frame:"
-msgstr ""
+msgstr "Рамка тексту:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:49
 msgid "Draw a shape around the leader text"
-msgstr ""
+msgstr "Намалювати контур навколо тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
@@ -23391,26 +23523,28 @@ msgstr ""
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:76
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:149
 msgid "Layer:"
-msgstr ""
+msgstr "Шар:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr ""
+msgstr "Формат розмірності"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "Вимірюване значення цього розміру"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:108
 msgid "Override value"
-msgstr ""
+msgstr "Перевизначити значення"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:109
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
 msgstr ""
+"Якщо позначено, фактичне вимірювання ігнорується, і можна вводити будь-яке "
+"значення"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
@@ -23418,7 +23552,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 msgid "Units:"
-msgstr ""
+msgstr "Одиниці виміру:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:126
@@ -23426,53 +23560,55 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
+"Одиниці цього розміру (\"автоматично\" до одиниць вимірювання, вибраних у "
+"редакторі)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr ""
+msgstr "Текст для друку перед значенням розміру"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "Units format:"
-msgstr ""
+msgstr "Формат вимірів:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:151
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "Вибір способу відображення одиниць вимірювання"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:116
 msgid "1234"
-msgstr ""
+msgstr "1234"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:116
 msgid "1234 mm"
-msgstr ""
+msgstr "1234 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:116
 msgid "1234 (mm)"
-msgstr ""
+msgstr "1234 (mm)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "Текст для друку після значення розміру"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
 #: pcbnew/dialogs/dialog_plot_base.cpp:365
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Precision:"
-msgstr ""
+msgstr "Точність:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 msgid "Choose how many digits of precision to display"
-msgstr ""
+msgstr "Оберіть, скільки цифр точності відображати"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
@@ -23480,187 +23616,189 @@ msgstr ""
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:186
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0"
-msgstr ""
+msgstr "0.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00"
-msgstr ""
+msgstr "0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.000"
-msgstr ""
+msgstr "0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0000"
-msgstr ""
+msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00000"
-msgstr ""
+msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0.00 in / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.000 / 0 / 0.00"
-msgstr ""
+msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
 msgid "Suppress trailing zeroes"
-msgstr ""
+msgstr "Приховувати нулі в кінці"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:181
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
 msgstr ""
+"Коли вибрано, то \"0.100\" показуватиметься як \"0.1\", навіть якщо "
+"налаштування точності вище"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:211
 msgid "Dimension Text"
-msgstr ""
+msgstr "Розмір тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:167
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:139
 msgid "Text width"
-msgstr ""
+msgstr "Ширина тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:290
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:206
 msgid "Text pos X"
-msgstr ""
+msgstr "Текстове положення X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:303
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:155
 msgid "Text height"
-msgstr ""
+msgstr "Висота тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:316
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:219
 msgid "Text pos Y"
-msgstr ""
+msgstr "Текстове положення Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:327
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:191
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:166
 msgid "Thickness:"
-msgstr ""
+msgstr "Товщина:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:193
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:168
 msgid "Text thickness"
-msgstr ""
+msgstr "Товщина тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:232
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:181
 msgid "Text orientation"
-msgstr ""
+msgstr "Орієнтація тексту"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:348
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:187
 msgid "90.0"
-msgstr ""
+msgstr "90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:349
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:239
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:188
 msgid "-90.0"
-msgstr ""
+msgstr "-90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:350
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:240
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:189
 msgid "180.0"
-msgstr ""
+msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Position mode:"
-msgstr ""
+msgstr "Режим розташування:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Outside"
-msgstr ""
+msgstr "За межами"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Inline"
-msgstr ""
+msgstr "Всередині"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "Manual"
-msgstr ""
+msgstr "Вручну"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:361
 msgid "Choose how to position the text relative to the dimension line"
-msgstr ""
+msgstr "Виберіть спосіб розміщення тексту відносно розмірної лінії"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:365
 msgid "Keep aligned with dimension"
-msgstr ""
+msgstr "Зберегти у відповідності з розміром"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:366
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
+msgstr "Автоматично встановлювати орієнтацію тексту, відповідно до розмірів"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:380
 msgid "Dimension Line"
-msgstr ""
+msgstr "Лінія розмірності"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:389
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "Товщина розмірних ліній"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:403
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
 msgid "Arrow length:"
-msgstr ""
+msgstr "Довжина стрілок:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
 msgid "Extension line offset:"
-msgstr ""
+msgstr "Зміщення від точки вимірювання:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:416
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:421
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr ""
+msgstr "Прорив між вимірюваними точками та початком лінії"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:138
 msgid "Dimension Properties"
-msgstr ""
+msgstr "Властивості розмірів"
 
 #: pcbnew/dialogs/dialog_drc.cpp:113
 msgid "Run DRC"
-msgstr ""
+msgstr "Запуск DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:256
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr ""
+msgstr "DRC не завершено: не вдалося скомпілювати правила проектування.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:258 pcbnew/tools/board_inspection_tool.cpp:168
 msgid "Show design rules."
-msgstr ""
+msgstr "Показати правила проектування."
 
 #: pcbnew/dialogs/dialog_drc.cpp:303
 msgid "-------- DRC cancelled by user.<br><br>"
@@ -23669,49 +23807,49 @@ msgstr "-------- DRC скасовано користувачем.<br><br>"
 #: pcbnew/dialogs/dialog_drc.cpp:576
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr ""
+msgstr "Видалити всі виключення з правил '%s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:588
 #, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr ""
+msgstr "Виключити всі порушення правил '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:598
 msgid "Run clearance resolution tool..."
-msgstr ""
+msgstr "Запустити інструмент перевірки відступів..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:610
 msgid "Run constraints resolution tool..."
-msgstr ""
+msgstr "Запустити інструмент перевірки обмежень..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:637 pcbnew/dialogs/dialog_drc.cpp:813
 msgid "Open the Board Setup... dialog"
-msgstr ""
+msgstr "Відкрити вікно налаштувань друкованої плати"
 
 #: pcbnew/dialogs/dialog_drc.cpp:883
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr ""
+msgstr "Файл звіту '%s' створено<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1146
 msgid "Do you wish to delete excluded markers as well?"
-msgstr ""
+msgstr "Ви бажаєте також видалити маркери виключень?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1149
 msgid "Delete exclusions"
-msgstr ""
+msgstr "Видалити виключення"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1282
 msgid "not run"
-msgstr ""
+msgstr "не запущено"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Повторно залити всі зони перед виконанням DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr ""
+msgstr "Повідомляти про всі помилки для кожної доріжки"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -23721,60 +23859,65 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
+"Якщо вибрано, усі порушення DRC для доріжок буде виведено. Це може бути "
+"повільно, для складних конструкцій.\n"
+"\n"
+"Якщо не вибрати, лише перше порушення DRC повідомлятиметься для кожного з’"
+"єднання доріжок."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "Тест на відповідність між PCB та схемою"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
 #, c-format
 msgid "Unconnected Items (%s)"
-msgstr ""
+msgstr "Непідключені елементи (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 #, c-format
 msgid "Schematic Parity (%s)"
-msgstr ""
+msgstr "Невідповідність схеми (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
-msgstr ""
+msgstr "Перевірка правил проектування"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr ""
+msgstr "Імена контактних площадок обмежуються 4 символами (включаючи номер)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
-msgstr ""
+msgstr "Префікс назви контактної площадки:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr ""
+msgstr "Номер першої контактної площадки:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
 msgid "Pad Enumeration Settings"
-msgstr ""
+msgstr "Параметри нумерації контактних площадок"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
-msgstr ""
+msgstr "Змінити посадкове місце"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change all footprints on board"
-msgstr ""
+msgstr "Змінити всі посадкові місця на платі"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
-msgstr ""
+msgstr "Змінити вибрані посадкові місця"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
-msgstr ""
+msgstr "Змінити посадкові місця відповідно до позначення:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Change footprints matching value:"
-msgstr ""
+msgstr "Змінити посадкові місця з позначенням:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
@@ -24676,174 +24819,187 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
-msgstr ""
+msgstr "Відслідковування помилок в скриптах Python"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:37
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Виберіть <b>Варіант параметрів</b> у списку що вище і виконання за допомогою "
+"кнопки<b>Додати вибрані параметри</b> кнопкою."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
 #, c-format
 msgid "Options for Library '%s'"
-msgstr ""
+msgstr "Параметри для бібліотеки '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:25
 msgid "Plugin Options"
-msgstr ""
+msgstr "Опції плагіна"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:77
 msgid "Option Choices"
-msgstr ""
+msgstr "Вибір опцій"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:80
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "Параметри, що підтримуються поточним плагіном"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:84
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<<    Додати вибраний параметр"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "Gerber (experimental)"
-msgstr ""
+msgstr "Gerber (експериментальний)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Separate files for front, back"
-msgstr ""
+msgstr "Окремі файли для верхньої і нижньої сторін"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Single file for board"
-msgstr ""
+msgstr "Один файл для плати"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
 msgid "Files"
-msgstr ""
+msgstr "Файли"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:64
 msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
+"Створює 2 файли: по одному для кожної сторони дошки або\n"
+"Створює лише один файл, що містить усі посадкові місця для розміщення\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
 msgid "Include only SMD footprints"
-msgstr ""
+msgstr "Включити тільки SMD посадкові місця"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
-msgstr ""
+msgstr "Виключати всі посадкові місця зі наскрізними отворами"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
-msgstr ""
+msgstr "Включити шар контура плати"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
 #: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Use drill/place file origin"
-msgstr ""
+msgstr "Використовувати початок координат свердління/розміщення"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:86
 msgid "Use negative X coordinates for footprints on bottom layer"
 msgstr ""
+"Використовуйте негативні координати X для посадкових місць на нижньому шарі"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
-msgstr ""
+msgstr "Створити файли розміщення"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
-msgstr ""
+msgstr "Налаштування експорту GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:49
 msgid "Select a GenCAD export filename"
-msgstr ""
+msgstr "Вибрати назву файлу для експорту в GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr ""
+msgstr "Перевернути нижні стеки посадкових місць"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
-msgstr ""
+msgstr "Генерувати унікальні назви виводу"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
 msgstr ""
+"Створити нову форму для кожного екземпляра посадкового місця (не "
+"використовувати повторно форми)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr ""
+msgstr "Використовувати початок координат сверловки/розміщення"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
-msgstr ""
+msgstr "Збережіть координати початку координат у файлі"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:75
 msgid "Generate Drill File"
-msgstr ""
+msgstr "Генерувати файл сверловки"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:76
 msgid "Generate Map File"
-msgstr ""
+msgstr "Створити файл мапи"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:318
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
+"Неможливо зробити шлях відносного (об'єм цілі, відмінний від об'єму файлу)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:405
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr ""
+msgstr "Не вдалося записати файли сверловки та/або карти до теки \"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:454
 msgid "Save Drill Report File"
-msgstr ""
+msgstr "Зберегти файл звіту сверловки"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 msgid "Output folder:"
-msgstr ""
+msgstr "Вихідна тека:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr ""
+msgstr "Формат файлу сверловки"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
-msgstr ""
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr ""
+msgstr "Віддзеркалити по Y"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
 "Not recommended.\n"
 "Used mostly by users who make the boards themselves."
 msgstr ""
+"Не рекомендовано.\n"
+"Використовується переважно користувачами, які виготовляють дошки самостійно."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
 msgid "Minimal header"
-msgstr ""
+msgstr "Мінімальний заголовок"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:56
 msgid ""
 "Not recommended.\n"
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
+"Не рекомендовано.\n"
+"Використовуйте його лише для плати, які не приймають повнофункціональні "
+"заголовки."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
-msgstr ""
+msgstr "PTH і NPTH в одному файлі"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -24851,18 +25007,21 @@ msgid ""
 "Only use for board houses which ask for merged PTH and NPTH into a single "
 "file."
 msgstr ""
+"Не рекомендовано.\n"
+"Використовуйте лише для виробників друкованих плат, які вимагають об’єднання "
+"PTH і NPTH в один файл."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr ""
+msgstr "Використовувати команду маршруту (рекомендовано)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
-msgstr ""
+msgstr "Використовувати альтернативний режим свердління"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Oval Holes Drill Mode"
-msgstr ""
+msgstr "Режим свердління овальних отворів"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid ""
@@ -24871,115 +25030,125 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
+"Овальні отвори часто створюють проблеми для виробників друкованих плат.\n"
+"«Використовувати команду маршруту» використовує звичайну команду маршруту "
+"G00 (рекомендовано)\n"
+" «Використовувати альтернативний режим» використовує іншу команду свердління/"
+"трасування (G85)\n"
+"(Використовуйте його, лише якщо рекомендована команда не працює)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 msgid "Gerber X2"
-msgstr ""
+msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr ""
+msgstr "Формат файлу мапи"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PDF or other formats"
-msgstr ""
+msgstr "Створює карту свердління в PDF або інших форматах"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
-msgstr ""
+msgstr "Початок координат свердління"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
 msgstr ""
+"Виберіть початок координат: абсолютна або відносно джерельного джерела "
+"файлів свердління/розміщення"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Drill Units"
-msgstr ""
+msgstr "Одиниці вимірювання свердла"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Decimal format (recommended)"
-msgstr ""
+msgstr "Десятковий формат (рекомендовано)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress leading zeros"
-msgstr ""
+msgstr "Приховувати початкові нулі"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress trailing zeros"
-msgstr ""
+msgstr "Приховувати нулі з кінця"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Keep zeros"
-msgstr ""
+msgstr "Залишати нулі"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Zeros Format"
-msgstr ""
+msgstr "Формат нулів"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Choose EXCELLON numbers notation"
-msgstr ""
+msgstr "Вибрати формат представлення число EXCELLON"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:128 pcbnew/pcb_dimension.cpp:327
 msgid "Precision"
-msgstr ""
+msgstr "Точність"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:142
 msgid "Hole Counts"
-msgstr ""
+msgstr "Кількість отворів"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Plated pads:"
-msgstr ""
+msgstr "Металеві контактні площадки:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Non-plated pads:"
-msgstr ""
+msgstr "Неметалеві контактні площадки:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
-msgstr ""
+msgstr "Внутрішні перехідні отвори:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr ""
+msgstr "Генерувати файли сверловки"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:68
 msgid "Reference designator:"
-msgstr ""
+msgstr "Позначення:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr ""
+"(вкажіть кілька елементів, розділених пробілами для послідовного "
+"розташування)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
-msgstr ""
+msgstr "Доступні посадкові місця:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:263
 msgid "Get and Move Footprint"
-msgstr ""
+msgstr "Найти і перемістити посадкове місце"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:120
 msgid "Are you sure you want to delete the entire board?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити всю друковану плату?"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:121
 msgid "Are you sure you want to delete the selected items?"
-msgstr ""
+msgstr "Ви впевнені, що бажаєте видалити виділені елементи?"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
-msgstr ""
+msgstr "Елементи для видалення"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 #: pcbnew/tools/board_editor_control.cpp:83
@@ -24987,133 +25156,133 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:192
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
 msgid "Zones"
-msgstr ""
+msgstr "Зони"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
-msgstr ""
+msgstr "Контур друкованої плати"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter.cpp:191
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
 msgid "Graphics"
-msgstr ""
+msgstr "Графіка"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 #: pcbnew/widgets/panel_selection_filter.cpp:186
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 msgid "Footprints"
-msgstr ""
+msgstr "Посадкові місця"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr ""
+msgstr "Доріжки і перехідні отвори"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
-msgstr ""
+msgstr "Маркери"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Clear board"
-msgstr ""
+msgstr "Очистити друковану плату"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
-msgstr ""
+msgstr "Налаштування фільтру"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Locked graphics"
-msgstr ""
+msgstr "Закріплена графіки"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
 msgid "Unlocked graphics"
-msgstr ""
+msgstr "Розблокована графіка"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
-msgstr ""
+msgstr "Заблоковані посадкові місця"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:66
 msgid "Unlocked footprints"
-msgstr ""
+msgstr "Розблоковані посадкові місця"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:70
 msgid "Locked tracks"
-msgstr ""
+msgstr "Заблоковані доріжки"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
 msgid "Unlocked tracks"
-msgstr ""
+msgstr "Розблоковані доріжки"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "All layers"
-msgstr ""
+msgstr "Всі шари"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "Current layer only"
-msgstr ""
+msgstr "Лише поточний шар"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
 msgid "Layer Filter"
-msgstr ""
+msgstr "Фільтри по шарам"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:102
 msgid "Current layer:"
-msgstr ""
+msgstr "Поточний шар:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:73
 msgid "Delete Items"
-msgstr ""
+msgstr "Видалити елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
 msgid "Other text items"
-msgstr ""
+msgstr "Інші елементи тексту"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
 msgid "Graphic items"
-msgstr ""
+msgstr "Графічні елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr ""
+msgstr "Шари шовкографії"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:256
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
-msgstr ""
+msgstr "Мідні шари"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:257
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 msgid "Edge Cuts"
-msgstr ""
+msgstr "Контур плати"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:258
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
-msgstr ""
+msgstr "Область встановлення"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:259
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Fab Layers"
-msgstr ""
+msgstr "Виробничі шари"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:260
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Other Layers"
-msgstr ""
+msgstr "Інші шари"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:262
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
-msgstr ""
+msgstr "Товщина лінії"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:270
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
@@ -25121,7 +25290,7 @@ msgstr ""
 #: pcbnew/fp_textbox.cpp:318 pcbnew/pcb_dimension.cpp:340
 #: pcbnew/pcb_textbox.cpp:312
 msgid "Text Width"
-msgstr ""
+msgstr "Ширина тексту"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:276
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
@@ -25129,7 +25298,7 @@ msgstr ""
 #: pcbnew/fp_textbox.cpp:319 pcbnew/pcb_dimension.cpp:341
 #: pcbnew/pcb_textbox.cpp:313 pcbnew/tools/board_inspection_tool.cpp:279
 msgid "Text Height"
-msgstr ""
+msgstr "Висота тексту"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:282
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
@@ -25137,64 +25306,64 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_textbox.cpp:311
 #: pcbnew/tools/board_inspection_tool.cpp:294
 msgid "Text Thickness"
-msgstr ""
+msgstr "Товщина тексту"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:294
 msgid "Upright"
-msgstr ""
+msgstr "Вверх/вправо"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
 msgid "Other footprint text items"
-msgstr ""
+msgstr "Інші елементи тексту посадкового місця"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Footprint graphic items"
-msgstr ""
+msgstr "Графічні елементи посадкових місць"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "PCB graphic items"
-msgstr ""
+msgstr "PCB графічні елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB text items"
-msgstr ""
+msgstr "PCB текстові елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
 msgid "Filter items by layer:"
-msgstr ""
+msgstr "Фільтрувати елементи по шарам:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filter items by parent footprint library id:"
-msgstr ""
+msgstr "Фільтрувати елементи за батьківським ідентифікатором посадкового місця:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:106
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
 msgid "Set to specified values:"
-msgstr ""
+msgstr "Встановити вказані значення:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:222
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep upright"
-msgstr ""
+msgstr "Тільки вверх/вправо"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
 msgid "Set to layer default values:"
-msgstr ""
+msgstr "Встановити значення за замовчуванням в шарі :"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:230
 #: pcbnew/tools/board_inspection_tool.cpp:338
 #: pcbnew/tools/board_inspection_tool.cpp:1108
 msgid "Via Diameter"
-msgstr ""
+msgstr "Діаметр перехідного отвору"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
 msgid "uVia Diameter"
-msgstr ""
+msgstr "Діаметр мікро отвору"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
-msgstr ""
+msgstr "Фільтрувати елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
@@ -25206,31 +25375,32 @@ msgstr "Встановити значення з класу звʼязків:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr ""
+msgstr "Встановити властивості доріжок і відстеження"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 #: pcbnew/drc/drc_engine.cpp:1344
 msgid "footprint"
-msgstr ""
+msgstr "посадкове місце"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
 msgstr ""
+"Помилка при створенні порожньої таблиці бібліотеки посадкових місць '%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
-msgstr ""
+msgstr "Будь ласка, виберіть файл таблиці бібліотеки посадкових місць."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
+msgstr "'%s' не є коректною таблицею бібліотеки посадкових місць."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr ""
+msgstr "Не вдалося створити шлях до бібліотечної таблиці '%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
 #, c-format
@@ -25240,291 +25410,297 @@ msgid ""
 "to:\n"
 "%s."
 msgstr ""
+"Не вдалося скопіювати таблицю бібліотеку посадкових місць з:\n"
+"%s\n"
+"в:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 msgid "Error loading footprint library table."
-msgstr ""
+msgstr "Помилка при завантаженні таблиці бібліотеки посадкових місць."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:210
 msgid "Circle Properties"
-msgstr ""
+msgstr "Властивості кола"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:223
 msgid "Arc Properties"
-msgstr ""
+msgstr "Властивості дуги"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:229
 msgid "Polygon Properties"
-msgstr ""
+msgstr "Властивості многокутника"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:235
 msgid "Rectangle Properties"
-msgstr ""
+msgstr "Властивості прямокутника"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:241
 msgid "Line Segment Properties"
-msgstr ""
+msgstr "Властивості сегменту лінії"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:252
-#, fuzzy
 msgid "Curve Properties"
-msgstr "Властивості лінії"
+msgstr "Властивості кривої"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "Modify drawing properties"
-msgstr ""
+msgstr "Змінити властивості малюнка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:429
-#, fuzzy
 msgid "Arc angle cannot be zero."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Кут дуги не може дорівнювати нулю."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:433
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "Неправильна дуга з радіусом %f і кутом %f"
+msgstr "Некоректна дуга з радіусом %f і кутом %f."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:455
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:487
 msgid "Line width must be greater than zero."
-msgstr ""
+msgstr "Ширина лінії має бути більше нуля."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:462
-#, fuzzy
 msgid "Radius must be greater than zero."
-msgstr "%s має бути менше, ніж %s."
+msgstr "Радіус має бути більше нуля."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:465
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr ""
+msgstr "Для незаповненого кола ширина лінії має бути більше нуля."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:472
-#, fuzzy
 msgid "Rectangle cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Прямокутник не може бути порожнім."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:475
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr ""
+msgstr "Для незаповненого прямокутника ширина лінії має бути більшою за нуль."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:481
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
+msgstr "Для незаповненого багатокутника ширина лінії має бути більшою за нуль."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:493
 msgid "Line width must be greater than zero for an unfilled curve."
-msgstr ""
+msgstr "Для незаповненої кривої ширина лінії має бути більше нуля."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:504
 msgid "Error List"
-msgstr ""
+msgstr "Список помилок"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:29
 msgid "Start Point"
-msgstr ""
+msgstr "Початкова точка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:55
 msgid "End Point"
-msgstr ""
+msgstr "Кінцева точка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
 msgid "Bezier Control Pt"
-msgstr ""
+msgstr "Точка кривої Безьє"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:144
 msgid "Arc angle:"
-msgstr ""
+msgstr "Кут дуги:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:96
 msgid "Graphic Item Properties"
-msgstr ""
+msgstr "Властивості графічних елементів"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:119
 msgid "Modified group"
-msgstr ""
+msgstr "Змінена група"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 msgid "Group name:"
-msgstr ""
+msgstr "Назва групи:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
 msgid "Prevents group from being moved on canvas"
-msgstr ""
+msgstr "Заборона переміщення групи в редакторі"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
-msgstr ""
+msgstr "Елементи групи:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:64
 msgid "Group Properties"
-msgstr ""
+msgstr "Властивості групи"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:46
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 msgid "Deselect All"
-msgstr ""
+msgstr "Відмінити вибір"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Board layers and physical stackup"
-msgstr ""
+msgstr "Шари плати та стек"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
-msgstr ""
+msgstr "Паяльна маска/паста по замовчуванні"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 msgid "Text && graphics default properties"
-msgstr ""
+msgstr "Властивості тексту та графіки по замовчуванню"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Text && graphics formatting"
-msgstr ""
+msgstr "Формат тексту та графіки"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Design rule constraints"
-msgstr ""
+msgstr "Правила проектування"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
 msgid "Predefined track && via dimensions"
-msgstr ""
+msgstr "Попередньо встановлені розміри доріжок і перехідних отворів"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
 msgid "Imported Layer"
-msgstr ""
+msgstr "Імпортований шар"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:259
 msgid "KiCad Layer"
-msgstr ""
+msgstr "KiCad шар"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:339
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"Усі необхідні шари (позначені «*») мають бути збігаються. Будь ласка, "
+"натисніть «Автоматичне зіставлення шарів», щоб автоматично зіставити решту "
+"шарів"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:342
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
 msgid "Unmatched Layers"
-msgstr ""
+msgstr "Невідповідні шари"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
-msgstr ""
+msgstr "Імпортовані шари"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
 msgid "KiCad Layers"
-msgstr ""
+msgstr "KiCad шари"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "Додати виділені шари до списку підібраних шарів."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr ""
+msgstr "Вилучити вибрані шари зі списку підібраних шарів."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
-msgstr ""
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 msgid "Remove all matched layers."
-msgstr ""
+msgstr "Видалити всі підібрані шари."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
 msgid "Matched Layers"
-msgstr ""
+msgstr "Підібрані шари"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
 msgid "Auto-Match Layers"
-msgstr ""
+msgstr "Авто визначення шарів"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr ""
+"Автоматично зіставляйте будь-які невідповідні шари з їхнім еквівалентом у "
+"KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "Редагувати відображення імпортованих шарів"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:122
 msgid "Top/Front layer:"
-msgstr ""
+msgstr "Верхній/передній шар:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:161
 msgid "Bottom/Back layer:"
-msgstr ""
+msgstr "Нижній/задній шар:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:51
 msgid "Select Layer"
-msgstr ""
+msgstr "Вибір шару"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:80
 msgid "Select Copper Layer Pair"
-msgstr ""
+msgstr "Вибрати пару мідних шарів"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:104
 msgid "Rotate around item anchor"
-msgstr ""
+msgstr "Обернути навколо прив’язки"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
-msgstr ""
+msgstr "Обернути навколо вибраного центру"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:110
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr ""
+msgstr "Обертати навколо локальних координат"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:113
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr ""
+msgstr "Обертання навколо сверловки/розташування початкової точки"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:206
 #: pcbnew/dialogs/dialog_position_relative.cpp:160
 msgid "Distance:"
-msgstr ""
+msgstr "Відстань:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:212
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:24
 msgid "Move X:"
-msgstr ""
+msgstr "Перемістити по X:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:213
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:38
 msgid "Move Y:"
-msgstr ""
+msgstr "Перемістити по Y:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:286
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
+"Недійсні значення руху. Перемістити вибране за межі максимальної площі плати."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr ""
+msgstr "Обернути навколо центру виділеного"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
 msgid "Use polar coordinates"
-msgstr ""
+msgstr "Використовувати полярні координати"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:71
 msgid "Move Item"
-msgstr ""
+msgstr "Перемістити елемент"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:963 pcbnew/netinfo_item.cpp:87
 msgid "Net Code"
@@ -25589,12 +25765,12 @@ msgstr "Ім'я звʼязку не може бути пустим."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2140
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr ""
+msgstr "Зв'язок '%s' використовується.  Все одно видалити?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2170
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "Видалити всі зв'язки в групі '%s'?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2193
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2194
@@ -25663,15 +25839,17 @@ msgstr "Зміни застосовані до плати"
 #: pcbnew/dialogs/dialog_netlist.cpp:224
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr ""
+msgstr "Читання файла списку зв'язків'%s'.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:228
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr ""
+msgstr "Використання позначень для відповідності символів і слідів.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:230
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
+"Для порівняння компонентів і посадкових місць використовуються часові мітки ("
+"унікальні ідентифікатори).\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
@@ -25717,332 +25895,354 @@ msgstr "Імпортувати список звʼязків"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:120
 msgid "Convert to Non Copper Zone"
-msgstr ""
+msgstr "Конвертувати в не мідну зону"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:55
 msgid "Outline style:"
-msgstr ""
+msgstr "Тип контура:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
 msgid "degree"
-msgstr ""
+msgstr "°"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
 msgid "Non Copper Zone Properties"
-msgstr ""
+msgstr "Властивості не мідної зони"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 msgid "Ring"
-msgstr ""
+msgstr "Кільце"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:146
 msgid "Center:"
-msgstr ""
+msgstr "Центр:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:178
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "Ширина лінії не може бути 0 для незаповнених фігур."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
 #, c-format
 msgid "Corner %d"
-msgstr ""
+msgstr "Кут %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
-msgstr ""
+msgstr "Багатокутник повинен мати принаймні 3 кути"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:356
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr ""
+msgstr "Багатокутник повинен мати принаймні 3 кути після спрощення"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:362
 msgid "Polygon can not be self-intersecting"
-msgstr ""
+msgstr "Багатокутник не може пересікати сам себе"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:380
 msgid "Note: redundant corners removed"
-msgstr ""
+msgstr "Примітка: видалено зайві кути"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:406
 msgid "Select a corner to add the new corner after."
-msgstr ""
+msgstr "Виберіть існуючий кут, щоб додати новий кут."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:441
 msgid "Select a corner to delete."
-msgstr ""
+msgstr "Виберіть кут для видалення."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:169
 #: pcbnew/dialogs/dialog_pad_properties_base.h:271
 msgid "Pad Properties"
-msgstr ""
+msgstr "Налаштування контактної площадки"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:176
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr ""
+msgstr "Параметри документа за замовчуванням для додавання меню налаштувань"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:502
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr ""
+msgstr "Посадкове місце %s (%s), %s, повернуто на %g градусів"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:505
 #: pcbnew/dialogs/dialog_text_properties.cpp:248
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "зворотня сторона (віддзеркалена)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:505
 #: pcbnew/dialogs/dialog_text_properties.cpp:248
 msgid "front side"
-msgstr ""
+msgstr "передня сторона"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "width"
-msgstr ""
+msgstr "ширина"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
 #: pcbnew/dialogs/dialog_pad_properties.cpp:720
 msgid "from"
-msgstr ""
+msgstr "від"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:715
 #: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "to"
-msgstr ""
+msgstr "по"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:726
 msgid "center"
-msgstr ""
+msgstr "центр"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:727
 msgid "start"
-msgstr ""
+msgstr "початок"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:728
 msgid "angle"
-msgstr ""
+msgstr "кут"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "ring"
-msgstr ""
+msgstr "кільце"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:735
 msgid "circle"
-msgstr ""
+msgstr "коло"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:738
 msgid "radius"
-msgstr ""
+msgstr "радіус"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:744
 #, c-format
 msgid "corners count %d"
-msgstr ""
+msgstr "кількість кутів %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:749
 msgid "Unknown primitive"
-msgstr ""
+msgstr "Невідомий примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:940
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "All copper layers"
-msgstr ""
+msgstr "Всі мідні шари"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:941
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr ""
+msgstr "%s, %s та підключені шари"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:944
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Connected layers only"
-msgstr ""
+msgstr "Тільки зв'язані шари"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:949
 #, c-format
 msgid "%s and %s"
-msgstr ""
+msgstr "%s і %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
 msgid "Warning: Pad size is less than zero."
-msgstr ""
+msgstr "Попередження: розмір контактної площадки менше нуля."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
 msgstr ""
+"Попередження: Отвір контактної площадки не в середині контактної площадки."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid "Warning: Pad hole will leave no copper."
-msgstr ""
+msgstr "Попередження: Отвір контактної площадки поза шаром міді."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Попередження: негативне значення локального зазору не матимуть ефекту."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
+"Попередження: Результати з паяльною маскою перевищують деякі примітиви "
+"форми. Результати можуть бути неочікуваними."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1321
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Попередження: відмінний зазор паяльної маски більше контактної площадки. "
+"Паяльна маска не буде сформована."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
+"Попередження: відмінні границі паяльної пасти більше контактної площадки. Не "
+"буде згенеровано паяльну маску."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 msgid "Error: pad has no layer."
-msgstr ""
+msgstr "Помилка: контактна площадка не має шару."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1353
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
+"Попередження: отвір з металізацією повинен мати контактну площадку хоча б на "
+"одному шарі."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1359
 msgid "Error: Trapazoid delta is too large."
-msgstr ""
+msgstr "Помилка: Дельта Трапазуїду надто велика."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid "Error: Through hole pad has no hole."
-msgstr ""
+msgstr "Помилка: контактна площадка з наскрізним отвором не має отвору."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
+"Попередження: контактна площадка коннектора не має паяльної пасти. "
+"Використовуйте SMD контактну площадку."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1384
 msgid "Error: SMD pad has a hole."
-msgstr ""
+msgstr "Помилка: SMD контактна площадка не має шару."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1390
 msgid "Warning: SMD pad has no outer layers."
-msgstr ""
+msgstr "Попередження: у SMD контактної площадки немає зовнішніх шарів."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr ""
+"Попередження: не має сенсу позначити NPTH контактну площадку як реперну "
+"точку."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
 msgstr ""
+"Попередження: властивість тестової точки не має сенсу на контактних "
+"площадках NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1411
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr ""
+"Попередження: немає сенсу позначати NPTH контактну площадку як тепловідвідну."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1417
 msgid "Warning: Castellated property is for PTH pads."
 msgstr ""
+"Попередження: властивості половинного отвору стосується PTH контактної "
+"площадки."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Warning: BGA property is for SMD pads."
 msgstr ""
+"Попередження: тільки SMD контактні площадки можуть бути позначені як BGA."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1432
 msgid "Error: Negative corner size."
-msgstr ""
+msgstr "Помилка: від'ємне значення розміру закруглення."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1434
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Попередження: закруглення зробить контактну площадку круглою."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1444
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
+"Помилка: користувацька контактна площадка має бути єдиним багатокутником."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1450
 msgid "Pad Properties Errors"
-msgstr ""
+msgstr "Помилки властивостей контактної площадки"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1451
 msgid "Pad Properties Warnings"
-msgstr ""
+msgstr "Попередження про налаштування контактної площадки"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1683
 msgid "Modify pad"
-msgstr ""
+msgstr "Змінити контактну площадку"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1711
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:375
 msgid "Hole size X:"
-msgstr ""
+msgstr "Розмір отвору X:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1723
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:107
 msgid "Pad size X:"
-msgstr ""
+msgstr "Розмір контактної площадки X:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2094
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2229
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2260
 msgid "No shape selected"
-msgstr ""
+msgstr "Форма не вибрана"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2179
 msgid "Ring/Circle"
-msgstr ""
+msgstr "Кільце/Коло"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2183
 msgid "Shape type:"
-msgstr ""
+msgstr "Тип фігури:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2183
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
 msgid "Add Primitive"
-msgstr ""
+msgstr "Додати примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:36
 msgid "Pad type:"
-msgstr ""
+msgstr "Тип контактної площадки:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1652
 msgid "Through-hole"
-msgstr ""
+msgstr "Наскрізний отвір"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "Edge Connector"
-msgstr ""
+msgstr "Коннектор по краю"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1197
 #: pcbnew/pad.cpp:1220
 msgid "NPTH, Mechanical"
-msgstr ""
+msgstr "NPTH, механічний"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "SMD Aperture"
-msgstr ""
+msgstr "SMD апертура"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
-msgstr ""
+msgstr "Номер контактної площадки:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
+"Не дозволяти змінювати позицію контактної площадки відносно батьківської "
+"конт. пл."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:154
 msgid "Trapezoid delta:"
-msgstr ""
+msgstr "Кут трапеції:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:165
 msgid "Trapezoid axis:"
-msgstr ""
+msgstr "Осі трапеції:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
 msgid "Corner size:"
-msgstr ""
+msgstr "Розмір кута:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:317
@@ -26051,10 +26251,13 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"Радіус кута у відсотках від ширини майданчика.\n"
+"Ширина – це менше значення між розміром X і Y.\n"
+"Максимальне значення становить 50 відсотків."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:199
 msgid "Corner radius:"
-msgstr ""
+msgstr "Радіус округлення:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:201
 msgid ""
@@ -26063,11 +26266,15 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
+"Радіус кута.\n"
+"Може бути не більше половини ширини контактної площадки.\n"
+"Ширина – це менше значення між розміром X і Y.\n"
+"Примітка: норма IPC дає максимальне значення = 0,25 мм."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:274
 msgid "Chamfer size:"
-msgstr ""
+msgstr "Розмір фаски:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
@@ -26076,138 +26283,144 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"Розмір фаски у відсотках від ширини контактної площадки.\n"
+"Ширина – це менше значення між розміром X і Y.\n"
+"Максимальне значення становить 50 відсотків."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:287
 msgid "Chamfer corners:"
-msgstr ""
+msgstr "Кут фаски:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:239
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:289
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
 msgstr ""
+"Скошені кути. Позиція відносно орієнтації контактної площадки 0 градусів."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:246
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:296
 msgid "Top left"
-msgstr ""
+msgstr "Верхній лівий"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:250
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:300
 msgid "Top right"
-msgstr ""
+msgstr "Верхній правий"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:253
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:303
 msgid "Bottom left"
-msgstr ""
+msgstr "Нижній лівий"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:306
 msgid "Bottom right"
-msgstr ""
+msgstr "Нижній правий"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad shape:"
-msgstr ""
+msgstr "Форма контактної площадки:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369
 msgid "Circular"
-msgstr ""
+msgstr "Кругла"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1159
 #: pcbnew/pad.cpp:1660
 msgid "Oval"
-msgstr ""
+msgstr "Овал"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Rectangular"
-msgstr ""
+msgstr "Прямокутна"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Trapezoidal"
-msgstr ""
+msgstr "Трапецієподібний"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346 pcbnew/pad.cpp:1662
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "Округлений прямокутник"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346 pcbnew/pad.cpp:1663
 msgid "Chamfered rectangle"
-msgstr ""
+msgstr "Скошений прямокутник"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Chamfered with other corners rounded"
-msgstr ""
+msgstr "Скошений із закругленими прямокутник"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Custom (circular base)"
-msgstr ""
+msgstr "Кастомізація (кільцева основа)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Custom (rectangular base)"
-msgstr ""
+msgstr "Кастомізація (прямокутна база)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
 msgid "Hole shape:"
-msgstr ""
+msgstr "Форма отвору:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
-msgstr ""
+msgstr "Зміщення відносно отвору"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
 msgid "Specify pad to die length"
-msgstr ""
+msgstr "Довжина від контактної площадки до чіпу"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:494
 msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
+"Батьківська контактна площадка на платі перевернута.\n"
+"Шари будуть перевернуті."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:514
 msgid "Front adhesive"
-msgstr ""
+msgstr "Клей з лицевої"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:517
 msgid "Back adhesive"
-msgstr ""
+msgstr "Клей з зворотної"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:520
 msgid "Front solder paste"
-msgstr ""
+msgstr "Верхня паяльна паста"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:523
 msgid "Back solder paste"
-msgstr ""
+msgstr "Паяльна паста знизу"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:529
 msgid "Back silk screen"
-msgstr ""
+msgstr "Нижня шовкографія"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:535
 msgid "Back solder mask"
-msgstr ""
+msgstr "Нижня паяльна маска"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:538
 msgid "Drafting notes"
-msgstr ""
+msgstr "Чернетки"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:541
 msgid "E.C.O.1"
-msgstr ""
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:544
 msgid "E.C.O.2"
-msgstr ""
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:550
 msgid "Fabrication property:"
-msgstr ""
+msgstr "Параметри виробництва:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:552
 msgid ""
@@ -26224,23 +26437,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559 pcbnew/pad.cpp:1668
 msgid "BGA pad"
-msgstr ""
+msgstr "BGA контактна площадка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559 pcbnew/pad.cpp:1670
 msgid "Fiducial, local to footprint"
-msgstr ""
+msgstr "Реперна мітка, локальна для посадковому місця"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559 pcbnew/pad.cpp:1669
 msgid "Fiducial, global to board"
-msgstr ""
+msgstr "Реперна мітка, глобальна для плати"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559 pcbnew/pad.cpp:1671
 msgid "Test point pad"
-msgstr ""
+msgstr "Тестова контактна площадка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559 pcbnew/pad.cpp:1672
 msgid "Heatsink pad"
-msgstr ""
+msgstr "Тепловідвідна контактна площадка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
 msgid "Castellated pad (through hole only)"
