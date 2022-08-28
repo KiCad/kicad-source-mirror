@@ -1,4 +1,4 @@
-(kicad_sch (version 20211123) (generator eeschema)
+(kicad_sch (version 20220822) (generator eeschema)
 
   (uuid 3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b)
 
@@ -14,25 +14,25 @@
 
 
   (sheet (at 81.28 66.04) (size 41.91 43.18)
-    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (stroke (width 0) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid 00000000-0000-0000-0000-000048553e53)
-    (property "Sheet name" "pic_programmer" (id 0) (at 81.28 65.2775 0)
+    (property "Sheetname" "pic_programmer" (id 0) (at 81.28 65.2775 0)
       (effects (font (size 1.524 1.524)) (justify left bottom))
     )
-    (property "Sheet file" "pic_programmer.kicad_sch" (id 1) (at 81.28 109.8301 0)
+    (property "Sheetfile" "pic_programmer.kicad_sch" (id 1) (at 81.28 109.8301 0)
       (effects (font (size 1.524 1.524)) (justify left top))
     )
   )
 
   (sheet (at 142.24 66.04) (size 53.34 43.18)
-    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (stroke (width 0) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid 00000000-0000-0000-0000-000048553e7c)
-    (property "Sheet name" "sockets" (id 0) (at 142.24 65.2775 0)
+    (property "Sheetname" "sockets" (id 0) (at 142.24 65.2775 0)
       (effects (font (size 1.524 1.524)) (justify left bottom))
     )
-    (property "Sheet file" "pic_sockets.kicad_sch" (id 1) (at 142.24 109.8301 0)
+    (property "Sheetfile" "pic_sockets.kicad_sch" (id 1) (at 142.24 109.8301 0)
       (effects (font (size 1.524 1.524)) (justify left top))
     )
   )
@@ -246,22 +246,22 @@
       (reference "D1") (unit 1) (value "1N4004") (footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d1b"
-      (reference "D2") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D2") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d25"
-      (reference "D3") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D3") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d5c"
-      (reference "D4") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D4") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d5d"
-      (reference "D5") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D5") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d64"
-      (reference "D6") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D6") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d65"
-      (reference "D7") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D7") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f5d"
       (reference "D8") (unit 1) (value "RED-LED") (footprint "LED_THT:LED_D5.0mm")
@@ -273,7 +273,7 @@
       (reference "D10") (unit 1) (value "SCHOTTKY") (footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639ba28"
-      (reference "D11") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
+      (reference "D11") (unit 1) (value "BAT43") (footprint "pic_programmer_fp:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b9ea"
       (reference "D12") (unit 1) (value "YELLOW-LED") (footprint "LED_THT:LED_D5.0mm")
@@ -297,76 +297,76 @@
       (reference "P3") (unit 1) (value "SUPP40") (footprint "Package_DIP:DIP-40_W15.24mm_Socket_LongPads")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4eb9"
-      (reference "Q1") (unit 1) (value "BC237") (footprint "Package_TO_SOT_THT:TO-92")
+      (reference "Q1") (unit 1) (value "BC237") (footprint "pic_programmer_fp:TO-92")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f30"
-      (reference "Q2") (unit 1) (value "BC307") (footprint "Package_TO_SOT_THT:TO-92")
+      (reference "Q2") (unit 1) (value "BC307") (footprint "pic_programmer_fp:TO-92")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b996"
-      (reference "Q3") (unit 1) (value "BC307") (footprint "Package_TO_SOT_THT:TO-92")
+      (reference "Q3") (unit 1) (value "BC307") (footprint "pic_programmer_fp:TO-92")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4cf4"
-      (reference "R1") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R1") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4cfb"
-      (reference "R2") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R2") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d5a"
-      (reference "R3") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R3") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d5b"
-      (reference "R4") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R4") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d62"
-      (reference "R5") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R5") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d63"
-      (reference "R6") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R6") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f2a"
-      (reference "R7") (unit 1) (value "10K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R7") (unit 1) (value "10K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d92"
-      (reference "R8") (unit 1) (value "1K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R8") (unit 1) (value "1K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f52"
-      (reference "R9") (unit 1) (value "2.2K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R9") (unit 1) (value "2.2K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5f83"
-      (reference "R10") (unit 1) (value "5.1K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R10") (unit 1) (value "5.1K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f23"
-      (reference "R11") (unit 1) (value "22K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R11") (unit 1) (value "22K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d85"
-      (reference "R12") (unit 1) (value "470") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R12") (unit 1) (value "470") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4d8d"
-      (reference "R13") (unit 1) (value "470") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R13") (unit 1) (value "470") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5083"
-      (reference "R14") (unit 1) (value "470") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R14") (unit 1) (value "470") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a58d7"
-      (reference "R15") (unit 1) (value "6.2K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R15") (unit 1) (value "6.2K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a58dc"
-      (reference "R16") (unit 1) (value "62K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R16") (unit 1) (value "62K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a50bf"
-      (reference "R17") (unit 1) (value "22K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R17") (unit 1) (value "22K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-000044369638"
-      (reference "R18") (unit 1) (value "220") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R18") (unit 1) (value "220") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b9b0"
-      (reference "R19") (unit 1) (value "2.2K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R19") (unit 1) (value "2.2K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b9b3"
-      (reference "R20") (unit 1) (value "2.2K") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R20") (unit 1) (value "2.2K") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b9e9"
-      (reference "R21") (unit 1) (value "470") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+      (reference "R21") (unit 1) (value "470") (footprint "pic_programmer_fp:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000443d0101"
       (reference "RV1") (unit 1) (value "1K") (footprint "pic_programmer_fp:RV2X4")
@@ -387,7 +387,7 @@
       (reference "U2") (unit 4) (value "74HC125") (footprint "Package_DIP:DIP-14_W7.62mm_LongPads")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a504a"
-      (reference "U3") (unit 1) (value "7805") (footprint "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown")
+      (reference "U3") (unit 1) (value "7805") (footprint "pic_programmer_fp:TO-220-3_Horizontal_TabDown")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5e20"
       (reference "U4") (unit 1) (value "LT1373") (footprint "Package_DIP:DIP-8_W7.62mm_LongPads")
