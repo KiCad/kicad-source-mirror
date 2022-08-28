@@ -60,7 +60,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     for( std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
         m_cbViewports->Append( pair.first, static_cast<void*>( &pair.second ) );
 
-    m_cbViewports->Append( wxT( "-----" ) );
+    m_cbViewports->Append( wxT( "---" ) );
     m_cbViewports->Append( _( "Save viewport..." ) );
     m_cbViewports->Append( _( "Delete viewport..." ) );
 

@@ -9,6 +9,7 @@
 #include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
 #include "widgets/infobar.h"
+#include "widgets/wx_combobox.h"
 
 #include "dialog_text_properties_base.h"
 
@@ -273,7 +274,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_hyperlinkCombo = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_hyperlinkCombo = new WX_COMBOBOX( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	bSizer11->Add( m_hyperlinkCombo, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 

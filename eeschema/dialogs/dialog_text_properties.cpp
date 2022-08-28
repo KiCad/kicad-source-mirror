@@ -27,6 +27,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
+#include <widgets/wx_combobox.h>
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
@@ -134,14 +135,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         wxString sheetPageNum = sheet.GetPageNumber();
         wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" ) : sheet.Last()->GetName();
 
-        m_hyperlinkCombo->Append( wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
+        m_hyperlinkCombo->Append( wxT( "#" ) + sheetPageNum,
+                                  wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
         m_pageNumbers.push_back( sheetPageNum );
     }
 
     m_hyperlinkCombo->Append( wxT( "---" ) );
-    m_hyperlinkCombo->Append( wxT( "file://..." ), KiBitmap( BITMAPS::small_folder ) );
-    m_hyperlinkCombo->Append( wxT( "http://..." ), KiBitmap( BITMAPS::www ) );
-    m_hyperlinkCombo->Append( wxT( "https://..." ), KiBitmap( BITMAPS::www ) );
+    m_hyperlinkCombo->Append( wxT( "file://" ), wxT( "file://..." ) );
+    m_hyperlinkCombo->Append( wxT( "http://" ), wxT( "http://..." ) );
+    m_hyperlinkCombo->Append( wxT( "https://" ), wxT( "https://..." ) );
 
     SetupStandardButtons();
     Layout();
@@ -305,41 +307,10 @@ void DIALOG_TEXT_PROPERTIES::onHyperlinkText( wxCommandEvent& event )
 
 void DIALOG_TEXT_PROPERTIES::onHyperlinkCombo( wxCommandEvent& aEvent )
 {
-    size_t sel = aEvent.GetSelection();
-
-    if( sel < 0 )
+    if( aEvent.GetSelection() >= 0 )
     {
-        // user clicked outside dropdown; leave current value
-    }
-    else if( sel == m_hyperlinkCombo->GetCount() - 4 )
-    {
-        // separator
-    }
-    else if( sel == m_hyperlinkCombo->GetCount() - 3 )
-    {
-        static wxString helper = wxT( "file://" );
-
-        m_hyperlinkCombo->ChangeValue( helper );
+        m_hyperlinkCb->SetValue( true );
         m_hyperlinkCombo->SetInsertionPointEnd();
-    }
-    else if( sel == m_hyperlinkCombo->GetCount() - 2 )
-    {
-        static wxString helper = wxT( "http://" );
-
-        m_hyperlinkCombo->ChangeValue( helper );
-        m_hyperlinkCombo->SetInsertionPointEnd();
-    }
-    else if( sel == m_hyperlinkCombo->GetCount() - 1 )
-    {
-        static wxString helper = wxT( "https://" );
-
-        m_hyperlinkCombo->ChangeValue( helper );
-        m_hyperlinkCombo->SetInsertionPointEnd();
-    }
-    else
-    {
-        m_hyperlinkCombo->ChangeValue( wxT( "#" ) + m_pageNumbers[ sel ] );
-        m_hyperlinkCombo->SelectAll();
     }
 }
 

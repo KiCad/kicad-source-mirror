@@ -2438,7 +2438,7 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
         idx++;
     }
 
-    m_cbLayerPresets->Append( wxT( "-----" ) );
+    m_cbLayerPresets->Append( wxT( "---" ) );
     m_cbLayerPresets->Append( _( "Save preset..." ) );
     m_cbLayerPresets->Append( _( "Delete preset..." ) );
 
@@ -2677,7 +2677,7 @@ void APPEARANCE_CONTROLS::rebuildViewportsWidget()
     for( std::pair<const wxString, VIEWPORT>& pair : m_viewports )
         m_cbViewports->Append( pair.first, static_cast<void*>( &pair.second ) );
 
-    m_cbViewports->Append( wxT( "-----" ) );
+    m_cbViewports->Append( wxT( "---" ) );
     m_cbViewports->Append( _( "Save viewport..." ) );
     m_cbViewports->Append( _( "Delete viewport..." ) );
 

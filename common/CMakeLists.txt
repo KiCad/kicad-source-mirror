@@ -200,6 +200,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_aui_art_providers.cpp
     widgets/wx_aui_utils.cpp
     widgets/wx_busy_indicator.cpp
+    widgets/wx_combobox.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
     widgets/wx_listbox.cpp

@@ -13,6 +13,7 @@
 class BITMAP_BUTTON;
 class COLOR_SWATCH;
 class FONT_CHOICE;
+class WX_COMBOBOX;
 class WX_INFOBAR;
 
 #include "dialog_shim.h"
@@ -88,7 +89,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_panelFillColor;
 		COLOR_SWATCH* m_fillColorSwatch;
 		wxCheckBox* m_hyperlinkCb;
-		wxBitmapComboBox* m_hyperlinkCombo;
+		WX_COMBOBOX* m_hyperlinkCombo;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
