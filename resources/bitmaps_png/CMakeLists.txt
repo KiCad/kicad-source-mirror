@@ -371,9 +371,11 @@ set( BMAPS_MID
     new_generic
     new_library
     new_project
+    new_project_from_template
     noconn
     normal
     open_project
+    open_project_demo
     options_3drender
     options_board
     options_generic

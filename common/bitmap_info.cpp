@@ -394,9 +394,11 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::new_generic].emplace_back( BITMAPS::new_generic, wxT( "new_generic_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::new_library].emplace_back( BITMAPS::new_library, wxT( "new_library_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::new_project].emplace_back( BITMAPS::new_project, wxT( "new_project_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::new_project_from_template].emplace_back( BITMAPS::new_project_from_template, wxT( "new_project_from_template_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::noconn].emplace_back( BITMAPS::noconn, wxT( "noconn_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::normal].emplace_back( BITMAPS::normal, wxT( "normal_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::open_project].emplace_back( BITMAPS::open_project, wxT( "open_project_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::open_project_demo].emplace_back( BITMAPS::open_project_demo, wxT( "open_project_demo_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::options_3drender].emplace_back( BITMAPS::options_3drender, wxT( "options_3drender_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::options_board].emplace_back( BITMAPS::options_board, wxT( "options_board_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::options_generic].emplace_back( BITMAPS::options_generic, wxT( "options_generic_24.png" ), 24, wxT( "light" ) );
@@ -770,9 +772,11 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::new_generic].emplace_back( BITMAPS::new_generic, wxT( "new_generic_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::new_library].emplace_back( BITMAPS::new_library, wxT( "new_library_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::new_project].emplace_back( BITMAPS::new_project, wxT( "new_project_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::new_project_from_template].emplace_back( BITMAPS::new_project_from_template, wxT( "new_project_from_template_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::noconn].emplace_back( BITMAPS::noconn, wxT( "noconn_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::normal].emplace_back( BITMAPS::normal, wxT( "normal_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::open_project].emplace_back( BITMAPS::open_project, wxT( "open_project_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::open_project_demo].emplace_back( BITMAPS::open_project_demo, wxT( "open_project_demo_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::options_3drender].emplace_back( BITMAPS::options_3drender, wxT( "options_3drender_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::options_board].emplace_back( BITMAPS::options_board, wxT( "options_board_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::options_generic].emplace_back( BITMAPS::options_generic, wxT( "options_generic_dark_24.png" ), 24, wxT( "dark" ) );
