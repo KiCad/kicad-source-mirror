@@ -23,9 +23,9 @@
 
 #include "core/wx_stl_compat.h"
 
-#include <optional>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -141,6 +141,7 @@ struct PCM_INSTALLATION_ENTRY
     wxString    repository_id;
     wxString    repository_name;
     uint64_t    install_timestamp;
+    bool        pinned;
 
     // Not serialized fields
     bool update_available;
@@ -203,8 +204,8 @@ void to_json( json& j, const PCM_REPOSITORY& r );
 void from_json( const json& j, PCM_REPOSITORY& r );
 
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( PCM_INSTALLATION_ENTRY, package, current_version, repository_id,
-                                    repository_name, install_timestamp );
+void to_json( json& j, const PCM_INSTALLATION_ENTRY& e );
+void from_json( const json& j, PCM_INSTALLATION_ENTRY& e );
 
 
 #endif // PCM_DATA_H_

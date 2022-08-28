@@ -241,6 +241,25 @@ public:
     PCM_PACKAGE_STATE GetPackageState( const wxString& aRepositoryId, const wxString& aPackageId );
 
     /**
+     * @brief Returns pinned status of a package
+     *
+     * @param aPackageId package id
+     * @return true if package is installed and is pinned
+     * @return false if package is not installed or not pinned
+     */
+    bool IsPackagePinned( const wxString& aPackageId ) const;
+
+    /**
+     * @brief Set the pinned status of a package
+     *
+     * no-op for not installed packages
+     *
+     * @param aPackageId package id
+     * @param aPinned pinned status
+     */
+    void SetPinned( const wxString& aPackageId, const bool aPinned );
+
+    /**
      * @brief Get the preferred package update version or empty string if there is none
      *
      * Works only for installed packages and returns highest compatible version greater

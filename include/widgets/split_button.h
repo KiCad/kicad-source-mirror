@@ -43,6 +43,7 @@ public:
     void    SetBitmap( const wxBitmap& aBmp );
     void    SetMinSize( const wxSize& aSize ) override;
     void    SetWidthPadding( int aPadding );
+    void    SetLabel( const wxString& aLabel ) override;
 
 protected:
     void OnKillFocus( wxFocusEvent& aEvent );

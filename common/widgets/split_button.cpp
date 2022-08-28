@@ -88,6 +88,13 @@ void SPLIT_BUTTON::SetBitmap( const wxBitmap& aBmp )
 }
 
 
+void SPLIT_BUTTON::SetLabel( const wxString& aLabel )
+{
+    m_label = aLabel;
+    Refresh();
+}
+
+
 wxMenu* SPLIT_BUTTON::GetSplitButtonMenu()
 {
     return m_pMenu;

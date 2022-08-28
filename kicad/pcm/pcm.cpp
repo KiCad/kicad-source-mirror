@@ -813,7 +813,6 @@ PCM_PACKAGE_STATE PLUGIN_CONTENT_MANAGER::GetPackageState( const wxString& aRepo
     try
     {
         repo = &getCachedRepository( aRepositoryId );
-
     }
     catch( ... )
     {
@@ -935,6 +934,24 @@ PLUGIN_CONTENT_MANAGER::GetInstalledPackageVersion( const wxString& aPackageId )
                   "Installed package not found." );
 
     return m_installed.at( aPackageId ).current_version;
+}
+
+
+bool PLUGIN_CONTENT_MANAGER::IsPackagePinned( const wxString& aPackageId ) const
+{
+    if( m_installed.find( aPackageId ) == m_installed.end() )
+        return false;
+
+    return m_installed.at( aPackageId ).pinned;
+}
+
+
+void PLUGIN_CONTENT_MANAGER::SetPinned( const wxString& aPackageId, const bool aPinned )
+{
+    if( m_installed.find( aPackageId ) == m_installed.end() )
+        return;
+
+    m_installed.at( aPackageId ).pinned = aPinned;
 }
 
 
@@ -1096,11 +1113,14 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
                 if( m_installed.size() == 0 )
                     return;
 
-                // Only fetch repositories that have installed packages
+                // Only fetch repositories that have installed not pinned packages
                 std::unordered_set<wxString> repo_ids;
 
                 for( auto& entry : m_installed )
-                    repo_ids.insert( entry.second.repository_id );
+                {
+                    if( !entry.second.pinned )
+                        repo_ids.insert( entry.second.repository_id );
+                }
 
                 for( const auto& entry : m_repository_list )
                 {
@@ -1132,7 +1152,7 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
                                 GetPackageState( installed_package.repository_id,
                                                  installed_package.package.identifier );
 
-                        if( state == PPS_UPDATE_AVAILABLE )
+                        if( state == PPS_UPDATE_AVAILABLE && !installed_package.pinned )
                             availableUpdateCount++;
                     }
 

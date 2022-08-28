@@ -173,3 +173,28 @@ void from_json( const json& j, PCM_REPOSITORY& r )
     to_optional( j, "manifests", r.manifests );
     to_optional( j, "maintainer", r.maintainer );
 }
+
+
+void to_json( json& j, const PCM_INSTALLATION_ENTRY& e )
+{
+    j = json{ { "package", e.package },
+              { "current_version", e.current_version },
+              { "repository_id", e.repository_id },
+              { "repository_name", e.repository_name },
+              { "install_timestamp", e.install_timestamp },
+              { "pinned", e.pinned } };
+}
+
+
+void from_json( const json& j, PCM_INSTALLATION_ENTRY& e )
+{
+    j.at( "package" ).get_to( e.package );
+    j.at( "current_version" ).get_to( e.current_version );
+    j.at( "repository_id" ).get_to( e.repository_id );
+    j.at( "repository_name" ).get_to( e.repository_name );
+    j.at( "install_timestamp" ).get_to( e.install_timestamp );
+
+    e.pinned = false;
+    if( j.contains( "pinned" ) )
+        j.at( "pinned" ).get_to( e.pinned );
+}

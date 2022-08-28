@@ -23,8 +23,8 @@
 #include <html_window.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
-#include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
+#include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <widgets/wx_panel.h>
 #include <widgets/wx_splitter_window.h>
@@ -49,9 +49,11 @@ std::unordered_map<PCM_PACKAGE_VERSION_STATUS, wxString> PANEL_PACKAGES_VIEW::ST
 
 
 PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                               parent,
-                                          std::shared_ptr<PLUGIN_CONTENT_MANAGER> aPcm ) :
+                                          std::shared_ptr<PLUGIN_CONTENT_MANAGER> aPcm,
+                                          const ActionCallback&                   aActionCallback,
+                                          const PinCallback&                      aPinCallback ) :
         PANEL_PACKAGES_VIEW_BASE( parent ),
-        m_pcm( aPcm )
+        m_pcm( aPcm ), m_actionCallback( aActionCallback ), m_pinCallback( aPinCallback )
 {
     // Replace wxFormBuilder's sash initializer with one which will respect m_initialSashPos.
     m_splitter1->Disconnect( wxEVT_IDLE,
@@ -121,17 +123,14 @@ void PANEL_PACKAGES_VIEW::ClearData()
 }
 
 
-void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackageData,
-                                   ActionCallback                        aCallback )
+void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackageData )
 {
-    m_actionCallback = aCallback;
-
     ClearData();
 
     for( const PACKAGE_VIEW_DATA& data : aPackageData )
     {
         PANEL_PACKAGE* package_panel =
-                new PANEL_PACKAGE( m_packageListWindow, m_actionCallback, data );
+                new PANEL_PACKAGE( m_packageListWindow, m_actionCallback, m_pinCallback, data );
 
         package_panel->SetSelectCallback(
                 [package_panel, this]()
@@ -149,7 +148,7 @@ void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackag
         m_packagePanels.insert( { data.package.identifier, package_panel } );
         m_packageInitialOrder.push_back( data.package.identifier );
 
-        if( data.state == PPS_UPDATE_AVAILABLE )
+        if( data.state == PPS_UPDATE_AVAILABLE && !data.pinned )
             m_updateablePackages.insert( data.package.identifier );
     }
 
@@ -429,13 +428,13 @@ bool PANEL_PACKAGES_VIEW::canRunAction() const
 
 
 void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
-                                           const PCM_PACKAGE_STATE aState )
+                                           const PCM_PACKAGE_STATE aState, const bool aPinned )
 {
     auto it = m_packagePanels.find( aPackageId );
 
     if( it != m_packagePanels.end() )
     {
-        it->second->SetState( aState );
+        it->second->SetState( aState, aPinned );
 
         if( m_currentSelected && m_currentSelected == it->second )
         {
@@ -443,7 +442,7 @@ void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
             m_currentSelected->OnClick( dummy );
         }
 
-        if( aState == PPS_UPDATE_AVAILABLE )
+        if( aState == PPS_UPDATE_AVAILABLE && !aPinned )
         {
             m_updateablePackages.insert( aPackageId );
         }

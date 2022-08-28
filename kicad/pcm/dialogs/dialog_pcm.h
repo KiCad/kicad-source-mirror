@@ -90,11 +90,15 @@ private:
     ///< Gets installed packages list from PCM and displays it on installed tab
     void setInstalledPackages();
 
+    ///< Reflects new state of the package in all panels where it is displayed
+    void updatePackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState );
+
     ///< Discards specified pending action
     void discardAction( int aIndex );
 
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>                    m_pcm;
-    ActionCallback                                             m_callback;
+    ActionCallback                                             m_actionCallback;
+    PinCallback                                                m_pinCallback;
     PANEL_PACKAGES_VIEW*                                       m_installedPanel;
     std::unordered_map<PCM_PACKAGE_TYPE, PANEL_PACKAGES_VIEW*> m_repositoryContentPanels;
     wxString                                                   m_selectedRepositoryId;

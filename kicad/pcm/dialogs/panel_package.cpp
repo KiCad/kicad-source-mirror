@@ -24,9 +24,9 @@
 #include "panel_package.h"
 
 PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
-                              const PACKAGE_VIEW_DATA& aData ) :
+                              const PinCallback& aPinCallback, const PACKAGE_VIEW_DATA& aData ) :
         PANEL_PACKAGE_BASE( parent ),
-        m_actionCallback( aCallback ), m_data( aData )
+        m_actionCallback( aCallback ), m_pinCallback( aPinCallback ), m_data( aData )
 {
     // Propagate clicks on static elements to the panel handler.
     m_name->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
@@ -60,13 +60,18 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     m_splitButton->SetLabel( _( "Update" ) );
     m_splitButton->Bind( wxEVT_BUTTON, &PANEL_PACKAGE::OnButtonClicked, this );
 
-    wxMenu*     splitMenu = m_splitButton->GetSplitButtonMenu();
-    wxMenuItem* menuItem = splitMenu->Append( wxID_ANY, _( "Uninstall" ) );
+    wxMenu* splitMenu = m_splitButton->GetSplitButtonMenu();
+    m_pinVersionMenuItem =
+            splitMenu->Append( wxID_ANY, _( "Pin package" ),
+                               _( "Pinned packages don't affect available update notification and "
+                                  "will not be updated with \"Update All\" button." ),
+                               wxITEM_CHECK );
+    splitMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_PACKAGE::OnPinVersionClick, this,
+                     m_pinVersionMenuItem->GetId() );
 
-    splitMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_PACKAGE::OnUninstallClick, this,
-                     menuItem->GetId() );
+    m_actionMenuItem = splitMenu->Append( wxID_ANY, _( "Uninstall" ) );
 
-    SetState( m_data.state );
+    SetState( m_data.state, m_data.pinned );
 }
 
 
@@ -76,9 +81,11 @@ void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
 }
 
 
-void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
+void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState, bool aPinned )
 {
     m_data.state = aState;
+    m_data.pinned = aPinned;
+    m_splitButton->GetSplitButtonMenu()->Check( m_pinVersionMenuItem->GetId(), aPinned );
 
     switch( aState )
     {
@@ -95,10 +102,15 @@ void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
         m_button->Disable();
         break;
     case PCM_PACKAGE_STATE::PPS_INSTALLED:
-        m_splitButton->Hide();
-        m_button->Show();
-        m_button->SetLabel( _( "Uninstall" ) );
-        m_button->Enable();
+        m_button->Hide();
+        m_splitButton->Show();
+
+        m_splitButton->SetLabel( _( "Uninstall" ) );
+        m_splitButton->Bind( wxEVT_BUTTON, &PANEL_PACKAGE::OnButtonClicked, this );
+
+        m_actionMenuItem->SetItemLabel( _( "Update" ) );
+        m_splitButton->GetSplitButtonMenu()->Enable( m_actionMenuItem->GetId(), false );
+
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_INSTALL:
         m_splitButton->Hide();
@@ -113,9 +125,31 @@ void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
         m_button->Disable();
         break;
     case PCM_PACKAGE_STATE::PPS_UPDATE_AVAILABLE:
-        // The only state where the split button is shown instead of the normal one
         m_button->Hide();
         m_splitButton->Show();
+
+        if( aPinned )
+        {
+            m_splitButton->SetLabel( _( "Uninstall" ) );
+            m_splitButton->Bind( wxEVT_BUTTON, &PANEL_PACKAGE::OnUninstallClick, this );
+
+            m_actionMenuItem->SetItemLabel( _( "Update" ) );
+            m_splitButton->GetSplitButtonMenu()->Enable( m_actionMenuItem->GetId(), true );
+            m_splitButton->GetSplitButtonMenu()->Bind( wxEVT_COMMAND_MENU_SELECTED,
+                                                       &PANEL_PACKAGE::OnButtonClicked, this,
+                                                       m_actionMenuItem->GetId() );
+        }
+        else
+        {
+            m_splitButton->SetLabel( _( "Update" ) );
+            m_splitButton->Bind( wxEVT_BUTTON, &PANEL_PACKAGE::OnButtonClicked, this );
+
+            m_actionMenuItem->SetItemLabel( _( "Uninstall" ) );
+            m_splitButton->GetSplitButtonMenu()->Enable( m_actionMenuItem->GetId(), true );
+            m_splitButton->GetSplitButtonMenu()->Bind( wxEVT_COMMAND_MENU_SELECTED,
+                                                       &PANEL_PACKAGE::OnUninstallClick, this,
+                                                       m_actionMenuItem->GetId() );
+        }
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_UPDATE:
         m_splitButton->Hide();
@@ -149,6 +183,14 @@ void PANEL_PACKAGE::OnButtonClicked( wxCommandEvent& event )
     {
         m_actionCallback( m_data, PPA_UNINSTALL, m_data.current_version );
     }
+}
+
+
+void PANEL_PACKAGE::OnPinVersionClick( wxCommandEvent& event )
+{
+    m_data.pinned = event.IsChecked();
+
+    m_pinCallback( m_data.package.identifier, m_data.state, m_data.pinned );
 }
 
 

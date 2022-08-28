@@ -35,24 +35,26 @@
 class PANEL_PACKAGES_VIEW : public PANEL_PACKAGES_VIEW_BASE
 {
 public:
-    PANEL_PACKAGES_VIEW( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> aPcm );
+    PANEL_PACKAGES_VIEW( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> aPcm,
+                         const ActionCallback& aCallback, const PinCallback& aPinCallback );
     ~PANEL_PACKAGES_VIEW();
 
     /**
      * @brief Recreates package panels and displays data
      *
      * @param aPackageData list of package view data
-     * @param aCallback (un)install button callback
      */
-    void SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackageData, ActionCallback aCallback );
+    void SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackageData );
 
     /**
      * @brief Set the state of package
      *
      * @param aPackageId id of the package
      * @param aState new state
+     * @param aPinned indicates pinned version
      */
-    void SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState );
+    void SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState,
+                          const bool aPinned );
 
     ///< Destroys package panels
     void ClearData();
@@ -115,7 +117,8 @@ private:
     PCM_PACKAGE_ACTION getAction() const;
 
 private:
-    ActionCallback                               m_actionCallback;
+    const ActionCallback&                        m_actionCallback;
+    const PinCallback&                           m_pinCallback;
     std::unordered_map<wxString, PANEL_PACKAGE*> m_packagePanels;
     std::vector<wxString>                        m_packageInitialOrder;
     PANEL_PACKAGE*                               m_currentSelected;

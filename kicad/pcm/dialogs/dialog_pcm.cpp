@@ -66,23 +66,19 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
     m_discardActionButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_panelPending->Layout();
 
-    m_installedPanel = new PANEL_PACKAGES_VIEW( m_panelInstalledHolder, m_pcm );
-    m_panelInstalledHolder->GetSizer()->Add( m_installedPanel, 1, wxEXPAND );
-    m_panelInstalledHolder->Layout();
-
-    for( const std::pair<PCM_PACKAGE_TYPE, wxString>& entry : PACKAGE_TYPE_LIST )
+    m_actionCallback = [this]( const PACKAGE_VIEW_DATA& aData, PCM_PACKAGE_ACTION aAction,
+                               const wxString& aVersion )
     {
-        PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm );
-        wxString             label = wxGetTranslation( entry.second );
-        m_contentNotebook->AddPage( panel, wxString::Format( label, 0 ) );
-        m_repositoryContentPanels.insert( { entry.first, panel } );
-    }
+        if( aAction == PPA_UPDATE && m_pcm->IsPackagePinned( aData.package.identifier ) )
+        {
+            if( wxMessageBox( wxString::Format( _( "Are you sure you want to update pinned package "
+                                                   "from version %s to %s?" ),
+                                                aData.current_version, aVersion ),
+                              _( "Confirm update" ), wxICON_QUESTION | wxYES_NO, this )
+                == wxNO )
+                return;
+        }
 
-    m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ), 0 ) );
-
-    m_callback = [this]( const PACKAGE_VIEW_DATA& aData, PCM_PACKAGE_ACTION aAction,
-                         const wxString& aVersion )
-    {
         m_gridPendingActions->Freeze();
 
         PCM_PACKAGE_STATE new_state;
@@ -125,11 +121,32 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
 
         updatePendingActionsTab();
 
-        m_installedPanel->SetPackageState( aData.package.identifier, new_state );
-
-        for( const auto& entry : m_repositoryContentPanels )
-            entry.second->SetPackageState( aData.package.identifier, new_state );
+        updatePackageState( aData.package.identifier, new_state );
     };
+
+    m_pinCallback =
+            [this]( const wxString& aPackageId, const PCM_PACKAGE_STATE aState, const bool aPinned )
+    {
+        m_pcm->SetPinned( aPackageId, aPinned );
+
+        updatePackageState( aPackageId, aState );
+    };
+
+    m_installedPanel = new PANEL_PACKAGES_VIEW( m_panelInstalledHolder, m_pcm, m_actionCallback,
+                                                m_pinCallback );
+    m_panelInstalledHolder->GetSizer()->Add( m_installedPanel, 1, wxEXPAND );
+    m_panelInstalledHolder->Layout();
+
+    for( const std::pair<PCM_PACKAGE_TYPE, wxString>& entry : PACKAGE_TYPE_LIST )
+    {
+        PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm,
+                                                              m_actionCallback, m_pinCallback );
+        wxString             label = wxGetTranslation( entry.second );
+        m_contentNotebook->AddPage( panel, wxString::Format( label, 0 ) );
+        m_repositoryContentPanels.insert( { entry.first, panel } );
+    }
+
+    m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ), 0 ) );
 
     setInstalledPackages();
     updatePendingActionsTab();
@@ -312,7 +329,10 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
             package_data.state = m_pcm->GetPackageState( aRepositoryId, pkg.identifier );
 
             if( package_data.state == PPS_INSTALLED || package_data.state == PPS_UPDATE_AVAILABLE )
+            {
                 package_data.current_version = m_pcm->GetInstalledPackageVersion( pkg.identifier );
+                package_data.pinned = m_pcm->IsPackagePinned( pkg.identifier );
+            }
 
             if( package_data.state == PPS_UPDATE_AVAILABLE )
                 package_data.update_version = m_pcm->GetPackageUpdateVersion( pkg );
@@ -343,7 +363,7 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
         {
             PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
             const wxString&  label = PACKAGE_TYPE_LIST[i].second;
-            m_repositoryContentPanels[type]->SetData( data[type], m_callback );
+            m_repositoryContentPanels[type]->SetData( data[type] );
             m_contentNotebook->SetPageText(
                     i, wxString::Format( wxGetTranslation( label ), (int) data[type].size() ) );
         }
@@ -401,7 +421,7 @@ void DIALOG_PCM::setInstalledPackages()
         package_list.emplace_back( package_data );
     }
 
-    m_installedPanel->SetData( package_list, m_callback );
+    m_installedPanel->SetData( package_list );
 
     m_dialogNotebook->SetPageText(
             1, wxString::Format( _( "Installed (%d)" ), (int) package_list.size() ) );
@@ -489,12 +509,20 @@ void DIALOG_PCM::discardAction( int aIndex )
     PCM_PACKAGE_STATE state =
             m_pcm->GetPackageState( action.repository_id, action.package.identifier );
 
-    m_installedPanel->SetPackageState( action.package.identifier, state );
-
-    for( const auto& entry : m_repositoryContentPanels )
-        entry.second->SetPackageState( action.package.identifier, state );
+    updatePackageState( action.package.identifier, state );
 
     m_pendingActions.erase( m_pendingActions.begin() + aIndex );
+}
+
+
+void DIALOG_PCM::updatePackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState )
+{
+    bool pinned = m_pcm->IsPackagePinned( aPackageId );
+
+    m_installedPanel->SetPackageState( aPackageId, aState, pinned );
+
+    for( const auto& entry : m_repositoryContentPanels )
+        entry.second->SetPackageState( aPackageId, aState, pinned );
 }
 
 

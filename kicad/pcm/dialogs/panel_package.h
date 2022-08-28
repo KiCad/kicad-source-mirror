@@ -32,12 +32,14 @@ struct PACKAGE_VIEW_DATA
     const PCM_PACKAGE package;
     wxBitmap*         bitmap;
     PCM_PACKAGE_STATE state;
+    bool              pinned;
     wxString          repository_id;
     wxString          repository_name;
     wxString          current_version;
     wxString          update_version;
     PACKAGE_VIEW_DATA( const PCM_PACKAGE aPackage ) :
-            package( std::move( aPackage ) ), bitmap( nullptr ), state( PPS_INSTALLED ){};
+            package( std::move( aPackage ) ), bitmap( nullptr ), state( PPS_INSTALLED ),
+            pinned( false ){};
     PACKAGE_VIEW_DATA( const PCM_INSTALLATION_ENTRY& aEntry ) :
             package( std::move( aEntry.package ) ), bitmap( nullptr )
     {
@@ -45,6 +47,7 @@ struct PACKAGE_VIEW_DATA
         repository_id = aEntry.repository_id;
         repository_name = aEntry.repository_name;
         current_version = aEntry.current_version;
+        pinned = aEntry.pinned;
     }
 };
 
@@ -53,12 +56,15 @@ struct PACKAGE_VIEW_DATA
 using ActionCallback = std::function<void( const PACKAGE_VIEW_DATA& aData,
                                            PCM_PACKAGE_ACTION aAction, const wxString& aVersion )>;
 
+using PinCallback = std::function<void( const wxString& aPackageId, const PCM_PACKAGE_STATE aState,
+                                        const bool aPinned )>;
+
 
 class PANEL_PACKAGE : public PANEL_PACKAGE_BASE
 {
 public:
     PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
-                   const PACKAGE_VIEW_DATA& aData );
+                   const PinCallback& aPinCallback, const PACKAGE_VIEW_DATA& aData );
 
     ///< Sets callback for OnClick action
     void SetSelectCallback( const std::function<void()>& aCallback );
@@ -69,12 +75,14 @@ public:
     void OnButtonClicked( wxCommandEvent& event ) override;
 
     ///< Changes state of the (un)install button
-    void SetState( PCM_PACKAGE_STATE aState );
+    void SetState( PCM_PACKAGE_STATE aState, bool aPinned );
 
     ///< Called when anywhere on the panel is clicked (except install button)
     void OnClick( wxMouseEvent& event ) override;
 
     void OnUninstallClick( wxCommandEvent& event );
+
+    void OnPinVersionClick( wxCommandEvent& event );
 
     void OnSize( wxSizeEvent& event ) override;
 
@@ -87,9 +95,12 @@ private:
     void OnPaint( wxPaintEvent& event ) override;
 
 private:
+    wxMenuItem*           m_pinVersionMenuItem;
+    wxMenuItem*           m_actionMenuItem;
     std::function<void()> m_selectCallback;
     bool                  m_selected = false;
     const ActionCallback& m_actionCallback;
+    const PinCallback&    m_pinCallback;
     PACKAGE_VIEW_DATA     m_data;
     int                   m_minHeight;
 };
