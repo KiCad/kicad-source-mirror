@@ -26,7 +26,6 @@
 #define EDA_SHAPE_H
 
 #include <eda_units.h>
-#include <convert_to_biu.h>
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
