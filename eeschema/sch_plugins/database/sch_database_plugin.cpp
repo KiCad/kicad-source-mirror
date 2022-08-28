@@ -138,7 +138,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::LoadSymbol( const wxString&   aLibraryPath,
         return nullptr;
     }
 
-    return loadSymbolFromRow( symbolName, *table, result );
+    return loadSymbolFromRow( aAliasName, *table, result );
 }
 
 
