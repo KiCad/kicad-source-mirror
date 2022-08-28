@@ -47,7 +47,7 @@ private:
     void onBorderChecked( wxCommandEvent& aEvent ) override;
     void onFillChecked( wxCommandEvent& aEvent ) override;
     void onHyperlinkChecked( wxCommandEvent& aEvent ) override;
-    void onHyperlinkDropdown( wxCommandEvent& aEvent ) override;
+    void onHyperlinkText( wxCommandEvent& aEvent ) override;
     void onHyperlinkCombo( wxCommandEvent& aEvent ) override;
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;

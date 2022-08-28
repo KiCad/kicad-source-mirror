@@ -233,7 +233,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_borderStyleLabel->Wrap( -1 );
 	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
 
 	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
@@ -270,8 +270,14 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_textEntrySizer->Add( m_hyperlinkCb, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
-	m_hyperlinkCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_textEntrySizer->Add( m_hyperlinkCtrl, wxGBPosition( 9, 1 ), wxGBSpan( 1, 6 ), wxEXPAND|wxBOTTOM, 5 );
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_hyperlinkCombo = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer11->Add( m_hyperlinkCombo, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_textEntrySizer->Add( bSizer11, wxGBPosition( 9, 1 ), wxGBSpan( 1, 6 ), wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_textEntrySizer->AddGrowableCol( 3 );
@@ -307,8 +313,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
 	m_hyperlinkCb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
-	m_hyperlinkCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
-	m_hyperlinkCtrl->Connect( wxEVT_COMBOBOX_DROPDOWN, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkDropdown ), NULL, this );
+	m_hyperlinkCombo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
+	m_hyperlinkCombo->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkText ), NULL, this );
 }
 
 DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
@@ -319,7 +325,7 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
 	m_hyperlinkCb->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkChecked ), NULL, this );
-	m_hyperlinkCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
-	m_hyperlinkCtrl->Disconnect( wxEVT_COMBOBOX_DROPDOWN, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkDropdown ), NULL, this );
+	m_hyperlinkCombo->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkCombo ), NULL, this );
+	m_hyperlinkCombo->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onHyperlinkText ), NULL, this );
 
 }

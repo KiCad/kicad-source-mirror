@@ -134,14 +134,14 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         wxString sheetPageNum = sheet.GetPageNumber();
         wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" ) : sheet.Last()->GetName();
 
-        m_hyperlinkCtrl->Append( wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
+        m_hyperlinkCombo->Append( wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
         m_pageNumbers.push_back( sheetPageNum );
     }
 
-    m_hyperlinkCtrl->Append( wxT( "---------------------" ) );
-    m_hyperlinkCtrl->Append( wxT( "file://..." ) );
-    m_hyperlinkCtrl->Append( wxT( "http://..." ) );
-    m_hyperlinkCtrl->Append( wxT( "https://..." ) );
+    m_hyperlinkCombo->Append( wxT( "---" ) );
+    m_hyperlinkCombo->Append( wxT( "file://..." ), KiBitmap( BITMAPS::small_folder ) );
+    m_hyperlinkCombo->Append( wxT( "http://..." ), KiBitmap( BITMAPS::www ) );
+    m_hyperlinkCombo->Append( wxT( "https://..." ), KiBitmap( BITMAPS::www ) );
 
     SetupStandardButtons();
     Layout();
@@ -176,8 +176,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     SCHEMATIC& schematic = m_frame->Schematic();
 
     m_hyperlinkCb->SetValue( m_currentText->HasHyperlink() );
-    m_hyperlinkCtrl->Enable( m_currentText->HasHyperlink() );
-    m_hyperlinkCtrl->SetValue( m_currentText->GetHyperlink() );
+    m_hyperlinkCombo->SetValue( m_currentText->GetHyperlink() );
 
     // show text variable cross-references in a human-readable format
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
@@ -283,26 +282,24 @@ void DIALOG_TEXT_PROPERTIES::onFillChecked( wxCommandEvent& aEvent )
 
 void DIALOG_TEXT_PROPERTIES::onHyperlinkChecked( wxCommandEvent& aEvent )
 {
-    if( aEvent.IsChecked() && !m_hyperlinkCtrl->IsEnabled() )
+    if( aEvent.IsChecked() && m_hyperlinkCombo->GetValue().IsEmpty() )
     {
-        m_hyperlinkCtrl->Enable( true );
-        m_hyperlinkCtrl->ChangeValue( m_lastLink );
-        m_hyperlinkCtrl->SetFocus();
+        m_hyperlinkCombo->ChangeValue( m_lastLink );
     }
-    else if( !aEvent.IsChecked() && m_hyperlinkCtrl->IsEnabled() )
+    else if( !aEvent.IsChecked() && !m_hyperlinkCombo->GetValue().IsEmpty() )
     {
-        m_hyperlinkCtrl->Enable( false );
-        m_lastLink = m_hyperlinkCtrl->GetValue();
-        m_hyperlinkCtrl->SetValue( wxEmptyString );
+        m_lastLink = m_hyperlinkCombo->GetValue();
+        m_hyperlinkCombo->SetValue( wxEmptyString );
     }
 
     aEvent.Skip();
 }
 
 
-void DIALOG_TEXT_PROPERTIES::onHyperlinkDropdown( wxCommandEvent& aEvent )
+void DIALOG_TEXT_PROPERTIES::onHyperlinkText( wxCommandEvent& event )
 {
-    m_lastLink = m_hyperlinkCtrl->GetValue();
+    if( !m_hyperlinkCombo->GetValue().IsEmpty() )
+        m_hyperlinkCb->SetValue( true );
 }
 
 
@@ -314,38 +311,35 @@ void DIALOG_TEXT_PROPERTIES::onHyperlinkCombo( wxCommandEvent& aEvent )
     {
         // user clicked outside dropdown; leave current value
     }
-    else if( sel == m_hyperlinkCtrl->GetCount() - 4 )
+    else if( sel == m_hyperlinkCombo->GetCount() - 4 )
     {
-        // separator (and wxWidgets already updated our value to it);
-        // replace value with that saved in the dropdown event
-        m_hyperlinkCtrl->ChangeValue( m_lastLink );
-        m_hyperlinkCtrl->SetSelection( 0, m_hyperlinkCtrl->GetValue().Length() );
+        // separator
     }
-    else if( sel == m_hyperlinkCtrl->GetCount() - 3 )
+    else if( sel == m_hyperlinkCombo->GetCount() - 3 )
     {
         static wxString helper = wxT( "file://" );
 
-        m_hyperlinkCtrl->ChangeValue( helper );
-        m_hyperlinkCtrl->SetInsertionPointEnd();
+        m_hyperlinkCombo->ChangeValue( helper );
+        m_hyperlinkCombo->SetInsertionPointEnd();
     }
-    else if( sel == m_hyperlinkCtrl->GetCount() - 2 )
+    else if( sel == m_hyperlinkCombo->GetCount() - 2 )
     {
         static wxString helper = wxT( "http://" );
 
-        m_hyperlinkCtrl->ChangeValue( helper );
-        m_hyperlinkCtrl->SetInsertionPointEnd();
+        m_hyperlinkCombo->ChangeValue( helper );
+        m_hyperlinkCombo->SetInsertionPointEnd();
     }
-    else if( sel == m_hyperlinkCtrl->GetCount() - 1 )
+    else if( sel == m_hyperlinkCombo->GetCount() - 1 )
     {
         static wxString helper = wxT( "https://" );
 
-        m_hyperlinkCtrl->ChangeValue( helper );
-        m_hyperlinkCtrl->SetInsertionPointEnd();
+        m_hyperlinkCombo->ChangeValue( helper );
+        m_hyperlinkCombo->SetInsertionPointEnd();
     }
     else
     {
-        m_hyperlinkCtrl->ChangeValue( wxT( "#" ) + m_pageNumbers[ sel ] );
-        m_hyperlinkCtrl->SetSelection( 0, m_hyperlinkCtrl->GetValue().Length() );
+        m_hyperlinkCombo->ChangeValue( wxT( "#" ) + m_pageNumbers[ sel ] );
+        m_hyperlinkCombo->SelectAll();
     }
 }
 
@@ -469,7 +463,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    if( !m_currentText->ValidateHyperlink( m_hyperlinkCtrl->GetValue() ) )
+    if( !m_currentText->ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
     {
         DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
                                "(e.g. file:// or http(s)://) or \"#<page number>\" to create "
@@ -478,7 +472,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
     else
     {
-        m_currentText->SetHyperlink( m_hyperlinkCtrl->GetValue() );
+        m_currentText->SetHyperlink( m_hyperlinkCombo->GetValue() );
     }
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )

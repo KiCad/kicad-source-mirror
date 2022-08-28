@@ -36,7 +36,6 @@ class WX_INFOBAR;
 #include <wx/panel.h>
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
-#include <wx/combobox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -89,7 +88,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_panelFillColor;
 		COLOR_SWATCH* m_fillColorSwatch;
 		wxCheckBox* m_hyperlinkCb;
-		wxComboBox* m_hyperlinkCtrl;
+		wxBitmapComboBox* m_hyperlinkCombo;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -102,7 +101,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onFillChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onHyperlinkChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onHyperlinkCombo( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onHyperlinkDropdown( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHyperlinkText( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

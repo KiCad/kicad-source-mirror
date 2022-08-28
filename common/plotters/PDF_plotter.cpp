@@ -978,7 +978,7 @@ bool PDF_PLOTTER::EndPlot()
         for( const std::pair<wxString, int>& page : pages )
         {
             js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%d' }, " ),
-                                    page.first,
+                                    wxString::Format( _( "Show Page %s" ), page.first ),
                                     page.second );
         }
 
