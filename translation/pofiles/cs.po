@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:17-0700\n"
-"PO-Revision-Date: 2022-08-19 23:15+0000\n"
-"Last-Translator: Ondřej Čertík <ondrej@certik.us>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -111,24 +111,24 @@ msgid "Last render time %.0f ms"
 msgstr "Čas posledního vykreslení %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Síť %s\tTřída spojů %s"
+msgstr "Síť %s\tTřídy spojů %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:677
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s a %s"
+msgstr "Ploška %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Oblast pravidla na %s"
+msgstr "Oblast pravidla na %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zóny"
+msgstr "Zóna %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -7577,9 +7577,8 @@ msgid "Annotate Schematic"
 msgstr "Očíslování součástek"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
-#, fuzzy
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Aktuální obecná nastavení:</b><br>"
+msgstr "<b>Aktuálně odpovídající sítě:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -9328,9 +9327,8 @@ msgstr "Velikost textu názvu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "De Morgan standard"
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:70
@@ -10910,9 +10908,8 @@ msgid "Model"
 msgstr "Model"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Device:"
-msgstr "Zařízení"
+msgstr "Zařízení:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -10921,9 +10918,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Stránka:"
+msgstr "Stránka"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -11314,9 +11310,8 @@ msgid "Field name '%s' already in use."
 msgstr "Název pole '%s' již používán."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1097
-#, fuzzy
 msgid "User Fields"
-msgstr "Uživatelská pole:"
+msgstr "Uživatelská pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1106
 msgid "Delete Field"
@@ -11337,9 +11332,8 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1353
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Uložit jako obrázek"
+msgstr "Uložit jako CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -11887,7 +11881,6 @@ msgid "Line Drawing Mode:"
 msgstr "Režim kreslení"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "Volný úhel"
 
@@ -16906,9 +16899,8 @@ msgid "Show markers for electrical rules checker warnings"
 msgstr "Provézt kontrolu elektrického návrhu"
 
 #: eeschema/tools/ee_actions.cpp:687
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Zobrazit chyby pluginu"
+msgstr "Zobrazit chyby ERC"
 
 #: eeschema/tools/ee_actions.cpp:687
 #, fuzzy
@@ -17263,9 +17255,8 @@ msgid "Edit '%s' Field"
 msgstr "Upravit '%s' pole"
 
 #: eeschema/tools/sch_edit_tool.cpp:1818
-#, fuzzy
 msgid "<empty>"
-msgstr "Prázdný"
+msgstr "<prázdný>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2108
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -19413,13 +19404,13 @@ msgid "Archive metadata must have a single version defined"
 msgstr "Metadata archivu musí mít jednu definovanou verzi"
 
 #: kicad/pcm/pcm_task_manager.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Balík s identifikátorem %s je již nainstalován, musíte tento balíček nejprve "
-"odinstalovat."
+"Balíček s identifikátorem %s je již nainstalován. Chcete ji aktualizovat na "
+"verzi z vybraného souboru?"
 
 #: kicad/pcm/pcm_task_manager.cpp:384
 #, fuzzy
@@ -20480,141 +20471,140 @@ msgid "NP Pad: (diam - drill)"
 msgstr "NP ploška: (průměr - vrtání)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:47
-#, fuzzy
 msgid "AWG0000"
-msgstr "0000"
+msgstr "AWG0000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:48
 msgid "AWG000"
-msgstr ""
+msgstr "AWG000"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:49
 msgid "AWG00"
-msgstr ""
+msgstr "AWG00"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:50
 msgid "AWG0"
-msgstr ""
+msgstr "AWG0"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:51
 msgid "AWG1"
-msgstr ""
+msgstr "AWG1"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:52
 msgid "AWG2"
-msgstr ""
+msgstr "AWG2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:53
 msgid "AWG3"
-msgstr ""
+msgstr "AWG3"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:54
 msgid "AWG4"
-msgstr ""
+msgstr "AWG4"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:55
 msgid "AWG5"
-msgstr ""
+msgstr "AWG5"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:56
 msgid "AWG6"
-msgstr ""
+msgstr "AWG6"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:57
 msgid "AWG7"
-msgstr ""
+msgstr "AWG7"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:58
 msgid "AWG8"
-msgstr ""
+msgstr "AWG8"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:59
 msgid "AWG9"
-msgstr ""
+msgstr "AWG9"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:60
 msgid "AWG10"
-msgstr ""
+msgstr "AWG10"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:61
 msgid "AWG11"
-msgstr ""
+msgstr "AWG11"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:62
 msgid "AWG12"
-msgstr ""
+msgstr "AWG12"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:63
 msgid "AWG13"
-msgstr ""
+msgstr "AWG13"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:64
 msgid "AWG14"
-msgstr ""
+msgstr "AWG14"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:65
 msgid "AWG15"
-msgstr ""
+msgstr "AWG15"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:66
 msgid "AWG16"
-msgstr ""
+msgstr "AWG16"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:67
 msgid "AWG17"
-msgstr ""
+msgstr "AWG17"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:68
 msgid "AWG18"
-msgstr ""
+msgstr "AWG18"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:69
 msgid "AWG19"
-msgstr ""
+msgstr "AWG19"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:70
 msgid "AWG20"
-msgstr ""
+msgstr "AWG20"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:71
 msgid "AWG21"
-msgstr ""
+msgstr "AWG21"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:72
 msgid "AWG22"
-msgstr ""
+msgstr "AWG22"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:73
 msgid "AWG23"
-msgstr ""
+msgstr "AWG23"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:74
 msgid "AWG24"
-msgstr ""
+msgstr "AWG24"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:75
 msgid "AWG25"
-msgstr ""
+msgstr "AWG25"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:76
 msgid "AWG26"
-msgstr ""
+msgstr "AWG26"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:77
 msgid "AWG27"
-msgstr ""
+msgstr "AWG27"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:78
 msgid "AWG28"
-msgstr ""
+msgstr "AWG28"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:79
 msgid "AWG29"
-msgstr ""
+msgstr "AWG29"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:80
 msgid "AWG30"
-msgstr ""
+msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:182
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:105
@@ -20622,14 +20612,12 @@ msgid "Electrical Resistivity in Ohm*m"
 msgstr "Elektrická rezistivita v Ohm*m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
-#, fuzzy
 msgid "Wire properties"
-msgstr "Vlastnosti kružnice"
+msgstr "Vlastnosti drátu"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
-#, fuzzy
 msgid "Standard Size:"
-msgstr "Standardní typ"
+msgstr "Standardní velikost:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
@@ -20638,7 +20626,7 @@ msgstr "Oblast:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:65
 msgid "mm^2"
-msgstr ""
+msgstr "mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:69
 #, fuzzy
@@ -20678,14 +20666,12 @@ msgstr "Pomocné aplikace"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:93
-#, fuzzy
 msgid "Current:"
-msgstr "Proud"
+msgstr "Proud:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Length:"
-msgstr "&Délka:"
+msgstr "Délka:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:150
@@ -20710,18 +20696,16 @@ msgid "Voltage drop:"
 msgstr "Úbytek napětí:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:183
 msgid "Dissipated power:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
-#, fuzzy
 msgid "mW"
-msgstr "Š"
+msgstr "mW"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -20948,9 +20932,8 @@ msgid "Track width:"
 msgstr "Šířka spoje:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:78
-#, fuzzy
 msgid "Track thickness:"
-msgstr "Tloušťka spoje (H):"
+msgstr "Tloušťka spoje:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:107
 #, fuzzy
@@ -21444,23 +21427,20 @@ msgid "Speed in medium:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
-#, fuzzy
 msgid "er:"
-msgstr "Er:"
+msgstr "er:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:89
-#, fuzzy
 msgid "relative permittivity (dielectric constant)"
-msgstr "Relativní permitivita substrátu (dielektrická konstanta)"
+msgstr "Relativní permitivita (dielektrická konstanta)"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:99
 msgid "mur:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:101
-#, fuzzy
 msgid "relative permeability"
-msgstr "Relativní permeabilita (mu) substrátu"
+msgstr "relativní permeabilita"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21559,18 +21539,16 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
-#, fuzzy
 msgid "General system design"
-msgstr "Obecné možnosti"
+msgstr "Obecný návrh systému"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:82
 msgid "Regulators"
 msgstr "Regulátory"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "Izolační mezera díry porušení"
+msgstr "Napájení, proud a izolace"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:87
 msgid "Electrical Spacing"
@@ -21582,27 +21560,24 @@ msgid "Fusing Current"
 msgstr "Vytisknout aktuální"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:97
-#, fuzzy
 msgid "Cable Size"
-msgstr "Velikost díry"
+msgstr "Velikost kabelu"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:99
 msgid "High speed"
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
-#, fuzzy
 msgid "Wavelength"
-msgstr "Délka vlnovodu"
+msgstr "Vlnovod"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "RF Attenuators"
 msgstr "VF atenuátory"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:107
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "Přenosové vedení typu"
+msgstr "Přenosové vedení"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:109
 msgid "Memo"
@@ -22013,9 +21988,8 @@ msgid "m"
 msgstr "m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
-#, fuzzy
 msgid "km"
-msgstr "m"
+msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
@@ -22023,19 +21997,19 @@ msgstr ""
 
 #: pcb_calculator/widgets/unit_selector.cpp:241
 msgid "m/s"
-msgstr ""
+msgstr "m/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:242
 msgid "ft/s"
-msgstr ""
+msgstr "ft/s"
 
 #: pcb_calculator/widgets/unit_selector.cpp:243
 msgid "km/h"
-msgstr ""
+msgstr "km/h"
 
 #: pcb_calculator/widgets/unit_selector.cpp:244
 msgid "mi/h"
-msgstr ""
+msgstr "mi/h"
 
 #: pcbnew/array_creator.cpp:214
 msgid "Create an array"
@@ -22524,11 +22498,11 @@ msgstr "Žlutá"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr "FR4 natural"
+msgstr "FR4 přirozený"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr "PTFE natural"
+msgstr "PTFE přirozený"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 #, fuzzy
@@ -22537,7 +22511,7 @@ msgstr "Lomená čára"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr "Phenolic natural"
+msgstr "Phenolic přirozený"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
@@ -24401,14 +24375,14 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Test parity mezi DPS a schématem"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Nepřipojené položky (%d)"
+msgstr "Nepřipojené položky (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Schematická parita (%d)"
+msgstr "Schematická parita (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -24479,19 +24453,18 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Aktualizovat vybrané pouzdro(a)"
+msgstr "Aktualizované pouzdro %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Změnit pouzdro %s z '%s' na '%s'"
+msgstr "Změna pouzdra %s z '%s' na '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** pouzdro nenalezeno ***"
+msgstr "*** knihovna pouzder nenalezena ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:394
 msgid ": (no changes)"
@@ -27242,9 +27215,8 @@ msgid "Basic Shape Polygon"
 msgstr "Základní tvar polygonu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:132
-#, fuzzy
 msgid "Plot on All Layers"
-msgstr "Kreslit všechny stránky"
+msgstr "Kreslit na všechny vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:161
 #, fuzzy
@@ -28357,7 +28329,7 @@ msgstr "Spoje & prokovy Vlastnosti"
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 #, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "Spoje a průchodky:"
+msgstr "Spoje a rozměry prokovů:"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
@@ -28549,9 +28521,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
-#, fuzzy
 msgid "No modifier"
-msgstr "Není soubor modulu"
+msgstr "Žádný modifikátor"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:105
 #: pcbnew/dialogs/panel_edit_options_base.cpp:177
@@ -28976,14 +28947,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
-#, fuzzy
 msgid "Minimum text height:"
-msgstr "Výška textu:"
+msgstr "Minimální výška textu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
-#, fuzzy
 msgid "Minimum text thickness:"
-msgstr "Tloušťka textu:"
+msgstr "Minimální tloušťka textu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
@@ -30355,9 +30324,9 @@ msgid "Checking board setup constraints hole size: min %s."
 msgstr "omezení nastavení desky"
 
 #: pcbnew/drc/drc_engine.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Kontrola %s %s: %s."
+msgstr "Kontrola %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:982
 #, fuzzy, c-format
@@ -32037,9 +32006,8 @@ msgid "Invalid C_pkg value."
 msgstr "Neplatná hodnota vlastnosti"
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "Kontrola vývodů..."
+msgstr "Kontrola vývodů "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
 #, fuzzy
@@ -32077,9 +32045,8 @@ msgid "Component name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Kontrola zón"
+msgstr "Kontrola komponent "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
 #, fuzzy
@@ -32129,9 +32096,8 @@ msgid "Model name cannot be empty"
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Kontrola zón"
+msgstr "Kontrola modelů "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
 #, fuzzy
@@ -32237,9 +32203,8 @@ msgid "Package model name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "Kontrola otvorů plošek..."
+msgstr "Kontrola modelu balíčku "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
 #, fuzzy
@@ -32293,24 +32258,20 @@ msgid "Inductance matrix is nullptr"
 msgstr "Délka vodiče:"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Nelze otevřít soubor '%s'"
+msgstr "Nelze otevřít soubor "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "Načítám soubory..."
+msgstr "Čtení souboru "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Neočekávaný konec souboru."
+msgstr "Neočekávaný konec souboru. Chybí [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "Chyba"
+msgstr "Chyba na řádku "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
 #, fuzzy
@@ -32356,14 +32317,12 @@ msgid "No extra argument was expected"
 msgstr "Síť není zvolena"
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Neznámé ID záznamu: %d."
+msgstr "Neznámé klíčové slovo v "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid " context: "
-msgstr "Krok textu:"
+msgstr " kontext: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1321
 #, fuzzy
@@ -32423,18 +32382,16 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Neznámá metoda"
+msgstr "Neznámý typ_modelu "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Neznámá vrstva PCad %u"
+msgstr "Neznámé povolení: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 #, fuzzy
@@ -32442,9 +32399,8 @@ msgid "Internal Error while reading Enable"
 msgstr "%d chyb při čtení Gerber souboru [%s]"
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Neznámý základnítvar"
+msgstr "Neznámá polarita "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -35416,9 +35372,9 @@ msgid "Via netclass values"
 msgstr "Prokov hodnoty třídy sítě"
 
 #: pcbnew/router/router_tool.cpp:252 pcbnew/tools/drawing_tool.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s, hole %s"
-msgstr "Prokov %s na %s"
+msgstr "Prokov %s, díra %s"
 
 #: pcbnew/router/router_tool.cpp:256 pcbnew/tools/drawing_tool.cpp:126
 #, c-format
@@ -36204,9 +36160,8 @@ msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "Místní izolační mezera na %s; izolační mezera: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:770
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Mezera diferenciálního páru"
+msgstr "Dif. pár"
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 #, fuzzy
