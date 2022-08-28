@@ -34,7 +34,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int fpEditSchemaVersion = 1;
+const int fpEditSchemaVersion = 2;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
@@ -292,6 +292,13 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             } ) );
 
     registerMigration( 0, 1, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1, this ) );
+
+    registerMigration( 1, 2,
+                       [&]() -> bool
+                       {
+                           // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
+                           return migrateLibTreeWidth();
+                       } );
 }
 
 

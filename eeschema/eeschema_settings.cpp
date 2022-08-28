@@ -40,7 +40,7 @@
 using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
 
 ///! Update the schema version whenever a migration is required
-const int eeschemaSchemaVersion = 2;
+const int eeschemaSchemaVersion = 3;
 
 /// Default value for bom.plugins
 const nlohmann::json defaultBomPlugins =
@@ -475,6 +475,13 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
                 return true;
             } );
+
+    registerMigration( 2, 3,
+           [&]() -> bool
+           {
+                // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
+                return migrateLibTreeWidth();
+           } );
 }
 
 

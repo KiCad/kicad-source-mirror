@@ -25,6 +25,7 @@
 #ifndef LIB_TREE_ITEM_H
 #define LIB_TREE_ITEM_H
 
+#include <map>
 #include <lib_id.h>
 #include <import_export.h>
 
@@ -46,8 +47,13 @@ public:
 
     virtual wxString GetName() const = 0;
     virtual wxString GetLibNickname() const = 0;
-
     virtual wxString GetDescription() = 0;
+
+    /**
+     * Retrieves a key/value map of the fields on this item that should be exposed to the library
+     * browser/chooser for displaying in columns, searching, etc
+     */
+    virtual void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) {}
 
     virtual wxString GetSearchText() { return wxEmptyString; }
 

@@ -127,7 +127,8 @@ public:
 
     struct LIB_TREE
     {
-        int column_width;
+        std::vector<wxString> columns;         ///< Ordered list of visible columns in the tree
+        std::map<wxString, int> column_widths; ///< Column widths, keyed by header name
     };
 
     struct PRINTING
@@ -211,6 +212,11 @@ protected:
      * @param aJsonPath is the path to read parameters from
      */
     void addParamsForWindow( WINDOW_SETTINGS* aWindow, const std::string& aJsonPath );
+
+    /**
+     * Migrates the library tree width setting from a single column (Item) to multi-column
+     */
+    bool migrateLibTreeWidth();
 };
 
 #endif

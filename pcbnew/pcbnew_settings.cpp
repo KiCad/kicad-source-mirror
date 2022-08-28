@@ -43,7 +43,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int pcbnewSchemaVersion = 3;
+const int pcbnewSchemaVersion = 4;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
@@ -595,6 +595,13 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
                 return true;
             } );
+
+    registerMigration( 3, 4,
+                       [&]() -> bool
+                       {
+                           // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
+                           return migrateLibTreeWidth();
+                       } );
 }
 
 

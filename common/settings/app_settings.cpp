@@ -42,7 +42,6 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Make Coverity happy:
-    m_LibTree.column_width = 300;
     m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     // Build parameters list:
@@ -79,8 +78,32 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "color_picker.default_tab",
             &m_ColorPicker.default_tab, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "lib_tree.column_width",
-            &m_LibTree.column_width, 300 ) );
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "lib_tree.column_widths",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const std::pair<const wxString, int>& pair : m_LibTree.column_widths )
+                    ret[std::string( pair.first.ToUTF8() )] = pair.second;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_LibTree.column_widths.clear();
+
+                for( const auto& entry : aJson.items() )
+                {
+                    if( !entry.value().is_number_integer() )
+                        continue;
+
+                    m_LibTree.column_widths[ entry.key() ] = entry.value().get<int>();
+                }
+            },
+            {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "printing.background",
             &m_Printing.background, false ) );
@@ -362,4 +385,18 @@ const std::vector<wxString> APP_SETTINGS_BASE::DefaultGridSizeList() const
              "0.05 mm",
              "0.025 mm",
              "0.01 mm" };
+}
+
+
+bool APP_SETTINGS_BASE::migrateLibTreeWidth()
+{
+    // We used to store only the width of the first column, because there were only
+    // two possible columns.
+    if( std::optional<int> optWidth = Get<int>( "lib_tree.column_width" ) )
+    {
+        Set<nlohmann::json>( "lib_tree.column_widths", { { "Item", *optWidth } } );
+        At( "lib_tree" ).erase( "column_width" );
+    }
+
+    return true;
 }

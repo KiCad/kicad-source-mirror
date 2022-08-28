@@ -174,7 +174,9 @@ public:
         return GetFootprintField().GetText();
     }
 
-    /**
+    void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) override;
+
+            /**
      * For symbols derived from other symbols, IsRoot() indicates no derivation.
      */
     bool IsRoot() const override { return m_parent.use_count() == 0; }

@@ -29,7 +29,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int libeditSchemaVersion = 0;
+const int libeditSchemaVersion = 1;
 
 
 SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
@@ -81,6 +81,13 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
                                             &m_UseEeschemaColorSettings, true ) );
+
+    registerMigration( 0, 1,
+                       [&]() -> bool
+                       {
+                           // This is actually a migration for APP_SETTINGS_BASE::m_LibTree
+                           return migrateLibTreeWidth();
+                       } );
 }
 
 

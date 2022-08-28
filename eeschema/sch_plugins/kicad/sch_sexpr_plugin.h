@@ -133,6 +133,9 @@ public:
     bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
+    void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
+    void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
+
     const wxString& GetError() const override { return m_error; }
 
     static LIB_SYMBOL* ParseLibSymbol( LINE_READER& aReader,

@@ -59,7 +59,26 @@ wxString LIB_SYMBOL::GetSearchText()
         text += discount + footprint;
     }
 
+    // TODO(JE) rework this later so we can highlight matches in their column
+    std::map<wxString, wxString> fields;
+    GetChooserFields( fields );
+
+    for( const auto& it : fields )
+        text += discount + it.second;
+
     return text;
+}
+
+
+void LIB_SYMBOL::GetChooserFields( std::map<wxString , wxString>& aColumnMap )
+{
+    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    {
+        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+
+        if( field->ShowInChooser() )
+            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText();
+    }
 }
 
 

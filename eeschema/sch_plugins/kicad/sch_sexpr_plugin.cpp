@@ -1433,6 +1433,41 @@ bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
+void SCH_SEXPR_PLUGIN::GetAvailableSymbolFields( std::vector<wxString>& aNames )
+{
+    if( !m_cache )
+        return;
+
+    const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
+
+    std::set<wxString> fieldNames;
+
+    for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
+    {
+        std::vector<LIB_FIELD*> fields;
+        it->second->GetFields( fields );
+
+        for( LIB_FIELD* field : fields )
+        {
+            if( field->IsMandatory() )
+                continue;
+
+            // TODO(JE): enable configurability of this outside database libraries?
+            // if( field->ShowInChooser() )
+            fieldNames.insert( field->GetName() );
+        }
+    }
+
+    std::copy( fieldNames.begin(), fieldNames.end(), std::back_inserter( aNames ) );
+}
+
+
+void SCH_SEXPR_PLUGIN::GetDefaultSymbolFields( std::vector<wxString>& aNames )
+{
+    GetAvailableSymbolFields( aNames );
+}
+
+
 LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParseLibSymbol( LINE_READER& aReader, int aFileVersion )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.

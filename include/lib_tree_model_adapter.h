@@ -30,6 +30,7 @@
 #include <vector>
 #include <functional>
 #include <set>
+#include <map>
 
 /**
  * Adapter class in the symbol selector Model-View-Adapter (mediated MVC)
@@ -123,14 +124,15 @@ public:
     };
 
     /**
-     * This enum defines the order of the columns in the tree view
+     * This enum defines the order of the default columns in the tree view
      */
     enum TREE_COLS
     {
         NAME_COL = 0,   ///< Library or library item name column
         DESC_COL,       ///< Library or library description column
-        NUM_COLS        ///< The number of tree columns
+        NUM_COLS        ///< The number of default tree columns
     };
+
 
     /**
      * Save the column widths to the config file. This requires the tree view to still be
@@ -179,6 +181,10 @@ public:
                        const std::vector<LIB_TREE_ITEM*>& aItemList,
                        bool pinned, bool presorted );
 
+    void AddColumn( const wxString& aHeader )
+    {
+        doAddColumn( aHeader, false );
+    }
 
     /**
      * Sort the tree and assign ranks after adding libraries.
@@ -328,7 +334,7 @@ protected:
      */
     wxDataViewItem GetParent( const wxDataViewItem& aItem ) const override;
 
-    unsigned int GetColumnCount() const override { return NUM_COLS; }
+    unsigned int GetColumnCount() const override { return m_columns.size(); }
 
     /**
      * Return the type of data stored in the column as indicated by wxVariant::GetType()
@@ -389,8 +395,13 @@ private:
      */
     LIB_TREE_NODE* ShowSingleLibrary();
 
+    wxDataViewColumn* doAddColumn( const wxString& aHeader, bool aTranslate = true );
+
 protected:
-    LIB_TREE_NODE_ROOT      m_tree;
+    void addColumnIfNecessary( const wxString& aHeader );
+
+    LIB_TREE_NODE_ROOT           m_tree;
+    std::map<unsigned, wxString> m_colIdxMap;
 
 private:
     [[maybe_unused]] EDA_BASE_FRAME* m_parent;
@@ -401,11 +412,11 @@ private:
     int                     m_preselect_unit;
     int                     m_freeze;
 
-    wxDataViewColumn*       m_col_part;
-    wxDataViewColumn*       m_col_desc;
     wxDataViewCtrl*         m_widget;
 
-    int                     m_colWidths[NUM_COLS];
+    std::vector<wxDataViewColumn*>        m_columns;
+    std::map<wxString, wxDataViewColumn*> m_colNameMap;
+    std::map<wxString, int>               m_colWidths;
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

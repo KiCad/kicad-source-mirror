@@ -23,6 +23,7 @@
 #define LIB_TREE_MODEL_H
 
 #include <vector>
+#include <map>
 #include <memory>
 #include <wx/string.h>
 #include <lib_tree_item.h>
@@ -135,6 +136,8 @@ public:
     wxString    m_SearchText;  // Descriptive text to search
     bool        m_Normalized;  // Support for lazy normalization.
 
+    /// @see LIB_TREE_ITEMS::GetChooserFields
+    std::map<wxString, wxString> m_Fields;
 
     LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
     int         m_Unit;        // Actual unit, or zero

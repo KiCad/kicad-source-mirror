@@ -463,6 +463,34 @@ public:
     virtual void GetSubLibraryNames( std::vector<wxString>& aNames ) {}
 
     /**
+     * Retrieves a list of (custom) field names that are present on symbols in this library.
+     * The plugin is responsible for guaranteeing that this list contains the set of unique
+     * custom field names present on any symbols contained in the library.
+     *
+     * The required KiCad fields are not included in this list.
+     *
+     * @param aNames will be filled with any custom fields present in this library.
+     */
+    virtual void GetAvailableSymbolFields( std::vector<wxString>& aNames ) {}
+
+    /**
+     * Retrieves a list of (custom) field names that should be shown by default for this library
+     * in the symbol chooser.  This list should be a subset of the result returned by
+     * GetAvailableSymbolFields().
+     *
+     * The preference for which fields to hide and show for a given library is stored on a
+     * per-library basis in a user's preferences (or in the project local settings for a project-
+     * local library).  The set of fields returned by GetDefaultSymbolFields() will be used if this
+     * preference is missing.
+     *
+     * @param aNames will be filled with the custom field names that should be shown by default
+     */
+    virtual void GetDefaultSymbolFields( std::vector<wxString>& aNames )
+    {
+        return GetAvailableSymbolFields( aNames );
+    }
+
+    /**
      * Return true if the first line in @a aFileName begins with the expected header.
      *
      * @param aFileName is the name of the file to use as input

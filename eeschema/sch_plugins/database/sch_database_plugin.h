@@ -77,6 +77,10 @@ public:
 
     void GetSubLibraryNames( std::vector<wxString>& aNames ) override;
 
+    void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
+
+    void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
+
     bool CheckHeader( const wxString& aFileName ) override;
 
     // Database libraries can never be written using the symbol editing API
@@ -104,6 +108,10 @@ private:
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
 
     std::unique_ptr<DATABASE_CONNECTION> m_conn;
+
+    std::set<wxString> m_customFields;
+
+    std::set<wxString> m_defaultShownFields;
 
 };
 

@@ -175,6 +175,8 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
     m_Desc = aItem->GetDescription();
     m_Footprint = aItem->GetFootprint();
 
+    aItem->GetChooserFields( m_Fields );
+
     m_MatchName = aItem->GetName();
     m_SearchText = aItem->GetSearchText();
     m_Normalized = false;
@@ -205,6 +207,8 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
     m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();
     m_MatchName = aItem->GetName();
+
+    aItem->GetChooserFields( m_Fields );
 
     m_SearchText = aItem->GetSearchText();
     m_Normalized = false;

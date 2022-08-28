@@ -153,6 +153,19 @@ void SCH_DATABASE_PLUGIN::GetSubLibraryNames( std::vector<wxString>& aNames )
 }
 
 
+void SCH_DATABASE_PLUGIN::GetAvailableSymbolFields( std::vector<wxString>& aNames )
+{
+    std::copy( m_customFields.begin(), m_customFields.end(), std::back_inserter( aNames ) );
+}
+
+
+void SCH_DATABASE_PLUGIN::GetDefaultSymbolFields( std::vector<wxString>& aNames )
+{
+    std::copy( m_defaultShownFields.begin(), m_defaultShownFields.end(),
+               std::back_inserter( aNames ) );
+}
+
+
 bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
 {
     // TODO: Implement this sometime; but CheckHeader isn't even called...
@@ -352,6 +365,11 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         field->SetNameShown( mapping.show_name );
 
         symbol->AddField( field );
+
+        m_customFields.insert( mapping.name );
+
+        if( mapping.visible_in_chooser )
+            m_defaultShownFields.insert( mapping.name );
     }
 
     return symbol;

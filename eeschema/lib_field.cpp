@@ -77,6 +77,7 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
     m_autoAdded      = field.m_autoAdded;
     m_showName       = field.m_showName;
     m_allowAutoPlace = field.m_allowAutoPlace;
+    m_showInChooser  = field.m_showInChooser;
 
     SetText( field.GetText() );
     SetAttributes( field );
@@ -105,6 +106,7 @@ void LIB_FIELD::Init( int aId )
     m_autoAdded      = false;
     m_showName       = false;
     m_allowAutoPlace = true;
+    m_showInChooser  = true;
 }
 
 
@@ -199,6 +201,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
     aTarget->m_name           = m_name;
     aTarget->m_showName       = m_showName;
     aTarget->m_allowAutoPlace = m_allowAutoPlace;
+    aTarget->m_showInChooser  = m_showInChooser;
 
     aTarget->CopyText( *this );
     aTarget->SetAttributes( *this );

@@ -136,6 +136,12 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
             if( !row->GetIsVisible() )
                 continue;
 
+            std::vector<wxString> additionalColumns;
+            row->GetAvailableSymbolFields( additionalColumns );
+
+            for( const wxString& column : additionalColumns )
+                addColumnIfNecessary( column );
+
             if( row->SupportsSubLibraries() )
             {
                 std::vector<wxString> subLibraries;
@@ -248,6 +254,21 @@ void SYMBOL_TREE_MODEL_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem co
     case DESC_COL:
         aVariant = node->m_Desc;
         break;
+
+    default:
+    {
+        if( m_colIdxMap.count( aCol ) )
+        {
+            const wxString& key = m_colIdxMap.at( aCol );
+
+            if( node->m_Fields.count( key ) )
+                aVariant = node->m_Fields.at( key );
+            else
+                aVariant = wxEmptyString;
+        }
+
+        break;
+    }
     }
 }
 

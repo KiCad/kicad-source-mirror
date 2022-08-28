@@ -74,16 +74,16 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
         m_show_units( true ),
         m_preselect_unit( 0 ),
         m_freeze( 0 ),
-        m_col_part( nullptr ),
-        m_col_desc( nullptr ),
         m_widget( nullptr )
 {
-    // Default column widths
-    m_colWidths[NAME_COL] = 300;
-    m_colWidths[DESC_COL] = 2000;
+    // Default column widths.  Do not translate these names.
+    m_colWidths[ wxT( "Item" ) ] = 300;
+    m_colWidths[ wxT( "Description" ) ] = 600;
 
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-    m_colWidths[NAME_COL] = cfg->m_LibTree.column_width;
+
+    for( const std::pair<const wxString, int>& pair : cfg->m_LibTree.column_widths )
+        m_colWidths[pair.first] = pair.second;
 }
 
 
@@ -96,7 +96,16 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
     if( m_widget )
     {
         APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
-        cfg->m_LibTree.column_width = m_widget->GetColumn( NAME_COL )->GetWidth();
+
+        cfg->m_LibTree.columns.clear();
+        cfg->m_LibTree.column_widths.clear();
+
+        // TODO(JE) ordering?
+        for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
+        {
+            cfg->m_LibTree.columns.emplace_back( pair.first );
+            cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
+        }
     }
 }
 
@@ -236,30 +245,59 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
 
 void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
-    wxString itemHead = _( "Item" );
-    wxString descHead = _( "Description" );
-
-    // The extent of the text doesn't take into account the space on either side
-    // in the header, so artificially pad it
-    wxSize itemHeadMinWidth = KIUI::GetTextSize( itemHead + wxT( "MMM" ), aDataViewCtrl );
-    wxSize descHeadMinWidth = KIUI::GetTextSize( descHead + wxT( "MMM" ), aDataViewCtrl );
-
-    // Ensure the part column is wider than the smallest allowable width
-    if( m_colWidths[NAME_COL] < itemHeadMinWidth.x )
-        m_colWidths[NAME_COL] = itemHeadMinWidth.x;
-
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    m_col_part = aDataViewCtrl->AppendTextColumn( itemHead, NAME_COL, wxDATAVIEW_CELL_INERT,
-                                                  m_colWidths[NAME_COL] );
-    m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, DESC_COL, wxDATAVIEW_CELL_INERT,
-                                                  m_colWidths[DESC_COL] );
+    // These two columns are always added; other columns may be added by specific libraries.
+    // Do not use translated names here.
+    doAddColumn( wxT( "Item" ) );
 
-    m_col_part->SetMinWidth( itemHeadMinWidth.x );
-    m_col_desc->SetMinWidth( descHeadMinWidth.x );
+    // TODO(JE) make Description optional
+    doAddColumn( wxT( "Description" ) );
+
+    for( auto& it : m_colNameMap )
+    {
+        if( !it.second )
+            doAddColumn( it.first, false );
+    }
+}
+
+
+wxDataViewColumn* LIB_TREE_MODEL_ADAPTER::doAddColumn( const wxString& aHeader, bool aTranslate )
+{
+    wxString translatedHeader = aTranslate ? wxGetTranslation( aHeader ) : aHeader;
+
+    // The extent of the text doesn't take into account the space on either side
+    // in the header, so artificially pad it
+    wxSize headerMinWidth = KIUI::GetTextSize( translatedHeader + wxT( "MMM" ), m_widget );
+
+    if( !m_colWidths.count( aHeader ) || m_colWidths[aHeader] < headerMinWidth.x )
+        m_colWidths[aHeader] = headerMinWidth.x;
+
+    int index = m_columns.size();
+
+    wxDataViewColumn* ret = m_widget->AppendTextColumn( translatedHeader, index,
+                                                        wxDATAVIEW_CELL_INERT,
+                                                        m_colWidths[aHeader] );
+    ret->SetMinWidth( headerMinWidth.x );
+
+    m_columns.emplace_back( ret );
+    m_colNameMap[aHeader] = ret;
+    m_colIdxMap[m_columns.size() - 1] = aHeader;
+
+    return ret;
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::addColumnIfNecessary( const wxString& aHeader )
+{
+    if( m_colNameMap.count( aHeader ) )
+        return;
+
+    // Columns will be created later
+    m_colNameMap[aHeader] = nullptr;
 }
 
 
@@ -352,19 +390,46 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
 
 void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
 {
-    m_col_part->SetWidth( m_colWidths[NAME_COL] );
-    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
+    wxDataViewColumn* col        = nullptr;
+    size_t            idx        = 0;
+    int               totalWidth = 0;
+    wxString          header;
+
+    for( ; idx < m_columns.size() - 1; idx++ )
+    {
+        col    = m_columns[idx];
+        header = col->GetTitle();
+
+        wxASSERT( m_colWidths.count( header ) );
+
+        col->SetWidth( m_colWidths[header] );
+        totalWidth += col->GetWidth();
+    }
+
+    int remainingWidth = m_widget->GetSize().x - totalWidth;
+    header = m_columns[idx]->GetTitle();
+
+    m_columns[idx]->SetWidth( std::max( m_colWidths[header], remainingWidth ) );
 }
 
 
 void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
 {
-    // On GTK, this value in not immediately available, so don't
-    // set it to zero just because we haven't fully initialized
-    if( m_col_part->GetWidth() > 0 )
-        m_colWidths[NAME_COL] = m_col_part->GetWidth();
+    for( auto& it : m_colNameMap )
+    {
+        if( it.second == m_columns[0] )
+        {
+            // On GTK, this value in not immediately available, so don't
+            // set it to zero just because we haven't fully initialized
+            if( it.second->GetWidth() > 0 )
+               m_colWidths[it.first] = it.second->GetWidth();
 
-    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
+            continue;
+        }
+
+        wxASSERT( m_colWidths.count( it.first ) );
+        it.second->SetWidth( m_colWidths[it.first] );
+    }
 
     // Mandatory in any wxSizeEvent handler:
     aEvent.Skip();
@@ -378,22 +443,40 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     // user's scroll position (which re-attaching or deleting/re-inserting columns does).
     static int walk = 1;
 
-    int partWidth = m_col_part->GetWidth();
-    int descWidth = m_col_desc->GetWidth();
+    std::vector<int> widths;
+
+    for( const wxDataViewColumn* col : m_columns )
+        widths.emplace_back( col->GetWidth() );
+
+    wxASSERT( widths.size() );
 
     // Only use the widths read back if they are non-zero.
     // GTK returns the displayed width of the column, which is not calculated immediately
-    if( descWidth > 0 )
+    if( widths[0] > 0 )
     {
-        m_colWidths[NAME_COL] = partWidth;
-        m_colWidths[DESC_COL] = descWidth;
+        size_t i = 0;
+
+        for( auto& it : m_colNameMap )
+            m_colWidths[it.first] = widths[i++];
     }
 
-    m_colWidths[NAME_COL] += walk;
-    m_colWidths[DESC_COL] -= walk;
+    auto colIt = m_colWidths.begin();
 
-    m_col_part->SetWidth( m_colWidths[NAME_COL] );
-    m_col_desc->SetWidth( m_colWidths[DESC_COL] );
+    colIt->second += walk;
+    colIt++;
+
+    if( colIt != m_colWidths.end() )
+        colIt->second -= walk;
+
+    for( auto& it : m_colNameMap )
+    {
+        if( it.second == m_columns[0] )
+            continue;
+
+        wxASSERT( m_colWidths.count( it.first ) );
+        it.second->SetWidth( m_colWidths[it.first] );
+    }
+
     walk = -walk;
 }
 
@@ -443,13 +526,25 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 
     switch( aCol )
     {
-    default:    // column == -1 is used for default Compare function
-    case 0:
+    case NAME_COL:
         aVariant = UnescapeString( node->m_Name );
         break;
-    case 1:
+
+    case DESC_COL:
         aVariant = node->m_Desc;
         break;
+
+    default:
+    {
+        wxCHECK_RET( m_colIdxMap.count( aCol ), wxT( "Invalid column in LIB_TREE_MODEL_ADAPTER" ) );
+
+        if( node->m_Fields.count( m_colIdxMap.at( aCol ) ) )
+            aVariant = node->m_Fields[m_colIdxMap.at( aCol )];
+        else
+            aVariant = wxEmptyString;
+
+        break;
+    }
     }
 }
 

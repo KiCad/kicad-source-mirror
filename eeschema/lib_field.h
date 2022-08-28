@@ -184,6 +184,9 @@ public:
     bool CanAutoplace() const { return m_allowAutoPlace; }
     void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
 
+    bool ShowInChooser() const { return m_showInChooser; }
+    void SetShowInChooser( bool aShow = true ) { m_showInChooser = aShow; }
+
 private:
 
     /**
@@ -223,6 +226,7 @@ private:
     bool     m_autoAdded;  ///< Was this field automatically added to a LIB_SYMBOL?
     bool     m_showName;   ///< Render the field's name in addition to its value
     bool     m_allowAutoPlace;  ///< This field can be autoplaced when converted to a SCH_FIELD
+    bool     m_showInChooser;   ///< This field is available as a data column for the chooser
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H
