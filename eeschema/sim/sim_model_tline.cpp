@@ -31,8 +31,8 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
     : SIM_MODEL( aType ),
       m_isInferred( false )
 {
-    static std::vector<PARAM::INFO> z0 = makeZ0ParamInfo();
-    static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfo();
+    static std::vector<PARAM::INFO> z0 = makeZ0ParamInfos();
+    static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfos();
 
     switch( aType )
     {
@@ -49,26 +49,6 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
     }
-}
-
-
-void SIM_MODEL_TLINE::ReadDataSchFields( unsigned aSymbolPinCount,
-                                         const std::vector<SCH_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
-    else
-        InferredReadDataFields( aSymbolPinCount, aFields );
-}
-
-
-void SIM_MODEL_TLINE::ReadDataLibFields( unsigned aSymbolPinCount,
-                                         const std::vector<LIB_FIELD>* aFields )
-{
-    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
-        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
-    else
-        InferredReadDataFields( aSymbolPinCount, aFields );
 }
 
 
@@ -102,7 +82,7 @@ void SIM_MODEL_TLINE::inferredWriteDataFields( std::vector<T>& aFields ) const
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfo()
+std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo = {};
@@ -131,7 +111,7 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfo()
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfo()
+std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo = {};
@@ -187,10 +167,4 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeRlgcParamInfo()
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
-}
-
-
-bool SIM_MODEL_TLINE::requiresSpiceModel() const
-{
-    return GetType() == TYPE::TLINE_RLGC;
 }

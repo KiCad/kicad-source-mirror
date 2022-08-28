@@ -33,11 +33,6 @@ class SIM_MODEL_TLINE : public SIM_MODEL
 public:
     SIM_MODEL_TLINE( TYPE aType );
 
-    void ReadDataSchFields( unsigned aSymbolPinCount,
-                            const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount,
-                            const std::vector<LIB_FIELD>* aFields ) override;
-
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
@@ -48,13 +43,13 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
-    static std::vector<PARAM::INFO> makeZ0ParamInfo();
-    static std::vector<PARAM::INFO> makeRlgcParamInfo();
-
     std::vector<wxString> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
 
     // Subcircuits require models even when they have no Spice instance parameters.
-    bool requiresSpiceModel() const override;
+    bool requiresSpiceModel() const override { return GetType() == TYPE::TLINE_RLGC; }
+
+    static std::vector<PARAM::INFO> makeZ0ParamInfos();
+    static std::vector<PARAM::INFO> makeRlgcParamInfos();
 
     bool m_isInferred;
 };

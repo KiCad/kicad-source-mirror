@@ -152,8 +152,6 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     switch( GetType() )
     {
     case TYPE::NONE:                 return MODEL_TYPE::NONE;
-    case TYPE::SW_V:                 return MODEL_TYPE::SWITCH;
-    case TYPE::SW_I:                 return MODEL_TYPE::CSWITCH;
     case TYPE::D:                    return MODEL_TYPE::DIODE;
 
     case TYPE::NPN_GUMMELPOON:

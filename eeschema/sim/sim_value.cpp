@@ -657,6 +657,8 @@ bool SIM_VALUE_INST<T>::operator==( const T& aOther ) const
 template <>
 bool SIM_VALUE_INST<bool>::operator==( const bool& aOther ) const
 {
+    // Note that we take nullopt as the same as false here.
+
     if( !m_value )
         return false == aOther;
 

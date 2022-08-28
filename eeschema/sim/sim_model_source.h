@@ -48,11 +48,6 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
-    void ReadDataSchFields( unsigned aSymbolPinCount,
-                            const std::vector<SCH_FIELD>* aFields ) override;
-    void ReadDataLibFields( unsigned aSymbolPinCount,
-                            const std::vector<LIB_FIELD>* aFields ) override;
-
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
@@ -75,7 +70,7 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
-    std::vector<wxString> getPinNames() const override;
+    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 
     wxString getParamValueString( const wxString& aParamName, const wxString& aDefaultValue ) const;
 

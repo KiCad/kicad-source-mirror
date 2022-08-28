@@ -26,8 +26,6 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
-using PARAM = SIM_MODEL::PARAM;
-
 
 SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
     : SIM_MODEL( aType ),
@@ -118,7 +116,8 @@ void SIM_MODEL_IDEAL::inferredWriteDataFields( std::vector<T>& aFields ) const
 }
 
 
-PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( wxString aName, wxString aDescription, wxString aUnit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( wxString aName, wxString aDescription,
+                                                       wxString aUnit )
 {
     SIM_MODEL::PARAM::INFO paramInfo = {};
 

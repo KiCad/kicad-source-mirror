@@ -67,7 +67,7 @@ struct MODEL_INFO_MAP
     MODEL_INFO_MAP()
     {
         modelInfos[MODEL_TYPE::NONE] = {};
-        modelInfos[MODEL_TYPE::SWITCH] = { "Switch", "SW", "", { "+", "-", "Ctrl+", "Ctrl-" }, "Ideal voltage controlled switch", {}, {} };
+        /*modelInfos[MODEL_TYPE::SWITCH] = { "Switch", "SW", "", { "+", "-", "Ctrl+", "Ctrl-" }, "Ideal voltage controlled switch", {}, {} };
         // Model parameters
         modelInfos[MODEL_TYPE::SWITCH].modelParams.emplace_back( "sw", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "NaN", "", "Switch model" );
         modelInfos[MODEL_TYPE::SWITCH].modelParams.emplace_back( "vt", 104, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, U(), "V", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "0", "", "Threshold voltage" );
@@ -96,13 +96,13 @@ struct MODEL_INFO_MAP
         modelInfos[MODEL_TYPE::CSWITCH].modelParams.emplace_back( "gon", 106, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "", "", "Closed conductance" );
         modelInfos[MODEL_TYPE::CSWITCH].modelParams.emplace_back( "goff", 107, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, U(), "", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "", "", "Open conductance" );
         // Instance parameters
-        modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "control", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_STRING /*SIM_VALUE::TYPE::INSTANCE*/, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Name of controlling source", true );
+        modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "control", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_STRING /SIM_VALUE::TYPE::INSTANCE/, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Name of controlling source", true );
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "on", 2, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initially closed", true );
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "off", 3, SIM_MODEL::PARAM::DIR_IN, SIM_VALUE::TYPE_BOOL, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initially open", true );
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "pos_node", 4, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Positive node of switch", true );
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "neg_node", 5, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Negative node of switch", true );
         modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "i", 6, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "A", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Switch current", true );
-        modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power", true );
+        modelInfos[MODEL_TYPE::CSWITCH].instanceParams.emplace_back( "p", 7, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, SIM_MODEL::PARAM::FLAGS(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instantaneous power", true );*/
 
 
         modelInfos[MODEL_TYPE::DIODE] = { "Diode", "D", "", { "Anode", "Cathode" }, "Junction Diode model", {}, {} };

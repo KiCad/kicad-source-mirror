@@ -287,6 +287,7 @@ set( EESCHEMA_SRCS
     sim/sim_model_ngspice_data.cpp
     sim/sim_model_spice.cpp
     sim/sim_model_source.cpp
+    sim/sim_model_switch.cpp
     sim/sim_model_subckt.cpp
     sim/sim_model_tline.cpp
     sim/sim_value.cpp

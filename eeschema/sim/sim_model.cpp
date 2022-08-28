@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <iterator>
-
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
 #include <sim/sim_model_ideal.h>
@@ -31,6 +29,7 @@
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_subckt.h>
+#include <sim/sim_model_switch.h>
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 
@@ -39,6 +38,8 @@
 #include <lib_symbol.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+
+#include <iterator>
 
 using DEVICE_TYPE = SIM_MODEL::DEVICE_TYPE_;
 using TYPE = SIM_MODEL::TYPE;
@@ -269,8 +270,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::TLINE_Z0:             return { "T"  };
     case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
 
-    case TYPE::SW_V:                 return { "S", "switch"  };
-    case TYPE::SW_I:                 return { "W", "cswitch" };
+    case TYPE::SW_V:                 return { "S", "sw"  };
+    case TYPE::SW_I:                 return { "W", "csw" };
 
     case TYPE::D:                    return { "D", "d"       };
 
@@ -485,7 +486,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
         }
     }
 
-    if( !typeFieldValue.IsEmpty() )
+    if( typeFieldValue != "" )
         return TYPE::NONE;
 
     // No type information. Look for legacy (pre-V7) fields.
@@ -912,7 +913,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 {
     LOCALE_IO toggle;
 
-    if( !HasSpiceNonInstanceOverrides() || !requiresSpiceModel() )
+    if( !HasSpiceNonInstanceOverrides() && !requiresSpiceModel() )
         return "";
 
     wxString result = "";
@@ -925,12 +926,14 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
         if( param.info.isSpiceInstanceParam )
             continue;
 
-        wxString valueStr = param.value->ToSpiceString();
+        wxString name = ( param.info.spiceModelName == "" ) ?
+            param.info.name : param.info.spiceModelName;
+        wxString value = param.value->ToSpiceString();
 
-        if( valueStr == "" )
+        if( value == "" )
             continue;
         
-        wxString appendix = " " + param.info.name + "=" + valueStr;
+        wxString appendix = " " + name + "=" + value;
 
         if( line.Length() + appendix.Length() > 60 )
         {
@@ -952,6 +955,26 @@ wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
         return aRefName;
     else
         return GetSpiceInfo().itemType + aRefName;
+}
+
+
+wxString SIM_MODEL::GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+{
+    wxString result;
+
+    if( aIsFirst )
+        aIsFirst = false;
+    else
+        result << " ";
+
+    wxString name = ( aParam.info.spiceInstanceName == "" ) ?
+        aParam.info.name : aParam.info.spiceInstanceName;
+    wxString value = aParam.value->ToSpiceString();
+
+    if( value != "" )
+        result << name << "=" << value;
+
+    return result;
 }
 
 
@@ -987,15 +1010,14 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const std::vector<wxString>& aSymbolPinNumbers,
                                            const std::vector<wxString>& aPinNetNames ) const
 {
-    wxString result = "";
+    wxString result;
     result << GenerateSpiceItemName( aRefName ) << " ";
 
     int ncCounter = 0;
 
-    for( const PIN& pin : GetPins() )
+    for( const PIN& pin : GetSpicePins() )
     {
-        auto it = std::find( aSymbolPinNumbers.begin(),
-                             aSymbolPinNumbers.end(),
+        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
                              pin.symbolPinNumber );
 
         if( it == aSymbolPinNumbers.end() )
@@ -1006,24 +1028,22 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
         else
         {
             long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << aPinNetNames.at( symbolPinIndex ) << " ";
+            wxString netName = aPinNetNames.at( symbolPinIndex );
+            result << netName << " ";
         }
     }
 
     if( requiresSpiceModel() )
         result << aModelName << " ";
 
+    bool isFirst = false;
+
     for( const PARAM& param : GetParams() )
     {
         if( !param.info.isSpiceInstanceParam )
             continue;
 
-        wxString name = ( param.info.spiceInstanceName == "" ) ?
-            param.info.name : param.info.spiceInstanceName;
-        wxString value = param.value->ToSpiceString();
-
-        if( value != "" )
-            result << name << "=" << value << " ";
+        result << GenerateSpiceItemParamValuePair( param, isFirst );
     }
 
     result << "\n";
@@ -1266,7 +1286,7 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString
 
 wxString SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
 {
-    wxString result = "";
+    wxString result;
 
     if( aIsFirst )
         aIsFirst = false;
@@ -1290,8 +1310,8 @@ wxString SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst 
 
 wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
 {
+    wxString result;
     bool isFirst = true;
-    wxString result = "";
 
     for( const PARAM& param : m_params )
     {
@@ -1438,6 +1458,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::TLINE_RLGC:
         return std::make_unique<SIM_MODEL_TLINE>( aType );
 
+    case TYPE::SW_V:
+    case TYPE::SW_I:
+        return std::make_unique<SIM_MODEL_SWITCH>( aType );
+
     case TYPE::V:
     case TYPE::I:
     case TYPE::V_SIN:
@@ -1519,9 +1543,15 @@ TYPE SIM_MODEL::readTypeFromSpiceStrings( const wxString& aTypeString,
 template <typename T>
 void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
-    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
-    ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
     ParseDisabledField( GetFieldValue( aFields, DISABLED_FIELD ) );
+
+    if( GetFieldValue( aFields, PARAMS_FIELD ) != "" )
+    {
+        ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
+        ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
+    }
+    else
+        InferredReadDataFields( aSymbolPinCount, aFields, true );
 }
 
 

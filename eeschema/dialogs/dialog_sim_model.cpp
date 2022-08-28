@@ -37,7 +37,7 @@ using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 template <typename T>
 DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
-                                           std::vector<T>& aFields )
+                                       std::vector<T>& aFields )
     : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
@@ -50,8 +50,8 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
     m_modelNameCombobox->SetValidator( m_modelNameValidator );
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    m_sortedLibPins = m_symbol.GetLibPins();
-    std::sort( m_sortedLibPins.begin(), m_sortedLibPins.end(),
+    m_sortedSymbolPins = m_symbol.GetLibPins();
+    std::sort( m_sortedSymbolPins.begin(), m_sortedSymbolPins.end(),
                []( const LIB_PIN* lhs, const LIB_PIN* rhs )
                {
                    // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
@@ -60,7 +60,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        m_models.push_back( SIM_MODEL::Create( type, m_sortedLibPins.size() ) );
+        m_models.push_back( SIM_MODEL::Create( type, m_sortedSymbolPins.size() ) );
 
         SIM_MODEL::DEVICE_TYPE_ deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
@@ -138,7 +138,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         try
         {
             m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) ) =
-                    SIM_MODEL::Create( m_sortedLibPins.size(), m_fields );
+                    SIM_MODEL::Create( m_sortedSymbolPins.size(), m_fields );
         }
         catch( const IO_ERROR& e )
         {
@@ -194,7 +194,7 @@ void DIALOG_SIM_MODEL<T>::updateWidgets()
 {
     updateModelParamsTab();
     updateModelCodeTab();
-    updatePinAssignmentsTab();
+    updatePinAssignments();
 
     m_prevModel = &curModel();
 }
@@ -333,12 +333,14 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
 
 
 template <typename T>
-void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
+void DIALOG_SIM_MODEL<T>::updatePinAssignments()
 {
-    // First reset the grid.
+    removeOrphanedPinAssignments();
+
+    // Reset the grid.
 
     m_pinAssignmentsGrid->ClearRows();
-    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedLibPins.size() ) );
+    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedSymbolPins.size() ) );
 
     for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
     {
@@ -355,8 +357,6 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
             continue;
 
         wxString modelPinString = getModelPinString( modelPinIndex );
-        wxArrayString choices;
-
         m_pinAssignmentsGrid->SetCellValue( findSymbolPinRow( symbolPinNumber ),
                                             static_cast<int>( PIN_COLUMN::MODEL ),
                                             modelPinString );
@@ -378,7 +378,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
 
         wxArrayString actualModelPinChoices( modelPinChoices );
 
-        if( curModelPinString != "Not Connected" )
+        if( curModelPinString != _( "Not Connected" ) )
             actualModelPinChoices.Insert( curModelPinString, 0 );
 
         // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
@@ -389,6 +389,29 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
 
     // TODO: Show a preview of the symbol with the pin numbers shown.
     // TODO: Maybe show a preview of the code for subcircuits and code models.
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::removeOrphanedPinAssignments()
+{
+    for( int i = 0; i < curModel().GetPinCount(); ++i )
+    {
+        const SIM_MODEL::PIN& modelPin   = curModel().GetPin( i );
+        bool                  isOrphaned = true;
+
+        for( const LIB_PIN* symbolPin : m_sortedSymbolPins )
+        {
+            if( modelPin.symbolPinNumber == symbolPin->GetNumber() )
+            {
+                isOrphaned = false;
+                break;
+            }
+        }
+
+        if( isOrphaned )
+            curModel().SetPinSymbolPinNumber( i, "" );
+    }
 }
 
 
@@ -428,11 +451,11 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
                 //TODO: it's not cur model.
 
                 m_libraryModels.push_back(
-                        SIM_MODEL::Create( baseModel, m_sortedLibPins.size(), m_fields ) );
+                        SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size(), m_fields ) );
             }
             else
             {
-                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_sortedLibPins.size() ) );
+                m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_sortedSymbolPins.size() ) );
             }
         }
     }
@@ -561,8 +584,8 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     //  break;
 
     case SIM_VALUE::TYPE_STRING:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE::TYPE_STRING );
+        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
+                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
         break;
 
     default:
@@ -609,9 +632,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 template <typename T>
 int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) const
 {
-    for( int row = 0; row < static_cast<int>( m_sortedLibPins.size() ); ++row )
+    for( int row = 0; row < static_cast<int>( m_sortedSymbolPins.size() ); ++row )
     {
-        LIB_PIN* pin = m_sortedLibPins[row];
+        LIB_PIN* pin = m_sortedSymbolPins[row];
 
         if( pin->GetNumber() == aSymbolPinNumber )
             return row;
@@ -644,7 +667,7 @@ std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
-    LIB_PIN* pin = m_sortedLibPins.at( symbolPinIndex );
+    LIB_PIN* pin = m_sortedSymbolPins.at( symbolPinIndex );
     wxString number;
     wxString name;
 
@@ -699,7 +722,6 @@ template <typename T>
 wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
 {
     wxArrayString modelPinChoices;
-    bool          isFirst = true;
 
     for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
@@ -708,16 +730,10 @@ wxArrayString DIALOG_SIM_MODEL<T>::getModelPinChoices() const
         if( modelPin.symbolPinNumber != "" )
             continue;
 
-        if( isFirst )
-        {
-            modelPinChoices.Add( getModelPinString( i ) );
-            isFirst = false;
-        }
-        else
-            modelPinChoices.Add( getModelPinString( i ) );
+        modelPinChoices.Add( getModelPinString( i ) );
     }
 
-    modelPinChoices.Add( "Not Connected" );
+    modelPinChoices.Add( _( "Not Connected" ) );
     return modelPinChoices;
 }
 
@@ -845,10 +861,10 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
     {
         curModel().SetPinSymbolPinNumber( modelPinIndex,
-                                          m_sortedLibPins.at( symbolPinIndex )->GetShownNumber() );
+                                          m_sortedSymbolPins.at( symbolPinIndex )->GetShownNumber() );
     }
 
-    updatePinAssignmentsTab();
+    updatePinAssignments();
 
     aEvent.Skip();
 }

@@ -365,7 +365,7 @@ public:
 
         struct INFO
         {
-            wxString name;
+            wxString name = "";
             unsigned id = 0; // Legacy (don't remove).
             DIR dir = DIR_INOUT;
             SIM_VALUE::TYPE type = SIM_VALUE::TYPE_FLOAT;
@@ -377,6 +377,7 @@ public:
             wxString description = "";
             bool isSpiceInstanceParam = false;
             bool isInstanceParam = false;
+            wxString spiceModelName = "";
             wxString spiceInstanceName = "";
 
             // TODO: Stop using brace-initializers, use this constructor for all info structs.
@@ -392,6 +393,7 @@ public:
                   const wxString& aDescription = "",
                   bool aIsSpiceInstanceParam = false,
                   bool aIsInstanceParam = false,
+                  wxString aSpiceModelName = "",
                   wxString aSpiceInstanceName = "" ) :
                 name( aName ),
                 id( aId ),
@@ -491,9 +493,10 @@ public:
     virtual wxString GenerateSpiceModelLine( const wxString& aModelName ) const;
 
     virtual wxString GenerateSpiceItemName( const wxString& aRefName ) const;
+    virtual wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
+
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
-    wxString GenerateSpiceItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
+    wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName,
                                     const std::vector<wxString>& aSymbolPinNumbers ) const;
     virtual wxString GenerateSpiceItemLine( const wxString& aRefName,
                                             const wxString& aModelName,
@@ -524,6 +527,10 @@ public:
     const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
 
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
+    virtual std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const
+    {
+        return GetPins();
+    }
 
     void SetPinSymbolPinNumber( int aPinIndex, const wxString& aSymbolPinNumber )
     {

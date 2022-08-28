@@ -77,8 +77,9 @@ private:
     void updateWidgets();
     void updateModelParamsTab();
     void updateModelCodeTab();
-    void updatePinAssignmentsTab();
-    //void updatePinAssignmentsGridEditors();
+    void updatePinAssignments();
+
+    void removeOrphanedPinAssignments();
 
     void loadLibrary( const wxString& aFilePath );
     
@@ -124,7 +125,7 @@ private:
     std::vector<T>& m_fields;
 
     std::vector<std::shared_ptr<SIM_MODEL>>            m_models;
-    std::vector<LIB_PIN*>                              m_sortedLibPins;
+    std::vector<LIB_PIN*>                              m_sortedSymbolPins;
     std::map<SIM_MODEL::DEVICE_TYPE_, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                    m_curModelType = SIM_MODEL::TYPE::NONE;
 

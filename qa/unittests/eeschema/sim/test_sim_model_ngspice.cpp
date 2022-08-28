@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( Models )
             BOOST_CHECK_EQUAL( instanceParamCount, 3 );
             break;*/
 
-        case MODEL_TYPE::SWITCH:
+        /*case MODEL_TYPE::SWITCH:
             BOOST_CHECK_EQUAL( modelParamCount, 7 );
             BOOST_CHECK_EQUAL( instanceParamCount, 8 );
             break;
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE( Models )
         case MODEL_TYPE::CSWITCH:
             BOOST_CHECK_EQUAL( modelParamCount, 7 );
             BOOST_CHECK_EQUAL( instanceParamCount, 7 );
-            break;
+            break;*/
         
         case MODEL_TYPE::DIODE:
             BOOST_CHECK_EQUAL( modelParamCount, 76 );
