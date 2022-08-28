@@ -221,9 +221,9 @@ void BOARD::IncrementTimeStamp()
         std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
-        m_InsideCourtyardCache.clear();
-        m_InsideFCourtyardCache.clear();
-        m_InsideBCourtyardCache.clear();
+        m_IntersectsCourtyardCache.clear();
+        m_IntersectsFCourtyardCache.clear();
+        m_IntersectsBCourtyardCache.clear();
         m_LayerExpressionCache.clear();
 
         m_DRCMaxClearance = 0;

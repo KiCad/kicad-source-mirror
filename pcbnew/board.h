@@ -1145,9 +1145,9 @@ public:
 
     // ------------ Run-time caches -------------
     std::mutex                                            m_CachesMutex;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideCourtyardCache;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideFCourtyardCache;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_InsideBCourtyardCache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsCourtyardCache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsFCourtyardCache;
+    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsBCourtyardCache;
     std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_IntersectsAreaCache;
     std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_EnclosedByAreaCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;

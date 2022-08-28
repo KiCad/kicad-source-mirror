@@ -73,11 +73,11 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 // Do not wrap internal-only structures
 %ignore BOARD::m_CachesMutex;
-%ignore BOARD::m_InsideCourtyardCache;
-%ignore BOARD::m_InsideFCourtyardCache;
-%ignore BOARD::m_InsideBCourtyardCache;
-%ignore BOARD::m_InsideAreaCache;
-%ignore BOARD::m_EntirelyInsideAreaCache;
+%ignore BOARD::m_IntersectsCourtyardCache;
+%ignore BOARD::m_IntersectsFCourtyardCache;
+%ignore BOARD::m_IntersectsBCourtyardCache;
+%ignore BOARD::m_IntersectsAreaCache;
+%ignore BOARD::m_EnclosedByAreaCache;
 %ignore BOARD::m_LayerExpressionCache;
 %ignore BOARD::m_CopperZoneRTreeCache;
 %ignore BOARD::m_CopperItemRTreeCache;
