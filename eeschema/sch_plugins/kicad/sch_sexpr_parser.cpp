@@ -1322,7 +1322,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                 {
                     // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
                     // so duplicate parsing is not required.
-                    EDA_TEXT text;
+                    EDA_TEXT text( Mils2iu( DEFAULT_SIZE_TEXT ) );
 
                     parseEDA_TEXT( &text, true );
                     pin->SetNameTextSize( text.GetTextHeight() );
@@ -1356,7 +1356,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                 {
                     // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
                     // so duplicate parsing is not required.
-                    EDA_TEXT text;
+                    EDA_TEXT text( Mils2iu( DEFAULT_SIZE_TEXT ) );
 
                     parseEDA_TEXT( &text, false );
                     pin->SetNumberTextSize( text.GetTextHeight() );

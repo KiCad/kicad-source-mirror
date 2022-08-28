@@ -39,7 +39,7 @@
 
 FP_TEXTBOX::FP_TEXTBOX( FOOTPRINT* aParentFootprint ) :
         FP_SHAPE( aParentFootprint, SHAPE_T::RECT, PCB_FP_TEXTBOX_T ),
-        EDA_TEXT()
+        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );

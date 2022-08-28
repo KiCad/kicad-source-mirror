@@ -40,21 +40,24 @@
 
 
 LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId ) :
-    LIB_ITEM( LIB_FIELD_T, aParent )
+    LIB_ITEM( LIB_FIELD_T, aParent ),
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     Init( aId );
 }
 
 
 LIB_FIELD::LIB_FIELD( int aId ) :
-    LIB_ITEM( LIB_FIELD_T, nullptr )
+    LIB_ITEM( LIB_FIELD_T, nullptr ),
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     Init( aId );
 }
 
 
 LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
-    LIB_ITEM( LIB_FIELD_T, nullptr )
+    LIB_ITEM( LIB_FIELD_T, nullptr ),
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     Init( aId );
     m_name = aName;

@@ -41,7 +41,7 @@
 
 PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, PCB_TEXT_T ),
-    EDA_TEXT()
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     SetMultilineAllowed( true );
 }

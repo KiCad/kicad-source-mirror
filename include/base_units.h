@@ -48,15 +48,6 @@
 #define INDETERMINATE_STATE _( "-- mixed values --" )
 #define INDETERMINATE_ACTION _( "-- leave unchanged --" )
 
-
-// PCBNew doesn't support a bold style so we want to allow text thicknesses
-// that achieve the same effect
-#if defined( PCBNEW )
-#define ALLOW_BOLD_THICKNESS true
-#else
-#define ALLOW_BOLD_THICKNESS IsBold()
-#endif
-
 /**
  *  Convert mm to mils.
  */

@@ -40,7 +40,7 @@
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
-    EDA_TEXT()
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 

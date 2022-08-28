@@ -35,7 +35,6 @@
 #include <eda_item.h>
 #include <base_units.h>
 #include <callback_gal.h>
-#include <convert_to_biu.h>   // for Mils2iu
 #include <eda_rect.h>
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
@@ -89,14 +88,13 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 }
 
 
-EDA_TEXT::EDA_TEXT( const wxString& text ) :
-        m_text( text ),
+EDA_TEXT::EDA_TEXT( int aDefaultSizeIu, const wxString& aText ) :
+        m_text( aText ),
         m_bounding_box_cache_valid( false ),
         m_bounding_box_cache_line( -1 ),
         m_bounding_box_cache_inverted( false )
 {
-    int sz = Mils2iu( DEFAULT_SIZE_TEXT );
-    SetTextSize( wxSize( sz, sz ) );
+    SetTextSize( VECTOR2I( aDefaultSizeIu, aDefaultSizeIu ) );
     cacheShownText();
 }
 
@@ -309,7 +307,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultPenWidth ) const
     }
 
     // Clip pen size for small texts:
-    penWidth = Clamp_Text_PenSize( penWidth, GetTextSize(), ALLOW_BOLD_THICKNESS );
+    penWidth = Clamp_Text_PenSize( penWidth, GetTextSize(), IsBold() );
 
     return penWidth;
 }

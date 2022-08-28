@@ -45,7 +45,7 @@ using KIGFX::SCH_RENDER_SETTINGS;
 
 SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text ) :
         SCH_SHAPE( SHAPE_T::RECT, aLineWidth, aFillType, SCH_TEXTBOX_T ),
-        EDA_TEXT( text )
+        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), text )
 {
     m_layer = LAYER_NOTES;
 

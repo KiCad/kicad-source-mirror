@@ -45,7 +45,7 @@ using KIGFX::SCH_RENDER_SETTINGS;
 LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
                           const wxString& text ) :
         LIB_SHAPE( aParent, SHAPE_T::RECT, aLineWidth, aFillType, LIB_TEXTBOX_T ),
-        EDA_TEXT( text )
+        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), text )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );

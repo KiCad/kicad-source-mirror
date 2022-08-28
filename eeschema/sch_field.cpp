@@ -59,7 +59,7 @@
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT( wxEmptyString ),
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), wxEmptyString ),
     m_id( 0 ),
     m_name( aName ),
     m_renderCacheValid( false )

@@ -72,7 +72,7 @@ using KIGFX::COLOR4D;
 class EDA_TEXT
 {
 public:
-    EDA_TEXT( const wxString& text = wxEmptyString );
+    EDA_TEXT( int aDefaultSizeIu, const wxString& aText = wxEmptyString );
 
     EDA_TEXT( const EDA_TEXT& aText );
 

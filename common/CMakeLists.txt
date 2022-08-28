@@ -307,6 +307,7 @@ set( COMMON_SRCS
     eda_pattern_match.cpp
     eda_rect.cpp
     eda_shape.cpp
+    eda_text.cpp
     eda_units.cpp
     env_paths.cpp
     env_vars.cpp
@@ -506,7 +507,6 @@ target_include_directories( common SYSTEM PUBLIC
 
 
 set( PCB_COMMON_SRCS
-    eda_text.cpp
     fp_lib_table.cpp
     hash_eda.cpp
     pg_properties.cpp

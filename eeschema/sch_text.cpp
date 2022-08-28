@@ -114,7 +114,7 @@ TEXT_SPIN_STYLE TEXT_SPIN_STYLE::MirrorY()
 
 SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
-        EDA_TEXT( text )
+        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), text )
 {
     m_layer = LAYER_NOTES;
 

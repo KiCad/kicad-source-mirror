@@ -39,7 +39,7 @@
 
 LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TEXT( wxEmptyString )
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), wxEmptyString )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
 }

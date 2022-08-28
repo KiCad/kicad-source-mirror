@@ -39,7 +39,7 @@
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
     PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECT ),
-    EDA_TEXT()
+    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
