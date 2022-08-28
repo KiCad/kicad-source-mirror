@@ -787,6 +787,12 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                         // Convert to PCB_FP_TEXTBOX_T
                         FP_TEXTBOX* pastedTextBox = new FP_TEXTBOX( editorFootprint );
+
+                        // Handle shape data
+                        static_cast<PCB_SHAPE*>( pastedTextBox )->SwapData( clipTextBox );
+                        pastedTextBox->SetLocalCoord();
+
+                        // Handle text data
                         static_cast<EDA_TEXT*>( pastedTextBox )->SwapText( *clipTextBox );
                         static_cast<EDA_TEXT*>( pastedTextBox )->SwapAttributes( *clipTextBox );
 
