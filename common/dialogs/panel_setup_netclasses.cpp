@@ -686,7 +686,7 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
         m_netclassesDirty = false;
     }
 
-    if( m_assignmentGrid->GetRows() == 0 )
+    if( m_assignmentGrid->GetNumberRows() == 0 )
         return;
 
     wxString pattern;
