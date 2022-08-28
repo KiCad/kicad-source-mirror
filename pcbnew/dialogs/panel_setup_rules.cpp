@@ -452,7 +452,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             PCB_EXPR_BUILTIN_FUNCTIONS& functions = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
             for( const wxString& funcSig : functions.GetSignatures() )
-                tokens += wxT( "|" ) + funcSig;
+            {
+                if( !funcSig.Contains( "DEPRECATED" ) )
+                    tokens += wxT( "|" ) + funcSig;
+            }
         }
         else if( expr_context == STRING )
         {

@@ -38,7 +38,6 @@
 #include <connectivity/from_to_cache.h>
 
 #include <drc/drc_engine.h>
-#include <geometry/shape_circle.h>
 
 bool fromToFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
@@ -453,9 +452,6 @@ bool collidesWithArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
     EDA_RECT               areaBBox = aArea->GetCachedBoundingBox();
     std::shared_ptr<SHAPE> shape;
 
-    if( !areaBBox.Intersects( aItemBBox ) )
-        return false;
-
     // Collisions include touching, so we need to deflate outline by enough to exclude it.
     // This is particularly important for detecting copper fills as they will be exactly
     // touching along the entire exclusion border.
@@ -491,9 +487,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
         if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
         {
             if( aCtx->HasErrorCallback() )
-            {
                 aCtx->ReportError( _( "Footprint's courtyard is not a single, closed shape." ) );
-            }
 
             return false;
         }
@@ -573,75 +567,18 @@ bool collidesWithArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 }
 
 
-bool enclosedByArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_LAYER_ID layer, ZONE* aArea )
+bool searchAreas( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
+                  std::function<bool( ZONE* )> aFunc )
 {
-    BOARD*         board = aItem->GetBoard();
-    EDA_RECT       areaBBox = aArea->GetCachedBoundingBox();
-    SHAPE_POLY_SET itemShape;
-
-    if( !areaBBox.Intersects( aItemBBox ) )
-        return false;
-
-    aItem->TransformShapeWithClearanceToPolygon( itemShape, layer, 0,
-                                                 board->GetDesignSettings().m_MaxError,
-                                                 ERROR_OUTSIDE );
-
-    itemShape.BooleanSubtract( *aArea->Outline(), SHAPE_POLY_SET::PM_FAST );
-
-    return itemShape.IsEmpty();
-}
-
-
-bool isInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CONTEXT* aCtx,
-                   ZONE* aArea, bool aEntirely )
-{
-    if( !aArea || aArea == aItem || aArea->GetParent() == aItem )
-        return false;
-
-    BOARD*                       board = aArea->GetBoard();
-    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
-    auto&                        cache = aEntirely ? board->m_EntirelyInsideAreaCache
-                                                   : board->m_InsideAreaCache;
-    PCB_LAYER_ID                 layer = aCtx->GetLayer();
-    PTR_PTR_LAYER_CACHE_KEY      key = { aArea, aItem, layer };
-    auto                         i = cache.find( key );
-
-    if( i != cache.end() )
-        return i->second;
-
-    bool isInside;
-
-    if( aEntirely )
-        isInside = enclosedByArea( aItem, aItemBBox, layer, aArea );
-    else
-        isInside = collidesWithArea( aItem, aItemBBox, aCtx, aArea );
-
-    cache[ key ] = isInside;
-
-    return isInside;
-}
-
-
-bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
-                         bool aEntirely )
-{
-    BOARD*   board = aItem->GetBoard();
-    EDA_RECT itemBBox;
-
-    if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
-        itemBBox = static_cast<ZONE*>( aItem )->GetCachedBoundingBox();
-    else
-        itemBBox = aItem->GetBoundingBox();
+    BOARD* board = aItem->GetBoard();
 
     if( aArg == wxT( "A" ) )
     {
-        ZONE* zone = dynamic_cast<ZONE*>( aCtx->GetItem( 0 ) );
-        return isInsideArea( aItem, itemBBox, aCtx, zone, aEntirely );
+        return aFunc( dynamic_cast<ZONE*>( aCtx->GetItem( 0 ) ) );
     }
     else if( aArg == wxT( "B" ) )
     {
-        ZONE* zone = dynamic_cast<ZONE*>( aCtx->GetItem( 1 ) );
-        return isInsideArea( aItem, itemBBox, aCtx, zone, aEntirely );
+        return aFunc( dynamic_cast<ZONE*>( aCtx->GetItem( 1 ) ) );
     }
     else if( KIID::SniffTest( aArg ) )
     {
@@ -652,7 +589,7 @@ bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTE
             // Only a single zone can match the UUID; exit once we find a match whether
             // "inside" or not
             if( area->m_Uuid == target )
-                return isInsideArea( aItem, itemBBox, aCtx, area, aEntirely );
+                return aFunc( area );
         }
 
         for( FOOTPRINT* footprint : board->Footprints() )
@@ -662,7 +599,7 @@ bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTE
                 // Only a single zone can match the UUID; exit once we find a match
                 // whether "inside" or not
                 if( area->m_Uuid == target )
-                    return isInsideArea( aItem, itemBBox, aCtx, area, aEntirely );
+                    return aFunc( area );
             }
         }
 
@@ -675,7 +612,7 @@ bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTE
             if( area->GetZoneName().Matches( aArg ) )
             {
                 // Many zones can match the name; exit only when we find an "inside"
-                if( isInsideArea( aItem, itemBBox, aCtx, area, aEntirely ) )
+                if( aFunc( area ) )
                     return true;
             }
         }
@@ -687,7 +624,7 @@ bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTE
                 // Many zones can match the name; exit only when we find an "inside"
                 if( area->GetZoneName().Matches( aArg ) )
                 {
-                    if( isInsideArea( aItem, itemBBox, aCtx, area, aEntirely ) )
+                    if( aFunc( area ) )
                         return true;
                 }
             }
@@ -698,7 +635,7 @@ bool evalInsideAreaFunc( BOARD_ITEM* aItem, const wxString& aArg, PCB_EXPR_CONTE
 }
 
 
-static void insideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -713,14 +650,14 @@ static void insideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         {
             aCtx->ReportError( wxString::Format( _( "Missing rule-area identifier argument "
                                                     "(A, B, or rule-area name) to %s." ),
-                                                 wxT( "insideArea()" ) ) );
+                                                 wxT( "intersectsArea()" ) ) );
         }
 
         return;
     }
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
         return;
@@ -728,15 +665,48 @@ static void insideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                if( evalInsideAreaFunc( item, arg->AsString(), context, false ) )
+                BOARD*       board = item->GetBoard();
+                PCB_LAYER_ID layer = context->GetLayer();
+                EDA_RECT     itemBBox;
+
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                    itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
+                else
+                    itemBBox = item->GetBoundingBox();
+
+                if( searchAreas( item, arg->AsString(), context,
+                        [&]( ZONE* aArea )
+                        {
+                            if( !aArea || aArea == item || aArea->GetParent() == item )
+                                return false;
+
+                            if( !aArea->GetCachedBoundingBox().Intersects( itemBBox ) )
+                                return false;
+
+                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_LAYER_CACHE_KEY      key = { aArea, item, layer };
+
+                            auto i = board->m_IntersectsAreaCache.find( key );
+
+                            if( i != board->m_IntersectsAreaCache.end() )
+                                return i->second;
+
+                            bool collides = collidesWithArea( item, itemBBox, context, aArea );
+
+                            board->m_IntersectsAreaCache[ key ] = collides;
+
+                            return collides;
+                        } ) )
+                {
                     return 1.0;
+                }
 
                 return 0.0;
             } );
 }
 
 
-static void entirelyInsideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -751,14 +721,14 @@ static void entirelyInsideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         {
             aCtx->ReportError( wxString::Format( _( "Missing rule-area identifier argument "
                                                     "(A, B, or rule-area name) to %s." ),
-                                                 wxT( "entirelyInsideArea()" ) ) );
+                                                 wxT( "eclosedByArea()" ) ) );
         }
 
         return;
     }
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
         return;
@@ -766,8 +736,49 @@ static void entirelyInsideAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                if( evalInsideAreaFunc( item, arg->AsString(), context, true ) )
+                BOARD*       board = item->GetBoard();
+                int          maxError = board->GetDesignSettings().m_MaxError;
+                PCB_LAYER_ID layer = context->GetLayer();
+                EDA_RECT     itemBBox;
+
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                    itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
+                else
+                    itemBBox = item->GetBoundingBox();
+
+                if( searchAreas( item, arg->AsString(), context,
+                        [&]( ZONE* aArea )
+                        {
+                            if( !aArea || aArea == item || aArea->GetParent() == item )
+                                return false;
+
+                            if( !aArea->GetCachedBoundingBox().Intersects( itemBBox ) )
+                                return false;
+
+                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_LAYER_CACHE_KEY      key = { aArea, item, layer };
+
+                            auto i = board->m_EnclosedByAreaCache.find( key );
+
+                            if( i != board->m_EnclosedByAreaCache.end() )
+                                return i->second;
+
+                            SHAPE_POLY_SET itemShape;
+
+                            item->TransformShapeWithClearanceToPolygon( itemShape, layer, 0,
+                                                                        maxError, ERROR_OUTSIDE );
+
+                            itemShape.BooleanSubtract( *aArea->Outline(), SHAPE_POLY_SET::PM_FAST );
+
+                            bool enclosedByArea = itemShape.IsEmpty();
+
+                            board->m_EnclosedByAreaCache[ key ] = enclosedByArea;
+
+                            return enclosedByArea;
+                        } ) )
+                {
                     return 1.0;
+                }
 
                 return 0.0;
             } );
@@ -987,19 +998,31 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 {
     m_funcs.clear();
+
     RegisterFunc( wxT( "existsOnLayer('x')" ), existsOnLayerFunc );
+
     RegisterFunc( wxT( "isPlated()" ), isPlatedFunc );
-    RegisterFunc( wxT( "insideCourtyard('x')" ), insideCourtyardFunc );
-    RegisterFunc( wxT( "insideFrontCourtyard('x')" ), insideFrontCourtyardFunc );
-    RegisterFunc( wxT( "insideBackCourtyard('x')" ), insideBackCourtyardFunc );
-    RegisterFunc( wxT( "insideArea('x')" ), insideAreaFunc );
-    RegisterFunc( wxT( "entirelyInsideArea('x')" ), entirelyInsideAreaFunc );
+
+    RegisterFunc( wxT( "insideCourtyard('x') DEPRECATED" ), insideCourtyardFunc );
+    RegisterFunc( wxT( "insideFrontCourtyard('x') DEPRECATED" ), insideFrontCourtyardFunc );
+    RegisterFunc( wxT( "insideBackCourtyard('x') DEPRECATED" ), insideBackCourtyardFunc );
+    RegisterFunc( wxT( "intersectsCourtyard('x')" ), insideCourtyardFunc );
+    RegisterFunc( wxT( "intersectsFrontCourtyard('x')" ), insideFrontCourtyardFunc );
+    RegisterFunc( wxT( "intersectsBackCourtyard('x')" ), insideBackCourtyardFunc );
+
+    RegisterFunc( wxT( "insideArea('x') DEPRECATED" ), intersectsAreaFunc );
+    RegisterFunc( wxT( "intersectsArea('x')" ), intersectsAreaFunc );
+    RegisterFunc( wxT( "enclosedByArea('x')" ), enclosedByAreaFunc );
+
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
     RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedViaFunc );
+
     RegisterFunc( wxT( "memberOf('x')" ), memberOfFunc );
+
     RegisterFunc( wxT( "fromTo('x','y')" ), fromToFunc );
     RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPairFunc );
     RegisterFunc( wxT( "inDiffPair('x')" ), inDiffPairFunc );
+
     RegisterFunc( wxT( "getField('x')" ), getFieldFunc );
 }
 

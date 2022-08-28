@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                 {
                     std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
-                    board->m_InsideAreaCache[ key ] = isInside;
+                    board->m_IntersectsAreaCache[ key ] = isInside;
                 }
 
                 done.fetch_add( 1 );

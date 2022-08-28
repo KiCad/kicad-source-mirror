@@ -104,7 +104,7 @@ Note: `clearance` and `hole_clearance` rules are not run against items of the sa
 
     (rule HV_unshielded
        (constraint clearance (min 2mm))
-       (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')"))
+       (condition "A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"))
 
 
     (rule heavy_thermals
@@ -130,26 +130,27 @@ Use Ctrl+/ to comment or uncomment line(s).
 All function parameters support simple wildcards (`*` and `?`).
 <br><br>
 
-    A.insideCourtyard('<footprint_refdes>')
+    A.intersectsCourtyard('<footprint_refdes>')
 True if any part of `A` lies within the given footprint's principal courtyard.
 <br><br>
 
-    A.insideFrontCourtyard('<footprint_refdes>')
+    A.intersectsFrontCourtyard('<footprint_refdes>')
 True if any part of `A` lies within the given footprint's front courtyard.
 <br><br>
 
-    A.insideBackCourtyard('<footprint_refdes>')
+    A.intersectsBackCourtyard('<footprint_refdes>')
 True if any part of `A` lies within the given footprint's back courtyard.
 <br><br>
 
-    A.insideArea('<zone_name>')
+    A.intersectsArea('<zone_name>')
 True if any part of `A` lies within the given zone's outline.
 <br><br>
 
-    A.entirelyInsideArea('<zone_name>')
+    A.enclosedByArea('<zone_name>')
 True if all of `A` lies within the given zone's outline.  
 
-NB: this is potentially a more expensive call than `insideArea()`.
+NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()` 
+where possible.
 <br><br>
 
     A.isPlated()
@@ -157,7 +158,7 @@ True if `A` has a hole which is plated.
 <br><br>
 
     A.inDiffPair('<net_name>')
-True if `A` has net that is part of the specified differential pair.
+True if `A` has a net that is part of the specified differential pair.
 `<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`
 matches items in the `/CLK_P` and `/CLK_N` nets.
 <br><br>
@@ -178,19 +179,35 @@ the canonical name (ie: `F.Cu`).
 NB: this returns true if `A` is on the given layer, independently
 of whether or not the rule is being evaluated for that layer.
 For the latter use a `(layer "layer_name")` clause in the rule.
+<br><br>
+
+    !!! A.insideCourtyard('<footprint_refdes>') !!!
+Deprecated; use `intersectsCourtyard()` instead.
+<br><br>
+
+    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!
+Deprecated; use `intersectsFrontCourtyard()` instead.
+<br><br>
+
+    !!! A.insideBackCourtyard('<footprint_refdes>') !!!
+Deprecated; use `intersectsBackCourtyard()` instead.
+<br><br>
+
+    !!! A.insideArea('<zone_name>') !!!
+Deprecated; use `intersectsArea()` instead.
 <br><br><br>
 
 ### More Examples
 
     (rule "copper keepout"
        (constraint disallow track via zone)
-       (condition "A.insideArea('zone3')"))
+       (condition "A.intersectsArea('zone3')"))
 
 
     (rule "BGA neckdown"
        (constraint track_width (min 0.2mm) (opt 0.25mm))
        (constraint clearance (min 0.05mm) (opt 0.08mm))
-       (condition "A.insideCourtyard('U3')"))
+       (condition "A.intersectsCourtyard('U3')"))
 
 
     # prevent silk over tented vias
