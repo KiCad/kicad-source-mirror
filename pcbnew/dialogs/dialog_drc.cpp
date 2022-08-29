@@ -593,7 +593,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     if( rcItem->GetErrorCode() == DRCE_CLEARANCE
             || rcItem->GetErrorCode() == DRCE_EDGE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_HOLE_CLEARANCE )
+            || rcItem->GetErrorCode() == DRCE_HOLE_CLEARANCE
+            || rcItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE )
     {
         menu.Append( 3, _( "Run clearance resolution tool..." ) );
     }

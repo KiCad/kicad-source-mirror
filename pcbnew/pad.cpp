@@ -1217,15 +1217,13 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( F_Cu ) )
+        else if( GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            return wxString::Format( _( "Through hole pad %s of %s" ),
-                                     wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),
-                                     GetParent()->GetReference() );
+            return wxString::Format( _( "NPTH pad of %s" ), GetParent()->GetReference() );
         }
         else
         {
-            return wxString::Format( _( "Through hole pad %s of %s" ),
+            return wxString::Format( _( "PTH pad %s of %s" ),
                                      GetNetnameMsg(),
                                      GetParent()->GetReference() );
         }
@@ -1240,15 +1238,13 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( F_Cu ) )
+        else if( GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            return wxString::Format( _( "Through hole pad %s of %s" ),
-                                     wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),
-                                     GetParent()->GetReference() );
+            return wxString::Format( _( "NPTH of %s" ), GetParent()->GetReference() );
         }
         else
         {
-            return wxString::Format( _( "Through hole pad %s %s of %s" ),
+            return wxString::Format( _( "PTH pad %s %s of %s" ),
                                      GetNumber(),
                                      GetNetnameMsg(),
                                      GetParent()->GetReference() );

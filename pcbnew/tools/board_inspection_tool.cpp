@@ -141,6 +141,13 @@ DRC_ENGINE BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError, bool* aCou
 }
 
 
+bool isNPTHPad( BOARD_ITEM* aItem )
+{
+    return aItem->Type() == PCB_PAD_T
+            && static_cast<PAD*>( aItem )->GetAttribute() == PAD_ATTRIB::NPTH;
+}
+
+
 wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 {
     // Null items have no description
@@ -149,9 +156,10 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 
     wxString s = aItem->GetSelectMenuText( m_frame->GetUserUnits() );
 
-    if( aItem->IsConnected() )
+    if( aItem->IsConnected() && !isNPTHPad( aItem ) )
     {
         BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
         s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
                                             cItem->GetEffectiveNetClass()->GetName() );
     }
@@ -421,6 +429,21 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
             r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
         }
 
+        break;
+
+    case DRCE_DRILLED_HOLES_TOO_CLOSE:
+        r = m_inspectClearanceDialog->AddPage( _( "Hole to Hole" ) );
+        reportHeader( _( "Hole to hole clearance resolution for:" ), a, b, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
+        clearance = constraint.m_Value.Min();
+        clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
         break;
 
     case DRCE_EDGE_CLEARANCE:
@@ -881,6 +904,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     if( a->HasHole() || b->HasHole() )
     {
         PCB_LAYER_ID layer = UNDEFINED_LAYER;
+        bool         pageAdded = false;
 
         if( a->HasHole() && b->IsOnLayer( active ) && IsCopperLayer( active ) )
             layer = active;
@@ -893,10 +917,50 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         if( layer >= 0 )
         {
-            r = m_inspectClearanceDialog->AddPage( _( "Hole" ) );
+            if( !pageAdded )
+            {
+                r = m_inspectClearanceDialog->AddPage( _( "Hole" ) );
+                pageAdded = true;
+            }
+            else
+            {
+                r->Report( "" );
+                r->Report( "" );
+                r->Report( "" );
+            }
+
             reportHeader( _( "Hole clearance resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+
+            r->Flush();
+        }
+
+        if( a->HasHole() && b->HasHole() )
+        {
+            if( !pageAdded )
+            {
+                r = m_inspectClearanceDialog->AddPage( _( "Hole" ) );
+                pageAdded = true;
+            }
+            else
+            {
+                r->Report( "" );
+                r->Report( "" );
+                r->Report( "" );
+            }
+
+            reportHeader( _( "Hole to hole clearance resolution for:" ), a, b, r );
+
+            constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
