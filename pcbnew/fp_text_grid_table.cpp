@@ -54,10 +54,14 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
 
     if( g_menuOrientations.IsEmpty() )
     {
-        g_menuOrientations.push_back( "0" + GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back( "90" + GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back( "-90" + GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back( "180" + GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back(
+                "0" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back(
+                "90" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back(
+                "-90" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back(
+                "180" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
     }
 
     m_orientationColAttr = new wxGridCellAttr;

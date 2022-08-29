@@ -25,6 +25,9 @@
 #ifndef EDA_UNITS_H
 #define EDA_UNITS_H
 
+#include <wx/string.h>
+#include <geometry/eda_angle.h>
+
 /**
  * The type of unit.
  */
@@ -50,6 +53,40 @@ namespace EDA_UNIT_UTILS
     bool IsImperialUnit( EDA_UNITS aUnit );
 
     bool IsMetricUnit( EDA_UNITS aUnit );
+
+    /**
+     *  Convert mm to mils.
+     */
+    int Mm2mils( double aVal );
+
+    /**
+     *  Convert mils to mm.
+     */
+    int Mils2mm( double aVal );
+
+    /**
+     * Writes any unit info found in the string to aUnits.
+     */
+    void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
+
+    /**
+     * Get the units string for a given units type.
+     *
+     * @param aUnits - The units requested.
+     * @param aType - The data type of the unit (e.g. distance, area, etc.)
+     * @return The human readable units string.
+     */
+    wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+
+    /**
+     * Converts \a aAngle from board units to a string appropriate for writing to file.
+     *
+     * @note Internal angles for board items can be either degrees or tenths of degree
+     *       on how KiCad is built.
+     * @param aAngle A angle value to convert.
+     * @return std::string object containing the converted angle.
+     */
+    std::string FormatAngle( const EDA_ANGLE& aAngle );
 }
 
 #endif

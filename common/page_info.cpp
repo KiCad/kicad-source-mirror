@@ -26,7 +26,7 @@
 #include <common.h>
 #include <page_info.h>
 #include <macros.h>
-#include <base_units.h>     // for Mm2mils
+#include <eda_units.h>
 
 
 // late arriving wxPAPER_A0, wxPAPER_A1
@@ -64,7 +64,7 @@ const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 // also see: wx/defs.h
 
 // local readability macro for millimeter wxSize
-#define MMsize( x, y )  wxSize( Mm2mils( x ), Mm2mils( y ) )
+#define MMsize( x, y ) wxSize( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
 
 // All MUST be defined as landscape.
 const PAGE_INFO  PAGE_INFO::pageA5(     MMsize( 210,   148 ),   wxT( "A5" ),    wxPAPER_A5 );

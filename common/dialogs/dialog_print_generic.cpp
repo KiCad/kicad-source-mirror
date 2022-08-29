@@ -310,11 +310,11 @@ void DIALOG_PRINT_GENERIC::initPrintData()
         if( pageInfo.IsCustom() )
         {
             if( pageInfo.IsPortrait() )
-                s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
-                                                       Mils2mm( pageInfo.GetHeightMils() ) ) );
+                s_pageSetupData->SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ),
+                                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ) ) );
             else
-                s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
-                                                       Mils2mm( pageInfo.GetWidthMils() ) ) );
+                s_pageSetupData->SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ),
+                                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ) ) );
         }
 
         *s_PrintData = s_pageSetupData->GetPrintData();

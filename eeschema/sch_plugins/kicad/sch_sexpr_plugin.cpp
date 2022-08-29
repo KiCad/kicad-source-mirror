@@ -664,7 +664,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
                   m_out->Quotew( aSymbol->GetLibId().Format().wx_str() ).c_str(),
                   FormatInternalUnits( aSymbol->GetPosition().x ).c_str(),
                   FormatInternalUnits( aSymbol->GetPosition().y ).c_str(),
-                  FormatAngle( angle ).c_str() );
+                  EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     bool mirrorX = aSymbol->GetOrientation() & SYM_MIRROR_X;
     bool mirrorY = aSymbol->GetOrientation() & SYM_MIRROR_Y;
@@ -811,7 +811,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   aField->GetId(),
                   FormatInternalUnits( aField->GetPosition().x ).c_str(),
                   FormatInternalUnits( aField->GetPosition().y ).c_str(),
-                  FormatAngle( aField->GetTextAngle() ).c_str() );
+                  EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
     if( !aField->IsDefaultFormatting()
       || ( aField->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
@@ -920,7 +920,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                       getSheetPinShapeToken( pin->GetShape() ),
                       FormatInternalUnits( pin->GetPosition().x ).c_str(),
                       FormatInternalUnits( pin->GetPosition().y ).c_str(),
-                      FormatAngle( getSheetPinAngle( pin->GetSide() ) ).c_str() );
+                      EDA_UNIT_UTILS::FormatAngle( getSheetPinAngle( pin->GetSide() ) ).c_str() );
 
         pin->Format( m_out, aNestLevel + 1, 0 );
 
@@ -1111,7 +1111,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( 0, " (at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( angle ).c_str() );
+                      EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
     else
     {
@@ -1119,7 +1119,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( angle ).c_str() );
+                      EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
 
     if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
@@ -1153,7 +1153,7 @@ void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     m_out->Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
                   FormatInternalUnits( pos.x ).c_str(),
                   FormatInternalUnits( pos.y ).c_str(),
-                  FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                  EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
                   FormatInternalUnits( size.x ).c_str(),
                   FormatInternalUnits( size.y ).c_str() );
 

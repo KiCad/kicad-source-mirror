@@ -49,16 +49,6 @@
 #define INDETERMINATE_ACTION _( "-- leave unchanged --" )
 
 /**
- *  Convert mm to mils.
- */
-int Mm2mils( double x );
-
-/**
- *  Convert mils to mm.
- */
-int Mils2mm( double x );
-
-/**
  * Function To_User_Unit
  * convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
  *
@@ -152,21 +142,6 @@ long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
                                EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
- * Function FetchUnitsFromString
- * writes any unit info found in the string to aUnits.
- */
-void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
-
-/**
- * Get the units string for a given units type.
- *
- * @param aUnits - The units requested.
- * @param aType - The data type of the unit (e.g. distance, area, etc.)
- * @return The human readable units string.
- */
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
-
-/**
  * Function FormatInternalUnits
  * converts \a aValue from internal units to a string appropriate for writing
  * to file.
@@ -178,17 +153,6 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType = EDA_DA
  * @return A std::string object containing the converted value.
  */
 std::string FormatInternalUnits( int aValue );
-
-/**
- * Function FormatAngle
- * converts \a aAngle from board units to a string appropriate for writing to file.
- *
- * @note Internal angles for board items can be either degrees or tenths of degree
- *       on how KiCad is built.
- * @param aAngle A angle value to convert.
- * @return A std::string object containing the converted angle.
- */
-std::string FormatAngle( const EDA_ANGLE& aAngle );
 
 std::string FormatInternalUnits( const wxPoint& aPoint );
 

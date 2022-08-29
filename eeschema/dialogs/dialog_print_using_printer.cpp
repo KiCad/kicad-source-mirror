@@ -209,11 +209,11 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
     if( pageInfo.IsCustom() )
     {
         if( pageInfo.IsPortrait() )
-            pageSetupDialogData.SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
-                                                      Mils2mm( pageInfo.GetHeightMils() ) ) );
+            pageSetupDialogData.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ),
+                                                      EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ) ) );
         else
-            pageSetupDialogData.SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
-                                                      Mils2mm( pageInfo.GetWidthMils() ) ) );
+            pageSetupDialogData.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ),
+                                                      EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ) ) );
     }
 
     pageSetupDialogData.GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );

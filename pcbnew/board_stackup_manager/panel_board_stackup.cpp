@@ -175,7 +175,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
     if( min_thickness == 0 )
     {
         title.Printf( _( "Enter board thickness in %s:" ),
-                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
     }
     else
     {

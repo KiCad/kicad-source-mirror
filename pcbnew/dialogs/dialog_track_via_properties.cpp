@@ -298,7 +298,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_netSelector->Disable();
         }
 
-        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+        m_DesignRuleViasUnit->SetLabel(
+                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
 
         int viaSelection = wxNOT_FOUND;
 
@@ -342,7 +343,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+        m_DesignRuleWidthsUnits->SetLabel(
+                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
 
         int widthSelection = wxNOT_FOUND;
 
@@ -412,7 +414,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         }
 
         m_DesignRuleViasCtrl->SetSelection( viaSel );
-        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleViasUnit->SetLabel(
+                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
     }
 
     if( m_tracks )
@@ -430,7 +433,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         }
 
         m_DesignRuleWidthsCtrl->SetSelection( trackSel );
-        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleWidthsUnits->SetLabel(
+                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
     }
 
     aEvent.Skip();

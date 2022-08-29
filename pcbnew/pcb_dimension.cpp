@@ -78,12 +78,12 @@ void PCB_DIMENSION_BASE::updateText()
         break;
 
     case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
-        text += GetAbbreviatedUnitsLabel( m_units );
+        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units );
         break;
 
     case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
         text += wxT( " (" );
-        text += GetAbbreviatedUnitsLabel( m_units ).Trim( false );
+        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units ).Trim( false );
         text += wxT( ")" );
         break;
     }
@@ -332,7 +332,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     EDA_UNITS units;
 
     GetUnits( units );
-    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ).Trim( false ) );
+    aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( units ).Trim( false ) );
 
     aList.emplace_back( _( "Font" ), m_text.GetDrawFont()->GetName() );
     aList.emplace_back( _( "Text Thickness" ),

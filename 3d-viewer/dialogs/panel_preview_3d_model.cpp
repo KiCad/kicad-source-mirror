@@ -250,7 +250,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 {
     return wxString::Format( wxT( "%.2f%s" ),
                              aValue,
-                             GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+                             EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
 }
 
 
@@ -264,7 +264,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 
     return wxString::Format( wxT( "%.6f%s" ),
                              aValue,
-                             GetAbbreviatedUnitsLabel( m_userUnits ) );
+                             EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_userUnits ) );
 }
 
 

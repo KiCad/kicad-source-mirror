@@ -1195,8 +1195,8 @@ void PCB_PARSER::parsePAGE_INFO()
         else if( height > MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm )
             height = MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm;
 
-        pageInfo.SetWidthMils( Mm2mils( width ) );
-        pageInfo.SetHeightMils( Mm2mils( height ) );
+        pageInfo.SetWidthMils( EDA_UNIT_UTILS::Mm2mils( width ) );
+        pageInfo.SetHeightMils( EDA_UNIT_UTILS::Mm2mils( height ) );
     }
 
     token = NextTok();
@@ -3220,7 +3220,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             if( isLegacyDimension )
             {
                 EDA_UNITS units   = EDA_UNITS::INCHES;
-                FetchUnitsFromString( text->GetText(), units );
+                EDA_UNIT_UTILS::FetchUnitsFromString( text->GetText(), units );
                 dim->SetUnits( units );
             }
 

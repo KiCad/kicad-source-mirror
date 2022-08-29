@@ -1703,7 +1703,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 
     if( pageType == PAGE_INFO::Custom )
     {
-        int width = Mm2mils( parseDouble( "width" ) ); // width stored in mm so we convert to mils
+        int width = EDA_UNIT_UTILS::Mm2mils( parseDouble( "width" ) ); // width stored in mm so we convert to mils
 
         // Perform some controls to avoid crashes if the size is edited by hands
         if( width < MIN_PAGE_SIZE_MILS )
@@ -1711,7 +1711,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
         else if( width > MAX_PAGE_SIZE_EESCHEMA_MILS )
             width = MAX_PAGE_SIZE_EESCHEMA_MILS;
 
-        int height = Mm2mils( parseDouble( "height" ) ); // height stored in mm so we convert to mils
+        int height = EDA_UNIT_UTILS::Mm2mils( parseDouble( "height" ) ); // height stored in mm so we convert to mils
 
         if( height < MIN_PAGE_SIZE_MILS )
             height = MIN_PAGE_SIZE_MILS;

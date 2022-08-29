@@ -415,7 +415,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter
                       getPinShapeToken( aPin->GetShape() ),
                       FormatInternalUnits( aPin->GetPosition().x ).c_str(),
                       FormatInternalUnits( aPin->GetPosition().y ).c_str(),
-                      FormatAngle( getPinAngle( aPin->GetOrientation() ) ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( getPinAngle( aPin->GetOrientation() ) ).c_str(),
                       FormatInternalUnits( aPin->GetLength() ).c_str() );
 
     if( !aPin->IsVisible() )
@@ -479,7 +479,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER
     aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
                       FormatInternalUnits( pos.x ).c_str(),
                       FormatInternalUnits( pos.y ).c_str(),
-                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
                       FormatInternalUnits( size.x ).c_str(),
                       FormatInternalUnits( size.y ).c_str() );
 
