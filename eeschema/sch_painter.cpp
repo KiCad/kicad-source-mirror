@@ -306,10 +306,6 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const
 {
-    // We don't (yet?) have a separate color for intersheet refs
-    if( aLayer == LAYER_INTERSHEET_REFS )
-        aLayer = LAYER_GLOBLABEL;
-
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
     if( aItem->Type() == SCH_LINE_T )
@@ -2149,7 +2145,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 

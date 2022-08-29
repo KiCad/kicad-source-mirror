@@ -253,6 +253,10 @@ public:
      */
     inline const COLOR4D& GetLayerColor( int aLayer ) const
     {
+        // We don't (yet?) have a separate color for intersheet refs
+        if( aLayer == LAYER_INTERSHEET_REFS )
+            aLayer = LAYER_GLOBLABEL;
+
         return m_layerColors[aLayer];
     }
 
