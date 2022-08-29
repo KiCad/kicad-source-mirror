@@ -929,7 +929,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         return;
 
     // Calculate the text orientation, according to the symbol orientation/mirror
-    EDA_ANGLE orient = GetTextAngle();
+    EDA_ANGLE         orient = GetTextAngle();
+    VECTOR2I          textpos = GetTextPos();
+    GR_TEXT_H_ALIGN_T hjustify = GetHorizJustify();
+    GR_TEXT_V_ALIGN_T vjustify = GetVertJustify();
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
@@ -942,21 +945,22 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
             else
                 orient = ANGLE_HORIZONTAL;
         }
-    }
 
-    /*
-     * Calculate the text justification, according to the symbol orientation/mirror.
-     * This is a bit complicated due to cumulative calculations:
-     * - numerous cases (mirrored or not, rotation)
-     * - the plotter's Text function will also recalculate H and V justifications according to
-     *   the text orientation.
-     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
-     *   to calculate so the easier way is to use no justifications (centered text) and use
-     *   GetBoundingBox to know the text coordinate considered as centered
-     */
-    GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_CENTER;
-    GR_TEXT_V_ALIGN_T vjustify = GR_TEXT_V_ALIGN_CENTER;
-    VECTOR2I          textpos = GetBoundingBox().Centre();
+        /*
+         * Calculate the text justification, according to the symbol orientation/mirror.  This is
+         * a bit complicated due to cumulative calculations:
+         *  - numerous cases (mirrored or not, rotation)
+         *  - the plotter's Text() function will also recalculate H and V justifications according
+         *    to the text orientation
+         *  - when a symbol is mirrored the text is not, and justifications become a nightmare
+         *
+         *  So the easier way is to use no justifications (centered text) and use GetBoundingBox to
+         *  know the text coordinate considered as centered.
+         */
+        hjustify = GR_TEXT_H_ALIGN_CENTER;
+        vjustify = GR_TEXT_V_ALIGN_CENTER;
+        textpos = GetBoundingBox().Centre();
+    }
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
                     penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
