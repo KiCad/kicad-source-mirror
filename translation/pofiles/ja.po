@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"PO-Revision-Date: 2022-08-30 03:18+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4602,9 +4602,8 @@ msgid "Bottom"
 msgstr "下"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "ハイパーリンク"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5457,9 +5456,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "この言語向けのKiCadの言語ファイルがインストールされていません。"
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "ページの境界を表示"
+msgstr "%s ページを表示"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6572,14 +6571,12 @@ msgstr "%s をデフォルトに戻す"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "バス未選択"
+msgstr "オブジェクトが選択されていません"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "バス未選択"
+msgstr "複数のオブジェクトが選択されています"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6670,9 +6667,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "KiCad レガシー シンボル ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad シンボル ライブラリー ファイル"
+msgstr "KiCad データベース ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10631,9 +10627,8 @@ msgid "Net Classes"
 msgstr "ネットクラス"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "バス定義"
+msgstr "バス エイリアス定義"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -11619,9 +11614,9 @@ msgid "<root sheet>"
 msgstr "<ルート シート>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "ページに移動: %s (%s)"
+msgstr "%sページ (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -11632,7 +11627,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 msgid "Link:"
-msgstr ""
+msgstr "リンク:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
@@ -12038,9 +12033,9 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "シンボル選択中にフットプリントのプレビューを表示"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "フィールド名 '%s' は既に使われています。"
+msgstr "エイリアス名 '%s' は既に使われています。"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
 #, fuzzy
@@ -12053,9 +12048,8 @@ msgid "Bus definitions:"
 msgstr "バス定義"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "ソース"
+msgstr "(ソース)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
 #, fuzzy, c-format
@@ -14259,9 +14253,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "不正なシンボル変換番号 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "不正なピン番号"
+msgstr "不正なハイパーリンク URL '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -17330,9 +17324,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "<ESC>を押すと、移動をキャンセルします。"
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "ファイル '%s' が見つかりません。"
+msgstr "ページ '%d' が見つかりません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -18871,9 +18865,8 @@ msgid "Restoring '%s'"
 msgstr "'%s' を復元しています"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "起動時に自動的にアップデートを確認しますか？"
+msgstr "起動時に自動的プラグインのアップデートを確認しますか？"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
