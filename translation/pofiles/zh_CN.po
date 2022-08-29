@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-08-30 03:18+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4563,9 +4563,8 @@ msgid "Bottom"
 msgstr "向下对齐"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "超链接"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5127,9 +5126,8 @@ msgid "Cursor"
 msgstr "光标"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "移动项目"
+msgstr "悬停项目"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5400,9 +5398,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "显示图框限制"
+msgstr "显示页面 %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6507,14 +6505,12 @@ msgstr "重置 %s 为默认值"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "未选择总线"
+msgstr "未选择对象"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "未选择总线"
+msgstr "选中了多个对象"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6603,9 +6599,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "KiCad 旧版符号库文件"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad 符号库文件"
+msgstr "KiCad 数据库库文件"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10486,9 +10481,8 @@ msgid "Net Classes"
 msgstr "网络类表"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "总线定义"
+msgstr "总线别名定义"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10739,14 +10733,12 @@ msgid "Model"
 msgstr "模型"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Spice 指令："
+msgstr "Spice 设备："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "形状类型："
+msgstr "Spice 类型："
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11464,24 +11456,25 @@ msgid "<root sheet>"
 msgstr "<root sheet>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "转到第 %s 页 (%s)"
+msgstr "页 %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
 "Invalid hyperlink destination. Please enter either a valid URL (e.g. file:// "
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
-msgstr ""
+msgstr "无效的超链接目标。 请输入有效的 URL（例如 file:// 或 "
+"http(s)://）或“#<页码>”以创建指向此原理图中页面的超链接。"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 msgid "Link:"
-msgstr ""
+msgstr "链接："
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "使此文本项成为可点击的超链接"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11877,34 +11870,30 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "在符号选择器中显示封装预览"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "字段名称 \"%s\" 已经被占用。"
+msgstr "别称 \"%s\" 已被占用。"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "型号名不能为空。"
+msgstr "成员网络/别名不能为空。"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "总线定义"
+msgstr "总线定义："
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "源"
+msgstr "(源)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "'%s' 需要一个数字"
+msgstr "'%s'的成员："
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "网络或总线名称"
+msgstr "网络/嵌套总线名称"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -13954,19 +13943,19 @@ msgid ""
 msgstr "CADSTAR 原理图可能已损坏：块 %s 引用子图框，但没有定义图。"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "读取图片“%s”时出错。"
+msgstr "读取数据库表 %s 出错：%s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "无法加载数据库库：设置文件 %s 丢失或无效"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "无法加载数据库库：无法连接到数据库 %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14046,9 +14035,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "无效的符号转换编号 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "无效的引脚编号"
+msgstr "无效的超链接 url '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -14790,9 +14779,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "无法从值“%s”推断模型"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "无效的符号库单元数 %s"
+msgstr "无效的符号引脚索引：'%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -17059,9 +17048,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "按下 <ESC> 取消移动。"
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "找不到文件 '%s'。"
+msgstr "未找到页 '%d'。"
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -18578,7 +18567,6 @@ msgid "Restoring '%s'"
 msgstr "正在恢复 \"%s\""
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr "是否要在启动时自动检查更新？"
 
@@ -30061,9 +30049,8 @@ msgid "Via Gap"
 msgstr "过孔间距"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "修改文本属性"
+msgstr "修改属性"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -33357,9 +33344,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "无法识别的图层 '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "缺少 %s 的封装标识符参数（A，B，或位号）。"
+msgstr "缺少 %s 的封装参数（A、B或位号）。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -33374,9 +33361,9 @@ msgid "Footprint has no back courtyard."
 msgstr "封装没有底层外框。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "缺少规则区标识符参数（A、B 或规则区名称）到 %s。"
+msgstr "缺少 %s 规则区参数（A、B 或规则区名称）。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -37207,14 +37194,12 @@ msgid "Show/hide the appearance manager"
 msgstr "显示/隐藏外观管理器"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "图框属性"
+msgstr "显示属性面板"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "显示/隐藏外观管理器"
+msgstr "显示/隐藏属性面板"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -37650,14 +37635,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "选择同一原理图中的所有封装和布线"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "保存到原理图"
+msgstr "在原理图上选择"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "在印刷电路板编辑器中选择相应项目"
+msgstr "在原理图编辑器中选择相应项目"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
