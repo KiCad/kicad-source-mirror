@@ -369,7 +369,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         if(( aCurLine.Marker() & MK_HEAD ) && !colliding )
         {
-            JOINT* jtStart = m_currentNode->FindJoint( aCurLine.CPoint( 0 ), &aCurLine );
+            const JOINT* jtStart = m_currentNode->FindJoint( aCurLine.CPoint( 0 ), &aCurLine );
 
             for( ITEM* item : jtStart->LinkList() )
             {
@@ -664,7 +664,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     {
         VIA vh = aCurrent.Via();
         VIA* via = nullptr;
-        JOINT* jtStart = m_currentNode->FindJoint( vh.Pos(), &aCurrent );
+        const JOINT* jtStart = m_currentNode->FindJoint( vh.Pos(), &aCurrent );
 
         if( !jtStart )
             return SH_INCOMPLETE;
@@ -868,7 +868,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 {
     LINE_PAIR_VEC draggedLines;
     VECTOR2I p0( aVia->Pos() );
-    JOINT* jt = m_currentNode->FindJoint( p0, aVia );
+    const JOINT* jt = m_currentNode->FindJoint( p0, aVia );
     VECTOR2I p0_pushed( p0 + aForce );
 
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "via force [%d %d]\n" ), aForce.x, aForce.y ) );
@@ -893,7 +893,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     // make sure pushed via does not overlap with any existing joint
     while( true )
     {
-        JOINT* jt_next = m_currentNode->FindJoint( p0_pushed, aVia );
+        const JOINT* jt_next = m_currentNode->FindJoint( p0_pushed, aVia );
 
         if( !jt_next )
             break;
@@ -1070,7 +1070,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     LINE cur( aCurrent );
     cur.ClearLinks();
 
-    JOINT* jt = m_currentNode->FindJoint( aObstacleVia->Pos(), aObstacleVia );
+    const JOINT* jt = m_currentNode->FindJoint( aObstacleVia->Pos(), aObstacleVia );
     LINE shoved( aCurrent );
     shoved.ClearLinks();
 
@@ -1152,7 +1152,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 }
 
 
-void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
+void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
 {
     int d = 0;
 
@@ -1179,15 +1179,17 @@ void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
 }
 
 
-void SHOVE::unwindLineStack( ITEM* aItem )
+void SHOVE::unwindLineStack( const ITEM* aItem )
 {
-    if( aItem->OfKind( ITEM::SEGMENT_T  | ITEM::ARC_T ) )
-        unwindLineStack( static_cast<LINKED_ITEM*>( aItem ) );
+    if( aItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+    {
+        unwindLineStack( static_cast<const LINKED_ITEM*>( aItem ) );
+    }
     else if( aItem->OfKind( ITEM::LINE_T ) )
     {
-        LINE* l = static_cast<LINE*>( aItem );
+        const LINE* l = static_cast<const LINE*>( aItem );
 
-        for( LINKED_ITEM* seg : l->Links() )
+        for( const LINKED_ITEM* seg : l->Links() )
             unwindLineStack( seg );
     }
 }
@@ -1253,20 +1255,22 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
     // our colliding item is a via: just find the max width of the traces connected to it
     if( obs.m_item->OfKind( ITEM::VIA_T ) )
     {
-        VIA*   v = static_cast<VIA*>( obs.m_item );
-        int    maxw = 0;
-        JOINT* jv = m_currentNode->FindJoint( v->Pos(), v );
+        const VIA*   v = static_cast<const VIA*>( obs.m_item );
+        int          maxw = 0;
+        const JOINT* jv = m_currentNode->FindJoint( v->Pos(), v );
 
-        for( auto link : jv->Links() )
+        ITEM_SET links( jv->CLinks() );
+
+        for( ITEM* link : links )
         {
-            if( link.item->OfKind( ITEM::SEGMENT_T ) ) // consider segments ...
+            if( link->OfKind( ITEM::SEGMENT_T ) ) // consider segments ...
             {
-                auto seg = static_cast<SEGMENT*>( link.item );
+                const SEGMENT* seg = static_cast<const SEGMENT*>( link );
                 maxw = std::max( seg->Width(), maxw );
             }
-            else if( link.item->OfKind( ITEM::ARC_T ) ) // ... or arcs
+            else if( link->OfKind( ITEM::ARC_T ) ) // ... or arcs
             {
-                auto arc = static_cast<ARC*>( link.item );
+                const ARC* arc = static_cast<const ARC*>( link );
                 maxw = std::max( arc->Width(), maxw );
             }
         }
@@ -1289,10 +1293,10 @@ bool SHOVE::fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs )
     if( !obs.m_item->OfKind( ITEM::SEGMENT_T ) )
         return false;
 
-    auto s = static_cast<SEGMENT*>( obs.m_item );
+    const SEGMENT* s = static_cast<const SEGMENT*>( obs.m_item );
 
-    JOINT* ja = m_currentNode->FindJoint( s->Seg().A, s );
-    JOINT* jb = m_currentNode->FindJoint( s->Seg().B, s );
+    const JOINT* ja = m_currentNode->FindJoint( s->Seg().A, s );
+    const JOINT* jb = m_currentNode->FindJoint( s->Seg().B, s );
 
     VIA* vias[] = { ja->Via(), jb->Via() };
 
@@ -1753,7 +1757,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 
 static VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
 {
-    JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
+    const JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
 
     if( !jt )
         return nullptr;
@@ -2045,7 +2049,7 @@ void SHOVE::DisablePostShoveOptimizations( int aMask )
 }
 
 
-void SHOVE::SetSpringbackDoNotTouchNode( NODE *aNode )
+void SHOVE::SetSpringbackDoNotTouchNode( const NODE *aNode )
 {
     m_springbackDoNotTouchNode = aNode;
 }

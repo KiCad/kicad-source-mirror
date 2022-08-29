@@ -935,7 +935,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
     if( m_endItem )
     {
         // Make sure the springback algorithm won't erase the NODE that owns m_endItem.
-        m_shove->SetSpringbackDoNotTouchNode( m_endItem->Owner() );
+        m_shove->SetSpringbackDoNotTouchNode( static_cast<const NODE*>( m_endItem->Owner() ) );
     }
 
     LINE newHead( walkSolids );
@@ -1268,7 +1268,7 @@ bool LINE_PLACER::SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
     if( !aSeg->OfKind( ITEM::SEGMENT_T ) )
         return false;
 
-    JOINT* jt = aNode->FindJoint( aP, aSeg );
+    const JOINT* jt = aNode->FindJoint( aP, aSeg );
 
     if( jt && jt->LinkCount() >= 1 )
         return false;
@@ -1430,7 +1430,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     int eiDepth = -1;
 
     if( aEndItem && aEndItem->Owner() )
-        eiDepth = static_cast<NODE*>( aEndItem->Owner() )->Depth();
+        eiDepth = static_cast<const NODE*>( aEndItem->Owner() )->Depth();
 
     if( m_lastNode )
     {
@@ -1783,7 +1783,7 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
     std::set<ITEM*> cleanup;
 
     auto processJoint =
-            [&]( JOINT* aJoint, ITEM* aItem )
+            [&]( const JOINT* aJoint, ITEM* aItem )
             {
                 if( !aJoint || aJoint->IsLineCorner() )
                     return;
@@ -1792,7 +1792,7 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
                 NODE::ITEM_VECTOR toRemove;
 
-                for( ITEM* neighbor : aJoint->Links() )
+                for( ITEM* neighbor : aJoint->CLinks().CItems() )
                 {
                     if( neighbor == aItem
                         || !neighbor->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
@@ -1801,18 +1801,18 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
                         continue;
                     }
 
-                    if( static_cast<SEGMENT*>( neighbor )->Width()
-                            != static_cast<SEGMENT*>( aItem )->Width() )
+                    if( static_cast<const SEGMENT*>( neighbor )->Width()
+                            != static_cast<const SEGMENT*>( aItem )->Width() )
                     {
                         continue;
                     }
 
-                    const SEG& testSeg = static_cast<SEGMENT*>( neighbor )->Seg();
+                    const SEG& testSeg = static_cast<const SEGMENT*>( neighbor )->Seg();
 
                     if( refSeg.Contains( testSeg ) )
                     {
-                        JOINT* nA = aNode->FindJoint( neighbor->Anchor( 0 ), neighbor );
-                        JOINT* nB = aNode->FindJoint( neighbor->Anchor( 1 ), neighbor );
+                        const JOINT* nA = aNode->FindJoint( neighbor->Anchor( 0 ), neighbor );
+                        const JOINT* nB = aNode->FindJoint( neighbor->Anchor( 1 ), neighbor );
 
                         if( ( nA == aJoint && nB->LinkCount() == 1 ) ||
                             ( nB == aJoint && nA->LinkCount() == 1 ) )
@@ -1828,8 +1828,8 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
         if( !item->OfKind( ITEM::SEGMENT_T ) || cleanup.count( item ) )
             continue;
 
-        JOINT* jA = aNode->FindJoint( item->Anchor( 0 ), item );
-        JOINT* jB = aNode->FindJoint( item->Anchor( 1 ), item );
+        const JOINT* jA = aNode->FindJoint( item->Anchor( 0 ), item );
+        const JOINT* jB = aNode->FindJoint( item->Anchor( 1 ), item );
 
         processJoint( jA, item );
         processJoint( jB, item );

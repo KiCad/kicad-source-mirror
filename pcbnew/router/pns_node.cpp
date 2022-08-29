@@ -48,7 +48,7 @@
 namespace PNS {
 
 #ifdef DEBUG
-static std::unordered_set<NODE*> allocNodes;
+static std::unordered_set<const NODE*> allocNodes;
 #endif
 
 NODE::NODE()
@@ -784,15 +784,15 @@ void NODE::removeArcIndex( ARC* aArc )
 }
 
 
-void NODE::rebuildJoint( JOINT* aJoint, ITEM* aItem )
+void NODE::rebuildJoint( const JOINT* aJoint, const ITEM* aItem )
 {
     // We have to split a single joint (associated with a via or a pad, binding together multiple
     // layers) into multiple independent joints. As I'm a lazy bastard, I simply delete the
     // via/solid and all its links and re-insert them.
 
-    JOINT::LINKED_ITEMS links( aJoint->LinkList() );
-    JOINT::HASH_TAG tag;
-    int net = aItem->Net();
+    std::vector<ITEM*> links( aJoint->LinkList() );
+    JOINT::HASH_TAG    tag;
+    int                net = aItem->Net();
 
     tag.net = net;
     tag.pos = aJoint->Pos();
@@ -831,7 +831,7 @@ void NODE::rebuildJoint( JOINT* aJoint, ITEM* aItem )
 
 void NODE::removeViaIndex( VIA* aVia )
 {
-    JOINT* jt = FindJoint( aVia->Pos(), aVia->Layers().Start(), aVia->Net() );
+    const JOINT* jt = FindJoint( aVia->Pos(), aVia->Layers().Start(), aVia->Net() );
     assert( jt );
     rebuildJoint( jt, aVia );
 }
@@ -843,7 +843,7 @@ void NODE::removeSolidIndex( SOLID* aSolid )
         return;
 
     // fixme: redundant code
-    JOINT* jt = FindJoint( aSolid->Pos(), aSolid->Layers().Start(), aSolid->Net() );
+    const JOINT* jt = FindJoint( aSolid->Pos(), aSolid->Layers().Start(), aSolid->Net() );
     assert( jt );
     rebuildJoint( jt, aSolid );
 }
@@ -1123,7 +1123,7 @@ int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<
 
 void NODE::FixupVirtualVias()
 {
-    SEGMENT* locked_seg = nullptr;
+    const SEGMENT* locked_seg = nullptr;
     std::vector<VVIA*> vvias;
 
     for( auto& jointPair : m_joints )
@@ -1139,17 +1139,17 @@ void NODE::FixupVirtualVias()
         bool is_width_change = false;
         bool is_locked       = false;
 
-        for( const auto& lnk : joint.LinkList() )
+        for( const ITEM* item : joint.LinkList() )
         {
-            if( lnk.item->OfKind( ITEM::VIA_T ) )
+            if( item->OfKind( ITEM::VIA_T ) )
             {
                 n_vias++;
             }
-            else if( lnk.item->OfKind( ITEM::SOLID_T ) )
+            else if( item->OfKind( ITEM::SOLID_T ) )
             {
                 n_solid++;
             }
-            else if( const auto t = dyn_cast<PNS::SEGMENT*>( lnk.item ) )
+            else if( const auto t = dyn_cast<const PNS::SEGMENT*>( item ) )
             {
                 int w = t->Width();
 
@@ -1192,14 +1192,14 @@ void NODE::FixupVirtualVias()
 }
 
 
-JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, int aNet )
+const JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, int aNet ) const
 {
     JOINT::HASH_TAG tag;
 
     tag.net = aNet;
     tag.pos = aPos;
 
-    JOINT_MAP::iterator f = m_joints.find( tag ), end = m_joints.end();
+    JOINT_MAP::const_iterator f = m_joints.find( tag ), end = m_joints.end();
 
     if( f == end && !isRoot() )
     {
@@ -1524,7 +1524,7 @@ void NODE::RemoveByMarker( int aMarker )
 SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
                                      int aNet )
 {
-    JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
+    const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
     if( !jtStart )
         return nullptr;
@@ -1559,7 +1559,7 @@ SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
                              int aNet )
 {
-    JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
+    const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
     if( !jtStart )
         return nullptr;

@@ -39,7 +39,7 @@ class DIFF_PAIR;
 class TOPOLOGY
 {
 public:
-    typedef std::set<JOINT*> JOINT_SET;
+    typedef std::set<const JOINT*> JOINT_SET;
 
     TOPOLOGY( NODE* aNode ):
         m_world( aNode ) {};
@@ -47,15 +47,15 @@ public:
     ~TOPOLOGY() {};
 
     bool SimplifyLine( LINE *aLine );
-    ITEM* NearestUnconnectedItem( JOINT* aStart, int* aAnchor = nullptr,
+    ITEM* NearestUnconnectedItem( const JOINT* aStart, int* aAnchor = nullptr,
                                   int aKindMask = ITEM::ANY_T );
 
     bool NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoint,
                                         LAYER_RANGE& aLayers );
     bool LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
-    const JOINT_SET ConnectedJoints( JOINT* aStart );
-    const ITEM_SET ConnectedItems( JOINT* aStart, int aKindMask = ITEM::ANY_T );
+    const JOINT_SET ConnectedJoints( const JOINT* aStart );
+    const ITEM_SET ConnectedItems( const JOINT* aStart, int aKindMask = ITEM::ANY_T );
     const ITEM_SET ConnectedItems( ITEM* aStart, int aKindMask = ITEM::ANY_T );
     int64_t ShortestConnectionLength( ITEM* aFrom, ITEM* aTo );
 
@@ -68,7 +68,7 @@ public:
      * @return a set of items in the path.
      */
     const ITEM_SET AssembleTrivialPath( ITEM* aStart,
-                                        std::pair<JOINT*, JOINT*>* aTerminalJoints = nullptr,
+                                        std::pair<const JOINT*, const JOINT*>* aTerminalJoints = nullptr,
                                         bool aFollowLockedSegments = false );
 
     /**
@@ -96,7 +96,7 @@ private:
     const int DP_PARALLELITY_THRESHOLD = 5;
 
     bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited,
-                            JOINT** aTerminalJoint = nullptr );
+                            const JOINT** aTerminalJoint = nullptr );
 
     NODE *m_world;
 };

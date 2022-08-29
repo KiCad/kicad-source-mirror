@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -33,69 +33,16 @@ namespace PNS {
  */
 class LINE;
 
-class ITEM_SET
+class ITEM_SET : public ITEM_OWNER
 {
 public:
-    struct ENTRY
-    {
-        ENTRY( ITEM* aItem, bool aOwned = false ) :
-            item( aItem ),
-            owned( aOwned )
-        {}
-
-        ENTRY( const ENTRY& aOther )
-        {
-            owned = aOther.owned;
-
-            if( aOther.owned )
-                item = aOther.item->Clone();
-            else
-                item = aOther.item;
-        }
-
-        ~ENTRY()
-        {
-            if( owned )
-                delete item;
-        }
-
-        bool operator==( const ENTRY& b ) const
-        {
-            return item == b.item;
-        }
-
-        bool operator<( const ENTRY& b ) const
-        {
-            return item < b.item;
-        }
-
-        ENTRY& operator=( const ENTRY& aOther )
-        {
-            owned = aOther.owned;
-
-            if( aOther.owned )
-                item = aOther.item->Clone();
-            else
-                item = aOther.item;
-
-            return *this;
-        }
-
-        operator ITEM* () const
-        {
-            return item;
-        }
-
-        ITEM *item;
-        bool owned;
-    };
-
-    typedef std::vector<ENTRY> ENTRIES;
-
     ITEM_SET( ITEM* aInitialItem = nullptr, bool aBecomeOwner = false )
     {
         if( aInitialItem )
-            m_items.emplace_back( ENTRY( aInitialItem, aBecomeOwner ) );
+            m_items.emplace_back( aInitialItem );
+
+        if( aBecomeOwner )
+            aInitialItem->SetOwner( this );
     }
 
     ITEM_SET( const ITEM_SET& aOther )
@@ -107,7 +54,12 @@ public:
 
     ITEM_SET& operator=( const ITEM_SET& aOther )
     {
-        m_items = aOther.m_items;
+        m_items.clear();
+        m_items.reserve( aOther.m_items.size() );
+
+        for( ITEM* item : aOther.m_items )
+            m_items.push_back( item );
+
         return *this;
     }
 
@@ -132,8 +84,8 @@ public:
         return m_items.empty();
     }
 
-    ENTRIES& Items() { return m_items; }
-    const ENTRIES& CItems() const { return m_items; }
+    std::vector<ITEM*>& Items() { return m_items; }
+    const std::vector<ITEM*>& CItems() const { return m_items; }
 
     ITEM_SET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
     ITEM_SET& FilterKinds( int aKindMask, bool aInvert = false );
@@ -167,22 +119,28 @@ public:
 
     ITEM* operator[]( size_t aIndex ) const
     {
-        return m_items[aIndex].item;
+        return m_items[aIndex];
     }
 
-    ENTRIES::iterator begin() { return m_items.begin(); }
-    ENTRIES::iterator end() { return m_items.end(); }
-    ENTRIES::const_iterator cbegin() const { return m_items.cbegin(); }
-    ENTRIES::const_iterator cend() const { return m_items.cend(); }
+    std::vector<ITEM*>::iterator begin()              { return m_items.begin(); }
+    std::vector<ITEM*>::iterator end()                { return m_items.end(); }
+    std::vector<ITEM*>::const_iterator cbegin() const { return m_items.cbegin(); }
+    std::vector<ITEM*>::const_iterator cend() const   { return m_items.cend(); }
 
     void Add( ITEM* aItem, bool aBecomeOwner = false )
     {
-        m_items.emplace_back( ENTRY( aItem, aBecomeOwner ) );
+        m_items.emplace_back( aItem );
+
+        if( aBecomeOwner )
+            aItem->SetOwner( this );
     }
 
     void Prepend( ITEM* aItem, bool aBecomeOwner = false )
     {
-         m_items.emplace( m_items.begin(), ENTRY( aItem, aBecomeOwner ) );
+         m_items.emplace( m_items.begin(), aItem );
+
+         if( aBecomeOwner )
+            aItem->SetOwner( this );
     }
 
     void Clear()
@@ -192,14 +150,12 @@ public:
 
     bool Contains( ITEM* aItem ) const
     {
-        const ENTRY ent( aItem );
-        return alg::contains( m_items, ent );
+        return alg::contains( m_items, aItem );
     }
 
     void Erase( ITEM* aItem )
     {
-        ENTRY ent( aItem );
-        ENTRIES::iterator f = std::find( m_items.begin(), m_items.end(), ent );
+        std::vector<ITEM*>::iterator f = std::find( m_items.begin(), m_items.end(), aItem );
 
         if( f != m_items.end() )
             m_items.erase( f );
@@ -225,7 +181,7 @@ public:
     }
 
 private:
-    ENTRIES m_items;
+    std::vector<ITEM*> m_items;
 };
 
 }

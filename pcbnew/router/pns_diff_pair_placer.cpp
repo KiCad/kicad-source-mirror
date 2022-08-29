@@ -145,11 +145,11 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
     // check proper clearances to the diff pair line.  It can be removed if some specialized
     // pushout for traces / diff pairs is implemented.  Just calling VIA::PushoutForce does not work
     // as the via may have different resolved clearance to items than the diff pair should.
-    int      maxIter  = 40;
-    int      iter     = 0;
-    bool     collided = false;
-    VECTOR2I force, totalForce;
-    std::set<ITEM*> handled;
+    int                   maxIter  = 40;
+    int                   iter     = 0;
+    bool                  collided = false;
+    VECTOR2I              force, totalForce;
+    std::set<const ITEM*> handled;
 
     while( iter < maxIter )
     {
@@ -443,8 +443,8 @@ OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
     {
         SEGMENT* s = static_cast<SEGMENT*>( aItem );
 
-        JOINT* jA = aNode->FindJoint( aItem->Anchor( 0 ), aItem );
-        JOINT* jB = aNode->FindJoint( aItem->Anchor( 1 ), aItem );
+        const JOINT* jA = aNode->FindJoint( aItem->Anchor( 0 ), aItem );
+        const JOINT* jB = aNode->FindJoint( aItem->Anchor( 1 ), aItem );
 
         if( jA && jA->LinkCount() == 1 )
             return s->Seg().A;

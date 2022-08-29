@@ -105,10 +105,7 @@ public:
     virtual void ClearCacheForItem( const ITEM* aItem ) {}
     virtual void ClearCaches() {}
 
-    virtual int ClearanceEpsilon() const { return m_clearanceEpsilon; }
-
-protected:
-    int m_clearanceEpsilon = 0;
+    virtual int ClearanceEpsilon() const { return 0; }
 };
 
 /**
@@ -161,7 +158,7 @@ protected:
  * - assembly of lines connecting joints, finding loops and unique paths.
  * - lightweight cloning/branching (for recursive optimization and shove springback).
  **/
-class NODE
+class NODE : public ITEM_OWNER
 {
 public:
 
@@ -372,7 +369,7 @@ public:
      *
      * @return the joint, if found, otherwise empty.
      */
-    JOINT* FindJoint( const VECTOR2I& aPos, int aLayer, int aNet );
+    const JOINT* FindJoint( const VECTOR2I& aPos, int aLayer, int aNet ) const;
 
     void LockJoint( const VECTOR2I& aPos, const ITEM* aItem, bool aLock );
 
@@ -381,7 +378,7 @@ public:
      *
      * @return the joint, if found, otherwise empty.
      */
-    JOINT* FindJoint( const VECTOR2I& aPos, const ITEM* aItem )
+    const JOINT* FindJoint( const VECTOR2I& aPos, const ITEM* aItem ) const
     {
         return FindJoint( aPos, aItem->Layers().Start(), aItem->Net() );
     }
@@ -463,7 +460,7 @@ private:
     void unlinkParent();
     void releaseChildren();
     void releaseGarbage();
-    void rebuildJoint( JOINT* aJoint, ITEM* aItem );
+    void rebuildJoint( const JOINT* aJoint, const ITEM* aItem );
 
     bool isRoot() const
     {

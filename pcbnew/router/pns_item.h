@@ -57,12 +57,52 @@ struct COLLISION_SEARCH_OPTIONS
 };
 
 /**
+ * Dummy interface for ITEMs that can own other ITEMs
+ */
+class ITEM_OWNER {};
+
+/**
+ * Base class for an item belonging to some container.
+ *
+ * Container can be another ITEM, ITEM_SET or a NODE.
+ */
+class OWNABLE_ITEM
+{
+public:
+    OWNABLE_ITEM() :
+        m_owner( nullptr )
+    {}
+
+    /**
+     * Return the owner of this item, or NULL if there's none.
+     */
+    const ITEM_OWNER* Owner() const { return m_owner; }
+
+    /**
+     * Set the node that owns this item. An item can belong to a single NODE or be unowned.
+     */
+    void SetOwner( const ITEM_OWNER* aOwner ) { m_owner = aOwner; }
+
+    /**
+     * @return true if the item is owned by the node aNode.
+     */
+    bool BelongsTo( const ITEM_OWNER* aNode ) const
+    {
+        return m_owner == aNode;
+    }
+
+protected:
+    const ITEM_OWNER *m_owner;
+};
+
+
+/**
  * Base class for PNS router board items.
  *
  * Implements the shared properties of all PCB items  net, spanned layers, geometric shape and
  * reference to owning model.
  */
-class ITEM
+class ITEM : public OWNABLE_ITEM, public ITEM_OWNER
 {
 public:
     static const int UnusedNet = INT_MAX;
@@ -176,25 +216,7 @@ public:
     {
         return Layers().Overlaps( aOther->Layers() );
     }
-
-    /**
-     * Return the owner of this item, or NULL if there's none.
-     */
-    NODE* Owner() const { return m_owner; }
-
-    /**
-     * Set the node that owns this item. An item can belong to a single NODE or be unowned.
-     */
-    void SetOwner( NODE* aOwner ) { m_owner = aOwner; }
-
-    /**
-     * @return true if the item is owned by the node aNode.
-     */
-    bool BelongsTo( NODE* aNode ) const
-    {
-        return m_owner == aNode;
-    }
-
+   
     /**
      * Check for a collision (clearance violation) with between us and item \a aOther.
      *

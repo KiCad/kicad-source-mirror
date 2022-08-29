@@ -90,19 +90,15 @@ VVIA* DRAGGER::checkVirtualVia( const VECTOR2D& aP, SEGMENT* aSeg )
         return nullptr;
     }
 
-    JOINT *jt = m_world->FindJoint( psnap, aSeg );
+    const JOINT *jt = m_world->FindJoint( psnap, aSeg );
 
     if ( !jt )
-    {
         return nullptr;
-    }
 
-    for( auto& lnk : jt->LinkList() )
+    for( ITEM* item : jt->LinkList() )
     {
-        if( lnk.item->IsVirtual() && lnk.item->OfKind( ITEM::VIA_T ))
-        {
-            return static_cast<VVIA*>( lnk.item );
-        }
+        if( item->IsVirtual() && item->OfKind( ITEM::VIA_T ))
+            return static_cast<VVIA*>( item );
     }
 
     return nullptr;
@@ -175,7 +171,7 @@ const ITEM_SET DRAGGER::findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& h
 {
     ITEM_SET rv;
 
-    JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
+    const JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
 
     if( !jt )
         return rv;
