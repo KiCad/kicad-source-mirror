@@ -330,15 +330,34 @@ const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon() const
 }
 
 
-std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING flashPTHPads ) const
 {
-    if( ( GetAttribute() == PAD_ATTRIB::PTH  && aFlash == FLASHING::NEVER_FLASHED )
-            || ( aLayer != UNDEFINED_LAYER && !FlashLayer( aLayer ) ) )
+    if( aLayer == Edge_Cuts )
     {
-        if( GetAttribute() == PAD_ATTRIB::PTH )
+        if( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
             return GetEffectiveHoleShape();
         else
             return std::make_shared<SHAPE_NULL>();
+    }
+
+    if( GetAttribute() == PAD_ATTRIB::PTH )
+    {
+        bool flash;
+
+        if( flashPTHPads == FLASHING::NEVER_FLASHED )
+            flash = false;
+        else if( flashPTHPads == FLASHING::ALWAYS_FLASHED )
+            flash = true;
+        else
+            flash = FlashLayer( aLayer );
+
+        if( !flash )
+        {
+            if( GetAttribute() == PAD_ATTRIB::PTH )
+                return GetEffectiveHoleShape();
+            else
+                return std::make_shared<SHAPE_NULL>();
+        }
     }
 
     if( m_shapesDirty )
