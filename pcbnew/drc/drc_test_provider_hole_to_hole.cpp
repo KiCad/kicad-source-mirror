@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about drilled (ie: round) holes
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
-                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
+                        m_holeTree.Insert( item, Edge_Cuts, m_largestClearance );
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
@@ -162,7 +162,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
                     // We only care about mechanically drilled (ie: non-laser) holes
                     if( via->GetViaType() == VIATYPE::THROUGH )
-                        m_holeTree.Insert( item, F_Cu, m_largestClearance );
+                        m_holeTree.Insert( item, Edge_Cuts, m_largestClearance );
                 }
 
                 return true;
@@ -191,7 +191,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
         {
             std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( via );
 
-            m_holeTree.QueryColliding( via, F_Cu, F_Cu,
+            m_holeTree.QueryColliding( via, Edge_Cuts, Edge_Cuts,
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
@@ -236,7 +236,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
             {
                 std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( pad );
 
-                m_holeTree.QueryColliding( pad, F_Cu, F_Cu,
+                m_holeTree.QueryColliding( pad, Edge_Cuts, Edge_Cuts,
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
