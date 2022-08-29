@@ -55,7 +55,6 @@
 
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
-#include <wx/gdicmn.h>          // for wxPoint, wxSize
 #include <wx/url.h>             // for wxURL
 
 class OUTPUTFORMATTER;
