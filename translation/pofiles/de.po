@@ -19,16 +19,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-21 02:52+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2022-08-30 03:18+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -132,24 +132,24 @@ msgid "Last render time %.0f ms"
 msgstr "Letzte Renderdauer %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
 msgstr "Netz %s\tNetzklasse %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:677
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s und %s"
+msgstr "Pad %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Regelbereich auf %s"
+msgstr "Regelbereich %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Flächen"
+msgstr "Zone %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -300,9 +300,8 @@ msgid "&Preferences"
 msgstr "&Einstellungen"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Ansichtsbereiche (Alt+Tab):"
+msgstr "Ansichtsbereiche (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2681
