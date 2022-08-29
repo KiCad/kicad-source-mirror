@@ -381,6 +381,17 @@ BOOST_AUTO_TEST_CASE( FliegeFilter )
 }
 
 
+BOOST_AUTO_TEST_CASE( Switches )
+{
+    TestNetlist( "switches" );
+    TestTranPoint( 0.5e-3, { { "V(/inswv)", 0 }, { "V(/outswv)", 0 } } );
+    TestTranPoint( 1.5e-3, { { "V(/inswv)", 1 }, { "V(/outswv)", 5 } } );
+    TestTranPoint( 2.5e-3, { { "V(/inswv)", 0 }, { "V(/outswv)", 0 } } );
+
+    // TODO: Current switch, when it's fixed in Ngspice.
+}
+
+
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver" );
