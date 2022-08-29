@@ -320,5 +320,10 @@ static struct PCB_SHAPE_DESC
         propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, EDA_SHAPE> );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
+
+        auto layerProperty = new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID, BOARD_ITEM>(
+                _HKI( "Layer" ), &PCB_SHAPE::SetLayer, &PCB_SHAPE::GetLayer );
+
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layerProperty );
     }
 } _PCB_SHAPE_DESC;
