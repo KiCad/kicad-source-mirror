@@ -116,6 +116,9 @@ public:
     /// Mirroring of selected items
     static TOOL_ACTION mirror;
 
+    /// Swapping of selected items
+    static TOOL_ACTION swap;
+
     /// Update selected tracks & vias to the current track & via dimensions
     static TOOL_ACTION changeTrackWidth;
 

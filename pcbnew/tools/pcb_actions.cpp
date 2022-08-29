@@ -325,6 +325,11 @@ TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
         _( "Mirror" ), _( "Mirrors selected item" ),
         BITMAPS::mirror_h );
 
+TOOL_ACTION PCB_ACTIONS::swap( "pcbnew.InteractiveEdit.swap",
+        AS_GLOBAL, 0, "",
+        _( "Swap" ), _( "Swaps selected items' positions" ),
+        BITMAPS::swap_layer );
+
 TOOL_ACTION PCB_ACTIONS::changeTrackWidth( "pcbnew.InteractiveEdit.changeTrackWidth",
         AS_GLOBAL, 0, "",
         _( "Change Track Width" ), _( "Updates selected track & via sizes" ) );

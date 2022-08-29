@@ -270,6 +270,116 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Run()
 }
 
 
+int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
+{
+    if( isRouterActive() || m_dragging )
+    {
+        wxBell();
+        return 0;
+    }
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector );
+            },
+            true /* prompt user regarding locked items */ );
+
+    if( selection.Size() < 2 )
+        return 0;
+
+    std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
+
+    // When editing footprints, all items have the same parent
+    if( IsFootprintEditor() )
+    {
+        m_commit->Modify( selection.Front() );
+    }
+    else
+    {
+        // Save items, so changes can be undone
+        for( EDA_ITEM* item : selection )
+        {
+            // Don't double move footprint pads, fields, etc.
+            //
+            // For PCB_GROUP_T, the parent is the board.
+            if( item->GetParent() && item->GetParent()->IsSelected() )
+                continue;
+
+            m_commit->Modify( item );
+
+            // If moving a group, record position of all the descendants for undo
+            if( item->Type() == PCB_GROUP_T )
+            {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                         {
+                                             m_commit->Modify( bItem );
+                                         });
+            }
+        }
+    }
+
+    for( size_t i = 0; i < sorted.size() - 1; i++ )
+    {
+        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( sorted[i] );
+        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+
+        // Swap X,Y position
+        VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
+        std::swap( aPos, bPos );
+        a->SetPosition( aPos );
+        b->SetPosition( bPos );
+
+        // Pads need special handling to keep their offset from their parent
+        if( a->Type() == PCB_PAD_T )
+            static_cast<PAD*>( a )->SetLocalCoord();
+
+        if( b->Type() == PCB_PAD_T )
+            static_cast<PAD*>( b )->SetLocalCoord();
+
+        // Handle footprints specially. They can be flipped to the back of the board which
+        // requires a special transformation.
+        if( a->Type() == PCB_FOOTPRINT_T && b->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* aFP = static_cast<FOOTPRINT*>( a );
+            FOOTPRINT* bFP = static_cast<FOOTPRINT*>( b );
+
+            // Flip both if needed
+            if( aFP->IsFlipped() != bFP->IsFlipped() )
+            {
+                aFP->Flip( aPos, false );
+                bFP->Flip( bPos, false );
+            }
+
+            // Set orientation
+            EDA_ANGLE aAngle = aFP->GetOrientation(), bAngle = bFP->GetOrientation();
+            std::swap( aAngle, bAngle );
+            aFP->SetOrientation( aAngle );
+            bFP->SetOrientation( bAngle );
+        }
+        // We can also do a layer swap safely for two objects of the same type,
+        // except groups which don't support layer swaps.
+        else if( a->Type() == b->Type() && a->Type() != PCB_GROUP_T )
+        {
+            // Swap layers
+            PCB_LAYER_ID aLayer = a->GetLayer(), bLayer = b->GetLayer();
+            std::swap( aLayer, bLayer );
+            a->SetLayer( aLayer );
+            b->SetLayer( bLayer );
+        }
+    }
+
+    m_commit->Push( _( "Swap" ) );
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    return 0;
+}
+
+
 int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )

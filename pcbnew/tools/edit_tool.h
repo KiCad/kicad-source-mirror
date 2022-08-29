@@ -111,6 +111,11 @@ public:
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
+    /**
+     * Swap currently selected items' positions. Changes position of each item to the next.
+     */
+    int Swap( const TOOL_EVENT& aEvent );
+
     int ChangeTrackWidth( const TOOL_EVENT& aEvent );
 
     /**
