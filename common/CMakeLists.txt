@@ -141,6 +141,7 @@ set( COMMON_DLG_SRCS
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
+    dialogs/panel_gal_display_options.cpp
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
     dialogs/panel_image_editor_base.cpp

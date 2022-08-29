@@ -317,7 +317,6 @@ set( EESCHEMA_SRCS
 
 set( EESCHEMA_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/common/dialogs/panel_setup_severities.cpp
-    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_gal_display_options.cpp
 
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     )
