@@ -59,26 +59,26 @@ bool TOPOLOGY::SimplifyLine( LINE* aLine )
 }
 
 
-const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( JOINT* aStart )
+const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( const JOINT* aStart )
 {
-    std::deque<JOINT*> searchQueue;
-    JOINT_SET processed;
+    std::deque<const JOINT*> searchQueue;
+    JOINT_SET                processed;
 
     searchQueue.push_back( aStart );
     processed.insert( aStart );
 
     while( !searchQueue.empty() )
     {
-        JOINT* current = searchQueue.front();
+        const JOINT* current = searchQueue.front();
         searchQueue.pop_front();
 
         for( ITEM* item : current->LinkList() )
         {
-            if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+            if( item->OfKind( ITEM::SEGMENT_T ) )
             {
-                JOINT* a = m_world->FindJoint( item->Anchor( 0 ), item );;
-                JOINT* b = m_world->FindJoint( item->Anchor( 1 ), item );;
-                JOINT* next = ( *a == *current ) ? b : a;
+                const JOINT* a = m_world->FindJoint( item->Anchor( 0 ), item );;
+                const JOINT* b = m_world->FindJoint( item->Anchor( 1 ), item );;
+                const JOINT* next = ( *a == *current ) ? b : a;
 
                 if( processed.find( next ) == processed.end() )
                 {
@@ -105,7 +105,7 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
     std::unique_ptr<NODE> tmpNode( m_world->Branch() );
     tmpNode->Add( track );
 
-    JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
+    const JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
 
     if( !jt || jt->Net() <= 0 )
        return false;
@@ -154,7 +154,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
 }
 
 
-ITEM* TOPOLOGY::NearestUnconnectedItem( JOINT* aStart, int* aAnchor, int aKindMask )
+ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int aKindMask )
 {
     std::set<ITEM*> disconnected;
 
@@ -198,13 +198,13 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( JOINT* aStart, int* aAnchor, int aKindMa
 
 
 bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
-                                  std::set<ITEM*>& aVisited, JOINT** aTerminalJoint )
+                                  std::set<ITEM*>& aVisited, const JOINT** aTerminalJoint )
 {
     assert( aLine->IsLinked() );
 
     VECTOR2I     anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
     LINKED_ITEM* last   = aLeft ? aLine->Links().front() : aLine->Links().back();
-    JOINT*       jt     = m_world->FindJoint( anchor, aLine );
+    const JOINT* jt     = m_world->FindJoint( anchor, aLine );
 
     assert( jt != nullptr );
 
@@ -215,7 +215,9 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
         ITEM* via = nullptr;
         SEGMENT* next_seg = nullptr;
 
-        for( ITEM* link : jt->Links().Items() )
+        ITEM_SET links( jt->CLinks() );
+
+        for( ITEM* link : links )
         {
             if( link->OfKind( ITEM::VIA_T ) )
                 via = link;
@@ -266,7 +268,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
 
 
 const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
-                                              std::pair<JOINT*, JOINT*>* aTerminalJoints,
+                                              std::pair<const JOINT*, const JOINT*>* aTerminalJoints,
                                               bool aFollowLockedSegments )
 {
     ITEM_SET        path;
@@ -275,17 +277,19 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 
     if( aStart->Kind() == ITEM::VIA_T )
     {
-        VIA*   via = static_cast<VIA*>( aStart );
-        JOINT* jt  = m_world->FindJoint( via->Pos(), via );
+        VIA*         via = static_cast<VIA*>( aStart );
+        const JOINT* jt  = m_world->FindJoint( via->Pos(), via );
 
         if( !jt->IsNonFanoutVia() )
             return ITEM_SET();
 
-        for( const ITEM_SET::ENTRY& entry : jt->Links().Items() )
+        ITEM_SET links( jt->CLinks() );
+
+        for( ITEM* item : links )
         {
-            if( entry.item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+            if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
             {
-                seg = static_cast<LINKED_ITEM*>( entry.item );
+                seg = static_cast<LINKED_ITEM*>( item );
                 break;
             }
         }
@@ -304,8 +308,8 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 
     path.Add( l );
 
-    JOINT* jointA = nullptr;
-    JOINT* jointB = nullptr;
+    const JOINT* jointA = nullptr;
+    const JOINT* jointB = nullptr;
 
     followTrivialPath( &l, false, path, visited, &jointB );
     followTrivialPath( &l, true, path, visited, &jointA );
@@ -322,14 +326,14 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 
 const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SOLID** aEndPad )
 {
-    std::pair<JOINT*, JOINT*> joints;
+    std::pair<const JOINT*, const JOINT*> joints;
     ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints, true );
 
     PAD* padA = nullptr;
     PAD* padB = nullptr;
 
     auto getPadFromJoint =
-            []( JOINT* aJoint, PAD** aTargetPad, SOLID** aTargetSolid )
+            []( const JOINT* aJoint, PAD** aTargetPad, SOLID** aTargetSolid )
             {
                 for( ITEM* item : aJoint->LinkList() )
                 {
@@ -406,7 +410,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
             };
 
     auto processPad =
-            [&]( JOINT* aJoint, PAD* aPad )
+            [&]( const JOINT* aJoint, PAD* aPad )
             {
                 const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
 
@@ -444,7 +448,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
 }
 
 
-const ITEM_SET TOPOLOGY::ConnectedItems( JOINT* aStart, int aKindMask )
+const ITEM_SET TOPOLOGY::ConnectedItems( const JOINT* aStart, int aKindMask )
 {
     return ITEM_SET();
 }
@@ -556,7 +560,7 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
         m_world->QueryColliding( top, obstacles, opts ); // only query touching objects
 
-        for( OBSTACLE& obs : obstacles )
+        for( const OBSTACLE& obs : obstacles )
         {
             bool trackOnTrack = ( obs.m_item->Net() != top->Net() ) &&  obs.m_item->OfKind( ITEM::SEGMENT_T ) && top->OfKind( ITEM::SEGMENT_T );
 

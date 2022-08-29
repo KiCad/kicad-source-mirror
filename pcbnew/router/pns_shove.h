@@ -90,7 +90,7 @@ public:
     bool RewindSpringbackTo( NODE* aNode );
     bool RewindToLastLockedNode();
     void DisablePostShoveOptimizations( int aMask );
-    void SetSpringbackDoNotTouchNode( NODE *aNode );
+    void SetSpringbackDoNotTouchNode( const NODE *aNode );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
@@ -139,8 +139,8 @@ private:
 
     OPT_BOX2I totalAffectedArea() const;
 
-    void unwindLineStack( LINKED_ITEM* aSeg );
-    void unwindLineStack( ITEM* aItem );
+    void unwindLineStack( const LINKED_ITEM* aSeg );
+    void unwindLineStack( const ITEM* aItem );
 
     void runOptimizer( NODE* aNode );
 
@@ -172,7 +172,7 @@ private:
 
     NODE*                       m_root;
     NODE*                       m_currentNode;
-    NODE*                       m_springbackDoNotTouchNode;
+    const NODE*                 m_springbackDoNotTouchNode;
     int                         m_restrictSpringbackTagId;
 
     OPT_LINE                    m_newHead;

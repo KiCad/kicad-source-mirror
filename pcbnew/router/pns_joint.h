@@ -42,8 +42,6 @@ namespace PNS {
 class JOINT : public ITEM
 {
 public:
-    typedef ITEM_SET::ENTRIES LINKED_ITEMS;
-
     ///< Joints are hashed by their position, layers and net.
     ///<  Linked items are, obviously, not hashed.
     struct HASH_TAG
@@ -210,12 +208,12 @@ public:
         return static_cast<LINKED_ITEM*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
 
-    VIA* Via()
+    VIA* Via() const
     {
-        for( ITEM* item : m_linkedItems.Items() )
+        for( ITEM* item : m_linkedItems.CItems() )
         {
             if( item->OfKind( VIA_T ) )
-                return static_cast<VIA*>( item );
+                return static_cast<VIA*>( item ); // fixme: const correctness
         }
 
         return nullptr;
@@ -238,7 +236,7 @@ public:
         return m_tag.net;
     }
 
-    const LINKED_ITEMS& LinkList() const
+    const std::vector<ITEM*>& LinkList() const
     {
         return m_linkedItems.CItems();
     }

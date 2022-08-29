@@ -930,7 +930,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::computeBreakouts( int aWidth, const ITEM* aI
 
 ITEM* OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const
 {
-    JOINT* jt = m_world->FindJoint( aP, aLayer, aNet );
+    const JOINT* jt = m_world->FindJoint( aP, aLayer, aNet );
 
     if( !jt )
         return nullptr;

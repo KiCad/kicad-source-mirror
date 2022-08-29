@@ -508,8 +508,8 @@ bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEn
     // Otherwise, find the closest anchor to our start point
 
     // Get joint from placer start item
-    JOINT* jt = lastNode->FindJoint( placer->CurrentStart(), placer->CurrentLayer(),
-                                     placer->CurrentNets()[0] );
+    const JOINT* jt = lastNode->FindJoint( placer->CurrentStart(), placer->CurrentLayer(),
+                                           placer->CurrentNets()[0] );
 
     if( !jt )
         return false;
@@ -816,10 +816,8 @@ void ROUTER::GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS
 
     node->GetUpdatedItems( aRemoved, aAdded );
 
-    for( auto& item : current.CItems() )
-    {
-        aHeads.push_back( item.item->Clone() );
-    }
+    for( const ITEM* item : current.CItems() )
+        aHeads.push_back( item->Clone() );
 }
 
 

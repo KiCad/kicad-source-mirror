@@ -125,7 +125,7 @@ public:
                                   PNS::CONSTRAINT* aConstraint ) override;
     virtual wxString NetName( int aNet ) override;
 
-    int ClearanceEpsilon() const { return m_clearanceEpsilon; }
+    int ClearanceEpsilon() const override { return m_clearanceEpsilon; }
 
     void ClearCacheForItem( const PNS::ITEM* aItem ) override;
     void ClearCaches() override;
@@ -570,13 +570,13 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
         return false;
     }
 
-    PNS::JOINT* jt = static_cast<PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
+    const PNS::JOINT* jt = static_cast<const PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
 
     assert( jt != nullptr );
 
     int mval = INT_MAX;
 
-    PNS::ITEM_SET linkedSegs = jt->Links();
+    PNS::ITEM_SET linkedSegs( jt->CLinks() );
     linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T );
 
     for( PNS::ITEM* item : linkedSegs.Items() )

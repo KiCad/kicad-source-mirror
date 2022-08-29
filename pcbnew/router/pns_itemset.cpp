@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -32,31 +32,33 @@ ITEM_SET::~ITEM_SET()
 void ITEM_SET::Add( const LINE& aLine )
 {
     LINE* copy = aLine.Clone();
-    m_items.emplace_back( ENTRY( copy, true ) );
+    copy->SetOwner( this );
+    m_items.emplace_back( copy );
 }
 
 
 void ITEM_SET::Prepend( const LINE& aLine )
 {
     LINE* copy = aLine.Clone();
-    m_items.emplace( m_items.begin(), ENTRY( copy, true ) );
+    copy->SetOwner( this );
+    m_items.emplace( m_items.begin(), copy );
 }
 
 
 ITEM_SET& ITEM_SET::FilterLayers( int aStart, int aEnd, bool aInvert )
 {
-    ENTRIES newItems;
-    LAYER_RANGE l;
+    std::vector<ITEM*> newItems;
+    LAYER_RANGE        l;
 
     if( aEnd < 0 )
         l = LAYER_RANGE( aStart );
     else
         l = LAYER_RANGE( aStart, aEnd );
 
-    for( const ENTRY& ent : m_items )
+    for( ITEM* item : m_items )
     {
-        if( ent.item->Layers().Overlaps( l ) ^ aInvert )
-            newItems.push_back( ent );
+        if( item->Layers().Overlaps( l ) ^ aInvert )
+            newItems.push_back( item );
     }
 
     m_items = newItems;
@@ -67,12 +69,12 @@ ITEM_SET& ITEM_SET::FilterLayers( int aStart, int aEnd, bool aInvert )
 
 ITEM_SET& ITEM_SET::FilterKinds( int aKindMask, bool aInvert )
 {
-    ENTRIES newItems;
+    std::vector<ITEM*> newItems;
 
-    for( const ENTRY& ent : m_items )
+    for( ITEM *item : m_items )
     {
-        if( ent.item->OfKind( aKindMask ) ^ aInvert )
-            newItems.push_back( ent );
+        if( item->OfKind( aKindMask ) ^ aInvert )
+            newItems.push_back( item );
     }
 
     m_items = newItems;
@@ -83,12 +85,12 @@ ITEM_SET& ITEM_SET::FilterKinds( int aKindMask, bool aInvert )
 
 ITEM_SET& ITEM_SET::FilterMarker( int aMarker, bool aInvert )
 {
-    ENTRIES newItems;
+    std::vector<ITEM*> newItems;
 
-    for( const ENTRY& ent : m_items )
+    for( ITEM* item : m_items )
     {
-        if( ent.item->Marker() & aMarker )
-            newItems.push_back( ent );
+        if( item->Marker() & aMarker )
+            newItems.push_back( item );
     }
 
     m_items = newItems;
@@ -99,12 +101,12 @@ ITEM_SET& ITEM_SET::FilterMarker( int aMarker, bool aInvert )
 
 ITEM_SET& ITEM_SET::FilterNet( int aNet, bool aInvert )
 {
-    ENTRIES newItems;
+    std::vector<ITEM*> newItems;
 
-    for( const ENTRY& ent : m_items )
+    for( ITEM *item : m_items )
     {
-        if( ( ent.item->Net() == aNet ) ^ aInvert )
-            newItems.push_back( ent );
+        if( ( item->Net() == aNet ) ^ aInvert )
+            newItems.push_back( item );
     }
 
     m_items = newItems;
@@ -115,12 +117,12 @@ ITEM_SET& ITEM_SET::FilterNet( int aNet, bool aInvert )
 
 ITEM_SET& ITEM_SET::ExcludeItem( const ITEM* aItem )
 {
-    ENTRIES newItems;
+    std::vector<ITEM*> newItems;
 
-    for( const ENTRY& ent : m_items )
+    for( ITEM* item : m_items )
     {
-        if( ent.item != aItem )
-            newItems.push_back( ent );
+        if( item != aItem )
+            newItems.push_back( item );
     }
 
     m_items = newItems;
