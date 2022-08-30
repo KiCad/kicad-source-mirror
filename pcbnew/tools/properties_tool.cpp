@@ -38,6 +38,7 @@ void PROPERTIES_TOOL::setTransitions()
 {
     TOOL_EVENT undoRedoPostEvt = { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL };
     Go( &PROPERTIES_TOOL::UpdateProperties, undoRedoPostEvt );
+    Go( &PROPERTIES_TOOL::UpdateProperties, EVENTS::PointSelectedEvent );
     Go( &PROPERTIES_TOOL::UpdateProperties, EVENTS::SelectedEvent );
     Go( &PROPERTIES_TOOL::UpdateProperties, EVENTS::UnselectedEvent );
     Go( &PROPERTIES_TOOL::UpdateProperties, EVENTS::ClearedEvent );
