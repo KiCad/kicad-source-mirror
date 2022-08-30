@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-17 17:15+0000\n"
+"PO-Revision-Date: 2022-08-30 19:59+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3610,7 +3610,7 @@ msgstr "Se requiere la clase de red predeterminada."
 #: common/dialogs/panel_setup_netclasses.cpp:717
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b>Redes que coinciden '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -7672,7 +7672,7 @@ msgstr "Anotar esquema"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b> Redes que coinciden actualmente:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -11730,6 +11730,9 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Destino de hipervínculo inválido. Introduzca una URL válida (por ejemplo, "
+"file:// o http(s)://) o \"#<número de página>\" para crear un hipervínculo a "
+"una página de este esquema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 #, fuzzy
@@ -11738,7 +11741,7 @@ msgstr "Enlaces"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Convertir este elemento de texto en un hipervínculo clicable"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -13942,6 +13945,8 @@ msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
 msgstr ""
+"Registro desconocido o inesperado encontrado dentro de la sección \"Adicional"
+"\", ID de registro: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13953,6 +13958,8 @@ msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 msgstr ""
+"Registro desconocido o inesperado encontrado dentro de la sección "
+"\"FileHeader\", ID de registro: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
@@ -14043,6 +14050,9 @@ msgid ""
 "review imported schematic, as KiCad does not natively support these Altium "
 "elements."
 msgstr ""
+"El conector de arnés de Altium (%s) fue importado como hoja jerárquica. Por "
+"favor, revise el esquema importado, ya que KiCad no soporta nativamente "
+"estos elementos de Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1631
 #, c-format
@@ -14071,6 +14081,9 @@ msgid ""
 "Altium's Harness port (%s) was imported as Text box. Please review imported "
 "schematic, as KiCad does not natively support these Altium elements."
 msgstr ""
+"El puerto de arnés de Altium (%s) se importó como cuadro de texto. Revise el "
+"esquema importado, ya que KiCad no admite de forma nativa estos elementos "
+"Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
 #, c-format
@@ -14167,6 +14180,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"Las fuentes de CADSTAR son diferentes a las de KiCad. Esto probablemente "
+"resultará en problemas de alineación. Por favor, revise los elementos de "
+"texto importados cuidadosamente y corríjalos manualmente si es necesario."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -14324,11 +14340,15 @@ msgstr "Error al leer la imagen %s."
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"No se ha podido cargar la biblioteca de la base de datos: falta el archivo "
+"de configuración %s o no es válido"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"No se pudo cargar la biblioteca de la base de datos: no se pudo conectar a "
+"la base de datos %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -19058,6 +19078,8 @@ msgstr "Restaurando '%s'"
 #: kicad/kicad_manager_frame.cpp:831
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
+"¿Le gustaría comprobar automáticamente si hay actualizaciones de "
+"complementosal inicio?"
 
 #: kicad/kicad_manager_frame.cpp:832
 #, fuzzy
@@ -19397,7 +19419,7 @@ msgstr "Descargar"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Comprobar si hay actualizaciones de paquetes al inicio"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -19491,7 +19513,7 @@ msgstr "Archivo local"
 
 #: kicad/pcm/pcm.cpp:1146
 msgid "Package updates are available"
-msgstr ""
+msgstr "Actualizaciones de paquetes disponibles"
 
 #: kicad/pcm/pcm.cpp:1147
 #, fuzzy
@@ -25635,7 +25657,7 @@ msgstr "Herramientas de redes"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Los grupos de pad permiten acortar diferentes redes:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
