@@ -50,8 +50,6 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
-    m_changesTreeModel->SetSeverities( RPT_SEVERITY_ACTION );
-
     setupOKButtonLabel();
 
     m_sdbSizer->SetSizeHints( this );
@@ -123,7 +121,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
         // ... and to keep the treeModel from trying to refresh a deleted item
-        m_changesTreeModel->SetProvider( nullptr );
+        m_changesTreeModel->Update( nullptr, RPT_SEVERITY_ACTION );
     }
 
     m_items.clear();
@@ -152,8 +150,8 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( aDryRun )
     {
-        RC_ITEMS_PROVIDER* provider = new VECTOR_CLEANUP_ITEMS_PROVIDER( &m_items );
-        m_changesTreeModel->SetProvider( provider );
+        m_changesTreeModel->Update( std::make_shared<VECTOR_CLEANUP_ITEMS_PROVIDER>( &m_items ),
+                                    RPT_SEVERITY_ACTION );
     }
     else if( !commit.Empty() )
     {

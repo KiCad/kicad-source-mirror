@@ -180,22 +180,19 @@ RC_TREE_MODEL::RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aVie
         m_severities( 0 ),
         m_rcItemsProvider( nullptr )
 {
-    m_view->GetMainWindow()->Connect( wxEVT_SIZE,
-                                      wxSizeEventHandler( RC_TREE_MODEL::onSizeView ),
+    m_view->GetMainWindow()->Connect( wxEVT_SIZE, wxSizeEventHandler( RC_TREE_MODEL::onSizeView ),
                                       nullptr, this );
 }
 
 
 RC_TREE_MODEL::~RC_TREE_MODEL()
 {
-    delete m_rcItemsProvider;
-
     for( RC_TREE_NODE* topLevelNode : m_tree )
         delete topLevelNode;
 }
 
 
-void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities )
+void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
 {
     wxWindowUpdateLocker updateLock( m_view );
 
@@ -213,11 +210,7 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 
     BeforeReset();
 
-    if( aProvider != m_rcItemsProvider )
-    {
-        delete m_rcItemsProvider;
-        m_rcItemsProvider = aProvider;
-    }
+    m_rcItemsProvider = aProvider;
 
     if( aSeverities != m_severities )
         m_severities = aSeverities;
@@ -292,15 +285,9 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 }
 
 
-void RC_TREE_MODEL::SetProvider( RC_ITEMS_PROVIDER* aProvider )
+void RC_TREE_MODEL::Update( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
 {
-    rebuildModel( aProvider, m_severities );
-}
-
-
-void RC_TREE_MODEL::SetSeverities( int aSeverities )
-{
-    rebuildModel( m_rcItemsProvider, aSeverities );
+    rebuildModel( aProvider, aSeverities );
 }
 
 

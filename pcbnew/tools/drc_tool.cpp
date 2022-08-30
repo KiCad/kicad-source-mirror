@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 #include <kiface_base.h>
 #include <dialog_drc.h>
 #include <board_commit.h>
-#include <zone.h>
 #include <board_design_settings.h>
 #include <progress_reporter.h>
 #include <drc/drc_engine.h>
@@ -209,16 +208,8 @@ void DRC_TOOL::updatePointers()
 
     m_editFrame->ResolveDRCExclusions();
 
-    if( m_drcDialog )  // Use dialog list boxes only in DRC_TOOL dialog
-    {
-        m_drcDialog->SetMarkersProvider( new DRC_ITEMS_PROVIDER( m_pcb,
-                                                                 MARKER_BASE::MARKER_DRC,
-                                                                 MARKER_BASE::MARKER_DRAWING_SHEET ) );
-        m_drcDialog->SetRatsnestProvider( new DRC_ITEMS_PROVIDER( m_pcb,
-                                                                  MARKER_BASE::MARKER_RATSNEST ) );
-        m_drcDialog->SetFootprintsProvider( new DRC_ITEMS_PROVIDER( m_pcb,
-                                                                    MARKER_BASE::MARKER_PARITY ) );
-    }
+    if( m_drcDialog )
+        m_drcDialog->UpdateData();
 }
 
 

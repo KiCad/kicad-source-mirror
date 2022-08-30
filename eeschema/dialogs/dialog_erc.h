@@ -102,8 +102,8 @@ private:
     wxString           m_violationsTitleTemplate;
     wxString           m_ignoredTitleTemplate;
 
-    RC_ITEMS_PROVIDER* m_markerProvider;
-    RC_TREE_MODEL*     m_markerTreeModel;
+    std::shared_ptr<RC_ITEMS_PROVIDER> m_markerProvider;
+    RC_TREE_MODEL*                     m_markerTreeModel;   // wx reference-counted ptr
 
     bool               m_running;
     bool               m_ercRun;

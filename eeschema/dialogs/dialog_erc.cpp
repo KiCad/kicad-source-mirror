@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 #include <schematic.h>
 #include <project.h>
 #include <kiface_base.h>
-#include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_marker.h>
@@ -64,10 +63,11 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
         m_parent( parent ),
+        m_markerTreeModel( nullptr ),
         m_running( false ),
         m_ercRun( false ),
         m_centerMarkerOnIdle( nullptr ),
-        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
+        m_severities( 0 )
 {
     m_currentSchematic = &parent->Schematic();
 
@@ -78,12 +78,11 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_messages->SetImmediateMode();
 
-    m_markerProvider = new SHEETLIST_ERC_ITEMS_PROVIDER( &m_parent->Schematic() );
+    m_markerProvider = std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( &m_parent->Schematic() );
+
     m_markerTreeModel = new RC_TREE_MODEL( parent, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
-
-    m_markerTreeModel->SetSeverities( m_severities );
-    m_markerTreeModel->SetProvider( m_markerProvider );
+    m_markerTreeModel->Update( m_markerProvider, m_severities );
 
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
@@ -540,8 +539,8 @@ void DIALOG_ERC::testErc()
 
     m_parent->ResolveERCExclusions();
 
-    // Display diags:
-    m_markerTreeModel->SetProvider( m_markerProvider );
+    // Update marker list:
+    m_markerTreeModel->Update( m_markerProvider, m_severities );
 
     // Display new markers from the current screen:
     for( SCH_ITEM* marker : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
@@ -720,7 +719,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
         modified = true;
         break;
 
@@ -736,7 +735,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
         modified = true;
         break;
 
@@ -751,7 +750,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, m_severities );
         modified = true;
     }
         break;
@@ -891,14 +890,7 @@ void DIALOG_ERC::OnSeverity( wxCommandEvent& aEvent )
 
     syncCheckboxes();
 
-    // Set the provider's severity levels through the TreeModel so that the old tree
-    // can be torn down before the severity changes.
-    //
-    // It's not clear this is required, but we've had a lot of issues with wxDataView
-    // being cranky on various platforms.
-
-    m_markerTreeModel->SetSeverities( m_severities );
-
+    m_markerTreeModel->Update( m_markerProvider, m_severities );
     updateDisplayedCounts();
 }
 

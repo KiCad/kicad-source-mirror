@@ -69,12 +69,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_cancelled( false ),
         m_drcRun( false ),
         m_footprintTestsRun( false ),
-        m_markersProvider( nullptr ),
         m_markersTreeModel( nullptr ),
-        m_unconnectedItemsProvider( nullptr ),
         m_unconnectedTreeModel( nullptr ),
-        m_footprintWarningsProvider( nullptr ),
-        m_footprintWarningsTreeModel( nullptr ),
+        m_fpWarningsTreeModel( nullptr ),
         m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
@@ -85,14 +82,30 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     m_messages->SetImmediateMode();
 
+    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
+    m_severities = cfg->m_DrcDialog.severities;
+
+    m_markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
+                                                              MARKER_BASE::MARKER_DRC,
+                                                              MARKER_BASE::MARKER_DRAWING_SHEET );
+
+    m_ratsnestProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
+                                                               MARKER_BASE::MARKER_RATSNEST );
+
+    m_fpWarningsProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
+                                                                 MARKER_BASE::MARKER_PARITY );
+
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markerDataView );
     m_markerDataView->AssociateModel( m_markersTreeModel );
+    m_markersTreeModel->Update( m_markersProvider, m_severities );
 
     m_unconnectedTreeModel = new RC_TREE_MODEL( m_frame, m_unconnectedDataView );
     m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
+    m_unconnectedTreeModel->Update( m_ratsnestProvider, m_severities );
 
-    m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
-    m_footprintsDataView->AssociateModel( m_footprintWarningsTreeModel );
+    m_fpWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
+    m_footprintsDataView->AssociateModel( m_fpWarningsTreeModel );
+    m_fpWarningsTreeModel->Update( m_fpWarningsProvider, m_severities );
 
     m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
 
@@ -118,18 +131,11 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
     m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
 
-    auto cfg = m_frame->GetPcbNewSettings();
-
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
 
     if( !Kiface().IsSingle() )
         m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
-
-    m_severities = cfg->m_DrcDialog.severities;
-    m_markersTreeModel->SetSeverities( m_severities );
-    m_unconnectedTreeModel->SetSeverities( m_severities );
-    m_footprintWarningsTreeModel->SetSeverities( m_severities );
 
     Layout(); // adding the units above expanded Clearance text, now resize.
 
@@ -164,6 +170,8 @@ DIALOG_DRC::~DIALOG_DRC()
     settings->m_DrcDialog.severities            = m_severities;
 
     m_markersTreeModel->DecRef();
+    m_unconnectedTreeModel->DecRef();
+    m_fpWarningsTreeModel->DecRef();
 }
 
 
@@ -325,26 +333,12 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
+void DIALOG_DRC::UpdateData()
 {
-    m_markersProvider = aProvider;
-    m_markersTreeModel->SetProvider( m_markersProvider );
-    updateDisplayedCounts();
-}
+    m_markersTreeModel->Update( m_markersProvider, m_severities );
+    m_unconnectedTreeModel->Update( m_ratsnestProvider, m_severities );
+    m_fpWarningsTreeModel->Update( m_fpWarningsProvider, m_severities );
 
-
-void DIALOG_DRC::SetRatsnestProvider( class RC_ITEMS_PROVIDER * aProvider )
-{
-    m_unconnectedItemsProvider = aProvider;
-    m_unconnectedTreeModel->SetProvider( m_unconnectedItemsProvider );
-    updateDisplayedCounts();
-}
-
-
-void DIALOG_DRC::SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider )
-{
-    m_footprintWarningsProvider = aProvider;
-    m_footprintWarningsTreeModel->SetProvider( m_footprintWarningsProvider );
     updateDisplayedCounts();
 }
 
@@ -704,7 +698,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
     }
@@ -720,7 +714,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
     }
@@ -744,7 +738,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
 
@@ -758,7 +752,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
 
@@ -788,7 +782,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             m_frame->GetCanvas()->RedrawRatsnest();
 
         // Rebuild model and view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
     }
@@ -807,18 +801,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_DRC::OnIgnoreItemRClick( wxListEvent& event )
+void DIALOG_DRC::OnEditViolationSeverities( wxHyperlinkEvent& aEvent )
 {
-    wxMenu menu;
-
-    menu.Append( 1, _( "Edit ignored violations..." ), _( "Open the Board Setup... dialog" ) );
-
-    switch( GetPopupMenuSelectionFromUser( menu ) )
-    {
-    case 1:
-        m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
-        break;
-    }
+    m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
 }
 
 
@@ -843,18 +828,7 @@ void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
         m_severities &= ~flag;
 
     syncCheckboxes();
-
-    // Set the provider's severity levels through the TreeModel so that the old tree
-    // can be torn down before the severity changes.
-    //
-    // It's not clear this is required, but we've had a lot of issues with wxDataView
-    // being cranky on various platforms.
-
-    m_markersTreeModel->SetSeverities( m_severities );
-    m_unconnectedTreeModel->SetSeverities( m_severities );
-    m_footprintWarningsTreeModel->SetSeverities( m_severities );
-
-    updateDisplayedCounts();
+    UpdateData();
 }
 
 
@@ -950,7 +924,7 @@ void DIALOG_DRC::PrevMarker()
         {
         case 0: m_markersTreeModel->PrevMarker();           break;
         case 1: m_unconnectedTreeModel->PrevMarker();       break;
-        case 2: m_footprintWarningsTreeModel->PrevMarker(); break;
+        case 2: m_fpWarningsTreeModel->PrevMarker(); break;
         case 3:                                             break;
         }
     }
@@ -965,7 +939,7 @@ void DIALOG_DRC::NextMarker()
         {
         case 0: m_markersTreeModel->NextMarker();           break;
         case 1: m_unconnectedTreeModel->NextMarker();       break;
-        case 2: m_footprintWarningsTreeModel->NextMarker(); break;
+        case 2: m_fpWarningsTreeModel->NextMarker(); break;
         case 3:                                             break;
         }
     }
@@ -1028,7 +1002,7 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 
     m_markersTreeModel->DeleteItems( false, aIncludeExclusions, false );
     m_unconnectedTreeModel->DeleteItems( false, aIncludeExclusions, false );
-    m_footprintWarningsTreeModel->DeleteItems( false, aIncludeExclusions, false );
+    m_fpWarningsTreeModel->DeleteItems( false, aIncludeExclusions, false );
 
     m_frame->GetBoard()->DeleteMARKERs( true, aIncludeExclusions );
 }
@@ -1069,25 +1043,25 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }
 
-    count = m_unconnectedItemsProvider->GetCount();
+    count = m_ratsnestProvider->GetCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0; i < count; ++i )
     {
-        const std::shared_ptr<RC_ITEM>& item = m_unconnectedItemsProvider->GetItem( i );
+        const std::shared_ptr<RC_ITEM>& item = m_ratsnestProvider->GetItem( i );
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }
 
-    count = m_footprintWarningsProvider->GetCount();
+    count = m_fpWarningsProvider->GetCount();
 
     fprintf( fp, "\n** Found %d Footprint errors **\n", count );
 
     for( int i = 0; i < count; ++i )
     {
-        const std::shared_ptr<RC_ITEM>& item = m_footprintWarningsProvider->GetItem( i );
+        const std::shared_ptr<RC_ITEM>& item = m_fpWarningsProvider->GetItem( i );
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
@@ -1120,7 +1094,7 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
     }
     else if( m_Notebook->GetSelection() == 2 )
     {
-        m_footprintWarningsTreeModel->DeleteCurrentItem( true );
+        m_fpWarningsTreeModel->DeleteCurrentItem( true );
     }
 
     updateDisplayedCounts();
@@ -1136,11 +1110,11 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
     if( m_markersProvider )
         numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
 
-    if( m_unconnectedItemsProvider )
-        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    if( m_ratsnestProvider )
+        numExcluded += m_ratsnestProvider->GetCount( RPT_SEVERITY_EXCLUSION );
 
-    if( m_footprintWarningsProvider )
-        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    if( m_fpWarningsProvider )
+        numExcluded += m_fpWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
 
     if( numExcluded > 0 )
     {
@@ -1188,20 +1162,20 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( m_unconnectedItemsProvider )
+    if( m_ratsnestProvider )
     {
-        numUnconnected += m_unconnectedItemsProvider->GetCount();
-        numErrors += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_ERROR );
-        numWarnings += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_WARNING );
-        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+        numUnconnected += m_ratsnestProvider->GetCount();
+        numErrors += m_ratsnestProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_ratsnestProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_ratsnestProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( m_footprintTestsRun && m_footprintWarningsProvider )
+    if( m_footprintTestsRun && m_fpWarningsProvider )
     {
-        numFootprints += m_footprintWarningsProvider->GetCount();
-        numErrors += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
-        numWarnings += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
-        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+        numFootprints += m_fpWarningsProvider->GetCount();
+        numErrors += m_fpWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_fpWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_fpWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
     bool errorsOverflowed = false;

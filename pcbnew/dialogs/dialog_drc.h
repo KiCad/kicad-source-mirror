@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,12 +48,22 @@ public:
     DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC();
 
+    /**
+     * Called after running DRC.  It's main function is prevent showing potentially-false-0
+     * counts before DRC has been run.
+     */
     void SetDrcRun() { m_drcRun = true; }
+
+    /**
+     * Called after running Footprint Tests.  It's main function is to update the Footprint
+     * Warnings tab title.
+     */
     void SetFootprintTestsRun() { m_footprintTestsRun = true; }
 
-    void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
-    void SetRatsnestProvider( RC_ITEMS_PROVIDER* aProvider );
-    void SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider );
+    /**
+     * Rebuild the contents of the violation tabs based on the current markers and severties.
+     */
+    void UpdateData();
 
     void PrevMarker();
     void NextMarker();
@@ -64,8 +74,7 @@ public:
 private:
     /**
      * Function writeReport
-     * outputs the MARKER items and unconnecte DRC_ITEMs with commentary to an
-     * open text file.
+     * outputs the MARKER items with commentary to an open text file.
      * @param aFullFileName The text filename to write the report to.
      * @return true if OK, false on error
      */
@@ -77,7 +86,7 @@ private:
     void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;
-    void OnIgnoreItemRClick( wxListEvent& event ) override;
+    void OnEditViolationSeverities( wxHyperlinkEvent& aEvent ) override;
 
     void OnSeverity( wxCommandEvent& aEvent ) override;
   	void OnSaveReport( wxCommandEvent& aEvent ) override;
@@ -92,7 +101,7 @@ private:
     void OnCancelClick( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& event ) override;
 
-    // Updates data which can be modified outside the dialog
+    // Updates data which can be modified outside the dialog.
     void OnActivateDlg( wxActivateEvent& aEvent ) override;
 
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
@@ -120,18 +129,17 @@ private:
     wxString           m_footprintsTitleTemplate;
     wxString           m_ignoredTitleTemplate;
 
-    RC_ITEMS_PROVIDER* m_markersProvider;
-    RC_TREE_MODEL*     m_markersTreeModel;
+    std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
+    std::shared_ptr<RC_ITEMS_PROVIDER> m_ratsnestProvider;
+    std::shared_ptr<RC_ITEMS_PROVIDER> m_fpWarningsProvider;
 
-    RC_ITEMS_PROVIDER* m_unconnectedItemsProvider;
-    RC_TREE_MODEL*     m_unconnectedTreeModel;
+    RC_TREE_MODEL*                     m_markersTreeModel;      // wx reference-counted ptr
+    RC_TREE_MODEL*                     m_unconnectedTreeModel;  // wx reference-counted ptr
+    RC_TREE_MODEL*                     m_fpWarningsTreeModel;   // wx reference-counted ptr
 
-    RC_ITEMS_PROVIDER* m_footprintWarningsProvider;
-    RC_TREE_MODEL*     m_footprintWarningsTreeModel;
+    const PCB_MARKER*                  m_centerMarkerOnIdle;
 
-    const PCB_MARKER*  m_centerMarkerOnIdle;
-
-    int                m_severities;        // A mask of SEVERITY flags
+    int                                m_severities;            // A mask of SEVERITY flags
 };
 
 #endif  // _DIALOG_DRC_H_

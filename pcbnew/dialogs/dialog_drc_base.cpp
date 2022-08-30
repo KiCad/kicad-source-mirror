@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -136,6 +136,12 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_ignoredList = new wxListCtrl( m_panelIgnored, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT );
 	bSizer15->Add( m_ignoredList, 1, wxALL|wxEXPAND, 5 );
 
+	m_violationSeveritiesLink = new wxHyperlinkCtrl( m_panelIgnored, wxID_ANY, _("Edit ignored tests"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	bSizer15->Add( m_violationSeveritiesLink, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer15->Add( 0, 5, 0, wxEXPAND, 5 );
+
 
 	m_panelIgnored->SetSizer( bSizer15 );
 	m_panelIgnored->Layout();
@@ -240,7 +246,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemSelected ), NULL, this );
-	m_ignoredList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_DRC_BASE::OnIgnoreItemRClick ), NULL, this );
+	m_violationSeveritiesLink->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_DRC_BASE::OnEditViolationSeverities ), NULL, this );
 	m_showAll->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );
@@ -268,7 +274,7 @@ DIALOG_DRC_BASE::~DIALOG_DRC_BASE()
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemSelected ), NULL, this );
-	m_ignoredList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_DRC_BASE::OnIgnoreItemRClick ), NULL, this );
+	m_violationSeveritiesLink->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_DRC_BASE::OnEditViolationSeverities ), NULL, this );
 	m_showAll->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_BASE::OnSeverity ), NULL, this );

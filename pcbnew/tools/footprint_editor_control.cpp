@@ -648,9 +648,6 @@ int FOOTPRINT_EDITOR_CONTROL::CheckFootprint( const TOOL_EVENT& aEvent )
     }
     else // The dialog is just not visible (because the user has double clicked on an error item)
     {
-        m_checkerDialog->SetMarkersProvider( new DRC_ITEMS_PROVIDER( m_frame->GetBoard(),
-                                                                     MARKER_BASE::MARKER_DRC ) );
-
         m_checkerDialog->Show( true );
     }
 

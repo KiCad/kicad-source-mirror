@@ -42,15 +42,15 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
         DIALOG_FOOTPRINT_CHECKER_BASE( aParent ),
         m_frame( aParent ),
         m_checksRun( false ),
-        m_centerMarkerOnIdle( nullptr ),
-        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
+        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
+        m_centerMarkerOnIdle( nullptr )
 {
-    m_markersProvider = new DRC_ITEMS_PROVIDER( m_frame->GetBoard(), MARKER_BASE::MARKER_DRC );
+    m_markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_frame->GetBoard(),
+                                                              MARKER_BASE::MARKER_DRC );
+
     m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markersDataView );
     m_markersDataView->AssociateModel( m_markersTreeModel );
-
-    m_markersTreeModel->SetSeverities( -1 );
-    m_markersTreeModel->SetProvider( m_markersProvider );
+    m_markersTreeModel->Update( m_markersProvider, m_severities );
 
     if( m_frame->GetBoard()->GetFirstFootprint() == g_lastFootprint )
     {
@@ -108,8 +108,6 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     BOARD*     board = m_frame->GetBoard();
     FOOTPRINT* footprint = board->GetFirstFootprint();
     wxString   msg;
-
-    SetMarkersProvider( new DRC_ITEMS_PROVIDER( board, MARKER_BASE::MARKER_DRC ) );
 
     deleteAllMarkers();
 
@@ -182,20 +180,10 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 
     m_checksRun = true;
 
-    SetMarkersProvider( new DRC_ITEMS_PROVIDER( board, MARKER_BASE::MARKER_DRC ) );
+    m_markersTreeModel->Update( m_markersProvider, m_severities );
+    updateDisplayedCounts();
 
     refreshEditor();
-}
-
-
-void DIALOG_FOOTPRINT_CHECKER::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
-{
-    // TreeModel owns the provider, not us
-    // delete m_markersProvider;
-
-    m_markersProvider = aProvider;
-    m_markersTreeModel->SetProvider( aProvider );
-    updateDisplayedCounts();
 }
 
 
@@ -353,14 +341,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSeverity( wxCommandEvent& aEvent )
 
     syncCheckboxes();
 
-    // Set the provider's severity levels through the TreeModel so that the old tree
-    // can be torn down before the severity changes.
-    //
-    // It's not clear this is required, but we've had a lot of issues with wxDataView
-    // being cranky on various platforms.
-
-    m_markersTreeModel->SetSeverities( m_severities );
-
+    m_markersTreeModel->Update( m_markersProvider, m_severities );
     updateDisplayedCounts();
 }
 
