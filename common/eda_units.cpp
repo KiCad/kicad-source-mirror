@@ -105,7 +105,7 @@ wxString EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS aUnits, EDA_DATA_TY
     switch( aUnits )
     {
     case EDA_UNITS::MILLIMETRES: label = wxT( " mm" ); break;
-    case EDA_UNITS::DEGREES: label = wxT( "°" ); break;
+    case EDA_UNITS::DEGREES: label = wxT( "Â°" ); break;
     case EDA_UNITS::MILS: label = wxT( " mils" ); break;
     case EDA_UNITS::INCHES: label = wxT( " in" ); break;
     case EDA_UNITS::PERCENT: label = wxT( "%" ); break;
@@ -115,8 +115,8 @@ wxString EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS aUnits, EDA_DATA_TY
 
     switch( aType )
     {
-    case EDA_DATA_TYPE::VOLUME: label += wxT( "³" ); break;
-    case EDA_DATA_TYPE::AREA: label += wxT( "²" ); break;
+    case EDA_DATA_TYPE::VOLUME: label += wxT( "Â³" ); break;
+    case EDA_DATA_TYPE::AREA: label += wxT( "Â²" ); break;
     case EDA_DATA_TYPE::DISTANCE: break;
     default: UNIMPLEMENTED_FOR( "Unknown measurement" ); break;
     }
