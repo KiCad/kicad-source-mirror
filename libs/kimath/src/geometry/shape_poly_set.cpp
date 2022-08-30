@@ -1614,6 +1614,7 @@ int SHAPE_POLY_SET::RemoveNullSegments()
     VECTOR2I    segmentStart, segmentEnd;
 
     VERTEX_INDEX indexStart;
+    std::vector<VERTEX_INDEX> indices_to_remove;
 
     while( iterator )
     {
@@ -1629,6 +1630,8 @@ int SHAPE_POLY_SET::RemoveNullSegments()
             // Advance
             iterator++;
 
+            // If we have rolled into the next contour, remember its position
+            // segmentStart and segmentEnd remain valid for comparison here
             if( iterator )
                 contourStart = *iterator;
         }
@@ -1637,21 +1640,24 @@ int SHAPE_POLY_SET::RemoveNullSegments()
             // Advance
             iterator++;
 
-            if( iterator )
-                segmentEnd = *iterator;
+            // If we have reached the end of the SHAPE_POLY_SET, something is broken here
+            wxCHECK_MSG( iterator, removed, wxT( "Invalid polygon.  Reached end without noticing.  Please report this error" ) );
+
+            segmentEnd = *iterator;
         }
 
         // Remove segment start if both points are equal
         if( segmentStart == segmentEnd )
         {
-            RemoveVertex( indexStart );
+            indices_to_remove.push_back( indexStart );
             removed++;
-
-            // Advance the iterator one position, as there is one vertex less.
-            if( iterator )
-                iterator++;
         }
     }
+
+    // Proceed in reverse direction to remove the vertices because they are stored as absolute indices in a vector
+    // Removing in reverse order preserves the remaining index values
+    for( auto it = indices_to_remove.rbegin(); it != indices_to_remove.rend(); ++it )
+        RemoveVertex( *it );
 
     return removed;
 }
