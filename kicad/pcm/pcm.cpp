@@ -333,10 +333,10 @@ void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
 }
 
 
-bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUrl,
+bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                aUrl,
                                             const std::optional<wxString>& aHash,
-                                            std::vector<PCM_PACKAGE>&        aPackages,
-                                            PROGRESS_REPORTER*               aReporter )
+                                            std::vector<PCM_PACKAGE>&      aPackages,
+                                            PROGRESS_REPORTER*             aReporter )
 {
     std::stringstream packages_stream;
 
@@ -352,7 +352,7 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
 
     std::istringstream isstream( packages_stream.str() );
 
-    if( aHash && !VerifyHash( isstream, aHash.value() ) )
+    if( aHash && !VerifyHash( isstream, *aHash ) )
     {
         if( m_dialog )
             wxLogError( _( "Packages hash doesn't match. Repository may be corrupted." ) );
@@ -507,7 +507,7 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     if( current_repo.resources )
     {
         // Check resources file date, redownload if needed
-        PCM_RESOURCE_REFERENCE& resources = current_repo.resources.value();
+        PCM_RESOURCE_REFERENCE& resources = *current_repo.resources;
 
         wxFileName resource_file( repo_cache.GetPath(), "resources.zip" );
 
@@ -535,7 +535,7 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
                                            std::ios_base::binary );
 
 
-                if( resources.sha256 && !VerifyHash( read_stream, resources.sha256.value() ) )
+                if( resources.sha256 && !VerifyHash( read_stream, *resources.sha256 ) )
                 {
                     read_stream.close();
 
@@ -614,7 +614,7 @@ void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aR
 
         if( current_version_it == installation_entry.package.versions.end() )
         {
-            installation_entry.package.versions.emplace_back( current_version.value() );
+            installation_entry.package.versions.emplace_back( *current_version );
 
             // Re-sort the versions by descending version
             std::sort( installation_entry.package.versions.begin(),
@@ -636,7 +636,7 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
         int epoch = 0, major = 0, minor = 0, patch = 0;
 
         if( ver.version_epoch )
-            epoch = ver.version_epoch.value();
+            epoch = *ver.version_epoch;
 
         wxStringTokenizer version_tokenizer( ver.version, "." );
 
@@ -676,7 +676,7 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
             ver.compatible = false;
 
         if( ver.kicad_version_max
-            && parse_version_tuple( ver.kicad_version_max.value(), 999 ) < m_kicad_version )
+            && parse_version_tuple( *ver.kicad_version_max, 999 ) < m_kicad_version )
             ver.compatible = false;
 
 #ifdef __WXMSW__
@@ -978,7 +978,7 @@ int PLUGIN_CONTENT_MANAGER::GetPackageSearchRank( const PCM_PACKAGE& aPackage,
     rank += find_term_matches( aPackage.author.name );
 
     if( aPackage.maintainer )
-        rank += 3 * find_term_matches( aPackage.maintainer.value().name );
+        rank += 3 * find_term_matches( aPackage.maintainer->name );
 
     // Match on resources
     for( const auto& entry : aPackage.resources )

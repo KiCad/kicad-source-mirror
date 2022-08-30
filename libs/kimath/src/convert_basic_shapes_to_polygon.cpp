@@ -330,10 +330,12 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
 
                     if( outlineIn.Side( pt ) > 0 )
                     {
-                        VECTOR2I intersect = outlineIn.IntersectLines( SEG( prevPt, pt ) ).value();
-                        outline.Append( intersect );
+                        OPT_VECTOR2I intersect = outlineIn.IntersectLines( SEG( prevPt, pt ) );
+
+                        wxCHECK_RET( intersect, wxT( "No solutions exist!" ) );
+                        outline.Append( *intersect );
                         outline.Append( pt );
-                        arcEnd = SEG( cornerPosition, arcCenter ).ReflectPoint( intersect );
+                        arcEnd = SEG( cornerPosition, arcCenter ).ReflectPoint( *intersect );
                         break;
                     }
 

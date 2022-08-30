@@ -361,10 +361,14 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
 
     //Ensure the tangent segments are in the correct orientation
-    VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd ).value();
-    tanStart.A = tanIntersect;
+    OPT_VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd );
+
+    if( !tanIntersect )
+        return 0;
+
+    tanStart.A = *tanIntersect;
     tanStart.B = theArc->GetStart();
-    tanEnd.A = tanIntersect;
+    tanEnd.A = *tanIntersect;
     tanEnd.B = theArc->GetEnd();
 
     auto getUniqueTrackAtAnchorCollinear =
@@ -438,7 +442,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     }
 
     // Recalculate intersection point
-    tanIntersect = tanStart.IntersectLines( tanEnd ).value();
+    if( tanIntersect = tanStart.IntersectLines( tanEnd ); !tanIntersect )
+        return 0;
 
     auto isTrackStartClosestToArcStart =
             [&]( PCB_TRACK* aTrack ) -> bool
@@ -482,8 +487,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     auto getFurthestPointToTanInterstect =
             [&]( VECTOR2I& aPointA, VECTOR2I& aPointB ) -> VECTOR2I
             {
-                if( ( aPointA - tanIntersect ).EuclideanNorm()
-                    > ( aPointB - tanIntersect ).EuclideanNorm() )
+                if( ( aPointA - *tanIntersect ).EuclideanNorm()
+                    > ( aPointB - *tanIntersect ).EuclideanNorm() )
                 {
                     return aPointA;
                 }
@@ -505,8 +510,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     VECTOR2I maxTanPtStart = tanStart.LineProject( maxTanCircle.Center );
     VECTOR2I maxTanPtEnd = tanEnd.LineProject( maxTanCircle.Center );
 
-    SEG cSegTanStart( maxTanPtStart, tanIntersect );
-    SEG cSegTanEnd( maxTanPtEnd, tanIntersect );
+    SEG cSegTanStart( maxTanPtStart, *tanIntersect );
+    SEG cSegTanEnd( maxTanPtEnd, *tanIntersect );
     SEG cSegChord( maxTanPtStart, maxTanPtEnd );
 
     int cSegTanStartSide = cSegTanStart.Side( theArc->GetMid() );
@@ -1384,7 +1389,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     editFrame->PushTool( tool );
 
     std::vector<BOARD_ITEM*> lockedItems;
@@ -2030,7 +2035,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_statusPopup->Hide();
 
     if( pickedPoint )
-        aReferencePoint = pickedPoint.value();
+        aReferencePoint = *pickedPoint;
 
     return pickedPoint.has_value();
 }

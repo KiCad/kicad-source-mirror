@@ -299,7 +299,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     frame()->PushTool( tool );
 
     VECTOR2I        oldCursorPos;  // store the previous mouse cursor position, during mouse drag
@@ -555,7 +555,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
     PAD_PLACER placer( this );
 
-    doInteractiveItemPlacement( aEvent.GetCommandStr().value(), &placer,  _( "Place pad" ),
+    doInteractiveItemPlacement( *aEvent.GetCommandStr(), &placer,  _( "Place pad" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
     return 0;

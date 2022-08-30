@@ -313,7 +313,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
     Activate();
 
@@ -387,7 +387,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
     Activate();
 
@@ -447,7 +447,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
     Activate();
 
@@ -495,7 +495,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
     Activate();
 
@@ -553,7 +553,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
     auto setCursor =
             [&]()
@@ -797,7 +797,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     Activate();
@@ -1079,7 +1079,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     Activate();
@@ -1560,7 +1560,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1659,7 +1659,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -1833,7 +1833,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
-        m_toolMgr->PrimeTool( aStartingPoint.value() );
+        m_toolMgr->PrimeTool( *aStartingPoint );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1957,7 +1957,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 if( aStartingPoint )
                 {
-                    cursorPos = aStartingPoint.value();
+                    cursorPos = *aStartingPoint;
                     aStartingPoint = std::nullopt;
                 }
 
@@ -2202,7 +2202,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
-        m_toolMgr->PrimeTool(aStartingPoint.value() );
+        m_toolMgr->PrimeTool( *aStartingPoint );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -2498,7 +2498,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -3033,26 +3033,27 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 VECTOR2I trackStart = track->GetStart();
                 VECTOR2I trackEnd = track->GetEnd();
                 SEG      trackSeg( trackStart, trackEnd );
-                VECTOR2I joint1;
-                VECTOR2I joint2;
+
+                OPT_VECTOR2I joint1;
+                OPT_VECTOR2I joint2;
 
                 auto insertChevron =
                         [&]()
                         {
-                            if( ( trackStart - joint1 ).SquaredEuclideanNorm()
-                                    > ( trackStart - joint2 ).SquaredEuclideanNorm() )
+                            if( ( trackStart - *joint1 ).SquaredEuclideanNorm()
+                                    > ( trackStart - *joint2 ).SquaredEuclideanNorm() )
                             {
                                 std::swap( joint1, joint2 );
                             }
 
                             aCommit.Modify( track );
                             track->SetStart( trackStart );
-                            track->SetEnd( joint1 );
+                            track->SetEnd( *joint1 );
 
                             PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
-                            newTrack->SetStart( joint1 );
+                            newTrack->SetStart( *joint1 );
                             newTrack->SetEnd( viaPos );
                             aCommit.Add( newTrack );
 
@@ -3060,13 +3061,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
                             newTrack->SetStart( viaPos );
-                            newTrack->SetEnd( joint2 );
+                            newTrack->SetEnd( *joint2 );
                             aCommit.Add( newTrack );
 
                             newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
                             const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
 
-                            newTrack->SetStart( joint2 );
+                            newTrack->SetStart( *joint2 );
                             newTrack->SetEnd( trackEnd );
                             aCommit.Add( newTrack );
                         };
@@ -3115,8 +3116,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                     if( track->GetBoundingBox().Contains( viaPos ) )
                     {
-                        joint1 = trackSeg.Intersect( horiz, true, true ).value();
-                        joint2 = trackSeg.Intersect( vert, true, true ).value();
+                        joint1 = trackSeg.Intersect( horiz, true, true );
+                        joint2 = trackSeg.Intersect( vert, true, true );
+
+                        if( !joint1 || !joint2 )
+                            return false;
 
                         insertChevron();
                         return true;
@@ -3207,7 +3211,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
 
-    doInteractiveItemPlacement( aEvent.GetCommandStr().value(), &placer, _( "Place via" ),
+    doInteractiveItemPlacement( *aEvent.GetCommandStr(), &placer, _( "Place via" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;

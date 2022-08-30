@@ -557,7 +557,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
     // do not capture or auto-pan until we start placing the table
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     Activate();

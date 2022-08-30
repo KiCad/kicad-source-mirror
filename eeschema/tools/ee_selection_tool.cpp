@@ -539,17 +539,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
 
             // context sub-menu selection?  Handle unit selection or bus unfolding
-            if( evt->GetCommandId().value() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && evt->GetCommandId().value() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selection.Front() );
-                int unit = evt->GetCommandId().value() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( symbol )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( symbol, unit );
             }
-            else if( evt->GetCommandId().value() >= ID_POPUP_SCH_UNFOLD_BUS
-                     && evt->GetCommandId().value() <= ID_POPUP_SCH_UNFOLD_BUS_END )
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_UNFOLD_BUS
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_UNFOLD_BUS_END )
             {
                 wxString* net = new wxString( *evt->Parameter<wxString*>() );
                 m_toolMgr->RunAction( EE_ACTIONS::unfoldBus, true, net );

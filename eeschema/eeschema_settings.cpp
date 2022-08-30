@@ -771,7 +771,7 @@ bool EESCHEMA_SETTINGS::migrateBomSettings()
     if( !Contains( "bom.plugins" ) )
         return false;
 
-    wxString list = Get<wxString>( "bom.plugins" ).value();
+    wxString list = *Get<wxString>( "bom.plugins" );
 
     BOM_CFG_PARSER cfg_parser( &m_BomPanel.plugins, TO_UTF8( list ), wxT( "plugins" ) );
 

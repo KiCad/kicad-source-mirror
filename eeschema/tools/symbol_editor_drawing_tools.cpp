@@ -95,7 +95,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -147,7 +147,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().value().compare( tool ) == 0;
+                                && evt->GetCommandStr() == tool;
 
         if( evt->IsCancelInteractive() )
         {
@@ -341,7 +341,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =
@@ -378,7 +378,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item
                                 && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr().value().compare( tool ) == 0;
+                                && evt->GetCommandStr() == tool;
 
         if( evt->IsCancelInteractive() )
         {
@@ -542,7 +542,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =

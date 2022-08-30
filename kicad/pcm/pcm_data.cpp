@@ -40,25 +40,25 @@ void to_json( json& j, const PACKAGE_VERSION& v )
               { "kicad_version", v.kicad_version } };
 
     if( v.version_epoch )
-        j["version_epoch"] = v.version_epoch.value();
+        j["version_epoch"] = *v.version_epoch;
 
     if( v.download_url )
-        j["download_url"] = v.download_url.value();
+        j["download_url"] = *v.download_url;
 
     if( v.download_sha256 )
-        j["download_sha256"] = v.download_sha256.value();
+        j["download_sha256"] = *v.download_sha256;
 
     if( v.download_size )
-        j["download_size"] = v.download_size.value();
+        j["download_size"] = *v.download_size;
 
     if( v.install_size )
-        j["install_size"] = v.install_size.value();
+        j["install_size"] = *v.install_size;
 
     if( v.platforms.size() > 0 )
         nlohmann::to_json( j["platforms"], v.platforms );
 
     if( v.kicad_version_max )
-        j["kicad_version_max"] = v.kicad_version_max.value();
+        j["kicad_version_max"] = *v.kicad_version_max;
 
     if( v.keep_on_update.size() > 0 )
         nlohmann::to_json( j["keep_on_update"], v.keep_on_update );
@@ -99,7 +99,7 @@ void to_json( json& j, const PCM_PACKAGE& p )
               { "versions", p.versions } };
 
     if( p.maintainer )
-        j["maintainer"] = p.maintainer.value();
+        j["maintainer"] = *p.maintainer;
 
     if( p.tags.size() > 0 )
         j["tags"] = p.tags;
@@ -136,7 +136,7 @@ void to_json( json& j, const PCM_RESOURCE_REFERENCE& r )
     j = json{ { "url", r.url }, { "update_timestamp", r.update_timestamp } };
 
     if( r.sha256 )
-        j["sha256"] = r.sha256.value();
+        j["sha256"] = *r.sha256;
 }
 
 
@@ -154,13 +154,13 @@ void to_json( json& j, const PCM_REPOSITORY& r )
     j = json{ { "name", r.name }, { "packages", r.packages } };
 
     if( r.resources )
-        j["resources"] = r.resources.value();
+        j["resources"] = *r.resources;
 
     if( r.manifests )
-        j["manifests"] = r.manifests.value();
+        j["manifests"] = *r.manifests;
 
     if( r.maintainer )
-        j["maintainer"] = r.maintainer.value();
+        j["maintainer"] = *r.maintainer;
 }
 
 

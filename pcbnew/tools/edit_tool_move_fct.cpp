@@ -375,7 +375,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     if( selection.Empty() )
         return 0;
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     editFrame->PushTool( tool );
 
     Activate();

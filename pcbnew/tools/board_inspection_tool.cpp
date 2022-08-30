@@ -1542,7 +1542,7 @@ int BOARD_INSPECTION_TOOL::ClearHighlight( const TOOL_EVENT& aEvent )
 #if 0
 int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
 {
-    std::string      tool = aEvent.GetCommandStr().value();
+    std::string      tool = *aEvent.GetCommandStr();
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1576,7 +1576,7 @@ int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
-    std::string       tool = aEvent.GetCommandStr().value();
+    std::string       tool = *aEvent.GetCommandStr();
     PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     BOARD*            board = getModel<BOARD>();
 

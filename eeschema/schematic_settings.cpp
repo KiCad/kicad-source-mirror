@@ -225,7 +225,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 std::optional<double> tor = Get<double>( "drawing.text_offset_ratio" );
 
                 if( tor )
-                    Set( "drawing.label_size_ratio", tor.value() );
+                    Set( "drawing.label_size_ratio", *tor );
 
                 return true;
             } );

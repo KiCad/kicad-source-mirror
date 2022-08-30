@@ -89,7 +89,7 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 
     MICROWAVE_PLACER placer( this, aEvent.Parameter<MICROWAVE_FOOTPRINT_SHAPE>() );
 
-    doInteractiveItemPlacement( aEvent.GetCommandStr().value(), &placer,
+    doInteractiveItemPlacement( *aEvent.GetCommandStr(), &placer,
                                 _( "Place microwave feature" ),
                                 IPO_REPEAT | IPO_ROTATE | IPO_FLIP );
 
@@ -114,7 +114,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS& controls = *getViewControls();
     PCB_EDIT_FRAME&       frame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     frame.PushTool( tool );
 
     auto setCursor =

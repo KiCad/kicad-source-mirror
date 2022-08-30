@@ -1212,10 +1212,10 @@ void PCB_DIM_RADIAL::updateGeometry()
     OPT_VECTOR2I textSegEnd = segPolyIntersection( polyBox, textSeg );
 
     if( arrowSegEnd )
-        arrowSeg.B = arrowSegEnd.value();
+        arrowSeg.B = *arrowSegEnd;
 
     if( textSegEnd )
-        textSeg.B = textSegEnd.value();
+        textSeg.B = *textSegEnd;
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( arrowSeg ) );
 

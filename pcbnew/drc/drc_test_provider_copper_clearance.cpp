@@ -200,7 +200,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                 drcItem->SetItems( track, other );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, intersection.value(), layer );
+                reportViolation( drcItem, *intersection, layer );
 
                 return m_drcEngine->GetReportAllTrackErrors();
             }

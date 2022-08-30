@@ -110,7 +110,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     Activate();

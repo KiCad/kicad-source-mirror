@@ -264,10 +264,10 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
             [&]()
             {
                 if( std::optional<COLOR4D> optval = Get<COLOR4D>( "board.grid" ) )
-                    Set( "board.page_limits",  optval.value() );
+                    Set( "board.page_limits",  *optval );
 
                 if( std::optional<COLOR4D> optval = Get<COLOR4D>( "schematic.grid" ) )
-                    Set( "schematic.page_limits", optval.value() );
+                    Set( "schematic.page_limits", *optval );
 
                 return true;
             } );

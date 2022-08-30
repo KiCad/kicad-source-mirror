@@ -1487,7 +1487,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     frame->PushTool( tool );
 
     auto setCursor =

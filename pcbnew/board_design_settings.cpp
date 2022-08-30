@@ -920,8 +920,8 @@ bool BOARD_DESIGN_SETTINGS::migrateSchema0to1()
         return true;
     }
 
-    int units     = Get<int>( units_ptr ).value();
-    int precision = Get<int>( precision_ptr ).value();
+    int units     = *Get<int>( units_ptr );
+    int precision = *Get<int>( precision_ptr );
 
     // The enum maps directly to precision if the units is mils
     int extraDigits = 0;

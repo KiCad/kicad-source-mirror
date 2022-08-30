@@ -1356,7 +1356,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         return SH_OK;
     }
 
-    bool viaFixup = fixupViaCollisions( &currentLine, nearest.value() );
+    bool viaFixup = fixupViaCollisions( &currentLine, *nearest );
 
     PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: VF %d", aIter, viaFixup?1:0 ) );
 
@@ -1443,7 +1443,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             st = onCollidingSegment( currentLine, (SEGMENT*) ni );
 
             if( st == SH_TRY_WALK )
-                st = onCollidingSolid( currentLine, ni, nearest.value() );
+                st = onCollidingSolid( currentLine, ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
 
@@ -1456,7 +1456,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             st = onCollidingArc( currentLine, static_cast<ARC*>( ni ) );
 
             if( st == SH_TRY_WALK )
-                st = onCollidingSolid( currentLine, ni, nearest.value() );
+                st = onCollidingSolid( currentLine, ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
 
@@ -1464,10 +1464,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
         case ITEM::VIA_T:
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-via (fixup: %d)", aIter, 0 ), 0 );            
-            st = onCollidingVia( &currentLine, (VIA*) ni, nearest.value() );
+            st = onCollidingVia( &currentLine, (VIA*) ni, *nearest );
 
             if( st == SH_TRY_WALK )
-                st = onCollidingSolid( currentLine, ni, nearest.value() );
+                st = onCollidingSolid( currentLine, ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
 
@@ -1475,7 +1475,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
         case ITEM::SOLID_T:
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: walk-solid ", aIter ), 0);
-            st = onCollidingSolid( currentLine, (SOLID*) ni, nearest.value() );
+            st = onCollidingSolid( currentLine, (SOLID*) ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
 

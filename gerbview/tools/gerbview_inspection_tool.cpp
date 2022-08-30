@@ -207,7 +207,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     EDA_UNITS                  units = m_frame->GetUserUnits();
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units, false, false );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_frame->PushTool( tool );
 
     auto setCursor =

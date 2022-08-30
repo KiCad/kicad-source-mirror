@@ -924,7 +924,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
@@ -1014,7 +1014,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    std::string tool = aEvent.GetCommandStr().value();
+    std::string tool = *aEvent.GetCommandStr();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
@@ -1332,7 +1332,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_frame->RecalculateConnections( NO_CLEANUP );
 
-    std::string  tool = aEvent.GetCommandStr().value();
+    std::string  tool = *aEvent.GetCommandStr();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running

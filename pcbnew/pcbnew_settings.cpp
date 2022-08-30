@@ -559,7 +559,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             [&]()
             {
                 if( std::optional<int> optval = Get<int>( "pcb_display.rotation_angle" ) )
-                    Set( "editing.rotation_angle", optval.value() );
+                    Set( "editing.rotation_angle", *optval );
 
                 try
                 {

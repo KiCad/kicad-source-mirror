@@ -820,7 +820,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     BOARD_ITEM* b = fetchOwner( *seg2 );
 
                     if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, pt.value() );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, *pt );
                 }
 
                 selfIntersecting = true;
