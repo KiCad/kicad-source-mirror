@@ -26,6 +26,8 @@
 #include <vector>
 #include <wx/dir.h>
 #include <wx/msgdlg.h>
+#include <wx/wfstream.h>
+#include <wx/zstream.h>
 
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_info.h"
@@ -1102,13 +1104,40 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
                 if( fileExt == wxT( "wrl" ) )
                 {
                     if( !wxCopyFile( srcFile.GetFullPath(), dstFile.GetFullPath() ) )
+                    {
+                        ++sM;
                         continue;
+                    }
+                }
+                else if( fileExt == wxT( "wrz" ) )
+                {
+                    wxFileInputStream input_file_stream( srcFile.GetFullPath() );
+                    if( !input_file_stream.IsOk() || input_file_stream.GetSize() == wxInvalidSize )
+                    {
+                        ++sM;
+                        continue;
+                    }
+
+                    wxZlibInputStream   zlib_input_stream( input_file_stream, wxZLIB_GZIP );
+                    wxFFileOutputStream output_file_stream( dstFile.GetFullPath() );
+                    if( !zlib_input_stream.IsOk() || !output_file_stream.IsOk() )
+                    {
+                        output_file_stream.Close();
+                        ++sM;
+                        continue;
+                    }
+
+                    output_file_stream.Write( zlib_input_stream );
+                    output_file_stream.Close();
                 }
                 else
                 {
                     if( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, m_ReuseDef,
                                          true ) )
+                    {
+                        ++sM;
                         continue;
+                    }
                 }
             }
 
