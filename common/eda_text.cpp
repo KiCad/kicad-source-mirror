@@ -772,10 +772,6 @@ bool EDA_TEXT::IsDefaultFormatting() const
 
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
 {
-#ifndef GERBVIEW        // Gerbview does not use EDA_TEXT::Format
-                        // and does not define FormatInternalUnits, used here
-                        // however this function should exist
-
     aFormatter->Print( aNestLevel + 1, "(effects" );
 
     aFormatter->Print( 0, " (font" );
@@ -843,7 +839,6 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     }
 
     aFormatter->Print( 0, ")\n" ); // (effects
-#endif
 }
 
 
