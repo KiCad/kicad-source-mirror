@@ -153,8 +153,8 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 
         PNS::ITEM_SET ret;
 
-        for( OBSTACLE& obstacle : obs )
-            ret.Add( obstacle.m_item, false );
+            for( const OBSTACLE& obstacle : obs )
+                ret.Add( obstacle.m_item, false );
 
         return ret;
     }
@@ -633,19 +633,15 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
                 int  clearance;
                 bool removeOriginal = true;
-                bool holeOnly       = false; // JEY TODO ( ( itemToMark->Marker() & MK_HOLE )
-                                        //&& !( itemToMark->Marker() & MK_VIOLATION ) );
 
-                if( holeOnly )
-                    clearance = aNode->GetHoleClearance( currentItem, itemToMark );
-                else
-                    clearance = aNode->GetClearance( currentItem, itemToMark );
+                clearance = aNode->GetClearance( currentItem, itemToMark );
 
                 if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer() )
                     tmp->SetLayer( currentItem->Layer() );
 
                 if( itemToMark->Kind() == ITEM::SOLID_T )
                 {
+                    #if 0 // fixme holes
                     if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, currentItem->Layer() ) )
                     {
                         SOLID* solid = static_cast<SOLID*>( tmp.get() );
@@ -658,6 +654,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
                             removeOriginal = false;
                         }
                     }
+                    #endif
 
                     if( itemToMark->IsCompoundShapePrimitive() )
                     {
@@ -695,7 +692,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
         if( GetDragger() )
             draggedItems = GetDragger()->Traces();
 
-        for( OBSTACLE& obs : obstacles )
+        for( const OBSTACLE& obs : obstacles )
         {
             // Don't mark items being dragged; only board items they collide with
             if( draggedItems.Contains( obs.m_item ) )
@@ -775,7 +772,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         {
             const VIA& via = l->Via();
             int viaClearance = GetRuleResolver()->Clearance( &via, nullptr );
-            int holeClearance = GetRuleResolver()->HoleClearance( &via, nullptr );
+            int holeClearance = 0; // GetRuleResolver()->HoleClearance( &via, nullptr ); // fixme holes
 
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
                 viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;

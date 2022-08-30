@@ -35,6 +35,7 @@ set( QA_PCBNEW_SRCS
     test_board_item.cpp
     test_graphics_import_mgr.cpp
     test_lset.cpp
+    test_pns_basics.cpp
     test_pad_numbering.cpp
     test_libeval_compiler.cpp
     test_save_load.cpp

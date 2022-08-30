@@ -43,12 +43,17 @@ void WALKAROUND::start( const LINE& aInitialPath )
 NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 {
     COLLISION_SEARCH_OPTIONS opts;
+
+    opts.m_kindMask = m_itemMask;
+
+    if( ! m_restrictedSet.empty() )
+        opts.m_restrictedSet = &m_restrictedSet;
+    else
+        opts.m_restrictedSet = nullptr;
+
     opts.m_useClearanceEpsilon = false;
 
-    NODE::OPT_OBSTACLE obs = m_world->NearestObstacle( &aPath, m_itemMask,
-                                                       m_restrictedSet.empty() ? nullptr
-                                                                               : &m_restrictedSet,
-                                                       opts );
+    NODE::OPT_OBSTACLE obs = m_world->NearestObstacle( &aPath, opts );
 
     if( m_restrictedSet.empty() )
         return obs;
@@ -91,14 +96,13 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
 
     SHAPE_LINE_CHAIN path_walk;
 
-
-    SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance,
-                                                       current_obs->m_walkaroundThickness );
+    
+    SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance, aPath.Width() );
 
     bool s_cw = aPath.Walkaround( hull, path_walk, aWindingDirection );
 
     PNS_DBG( Dbg(), BeginGroup, "hull/walk", 1 );
-    PNS_DBG( Dbg(), AddShape, &hull, RED, 0, wxString::Format( "hull-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
+    PNS_DBG( Dbg(), AddShape, &hull, RED, 0, wxString::Format( "hull-%s-%d-cl %d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration, current_obs->m_clearance ) );
     PNS_DBG( Dbg(), AddShape, &aPath.CLine(), GREEN, 0, wxString::Format( "path-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
     PNS_DBG( Dbg(), AddShape, &path_walk, BLUE, 0, wxString::Format( "result-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Stat cw %d" ), !!s_cw ) );
@@ -179,6 +183,12 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
         if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
             break;
+
+        double lcw = path_cw.Line().Length() / (double)aInitialPath.CLine().Length();
+        double lccw = path_ccw.Line().Length() / (double)aInitialPath.CLine().Length();
+
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "lcw %.1f lccw %.1f" ), lcw, lccw ) );
+
 
         // Safety valve
         if( m_lengthLimitOn && path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )

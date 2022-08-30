@@ -24,6 +24,7 @@
 #define __PNS_ITEM_H
 
 #include <memory>
+#include <unordered_set>
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
@@ -44,28 +45,13 @@ enum LineMarker {
     MK_DP_COUPLED   = ( 1 << 5 )
 };
 
-struct OBSTACLE;
 
+class ITEM;
+class HOLE;
+struct COLLISION_SEARCH_CONTEXT;
 
-struct COLLISION_SEARCH_OPTIONS
-{
-    bool m_differentNetsOnly = true;
-    int m_overrideClearance = -1;
-    int m_limitCount = -1;
-    int m_kindMask = -1;
-    bool m_useClearanceEpsilon = true;
-};
-
-/**
- * Dummy interface for ITEMs that can own other ITEMs
- */
 class ITEM_OWNER {};
 
-/**
- * Base class for an item belonging to some container.
- *
- * Container can be another ITEM, ITEM_SET or a NODE.
- */
 class OWNABLE_ITEM
 {
 public:
@@ -95,7 +81,6 @@ protected:
     const ITEM_OWNER *m_owner;
 };
 
-
 /**
  * Base class for PNS router board items.
  *
@@ -117,7 +102,8 @@ public:
         ARC_T       =   16,
         VIA_T       =   32,
         DIFF_PAIR_T =   64,
-        ANY_T       =   0xff
+        HOLE_T      =   128,
+        ANY_T       =   0xffff
     };
 
     ITEM( PnsKind aKind )
@@ -170,12 +156,6 @@ public:
         return SHAPE_LINE_CHAIN();
     }
 
-    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness = 0,
-                                             int aLayer = -1 ) const
-    {
-        return SHAPE_LINE_CHAIN();
-    }
-
     /**
      * Return the type (kind) of the item.
      */
@@ -216,7 +196,7 @@ public:
     {
         return Layers().Overlaps( aOther->Layers() );
     }
-   
+
     /**
      * Check for a collision (clearance violation) with between us and item \a aOther.
      *
@@ -226,19 +206,13 @@ public:
      * @param aOther is the item to check collision against.
      * @return true, if a collision was found.
      */
-    bool Collide( const ITEM* aOther, const NODE* aNode,
-                  const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS(),
-                  OBSTACLE *aObsInfo = nullptr ) const;
+    bool Collide( const ITEM* aHead, const NODE* aNode,
+                  COLLISION_SEARCH_CONTEXT* aCtx = nullptr ) const;
 
     /**
      * Return the geometrical shape of the item. Used for collision detection and spatial indexing.
      */
     virtual const SHAPE* Shape() const
-    {
-        return nullptr;
-    }
-
-    virtual const SHAPE* Hole() const
     {
         return nullptr;
     }
@@ -279,18 +253,20 @@ public:
     void SetIsCompoundShapePrimitive() { m_isCompoundShapePrimitive = true; }
     bool IsCompoundShapePrimitive() const { return m_isCompoundShapePrimitive; }
 
+    virtual bool HasHole() const { return false; }
+    virtual HOLE *Hole() const { return nullptr; }
+    virtual void SetHole( HOLE* aHole ) {};
+
     virtual const std::string Format() const;
 
 private:
-    bool collideSimple( const ITEM* aOther, const NODE* aNode,
-                        const COLLISION_SEARCH_OPTIONS& aOpts,
-                        OBSTACLE *aObsInfo = nullptr ) const;
+    bool collideSimple( const ITEM* aHead, const NODE* aNode,
+                        COLLISION_SEARCH_CONTEXT* aCtx ) const;
 
 protected:
     PnsKind       m_kind;
 
     BOARD_ITEM*   m_parent;
-    NODE*         m_owner;
     LAYER_RANGE   m_layers;
 
     bool          m_movable;

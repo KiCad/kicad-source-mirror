@@ -24,41 +24,72 @@
 #include "pns_item.h"
 #include "pns_line.h"
 #include "pns_router.h"
+#include "pns_utils.h"
+
+#include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
 
 typedef VECTOR2I::extended_type ecoord;
 
 namespace PNS {
 
-bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode,
-                          const COLLISION_SEARCH_OPTIONS& aOpts, OBSTACLE *aObsInfo ) const
+static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 {
-    const ROUTER_IFACE* iface = ROUTER::GetInstance()->GetInterface();
-    const SHAPE*        shapeA = Shape();
-    const SHAPE*        holeA = Hole();
-    int                 lineWidthA = 0;
-    const SHAPE*        shapeB = aOther->Shape();
-    const SHAPE*        holeB = aOther->Hole();
-    int                 lineWidthB = 0;
-    const int           clearanceEpsilon = aNode->GetRuleResolver()->ClearanceEpsilon();
+    printf("&&&& %d obstacles: \n", obstacles.size() );
+
+    for( const auto& obs : obstacles )
+    {
+        printf("%p [%s] - %p [%s], clearance %d\n", obs.m_head, obs.m_head->KindStr().c_str(),
+                                                obs.m_item, obs.m_item->KindStr().c_str(),
+                                                obs.m_clearance );
+    }
+}
+
+
+bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
+                          COLLISION_SEARCH_CONTEXT* aCtx ) const
+{
+    const SHAPE* shapeI = Shape();
+    const HOLE*  holeI = Hole();
+    int          lineWidthI = 0;
+
+    const SHAPE* shapeH = aHead->Shape();
+    const HOLE*  holeH = aHead->Hole();
+    int          lineWidthH = 0;
+    int          clearanceEpsilon = aNode->GetRuleResolver()->ClearanceEpsilon();
+    bool         collisionsFound = false;
+
+    printf("******************** CollideSimple %d\n", aCtx->obstacles.size() );
+
+    //printf( "h %p n %p t %p ctx %p\n", aHead, aNode, this, aCtx );
+
+    if( aHead == this )  // we cannot be self-colliding
+        return false;
 
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
     // of the clearance value.
     if( m_kind == LINE_T )
-        lineWidthA = static_cast<const LINE*>( this )->Width() / 2;
+        lineWidthI = static_cast<const LINE*>( this )->Width() / 2;
 
-    if( aOther->m_kind == LINE_T )
-        lineWidthB = static_cast<const LINE*>( aOther )->Width() / 2;
+    if( aHead->m_kind == LINE_T )
+        lineWidthH = static_cast<const LINE*>( aHead )->Width() / 2;
 
     // same nets? no collision!
-    if( aOpts.m_differentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
+    if( aCtx && aCtx->options.m_differentNetsOnly
+            && m_net == aHead->m_net && m_net >= 0 && aHead->m_net >= 0 )
+    {
         return false;
+    }
 
     // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
-    if( aOpts.m_differentNetsOnly && ( IsFreePad() || aOther->IsFreePad() ) )
+    if( aCtx && aCtx->options.m_differentNetsOnly
+            && ( IsFreePad() || aHead->IsFreePad() ) )
+    {
         return false;
+    }
 
     // check if we are not on completely different layers first
-    if( !m_layers.Overlaps( aOther->m_layers ) )
+    if( !m_layers.Overlaps( aHead->m_layers ) )
         return false;
 
     auto checkKeepout =
@@ -84,74 +115,143 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode,
             };
 
     const ZONE* zoneA = dynamic_cast<ZONE*>( Parent() );
-    const ZONE* zoneB = dynamic_cast<ZONE*>( aOther->Parent() );
+    const ZONE* zoneB = dynamic_cast<ZONE*>( aHead->Parent() );
 
-    if( zoneA && aOther->Parent() && !checkKeepout( zoneA, aOther->Parent() ) )
+    if( zoneA && aHead->Parent() && !checkKeepout( zoneA, aHead->Parent() ) )
         return false;
 
     if( zoneB && Parent() && !checkKeepout( zoneB, Parent() ) )
         return false;
 
-    bool thisNotFlashed  = !iface->IsFlashedOnLayer( this, aOther->Layer() );
-    bool otherNotFlashed = !iface->IsFlashedOnLayer( aOther, Layer() );
+    // fixme: this f***ing singleton must go...
+    ROUTER *router = ROUTER::GetInstance();
+    ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
 
-    if( aObsInfo )
+    bool thisNotFlashed = false;
+    bool otherNotFlashed = false;
+
+    if( iface )
     {
-        aObsInfo->m_headIsHole = false;
-        aObsInfo->m_itemIsHole = false;
+        thisNotFlashed = !iface->IsFlashedOnLayer( this, aHead->Layer() );
+        otherNotFlashed = !iface->IsFlashedOnLayer( aHead, Layer() );
     }
 
     if( ( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES
-          || ( thisNotFlashed || otherNotFlashed ) )
-        && ( holeA || holeB ) )
+          || ( thisNotFlashed || otherNotFlashed ) ) )
     {
-        int holeClearance = aNode->GetHoleClearance( this, aOther );
-
-        if( holeA && holeA->Collide( shapeB, holeClearance + lineWidthB - clearanceEpsilon ) )
+        if( holeI && holeI->ParentPadVia() != aHead && holeI != aHead )
         {
-            if( aObsInfo )
-            {
-                aObsInfo->m_headIsHole = true;
-                aObsInfo->m_clearance = holeClearance;
-            }
-            return true;
-        }
+            int holeClearance = aNode->GetClearance( this, holeI );
+            printf("HCH1 %d\n", holeClearance);
 
-        if( holeB && holeB->Collide( shapeA, holeClearance + lineWidthA - clearanceEpsilon ) )
-        {
-            if( aObsInfo )
+            if( holeI->Shape()->Collide( shapeH, holeClearance + lineWidthH - clearanceEpsilon ) )
             {
-                aObsInfo->m_itemIsHole = true;
-                aObsInfo->m_clearance = holeClearance;
-            }
-            return true;
-        }
-
-        if( holeA && holeB )
-        {
-            int holeToHoleClearance = aNode->GetHoleToHoleClearance( this, aOther );
-
-            if( holeA->Collide( holeB, holeToHoleClearance - clearanceEpsilon ) )
-            {
-                if( aObsInfo )
+                if( aCtx )
                 {
-                    aObsInfo->m_headIsHole = true;
-                    aObsInfo->m_itemIsHole = true;
-                    aObsInfo->m_clearance = holeToHoleClearance;
+                    OBSTACLE obs;
+                    obs.m_clearance = holeClearance;
+                    obs.m_head = const_cast<ITEM*>( aHead );
+                    obs.m_item = const_cast<HOLE*>( holeI );
+
+                    aCtx->obstacles.insert( obs );
+                    dumpObstacles( aCtx->obstacles );
+                    collisionsFound = true;
                 }
-                return true;
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        if( holeH && holeH->ParentPadVia() != this && holeH != this )
+        {
+            int holeClearance = aNode->GetClearance( this, holeH );
+
+            printf("HCH2 %d\n", holeClearance);
+
+            if( holeH->Shape()->Collide( shapeI, holeClearance + lineWidthI - clearanceEpsilon ) )
+            {
+                if( aCtx )
+                {
+                    OBSTACLE obs;
+                    obs.m_clearance = holeClearance;
+                    obs.m_head = const_cast<HOLE*>( holeH );
+                    obs.m_item = const_cast<ITEM*>( this );
+
+                    aCtx->obstacles.insert( obs );
+                    dumpObstacles( aCtx->obstacles );
+                    collisionsFound = true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        if( holeI && holeH && ( holeI != holeH ) )
+        {
+            int holeClearance = aNode->GetClearance( holeI, holeH );
+
+            printf("HCH3 %d\n", holeClearance);
+
+            if( holeI->Shape()->Collide( holeH->Shape(), holeClearance - clearanceEpsilon ) )
+            {
+                if( aCtx )
+                {
+                    OBSTACLE obs;
+                    obs.m_clearance = holeClearance;
+
+                    // printf("pushh3 %p %p\n", obs.m_head, obs.m_item );
+
+                    obs.m_head = const_cast<HOLE*>( holeH );
+                    obs.m_item = const_cast<HOLE*>( holeI );
+
+                    aCtx->obstacles.insert( obs );
+                    dumpObstacles( aCtx->obstacles );
+
+                    collisionsFound = true;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
     }
 
-    if( !aOther->Layers().IsMultilayer() && thisNotFlashed )
+    printf("HCHE\n");
+
+    if( !aHead->Layers().IsMultilayer() && thisNotFlashed )
         return false;
 
     if( !Layers().IsMultilayer() && otherNotFlashed )
         return false;
 
-    int clearance = aOpts.m_overrideClearance >= 0 ? aOpts.m_overrideClearance
-                                                   : aNode->GetClearance( this, aOther );
+    int clearance;
+
+    if( aCtx && aCtx->options.m_overrideClearance >= 0 )
+    {
+        clearance = aCtx->options.m_overrideClearance;
+    }
+    else
+    {
+        clearance = aNode->GetClearance( this, aHead );
+    }
+
+    // prevent bogus collisions between the item and its own hole. FIXME: figure out a cleaner way of doing that
+    if( holeI && aHead == holeI->ParentPadVia() )
+        return false;
+
+    if( holeH && this == holeH->ParentPadVia() )
+        return false;
+
+    if( holeH && this == holeH )
+        return false;
+
+    if( holeI && aHead == holeI )
+        return false;
 
     if( clearance >= 0 )
     {
@@ -164,41 +264,69 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode,
             int      actual;
             VECTOR2I pos;
 
-            if( shapeA->Collide( shapeB, clearance + lineWidthA, &actual, &pos ) )
+            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - clearanceEpsilon,
+                                 &actual, &pos ) )
             {
                 if( checkCastellation && aNode->QueryEdgeExclusions( pos ) )
                     return false;
 
-                if( checkNetTie && aNode->GetRuleResolver()->IsNetTieExclusion( aOther, pos, this ) )
+                if( checkNetTie && aNode->GetRuleResolver()->IsNetTieExclusion( aHead, pos, this ) )
                     return false;
 
-                if( aObsInfo )
-                    aObsInfo->m_clearance = clearance;
-
-                return true;
+                if( aCtx )
+                {
+                    collisionsFound = true;
+                    OBSTACLE obs;
+                    obs.m_head = const_cast<ITEM*>( aHead );
+                    obs.m_item = const_cast<ITEM*>( this );
+                    obs.m_clearance = clearance;
+                    aCtx->obstacles.insert( obs );
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
         else
         {
             // Fast method
-            if( shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB - clearanceEpsilon ) )
+            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - clearanceEpsilon ) )
             {
-                if( aObsInfo )
-                    aObsInfo->m_clearance = clearance;
+                if( aCtx )
+                {
+                    collisionsFound = true;
+                    OBSTACLE obs;
+                    obs.m_head = const_cast<ITEM*>( aHead );
+                    obs.m_item = const_cast<ITEM*>( this );
+                    obs.m_clearance = clearance;
 
-                return true;
+                    //printf("i %p h %p ih %p hh %p\n", this ,aHead, holeI, holeH);
+                    printf("HCHX %d %d\n", clearance, clearance + lineWidthH + lineWidthI - clearanceEpsilon);
+                    //printf("pushc %p %p cl %d cle %d\n", obs.m_head, obs.m_item, clearance, clearance + lineWidthH + lineWidthI - clearanceEpsilon );
+                    //printf("SH %s\n", shapeH->Format().c_str(), aHead );
+                    //printf("SI %s\n", shapeI->Format().c_str(), this );
+
+                    aCtx->obstacles.insert( obs );
+
+                    dumpObstacles( aCtx->obstacles );
+                    printf("--EndDump\n");
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
     }
 
-    return false;
+    return collisionsFound;
 }
 
 
-bool ITEM::Collide( const ITEM* aOther, const NODE* aNode,
-                    const COLLISION_SEARCH_OPTIONS& aOpts, OBSTACLE *aObsInfo ) const
+bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, COLLISION_SEARCH_CONTEXT *aCtx ) const
 {
-    if( collideSimple( aOther, aNode, aOpts, aObsInfo ) )
+    if( collideSimple( aOther, aNode, aCtx ) )
         return true;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
@@ -209,15 +337,15 @@ bool ITEM::Collide( const ITEM* aOther, const NODE* aNode,
     {
         const LINE* line = static_cast<const LINE*>( this );
 
-        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aOpts, aObsInfo ) )
+        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aCtx ) )
             return true;
     }
 
     if( aOther->m_kind == LINE_T )
     {
-        const LINE* line = static_cast<const LINE*>( aOther );
+        const LINE* line = static_cast<const LINE*>( aOther ); // fixme
 
-        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aOpts, aObsInfo ) )
+        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aCtx ) )
             return true;
     }
 
@@ -236,6 +364,8 @@ std::string ITEM::KindStr() const
     case JOINT_T:     return "joint";
     case SOLID_T:     return "solid";
     case DIFF_PAIR_T: return "diff-pair";
+    case HOLE_T:      return "hole";
+
     default:          return "unknown";
     }
 }
@@ -244,6 +374,113 @@ std::string ITEM::KindStr() const
 ITEM::~ITEM()
 {
 }
+
+HOLE::~HOLE()
+{
+    delete m_holeShape;
+}
+
+HOLE* HOLE::Clone() const
+{
+    HOLE* h = new HOLE( m_parentPadVia, m_holeShape->Clone() );
+
+    h->SetNet( Net() );
+    h->SetLayers( Layers() );
+
+    h->m_rank = m_rank;
+    h->m_marker = m_marker;
+    h->m_parent = m_parent;
+    h->m_isVirtual = m_isVirtual;
+
+    return h;
+}
+
+const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+{
+    if( !m_holeShape )
+        return SHAPE_LINE_CHAIN();
+
+    if( m_holeShape->Type() == SH_CIRCLE )
+    {
+        auto cir = static_cast<SHAPE_CIRCLE*>( m_holeShape );
+        int cl = ( aClearance + aWalkaroundThickness / 2 );
+        int width = cir->GetRadius() * 2;
+
+        // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
+        return OctagonalHull( cir->GetCenter() - VECTOR2I( width / 2, width / 2 ), VECTOR2I( width, width ), cl,
+                            ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
+    }
+    else if( m_holeShape->Type() == SH_COMPOUND )
+    {
+        SHAPE_COMPOUND* cmpnd = static_cast<SHAPE_COMPOUND*>( m_holeShape );
+
+        if ( cmpnd->Shapes().size() == 1 )
+        {
+            return BuildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance,
+                                               aWalkaroundThickness );
+        }
+        else
+        {
+            SHAPE_POLY_SET hullSet;
+
+            for( SHAPE* shape : cmpnd->Shapes() )
+            {
+                hullSet.AddOutline( BuildHullForPrimitiveShape( shape, aClearance,
+                                                                aWalkaroundThickness ) );
+            }
+
+            hullSet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            return hullSet.Outline( 0 );
+        }
+    }
+    else
+    {
+        return BuildHullForPrimitiveShape( m_holeShape, aClearance, aWalkaroundThickness );
+    }
+}
+
+bool HOLE::IsCircular() const
+{
+    return m_holeShape->Type() == SH_CIRCLE;
+}
+
+int HOLE::Radius() const
+{
+    assert( m_holeShape->Type() == SH_CIRCLE );
+
+    return static_cast<const SHAPE_CIRCLE*>( m_holeShape )->GetRadius();
+}
+
+const VECTOR2I HOLE::Pos() const
+{
+    return VECTOR2I( 0, 0 ); // fixme holes
+}
+
+void HOLE::SetCenter( const VECTOR2I& aCenter )
+{
+    assert( m_holeShape->Type() == SH_CIRCLE );
+    static_cast<SHAPE_CIRCLE*>( m_holeShape )->SetCenter( aCenter );
+}
+void HOLE::SetRadius( int aRadius )
+{
+    assert( m_holeShape->Type() == SH_CIRCLE );
+    static_cast<SHAPE_CIRCLE*>( m_holeShape )->SetRadius( aRadius );
+}
+
+
+void HOLE::Move( const VECTOR2I& delta )
+{
+    m_holeShape->Move( delta );
+}
+
+HOLE* HOLE::MakeCircularHole( const VECTOR2I& pos, int radius )
+{
+    auto circle = new SHAPE_CIRCLE( pos, radius );
+    auto hole = new HOLE( nullptr, circle );
+    hole->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+    return hole;
+}
+
 
 const std::string ITEM::Format() const
 {
