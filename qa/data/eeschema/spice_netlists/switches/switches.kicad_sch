@@ -726,7 +726,7 @@
     (property "Sim_Pins" "1 6 3 5" (id 6) (at 163.83 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim_Params" "thr=500m his=0 ron=100m roff=1T ic=on" (id 7) (at 163.83 83.82 0)
+    (property "Sim_Params" "thr=500m his=0 ron=100m roff=1T" (id 7) (at 163.83 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 985f68da-ac8b-4dfe-a794-ff843a4dcef6))

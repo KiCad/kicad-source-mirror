@@ -57,7 +57,6 @@ public:
 
         wxString IsValid( const wxString& aStr ) const override
         {
-            //if( !IsIncluded( aStr ) )
             if( m_includes.Index( aStr ) == wxNOT_FOUND )
                 return wxString::Format( _( "No model named '%s' in library." ), aStr );
 

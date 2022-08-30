@@ -135,4 +135,25 @@ protected:
     int                          m_paramIndex;
 };
 
+
+class SIM_ENUM_PROPERTY : public wxEnumProperty
+{
+public:
+    SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
+                       std::shared_ptr<SIM_LIBRARY> aLibrary,
+                       std::shared_ptr<SIM_MODEL> aModel,
+                       int aParamIndex,
+                       SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT,
+                       SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
+
+    bool IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags = 0 ) const override;
+
+    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
+
+protected:
+    std::shared_ptr<SIM_LIBRARY> m_library;
+    std::shared_ptr<SIM_MODEL>   m_model;
+    int                          m_paramIndex;
+};
+
 #endif // SIM_PROPERTY_H

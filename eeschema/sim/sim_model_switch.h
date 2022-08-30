@@ -38,6 +38,8 @@ public:
                                     const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
+protected:
+    wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
     std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const override;
 
 private:

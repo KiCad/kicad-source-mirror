@@ -369,18 +369,19 @@ wxValidator* SIM_STRING_PROPERTY::DoGetValidator() const
 }
 
 
-bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                         int aArgFlags ) const
 {
-    wxString paramValueStr = m_model->GetBaseParam( m_paramIndex ).value->ToString();
+    wxString baseParamValue = m_model->GetBaseParam( m_paramIndex ).value->ToString();
     aVariant = aText;
 
     // TODO: Don't use string comparison.
-    if( m_model->GetBaseModel() && ( aText == "" || aText == paramValueStr ) )
+    if( m_model->GetBaseModel() && ( aText == "" || aText == baseParamValue ) )
     {
         if( !m_model->SetParamValue( m_paramIndex, "" ) ) // Nullify.
             return false;
 
-        aVariant = paramValueStr; // Use the inherited value (if it exists) if null.
+        aVariant = baseParamValue; // Use the inherited value (if it exists) if null.
     }
     else
     {
@@ -389,4 +390,30 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     }
 
     return true;
+}
+
+
+SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
+                                      std::shared_ptr<SIM_LIBRARY> aLibrary,
+                                      std::shared_ptr<SIM_MODEL> aModel,
+                                      int aParamIndex,
+                                      SIM_VALUE::TYPE aValueType,
+                                      SIM_VALUE_GRAMMAR::NOTATION aNotation )
+    : wxEnumProperty( aLabel, aName,
+                      wxArrayString( aModel->GetParam( aParamIndex ).info.enumValues.size(),
+                                     &aModel->GetParam( aParamIndex ).info.enumValues[0]  ) ),
+      m_library( aLibrary ),
+      m_model( aModel ),
+      m_paramIndex( aParamIndex )
+{
+    auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),
+                         GetParam().value->ToString() );
+    SetValue( std::distance( GetParam().info.enumValues.begin(), it ) );
+}
+
+
+bool SIM_ENUM_PROPERTY::IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags ) const
+{
+    m_model->SetParamValue( m_paramIndex, GetParam().info.enumValues.at( aNumber ) );
+    return wxEnumProperty::IntToValue( aVariant, aNumber, aArgFlags );
 }

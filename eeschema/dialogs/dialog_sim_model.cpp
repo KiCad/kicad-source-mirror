@@ -553,11 +553,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     wxString paramDescription;
 
     if( param.info.description == "" )
-        paramDescription = wxString::Format( "%s (%s)",
-                                             param.info.description,
-                                             param.info.name );
-    else
         paramDescription = wxString::Format( "%s", param.info.name );
+    else
+        paramDescription = wxString::Format( "%s (%s)", param.info.description, param.info.name );
 
     wxPGProperty* prop = nullptr;
 
@@ -584,8 +582,16 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
     //  break;
 
     case SIM_VALUE::TYPE_STRING:
-        prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
-                                        curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
+        if( param.info.enumValues.empty() )
+        {
+            prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, m_library,
+                    curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
+        }
+        else
+        {
+            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, m_library,
+                                          curModelSharedPtr(), aParamIndex, SIM_VALUE::TYPE_STRING );
+        }
         break;
 
     default:

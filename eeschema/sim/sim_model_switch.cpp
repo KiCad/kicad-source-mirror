@@ -46,6 +46,8 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) : SIM_MODEL( aType )
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SWITCH" );
         break;
     }
+
+    SetParamValue( "ic", "none" );
 }
 
 
@@ -53,7 +55,12 @@ wxString SIM_MODEL_SWITCH::GenerateSpiceItemParamValuePair( const PARAM& aParam,
                                                             bool& aIsFirst ) const
 {
     // The only instance param is "ic", which is positional.
-    return aParam.value->ToSpiceString();
+    wxString value = aParam.value->ToSpiceString();
+    
+    if( value == "none" )
+        return "";
+    else
+        return value;
 }
 
 
@@ -94,6 +101,17 @@ wxString SIM_MODEL_SWITCH::GenerateSpiceItemLine( const wxString& aRefName,
 }
 
 
+wxString SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+{
+    if( aParam.info.name == "ic" && aParam.value->ToString() == "none" )
+    {
+        return "";
+    }
+
+    return SIM_MODEL::GenerateParamValuePair( aParam, aIsFirst );
+}
+
+
 std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL_SWITCH::GetSpicePins() const
 {
     switch( GetType() )
@@ -124,6 +142,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.description = "Threshold voltage";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "vt";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "his";
@@ -134,6 +153,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.description = "Hysteresis voltage";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "vh";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "ron";
@@ -144,6 +164,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.description = "Resistance when open";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "roff";
@@ -154,6 +175,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.description = "Resistance when closed";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "ic";
@@ -161,9 +183,10 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwVParamInfos()
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
-    paramInfo.description = "Initial state (1=on, 0=off)";
+    paramInfo.description = "Initial state";
     paramInfo.isSpiceInstanceParam = true;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = { "none", "off", "on" };
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
@@ -183,6 +206,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.description = "Threshold current";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "it";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "his";
@@ -193,6 +217,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.description = "Hysteresis current";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "ih";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "ron";
@@ -203,6 +228,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.description = "Resistance when open";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "roff";
@@ -213,6 +239,7 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.description = "Resistance when closed";
     paramInfo.isSpiceInstanceParam = false;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = {};
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "ic";
@@ -220,9 +247,10 @@ const std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SWITCH::makeSwIParamInfos()
     paramInfo.unit = "";
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
-    paramInfo.description = "Initial state (1=on, 0=off)";
+    paramInfo.description = "Initial state";
     paramInfo.isSpiceInstanceParam = true;
     paramInfo.spiceModelName = "";
+    paramInfo.enumValues = { "none", "off", "on" };
     paramInfos.push_back( paramInfo );
 
     return paramInfos;

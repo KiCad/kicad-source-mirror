@@ -27,6 +27,7 @@
 
 #include <wx/string.h>
 #include <map>
+#include <utility>
 
 #include <sch_field.h>
 #include <lib_field.h>
@@ -379,6 +380,7 @@ public:
             bool isInstanceParam = false;
             wxString spiceModelName = "";
             wxString spiceInstanceName = "";
+            std::vector<wxString> enumValues = {};
 
             // TODO: Stop using brace-initializers, use this constructor for all info structs.
             INFO( wxString aName = "",
@@ -393,8 +395,9 @@ public:
                   const wxString& aDescription = "",
                   bool aIsSpiceInstanceParam = false,
                   bool aIsInstanceParam = false,
-                  wxString aSpiceModelName = "",
-                  wxString aSpiceInstanceName = "" ) :
+                  const wxString& aSpiceModelName = "",
+                  const wxString& aSpiceInstanceName = "",
+                  std::vector<wxString> aEnumValues = {} ) :
                 name( aName ),
                 id( aId ),
                 dir( aDir ),
@@ -407,7 +410,9 @@ public:
                 description( aDescription ),
                 isSpiceInstanceParam( aIsSpiceInstanceParam ),
                 isInstanceParam( aIsInstanceParam ),
-                spiceInstanceName( aSpiceInstanceName )
+                spiceModelName( aSpiceModelName ),
+                spiceInstanceName( aSpiceInstanceName ),
+                enumValues( std::move( aEnumValues ) )
             {
             }
         };
@@ -527,10 +532,6 @@ public:
     const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
 
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
-    virtual std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const
-    {
-        return GetPins();
-    }
 
     void SetPinSymbolPinNumber( int aPinIndex, const wxString& aSymbolPinNumber )
     {
@@ -580,6 +581,11 @@ protected:
 
     void ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
     void ParseDisabledField( const wxString& aDisabledField );
+
+    virtual std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const
+    {
+        return GetPins();
+    }
 
     virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                         SIM_VALUE_GRAMMAR::NOTATION aNotation
