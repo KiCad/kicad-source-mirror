@@ -88,7 +88,7 @@ namespace SPICE_GRAMMAR
     struct sep : sor<plus<continuation>,
                      garbage> {};
 
-    // Ngspice has some heuristic logic to allow + and - in tokens. We mimic that here.
+    // Ngspice has some heuristic logic to allow + and - in tokens. We replicate that here.
     struct tokenStart : seq<opt<one<'+', '-'>>,
                             opt<seq<star<sor<tao::pegtl::digit,
                                              one<'.'>>>,
@@ -156,9 +156,9 @@ namespace SPICE_GRAMMAR
     struct dotSubcktPinName : seq<not_at<TAO_PEGTL_ISTRING( "params:" )>,
                                   plus<not_at<space>,
                                        any>> {};
-    struct dotSubcktPinSequence : seq<opt<dotSubcktPinName,
-                                          star<sep,
-                                               dotSubcktPinName>>> {};
+    struct dotSubcktPinSequence : seq<opt<dotSubcktPinName>,
+                                      star<sep,
+                                           dotSubcktPinName>> {};
     struct dotSubcktParams : seq<TAO_PEGTL_ISTRING( "params:" ),
                                  sep,
                                  paramValuePairs> {};
@@ -169,8 +169,8 @@ namespace SPICE_GRAMMAR
                            TAO_PEGTL_ISTRING( ".subckt" ),
                            sep,
                            modelName,
-                           sep,
-                           dotSubcktPinSequence,
+                           opt<sep,
+                               dotSubcktPinSequence>,
                            opt<sep,
                                dotSubcktParams>,
                            opt<sep>,
@@ -180,6 +180,12 @@ namespace SPICE_GRAMMAR
 
     struct modelUnit : sor<dotModel,
                            dotSubckt> {};
+
+
+    struct dotControl : seq<opt<sep>,
+                            TAO_PEGTL_ISTRING( ".control" ),
+                            until<TAO_PEGTL_ISTRING( ".endc" )>,
+                            until<newline>> {};
 
 
     struct dotTitleTitle : star<not_at<newline>, any> {};
@@ -207,6 +213,16 @@ namespace SPICE_GRAMMAR
                             newline> {};
 
 
+    struct kLine : seq<opt<sep>,
+                       one<'K'>,
+                       until<sep>,
+                       one<'L'>,
+                       until<sep>,
+                       one<'L'>,
+                       until<sep>,
+                       until<newline>> {};
+
+
     struct dotLine : seq<opt<sep>,
                          one<'.'>,
                          until<newline>> {};
@@ -215,9 +231,11 @@ namespace SPICE_GRAMMAR
 
 
     struct spiceUnit : sor<modelUnit,
+                           dotControl,
                            dotTitle,
                            dotInclude,
                            dotLine,
+                           kLine,
                            unknownLine> {};
     struct spiceUnitGrammar : must<spiceUnit, tao::pegtl::eof> {};
 

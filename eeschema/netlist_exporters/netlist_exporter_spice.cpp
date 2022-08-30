@@ -49,6 +49,8 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
     template <typename Rule> struct textSelector : std::false_type {};
     template <> struct textSelector<modelUnit> : std::true_type {};
 
+    template <> struct textSelector<dotControl> : std::true_type {};
+
     template <> struct textSelector<dotTitle> : std::true_type {};
     template <> struct textSelector<dotTitleTitle> : std::true_type {};
 
@@ -56,6 +58,8 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
     template <> struct textSelector<dotIncludePathWithoutQuotes> : std::true_type {};
     template <> struct textSelector<dotIncludePathWithoutApostrophes> : std::true_type {};
     template <> struct textSelector<dotIncludePath> : std::true_type {};
+
+    template <> struct textSelector<kLine> : std::true_type {};
 
     template <> struct textSelector<dotLine> : std::true_type {};
 }
@@ -183,31 +187,6 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
                 text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
             else
                 continue;
-
-            // Some directives have a plain text inside them:
-            //  .control (that ends with .endc
-            //  .subckt (that ends with .ends
-            // So we insert the full text in netlist without any test
-            // (it is not the right place here to verify the directive)
-            if( text.StartsWith( ".control" ) || text.StartsWith( ".subckt") )
-            {
-                m_directives.emplace_back( text );
-                continue;
-            }
-
-            // A specific "directive" allows entering coupling parameter between 2 inductors
-            // Kxx Lyy Lzz nn (xx, yy, zz are digits, nn is the coupling value
-            if( text.StartsWith( "K" ) )
-            {
-                wxRegEx couplingK( "^[kK][[:digit:]]*[[:space:]]+[[:alnum:]]+[[:space:]]+[[:alnum:]]+",
-                                   wxRE_ADVANCED );
-
-                if( couplingK.Matches( text ) )     // K## L## L## coupling constant
-                {
-                    m_directives.emplace_back( text );
-                    continue;
-                }
-            }
 
             tao::pegtl::string_input<> in( ( text + "\n" ).ToUTF8(), "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
