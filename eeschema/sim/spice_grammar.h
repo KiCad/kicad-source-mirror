@@ -159,6 +159,9 @@ namespace SPICE_GRAMMAR
     struct dotSubcktPinSequence : seq<opt<dotSubcktPinName,
                                           star<sep,
                                                dotSubcktPinName>>> {};
+    struct dotSubcktParams : seq<TAO_PEGTL_ISTRING( "params:" ),
+                                 sep,
+                                 paramValuePairs> {};
     struct dotSubcktEnd : seq<TAO_PEGTL_ISTRING( ".ends" ),
                               until<newline>> {};
     struct spiceUnit;
@@ -169,9 +172,7 @@ namespace SPICE_GRAMMAR
                            sep,
                            dotSubcktPinSequence,
                            opt<sep,
-                               TAO_PEGTL_ISTRING( "params:" ),
-                               sep,
-                               paramValuePairs>,
+                               dotSubcktParams>,
                            opt<sep>,
                            newline,
                            until<dotSubcktEnd, spiceUnit>> {};

@@ -37,7 +37,7 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
     template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
     template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotSubcktPinName> : std::true_type {};
-    template <> struct spiceUnitSelector<paramValuePairs> : std::true_type {};
+    template <> struct spiceUnitSelector<dotSubcktParams> : std::true_type {};
     template <> struct spiceUnitSelector<param> : std::true_type {};
     template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE_INT, NOTATION::SPICE>>
         : std::true_type {};
@@ -72,8 +72,6 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
     {
         if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )
         {
-            bool hadParamValuePairs = false;
-
             for( const auto& subnode : node->children )
             {
                 if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::modelName>() )
@@ -83,8 +81,7 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                 {
                     AddPin( { subnode->string(), wxString::FromCDouble( GetPinCount() + 1 ) } );
                 }
-                else if( !hadParamValuePairs
-                    && subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::paramValuePairs>() )
+                else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktParams>() )
                 {
                     for( const auto& subsubnode : subnode->children )
                     {
@@ -102,8 +99,6 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                             wxFAIL_MSG( "Unhandled parse tree subsubnode" );
                         }
                     }
-
-                    hadParamValuePairs = true;
                 }
                 else if( subnode->is_type<
                         SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_INT,
