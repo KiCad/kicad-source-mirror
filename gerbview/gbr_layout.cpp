@@ -93,7 +93,7 @@ INSPECT_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData,
                 if( gerber == nullptr )    // Graphic layer not yet used
                     continue;
 
-                if( gerber->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+                if( gerber->Visit( inspector, testData, aScanTypes ) == INSPECT_RESULT::QUIT )
                     return INSPECT_RESULT::QUIT;
             }
         }
