@@ -189,6 +189,11 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
+     * Automatically set the rotation of an item (if the item supports it)
+     */
+    void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
+
+    /**
      * Add an item to the schematic and adds the changes to the undo/redo container.
      * @param aUndoAppend True if the action should be appended to the current undo record.
      */

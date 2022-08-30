@@ -1287,6 +1287,32 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
+void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
+{
+    if( aItem->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
+    {
+        auto label = static_cast<SCH_LABEL_BASE*>( aItem );
+        if( label->AutoRotateOnPlacement() )
+        {
+            auto textSpin = aScreen->GetLabelOrientationForPoint(
+                    label->GetPosition(), label->GetTextSpinStyle(), &GetCurrentSheet() );
+            if( textSpin != label->GetTextSpinStyle() )
+            {
+                label->SetTextSpinStyle( textSpin );
+                for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+                {
+                    SCH_LABEL_BASE* otherLabel = static_cast<SCH_LABEL_BASE*>( item );
+                    if( otherLabel != label && otherLabel->GetText() == label->GetText() )
+                    {
+                        otherLabel->AutoplaceFields( aScreen, false );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
                                                  bool aUndoAppend )
 {
@@ -1369,27 +1395,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
         if( connected )
         {
-            if( aItem->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
-            {
-                auto label = static_cast<SCH_LABEL_BASE*>( aItem );
-                if( label->AutoRotateOnPlacement() )
-                {
-                    auto textSpin = aScreen->GetLabelOrientationForPoint(
-                            label->GetPosition(), label->GetTextSpinStyle(), &GetCurrentSheet() );
-                    if( textSpin != label->GetTextSpinStyle() )
-                    {
-                        label->SetTextSpinStyle( textSpin );
-                        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-                        {
-                            SCH_LABEL_BASE *otherLabel = static_cast<SCH_LABEL_BASE *>( item );
-                            if ( otherLabel != label && otherLabel->GetText()  == label->GetText() )
-                            {
-                                otherLabel->AutoplaceFields( aScreen, false );
-                            }
-                        }
-                    }
-                }
-            }
+            AutoRotateItem( aScreen, aItem );
         }
 
         TestDanglingEnds();

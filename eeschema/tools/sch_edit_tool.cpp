@@ -386,6 +386,7 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorV,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorH,         orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ) );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
 
@@ -465,6 +466,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
 
@@ -959,6 +961,111 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         updateItem( selected, true );
 
     if( item->IsMoving() )
+    {
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    }
+    else
+    {
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+        if( connections )
+            m_frame->TestDanglingEnds();
+
+        m_frame->OnModify();
+    }
+
+    return 0;
+}
+
+
+const std::vector<KICAD_T> swappableItems = {
+    SCH_SHAPE_T,
+    SCH_TEXT_T,
+    SCH_TEXTBOX_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_DIRECTIVE_LABEL_T,
+    SCH_FIELD_T,
+    SCH_SYMBOL_T,
+    SCH_SHEET_T,
+    SCH_BITMAP_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T
+};
+
+
+int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
+    std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
+
+    if( selection.Size() < 2 )
+        return 0;
+
+    bool isMoving    = selection.Front()->IsMoving();
+    bool appendUndo  = isMoving;
+    bool connections = false;
+
+    SCH_SCREEN* screen = this->m_frame->GetScreen();
+
+    for( size_t i = 0; i < sorted.size() - 1; i++ )
+    {
+        SCH_ITEM* a = static_cast<SCH_ITEM*>( sorted[i] );
+        SCH_ITEM* b = static_cast<SCH_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+
+        VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
+        std::swap( aPos, bPos );
+
+        saveCopyInUndoList( a, UNDO_REDO::CHANGED, appendUndo );
+        appendUndo = true;
+        saveCopyInUndoList( b, UNDO_REDO::CHANGED, appendUndo );
+
+        a->SetPosition( aPos );
+        b->SetPosition( bPos );
+
+        if( a->Type() == b->Type() )
+        {
+            switch( a->Type() )
+            {
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
+            case SCH_DIRECTIVE_LABEL_T:
+                m_frame->AutoRotateItem( screen, a );
+                m_frame->AutoRotateItem( screen, b );
+                break;
+            case SCH_SYMBOL_T:
+            {
+                SCH_SYMBOL* aSymbol = static_cast<SCH_SYMBOL*>( a );
+                SCH_SYMBOL* bSymbol = static_cast<SCH_SYMBOL*>( b );
+                int aOrient = aSymbol->GetOrientation(), bOrient = bSymbol->GetOrientation();
+                std::swap( aOrient, bOrient );
+                aSymbol->SetOrientation( aOrient );
+                bSymbol->SetOrientation( bOrient );
+                break;
+            }
+            default: break;
+            }
+        }
+
+        connections |= a->IsConnectable();
+        connections |= b->IsConnectable();
+        m_frame->UpdateItem( a, false, true );
+        m_frame->UpdateItem( b, false, true );
+    }
+
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
+    // Update R-Tree for modified items
+    for( EDA_ITEM* selected : selection )
+        updateItem( selected, true );
+
+    if( isMoving )
     {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
@@ -2185,6 +2292,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 

@@ -419,6 +419,11 @@ TOOL_ACTION EE_ACTIONS::mirrorH( "eeschema.InteractiveEdit.mirrorH",
         _( "Mirror Horizontally" ), _( "Flips selected item(s) from left to right" ),
         BITMAPS::mirror_h );
 
+TOOL_ACTION EE_ACTIONS::swap( "eeschema.InteractiveEdit.swap",
+        AS_GLOBAL, 0, "",
+        _( "Swap" ), _( "Swaps selected items' positions" ),
+        BITMAPS::swap_layer );
+
 TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL,
         'E', LEGACY_HK_NAME( "Edit Item" ),

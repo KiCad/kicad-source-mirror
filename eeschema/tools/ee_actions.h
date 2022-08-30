@@ -127,6 +127,7 @@ public:
     static TOOL_ACTION rotateCCW;
     static TOOL_ACTION mirrorV;
     static TOOL_ACTION mirrorH;
+    static TOOL_ACTION swap;
     static TOOL_ACTION properties;
     static TOOL_ACTION editReference;
     static TOOL_ACTION editValue;
