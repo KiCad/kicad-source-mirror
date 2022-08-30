@@ -480,7 +480,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
     while( !itemPoly.IsEmpty() )
     {
-        focusPt = (wxPoint) itemPoly.BBox().Centre();
+        focusPt = itemPoly.BBox().Centre();
 
         try
         {

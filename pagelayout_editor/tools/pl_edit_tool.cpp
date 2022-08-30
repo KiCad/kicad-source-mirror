@@ -423,7 +423,7 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             {
                 for( DS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
                 {
-                    if( drawItem->HitTest( (wxPoint) aPos, threshold ) )
+                    if( drawItem->HitTest( aPos, threshold ) )
                     {
                         item = drawItem;
                         break;

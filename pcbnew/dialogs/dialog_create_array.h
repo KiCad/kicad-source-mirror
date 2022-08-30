@@ -44,12 +44,12 @@ public:
      * Construct a new dialog.
      *
      * @param aParent the parent window
-     * @param aOptions the options that will be re-seated when dialog is validly closed
+     * @param aOptions the options that will be updated when dialog is closed with OK
      * @param aEnableNumbering enable pad numbering
      * @param aOrigPos original item position (used for computing the circular array radius)
      */
     DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, std::unique_ptr<ARRAY_OPTIONS>& aOptions,
-                         bool enableNumbering, const wxPoint& aOrigPos );
+                         bool enableNumbering, const VECTOR2I& aOrigPos );
 
 private:
     // Event callbacks
@@ -69,7 +69,7 @@ private:
     /*
      * The position of the original item(s), used for finding radius, etc
      */
-    const wxPoint m_originalItemPosition;
+    const VECTOR2I m_originalItemPosition;
 
     // Decide whether to display pad numbering options or not
     bool m_isFootprintEditor;

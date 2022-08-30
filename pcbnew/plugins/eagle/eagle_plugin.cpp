@@ -1039,9 +1039,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     dimension->SetLayer( layer );
                     dimension->SetPrecision( DIMENSION_PRECISION );
 
-                    dimension->SetStart( (wxPoint) pt1 );
-                    dimension->SetEnd( (wxPoint) pt2 );
-                    dimension->Text().SetPosition( (wxPoint) pt3 );
+                    dimension->SetStart( pt1 );
+                    dimension->SetEnd( pt2 );
+                    dimension->Text().SetPosition( pt3 );
                     dimension->Text().SetTextSize( textSize );
                     dimension->Text().SetTextThickness( textThickness );
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
@@ -1055,9 +1055,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     leader->SetLayer( layer );
                     leader->SetPrecision( DIMENSION_PRECISION );
 
-                    leader->SetStart( (wxPoint) pt1 );
-                    leader->SetEnd( (wxPoint) pt2 );
-                    leader->Text().SetPosition( (wxPoint) pt3 );
+                    leader->SetStart( pt1 );
+                    leader->SetEnd( pt2 );
+                    leader->Text().SetPosition( pt3 );
                     leader->Text().SetTextSize( textSize );
                     leader->Text().SetTextThickness( textThickness );
                     leader->SetText( wxEmptyString );
@@ -1122,7 +1122,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     }
                     else
                     {
-                        int offset = GetLineLength( (wxPoint) pt3, (wxPoint) pt1 );
+                        int offset = GetLineLength( pt3, pt1 );
 
                         if( pt1.y > pt2.y )
                             dimension->SetHeight( offset );

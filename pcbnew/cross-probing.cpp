@@ -225,11 +225,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( crossProbingSettings.center_on_items && bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
         if( crossProbingSettings.zoom_to_fit )
-        {
             GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
-        }
 
-        FocusOnLocation( (wxPoint) bbox.Centre() );
+        FocusOnLocation( bbox.Centre() );
     }
 
     view->UpdateAllLayersColor();

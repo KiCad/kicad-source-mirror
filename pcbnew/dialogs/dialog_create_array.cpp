@@ -148,7 +148,7 @@ static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
 
 DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
                                           std::unique_ptr<ARRAY_OPTIONS>& aSettings,
-                                          bool aIsFootprintEditor, const wxPoint& aOrigPos ) :
+                                          bool aIsFootprintEditor, const VECTOR2I& aOrigPos ) :
         DIALOG_CREATE_ARRAY_BASE( aParent ),
         m_settings( aSettings ),
         m_originalItemPosition( aOrigPos ),

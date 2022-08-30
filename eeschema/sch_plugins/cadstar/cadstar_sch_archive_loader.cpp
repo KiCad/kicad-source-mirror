@@ -2101,8 +2101,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
             for( int jj = 0; jj < arcSegments.SegmentCount(); jj++ )
             {
-                VECTOR2I segStart = (wxPoint) arcSegments.Segment( jj ).A;
-                VECTOR2I segEnd = (wxPoint) arcSegments.Segment( jj ).B;
+                VECTOR2I segStart = arcSegments.Segment( jj ).A;
+                VECTOR2I segEnd = arcSegments.Segment( jj ).B;
 
                 loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID, aCadstarSheetID,
                                            aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
@@ -2869,7 +2869,7 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
                 SHAPE_LINE_CHAIN& poly = shape.GetPolyShape().Outline( 0 );
 
                 for( size_t ii = 0; ii < poly.GetPointCount(); ++ii )
-                    poly.SetPoint( ii, scalePt( (wxPoint) poly.CPoint( ii ) ) );
+                    poly.SetPoint( ii, scalePt( poly.CPoint( ii ) ) );
             }
             break;
         }

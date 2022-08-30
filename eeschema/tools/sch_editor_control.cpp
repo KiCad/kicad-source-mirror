@@ -560,7 +560,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     if( item )
     {
         m_selectionTool->AddItemToSel( item );
-        m_frame->FocusOnLocation( (wxPoint)item->GetBoundingBox().GetCenter() );
+        m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter() );
         m_frame->GetCanvas()->Refresh();
     }
     else

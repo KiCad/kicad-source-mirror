@@ -73,7 +73,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 
                 if( newItem )
                 {
-                    newItem->SetPosition( (wxPoint) aPosition );
+                    newItem->SetPosition( aPosition );
                     preview.Add( newItem.get() );
 
                     if( newItem->Type() == PCB_FOOTPRINT_T )
@@ -240,7 +240,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 preview.Clear();
                 newItem.release();
 
-                makeNewItem( (wxPoint) cursorPos );
+                makeNewItem( cursorPos );
                 aPlacer->SnapItem( newItem.get() );
                 view()->Update( &preview );
             }
@@ -252,7 +252,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
         else if( newItem && evt->IsMotion() )
         {
             // track the cursor
-            newItem->SetPosition( (wxPoint) cursorPos );
+            newItem->SetPosition( cursorPos );
             aPlacer->SnapItem( newItem.get() );
 
             // Show a preview of the item

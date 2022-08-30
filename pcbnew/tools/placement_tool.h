@@ -32,8 +32,6 @@
 #include <board_item.h>
 #include <pcb_base_frame.h>
 
-using ALIGNMENT_RECT = std::pair<BOARD_ITEM*, EDA_RECT>;
-using ALIGNMENT_RECTS = std::vector<ALIGNMENT_RECT>;
 
 class PCB_SELECTION_TOOL;
 
@@ -105,11 +103,13 @@ private:
      * Returns the size of aItemsToAlign()
      */
     template< typename T >
-    size_t GetSelections( ALIGNMENT_RECTS& aItemsToAlign, ALIGNMENT_RECTS& aLockedItems,
+    size_t GetSelections( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItemsToAlign,
+                          std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aLockedItems,
                           T aCompare );
 
     template< typename T >
-    int selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aGetValue );
+    int selectTarget( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                      std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aLocked, T aGetValue );
 
     /**
      * Sets X coordinate of the selected items to the value of the left-most selected item
@@ -136,7 +136,7 @@ private:
      * since items of differing widths will be placed with different gaps. Is only used if
      * items overlap.
      */
-    void doDistributeCentersHorizontally( ALIGNMENT_RECTS& itemsToDistribute,
+    void doDistributeCentersHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
                                           BOARD_COMMIT& aCommit ) const;
 
     /**
@@ -147,7 +147,7 @@ private:
      *       since items of differing widths will be placed with different gaps. Is only used
      *       if items overlap
      */
-    void doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute,
+    void doDistributeCentersVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
                                         BOARD_COMMIT& aCommit ) const;
 
     /**
@@ -156,8 +156,9 @@ private:
      * @note Using the edges of bounding box of items is only possible if there is enough space
      *       between them. If this is not the case, use the center spacing method
      */
-    void doDistributeGapsHorizontally( ALIGNMENT_RECTS& itemsToDistribute, BOARD_COMMIT& aCommit,
-                                       const BOARD_ITEM* lastItem, int totalGap ) const;
+    void doDistributeGapsHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                                       BOARD_COMMIT& aCommit, const BOARD_ITEM* lastItem,
+                                       int totalGap ) const;
 
     /**
      * Distributes selected items using an even spacing between their bounding boxes
@@ -165,8 +166,9 @@ private:
      * @note Using the edges of bounding box of items is only possible if there is enough space
      *       between them. If this is not the case, use the center spacing method
      */
-    void doDistributeGapsVertically( ALIGNMENT_RECTS& itemsToDistribute, BOARD_COMMIT& aCommit,
-                                     const BOARD_ITEM* lastItem, int totalGap ) const;
+    void doDistributeGapsVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                                     BOARD_COMMIT& aCommit, const BOARD_ITEM* lastItem,
+                                     int totalGap ) const;
 
 private:
     PCB_SELECTION_TOOL*  m_selectionTool;

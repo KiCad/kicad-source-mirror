@@ -245,7 +245,7 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
     {
         for( DS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
         {
-            if( drawItem->HitTest( (wxPoint) aWhere, threshold ) )
+            if( drawItem->HitTest( aWhere, threshold ) )
                 collector.Append( drawItem );
         }
     }
@@ -317,7 +317,7 @@ void PL_SELECTION_TOOL::guessSelectionCandidates( COLLECTOR& collector, const VE
         EDA_ITEM* item = collector[ i ];
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
-        if( item->HitTest( (wxPoint) aPos, 0 ) && !other->HitTest( (wxPoint) aPos, 0 ) )
+        if( item->HitTest( aPos, 0 ) && !other->HitTest( aPos, 0 ) )
             collector.Transfer( other );
     }
 }

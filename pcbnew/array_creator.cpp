@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Created on: 11 Mar 2016, author John Beard
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
 {
     const ARRAY_OPTIONS::TRANSFORM transform = aArrOpts.GetTransform( aIndex, aItem.GetPosition() );
 
-    aItem.Move( (wxPoint) transform.m_offset );
+    aItem.Move( transform.m_offset );
     aItem.Rotate( aItem.GetPosition(), transform.m_rotation );
 }
 
@@ -57,8 +57,8 @@ void ARRAY_CREATOR::Invoke()
 
     FOOTPRINT* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
 
-    const bool enableArrayNumbering = m_isFootprintEditor;
-    const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
+    const bool     enableArrayNumbering = m_isFootprintEditor;
+    const VECTOR2I rotPoint = m_selection.GetCenter();
 
     std::unique_ptr<ARRAY_OPTIONS> array_opts;
 

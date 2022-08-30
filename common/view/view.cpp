@@ -620,7 +620,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuri
 
     while( !unobscuredPoly.IsEmpty() )
     {
-        unobscuredCenter = (wxPoint) unobscuredPoly.BBox().Centre();
+        unobscuredCenter = unobscuredPoly.BBox().Centre();
         unobscuredPoly.Deflate( step, 4 );
     }
 

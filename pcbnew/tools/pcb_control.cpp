@@ -89,7 +89,7 @@ void PCB_CONTROL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
-        m_gridOrigin->SetPosition( (wxPoint) board()->GetDesignSettings().GetGridOrigin() );
+        m_gridOrigin->SetPosition( board()->GetDesignSettings().GetGridOrigin() );
         m_gridOrigin->SetColor( m_frame->GetGridColor() );
         getView()->Remove( m_gridOrigin.get() );
         getView()->Add( m_gridOrigin.get() );
@@ -478,7 +478,7 @@ void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
 {
     aFrame->GetDesignSettings().SetGridOrigin( wxPoint( aPoint ) );
     aView->GetGAL()->SetGridOrigin( aPoint );
-    originViewItem->SetPosition( (wxPoint) aPoint );
+    originViewItem->SetPosition( aPoint );
     aView->MarkDirty();
     aFrame->OnModify();
 }

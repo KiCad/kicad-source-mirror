@@ -2511,13 +2511,13 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
     collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                     : GENERAL_COLLECTOR::AllBoardItems,
-                       (wxPoint) aPoint, guide );
+                       aPoint, guide );
 
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
         BOARD_ITEM* item = collector[i];
 
-        if( item->IsSelected() && item->HitTest( (wxPoint) aPoint, 5 * guide.OnePixelInIU() ) )
+        if( item->IsSelected() && item->HitTest( aPoint, 5 * guide.OnePixelInIU() ) )
             return true;
     }
 

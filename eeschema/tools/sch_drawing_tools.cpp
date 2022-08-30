@@ -674,7 +674,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
-    wxPoint               cursorPos;
+    VECTOR2I              cursorPos;
     KICAD_T               type = aEvent.Parameter<KICAD_T>();
     EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -784,10 +784,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
-                                   : (wxPoint) controls->GetMousePosition();
-
-        cursorPos = wxPoint( grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr ) );
+        cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
+        cursorPos = grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr );
         controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -853,7 +851,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() )
         {
-            previewItem->SetPosition( (wxPoint)cursorPos );
+            previewItem->SetPosition( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( previewItem->Clone() );
             m_frame->SetMsgPanel( previewItem );
@@ -1599,7 +1597,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
 
             item->SetFlags( IS_NEW );
-            item->BeginEdit( (wxPoint) cursorPos );
+            item->BeginEdit( cursorPos );
 
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
@@ -1611,7 +1609,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         {
             if( evt->IsDblClick( BUT_LEFT )
                     || evt->IsAction( &EE_ACTIONS::finishDrawing )
-                    || !item->ContinueEdit( (wxPoint) cursorPos ) )
+                    || !item->ContinueEdit( cursorPos ) )
             {
                 item->EndEdit();
                 item->ClearEditFlags();
@@ -1655,7 +1653,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->CalcEdit( (wxPoint) cursorPos );
+            item->CalcEdit( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
             m_frame->SetMsgPanel( item );

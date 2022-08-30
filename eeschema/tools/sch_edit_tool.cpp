@@ -50,9 +50,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
-#include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eeschema_id.h>
-#include <status_popup.h>
 #include <wx/gdicmn.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_properties.h>
@@ -2053,7 +2051,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
 
     std::vector<SCH_LINE*> lines;

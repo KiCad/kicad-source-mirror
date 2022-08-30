@@ -975,7 +975,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             if( !segment )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            contextMenuPos = (wxPoint)cursorPos;
+            contextMenuPos = (wxPoint) cursorPos;
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
@@ -1046,7 +1046,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
     else
     {
         aSegment = static_cast<SCH_LINE*>( aSegment->Duplicate() );
-        aSegment->SetStartPoint( (wxPoint) aPos );
+        aSegment->SetStartPoint( aPos );
     }
 
 
