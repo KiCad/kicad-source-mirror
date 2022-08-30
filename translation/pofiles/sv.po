@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"PO-Revision-Date: 2022-08-30 19:59+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4626,9 +4626,8 @@ msgid "Bottom"
 msgstr "Nederst"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx ..."
+msgstr "Hyperlänk"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5204,9 +5203,8 @@ msgid "Cursor"
 msgstr "Muspekare"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Flytta objekt"
+msgstr "Svävande objekt"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5482,9 +5480,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-språkfilen för detta språk är inte installerad."
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Visa sidgränser"
+msgstr "Visa sida %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6594,14 +6592,12 @@ msgstr "Återställ %s till standardinställningar"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "Ingen buss vald"
+msgstr "Inga objekt valda"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Ingen buss vald"
+msgstr "Flera objekt valda"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6692,9 +6688,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Äldre KiCad symbolbiblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad-symbolbiblioteksfiler"
+msgstr "KiCad databas-biblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -9036,9 +9031,8 @@ msgstr "Sätt diametern till 0 för att använda kretsschemats knutpunktsstorlek
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Välj transparent färg för att använda kretsschemaredigerarens färger."
+msgstr "Rensa färg för att använda kretsschemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -10660,9 +10654,8 @@ msgid "Net Classes"
 msgstr "Nätklasser"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Bussdefinitioner"
+msgstr "Bussaliasdefinitioner"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10918,14 +10911,12 @@ msgid "Model"
 msgstr "Modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Spice-direktiv:"
+msgstr "Spice-enhet:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "Formtyp:"
+msgstr "Spice-typ:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11656,9 +11647,9 @@ msgid "<root sheet>"
 msgstr "<rotark>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Gå till Sida %s (%s)"
+msgstr "Sida %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -11666,14 +11657,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Ogiltig destination för hyperlänk. Vänligen mata in endera en giltig URL ("
+"t.ex. file:// eller http(s):// eller \"#<sidnummer>\" för att skapa en "
+"hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 msgid "Link:"
-msgstr ""
+msgstr "Länk:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Gör detta textobjekt till en klickbar hyperlänk"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11857,9 +11851,8 @@ msgid "(selection color can be edited in the \"Colors\" page)"
 msgstr "(markeringens färg kan redigeras på sidan \"Färger\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:95
-#, fuzzy
 msgid "Highlight thickness:"
-msgstr "Markeringstjocklek:"
+msgstr "Framhävningstjocklek:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:110
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -12079,34 +12072,31 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Visa förhandsgranskningar av fotavtryck i Symbolväljare"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Fältnamnet '%s' används redan."
+msgstr "Täcknamnet (alias) '%s' används redan."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Modellnamnet kan inte utelämnas."
+msgstr "Medlemsnät / täcknamn (alias) kan inte lämnas tomt."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Bussdefinitioner"
+msgstr "Bussdefinitioner:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Källa"
+msgstr "(källa)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "behöver ett nummer för '%s'"
+msgstr "Medlemmar för '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
 #, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Nät- eller Bussnamn"
+msgstr "Namn för nät- / nästlad buss"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -14222,19 +14212,22 @@ msgstr ""
 "ark men har ingen figur definierad."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Fel vid inläsning av bild %s."
+msgstr "Fel vid inläsning av databastabell %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Kunde inte läsa in databasbibliotek: inställningsfil %s saknas eller är "
+"ogiltig"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"Kunde inte läsa in databasbibliotek: kunde inte ansluta till databas %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14316,9 +14309,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Ogiltigt symbolkonverteringsnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Ogiltigt stiftnummer"
+msgstr "Ogiltig URL i hyperlänk '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -15071,9 +15064,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Det gick inte att sluta sig till en modell utifrån värde '%s'"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "Ogiltigt symbolenhetsnummer %s"
+msgstr "Ogiltigt symbolstifts index '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -17390,7 +17383,7 @@ msgstr "Tryck på <ESC> för att avbryta flytt."
 #: eeschema/tools/sch_navigate_tool.cpp:80
 #, fuzzy, c-format
 msgid "Page '%d' not found."
-msgstr "Filen %s fanns ej."
+msgstr "Sida %s hittades inte."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -18926,9 +18919,10 @@ msgid "Restoring '%s'"
 msgstr "Återställer '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "Vill du automatiskt söka efter uppdateringar vid uppstart?"
+msgstr ""
+"Vill du automatiskt söka efter uppdateringar för insticksmoduler vid "
+"uppstart?"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
@@ -30568,9 +30562,8 @@ msgid "Via Gap"
 msgstr "Viors isolationsavstånd"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Ändra textegenskaper"
+msgstr "Ändra egenskap"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -33909,11 +33902,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "Okänt lager \"%s\""
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr ""
-"Argument för fotavtrycks identifierare (A, B eller referensbeteckning) "
-"saknas för %s."
+msgstr "Argument för fotavtryck (A, B eller referensbeteckning) saknas för %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -33928,11 +33919,9 @@ msgid "Footprint has no back courtyard."
 msgstr "Footprint har ingen bakgård."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr ""
-"Saknat argument för regelytans beteckning (A, B eller regelytans namn) för "
-"%s."
+msgstr "Saknat argument för regelytan (A, B eller regelytans namn) för %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -37861,14 +37850,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Visa / dölj utseendehanteraren"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "Arkegenskaper"
+msgstr "Visa dialogruta för egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "Visa / dölj utseendehanteraren"
+msgstr "Visa / dölj dialogruta för egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -38308,14 +38295,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Väljer alla fotavtryck och ledare i samma kretsschema-ark"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Spara i schematisk"
+msgstr "Välj i kretsschemat"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Markera motsvarande objekt i mönsterkortsredigeraren"
+msgstr "Väljer motsvarande objekt i kretsschemaredigeraren"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
