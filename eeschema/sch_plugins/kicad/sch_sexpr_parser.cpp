@@ -524,7 +524,7 @@ void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 
 void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax )
 {
-    wxCHECK_RET( aText && CurTok() == T_effects || CurTok() == T_href,
+    wxCHECK_RET( aText && ( CurTok() == T_effects || CurTok() == T_href ),
                  "Cannot parse " + GetTokenString( CurTok() ) + " as an EDA_TEXT." );
 
     // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`.
