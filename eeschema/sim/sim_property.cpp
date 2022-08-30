@@ -408,7 +408,9 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
 {
     auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),
                          GetParam().value->ToString() );
-    SetValue( std::distance( GetParam().info.enumValues.begin(), it ) );
+
+    // we need the force cast for msvc because wxVariant lacks 64-bit methods due to `long`
+    SetValue( static_cast<int>( std::distance( GetParam().info.enumValues.begin(), it ) ) );
 }
 
 
