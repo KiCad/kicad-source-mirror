@@ -422,6 +422,13 @@ public:
     bool IsMoveTool() const;
 
     /**
+     * Indicate if the event is asking for an editor tool.
+     *
+     * Used to allow deleting an element without de-activating the current tool.
+     */
+    bool IsEditorTool() const;
+
+    /**
      * Indicate if the event is from the simulator.
      */
     bool IsSimulator() const;

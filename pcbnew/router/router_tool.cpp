@@ -1522,7 +1522,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
-            if( evt->IsMoveTool() )
+            if( evt->IsMoveTool() || evt->IsEditorTool() )
             {
                 // leave ourselves on the stack so we come back after the move
                 break;
