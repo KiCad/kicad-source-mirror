@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,14 +301,7 @@ void PCB_MARKER::SetZoom( double aZoomFactor )
 
 const EDA_RECT PCB_MARKER::GetBoundingBox() const
 {
-    EDA_RECT bbox = m_shapeBoundingBox;
-
-    VECTOR2I pos = m_Pos;
-    pos.x += int( bbox.GetOrigin().x * MarkerScale() );
-    pos.y += int( bbox.GetOrigin().y * MarkerScale() );
-
-    return EDA_RECT( pos, wxSize( int( bbox.GetWidth() * MarkerScale() ),
-                                  int( bbox.GetHeight() * MarkerScale() ) ) );
+    return GetBoundingBoxMarker();
 }
 
 
