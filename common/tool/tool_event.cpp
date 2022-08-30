@@ -242,6 +242,13 @@ bool TOOL_EVENT::IsMoveTool() const
 }
 
 
+bool TOOL_EVENT::IsEditorTool() const
+{
+    return ( m_commandStr
+            && m_commandStr.value().find( "InteractiveEdit" ) != GetCommandStr()->npos );
+}
+
+
 bool TOOL_EVENT::IsSimulator() const
 {
     return( m_commandStr.is_initialized()

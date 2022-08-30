@@ -263,12 +263,11 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 }
 
 
-
 bool EDIT_TOOL::isRouterActive() const
 {
     ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
 
-    return router && router->IsToolActive();
+    return router && router->RoutingInProgress();
 }
 
 
@@ -1763,11 +1762,16 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
+    PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
     if( isRouterActive() )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::routerUndoLastSegment, true );
         return 0;
     }
+
+    std::string tool = aEvent.GetCommandStr().value();
+    editFrame->PushTool( tool );
 
     std::vector<BOARD_ITEM*> lockedItems;
     Activate();
@@ -1808,6 +1812,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
             wxBell();
             canvas()->Refresh();
+            editFrame->PopTool( tool );
             return 0;
         }
 
@@ -1978,6 +1983,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Delete" ) );
 
+    editFrame->PopTool( tool );
     return 0;
 }
 
