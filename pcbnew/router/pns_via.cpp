@@ -36,6 +36,7 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
     VECTOR2I elementForces[4], force;
     size_t   nf = 0;
 
+    #if 0
     if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES )
     {
         int holeClearance = aNode->GetHoleClearance( this, aOther );
@@ -49,6 +50,7 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
 
         aOther->Shape()->Collide( Hole(), holeClearance, &elementForces[nf++] );
     }
+    #endif
 
     aOther->Shape()->Collide( Shape(), clearance, &elementForces[nf++] );
 
@@ -155,7 +157,7 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
     int width = m_diameter;
 
     if( !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
-        width = m_hole.GetRadius() * 2;
+        width = m_hole->Radius() * 2;
 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
     return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ),
@@ -164,16 +166,17 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
 }
 
 
+#if 0
 const SHAPE_LINE_CHAIN VIA::HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     int cl = ( aClearance + aWalkaroundThickness / 2 );
-    int width = m_hole.GetRadius() * 2;
+    int width = m_hole->GetRadius() * 2;
 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
     return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ), VECTOR2I( width, width ), cl,
                           ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
 }
-
+#endif
 
 VIA* VIA::Clone() const
 {
@@ -185,7 +188,7 @@ VIA* VIA::Clone() const
     v->m_diameter = m_diameter;
     v->m_drill = m_drill;
     v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
-    v->m_hole = SHAPE_CIRCLE( m_pos, m_drill / 2 );
+    v->m_hole = m_hole->Clone();
     v->m_rank = m_rank;
     v->m_marker = m_marker;
     v->m_viaType = m_viaType;

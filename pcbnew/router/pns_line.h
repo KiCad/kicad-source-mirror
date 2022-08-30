@@ -196,6 +196,7 @@ public:
     void AppendVia( const VIA& aVia );
     void RemoveVia() { m_hasVia = false; }
 
+    VIA& Via() { return m_via; }
     const VIA& Via() const { return m_via; }
 
     void SetViaDiameter( int aDiameter ) { m_via.SetDiameter( aDiameter ); }

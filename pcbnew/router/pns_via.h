@@ -30,6 +30,7 @@
 
 #include "pns_item.h"
 #include "pns_linked_item.h"
+#include "pns_hole.h"
 
 namespace PNS {
 
@@ -57,6 +58,7 @@ public:
         m_viaType  = VIATYPE::THROUGH;
         m_isFree   = false;
         m_isVirtual = false;
+        m_hole = nullptr;
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
@@ -69,7 +71,8 @@ public:
         m_diameter = aDiameter;
         m_drill = aDrill;
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
-        m_hole = SHAPE_CIRCLE( m_pos, aDrill / 2 );
+        m_hole = HOLE::MakeCircularHole( m_pos, aDrill / 2 );
+        m_hole->SetNet( aNet );
         m_viaType = aViaType;
         m_isFree = false;
         m_isVirtual = false;
@@ -83,13 +86,19 @@ public:
         m_pos = aB.m_pos;
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
-        m_hole = SHAPE_CIRCLE( m_pos, aB.m_drill / 2 );
+        m_hole = aB.m_hole->Clone();
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_drill = aB.m_drill;
         m_viaType = aB.m_viaType;
         m_isFree = aB.m_isFree;
         m_isVirtual = aB.m_isVirtual;
+    }
+
+    virtual ~VIA()
+    {
+        if ( m_hole )
+            delete m_hole;
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -103,7 +112,8 @@ public:
     {
         m_pos = aPos;
         m_shape.SetCenter( aPos );
-        m_hole.SetCenter( aPos );
+        if( m_hole )
+            m_hole->SetCenter( aPos );
     }
 
     VIATYPE ViaType() const { return m_viaType; }
@@ -122,7 +132,8 @@ public:
     void SetDrill( int aDrill )
     {
         m_drill = aDrill;
-        m_hole.SetRadius( m_drill / 2 );
+        if( m_hole )
+            m_hole->SetRadius( m_drill / 2 );
     }
 
     bool IsFree() const { return m_isFree; }
@@ -135,16 +146,10 @@ public:
 
     const SHAPE* Shape() const override { return &m_shape; }
 
-    const SHAPE_CIRCLE* Hole() const override { return &m_hole; }
-    void SetHole( const SHAPE_CIRCLE& aHole ) { m_hole = aHole; }
-
     VIA* Clone() const override;
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
-
-    const SHAPE_LINE_CHAIN HoleHull( int aClearance = 0, int aWalkaroundThickness = 0,
-                                     int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {
@@ -160,6 +165,26 @@ public:
 
     const VIA_HANDLE MakeHandle() const;
 
+    virtual void SetHole( HOLE* aHole ) override
+    {
+        if( m_hole )
+        {
+            assert( m_hole->Owner() == nullptr );
+        }
+
+        m_hole = aHole;
+        m_hole->SetNet( Net() );
+        m_hole->SetOwner( this );
+
+        if( m_hole )
+        {
+            m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different than copper layer set
+        }
+    }
+
+    virtual bool HasHole() const override { return true; }
+    virtual HOLE *Hole() const override { return m_hole; }
+
     virtual const std::string Format() const override;
 
 private:
@@ -167,10 +192,9 @@ private:
     int          m_drill;
     VECTOR2I     m_pos;
     SHAPE_CIRCLE m_shape;
-    SHAPE_CIRCLE m_hole;
     VIATYPE      m_viaType;
     bool         m_isFree;
-
+    HOLE*        m_hole;
 };
 
 
@@ -181,7 +205,7 @@ public:
         VIA( aPos, LAYER_RANGE( aLayer, aLayer ), aDiameter, aDiameter / 2, aNet )
     {
         m_isVirtual = true;
-        SetHole( SHAPE_CIRCLE( Pos(), 1 ) );
+        //SetHole( SHAPE_CIRCLE( Pos(), 1 ) );
     }
 };
 

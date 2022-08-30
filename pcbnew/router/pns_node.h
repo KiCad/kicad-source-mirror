@@ -25,7 +25,7 @@
 
 #include <vector>
 #include <list>
-#include <unordered_set>
+#include <set>
 #include <core/minoptmax.h>
 
 #include <geometry/shape_line_chain.h>
@@ -46,10 +46,6 @@ class INDEX;
 class ROUTER;
 class NODE;
 
-/**
- * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required
- * between two items.
- */
 
 enum class CONSTRAINT_TYPE
 {
@@ -64,6 +60,11 @@ enum class CONSTRAINT_TYPE
     CT_HOLE_TO_HOLE = 9
 };
 
+/**
+ * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required
+ * between two items.
+ */
+
 struct CONSTRAINT
 {
     CONSTRAINT_TYPE m_Type;
@@ -74,16 +75,68 @@ struct CONSTRAINT
     wxString        m_ToName;
 };
 
+
+/**
+ * Hold an object colliding with another object, along with some useful data about the collision.
+ */
+struct OBSTACLE
+{
+    ITEM*            m_head = nullptr;           ///< Line we search collisions against
+    ITEM*            m_item = nullptr;           ///< Item found to be colliding with m_head
+    VECTOR2I         m_ipFirst;        ///< First intersection between m_head and m_hull
+    int              m_clearance;
+    VECTOR2I         m_pos;
+    int              m_distFirst;      ///< ... and the distance thereof
+    int              m_maxFanoutWidth; ///< worst case (largest) width of the tracks connected to the item
+
+    CONSTRAINT_TYPE  m_violatingConstraint;
+
+    bool operator==(const OBSTACLE& other) const
+    {
+        return m_head == other.m_head && m_item == other.m_item;
+    }
+
+    bool operator<(const OBSTACLE& other) const
+    {
+        if( (uintptr_t)m_head < (uintptr_t)other.m_head )
+            return true;
+        else if ( m_head == other.m_head )
+            return (uintptr_t)m_item < (uintptr_t)other.m_item;
+        return false;
+    }
+};
+
+
+struct COLLISION_SEARCH_OPTIONS
+{
+    bool m_differentNetsOnly = true;
+    int m_overrideClearance = -1;
+    int m_limitCount = -1;
+    int m_kindMask = -1;
+    bool m_useClearanceEpsilon = true;
+    std::set<ITEM*>* m_restrictedSet = nullptr;
+};
+
+
+struct COLLISION_SEARCH_CONTEXT
+{
+    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts ) :
+        obstacles( aObs ),
+        options( aOpts )
+    {
+    }
+
+    std::set<OBSTACLE>& obstacles;
+    const COLLISION_SEARCH_OPTIONS options;
+};
+
+
 class RULE_RESOLVER
 {
 public:
     virtual ~RULE_RESOLVER() {}
 
     virtual int Clearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) = 0;
-    virtual int HoleClearance( const ITEM* aA, const ITEM* aB,
-                               bool aUseClearanceEpsilon = true ) = 0;
-    virtual int HoleToHoleClearance( const ITEM* aA, const ITEM* aB,
-                                     bool aUseClearanceEpsilon = true ) = 0;
 
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
@@ -108,23 +161,6 @@ public:
     virtual int ClearanceEpsilon() const { return 0; }
 };
 
-/**
- * Hold an object colliding with another object, along with some useful data about the collision.
- */
-struct OBSTACLE
-{
-    const ITEM*      m_head;           ///< Line we search collisions against
-    ITEM*            m_item;           ///< Item found to be colliding with m_head
-    VECTOR2I         m_ipFirst;        ///< First intersection between m_head and m_hull
-    int              m_clearance;
-    int              m_actual;
-    int              m_walkaroundThickness;
-    bool             m_headIsHole = false;
-    bool             m_itemIsHole = false;
-    VECTOR2I         m_pos;
-    int              m_distFirst;      ///< ... and the distance thereof
-    int              m_maxFanoutWidth; ///< worst case (largest) width of the tracks connected to the item
-};
 
 class OBSTACLE_VISITOR
 {
@@ -171,16 +207,13 @@ public:
 
     typedef std::optional<OBSTACLE>         OPT_OBSTACLE;
     typedef std::vector<ITEM*>    ITEM_VECTOR;
-    typedef std::vector<OBSTACLE> OBSTACLES;
+    typedef std::set<OBSTACLE>    OBSTACLES;
 
     NODE();
     ~NODE();
 
     ///< Return the expected clearance between items a and b.
     int GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
-    int GetHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
-    int GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB,
-                                bool aUseClearanceEpsilon = true ) const;
 
     ///< Return the pre-set worst case clearance between any pair of items.
     int GetMaxClearance() const
@@ -227,7 +260,7 @@ public:
      * @return number of obstacles found
      */
     int QueryColliding( const ITEM* aItem, OBSTACLES& aObstacles,
-                        const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() );
+                        const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() ) const;
 
     int QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints,
                      LAYER_RANGE aLayerMask = LAYER_RANGE::All(), int aKindMask = ITEM::ANY_T );
@@ -241,8 +274,7 @@ public:
      * @param aRestrictedSet is an optional set of items that should be considered as obstacles
      * @return the obstacle, if found, otherwise empty.
      */
-    OPT_OBSTACLE NearestObstacle( const LINE* aLine, int aKindMask = ITEM::ANY_T,
-                                  const std::set<ITEM*>* aRestrictedSet = nullptr,
+    OPT_OBSTACLE NearestObstacle( const LINE* aLine,
                                   const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() );
 
     /**
@@ -288,6 +320,8 @@ public:
     bool Add( std::unique_ptr< ARC >     aArc, bool aAllowRedundant = false );
 
     void Add( LINE& aLine, bool aAllowRedundant = false );
+
+    void Add( ITEM* aItem, bool aAllowRedundant = false );
 
     void AddEdgeExclusion( std::unique_ptr<SHAPE> aShape );
 
@@ -450,6 +484,7 @@ private:
     void addSegment( SEGMENT* aSeg );
     void addVia( VIA* aVia );
     void addArc( ARC* aVia );
+    void addHole( HOLE* aHole );
 
     void removeSolidIndex( SOLID* aSeg );
     void removeSegmentIndex( SEGMENT* aSeg );

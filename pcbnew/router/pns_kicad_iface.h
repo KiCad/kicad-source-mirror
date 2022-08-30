@@ -36,6 +36,7 @@ class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
 class FOOTPRINT;
 class PAD;
+class EDA_TEXT;
 
 namespace PNS
 {

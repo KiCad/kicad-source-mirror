@@ -38,12 +38,26 @@ using namespace KIGFX;
 
 
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView ) :
-    EDA_ITEM( NOT_USED )
+    EDA_ITEM( NOT_USED ),
+    m_view( aView ),
+    m_shape( nullptr ),
+    m_hole( nullptr )
 {
-    m_view = aView;
+    BOARD_ITEM* boardItem = aItem ? aItem->Parent() : nullptr;
 
-    m_shape = aItem ? aItem->Shape()->Clone() : nullptr;
-    m_hole = aItem && aItem->Hole() ? aItem->Hole()->Clone() : nullptr;
+    // A PNS::SOLID for an edge-cut item must have 0 width for collision calculations, but when
+    // highlighting an edge we want to show it with its parent PCB_SHAPE's shape.
+    if( boardItem && boardItem->IsOnLayer( Edge_Cuts ) )
+    {
+        m_shape = boardItem->GetEffectiveShape()->Clone();
+    }
+    else if( aItem )
+    {
+        m_shape = aItem->Shape()->Clone();
+
+        if( aItem->Hole() )
+            m_hole = aItem->Hole()->Shape()->Clone();
+    }
 
     m_clearance = -1;
     m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
@@ -145,7 +159,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         m_hole = nullptr;
 
         if( aItem->Hole() )
-            m_hole = aItem->Hole()->Clone();
+            m_hole = aItem->Hole()->Shape()->Clone();
 
         break;
 

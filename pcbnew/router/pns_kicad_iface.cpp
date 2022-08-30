@@ -106,10 +106,6 @@ public:
 
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                            bool aUseClearanceEpsilon = true ) override;
-    virtual int HoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                               bool aUseClearanceEpsilon = true ) override;
-    virtual int HoleToHoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                                     bool aUseClearanceEpsilon = true ) override;
 
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
@@ -153,8 +149,6 @@ private:
     int                m_clearanceEpsilon;
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
-    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_holeClearanceCache;
-    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_holeToHoleClearanceCache;
 };
 
 
@@ -252,16 +246,31 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
 }
 
 
-bool isCopper( const PNS::ITEM* aItem )
+static bool isCopper( const PNS::ITEM* aItem )
 {
+    if ( !aItem )
+        return false;
+
     const BOARD_ITEM *parent = aItem->Parent();
 
     return !parent || parent->IsOnCopperLayer();
 }
 
 
-bool isEdge( const PNS::ITEM* aItem )
+static bool isHole( const PNS::ITEM* aItem )
 {
+    if ( !aItem )
+        return false;
+
+    return aItem->OfKind( PNS::ITEM::HOLE_T );
+}
+
+
+static bool isEdge( const PNS::ITEM* aItem )
+{
+    if ( !aItem )
+        return false;
+
     const BOARD_ITEM *parent = aItem->Parent();
 
     return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
@@ -382,8 +391,6 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItem( const PNS::ITEM* aItem )
 void PNS_PCBNEW_RULE_RESOLVER::ClearCaches()
 {
     m_clearanceCache.clear();
-    m_holeClearanceCache.clear();
-    m_holeToHoleClearanceCache.clear();
 }
 
 
@@ -414,7 +421,23 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+        if( isHole( aA ) && isHole( aB) )
+        {
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+            {
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
+            }
+        }
+        else if( isHole( aA ) || isHole( aB ) )
+        {
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
+            {
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
+            }
+        }
+        else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
             {
@@ -422,8 +445,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                     rv = constraint.m_Value.Min();
             }
         }
-
-        if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+        else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
@@ -440,6 +462,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     return rv;
 }
 
+#if 0
 
 int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                              bool aUseClearanceEpsilon )
@@ -464,6 +487,8 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
 
 #define HAS_PLATED_HOLE( a ) ( a )->IsRoutable()
 
+    // JEY TODO: this is a new test introduced after Tom's brach.  How does it fit
+    // in the new architecture?
     if( IsCopperLayer( layer )
             && ( HAS_PLATED_HOLE( aA ) || HAS_PLATED_HOLE( aB ) )
             && QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint )
@@ -507,6 +532,8 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PN
     m_holeToHoleClearanceCache[ key ] = rv;
     return rv;
 }
+
+#endif
 
 
 bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth )
@@ -1140,7 +1167,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
     if( aPad->GetDrillSize().x > 0 )
-        solid->SetHole( aPad->GetEffectiveHoleShape()->Clone() );
+    {
+        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
+        PNS::HOLE*     hole = new PNS::HOLE( solid.get(), slot );
+
+        solid->SetHole( hole );
+    }
 
     // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
     // perform layer-specific flashing tests internally.
@@ -1214,9 +1246,10 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
     via->SetIsFree( aVia->GetIsFree() );
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    via->SetHole( SHAPE_CIRCLE( aVia->GetPosition(),
-                                aVia->GetDrillValue() / 2 ) );
+    SHAPE*     holeShape = new SHAPE_CIRCLE( aVia->GetPosition(), aVia->GetDrillValue() / 2 );
+    PNS::HOLE* viaHole = new PNS::HOLE( via.get(), holeShape );
+
+    via->SetHole( viaHole );
 
     return via;
 }

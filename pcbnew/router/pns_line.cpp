@@ -28,6 +28,8 @@
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_utils.h"
+#include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 #include <geometry/shape_rect.h>
 
@@ -545,6 +547,12 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
 
 const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
+    /*DEBUG_DECORATOR* debugDecorator = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    
+    PNS_DBG( debugDecorator, Message, wxString::Format( wxT( "seghull %d %d" ), aWalkaroundThickness, aClearance ) );
+    PNS_DBG(debugDecorator, AddShape, &m_seg, RED, 0, wxT("theseg") );
+        */
+
    return SegmentHull( m_seg, aClearance, aWalkaroundThickness );
 }
 

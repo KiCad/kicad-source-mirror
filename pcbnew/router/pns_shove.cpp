@@ -140,10 +140,12 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
 
 int SHOVE::getHoleClearance( const ITEM* aA, const ITEM* aB ) const
 {
-    if( m_forceClearance >= 0 )
+   /* if( m_forceClearance >= 0 )
         return m_forceClearance;
 
-    return m_currentNode->GetHoleClearance( aA, aB );
+    return m_currentNode->GetHoleClearance( aA, aB );*/
+
+    return -1; // fixme hole
 }
 
 
@@ -1342,7 +1344,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
-         nearest = m_currentNode->NearestObstacle( &currentLine, search_order );
+        COLLISION_SEARCH_OPTIONS opts;
+        opts.m_kindMask = search_order;
+
+         nearest = m_currentNode->NearestObstacle( &currentLine, opts );
 
          if( nearest )
          {

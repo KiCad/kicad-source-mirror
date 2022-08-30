@@ -463,4 +463,62 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
     }
 }
 
+
+const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
+                                                          int aWalkaroundThickness )
+{
+    int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
+
+    switch( aShape->Type() )
+    {
+    case SH_RECT:
+    {
+        const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>( aShape );
+        return OctagonalHull( rect->GetPosition(),
+                              rect->GetSize(),
+                              cl,
+                              0 );
+    }
+
+    case SH_CIRCLE:
+    {
+        const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( aShape );
+        int r = circle->GetRadius();
+        return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ),
+                              VECTOR2I( 2 * r, 2 * r ),
+                              cl,
+                              2.0 * ( 1.0 - M_SQRT1_2 ) * ( r + cl ) );
+    }
+
+    case SH_SEGMENT:
+    {
+        const SHAPE_SEGMENT* seg = static_cast<const SHAPE_SEGMENT*>( aShape );
+        return SegmentHull( *seg, aClearance, aWalkaroundThickness );
+    }
+
+    case SH_ARC:
+    {
+        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
+        return ArcHull( *arc, aClearance, aWalkaroundThickness );
+    }
+
+    case SH_SIMPLE:
+    {
+        const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
+
+        return ConvexHull( *convex, cl );
+    }
+    default:
+    {
+        wxFAIL_MSG( wxString::Format( wxT( "Unsupported hull shape: %d (%s)." ),
+                                      aShape->Type(),
+                                      SHAPE_TYPE_asString( aShape->Type() ) ) );
+        break;
+    }
+    }
+
+    return SHAPE_LINE_CHAIN();
+}
+
+
 }

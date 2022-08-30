@@ -87,10 +87,20 @@ NODE::~NODE()
 
     m_joints.clear();
 
+    std::vector<ITEM*> toDelete;
+
+    toDelete.reserve( m_index->Size() );
+
     for( ITEM* item : *m_index )
     {
-        if( item->BelongsTo( this ) )
-            delete item;
+        if( item->BelongsTo( this ) && item->OfKind( ITEM::HOLE_T ) )
+            toDelete.push_back( item );
+    }
+
+    for( ITEM* item : toDelete )
+    {
+        printf("del item %p type %s\n", item, item->KindStr().c_str() );
+        delete item;
     }
 
     releaseGarbage();
@@ -105,34 +115,13 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilo
    if( !m_ruleResolver )
         return 100000;
 
-   if( aA->IsVirtual() || aB->IsVirtual() )
-       return 0;
-
-   return m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
-}
-
-
-int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
-{
-    if( !m_ruleResolver )
-        return 0;
-
-    if( aA->IsVirtual() || aB->IsVirtual() )
-        return 0;
-
-    return m_ruleResolver->HoleClearance( aA, aB, aUseClearanceEpsilon );
-}
-
-
-int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
-{
-   if( !m_ruleResolver )
-        return 0;
 
    if( aA->IsVirtual() || aB->IsVirtual() )
        return 0;
 
-   return m_ruleResolver->HoleToHoleClearance( aA, aB, aUseClearanceEpsilon );
+    int cl = m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
+
+   return cl;
 }
 
 
@@ -211,16 +200,11 @@ bool OBSTACLE_VISITOR::visit( ITEM* aCandidate )
 // function object that visits potential obstacles and performs the actual collision refining
 struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 {
-    OBSTACLES&                      m_tab;
-    int                             m_matchCount;
-    const COLLISION_SEARCH_OPTIONS& m_opts;
+    COLLISION_SEARCH_CONTEXT* m_ctx;
 
-    DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem,
-                              const COLLISION_SEARCH_OPTIONS& aOpts ) :
+    DEFAULT_OBSTACLE_VISITOR( COLLISION_SEARCH_CONTEXT* aCtx, const ITEM* aItem ) :
         OBSTACLE_VISITOR( aItem ),
-        m_tab( aTab ),
-        m_opts( aOpts ),
-        m_matchCount( 0 )
+        m_ctx( aCtx )
     {
     }
 
@@ -230,26 +214,16 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 
     bool operator()( ITEM* aCandidate ) override
     {
-        if( !aCandidate->OfKind( m_opts.m_kindMask ) )
+        if( !aCandidate->OfKind( m_ctx->options.m_kindMask ) )
             return true;
 
         if( visit( aCandidate ) )
             return true;
 
-        if( !aCandidate->Collide( m_item, m_node, m_opts ) )
+        if( !aCandidate->Collide( m_item, m_node, m_ctx ) )
             return true;
 
-        OBSTACLE obs;
-
-        obs.m_head = m_item;
-        obs.m_item = aCandidate;
-        obs.m_distFirst = INT_MAX;
-        obs.m_maxFanoutWidth = 0;
-        m_tab.push_back( obs );
-
-        m_matchCount++;
-
-        if( m_opts.m_limitCount > 0 && m_matchCount >= m_opts.m_limitCount )
+        if( m_ctx->options.m_limitCount > 0 && m_ctx->obstacles.size() >= m_ctx->options.m_limitCount )
             return false;
 
         return true;
@@ -258,13 +232,15 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 
 
 int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
-                          const COLLISION_SEARCH_OPTIONS& aOpts )
+                          const COLLISION_SEARCH_OPTIONS& aOpts ) const
 {
+    COLLISION_SEARCH_CONTEXT ctx( aObstacles, aOpts );
+
     /// By default, virtual items cannot collide
     if( aItem->IsVirtual() )
         return 0;
 
-    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aOpts );
+    DEFAULT_OBSTACLE_VISITOR visitor( &ctx, aItem );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );
@@ -276,7 +252,7 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
     m_index->Query( aItem, m_maxClearance, visitor );
 
     // if we haven't found enough items, look in the root branch as well.
-    if( !isRoot() && ( visitor.m_matchCount < aOpts.m_limitCount || aOpts.m_limitCount < 0 ) )
+    if( !isRoot() && ( ctx.obstacles.size() < aOpts.m_limitCount || aOpts.m_limitCount < 0 ) )
     {
         visitor.SetWorld( m_root, this );
         m_root->m_index->Query( aItem, m_maxClearance, visitor );
@@ -286,22 +262,24 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
 }
 
 
-NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
-                                          const std::set<ITEM*>* aRestrictedSet,
+NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
-    const int clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
-    OBSTACLES obstacleList;
-    obstacleList.reserve( 100 );
+    const int            clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
+    OBSTACLES            obstacleList;
+    std::vector<SEGMENT> tmpSegs;
+
+    tmpSegs.reserve( aLine->CLine().SegmentCount() );
+
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
-        // Note: Clearances between &s and other items are cached,
+        // Note: Clearances between tmpSegs.back() and other items are cached,
         // which means they'll be the same for all segments in the line.
         // Disabling the cache will lead to slowness.
 
-        const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &s, obstacleList, aOpts );
+        tmpSegs.emplace_back( *aLine, aLine->CLine().CSegment( i ) );
+        QueryColliding( &tmpSegs.back(), obstacleList, aOpts );
     }
 
     if( aLine->EndsWithVia() )
@@ -317,22 +295,15 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     nearest.m_maxFanoutWidth = 0;
 
     auto updateNearest =
-            [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, ITEM* obstacle,
-                 const SHAPE_LINE_CHAIN& hull, bool isHole )
+            [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, const OBSTACLE& obstacle )
             {
                 int dist = aLine->CLine().PathLength( pt.p, pt.index_their );
 
                 if( dist < nearest.m_distFirst )
                 {
+                    nearest = obstacle;
                     nearest.m_distFirst = dist;
                     nearest.m_ipFirst = pt.p;
-                    nearest.m_item = obstacle;
-                    nearest.m_itemIsHole = isHole;
-                    // JEY TODO: are these no longer needed?
-                    //nearest.m_hull = hull;
-
-                    //obstacle->Mark( isHole ? obstacle->Marker() | MK_HOLE
-                    //                       : obstacle->Marker() & ~MK_HOLE );
                 }
             };
 
@@ -343,7 +314,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
-        if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )
+        if( aOpts.m_restrictedSet && aOpts.m_restrictedSet->count( obstacle.m_item ) == 0 )
             continue;
 
         int clearance =
@@ -360,23 +331,24 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         {
             //debugDecorator->AddPoint( ip.p, ip.valid?3:6, 100000, (const char *) wxString::Format("obstacle-isect-point-%d" ).c_str() );
             if( ip.valid )
-                updateNearest( ip, obstacle.m_item, obstacleHull, false );
+                updateNearest( ip, obstacle );
         }
 
         if( aLine->EndsWithVia() )
         {
             const VIA& via = aLine->Via();
-            // Don't use via.Drill(); it doesn't include the plating thickness
+            // JEY TODO: clean up (or re-enable) all this commented-out stuff....
+            //const HOLE* viaHole = via.Hole();
 
-            int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
+            //int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
             int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
                                + via.Diameter() / 2;
-            int holeClearance = GetHoleClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                               + viaHoleRadius;
+            //int holeClearance = GetClearance( obstacle.m_item, viaHole, aOpts.m_useClearanceEpsilon )
+            //                   + viaHoleRadius;
 
-            if( holeClearance > viaClearance )
-                viaClearance = holeClearance;
+            //if( holeClearance > viaClearance )
+            //    viaClearance = holeClearance;
 
             obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
             //debugDecorator->AddLine( obstacleHull, 3 );
@@ -387,9 +359,9 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
             // obstacleHull.Intersect( aLine->CLine(), intersectingPts, true );
 
             for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                updateNearest( ip, obstacle.m_item, obstacleHull, false );
+                updateNearest( ip, obstacle );
         }
-
+#if 0
         if( ( m_collisionQueryScope == CQS_ALL_RULES
               || !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( obstacle.m_item,
                                                                            layer ) )
@@ -438,10 +410,11 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                     updateNearest( ip, obstacle.m_item, obstacleHull, true );
             }
         }
+#endif
     }
 
     if( nearest.m_distFirst == INT_MAX )
-        nearest.m_item = obstacleList[0].m_item;
+        nearest = (*obstacleList.begin());
 
     return nearest;
 }
@@ -470,8 +443,6 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
     opts.m_limitCount = 1;
     opts.m_overrideClearance = 1;
 
-    obs.reserve( 100 );
-
     if( aItemA->Kind() == ITEM::LINE_T )
     {
         int n = 0;
@@ -488,7 +459,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
             n += QueryColliding( &s, obs, opts );
 
             if( n )
-                return OPT_OBSTACLE( obs[0] );
+                return OPT_OBSTACLE( *obs.begin() );
         }
 
         if( line->EndsWithVia() )
@@ -496,12 +467,12 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
             n += QueryColliding( &line->Via(), obs, opts );
 
             if( n )
-                return OPT_OBSTACLE( obs[0] );
+                return OPT_OBSTACLE( *obs.begin() );
         }
     }
     else if( QueryColliding( aItemA, obs, opts ) > 0 )
     {
-        return OPT_OBSTACLE( obs[0] );
+        return OPT_OBSTACLE( *obs.begin() );
     }
 
     return OPT_OBSTACLE();
@@ -568,6 +539,9 @@ const ITEM_SET NODE::HitTest( const VECTOR2I& aPoint ) const
 
 void NODE::addSolid( SOLID* aSolid )
 {
+    if( aSolid->HasHole() )
+        addHole( aSolid->Hole() );
+
     if( aSolid->IsRoutable() )
         linkJoint( aSolid->Pos(), aSolid->Layers(), aSolid->Net(), aSolid );
 
@@ -584,9 +558,21 @@ void NODE::Add( std::unique_ptr< SOLID > aSolid )
 
 void NODE::addVia( VIA* aVia )
 {
+    if( aVia->HasHole() )
+        addHole( aVia->Hole() );
+
     linkJoint( aVia->Pos(), aVia->Layers(), aVia->Net(), aVia );
 
     m_index->Add( aVia );
+}
+
+
+void NODE::addHole( HOLE* aHole )
+{
+    // do we need holes in the connection graph?
+    //linkJoint( aHole->Pos(), aHole->Layers(), aHole->Net(), aHole );
+
+    m_index->Add( aHole );
 }
 
 
@@ -594,6 +580,29 @@ void NODE::Add( std::unique_ptr< VIA > aVia )
 {
     aVia->SetOwner( this );
     addVia( aVia.release() );
+}
+
+void NODE::Add( ITEM* aItem, bool aAllowRedundant )
+{
+    aItem->SetOwner( this );
+
+    switch( aItem->Kind() )
+    {
+    case ITEM::ARC_T:
+        addArc( static_cast<ARC*>( aItem ) );
+        break;
+    case ITEM::SEGMENT_T:
+        addSegment( static_cast<SEGMENT*>( aItem ) );
+        break;
+    case ITEM::VIA_T:
+        addVia( static_cast<VIA*>( aItem ) );
+        break;
+    case ITEM::SOLID_T:
+        addSolid( static_cast<SOLID*>( aItem ) );
+        break;
+    default:
+        assert( false );
+    }
 }
 
 
@@ -725,6 +734,7 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
         Add( *l );
         break;
     }
+
     default:
         assert( false );
     }
@@ -754,18 +764,37 @@ void NODE::doRemove( ITEM* aItem )
     // case 1: removing an item that is stored in the root node from any branch:
     // mark it as overridden, but do not remove
     if( aItem->BelongsTo( m_root ) && !isRoot() )
+    {
         m_override.insert( aItem );
+
+        if( aItem->HasHole() )
+            m_override.insert( aItem->Hole() );
+    }
 
     // case 2: the item belongs to this branch or a parent, non-root branch,
     // or the root itself and we are the root: remove from the index
     else if( !aItem->BelongsTo( m_root ) || isRoot() )
+    {
         m_index->Remove( aItem );
+
+        if( aItem->HasHole() )
+            m_index->Remove( aItem->Hole() );
+    }
 
     // the item belongs to this particular branch: un-reference it
     if( aItem->BelongsTo( this ) )
     {
         aItem->SetOwner( nullptr );
+
         m_root->m_garbageItems.insert( aItem );
+
+        HOLE *hole = aItem->Hole();
+
+        if( hole )
+        {
+            m_index->Remove( hole ); // hole is not directly owned by NODE but by the parent SOLID/VIA.
+            hole->SetOwner( nullptr );
+        }
     }
 }
 

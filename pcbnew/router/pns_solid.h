@@ -46,8 +46,10 @@ public:
 
     ~SOLID()
     {
+        if ( m_hole )
+            delete m_hole;
+
         delete m_shape;
-        delete m_hole;
     }
 
     SOLID( const SOLID& aSolid ) :
@@ -77,24 +79,14 @@ public:
 
     const SHAPE* Shape() const override { return m_shape; }
 
-    const SHAPE* Hole() const override { return m_hole; }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
-
-    const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness,
-                                     int aLayer ) const override;
 
     void SetShape( SHAPE* shape )
     {
         delete m_shape;
         m_shape = shape;
-    }
-
-    void SetHole( SHAPE* shape )
-    {
-        delete m_hole;
-        m_hole = shape;
     }
 
     const VECTOR2I& Pos() const { return m_pos; }
@@ -119,13 +111,33 @@ public:
     EDA_ANGLE GetOrientation() const { return m_orientation; }
     void SetOrientation( const EDA_ANGLE& aOrientation ) { m_orientation = aOrientation; }
 
+    virtual void SetHole( HOLE* aHole ) override
+    {
+        if( m_hole )
+        {
+            assert( m_hole->Owner() == nullptr );
+        }
+
+        m_hole = aHole;
+        m_hole->SetNet( Net() );
+        m_hole->SetOwner( this );
+
+        if( m_hole )
+        {
+            m_hole->SetLayers( m_layers ); // fixme: backdrill vias can have hole layer set different than copper layer set
+        }
+    }
+
+    virtual bool HasHole() const override { return m_hole != nullptr; }
+    virtual HOLE *Hole() const override { return m_hole; }
+
 private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
-    SHAPE*      m_hole;
     VECTOR2I    m_offset;
     int         m_padToDie;
     EDA_ANGLE   m_orientation;
+    HOLE*       m_hole;
 };
 
 }

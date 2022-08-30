@@ -64,6 +64,8 @@ OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB );
 void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
                        SHAPE_LINE_CHAIN::INTERSECTIONS& ips );
 
+const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
+                                                          int aWalkaroundThickness );
 
 }
 
