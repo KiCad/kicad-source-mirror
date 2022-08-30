@@ -153,8 +153,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     }
     else
     {
-        EDA_RECT targetBbox = getBoundingBox();
-        bBox = BOX2I( targetBbox.GetOrigin(), targetBbox.GetSize() );
+        bBox = getBoundingBox();
         view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
     }
 

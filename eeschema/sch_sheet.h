@@ -248,7 +248,7 @@ public:
     /**
      * Return a bounding box for the sheet body but not the fields.
      */
-    const EDA_RECT GetBodyBoundingBox() const;
+    const BOX2I GetBodyBoundingBox() const;
 
     const EDA_RECT GetBoundingBox() const override;
 

@@ -47,7 +47,7 @@ class DIALOG_MOVE_EXACT : public DIALOG_MOVE_EXACT_BASE
 {
 public:
     DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent, VECTOR2I& aTranslate, EDA_ANGLE& aRotate,
-                       ROTATION_ANCHOR& aAnchor, const EDA_RECT& aBbox );
+                       ROTATION_ANCHOR& aAnchor, const BOX2I& aBbox );
     ~DIALOG_MOVE_EXACT() { };
 
 private:
@@ -113,7 +113,7 @@ private:
     VECTOR2I&        m_translation;
     EDA_ANGLE&       m_rotation;
     ROTATION_ANCHOR& m_rotationAnchor;
-    const EDA_RECT&  m_bbox;
+    const BOX2I&     m_bbox;
 
     UNIT_BINDER      m_moveX;
     UNIT_BINDER      m_moveY;

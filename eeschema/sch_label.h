@@ -147,7 +147,7 @@ public:
     /**
      * Return the bounding box of the label only, without taking in account its fields.
      */
-    virtual const EDA_RECT GetBodyBoundingBox() const;
+    virtual const BOX2I GetBodyBoundingBox() const;
 
     /**
      * Return the bounding box of the label including its fields.
@@ -225,7 +225,7 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
-    const EDA_RECT GetBodyBoundingBox() const override;
+    const BOX2I GetBodyBoundingBox() const override;
 
     bool IsConnectable() const override { return true; }
 
@@ -395,7 +395,7 @@ public:
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos, LABEL_FLAG_SHAPE aShape ) const;
 
-    const EDA_RECT GetBodyBoundingBox() const override;
+    const BOX2I GetBodyBoundingBox() const override;
 
     bool IsConnectable() const override { return true; }
 

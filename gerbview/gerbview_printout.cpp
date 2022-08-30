@@ -95,7 +95,7 @@ void GERBVIEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 }
 
 
-EDA_RECT GERBVIEW_PRINTOUT::getBoundingBox()
+BOX2I GERBVIEW_PRINTOUT::getBoundingBox()
 {
     return m_layout->ComputeBoundingBox();
 }

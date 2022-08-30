@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pcb_base_frame.h
- * @brief Classes used in Pcbnew, CvPcb and GerbView.
  */
 
 #ifndef  PCB_BASE_FRAME_H
@@ -90,11 +85,9 @@ public:
      *
      * @param aMarkDirty alerts the 3D view that data is stale (it may not refresh instantly)
      * @param aRefresh will tell the 3D view to refresh immediately
-     * @param aTitle is the new title of the 3D frame, or nullptr to do not change the
-     *               frame title
+     * @param aTitle is the new title of the 3D frame, or nullptr to do not change the frame title
      */
-    virtual void Update3DView( bool aMarkDirty, bool aRefresh,
-                               const wxString* aTitle = nullptr );
+    virtual void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr );
 
     /**
      * Attempt to load \a aFootprintId from the footprint library table.
@@ -111,7 +104,7 @@ public:
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
      * @return the board's bounding box.
      */
-    EDA_RECT GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
+    BOX2I GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
@@ -414,7 +407,7 @@ protected:
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
 
 private:
-    NL_PCBNEW_PLUGIN* m_spaceMouse;
+    NL_PCBNEW_PLUGIN*       m_spaceMouse;
 };
 
 #endif  // PCB_BASE_FRAME_H

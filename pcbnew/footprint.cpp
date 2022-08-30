@@ -732,9 +732,9 @@ wxString FOOTPRINT::GetTypeName() const
 }
 
 
-EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
+BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
 {
-    EDA_RECT area;
+    BOX2I area;
 
     // We want the bounding box of the footprint pads at rot 0, not flipped
     // Create such a image:

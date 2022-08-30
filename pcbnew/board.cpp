@@ -1151,12 +1151,12 @@ unsigned BOARD::GetUnconnectedNetCount() const
 }
 
 
-EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
+BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
-    EDA_RECT area;
-    LSET     visible = GetVisibleLayers();
-    bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
-                                 && PgmOrNull() && !PgmOrNull()->m_Printing;
+    BOX2I area;
+    LSET  visible = GetVisibleLayers();
+    bool  showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
+                                      && PgmOrNull() && !PgmOrNull()->m_Printing;
 
     if( aBoardEdgesOnly )
         visible.set( Edge_Cuts );

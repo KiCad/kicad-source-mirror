@@ -126,7 +126,7 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
         if( aProperties->Value( "page_width", &page_width )
                 && aProperties->Value( "page_height", &page_height ) )
         {
-            EDA_RECT bbbox = m_board->GetBoardEdgesBoundingBox();
+            BOX2I bbbox = m_board->GetBoardEdgesBoundingBox();
 
             int w = atoi( page_width.c_str() );
             int h = atoi( page_height.c_str() );

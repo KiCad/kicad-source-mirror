@@ -120,7 +120,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_RECT GetBoundingBoxMarker() const;
+    BOX2I GetBoundingBoxMarker() const;
 
 protected:
     virtual KIGFX::COLOR4D getColor() const = 0;
@@ -135,7 +135,7 @@ protected:
 
     int                   m_scalingFactor;       // Scaling factor to convert corners coordinates
                                                  // to internal units coordinates
-    EDA_RECT              m_shapeBoundingBox;    // Bounding box of the graphic symbol, relative
+    BOX2I                 m_shapeBoundingBox;    // Bounding box of the graphic symbol, relative
                                                  // to the position of the shape, in marker shape
                                                  // units
 };

@@ -133,7 +133,7 @@ void LIB_TEXT::MoveTo( const VECTOR2I& newPosition )
 void LIB_TEXT::NormalizeJustification( bool inverse )
 {
     VECTOR2I delta( 0, 0 );
-    EDA_RECT bbox = GetTextBox();
+    BOX2I    bbox = GetTextBox();
 
     if( GetTextAngle().IsHorizontal() )
     {
@@ -400,7 +400,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( -1, true );
+    BOX2I rect = GetTextBox( -1, true );
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.

@@ -208,7 +208,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                     GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_FOOTPRINT );
 
             // bbox of fp pads, pos 0, rot 0, non flipped
-            EDA_RECT bbox = footprint->GetFpPadsLocalBbox();
+            BOX2I bbox = footprint->GetFpPadsLocalBbox();
 
             // negate bbox Y values if the fp is flipped (always flipped around X axis
             // in Gerber P&P files).

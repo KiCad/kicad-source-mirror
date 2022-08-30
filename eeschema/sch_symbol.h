@@ -330,7 +330,7 @@ public:
     /**
      * Return a bounding box for the symbol body but not the pins or fields.
      */
-    EDA_RECT GetBodyBoundingBox() const;
+    BOX2I GetBodyBoundingBox() const;
 
     /**
      * Return a bounding box for the symbol body and pins but not the fields.
@@ -705,7 +705,7 @@ public:
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override;
 
 private:
-    EDA_RECT doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
+    BOX2I doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
 
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 

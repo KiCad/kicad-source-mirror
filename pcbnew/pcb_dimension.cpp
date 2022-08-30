@@ -649,8 +649,8 @@ void PCB_DIM_ALIGNED::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                    - m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                 - m_text.GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -827,8 +827,8 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the crossbar.
     // First we need to create an appropriate bounding polygon to collide with
-    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                    m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                 m_text.GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1001,8 +1001,8 @@ void PCB_DIM_LEADER::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                    m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                 m_text.GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();
@@ -1191,8 +1191,8 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     // Now that we have the text updated, we can determine how to draw the second line
     // First we need to create an appropriate bounding polygon to collide with
-    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
-                                                    m_text.GetEffectiveTextPenWidth() );
+    BOX2I textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                 m_text.GetEffectiveTextPenWidth() );
 
     SHAPE_POLY_SET polyBox;
     polyBox.NewOutline();

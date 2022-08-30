@@ -39,7 +39,7 @@ protected:
 
     void setupGal( KIGFX::GAL* aGal ) override;
 
-    EDA_RECT getBoundingBox() override;
+     BOX2I getBoundingBox() override;
 
     std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) override;
 

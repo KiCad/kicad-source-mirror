@@ -44,10 +44,9 @@ GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList() const
 }
 
 
-EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
+BOX2I GBR_LAYOUT::ComputeBoundingBox() const
 {
-    EDA_RECT bbox;
-    bool first_item = true;
+    BOX2I bbox;     // Start with a fresh BOX2I so the Merge algorithm works
 
     for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
     {
@@ -57,15 +56,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
             continue;
 
         for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
-        {
-            if( first_item )
-            {
-                bbox = item->GetBoundingBox();
-                first_item = false;
-            }
-            else
-                bbox.Merge( item->GetBoundingBox() );
-        }
+            bbox.Merge( item->GetBoundingBox() );
     }
 
     bbox.Normalize();

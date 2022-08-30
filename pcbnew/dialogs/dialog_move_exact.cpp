@@ -34,7 +34,7 @@ DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTranslate,
                                       EDA_ANGLE& aRotate, ROTATION_ANCHOR& aAnchor,
-                                      const EDA_RECT& aBbox ) :
+                                      const BOX2I& aBbox ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
     m_translation( aTranslate ),
     m_rotation( aRotate ),

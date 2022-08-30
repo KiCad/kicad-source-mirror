@@ -61,7 +61,7 @@ static int refreshCallback( FOOTPRINT* aFootprint )
 
 int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlaceOffboard )
 {
-    EDA_RECT bbox = board()->GetBoardEdgesBoundingBox();
+    BOX2I bbox = board()->GetBoardEdgesBoundingBox();
 
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
     {

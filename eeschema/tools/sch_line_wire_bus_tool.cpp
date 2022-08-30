@@ -1226,7 +1226,7 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
     SCH_SCREEN* screen = sch->CurrentSheet().LastScreen();
 
     std::set<SCH_LINE*> lines;
-    EDA_RECT bb = aSelection->GetBoundingBox();
+    BOX2I bb = aSelection->GetBoundingBox();
 
     for( EDA_ITEM* item : screen->Items().Overlapping( SCH_LINE_T, bb ) )
         lines.insert( static_cast<SCH_LINE*>( item ) );
@@ -1272,7 +1272,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
     std::vector<VECTOR2I> connections = m_frame->GetSchematicConnections();
 
     std::set<SCH_LINE*> lines;
-    EDA_RECT bb = aSelection->GetBoundingBox();
+    BOX2I bb = aSelection->GetBoundingBox();
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items().Overlapping( SCH_LINE_T, bb ) )
         lines.insert( static_cast<SCH_LINE*>( item ) );

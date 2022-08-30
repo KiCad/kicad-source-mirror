@@ -1540,7 +1540,7 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
     if( aWithNets )
         selectConnections( aItems );
 
-    EDA_RECT bbox = m_selection.GetBoundingBox();
+    BOX2I bbox = m_selection.GetBoundingBox();
 
     if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
@@ -1615,10 +1615,10 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 void PCB_SELECTION_TOOL::zoomFitSelection()
 {
     // Should recalculate the view to zoom in on the selection.
-    auto selectionBox = m_selection.GetBoundingBox();
-    auto view = getView();
+    BOX2I        selectionBox = m_selection.GetBoundingBox();
+    KIGFX::VIEW* view = getView();
 
-    VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+    VECTOR2D     screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
     screenSize.x = std::max( 10.0, screenSize.x );
     screenSize.y = std::max( 10.0, screenSize.y );
 

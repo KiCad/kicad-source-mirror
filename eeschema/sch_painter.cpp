@@ -1866,7 +1866,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         // SCH_FIELD text.
         if( aText->GetDrawFont()->IsOutline() )
         {
-            EDA_RECT firstLineBBox = aText->GetTextBox( 0 );
+            BOX2I    firstLineBBox = aText->GetTextBox( 0 );
             int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
             int      adjust = KiROUND( sizeDiff * 0.4 );
             VECTOR2I adjust_offset( 0, - adjust );

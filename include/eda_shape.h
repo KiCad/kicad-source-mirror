@@ -325,9 +325,9 @@ protected:
     virtual EDA_ANGLE getParentOrientation() const = 0;
     virtual VECTOR2I getParentPosition() const = 0;
 
-    const EDA_RECT getBoundingBox() const;
+    const BOX2I getBoundingBox() const;
 
-    void computeArcBBox( EDA_RECT& aBBox ) const;
+    void computeArcBBox( BOX2I& aBBox ) const;
 
     bool hitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
     bool hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const;

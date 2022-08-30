@@ -141,7 +141,7 @@ void PCB_SHAPE::NormalizeRect()
         VECTOR2I start = GetStart();
         VECTOR2I end = GetEnd();
 
-        EDA_RECT rect( start, end - start );
+        BOX2I rect( start, end - start );
         rect.Normalize();
 
         SetStart( rect.GetPosition() );

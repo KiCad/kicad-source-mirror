@@ -68,7 +68,7 @@ public:
      *
      * @return the full item list bounding box.
      */
-    EDA_RECT ComputeBoundingBox() const;
+    BOX2I ComputeBoundingBox() const;
 
     const EDA_RECT GetBoundingBox() const override
     {

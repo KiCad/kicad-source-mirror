@@ -23,18 +23,19 @@
  */
 
 #include <eda_item.h>
+#include <eda_rect.h>
 #include "tools/pl_selection.h"
 
 
 EDA_ITEM* PL_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
-    EDA_RECT  topLeftItemBB;
+    BOX2I     topLeftItemBB;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
     for( EDA_ITEM* item : m_items )
     {
-        EDA_RECT currentItemBB = item->GetBoundingBox();
+        BOX2I currentItemBB = item->GetBoundingBox();
 
         if( topLeftItem == nullptr )
         {

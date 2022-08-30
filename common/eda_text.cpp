@@ -497,7 +497,7 @@ int EDA_TEXT::GetInterline() const
 }
 
 
-EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
+BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
@@ -509,7 +509,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         return m_bounding_box_cache;
     }
 
-    EDA_RECT       rect;
+    BOX2I          rect;
     wxArrayString  strings;
     wxString       text = GetShownText();
     int            thickness = GetEffectiveTextPenWidth();
@@ -619,7 +619,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
 bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    EDA_RECT rect = GetTextBox();
+    BOX2I    rect = GetTextBox();
     VECTOR2I location = aPoint;
 
     rect.Inflate( aAccuracy );
@@ -942,7 +942,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     VECTOR2I  corners[4];    // Buffer of polygon corners
 
-    EDA_RECT rect = GetTextBox();
+    BOX2I rect = GetTextBox();
 
     // TrueType bounding boxes aren't guaranteed to include all descenders, diacriticals, etc.
     // Since we use this for zone knockouts and DRC, we need something more accurate.

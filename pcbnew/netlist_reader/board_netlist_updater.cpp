@@ -102,14 +102,14 @@ wxString BOARD_NETLIST_UPDATER::getPinFunction( PAD* aPad )
 }
 
 
-wxPoint BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
+VECTOR2I BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
 {
-    wxPoint bestPosition;
+    VECTOR2I bestPosition;
 
     if( !m_board->IsEmpty() )
     {
         // Position new components below any existing board features.
-        EDA_RECT bbox = m_board->GetBoardEdgesBoundingBox();
+        BOX2I bbox = m_board->GetBoardEdgesBoundingBox();
 
         if( bbox.GetWidth() || bbox.GetHeight() )
         {

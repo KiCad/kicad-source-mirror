@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -30,7 +30,6 @@
 #include <optional>
 #include <core/typeinfo.h>
 #include <deque>
-#include <eda_rect.h>
 #include <eda_item.h>
 #include <view/view_group.h>
 
@@ -127,31 +126,33 @@ public:
     const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY( bool leftBeforeRight = true,
                                                             bool topBeforeBottom = true ) const
     {
-        std::vector<EDA_ITEM*> sorted_items =
-                std::vector<EDA_ITEM*>( m_items.begin(), m_items.end() );
+        std::vector<EDA_ITEM*> sorted_items = std::vector<EDA_ITEM*>( m_items.begin(),
+                                                                      m_items.end() );
 
-        std::sort( sorted_items.begin(), sorted_items.end(), [&]( EDA_ITEM* a, EDA_ITEM* b ) {
-            if( a->Type() == b->Type() )
-            {
-                if( a->GetSortPosition().x == b->GetSortPosition().x )
+        std::sort( sorted_items.begin(), sorted_items.end(),
+                [&]( EDA_ITEM* a, EDA_ITEM* b )
                 {
-                    // Ensure deterministic sort
-                    if( a->GetSortPosition().y == b->GetSortPosition().y )
-                        return a->m_Uuid < b->m_Uuid;
+                    if( a->Type() == b->Type() )
+                    {
+                        if( a->GetSortPosition().x == b->GetSortPosition().x )
+                        {
+                            // Ensure deterministic sort
+                            if( a->GetSortPosition().y == b->GetSortPosition().y )
+                                return a->m_Uuid < b->m_Uuid;
 
-                    if( topBeforeBottom )
-                        return a->GetSortPosition().y < b->GetSortPosition().y;
+                            if( topBeforeBottom )
+                                return a->GetSortPosition().y < b->GetSortPosition().y;
+                            else
+                                return a->GetSortPosition().y > b->GetSortPosition().y;
+                        }
+                        else if( leftBeforeRight )
+                            return a->GetSortPosition().x < b->GetSortPosition().x;
+                        else
+                            return a->GetSortPosition().x > b->GetSortPosition().x;
+                    }
                     else
-                        return a->GetSortPosition().y > b->GetSortPosition().y;
-                }
-                else if( leftBeforeRight )
-                    return a->GetSortPosition().x < b->GetSortPosition().x;
-                else
-                    return a->GetSortPosition().x > b->GetSortPosition().x;
-            }
-            else
-                return a->Type() < b->Type();
-        } );
+                        return a->Type() < b->Type();
+                } );
 
         return sorted_items;
     }
@@ -169,10 +170,10 @@ public:
     /// Returns the top left point of the selection area bounding box.
     VECTOR2I GetPosition() const
     {
-        return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
+        return GetBoundingBox().GetPosition();
     }
 
-    virtual EDA_RECT GetBoundingBox() const;
+    virtual BOX2I GetBoundingBox() const;
 
     virtual EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const
     {

@@ -1438,7 +1438,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
             for( size_t ii = 0; ii < strings.size(); ++ii )
             {
-                EDA_RECT bbox = libtext->GetTextBox( ii, true );
+                BOX2I    bbox = libtext->GetTextBox( ii, true );
                 VECTOR2I linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );

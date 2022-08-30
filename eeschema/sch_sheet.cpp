@@ -617,10 +617,10 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT SCH_SHEET::GetBodyBoundingBox() const
+const BOX2I SCH_SHEET::GetBodyBoundingBox() const
 {
     VECTOR2I end;
-    EDA_RECT box( m_pos, m_size );
+    BOX2I    box( m_pos, m_size );
     int      lineWidth = GetPenWidth();
     int      textLength = 0;
 
@@ -640,7 +640,7 @@ const EDA_RECT SCH_SHEET::GetBodyBoundingBox() const
 
 const EDA_RECT SCH_SHEET::GetBoundingBox() const
 {
-    EDA_RECT box = GetBodyBoundingBox();
+    BOX2I box = GetBodyBoundingBox();
 
     for( const SCH_FIELD& field : m_fields )
         box.Merge( field.GetBoundingBox() );
@@ -1024,7 +1024,7 @@ BITMAPS SCH_SHEET::GetMenuImage() const
 
 bool SCH_SHEET::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBodyBoundingBox();
+    BOX2I rect = GetBodyBoundingBox();
 
     rect.Inflate( aAccuracy );
 

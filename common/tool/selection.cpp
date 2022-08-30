@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <eda_item.h>
+#include <eda_rect.h>
 #include <tool/selection.h>
 
 
@@ -93,7 +94,7 @@ VECTOR2I SELECTION::GetCenter() const
         }
     }
 
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     if( hasOnlyText )
     {
@@ -116,9 +117,9 @@ VECTOR2I SELECTION::GetCenter() const
 }
 
 
-EDA_RECT SELECTION::GetBoundingBox() const
+BOX2I SELECTION::GetBoundingBox() const
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     for( EDA_ITEM* item : m_items )
         bbox.Merge( item->GetBoundingBox() );

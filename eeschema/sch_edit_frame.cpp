@@ -1680,18 +1680,14 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
         DS_PROXY_VIEW_ITEM* ds = SCH_BASE_FRAME::GetCanvas()->GetView()->GetDrawingSheet();
         EDA_ITEM*           dsAsItem = static_cast<EDA_ITEM*>( ds );
 
-        // Need an EDA_RECT so the first ".Merge" sees it's uninitialized
-        EDA_RECT bBoxItems;
-
         // Calc the bounding box of all items on screen except the page border
         for( EDA_ITEM* item : GetScreen()->Items() )
         {
             if( item != dsAsItem ) // Ignore the drawing-sheet itself
-                bBoxItems.Merge( item->GetBoundingBox() );
-
-            bBoxDoc = bBoxItems;
+                bBoxDoc.Merge( item->GetBoundingBox() );
         }
     }
+
     return bBoxDoc;
 }
 

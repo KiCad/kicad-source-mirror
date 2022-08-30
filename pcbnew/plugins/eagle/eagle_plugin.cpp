@@ -3117,7 +3117,7 @@ void EAGLE_PLUGIN::centerBoard()
         if( m_props->Value( "page_width",  &page_width ) &&
             m_props->Value( "page_height", &page_height ) )
         {
-            EDA_RECT bbbox = m_board->GetBoardEdgesBoundingBox();
+            BOX2I bbbox = m_board->GetBoardEdgesBoundingBox();
 
             int w = atoi( page_width.c_str() );
             int h = atoi( page_height.c_str() );

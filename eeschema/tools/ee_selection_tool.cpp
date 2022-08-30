@@ -1058,8 +1058,8 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
     for( EDA_ITEM* item : collector )
     {
-        EDA_RECT bbox = item->GetBoundingBox();
-        int      dist = INT_MAX / 2;
+        BOX2I bbox = item->GetBoundingBox();
+        int   dist = INT_MAX / 2;
 
         if( exactHits.count( item ) )
         {
@@ -1129,7 +1129,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     // for selection and can be dropped.
     if( closest ) // Don't try and get a tight bbox if nothing is near the mouse pointer
     {
-        EDA_RECT tightBox = closest->GetBoundingBox();
+        BOX2I tightBox = closest->GetBoundingBox();
         tightBox.Inflate( -tightBox.GetWidth() / 4, -tightBox.GetHeight() / 4 );
 
         for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -1622,7 +1622,7 @@ int EE_SELECTION_TOOL::SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetP
     for( SCH_ITEM* item : items )
         select( item );
 
-    EDA_RECT bbox = m_selection.GetBoundingBox();
+    BOX2I bbox = m_selection.GetBoundingBox();
 
     if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {

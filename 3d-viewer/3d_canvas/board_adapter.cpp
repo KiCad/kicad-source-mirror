@@ -317,7 +317,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             aWarningReporter->Report( wxEmptyString );
     }
 
-    EDA_RECT bbbox;
+    BOX2I bbbox;
 
     if( m_board )
     {

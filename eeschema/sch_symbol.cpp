@@ -1396,9 +1396,9 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-EDA_RECT SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const
+BOX2I SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const
 {
-    EDA_RECT    bBox;
+    BOX2I    bBox;
 
     if( m_part )
         bBox = m_part->GetBodyBoundingBox( m_unit, m_convert, aIncludePins, false );
@@ -1441,7 +1441,7 @@ EDA_RECT SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) 
 }
 
 
-EDA_RECT SCH_SYMBOL::GetBodyBoundingBox() const
+BOX2I SCH_SYMBOL::GetBodyBoundingBox() const
 {
     return doGetBoundingBox( false, false );
 }
@@ -1883,7 +1883,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 
 bool SCH_SYMBOL::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bBox = GetBodyBoundingBox();
+    BOX2I bBox = GetBodyBoundingBox();
     bBox.Inflate( aAccuracy / 2 );
 
     if( bBox.Contains( aPosition ) )

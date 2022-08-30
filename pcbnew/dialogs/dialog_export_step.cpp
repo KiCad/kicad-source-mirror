@@ -429,7 +429,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
         {
-            EDA_RECT bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+            BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             LOCALE_IO dummy;
@@ -497,7 +497,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
         case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
         {
-            EDA_RECT bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+            BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             params.m_xOrigin = xOrg;

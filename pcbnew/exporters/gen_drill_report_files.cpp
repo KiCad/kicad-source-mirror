@@ -23,7 +23,6 @@
  */
 
 #include <plotters/plotter_dxf.h>
-#include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
 #include <eda_item.h>
@@ -84,7 +83,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     // to calculate the board edges bounding box
     LSET visibleLayers = m_pcb->GetVisibleLayers();
     m_pcb->SetVisibleLayers( visibleLayers | LSET( Edge_Cuts ) );
-    EDA_RECT bbbox = m_pcb->GetBoardEdgesBoundingBox();
+    BOX2I bbbox = m_pcb->GetBoardEdgesBoundingBox();
     m_pcb->SetVisibleLayers( visibleLayers );
 
     // Some formats cannot be used to generate a document like the map files

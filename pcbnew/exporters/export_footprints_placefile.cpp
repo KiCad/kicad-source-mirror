@@ -304,7 +304,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "\n$BeginDESCRIPTION\n";
 
-    EDA_RECT bbbox = m_board->ComputeBoundingBox();
+    BOX2I bbbox = m_board->ComputeBoundingBox();
 
     buffer += "\n$BOARD\n";
 

@@ -271,7 +271,7 @@ public:
      *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the physical area
      */
-    EDA_RECT GetTextBox( int aLine = -1, bool aInvertY = false ) const;
+    BOX2I GetTextBox( int aLine = -1, bool aInvertY = false ) const;
 
     /**
      * Return the distance between two lines of text.

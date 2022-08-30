@@ -270,7 +270,7 @@ void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 }
 
 
-EDA_RECT PCBNEW_PRINTOUT::getBoundingBox()
+BOX2I PCBNEW_PRINTOUT::getBoundingBox()
 {
     return m_board->ComputeBoundingBox();
 }

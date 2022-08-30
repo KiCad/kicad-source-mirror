@@ -639,11 +639,11 @@ int SCH_LABEL_BASE::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) con
 }
 
 
-const EDA_RECT SCH_LABEL_BASE::GetBodyBoundingBox() const
+const BOX2I SCH_LABEL_BASE::GetBodyBoundingBox() const
 {
     // build the bounding box of the label only, without taking into account its fields
 
-    EDA_RECT             box;
+    BOX2I                 box;
     std::vector<VECTOR2I> pts;
 
     CreateGraphicShape( nullptr, pts, GetTextPos() );
@@ -661,7 +661,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
 {
     // build the bounding box of the entire label, including its fields
 
-    EDA_RECT box( GetBodyBoundingBox() );
+    BOX2I box = GetBodyBoundingBox();
 
     for( const SCH_FIELD& field : m_fields )
     {
@@ -684,7 +684,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
 
 bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bbox = GetBodyBoundingBox();
+    BOX2I bbox = GetBodyBoundingBox();
     bbox.Inflate( aAccuracy );
 
     if( bbox.Contains( aPosition ) )
@@ -960,9 +960,9 @@ SCH_LABEL::SCH_LABEL( const VECTOR2I& pos, const wxString& text ) :
 }
 
 
-const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
+const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox();
+    BOX2I rect = GetTextBox();
 
     rect.Offset( 0, -GetTextOffset() );
     rect.Inflate( GetEffectiveTextPenWidth() );
@@ -1501,7 +1501,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 }
 
 
-const EDA_RECT SCH_HIERLABEL::GetBodyBoundingBox() const
+const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
 {
     int penWidth = GetEffectiveTextPenWidth();
     int margin = GetTextOffset();
@@ -1548,7 +1548,7 @@ const EDA_RECT SCH_HIERLABEL::GetBodyBoundingBox() const
         break;
     }
 
-    EDA_RECT box( VECTOR2I( x, y ), VECTOR2I( dx, dy ) );
+    BOX2I box( VECTOR2I( x, y ), VECTOR2I( dx, dy ) );
     box.Normalize();
     return box;
 }

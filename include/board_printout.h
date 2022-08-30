@@ -109,7 +109,7 @@ protected:
     virtual void setupGal( KIGFX::GAL* aGal );
 
     ///< Returns bounding box of the printed objects (excluding drawing-sheet frame)
-    virtual EDA_RECT getBoundingBox() = 0;
+    virtual BOX2I getBoundingBox() = 0;
 
     ///< Returns a PAINTER instance used to draw the items.
     virtual std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) = 0;

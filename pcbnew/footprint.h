@@ -159,7 +159,7 @@ public:
      *
      * @return The rectangle containing the pads for the normalized footprint.
      */
-    EDA_RECT GetFpPadsLocalBbox() const;
+    BOX2I GetFpPadsLocalBbox() const;
 
     /**
      * Return a bounding polygon for the shapes and pads in the footprint.

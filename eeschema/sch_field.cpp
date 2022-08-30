@@ -402,7 +402,7 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     // Calculate the text bounding box:
-    EDA_RECT rect = GetTextBox();
+    BOX2I rect = GetTextBox();
 
     // Calculate the bounding box position relative to the parent:
     VECTOR2I origin = GetParentPosition();

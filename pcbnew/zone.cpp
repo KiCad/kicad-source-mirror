@@ -322,9 +322,7 @@ const EDA_RECT ZONE::GetBoundingBox() const
 {
     BOX2I bb = m_Poly->BBox();
 
-    EDA_RECT ret( bb.GetOrigin(), VECTOR2I( bb.GetWidth(), bb.GetHeight() ) );
-
-    return ret;
+    return bb;
 }
 
 

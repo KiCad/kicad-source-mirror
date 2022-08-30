@@ -82,9 +82,9 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-EDA_RECT EE_SELECTION::GetBoundingBox() const
+BOX2I EE_SELECTION::GetBoundingBox() const
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     for( EDA_ITEM* item : m_items )
     {

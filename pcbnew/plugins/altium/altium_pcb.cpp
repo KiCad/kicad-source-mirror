@@ -636,7 +636,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     }
 
     // center board
-    EDA_RECT bbbox = m_board->GetBoardEdgesBoundingBox();
+    BOX2I bbbox = m_board->GetBoardEdgesBoundingBox();
 
     int w = m_board->GetPageSettings().GetWidthIU( IU_PER_MILS );
     int h = m_board->GetPageSettings().GetHeightIU( IU_PER_MILS );

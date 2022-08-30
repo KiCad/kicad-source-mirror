@@ -71,10 +71,10 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, std::shared_ptr<RC_ITEM> aItem, TY
     for( unsigned ii = 1; ii < CORNERS_COUNT; ii++ )
     {
         ++point_shape;
-        start.x = std::min( start.x, point_shape->x);
-        start.y = std::min( start.y, point_shape->y);
-        end.x = std::max( end.x, point_shape->x);
-        end.y = std::max( end.y, point_shape->y);
+        start.x = std::min( start.x, point_shape->x );
+        start.y = std::min( start.y, point_shape->y );
+        end.x = std::max( end.x, point_shape->x );
+        end.y = std::max( end.y, point_shape->y );
     }
 
     m_shapeBoundingBox.SetOrigin( start);
@@ -89,7 +89,7 @@ MARKER_BASE::~MARKER_BASE()
 
 bool MARKER_BASE::HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const
 {
-    EDA_RECT bbox = GetBoundingBoxMarker();
+    BOX2I bbox = GetBoundingBoxMarker();
     bbox.Inflate( aAccuracy );
 
     // Fast hit test using boundary box. A finer test will be made if requested
@@ -120,17 +120,14 @@ void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale ) const
 }
 
 
-EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
+BOX2I MARKER_BASE::GetBoundingBoxMarker() const
 {
-    VECTOR2I size_iu = m_shapeBoundingBox.GetSize();
-    VECTOR2I position_iu = m_shapeBoundingBox.GetPosition();
-    size_iu.x *= m_scalingFactor;
-    size_iu.y *= m_scalingFactor;
-    position_iu.x *= m_scalingFactor;
-    position_iu.y *= m_scalingFactor;
-    position_iu += m_Pos;
+    BOX2I bbox = m_shapeBoundingBox;
 
-    return EDA_RECT( position_iu, size_iu );
+    VECTOR2I pos = m_Pos;
+    pos += m_shapeBoundingBox.GetPosition() * m_scalingFactor;
+
+    return BOX2I( pos, bbox.GetSize() * m_scalingFactor );
 }
 
 

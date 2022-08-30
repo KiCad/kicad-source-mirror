@@ -223,7 +223,7 @@ UseBoundingBox:
     // Fetch a rectangular bounding box for the board; there is always some uncertainty in the
     // board dimensions computed via ComputeBoundingBox() since this depends on the individual
     // footprint entities.
-    EDA_RECT bbbox = aPcb->GetBoardEdgesBoundingBox();
+    BOX2I bbbox = aPcb->GetBoardEdgesBoundingBox();
 
     // convert to mm and compensate for an assumed LINE_WIDTH line thickness
     double  x   = ( bbbox.GetOrigin().x + LINE_WIDTH / 2 ) * scale + offX;

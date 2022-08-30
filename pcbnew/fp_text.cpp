@@ -74,7 +74,7 @@ FP_TEXT::~FP_TEXT()
 
 bool FP_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    EDA_RECT rect = GetTextBox();
+    BOX2I    rect = GetTextBox();
     VECTOR2I location = aPoint;
 
     rect.Inflate( aAccuracy );
@@ -222,7 +222,7 @@ void FP_TEXT::SetLocalCoord()
 const EDA_RECT FP_TEXT::GetBoundingBox() const
 {
     EDA_ANGLE angle = GetDrawRotation();
-    EDA_RECT  text_area = GetTextBox();
+    BOX2I     text_area = GetTextBox();
 
     if( !angle.IsZero() )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
@@ -337,7 +337,7 @@ EDA_ITEM* FP_TEXT::Clone() const
 const BOX2I FP_TEXT::ViewBBox() const
 {
     EDA_ANGLE angle = GetDrawRotation();
-    EDA_RECT  text_area = GetTextBox();
+    BOX2I     text_area = GetTextBox();
 
     if( !angle.IsZero() )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );

@@ -337,8 +337,8 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
 
     if( m_rbSvgPageSizeOpt->GetSelection() == 2 )   // Page is board boundary size
     {
-        EDA_RECT    bbox = m_board->ComputeBoundingBox();
-        PAGE_INFO   currpageInfo = m_board->GetPageSettings();
+        BOX2I     bbox = m_board->ComputeBoundingBox();
+        PAGE_INFO currpageInfo = m_board->GetPageSettings();
 
         currpageInfo.SetWidthMils(  bbox.GetWidth() / IU_PER_MILS );
         currpageInfo.SetHeightMils( bbox.GetHeight() / IU_PER_MILS );

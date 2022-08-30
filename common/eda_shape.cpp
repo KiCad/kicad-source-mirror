@@ -631,9 +631,9 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-const EDA_RECT EDA_SHAPE::getBoundingBox() const
+const BOX2I EDA_SHAPE::getBoundingBox() const
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     switch( m_shape )
     {
@@ -812,7 +812,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    EDA_RECT bb = getBoundingBox();
+    BOX2I bb = getBoundingBox();
 
     switch( m_shape )
     {
@@ -1015,7 +1015,7 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 }
 
 
-void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
+void EDA_SHAPE::computeArcBBox( BOX2I& aBBox ) const
 {
     // Start, end, and each inflection point the arc crosses will enclose the entire arc.
     // Only include the center when filled; it's not necessarily inside the BB of an unfilled

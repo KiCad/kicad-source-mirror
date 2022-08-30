@@ -911,10 +911,10 @@ void LIB_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins,
-                                               bool aIncludePrivateItems ) const
+const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins,
+                                            bool aIncludePrivateItems ) const
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     for( const LIB_ITEM& item : m_drawings )
     {

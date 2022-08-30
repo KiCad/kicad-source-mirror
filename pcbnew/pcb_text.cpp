@@ -159,7 +159,7 @@ int PCB_TEXT::getKnockoutMargin() const
 
 const EDA_RECT PCB_TEXT::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox();
+    BOX2I rect = GetTextBox();
 
     if( IsKnockout() )
         rect.Inflate( getKnockoutMargin() );

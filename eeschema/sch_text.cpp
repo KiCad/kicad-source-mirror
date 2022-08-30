@@ -300,7 +300,7 @@ void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset 
     // SCH_FIELD text.
     if( GetDrawFont()->IsOutline() )
     {
-        EDA_RECT firstLineBBox = GetTextBox( 0 );
+        BOX2I    firstLineBBox = GetTextBox( 0 );
         int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
         int      adjust = KiROUND( sizeDiff * 0.4 );
         VECTOR2I adjust_offset( 0, - adjust );
@@ -315,7 +315,7 @@ void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset 
 
 const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox();
+    BOX2I rect = GetTextBox();
 
     if( !GetTextAngle().IsZero() ) // Rotate rect.
     {
@@ -456,7 +456,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     // SCH_FIELD text.
     if( GetDrawFont()->IsOutline() )
     {
-        EDA_RECT firstLineBBox = GetTextBox( 0 );
+        BOX2I    firstLineBBox = GetTextBox( 0 );
         int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
         int      adjust = KiROUND( sizeDiff * 0.4 );
         VECTOR2I adjust_offset( 0, - adjust );

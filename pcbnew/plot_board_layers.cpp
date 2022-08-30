@@ -998,7 +998,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
         autocenter  = (aPlotOpts->GetScale() != 1.0);
     }
 
-    EDA_RECT bbox = aBoard->ComputeBoundingBox();
+    BOX2I    bbox = aBoard->ComputeBoundingBox();
     VECTOR2I boardCenter = bbox.Centre();
     VECTOR2I boardSize = bbox.GetSize();
 
@@ -1052,12 +1052,13 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
 /**
  * Prefill in black an area a little bigger than the board to prepare for the negative plot
  */
-static void FillNegativeKnockout( PLOTTER *aPlotter, const EDA_RECT &aBbbox )
+static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 {
     const int margin = 5 * IU_PER_MM;   // Add a 5 mm margin around the board
     aPlotter->SetNegative( true );
     aPlotter->SetColor( WHITE );        // Which will be plotted as black
-    EDA_RECT area = aBbbox;
+
+    BOX2I area = aBbbox;
     area.Inflate( margin );
     aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILL_T::FILLED_SHAPE );
     aPlotter->SetColor( BLACK );
@@ -1192,7 +1193,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         // done in the driver (if supported)
         if( aPlotOpts->GetNegative() )
         {
-            EDA_RECT bbox = aBoard->ComputeBoundingBox();
+            BOX2I bbox = aBoard->ComputeBoundingBox();
             FillNegativeKnockout( plotter, bbox );
         }
 
