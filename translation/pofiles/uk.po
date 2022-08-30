@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"PO-Revision-Date: 2022-08-30 19:59+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4617,7 +4617,7 @@ msgstr "Вниз"
 
 #: common/eda_text.cpp:1030
 msgid "Hyperlink"
-msgstr ""
+msgstr "Гіперпосилання"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5189,9 +5189,8 @@ msgid "Cursor"
 msgstr "Курсор"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Допоміжні елементи"
+msgstr "Навести на елементи"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5465,9 +5464,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Файл перекладу KiCad для цієї мови не встановлений."
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Показувати межі сторінки"
+msgstr "Показати сторінку %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6578,14 +6577,12 @@ msgstr "Відновити %s за замовчуванням"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "Не виділено шини"
+msgstr "Об'єкти не вибрано"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Не виділено шини"
+msgstr "Вибрано декілька об’єктів"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6676,9 +6673,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Файли застарілих бібліотек символів KiCad"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Файли бібліотек символів KiCad"
+msgstr "База даних бібліотек символів KiCad"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -11803,14 +11799,13 @@ msgid "(source)"
 msgstr "Джерело"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "потрібно число для '%s'"
+msgstr "Члени '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Ім'я шини або зв'язку"
+msgstr "Ім'я зв'язку/вкладеної шини"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -11988,25 +11983,27 @@ msgstr "Використовувати тему:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
-msgstr ""
+msgstr "Товщин лінії по замовчуванню:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:40
 msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"Встановіть значення 0, щоб дозволити символам наслідувати ширину ліній\n"
+"від вихідної схеми"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
-msgstr ""
+msgstr "Довжина виводу по замовчуванню:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:66
 msgid "De&fault pin number size:"
-msgstr ""
+msgstr "Розмір номеру виводу по замовчуванню:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:77
 msgid "Def&ault pin name size:"
-msgstr ""
+msgstr "Ім'я виводу по замовчуванню:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:91
 msgid "Show pin &electrical type"
@@ -12163,6 +12160,9 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
+"Було внесено зміни до однієї чи кількох бібліотек символів.\n"
+"Зміни потрібно зберегти або скасувати, перш ніж можна буде змінити таблицю "
+"бібліотеки символів."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1055
 msgid "Symbol Libraries"
@@ -12176,6 +12176,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Помилка збереження таблиці глобальної бібліотеки:\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1078
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1091
@@ -12195,6 +12198,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Помилка збереження бібліотечної таблиці проекту:\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:20
@@ -12437,9 +12443,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Більше одного імені назначено цій шині або звʼязку"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Відповідність посадкового місця"
+msgstr "Конфліктні призначення класів зв'язків"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -12514,7 +12519,7 @@ msgstr "Схема '%s' вже відкрита."
 #: eeschema/files-io.cpp:123
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "Схема '%s' не існує. Ви хочете його створити?"
 
 #: eeschema/files-io.cpp:141
 msgid "Creating Schematic"
@@ -12533,6 +12538,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
+"Не вдалося завантажити всю схему. Під час спроби завантажити ієрархії "
+"аркушів виникли помилки."
 
 #: eeschema/files-io.cpp:246 eeschema/files-io.cpp:254
 #: eeschema/files-io.cpp:1260 eeschema/sheet.cpp:162
