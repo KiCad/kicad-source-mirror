@@ -92,6 +92,7 @@ private:
     int                          m_lastTargetLayer;
 
     bool                         m_inRouterTool;         // Re-entrancy guard
+    PCB_LAYER_ID                 m_originalActiveLayer;
 };
 
 #endif
