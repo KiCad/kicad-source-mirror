@@ -814,7 +814,17 @@ int ROUTER_TOOL::onLayerCommand( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
-    return handleLayerSwitch( aEvent, true );
+    if( !m_router->IsPlacingVia() )
+        return handleLayerSwitch( aEvent, true );
+    else
+    {
+        m_router->ToggleViaPlacement();
+        frame()->SetActiveLayer( static_cast<PCB_LAYER_ID>( m_router->GetCurrentLayer() ) );
+        updateEndItem( aEvent );
+        m_router->Move( m_endSnapPoint, m_endItem );
+    }
+
+    return 0;
 }
 
 
