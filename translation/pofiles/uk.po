@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-30 19:59+0000\n"
+"PO-Revision-Date: 2022-09-02 14:00+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -11794,9 +11794,8 @@ msgid "Bus definitions:"
 msgstr "Визначення шин"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Джерело"
+msgstr "(джерело)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
 #, c-format
@@ -12563,6 +12562,9 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
+"Під час завантаження схеми виявлено помилку, яка була автоматично "
+"виправлена. Будь ласка, збережіть схему, щоб відновити пошкоджений файл, "
+"інакше вона може бути непридатною для інших версій KiCad."
 
 #: eeschema/files-io.cpp:358
 msgid "Illegal entry found in project file symbol library list."
@@ -12579,6 +12581,11 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"Бібліотеки символів, визначені у списку бібліотек символів файлу проекту, "
+"більше не підтримуються та їх буде видалено.\n"
+"\n"
+"За певних умов це може призвести до пошкодження посилань на бібліотеку "
+"символів."
 
 #: eeschema/files-io.cpp:366
 msgid "Do not show this dialog again."
@@ -12597,6 +12604,11 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"За певних умов це може призвести до некоректності схеми. Якщо на схемі "
+"відсутні символів під час відкриття, збережіть її безпосередньо перед "
+"внесенням будь-яких змін, щоб запобігти втраті даних. Якщо відсутні символи, "
+"потрібно або ручне відновлення схеми, або відновлення файлу бібліотеки кешу "
+"символів і перезавантаження схеми."
 
 #: eeschema/files-io.cpp:408
 msgid "Load Without Cache File"
@@ -12629,6 +12641,9 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
+"Цю операцію не можна скасувати.\n"
+"\n"
+"Бажаєте зберегти поточний документ, перш ніж продовжити?"
 
 #: eeschema/files-io.cpp:612 pcbnew/files.cpp:169
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:280
@@ -12650,6 +12665,8 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
+"Помилка збереження схеми до файлу '%s'.\n"
+"%s"
 
 #: eeschema/files-io.cpp:707 pcbnew/files.cpp:1069
 #, c-format
@@ -12733,6 +12750,10 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
+"Це потенційно незручно!\n"
+"Схоже, що минулого разу ви редагували один або кілька файлів, схема\n"
+"не була збережена належним чином. Бажаєте відновити останні збережені вами "
+"зміни?"
 
 #: eeschema/files-io.cpp:1390
 #, c-format
@@ -13043,9 +13064,9 @@ msgstr ""
 "Позначення повинно бути виправлена перед моделюванням."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "Не вдалося завантажити бібліотеку kiface '%s'."
+msgstr "Не вдалося прочитати модель симуляції %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:388
 #, c-format
@@ -13243,9 +13264,8 @@ msgstr "Тип входу шини"
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_label.cpp:873
 #: eeschema/sch_line.cpp:882 pcbnew/pad.cpp:927 pcbnew/pcb_track.cpp:893
 #: pcbnew/zone.cpp:541
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Призначений клас звʼязків"
+msgstr "Вирішено клас звʼязків"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13382,9 +13402,9 @@ msgid "Label '%s'"
 msgstr "Мітка '%s'"
 
 #: eeschema/sch_label.cpp:1171
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Директивна мітка"
+msgstr "Директивна мітка [%s %s]"
 
 #: eeschema/sch_label.cpp:1446
 #, c-format
@@ -13511,6 +13531,8 @@ msgid ""
 "Unknown or unexpected record found inside \"Additional\" section, Record id: "
 "%d."
 msgstr ""
+"У розділі «Додатково» знайдено невідомий або неочікуваний запис, "
+"ідентифікатор запису: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:566
 msgid "Compile mask not currently supported."
@@ -13522,6 +13544,8 @@ msgid ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 msgstr ""
+"У розділі «Заголовку файла» знайдено невідомий або неочікуваний запис, "
+"ідентифікатор запису: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 #, c-format
@@ -13586,23 +13610,23 @@ msgid "Line's owner (%d) not found."
 msgstr "Власник лінії (%d) не знайдено."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1477
-#, fuzzy
 msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Компіляція в даний час не підтримується."
+msgstr "Група сигналів, що належить до частини, наразі не підтримується."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1520
 msgid "Harness connector, belonging to the part is not currently supported."
 msgstr ""
+"Під'єднання групи сигналів, що належить до частини, наразі не підтримується."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Harness entry's parent (%d) not found."
-msgstr "Власник листа (%d) не знайдено."
+msgstr "Батьківський елемент групи сигналів (%d) не знайдено."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1584
-#, fuzzy, c-format
+#, c-format
 msgid "Harness type's parent (%d) not found."
-msgstr "Власник лінії (%d) не знайдено."
+msgstr "Батьківський тип групи сигналів (%d) не знайдено."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1598
 #, c-format
@@ -13611,6 +13635,9 @@ msgid ""
 "review imported schematic, as KiCad does not natively support these Altium "
 "elements."
 msgstr ""
+"З’єднувач групи сигналів Altium (%s) було імпортовано як ієрархічний аркуш. "
+"Перегляньте імпортовану схему, оскільки KiCad не підтримує ці елементи "
+"Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1631
 #, c-format
@@ -13638,6 +13665,9 @@ msgid ""
 "Altium's Harness port (%s) was imported as Text box. Please review imported "
 "schematic, as KiCad does not natively support these Altium elements."
 msgstr ""
+"Порт групи сигналів Altium (%s) було імпортовано як текстове поле. "
+"Перегляньте імпортовану схему, оскільки KiCad не підтримує ці елементи "
+"Altium."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
 #, c-format
@@ -13735,6 +13765,9 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
+"Шрифти CADSTAR відрізняються від шрифтів KiCad. Ймовірно, це призведе до "
+"проблем з вирівнюванням. Будь ласка, уважно перегляньте імпортовані текстові "
+"елементи та за потреби виправте вручну."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:265
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:170
@@ -13881,19 +13914,23 @@ msgstr ""
 "але не має визначеної фігури."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Помилка при читанні зображення %s."
+msgstr "Помилка читання таблиці бази даних %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Не вдалося завантажити бібліотеку бази даних: файл налаштувань %s відсутній "
+"або недійсний"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"Не вдалося завантажити бібліотеку бази даних: не вдалося підключитися до "
+"бази даних %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -13933,9 +13970,9 @@ msgstr "Неприпустима назва символу"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:198
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2458
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Символ %s не знайдено в бібліотеці '%s."
+msgstr "Символ %s містить недійсну літеру '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:205
 msgid "Invalid library identifier"
@@ -13975,9 +14012,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Неправильний символ конвертованого номеру %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Невірний номер контакту"
+msgstr "Недійсний URL-адреса гіперпосилання \"%s\""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -14590,9 +14627,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Не вдалося визначити модель із значенням '%s'."
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "Неприпустима одиниця вимірювання символу %s"
+msgstr "Недійсний індекс символу виводу: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -16289,15 +16326,15 @@ msgstr "Розірвати шину"
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Divide a bus into segments which can be dragged independently"
-msgstr ""
+msgstr "Розділіть шину на сегменти, які можуть бути переміщені незалежно"
 
 #: eeschema/tools/ee_actions.cpp:559
 msgid "Add a simulator probe"
-msgstr ""
+msgstr "Додати пробник симулятора"
 
 #: eeschema/tools/ee_actions.cpp:563
 msgid "Select a value to be tuned"
-msgstr ""
+msgstr "Оберіть значення для точного налаштування"
 
 #: eeschema/tools/ee_actions.cpp:568 pcbnew/tools/pcb_actions.cpp:751
 msgid "Highlight net under cursor"
@@ -16321,89 +16358,93 @@ msgstr "Підсвічувати провідники та виводи одно
 
 #: eeschema/tools/ee_actions.cpp:586
 msgid "Edit with Symbol Editor"
-msgstr ""
+msgstr "Редагувати в редакторі символів"
 
 #: eeschema/tools/ee_actions.cpp:586
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr ""
+msgstr "Відкрити вибраний символ в редакторі символів"
 
 #: eeschema/tools/ee_actions.cpp:592
 msgid "Open the library symbol in the Symbol Editor"
-msgstr ""
+msgstr "Відкрити символ бібліотеки в редакторі символів"
 
 #: eeschema/tools/ee_actions.cpp:597
 msgid "Edit Symbol Fields..."
-msgstr ""
+msgstr "Редагувати поля символу..."
 
 #: eeschema/tools/ee_actions.cpp:597
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr ""
+msgstr "Масове редагування всіх символів схеми"
 
 #: eeschema/tools/ee_actions.cpp:602
 msgid "Edit Symbol Library Links..."
-msgstr ""
+msgstr "Редагувати посилання на бібліотеку символів..."
 
 #: eeschema/tools/ee_actions.cpp:602
 msgid "Edit links between schematic and library symbols"
-msgstr ""
+msgstr "Змінити посилання між схемою і бібліотекою символів"
 
 #: eeschema/tools/ee_actions.cpp:607
 msgid "Assign Footprints..."
-msgstr ""
+msgstr "Призначити посадкові місця..."
 
 #: eeschema/tools/ee_actions.cpp:607
 msgid "Run footprint assignment tool"
-msgstr ""
+msgstr "Запустити інструмент призначення посадкового місця"
 
 #: eeschema/tools/ee_actions.cpp:612
 msgid "Import Footprint Assignments..."
-msgstr ""
+msgstr "Імпортувати назначені посадкові місця..."
 
 #: eeschema/tools/ee_actions.cpp:613
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
-msgstr ""
+msgstr "Імпортуйте призначення символів із файлу .cmp, створеного Pcbnew"
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Annotate Schematic..."
-msgstr ""
+msgstr "Позначити компоненти на схемі..."
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Fill in schematic symbol reference designators"
-msgstr ""
+msgstr "Заповнити позначення символів схеми"
 
 #: eeschema/tools/ee_actions.cpp:623
 msgid "Schematic Setup..."
-msgstr ""
+msgstr "Налаштування схеми..."
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
+"Редагувати налаштування схеми, включаючи стилі позначення і електричні "
+"правила"
 
 #: eeschema/tools/ee_actions.cpp:629
 msgid "Edit Sheet Page Number..."
-msgstr ""
+msgstr "Редагувати нумерацію сторінок листа..."
 
 #: eeschema/tools/ee_actions.cpp:630
 msgid "Edit the page number of the current or selected sheet"
-msgstr ""
+msgstr "Редагувати номер сторінки поточного або вибраного аркуша"
 
 #: eeschema/tools/ee_actions.cpp:634
 msgid "Rescue Symbols..."
-msgstr ""
+msgstr "Символи порятунку..."
 
 #: eeschema/tools/ee_actions.cpp:635
 msgid "Find old symbols in project and rename/rescue them"
-msgstr ""
+msgstr "Знайти старі символи в проекті та перейменувати/зберегти їх"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Remap Legacy Library Symbols..."
-msgstr ""
+msgstr "Перепризначити застарілі символи бібліотеки..."
 
 #: eeschema/tools/ee_actions.cpp:641
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
+"Перепризначити посилання на символи бібліотеки в застарілих схемах на нову "
+"таблицю бібліотеки символів"
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Export Drawing to Clipboard"
@@ -16635,7 +16676,7 @@ msgstr "Скасувати останній сегмент"
 
 #: eeschema/tools/ee_actions.cpp:826
 msgid "Walks the current line back one segment."
-msgstr ""
+msgstr "Перейти з поточного ряда на один сегмент назад."
 
 #: eeschema/tools/ee_actions.cpp:832
 msgid "Switch Segment Posture"
@@ -16643,45 +16684,45 @@ msgstr "Змінити частину сегменту"
 
 #: eeschema/tools/ee_actions.cpp:832
 msgid "Switches posture of the current segment."
-msgstr ""
+msgstr "Перемикнути положення поточного сегмента."
 
 #: eeschema/tools/ee_actions.cpp:838
 msgid "Finish Wire or Bus"
-msgstr ""
+msgstr "Завершити провідник або шину"
 
 #: eeschema/tools/ee_actions.cpp:838
 msgid "Complete drawing at current segment"
-msgstr ""
+msgstr "Завершити малюнок на поточному сегменті"
 
 #: eeschema/tools/ee_actions.cpp:843
 msgid "Finish Wire"
-msgstr ""
+msgstr "Завершити провідник"
 
 #: eeschema/tools/ee_actions.cpp:843
 msgid "Complete wire with current segment"
-msgstr ""
+msgstr "Завершіть провідник з поточним сегментом"
 
 #: eeschema/tools/ee_actions.cpp:848
 msgid "Finish Bus"
-msgstr ""
+msgstr "Закінчити шину"
 
 #: eeschema/tools/ee_actions.cpp:848
 msgid "Complete bus with current segment"
-msgstr ""
+msgstr "Завершити шину з поточним сегментом"
 
 #: eeschema/tools/ee_actions.cpp:853
 msgid "Finish Lines"
-msgstr ""
+msgstr "Завершення лінії"
 
 #: eeschema/tools/ee_actions.cpp:853
 msgid "Complete connected lines with current segment"
-msgstr ""
+msgstr "Повністю з'єднані лінії з поточним сегментом"
 
 #: eeschema/tools/ee_actions.cpp:862 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Move"
-msgstr ""
+msgstr "Пересунути"
 
 #: eeschema/tools/ee_actions.cpp:862 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:270
@@ -16714,27 +16755,27 @@ msgstr "Зберегти копію поточного листа як..."
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Save a copy of the current sheet to another location or name"
-msgstr ""
+msgstr "Зберегти копію поточної таблиці в інше місце або з іншим іменем"
 
 #: eeschema/tools/ee_inspection_tool.cpp:223
 msgid "No symbol issues found."
-msgstr ""
+msgstr "Не знайдено проблем із символом."
 
 #: eeschema/tools/ee_inspection_tool.cpp:227
 msgid "Symbol Warnings"
-msgstr ""
+msgstr "Попередження про символ"
 
 #: eeschema/tools/ee_inspection_tool.cpp:299
 msgid "No datasheet defined."
-msgstr ""
+msgstr "Не задано даташит."
 
 #: eeschema/tools/sch_drawing_tools.cpp:282
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни створення символу."
 
 #: eeschema/tools/sch_drawing_tools.cpp:552 pcbnew/tools/drawing_tool.cpp:634
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "Натисніть <ESC> для відміни створення зображення."
 
 #: eeschema/tools/sch_drawing_tools.cpp:603
 #: pagelayout_editor/pl_editor_frame.cpp:843
@@ -16902,9 +16943,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Натисніть <ESC> для відміни переміщення."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "Файл '%s' не знайдено."
+msgstr "Сторінку '%d' не знайдено."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -17008,6 +17049,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
+"Додайте новий запис до таблиці глобальної бібліотеки символів.\n"
+"\n"
+"Псевдонім таблиці бібліотеки символів має суфікс\n"
+"ціле число, щоб запобігти дублюванню записів таблиці."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:55
 msgid ""
@@ -17016,68 +17061,72 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
+"Додайте новий запис до таблиці бібліотеки символів проекту.\n"
+"\n"
+"Псевдонім таблиці бібліотеки символів має суфікс\n"
+"ціле число, щоб запобігти дублюванню записів таблиці."
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "4B S-Curve"
-msgstr ""
+msgstr "4B S-крива"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "5B S-Curve"
-msgstr ""
+msgstr "5B S-крива"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "Switch"
-msgstr ""
+msgstr "Перемкнути"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
 msgid "Characteristic Curve"
-msgstr ""
+msgstr "Крива характеристики"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
-msgstr ""
+msgstr "Поточні дані буде втрачено?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, c-format
 msgid "Clear layer %d?"
-msgstr ""
+msgstr "Очистити шар %d?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:149
 #, c-format
 msgid "Layer %d"
-msgstr ""
+msgstr "Шар %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:175
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:234
@@ -17086,31 +17135,33 @@ msgstr ""
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:378
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:143
 msgid "Do not export"
-msgstr ""
+msgstr "Не експортувати"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:221
 msgid "Gerbers with known layers: "
-msgstr ""
+msgstr "Gerber з відомими шарами: "
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:223
 msgid "Automatic Layer Assignment"
-msgstr ""
+msgstr "Автоматичне призначення шару"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:333
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:386
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:135
 msgid "Hole data"
-msgstr ""
+msgstr "Дані отвору"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:427
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
 msgstr ""
+"Експортована плата не має достатньої кількості шарів для обробки вибраних "
+"внутрішніх шарів"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:32
 msgid "Layer selection:"
-msgstr ""
+msgstr "Вибір шару:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
 msgid "Copper layers count:"
@@ -17312,7 +17363,7 @@ msgstr "Формат файлу"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "Ці параметри зазвичай вказані у файлах, але не завжди."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 msgid "File units"
@@ -17336,6 +17387,9 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
+"Для цілих чисел у файлах можуть бути видалені нулі.\n"
+"Відсутність формату початкових нулів означає, що початкові нулі видаляються\n"
+"Відсутність формату кінцевих нулів означає, що кінцеві нулі видаляються"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -17343,11 +17397,11 @@ msgstr "Формат координат"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "Формат координат не вказано у форматі Excellon."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(Десятковий формат не використовує ці налаштування)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -17419,7 +17473,6 @@ msgstr "6"
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:391
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:447
-#, fuzzy
 msgid ":"
 msgstr ":"
 
@@ -17540,47 +17593,48 @@ msgstr "Механічні шари"
 
 #: gerbview/files.cpp:220
 msgid "Top Pad Master"
-msgstr ""
+msgstr "Pad Master зверху"
 
 #: gerbview/files.cpp:221
 msgid "Bottom Pad Master"
-msgstr ""
+msgstr "Pad Master знизу"
 
 #: gerbview/files.cpp:227
 msgid "Open Gerber File(s)"
-msgstr ""
+msgstr "Відкрити Gerber файли"
 
 #: gerbview/files.cpp:238
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr ""
+msgstr "Відкрити файл свердління NC (Excellon)"
 
 #: gerbview/files.cpp:276
 msgid "File not found:"
-msgstr ""
+msgstr "Файл не знайдено:"
 
 #: gerbview/files.cpp:287
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
+"<b>Файл завдання gerber не можна завантажити як файл графіка</b> <i>%s</i>"
 
 #: gerbview/files.cpp:300
 msgid "Loading files..."
-msgstr ""
+msgstr "Завантаження файлів..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
 msgid "Loading %u/%zu %s..."
-msgstr ""
+msgstr "Завантаження %u/%zu %s..."
 
 #: gerbview/files.cpp:441
 #, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr ""
+msgstr "Zip файл '%s' не може бути відкритий."
 
 #: gerbview/files.cpp:479
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr ""
+msgstr "Пропущений файл '%s' (робочий gerber файл)."
 
 #: gerbview/files.cpp:524
 #, c-format
@@ -18303,18 +18357,20 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
+"Редагувати межі аркушів креслення та блоки заголовків для використання в "
+"схемах і дизайнах друкованих плат"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Керування пакетами для завантаження з KiCad і сторонніх репозиторіїв"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
-msgstr ""
+msgstr "Файл проекту KiCad"
 
 #: kicad/files-io.cpp:66
 msgid "Unzip Project"
-msgstr ""
+msgstr "Розархівувати проект"
 
 #: kicad/files-io.cpp:73
 #, c-format
@@ -18322,23 +18378,25 @@ msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
+"\n"
+"Відкрити '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
-msgstr ""
+msgstr "Тека призначення"
 
 #: kicad/files-io.cpp:82
 #, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr ""
+msgstr "Розархівувати проект в '%s'.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr ""
+msgstr "Архівувати файли проекту"
 
 #: kicad/import_project.cpp:83
 msgid "KiCad Project Destination"
-msgstr ""
+msgstr "Розташування проекту KiCad"
 
 #: kicad/import_project.cpp:99
 msgid ""
@@ -18347,12 +18405,18 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
+"Вибрана тека не порожня. Ми рекомендуємо створювати проекти у власній "
+"порожній теці.\n"
+"\n"
+"Ви хочете створити нову порожню теку для проекту?"
 
 #: kicad/import_project.cpp:124
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
+"Помилка при створенні нової теки. Будь ласка, спробуйте інший шлях. Проект "
+"не може бути імпортовано."
 
 #: kicad/import_project.cpp:149 kicad/import_project.cpp:168
 #, c-format
@@ -18361,14 +18425,17 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Не вдалося скопіювати файл '%s'\n"
+"в '%s'\n"
+"Проект не може бути імпортований."
 
 #: kicad/import_project.cpp:239
 msgid "Import CADSTAR Archive Project Files"
-msgstr ""
+msgstr "Імпорт файлів архіву CADSTAR"
 
 #: kicad/import_project.cpp:247
 msgid "Import Eagle Project Files"
-msgstr ""
+msgstr "Імпортувати файли проекту Eagle"
 
 #: kicad/kicad.cpp:169
 #, c-format
@@ -18376,129 +18443,133 @@ msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
 msgstr ""
+"Файл '%s'\n"
+"не є фалом проекту KiCad."
 
 #: kicad/kicad_manager_frame.cpp:203
 msgid "Project Files"
-msgstr ""
+msgstr "Файли проекту"
 
 #: kicad/kicad_manager_frame.cpp:207
 msgid "Editors"
-msgstr ""
+msgstr "Редактори"
 
 #: kicad/kicad_manager_frame.cpp:635
 msgid "Load File to Edit"
-msgstr ""
+msgstr "Завантажити файл для редагування"
 
 #: kicad/kicad_manager_frame.cpp:709
 msgid "[no project loaded]"
-msgstr ""
+msgstr "[немає завантажених проектів]"
 
 #: kicad/kicad_manager_frame.cpp:749
 #, c-format
 msgid "Project: %s"
-msgstr ""
+msgstr "Проект: %s"
 
 #: kicad/kicad_manager_frame.cpp:793
 msgid "Restoring session"
-msgstr ""
+msgstr "Відновлення сесії"
 
 #: kicad/kicad_manager_frame.cpp:803
 #, c-format
 msgid "Restoring '%s'"
-msgstr ""
+msgstr "Відновлення '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
+"Чи бажаєте ви автоматично перевіряти наявність оновлень плагіна під час "
+"запуску?"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
-msgstr ""
+msgstr "Перевірка оновлень"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
-msgstr ""
+msgstr "Очистити нещодавні проекти"
 
 #: kicad/menubar.cpp:103
 msgid "Import Non-KiCad Project..."
-msgstr ""
+msgstr "Імпорт не KiCad проекту..."
 
 #: kicad/menubar.cpp:106
 msgid "CADSTAR Project..."
-msgstr ""
+msgstr "Проект CADSTAR..."
 
 #: kicad/menubar.cpp:107
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr ""
+msgstr "Імпорт схем CADSTAR і PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:111
 msgid "EAGLE Project..."
-msgstr ""
+msgstr "Проект EAGLE..."
 
 #: kicad/menubar.cpp:112
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr ""
+msgstr "Імпорт EAGLE CAM XML схему та плату"
 
 #: kicad/menubar.cpp:119
 msgid "&Archive Project..."
-msgstr ""
+msgstr "Архівувати проект..."
 
 #: kicad/menubar.cpp:120
 msgid "Archive all needed project files into zip archive"
-msgstr ""
+msgstr "Архівувати всі необхідні файли проекту в zip архів"
 
 #: kicad/menubar.cpp:124
 msgid "&Unarchive Project..."
-msgstr ""
+msgstr "Розархівувати проект..."
 
 #: kicad/menubar.cpp:125 kicad/menubar.cpp:252
 msgid "Unarchive project files from zip archive"
-msgstr ""
+msgstr "Розархівувати файли проекту з архіву zip"
 
 #: kicad/menubar.cpp:153
 msgid "Browse Project Files"
-msgstr ""
+msgstr "Переглянути файли проекту"
 
 #: kicad/menubar.cpp:154
 msgid "Open project directory in file browser"
-msgstr ""
+msgstr "Відкрити теку проекту у переглядачі файлів"
 
 #: kicad/menubar.cpp:187
 msgid "Edit Local File..."
-msgstr ""
+msgstr "Редагувати локальний файл..."
 
 #: kicad/menubar.cpp:188
 msgid "Edit local file in text editor"
-msgstr ""
+msgstr "Редагування локального файлу в текстовому редакторі"
 
 #: kicad/menubar.cpp:248
 msgid "Archive all project files"
-msgstr ""
+msgstr "Архівувати всі файли проекту"
 
 #: kicad/menubar.cpp:261
 msgid "Reveal project folder in Finder"
-msgstr ""
+msgstr "Показати теку проекту у пошуку"
 
 #: kicad/menubar.cpp:263
 msgid "Open project directory in file explorer"
-msgstr ""
+msgstr "Відкрити теку проекту у файлі провідника"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
 msgid "Add Default Repository"
-msgstr ""
+msgstr "Додати репозиторій по замовчуванню"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Будь ласка, введіть повністю коректну URL-адресу репозиторію"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:93
 msgid "Add repository"
-msgstr ""
+msgstr "Додати репозиторій"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:107
 msgid "Add Existing"
-msgstr ""
+msgstr "Додати наявні"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:61
 msgid "Manage Repositories"
@@ -18552,6 +18623,7 @@ msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
 msgstr ""
+"Ви впевнені, що хочете закрити менеджер пакетів і скасувати внесені зміни?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:263
 msgid "Choose package file"
@@ -18696,85 +18768,88 @@ msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"Цілісність завантаженого пакету не може бути перевірена, хеш не збігається. "
+"Ви впевнені, що хочете залишити цей файл?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:538
 msgid "Keep downloaded file"
-msgstr ""
+msgstr "Зберегти звантажений файл"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:587
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"Ця версія пакунку несумісна з версією kicad або платформою. Ви впевнені, що "
+"хочете його встановити в будь-якому випадку?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:589
 msgid "Install package"
-msgstr ""
+msgstr "Встановити пакунок"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:698
 msgid "Pending"
-msgstr ""
+msgstr "В очікуванні"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Оновити"
+msgstr "Оновити все"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
-msgstr ""
+msgstr "Розмір завантаження"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:92
 msgid "Install Size"
-msgstr ""
+msgstr "Розмір встановлення"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:93
 msgid "Compatible"
-msgstr ""
+msgstr "Сумісний"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:112
 msgid "Show all versions"
-msgstr ""
+msgstr "Показати всі версії"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:118
 msgid "Download"
-msgstr ""
+msgstr "Звантажити"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:17
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Перевірте наявність оновлень пакетів під час запуску"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
 msgid "schema file '%s' not found"
-msgstr ""
+msgstr "файл схеми '%s' не знайдено"
 
 #: kicad/pcm/pcm.cpp:126
 #, c-format
 msgid "Error loading schema: %s"
-msgstr ""
+msgstr "Помилка завантаження схеми: %s"
 
 #: kicad/pcm/pcm.cpp:152
 #, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
+msgstr "Помилка при завантаженні встановленого списку пакунків: %s"
 
 #: kicad/pcm/pcm.cpp:252
 #, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr ""
+msgstr "Завантаження %lld/%lld кБ"
 
 #: kicad/pcm/pcm.cpp:279
 msgid "Download is too large."
-msgstr ""
+msgstr "Завантаження завелике."
 
 #: kicad/pcm/pcm.cpp:296
 msgid "Fetching repository"
-msgstr ""
+msgstr "Отримання репозиторію"
 
 #: kicad/pcm/pcm.cpp:301
 msgid "Unable to load repository url"
-msgstr ""
+msgstr "Неможливо завантажити url репозиторію"
 
 #: kicad/pcm/pcm.cpp:319
 #, c-format
@@ -18783,18 +18858,21 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Не вдалося проаналізувати сховище:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:343
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Отримання пакунків репозиторію"
 
 #: kicad/pcm/pcm.cpp:348
 msgid "Unable to load repository packages url."
-msgstr ""
+msgstr "Неможливо завантажити url-адресу пакунків репозиторію."
 
 #: kicad/pcm/pcm.cpp:358
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "Хеш пакунків не збігається. Репозиторій може бути пошкоджено."
 
 #: kicad/pcm/pcm.cpp:374
 #, c-format
@@ -18803,42 +18881,48 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Неможливо проаналізувати метадані пакетів:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:473
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
+"Кеш пакунків для поточного репозиторію пошкоджено, він буде перезавантажений."
 
 #: kicad/pcm/pcm.cpp:524
 msgid "Downloading resources"
-msgstr ""
+msgstr "Завантаження ресурсів"
 
 #: kicad/pcm/pcm.cpp:543
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"Хеш файлу ресурсів не збігається і не буде використовуватися. Репозиторій "
+"може бути пошкоджений."
 
 #: kicad/pcm/pcm.cpp:784
 msgid "Local file"
-msgstr ""
+msgstr "Локальний файл"
 
 #: kicad/pcm/pcm.cpp:1146
 msgid "Package updates are available"
-msgstr ""
+msgstr "Доступні оновлення пакетів"
 
 #: kicad/pcm/pcm.cpp:1147
 msgid "No package updates available"
-msgstr ""
+msgstr "Немає оновлень пакетів"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
-msgstr ""
+msgstr "Неможливо створити теку для завантаження!"
 
 #: kicad/pcm/pcm_task_manager.cpp:123
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Завантаження URL-адреси пакета: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:137
 #, c-format
@@ -18846,6 +18930,8 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
+"Не вдалося завантажити url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:176
 #, c-format
@@ -18854,29 +18940,31 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"Завантажений архівний хеш для пакунку %s не відповідає запису сховища. Це "
+"може вказати проблему з пакетом, якщо проблема зберігається у сховищі."
 
 #: kicad/pcm/pcm_task_manager.cpp:189 kicad/pcm/pcm_task_manager.cpp:398
 #, c-format
 msgid "Removing previous version of package '%s'."
-msgstr ""
+msgstr "Видалення попередньої версії пакета \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:197
 #, c-format
 msgid "Extracting package '%s'."
-msgstr ""
+msgstr "Розпакування пакета \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:213
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "Видалення завантаженого архіву '%s."
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Переривання установки пакета."
 
 #: kicad/pcm/pcm_task_manager.cpp:302
 msgid "Extracted package\n"
-msgstr ""
+msgstr "Пакет розпаковано\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:346
 #, c-format
@@ -18885,14 +18973,17 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Неможливо проаналізувати метадані пакета:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:355
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Архів не містить припустимий metadata.json файл"
 
 #: kicad/pcm/pcm_task_manager.cpp:363
 msgid "Archive metadata must have a single version defined"
-msgstr ""
+msgstr "Архів метаданих повинен мати одинарну встановлену версію"
 
 #: kicad/pcm/pcm_task_manager.cpp:381
 #, c-format
@@ -18900,75 +18991,78 @@ msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
+"Пакет з ідентифікатором %s уже встановлено. Бажаєте оновити його до версії з "
+"вибраного файлу?"
 
 #: kicad/pcm/pcm_task_manager.cpp:384
-#, fuzzy
 msgid "Update package"
-msgstr "Оновити схему"
+msgstr "Пакет оновлення"
 
 #: kicad/pcm/pcm_task_manager.cpp:472
 #, c-format
 msgid "Removing directory %s"
-msgstr ""
+msgstr "Видалення теки %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:480
 #, c-format
 msgid "Failed to remove directory %s"
-msgstr ""
+msgstr "Не вдалося видалити теку %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:541
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Пакунок %s видалено"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr ""
+msgstr "Не вдалося відкрити файл шаблонів!"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
-msgstr ""
+msgstr "Не вдалося відкрити теку з мета-інформацією для цього шаблону!"
 
 #: kicad/project_template.cpp:63
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr ""
+msgstr "Не вдалося знайти інформаційний файл HTML для цього шаблону!"
 
 #: kicad/project_template.cpp:260
 #, c-format
 msgid "Cannot create folder '%s'."
-msgstr ""
+msgstr "Не вдалося створити теку '%s."
 
 #: kicad/project_tree_item.cpp:130
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
+"Зміна розширення файлу призведе до зміни типу файлу.\n"
+"Ви хочете продовжити?"
 
 #: kicad/project_tree_item.cpp:132
 msgid "Rename File"
-msgstr ""
+msgstr "Перейменування файлу"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
-msgstr ""
+msgstr "Неможливо перейменувати файл... "
 
 #: kicad/project_tree_item.cpp:140
 msgid "Permission error?"
-msgstr ""
+msgstr "Помилка дозволів?"
 
 #: kicad/project_tree_item.cpp:159
 #, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr ""
+msgstr "Неможливо перемістити '%s' у кошик."
 
 #: kicad/project_tree_item.cpp:162
 #, c-format
 msgid "Can not move '%s' to trash."
-msgstr ""
+msgstr "Не можна перемістити '%s' в кошик."
 
 #: kicad/project_tree_pane.cpp:244
 msgid "Directory name:"
-msgstr ""
+msgstr "Ім'я теки:"
 
 #: kicad/project_tree_pane.cpp:244
 msgid "Create New Directory"
@@ -18976,96 +19070,96 @@ msgstr "Створити нову теку"
 
 #: kicad/project_tree_pane.cpp:688
 msgid "Switch to this Project"
-msgstr ""
+msgstr "Перейти на цей проект"
 
 #: kicad/project_tree_pane.cpp:689
 msgid "Close all editors, and switch to the selected project"
-msgstr ""
+msgstr "Закрити всі редактори та перейти до обраного проекту"
 
 #: kicad/project_tree_pane.cpp:696
 msgid "New Directory..."
-msgstr ""
+msgstr "Нова тека..."
 
 #: kicad/project_tree_pane.cpp:697
 msgid "Create a New Directory"
-msgstr ""
+msgstr "Створити нову теку"
 
 #: kicad/project_tree_pane.cpp:705 kicad/project_tree_pane.cpp:715
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Показати у Finder"
 
 #: kicad/project_tree_pane.cpp:706
 msgid "Reveals the directory in a Finder window"
-msgstr ""
+msgstr "Показати каталог у вікні Finder"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Open Directory in File Explorer"
-msgstr ""
+msgstr "Відкрити теку у Провіднику файлів"
 
 #: kicad/project_tree_pane.cpp:709 pcbnew/tools/pcb_actions.cpp:587
 msgid "Opens the directory in the default system file manager"
-msgstr ""
+msgstr "Відкрити теку в стандартному файловому менеджері"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
-msgstr ""
+msgstr "Показати теку у вікні Finder"
 
 #: kicad/project_tree_pane.cpp:718
 msgid "Open Directories in File Explorer"
-msgstr ""
+msgstr "Відкрити теку у файловому провіднику"
 
 #: kicad/project_tree_pane.cpp:719
 msgid "Opens the directories in the default system file manager"
-msgstr ""
+msgstr "Відкрити теку у файловому менеджері системи за замовчуванням"
 
 #: kicad/project_tree_pane.cpp:730
 msgid "Open the file in a Text Editor"
-msgstr ""
+msgstr "Відкрити файл в текстовому редакторі"
 
 #: kicad/project_tree_pane.cpp:732
 msgid "Open files in a Text Editor"
-msgstr ""
+msgstr "Відкрити файл в текстовому редакторі"
 
 #: kicad/project_tree_pane.cpp:734
 msgid "Edit in a Text Editor"
-msgstr ""
+msgstr "Редагувати в текстовому редакторі"
 
 #: kicad/project_tree_pane.cpp:742
 msgid "Rename File..."
-msgstr ""
+msgstr "Перейменувати файл..."
 
 #: kicad/project_tree_pane.cpp:743
 msgid "Rename file"
-msgstr ""
+msgstr "Перейменувати файл"
 
 #: kicad/project_tree_pane.cpp:747
 msgid "Rename Files..."
-msgstr ""
+msgstr "Перейменувати файли..."
 
 #: kicad/project_tree_pane.cpp:748
 msgid "Rename files"
-msgstr ""
+msgstr "Перейменувати файли"
 
 #: kicad/project_tree_pane.cpp:757
 msgid "Delete the file and its content"
-msgstr ""
+msgstr "Видалити файл і його вміст"
 
 #: kicad/project_tree_pane.cpp:759
 msgid "Delete the files and their contents"
-msgstr ""
+msgstr "Видалити файли та їх вміст"
 
 #: kicad/project_tree_pane.cpp:774
 msgid "Move to Trash"
-msgstr ""
+msgstr "Перемістити у кошик"
 
 #: kicad/project_tree_pane.cpp:830
 #, c-format
 msgid "Change filename: '%s'"
-msgstr ""
+msgstr "Змінити ім'я файлу: '%s'"
 
 #: kicad/project_tree_pane.cpp:832
 msgid "Change filename"
-msgstr ""
+msgstr "Змінити ім'я файлу"
 
 #: kicad/project_tree_pane.cpp:1152
 msgid "Network path: not monitoring folder changes"
@@ -19073,75 +19167,75 @@ msgstr "Мережа тека: зміни не відстежуються"
 
 #: kicad/project_tree_pane.cpp:1157
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "Локальний шлях: моніторинг змін теки"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
-msgstr ""
+msgstr "Новий проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "Create new blank project"
-msgstr ""
+msgstr "Створити новий пустий проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
-msgstr ""
+msgstr "Новий проект із шаблону..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "Create new project from template"
-msgstr ""
+msgstr "Створити новий проект із шаблону"
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open Demo Project..."
-msgstr ""
+msgstr "Відкрийте демо-проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open a demo project"
-msgstr ""
+msgstr "Відкрити демо проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open Project..."
-msgstr ""
+msgstr "Відкрити проект..."
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Open an existing project"
-msgstr ""
+msgstr "Відкрити існуючий проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close Project"
-msgstr ""
+msgstr "Закрити проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Close the current project"
-msgstr ""
+msgstr "Закрити поточний проект"
 
 #: kicad/tools/kicad_manager_actions.cpp:71
 msgid "Edit schematic"
-msgstr ""
+msgstr "Редагувати схему"
 
 #: kicad/tools/kicad_manager_actions.cpp:77
 msgid "Edit schematic symbols"
-msgstr ""
+msgstr "Редагувати символи схеми"
 
 #: kicad/tools/kicad_manager_actions.cpp:83
 msgid "Edit PCB"
-msgstr ""
+msgstr "Редагувати друковану плату"
 
 #: kicad/tools/kicad_manager_actions.cpp:89
 msgid "Edit PCB footprints"
-msgstr ""
+msgstr "Редагувати посадкові місця"
 
 #: kicad/tools/kicad_manager_actions.cpp:95
 msgid "Preview Gerber output files"
-msgstr ""
+msgstr "Попередній перегляд Gerber вихідних файлів"
 
 #: kicad/tools/kicad_manager_actions.cpp:101
 msgid "Image Converter"
-msgstr ""
+msgstr "Конвертер зображень"
 
 #: kicad/tools/kicad_manager_actions.cpp:101
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr ""
+msgstr "Перетворення растрових зображень в схему або PCB компоненти"
 
 #: kicad/tools/kicad_manager_actions.cpp:106
 #: pcb_calculator/pcb_calculator_frame.cpp:52
@@ -20139,7 +20233,7 @@ msgstr "Лінійний опір:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:100
 #, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "Частота для 100% проникнення глибини:"
+msgstr "Частота для 100% проникнення в глибину:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Ampacity:"
@@ -23366,7 +23460,7 @@ msgstr "Помилкові параметри"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:34
 msgid "Horizontal count:"
-msgstr ""
+msgstr "Кількість по горизонталі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Vertical count:"
@@ -23402,71 +23496,71 @@ msgstr "Стовпці"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:101
 msgid "Stagger Type"
-msgstr ""
+msgstr "Тип шахової розкладки"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Horizontal, then vertical"
-msgstr ""
+msgstr "Горизонтально, тоді вертикально"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Vertical, then horizontal"
-msgstr ""
+msgstr "Вертикально, тоді горизонтально"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Numbering Direction"
-msgstr ""
+msgstr "Направлення нумерації"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Reverse numbering on alternate rows/columns"
-msgstr ""
+msgstr "Зворотня нумерація по альтернативних рядках/стовпцях"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 #: pcbnew/dialogs/dialog_create_array_base.cpp:293
 msgid "Use first free number"
-msgstr ""
+msgstr "Використовувати перший вільний номер"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 #: pcbnew/dialogs/dialog_create_array_base.cpp:293
 msgid "From start value"
-msgstr ""
+msgstr "З початкового значення"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
 msgid "Initial Pad Number"
-msgstr ""
+msgstr "Початковий номер документа"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Continuous (1, 2, 3...)"
-msgstr ""
+msgstr "Послідовний (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr ""
+msgstr "Координатна (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:133
 msgid "Pad Numbering Scheme"
-msgstr ""
+msgstr "Схема нумерації"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:137
 msgid "Primary axis numbering:"
-msgstr ""
+msgstr "Основна нумерація осі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:146
 msgid "Secondary axis numbering:"
-msgstr ""
+msgstr "Вторинне число осі:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:165
 #: pcbnew/dialogs/dialog_create_array_base.cpp:314
 msgid "Pad numbering start:"
-msgstr ""
+msgstr "Початком нумерації контактної площадки:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:179
 #: pcbnew/dialogs/dialog_create_array_base.cpp:321
 msgid "Pad numbering skip:"
-msgstr ""
+msgstr "Пропуск нумерації контактної площадки:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 msgid "Grid Array"
-msgstr ""
+msgstr "Масив сітки"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
@@ -23979,23 +24073,23 @@ msgstr "Змінити посадкові місця з позначенням:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
-msgstr ""
+msgstr "Змінити посадкові місця з ідентифікатором бібліотеки:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text layers and visibilities"
-msgstr ""
+msgstr "Оновити шари та видимість тексту"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Update text sizes, styles and positions"
-msgstr ""
+msgstr "Оновити розміри тексту, стилі та розташування"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
 msgid "Update fabrication attributes"
-msgstr ""
+msgstr "Оновити атрибути виробництва"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update 3D models"
-msgstr ""
+msgstr "Оновлення 3D-моделей"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
 msgid ""
@@ -24004,52 +24098,57 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Оновлення/скидання рядків: є два випадки, які мають охоплювати ці описи: "
+"користувач змінив посадочне місце на друкованій платі та хоче їх видалити, "
+"або користувач вніс зміни в посадкове місце бібліотеки та хоче розмістити їх "
+"назад на друковану плату."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:358
 #, c-format
 msgid "Updated footprint %s (%s)"
-msgstr ""
+msgstr "Оновлене посадкове місце %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:364
 #, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr ""
+msgstr "Змінено посадкове місце %s з '%s' на '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
 msgid "*** library footprint not found ***"
-msgstr ""
+msgstr "*** бібліотека посадкового місця не знайдене ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:394
 msgid ": (no changes)"
-msgstr ""
+msgstr ": (без змін)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:399
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
-msgstr ""
+msgstr "Оновити всі посадкові місця на друкованій платі"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint(s)"
-msgstr ""
+msgstr "Оновити вибрані посадкові місця"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
+#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr ""
+msgstr "Оновити посадкові місця з позначеннями"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
-msgstr ""
+msgstr "Оновити посадкові місця з значенням:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
-msgstr ""
+msgstr "Оновити посадкове місце з ID бібліотеки:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr ""
+msgstr "Ідентифікатор нової бібліотеки посадкових місць:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -38197,92 +38296,94 @@ msgstr ""
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+msgstr "Помилка завантаження [ІНФО]: надто довгий рядок введення\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "Перетворення зображень KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "Створіть компонент із растрового зображення для використання з KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "bitmap2component"
-msgstr ""
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr ""
+msgstr "KiCad редактор схем (стандартний)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
-msgstr ""
+msgstr "Інструмент створення схем"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Автономний редактор схем KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr ""
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
-msgstr ""
+msgstr "Переглядач Gerber файлу"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
-msgstr ""
+msgstr "Перегляд Gerber файлів"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview"
-msgstr ""
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Suite"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
+"Набір інструментів для схемного проектування та компонування друкованих плат"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
-msgstr ""
+msgstr "Калькулятор для друкованих плат KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
-msgstr ""
+msgstr "Калькулятор друкованих плат"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr ""
+"Калькулятор для різних обчислень, пов'язаних з проектуванням електроніки"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr ""
+msgstr "KiCad редактор друкованих плат (Автономний)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
-msgstr ""
+msgstr "Редактор компонування друкованих плат"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Автономний редактор друкованих плат KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
-msgstr ""
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "Конструктор EDA для схеми та проектування друкованої плати"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -38293,26 +38394,33 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad — це безкоштовний пакет автоматизованого проектування електроніки (EDA)"
+" із відкритим кодом. У ньому передбачено створення схем, моделювання "
+"інтегральної схеми, створення макету друкованої плати (PCB), 3D-візуалізацію "
+"та побудову/експорт даних у численні формати. KiCad також містить "
+"високоякісну бібліотеку компонентів, яка містить тисячі символів, слідів і "
+"3D-моделей. KiCad має мінімальні системні вимоги та працює на Linux, Windows "
+"і macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "Головне вікно KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad PCB Layout Editor"
-msgstr ""
+msgstr "Редактор компонування друкованих плат KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
 msgid "The KiCad Developers"
-msgstr ""
+msgstr "Розробники KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
-msgstr ""
+msgstr "Gerber файл"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 msgid "Excellon drill file"
-msgstr ""
+msgstr "Файл сверловки Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
