@@ -162,25 +162,40 @@ bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
 
 void SCH_DATABASE_PLUGIN::ensureSettings( const wxString& aSettingsPath )
 {
+    auto tryLoad =
+            [&]()
+            {
+                if( !m_settings->LoadFromFile() )
+                {
+                    wxString msg = wxString::Format(
+                        _( "Could not load database library: settings file %s missing or invalid" ),
+                        aSettingsPath );
+
+                    THROW_IO_ERROR( msg );
+                }
+            };
+
     if( !m_settings && !aSettingsPath.IsEmpty() )
     {
         std::string path( aSettingsPath.ToUTF8() );
         m_settings = std::make_unique<DATABASE_LIB_SETTINGS>( path );
         m_settings->SetReadOnly( true );
 
-        if( !m_settings->LoadFromFile() )
-        {
-            wxString msg = wxString::Format(
-                    _( "Could not load database library: settings file %s missing or invalid" ),
-                    aSettingsPath );
-
-            THROW_IO_ERROR( msg );
-        }
+        tryLoad();
     }
-    else if( !m_settings )
+    else if( !m_conn && m_settings )
+    {
+        // If we have valid settings but no connection yet; reload settings in case user is editing
+        tryLoad();
+    }
+    else if( m_conn && m_settings && !aSettingsPath.IsEmpty() )
     {
         wxASSERT_MSG( aSettingsPath == m_settings->GetFilename(),
                       "Path changed for database library without re-initializing plugin!" );
+    }
+    else if( !m_settings )
+    {
+        wxLogTrace( traceDatabase, wxT( "ensureSettings: no settings but no valid path!" ) );
     }
 }
 
@@ -216,6 +231,8 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
                     _( "Could not load database library: could not connect to database %s (%s)" ),
                     m_settings->m_Source.dsn,
                     m_conn->GetLastError() );
+
+            m_conn.reset();
 
             THROW_IO_ERROR( msg );
         }
