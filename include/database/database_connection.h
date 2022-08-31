@@ -34,6 +34,8 @@ namespace nanodbc
     class connection;
 }
 
+class DATABASE_CACHE;
+
 
 class DATABASE_CONNECTION
 {
@@ -51,6 +53,8 @@ public:
                          bool aConnectNow = true );
 
     ~DATABASE_CONNECTION();
+
+    void SetCacheParams( int aMaxSize, int aMaxAge );
 
     bool Connect();
 
@@ -104,6 +108,8 @@ private:
     long m_timeout;
 
     char m_quoteChar;
+
+    std::unique_ptr<DATABASE_CACHE> m_cache;
 };
 
 #endif //KICAD_DATABASE_CONNECTION_H

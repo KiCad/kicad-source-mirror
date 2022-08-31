@@ -76,6 +76,13 @@ struct DATABASE_LIB_TABLE
 };
 
 
+struct DATABASE_CACHE_SETTINGS
+{
+    int max_size;    ///< Maximum number of single-row results to cache
+    int max_age;     ///< Max age of cached rows before they expire, in seconds
+};
+
+
 class DATABASE_LIB_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -86,6 +93,8 @@ public:
     DATABASE_SOURCE m_Source;
 
     std::vector<DATABASE_LIB_TABLE> m_Tables;
+
+    DATABASE_CACHE_SETTINGS m_Cache;
 
 protected:
     wxString getFileExt() const override;

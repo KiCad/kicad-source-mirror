@@ -236,6 +236,8 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
 
             THROW_IO_ERROR( msg );
         }
+
+        m_conn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
     }
 }
 

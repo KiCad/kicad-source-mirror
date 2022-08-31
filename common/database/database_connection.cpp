@@ -43,6 +43,7 @@
 #include <wx/log.h>
 
 #include <database/database_connection.h>
+#include <database/database_cache.h>
 
 
 const char* const traceDatabase = "KICAD_DATABASE";
@@ -88,6 +89,8 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( const std::string& aDataSourceName,
     m_pass    = aPassword;
     m_timeout = aTimeoutSeconds;
 
+    m_cache = std::make_unique<DATABASE_CACHE>( 10, 1 );
+
     if( aConnectNow )
         Connect();
 }
@@ -100,6 +103,8 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( const std::string& aConnectionString,
     m_connectionString = aConnectionString;
     m_timeout          = aTimeoutSeconds;
 
+    m_cache = std::make_unique<DATABASE_CACHE>( 10, 1 );
+
     if( aConnectNow )
         Connect();
 }
@@ -109,6 +114,22 @@ DATABASE_CONNECTION::~DATABASE_CONNECTION()
 {
     Disconnect();
     m_conn.reset();
+}
+
+
+void DATABASE_CONNECTION::SetCacheParams( int aMaxSize, int aMaxAge )
+{
+    if( !m_cache )
+        return;
+
+    if( aMaxSize < 0 )
+        aMaxSize = 0;
+
+    if( aMaxAge < 0 )
+        aMaxAge = 0;
+
+    m_cache->SetMaxSize( static_cast<size_t>( aMaxSize ) );
+    m_cache->SetMaxAge( static_cast<time_t>( aMaxAge ) );
 }
 
 
@@ -301,11 +322,19 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
     const std::string& columnName = columnCacheIter->first;
 
-    nanodbc::statement statement( *m_conn );
+    std::string queryStr = fmt::format( "SELECT * FROM {}{}{} WHERE {}{}{} = ?",
+                                        m_quoteChar, tableName, m_quoteChar,
+                                        m_quoteChar, columnName, m_quoteChar );
 
-    nanodbc::string query = fromUTF8( fmt::format( "SELECT * FROM {}{}{} WHERE {}{}{} = ?",
-                                                   m_quoteChar, tableName, m_quoteChar,
-                                                   m_quoteChar, columnName, m_quoteChar ) );
+    nanodbc::statement statement( *m_conn );
+    nanodbc::string query = fromUTF8( queryStr );
+
+    if( m_cache->Get( queryStr, aResult ) )
+    {
+        wxLogTrace( traceDatabase, wxT( "SelectOne: `%s` with parameter `%s` - cache hit" ),
+                    toUTF8( query ), aWhere.second );
+        return true;
+    }
 
     try
     {
@@ -363,6 +392,8 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
                     m_lastError );
         return false;
     }
+
+    m_cache->Put( queryStr, aResult );
 
     return true;
 }
