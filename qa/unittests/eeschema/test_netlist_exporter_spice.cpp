@@ -392,6 +392,16 @@ BOOST_AUTO_TEST_CASE( Switches )
 }
 
 
+BOOST_AUTO_TEST_CASE( Directives )
+{
+    TestNetlist( "directives" );
+    TestTranPoint( 9.25e-3, { { "V(/in)", 1 }, { "V(/out)", -900e-3 }, { "I(XR1)", 1e-3 } } );
+    TestTranPoint( 9.50e-3, { { "V(/in)", 0 }, { "V(/out)", 0 }, { "I(XR1)", 1e-3 } } );
+    TestTranPoint( 9.75e-3, { { "V(/in)", -1 }, { "V(/out)", 900e-3 }, { "I(XR1)", 1e-3 } } );
+    TestTranPoint( 10e-3,    { { "V(/in)", 0 }, { "V(/out)", 0 }, { "I(XR1)", 1e-3 } } );
+}
+
+
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     TestNetlist( "legacy_laser_driver" );
