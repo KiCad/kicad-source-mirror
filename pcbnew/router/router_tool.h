@@ -90,6 +90,7 @@ private:
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
 
     int                          m_lastTargetLayer;
+    PCB_LAYER_ID                 m_originalActiveLayer;
 };
 
 #endif

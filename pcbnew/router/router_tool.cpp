@@ -1129,6 +1129,7 @@ bool ROUTER_TOOL::prepareInteractive()
         return false;
     }
 
+    m_originalActiveLayer = editFrame->GetActiveLayer();
     editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
     if( !getView()->IsLayerVisible( routingLayer ) )
@@ -1188,6 +1189,7 @@ bool ROUTER_TOOL::finishInteractive()
     m_startItem = nullptr;
     m_endItem   = nullptr;
 
+    frame()->SetActiveLayer( m_originalActiveLayer );
     UpdateMessagePanel();
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
