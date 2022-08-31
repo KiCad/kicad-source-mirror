@@ -1234,7 +1234,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
         return;
 
     SIM_TYPE simType = m_circuitModel->GetSimType();
-    
+
     std::size_t rowCount = traces.begin()->second->GetDataX().size();
 
     // write column header names on the first row
@@ -1742,8 +1742,24 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
         plotPanelWindow = NewPlotPanel( m_circuitModel->GetSimCommand() );
 
+    // Sometimes (for instance with a directive like wrdata my_file.csv "my_signal")
+    // the simulator is in idle state (simulation is finished), but still running, during
+    // the time the file is written. So gives a slice of time to fully finish the work:
     if( m_simulator->IsRunning() )
-        return;
+    {
+        int max_time = 40;      // For a max timeout = 2s
+
+        do
+        {
+            wxMilliSleep( 50 );
+            wxYield();
+
+            if( max_time )
+                max_time--;
+
+        } while( max_time && m_simulator->IsRunning() );
+    }
+    // Is a warning message useful if the simulatior is still running?
 
     // If there are any signals plotted, update them
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
