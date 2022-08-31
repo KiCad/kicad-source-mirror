@@ -228,7 +228,7 @@ else()
   set(FMT_SOURCES src/format.cc)
 endif ()
 
-add_library(fmt ${FMT_SOURCES} ${FMT_HEADERS} README.rst ChangeLog.rst)
+add_library(fmt STATIC ${FMT_SOURCES} ${FMT_HEADERS} README.rst ChangeLog.rst)
 add_library(fmt::fmt ALIAS fmt)
 
 if (FMT_WERROR)
