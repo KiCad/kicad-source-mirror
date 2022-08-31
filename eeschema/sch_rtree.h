@@ -26,7 +26,6 @@
 #define EESCHEMA_SCH_RTREE_H_
 
 #include <core/typeinfo.h>
-#include <eda_rect.h>
 #include <sch_item.h>
 #include <set>
 #include <vector>

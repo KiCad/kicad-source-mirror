@@ -629,9 +629,10 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         viewport.SetOrigin( VECTOR2D( matrix * VECTOR2D( 0, 0 ) ) );
         viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
+        viewport.Normalize();
 
-        EDA_RECT clipBox( viewport.Normalize() );
-        SEG      visibleSeg( start, end );
+        BOX2I clipBox( viewport.GetOrigin(), viewport.GetSize() );
+        SEG   visibleSeg( start, end );
 
         ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
@@ -2088,7 +2089,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
 #else
-        EDA_RECT bbox = aFootprint->GetBoundingBox( false, false );
+        BOX2I    bbox = aFootprint->GetBoundingBox( false, false );
         VECTOR2I topLeft = bbox.GetPosition();
         VECTOR2I botRight = bbox.GetPosition() + bbox.GetSize();
 

@@ -139,12 +139,12 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
         frontBBox.Inflate( m_largestCourtyardClearance );
         backBBox.Inflate( m_largestCourtyardClearance );
 
-        EDA_RECT fpABBox = fpA->GetBoundingBox();
+        BOX2I fpABBox = fpA->GetBoundingBox();
 
         for( FOOTPRINT* fpB : m_FpInMove )
         {
             fpB->BuildCourtyardCaches();
-            EDA_RECT              fpBBBox = fpB->GetBoundingBox();
+            BOX2I                 fpBBBox = fpB->GetBoundingBox();
             const SHAPE_POLY_SET& frontB = fpB->GetCourtyard( F_CrtYd );
             const SHAPE_POLY_SET& backB = fpB->GetCourtyard( B_CrtYd );
             DRC_CONSTRAINT        constraint;

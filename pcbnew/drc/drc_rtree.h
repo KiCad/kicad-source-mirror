@@ -280,13 +280,14 @@ public:
      * It checks all items in the bbox overlap to find the minimal actual distance and
      * position.
      */
-    bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer, int aClearance,
+    bool QueryColliding( const BOX2I& aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer, int aClearance,
                          int* aActual, VECTOR2I* aPos ) const
     {
-        aBox.Inflate( aClearance );
+        BOX2I bbox = aBox;
+        bbox.Inflate( aClearance );
 
-        int min[2] = { aBox.GetX(), aBox.GetY() };
-        int max[2] = { aBox.GetRight(), aBox.GetBottom() };
+        int min[2] = { bbox.GetX(), bbox.GetY() };
+        int max[2] = { bbox.GetRight(), bbox.GetBottom() };
 
         bool     collision = false;
         int      actual = INT_MAX;
@@ -335,7 +336,7 @@ public:
     /**
      * Quicker version of above that just reports a raw yes/no.
      */
-    bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer ) const
+    bool QueryColliding( const BOX2I& aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer ) const
     {
         SHAPE_POLY_SET* poly = dynamic_cast<SHAPE_POLY_SET*>( aRefShape );
 
@@ -531,7 +532,7 @@ public:
             m_rect = { { INT_MIN, INT_MIN }, { INT_MAX, INT_MAX } };
         };
 
-        DRC_LAYER( drc_rtree* aTree, const EDA_RECT aRect ) : layer_tree( aTree )
+        DRC_LAYER( drc_rtree* aTree, const BOX2I& aRect ) : layer_tree( aTree )
         {
             m_rect = { { aRect.GetX(), aRect.GetY() },
                        { aRect.GetRight(), aRect.GetBottom() } };
@@ -558,12 +559,12 @@ public:
 
     DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
-        EDA_RECT rect( aPoint, VECTOR2I( 0, 0 ) );
+        BOX2I rect( aPoint, VECTOR2I( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return DRC_LAYER( m_tree[int( aLayer )], rect );
     }
 
-    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const EDA_RECT& aRect ) const
+    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const BOX2I& aRect ) const
     {
         return DRC_LAYER( m_tree[int( aLayer )], aRect );
     }

@@ -1812,7 +1812,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
             if( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::NONE )
             {
                 // use a small hack to get us only an outline (hopefully)
-                const EDA_RECT& bbox = zone->GetBoundingBox();
+                const BOX2I& bbox = zone->GetBoundingBox();
                 zone->SetHatchGap( std::max( bbox.GetHeight(), bbox.GetWidth() ) );
             }
             else

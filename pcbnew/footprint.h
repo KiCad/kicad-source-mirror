@@ -170,7 +170,7 @@ public:
 
     // Virtual function
     const BOX2I GetBoundingBox() const override;
-    const EDA_RECT GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
+    const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
     PADS& Pads()             { return m_pads; }
     const PADS& Pads() const { return m_pads; }
@@ -797,11 +797,11 @@ private:
     // that any edit that could affect the bounding boxes (including edits to the footprint
     // children) marked the bounding boxes dirty.  It would definitely be faster -- but also more
     // fragile.
-    mutable EDA_RECT       m_cachedBoundingBox;
+    mutable BOX2I          m_cachedBoundingBox;
     mutable int            m_boundingBoxCacheTimeStamp;
-    mutable EDA_RECT       m_cachedVisibleBBox;
+    mutable BOX2I          m_cachedVisibleBBox;
     mutable int            m_visibleBBoxCacheTimeStamp;
-    mutable EDA_RECT       m_cachedTextExcludedBBox;
+    mutable BOX2I          m_cachedTextExcludedBBox;
     mutable int            m_textExcludedBBoxCacheTimeStamp;
     mutable SHAPE_POLY_SET m_cachedHull;
     mutable int            m_hullCacheTimeStamp;

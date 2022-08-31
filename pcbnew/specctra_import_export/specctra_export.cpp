@@ -576,7 +576,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
         // this string _must_ be unique for a given physical shape, so try to make it unique
         MD5_HASH hash = pad_shape.GetHash();
-        EDA_RECT rect = aPad->GetBoundingBox();
+        BOX2I    rect = aPad->GetBoundingBox();
         snprintf( name, sizeof( name ), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um_%s",
                   uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
                   IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ), (int) polygonal_shape.size(),

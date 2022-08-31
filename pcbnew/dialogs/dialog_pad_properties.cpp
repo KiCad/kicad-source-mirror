@@ -1296,7 +1296,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         {
             for( const std::shared_ptr<PCB_SHAPE>& shape : m_dummyPad->GetPrimitives() )
             {
-                EDA_RECT shapeBBox = shape->GetBoundingBox();
+                BOX2I shapeBBox = shape->GetBoundingBox();
 
                 if( absMargin > shapeBBox.GetWidth() || absMargin > shapeBBox.GetHeight() )
                 {

@@ -247,7 +247,7 @@ bool DIALOG_SHIM::Show( bool show )
 #endif
         ret = wxDialog::Show( show );
 
-        // classname is key, returns a zeroed out default EDA_RECT if none existed before.
+        // classname is key, returns a zeroed-out default wxRect if none existed before.
         wxRect savedDialogRect = class_map[ hash_key ];
 
         if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )

@@ -885,8 +885,8 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
             int height = area.GetEnd().y - area.GetOrigin().y;
 
-            // Construct an EDA_RECT to determine BOARD_ITEM selection
-            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
+            // Construct a BOX2I to determine BOARD_ITEM selection
+            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
 
             selectionRect.Normalize();
 
@@ -2582,7 +2582,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
     case PCB_FOOTPRINT_T:
     {
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
-        EDA_RECT   bbox = footprint->GetBoundingBox( false, false );
+        BOX2I      bbox = footprint->GetBoundingBox( false, false );
 
         try
         {

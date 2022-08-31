@@ -100,8 +100,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
 
     // Spread new footprints.
-    wxPoint areaPosition = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
-    EDA_RECT bbox = board->GetBoundingBox();
+    VECTOR2I areaPosition = GetCanvas()->GetViewControls()->GetCursorPosition();
+    BOX2I    bbox = board->GetBoundingBox();
 
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 

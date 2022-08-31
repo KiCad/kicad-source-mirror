@@ -79,9 +79,9 @@ private:
     void testSilkToMaskClearance();
     void testMaskBridges();
 
-    void testItemAgainstItems( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
+    void testItemAgainstItems( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
                                PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer );
-    void testMaskItemAgainstZones( BOARD_ITEM* item, const EDA_RECT& itemBBox,
+    void testMaskItemAgainstZones( BOARD_ITEM* item, const BOX2I& itemBBox,
                                    PCB_LAYER_ID refLayer, PCB_LAYER_ID targetLayer );
 
     bool checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem, PCB_LAYER_ID aTestLayer,
@@ -400,8 +400,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aMaskItem, int aT
 }
 
 
-void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
-                                                          const EDA_RECT& aItemBBox,
+void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer,
                                                           PCB_LAYER_ID aTargetLayer )
 {
@@ -558,7 +557,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
 
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
-                                                              const EDA_RECT& aItemBBox,
+                                                              const BOX2I& aItemBBox,
                                                               PCB_LAYER_ID aMaskLayer,
                                                               PCB_LAYER_ID aTargetLayer )
 {
@@ -577,8 +576,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
                 continue;
         }
 
-        EDA_RECT inflatedBBox( aItemBBox );
-        int      clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
+        BOX2I inflatedBBox( aItemBBox );
+        int   clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
 
         if( aItem->Type() == PCB_PAD_T )
             clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion();

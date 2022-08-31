@@ -1,6 +1,3 @@
-/**
- * @file pl_editor_layout.h
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -64,26 +61,26 @@ public:
      *
      * @return the full item list bounding box.
      */
-    EDA_RECT ComputeBoundingBox();
+    BOX2I ComputeBoundingBox();
 
     /**
-     * Called soon after ComputeBoundingBox() to return the same EDA_RECT,
-     * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
+     * Called soon after ComputeBoundingBox() to return the same BOX2I, as long as the
+     * CLASS_PL_EDITOR_LAYOUT has not changed.
      */
     const BOX2I GetBoundingBox() const { return m_boundingBox; }
 
-    void SetBoundingBox( const EDA_RECT& aBox ) { m_boundingBox = aBox; }
+    void SetBoundingBox( const BOX2I& aBox ) { m_boundingBox = aBox; }
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;
 #endif
 
 private:
-    EDA_RECT                m_boundingBox;
-    PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;
+    BOX2I                m_boundingBox;
+    PAGE_INFO            m_paper;
+    TITLE_BLOCK          m_titles;
 
-    DS_DRAW_ITEM_LIST       m_drawItemList;
+    DS_DRAW_ITEM_LIST    m_drawItemList;
 };
 
 #endif      // #ifndef CLASS_PL_EDITOR_LAYOUT_H

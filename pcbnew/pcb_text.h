@@ -102,8 +102,8 @@ public:
         return TextHitTest( aPosition, aAccuracy );
     }
 
-    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
-     *                               bool aContained = true, int aAccuracy ) const
+    /**
+     * @copydoc BOARD_ITEM::HitTest(const BOX2I& aRect, bool aContained, int aAccuracy ) const
      */
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {

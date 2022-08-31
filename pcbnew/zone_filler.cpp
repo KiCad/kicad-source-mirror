@@ -203,7 +203,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
                 // A higher priority zone is found: if we intersect and it's not filled yet
                 // then we have to wait.
-                EDA_RECT inflatedBBox = aZone->GetCachedBoundingBox();
+                BOX2I inflatedBBox = aZone->GetCachedBoundingBox();
                 inflatedBBox.Inflate( m_worstClearance );
 
                 return inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() );
@@ -572,7 +572,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     {
         for( PAD* pad : footprint->Pads() )
         {
-            EDA_RECT padBBox = pad->GetBoundingBox();
+            BOX2I padBBox = pad->GetBoundingBox();
             padBBox.Inflate( m_worstClearance );
 
             if( !padBBox.Intersects( aZone->GetCachedBoundingBox() ) )
@@ -672,8 +672,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // A small extra clearance to be sure actual track clearances are not smaller than
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.
-    EDA_RECT zone_boundingbox = aZone->GetCachedBoundingBox();
-    int      extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
+    BOX2I zone_boundingbox = aZone->GetCachedBoundingBox();
+    int   extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
     // largest clearance value found in the netclasses and rules
@@ -1179,7 +1179,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     for( int ii = aFillPolys.OutlineCount() - 1; ii >= 0; ii-- )
     {
         std::vector<SHAPE_LINE_CHAIN>& island = aFillPolys.Polygon( ii );
-        EDA_RECT                       islandExtents = island.front().BBox();
+        BOX2I                          islandExtents = island.front().BBox();
 
         if( islandExtents.GetSizeMax() < half_min_width )
             aFillPolys.DeletePolygon( ii );
@@ -1239,7 +1239,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                      SHAPE_POLY_SET& aFillPolys )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    EDA_RECT               zone_boundingbox = aZone->GetCachedBoundingBox();
+    BOX2I                  zone_boundingbox = aZone->GetCachedBoundingBox();
     SHAPE_POLY_SET         clearanceHoles;
     long                   ticker = 0;
 
@@ -1357,7 +1357,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    EDA_RECT               zoneBB = aZone->GetCachedBoundingBox();
+    BOX2I                  zoneBB = aZone->GetCachedBoundingBox();
     DRC_CONSTRAINT         constraint;
 
     zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance() ) );
@@ -1626,7 +1626,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
         // one of the holes.  Effectively this means their copper outline needs to be expanded
         // to be at least as wide as the gap so that it is guaranteed to touch at least one
         // edge.
-        EDA_RECT       zone_boundingbox = aZone->GetCachedBoundingBox();
+        BOX2I          zone_boundingbox = aZone->GetCachedBoundingBox();
         SHAPE_POLY_SET aprons;
         int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
 

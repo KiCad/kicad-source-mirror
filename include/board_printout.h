@@ -25,22 +25,18 @@
  */
 
 
-/**
- * @file board_printout.h
- * @brief Board print handler definition file.
- */
-
 #ifndef BOARD_PRINTOUT_H
 #define BOARD_PRINTOUT_H
 
 #include <wx/print.h>
 #include <layer_ids.h>
-#include <eda_rect.h>
 #include <printout.h>
+#include <math/box2.h>
 
 #include <memory>
 
-namespace KIGFX {
+namespace KIGFX
+{
 class GAL;
 class VIEW;
 class PAINTER;

@@ -231,7 +231,7 @@ VECTOR2I FP_TEXTBOX::GetDrawPos() const
 
 bool FP_TEXTBOX::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

@@ -1264,7 +1264,7 @@ const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
 {
     int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
 
-    EDA_RECT bBox;
+    BOX2I bBox;
 
     bBox.SetX( m_start.x - halfWidth );
     bBox.SetY( m_start.y - halfWidth );

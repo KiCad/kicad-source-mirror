@@ -1428,9 +1428,9 @@ const BOX2I PAD::ViewBBox() const
 {
     // Bounding box includes soldermask too. Remember mask and/or paste
     // margins can be < 0
-    int solderMaskMargin       = std::max( GetSolderMaskExpansion(), 0 );
+    int      solderMaskMargin  = std::max( GetSolderMaskExpansion(), 0 );
     VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
-    EDA_RECT bbox              = GetBoundingBox();
+    BOX2I    bbox              = GetBoundingBox();
 
     // get the biggest possible clearance
     int clearance = 0;

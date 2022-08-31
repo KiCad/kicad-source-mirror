@@ -28,7 +28,6 @@
 #include <fp_shape.h>
 
 class LINE_READER;
-class EDA_RECT;
 class FOOTPRINT;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;

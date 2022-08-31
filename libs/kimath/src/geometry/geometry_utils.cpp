@@ -114,7 +114,7 @@ int GetCircleToPolyCorrection( int aMaxError )
  * Utility for the line clipping code, returns the boundary code of
  * a point. Bit allocation is arbitrary
  */
-inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
+inline int clipOutCode( const BOX2I *aClipBox, int x, int y )
 {
     int code;
 
@@ -134,7 +134,7 @@ inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
 }
 
 
-bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
+bool ClipLine( const BOX2I *aClipBox, int &x1, int &y1, int &x2, int &y2 )
 {
     // Stock Cohen-Sutherland algorithm; check *any* CG book for details
     int outcode1 = clipOutCode( aClipBox, x1, y1 );
@@ -194,6 +194,7 @@ bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
             outcode2 = clipOutCode( aClipBox, x2, y2 );
         }
     }
+
     return false;
 }
 

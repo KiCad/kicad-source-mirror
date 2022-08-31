@@ -132,9 +132,9 @@ const BOX2I PCB_BITMAP::GetBoundingBox() const
 
 std::shared_ptr<SHAPE> PCB_BITMAP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    EDA_RECT box = GetBoundingBox();
-    return std::shared_ptr<SHAPE_RECT>(
-            new SHAPE_RECT( box.GetCenter(), box.GetWidth(), box.GetHeight() ) );
+    BOX2I box = GetBoundingBox();
+    return std::shared_ptr<SHAPE_RECT>( new SHAPE_RECT( box.GetCenter(), box.GetWidth(),
+                                                        box.GetHeight() ) );
 }
 
 
@@ -178,7 +178,7 @@ void PCB_BITMAP::Show( int nestLevel, std::ostream& os ) const
 
 bool PCB_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

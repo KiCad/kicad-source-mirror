@@ -28,7 +28,6 @@
 #include <board_item.h>
 
 
-class EDA_RECT;
 class LINE_READER;
 
 

@@ -20,7 +20,6 @@
 #include <base_units.h>
 #include <charconv>
 #include <string_utils.h>
-#include <eda_rect.h>
 #include <render_settings.h>
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
@@ -94,8 +93,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 
         VECTOR2D start = line->GetSeg().A;
         VECTOR2D end = line->GetSeg().B;
-
-        EDA_RECT clip( (VECTOR2I) start, wxSize( end.x - start.x, end.y - start.y ) );
+        BOX2I    clip( start, VECTOR2I( end.x - start.x, end.y - start.y ) );
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );

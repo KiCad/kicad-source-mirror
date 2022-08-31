@@ -35,7 +35,6 @@
 #include <eda_item.h>
 #include <base_units.h>
 #include <callback_gal.h>
-#include <eda_rect.h>
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
 #include <gr_text.h>
@@ -509,7 +508,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         return m_bounding_box_cache;
     }
 
-    BOX2I          rect;
+    BOX2I          bbox;
     wxArrayString  strings;
     wxString       text = GetShownText();
     int            thickness = GetEffectiveTextPenWidth();
@@ -549,7 +548,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     if( aInvertY )
         pos.y = -pos.y;
 
-    rect.SetOrigin( pos );
+    bbox.SetOrigin( pos );
 
     // for multiline texts and aLine < 0, merge all rectangles (aLine == -1 signals all lines)
     if( IsMultilineAllowed() && aLine < 0 && strings.GetCount() )
@@ -566,7 +565,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
     }
 
-    rect.SetSize( textsize );
+    bbox.SetSize( textsize );
 
     /*
      * At this point the rectangle origin is the text origin (m_Pos).  This is correct only for
@@ -578,16 +577,16 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     {
     case GR_TEXT_H_ALIGN_LEFT:
         if( IsMirrored() )
-            rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) );
+            bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
         break;
 
     case GR_TEXT_H_ALIGN_CENTER:
-        rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) / 2 );
+        bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 );
         break;
 
     case GR_TEXT_H_ALIGN_RIGHT:
         if( !IsMirrored() )
-            rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) );
+            bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
         break;
     }
 
@@ -597,23 +596,23 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         break;
 
     case GR_TEXT_V_ALIGN_CENTER:
-        rect.SetY( rect.GetY() - ( rect.GetHeight() + overbarOffset ) / 2 );
+        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) / 2 );
         break;
 
     case GR_TEXT_V_ALIGN_BOTTOM:
-        rect.SetY( rect.GetY() - ( rect.GetHeight() + overbarOffset ) );
+        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) );
         break;
     }
 
-    rect.Normalize();       // Make h and v sizes always >= 0
+    bbox.Normalize();       // Make h and v sizes always >= 0
 
     m_bounding_box_cache_valid = true;
     m_bounding_box_cache_pos = drawPos;
     m_bounding_box_cache_line = aLine;
     m_bounding_box_cache_inverted = aInvertY;
-    m_bounding_box_cache = rect;
+    m_bounding_box_cache = bbox;
 
-    return rect;
+    return bbox;
 }
 
 

@@ -104,7 +104,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 
             VECTOR2D start( m_position );
             VECTOR2D end( m_end );
-            EDA_RECT clip( VECTOR2I( start ), VECTOR2I( end.x - start.x, end.y - start.y ) );
+            BOX2I    clip( VECTOR2I( start ), VECTOR2I( end.x - start.x, end.y - start.y ) );
             clip.Normalize();
 
             double               theta = atan2( end.y - start.y, end.x - start.x );

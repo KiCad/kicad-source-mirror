@@ -23,7 +23,6 @@
  */
 
 #include <bitmap_base.h>
-#include <eda_rect.h>     // for EDA_RECT
 #include <gr_basic.h>
 #include <math/util.h>    // for KiROUND
 #include <memory>         // for make_unique, unique_ptr

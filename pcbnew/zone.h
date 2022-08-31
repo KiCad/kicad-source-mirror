@@ -131,7 +131,7 @@ public:
     /**
      * ONLY TO BE USED BY CLIENTS WHICH SET UP THE CACHE!
      */
-    const EDA_RECT GetCachedBoundingBox() const { return m_bboxCache; }
+    const BOX2I GetCachedBoundingBox() const { return m_bboxCache; }
     void CacheBoundingBox() { m_bboxCache = GetBoundingBox(); }
 
     /**
@@ -425,8 +425,7 @@ public:
                          SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit = nullptr ) const;
 
     /**
-     * @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
-     *                              bool aContained = true, int aAccuracy) const
+     * @copydoc BOARD_ITEM::HitTest(const BOX2I& aRect, bool aContained, int aAccuracy) const
      */
     bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
@@ -876,7 +875,7 @@ protected:
     std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> m_FilledPolysList;
 
     /// Temp variables used while filling
-    EDA_RECT                               m_bboxCache;
+    BOX2I                                  m_bboxCache;
     std::map<PCB_LAYER_ID, bool>           m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date

@@ -406,7 +406,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
 {
     BOARD*                 board = aArea->GetBoard();
-    EDA_RECT               areaBBox = aArea->GetCachedBoundingBox();
+    BOX2I                  areaBBox = aArea->GetCachedBoundingBox();
     std::shared_ptr<SHAPE> shape;
 
     // Collisions include touching, so we need to deflate outline by enough to exclude it.

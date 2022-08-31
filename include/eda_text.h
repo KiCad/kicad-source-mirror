@@ -29,7 +29,6 @@
 #include <vector>
 
 #include <outline_mode.h>
-#include <eda_rect.h>
 #include <eda_search_data.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
@@ -388,7 +387,7 @@ private:
     mutable VECTOR2I m_bounding_box_cache_pos;
     mutable int      m_bounding_box_cache_line;
     mutable bool     m_bounding_box_cache_inverted;
-    mutable EDA_RECT m_bounding_box_cache;
+    mutable BOX2I    m_bounding_box_cache;
 
     TEXT_ATTRIBUTES  m_attributes;
     VECTOR2I         m_pos;

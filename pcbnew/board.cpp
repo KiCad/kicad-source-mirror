@@ -1790,7 +1790,7 @@ FOOTPRINT* BOARD::GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveL
         // Filter non visible footprints if requested
         if( !aVisibleOnly || IsFootprintLayerVisible( layer ) )
         {
-            EDA_RECT bb = candidate->GetBoundingBox( false, false );
+            BOX2I bb = candidate->GetBoundingBox( false, false );
 
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;

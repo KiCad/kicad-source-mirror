@@ -32,8 +32,8 @@
 
 #include <wx/gdicmn.h>
 #include <geometry/eda_angle.h>
+#include <math/box2.h>
 
-class EDA_RECT;
 
 /**
  * for transforming drawing coordinates for a wxDC device context.
@@ -64,9 +64,8 @@ public:
 
    /**
     * Calculate a new coordinate according to the mirror/rotation transform.
-    * Useful to calculate actual coordinates of a point
-    * from coordinates relative to a symbol.
-    * which are given for a non rotated, non mirrored item
+    * Useful to calculate actual coordinates of a point from coordinates relative to a symbol,
+    * which are given for a non-rotated,-non mirrored item.
     * @param aPoint = The position to transform
     * @return The transformed coordinate.
     */
@@ -74,19 +73,17 @@ public:
 
    /**
     * Calculate a new rect according to the mirror/rotation transform.
-    * Useful to calculate actual coordinates of a point
-    * from coordinates relative to a symbol
-    * which are given for a non rotated, non mirrored item
+    * Useful to calculate actual coordinates of a point from coordinates relative to a symbol,
+    * which are given for a non-rotated,-non mirrored item.
     * @param aRect = The rectangle to transform
     * @return The transformed rectangle.
     */
-    EDA_RECT TransformCoordinate( const EDA_RECT& aRect ) const;
+    BOX2I TransformCoordinate( const BOX2I& aRect ) const;
 
     /**
     * Calculate the Inverse mirror/rotation transform.
-    * Useful to calculate coordinates relative to a symbol.
-    * which must be for a non rotated, non mirrored item
-    * from the actual coordinate.
+    * Useful to calculate coordinates relative to a symbol, which must be for a non-rotated,
+    * non-mirrored item from the actual coordinate.
     * @return The inverse transform.
     */
     TRANSFORM InverseTransform( ) const;

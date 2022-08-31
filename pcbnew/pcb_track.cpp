@@ -627,7 +627,8 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         // When drawing netnames, clip the track to the viewport
         VECTOR2I start( GetStart() );
         VECTOR2I end( GetEnd() );
-        EDA_RECT clipBox( aView->GetViewport() );
+        BOX2D    viewport = aView->GetViewport();
+        BOX2I    clipBox( viewport.GetOrigin(), viewport.GetSize() );
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 
@@ -1009,7 +1010,7 @@ bool PCB_ARC::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
 
 bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
     BOX2I box( GetStart() );

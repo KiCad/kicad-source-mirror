@@ -664,7 +664,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
 double FOOTPRINT::GetArea( int aPadding ) const
 {
-    EDA_RECT bbox = GetBoundingBox( false, false );
+    BOX2I bbox = GetBoundingBox( false, false );
 
     double w = std::abs( static_cast<double>( bbox.GetWidth() ) ) + aPadding;
     double h = std::abs( static_cast<double>( bbox.GetHeight() ) ) + aPadding;
@@ -759,7 +759,7 @@ const BOX2I FOOTPRINT::GetBoundingBox() const
 }
 
 
-const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
+const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
 {
     const BOARD* board = GetBoard();
     bool         isFPEdit = board && board->IsFootprintHolder();
@@ -1059,7 +1059,7 @@ bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 bool FOOTPRINT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox( false, false );
+    BOX2I rect = GetBoundingBox( false, false );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -1494,7 +1494,7 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I FOOTPRINT::ViewBBox() const
 {
-    EDA_RECT area = GetBoundingBox( true, true );
+    BOX2I area = GetBoundingBox( true, true );
 
     // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
     // optimized, but the draw cost is small (perhaps smaller than optimization).

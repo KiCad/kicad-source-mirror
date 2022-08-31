@@ -307,8 +307,7 @@ const BOX2I PCB_MARKER::GetBoundingBox() const
 
 const BOX2I PCB_MARKER::ViewBBox() const
 {
-    EDA_RECT bbox = GetBoundingBox();
-    return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
+    return GetBoundingBox();
 }
 
 

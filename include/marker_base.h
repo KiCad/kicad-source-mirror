@@ -30,7 +30,6 @@
 
 #include <rc_item.h>
 #include <gr_basic.h>
-#include <eda_rect.h>
 
 
 class SHAPE_LINE_CHAIN;

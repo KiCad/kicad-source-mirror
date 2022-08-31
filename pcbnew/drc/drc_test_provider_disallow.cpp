@@ -114,11 +114,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( m_drcEngine->IsCancelled() )
                     return 0;
 
-                ZONE*    ruleArea = areaZonePair.first;
-                ZONE*    copperZone = areaZonePair.second;
-                EDA_RECT areaBBox = ruleArea->GetCachedBoundingBox();
-                EDA_RECT copperBBox = copperZone->GetCachedBoundingBox();
-                bool     isInside = false;
+                ZONE* ruleArea = areaZonePair.first;
+                ZONE* copperZone = areaZonePair.second;
+                BOX2I areaBBox = ruleArea->GetCachedBoundingBox();
+                BOX2I copperBBox = copperZone->GetCachedBoundingBox();
+                bool  isInside = false;
 
                 if( copperZone->IsFilled() && areaBBox.Intersects( copperBBox ) )
                 {

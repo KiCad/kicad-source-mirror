@@ -26,9 +26,8 @@
 #include <trigo.h>
 #include <transform.h>
 #include <common.h>
-#include <eda_rect.h>
 #include <math/util.h>      // for KiROUND
-
+#include <math/box2.h>
 
 bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const
 {
@@ -45,9 +44,9 @@ VECTOR2I TRANSFORM::TransformCoordinate( const VECTOR2I& aPoint ) const
 }
 
 
-EDA_RECT TRANSFORM::TransformCoordinate( const EDA_RECT& aRect ) const
+BOX2I TRANSFORM::TransformCoordinate( const BOX2I& aRect ) const
 {
-    EDA_RECT rect;
+    BOX2I rect;
     rect.SetOrigin( TransformCoordinate( aRect.GetOrigin() ) );
     rect.SetEnd( TransformCoordinate( aRect.GetEnd() ) );
     return rect;

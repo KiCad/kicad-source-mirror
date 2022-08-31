@@ -396,8 +396,8 @@ bool PL_SELECTION_TOOL::selectMultiple()
             bool anyAdded = false;
             bool anySubtracted = false;
 
-            // Construct an EDA_RECT to determine EDA_ITEM selection
-            EDA_RECT selectionRect( (wxPoint)area.GetOrigin(), wxSize( width, height ) );
+            // Construct a BOX2I to determine EDA_ITEM selection
+            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
 
             selectionRect.Normalize();
 

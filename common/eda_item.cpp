@@ -26,7 +26,6 @@
 
 #include <bitmaps.h>
 #include <eda_item.h>
-#include <eda_rect.h>
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <i18n_utility.h>

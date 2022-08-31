@@ -25,10 +25,9 @@
 #ifndef BITMAP_BASE_H
 #define BITMAP_BASE_H
 
-#include <eda_rect.h>
-
 #include <wx/bitmap.h>
 #include <wx/image.h>
+#include <math/box2.h>
 
 namespace KIGFX
 {

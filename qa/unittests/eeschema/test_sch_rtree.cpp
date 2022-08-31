@@ -84,12 +84,13 @@ BOOST_AUTO_TEST_CASE( Default )
         BOOST_CHECK_EQUAL( count, 0 );
     }
 
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     for( int type = 0; type <= MAX_STRUCT_TYPE_ID; type++ )
     {
         count = 0;
-        for( auto item : m_tree.Overlapping( SCH_JUNCTION_T, bbox ) )
+
+        for( SCH_ITEM* item : m_tree.Overlapping( SCH_JUNCTION_T, bbox ) )
         {
             ignore_unused( item );
             count++;
@@ -127,12 +128,13 @@ BOOST_AUTO_TEST_CASE( Junctions )
 
     BOOST_CHECK_EQUAL( count, 0 );
 
-    EDA_RECT small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
-    EDA_RECT med_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 100 ), Mils2iu( 100 ) ) );
-    EDA_RECT big_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 5000 ), Mils2iu( 5000 ) ) );
+    BOX2I small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
+    BOX2I med_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 100 ), Mils2iu( 100 ) ) );
+    BOX2I big_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 5000 ), Mils2iu( 5000 ) ) );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -141,7 +143,8 @@ BOOST_AUTO_TEST_CASE( Junctions )
     BOOST_CHECK_EQUAL( count, 1 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( SCH_JUNCTION_T, small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( SCH_JUNCTION_T, small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -150,7 +153,8 @@ BOOST_AUTO_TEST_CASE( Junctions )
     BOOST_CHECK_EQUAL( count, 1 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( SCH_NO_CONNECT_T, small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( SCH_NO_CONNECT_T, small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -159,7 +163,8 @@ BOOST_AUTO_TEST_CASE( Junctions )
     BOOST_CHECK_EQUAL( count, 0 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( med_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( med_bbox ) )
     {
         BOOST_CHECK( med_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -168,7 +173,8 @@ BOOST_AUTO_TEST_CASE( Junctions )
     BOOST_CHECK_EQUAL( count, 2 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( big_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( big_bbox ) )
     {
         BOOST_CHECK( big_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -187,18 +193,18 @@ BOOST_AUTO_TEST_CASE( MixedElements )
         int x_sign = ( i % 2 == 0 ) ? -1 : 1;
         int y_sign = ( i % 3 == 0 ) ? -1 : 1;
 
-        SCH_JUNCTION* junction = new SCH_JUNCTION(
-                VECTOR2I( Mils2iu( 100 ) * i * x_sign, Mils2iu( 100 ) * i * y_sign ) );
+        SCH_JUNCTION* junction = new SCH_JUNCTION( VECTOR2I( Mils2iu( 100 ) * i * x_sign,
+                                                             Mils2iu( 100 ) * i * y_sign ) );
         m_tree.insert( junction );
 
-        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT(
-                VECTOR2I( Mils2iu( 150 ) * i * y_sign, Mils2iu( 150 ) * i * x_sign ) );
+        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( VECTOR2I( Mils2iu( 150 ) * i * y_sign,
+                                                           Mils2iu( 150 ) * i * x_sign ) );
         m_tree.insert( nc );
     }
 
     int count = 0;
 
-    for( auto item : m_tree.OfType( SCH_JUNCTION_T ) )
+    for( SCH_ITEM* item : m_tree.OfType( SCH_JUNCTION_T ) )
     {
         ignore_unused( item );
         count++;
@@ -207,7 +213,8 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     BOOST_CHECK_EQUAL( count, 100 );
 
     count = 0;
-    for( auto item : m_tree.OfType( SCH_NO_CONNECT_T ) )
+
+    for( SCH_ITEM* item : m_tree.OfType( SCH_NO_CONNECT_T ) )
     {
         ignore_unused( item );
         count++;
@@ -218,7 +225,8 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     EDA_RECT small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -227,7 +235,8 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     BOOST_CHECK_EQUAL( count, 2 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( SCH_JUNCTION_T, small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( SCH_JUNCTION_T, small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;
@@ -236,7 +245,8 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     BOOST_CHECK_EQUAL( count, 1 );
 
     count = 0;
-    for( auto item : m_tree.Overlapping( SCH_NO_CONNECT_T, small_bbox ) )
+
+    for( SCH_ITEM* item : m_tree.Overlapping( SCH_NO_CONNECT_T, small_bbox ) )
     {
         BOOST_CHECK( small_bbox.Intersects( item->GetBoundingBox() ) );
         count++;

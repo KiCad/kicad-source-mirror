@@ -242,7 +242,7 @@ public:
     /**
      * Test if \a aRect intersects this item.
      *
-     * @param aRect A reference to a #EDA_RECT object containing the rectangle to test.
+     * @param aRect A reference to a #BOX2I object containing the rectangle to test.
      * @param aContained Set to true to test for containment instead of an intersection.
      * @param aAccuracy Increase \a aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.

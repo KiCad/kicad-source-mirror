@@ -32,7 +32,7 @@
 
 #include <math.h>           // for copysign
 #include <stdlib.h>         // for abs
-#include <math/vector2d.h>
+#include <math/box2.h>
 #include <geometry/eda_angle.h>
 
 class EDA_RECT;
@@ -187,7 +187,7 @@ VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aP
  *
  * @return - False if any part of the line lies within the rectangle.
  */
-bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 );
+bool ClipLine( const BOX2I *aClipBox, int &x1, int &y1, int &x2, int &y2 );
 
 
 #endif  // #ifndef GEOMETRY_UTILS_H
