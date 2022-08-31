@@ -36,6 +36,8 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
+    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+
 private:
     template <typename T>
     void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
@@ -44,9 +46,6 @@ private:
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
     std::vector<wxString> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
-
-    // Subcircuits require models even when they have no Spice instance parameters.
-    bool requiresSpiceModel() const override { return GetType() == TYPE::TLINE_RLGC; }
 
     static std::vector<PARAM::INFO> makeZ0ParamInfos();
     static std::vector<PARAM::INFO> makeRlgcParamInfos();

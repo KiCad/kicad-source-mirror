@@ -498,7 +498,6 @@ public:
     virtual wxString GenerateSpiceModelLine( const wxString& aModelName ) const;
 
     virtual wxString GenerateSpiceItemName( const wxString& aRefName ) const;
-    virtual wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName,
@@ -573,6 +572,8 @@ protected:
 
     template <typename T>
     void WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const;
+
+    virtual wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
     virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 

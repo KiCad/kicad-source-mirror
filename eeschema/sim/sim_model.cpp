@@ -267,7 +267,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     //case TYPE::L_ADV:                return { "L", "l"       };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
     
-    case TYPE::TLINE_Z0:             return { "T"  };
+    //case TYPE::TLINE_Z0:             return { "T"  };
+    case TYPE::TLINE_Z0:             return { "O", "ltra"    };
     case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
 
     case TYPE::SW_V:                 return { "S", "sw"  };
@@ -958,26 +959,6 @@ wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
 }
 
 
-wxString SIM_MODEL::GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
-{
-    wxString result;
-
-    if( aIsFirst )
-        aIsFirst = false;
-    else
-        result << " ";
-
-    wxString name = ( aParam.info.spiceInstanceName == "" ) ?
-        aParam.info.name : aParam.info.spiceInstanceName;
-    wxString value = aParam.value->ToSpiceString();
-
-    if( value != "" )
-        result << name << "=" << value;
-
-    return result;
-}
-
-
 wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const wxString& aModelName ) const
 {
@@ -1281,6 +1262,26 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString
     SetFieldValue( aFields, TYPE_FIELD, "" );
     SetFieldValue( aFields, PARAMS_FIELD, "" );
     SetFieldValue( aFields, DISABLED_FIELD, "" );
+}
+
+
+wxString SIM_MODEL::GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+{
+    wxString result;
+
+    if( aIsFirst )
+        aIsFirst = false;
+    else
+        result << " ";
+
+    wxString name = ( aParam.info.spiceInstanceName == "" ) ?
+        aParam.info.name : aParam.info.spiceInstanceName;
+    wxString value = aParam.value->ToSpiceString();
+
+    if( value != "" )
+        result << name << "=" << value;
+
+    return result;
 }
 
 

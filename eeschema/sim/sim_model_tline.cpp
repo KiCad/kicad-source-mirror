@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_model_tline.h>
+#include <locale_io.h>
 
 using PARAM = SIM_MODEL::PARAM;
 
@@ -48,6 +49,7 @@ SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
+        break;
     }
 }
 
@@ -67,6 +69,43 @@ void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 
     if( m_isInferred )
         inferredWriteDataFields( aFields );
+}
+
+
+wxString SIM_MODEL_TLINE::GenerateSpiceModelLine( const wxString& aModelName ) const
+{
+    wxString r, l, g, c, len;
+
+    switch( GetType() )
+    {
+    case TYPE::TLINE_Z0:
+    {
+        auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "z0" )->value );
+        auto td = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "td" )->value );
+
+        r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
+        l = ( td * z0 ).ToSpiceString();
+        g = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
+        c = ( td / z0 ).ToSpiceString();
+        len = SIM_VALUE_FLOAT( 1 ).ToSpiceString();
+        break;
+    }
+
+    case TYPE::TLINE_RLGC:
+        r = FindParam( "r" )->value->ToSpiceString();
+        l = FindParam( "l" )->value->ToSpiceString();
+        g = FindParam( "g" )->value->ToSpiceString();
+        c = FindParam( "c" )->value->ToSpiceString();
+        len = FindParam( "len" )->value->ToSpiceString();
+        break;
+
+    default:
+        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
+        return "";
+    }
+
+    return wxString::Format( ".model %s %s( r=%s l=%s g=%s c=%s len=%s )\n",
+                             aModelName, "ltra", r, l, g, c, len );
 }
 
 
@@ -93,8 +132,8 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Characteristic impedance";
-    paramInfo.isSpiceInstanceParam = true;
-    paramInfo.isInstanceParam = false;
+    paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = true;
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
@@ -103,8 +142,8 @@ std::vector<PARAM::INFO> SIM_MODEL_TLINE::makeZ0ParamInfos()
     paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Transmission delay";
-    paramInfo.isSpiceInstanceParam = true;
-    paramInfo.isInstanceParam = false;
+    paramInfo.isSpiceInstanceParam = false;
+    paramInfo.isInstanceParam = true;
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
