@@ -61,7 +61,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 
     GetImagesList()->DeleteAllImages();
 
-    GetGerberLayout()->SetBoundingBox( EDA_RECT() );
+    GetGerberLayout()->SetBoundingBox( BOX2I() );
 
     SetActiveLayer( 0 );
     ReFillLayerWidget();

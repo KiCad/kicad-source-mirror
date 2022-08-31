@@ -32,7 +32,6 @@
 #include <drawing_sheet/ds_draw_item.h>
 
 // Forward declarations:
-class EDA_RECT;
 class TITLE_BLOCK;
 
 using KIGFX::COLOR4D;

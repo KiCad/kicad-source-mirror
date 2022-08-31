@@ -69,21 +69,21 @@ void fillRectList( CSubRectArray& vecSubRects, std::vector <FOOTPRINT*>& aFootpr
 
     for( unsigned ii = 0; ii < aFootprintList.size(); ii++ )
     {
-        EDA_RECT fpBox = aFootprintList[ii]->GetBoundingBox( false, false );
+        BOX2I    fpBox = aFootprintList[ii]->GetBoundingBox( false, false );
         TSubRect fpRect( ( fpBox.GetWidth() + PADDING ) / scale,
                          ( fpBox.GetHeight() + PADDING ) / scale, ii );
         vecSubRects.push_back( fpRect );
     }
 }
 
-// Populates a list of rectangles, from a list of EDA_RECT
-void fillRectList( CSubRectArray& vecSubRects, std::vector <EDA_RECT>& aRectList )
+// Populates a list of rectangles, from a list of BOX2I
+void fillRectList( CSubRectArray& vecSubRects, std::vector<BOX2I>& aRectList )
 {
     vecSubRects.clear();
 
     for( unsigned ii = 0; ii < aRectList.size(); ii++ )
     {
-        EDA_RECT& rect = aRectList[ii];
+        BOX2I& rect = aRectList[ii];
         TSubRect fpRect( rect.GetWidth()/scale, rect.GetHeight()/scale, ii );
         vecSubRects.push_back( fpRect );
     }
@@ -148,8 +148,8 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
 }
 
 
-void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <FOOTPRINT*>& aFootprintList,
-                           EDA_RECT& aFreeArea, bool aFindAreaOnly )
+void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector<FOOTPRINT*>& aFootprintList,
+                           const BOX2I& aFreeArea, bool aFindAreaOnly )
 {
     CSubRectArray   vecSubRects;
 
@@ -167,10 +167,9 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <FOOTPRIN
 
         FOOTPRINT* footprint = aFootprintList[vecSubRects[it].n];
 
-        EDA_RECT fpBBox = footprint->GetBoundingBox( false, false );
-        VECTOR2I mod_pos =
-                pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
-                          + aFreeArea.GetOrigin();
+        BOX2I    fpBBox = footprint->GetBoundingBox( false, false );
+        VECTOR2I mod_pos = pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
+                                  + aFreeArea.GetOrigin();
 
         footprint->Move( mod_pos - footprint->GetPosition() );
     }
@@ -208,8 +207,8 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
     sort( footprintList.begin(), footprintList.end(), sortFootprintsbySheetPath );
 
     // Extract and place footprints by sheet
-    std::vector <FOOTPRINT*> footprintListBySheet;
-    std::vector <EDA_RECT>   placementSheetAreas;
+    std::vector<FOOTPRINT*>  footprintListBySheet;
+    std::vector<BOX2I>       placementSheetAreas;
     double                   subsurface;
     double                   placementsurface = 0.0;
 
@@ -240,7 +239,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
             subsurface += footprint->GetArea( PADDING );
 
             // Calculate min size of placement area:
-            EDA_RECT bbox = footprint->GetBoundingBox( false, false );
+            BOX2I bbox = footprint->GetBoundingBox( false, false );
             fp_max_width = std::max( fp_max_width, bbox.GetWidth() );
             fp_max_height = std::max( fp_max_height, bbox.GetHeight() );
 
@@ -248,7 +247,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
             {
                 // end of the footprint sublist relative to the same sheet path
                 // calculate placement of the current sublist
-                EDA_RECT freeArea;
+                BOX2I freeArea;
                 int Xsize_allowed = (int) ( sqrt( subsurface ) * 4.0 / 3.0 );
                 Xsize_allowed = std::max( fp_max_width, Xsize_allowed );
 
@@ -273,7 +272,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
                 if( pass == 0 )
                 {
                     // Populate sheet placement areas list
-                    EDA_RECT sub_area;
+                    BOX2I sub_area;
                     sub_area.SetWidth( placementArea.GetW()*scale );
                     sub_area.SetHeight( placementArea.GetH()*scale );
                     // Add a margin around the sheet placement area:

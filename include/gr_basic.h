@@ -23,8 +23,8 @@
 #define GR_BASIC
 
 #include <gal/color4d.h>
+#include <math/box2.h>
 #include <vector>
-#include <eda_rect.h>
 #include <wx/pen.h>
 #include <wx/dc.h>
 

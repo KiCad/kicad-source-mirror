@@ -279,7 +279,7 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_BITMAP* aItem, int aLayer ) con
     m_gal->DrawBitmap( *bitmap->m_ImageBitmap );
 
 #if 0   // For bounding box debug purpose only
-    EDA_RECT bbox = aItem->GetBoundingBox();
+    BOX2I bbox = aItem->GetBoundingBox();
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( true );
     m_gal->SetFillColor( COLOR4D( 1, 1, 1, 0.4 ) );

@@ -1807,19 +1807,13 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
             KIGFX::PCB_VIEW* pcbView = canvas()->GetView();
             BOX2D            screenBox = pcbView->GetViewport();
-            wxSize           screenSize = wxSize( screenBox.GetWidth(), screenBox.GetHeight() );
-            screenSize /= marginFactor;
+            VECTOR2I         screenSize = screenBox.GetSize();
+            BOX2I            screenRect( screenBox.GetOrigin(), screenSize / marginFactor );
 
-            wxPoint   screenPos = wxPoint( screenBox.GetOrigin() );
-            EDA_RECT* screenRect = new EDA_RECT( screenPos, screenSize );
-
-            if( !screenRect->Contains( aItem->GetBoundingBox() ) )
+            if( !screenRect.Contains( aItem->GetBoundingBox() ) )
             {
-                double scaleX = screenSize.GetWidth()
-                                / static_cast<double>( aItem->GetBoundingBox().GetWidth() );
-                double scaleY = screenSize.GetHeight()
-                                / static_cast<double>( aItem->GetBoundingBox().GetHeight() );
-
+                double scaleX = screenSize.x / static_cast<double>( aItem->GetBoundingBox().GetWidth() );
+                double scaleY = screenSize.y / static_cast<double>( aItem->GetBoundingBox().GetHeight() );
 
                 scaleX /= marginFactor;
                 scaleY /= marginFactor;
@@ -1834,8 +1828,6 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
                     m_frame->FocusOnLocation( aItem->GetCenter() );
                 }
             }
-
-            delete screenRect;
         }
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );

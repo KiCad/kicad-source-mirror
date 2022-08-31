@@ -35,8 +35,6 @@
 #include <math/box2.h>
 #include <geometry/eda_angle.h>
 
-class EDA_RECT;
-
 /**
  * When approximating an arc or circle, should the error be placed on the outside
  * or inside of the curve?  (Generally speaking filled shape errors go on the inside

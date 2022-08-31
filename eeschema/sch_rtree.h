@@ -200,16 +200,20 @@ public:
                 m_rect = { { type, INT_MIN, INT_MIN }, { type, INT_MAX, INT_MAX } };
         };
 
-        EE_TYPE( ee_rtree* aTree, KICAD_T aType, const EDA_RECT aRect ) : type_tree( aTree )
+        EE_TYPE( ee_rtree* aTree, KICAD_T aType, const BOX2I& aRect ) : type_tree( aTree )
         {
             KICAD_T type = BaseType( aType );
 
             if( type == SCH_LOCATE_ANY_T )
-                m_rect = { { INT_MIN, aRect.GetX(), aRect.GetY() },
-                    { INT_MAX, aRect.GetRight(), aRect.GetBottom() } };
+            {
+                m_rect = { { INT_MIN, aRect.GetX(),     aRect.GetY() },
+                           { INT_MAX, aRect.GetRight(), aRect.GetBottom() } };
+            }
             else
-                m_rect = { { type, aRect.GetX(), aRect.GetY() },
-                    { type, aRect.GetRight(), aRect.GetBottom() } };
+            {
+                m_rect = { { type, aRect.GetX(),     aRect.GetY() },
+                           { type, aRect.GetRight(), aRect.GetBottom() } };
+            }
         };
 
         ee_rtree::Rect m_rect;
@@ -236,26 +240,26 @@ public:
         return EE_TYPE( m_tree, aType );
     }
 
-    EE_TYPE Overlapping( const EDA_RECT& aRect ) const
+    EE_TYPE Overlapping( const BOX2I& aRect ) const
     {
         return EE_TYPE( m_tree, SCH_LOCATE_ANY_T, aRect );
     }
 
     EE_TYPE Overlapping( const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
-        EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
+        BOX2I rect( aPoint, VECTOR2I( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return EE_TYPE( m_tree, SCH_LOCATE_ANY_T, rect );
     }
 
     EE_TYPE Overlapping( KICAD_T aType, const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
-        EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
+        BOX2I rect( aPoint, VECTOR2I( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return EE_TYPE( m_tree, aType, rect );
     }
 
-    EE_TYPE Overlapping( KICAD_T aType, const EDA_RECT& aRect ) const
+    EE_TYPE Overlapping( KICAD_T aType, const BOX2I& aRect ) const
     {
         return EE_TYPE( m_tree, aType, aRect );
     }

@@ -27,7 +27,6 @@
 // Code under test
 #include <sch_pin.h>
 #include <sch_symbol.h>
-#include <eda_rect.h>
 
 
 class TEST_SCH_PIN_FIXTURE

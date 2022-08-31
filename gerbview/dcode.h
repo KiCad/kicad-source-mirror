@@ -39,7 +39,6 @@ using KIGFX::COLOR4D;
 
 class wxDC;
 class GERBER_DRAW_ITEM;
-class EDA_RECT;
 
 
 /**

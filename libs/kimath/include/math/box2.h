@@ -837,7 +837,5 @@ typedef BOX2<VECTOR2D>    BOX2D;
 
 typedef std::optional<BOX2I> OPT_BOX2I;
 
-// FIXME should be removed to avoid multiple typedefs for the same type
-typedef BOX2D             DBOX;
 
 #endif

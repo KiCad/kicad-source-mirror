@@ -850,7 +850,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     // (i.e link holes by overlapping edges)
     m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    m_boundingBox = EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 1, 1 ) );
+    m_boundingBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 1, 1 ) );
 
     auto bb = m_shape.BBox();
     VECTOR2I center( bb.Centre().x, bb.Centre().y );

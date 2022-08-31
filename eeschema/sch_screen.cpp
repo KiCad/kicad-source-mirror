@@ -27,7 +27,6 @@
 #include <wx/filefn.h>
 
 #include <eda_item.h>
-#include <eda_rect.h>
 #include <id.h>
 #include <string_utils.h>
 #include <kiway.h>
@@ -335,7 +334,7 @@ bool SCH_SCREEN::CheckIfOnDrawList( const SCH_ITEM* aItem ) const
 
 SCH_ITEM* SCH_SCREEN::GetItem( const VECTOR2I& aPosition, int aAccuracy, KICAD_T aType ) const
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
     bbox.SetOrigin( aPosition );
     bbox.Inflate( aAccuracy );
 

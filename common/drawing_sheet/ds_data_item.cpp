@@ -49,7 +49,6 @@
  */
 
 #include <gr_text.h>
-#include <eda_rect.h>
 #include <math/util.h>      // for KiROUND
 #include <view/view.h>
 #include <title_block.h>

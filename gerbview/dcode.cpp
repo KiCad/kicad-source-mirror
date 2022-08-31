@@ -29,7 +29,6 @@
  */
 
 #include <trigo.h>
-#include <eda_rect.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <convert_to_biu.h>

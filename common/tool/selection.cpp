@@ -26,7 +26,6 @@
 
 #include <algorithm>
 #include <eda_item.h>
-#include <eda_rect.h>
 #include <tool/selection.h>
 
 

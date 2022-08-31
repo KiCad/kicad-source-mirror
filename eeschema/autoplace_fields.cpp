@@ -573,7 +573,7 @@ protected:
 
         if( aFieldSideAndPins.pins > 0 )
         {
-            EDA_RECT pinsBox = getPinsBox( aFieldSideAndPins.side );
+            BOX2I pinsBox = getPinsBox( aFieldSideAndPins.side );
 
             if( aFieldSideAndPins.side == SIDE_TOP || aFieldSideAndPins.side == SIDE_BOTTOM )
             {
@@ -645,7 +645,7 @@ protected:
      *
      * @return Correct field horizontal position
      */
-    int fieldHPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox )
+    int fieldHPlacement( SCH_FIELD* aField, const BOX2I& aFieldBox )
     {
         int field_hjust;
         int field_xcoord;
@@ -685,7 +685,7 @@ protected:
      *
      * @return Correct field vertical position
      */
-    int fieldVPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aAccumulatedPosition,
+    int fieldVPlacement( SCH_FIELD* aField, const BOX2I& aFieldBox, int* aAccumulatedPosition,
                          bool aDynamic )
     {
         int field_height;

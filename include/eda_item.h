@@ -64,7 +64,6 @@ enum FIND_REPLACE_FLAGS
 
 class wxFindReplaceData;
 class EDA_DRAW_FRAME;
-class EDA_RECT;
 class MSG_PANEL_ITEM;
 
 

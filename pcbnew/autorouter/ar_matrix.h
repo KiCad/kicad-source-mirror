@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,8 @@
 #ifndef __AR_MATRIX_H
 #define __AR_MATRIX_H
 
-#include <eda_rect.h>
 #include <layer_ids.h>
+#include <math/box2.h>
 
 class PCB_SHAPE;
 class PAD;
@@ -84,7 +84,7 @@ public:
      * @param aUseBoardEdgesOnly set to true to use board edges only or false to use the full
      *                           board bounding box (default).
      */
-    bool ComputeMatrixSize( const EDA_RECT& aBoundingBox );
+    bool ComputeMatrixSize( const BOX2I& aBoundingBox );
 
     /**
      * Initialize the data structures.
@@ -138,12 +138,12 @@ public:
     MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
     DIST_CELL*   m_DistSide[AR_MAX_ROUTING_LAYERS_COUNT];  // the image map of 2 board sides:
                                                            // distance to cells
-    int      m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
-    int      m_GridRouting;        // Size of grid for autoplace/autoroute
-    EDA_RECT m_BrdBox;             // Actual board bounding box
-    int      m_Nrows, m_Ncols;     // Matrix size
-    int      m_MemSize;            // Memory requirement, just for statistics
-    int      m_RouteCount;         // Number of routes
+    int          m_RoutingLayersCount; // Number of layers for autorouting (0 or 1)
+    int          m_GridRouting;        // Size of grid for autoplace/autoroute
+    BOX2I        m_BrdBox;             // Actual board bounding box
+    int          m_Nrows, m_Ncols;     // Matrix size
+    int          m_MemSize;            // Memory requirement, just for statistics
+    int          m_RouteCount;         // Number of routes
 
     PCB_LAYER_ID m_routeLayerTop;
     PCB_LAYER_ID m_routeLayerBottom;

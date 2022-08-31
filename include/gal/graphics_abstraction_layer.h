@@ -39,7 +39,6 @@
 #include <gal/gal_display_options.h>
 #include <newstroke_font.h>
 #include <font/stroke_font.h>
-#include <eda_rect.h>
 #include <geometry/eda_angle.h>
 
 class SHAPE_LINE_CHAIN;
@@ -168,7 +167,7 @@ public:
      */
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
-    void DrawRectangle( const EDA_RECT& aRect )
+    void DrawRectangle( const BOX2I& aRect )
     {
         DrawRectangle( aRect.GetOrigin(), aRect.GetEnd() );
     }

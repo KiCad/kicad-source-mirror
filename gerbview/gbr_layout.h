@@ -35,7 +35,7 @@
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <title_block.h>
 #include <gerber_draw_item.h>
-#include <eda_rect.h>
+#include <math/box2.h>
 
 class GERBER_FILE_IMAGE_LIST;
 
@@ -75,7 +75,7 @@ public:
         return ComputeBoundingBox();
     }
 
-    void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
+    void SetBoundingBox( const BOX2I& aBox ) { m_BoundingBox = aBox; }
 
     ///< @copydoc EDA_ITEM::Visit()
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
@@ -86,9 +86,9 @@ public:
 #endif
 
 private:
-    mutable EDA_RECT    m_BoundingBox;
-    TITLE_BLOCK         m_titles;
-    VECTOR2I            m_originAxisPosition;
+    mutable BOX2I    m_BoundingBox;
+    TITLE_BLOCK      m_titles;
+    VECTOR2I         m_originAxisPosition;
 };
 
 #endif      // #ifndef GBR_LAYOUT_H

@@ -34,7 +34,6 @@ set( QA_COMMON_SRCS
     test_bitmap_base.cpp
     test_color4d.cpp
     test_coroutine.cpp
-    test_eda_rect.cpp
     test_lib_table.cpp
     test_kicad_string.cpp
     test_kiid.cpp

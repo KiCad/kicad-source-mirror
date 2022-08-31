@@ -27,7 +27,6 @@
 #define _LIB_ITEM_H_
 
 #include <eda_item.h>
-#include <eda_rect.h>
 #include <eda_shape.h>
 #include <transform.h>
 #include <render_settings.h>

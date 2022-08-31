@@ -30,7 +30,6 @@
 #include <cstdint>
 #include <algorithm>         // for max, min
 
-#include <eda_rect.h>
 #include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
 

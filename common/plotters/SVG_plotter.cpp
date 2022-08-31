@@ -87,7 +87,6 @@
  */
 
 #include <base64.h>
-#include <eda_rect.h>
 #include <eda_shape.h>
 #include <string_utils.h>
 #include <font/font.h>
@@ -385,8 +384,9 @@ void SVG_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 
 void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
-    EDA_RECT rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+    BOX2I rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
     rect.Normalize();
+
     VECTOR2D  org_dev  = userToDeviceCoordinates( rect.GetOrigin() );
     VECTOR2D  end_dev = userToDeviceCoordinates( rect.GetEnd() );
     VECTOR2D  size_dev = end_dev - org_dev;
@@ -394,7 +394,7 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     // Ensure size of rect in device coordinates is > 0
     // I don't know if this is a SVG issue or a Inkscape issue, but
     // Inkscape has problems with negative or null values for width and/or height, so avoid them
-    DBOX rect_dev( org_dev, size_dev);
+    BOX2D rect_dev( org_dev, size_dev );
     rect_dev.Normalize();
 
     setFillMode( fill );
@@ -422,8 +422,8 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 
 void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
-    VECTOR2D  pos_dev = userToDeviceCoordinates( pos );
-    double  radius  = userToDeviceSize( diametre / 2.0 );
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    double   radius  = userToDeviceSize( diametre / 2.0 );
 
     setFillMode( fill );
     SetCurrentLineWidth( width );

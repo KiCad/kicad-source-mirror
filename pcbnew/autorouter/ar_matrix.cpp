@@ -59,7 +59,7 @@ AR_MATRIX::~AR_MATRIX()
 // was: bool AR_MATRIX::ComputeMatrixSize(  BOARD* aPcb, bool aUseBoardEdgesOnly )
 // aUseBoardEdgesOnly ? aPcb->GetBoardEdgesBoundingBox() : aPcb->GetBoundingBox();
 
-bool AR_MATRIX::ComputeMatrixSize( const EDA_RECT& aBoundingBox )
+bool AR_MATRIX::ComputeMatrixSize( const BOX2I& aBoundingBox )
 {
     // The boundary box must have its start point on routing grid:
     m_BrdBox = aBoundingBox;

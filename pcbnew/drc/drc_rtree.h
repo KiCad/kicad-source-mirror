@@ -25,7 +25,6 @@
 #ifndef DRC_RTREE_H_
 #define DRC_RTREE_H_
 
-#include <eda_rect.h>
 #include <board_item.h>
 #include <pad.h>
 #include <fp_text.h>

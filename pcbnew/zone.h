@@ -37,7 +37,6 @@
 #include <teardrop/teardrop_types.h>
 
 
-class EDA_RECT;
 class LINE_READER;
 class PCB_EDIT_FRAME;
 class BOARD;

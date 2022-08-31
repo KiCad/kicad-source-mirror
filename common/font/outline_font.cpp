@@ -430,7 +430,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                          { 0, 0 }, aTextStyle & ~TEXT_STYLE::OVERBAR );
 
         OUTLINE_GLYPH* underscoreGlyph = static_cast<OUTLINE_GLYPH*>( underscoreGlyphs[0].get() );
-        EDA_RECT       underscoreBBox;
+        BOX2I          underscoreBBox;
 
         for( const VECTOR2I& pt : underscoreGlyph->Outline( 0 ).CPoints() )
             underscoreBBox.Merge( pt );

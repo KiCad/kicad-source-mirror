@@ -95,8 +95,8 @@ private:
     bool fillMatrix();
     void genModuleOnRoutingMatrix( FOOTPRINT* aFootprint );
 
-    int testRectangle( const EDA_RECT& aRect, int side );
-    unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
+    int testRectangle( const BOX2I& aRect, int side );
+    unsigned int calculateKeepOutArea( const  BOX2I& aRect, int side );
     int testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide, const VECTOR2I& aOffset );
     int getOptimalFPPlacement( FOOTPRINT* aFootprint );
     double computePlacementRatsnestCost( FOOTPRINT* aFootprint, const VECTOR2I& aOffset );

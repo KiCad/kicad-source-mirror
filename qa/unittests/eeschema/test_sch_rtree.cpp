@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE( MixedElements )
 
     BOOST_CHECK_EQUAL( count, 100 );
 
-    EDA_RECT small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
+    BOX2I small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
 
     count = 0;
 

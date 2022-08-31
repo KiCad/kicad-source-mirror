@@ -61,7 +61,6 @@ class wxChoice;
 class wxEvent;
 class wxFileName;
 class EDA_ITEM;
-class EDA_RECT;
 class EDA_DRAW_PANEL_GAL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;

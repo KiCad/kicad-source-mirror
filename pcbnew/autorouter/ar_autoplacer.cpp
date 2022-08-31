@@ -87,7 +87,7 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
 {
     m_matrix.UnInitRoutingMatrix();
 
-    EDA_RECT bbox = m_board->GetBoardEdgesBoundingBox();
+    BOX2I bbox = m_board->GetBoardEdgesBoundingBox();
 
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
         return 0;
@@ -398,9 +398,9 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
 }
 
 
-int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
+int AR_AUTOPLACER::testRectangle( const BOX2I& aRect, int side )
 {
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( m_matrix.m_GridRouting / 2 );
 
@@ -451,7 +451,7 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
 }
 
 
-unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int side )
+unsigned int AR_AUTOPLACER::calculateKeepOutArea( const BOX2I& aRect, int side )
 {
     VECTOR2I start = aRect.GetOrigin();
     VECTOR2I end = aRect.GetEnd();
@@ -511,7 +511,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
         side = AR_SIDE_BOTTOM; otherside = AR_SIDE_TOP;
     }
 
-    EDA_RECT    fpBBox = aFootprint->GetBoundingBox( false, false );
+    BOX2I fpBBox = aFootprint->GetBoundingBox( false, false );
     fpBBox.Move( -1*aOffset );
 
     buildFpAreas( aFootprint, 0 );
@@ -548,7 +548,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     lastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
     VECTOR2I fpPos = aFootprint->GetPosition();
-    EDA_RECT fpBBox  = aFootprint->GetBoundingBox( false, false );
+    BOX2I    fpBBox  = aFootprint->GetBoundingBox( false, false );
 
     // Move fpBBox to have the footprint position at (0,0)
     fpBBox.Move( -fpPos );

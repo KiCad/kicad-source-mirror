@@ -800,10 +800,10 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 
     case GBR_SPOT_OVAL:
     {
-        EDA_RECT bbox = GetBoundingBox();
+        BOX2I bbox = GetBoundingBox();
 
-            if( ! bbox.Contains( aRefPos ) )
-                return false;
+        if( ! bbox.Contains( aRefPos ) )
+            return false;
 
         // This is similar to a segment with thickness = min( m_Size.x, m_Size.y )
         int radius = std::min( m_Size.x, m_Size.y )/2;
@@ -938,8 +938,7 @@ void GERBER_DRAW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 
 const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
 {
-    EDA_RECT bbox = GetBoundingBox();
-    return BOX2I( VECTOR2I( bbox.GetOrigin() ), VECTOR2I( bbox.GetSize() ) );
+    return GetBoundingBox();
 }
 
 

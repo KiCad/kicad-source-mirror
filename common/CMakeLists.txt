@@ -306,7 +306,6 @@ set( COMMON_SRCS
     eda_draw_frame.cpp
     eda_item.cpp
     eda_pattern_match.cpp
-    eda_rect.cpp
     eda_shape.cpp
     eda_text.cpp
     eda_units.cpp

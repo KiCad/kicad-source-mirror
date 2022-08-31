@@ -48,7 +48,6 @@
  * describes the drawing sheet (can be the default drawing sheet or a custom file).
  */
 
-#include <eda_rect.h>
 #include <eda_draw_frame.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -446,7 +445,7 @@ const BOX2I DS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 
 bool DS_DRAW_ITEM_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bbox = GetBoundingBox();
+    BOX2I bbox = GetBoundingBox();
     bbox.Inflate( aAccuracy );
 
     return bbox.Contains( aPosition );
