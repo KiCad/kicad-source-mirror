@@ -378,10 +378,10 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     SYMBOL_EDIT_FRAME* symbolEditor = (SYMBOL_EDIT_FRAME*) GetParent();
 
     // Calculate a suitable scale to fit the available draw area
-    EDA_RECT bBox = m_dummyPin->GetBoundingBox( true, true, false );
-    double   xscale = (double) dc_size.x / bBox.GetWidth();
-    double   yscale = (double) dc_size.y / bBox.GetHeight();
-    double   scale = std::min( xscale, yscale );
+    BOX2I  bBox = m_dummyPin->GetBoundingBox( true, true, false );
+    double xscale = (double) dc_size.x / bBox.GetWidth();
+    double yscale = (double) dc_size.y / bBox.GetHeight();
+    double scale = std::min( xscale, yscale );
 
     // Give a 7% margin (each side) and limit to no more than 100% zoom
     scale = std::min( scale * 0.85, 1.0 );

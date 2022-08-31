@@ -933,18 +933,16 @@ const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) c
 
     if( !symbol )
     {
-        return BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) );
+        return BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) );
     }
     else
     {
-        std::shared_ptr< LIB_SYMBOL > tmp;
+        std::shared_ptr<LIB_SYMBOL> tmp = symbol->IsAlias() ? symbol->GetParent().lock()
+                                                            : symbol->SharedPtr();
 
-        tmp = ( symbol->IsAlias() ) ? symbol->GetParent().lock() : symbol->SharedPtr();
+        wxCHECK( tmp, BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) ) );
 
-        wxCHECK( tmp, BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) ) );
-
-        EDA_RECT bbox = tmp->GetUnitBoundingBox( m_unit, m_convert );
-        return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
+        return tmp->GetUnitBoundingBox( m_unit, m_convert );
     }
 }
 

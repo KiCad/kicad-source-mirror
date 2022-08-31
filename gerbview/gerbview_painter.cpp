@@ -350,7 +350,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 #if 0   // Bbox arc Debugging only
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        EDA_RECT box = aItem->GetBoundingBox();
+        BOX2I box = aItem->GetBoundingBox();
         m_gal->SetLineWidth( 5 );
         m_gal->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
         // box coordinates are already in AB position.

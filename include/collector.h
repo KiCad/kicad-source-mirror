@@ -28,7 +28,6 @@
 #include <vector>
 #include <core/kicad_algo.h>
 #include <eda_item.h>    // SEARCH_RESULT
-#include <eda_rect.h>
 
 
 class EDA_ITEM;
@@ -213,8 +212,6 @@ public:
 
     void SetRefPos( const VECTOR2I& aRefPos ) { m_refPos = aRefPos; }
 
-    const EDA_RECT& GetBoundingBox() const { return m_refBox; }
-
     /**
      * Count the number of items matching \a aType.
      *
@@ -247,7 +244,6 @@ protected:
     INSPECTOR_FUNC         m_inspector;
 
     VECTOR2I               m_refPos;     // Reference pos used to generate the collection.
-    EDA_RECT               m_refBox;     // Selection rect used to generate the collection.
 };
 
 #endif  // COLLECTOR_H

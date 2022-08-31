@@ -33,7 +33,6 @@
 #include <vector>
 #include <multivector.h>
 
-class EDA_RECT;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class SYMBOL_LIB;

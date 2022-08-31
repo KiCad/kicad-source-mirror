@@ -407,7 +407,7 @@ BITMAPS SCH_TEXT::GetMenuImage() const
 
 bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bBox = GetBoundingBox();
+    BOX2I bBox = GetBoundingBox();
     bBox.Inflate( aAccuracy );
     return bBox.Contains( aPosition );
 }

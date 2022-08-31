@@ -1107,9 +1107,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 const BOX2I LIB_PIN::ViewBBox() const
 {
-    EDA_RECT bbox = GetBoundingBox( false, true, true );
-
-    return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
+    return GetBoundingBox( false, true, true );
 }
 
 

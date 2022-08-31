@@ -160,7 +160,7 @@ public:
     void zoomFitSelection();
 
     ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
-    void ZoomFitCrossProbeBBox( EDA_RECT bbox );
+    void ZoomFitCrossProbeBBox( const BOX2I& bbox );
 
     /**
      * Enter the group at the head of the current selection.

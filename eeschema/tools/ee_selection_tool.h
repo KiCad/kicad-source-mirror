@@ -74,7 +74,7 @@ public:
     void OnIdle( wxIdleEvent& aEvent );
 
     ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
-    void ZoomFitCrossProbeBBox( EDA_RECT bbox );
+    void ZoomFitCrossProbeBBox( const BOX2I& aBBox );
 
     /**
      * @return the set of currently selected items.

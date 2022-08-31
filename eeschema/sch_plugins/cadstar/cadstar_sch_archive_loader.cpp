@@ -156,7 +156,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         SCH_SHEET* sheet = sheetPair.second;
 
         // Calculate the new sheet size.
-        EDA_RECT sheetBoundingBox;
+        BOX2I sheetBoundingBox;
 
         for( SCH_ITEM* item : sheet->GetScreen()->Items() )
         {

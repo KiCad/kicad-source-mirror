@@ -1636,14 +1636,15 @@ void PCB_SELECTION_TOOL::zoomFitSelection()
 }
 
 
-void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( EDA_RECT bbox )
+void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 {
     // Should recalculate the view to zoom in on the bbox.
-    auto view = getView();
+    KIGFX::VIEW* view = getView();
 
-    if( bbox.GetWidth() == 0 )
+    if( aBBox.GetWidth() == 0 )
         return;
 
+    BOX2I bbox = aBBox;
     bbox.Normalize();
 
     //#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm

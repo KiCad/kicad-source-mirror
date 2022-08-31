@@ -1241,9 +1241,7 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
     }
     else
     {
-        EDA_RECT boundingBox = m_symbol->Flatten()->GetUnitBoundingBox( m_unit, m_convert );
-        return BOX2I( boundingBox.GetOrigin(), VECTOR2I( boundingBox.GetWidth(),
-                                                         boundingBox.GetHeight() ) );
+        return m_symbol->Flatten()->GetUnitBoundingBox( m_unit, m_convert );
     }
 }
 

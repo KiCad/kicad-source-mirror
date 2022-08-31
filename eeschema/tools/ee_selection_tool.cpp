@@ -1299,7 +1299,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            EDA_RECT selectionRect( area.GetOrigin(), wxSize( width, height ) );
+            BOX2I selectionRect( area.GetOrigin(), VECTOR2I( width, height ) );
             selectionRect.Normalize();
 
             bool anyAdded = false;
@@ -1495,11 +1495,12 @@ int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( EDA_RECT bbox )
+void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 {
-    if( bbox.GetWidth() == 0 )
+    if( aBBox.GetWidth() == 0 )
         return;
 
+    BOX2I bbox = aBBox;
     bbox.Normalize();
 
     VECTOR2I bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();

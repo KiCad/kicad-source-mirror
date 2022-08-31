@@ -299,7 +299,7 @@ wxString SCH_TEXTBOX::GetShownText( int aDepth ) const
 
 bool SCH_TEXTBOX::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
