@@ -318,11 +318,9 @@ bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-const EDA_RECT ZONE::GetBoundingBox() const
+const BOX2I ZONE::GetBoundingBox() const
 {
-    BOX2I bb = m_Poly->BBox();
-
-    return bb;
+    return m_Poly->BBox();
 }
 
 

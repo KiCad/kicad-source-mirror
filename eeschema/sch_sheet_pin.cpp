@@ -340,7 +340,7 @@ BITMAPS SCH_SHEET_PIN::GetMenuImage() const
 
 bool SCH_SHEET_PIN::HitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

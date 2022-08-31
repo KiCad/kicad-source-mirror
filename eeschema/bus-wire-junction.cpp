@@ -80,16 +80,14 @@ void SCH_EDIT_FRAME::TestDanglingEnds()
 
 bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
 {
-    SCH_SCREEN* screen = GetScreen();
-    bool        retval = false;
+    if( aStart == aEnd )
+        return false;
 
+    SCH_SCREEN*            screen = GetScreen();
     std::vector<SCH_LINE*> wires;
-    EDA_RECT    bb( aStart, wxSize( 1, 1 ) );
+    BOX2I                  bb( aStart );
 
     bb.Merge( aEnd );
-
-    if( aStart == aEnd )
-        return retval;
 
     // We cannot modify the RTree while iterating, so push the possible
     // wires into a separate structure.
@@ -138,10 +136,10 @@ bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
         SaveCopyInUndoList( screen, line, UNDO_REDO::DELETED, true );
         RemoveFromScreen( line, screen );
 
-        retval = true;
+        return true;
     }
 
-    return retval;
+    return false;
 }
 
 

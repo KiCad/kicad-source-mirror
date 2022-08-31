@@ -72,11 +72,11 @@ void EDA_ITEM::SetModified()
 }
 
 
-const EDA_RECT EDA_ITEM::GetBoundingBox() const
+const BOX2I EDA_ITEM::GetBoundingBox() const
 {
     // return a zero-sized box per default. derived classes should override
     // this
-    return EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
+    return BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
 }
 
 
@@ -255,9 +255,7 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 const BOX2I EDA_ITEM::ViewBBox() const
 {
     // Basic fallback
-    EDA_RECT bbox = GetBoundingBox();
-
-    return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
+    return GetBoundingBox();
 }
 
 

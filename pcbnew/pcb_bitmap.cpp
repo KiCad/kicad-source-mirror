@@ -120,13 +120,13 @@ double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const EDA_RECT PCB_BITMAP::GetBoundingBox() const
+const BOX2I PCB_BITMAP::GetBoundingBox() const
 {
-    // Bitmaps are center origin, EDA_RECTs need top-left origin
+    // Bitmaps are center origin, BOX2Is need top-left origin
     VECTOR2I size = m_image->GetSize();
     VECTOR2I topLeft = { m_pos.x - size.x / 2, m_pos.y - size.y / 2 };
 
-    return EDA_RECT( topLeft, size );
+    return BOX2I( topLeft, size );
 }
 
 

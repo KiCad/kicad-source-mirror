@@ -657,7 +657,7 @@ const BOX2I SCH_LABEL_BASE::GetBodyBoundingBox() const
 }
 
 
-const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
+const BOX2I SCH_LABEL_BASE::GetBoundingBox() const
 {
     // build the bounding box of the entire label, including its fields
 
@@ -667,7 +667,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
     {
         if( field.IsVisible() )
         {
-            EDA_RECT fieldBBox = field.GetBoundingBox();
+            BOX2I fieldBBox = field.GetBoundingBox();
 
             if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
                 fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
@@ -694,7 +694,7 @@ bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     {
         if( field.IsVisible() )
         {
-            EDA_RECT fieldBBox = field.GetBoundingBox();
+            BOX2I fieldBBox = field.GetBoundingBox();
             fieldBBox.Inflate( aAccuracy );
 
             if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
@@ -728,7 +728,7 @@ bool SCH_LABEL_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
         {
             if( field.IsVisible() )
             {
-                EDA_RECT fieldBBox = field.GetBoundingBox();
+                BOX2I fieldBBox = field.GetBoundingBox();
 
                 if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
                     fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );

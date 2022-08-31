@@ -124,7 +124,7 @@ public:
     }
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * Function GetLength

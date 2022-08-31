@@ -182,14 +182,14 @@ public:
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
-    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false, true, false ); }
+    const BOX2I GetBoundingBox() const override { return GetBoundingBox( false, true, false ); }
 
     /**
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
      *      in the calculation.
      */
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
-                                   bool aIncludeElectricalType ) const;
+    const BOX2I GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                bool aIncludeElectricalType ) const;
 
     /**
      * Return whether this pin forms an implicit power connection: i.e., is hidden

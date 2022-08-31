@@ -621,7 +621,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
             {
                 BOARD*       board = item->GetBoard();
                 PCB_LAYER_ID layer = context->GetLayer();
-                EDA_RECT     itemBBox;
+                BOX2I        itemBBox;
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                     itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
@@ -689,7 +689,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 BOARD*       board = item->GetBoard();
                 int          maxError = board->GetDesignSettings().m_MaxError;
                 PCB_LAYER_ID layer = context->GetLayer();
-                EDA_RECT     itemBBox;
+                BOX2I        itemBBox;
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                     itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();

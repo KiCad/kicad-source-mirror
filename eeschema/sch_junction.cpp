@@ -100,14 +100,12 @@ SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
 }
 
 
-const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
+const BOX2I SCH_JUNCTION::GetBoundingBox() const
 {
-    EDA_RECT rect;
+    BOX2I bbox( m_pos );
+    bbox.Inflate( getEffectiveShape().GetRadius() );
 
-    rect.SetOrigin( m_pos );
-    rect.Inflate( getEffectiveShape().GetRadius() );
-
-    return rect;
+    return bbox;
 }
 
 

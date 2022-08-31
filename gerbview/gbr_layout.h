@@ -70,7 +70,7 @@ public:
      */
     BOX2I ComputeBoundingBox() const;
 
-    const EDA_RECT GetBoundingBox() const override
+    const BOX2I GetBoundingBox() const override
     {
         return ComputeBoundingBox();
     }

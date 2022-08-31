@@ -104,13 +104,13 @@ void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 }
 
 
-const EDA_RECT SCH_BITMAP::GetBoundingBox() const
+const BOX2I SCH_BITMAP::GetBoundingBox() const
 {
-    EDA_RECT rect = m_image->GetBoundingBox();
+    BOX2I bbox = m_image->GetBoundingBox();
 
-    rect.Move( m_pos );
+    bbox.Move( m_pos );
 
-    return rect;
+    return bbox;
 }
 
 
@@ -122,7 +122,7 @@ void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 }
 
 
-wxSize SCH_BITMAP::GetSize() const
+VECTOR2I SCH_BITMAP::GetSize() const
 {
     return m_image->GetSize();
 }
@@ -162,7 +162,7 @@ void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 
 bool SCH_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

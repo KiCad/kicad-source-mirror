@@ -89,7 +89,7 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     void Move( const VECTOR2I& aMoveVector ) override
     {

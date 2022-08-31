@@ -33,12 +33,10 @@ VECTOR2I GERBVIEW_SELECTION::GetCenter() const
     }
     else
     {
-        EDA_RECT bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
+        BOX2I bbox;
 
-        for( ; i != m_items.end(); ++i )
-            bbox.Merge( (*i)->GetBoundingBox() );
+        for( EDA_ITEM* item : m_items )
+            bbox.Merge( item->GetBoundingBox() );
 
         centre = bbox.Centre();
     }
@@ -49,23 +47,19 @@ VECTOR2I GERBVIEW_SELECTION::GetCenter() const
 
 const BOX2I GERBVIEW_SELECTION::ViewBBox() const
 {
-    EDA_RECT eda_bbox;
+    BOX2I bbox;
 
     if( Size() == 1 )
     {
-        eda_bbox = Front()->GetBoundingBox();
+        bbox = Front()->GetBoundingBox();
     }
     else if( Size() > 1 )
     {
-        eda_bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
-            eda_bbox.Merge( (*i)->GetBoundingBox() );
+        for( EDA_ITEM* item : m_items )
+            bbox.Merge( item->GetBoundingBox() );
     }
 
-    return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
+    return bbox;
 }
 
 

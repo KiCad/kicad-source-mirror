@@ -111,9 +111,9 @@ static int countChildren( wxXmlNode* aCurrentNode, const wxString& aName )
 
 
 ///< Compute a bounding box for all items in a schematic sheet
-static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
+static BOX2I getSheetBbox( SCH_SHEET* aSheet )
 {
-    EDA_RECT bbox;
+    BOX2I bbox;
 
     for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
         bbox.Merge( item->GetBoundingBox() );
@@ -756,7 +756,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     // Calculate the already placed items bounding box and the page size to determine
     // placement for the new symbols
     wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU( IU_PER_MILS );
-    EDA_RECT sheetBbox  = getSheetBbox( m_rootSheet );
+    BOX2I    sheetBbox  = getSheetBbox( m_rootSheet );
     VECTOR2I newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
     int      maxY = sheetBbox.GetY();
 
@@ -783,8 +783,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             symbol->AddHierarchicalReference( sheetpath.Path(), reference, unit );
 
             // Calculate the placement position
-            EDA_RECT cmpBbox = symbol->GetBoundingBox();
-            int      posY    = newCmpPosition.y + cmpBbox.GetHeight();
+            BOX2I cmpBbox = symbol->GetBoundingBox();
+            int   posY    = newCmpPosition.y + cmpBbox.GetHeight();
             symbol->SetPosition( VECTOR2I( newCmpPosition.x, posY ) );
             newCmpPosition.x += cmpBbox.GetWidth();
             maxY = std::max( maxY, posY );
@@ -935,7 +935,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     }
 
     // Calculate the new sheet size.
-    EDA_RECT sheetBoundingBox = getSheetBbox( m_currentSheet );
+    BOX2I    sheetBoundingBox = getSheetBbox( m_currentSheet );
     VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
     targetSheetSize += VECTOR2I( Mils2iu( 1500 ), Mils2iu( 1500 ) );
 

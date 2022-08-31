@@ -313,24 +313,24 @@ void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset 
 }
 
 
-const EDA_RECT SCH_TEXT::GetBoundingBox() const
+const BOX2I SCH_TEXT::GetBoundingBox() const
 {
-    BOX2I rect = GetTextBox();
+    BOX2I bbox = GetTextBox();
 
-    if( !GetTextAngle().IsZero() ) // Rotate rect.
+    if( !GetTextAngle().IsZero() ) // Rotate bbox.
     {
-        VECTOR2I pos = rect.GetOrigin();
-        VECTOR2I end = rect.GetEnd();
+        VECTOR2I pos = bbox.GetOrigin();
+        VECTOR2I end = bbox.GetEnd();
 
         RotatePoint( pos, GetTextPos(), GetTextAngle() );
         RotatePoint( end, GetTextPos(), GetTextAngle() );
 
-        rect.SetOrigin( pos );
-        rect.SetEnd( end );
+        bbox.SetOrigin( pos );
+        bbox.SetEnd( end );
     }
 
-    rect.Normalize();
-    return rect;
+    bbox.Normalize();
+    return bbox;
 }
 
 

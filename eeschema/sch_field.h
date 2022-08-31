@@ -124,7 +124,7 @@ public:
      */
     EDA_ANGLE         GetDrawRotation() const override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * Return whether the field will be rendered with the horizontal justification

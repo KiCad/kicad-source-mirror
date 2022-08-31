@@ -219,15 +219,15 @@ void FP_TEXT::SetLocalCoord()
     }
 }
 
-const EDA_RECT FP_TEXT::GetBoundingBox() const
+const BOX2I FP_TEXT::GetBoundingBox() const
 {
     EDA_ANGLE angle = GetDrawRotation();
-    BOX2I     text_area = GetTextBox();
+    BOX2I     bbox = GetTextBox();
 
     if( !angle.IsZero() )
-        text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
+        bbox = bbox.GetBoundingBoxRotated( GetTextPos(), angle );
 
-    return text_area;
+    return bbox;
 }
 
 

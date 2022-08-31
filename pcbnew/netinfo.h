@@ -85,7 +85,7 @@ public:
     }
 #endif
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     VECTOR2I GetPosition() const override
     {

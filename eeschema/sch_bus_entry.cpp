@@ -159,17 +159,15 @@ void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
+const BOX2I SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 {
-    EDA_RECT box;
+    BOX2I bbox( m_pos );
+    bbox.SetEnd( GetEnd() );
 
-    box.SetOrigin( m_pos );
-    box.SetEnd( GetEnd() );
+    bbox.Normalize();
+    bbox.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
-    box.Normalize();
-    box.Inflate( ( GetPenWidth() / 2 ) + 1 );
-
-    return box;
+    return bbox;
 }
 
 

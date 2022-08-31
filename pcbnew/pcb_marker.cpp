@@ -299,7 +299,7 @@ void PCB_MARKER::SetZoom( double aZoomFactor )
 }
 
 
-const EDA_RECT PCB_MARKER::GetBoundingBox() const
+const BOX2I PCB_MARKER::GetBoundingBox() const
 {
     return GetBoundingBoxMarker();
 }

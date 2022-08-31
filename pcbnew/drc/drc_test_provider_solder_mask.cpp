@@ -260,7 +260,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                     if( !item->IsOnLayer( layer ) )
                         continue;
 
-                    EDA_RECT       itemBBox = item->GetBoundingBox();
+                    BOX2I          itemBBox = item->GetBoundingBox();
                     DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT,
                                                                         item, nullptr, layer );
                     int            clearance = constraint.GetValue().Min();
@@ -662,7 +662,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                EDA_RECT itemBBox = item->GetBoundingBox();
+                BOX2I itemBBox = item->GetBoundingBox();
 
                 if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
                 {

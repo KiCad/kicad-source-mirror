@@ -179,7 +179,7 @@ bool SCH_MARKER::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
 }
 
 
-const EDA_RECT SCH_MARKER::GetBoundingBox() const
+const BOX2I SCH_MARKER::GetBoundingBox() const
 {
     return GetBoundingBoxMarker();
 }

@@ -323,7 +323,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             orient = ANGLE_HORIZONTAL;
     }
 
-    EDA_RECT bbox = GetBoundingBox();
+    BOX2I bbox = GetBoundingBox();
     bbox.RevertYAxis();
 
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_CENTER;
@@ -368,28 +368,28 @@ wxString LIB_FIELD::GetFullText( int unit ) const
 }
 
 
-const EDA_RECT LIB_FIELD::GetBoundingBox() const
+const BOX2I LIB_FIELD::GetBoundingBox() const
 {
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    BOX2I rect = GetTextBox( -1, true );
-    rect.RevertYAxis();
+    BOX2I bbox = GetTextBox( -1, true );
+    bbox.RevertYAxis();
 
     // We are using now a bottom to top Y axis.
-    VECTOR2I orig = rect.GetOrigin();
-    VECTOR2I end = rect.GetEnd();
+    VECTOR2I orig = bbox.GetOrigin();
+    VECTOR2I end = bbox.GetEnd();
 
     RotatePoint( orig, GetTextPos(), -GetTextAngle() );
     RotatePoint( end, GetTextPos(), -GetTextAngle() );
 
-    rect.SetOrigin( orig );
-    rect.SetEnd( end );
+    bbox.SetOrigin( orig );
+    bbox.SetEnd( end );
 
     // We are using now a top to bottom Y axis:
-    rect.RevertYAxis();
+    bbox.RevertYAxis();
 
-    return rect;
+    return bbox;
 }
 
 

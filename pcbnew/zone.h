@@ -124,9 +124,9 @@ public:
     }
 
     /**
-     * @return an EDA_RECT that is the bounding box of the zone outline.
+     * @return the bounding box of the zone outline.
      */
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * ONLY TO BE USED BY CLIENTS WHICH SET UP THE CACHE!

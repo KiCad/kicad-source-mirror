@@ -270,17 +270,16 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     if( aBackground )
         return;
 
-    EDA_RECT bBox = GetBoundingBox();
+    BOX2I bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis
     bBox.RevertYAxis();
     VECTOR2I txtpos = bBox.Centre();
 
     // The text orientation may need to be flipped if the transformation matrix causes xy
     // axes to be flipped.
-    int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
+    int      t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
     VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
-
-    COLOR4D color = GetTextColor();
+    COLOR4D  color = GetTextColor();
 
     if( !plotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
         color = plotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
@@ -345,7 +344,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
      *   to calculate so the more easily way is to use no justifications (centered text) and
      *   use GetBoundingBox to know the text coordinate considered as centered
     */
-    EDA_RECT bBox = GetBoundingBox();
+    BOX2I bBox = GetBoundingBox();
 
     // convert coordinates from draw Y axis to symbol_editor Y axis:
     bBox.RevertYAxis();
@@ -395,28 +394,28 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
-const EDA_RECT LIB_TEXT::GetBoundingBox() const
+const BOX2I LIB_TEXT::GetBoundingBox() const
 {
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    BOX2I rect = GetTextBox( -1, true );
-    rect.RevertYAxis();
+    BOX2I bbox = GetTextBox( -1, true );
+    bbox.RevertYAxis();
 
     // We are using now a bottom to top Y axis.
-    VECTOR2I orig = rect.GetOrigin();
-    VECTOR2I end = rect.GetEnd();
+    VECTOR2I orig = bbox.GetOrigin();
+    VECTOR2I end = bbox.GetEnd();
 
     RotatePoint( orig, GetTextPos(), -GetTextAngle() );
     RotatePoint( end, GetTextPos(), -GetTextAngle() );
 
-    rect.SetOrigin( orig );
-    rect.SetEnd( end );
+    bbox.SetOrigin( orig );
+    bbox.SetEnd( end );
 
     // We are using now a top to bottom Y axis:
-    rect.RevertYAxis();
+    bbox.RevertYAxis();
 
-    return rect;
+    return bbox;
 }
 
 

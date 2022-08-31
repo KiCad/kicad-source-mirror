@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( BasicProps )
     BOOST_CHECK( img.GetSizePixels() == size_4tile );
     BOOST_CHECK( img.GetSize() == size_4tile * 10 );
 
-    const EDA_RECT bb = img.GetBoundingBox();
+    const BOX2I bb = img.GetBoundingBox();
     BOOST_CHECK( bb.GetPosition() == wxPoint( -40, -40 ) );
     BOOST_CHECK( bb.GetEnd() == wxPoint( 40, 40 ) );
 }

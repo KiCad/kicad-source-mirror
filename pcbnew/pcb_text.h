@@ -144,7 +144,7 @@ public:
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     EDA_ITEM* Clone() const override;
 

@@ -151,7 +151,7 @@ public:
      */
     D_CODE* GetDcodeDescr() const;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     void Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
 

@@ -165,7 +165,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 

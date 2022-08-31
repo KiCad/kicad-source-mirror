@@ -220,16 +220,16 @@ bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-const EDA_RECT PCB_GROUP::GetBoundingBox() const
+const BOX2I PCB_GROUP::GetBoundingBox() const
 {
-    EDA_RECT area;
+    BOX2I bbox;
 
     for( BOARD_ITEM* item : m_items )
-        area.Merge( item->GetBoundingBox() );
+        bbox.Merge( item->GetBoundingBox() );
 
-    area.Inflate( Millimeter2iu( 0.25 ) ); // Give a min size to the area
+    bbox.Inflate( Millimeter2iu( 0.25 ) ); // Give a min size to the bbox
 
-    return area;
+    return bbox;
 }
 
 

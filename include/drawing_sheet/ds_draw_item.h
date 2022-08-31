@@ -86,7 +86,7 @@ public:
 
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
-    const EDA_RECT GetBoundingBox() const override = 0;
+    const BOX2I GetBoundingBox() const override = 0;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
@@ -138,7 +138,7 @@ public:
     VECTOR2I GetPosition() const override { return GetStart(); }
     void     SetPosition( const VECTOR2I& aPos ) override { SetStart( aPos ); }
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
     bool           HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
@@ -171,7 +171,7 @@ public:
     VECTOR2I        GetPosition() const override { return m_pos; }
     void            SetPosition( const VECTOR2I& aPos ) override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -227,7 +227,7 @@ public:
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -276,7 +276,7 @@ public:
 
     void PrintWsItem( const RENDER_SETTINGS* , const VECTOR2I& ) override { /* do nothing */ }
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override { return false; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -324,7 +324,7 @@ public:
     VECTOR2I GetPosition() const override { return GetTextPos(); }
     void     SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -360,7 +360,7 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

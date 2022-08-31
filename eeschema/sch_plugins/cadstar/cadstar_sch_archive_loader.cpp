@@ -158,9 +158,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // Calculate the new sheet size.
         EDA_RECT sheetBoundingBox;
 
-        for( auto item : sheet->GetScreen()->Items() )
+        for( SCH_ITEM* item : sheet->GetScreen()->Items() )
         {
-            EDA_RECT bbox;
+            BOX2I bbox;
 
             // Only use the visible fields of the symbols to calculate their bounding box
             // (hidden fields could be very long and artificially enlarge the sheet bounding box)
@@ -2769,7 +2769,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         // so need to adjust the location of the text element based on Cadstar's original text
         // alignment (anchor position).
         setAlignment( aKiCadTextItem, textAlignment );
-        EDA_RECT bb = textEdaItem->GetBoundingBox();
+        BOX2I    bb = textEdaItem->GetBoundingBox();
         int      off = static_cast<SCH_TEXT*>( aKiCadTextItem )->GetTextOffset();
         wxPoint  pos;
 

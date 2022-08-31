@@ -325,7 +325,7 @@ public:
      */
     bool ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath, const KIID_PATH& aNewSheetPath );
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * Return a bounding box for the symbol body but not the pins or fields.
@@ -335,7 +335,7 @@ public:
     /**
      * Return a bounding box for the symbol body and pins but not the fields.
      */
-    EDA_RECT GetBodyAndPinsBoundingBox() const;
+    BOX2I GetBodyAndPinsBoundingBox() const;
 
 
     //-----<Fields>-----------------------------------------------------------

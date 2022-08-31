@@ -65,15 +65,14 @@ void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
 }
 
 
-const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
+const BOX2I SCH_NO_CONNECT::GetBoundingBox() const
 {
-    int      delta = ( GetPenWidth() + GetSize() ) / 2;
-    EDA_RECT box;
+    int   delta = ( GetPenWidth() + GetSize() ) / 2;
+    BOX2I bbox( m_pos );
 
-    box.SetOrigin( m_pos );
-    box.Inflate( delta );
+    bbox.Inflate( delta );
 
-    return box;
+    return bbox;
 }
 
 

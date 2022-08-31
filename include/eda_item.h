@@ -259,7 +259,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate
      * system.  It is OK to overestimate the size by a few counts.
      */
-    virtual const EDA_RECT GetBoundingBox() const;
+    virtual const BOX2I GetBoundingBox() const;
 
     virtual VECTOR2I GetPosition() const { return VECTOR2I(); }
     virtual void     SetPosition( const VECTOR2I& aPos ){};

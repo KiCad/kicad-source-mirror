@@ -277,7 +277,7 @@ void AR_AUTOPLACER::addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSE
 void AR_AUTOPLACER::addPad( PAD* aPad, int aClearance )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    EDA_RECT bbox = aPad->GetBoundingBox();
+    BOX2I bbox = aPad->GetBoundingBox();
     bbox.Inflate( aClearance );
 
     if( aPad->IsOnLayer( F_Cu ) )
@@ -317,7 +317,7 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
     if( aFootprint->GetLayer() == B_Cu )
         layerMask.set( B_Cu );
 
-    EDA_RECT fpBBox = aFootprint->GetBoundingBox();
+    BOX2I fpBBox = aFootprint->GetBoundingBox();
 
     fpBBox.Inflate( ( m_matrix.m_GridRouting / 2 ) + aFpClearance );
 
@@ -335,9 +335,9 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
 
 void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
 {
-    int         ox, oy, fx, fy;
-    LSET        layerMask;
-    EDA_RECT    fpBBox = Module->GetBoundingBox();
+    int   ox, oy, fx, fy;
+    LSET  layerMask;
+    BOX2I fpBBox = Module->GetBoundingBox();
 
     fpBBox.Inflate( m_matrix.m_GridRouting / 2 );
     ox  = fpBBox.GetX();

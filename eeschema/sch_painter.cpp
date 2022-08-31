@@ -549,7 +549,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
 
     VECTOR2I extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
                                                    aAttrs.m_Bold, aAttrs.m_Italic );
-    EDA_RECT box( (VECTOR2I) aPosition, wxSize( extents.x, aAttrs.m_Size.y ) );
+    BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
 
     switch( aAttrs.m_Halign )
     {
@@ -874,7 +874,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    EDA_RECT bbox = aField->GetBoundingBox();
+    BOX2I bbox = aField->GetBoundingBox();
 
     if( drawingShadows )
     {
@@ -929,7 +929,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
             return;
     }
 
-    EDA_RECT bBox = aText->GetBoundingBox();
+    BOX2I bBox = aText->GetBoundingBox();
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
@@ -1838,7 +1838,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
     if( drawingShadows )
     {
-        EDA_RECT bBox = aText->GetBoundingBox();
+        BOX2I bBox = aText->GetBoundingBox();
         bBox.Inflate( getTextThickness( aText ) * 2 );
         bBox.RevertYAxis();
 
@@ -2198,7 +2198,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer )
      *   to calculate so the easier way is to use no justifications (centered text) and use
      *   GetBoundingBox to know the text coordinate considered as centered
      */
-    EDA_RECT bbox = aField->GetBoundingBox();
+    BOX2I bbox = aField->GetBoundingBox();
 
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_GLOBAL_LABEL_T )
     {
@@ -2211,7 +2211,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer )
 
     if( drawingShadows )
     {
-        EDA_RECT shadow_box = bbox;
+        BOX2I shadow_box = bbox;
         shadow_box.Inflate( getTextThickness( aField ) * 2 );
         shadow_box.RevertYAxis();
 

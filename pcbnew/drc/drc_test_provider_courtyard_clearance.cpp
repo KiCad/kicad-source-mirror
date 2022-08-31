@@ -183,7 +183,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
         frontA_worstCaseBBox.Inflate( m_largestCourtyardClearance );
         backA_worstCaseBBox.Inflate( m_largestCourtyardClearance );
 
-        EDA_RECT fpA_bbox = fpA->GetBoundingBox();
+        BOX2I fpA_bbox = fpA->GetBoundingBox();
 
         for( auto itB = itA + 1; itB != m_board->Footprints().end(); itB++ )
         {
@@ -205,7 +205,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             frontB_worstCaseBBox.Inflate( m_largestCourtyardClearance );
             backB_worstCaseBBox.Inflate( m_largestCourtyardClearance );
 
-            EDA_RECT       fpB_bbox = fpB->GetBoundingBox();
+            BOX2I          fpB_bbox = fpB->GetBoundingBox();
             DRC_CONSTRAINT constraint;
             int            clearance;
             int            actual;

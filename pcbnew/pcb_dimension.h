@@ -240,7 +240,7 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
@@ -609,7 +609,7 @@ public:
         return wxT( "PCB_DIM_CENTER" );
     }
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     const BOX2I ViewBBox() const override;
 

@@ -188,18 +188,18 @@ void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT SCH_LINE::GetBoundingBox() const
+const BOX2I SCH_LINE::GetBoundingBox() const
 {
-    int      width = m_stroke.GetWidth() / 2;
-    int      extra = m_stroke.GetWidth() & 0x1;
+    int   width = m_stroke.GetWidth() / 2;
+    int   extra = m_stroke.GetWidth() & 0x1;
 
-    int      xmin = std::min( m_start.x, m_end.x ) - width;
-    int      ymin = std::min( m_start.y, m_end.y ) - width;
+    int   xmin = std::min( m_start.x, m_end.x ) - width;
+    int   ymin = std::min( m_start.y, m_end.y ) - width;
 
-    int      xmax = std::max( m_start.x, m_end.x ) + width + extra;
-    int      ymax = std::max( m_start.y, m_end.y ) + width + extra;
+    int   xmax = std::max( m_start.x, m_end.x ) + width + extra;
+    int   ymax = std::max( m_start.y, m_end.y ) + width + extra;
 
-    EDA_RECT ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin, ymax - ymin ) );
+    BOX2I ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin, ymax - ymin ) );
 
     return ret;
 }

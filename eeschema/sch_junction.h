@@ -67,7 +67,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 

@@ -1,7 +1,3 @@
-/**
- * @file class_bitmap_base.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -215,15 +211,14 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-const EDA_RECT BITMAP_BASE::GetBoundingBox() const
+const BOX2I BITMAP_BASE::GetBoundingBox() const
 {
-    EDA_RECT rect;
+    BOX2I    bbox;
+    VECTOR2I size = GetSize();
 
-    wxSize   size = GetSize();
+    bbox.Inflate( size.x / 2, size.y / 2 );
 
-    rect.Inflate( size.x / 2, size.y / 2 );
-
-    return rect;
+    return bbox;
 }
 
 
@@ -233,7 +228,7 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         return;
 
     VECTOR2I pos = aPos;
-    wxSize  size = GetSize();
+    VECTOR2I size = GetSize();
 
     // This fixes a bug in OSX that should be fixed in the 3.0.3 version or later.
     if( ( size.x == 0 ) || ( size.y == 0 ) )
@@ -292,7 +287,7 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     }
 
     aDC->DestroyClippingRegion();
-    aDC->SetClippingRegion( clipAreaPos, size );
+    aDC->SetClippingRegion( clipAreaPos, wxSize( size.x, size.y ) );
 
     if( GetGRForceBlackPenState() )
     {
@@ -316,9 +311,9 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
 }
 
 
-wxSize BITMAP_BASE::GetSize() const
+VECTOR2I BITMAP_BASE::GetSize() const
 {
-    wxSize size;
+    VECTOR2I size;
 
     if( m_bitmap )
     {

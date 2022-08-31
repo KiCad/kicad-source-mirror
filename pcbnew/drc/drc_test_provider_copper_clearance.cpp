@@ -298,8 +298,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             return;
     }
 
-    EDA_RECT itemBBox = aItem->GetBoundingBox();
-    EDA_RECT worstCaseBBox = itemBBox;
+    BOX2I itemBBox = aItem->GetBoundingBox();
+    BOX2I worstCaseBBox = itemBBox;
 
     worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
 

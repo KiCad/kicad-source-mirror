@@ -863,10 +863,9 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 }
 
 
-const EDA_RECT LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
+const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_RECT bBox;
-    bool initialized = false;
+    BOX2I bBox;     // Start with a fresh BOX2I so the Merge algorithm works
 
     for( const LIB_ITEM& item : m_drawings )
     {
@@ -884,15 +883,7 @@ const EDA_RECT LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
         if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
             continue;
 
-        if( initialized )
-        {
-            bBox.Merge( item.GetBoundingBox() );
-        }
-        else
-        {
-            bBox = item.GetBoundingBox();
-            initialized = true;
-        }
+        bBox.Merge( item.GetBoundingBox() );
     }
 
     return bBox;

@@ -139,7 +139,7 @@ public:
         SIDE_AND_NPINS  sideandpins = chooseSideForFields( aManual );
         SIDE            field_side = sideandpins.side;
         VECTOR2I        fbox_pos = fieldBoxPlacement( sideandpins );
-        EDA_RECT        field_box( fbox_pos, m_fbox_size );
+        BOX2I           field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
             forceWireSpacing = fitFieldsBetweenWires( &field_box, field_side );
@@ -190,7 +190,7 @@ protected:
      * Compute and return the size of the fields' bounding box.
      * @param aDynamic - if true, use dynamic spacing
      */
-    wxSize computeFBoxSize( bool aDynamic )
+    VECTOR2I computeFBoxSize( bool aDynamic )
     {
         int max_field_width = 0;
         int total_height = 0;
@@ -210,9 +210,9 @@ protected:
             else
                 field->SetTextAngle( ANGLE_HORIZONTAL );
 
-            EDA_RECT bbox = field->GetBoundingBox();
-            int      field_width = bbox.GetWidth();
-            int      field_height = bbox.GetHeight();
+            BOX2I bbox = field->GetBoundingBox();
+            int   field_width = bbox.GetWidth();
+            int   field_height = bbox.GetHeight();
 
             max_field_width = std::max( max_field_width, field_width );
 
@@ -228,7 +228,7 @@ protected:
                 total_height += field_height + FIELD_PADDING;
         }
 
-        return wxSize( max_field_width, total_height );
+        return VECTOR2I( max_field_width, total_height );
     }
 
     /**
@@ -277,12 +277,12 @@ protected:
     {
         wxCHECK_RET( m_screen, "getPossibleCollisions() with null m_screen" );
 
-        EDA_RECT symbolBox = m_symbol->GetBodyAndPinsBoundingBox();
+        BOX2I symbolBox = m_symbol->GetBodyAndPinsBoundingBox();
         std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
 
         for( SIDE_AND_NPINS& side : sides )
         {
-            EDA_RECT box( fieldBoxPlacement( side ), m_fbox_size );
+            BOX2I box( fieldBoxPlacement( side ), m_fbox_size );
             box.Merge( symbolBox );
 
             for( SCH_ITEM* item : m_screen->Items().Overlapping( box ) )
@@ -308,13 +308,13 @@ protected:
      * Filter a list of possible colliders to include only those that actually collide
      * with a given rectangle. Returns the new vector.
      */
-    std::vector<SCH_ITEM*> filterCollisions( const EDA_RECT& aRect )
+    std::vector<SCH_ITEM*> filterCollisions( const BOX2I& aRect )
     {
         std::vector<SCH_ITEM*> filtered;
 
         for( SCH_ITEM* item : m_colliders )
         {
-            EDA_RECT item_box;
+            BOX2I item_box;
 
             if( SCH_SYMBOL* item_comp = dynamic_cast<SCH_SYMBOL*>( item ) )
                 item_box = item_comp->GetBodyAndPinsBoundingBox();
@@ -412,7 +412,7 @@ protected:
             sideandpins.side = side;
             sideandpins.pins = pinsOnSide( side );
 
-            EDA_RECT box( fieldBoxPlacement( sideandpins ), m_fbox_size );
+            BOX2I box( fieldBoxPlacement( sideandpins ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
 
@@ -540,8 +540,8 @@ protected:
     VECTOR2I fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
     {
         VECTOR2I fbox_center = m_symbol_bbox.Centre();
-        int      offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
-        int      offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
+        int      offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.x ) / 2;
+        int      offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.y ) / 2;
 
         if( aFieldSideAndPins.side.x != 0 )
             offs_x += HPADDING;
@@ -551,13 +551,13 @@ protected:
         fbox_center.x += aFieldSideAndPins.side.x * offs_x;
         fbox_center.y += aFieldSideAndPins.side.y * offs_y;
 
-        int     x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 );
-        int     y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 );
+        int     x = fbox_center.x - ( m_fbox_size.x / 2 );
+        int     y = fbox_center.y - ( m_fbox_size.y / 2 );
 
         auto getPinsBox =
                 [&]( const VECTOR2I& aSide )
                 {
-                    EDA_RECT pinsBox;
+                    BOX2I pinsBox;
 
                     for( SCH_PIN* each_pin : m_symbol->GetPins() )
                     {
@@ -581,7 +581,7 @@ protected:
             }
             else if( aFieldSideAndPins.side == SIDE_RIGHT || aFieldSideAndPins.side == SIDE_LEFT )
             {
-                y = pinsBox.GetTop() - ( m_fbox_size.GetHeight() + ( VPADDING * 2 ) );
+                y = pinsBox.GetTop() - ( m_fbox_size.y + ( VPADDING * 2 ) );
             }
         }
 
@@ -592,7 +592,7 @@ protected:
      * Shift a field box up or down a bit to make the fields fit between some wires.
      * Returns true if a shift was made.
      */
-    bool fitFieldsBetweenWires( EDA_RECT* aBox, SIDE aSide )
+    bool fitFieldsBetweenWires( BOX2I* aBox, SIDE aSide )
     {
         if( aSide != SIDE_TOP && aSide != SIDE_BOTTOM )
             return false;
@@ -719,8 +719,8 @@ private:
     SCH_SYMBOL*             m_symbol;
     std::vector<SCH_FIELD*> m_fields;
     std::vector<SCH_ITEM*>  m_colliders;
-    EDA_RECT                m_symbol_bbox;
-    wxSize                  m_fbox_size;
+    BOX2I                   m_symbol_bbox;
+    VECTOR2I                m_fbox_size;
     bool                    m_allow_rejustify;
     bool                    m_align_to_grid;
     bool                    m_is_power_symbol;

@@ -72,7 +72,7 @@ public:
             return m_stroke.GetPlotStyle();
     }
 
-    const EDA_RECT GetBoundingBox() const override    { return getBoundingBox(); }
+    const BOX2I GetBoundingBox() const override    { return getBoundingBox(); }
 
     VECTOR2I GetPosition() const override { return getPosition(); }
     void     SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }

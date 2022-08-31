@@ -169,7 +169,7 @@ public:
     SHAPE_POLY_SET GetBoundingHull() const;
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
     const EDA_RECT GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
     PADS& Pads()             { return m_pads; }

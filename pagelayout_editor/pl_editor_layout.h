@@ -70,7 +70,7 @@ public:
      * Called soon after ComputeBoundingBox() to return the same EDA_RECT,
      * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
      */
-    const EDA_RECT GetBoundingBox() const { return m_boundingBox; }
+    const BOX2I GetBoundingBox() const { return m_boundingBox; }
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_boundingBox = aBox; }
 

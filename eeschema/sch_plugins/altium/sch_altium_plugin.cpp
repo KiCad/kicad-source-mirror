@@ -2385,10 +2385,10 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
     }
 
     // we only support one scale, thus we need to select one in case it does not keep aspect ratio
-    wxSize  currentImageSize = bitmap->GetSize();
+    VECTOR2I currentImageSize = bitmap->GetSize();
     VECTOR2I expectedImageSize = elem.location - elem.corner;
-    double  scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
-    double  scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
+    double   scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
+    double   scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
     bitmap->SetImageScale( std::min( scaleX, scaleY ) );
 
     bitmap->SetFlags( IS_NEW );

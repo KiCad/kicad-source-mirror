@@ -701,8 +701,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
         if( !zone->GetLayerSet().test( aLayer ) )
             continue;
 
-        EDA_RECT itemBBox = aItem->GetBoundingBox();
-        EDA_RECT worstCaseBBox = itemBBox;
+        BOX2I itemBBox = aItem->GetBoundingBox();
+        BOX2I worstCaseBBox = itemBBox;
 
         worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
 

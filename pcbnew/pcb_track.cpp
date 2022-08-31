@@ -228,7 +228,7 @@ EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const VECTOR2I& point, int min_dist ) c
 }
 
 
-const EDA_RECT PCB_TRACK::GetBoundingBox() const
+const BOX2I PCB_TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width + 1 ) / 2;
@@ -245,7 +245,7 @@ const EDA_RECT PCB_TRACK::GetBoundingBox() const
     else if( Type() == PCB_ARC_T )
     {
         std::shared_ptr<SHAPE> arc = GetEffectiveShape();
-        auto bbox = arc->BBox();
+        BOX2I bbox = arc->BBox();
 
         xmin = bbox.GetLeft();
         xmax = bbox.GetRight();
@@ -268,7 +268,7 @@ const EDA_RECT PCB_TRACK::GetBoundingBox() const
     xmin -= radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_RECT ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
+    BOX2I ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }

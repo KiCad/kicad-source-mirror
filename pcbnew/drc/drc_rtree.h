@@ -223,7 +223,7 @@ public:
         // shapes
         std::unordered_map<BOARD_ITEM*, bool> filterResults;
 
-        EDA_RECT box = aRefItem->GetBoundingBox();
+        BOX2I box = aRefItem->GetBoundingBox();
         box.Inflate( aClearance );
 
         int min[2] = { box.GetX(),     box.GetY() };

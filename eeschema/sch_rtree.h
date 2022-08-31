@@ -59,7 +59,7 @@ public:
      */
     void insert( SCH_ITEM* aItem )
     {
-        EDA_RECT bbox = aItem->GetBoundingBox();
+        BOX2I bbox = aItem->GetBoundingBox();
 
         // Inflate a bit for safety, selection shadows, etc.
         bbox.Inflate( aItem->GetPenWidth() );
@@ -79,7 +79,7 @@ public:
     bool remove( SCH_ITEM* aItem )
     {
         // First, attempt to remove the item using its given BBox
-        EDA_RECT bbox    = aItem->GetBoundingBox();
+        BOX2I bbox = aItem->GetBoundingBox();
 
         // Inflate a bit for safety, selection shadows, etc.
         bbox.Inflate( aItem->GetPenWidth() );
@@ -125,7 +125,7 @@ public:
      */
     bool contains( const SCH_ITEM* aItem, bool aRobust = false ) const
     {
-        EDA_RECT bbox    = aItem->GetBoundingBox();
+        BOX2I bbox = aItem->GetBoundingBox();
 
         // Inflate a bit for safety, selection shadows, etc.
         bbox.Inflate( aItem->GetPenWidth() );

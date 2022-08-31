@@ -399,16 +399,16 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 }
 
 
-const EDA_RECT SCH_FIELD::GetBoundingBox() const
+const BOX2I SCH_FIELD::GetBoundingBox() const
 {
     // Calculate the text bounding box:
-    BOX2I rect = GetTextBox();
+    BOX2I bbox = GetTextBox();
 
     // Calculate the bounding box position relative to the parent:
     VECTOR2I origin = GetParentPosition();
     VECTOR2I pos = GetTextPos() - origin;
-    VECTOR2I begin = rect.GetOrigin() - origin;
-    VECTOR2I end = rect.GetEnd() - origin;
+    VECTOR2I begin = bbox.GetOrigin() - origin;
+    VECTOR2I end = bbox.GetEnd() - origin;
     RotatePoint( begin, pos, GetTextAngle() );
     RotatePoint( end, pos, GetTextAngle() );
 
@@ -431,13 +431,13 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
         transform = TRANSFORM( 1, 0, 0, 1 );  // identity transform
     }
 
-    rect.SetOrigin( transform.TransformCoordinate( begin ) );
-    rect.SetEnd( transform.TransformCoordinate( end ) );
+    bbox.SetOrigin( transform.TransformCoordinate( begin ) );
+    bbox.SetEnd( transform.TransformCoordinate( end ) );
 
-    rect.Move( origin );
-    rect.Normalize();
+    bbox.Move( origin );
+    bbox.Normalize();
 
-    return rect;
+    return bbox;
 }
 
 
@@ -874,7 +874,7 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     if( !IsVisible() || IsVoid() )
         return false;
 
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

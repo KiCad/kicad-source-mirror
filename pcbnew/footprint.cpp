@@ -734,7 +734,7 @@ wxString FOOTPRINT::GetTypeName() const
 
 BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
 {
-    BOX2I area;
+    BOX2I bbox;
 
     // We want the bounding box of the footprint pads at rot 0, not flipped
     // Create such a image:
@@ -747,13 +747,13 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
         dummy.Flip( VECTOR2I( 0, 0 ), false );
 
     for( PAD* pad : dummy.Pads() )
-        area.Merge( pad->GetBoundingBox() );
+        bbox.Merge( pad->GetBoundingBox() );
 
-    return area;
+    return bbox;
 }
 
 
-const EDA_RECT FOOTPRINT::GetBoundingBox() const
+const BOX2I FOOTPRINT::GetBoundingBox() const
 {
     return GetBoundingBox( true, true );
 }
@@ -783,11 +783,8 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
         }
     }
 
-    EDA_RECT area;
-
-    area.SetOrigin( m_pos );
-    area.SetEnd( m_pos );
-    area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
+    BOX2I bbox( m_pos );
+    bbox.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the bbox
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -803,14 +800,14 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
         if( item->Type() == PCB_FP_TEXT_T )
             continue;
 
-        area.Merge( item->GetBoundingBox() );
+        bbox.Merge( item->GetBoundingBox() );
     }
 
     for( PAD* pad : m_pads )
-        area.Merge( pad->GetBoundingBox() );
+        bbox.Merge( pad->GetBoundingBox() );
 
     for( FP_ZONE* zone : m_fp_zones )
-        area.Merge( zone->GetBoundingBox() );
+        bbox.Merge( zone->GetBoundingBox() );
 
     bool noDrawItems = ( m_drawings.empty() && m_pads.empty() && m_fp_zones.empty() );
 
@@ -825,7 +822,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
             // Only FP_TEXT items are independently selectable; FP_TEXTBOX items go in with
             // other graphic items above.
             if( item->Type() == PCB_FP_TEXT_T )
-                area.Merge( item->GetBoundingBox() );
+                bbox.Merge( item->GetBoundingBox() );
         }
 
         // This can be further optimized when aIncludeInvisibleText is true, but currently
@@ -853,14 +850,14 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
                 || aIncludeInvisibleText
                 || noDrawItems )
         {
-            area.Merge( m_value->GetBoundingBox() );
+            bbox.Merge( m_value->GetBoundingBox() );
         }
 
         if( ( m_reference->IsVisible() && refLayerIsVisible )
                 || aIncludeInvisibleText
                 || noDrawItems )
         {
-            area.Merge( m_reference->GetBoundingBox() );
+            bbox.Merge( m_reference->GetBoundingBox() );
         }
     }
 
@@ -869,21 +866,21 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
         if( ( aIncludeText && aIncludeInvisibleText ) || noDrawItems )
         {
             m_boundingBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedBoundingBox = area;
+            m_cachedBoundingBox = bbox;
         }
         else if( aIncludeText )
         {
             m_visibleBBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedVisibleBBox = area;
+            m_cachedVisibleBBox = bbox;
         }
         else
         {
             m_textExcludedBBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedTextExcludedBBox = area;
+            m_cachedTextExcludedBBox = bbox;
         }
     }
 
-    return area;
+    return bbox;
 }
 
 

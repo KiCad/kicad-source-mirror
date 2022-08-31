@@ -1447,13 +1447,13 @@ BOX2I SCH_SYMBOL::GetBodyBoundingBox() const
 }
 
 
-EDA_RECT SCH_SYMBOL::GetBodyAndPinsBoundingBox() const
+BOX2I SCH_SYMBOL::GetBodyAndPinsBoundingBox() const
 {
     return doGetBoundingBox( true, false );
 }
 
 
-const EDA_RECT SCH_SYMBOL::GetBoundingBox() const
+const BOX2I SCH_SYMBOL::GetBoundingBox() const
 {
     return doGetBoundingBox( true, true );
 }
@@ -1807,7 +1807,7 @@ bool SCH_SYMBOL::operator <( const SCH_ITEM& aItem ) const
 
     auto symbol = static_cast<const SCH_SYMBOL*>( &aItem );
 
-    EDA_RECT rect = GetBodyAndPinsBoundingBox();
+    BOX2I rect = GetBodyAndPinsBoundingBox();
 
     if( rect.GetArea() != symbol->GetBodyAndPinsBoundingBox().GetArea() )
         return rect.GetArea() < symbol->GetBodyAndPinsBoundingBox().GetArea();

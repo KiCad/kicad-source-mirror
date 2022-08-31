@@ -141,7 +141,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aN
 
 bool LIB_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
+    BOX2I rect = GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
 
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
@@ -1124,12 +1124,12 @@ void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
-                                        bool aIncludeElectricalType ) const
+const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+                                     bool aIncludeElectricalType ) const
 {
     KIFONT::FONT* font = KIFONT::FONT::GetFont( Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>()->m_Appearance.default_font );
 
-    EDA_RECT       bbox;
+    BOX2I          bbox;
     VECTOR2I       begin;
     VECTOR2I       end;
     int            nameTextOffset = 0;

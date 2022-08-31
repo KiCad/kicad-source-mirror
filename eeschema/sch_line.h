@@ -188,7 +188,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * @return The length of the line segment.

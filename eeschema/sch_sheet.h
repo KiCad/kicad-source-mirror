@@ -250,7 +250,7 @@ public:
      */
     const BOX2I GetBodyBoundingBox() const;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     /**
      * Rotating around the boundingBox's center can cause walking when the sheetname or

@@ -1153,7 +1153,7 @@ unsigned BOARD::GetUnconnectedNetCount() const
 
 BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
-    BOX2I area;
+    BOX2I bbox;
     LSET  visible = GetVisibleLayers();
     bool  showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
                                       && PgmOrNull() && !PgmOrNull()->m_Printing;
@@ -1168,7 +1168,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
             continue;
 
         if( ( item->GetLayerSet() & visible ).any() )
-            area.Merge( item->GetBoundingBox() );
+            bbox.Merge( item->GetBoundingBox() );
     }
 
     // Check footprints
@@ -1182,12 +1182,12 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
             for( const BOARD_ITEM* edge : footprint->GraphicalItems() )
             {
                 if( edge->GetLayer() == Edge_Cuts  && edge->Type() == PCB_FP_SHAPE_T )
-                    area.Merge( edge->GetBoundingBox() );
+                    bbox.Merge( edge->GetBoundingBox() );
             }
         }
         else
         {
-            area.Merge( footprint->GetBoundingBox( true, showInvisibleText ) );
+            bbox.Merge( footprint->GetBoundingBox( true, showInvisibleText ) );
         }
     }
 
@@ -1197,18 +1197,18 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         for( PCB_TRACK* track : m_tracks )
         {
             if( ( track->GetLayerSet() & visible ).any() )
-                area.Merge( track->GetBoundingBox() );
+                bbox.Merge( track->GetBoundingBox() );
         }
 
         // Check zones
         for( ZONE* aZone : m_zones )
         {
             if( ( aZone->GetLayerSet() & visible ).any() )
-                area.Merge( aZone->GetBoundingBox() );
+                bbox.Merge( aZone->GetBoundingBox() );
         }
     }
 
-    return area;
+    return bbox;
 }
 
 

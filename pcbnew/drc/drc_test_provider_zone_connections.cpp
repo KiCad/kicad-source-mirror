@@ -99,7 +99,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
                 continue;
 
-            EDA_RECT item_bbox = pad->GetBoundingBox();
+            BOX2I item_bbox = pad->GetBoundingBox();
 
             if( !item_bbox.Intersects( aZone->GetCachedBoundingBox() ) )
                 continue;

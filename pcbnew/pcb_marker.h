@@ -106,7 +106,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

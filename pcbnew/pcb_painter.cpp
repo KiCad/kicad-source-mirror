@@ -568,7 +568,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     if( m_pcbSettings.GetDrawBoundingBoxes() )
     {
         // Show bounding boxes of painted objects for debugging.
-        EDA_RECT box = item->GetBoundingBox();
+        BOX2I box = item->GetBoundingBox();
+
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
 
@@ -1017,7 +1018,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         if( netname.IsEmpty() && padNumber.IsEmpty() )
             return;
 
-        EDA_RECT padBBox = aPad->GetBoundingBox();
+        BOX2I    padBBox = aPad->GetBoundingBox();
         VECTOR2D position = padBBox.Centre();
         VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
 
@@ -2142,9 +2143,10 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 
         const COLOR4D color = m_pcbSettings.GetColor( aGroup, LAYER_ANCHOR );
 
-        EDA_RECT bbox = aGroup->GetBoundingBox();
         m_gal->SetStrokeColor( color );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth * 2.0f );
+
+        BOX2I    bbox = aGroup->GetBoundingBox();
         VECTOR2I topLeft = bbox.GetPosition();
         VECTOR2I width = VECTOR2I( bbox.GetWidth(), 0 );
         VECTOR2I height = VECTOR2I( 0, bbox.GetHeight() );

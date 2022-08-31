@@ -621,7 +621,7 @@ public:
     /**
      * The bounding box is cached, so this will be efficient most of the time.
      */
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     ///< Set absolute coordinates.
     void SetDrawCoord();
@@ -716,7 +716,7 @@ private:
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;
     mutable std::mutex                        m_shapesBuildingLock;
-    mutable EDA_RECT                          m_effectiveBoundingBox;
+    mutable BOX2I                             m_effectiveBoundingBox;
     mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
     mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
 

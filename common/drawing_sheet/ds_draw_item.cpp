@@ -169,7 +169,7 @@ void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_TEXT::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
     return EDA_TEXT::GetTextBox();
 }
@@ -231,17 +231,9 @@ void DS_DRAW_ITEM_POLYPOLYGONS::SetPosition( const VECTOR2I& aPos )
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 {
-    EDA_RECT rect;
-    BOX2I box = m_Polygons.BBox();
-
-    rect.SetX( box.GetX() );
-    rect.SetY( box.GetY() );
-    rect.SetWidth( box.GetWidth() );
-    rect.SetHeight( box.GetHeight() );
-
-    return rect;
+    return m_Polygons.BBox();
 }
 
 
@@ -309,9 +301,9 @@ void DS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_RECT::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_RECT::GetBoundingBox() const
 {
-    return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
+    return BOX2I( GetStart(), GetEnd() - GetStart() );
 }
 
 
@@ -407,9 +399,9 @@ void DS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_LINE::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_LINE::GetBoundingBox() const
 {
-    return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
+    return BOX2I( GetStart(), GetEnd() - GetStart() );
 }
 
 
@@ -440,14 +432,14 @@ void DS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const V
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_BITMAP::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 {
-    auto*    bitmap = static_cast<const DS_DATA_ITEM_BITMAP*>( m_peer );
-    wxSize bm_size = bitmap->m_ImageBitmap->GetSize();
+    const DS_DATA_ITEM_BITMAP* bitmap = static_cast<const DS_DATA_ITEM_BITMAP*>( m_peer );
+    VECTOR2I                   bm_size = bitmap->m_ImageBitmap->GetSize();
+    BOX2I                      bbox;
 
-    EDA_RECT bbox;
     bbox.SetSize( bm_size );
-    bbox.SetOrigin( m_pos.x - bm_size.x/2, m_pos.y - bm_size.y/2 );
+    bbox.SetOrigin( m_pos.x - bm_size.x / 2, m_pos.y - bm_size.y / 2 );
 
     return bbox;
 }
@@ -480,13 +472,14 @@ wxString DS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-const EDA_RECT DS_DRAW_ITEM_PAGE::GetBoundingBox() const
+const BOX2I DS_DRAW_ITEM_PAGE::GetBoundingBox() const
 {
-    EDA_RECT dummy;
+    BOX2I dummy;
 
     // We want this graphic item always visible. So gives the max size to the
     // bounding box to avoid any clamping:
-    dummy.SetSize( wxSize( std::numeric_limits<int>::max(), std::numeric_limits<int>::max() ) );
+    dummy.SetMaximum();
+
     return dummy;
 }
 

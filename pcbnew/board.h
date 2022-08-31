@@ -803,7 +803,7 @@ public:
      */
     BOX2I ComputeBoundingBox( bool aBoardEdgesOnly = false ) const;
 
-    const EDA_RECT GetBoundingBox() const override
+    const BOX2I GetBoundingBox() const override
     {
         return ComputeBoundingBox( false );
     }
@@ -817,7 +817,7 @@ public:
      *
      * @return bounding box calculated using exclusively the board edges.
      */
-    const EDA_RECT GetBoardEdgesBoundingBox() const
+    const BOX2I GetBoardEdgesBoundingBox() const
     {
         return ComputeBoundingBox( true );
     }

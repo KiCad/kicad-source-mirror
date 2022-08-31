@@ -164,7 +164,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         return;
     }
 
-    BOX2I bbox = { { 0, 0 }, { 0, 0 } };
+    BOX2I bbox;
 
     if( footprint )
     {
@@ -191,16 +191,11 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         pcb->HighLightON();
 
         auto merge_area =
-            [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
-            {
-            if( aItem->GetNetCode() == netcode )
-            {
-                if( bbox.GetWidth() == 0 )
-                    bbox = aItem->GetBoundingBox();
-                else
-                    bbox.Merge( aItem->GetBoundingBox() );
-            }
-        };
+                [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
+                {
+                    if( aItem->GetNetCode() == netcode )
+                        bbox.Merge( aItem->GetBoundingBox() );
+                };
 
         if( crossProbingSettings.center_on_items )
         {

@@ -135,7 +135,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
         {
             if( crossProbingSettings.zoom_to_fit )
             {
-                EDA_RECT bbox = symbol->GetBoundingBox();
+                BOX2I bbox = symbol->GetBoundingBox();
 
                 m_toolMgr->GetTool<EE_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
             }

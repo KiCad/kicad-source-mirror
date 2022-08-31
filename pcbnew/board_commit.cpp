@@ -133,9 +133,9 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
     }
     else
     {
-        BOARD*   board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-        EDA_RECT bbox = item->GetBoundingBox();
-        LSET     layers = item->GetLayerSet();
+        BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+        BOX2I  bbox = item->GetBoundingBox();
+        LSET   layers = item->GetLayerSet();
 
         if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
             layers = LSET::PhysicalLayersMask();

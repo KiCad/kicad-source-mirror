@@ -86,9 +86,9 @@ public:
     /**
      * @return the actual size (in user units, not in pixels) of the image.
      */
-    wxSize GetSize() const;
+    VECTOR2I GetSize() const;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const BOX2I GetBoundingBox() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

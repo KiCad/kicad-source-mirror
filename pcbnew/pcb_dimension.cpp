@@ -422,10 +422,10 @@ bool PCB_DIMENSION_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 }
 
 
-const EDA_RECT PCB_DIMENSION_BASE::GetBoundingBox() const
+const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
 {
-    EDA_RECT    bBox;
-    int         xmin, xmax, ymin, ymax;
+    BOX2I bBox;
+    int   xmin, xmax, ymin, ymax;
 
     bBox    = m_text.GetTextBox();
     xmin    = bBox.GetX();
@@ -1260,7 +1260,7 @@ BITMAPS PCB_DIM_CENTER::GetMenuImage() const
 }
 
 
-const EDA_RECT PCB_DIM_CENTER::GetBoundingBox() const
+const BOX2I PCB_DIM_CENTER::GetBoundingBox() const
 {
     int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
 

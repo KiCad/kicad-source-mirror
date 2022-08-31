@@ -413,13 +413,13 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 }
 
 
-const EDA_RECT LIB_SHAPE::GetBoundingBox() const
+const BOX2I LIB_SHAPE::GetBoundingBox() const
 {
-    BOX2I rect = getBoundingBox();
+    BOX2I bbox = getBoundingBox();
 
-    rect.RevertYAxis();
+    bbox.RevertYAxis();
 
-    return rect;
+    return bbox;
 }
 
 

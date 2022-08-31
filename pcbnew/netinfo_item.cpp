@@ -149,10 +149,10 @@ bool NETINFO_ITEM::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 }
 
 
-const EDA_RECT NETINFO_ITEM::GetBoundingBox() const
+const BOX2I NETINFO_ITEM::GetBoundingBox() const
 {
     std::shared_ptr<CONNECTIVITY_DATA> conn = GetBoard()->GetConnectivity();
-    EDA_RECT                           bbox;
+    BOX2I                              bbox;
 
     for( BOARD_ITEM* item : conn->GetNetItems( m_netCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
                                                             PCB_ZONE_T, PCB_PAD_T } ) )

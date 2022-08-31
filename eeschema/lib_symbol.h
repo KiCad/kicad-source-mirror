@@ -213,7 +213,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Invisible fields are not taken in account
      **/
-    const EDA_RECT GetUnitBoundingBox( int aUnit, int aConvert ) const;
+    const BOX2I GetUnitBoundingBox( int aUnit, int aConvert ) const;
 
     /**
      * Get the symbol bounding box excluding fields.
@@ -228,7 +228,7 @@ public:
     const BOX2I GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins,
                                     bool aIncludePrivateItems ) const;
 
-    const EDA_RECT GetBoundingBox() const override
+    const BOX2I GetBoundingBox() const override
     {
         return GetUnitBoundingBox( 0, 0 );
     }

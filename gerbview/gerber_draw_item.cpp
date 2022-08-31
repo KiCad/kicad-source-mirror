@@ -246,10 +246,10 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr() const
 }
 
 
-const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
+const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
-    EDA_RECT bbox( m_Start, wxSize( 1, 1 ) );
+    BOX2I   bbox( m_Start, VECTOR2I( 1, 1 ) );
     D_CODE* code = GetDcodeDescr();
 
     // TODO(JE) GERBER_DRAW_ITEM maybe should actually be a number of subclasses.
@@ -260,9 +260,9 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
     case GBR_POLYGON:
     {
-        auto bb = m_Polygon.BBox();
+        BOX2I bb = m_Polygon.BBox();
         bbox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
-        bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+        bbox.SetOrigin( bb.GetOrigin() );
         break;
     }
 
@@ -287,10 +287,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
             angle.Normalize();
 
         SHAPE_ARC arc( m_ArcCentre, m_Start, angle );
-        BOX2I arc_bbox = arc.BBox( m_Size.x / 2 );  // m_Size.x is the line thickness
-        bbox.SetOrigin( arc_bbox.GetX(), arc_bbox.GetY() );
-        bbox.SetWidth( arc_bbox.GetWidth() );
-        bbox.SetHeight( arc_bbox.GetHeight() );
+        bbox = arc.BBox( m_Size.x / 2 );  // m_Size.x is the line thickness
         break;
     }
 
@@ -358,16 +355,12 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
                 // So use a temporary polygon
                 SHAPE_POLY_SET poly_shape;
                 ConvertSegmentToPolygon( &poly_shape );
-                BOX2I bb = poly_shape.BBox();
-                bbox.SetSize( bb.GetWidth(), bb.GetHeight() );
-                bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+                bbox = poly_shape.BBox();
             }
 
             else
             {
-                BOX2I bb = m_Polygon.BBox();
-                bbox.SetSize( bb.GetWidth(), bb.GetHeight() );
-                bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+                bbox = m_Polygon.BBox();
             }
         }
         else
@@ -380,7 +373,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
             int ymin = std::min( m_Start.y, m_End.y ) - radius;
             int xmin = std::min( m_Start.x, m_End.x ) - radius;
 
-            bbox = EDA_RECT( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
+            bbox = BOX2I( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
         }
 
         break;

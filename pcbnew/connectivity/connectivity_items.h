@@ -218,10 +218,7 @@ public:
     const BOX2I& BBox()
     {
         if( m_dirty && m_valid )
-        {
-            EDA_RECT box = m_parent->GetBoundingBox();
-            m_bbox = BOX2I( box.GetPosition(), box.GetSize() );
-        }
+            m_bbox = m_parent->GetBoundingBox();
 
         return m_bbox;
     }

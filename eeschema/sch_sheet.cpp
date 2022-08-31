@@ -454,7 +454,7 @@ int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
 
         if( edge == SHEET_SIDE::TOP || edge == SHEET_SIDE::BOTTOM )
         {
-            EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
+            BOX2I pinRect = m_pins[i]->GetBoundingBox();
 
             pinsLeft = std::min( pinsLeft, pinRect.GetLeft() );
             pinsRight = std::max( pinsRight, pinRect.GetRight() );
@@ -488,7 +488,7 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 
         if( edge == SHEET_SIDE::RIGHT || edge == SHEET_SIDE::LEFT )
         {
-            EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
+            BOX2I pinRect = m_pins[i]->GetBoundingBox();
 
             pinsTop = std::min( pinsTop, pinRect.GetTop() );
             pinsBottom = std::max( pinsBottom, pinRect.GetBottom() );
@@ -638,20 +638,20 @@ const BOX2I SCH_SHEET::GetBodyBoundingBox() const
 }
 
 
-const EDA_RECT SCH_SHEET::GetBoundingBox() const
+const BOX2I SCH_SHEET::GetBoundingBox() const
 {
-    BOX2I box = GetBodyBoundingBox();
+    BOX2I bbox = GetBodyBoundingBox();
 
     for( const SCH_FIELD& field : m_fields )
-        box.Merge( field.GetBoundingBox() );
+        bbox.Merge( field.GetBoundingBox() );
 
-    return box;
+    return bbox;
 }
 
 
 VECTOR2I SCH_SHEET::GetRotationCenter() const
 {
-    EDA_RECT box( m_pos, m_size );
+    BOX2I box( m_pos, m_size );
     return box.GetCenter();
 }
 

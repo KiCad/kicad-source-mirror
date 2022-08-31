@@ -70,7 +70,7 @@ public:
         // do not confirm this by locally implementing a no-op Plot().
     }
 
-    EDA_RECT const GetBoundingBox() const override;
+    BOX2I const GetBoundingBox() const override;
 
     // Geometric transforms (used in block operations):
 

@@ -116,7 +116,7 @@ public:
     /**
      * @return the actual size (in user units, not in pixels) of the image
      */
-    wxSize GetSize() const;
+    VECTOR2I GetSize() const;
 
     /**
      * @return the size in pixels of the image
@@ -144,7 +144,7 @@ public:
      * and the units should be in the pcb or schematic coordinate system.  It is OK to
      * overestimate the size by a few counts.
      */
-    const EDA_RECT GetBoundingBox() const;
+    const BOX2I GetBoundingBox() const;
 
     void DrawBitmap( wxDC* aDC, const VECTOR2I& aPos );
 

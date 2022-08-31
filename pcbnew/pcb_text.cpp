@@ -157,7 +157,7 @@ int PCB_TEXT::getKnockoutMargin() const
 }
 
 
-const EDA_RECT PCB_TEXT::GetBoundingBox() const
+const BOX2I PCB_TEXT::GetBoundingBox() const
 {
     BOX2I rect = GetTextBox();
 

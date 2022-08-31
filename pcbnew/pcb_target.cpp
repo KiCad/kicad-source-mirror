@@ -101,7 +101,7 @@ void PCB_TARGET::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-const EDA_RECT PCB_TARGET::GetBoundingBox() const
+const BOX2I PCB_TARGET::GetBoundingBox() const
 {
     EDA_RECT bBox;
     bBox.SetX( m_pos.x - m_size / 2 );
