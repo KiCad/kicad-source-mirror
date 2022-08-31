@@ -639,9 +639,9 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     }
     else
     {
-        // If not found, clear current library selection because it can be
-        // deleted after a config change.
-        m_libraryName = m_libList->GetBaseString( 0 );
+        // If not found, clear current library selection because it can be deleted after a
+        // config change.
+        m_libraryName = m_libList->GetCount() > 0 ? m_libList->GetBaseString( 0 ) : wxT( "" );
         m_entryName = wxEmptyString;
         m_unit = 1;
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;
