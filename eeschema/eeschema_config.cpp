@@ -18,6 +18,7 @@
  */
 
 #include <mutex>
+#include <wx/ffile.h>
 
 #include <symbol_library.h>
 #include <confirm.h>
@@ -63,6 +64,8 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     // Verify some values, because the config file can be edited by hand, and have bad values:
     LIB_SYMBOL::SetSubpartIdNotation( LIB_SYMBOL::GetSubpartIdSeparator(),
                                       LIB_SYMBOL::GetSubpartFirstId() );
+
+    BASE_SCREEN::m_DrawingSheetFileName = settings.m_SchDrawingSheetFileName;
 
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
     // If empty, or not existing, the default drawing sheet is loaded.
@@ -126,6 +129,22 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
         return;
 
     RecordERCExclusions();
+
+    // TODO: We need to remove dependence on BASE_SCREEN
+    Prj().GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName = BASE_SCREEN::m_DrawingSheetFileName;
+
+    if( !BASE_SCREEN::m_DrawingSheetFileName.IsEmpty() )
+    {
+        // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
+
+        wxFileName layoutfn( BASE_SCREEN::m_DrawingSheetFileName );
+
+        if( !layoutfn.IsAbsolute() )
+            layoutfn = wxFileName( Prj().GetProjectPath(), BASE_SCREEN::m_DrawingSheetFileName );
+
+        if( !layoutfn.FileExists() )
+            DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetAbsolutePath() );
+    }
 
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
 }

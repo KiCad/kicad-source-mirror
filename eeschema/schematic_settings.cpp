@@ -23,11 +23,12 @@
 #include <lib_symbol.h>
 #include <default_values.h>
 #include <eeschema_settings.h>
-#include <kiface_base.h>
 #include <macros.h>
+#include <pgm_base.h>
 #include <schematic_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
+#include <settings/settings_manager.h>
 #include <sim/spice_settings.h>
 
 
@@ -58,7 +59,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_SpiceModelCurSheetAsRoot( true ),
         m_NgspiceSimulatorSettings( nullptr )
 {
-    EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* appSettings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     int defaultLineThickness =
             appSettings ? appSettings->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
@@ -163,7 +164,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     }
                 }
 
-                auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+                auto* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
                 if( cfg )
                 {
@@ -172,7 +173,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
                     if( !templateFieldNames.IsEmpty() )
                     {
-                        TEMPLATE_FIELDNAMES_LEXER  field_lexer( TO_UTF8( templateFieldNames ) );
+                        TEMPLATE_FIELDNAMES_LEXER field_lexer( TO_UTF8( templateFieldNames ) );
 
                         try
                         {
@@ -185,9 +186,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
             }, {} ) );
 
-    // TODO(JE) get rid of this static
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
-            &BASE_SCREEN::m_DrawingSheetFileName, "" ) );
+            &m_SchDrawingSheetFileName, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "plot_directory",
             &m_PlotDirectoryName, "" ) );
