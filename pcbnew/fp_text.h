@@ -148,14 +148,14 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool TextHitTest( const VECTOR2I& aPoint, int aAccuracy = 0 ) const override;
-    bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy = 0 ) const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override
     {
         return TextHitTest( aPosition, aAccuracy );
     }
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );
     }

@@ -888,13 +888,13 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
     if( !IsVisible() || IsVoid() )
         return false;
 
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( aAccuracy );
 

@@ -343,9 +343,9 @@ bool SCH_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_PIN::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if( aAccuracy )
         sel.Inflate( aAccuracy );

@@ -393,13 +393,13 @@ bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
 }
 
 
-bool ZONE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Calculate bounding box for zone
-    EDA_RECT bbox = GetBoundingBox();
+    BOX2I bbox = GetBoundingBox();
     bbox.Normalize();
 
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
@@ -417,8 +417,8 @@ bool ZONE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) cons
 
         for( int ii = 0; ii < count; ii++ )
         {
-            auto vertex = m_Poly->CVertex( ii );
-            auto vertexNext = m_Poly->CVertex( ( ii + 1 ) % count );
+            VECTOR2I vertex = m_Poly->CVertex( ii );
+            VECTOR2I vertexNext = m_Poly->CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within the rect
             if( arect.Contains( vertex ) )

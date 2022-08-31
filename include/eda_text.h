@@ -259,7 +259,7 @@ public:
      * @param aAccuracy Amount to inflate the bounding box.
      * @return true if a hit, else false.
      */
-    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const;
+    virtual bool TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy = 0 ) const;
 
     /**
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,

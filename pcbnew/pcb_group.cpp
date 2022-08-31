@@ -213,7 +213,7 @@ bool PCB_GROUP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_GROUP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Groups are selected by promoting a selection of one of their children
     return false;

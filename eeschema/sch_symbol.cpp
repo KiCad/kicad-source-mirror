@@ -1893,12 +1893,12 @@ bool SCH_SYMBOL::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_SYMBOL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_SYMBOL::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
         return false;
 
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( aAccuracy / 2 );
 

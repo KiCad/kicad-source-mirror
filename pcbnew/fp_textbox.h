@@ -110,7 +110,7 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
                                                int aClearance, int aError, ERROR_LOC aErrorLoc,

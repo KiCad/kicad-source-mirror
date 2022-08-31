@@ -977,9 +977,9 @@ bool PCB_VIA::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool PCB_TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_TRACK::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
     if( aContained )
@@ -989,13 +989,12 @@ bool PCB_TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-bool PCB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_ARC::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT box;
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
-    box.SetOrigin( GetStart() );
+    BOX2I box( GetStart() );
     box.Merge( GetMid() );
     box.Merge( GetEnd() );
 
@@ -1008,13 +1007,12 @@ bool PCB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) c
 }
 
 
-bool PCB_VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT box;
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
 
-    box.SetOrigin( GetStart() );
+    BOX2I box( GetStart() );
     box.Inflate( GetWidth() / 2 );
 
     if( aContained )

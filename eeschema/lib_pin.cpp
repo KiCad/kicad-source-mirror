@@ -147,12 +147,12 @@ bool LIB_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool LIB_PIN::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool LIB_PIN::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if ( aAccuracy )
         sel.Inflate( aAccuracy );

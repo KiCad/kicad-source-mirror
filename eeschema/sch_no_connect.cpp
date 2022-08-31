@@ -157,9 +157,9 @@ bool SCH_NO_CONNECT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_NO_CONNECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_NO_CONNECT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( aAccuracy );
 

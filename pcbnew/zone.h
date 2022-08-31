@@ -428,7 +428,7 @@ public:
      * @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                              bool aContained = true, int aAccuracy) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
      * Removes the zone filling.

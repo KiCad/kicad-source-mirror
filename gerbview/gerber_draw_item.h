@@ -194,7 +194,7 @@ public:
      * @param aRefArea a wxPoint to test
      * @return true if a hit, else false
      */
-    bool HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRefArea, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * @return the class name string.

@@ -247,7 +247,7 @@ public:
      * @param aAccuracy Increase \a aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
      */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const
+    virtual bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const
     {
         return false;   // derived classes should override this function
     }

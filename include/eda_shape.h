@@ -330,7 +330,7 @@ protected:
     void computeArcBBox( BOX2I& aBBox ) const;
 
     bool hitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
-    bool hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const;
+    bool hitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const;
 
     const std::vector<VECTOR2I> buildBezierToSegmentsPointsList( int aMinSegLen ) const;
 

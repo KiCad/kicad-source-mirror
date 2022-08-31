@@ -891,7 +891,7 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy ) const
+bool GERBER_DRAW_ITEM::HitTest( const BOX2I& aRefArea, bool aContained, int aAccuracy ) const
 {
     VECTOR2I pos = GetABPosition( m_Start );
 

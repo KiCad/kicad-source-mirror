@@ -405,12 +405,12 @@ bool PCB_DIMENSION_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) con
 }
 
 
-bool PCB_DIMENSION_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_DIMENSION_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
-    EDA_RECT rect = GetBoundingBox();
+    BOX2I rect = GetBoundingBox();
 
     if( aAccuracy )
         rect.Inflate( aAccuracy );

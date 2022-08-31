@@ -209,7 +209,7 @@ public:
     void     SetPosition( const VECTOR2I& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
 

@@ -95,7 +95,7 @@ public:
         return EDA_ITEM::HitTest( aPosition, aAccuracy );
     }
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -174,7 +174,7 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
@@ -230,7 +230,7 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -327,7 +327,7 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -359,7 +359,7 @@ public:
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
     const BOX2I GetBoundingBox() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

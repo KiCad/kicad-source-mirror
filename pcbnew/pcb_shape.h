@@ -127,7 +127,7 @@ public:
         return hitTest( aPosition, aAccuracy );
     }
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return hitTest( aRect, aContained, aAccuracy );
     }

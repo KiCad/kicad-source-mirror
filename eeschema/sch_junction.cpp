@@ -206,14 +206,14 @@ bool SCH_JUNCTION::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_JUNCTION::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
         return false;
 
     if( aContained )
     {
-        EDA_RECT selRect( aRect );
+        BOX2I selRect( aRect );
 
         return selRect.Inflate( aAccuracy ).Contains( GetBoundingBox() );
     }

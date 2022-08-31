@@ -346,6 +346,107 @@ public:
     }
 
     /**
+     * @return true if this rectangle intersects a rotated rect given by \a aRect and
+     *         \a aRotaiton.
+     */
+    bool Intersects( const BOX2<Vec>& aRect, const EDA_ANGLE& aRotation ) const
+    {
+        if( !m_init )
+            return false;
+
+        EDA_ANGLE rotation = aRotation;
+        rotation.Normalize();
+
+        /*
+         * Most rectangles will be axis aligned.  It is quicker to check for this case and pass
+         * the rect to the simpler intersection test.
+         */
+
+        // Prevent floating point comparison errors
+        static const EDA_ANGLE ROT_EPSILON( 0.000000001, DEGREES_T );
+
+        static const EDA_ANGLE ROT_PARALLEL[]      = { ANGLE_0, ANGLE_180, ANGLE_360 };
+        static const EDA_ANGLE ROT_PERPENDICULAR[] = { ANGLE_0, ANGLE_90,  ANGLE_270 };
+
+        // Test for non-rotated rectangle
+        for( EDA_ANGLE ii : ROT_PARALLEL )
+        {
+            if( std::abs( rotation - ii ) < ROT_EPSILON )
+                return Intersects( aRect );
+        }
+
+        // Test for rectangle rotated by multiple of 90 degrees
+        for( EDA_ANGLE jj : ROT_PERPENDICULAR )
+        {
+            if( std::abs( rotation - jj ) < ROT_EPSILON )
+            {
+                BOX2<Vec> rotRect;
+
+                // Rotate the supplied rect by 90 degrees
+                rotRect.SetOrigin( aRect.Centre() );
+                rotRect.Inflate( aRect.GetHeight(), aRect.GetWidth() );
+                return Intersects( rotRect );
+            }
+        }
+
+        /* There is some non-orthogonal rotation.
+         * There are three cases to test:
+         * A) One point of this rect is inside the rotated rect
+         * B) One point of the rotated rect is inside this rect
+         * C) One of the sides of the rotated rect intersect this
+         */
+
+        VECTOR2I corners[4];
+
+        /* Test A : Any corners exist in rotated rect? */
+        corners[0] = m_Pos;
+        corners[1] = m_Pos + VECTOR2I( m_Size.x, 0 );
+        corners[2] = m_Pos + VECTOR2I( m_Size.x, m_Size.y );
+        corners[3] = m_Pos + VECTOR2I( 0, m_Size.y );
+
+        VECTOR2I rCentre = aRect.Centre();
+
+        for( int i = 0; i < 4; i++ )
+        {
+            VECTOR2I delta = corners[i] - rCentre;
+            RotatePoint( delta, -rotation );
+            delta += rCentre;
+
+            if( aRect.Contains( delta ) )
+                return true;
+        }
+
+        /* Test B : Any corners of rotated rect exist in this one? */
+        int w = aRect.GetWidth() / 2;
+        int h = aRect.GetHeight() / 2;
+
+        // Construct corners around center of shape
+        corners[0] = VECTOR2I( -w, -h );
+        corners[1] = VECTOR2I( w, -h );
+        corners[2] = VECTOR2I( w, h );
+        corners[3] = VECTOR2I( -w, h );
+
+        // Rotate and test each corner
+        for( int j = 0; j < 4; j++ )
+        {
+            RotatePoint( corners[j], rotation );
+            corners[j] += rCentre;
+
+            if( Contains( corners[j] ) )
+                return true;
+        }
+
+        /* Test C : Any sides of rotated rect intersect this */
+        if( Intersects( corners[0], corners[1] ) || Intersects( corners[1], corners[2] )
+                || Intersects( corners[2], corners[3] ) || Intersects( corners[3], corners[0] ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return true if this rectangle intersects the circle defined by \a aCenter and \a aRadius.
      */
     bool IntersectsCircle( const Vec& aCenter, const int aRadius ) const

@@ -84,9 +84,9 @@ void DS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 
 
 // A generic HitTest that can be used by some, but not all, sub-classes.
-bool DS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool DS_DRAW_ITEM_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if ( aAccuracy )
         sel.Inflate( aAccuracy );
@@ -181,7 +181,7 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 }
 
 
-bool DS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool DS_DRAW_ITEM_TEXT::HitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) const
 {
     return EDA_TEXT::TextHitTest( aRect, aContains, aAccuracy );
 }
@@ -243,10 +243,9 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const VECTOR2I& aPosition, int aAccurac
 }
 
 
-bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
-                                         int aAccuracy ) const
+bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if ( aAccuracy )
         sel.Inflate( aAccuracy );
@@ -341,9 +340,9 @@ bool DS_DRAW_ITEM_RECT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 }
 
 
-bool DS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if ( aAccuracy )
         sel.Inflate( aAccuracy );
@@ -353,7 +352,7 @@ bool DS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 
     // For greedy we need to check each side of the rect as we're pretty much always inside the
     // rect which defines the drawing-sheet frame.
-    EDA_RECT side = GetBoundingBox();
+    BOX2I side = GetBoundingBox();
     side.SetHeight( 0 );
 
     if( sel.Intersects( side ) )
@@ -454,7 +453,7 @@ bool DS_DRAW_ITEM_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) co
 }
 
 
-bool DS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool DS_DRAW_ITEM_BITMAP::HitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) const
 {
     return DS_DRAW_ITEM_BASE::HitTest( aRect, aContains, aAccuracy );
 }

@@ -629,9 +629,9 @@ bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 }
 
 
-bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool EDA_TEXT::TextHitTest( const BOX2I& aRect, bool aContains, int aAccuracy ) const
 {
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( aAccuracy );
 

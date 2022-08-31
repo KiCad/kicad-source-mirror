@@ -51,7 +51,7 @@ bool LIB_SHAPE::HitTest( const VECTOR2I& aPosRef, int aAccuracy ) const
 }
 
 
-bool LIB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool LIB_SHAPE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;

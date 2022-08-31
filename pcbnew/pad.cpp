@@ -1044,13 +1044,13 @@ bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    EDA_RECT bbox = GetBoundingBox();
+    BOX2I bbox = GetBoundingBox();
 
     if( aContained )
     {

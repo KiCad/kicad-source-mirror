@@ -179,7 +179,7 @@ public:
         return EDA_ITEM::HitTest( aPosition, aAccuracy );
     }
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * @return the boundary box for this, in library coordinates

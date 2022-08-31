@@ -806,13 +806,13 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    BOX2I bb = getBoundingBox();
+    BOX2I bbox = getBoundingBox();
 
     switch( m_shape )
     {
@@ -820,12 +820,12 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         // Test if area intersects or contains the circle:
         if( aContained )
         {
-            return arect.Contains( bb );
+            return arect.Contains( bbox );
         }
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
-            if( !arect.Intersects( bb ) )
+            if( !arect.Intersects( bbox ) )
                 return false;
             else
                 return arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
@@ -835,12 +835,12 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         // Test for full containment of this arc in the rect
         if( aContained )
         {
-            return arect.Contains( bb );
+            return arect.Contains( bbox );
         }
         // Test if the rect crosses the arc
         else
         {
-            if( !arect.Intersects( bb ) )
+            if( !arect.Intersects( bbox ) )
                 return false;
 
             if( IsFilled() )
@@ -858,7 +858,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     case SHAPE_T::RECT:
         if( aContained )
         {
-            return arect.Contains( bb );
+            return arect.Contains( bbox );
         }
         else
         {
@@ -887,13 +887,13 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     case SHAPE_T::POLY:
         if( aContained )
         {
-            return arect.Contains( bb );
+            return arect.Contains( bbox );
         }
         else
         {
             // Fast test: if aRect is outside the polygon bounding box,
             // rectangles cannot intersect
-            if( !arect.Intersects( bb ) )
+            if( !arect.Intersects( bbox ) )
                 return false;
 
             // Account for the width of the line
@@ -942,13 +942,13 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     case SHAPE_T::BEZIER:
         if( aContained )
         {
-            return arect.Contains( bb );
+            return arect.Contains( bbox );
         }
         else
         {
             // Fast test: if aRect is outside the polygon bounding box,
             // rectangles cannot intersect
-            if( !arect.Intersects( bb ) )
+            if( !arect.Intersects( bbox ) )
                 return false;
 
             // Account for the width of the line

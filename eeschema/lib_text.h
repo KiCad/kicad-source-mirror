@@ -59,12 +59,12 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
             return false;
 
-        EDA_RECT rect = aRect;
+        BOX2I rect = aRect;
 
         rect.Inflate( aAccuracy );
 

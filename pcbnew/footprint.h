@@ -501,7 +501,7 @@ public:
      */
     bool HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * @return reference designator text.

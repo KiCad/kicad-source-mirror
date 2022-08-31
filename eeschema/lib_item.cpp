@@ -108,12 +108,12 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 }
 
 
-bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool LIB_ITEM::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT sel = aRect;
+    BOX2I sel = aRect;
 
     if ( aAccuracy )
         sel.Inflate( aAccuracy );

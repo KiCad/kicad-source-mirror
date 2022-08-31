@@ -1070,9 +1070,9 @@ bool FOOTPRINT::HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy ) cons
 }
 
 
-bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
+    BOX2I arect = aRect;
     arect.Inflate( aAccuracy );
 
     if( aContained )

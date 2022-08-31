@@ -413,9 +413,9 @@ bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT bBox = GetBoundingBox();
+    BOX2I bBox = GetBoundingBox();
     bBox.Inflate( aAccuracy );
 
     if( aContained )

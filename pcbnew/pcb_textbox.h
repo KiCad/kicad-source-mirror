@@ -97,7 +97,7 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {

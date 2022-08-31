@@ -116,7 +116,7 @@ public:
                || ( GetEnd() == aPos && IsDanglingEnd() );
     }
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
 

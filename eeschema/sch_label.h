@@ -155,7 +155,7 @@ public:
     const BOX2I GetBoundingBox() const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 

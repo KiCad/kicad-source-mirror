@@ -177,7 +177,7 @@ public:
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     bool ApproxCollinear( const PCB_TRACK& aTrack );
 
@@ -292,7 +292,7 @@ public:
     EDA_ANGLE GetArcAngleEnd() const;
     virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    virtual bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     bool IsCCW() const;
 
@@ -408,7 +408,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+    bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {

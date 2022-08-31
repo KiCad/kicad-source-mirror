@@ -777,12 +777,12 @@ bool SCH_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     if ( aAccuracy )
         rect.Inflate( aAccuracy );

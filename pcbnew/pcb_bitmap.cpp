@@ -186,9 +186,9 @@ bool PCB_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool PCB_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT rect = aRect;
+    BOX2I rect = aRect;
 
     rect.Inflate( aAccuracy );
 
