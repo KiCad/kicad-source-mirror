@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-23 17:52+0000\n"
+"PO-Revision-Date: 2022-09-02 14:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4634,9 +4634,8 @@ msgid "Bottom"
 msgstr "Dolna"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Hiperlink"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5215,9 +5214,8 @@ msgid "Cursor"
 msgstr "Kursor"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Przesuń element"
+msgstr "Elementy podświetlone"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5490,9 +5488,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Plik z tłumaczeniem dla tego języka nie jest zainstalowany."
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Pokaż granice strony"
+msgstr "Pokaż Stronę %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6609,14 +6607,12 @@ msgstr "Resetuj %s do domyślnych"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "Nie zaznaczono magistrali"
+msgstr "Nie zaznaczono obiektów"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Nie zaznaczono magistrali"
+msgstr "Zaznaczono wiele obiektów"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6707,9 +6703,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Pliki starszych bibliotek symboli programu KiCad"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Pliki bibliotek symboli"
+msgstr "Bazodanowe pliki bibliotek symboli"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10695,9 +10690,8 @@ msgid "Net Classes"
 msgstr "Klasy sieci"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Definicje magistral"
+msgstr "Definicje aliasów magistrali"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10953,14 +10947,12 @@ msgid "Model"
 msgstr "Model"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Dyrektywy Spice:"
+msgstr "Element Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "Typ kształtu:"
+msgstr "Typ Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11690,9 +11682,9 @@ msgid "<root sheet>"
 msgstr "<arkusz nadrzędny>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Idź do strony %s (%s)"
+msgstr "Strona %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -11700,14 +11692,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Nieprawidłowy adres w linku. Proszę wprowadzić prawidłowy URL (np. file:// "
+"lub http(s)://) lub \"#<numer strony>\" by utworzyć link do strony w tym "
+"schemacie."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 msgid "Link:"
-msgstr ""
+msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Utwórz klikalny link z tego elementu tekstu"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -12117,34 +12112,30 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Pokaż podgląd footprintu przy wyborze symbolu"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Pole o nazwie '%s' jest już używane."
+msgstr "Alias o nazwie '%s' jest już używany."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Nazwa modelu nie może być pusta."
+msgstr "Nazwa członka sieci/nazwa aliasu nie może być pusta."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Definicje magistral"
+msgstr "Definicje magistral:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Źródło"
+msgstr "(źródło)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "wymagana liczba dla '%s'"
+msgstr "Należące do '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Nazwa sieci lub magistrali"
+msgstr "Nazwa sieci / nazwa zagnieżdżonej magistrali"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -14288,19 +14279,23 @@ msgstr ""
 "podrzędnego lecz nie ma zdefiniowanego pola Figure."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Błąd podczas odczytywania obrazu %s."
+msgstr "Błąd podczas odczytywania tabeli bazy danych %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Nie można załadować bazy danych biblioteki: brak lub nieprawidłowy plik "
+"ustawień %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"Nie można załadować bazy danych biblioteki: nie można połączyć z bazą danych "
+"%s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14382,9 +14377,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Nieprawidłowy numer konwersji symbolu %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Nieprawidłowy numer pinu"
+msgstr "Nieprawidłowy URL linku '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -15145,9 +15140,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Nie udało się wywnioskować modelu z Wartości '%s'"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "Niepoprawny numer jednostki %s symbolu"
+msgstr "Niepoprawny indeks pinu symbolu: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -17473,9 +17468,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Naciśnij <ESC> by anulować przesuwanie."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "Nie znaleziono pliku '%s'."
+msgstr "Nie znaleziono strony '%d'."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -19011,10 +19006,9 @@ msgid "Restoring '%s'"
 msgstr "Przywracanie '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
-"Czy chcesz automatycznie sprawdzać dostępność aktualizacji podczas "
+"Czy chcesz automatycznie sprawdzać dostępność aktualizacji wtyczek podczas "
 "uruchamiania?"
 
 #: kicad/kicad_manager_frame.cpp:832
@@ -30033,7 +30027,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30374,6 +30367,7 @@ msgstr ""
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -30403,15 +30397,15 @@ msgstr ""
 "\n"
 "### Typy elementów\n"
 "\n"
-"* buried_via\n"
-"* graphic\n"
-"* hole\n"
-"* micro_via\n"
-"* pad\n"
-"* text\n"
-"* track\n"
-"* via\n"
-"* zone\n"
+" * buried\\_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro\\_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
 "\n"
 "<br>\n"
 "\n"
@@ -30484,23 +30478,31 @@ msgstr ""
 "`?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<oznaczenie_footprintu>')\n"
+"    A.intersectsCourtyard('<oznaczenie_footprintu>')\n"
 "Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<oznaczenie_footprintu>')\n"
+"    A.intersectsFrontCourtyard('<oznaczenie_footprintu>')\n"
 "Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu na stronie górnej.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<oznaczenie_footprintu>')\n"
+"    A.intersectsBackCourtyard('<oznaczenie_footprintu>')\n"
 "Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu na stronie dolnej.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<nazwa_strefy>')\n"
+"    A.intersectsArea('<nazwa_strefy>')\n"
 "Prawdziwe jeśli dowolna część `A` leży w obrysie podanej strefy.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<nazwa_strefy>')\n"
+"Prawdziwe jeśli całość `A` leży w obrysie podanej strefy.  \n"
+"\n"
+"UWAGA: Jest to potencjalnie bardziej czasochłonne wywołanie niż "
+"`intersectsArea()`.  Użyj `intersectsArea()` \n"
+"tam gdzie to możliwe.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -30510,8 +30512,8 @@ msgstr ""
 "    A.inDiffPair('<nazwa_sieci>')\n"
 "Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
 "`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
-"`inDiffPair('CLK')`\n"
-"odnosi się do sieci zarówno `CLK_P` jak i `CLK_N`.\n"
+"`inDiffPair('/CLK')`\n"
+"odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -30532,21 +30534,37 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
+"<br><br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsFrontCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsBackCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<nazwa_strefy>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsArea()`.\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
 "\n"
 "    (rule \"blokada strefy\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
 "    # zapobiega opisowi na przelotkach\n"
@@ -30727,9 +30745,8 @@ msgid "Via Gap"
 msgstr "Dystans między przelotkami"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Zmień właściwości tekstu"
+msgstr "Zmień właściwości"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -34070,11 +34087,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "Nierozpoznana warstwa '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr ""
-"Brakujący argument z identyfikatorem footprintu (A, B, lub oznaczenie) dla "
-"%s."
+msgstr "Brakujący argument footprintu (A, B, lub oznaczenie) dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -34089,11 +34104,11 @@ msgid "Footprint has no back courtyard."
 msgstr "Footprint nie ma określonego pola zajętości na warstwie dolnej."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
 msgstr ""
-"Brakujący argument z identyfikatorem strefy z regułami (A, B lub nazwa "
-"strefy z regułami) dla %s."
+"Brakujący argument strefy z regułami (A, B lub nazwa strefy z regułami) dla "
+"%s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -38066,14 +38081,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Pokazuje lub ukrywa Menedżera wyglądu"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "Właściwości arkusza"
+msgstr "Pokaż panel z właściwościami"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "Pokazuje lub ukrywa Menedżera wyglądu"
+msgstr "Pokazuje lub ukrywa panel z właściwościami"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -38519,14 +38532,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Wybiera wszystkie footprinty i ścieżki na tym samym arkuszu schematu"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Zapisz na schemacie"
+msgstr "Wybierz na schemacie"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Zaznacza tożsame elementy w edytorze obwodów drukowanych"
+msgstr "Zaznacza tożsame elementy w edytorze schematów"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
