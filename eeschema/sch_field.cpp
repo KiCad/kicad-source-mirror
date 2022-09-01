@@ -768,7 +768,7 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
         if( !href.IsEmpty() )
         {
             SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
-            navTool->HypertextCommand( m_hyperlink );
+            navTool->HypertextCommand( href );
         }
     }
 }
