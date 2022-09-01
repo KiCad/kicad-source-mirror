@@ -411,18 +411,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         }
         else
         {
-            // We can't add new strings onto 6.0 branch
-#ifdef 0
-            if( part.Definition.GateSymbols.size() == 0 )
-            {
-                m_reporter->Report(
-                        wxString::Format( _( "Part definition '%s' has an incomplete definition (no"
-                                             " symbol definitions are associated with it). The part"
-                                             " has not been loaded into the KiCad library." ),
-                                          part.Name ),
-                        RPT_SEVERITY_WARNING );
-            }
-#endif
+            // We can't add new strings onto 6.0 branch, so no error reporting
+
 
             // Don't save in the library, but still keep it cached as some of the units might have
             // been loaded correctly (saving us time later on), plus the part definition contains
