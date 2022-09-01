@@ -449,11 +449,11 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
         return false;
     }
 
-    if( !results.first() )
-        return false;
-
     try
     {
+        if( !results.first() )
+            return false;
+
         do
         {
             ROW result;
