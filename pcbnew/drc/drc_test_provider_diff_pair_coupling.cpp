@@ -452,7 +452,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         bool uncoupledViolation = false;
 
-        if( maxUncoupledConstraint )
+        if( maxUncoupledConstraint && ( !it.second.itemsP.empty() || ! it.second.itemsN.empty() ) )
         {
             auto val = maxUncoupledConstraint->GetValue();
 
@@ -468,23 +468,35 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
 
-                auto pit = it.second.itemsP.begin();
-                auto nit = it.second.itemsN.begin();
+                BOARD_CONNECTED_ITEM* item = nullptr;
+                auto                  pit = it.second.itemsP.begin();
+                auto                  nit = it.second.itemsN.begin();
 
-                drce->AddItem( *pit );
-                drce->AddItem( *nit );
-
-                for( pit++; pit != it.second.itemsP.end(); pit++ )
+                if( pit != it.second.itemsP.end() )
+                {
+                    item = *pit;
                     drce->AddItem( *pit );
+                    pit++;
+                }
 
-                for( nit++; nit != it.second.itemsN.end(); nit++ )
+                if( nit != it.second.itemsN.end() )
+                {
+                    item = *nit;
                     drce->AddItem( *nit );
+                    nit++;
+                }
+
+                while( pit != it.second.itemsP.end() )
+                    drce->AddItem( *pit++ );
+
+                while( nit != it.second.itemsN.end() )
+                    drce->AddItem( *nit++ );
 
                 uncoupledViolation = true;
 
                 drce->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
 
-                reportViolation( drce, ( *it.second.itemsP.begin() )->GetPosition() );
+                reportViolation( drce, item->GetPosition() );
             }
         }
 
@@ -492,7 +504,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             for( auto& cpair : it.second.coupled )
             {
-                if( !cpair.couplingOK )
+                if( !cpair.couplingOK && ( cpair.parentP || cpair.parentN ) )
                 {
                     auto val = gapConstraint->GetValue();
                     auto drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
@@ -514,12 +526,23 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     drcItem->SetErrorMessage( msg );
 
-                    drcItem->AddItem( cpair.parentP );
-                    drcItem->AddItem( cpair.parentN );
+                    BOARD_CONNECTED_ITEM* item = nullptr;
+
+                    if( cpair.parentP )
+                    {
+                        item = cpair.parentP;
+                        drcItem->AddItem( cpair.parentP );
+                    }
+
+                    if( cpair.parentN )
+                    {
+                        item = cpair.parentN;
+                        drcItem->AddItem( cpair.parentN );
+                    }
 
                     drcItem->SetViolatingRule( gapConstraint->GetParentRule() );
 
-                    reportViolation( drcItem, cpair.parentP->GetPosition() );
+                    reportViolation( drcItem, item->GetPosition() );
                 }
             }
         }
