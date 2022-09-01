@@ -411,6 +411,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         }
         else
         {
+            // We can't add new strings onto 6.0 branch
+#ifdef 0
             if( part.Definition.GateSymbols.size() == 0 )
             {
                 m_reporter->Report(
@@ -420,6 +422,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
                                           part.Name ),
                         RPT_SEVERITY_WARNING );
             }
+#endif
 
             // Don't save in the library, but still keep it cached as some of the units might have
             // been loaded correctly (saving us time later on), plus the part definition contains
