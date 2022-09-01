@@ -993,26 +993,7 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
 {
     wxString result;
     result << GenerateSpiceItemName( aRefName ) << " ";
-
-    int ncCounter = 0;
-
-    for( const PIN& pin : GetSpicePins() )
-    {
-        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
-                             pin.symbolPinNumber );
-
-        if( it == aSymbolPinNumbers.end() )
-        {
-            LOCALE_IO toggle;
-            result << wxString::Format( "NC-%s-%u ", aRefName, ncCounter++ );
-        }
-        else
-        {
-            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            wxString netName = aPinNetNames.at( symbolPinIndex );
-            result << netName << " ";
-        }
-    }
+    result << GenerateSpiceItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
 
     if( requiresSpiceModel() )
         result << aModelName << " ";
@@ -1262,6 +1243,35 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString
     SetFieldValue( aFields, TYPE_FIELD, "" );
     SetFieldValue( aFields, PARAMS_FIELD, "" );
     SetFieldValue( aFields, DISABLED_FIELD, "" );
+}
+
+
+wxString SIM_MODEL::GenerateSpiceItemPins( const wxString& aRefName,
+                                           const wxString& aModelName,
+                                           const std::vector<wxString>& aSymbolPinNumbers,
+                                           const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+    int ncCounter = 0;
+
+    for( const PIN& pin : GetSpicePins() )
+    {
+        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
+
+        if( it == aSymbolPinNumbers.end() )
+        {
+            LOCALE_IO toggle;
+            result << wxString::Format( "NC-%s-%u ", aRefName, ncCounter++ );
+        }
+        else
+        {
+            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
+            result << aPinNetNames.at( symbolPinIndex ) << " ";
+        }
+    }
+
+    return result;
 }
 
 

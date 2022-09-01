@@ -91,33 +91,10 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemName( const wxString& aRefName ) cons
 {
     wxString elementType = GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString();
 
-    if( !aRefName.IsEmpty() && aRefName.StartsWith( elementType ) )
+    if( aRefName != "" && aRefName.StartsWith( elementType ) )
         return aRefName;
     else
         return elementType + aRefName;
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpiceItemLine( const wxString& aRefName,
-                                                 const wxString& aModelName,
-                                                 const std::vector<wxString>& aSymbolPinNumbers,
-                                                 const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString result;
-    result << GenerateSpiceItemName( aRefName ) << " ";
-
-    for( const PIN& pin : GetPins() )
-    {
-        auto it = std::find( aSymbolPinNumbers.begin(),
-                             aSymbolPinNumbers.end(),
-                             pin.symbolPinNumber );
-        long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-
-        result << aPinNetNames.at( symbolPinIndex ) << " ";
-    }
-
-    result << GetParam( static_cast<unsigned>( SPICE_PARAM::MODEL ) ).value->ToString() << "\n";
-    return result;
 }
 
 
@@ -125,6 +102,39 @@ void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
         AddPin( { "", wxString::FromCDouble( symbolPinIndex + 1 ) } );
+}
+
+
+wxString SIM_MODEL_SPICE::GenerateSpiceItemPins( const wxString& aRefName,
+                                                 const wxString& aModelName,
+                                                 const std::vector<wxString>& aSymbolPinNumbers,
+                                                 const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+
+    for( const PIN& pin : GetSpicePins() )
+    {
+        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
+
+        if( it != aSymbolPinNumbers.end() )
+        {
+            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
+            result << aPinNetNames.at( symbolPinIndex ) << " ";
+        }
+    }
+
+    return result;
+}
+
+
+wxString SIM_MODEL_SPICE::GenerateSpiceItemParamValuePair( const PARAM& aParam,
+                                                           bool& aIsFirst ) const
+{
+    if( aParam.info.name != "model" )
+        return "";
+
+    return aParam.value->ToString();
 }
 
 
@@ -173,6 +183,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
             paramInfo.description = "Spice element type";
+            paramInfo.isSpiceInstanceParam = true;
 
             paramInfos.push_back( paramInfo );
             break;
@@ -184,6 +195,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
             paramInfo.description = "Model name or value";
+            paramInfo.isSpiceInstanceParam = true;
 
             paramInfos.push_back( paramInfo );
             break;
@@ -195,6 +207,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SPICE::makeParamInfos()
             paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
             paramInfo.defaultValue = "";
             paramInfo.description = "Library path to include";
+            paramInfo.isSpiceInstanceParam = true;
 
             paramInfos.push_back( paramInfo );
             break;
