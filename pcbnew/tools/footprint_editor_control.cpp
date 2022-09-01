@@ -24,7 +24,9 @@
  */
 
 #include "footprint_editor_control.h"
-#include "kicad_clipboard.h"
+#include <wx/generic/textdlgg.h>
+#include <string_utils.h>
+#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <view/view_controls.h>
@@ -117,7 +119,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   libSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition || libInferredCondition );
+    ctxMenu.AddItem( ACTIONS::save,                  SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
     ctxMenu.AddItem( ACTIONS::saveCopyAs,            fpSelectedCondition );
     ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition || libInferredCondition );
@@ -221,6 +223,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 
             m_frame->Zoom_Automatique( false );
             m_frame->GetScreen()->SetContentModified();
+            m_frame->OnModify();
 
             // If selected from the library tree then go ahead and save it there
             if( !selected.GetLibNickname().empty() )
