@@ -432,8 +432,21 @@ public:
 
         CollapseForSort();
 
+        // We're going to sort the rows based on their first reference, so the first reference
+        // had better be the lowest one.
+        for( DATA_MODEL_ROW& row : m_rows )
+        {
+            std::sort( row.m_Refs.begin(), row.m_Refs.end(),
+                    []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs )
+                    {
+                        wxString lhs_ref( lhs.GetRef() << lhs.GetRefNumber() );
+                        wxString rhs_ref( rhs.GetRef() << rhs.GetRefNumber() );
+                        return StrNumCmp( lhs_ref, rhs_ref, true ) < 0;
+                    } );
+        }
+
         std::sort( m_rows.begin(), m_rows.end(),
-               [ this ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+               [this]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
                {
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
