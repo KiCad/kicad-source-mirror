@@ -35,8 +35,8 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/choice.h>
-#include <wx/panel.h>
 #include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/gbsizer.h>
 #include <wx/dialog.h>
 

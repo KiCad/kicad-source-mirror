@@ -452,7 +452,7 @@
                                 <property name="col_label_values">&quot;Name&quot; &quot;Value&quot; &quot;Show&quot; &quot;H Align&quot; &quot;V Align&quot; &quot;Italic&quot; &quot;Bold&quot; &quot;Text Size&quot; &quot;Orientation&quot; &quot;X Position&quot; &quot;Y Position&quot; &quot;Font&quot; &quot;Color&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="cols">13</property>
-                                <property name="column_sizes">72,84,48,72,72,48,48,84,48,84,84,140,48</property>
+                                <property name="column_sizes">72,84,48,70,70,48,48,80,48,80,80,100,48</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>

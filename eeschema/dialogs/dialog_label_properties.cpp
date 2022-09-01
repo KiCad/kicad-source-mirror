@@ -185,6 +185,14 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
     }
 
+    if( !m_currentLabel->AutoRotateOnPlacementSupported() )
+    {
+        m_autoRotate->Hide();
+        wxSizer* parentSizer = m_autoRotate->GetContainingSizer();
+        parentSizer->Detach( m_autoRotate );
+        parentSizer->Layout();
+    }
+
     SetupStandardButtons();
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
@@ -319,14 +327,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     }
 
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
-    {
-        m_autoRotate->Show();
         m_autoRotate->SetValue( m_currentLabel->AutoRotateOnPlacement() );
-    }
-    else
-    {
-        m_autoRotate->Hide();
-    }
 
     return true;
 }

@@ -70,15 +70,15 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_grid->SetColSize( 0, 72 );
 	m_grid->SetColSize( 1, 84 );
 	m_grid->SetColSize( 2, 48 );
-	m_grid->SetColSize( 3, 72 );
-	m_grid->SetColSize( 4, 72 );
+	m_grid->SetColSize( 3, 70 );
+	m_grid->SetColSize( 4, 70 );
 	m_grid->SetColSize( 5, 48 );
 	m_grid->SetColSize( 6, 48 );
-	m_grid->SetColSize( 7, 84 );
+	m_grid->SetColSize( 7, 80 );
 	m_grid->SetColSize( 8, 48 );
-	m_grid->SetColSize( 9, 84 );
-	m_grid->SetColSize( 10, 84 );
-	m_grid->SetColSize( 11, 140 );
+	m_grid->SetColSize( 9, 80 );
+	m_grid->SetColSize( 10, 80 );
+	m_grid->SetColSize( 11, 100 );
 	m_grid->SetColSize( 12, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
@@ -95,6 +95,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_grid->SetColLabelValue( 10, _("Y Position") );
 	m_grid->SetColLabelValue( 11, _("Font") );
 	m_grid->SetColLabelValue( 12, _("Color") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
