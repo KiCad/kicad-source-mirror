@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1983,7 +1983,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     if( selection.GetSize() >= 1 )
         symbol = (SCH_SYMBOL*) selection.Front();
 
-    if( !symbol || symbol->GetEditFlags() != 0 )
+    if( !symbol || symbol->GetEditFlags() != 0 || symbol->IsMissingLibSymbol() )
         return 0;
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );

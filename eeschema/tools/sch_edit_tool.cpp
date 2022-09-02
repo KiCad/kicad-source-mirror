@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1397,6 +1397,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
                 blocking_win->Close( true );
+
+            // The broken library symbol link indicator cannot be edited.
+            if( symbol->IsMissingLibSymbol() )
+                return 0;
 
             editor->LoadSymbolFromSchematic( symbol );
 

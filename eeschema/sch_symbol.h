@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,21 @@ public:
     {
         return wxT( "SCH_SYMBOL" );
     }
+
+    /**
+     * Check to see if the library symbol is set to the dummy library symbol.
+     *
+     * When the library symbol is missing (which technically should not happen now that the
+     * library symbols are cached in the schematic file), a dummy library symbol is substituted
+     * for the missing symbol as an indicator that something is amiss.  The dummy symbol cannot
+     * be edited so a check for this symbol must be performed before attempting to edit the
+     * library symbol with the library editor or it will crash KiCad.
+     *
+     * @see dummy()
+     *
+     * @return true if the library symbol is missing or false if it is valid.
+     */
+    bool IsMissingLibSymbol() const;
 
     const std::vector<SYMBOL_INSTANCE_REFERENCE>& GetInstanceReferences()
     {

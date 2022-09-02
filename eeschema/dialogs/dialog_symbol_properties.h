@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,9 @@ private:
     void OnEditLibrarySymbol( wxCommandEvent&  ) override;
     void OnUpdateSymbol( wxCommandEvent&  ) override;
     void OnExchangeSymbol( wxCommandEvent&  ) override;
+
+    virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) override;
+    virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
 
     void AdjustGridColumns( int aWidth );
 
