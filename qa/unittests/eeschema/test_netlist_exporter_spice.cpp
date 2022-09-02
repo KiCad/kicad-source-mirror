@@ -313,7 +313,6 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 }
 
 // Incomplete. TODO.
-
 BOOST_AUTO_TEST_CASE( Rlc )
 {
     TestNetlist( "rlc" );
@@ -464,6 +463,8 @@ BOOST_AUTO_TEST_CASE( LegacySallenKey )
 
 BOOST_AUTO_TEST_CASE( LegacyOpamp )
 {
+    // Amplifier_Operational:AD797 model is used to test symbols that have more pins than the model.
+
     TestNetlist( "legacy_opamp" );
     TestTranPoint( 0, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
     TestTranPoint( 250e-6, { { "V(/in)", 500e-3 }, { "V(/out)", 1 } } );
