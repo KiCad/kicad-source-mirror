@@ -111,7 +111,7 @@ TOOL_ACTION EDA_3D_ACTIONS::resetView( "3DViewer.Control.resetView",
 
 TOOL_ACTION EDA_3D_ACTIONS::flipView( "3DViewer.Control.flipView",
         AS_ACTIVE,
-        0, "",
+        'F', "",
         _( "Flip Board" ), _( "Flip the board view" ),
         BITMAPS::flip_board, AF_NONE, (void*) ID_VIEW3D_FLIP );
 
