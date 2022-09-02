@@ -545,13 +545,7 @@ if( APPLE )
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    # get_cmake_property(_variableNames VARIABLES)
-    # list (SORT _variableNames)
-    # foreach (_variableName ${_variableNames})
-    #     message(STATUS "${_variableName}=${${_variableName}}")
-    # endforeach()
-    # message(STATUS "markmark")
-    # PYTHON_FRAMEWORK=/Users/alexander/Documents/Code/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework
+
     install( CODE "
             # override default embedded path settings
             ${OSX_BUNDLE_OVERRIDE_PATHS}

@@ -914,11 +914,10 @@ endfunction()
 
 
 function(fixup_bundle app libs dirs)
-  message(STATUS "fixup_bundleY")
+  message(STATUS "fixup_bundle")
   message(STATUS "  app='${app}'")
   message(STATUS "  libs='${libs}'")
   message(STATUS "  dirs='${dirs}'")
-  message(STATUS "xxxxxxxxx")
   set(options)
   set(oneValueArgs)
   set(multiValueArgs IGNORE_ITEM)
@@ -930,7 +929,7 @@ function(fixup_bundle app libs dirs)
   if(valid)
     get_filename_component(exepath "${executable}" PATH)
 
-    message(STATUS "fixup_bundle: preparingX...")
+    message(STATUS "fixup_bundle: preparing...")
     get_bundle_keys("${app}" "${libs}" "${dirs}" keys IGNORE_ITEM "${CFG_IGNORE_ITEM}")
 
     message(STATUS "fixup_bundle: copying...")
@@ -1031,9 +1030,7 @@ function(verify_bundle_prerequisites bundle result_var info_var)
 
       if(NOT prereq_filename IN_LIST CFG_IGNORE_ITEM)
         get_item_rpaths(${f} _main_exe_rpaths)
-        message(STATUS "pqr: ${f}")
         get_prerequisites("${f}" prereqs 1 1 "${exepath}" "${_main_exe_rpaths}")
-        message(STATUS "pqf: ${prereqs}")
         # On the Mac,
         # "embedded" and "system" prerequisites are fine... anything else means
         # the bundle's prerequisites are not verified (i.e., the bundle is not
@@ -1047,7 +1044,6 @@ function(verify_bundle_prerequisites bundle result_var info_var)
 
         foreach(p ${prereqs})
           set(p_type "")
-          message(STATUS "pqq: ${p}")
           gp_file_type("${f}" "${p}" p_type)
 
           if(APPLE)
@@ -1065,7 +1061,6 @@ function(verify_bundle_prerequisites bundle result_var info_var)
           # Found non-system/somehow-unacceptable prerequisites:
           set(result 0)
           set(info ${info} "external prerequisites found:\nf='${f}'\nexternal_prereqs='${external_prereqs}'\n")
-          execute_process(COMMAND sleep 1000 RESULT_VARIABLE res)
         endif()
       else()
         message(STATUS "Ignoring file: ${prereq_filename}")
