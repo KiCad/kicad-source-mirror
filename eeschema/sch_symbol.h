@@ -208,9 +208,14 @@ public:
     void SetLibSymbol( LIB_SYMBOL* aLibSymbol );
 
     /**
-     * Return information about the aliased parts
+     * @return the associated LIB_SYMBOL's description field (or wxEmptyString).
      */
     wxString GetDescription() const;
+
+    /**
+     * @return the associated LIB_SYMBOL's keywords field (or wxEmptyString).
+     */
+    wxString GetKeyWords() const;
 
     /**
      * Return the documentation text for the given part alias

@@ -315,6 +315,15 @@ wxString SCH_SYMBOL::GetDescription() const
 }
 
 
+wxString SCH_SYMBOL::GetKeyWords() const
+{
+    if( m_part )
+        return m_part->GetKeyWords();
+
+    return wxEmptyString;
+}
+
+
 wxString SCH_SYMBOL::GetDatasheet() const
 {
     if( m_part )
@@ -1022,6 +1031,8 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "UNIT" ) );
     aVars->push_back( wxT( "SYMBOL_LIBRARY" ) );
     aVars->push_back( wxT( "SYMBOL_NAME" ) );
+    aVars->push_back( wxT( "SYMBOL_DESCRIPTION" ) );
+    aVars->push_back( wxT( "SYMBOL_KEYWORDS" ) );
 }
 
 
@@ -1112,6 +1123,16 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     else if( token->IsSameAs( wxT( "SYMBOL_NAME" ) ) )
     {
         *token = m_lib_id.GetLibItemName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
+    {
+        *token = GetDescription();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
+    {
+        *token = GetKeyWords();
         return true;
     }
 
