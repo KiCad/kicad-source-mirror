@@ -1590,13 +1590,16 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
         }
         catch( const IO_ERROR& e )
         {
-            if( aAllowOnlyFirstValue )
-                SetParamValue( 0, parseFieldFloatValue( valueField ) );
-            else
-                throw e;
+            if( GetParamCount() >= 1 )
+            {
+                if( aAllowOnlyFirstValue )
+                    SetParamValue( 0, parseFieldFloatValue( valueField ) );
+                else
+                    throw e;
+            }
         }
     }
-    else if( aAllowOnlyFirstValue )
+    else if( GetParamCount() >= 1 && aAllowOnlyFirstValue )
     {
         // This is reached only when model allows only the first value.
         SetParamValue( 0, parseFieldFloatValue( valueField ) );
