@@ -1,4 +1,4 @@
-(kicad_sch (version 20220404) (generator eeschema)
+(kicad_sch (version 20220822) (generator eeschema)
 
   (uuid 994297ef-4ddc-40ea-b4d6-64ee58be7864)
 
@@ -1073,7 +1073,7 @@
     (pin "1" (uuid 993289f0-bf93-449c-9d0c-6b0bb115ff64))
   )
 
-  (symbol (lib_id "complex_hierarchy_schlib:LM358N") (at 123.19 60.96 0) (unit 1)
+  (symbol (lib_id "complex_hierarchy_schlib:LM358N") (at 123.19 60.96 0) (unit 2)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00004b3a135c)
     (default_instance (reference "U") (unit 1) (value "") (footprint ""))
@@ -1091,12 +1091,9 @@
     )
     (pin "4" (uuid ed843dde-7cdb-4238-b622-e9a98482d8ce))
     (pin "8" (uuid 471c36a5-5f92-4b91-997c-9549ac0334bb))
-    (pin "1" (uuid a10b569c-d672-485d-9c05-2cb4795deeca))
-    (pin "2" (uuid db902262-2864-4997-aeff-8abaa132424a))
-    (pin "3" (uuid b21625e3-a75b-41d7-9f13-4c0e12ba16cb))
-    (pin "5" (uuid 003e1157-1df7-4d52-8a2e-32cb2287cca5))
-    (pin "6" (uuid 9ab82712-865c-483c-9829-da0c59c8c7a2))
-    (pin "7" (uuid b5d495ac-adab-41de-9d5f-0f59f6663604))
+    (pin "5" (uuid 3f563f00-5ff1-4125-9ede-2b6c9b9fbc6b))
+    (pin "6" (uuid c40edc8c-5be2-4198-aa9e-ea0142dc22f7))
+    (pin "7" (uuid 143fb5b8-2cdc-4c00-bc4c-383a989bd661))
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:HT") (at 218.44 83.82 0) (unit 1)
@@ -1336,9 +1333,6 @@
     (pin "1" (uuid 62c7c7da-16a5-4e68-9e5b-946f21e4bf93))
     (pin "2" (uuid c9d81d88-d1ec-429b-9fa7-e0afc89f83f7))
     (pin "3" (uuid ab5c9424-0cc8-46b8-8fb9-f9135c4d7de6))
-    (pin "5" (uuid 705adcaf-43a1-4f78-99c3-e73130c2cf50))
-    (pin "6" (uuid 13796e5d-55d7-4961-aa38-73d5d01743dd))
-    (pin "7" (uuid e05f2f58-bc19-4d69-b161-e4b40d414dac))
   )
 
   (symbol (lib_id "complex_hierarchy_schlib:GND") (at 101.6 69.85 0) (unit 1)

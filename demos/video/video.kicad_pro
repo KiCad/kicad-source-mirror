@@ -72,6 +72,7 @@
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
+        "footprint": "error",
         "footprint_type_mismatch": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
@@ -437,11 +438,6 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "pwr",
-        "nets": [
-          "+12V",
-          "+3.3V",
-          "+5F"
-        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
@@ -451,9 +447,24 @@
       }
     ],
     "meta": {
-      "version": 2
+      "version": 3
     },
-    "net_colors": null
+    "net_colors": null,
+    "netclass_assignments": null,
+    "netclass_patterns": [
+      {
+        "netclass": "pwr",
+        "pattern": "+12V"
+      },
+      {
+        "netclass": "pwr",
+        "pattern": "+3.3V"
+      },
+      {
+        "netclass": "pwr",
+        "pattern": "+5F"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {

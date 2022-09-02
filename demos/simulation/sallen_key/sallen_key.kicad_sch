@@ -1,4 +1,4 @@
-(kicad_sch (version 20220404) (generator eeschema)
+(kicad_sch (version 20220822) (generator eeschema)
 
   (uuid 403a5eac-c035-4b08-8ba1-e036b0ed18fb)
 
@@ -550,6 +550,14 @@
   (wire (pts (xy 152.4 109.22) (xy 152.4 114.3))
     (stroke (width 0) (type solid))
     (uuid fc2d08ca-d4e2-4706-9885-a0781d86f92f)
+  )
+
+  (text_box ".control\nversion\n.endc"
+    (at 109.22 130.81 0) (size 14.986 8.7796)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1.524 1.524)) (justify left top))
+    (uuid d15f446c-5062-4dbf-aa54-9559d3f29629)
   )
 
   (text ".ac dec 10 1 1Meg\n" (at 109.22 127 0)
