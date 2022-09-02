@@ -704,8 +704,8 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 
     auto obs = m_currentNode->NearestObstacle( &m_head );
 
-    // If the head is in colliding state, snap to the hull of the first obstacle. 
-    // This way, one can route tracks as tightly as possible without enabling 
+    // If the head is in colliding state, snap to the hull of the first obstacle.
+    // This way, one can route tracks as tightly as possible without enabling
     // the shove/walk mode that certain users find too intrusive.
     if( obs )
     {
@@ -1008,7 +1008,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         if( m_last_head.PointCount() > 0 )
         {
             m_head = m_last_head;
-            PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-before-re-route" );
+            PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, "head-before-re-route" );
 
             VECTOR2I lastValidRoutePoint = m_head.CPoint( m_head.PointCount() - 1 );
 
@@ -1016,7 +1016,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             if( !routeHead( lastValidRoutePoint, m_head ) )
                 PNS_DBG( Dbg(), Message, "****Unable to recover.***** Route head failed, second time" );
 
-            PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-after-re-route" );
+            PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, "head-after-re-route" );
         }
         else
         {
