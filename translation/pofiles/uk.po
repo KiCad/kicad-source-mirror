@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-09-02 14:00+0000\n"
+"PO-Revision-Date: 2022-09-05 11:14+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -24152,97 +24152,99 @@ msgstr "Ідентифікатор нової бібліотеки посадк�
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
-msgstr ""
+msgstr "Видаліть текстові елементи, яких немає в бібліотеці"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
 msgid "Update/reset text layers and visibilities"
-msgstr ""
+msgstr "Оновлення/скидання текстових шарів і видимості"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
 msgid "Update/reset text sizes, styles and positions"
-msgstr ""
+msgstr "Оновлення/скидання розмірів, стилів і позицій тексту"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 msgid "Update/reset fabrication attributes"
-msgstr ""
+msgstr "Оновити/скинути атрибути виробництва"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
 msgid "Update/reset 3D models"
-msgstr ""
+msgstr "Оновити/скинути 3D моделі"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
-msgstr ""
+msgstr "Оновлення посадкових місць з бібліотеки"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #, c-format
 msgid "File %s already exists."
-msgstr ""
+msgstr "Файл %s вже існує."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr ""
+msgstr "Назва файлу:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
-msgstr ""
+msgstr "Виберіть назву файлу експорту IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr ""
+msgstr "Референтна точка сітки:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
-msgstr ""
+msgstr "Налаштувати автоматично"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 #: pcbnew/dialogs/dialog_export_step_base.cpp:71
 msgid "X position:"
-msgstr ""
+msgstr "Положення X:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
 #: pcbnew/dialogs/dialog_export_step_base.cpp:86
 msgid "Y position:"
-msgstr ""
+msgstr "Y позиція:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:104
 msgid "Output Units"
-msgstr ""
+msgstr "Вихідні одиниці"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
-msgstr ""
+msgstr "Експорт IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:143
 msgid "Select a STEP export filename"
-msgstr ""
+msgstr "Виберіть ім'я файлу STEP для експорту"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:144
 msgid "STEP files"
-msgstr ""
+msgstr "Файли STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:211
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Моделі, які не є масштабованими:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:213
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Виявлено масштабовані моделі. Масштабування моделі не є надійним для "
+"експорту."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:215
 msgid "Model Scale Warning"
-msgstr ""
+msgstr "Попередження щодо масштабу моделі"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr ""
+msgstr "Помилка експорту STEP! Збережіть друковану плату та повторіть спробу"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:343
 #, c-format
@@ -24250,325 +24252,337 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
+"Контур плати відсутній або не закритий з допуском %.3f мм.\n"
+"Запустіть DRC для повного аналізу."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:355
 msgid "STEP Export"
-msgstr ""
+msgstr "Експорт STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
-msgstr ""
+msgstr "Координати"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr ""
+msgstr "Початок координат сверловки/розміщення"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr ""
+msgstr "Початок координат сітки"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
-msgstr ""
+msgstr "Початок координат користувача"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:47
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "Board center origin"
-msgstr ""
+msgstr "Початок координат в центрі плати"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:54
 msgid "User Defined Origin"
-msgstr ""
+msgstr "Початок координат визначено користувачем"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:108
 msgid "Other Options"
-msgstr ""
+msgstr "Інші опції"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Ignore virtual components"
-msgstr ""
+msgstr "Ігнорувати віртуальні компоненти"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Замініть аналогічні моделі"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Замініть моделі VRML таким же іменем STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Overwrite old file"
-msgstr ""
+msgstr "Перезаписати старий файл"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
 msgid "Board outline chaining tolerance:"
-msgstr ""
+msgstr "Допуски перетворення контура плати:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Щільність (0.001 мм)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Standard (0.01 mm)"
-msgstr ""
+msgstr "Стандарт (0.01 мм)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Вільний (0.1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
+"Толерантність встановлює відстань між двома точками, які вважаються "
+"об'єднаними."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:77
 msgid "Export STEP"
-msgstr ""
+msgstr "Експорт STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:211
 #: pcbnew/exporters/gen_footprints_placefile.cpp:228
 msgid "Use a relative path?"
-msgstr ""
+msgstr "Використати відносний шлях?"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:221
 #: pcbnew/exporters/gen_footprints_placefile.cpp:237
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
+"Неможливо зробити шлях відносним (цільовий обсяг відрізняється від обсягу "
+"файлу плати)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:273 pcbnew/dialogs/dialog_plot.cpp:959
 #: pcbnew/exporters/gen_footprints_placefile.cpp:309
 #: pcbnew/exporters/gen_footprints_placefile.cpp:418
 #, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr ""
+msgstr "Не вдалося записати файли діаграм до теки «%s."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:300
 #, c-format
 msgid "Exported '%s'."
-msgstr ""
+msgstr "Експорт '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"Введіть назву файлу, якщо ви не хочете використовувати імена файлів за "
+"замовчуванням\n"
+"Можна використовувати лише під час друку поточного аркуша"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:495
 msgid "Technical layers:"
-msgstr ""
+msgstr "Технічні шари:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:82
 msgid "Print Mode"
-msgstr ""
+msgstr "Режим друку"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Експортувати як чорні елементи на білому фоні"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr ""
+msgstr "Сторінка з блоком рамки і заголовком"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
-msgstr ""
+msgstr "Поточний розмір сторінки"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
-msgstr ""
+msgstr "Тільки область плати"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
-msgstr ""
+msgstr "Розмір сторінки SVG"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "Надрукувати горизонтально віддзеркалені шари"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:252
 msgid "Print one page per layer"
-msgstr ""
+msgstr "Друкувати кожен шар на окремій сторінці"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:258
 msgid "Print board edges on all pages"
-msgstr ""
+msgstr "Друкувати контур плати на всіх сторінках"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
-msgstr ""
+msgstr "Експорт файлу SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr ""
+msgstr "Ви впевнені, що хочете перезаписати існуючий файл?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
 #: pcbnew/plugins/altium/altium_pcb.cpp:1622
 #, c-format
 msgid "Failed to create folder '%s'."
-msgstr ""
+msgstr "Не вдалося створити теку '%s."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr ""
+msgstr "Зберегти файл VRML плати"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
-msgstr ""
+msgstr "Шлях до 3D-моделі посадкового місця:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
 msgid "Coordinate origin options:"
-msgstr ""
+msgstr "Опції початку координат:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
-msgstr ""
+msgstr "Початок координат користувача:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
-msgstr ""
+msgstr "м"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
-msgstr ""
+msgstr "0.1 дюйм"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "VRML одиниці для вихідних файлів"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
-msgstr ""
+msgstr "Копіювати файли 3D-моделі в теку з 3D моделями"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"Якщо позначено: копіювати 3D-моделі до папки призначення\n"
+"Якщо не позначено: Вбудовувати 3D-моделі у файл плати VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
-msgstr ""
+msgstr "Використовувати відносні шляхи до файлів моделі у файлі VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
+"Використовувати шляхи для файлів моделі у форматі VRML файлу відповідно VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
-msgstr ""
+msgstr "Опції експорту VRML"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
 #: pcbnew/widgets/panel_selection_filter.cpp:183
 #: pcbnew/widgets/panel_selection_filter_base.cpp:19
 msgid "All items"
-msgstr ""
+msgstr "Всі елементи"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:30
 msgid "Include &footprints"
-msgstr ""
+msgstr "Включно з посадковими місцями"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:33
 msgid "Include t&ext items"
-msgstr ""
+msgstr "Включно з елементами тексту"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:36
 msgid "Include &locked footprints"
-msgstr ""
+msgstr "Включно з заблокованими посадковими місцями"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:39
 msgid "Include &drawings"
-msgstr ""
+msgstr "Включно з малюнками"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr ""
+msgstr "Включно з доріжками"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
-msgstr ""
+msgstr "Включно з контуром плати"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
-msgstr ""
+msgstr "Включно з перехідними отворами"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
-msgstr ""
+msgstr "Включно з зонами"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:59
 msgid "Filter Selected Items"
-msgstr ""
+msgstr "Фільтр вибраних елементів"
 
 #: pcbnew/dialogs/dialog_find.cpp:251
 msgid "Searching..."
-msgstr ""
+msgstr "Пошук..."
 
 #: pcbnew/dialogs/dialog_find.cpp:380
 #, c-format
 msgid "'%s' not found"
-msgstr ""
+msgstr "'%s' не знайдено"
 
 #: pcbnew/dialogs/dialog_find.cpp:388
 msgid "No more items to show"
-msgstr ""
+msgstr "Більше немає елементів для відображення"
 
 #: pcbnew/dialogs/dialog_find.cpp:390
 msgid "No hits"
-msgstr ""
+msgstr "Без співпадінь"
 
 #: pcbnew/dialogs/dialog_find.cpp:396
 #, c-format
 msgid "'%s' found"
-msgstr ""
+msgstr "'%s' знайдено"
 
 #: pcbnew/dialogs/dialog_find.cpp:399
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr ""
+msgstr "Співпадіння: %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
-msgstr ""
+msgstr "Шукати:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match case"
-msgstr ""
+msgstr "З урахуванням регістру"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Обернути"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
-msgstr ""
+msgstr "Пошук опорних посадкових місць"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
-msgstr ""
+msgstr "Пошук значення посадкових місць"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search other text items"
-msgstr ""
+msgstr "Пошук інших текстових елементів"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
-msgstr ""
+msgstr "Пошук маркерів DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
@@ -24576,25 +24590,25 @@ msgstr "Пошук в іменах звʼязків"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
-msgstr ""
+msgstr "Знайти попереднє"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
 msgid "Restart Search"
-msgstr ""
+msgstr "Перезапустити пошук"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
-msgstr ""
+msgstr "Запустити перевірку"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:424
 msgid "Footprint Checker"
-msgstr ""
+msgstr "Перевірка посадкових місць"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:76
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:139
 msgid "3D Models"
-msgstr ""
+msgstr "3D моделі"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:275
 #: pcbnew/dialogs/dialog_image_properties.cpp:83
@@ -24603,22 +24617,25 @@ msgid ""
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
+"Заблоковані посадкові місця не можна вільно переміщувати та орієнтувати на "
+"полотні, їх можна вибирати, лише коли у фільтрі вибору встановлено прапорець "
+"«Заблоковані елементи»."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:361
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:400
 msgid "Text items must have some content."
-msgstr ""
+msgstr "Елементи тексту повинні мати деякий вміст."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:493
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:551
 msgid "Modify footprint properties"
-msgstr ""
+msgstr "Змінити властивості посадкового місця"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:552
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:622
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 msgid "Reference and value are mandatory."
-msgstr ""
+msgstr "Позначення і значення є обов'язковими."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:52
@@ -24626,25 +24643,25 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:45
 #: pcbnew/fp_text_grid_table.cpp:98
 msgid "Text Items"
-msgstr ""
+msgstr "Текстові поля"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/fp_text_grid_table.cpp:106
 msgid "Keep Upright"
-msgstr ""
+msgstr "Тримати вверх і вправо"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 #: pcbnew/fp_text_grid_table.cpp:107
 msgid "X Offset"
-msgstr ""
+msgstr "Зсув по Х"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
 #: pcbnew/fp_text_grid_table.cpp:108
 msgid "Y Offset"
-msgstr ""
+msgstr "Зсув по Y"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:68
@@ -24652,32 +24669,32 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
 #: pcbnew/fp_text_grid_table.cpp:118
 msgid "Reference designator"
-msgstr ""
+msgstr "Позначення"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:142
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:325
 msgid "90"
-msgstr ""
+msgstr "90"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:150
 msgid "Side:"
-msgstr ""
+msgstr "Сторона:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:183
 msgid "Fabrication Attributes"
-msgstr ""
+msgstr "Атрибути виробництва"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:181
 #: pcbnew/footprint_libraries_utils.cpp:1243
 msgid "Footprint type:"
-msgstr ""
+msgstr "Тип посадкового місця:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/footprint.cpp:729 pcbnew/footprint_libraries_utils.cpp:1244
 msgid "Through hole"
-msgstr ""
+msgstr "THT"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
@@ -24685,67 +24702,67 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1244 pcbnew/pad.cpp:1182
 #: pcbnew/pad.cpp:1660
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/footprint.cpp:731 pcbnew/footprint_libraries_utils.cpp:1244
 msgid "Other"
-msgstr ""
+msgstr "Інший"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:201
 msgid "Not in schematic"
-msgstr ""
+msgstr "Немає на схемі"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:200
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
 msgid "Exclude from position files"
-msgstr ""
+msgstr "Виключити з файлів позицій"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:207
 msgid "Exclude from BOM"
-msgstr ""
+msgstr "Виключити з BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "Звільнено від вимоги мати зайняте поле"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "Не буде згенеровано порушень DRC"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
-msgstr ""
+msgstr "Оновлення посадкового місця з бібліотеки..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:226
 #: pcbnew/tools/pcb_actions.cpp:449
 msgid "Change Footprint..."
-msgstr ""
+msgstr "Змінити посадкове місце..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:235
 #: pcbnew/tools/pcb_actions.cpp:256
 msgid "Edit Library Footprint..."
-msgstr ""
+msgstr "Редагувати бібліотеку посадкових місць..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:260
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:231
 msgid "Clearances"
-msgstr ""
+msgstr "Зазори"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:262
 msgid "Set values to 0 to use Board Setup values."
-msgstr ""
+msgstr "Встановіть значення в 0 для використання значень з плати."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:243
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 msgid "Pad clearance:"
-msgstr ""
+msgstr "Зазор контактної площадки:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:274
 msgid ""
@@ -24753,13 +24770,16 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
+"Це локальний зазор для всіх контактних площадок посадкового місця\n"
+"Якщо 0, використовуються значення з класу ланцюгів\n"
+"Це значення може бути замінене локальним значенням контактної площадки."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:285
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:600
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
 msgid "Solder mask expansion:"
-msgstr ""
+msgstr "Розширення паяльної маски:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -24768,18 +24788,23 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
+"Це локальний зазор між контактними площадками та паяльною маскою для цього "
+"посадкового місця.\n"
+"Це значення може бути замінене локальним значенням для контактної площадки.\n"
+"Якщо 0, використовується глобальне значення."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
 msgstr ""
+"Дозволяйте перемикати отвори маски для припою між контактними площадками"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
 msgid "Solder paste absolute clearance:"
-msgstr ""
+msgstr "Абсолютний зазор паяльної пасти:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
 msgid ""
@@ -24790,13 +24815,20 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
+"Це локальний зазор між контактними площадками та паяльною пастою для цього "
+"посадкового місця.\n"
+"Це значення можна замінити локальними значеннями.\n"
+"Остаточне значення кліренсу є сумою цього значення та співвідношення "
+"величини кліренсу.\n"
+"Від’ємне значення означає менший розмір отвору трафарету, ніж розмір "
+"контактної площадки."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:626
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:116
 msgid "Solder paste relative clearance:"
-msgstr ""
+msgstr "Відносний зазор паяльної пасти:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
 #, c-format
@@ -24810,6 +24842,16 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
+"Це коефіцієнт місцевого зазору, застосований у відсотках від ширини та "
+"висоти контактної площадки для посадкового місця.\n"
+"Значення 10 означає, що значення горизонтального зазору становить 10 "
+"відсотків від ширини контактної площадки, а значення вертикального зазору "
+"становить 10 відсотків від висоти контактної площадки.\n"
+"Це значення може бути замінене локальним значенням контактної площадки.\n"
+"Остаточне значення зазору є сумою цього значення та абсолютного значення "
+"зазору.\n"
+"Від’ємне значення означає менший розмір отвору трафарету, ніж розмір "
+"контактної площадки. % o % o."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:310
@@ -24818,6 +24860,8 @@ msgstr ""
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
+"Примітка: значення паяльної маски та пасти використовуються лише для "
+"контактних площадок на шарах міді."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -24826,74 +24870,79 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Примітка: зазори паяльної пасти (абсолютні та відносні) додаються для "
+"визначення остаточного зазору."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:322
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:690
 msgid "Connection to Copper Zones"
-msgstr ""
+msgstr "З'єднання з мідними зонами"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:353
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:324
 msgid "Pad connection to zones:"
-msgstr ""
+msgstr "З'єднання контактної площадки з зонами:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
 msgid "Use zone setting"
-msgstr ""
+msgstr "Використання налаштувань зони"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:702
 msgid "Thermal relief"
-msgstr ""
+msgstr "Тепловий відвід"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:370
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:395
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:782
 msgid "Clearance Overrides and Settings"
-msgstr ""
+msgstr "Перевизначення та налаштування зазорів"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
+"Ідентифікатор бібліотеки та ідентифікатор посадкової площадки, поточно "
+"назначено. Використовуйте «Змінити посадкових місць...», щоб призначити інше "
+"посадкове місце."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:120
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:112
 msgid "Footprint Properties"
-msgstr ""
+msgstr "Властивості посадкових місць"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:354
 msgid "Footprint must have a name."
-msgstr ""
+msgstr "Посадкове місце повинно мати ім'я."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:359
 #, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr ""
+msgstr "Ім'я посадкового місця не може містити '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
-msgstr ""
+msgstr "Необмежений"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:106
 msgid "Footprint name:"
-msgstr ""
+msgstr "Ім'я посадкового місця:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
 msgid "Private Layers"
-msgstr ""
+msgstr "Приватні шари"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
-msgstr ""
+msgstr "Тип компонента:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:233
 msgid "Set values to 0 to use netclass values."
-msgstr ""
+msgstr "Встановіть значення в 0 для використання значень класу мереж."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:245
 msgid ""
@@ -24902,6 +24951,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Це локальний чистий зазор для всіх площадок цього посадкового місця.\n"
+"Якщо 0, використовуються значення класу мереж.\n"
+"Це значення можна змінювати окремо локально\n"
+"Вкладка зазор і налаштування в властивостях контактної площадки."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:258
 msgid ""
@@ -24911,6 +24964,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Це локальний зазор між контактними площадками та паяльною маскою для\n"
+"посадкового місця.\n"
+"Якщо 0, використовується глобальне значення.\n"
+"Це значення можна змінювати окремо в локальній площадці\n"
+"Вкладка зазор і налаштування в властивостях контактної площадки."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
 msgid ""
@@ -24938,41 +24996,40 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
-#, fuzzy
 msgid "Net Ties"
-msgstr "Інструменти Звʼязку"
+msgstr "Вузли мережі"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Групи контактних площадок, дозволені для замикання різних мереж:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
-msgstr ""
+msgstr "Всі скрипти генератора посадкових місць завантажено"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
-msgstr ""
+msgstr "Доступні генератори посадкових місць"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
-msgstr ""
+msgstr "Шляхи пошуку:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr ""
+msgstr "Не вдалося завантажити скрипти Python:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr ""
+msgstr "Показати доріжки"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
-msgstr ""
+msgstr "Оновити модулі Python"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:65
 msgid "Footprint Generators"
-msgstr ""
+msgstr "Генератори посадкових місць"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
@@ -26605,7 +26662,7 @@ msgstr "Тепловідвідна контактна площадка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:544
 msgid "Castellated pad (through hole only)"
-msgstr ""
+msgstr "Зубчаста пластина (тільки наскрізний отвір)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:566
 msgid "Clearance Overrides"
@@ -26614,29 +26671,41 @@ msgstr "Перевизначення відступу"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:569
 msgid "Set values to 0 to use parent footprint or netclass values."
 msgstr ""
+"Встановіть значення 0, щоб використовувати батьківського посадкового місця "
+"або значення мережевого класу."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:573
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
+"Позитивний зазор означає площу, більшу за контактну площадку (зазвичай для "
+"зазору маски)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:577
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
+"Негативний зазор означає площу, меншу за контактну площадку (зазвичай для "
+"пасти)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:589
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
+"Це локальний чистий зазор для цієї контактної площадки.\n"
+"Якщо 0, використовується локальне значення посадкового місця або значення "
+"класу мереж."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:602
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
+"Це локальний зазор між цією площадкою та паяльною маскою.\n"
+"Якщо 0, використовується локальне значення посадкового місця або глобальне "
+"значення."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
 msgid ""
@@ -26646,6 +26715,12 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"Це локальний зазор між цією площадкою та паяльною пастою.\n"
+"Якщо 0, використовується значення сліду або глобальне значення.\n"
+"Остаточне значення кліренсу є сумою цього значення та співвідношення "
+"величини кліренсу.\n"
+"Від’ємне значення означає менший розмір маски, ніж розмір контактної "
+"площадки."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:628
 msgid ""
@@ -26656,26 +26731,34 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"Це локальне співвідношення зазору у відсотках між контактною площадкою та "
+"паяльною пастою.\n"
+"Значення 10 означає, що значення зазору становить 10 відсотків розміру "
+"колодки.\n"
+"Якщо 0, використовується значення сліду або глобальне значення.\n"
+"Остаточне значення кліренсу є сумою цього значення та значення кліренсу.\n"
+"Від’ємне значення означає менший розмір маски, ніж розмір контактної "
+"площадки."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:698
 msgid "Pad connection:"
-msgstr ""
+msgstr "З'єднання контактної площадки:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:702
 msgid "From parent footprint"
-msgstr ""
+msgstr "Із батьківського посадкового місця"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:708
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Зони перекриття:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:712
 msgid "Pad shape"
-msgstr ""
+msgstr "Форма контактної площадки"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:712
 msgid "Pad convex hull"
-msgstr ""
+msgstr "Використовуйте акцент на контурі"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
 msgid "Thermal Relief Overrides"
