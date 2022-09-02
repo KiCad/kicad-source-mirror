@@ -1711,6 +1711,7 @@
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
                                                             <event name="OnButtonClick">OnEditSymbol</event>
+                                                            <event name="OnUpdateUI">onUpdateEditSymbol</event>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
@@ -1795,6 +1796,7 @@
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
                                                             <event name="OnButtonClick">OnEditLibrarySymbol</event>
+                                                            <event name="OnUpdateUI">onUpdateEditLibrarySymbol</event>
                                                         </object>
                                                     </object>
                                                 </object>

@@ -2023,7 +2023,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     if( selection.GetSize() >= 1 )
         symbol = (SCH_SYMBOL*) selection.Front();
 
-    if( !symbol || symbol->GetEditFlags() != 0 )
+    if( !symbol || symbol->GetEditFlags() != 0 || symbol->IsMissingLibSymbol() )
         return 0;
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );

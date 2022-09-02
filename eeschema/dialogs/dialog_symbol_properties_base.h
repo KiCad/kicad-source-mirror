@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,7 +94,9 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExchangeSymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnEditLibrarySymbol( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPinTableCellEdited( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSizePinsGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }

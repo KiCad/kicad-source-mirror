@@ -95,6 +95,11 @@ private:
     void HandleDelayedFocus( wxCommandEvent& event );
     void HandleDelayedSelection( wxCommandEvent& event );
 
+    virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) override;
+    virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
+
+    void AdjustGridColumns( int aWidth );
+
 private:
     SCH_SYMBOL*    m_symbol;
     LIB_SYMBOL*    m_part;

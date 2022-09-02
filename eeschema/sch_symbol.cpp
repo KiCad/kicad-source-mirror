@@ -234,6 +234,15 @@ EDA_ITEM* SCH_SYMBOL::Clone() const
 }
 
 
+bool SCH_SYMBOL::IsMissingLibSymbol() const
+{
+    if( !m_part )
+        return true;
+
+    return false;
+}
+
+
 void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 7;

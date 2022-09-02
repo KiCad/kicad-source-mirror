@@ -1209,3 +1209,16 @@ void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
 
     OnModify();
 }
+
+
+void DIALOG_SYMBOL_PROPERTIES::onUpdateEditSymbol( wxUpdateUIEvent& event )
+{
+    event.Enable( m_symbol && m_symbol->GetLibSymbolRef() );
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::onUpdateEditLibrarySymbol( wxUpdateUIEvent& event )
+{
+    event.Enable( m_symbol && m_symbol->GetLibSymbolRef() );
+}
+
