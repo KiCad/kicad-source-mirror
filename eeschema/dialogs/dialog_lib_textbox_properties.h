@@ -42,7 +42,9 @@ public:
     ~DIALOG_LIB_TEXTBOX_PROPERTIES();
 
 private:
-    void onSpinButton( wxCommandEvent &aEvent );
+    void onHAlignButton( wxCommandEvent &aEvent );
+    void onVAlignButton( wxCommandEvent &aEvent );
+    void onTextAngleButton( wxCommandEvent &aEvent );
     void onBorderChecked( wxCommandEvent& event ) override;
     void onFillChecked( wxCommandEvent& event ) override;
 
@@ -53,7 +55,7 @@ private:
     bool TransferDataFromWindow() override;
 
     SYMBOL_EDIT_FRAME*    m_frame;
-    LIB_TEXTBOX*         m_currentText;
+    LIB_TEXTBOX*          m_currentText;
     UNIT_BINDER           m_textSize;
     UNIT_BINDER           m_borderWidth;
     SCINTILLA_TRICKS*     m_scintillaTricks;

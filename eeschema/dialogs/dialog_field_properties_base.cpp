@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,6 +46,7 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 	m_StyledTextCtrl->SetViewWhiteSpace( false );
 	m_StyledTextCtrl->SetMarginWidth( 2, 0 );
 	m_StyledTextCtrl->SetIndentationGuides( false );
+	m_StyledTextCtrl->SetReadOnly( false );
 	m_StyledTextCtrl->SetMarginWidth( 1, 0 );
 	m_StyledTextCtrl->SetMarginWidth( 0, 0 );
 	m_StyledTextCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -113,21 +114,6 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	formattingSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_horizontal = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_horizontal->SetToolTip( _("Horizontal text") );
-
-	formattingSizer->Add( m_horizontal, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_vertical = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_vertical->SetToolTip( _("Vertical text") );
-
-	formattingSizer->Add( m_vertical, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_separator2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_separator2->Enable( false );
-
-	formattingSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_bold = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
@@ -138,10 +124,10 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	formattingSizer->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_separator3->Enable( false );
+	m_separator2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator2->Enable( false );
 
-	formattingSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	formattingSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_hAlignLeft = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_hAlignLeft->SetToolTip( _("Align left") );
@@ -158,10 +144,10 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	formattingSizer->Add( m_hAlignRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_separator4 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_separator4->Enable( false );
+	m_separator3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator3->Enable( false );
 
-	formattingSizer->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	formattingSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_vAlignTop = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_vAlignTop->SetToolTip( _("Align top") );
@@ -177,6 +163,21 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 	m_vAlignBottom->SetToolTip( _("Align bottom") );
 
 	formattingSizer->Add( m_vAlignBottom, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_separator4 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator4->Enable( false );
+
+	formattingSizer->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_horizontal = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_horizontal->SetToolTip( _("Horizontal text") );
+
+	formattingSizer->Add( m_horizontal, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_vertical = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_vertical->SetToolTip( _("Vertical text") );
+
+	formattingSizer->Add( m_vertical, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator5 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator5->Enable( false );

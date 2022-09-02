@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,19 +55,19 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
-		BITMAP_BUTTON* m_horizontal;
-		BITMAP_BUTTON* m_vertical;
-		BITMAP_BUTTON* m_separator2;
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
-		BITMAP_BUTTON* m_separator3;
+		BITMAP_BUTTON* m_separator2;
 		BITMAP_BUTTON* m_hAlignLeft;
 		BITMAP_BUTTON* m_hAlignCenter;
 		BITMAP_BUTTON* m_hAlignRight;
-		BITMAP_BUTTON* m_separator4;
+		BITMAP_BUTTON* m_separator3;
 		BITMAP_BUTTON* m_vAlignTop;
 		BITMAP_BUTTON* m_vAlignCenter;
 		BITMAP_BUTTON* m_vAlignBottom;
+		BITMAP_BUTTON* m_separator4;
+		BITMAP_BUTTON* m_horizontal;
+		BITMAP_BUTTON* m_vertical;
 		BITMAP_BUTTON* m_separator5;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
@@ -88,7 +88,7 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
@@ -98,6 +98,7 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_FIELD_PROPERTIES_BASE();
 
 };

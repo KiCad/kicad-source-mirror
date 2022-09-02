@@ -109,16 +109,34 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
     BOX2I bbox( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
                 VECTOR2I( abs( m_end.x - m_start.x ), abs( m_end.y - m_start.y ) ) );
 
+    VECTOR2I pos( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+            pos.y = bbox.GetBottom() - margin;
+            break;
         case GR_TEXT_H_ALIGN_CENTER:
-            return VECTOR2I( bbox.GetLeft() + margin, ( bbox.GetTop() + bbox.GetBottom() ) / 2 );
+            pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
+            break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+            pos.y = bbox.GetTop() + margin;
+            break;
+        }
+
+        switch( GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP:
+            pos.x = bbox.GetLeft() + margin;
+            break;
+        case GR_TEXT_V_ALIGN_CENTER:
+            pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
+            break;
+        case GR_TEXT_V_ALIGN_BOTTOM:
+            pos.x = bbox.GetRight() - margin;
+            break;
         }
     }
     else
@@ -126,16 +144,31 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+            pos.x = bbox.GetLeft() + margin;
+            break;
         case GR_TEXT_H_ALIGN_CENTER:
-            return VECTOR2I( ( bbox.GetLeft() + bbox.GetRight() ) / 2, bbox.GetTop() + margin );
+            pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
+            break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            return VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin );
+            pos.x = bbox.GetRight() - margin;
+            break;
+        }
+
+        switch( GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP:
+            pos.y = bbox.GetTop() + margin;
+            break;
+        case GR_TEXT_V_ALIGN_CENTER:
+            pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
+            break;
+        case GR_TEXT_V_ALIGN_BOTTOM:
+            pos.y = bbox.GetBottom() - margin;
+            break;
         }
     }
 
-    // Dummy default.  Should never reach here
-    return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+    return pos;
 }
 
 
@@ -215,7 +248,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             color = aSettings->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+            lineStyle = PLOT_DASH_TYPE::SOLID;
 
         if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
         {

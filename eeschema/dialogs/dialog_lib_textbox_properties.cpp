@@ -85,30 +85,41 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
 
     m_separator2->SetIsSeparator();
 
-    m_spin0->SetIsRadioButton();
-    m_spin0->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-    m_spin1->SetIsRadioButton();
-    m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
-    m_spin2->SetIsRadioButton();
-    m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
-    m_spin3->SetIsRadioButton();
-    m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
-    m_spin4->SetIsRadioButton();
-    m_spin4->SetBitmap( KiBitmap( BITMAPS::text_align_middle ) );
-    m_spin5->SetIsRadioButton();
-    m_spin5->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
-
+    m_hAlignLeft->SetIsRadioButton();
+    m_hAlignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_hAlignCenter->SetIsRadioButton();
+    m_hAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_hAlignRight->SetIsRadioButton();
+    m_hAlignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
     m_separator3->SetIsSeparator();
+
+    m_vAlignTop->SetIsRadioButton();
+    m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
+    m_vAlignCenter->SetIsRadioButton();
+    m_vAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
+    m_vAlignBottom->SetIsRadioButton();
+    m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
+
+    m_separator4->SetIsSeparator();
+
+    m_horizontal->SetIsRadioButton();
+    m_horizontal->SetBitmap( KiBitmap( BITMAPS::text_horizontal ) );
+    m_vertical->SetIsRadioButton();
+    m_vertical->SetBitmap( KiBitmap( BITMAPS::text_vertical ) );
+
+    m_separator5->SetIsSeparator();
 
     SetupStandardButtons();
     Layout();
 
-    m_spin0->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-    m_spin1->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-    m_spin2->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-    m_spin3->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-    m_spin4->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-    m_spin5->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
+    m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onHAlignButton, this );
+    m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onHAlignButton, this );
+    m_hAlignRight->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onHAlignButton, this );
+    m_vAlignTop->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onVAlignButton, this );
+    m_vAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onVAlignButton, this );
+    m_vAlignBottom->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onVAlignButton, this );
+    m_horizontal->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onTextAngleButton, this );
+    m_vertical->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onTextAngleButton, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -137,6 +148,25 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
+
+    switch( m_currentText->GetHorizJustify() )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check();   break;
+    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check();  break;
+    }
+
+    switch( m_currentText->GetVertJustify() )
+    {
+    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check();    break;
+    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+    }
+
+    if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
+        m_vertical->Check();
+    else
+        m_horizontal->Check();
 
     if( m_currentText->GetWidth() >= 0 )
     {
@@ -171,25 +201,6 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_fillColorLabel->Enable( m_currentText->IsFilled() );
     m_fillColorSwatch->Enable( m_currentText->IsFilled() );
 
-    if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
-    {
-        switch( m_currentText->GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   m_spin3->Check(); break;
-        case GR_TEXT_H_ALIGN_CENTER: m_spin4->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT:  m_spin5->Check(); break;
-        }
-    }
-    else
-    {
-        switch( m_currentText->GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   m_spin0->Check(); break;
-        case GR_TEXT_H_ALIGN_CENTER: m_spin1->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT:  m_spin2->Check(); break;
-        }
-    }
-
     m_privateCheckbox->SetValue( m_currentText->IsPrivate() );
     m_CommonUnit->SetValue( m_currentText->GetUnit() == 0 );
     m_CommonConvert->SetValue( m_currentText->GetConvert() == 0 );
@@ -198,9 +209,29 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton( wxCommandEvent& aEvent )
+void DIALOG_LIB_TEXTBOX_PROPERTIES::onHAlignButton( wxCommandEvent& aEvent )
 {
-    for( BITMAP_BUTTON* btn : { m_spin0, m_spin1, m_spin2, m_spin3, m_spin4, m_spin5 } )
+    for( BITMAP_BUTTON* btn : { m_hAlignLeft, m_hAlignCenter, m_hAlignRight } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_LIB_TEXTBOX_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignCenter, m_vAlignBottom } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_LIB_TEXTBOX_PROPERTIES::onTextAngleButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_horizontal, m_vertical } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
@@ -252,36 +283,24 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     m_currentText->SetItalic( m_italic->IsChecked() );
     m_currentText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
-    if( m_spin0->IsChecked() )
-    {
-        m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-    }
-    else if( m_spin1->IsChecked() )
-    {
-        m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-    }
-    else if( m_spin2->IsChecked() )
-    {
-        m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
+    if( m_hAlignRight->IsChecked() )
         m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-    }
-    else if( m_spin3->IsChecked() )
-    {
-        m_currentText->SetTextAngle( ANGLE_VERTICAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-    }
-    else if( m_spin4->IsChecked() )
-    {
-        m_currentText->SetTextAngle( ANGLE_VERTICAL );
+    else if( m_hAlignCenter->IsChecked() )
         m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-    }
-    else if( m_spin5->IsChecked() )
-    {
+    else
+        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+    if( m_vAlignBottom->IsChecked() )
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    else if( m_vAlignCenter->IsChecked() )
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    else
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+    if( m_vertical->IsChecked() )
         m_currentText->SetTextAngle( ANGLE_VERTICAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-    }
+    else
+        m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
 
     STROKE_PARAMS stroke = m_currentText->GetStroke();
 

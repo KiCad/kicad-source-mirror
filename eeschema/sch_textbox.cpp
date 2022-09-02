@@ -117,16 +117,34 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 
     bbox.Normalize();
 
+    VECTOR2I pos( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+            pos.y = bbox.GetBottom() - margin;
+            break;
         case GR_TEXT_H_ALIGN_CENTER:
-            return VECTOR2I( bbox.GetLeft() + margin, ( bbox.GetTop() + bbox.GetBottom() ) / 2 );
+            pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
+            break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+            pos.y = bbox.GetTop() + margin;
+            break;
+        }
+
+        switch( GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP:
+            pos.x = bbox.GetLeft() + margin;
+            break;
+        case GR_TEXT_V_ALIGN_CENTER:
+            pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
+            break;
+        case GR_TEXT_V_ALIGN_BOTTOM:
+            pos.x = bbox.GetRight() - margin;
+            break;
         }
     }
     else
@@ -134,16 +152,31 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+            pos.x = bbox.GetLeft() + margin;
+            break;
         case GR_TEXT_H_ALIGN_CENTER:
-            return VECTOR2I( ( bbox.GetLeft() + bbox.GetRight() ) / 2, bbox.GetTop() + margin );
+            pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
+            break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            return VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin );
+            pos.x = bbox.GetRight() - margin;
+            break;
+        }
+
+        switch( GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP:
+            pos.y = bbox.GetTop() + margin;
+            break;
+        case GR_TEXT_V_ALIGN_CENTER:
+            pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
+            break;
+        case GR_TEXT_V_ALIGN_BOTTOM:
+            pos.y = bbox.GetBottom() - margin;
+            break;
         }
     }
 
-    // Dummy default.  Should never reach here
-    return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+    return pos;
 }
 
 
