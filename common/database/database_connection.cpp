@@ -322,6 +322,8 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
     const std::string& columnName = columnCacheIter->first;
 
+    std::string cacheKey = fmt::format( "{}{}{}", tableName, columnName, aWhere.second );
+
     std::string queryStr = fmt::format( "SELECT * FROM {}{}{} WHERE {}{}{} = ?",
                                         m_quoteChar, tableName, m_quoteChar,
                                         m_quoteChar, columnName, m_quoteChar );
@@ -329,7 +331,7 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
     nanodbc::statement statement( *m_conn );
     nanodbc::string query = fromUTF8( queryStr );
 
-    if( m_cache->Get( queryStr, aResult ) )
+    if( m_cache->Get( cacheKey, aResult ) )
     {
         wxLogTrace( traceDatabase, wxT( "SelectOne: `%s` with parameter `%s` - cache hit" ),
                     toUTF8( query ), aWhere.second );
@@ -393,7 +395,7 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         return false;
     }
 
-    m_cache->Put( queryStr, aResult );
+    m_cache->Put( cacheKey, aResult );
 
     return true;
 }
