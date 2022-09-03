@@ -832,12 +832,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             shapePolys.Move( aFootprint->GetPosition() - anchorPos );
             pad->AddPrimitivePoly( shapePolys, 0, true );
 
-            aFootprint->Add( pad.release(), ADD_MODE::APPEND ); // Append so that we get the correct behaviour
-                                                      // when finding pads by PAD_ID. See loadNets()
-
-            m_librarycopperpads[aComponent.ID][anchorPad.ID].push_back( aFootprint->Pads().size() );
-            totalCopperPads++;
-
             // Now renumber all the associated pads
             COMPONENT_PAD associatedPad;
 
@@ -846,6 +840,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                 PAD* assocPad = getPadReference( aFootprint, padID );
                 assocPad->SetNumber( pad->GetNumber() );
             }
+
+            aFootprint->Add( pad.release(), ADD_MODE::APPEND ); // Append so that we get the correct behaviour
+                                                      // when finding pads by PAD_ID. See loadNets()
+
+            m_librarycopperpads[aComponent.ID][anchorPad.ID].push_back( aFootprint->Pads().size() );
+            totalCopperPads++;
         }
         else
         {
@@ -920,9 +920,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
     wxString errorMSG;
-
-    if( csPadcode.Shape.Size <= 0)
-        return nullptr;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
     LSET padLayerSet;
