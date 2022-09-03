@@ -457,7 +457,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     boardDesignSettings.SetBoardThickness( thickness );
     boardDesignSettings.m_HasStackup = true;
 
-    int numElecAndPowerLayers = 0;
+    int numElecLayersProcessed = 0;
 
     // Map CADSTAR documentation layers to KiCad "User layers"
     int                       currentDocLayer = 0;
@@ -480,7 +480,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         auto selectLayerID =
             [&]( PCB_LAYER_ID aFront, PCB_LAYER_ID aBack, LOG_LEVEL aLogType )
             {
-                if( numElecAndPowerLayers > 0 )
+                if( numElecLayersProcessed >= m_numCopperLayers )
                     kicadLayerID = aBack;
                 else
                     kicadLayerID = aFront;
@@ -515,7 +515,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         case LAYER_TYPE::JUMPERLAYER:
         case LAYER_TYPE::ELEC:
         case LAYER_TYPE::POWER:
-            ++numElecAndPowerLayers;
+            ++numElecLayersProcessed;
             KI_FALLTHROUGH;
         case LAYER_TYPE::CONSTRUCTION:
             //Already dealt with these when loading board stackup
