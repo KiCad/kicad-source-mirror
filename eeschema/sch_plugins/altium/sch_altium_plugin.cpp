@@ -62,6 +62,11 @@
 #include <wx/wfstream.h>
 #include <trigo.h>
 
+// Harness port object itself does not contain color information about itself
+// It seems altium is drawing harness ports using these colors
+#define HARNESS_PORT_COLOR_DEFAULT_BACKGROUND COLOR4D( 0.92941176470588238, 0.94901960784313721, 0.98431372549019602, 1.0 )
+#define HARNESS_PORT_COLOR_DEFAULT_OUTLINE    COLOR4D( 0.56078431372549020, 0.61960784313725492, 0.78823529411764703, 1.0 )
+
 static const VECTOR2I GetRelativePosition( const VECTOR2I& aPosition, const SCH_SYMBOL* aSymbol )
 {
     TRANSFORM t = aSymbol->GetTransform().InverseTransform();
@@ -1495,13 +1500,8 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
             /* aSize */ elem.Size );
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
-    // Harness ports are drawn the same colors as harness connectors, discarding properties, found in Altium's file,
-    // so keep color settings for use in harness ports
-    m_harnessConnectorBackgroundColor = GetColorFromInt( elem.AreaColor );
-    m_harnessConnectorBorderColor = GetColorFromInt( elem.Color );
-
-    sheet->SetBackgroundColor( m_harnessConnectorBackgroundColor );
-    sheet->SetBorderColor( m_harnessConnectorBorderColor );
+    sheet->SetBackgroundColor( GetColorFromInt( elem.AreaColor ) );
+    sheet->SetBorderColor( GetColorFromInt( elem.Color ) );
 
     sheet->SetScreen( screen );
 
@@ -2074,10 +2074,10 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
     textBox->SetEndX( ( aElem.Location + m_sheetOffset ).x + ( aElem.Width ) );
     textBox->SetEndY( ( aElem.Location + m_sheetOffset ).y + ( height / 2 ) );
 
-    textBox->SetFillColor( m_harnessConnectorBackgroundColor );
+    textBox->SetFillColor( HARNESS_PORT_COLOR_DEFAULT_BACKGROUND );
     textBox->SetFillMode( FILL_T::FILLED_WITH_COLOR );
 
-    textBox->SetStroke( STROKE_PARAMS( 2, PLOT_DASH_TYPE::DEFAULT, m_harnessConnectorBorderColor ) );
+    textBox->SetStroke( STROKE_PARAMS( 2, PLOT_DASH_TYPE::DEFAULT, HARNESS_PORT_COLOR_DEFAULT_OUTLINE ) );
 
     switch( aElem.Alignment )
     {

@@ -178,11 +178,6 @@ private:
 
     int m_harnessOwnerIndexOffset; // Add offset to all harness ownerIndex'es after parsing FileHeader
     int m_harnessEntryParent; // used to identify harness connector for harness entry element
-
-    // Harness ports are drawn the same colors as harness connectors, discarding port local
-    // settings found in altium's file, so keep color settings to draw harness ports correctly
-    COLOR4D m_harnessConnectorBackgroundColor; 
-    COLOR4D m_harnessConnectorBorderColor;
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_
