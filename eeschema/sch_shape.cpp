@@ -208,14 +208,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             break;
 
         case SHAPE_T::POLY:
-        {
-            aPlotter->MoveTo( cornerList[0] );
-
-            for( size_t ii = 1; ii < cornerList.size(); ++ii )
-                aPlotter->LineTo( cornerList[ii] );
-
-            aPlotter->FinishTo( cornerList[0] );
-        }
+            aPlotter->PlotPoly( cornerList, FILL_T::NO_FILL, pen_size );
             break;
 
         case SHAPE_T::BEZIER:
