@@ -41,13 +41,15 @@ public:
 private:
     bool TransferDataFromWindow() override;
 
-   bool AcceptOptions();
+    bool AcceptOptions();
+    void updateImage();
 
-   void syncImages( wxCommandEvent& aEvent ) override;
 
-   PCB_BASE_FRAME*      m_frame;
-   const PCB_SELECTION& m_items;     // List of items to be modified.
-   COMMIT&              m_commit;    // An undo record to add any changes to.
+    void syncImages( wxCommandEvent& aEvent ) override;
+
+    PCB_BASE_FRAME*      m_frame;
+    const PCB_SELECTION& m_items;     // List of items to be modified.
+    COMMIT&              m_commit;    // An undo record to add any changes to.
 };
 
 #endif // __dialog_remove_unused_pads__

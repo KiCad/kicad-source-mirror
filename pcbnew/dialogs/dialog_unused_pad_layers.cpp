@@ -32,12 +32,6 @@
 #include <pcb_edit_frame.h>
 #include <tools/pcb_selection_tool.h>
 
-enum SCOPE : int
-{
-    SCOPE_VIAS = 0,
-    SCOPE_PADS = 1
-};
-
 
 enum PAD_ACTION : int
 {
@@ -63,12 +57,14 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
 
     SetupStandardButtons();
 
+    updateImage();
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
 
 
-void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
+void DIALOG_UNUSED_PAD_LAYERS::updateImage()
 {
     if( m_rbAction->GetSelection() == PAD_ACTION_RESET )
         m_image->SetBitmap( KiBitmap( BITMAPS::pads_reset_unused ) );
@@ -76,6 +72,12 @@ void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
         m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused_keep_bottom ) );
     else
         m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
+}
+
+
+void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
+{
+    updateImage();
 }
 
 
@@ -87,14 +89,14 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
         {
             m_commit.Modify( item );
 
-            if( item->Type() == PCB_VIA_T && m_rbScope->GetSelection() == SCOPE_VIAS )
+            if( item->Type() == PCB_VIA_T && m_cbVias->IsChecked() )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 via->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                 via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }
 
-            if( item->Type() == PCB_FOOTPRINT_T && m_rbScope->GetSelection() == SCOPE_PADS )
+            if( item->Type() == PCB_FOOTPRINT_T && m_cbPads->IsChecked() )
             {
                 FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
@@ -105,7 +107,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
                 }
             }
 
-            if( item->Type() == PCB_PAD_T && m_rbScope->GetSelection() == SCOPE_PADS )
+            if( item->Type() == PCB_PAD_T && m_cbPads->IsChecked() )
             {
                 PAD* pad = static_cast<PAD*>( item );
 
@@ -116,7 +118,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
     }
     else
     {
-        if( m_rbScope->GetSelection() == SCOPE_PADS )
+        if( m_cbPads->IsChecked() )
         {
             for( FOOTPRINT* footprint : m_frame->GetBoard()->Footprints() )
             {
@@ -129,7 +131,8 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
                 }
             }
         }
-        else
+
+        if( m_cbVias->IsChecked() )
         {
             for( PCB_TRACK* item : m_frame->GetBoard()->Tracks() )
             {
