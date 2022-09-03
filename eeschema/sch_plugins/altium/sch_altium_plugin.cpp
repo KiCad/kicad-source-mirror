@@ -99,7 +99,7 @@ static PLOT_DASH_TYPE GetPlotDashType( const ASCH_POLYLINE_LINESTYLE linestyle )
 
 static void SetSchShapeFillAndColor( const ASCH_SHAPE_INTERFACE& elem, SCH_SHAPE* shape )
 {
-    shape->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
+    shape->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID, GetColorFromInt( elem.Color ) ) );
 
     if( !elem.IsSolid )
     {
