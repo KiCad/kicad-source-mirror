@@ -56,6 +56,7 @@ public:
 
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     wxString GenerateSpiceItemName( const wxString& aRefName ) const override;
+    wxString GenerateSpicePreview( const wxString& aModelName ) const override;
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;

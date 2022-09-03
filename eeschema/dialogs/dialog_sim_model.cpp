@@ -25,12 +25,14 @@
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>
 #include <sim/sim_library_spice.h>
+#include <sim/sim_model_spice.h>
 #include <widgets/wx_grid.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <wx/filedlg.h>
+#include <wx/textfile.h>
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
@@ -325,9 +327,38 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
     if( m_useInstanceModelRadioButton->GetValue() || modelName.IsEmpty() )
         modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
-    m_codePreview->SetEditable( true );
-    m_codePreview->SetText( curModel().GenerateSpicePreview( modelName ) );
-    m_codePreview->SetEditable( false );
+    m_codePreview->SetEditable( true ); // ???
+
+    if( dynamic_cast<SIM_MODEL_SPICE*>( &curModel() ) )
+    {
+        // For raw Spice models display the whole file instead.
+        
+        wxString path = curModel().FindParam( "lib" )->value->ToString();
+        wxString absolutePath = Prj().AbsolutePath( path );
+        wxTextFile file;
+        wxString text;
+
+        text << curModel().GenerateSpicePreview( modelName );
+        text << "\n";
+        text << "--- FILE SOURCE (" << path << ") ---\n";
+        text << "\n";
+
+        if( wxFileExists( absolutePath ) && file.Open( absolutePath ) )
+        {
+            for( text << file.GetFirstLine() << "\n";
+                 !file.Eof();
+                 text << file.GetNextLine() << "\n" )
+            {
+            }
+
+            file.Close();
+            m_codePreview->SetText( text );
+        }
+    }
+    else
+        m_codePreview->SetText( curModel().GenerateSpicePreview( modelName ) );
+
+    m_codePreview->SetEditable( false ); // ???
     m_wasCodePreviewUpdated = true;
 }
 

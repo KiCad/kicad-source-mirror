@@ -977,12 +977,12 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const wxString& aModelName,
                                            const std::vector<wxString>& aSymbolPinNumbers ) const
 {
-    std::vector<wxString> pinNames;
+    std::vector<wxString> pinNetNames;
 
     for( const PIN& pin : GetPins() )
-        pinNames.push_back( pin.name );
+        pinNetNames.push_back( pin.name );
 
-    return GenerateSpiceItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNames );
+    return GenerateSpiceItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNetNames );
 }
 
 

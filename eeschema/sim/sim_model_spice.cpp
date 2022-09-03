@@ -98,6 +98,21 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemName( const wxString& aRefName ) cons
 }
 
 
+wxString SIM_MODEL_SPICE::GenerateSpicePreview( const wxString& aModelName ) const
+{
+    std::vector<wxString> pinNumbers;
+    std::vector<wxString> pinNetNames;
+
+    for( int i = 0; i < GetPinCount(); ++i )
+    {
+        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
+        pinNetNames.push_back( wxString::FromCDouble( i + 1 ) );
+    }
+
+    return GenerateSpiceItemLine( "", aModelName, pinNumbers, pinNetNames );
+}
+
+
 void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )

@@ -77,7 +77,7 @@ std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxStri
             return SIM_MODEL::GenerateSpiceCurrentNames( aRefName );
 
         default:
-            wxFAIL_MSG( "Unhandled model device type" );
+            wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );
             return {};
     }
 }
