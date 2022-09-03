@@ -580,10 +580,12 @@ void ACTION_MENU::runOnSubmenus( std::function<void(ACTION_MENU*)> aFunction )
 {
     try
     {
-        std::for_each( m_submenus.begin(), m_submenus.end(), [&]( ACTION_MENU* m ) {
-            aFunction( m );
-            m->runOnSubmenus( aFunction );
-        } );
+        std::for_each( m_submenus.begin(), m_submenus.end(),
+                       [&]( ACTION_MENU* m )
+                       {
+                           aFunction( m );
+                           m->runOnSubmenus( aFunction );
+                       } );
     }
     catch( std::exception& )
     {
@@ -595,15 +597,17 @@ OPT_TOOL_EVENT ACTION_MENU::findToolAction( int aId )
 {
     OPT_TOOL_EVENT evt;
 
-    auto findFunc = [&]( ACTION_MENU* m ) {
-        if( evt )
-            return;
+    auto findFunc =
+            [&]( ACTION_MENU* m )
+            {
+                if( evt )
+                    return;
 
-        const auto it = m->m_toolActions.find( aId );
+                const auto it = m->m_toolActions.find( aId );
 
-        if( it != m->m_toolActions.end() )
-            evt = it->second->MakeEvent();
-    };
+                if( it != m->m_toolActions.end() )
+                    evt = it->second->MakeEvent();
+            };
 
     findFunc( this );
 

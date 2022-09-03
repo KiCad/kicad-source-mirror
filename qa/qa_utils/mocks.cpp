@@ -301,7 +301,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 }
 
 
-void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
+void PCB_SELECTION_TOOL::SelectAllItemsOnNet( int aNetCode, bool aSelect )
 {
 }
 

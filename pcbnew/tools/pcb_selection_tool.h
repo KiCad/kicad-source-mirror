@@ -132,6 +132,14 @@ public:
     bool Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly = false ) const;
 
     /**
+     * Select all items with the given net code.
+     *
+     * @param aNetCode is the target net to select
+     * @param aSelect is true to add the items to the selection, false to remove them (deselect)
+     */
+    void SelectAllItemsOnNet( int aNetCode, bool aSelect = true );
+
+    /**
      * Try to guess best selection candidates in case multiple items are clicked, by doing
      * some brain-dead heuristics.
      *
@@ -305,14 +313,6 @@ private:
      */
     void selectAllConnectedTracks( const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems,
                                    STOP_CONDITION aStopCondition );
-
-    /**
-     * Select all items with the given net code.
-     *
-     * @param aNetCode is the target net to select
-     * @param aSelect is true to add the items to the selection, false to remove them (deselect)
-     */
-    void selectAllItemsOnNet( int aNetCode, bool aSelect = true );
 
     /*
      * Select tracks and vias connected to specified board items.

@@ -29,10 +29,12 @@
 
 
 DIALOG_ASSIGN_NETCLASS::DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const wxString aNetName,
-                                                const std::set<wxString> aCandidateNetNames ) :
+                                                const std::set<wxString> aCandidateNetNames,
+                                                const std::function<void( const std::vector<wxString>& )>& aPreviewer ) :
         DIALOG_ASSIGN_NETCLASS_BASE( aParent ),
         m_frame( aParent ),
-        m_netCandidates( aCandidateNetNames )
+        m_netCandidates( aCandidateNetNames ),
+        m_previewer( aPreviewer )
 {
     std::shared_ptr<NET_SETTINGS>& netSettings = m_frame->Prj().GetProjectFile().m_NetSettings;
 
@@ -79,25 +81,37 @@ void DIALOG_ASSIGN_NETCLASS::OnUpdateUI( wxUpdateUIEvent& event )
 
     if( pattern != m_lastPattern )
     {
-        m_matchingNets->Clear();
+        CallAfter(
+                [this, pattern]()
+                {
+                    m_matchingNets->Clear();
 
-        if( !pattern.IsEmpty() )
-        {
-            EDA_COMBINED_MATCHER matcher( pattern, CTX_NETCLASS );
+                    std::vector<wxString> matchingNetNames;
 
-            m_matchingNets->Report( _( "<b>Currently matching nets:</b>" ) );
+                    if( !pattern.IsEmpty() )
+                    {
+                        EDA_COMBINED_MATCHER matcher( pattern, CTX_NETCLASS );
 
-            for( const wxString& net : m_netCandidates )
-            {
-                int matches;
-                int offset;
+                        m_matchingNets->Report( _( "<b>Currently matching nets:</b>" ) );
 
-                if( matcher.Find( net, matches, offset ) && offset == 0 )
-                    m_matchingNets->Report( net );
-            }
-        }
+                        for( const wxString& net : m_netCandidates )
+                        {
+                            int matches;
+                            int offset;
 
-        m_matchingNets->Flush();
+                            if( matcher.Find( net, matches, offset ) && offset == 0 )
+                            {
+                                m_matchingNets->Report( net );
+                                matchingNetNames.push_back( net );
+                            }
+                        }
+                    }
+
+                    m_matchingNets->Flush();
+
+                    m_previewer( matchingNetNames );
+                } );
+
         m_lastPattern = pattern;
     }
 }

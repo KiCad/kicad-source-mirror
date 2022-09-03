@@ -34,7 +34,8 @@ class DIALOG_ASSIGN_NETCLASS : public DIALOG_ASSIGN_NETCLASS_BASE
 {
 public:
     DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const wxString aNetName,
-                            const std::set<wxString> aCandidateNetNames );
+                            const std::set<wxString> aCandidateNetNames,
+                            const std::function<void( const std::vector<wxString>& )>& aPreviewer );
     ~DIALOG_ASSIGN_NETCLASS() override {}
 
 private:
@@ -45,6 +46,8 @@ private:
 private:
     EDA_BASE_FRAME*    m_frame;
     std::set<wxString> m_netCandidates;
+
+    const std::function<void( const std::vector<wxString>& )>& m_previewer;
 
     wxString           m_lastPattern;
 };

@@ -1110,6 +1110,8 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     EE_SELECTION_TOOL*    selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    SCHEMATIC&            schematic = m_frame->Schematic();
+    SCH_SCREEN*           screen = m_frame->GetCurrentSheet().LastScreen();
 
     // TODO remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
@@ -1142,30 +1144,79 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        wxArrayString netNames;
+        wxString netName;
 
-        if( conn->IsBus() )
+        if( conn->IsBus() && conn->Members().size() )
         {
-            for( const std::shared_ptr<SCH_CONNECTION>& member : conn->Members() )
-            {
-                if( member->IsBus() )
-                {
-                    for( const std::shared_ptr<SCH_CONNECTION>& subMember : member->Members() )
-                        netNames.Add( subMember->Name() );
-                }
-                else
-                {
-                    netNames.Add( member->Name() );
-                }
-            }
+            const std::shared_ptr<SCH_CONNECTION>& member = conn->Members()[0];
+
+            if( member->IsBus() && member->Members().size() )
+                netName = member->Members()[0]->Name();
+            else
+                netName = member->Name();
         }
         else
         {
-            netNames.Add( conn->Name() );
+            netName = conn->Name();
         }
 
-        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netNames.front(),
-                                    m_frame->Schematic().GetNetClassAssignmentCandidates() );
+        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, schematic.GetNetClassAssignmentCandidates(),
+                [&]( const std::vector<wxString>& aNetNames )
+                {
+                    for( SCH_ITEM* item : screen->Items() )
+                    {
+                        bool            redraw   = item->IsBrightened();
+                        SCH_CONNECTION* itemConn = item->Connection();
+
+                        if( itemConn && alg::contains( aNetNames, itemConn->Name() ) )
+                            item->SetBrightened();
+                        else
+                            item->ClearBrightened();
+
+                        redraw |= item->IsBrightened();
+
+                        if( item->Type() == SCH_SYMBOL_T )
+                        {
+                            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                            redraw |= symbol->HasBrightenedPins();
+
+                            symbol->ClearBrightenedPins();
+
+                            for( SCH_PIN* pin : symbol->GetPins() )
+                            {
+                                SCH_CONNECTION* pin_conn = pin->Connection();
+
+                                if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
+                                {
+                                    pin->SetBrightened();
+                                    redraw = true;
+                                }
+                            }
+                        }
+                        else if( item->Type() == SCH_SHEET_T )
+                        {
+                            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                            {
+                                SCH_CONNECTION* pin_conn = pin->Connection();
+
+                                redraw |= pin->IsBrightened();
+
+                                if( pin_conn && alg::contains( aNetNames, pin_conn->Name() ) )
+                                    pin->SetBrightened();
+                                else
+                                    pin->ClearBrightened();
+
+                                redraw |= pin->IsBrightened();
+                            }
+                        }
+
+                        if( redraw )
+                            getView()->Update( item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
+                    }
+
+                    m_frame->GetCanvas()->ForceRefresh();
+                } );
 
         dlg.ShowModal();
     }

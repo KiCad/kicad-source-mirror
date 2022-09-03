@@ -1485,16 +1485,28 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
-    m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true, (void*) netCode );
-    wxSafeYield();
+    m_toolMgr->RunAction( PCB_ACTIONS::selectNet, true, (void*) netCode );
+    canvas()->ForceRefresh();
 
-    DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, board()->GetNetClassAssignmentCandidates() );
+    DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, board()->GetNetClassAssignmentCandidates(),
+            [&]( const std::vector<wxString>& aNetNames )
+            {
+                selectionTool->ClearSelection();
+
+                for( const wxString& netName : aNetNames )
+                {
+                    int netCode = board()->GetNetInfo().GetNetItem( netName )->GetNetCode();
+
+                    if( netCode > 0 )
+                        selectionTool->SelectAllItemsOnNet( netCode );
+                }
+
+                canvas()->ForceRefresh();
+            } );
 
     dlg.ShowModal();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
     return 0;
 }
 

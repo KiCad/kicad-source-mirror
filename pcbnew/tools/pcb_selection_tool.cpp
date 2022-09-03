@@ -1348,7 +1348,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 }
 
 
-void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
+void PCB_SELECTION_TOOL::SelectAllItemsOnNet( int aNetCode, bool aSelect )
 {
     std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
 
@@ -1369,7 +1369,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     if( netcode > 0 )
     {
-        selectAllItemsOnNet( netcode, select );
+        SelectAllItemsOnNet( netcode, select );
         return 0;
     }
 
@@ -1384,7 +1384,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
         BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( i );
 
         if( connItem )
-            selectAllItemsOnNet( connItem->GetNetCode(), select );
+            SelectAllItemsOnNet( connItem->GetNetCode(), select );
     }
 
     // Inform other potentially interested tools
@@ -1789,7 +1789,7 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
             if( netCode > 0 )
             {
-                selectAllItemsOnNet( netCode, true );
+                SelectAllItemsOnNet( netCode, true );
                 m_frame->FocusOnLocation( aItem->GetCenter() );
             }
             break;
