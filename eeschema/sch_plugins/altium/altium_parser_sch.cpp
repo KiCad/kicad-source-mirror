@@ -337,9 +337,9 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::POLYGON );
 
-    ownerindex = ReadOwnerIndex( aProps );
-    ownerpartid = ReadOwnerPartId( aProps );
-    ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
+    OwnerIndex = ReadOwnerIndex( aProps );
+    OwnerPartID = ReadOwnerPartId( aProps );
+    OwnerPartDisplayMode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
 
     int locationCount = ALTIUM_PARSER::ReadInt( aProps, "LOCATIONCOUNT", 0 );
 
@@ -350,11 +350,11 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProps )
                              -ReadKiCadUnitFrac( aProps, "Y" + si ) );
     }
 
-    lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
-    isSolid   = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
+    LineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    IsSolid   = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
 
-    color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
-    areacolor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    Color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
 }
 
 
@@ -362,24 +362,24 @@ ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& 
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::ROUND_RECTANGLE );
 
-    ownerindex = ReadOwnerIndex( aProps );
-    ownerpartid = ReadOwnerPartId( aProps );
-    ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
+    OwnerIndex = ReadOwnerIndex( aProps );
+    OwnerPartID = ReadOwnerPartId( aProps );
+    OwnerPartDisplayMode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
 
-    bottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+    BottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                            -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    topRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
+    TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                            -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    cornerradius = wxSize( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
+    CornerRadius = wxSize( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
                            -ReadKiCadUnitFrac( aProps, "CORNERYRADIUS" ) );
 
-    lineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
-    isSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
-    isTransparent = ALTIUM_PARSER::ReadBool( aProps, "TRANSPARENT", false );
+    LineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    IsSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
+    IsTransparent = ALTIUM_PARSER::ReadBool( aProps, "TRANSPARENT", false );
 
-    color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
-    areacolor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    Color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
 }
 
 
@@ -511,21 +511,21 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::RECTANGLE );
 
-    ownerindex = ReadOwnerIndex( aProps );
-    ownerpartid = ReadOwnerPartId( aProps );
-    ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
+    OwnerIndex = ReadOwnerIndex( aProps );
+    OwnerPartID = ReadOwnerPartId( aProps );
+    OwnerPartDisplayMode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
 
-    bottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+    BottomLeft = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                            -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    topRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
+    TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                            -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    lineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
-    isSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
-    isTransparent = ALTIUM_PARSER::ReadBool( aProps, "TRANSPARENT", false );
+    LineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    IsSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
+    IsTransparent = ALTIUM_PARSER::ReadBool( aProps, "TRANSPARENT", false );
 
-    color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
-    areacolor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    Color     = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+    AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
 }
 
 

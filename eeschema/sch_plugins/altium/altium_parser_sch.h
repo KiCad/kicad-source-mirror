@@ -118,15 +118,15 @@ enum class ASCH_RECORD_ORIENTATION
 
 struct ASCH_SHAPE_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
+    int OwnerIndex;
+    int OwnerPartID;
+    int OwnerPartDisplayMode;
 
-    int  lineWidth;
-    bool isSolid;
+    int  LineWidth;
+    bool IsSolid;
 
-    int color;
-    int areacolor;
+    int Color;
+    int AreaColor;
 };
 
 
@@ -379,12 +379,12 @@ struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
 
 struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    VECTOR2I bottomLeft;
-    VECTOR2I topRight;
+    VECTOR2I BottomLeft;
+    VECTOR2I TopRight;
 
-    wxSize cornerradius;
+    wxSize CornerRadius;
 
-    bool isTransparent;
+    bool IsTransparent;
 
     explicit ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };
@@ -504,10 +504,10 @@ struct ASCH_HARNESS_TYPE
 
 struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    VECTOR2I bottomLeft;
-    VECTOR2I topRight;
+    VECTOR2I BottomLeft;
+    VECTOR2I TopRight;
 
-    bool isTransparent;
+    bool IsTransparent;
 
     explicit ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };

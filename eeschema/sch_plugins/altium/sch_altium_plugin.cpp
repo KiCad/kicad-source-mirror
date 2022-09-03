@@ -99,28 +99,28 @@ static PLOT_DASH_TYPE GetPlotDashType( const ASCH_POLYLINE_LINESTYLE linestyle )
 
 static void SetSchShapeFillAndColor( const ASCH_SHAPE_INTERFACE& elem, SCH_SHAPE* shape )
 {
-    shape->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+    shape->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
 
-    if( !elem.isSolid )
+    if( !elem.IsSolid )
     {
         shape->SetFillMode( FILL_T::NO_FILL );
     }
     else
     {
         shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-        shape->SetFillColor( GetColorFromInt( elem.areacolor ) );
+        shape->SetFillColor( GetColorFromInt( elem.AreaColor ) );
     }
 }
 
 static void SetLibShapeFillAndColor( const ASCH_SHAPE_INTERFACE& elem, LIB_SHAPE* shape )
 {
-    shape->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+    shape->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
 
-    if( !elem.isSolid )
+    if( !elem.IsSolid )
     {
         shape->SetFillMode( FILL_T::NO_FILL );
     }
-    else if( elem.color == elem.areacolor )
+    else if( elem.Color == elem.AreaColor )
     {
         shape->SetFillMode( FILL_T::FILLED_SHAPE );
     }
@@ -1242,7 +1242,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 {
     ASCH_POLYGON elem( aProperties );
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
 
@@ -1257,25 +1257,25 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     }
     else
     {
-        const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+        const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
 
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_reporter->Report( wxString::Format( _( "Polygon's owner (%d) not found." ),
-                                                  elem.ownerindex ),
+                                                  elem.OwnerIndex ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
-        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
             return;
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
-        line->SetUnit( elem.ownerpartid );
+        line->SetUnit( elem.OwnerPartID );
 
         for( VECTOR2I& point : elem.points )
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
@@ -1290,10 +1290,10 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 {
     ASCH_ROUND_RECTANGLE elem( aProperties );
 
-    VECTOR2I sheetTopRight = elem.topRight + m_sheetOffset;
-    VECTOR2I sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+    VECTOR2I sheetTopRight = elem.TopRight + m_sheetOffset;
+    VECTOR2I sheetBottomLeft = elem.BottomLeft + m_sheetOffset;
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         // TODO: misses rounded edges
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
@@ -1307,18 +1307,18 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
     }
     else
     {
-        const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+        const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
 
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_reporter->Report( wxString::Format( _( "Rounded rectangle's owner (%d) not found." ),
-                                                  elem.ownerindex ),
+                                                  elem.OwnerIndex ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
-        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
             return;
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
@@ -1326,10 +1326,10 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
         libSymbolIt->second->AddDrawItem( rect );
 
-        rect->SetUnit( elem.ownerpartid );
+        rect->SetUnit( elem.OwnerPartID );
 
-        rect->SetPosition( GetRelativePosition( elem.topRight + m_sheetOffset, symbol ) );
-        rect->SetEnd( GetRelativePosition( elem.bottomLeft + m_sheetOffset, symbol ) );
+        rect->SetPosition( GetRelativePosition( elem.TopRight + m_sheetOffset, symbol ) );
+        rect->SetEnd( GetRelativePosition( elem.BottomLeft + m_sheetOffset, symbol ) );
         SetLibShapeFillAndColor( elem, rect );
     }
 }
@@ -1613,10 +1613,10 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 {
     ASCH_RECTANGLE elem( aProperties );
 
-    VECTOR2I sheetTopRight = elem.topRight + m_sheetOffset;
-    VECTOR2I sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+    VECTOR2I sheetTopRight = elem.TopRight + m_sheetOffset;
+    VECTOR2I sheetBottomLeft = elem.BottomLeft + m_sheetOffset;
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
 
@@ -1629,25 +1629,25 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+        const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
 
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_reporter->Report( wxString::Format( _( "Rectangle's owner (%d) not found." ),
-                                                  elem.ownerindex ),
+                                                  elem.OwnerIndex ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
-        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
             return;
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
         libSymbolIt->second->AddDrawItem( rect );
 
-        rect->SetUnit( elem.ownerpartid );
+        rect->SetUnit( elem.OwnerPartID );
 
         rect->SetPosition( GetRelativePosition( sheetTopRight, symbol ) );
         rect->SetEnd( GetRelativePosition( sheetBottomLeft, symbol ) );
