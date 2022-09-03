@@ -1194,44 +1194,46 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 {
     ASCH_POLYLINE elem( aProperties );
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
 
-        for( VECTOR2I& point : elem.points )
+        for( VECTOR2I& point : elem.Points )
             poly->AddPoint( point + m_sheetOffset );
 
-        poly->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
+        poly->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                                        GetColorFromInt( elem.Color ) ) );
         poly->SetFlags( IS_NEW );
 
         m_currentSheet->GetScreen()->Append( poly );
     }
     else
     {
-        const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+        const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
 
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_reporter->Report( wxString::Format( _( "Polyline's owner (%d) not found." ),
-                                                  elem.ownerindex ),
+                                                  elem.OwnerIndex ),
                                 RPT_SEVERITY_ERROR );
             return;
         }
 
-        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
             return;
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
-        line->SetUnit( elem.ownerpartid );
+        line->SetUnit( elem.OwnerPartID );
 
-        for( VECTOR2I& point : elem.points )
+        for( VECTOR2I& point : elem.Points )
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
 
-        line->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
+        line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                                        GetColorFromInt( elem.Color ) ) );
     }
 }
 

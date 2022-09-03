@@ -309,24 +309,25 @@ ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::POLYLINE );
 
-    ownerindex = ReadOwnerIndex( aProps );
-    ownerpartid = ReadOwnerPartId( aProps );
-    ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
+    OwnerIndex = ReadOwnerIndex( aProps );
+    OwnerPartID = ReadOwnerPartId( aProps );
+    OwnerPartDisplayMode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
 
     int locationCount = ALTIUM_PARSER::ReadInt( aProps, "LOCATIONCOUNT", 0 );
 
     for( int i = 1; i <= locationCount; i++ )
     {
         const wxString si = std::to_string( i );
-        points.emplace_back( ReadKiCadUnitFrac( aProps, "X" + si ),
+        Points.emplace_back( ReadKiCadUnitFrac( aProps, "X" + si ),
                              -ReadKiCadUnitFrac( aProps, "Y" + si ) );
     }
 
-    lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    LineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
 
     int linestyleVar = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLEEXT", 0 );
     linestyleVar     = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLE", linestyleVar ); // overwrite if present
-    linestyle        = linestyleVar >= 0 && linestyleVar <= 3 ?
+    LineStyle        = linestyleVar >= 0 && linestyleVar <= 3 ?
                                 static_cast<ASCH_POLYLINE_LINESTYLE>( linestyleVar ) :
                                 ASCH_POLYLINE_LINESTYLE::SOLID;
 }

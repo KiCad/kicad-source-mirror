@@ -354,15 +354,16 @@ enum class ASCH_SHEET_ENTRY_SIDE
 
 struct ASCH_POLYLINE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
+    int OwnerIndex;
+    int OwnerPartID;
+    int OwnerPartDisplayMode;
 
-    std::vector<VECTOR2I> points;
+    std::vector<VECTOR2I> Points;
 
-    int lineWidth;
+    int LineWidth;
+    int Color;
 
-    ASCH_POLYLINE_LINESTYLE linestyle;
+    ASCH_POLYLINE_LINESTYLE LineStyle;
 
     explicit ASCH_POLYLINE( const std::map<wxString, wxString>& aProps );
 };
