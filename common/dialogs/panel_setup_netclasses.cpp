@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <grid_tricks.h>
 #include <dialogs/panel_setup_netclasses.h>
-#include <dialogs/wx_html_report_box.h>
+#include "widgets/wx_html_report_box.h"
 #include <tool/tool_manager.h>
 #include <widgets/wx_grid.h>
 #include <string_utils.h>
@@ -75,7 +75,7 @@ wxArrayString        g_lineStyleNames;
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_FRAME* aFrame,
                                                 std::shared_ptr<NET_SETTINGS> aNetSettings,
-                                                const std::vector<wxString>& aNetNames,
+                                                const std::set<wxString>& aNetNames,
                                                 bool aIsEEschema ) :
         PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
         m_frame( aFrame ),

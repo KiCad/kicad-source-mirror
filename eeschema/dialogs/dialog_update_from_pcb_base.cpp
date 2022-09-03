@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "wx_html_report_panel.h"
+#include "widgets/wx_html_report_panel.h"
 
 #include "dialog_update_from_pcb_base.h"
 

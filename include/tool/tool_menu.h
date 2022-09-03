@@ -72,7 +72,7 @@ public:
      *
      * @param aSubMenu: a sub menu to add
      */
-    void AddSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu );
+    void RegisterSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu );
 
     /**
      * @return the list of submenus from this menu

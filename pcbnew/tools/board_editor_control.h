@@ -100,6 +100,9 @@ public:
     ///< Equivalent to the above, but initiated by the user.
     int ExplicitCrossProbeToSch( const TOOL_EVENT& aEvent );
 
+    ///< Assign a netclass to a labelled net.
+    int AssignNetclass( const TOOL_EVENT& aEvent );
+
     /**
      * Display a dialog to select a footprint to be added and allows the user to set its position.
      */

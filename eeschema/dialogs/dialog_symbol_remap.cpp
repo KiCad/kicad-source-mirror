@@ -30,7 +30,7 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
-#include <wx_html_report_panel.h>
+#include "widgets/wx_html_report_panel.h"
 
 #include <symbol_library.h>
 #include <core/kicad_algo.h>

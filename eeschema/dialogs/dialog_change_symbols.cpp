@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -35,7 +35,7 @@
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <template_fieldnames.h>
-#include <wx_html_report_panel.h>
+#include <widgets/wx_html_report_panel.h>
 
 bool g_selectRefDes = false;
 bool g_selectValue  = false;

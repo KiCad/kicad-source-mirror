@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 #include <dialog_constraints_reporter.h>
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <wx_html_report_box.h>
+#include <widgets/wx_html_report_box.h>
 #include <tools/pcb_actions.h>
 #include <wx/wxhtml.h>
 

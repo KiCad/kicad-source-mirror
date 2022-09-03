@@ -237,18 +237,18 @@ std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) cons
 }
 
 
-std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
+std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 {
-    std::vector<wxString> names;
+    std::set<wxString> names;
 
-    for( const NET_MAP::value_type& pair: m_connectionGraph->GetNetMap() )
+    for( const auto& [ key, subgraphList ] : m_connectionGraph->GetNetMap() )
     {
-        CONNECTION_SUBGRAPH* subgraph = pair.second[0];
+        CONNECTION_SUBGRAPH* firstSubgraph = subgraphList[0];
 
-        if( !subgraph->m_driver_connection->IsBus()
-                && subgraph->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
+        if( !firstSubgraph->m_driver_connection->IsBus()
+                && firstSubgraph->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
         {
-            names.emplace_back( pair.first.Name );
+            names.insert( key.Name );
         }
     }
 

@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialogs/wx_html_report_box.h"
 #include "widgets/wx_grid.h"
+#include "widgets/wx_html_report_box.h"
 
 #include "panel_setup_netclasses_base.h"
 

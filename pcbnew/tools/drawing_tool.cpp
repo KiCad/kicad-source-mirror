@@ -241,7 +241,7 @@ bool DRAWING_TOOL::Init()
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
     viaSizeMenu->SetTool( this );
-    m_menu.AddSubMenu( viaSizeMenu );
+    m_menu.RegisterSubMenu( viaSizeMenu );
     ctxMenu.AddMenu( viaSizeMenu.get(),                viaToolActive, 500 );
 
     ctxMenu.AddSeparator( 500 );

@@ -1421,14 +1421,14 @@ FOOTPRINT* BOARD::FindFootprintByPath( const KIID_PATH& aPath ) const
 }
 
 
-std::vector<wxString> BOARD::GetNetClassAssignmentCandidates() const
+std::set<wxString> BOARD::GetNetClassAssignmentCandidates() const
 {
-    std::vector<wxString> names;
+    std::set<wxString> names;
 
     for( const NETINFO_ITEM* net : m_NetInfo )
     {
         if( !net->GetNetname().IsEmpty() )
-            names.emplace_back( net->GetNetname() );
+            names.insert( net->GetNetname() );
     }
 
     return names;

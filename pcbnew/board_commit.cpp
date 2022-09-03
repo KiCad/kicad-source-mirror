@@ -501,7 +501,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
 
             connectivity->RecalculateRatsnest( this );
-            connectivity->ClearDynamicRatsnest();
+            connectivity->ClearLocalRatsnest();
         }
 
         if( solderMaskDirty )

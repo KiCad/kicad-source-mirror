@@ -47,7 +47,7 @@ CONDITIONAL_MENU& TOOL_MENU::GetMenu()
 }
 
 
-void TOOL_MENU::AddSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu )
+void TOOL_MENU::RegisterSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu )
 {
     // store a copy of the menu (keeps a reference)
     m_subMenus.push_back( std::move( aSubMenu ) );

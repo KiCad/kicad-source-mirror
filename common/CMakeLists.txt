@@ -106,6 +106,8 @@ set( COMMON_ABOUT_DLG_SRCS
     )
 
 set( COMMON_DLG_SRCS
+    dialogs/dialog_assign_netclass.cpp
+    dialogs/dialog_assign_netclass_base.cpp
     dialogs/dialog_color_picker.cpp
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
@@ -152,9 +154,6 @@ set( COMMON_DLG_SRCS
     dialogs/panel_setup_severities.cpp
     dialogs/panel_text_variables.cpp
     dialogs/panel_text_variables_base.cpp
-    dialogs/wx_html_report_box.cpp
-    dialogs/wx_html_report_panel.cpp
-    dialogs/wx_html_report_panel_base.cpp
     )
 
 if( KICAD_USE_SENTRY )
@@ -204,6 +203,9 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_combobox.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
+    widgets/wx_html_report_box.cpp
+    widgets/wx_html_report_panel.cpp
+    widgets/wx_html_report_panel_base.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp
     widgets/wx_progress_reporters.cpp

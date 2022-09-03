@@ -441,11 +441,11 @@ bool ROUTER_TOOL::Init()
 
     m_trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
     m_trackViaMenu->SetTool( this );
-    m_menu.AddSubMenu( m_trackViaMenu );
+    m_menu.RegisterSubMenu( m_trackViaMenu );
 
     m_diffPairMenu = std::make_shared<DIFF_PAIR_MENU>( *frame );
     m_diffPairMenu->SetTool( this );
-    m_menu.AddSubMenu( m_diffPairMenu );
+    m_menu.RegisterSubMenu( m_diffPairMenu );
 
     auto haveHighlight =
             [&]( const SELECTION& sel )
@@ -2030,7 +2030,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 // Update ratsnest
                 dynamicData->Move( offset - lastOffset );
                 lastOffset = offset;
-                connectivityData->ComputeDynamicRatsnest( dynamicItems, dynamicData.get(), offset );
+                connectivityData->ComputeLocalRatsnest( dynamicItems, dynamicData.get(), offset );
             }
         }
         else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
@@ -2079,7 +2079,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         view()->ClearPreview();
         view()->ShowPreview( false );
 
-        connectivityData->ClearDynamicRatsnest();
+        connectivityData->ClearLocalRatsnest();
     }
 
     if( m_router->RoutingInProgress() )

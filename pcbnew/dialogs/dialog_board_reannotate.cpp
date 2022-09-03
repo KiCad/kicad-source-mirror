@@ -35,6 +35,7 @@
 #include <pcbnew_settings.h>
 #include <refdes_utils.h>
 #include <tool/grid_menu.h>
+#include <widgets/wx_html_report_panel.h>
 #include <wx/valtext.h>
 
 

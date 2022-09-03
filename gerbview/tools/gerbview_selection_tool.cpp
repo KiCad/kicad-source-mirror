@@ -125,14 +125,12 @@ GERBVIEW_SELECTION_TOOL::~GERBVIEW_SELECTION_TOOL()
 
 bool GERBVIEW_SELECTION_TOOL::Init()
 {
-    auto selectMenu = std::make_shared<HIGHLIGHT_MENU>();
-    selectMenu->SetTool( this );
-    m_menu.AddSubMenu( selectMenu );
+    std::shared_ptr<HIGHLIGHT_MENU> highlightSubMenu = std::make_shared<HIGHLIGHT_MENU>();
+    highlightSubMenu->SetTool( this );
+    m_menu.RegisterSubMenu( highlightSubMenu );
 
-    auto& menu = m_menu.GetMenu();
-
-    menu.AddMenu( selectMenu.get() );
-    menu.AddSeparator( 1000 );
+    m_menu.GetMenu().AddMenu( highlightSubMenu.get() );
+    m_menu.GetMenu().AddSeparator( 1000 );
 
     getEditFrame<GERBVIEW_FRAME>()->AddStandardSubMenus( m_menu );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 		wxBitmapButton* m_compileButton;
 		WX_HTML_REPORT_BOX* m_errorsReport;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnContextMenu( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnCompile( wxCommandEvent& event ) { event.Skip(); }
@@ -59,6 +59,7 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 	public:
 
 		PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_RULES_BASE();
 
 };

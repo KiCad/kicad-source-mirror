@@ -173,6 +173,8 @@ bool CONVERT_TOOL::Init()
     m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
+    m_menu->AppendSeparator();
+    m_menu->AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::ShowAlways );
 
     // Currently the code exists, but tracks are not really existing in footprints
     // only segments on copper layers

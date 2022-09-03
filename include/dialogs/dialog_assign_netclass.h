@@ -27,13 +27,14 @@
 #include <dialogs/dialog_assign_netclass_base.h>
 
 
-class SCH_EDIT_FRAME;
+class EDA_BASE_FRAME;
 
 
 class DIALOG_ASSIGN_NETCLASS : public DIALOG_ASSIGN_NETCLASS_BASE
 {
 public:
-    DIALOG_ASSIGN_NETCLASS( SCH_EDIT_FRAME* aParent, const wxString aNetName );
+    DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const wxString aNetName,
+                            const std::set<wxString> aCandidateNetNames );
     ~DIALOG_ASSIGN_NETCLASS() override {}
 
 private:
@@ -42,8 +43,10 @@ private:
     bool TransferDataFromWindow() override;
 
 private:
-    SCH_EDIT_FRAME* m_frame;
-    wxString        m_lastPattern;
+    EDA_BASE_FRAME*    m_frame;
+    std::set<wxString> m_netCandidates;
+
+    wxString           m_lastPattern;
 };
 
 #endif  //DIALOG_ASSIGN_NETCLASS_H

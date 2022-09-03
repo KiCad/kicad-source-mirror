@@ -25,7 +25,7 @@
 #include <pcbnew_settings.h>
 #include <dialog_update_pcb.h>
 #include <ratsnest/ratsnest_data.h>
-#include <wx_html_report_panel.h>
+#include "widgets/wx_html_report_panel.h"
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <tool/tool_manager.h>

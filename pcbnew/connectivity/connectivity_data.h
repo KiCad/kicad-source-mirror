@@ -235,27 +235,26 @@ public:
     bool TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos = nullptr );
 
     /**
-     * Function ClearDynamicRatsnest()
-     * Erases the temporary dynamic ratsnest (i.e. the ratsnest lines that
-     * pcbnew displays when moving an item/set of items)
+     * Function ClearLocalRatsnest()
+     * Erases the temporary, selection-based ratsnest (i.e. the ratsnest lines that pcbnew
+     * displays when moving an item/set of items).
      */
-    void ClearDynamicRatsnest();
+    void ClearLocalRatsnest();
 
     /**
-     * Hides the temporary dynamic ratsnest lines.
+     * Hides the temporary, selection-based ratsnest lines.
      */
-    void HideDynamicRatsnest();
+    void HideLocalRatsnest();
 
     /**
-     * Function ComputeDynamicRatsnest()
-     * Calculates the temporary dynamic ratsnest (i.e. the ratsnest lines that)
-     * for the set of items aItems.
+     * Function ComputeLocalRatsnest()
+     * Calculates the temporary (usually selection-based) ratsnest for the set of \a aItems.
      */
-    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
-                                 const CONNECTIVITY_DATA* aDynamicData,
-                                 VECTOR2I aInternalOffset = { 0, 0 } );
+    void ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aItems,
+                               const CONNECTIVITY_DATA* aDynamicData,
+                               VECTOR2I aInternalOffset = { 0, 0 } );
 
-    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const { return m_dynamicRatsnest; }
+    const std::vector<RN_DYNAMIC_LINE>& GetLocalRatsnest() const { return m_dynamicRatsnest; }
 
     /**
      * Function GetConnectedItems()

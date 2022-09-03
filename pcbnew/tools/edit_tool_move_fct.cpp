@@ -809,7 +809,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         m_commit->Push( _( "Drag" ) );
 
     // Remove the dynamic ratsnest from the screen
-    m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
 
     // Unselect all items to clear selection flags and then re-select the originally selected
     // items.

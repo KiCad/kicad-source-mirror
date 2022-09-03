@@ -149,9 +149,9 @@ bool PCB_SELECTION_TOOL::Init()
         return true;
     }
 
-    auto selectMenu = std::make_shared<SELECT_MENU>();
+    std::shared_ptr<SELECT_MENU> selectMenu = std::make_shared<SELECT_MENU>();
     selectMenu->SetTool( this );
-    m_menu.AddSubMenu( selectMenu );
+    m_menu.RegisterSubMenu( selectMenu );
 
     auto& menu = m_menu.GetMenu();
 
@@ -2087,7 +2087,7 @@ void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
     if( !aQuietMode )
     {
         m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-        m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
     }
 }
 

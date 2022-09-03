@@ -30,7 +30,6 @@
 #include <drc/drc_item.h>
 #include <tools/zone_filler_tool.h>
 #include <reporter.h>
-#include <dialogs/wx_html_report_panel_base.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),

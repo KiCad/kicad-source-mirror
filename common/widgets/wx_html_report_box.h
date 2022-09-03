@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -62,13 +62,13 @@ public:
 private:
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
-    wxString addHeader( const wxString& aBody );
     wxString generateHtml( const wxString& aLine );
 
+private:
     EDA_UNITS             m_units;
 
-    // Indicates messages should be flushed as they are added.  Required for progress-related
-    // reports, but can be very slow for larger reports.
+    ///< Indicates messages should be flushed as they are added.  Required for progress-related
+    ///< reports, but can be very slow for larger reports.
     bool                  m_immediateMode;
 
     ///< copy of the report, stored for filtering

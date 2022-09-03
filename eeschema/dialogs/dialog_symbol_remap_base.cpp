@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "wx_html_report_panel.h"
+#include "widgets/wx_html_report_panel.h"
 
 #include "dialog_symbol_remap_base.h"
 

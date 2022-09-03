@@ -857,12 +857,9 @@ public:
     FOOTPRINT* FindFootprintByPath( const KIID_PATH& aPath ) const;
 
     /**
-     * Return a list of name candidates for netclass assignment.
-     *
-     * Tokens may appear more than once if they were harvested from hierarchical nets
-     * (ie: /CLK, /sheet1/CLK).
+     * Return the set of netname candidates for netclass assignment.
      */
-    std::vector<wxString> GetNetClassAssignmentCandidates() const;
+    std::set<wxString> GetNetClassAssignmentCandidates() const;
 
     /**
      * Copy NETCLASS info to each NET, based on NET membership in a NETCLASS.

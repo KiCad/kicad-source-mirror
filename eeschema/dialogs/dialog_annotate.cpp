@@ -30,7 +30,7 @@
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
-#include <wx_html_report_panel.h>
+#include <widgets/wx_html_report_panel.h>
 #include <schematic.h>
 
 // A window name for the annotate dialog to retrieve is if not destroyed

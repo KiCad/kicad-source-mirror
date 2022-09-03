@@ -26,7 +26,7 @@
 #include <dialog_update_from_pcb.h>
 #include <sch_edit_frame.h>
 #include <sch_editor_control.h>
-#include <wx_html_report_panel.h>
+#include "widgets/wx_html_report_panel.h"
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE

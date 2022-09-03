@@ -146,11 +146,11 @@ public:
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel ) const;
 
     /**
-     * Return a list of name candidates for netclass assignment.  The list will include both
+     * Return the set of netname candidates for netclass assignment.  The list will include both
      * composite names (buses) and atomic net names.  Names are fetched from available labels,
      * power pins, etc.
      */
-    std::vector<wxString> GetNetClassAssignmentCandidates();
+    std::set<wxString> GetNetClassAssignmentCandidates();
 
     /**
      * Resolves text vars that refer to other items.

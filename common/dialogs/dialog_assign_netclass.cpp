@@ -22,16 +22,17 @@
  */
 
 #include <dialogs/dialog_assign_netclass.h>
-#include <dialogs/wx_html_report_box.h>
-#include <sch_edit_frame.h>
+#include <widgets/wx_html_report_box.h>
+#include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
-#include <schematic.h>
 
 
-DIALOG_ASSIGN_NETCLASS::DIALOG_ASSIGN_NETCLASS( SCH_EDIT_FRAME* aParent, const wxString aNetName ) :
+DIALOG_ASSIGN_NETCLASS::DIALOG_ASSIGN_NETCLASS( EDA_BASE_FRAME* aParent, const wxString aNetName,
+                                                const std::set<wxString> aCandidateNetNames ) :
         DIALOG_ASSIGN_NETCLASS_BASE( aParent ),
-        m_frame( aParent )
+        m_frame( aParent ),
+        m_netCandidates( aCandidateNetNames )
 {
     std::shared_ptr<NET_SETTINGS>& netSettings = m_frame->Prj().GetProjectFile().m_NetSettings;
 
@@ -86,7 +87,7 @@ void DIALOG_ASSIGN_NETCLASS::OnUpdateUI( wxUpdateUIEvent& event )
 
             m_matchingNets->Report( _( "<b>Currently matching nets:</b>" ) );
 
-            for( const wxString& net : m_frame->Schematic().GetNetClassAssignmentCandidates() )
+            for( const wxString& net : m_netCandidates )
             {
                 int matches;
                 int offset;

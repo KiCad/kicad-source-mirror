@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="15" />
+    <FileVersion major="1" minor="16" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -52,6 +52,7 @@
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Geographical Reannotation</property>
             <property name="tooltip"></property>
+            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
@@ -2873,7 +2874,7 @@
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
-                                        <property name="subclass">WX_HTML_REPORT_PANEL; wx_html_report_panel.h; forward_declare</property>
+                                        <property name="subclass">WX_HTML_REPORT_PANEL; widgets/wx_html_report_panel.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>

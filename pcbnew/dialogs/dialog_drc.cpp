@@ -44,7 +44,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
 #include <widgets/progress_reporter_base.h>
-#include <dialogs/wx_html_report_box.h>
+#include <widgets/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
 #include <tools/zone_filler_tool.h>

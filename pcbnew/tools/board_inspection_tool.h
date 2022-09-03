@@ -55,7 +55,7 @@ public:
     /**
      * Show dialog with board statistics.
      */
-    int ShowStatisticsDialog( const TOOL_EVENT& aEvent );
+    int ShowBoardStatistics( const TOOL_EVENT& aEvent );
 
     ///< Highlight net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
@@ -63,30 +63,25 @@ public:
     ///< Clear all board highlights
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
-    ///< Launch a tool to pick the item whose net is going to be highlighted.
-    int HighlightNetTool( const TOOL_EVENT& aEvent );
-
     ///< Perform the appropriate action in response to an Eeschema cross-probe.
     int HighlightItem( const TOOL_EVENT& aEvent );
 
     ///< Update ratsnest for selected items.
-    int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
+    int UpdateLocalRatsnest( const TOOL_EVENT& aEvent );
 
     ///< Hide ratsnest for selected items. Called when there are no items selected.
-    int HideDynamicRatsnest( const TOOL_EVENT& aEvent );
+    int HideLocalRatsnest( const TOOL_EVENT& aEvent );
 
     ///< Show local ratsnest of a component.
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
 
-    int FlipPcbView( const TOOL_EVENT& aEvent );
-
     int ListNets( const TOOL_EVENT& aEvent );
 
     ///< Hide the ratsnest for a given net.
-    int HideNet( const TOOL_EVENT& aEvent );
+    int HideNetInRatsnest( const TOOL_EVENT& aEvent );
 
     ///< Show the ratsnest for a given net.
-    int ShowNet( const TOOL_EVENT& aEvent );
+    int ShowNetInRatsnest( const TOOL_EVENT& aEvent );
 
     void InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem );
 
@@ -103,8 +98,6 @@ public:
         return !m_currentlyHighlighted.empty();
     }
 
-    static bool HasHole( BOARD_ITEM* aItem );
-
 private:
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
@@ -118,7 +111,7 @@ private:
      */
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
 
-    void doHideNet( int aNetCode, bool aHide );
+    void doHideRatsnestNet( int aNetCode, bool aHide );
 
     ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;

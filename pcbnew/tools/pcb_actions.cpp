@@ -670,6 +670,11 @@ TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSize
         "", "",
         BITMAPS::INVALID_BITMAP, AF_NOTIFY );
 
+TOOL_ACTION PCB_ACTIONS::assignNetClass( "pcbnew.EditorControl.assignNetclass",
+        AS_GLOBAL, 0, "",
+        _( "Assign Netclass..." ), _( "Assign a netclass to nets matching a pattern" ),
+        BITMAPS::netlist );
+
 TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
         AS_GLOBAL, 0, "",
         _( "Merge Zones" ), _( "Merge zones" ) );
@@ -768,20 +773,22 @@ TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( "pcbnew.EditorControl.toggleNetHigh
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL, 0, "",
-        _( "Highlight Selected Net" ), _( "Highlight all copper items on the selected net(s)" ),
+        _( "Highlight Net" ), _( "Highlight all copper items on the selected net(s)" ),
         BITMAPS::net_highlight );
 
 TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
 
-TOOL_ACTION PCB_ACTIONS::hideNet( "pcbnew.EditorControl.hideNet",
+TOOL_ACTION PCB_ACTIONS::hideNetInRatsnest( "pcbnew.EditorControl.hideNet",
         AS_GLOBAL, 0, "",
-        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ),
+        _( "Hide Net in Ratsnest" ),
+        _( "Hide the selected net in the ratsnest of unconnected net lines/arcs" ),
         BITMAPS::hide_ratsnest );
 
-TOOL_ACTION PCB_ACTIONS::showNet( "pcbnew.EditorControl.showNet",
+TOOL_ACTION PCB_ACTIONS::showNetInRatsnest( "pcbnew.EditorControl.showNet",
         AS_GLOBAL, 0, "",
-        _( "Show Net" ), _( "Show the ratsnest for the selected net" ),
+        _( "Show Net in Ratsnest" ),
+        _( "Show the selected net in the ratsnest of unconnected net lines/arcs" ),
         BITMAPS::show_ratsnest );
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
@@ -798,7 +805,7 @@ TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         _( "Local Ratsnest" ), _( "Toggle ratsnest display of selected item(s)" ),
         BITMAPS::tool_ratsnest, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideDynamicRatsnest",
+TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideDynamicRatsnest",
         AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnest",
@@ -1116,7 +1123,7 @@ TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
         BITMAPS::INVALID_BITMAP, AF_NOTIFY );
 
 //Show board statistics tool
-TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog",
+TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowBoardStatistics",
         AS_GLOBAL, 0, "",
         _( "Show Board Statistics" ), _( "Shows board statistics" ) );
 

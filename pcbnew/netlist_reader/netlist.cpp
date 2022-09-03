@@ -1,13 +1,10 @@
-/**
- * @file pcbnew/netlist.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,11 +94,9 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     for( auto track : board->Tracks() )
         GetCanvas()->GetView()->Update( track );
 
-    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
-
     // Spread new footprints.
-    VECTOR2I areaPosition = GetCanvas()->GetViewControls()->GetCursorPosition();
-    BOX2I    bbox = board->GetBoundingBox();
+    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
+    VECTOR2I                areaPosition = GetCanvas()->GetViewControls()->GetCursorPosition();
 
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 

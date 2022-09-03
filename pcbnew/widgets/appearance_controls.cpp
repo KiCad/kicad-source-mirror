@@ -304,17 +304,19 @@ void NET_GRID_TABLE::HideOtherNets( const NET_GRID_ENTRY& aNet )
 
 void NET_GRID_TABLE::updateNetVisibility( const NET_GRID_ENTRY& aNet )
 {
-    const TOOL_ACTION& action = aNet.visible ? PCB_ACTIONS::showNet : PCB_ACTIONS::hideNet;
+    const TOOL_ACTION& action = aNet.visible ? PCB_ACTIONS::showNetInRatsnest
+                                             : PCB_ACTIONS::hideNetInRatsnest;
+
     m_frame->GetToolManager()->RunAction( action, true, static_cast<intptr_t>( aNet.code ) );
 }
 
 
 void NET_GRID_TABLE::updateNetColor( const NET_GRID_ENTRY& aNet )
 {
-    KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-            m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
+    KIGFX::RENDER_SETTINGS*     rs = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
-    std::map<int, KIGFX::COLOR4D>& netColors  = rs->GetNetColorMap();
+    std::map<int, KIGFX::COLOR4D>& netColors  = renderSettings->GetNetColorMap();
 
     if( aNet.color != COLOR4D::UNSPECIFIED )
         netColors[aNet.code] = aNet.color;
@@ -1779,11 +1781,9 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         return;
 
     case ID_SHOW_ALL_COPPER_LAYERS:
-    {
         visible |= presetAllCopper.layers;
         setVisibleLayers( visible );
         break;
-    }
 
     case ID_HIDE_ALL_BUT_ACTIVE:
         ApplyLayerPreset( presetNoLayers );
@@ -1791,7 +1791,6 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_HIDE_ALL_COPPER_LAYERS:
-    {
         visible &= ~presetAllCopper.layers;
 
         if( !visible.test( current ) && visible.count() > 0 )
@@ -1799,10 +1798,8 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 
         setVisibleLayers( visible );
         break;
-    }
 
     case ID_HIDE_ALL_NON_COPPER:
-    {
         visible &= presetAllCopper.layers;
 
         if( !visible.test( current ) && visible.count() > 0 )
@@ -1810,15 +1807,12 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 
         setVisibleLayers( visible );
         break;
-    }
 
     case ID_SHOW_ALL_NON_COPPER:
-    {
         visible |= ~presetAllCopper.layers;
 
         setVisibleLayers( visible );
         break;
-    }
 
     case ID_PRESET_FRONT_ASSEMBLY:
         ApplyLayerPreset( presetFrontAssembly );
@@ -2878,28 +2872,22 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
     }
 
     case ID_HIGHLIGHT_NET:
-    {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true,
                                               static_cast<intptr_t>( net.code ) );
         m_frame->GetCanvas()->Refresh();
         break;
-    }
 
     case ID_SELECT_NET:
-    {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
                                               static_cast<intptr_t>( net.code ) );
         m_frame->GetCanvas()->Refresh();
         break;
-    }
 
     case ID_DESELECT_NET:
-    {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, true,
                                               static_cast<intptr_t>( net.code ) );
         m_frame->GetCanvas()->Refresh();
         break;
-    }
 
     case ID_SHOW_ALL_NETS:
         m_netsTable->ShowAllNets();
@@ -2932,8 +2920,8 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
     {
         if( net->GetNetClass()->GetName() == aClassName )
         {
-            m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNet
-                                                        : PCB_ACTIONS::hideNet,
+            m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNetInRatsnest
+                                                        : PCB_ACTIONS::hideNetInRatsnest,
                                                   true,
                                                   static_cast<intptr_t>( net->GetNetCode() ) );
 
@@ -3043,7 +3031,6 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
     switch( aEvent.GetId() )
     {
         case ID_SET_NET_COLOR:
-        {
             if( setting )
             {
                 setting->ctl_color->GetNewSwatchColor();
@@ -3061,10 +3048,8 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             }
 
             break;
-        }
 
         case ID_HIGHLIGHT_NET:
-        {
             if( !m_contextMenuNetclass.IsEmpty() )
             {
                 runOnNetsOfClass( m_contextMenuNetclass,
@@ -3089,12 +3074,11 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                 view->UpdateAllLayersColor();
                 board->HighLightON();
             }
+
             break;
-        }
 
         case ID_SELECT_NET:
         case ID_DESELECT_NET:
-        {
             if( !m_contextMenuNetclass.IsEmpty() )
             {
                 TOOL_MANAGER* toolMgr = m_frame->GetToolManager();
@@ -3109,10 +3093,9 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                         } );
             }
             break;
-        }
+
 
         case ID_SHOW_ALL_NETS:
-        {
             showNetclass( NETCLASS::Default );
             wxASSERT( m_netclassSettingsMap.count( NETCLASS::Default ) );
             m_netclassSettingsMap.at( NETCLASS::Default )->ctl_visibility->SetValue( true );
@@ -3126,7 +3109,6 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
             }
 
             break;
-        }
 
         case ID_HIDE_OTHER_NETS:
         {

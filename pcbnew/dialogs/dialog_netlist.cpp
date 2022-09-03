@@ -35,10 +35,8 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-
 #include <dialog_netlist.h>
-
-#include <wx_html_report_panel.h>
+#include <widgets/wx_html_report_panel.h>
 #include <wx/filedlg.h>
 
 

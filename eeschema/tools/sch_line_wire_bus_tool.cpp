@@ -179,6 +179,14 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
+    std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
+    busUnfoldMenu->SetTool( this );
+    m_menu.RegisterSubMenu( busUnfoldMenu );
+
+    std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
+    selBusUnfoldMenu->SetTool( m_selectionTool );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( selBusUnfoldMenu );
+
     auto wireOrBusTool =
             [this]( const SELECTION& aSel )
             {
@@ -230,9 +238,6 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     ctxMenu.AddItem( EE_ACTIONS::finishBus,            IsDrawingBus, 10 );
     ctxMenu.AddItem( EE_ACTIONS::finishLine,           IsDrawingLine, 10 );
 
-    std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
-    busUnfoldMenu->SetTool( this );
-    m_menu.AddSubMenu( busUnfoldMenu );
     ctxMenu.AddMenu( busUnfoldMenu.get(),              EE_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddSeparator( 100 );
@@ -252,9 +257,6 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
-    selBusUnfoldMenu->SetTool( m_selectionTool );
-    m_selectionTool->GetToolMenu().AddSubMenu( selBusUnfoldMenu );
     selToolMenu.AddMenu( selBusUnfoldMenu.get(),       busSelection && EE_CONDITIONS::Idle, 100 );
 
     return true;

@@ -470,7 +470,7 @@ TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
 
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",
-        _( "Assign Netclass..." ), _( "Assign a netclass to the net of the selected wire" ),
+        _( "Assign Netclass..." ), _( "Assign a netclass to nets matching a pattern" ),
         BITMAPS::netlist);
 
 TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",

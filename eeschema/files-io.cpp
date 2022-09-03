@@ -37,7 +37,6 @@
 #include <profile.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
-#include <wx_html_report_box.h>
 #include <dialog_HTML_reporter_base.h>
 #include <reporter.h>
 #include <richio.h>
@@ -68,6 +67,7 @@
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
 #include <widgets/wx_progress_reporters.h>
+#include <widgets/wx_html_report_box.h>
 
 #if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_hook_save_project.h"

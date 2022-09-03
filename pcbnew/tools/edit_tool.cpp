@@ -86,16 +86,15 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool ) :
+POSITIONING_TOOLS_MENU::POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool ) :
         CONDITIONAL_MENU( aTool )
 {
     SetIcon( BITMAPS::special_tools );
-    SetTitle( _( "Special Tools" ) );
+    SetTitle( _( "Positioning Tools" ) );
 
     AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::createArray,       SELECTION_CONDITIONS::ShowAlways );
 }
 
 
@@ -103,6 +102,9 @@ bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    auto positioningToolsSubMenu = std::make_shared<POSITIONING_TOOLS_MENU>( this );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( positioningToolsSubMenu );
 
     auto propertiesCondition =
             [&]( const SELECTION& aSel )
@@ -161,19 +163,30 @@ bool EDIT_TOOL::Init()
                 return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
             };
 
+    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
+                                                   PCB_ARC_T,
+                                                   PCB_VIA_T,
+                                                   PCB_PAD_T,
+                                                   PCB_ZONE_T };
+
+    static std::vector<KICAD_T> trackTypes = { PCB_TRACE_T,
+                                               PCB_ARC_T,
+                                               PCB_VIA_T };
+
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
-                                                      && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) );
+                                                      && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle,     SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
-    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) );
+    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -181,17 +194,18 @@ bool EDIT_TOOL::Init()
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
 
+    menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes ) );
+    menu.AddItem( PCB_ACTIONS::inspectClearance,  SELECTION_CONDITIONS::Count( 2 ) );
+
     // Footprint actions
     menu.AddSeparator();
     menu.AddItem( PCB_ACTIONS::editFpInFpEditor,  singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprint,   singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint,   singleFootprintCondition );
 
-    // Add the submenu for create array and special move
-    auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>( this );
-    menu.AddSeparator();
-    m_selectionTool->GetToolMenu().AddSubMenu( specialToolsSubMenu );
-    menu.AddMenu( specialToolsSubMenu.get(),      SELECTION_CONDITIONS::NotEmpty, 100 );
+    // Add the submenu for the special positioning tools
+    menu.AddSeparator( 100 );
+    menu.AddMenu( positioningToolsSubMenu.get(),  SELECTION_CONDITIONS::NotEmpty, 100 );
 
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::cut,                   SELECTION_CONDITIONS::NotEmpty, 150 );

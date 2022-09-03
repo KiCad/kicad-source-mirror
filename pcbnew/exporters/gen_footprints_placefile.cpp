@@ -38,7 +38,7 @@
 #include <footprint.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_base.h>
-#include <wx_html_report_panel.h>
+#include "widgets/wx_html_report_panel.h"
 #include <dialog_gen_footprint_position_file_base.h>
 #include <export_footprints_placefile.h>
 #include "gerber_placefile_writer.h"

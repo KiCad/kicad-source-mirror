@@ -547,13 +547,13 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 
     aMenu.AddSeparator( 1000 );
 
-    auto zoomMenu = std::make_shared<ZOOM_MENU>( this );
+    std::shared_ptr<ZOOM_MENU> zoomMenu = std::make_shared<ZOOM_MENU>( this );
     zoomMenu->SetTool( commonTools );
-    aToolMenu.AddSubMenu( zoomMenu );
+    aToolMenu.RegisterSubMenu( zoomMenu );
 
-    auto gridMenu = std::make_shared<GRID_MENU>( this );
+    std::shared_ptr<GRID_MENU> gridMenu = std::make_shared<GRID_MENU>( this );
     gridMenu->SetTool( commonTools );
-    aToolMenu.AddSubMenu( gridMenu );
+    aToolMenu.RegisterSubMenu( gridMenu );
 
     aMenu.AddMenu( zoomMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );
     aMenu.AddMenu( gridMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );

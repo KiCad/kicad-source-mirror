@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "wx_html_report_panel.h"
+#include "widgets/wx_html_report_panel.h"
 
 #include "dialog_netlist_base.h"
 

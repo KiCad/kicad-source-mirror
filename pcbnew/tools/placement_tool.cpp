@@ -78,7 +78,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->Add( PCB_ACTIONS::distributeVertically );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
-    selToolMenu.AddMenu( m_placementMenu, SELECTION_CONDITIONS::MoreThan( 1 ) );
+    selToolMenu.AddMenu( m_placementMenu, SELECTION_CONDITIONS::MoreThan( 1 ), 100 );
 
     return true;
 }

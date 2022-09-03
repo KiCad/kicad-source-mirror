@@ -109,7 +109,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const bool curved_ratsnest = cfg->m_Display.m_DisplayRatsnestLinesCurved;
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
-    for( const RN_DYNAMIC_LINE& l : m_data->GetDynamicRatsnest() )
+    for( const RN_DYNAMIC_LINE& l : m_data->GetLocalRatsnest() )
     {
         if( hiddenNets.count( l.netCode ) )
             continue;

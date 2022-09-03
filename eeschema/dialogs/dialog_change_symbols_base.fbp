@@ -1788,7 +1788,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">WX_HTML_REPORT_PANEL; wx_html_report_panel.h; forward_declare</property>
+                                <property name="subclass">WX_HTML_REPORT_PANEL; widgets/wx_html_report_panel.h; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>

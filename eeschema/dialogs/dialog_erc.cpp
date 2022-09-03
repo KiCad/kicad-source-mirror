@@ -39,7 +39,7 @@
 #include <erc.h>
 #include <id.h>
 #include <confirm.h>
-#include <dialogs/wx_html_report_box.h>
+#include <widgets/wx_html_report_box.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>

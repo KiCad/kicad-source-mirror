@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "wx_html_report_box.h"
+#include "widgets/wx_html_report_box.h"
 
 #include "panel_setup_rules_base.h"
 
@@ -48,6 +48,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_textEditor->SetViewWhiteSpace( false );
 	m_textEditor->SetMarginWidth( 2, 0 );
 	m_textEditor->SetIndentationGuides( true );
+	m_textEditor->SetReadOnly( false );
 	m_textEditor->SetMarginWidth( 1, 0 );
 	m_textEditor->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
 	m_textEditor->SetMarginWidth( 0, m_textEditor->TextWidth( wxSTC_STYLE_LINENUMBER, wxT("_99999") ) );

@@ -47,7 +47,6 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_view.h>
-#include <pin_numbers.h>
 #include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
@@ -59,11 +58,9 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
-#include <tools/sch_navigate_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
 #include <eda_list_dialog.h>
-
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <sch_sheet_path.h>
@@ -1116,8 +1113,10 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     // TODO remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+    {
         // Ensure the netlist data is up to date:
         m_frame->RecalculateConnections( NO_CLEANUP );
+    }
 
     // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
@@ -1165,7 +1164,8 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             netNames.Add( conn->Name() );
         }
 
-        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netNames.front() );
+        DIALOG_ASSIGN_NETCLASS dlg( m_frame, netNames.front(),
+                                    m_frame->Schematic().GetNetClassAssignmentCandidates() );
 
         dlg.ShowModal();
     }
@@ -2035,7 +2035,9 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
             blocking_win->Close( true );
 
         if( aEvent.IsAction( &EE_ACTIONS::editWithLibEdit ) )
+        {
             symbolEditor->LoadSymbolFromSchematic( symbol );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::editLibSymbolWithLibEdit ) )
         {
             symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );

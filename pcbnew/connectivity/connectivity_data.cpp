@@ -302,9 +302,9 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_
 }
 
 
-void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
-                                                const CONNECTIVITY_DATA* aDynamicData,
-                                                VECTOR2I aInternalOffset )
+void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aItems,
+                                              const CONNECTIVITY_DATA* aDynamicData,
+                                              VECTOR2I aInternalOffset )
 {
     if( !aDynamicData )
         return;
@@ -352,17 +352,17 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 }
 
 
-void CONNECTIVITY_DATA::ClearDynamicRatsnest()
+void CONNECTIVITY_DATA::ClearLocalRatsnest()
 {
     m_connAlgo->ForEachAnchor( []( CN_ANCHOR& anchor )
                                {
                                    anchor.SetNoLine( false );
                                } );
-    HideDynamicRatsnest();
+    HideLocalRatsnest();
 }
 
 
-void CONNECTIVITY_DATA::HideDynamicRatsnest()
+void CONNECTIVITY_DATA::HideLocalRatsnest()
 {
     m_dynamicRatsnest.clear();
 }

@@ -307,6 +307,8 @@ public:
 
     static TOOL_ACTION trackViaSizeChanged;   // notification
 
+    static TOOL_ACTION assignNetClass;
+
     // Zone actions
     static TOOL_ACTION zoneFill;
     static TOOL_ACTION zoneFillAll;
@@ -467,12 +469,12 @@ public:
     static TOOL_ACTION toggleNetHighlight;      // Toggles between highlight off and highlight on
     static TOOL_ACTION highlightNetSelection;   // Turns on highlight and takes net from selection
     static TOOL_ACTION highlightItem;           // Select component via cross-probe
-    static TOOL_ACTION hideNet;
-    static TOOL_ACTION showNet;
 
     // Ratsnest
+    static TOOL_ACTION hideNetInRatsnest;
+    static TOOL_ACTION showNetInRatsnest;
     static TOOL_ACTION localRatsnestTool;
-    static TOOL_ACTION hideDynamicRatsnest;
+    static TOOL_ACTION hideLocalRatsnest;
     static TOOL_ACTION updateLocalRatsnest;
 
     /// Find an item

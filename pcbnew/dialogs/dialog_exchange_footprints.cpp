@@ -37,7 +37,7 @@
 #include <pcb_group.h>
 #include <pcbnew_settings.h>
 #include <project.h>
-#include <wx_html_report_panel.h>
+#include <widgets/wx_html_report_panel.h>
 
 
 #define ID_MATCH_FP_ALL      4200

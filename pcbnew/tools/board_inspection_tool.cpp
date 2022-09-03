@@ -29,7 +29,6 @@
 #include <tools/edit_tool.h>
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
-#include <dialogs/wx_html_report_box.h>
 #include <drc/drc_engine.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
@@ -37,6 +36,7 @@
 #include "board_inspection_tool.h"
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/wx_html_report_box.h>
 #include <drc/drc_item.h>
 #include <pad.h>
 
@@ -55,10 +55,11 @@ public:
     NET_CONTEXT_MENU() : ACTION_MENU( true )
     {
         SetIcon( BITMAPS::show_ratsnest );
-        SetTitle( _( "Net Tools" ) );
+        SetTitle( _( "Net Inspection Tools" ) );
 
-        Add( PCB_ACTIONS::showNet );
-        Add( PCB_ACTIONS::hideNet );
+        Add( PCB_ACTIONS::showNetInRatsnest );
+        Add( PCB_ACTIONS::hideNetInRatsnest );
+        AppendSeparator();
         Add( PCB_ACTIONS::highlightNetSelection );
         Add( PCB_ACTIONS::clearHighlight );
     }
@@ -75,7 +76,7 @@ bool BOARD_INSPECTION_TOOL::Init()
 {
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    auto netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
+    std::shared_ptr<NET_CONTEXT_MENU> netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
     netSubMenu->SetTool( this );
 
     static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
@@ -86,10 +87,9 @@ bool BOARD_INSPECTION_TOOL::Init()
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
-    selectionTool->GetToolMenu().AddSubMenu( netSubMenu );
+    selectionTool->GetToolMenu().RegisterSubMenu( netSubMenu );
 
-    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ), 200 );
-    menu.AddItem( PCB_ACTIONS::inspectClearance, SELECTION_CONDITIONS::Count( 2 ), 200 );
+    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ), 100 );
 
     return true;
 }
@@ -101,7 +101,7 @@ void BOARD_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int BOARD_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
+int BOARD_INSPECTION_TOOL::ShowBoardStatistics( const TOOL_EVENT& aEvent )
 {
     DIALOG_BOARD_STATISTICS dialog( m_frame );
     dialog.ShowModal();
@@ -1539,41 +1539,6 @@ int BOARD_INSPECTION_TOOL::ClearHighlight( const TOOL_EVENT& aEvent )
 }
 
 
-#if 0
-int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
-{
-    std::string      tool = *aEvent.GetCommandStr();
-    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
-
-    // Deactivate other tools; particularly important if another PICKER is currently running
-    Activate();
-
-    // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
-    // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
-    // there is no selection, then behave like a ctrl-left-click.
-    if( aEvent.IsAction( &PCB_ACTIONS::highlightNetSelection ) )
-    {
-        bool use_selection = m_frame->IsCurrentTool( PCB_ACTIONS::highlightNetTool );
-        highlightNet( getViewControls()->GetMousePosition(), use_selection );
-    }
-
-    picker->SetClickHandler(
-        [this] ( const VECTOR2D& pt ) -> bool
-        {
-            highlightNet( pt, false );
-            return true;
-        } );
-
-    picker->SetLayerSet( LSET::AllCuMask() );
-    picker->SetSnapping( false );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
-
-    return 0;
-}
-#endif
-
-
 int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
     std::string       tool = *aEvent.GetCommandStr();
@@ -1653,7 +1618,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
+int BOARD_INSPECTION_TOOL::UpdateLocalRatsnest( const TOOL_EVENT& aEvent )
 {
     VECTOR2I  delta;
 
@@ -1676,7 +1641,7 @@ int BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
     {
-        connectivity->ClearDynamicRatsnest();
+        connectivity->ClearLocalRatsnest();
         delete m_dynamicData;
         m_dynamicData = nullptr;
     }
@@ -1689,9 +1654,9 @@ int BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_INSPECTION_TOOL::HideDynamicRatsnest( const TOOL_EVENT& aEvent )
+int BOARD_INSPECTION_TOOL::HideLocalRatsnest( const TOOL_EVENT& aEvent )
 {
-    getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
+    getModel<BOARD>()->GetConnectivity()->ClearLocalRatsnest();
     delete m_dynamicData;
     m_dynamicData = nullptr;
 
@@ -1758,7 +1723,7 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
         m_dynamicData->Move( aDelta );
     }
 
-    connectivity->ComputeDynamicRatsnest( items, m_dynamicData );
+    connectivity->ComputeLocalRatsnest( items, m_dynamicData );
 }
 
 
@@ -1821,21 +1786,21 @@ void BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed( wxCommandEvent& ev
 }
 
 
-int BOARD_INSPECTION_TOOL::HideNet( const TOOL_EVENT& aEvent )
+int BOARD_INSPECTION_TOOL::HideNetInRatsnest( const TOOL_EVENT& aEvent )
 {
-    doHideNet( aEvent.Parameter<intptr_t>(), true );
+    doHideRatsnestNet( aEvent.Parameter<intptr_t>(), true );
     return 0;
 }
 
 
-int BOARD_INSPECTION_TOOL::ShowNet( const TOOL_EVENT& aEvent )
+int BOARD_INSPECTION_TOOL::ShowNetInRatsnest( const TOOL_EVENT& aEvent )
 {
-    doHideNet( aEvent.Parameter<intptr_t>(), false );
+    doHideRatsnestNet( aEvent.Parameter<intptr_t>(), false );
     return 0;
 }
 
 
-void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
+void BOARD_INSPECTION_TOOL::doHideRatsnestNet( int aNetCode, bool aHide )
 {
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_toolMgr->GetView()->GetPainter()->GetSettings() );
@@ -1850,7 +1815,7 @@ void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
             if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
             {
                 if( bci->GetNetCode() > 0 )
-                    doHideNet( bci->GetNetCode(), aHide );
+                    doHideRatsnestNet( bci->GetNetCode(), aHide );
             }
         }
 
@@ -1871,25 +1836,22 @@ void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
 
 void BOARD_INSPECTION_TOOL::setTransitions()
 {
-    Go( &BOARD_INSPECTION_TOOL::LocalRatsnestTool,
-        PCB_ACTIONS::localRatsnestTool.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HideDynamicRatsnest,
-        PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest,
-        PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::LocalRatsnestTool,   PCB_ACTIONS::localRatsnestTool.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HideLocalRatsnest,   PCB_ACTIONS::hideLocalRatsnest.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::UpdateLocalRatsnest, PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
 
-    Go( &BOARD_INSPECTION_TOOL::ListNets,             PCB_ACTIONS::listNets.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::ShowStatisticsDialog, PCB_ACTIONS::boardStatistics.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::InspectClearance,     PCB_ACTIONS::inspectClearance.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::InspectConstraints,   PCB_ACTIONS::inspectConstraints.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::ListNets,            PCB_ACTIONS::listNets.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::ShowBoardStatistics, PCB_ACTIONS::boardStatistics.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::InspectClearance,    PCB_ACTIONS::inspectClearance.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::InspectConstraints,  PCB_ACTIONS::inspectConstraints.MakeEvent() );
 
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,   PCB_ACTIONS::highlightNet.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,   PCB_ACTIONS::highlightNetSelection.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,   PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::ClearHighlight, PCB_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,   PCB_ACTIONS::toggleNetHighlight.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightItem,  PCB_ACTIONS::highlightItem.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::toggleNetHighlight.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightItem,       PCB_ACTIONS::highlightItem.MakeEvent() );
 
-    Go( &BOARD_INSPECTION_TOOL::HideNet,        PCB_ACTIONS::hideNet.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::ShowNet,        PCB_ACTIONS::showNet.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HideNetInRatsnest,   PCB_ACTIONS::hideNetInRatsnest.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::ShowNetInRatsnest,   PCB_ACTIONS::showNetInRatsnest.MakeEvent() );
 }

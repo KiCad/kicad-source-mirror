@@ -99,18 +99,16 @@ bool GROUP_TOOL::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    std::shared_ptr<GROUP_CONTEXT_MENU> groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
-    groupMenu->SetTool( this );
-
     // Add the group control menus to relevant other tools
     if( m_selectionTool )
     {
-        TOOL_MENU&        toolMenu = m_selectionTool->GetToolMenu();
-        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
+        TOOL_MENU& selToolMenu = m_selectionTool->GetToolMenu();
 
-        toolMenu.AddSubMenu( groupMenu );
+        std::shared_ptr<GROUP_CONTEXT_MENU> groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
+        groupMenu->SetTool( this );
+        selToolMenu.RegisterSubMenu( groupMenu );
 
-        menu.AddMenu( groupMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
+        selToolMenu.GetMenu().AddMenu( groupMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
     }
 
     return true;
