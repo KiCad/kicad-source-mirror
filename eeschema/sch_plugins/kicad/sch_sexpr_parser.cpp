@@ -795,8 +795,13 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
             parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
 
+        case T_show_name:
+            field->SetNameShown();
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "id, at or effects" );
+            Expecting( "id, at, show_name, or effects" );
         }
     }
 
@@ -1902,8 +1907,13 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ), field->GetId() == VALUE_FIELD );
             break;
 
+        case T_show_name:
+            field->SetNameShown();
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "at or effects" );
+            Expecting( "id, show_name, at or effects" );
         }
     }
 

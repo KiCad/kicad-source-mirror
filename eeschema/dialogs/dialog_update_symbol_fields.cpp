@@ -163,7 +163,10 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
                     field.SetText( parentField->GetText() );
 
                 if( resetVis )
+                {
                     field.SetVisible( parentField->IsVisible() );
+                    field.SetNameShown( parentField->IsNameShown() );
+                }
 
                 if( resetEffects )
                 {

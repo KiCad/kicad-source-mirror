@@ -893,7 +893,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attrs.m_StrokeWidth = getTextThickness( aField );
 
-        strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
+        strokeText( UnescapeString( aField->GetShownText() ), textpos, attrs );
     }
 
     // Draw the umbilical line when in the schematic editor

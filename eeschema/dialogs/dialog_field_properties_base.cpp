@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,10 +82,15 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+
+	m_nameVisible = new wxCheckBox( this, wxID_ANY, _("Show field name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameVisible->SetToolTip( _("Show the field name in addtion to its value") );
+
+	bSizer9->Add( m_nameVisible, 0, wxLEFT, 5 );
 
 
 	bPropertiesSizer->Add( bSizer9, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );

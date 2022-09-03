@@ -199,6 +199,9 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     PROJECT*  project = nullptr;
     wxString  text = EDA_TEXT::GetShownText();
 
+    if( IsNameShown() )
+        text = GetName() << wxT( ": " ) << text;
+
     if( text == "~" )    // Legacy placeholder for empty string
     {
         text = "";
@@ -361,6 +364,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
     SetAttributes( aSource );
+    SetNameShown( aSource.IsNameShown() );
 }
 
 
@@ -372,6 +376,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
     SCH_FIELD* item = (SCH_FIELD*) aItem;
 
     std::swap( m_layer, item->m_layer );
+    std::swap( m_showName, item->m_showName );
     SwapText( *item );
     SwapAttributes( *item );
 }

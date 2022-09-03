@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,6 +52,7 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_TextValueSelectButton;
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
+		wxCheckBox* m_nameVisible;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;

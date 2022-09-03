@@ -136,6 +136,9 @@ public:
     GR_TEXT_H_ALIGN_T GetEffectiveHorizJustify() const;
     GR_TEXT_V_ALIGN_T GetEffectiveVertJustify() const;
 
+    bool IsNameShown() const { return m_showName; }
+    void SetNameShown( bool aShown = true ) { m_showName = aShown; }
+
     /**
      * @return true if the field is either empty or holds "~".
      */
@@ -229,6 +232,8 @@ private:
     int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T
 
     wxString m_name;
+
+    bool     m_showName;   ///< Render the field name in addition to its value
 
     mutable bool                                        m_renderCacheValid;
     mutable VECTOR2I                                    m_renderCachePos;

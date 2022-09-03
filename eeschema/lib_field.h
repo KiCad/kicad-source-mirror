@@ -148,6 +148,8 @@ public:
      */
     wxString GetFullText( int unit = 1 ) const;
 
+    wxString GetShownText( int aDepth = 0 ) const override;
+
     SCH_LAYER_ID GetDefaultLayer() const;
 
     void BeginEdit( const VECTOR2I& aStartPoint ) override;
@@ -175,6 +177,9 @@ public:
 
     bool IsAutoAdded() const { return m_autoAdded; }
     void SetAutoAdded( bool aAutoAdded ) { m_autoAdded = aAutoAdded; }
+
+    bool IsNameShown() const { return m_showName; }
+    void SetNameShown( bool aShown = true ) { m_showName = aShown; }
 
 private:
 
@@ -213,6 +218,7 @@ private:
     int      m_id;         ///< @see enum MANDATORY_FIELD_T
     wxString m_name;       ///< Name (not the field text value itself, that is #EDA_TEXT::m_Text)
     bool     m_autoAdded;  ///< Was this field automatically added to a LIB_SYMBOL?
+    bool     m_showName;   ///< Render the field's name in addition to its value
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

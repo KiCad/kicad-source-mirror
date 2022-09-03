@@ -75,6 +75,7 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
     m_name = field.m_name;
     m_parent = field.m_parent;
     m_autoAdded = field.m_autoAdded;
+    m_showName = field.m_showName;
 
     SetText( field.GetText() );
     SetAttributes( field );
@@ -101,6 +102,7 @@ void LIB_FIELD::Init( int aId )
         SetVisible( false );
 
     m_autoAdded = false;
+    m_showName  = false;
 }
 
 
@@ -193,6 +195,7 @@ EDA_ITEM* LIB_FIELD::Clone() const
 void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 {
     aTarget->m_name = m_name;
+    aTarget->m_showName = m_showName;
 
     aTarget->CopyText( *this );
     aTarget->SetAttributes( *this );
@@ -363,6 +366,17 @@ wxString LIB_FIELD::GetFullText( int unit ) const
 
     if( GetParent()->IsMulti() )
         text << LIB_SYMBOL::SubReference( unit );
+
+    return text;
+}
+
+
+wxString LIB_FIELD::GetShownText( int aDepth ) const
+{
+    wxString text = EDA_TEXT::GetShownText( aDepth );
+
+    if( IsNameShown() )
+        text = GetName() << wxT( ": " ) << text;
 
     return text;
 }

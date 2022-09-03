@@ -331,6 +331,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
     }
 
     m_visible->SetValue( m_isVisible );
+    m_nameVisible->SetValue( m_isNameVisible );
 
     return true;
 }
@@ -400,6 +401,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
         m_verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
 
     m_isVisible = m_visible->GetValue();
+    m_isNameVisible = m_nameVisible->GetValue();
 
     return true;
 }
@@ -424,6 +426,7 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
+    m_isNameVisible = aField->IsNameShown();
 
     if( m_fieldId == VALUE_FIELD )
         m_text = UnescapeString( aField->GetText() );
@@ -448,6 +451,8 @@ void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
         aField->GetParent()->SetName( value );
 
     updateText( aField );
+
+    aField->SetNameShown( m_isNameVisible );
 
     aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification ) );
     aField->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification  ) );
@@ -503,6 +508,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     m_textLabel->SetLabel( aField->GetName() + ":" );
 
     m_position = m_field->GetPosition();
+
+    m_isNameVisible = m_field->IsNameShown();
 
     m_horizontalJustification = m_field->GetEffectiveHorizJustify();
     m_verticalJustification = m_field->GetEffectiveVertJustify();
@@ -663,6 +670,8 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
     aField->SetPosition( m_position );
 
     aField->SetFont( m_font );
+
+    aField->SetNameShown( m_isNameVisible );
 
     // Note that we must set justifications before we can ask if they're flipped.  If the old
     // justification is center then it won't know (whereas if the new justification is center

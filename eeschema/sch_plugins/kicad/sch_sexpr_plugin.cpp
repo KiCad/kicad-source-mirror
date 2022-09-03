@@ -813,6 +813,9 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   FormatInternalUnits( aField->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
+    if( aField->IsNameShown() )
+        m_out->Print( aNestLevel, " (show_name)" );
+
     if( !aField->IsDefaultFormatting()
       || ( aField->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
     {

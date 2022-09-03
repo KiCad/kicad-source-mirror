@@ -101,6 +101,7 @@ protected:
     GR_TEXT_V_ALIGN_T m_verticalJustification;
     GR_TEXT_H_ALIGN_T m_horizontalJustification;
     bool              m_isVisible;
+    bool              m_isNameVisible;
 
     bool              m_firstFocus;
 
