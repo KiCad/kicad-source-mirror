@@ -1364,12 +1364,13 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 
 void SCH_GLOBALLABEL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 5;
-    aLayers[0] = LAYER_DEVICE;
-    aLayers[1] = LAYER_INTERSHEET_REFS;
-    aLayers[2] = LAYER_NETCLASS_REFS;
-    aLayers[3] = LAYER_FIELDS;
-    aLayers[4] = LAYER_SELECTION_SHADOWS;
+    aCount     = 6;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = LAYER_DEVICE;
+    aLayers[2] = LAYER_INTERSHEET_REFS;
+    aLayers[3] = LAYER_NETCLASS_REFS;
+    aLayers[4] = LAYER_FIELDS;
+    aLayers[5] = LAYER_SELECTION_SHADOWS;
 }
 
 
