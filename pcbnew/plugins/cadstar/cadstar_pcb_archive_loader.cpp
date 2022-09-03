@@ -2444,6 +2444,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
         shape->SetLocked( v.Fixed );
         shapes.push_back( shape );
         prevEnd = v.Vertex.End;
+
+        /* No string changes in 6.0
+        if( !m_doneTearDropWarning && ( v.TeardropAtEnd || v.TeardropAtStart ) )
+        {
+            // TODO: load teardrops
+            wxLogError( _( "The CADSTAR design contains teardrops. This importer does not yet "
+                           "support them, so the teardrops in the design have been ignored." ) );
+
+            m_doneTearDropWarning = true;
+        }*/
     }
 
     NETINFO_ITEM*           net = getKiCadNet( aCadstarNetID );

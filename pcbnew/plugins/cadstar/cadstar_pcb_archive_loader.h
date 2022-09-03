@@ -54,6 +54,7 @@ public:
         m_doneCopperWarning       = false;
         m_doneSpacingClassWarning = false;
         m_doneNetClassWarning     = false;
+        m_doneTearDropWarning     = false;
         m_numNets                 = 0;
         m_numCopperLayers         = 0 ;
         m_progressReporter        = aProgressReporter;
@@ -134,6 +135,7 @@ private:
                                                          ///< multiple duplicate warnings
     bool m_doneNetClassWarning;                          ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
+    bool m_doneTearDropWarning;
     int m_numNets;                                       ///< Number of nets loaded so far
     int m_numCopperLayers;                               ///< Number of layers in the design
 

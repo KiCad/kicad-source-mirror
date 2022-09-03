@@ -983,6 +983,10 @@ public:
                             ///< next node being a VERTEX (e.g. PT, CWARC, etc.)
         {
             long   RouteWidth;
+            bool   TeardropAtStart = false;
+            bool   TeardropAtEnd = false;
+            long   TeardropAtStartAngle = 0;
+            long   TeardropAtEndAngle = 0;
             bool   Fixed = false;
             VERTEX Vertex;
 
