@@ -62,6 +62,7 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
     EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), wxEmptyString ),
     m_id( 0 ),
     m_name( aName ),
+    m_showName( false ),
     m_renderCacheValid( false )
 {
     SetTextPos( aPos );
@@ -76,6 +77,7 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 {
     m_id = aField.m_id;
     m_name = aField.m_name;
+    m_showName = aField.m_showName;
 
     m_renderCache.clear();
 
@@ -96,6 +98,7 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 
     m_id = aField.m_id;
     m_name = aField.m_name;
+    m_showName = aField.m_showName;
 
     m_renderCache.clear();
 
