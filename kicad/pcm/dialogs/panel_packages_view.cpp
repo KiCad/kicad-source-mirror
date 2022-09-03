@@ -53,7 +53,9 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
                                           const ActionCallback&                   aActionCallback,
                                           const PinCallback&                      aPinCallback ) :
         PANEL_PACKAGES_VIEW_BASE( parent ),
-        m_pcm( aPcm ), m_actionCallback( aActionCallback ), m_pinCallback( aPinCallback )
+        m_actionCallback( aActionCallback ),
+        m_pinCallback( aPinCallback ),
+        m_pcm( aPcm )
 {
     // Replace wxFormBuilder's sash initializer with one which will respect m_initialSashPos.
     m_splitter1->Disconnect( wxEVT_IDLE,

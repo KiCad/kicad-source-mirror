@@ -349,8 +349,8 @@ void SCH_SYMBOL::UpdatePins()
     {
         wxASSERT( libPin->Type() == LIB_PIN_T );
 
-        if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )
-            continue;
+        //if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )
+        //    continue;
 
         if( libPin->GetUnit() && m_unit && m_unit != libPin->GetUnit() )
             continue;
