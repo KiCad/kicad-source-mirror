@@ -107,15 +107,18 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
     case TYPE::L_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
                                                  GetParam( 0 ).value->ToString(),
+                                                 aSymbolPinNumbers,
                                                  aPinNetNames );
 
     case TYPE::V_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
-                wxString::Format( "V=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
+                wxString::Format( "V=%s", GetParam( 0 ).value->ToString() ), aSymbolPinNumbers,
+                                  aPinNetNames );
 
     case TYPE::I_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
-                wxString::Format( "I=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
+                wxString::Format( "I=%s", GetParam( 0 ).value->ToString() ), aSymbolPinNumbers,
+                                  aPinNetNames );
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_BEHAVIORAL" );
