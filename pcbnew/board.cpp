@@ -314,8 +314,13 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
     INSPECTOR_FUNC inspector =
             [&] ( EDA_ITEM* item, void* testData )
             {
+                BOARD_ITEM* brdItem = static_cast<BOARD_ITEM*>( item );
+
                 // aMoveVector was snapshotted, don't need "data".
-                static_cast<BOARD_ITEM*>( item )->Move( aMoveVector );
+                // Only move the top level group
+                if( brdItem->GetParentGroup() == nullptr )
+                    brdItem->Move( aMoveVector );
+
                 return INSPECT_RESULT::CONTINUE;
             };
 
