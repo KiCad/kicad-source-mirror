@@ -27,6 +27,7 @@
 
 #include <wx/string.h>
 #include <optional>
+#include <complex>
 #include <memory>
 #include <pegtl.hpp>
 
@@ -70,6 +71,8 @@ public:
     virtual ~SIM_VALUE() = default;
     SIM_VALUE() = default;
 
+    virtual bool HasValue() const = 0;
+
     void operator=( const wxString& aString );
     virtual bool operator==( const SIM_VALUE& aOther ) const = 0;
     bool operator!=( const SIM_VALUE& aOther ) const;
@@ -89,6 +92,8 @@ class SIM_VALUE_INST : public SIM_VALUE
 public:
     SIM_VALUE_INST() = default;
     SIM_VALUE_INST( const T& aValue );
+
+    bool HasValue() const override;
 
     // TODO: Don't pass aNotation. Make a FromSpiceString() function instead.
     bool FromString( const wxString& aString, NOTATION aNotation = NOTATION::SI ) override;
@@ -122,8 +127,9 @@ private:
 };
 
 typedef SIM_VALUE_INST<bool> SIM_VALUE_BOOL;
-typedef SIM_VALUE_INST<long> SIM_VALUE_LONG;
+typedef SIM_VALUE_INST<long> SIM_VALUE_INT;
 typedef SIM_VALUE_INST<double> SIM_VALUE_FLOAT;
+typedef SIM_VALUE_INST<std::complex<double>> SIM_VALUE_COMPLEX;
 typedef SIM_VALUE_INST<wxString> SIM_VALUE_STRING;
 
 

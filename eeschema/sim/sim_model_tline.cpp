@@ -83,6 +83,9 @@ wxString SIM_MODEL_TLINE::GenerateSpiceModelLine( const wxString& aModelName ) c
         auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "z0" )->value );
         auto td = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "td" )->value );
 
+        if( !z0.HasValue() || !td.HasValue() )
+            return wxString::Format( ".model %s ltra()\n", aModelName );
+
         r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
         l = ( td * z0 ).ToSpiceString();
         g = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
@@ -104,8 +107,8 @@ wxString SIM_MODEL_TLINE::GenerateSpiceModelLine( const wxString& aModelName ) c
         return "";
     }
 
-    return wxString::Format( ".model %s %s( r=%s l=%s g=%s c=%s len=%s )\n",
-                             aModelName, "ltra", r, l, g, c, len );
+    return wxString::Format( ".model %s ltra( r=%s l=%s g=%s c=%s len=%s )\n",
+                             aModelName, r, l, g, c, len );
 }
 
 
