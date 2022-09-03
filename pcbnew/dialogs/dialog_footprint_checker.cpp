@@ -178,6 +178,12 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 } );
     }
 
+    footprint->CheckSMDSide(
+            [&]( const PAD* aPadA, const PAD* aPadB, const wxString& aMsg )
+            {
+                errorHandler( aPadA, aPadB, nullptr, DRCE_FOOTPRINT, aMsg, aPadA->GetPosition() );
+            } );
+
     m_checksRun = true;
 
     m_markersTreeModel->Update( m_markersProvider, m_severities );

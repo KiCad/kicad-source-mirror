@@ -138,6 +138,14 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                                       footprint->GetPosition(), footprint->GetLayer() );
                     } );
         }
+
+        footprint->CheckSMDSide(
+                [&]( const PAD* aPadA, const PAD* aPadB, const wxString& aMsg )
+                {
+                    errorHandler( aPadA, aPadB, nullptr, DRCE_FOOTPRINT, aMsg,
+                                  aPadA->GetPosition(), aPadA->GetPrincipalLayer() );
+                } );
+
     }
 
     return !m_drcEngine->IsCancelled();

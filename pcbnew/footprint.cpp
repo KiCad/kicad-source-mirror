@@ -2339,6 +2339,41 @@ void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
                     aErrorHandler( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
             }
         }
+
+        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
+        {
+            if( pad->IsOnLayer( F_Cu ) && pad->IsOnLayer( B_Cu ) )
+            {
+                aErrorHandler( pad, DRCE_PADSTACK,
+                               _( "(SMD pad appears on both front and back copper)" ) );
+            }
+            else if( pad->IsOnLayer( F_Cu ) )
+            {
+                if( pad->IsOnLayer( B_Mask ) )
+                {
+                    aErrorHandler( pad, DRCE_PADSTACK,
+                                   _( "(SMD pad copper and mask layers don't match)" ) );
+                }
+                else if( pad->IsOnLayer( B_Paste ) )
+                {
+                    aErrorHandler( pad, DRCE_PADSTACK,
+                                   _( "(SMD pad copper and paste layers don't match)" ) );
+                }
+            }
+            else if( pad->IsOnLayer( B_Cu ) )
+            {
+                if( pad->IsOnLayer( F_Mask ) )
+                {
+                    aErrorHandler( pad, DRCE_PADSTACK,
+                                   _( "(SMD pad copper and mask layers don't match)" ) );
+                }
+                else if( pad->IsOnLayer( F_Paste ) )
+                {
+                    aErrorHandler( pad, DRCE_PADSTACK,
+                                   _( "(SMD pad copper and paste layers don't match)" ) );
+                }
+            }
+        }
     }
 }
 
@@ -2536,11 +2571,36 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
 }
 
 
+void FOOTPRINT::CheckSMDSide( const std::function<void( const PAD*, const PAD*,
+                                                        const wxString& aMsg )>& aErrorHandler )
+{
+    PAD* firstFront = nullptr;
+    PAD* firstBack = nullptr;
+
+    for( PAD* pad : Pads() )
+    {
+        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
+        {
+            if( pad->IsOnLayer( F_Cu ) && !firstFront )
+                firstFront = pad;
+            else if( pad->IsOnLayer( B_Cu ) && !firstBack )
+                firstBack = pad;
+        }
+    }
+
+    if( firstFront && firstBack )
+    {
+        aErrorHandler( firstFront, firstBack,
+                       _( "(footprint contains SMD pads on both front and back)" )  );
+    }
+}
+
+
 void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );
 
-    std::swap( *((FOOTPRINT*) this), *((FOOTPRINT*) aImage) );
+    std::swap( *this, *static_cast<FOOTPRINT*>( aImage ) );
 }
 
 
