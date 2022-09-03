@@ -2689,17 +2689,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
                                                    const VECTOR2I& aTransformCentre,
                                                    const bool& aMirrorInvert )
 {
+    auto drawAsOutline = [&]()
+    {
+        drawCadstarVerticesAsShapes( aCadstarShape.Vertices, aKiCadLayer, aLineThickness,
+                                     aContainer, aCadstarGroupID, aMoveVector, aRotationAngle,
+                                     aScalingFactor, aTransformCentre, aMirrorInvert );
+        drawCadstarCutoutsAsShapes( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness, aContainer,
+                                    aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                    aTransformCentre, aMirrorInvert );
+    };
+
     switch( aCadstarShape.Type )
     {
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
-        drawCadstarVerticesAsShapes( aCadstarShape.Vertices, aKiCadLayer, aLineThickness,
-                                     aContainer, aCadstarGroupID, aMoveVector, aRotationAngle,
-                                     aScalingFactor, aTransformCentre, aMirrorInvert );
-        drawCadstarCutoutsAsShapes( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness,
-                                    aContainer, aCadstarGroupID, aMoveVector, aRotationAngle,
-                                    aScalingFactor, aTransformCentre, aMirrorInvert );
+        drawAsOutline();
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -2711,6 +2716,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
     case SHAPE_TYPE::SOLID:
     {
+        // Special case solid shapes that are effectively a single line
+        if( aCadstarShape.Vertices.size() < 3
+            || ( aCadstarShape.Vertices.size() == 3
+                 && aCadstarShape.Vertices.at( 0 ).End == aCadstarShape.Vertices.at( 2 ).End ) )
+        {
+            drawAsOutline();
+            break;
+        }
+
         PCB_SHAPE* shape;
 
         if( isFootprint( aContainer ) )
