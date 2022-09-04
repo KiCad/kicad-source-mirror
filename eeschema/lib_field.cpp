@@ -71,11 +71,12 @@ LIB_FIELD::~LIB_FIELD()
 
 LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 {
-    m_id = field.m_id;
-    m_name = field.m_name;
-    m_parent = field.m_parent;
-    m_autoAdded = field.m_autoAdded;
-    m_showName = field.m_showName;
+    m_id             = field.m_id;
+    m_name           = field.m_name;
+    m_parent         = field.m_parent;
+    m_autoAdded      = field.m_autoAdded;
+    m_showName       = field.m_showName;
+    m_allowAutoPlace = field.m_allowAutoPlace;
 
     SetText( field.GetText() );
     SetAttributes( field );
@@ -101,8 +102,9 @@ void LIB_FIELD::Init( int aId )
     if( aId == DATASHEET_FIELD || aId == FOOTPRINT_FIELD )
         SetVisible( false );
 
-    m_autoAdded = false;
-    m_showName  = false;
+    m_autoAdded      = false;
+    m_showName       = false;
+    m_allowAutoPlace = true;
 }
 
 
@@ -194,8 +196,9 @@ EDA_ITEM* LIB_FIELD::Clone() const
 
 void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 {
-    aTarget->m_name = m_name;
-    aTarget->m_showName = m_showName;
+    aTarget->m_name           = m_name;
+    aTarget->m_showName       = m_showName;
+    aTarget->m_allowAutoPlace = m_allowAutoPlace;
 
     aTarget->CopyText( *this );
     aTarget->SetAttributes( *this );

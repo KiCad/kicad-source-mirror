@@ -139,6 +139,9 @@ public:
     bool IsNameShown() const { return m_showName; }
     void SetNameShown( bool aShown = true ) { m_showName = aShown; }
 
+    bool CanAutoplace() const { return m_allowAutoPlace; }
+    void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
+
     /**
      * @return true if the field is either empty or holds "~".
      */
@@ -234,6 +237,7 @@ private:
     wxString m_name;
 
     bool     m_showName;   ///< Render the field name in addition to its value
+    bool     m_allowAutoPlace;  ///< This field can be autoplaced
 
     mutable bool                                        m_renderCacheValid;
     mutable VECTOR2I                                    m_renderCachePos;

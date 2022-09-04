@@ -332,6 +332,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 
     m_visible->SetValue( m_isVisible );
     m_nameVisible->SetValue( m_isNameVisible );
+    m_cbAllowAutoPlace->SetValue( m_allowAutoplace );
 
     return true;
 }
@@ -400,8 +401,9 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
     else
         m_verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
 
-    m_isVisible = m_visible->GetValue();
-    m_isNameVisible = m_nameVisible->GetValue();
+    m_isVisible      = m_visible->GetValue();
+    m_isNameVisible  = m_nameVisible->GetValue();
+    m_allowAutoplace = m_cbAllowAutoPlace->GetValue();
 
     return true;
 }
@@ -425,11 +427,15 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
                                                           const LIB_FIELD* aField ) :
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField )
 {
-    m_fieldId = aField->GetId();
-    m_isNameVisible = aField->IsNameShown();
+    m_fieldId        = aField->GetId();
+    m_isNameVisible  = aField->IsNameShown();
+    m_allowAutoplace = aField->CanAutoplace();
 
     if( m_fieldId == VALUE_FIELD )
         m_text = UnescapeString( aField->GetText() );
+
+    m_nameVisible->Show();
+    m_cbAllowAutoPlace->Show();
 
     // When in the library editor, power symbols can be renamed.
     m_isPower = false;
@@ -453,6 +459,7 @@ void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
     updateText( aField );
 
     aField->SetNameShown( m_isNameVisible );
+    aField->SetCanAutoplace( m_allowAutoplace );
 
     aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification ) );
     aField->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification  ) );
@@ -510,6 +517,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     m_position = m_field->GetPosition();
 
     m_isNameVisible = m_field->IsNameShown();
+    m_allowAutoplace = m_field->CanAutoplace();
 
     m_horizontalJustification = m_field->GetEffectiveHorizJustify();
     m_verticalJustification = m_field->GetEffectiveVertJustify();
@@ -529,6 +537,9 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded,
                             this );
+
+    m_nameVisible->Show();
+    m_cbAllowAutoPlace->Show();
 
     init();
 
@@ -672,6 +683,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
     aField->SetFont( m_font );
 
     aField->SetNameShown( m_isNameVisible );
+    aField->SetCanAutoplace( m_allowAutoplace );
 
     // Note that we must set justifications before we can ask if they're flipped.  If the old
     // justification is center then it won't know (whereas if the new justification is center

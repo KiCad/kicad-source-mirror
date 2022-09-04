@@ -83,5 +83,6 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220404  // Default schematic symbol instance data.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220622  // New simulation model format.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220820  // Fix broken default symbol instance data.
-//#define SEXPR_SCHEMATIC_FILE_VERSION 20220822    // Hyperlinks in text objects
-#define SEXPR_SCHEMATIC_FILE_VERSION 20220903    // Field name visibility
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220822  // Hyperlinks in text objects
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220903  // Field name visibility
+#define SEXPR_SCHEMATIC_FILE_VERSION 20220904    // Do not autoplace field option

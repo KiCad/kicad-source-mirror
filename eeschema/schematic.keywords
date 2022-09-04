@@ -28,6 +28,7 @@ default_instance
 diameter
 diamond
 directive_label
+do_not_autoplace
 dot
 edge_clock_high
 effects

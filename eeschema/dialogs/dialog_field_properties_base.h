@@ -53,6 +53,7 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
 		wxCheckBox* m_nameVisible;
+		wxCheckBox* m_cbAllowAutoPlace;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;

@@ -63,6 +63,7 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
     m_id( 0 ),
     m_name( aName ),
     m_showName( false ),
+    m_allowAutoPlace( true ),
     m_renderCacheValid( false )
 {
     SetTextPos( aPos );
@@ -75,9 +76,10 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
     SCH_ITEM( aField ),
     EDA_TEXT( aField )
 {
-    m_id = aField.m_id;
-    m_name = aField.m_name;
-    m_showName = aField.m_showName;
+    m_id             = aField.m_id;
+    m_name           = aField.m_name;
+    m_showName       = aField.m_showName;
+    m_allowAutoPlace = aField.m_allowAutoPlace;
 
     m_renderCache.clear();
 
@@ -96,9 +98,10 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 {
     EDA_TEXT::operator=( aField );
 
-    m_id = aField.m_id;
-    m_name = aField.m_name;
-    m_showName = aField.m_showName;
+    m_id             = aField.m_id;
+    m_name           = aField.m_name;
+    m_showName       = aField.m_showName;
+    m_allowAutoPlace = aField.m_allowAutoPlace;
 
     m_renderCache.clear();
 
@@ -368,6 +371,7 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
     SetAttributes( aSource );
     SetNameShown( aSource.IsNameShown() );
+    SetCanAutoplace( aSource.CanAutoplace() );
 }
 
 
@@ -380,6 +384,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_layer, item->m_layer );
     std::swap( m_showName, item->m_showName );
+    std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
     SwapText( *item );
     SwapAttributes( *item );
 }

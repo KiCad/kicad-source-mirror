@@ -181,6 +181,9 @@ public:
     bool IsNameShown() const { return m_showName; }
     void SetNameShown( bool aShown = true ) { m_showName = aShown; }
 
+    bool CanAutoplace() const { return m_allowAutoPlace; }
+    void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
+
 private:
 
     /**
@@ -219,6 +222,7 @@ private:
     wxString m_name;       ///< Name (not the field text value itself, that is #EDA_TEXT::m_Text)
     bool     m_autoAdded;  ///< Was this field automatically added to a LIB_SYMBOL?
     bool     m_showName;   ///< Render the field's name in addition to its value
+    bool     m_allowAutoPlace;  ///< This field can be autoplaced when converted to a SCH_FIELD
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

@@ -402,6 +402,9 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
     if( aField->IsNameShown() )
         aFormatter.Print( aNestLevel, " (show_name)" );
 
+    if( !aField->CanAutoplace() )
+        aFormatter.Print( aNestLevel, " (do_not_autoplace)" );
+
     aField->Format( &aFormatter, aNestLevel, 0 );
     aFormatter.Print( aNestLevel, "\n)\n" );
 }

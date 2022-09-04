@@ -800,8 +800,13 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
             NeedRIGHT();
             break;
 
+        case T_do_not_autoplace:
+            field->SetCanAutoplace( false );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "id, at, show_name, or effects" );
+            Expecting( "id, at, show_name, do_not_autoplace, or effects" );
         }
     }
 

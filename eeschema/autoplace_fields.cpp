@@ -151,7 +151,7 @@ public:
         {
             SCH_FIELD* field = m_fields[field_idx];
             
-            if( !field->IsVisible() )
+            if( !field->IsVisible() || !field->CanAutoplace() )
                 continue;
 
             if( m_allow_rejustify )
@@ -205,10 +205,13 @@ protected:
 
         for( SCH_FIELD* field : visibleFields )
         {
-            if( m_symbol->GetTransform().y1 )
-                field->SetTextAngle( ANGLE_VERTICAL );
-            else
-                field->SetTextAngle( ANGLE_HORIZONTAL );
+            if( field->CanAutoplace() )
+            {
+                if( m_symbol->GetTransform().y1 )
+                    field->SetTextAngle( ANGLE_VERTICAL );
+                else
+                    field->SetTextAngle( ANGLE_HORIZONTAL );
+            }
 
             BOX2I bbox = field->GetBoundingBox();
             int   field_width = bbox.GetWidth();
