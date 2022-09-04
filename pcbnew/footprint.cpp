@@ -2571,31 +2571,6 @@ void FOOTPRINT::CheckNetTiePadGroups( const std::function<void( const wxString& 
 }
 
 
-void FOOTPRINT::CheckSMDSide( const std::function<void( const PAD*, const PAD*,
-                                                        const wxString& aMsg )>& aErrorHandler )
-{
-    PAD* firstFront = nullptr;
-    PAD* firstBack = nullptr;
-
-    for( PAD* pad : Pads() )
-    {
-        if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-        {
-            if( pad->IsOnLayer( F_Cu ) && !firstFront )
-                firstFront = pad;
-            else if( pad->IsOnLayer( B_Cu ) && !firstBack )
-                firstBack = pad;
-        }
-    }
-
-    if( firstFront && firstBack )
-    {
-        aErrorHandler( firstFront, firstBack,
-                       _( "(footprint contains SMD pads on both front and back)" )  );
-    }
-}
-
-
 void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );

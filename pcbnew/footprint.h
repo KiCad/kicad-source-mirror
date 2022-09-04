@@ -414,15 +414,6 @@ public:
     void CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler );
 
     /**
-     * Sanity check SMD pads.  A footprint containing both front and back copper SMD pads is
-     * highly suspicious.
-     *
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckSMDSide( const std::function<void( const PAD*,
-                                                 const PAD*,
-                                                 const wxString& aMsg )>& aErrorHandler );
-    /**
      * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to
      * \a aCornerBuffer.
      *
