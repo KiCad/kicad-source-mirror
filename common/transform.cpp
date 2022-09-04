@@ -77,6 +77,8 @@ TRANSFORM TRANSFORM::InverseTransform() const
 
 bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
 {
+    static const EDA_ANGLE epsilon( 0.1, DEGREES_T );
+
     wxCHECK_MSG( aAngle1 != nullptr && aAngle2 != nullptr, false,
                  wxT( "Cannot map NULL point angles." ) );
 
@@ -84,42 +86,35 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
     VECTOR2D v;
     bool     swap = false;
 
-    EDA_ANGLE delta = ( *aAngle2 - *aAngle1 ).Normalize180();
+    EDA_ANGLE delta = *aAngle2 - *aAngle1;
 
     x = aAngle1->Cos();
     y = aAngle1->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle1 = EDA_ANGLE( v );
-    aAngle1->Normalize180();
 
     x = aAngle2->Cos();
     y = aAngle2->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle2 = EDA_ANGLE( v );
-    aAngle2->Normalize180();
 
-    EDA_ANGLE deltaTransformed = ( *aAngle2 - *aAngle1 ).Normalize180();
+    EDA_ANGLE deltaTransformed = *aAngle2 - *aAngle1;
+    EDA_ANGLE residualError( deltaTransformed - delta );
+    residualError.Normalize();
 
-    if( sign( deltaTransformed.AsDegrees() )
-        != sign( delta.AsDegrees() ) )
+    if( residualError > epsilon || residualError < epsilon.Invert().Normalize() )
     {
         std::swap( *aAngle1, *aAngle2 );
         swap = true;
-
-        if( *aAngle2 < *aAngle1 )
-            *aAngle2 += ANGLE_360;
     }
 
-#ifdef DEBUG
-    // This check is only valid for coordinate inversions (y=-y). If we start using this function on
-    // more complex transforms (different x to y scaling), we should re-write it/re think it.
-    static const EDA_ANGLE epsilon( 0.1, DEGREES_T );
-
-    EDA_ANGLE residualError( *aAngle2 - *aAngle1 - delta );
-    residualError.Normalize();
-
-    assert( residualError < epsilon || residualError > epsilon.Invert().Normalize() );
-#endif // DEBUG
+    if( *aAngle2 < *aAngle1 )
+    {
+        if( *aAngle2 < ANGLE_0 )
+            aAngle2->Normalize();
+        else
+            *aAngle1 = aAngle1->Normalize() - ANGLE_360;
+    }
 
     return swap;
 }
