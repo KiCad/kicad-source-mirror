@@ -407,6 +407,23 @@ struct ASCH_ARC
 };
 
 
+struct ASCH_ELLIPSE
+{
+    int OwnerIndex;
+    int OwnerPartID;
+
+    VECTOR2I Center;
+    int      Radius;
+    double   SecondaryRadius;
+
+    int  AreaColor;
+    bool IsSolid;
+    bool IsNotAccesible;
+
+    explicit ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps );
+};
+
+
 struct ASCH_LINE
 {
     int ownerindex;

@@ -402,6 +402,25 @@ ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProps )
 }
 
 
+ASCH_ELLIPSE::ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::ELLIPSE );
+
+    OwnerIndex = ReadOwnerIndex( aProps );
+    OwnerPartID = ReadOwnerPartId( aProps );
+
+    Center = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
+                       -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+
+    Radius = ReadKiCadUnitFrac( aProps, "RADIUS" );
+    SecondaryRadius = ReadKiCadUnitFrac( aProps, "SECONDARYRADIUS" );
+
+    AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
+    IsNotAccesible = ALTIUM_PARSER::ReadBool( aProps, "ISNOTACCESIBLE", false );
+    IsSolid = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
+}
+
+
 ASCH_LINE::ASCH_LINE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::LINE );

@@ -478,6 +478,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             ParsePolygon( properties );
             break;
         case ALTIUM_SCH_RECORD::ELLIPSE:
+            ParseEllipse( properties );
             break;
         case ALTIUM_SCH_RECORD::PIECHART:
             break;
@@ -1417,6 +1418,71 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
             arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_ELLIPSE elem( aProperties );
+
+    // To do: Import true ellipses when KiCad supports them
+    if( elem.Radius != elem.SecondaryRadius )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "Yet unsupported ellipse was not imported at (X = %d; Y = %d)." ),
+                                  ( elem.Center + m_sheetOffset ).x, ( elem.Center + m_sheetOffset ).y ),
+                RPT_SEVERITY_ERROR );
+        return;
+    }
+
+    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    {
+            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
+
+            circle->SetPosition( elem.Center + m_sheetOffset );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
+            circle->SetStroke( STROKE_PARAMS( 0.1, PLOT_DASH_TYPE::SOLID ) );
+
+            circle->SetFillColor( GetColorFromInt( elem.AreaColor ) );
+
+            if( elem.IsSolid )
+                circle->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+            else
+                circle->SetFilled( false );
+
+            m_currentSheet->GetScreen()->Append( circle );
+    }
+    else
+    {
+        const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+
+        if( libSymbolIt == m_libSymbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            m_reporter->Report(
+                    wxString::Format( _( "Ellipse's owner (%d) not found." ), elem.OwnerIndex ),
+                    RPT_SEVERITY_ERROR );
+            return;
+        }
+
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+
+        LIB_SHAPE* circle = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::CIRCLE );
+        libSymbolIt->second->AddDrawItem( circle );
+
+        circle->SetUnit( elem.OwnerPartID );
+
+        circle->SetPosition( GetRelativePosition( elem.Center + m_sheetOffset, symbol ) );
+        circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
+        circle->SetStroke( STROKE_PARAMS( 0.1, PLOT_DASH_TYPE::SOLID ) );
+
+        circle->SetFillColor( GetColorFromInt( elem.AreaColor ) );
+
+        if( elem.IsSolid )
+            circle->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+        else
+            circle->SetFilled( false );
     }
 }
 

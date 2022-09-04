@@ -121,6 +121,7 @@ private:
     void ParsePolygon( const std::map<wxString, wxString>& aProperties );
     void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseArc( const std::map<wxString, wxString>& aProperties );
+    void ParseEllipse( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
