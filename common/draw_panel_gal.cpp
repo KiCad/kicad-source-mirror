@@ -67,7 +67,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_options( aOptions ),
         m_eventDispatcher( nullptr ),
         m_lostFocus( false ),
-        m_stealsFocus( true )
+        m_stealsFocus( true ),
+        m_statusPopup( nullptr )
 {
     m_parent = aParentWindow;
     m_MouseCapturedLost = false;

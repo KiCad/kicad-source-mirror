@@ -42,8 +42,6 @@
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
 
-class STATUS_TEXT_POPUP;
-
 class SCH_ITEM;
 class EDA_ITEM;
 class SCH_LINE;

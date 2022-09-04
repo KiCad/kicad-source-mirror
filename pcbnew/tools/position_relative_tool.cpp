@@ -220,6 +220,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
+    canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
@@ -231,6 +232,8 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
         else
             break;
     }
+
+    canvas()->SetStatusPopup( nullptr );
 
     return 0;
 }

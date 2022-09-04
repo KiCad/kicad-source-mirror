@@ -113,7 +113,7 @@ bool EDIT_TOOL::Init()
                 {
                     if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
                     {
-                        DS_PROXY_VIEW_ITEM* ds = frame()->GetCanvas()->GetDrawingSheet();
+                        DS_PROXY_VIEW_ITEM* ds = canvas()->GetDrawingSheet();
                         VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
 
                         if( ds && ds->HitTestDrawingSheetItems( getView(), cursor ) )
@@ -2032,6 +2032,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
 
     m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     m_statusPopup->Popup();
+    canvas()->SetStatusPopup( m_statusPopup->GetPanel() );
 
     std::string tool = "";
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
@@ -2046,6 +2047,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     }
 
     // Ensure statusPopup is hidden after use and before deleting it:
+    canvas()->SetStatusPopup( nullptr );
     m_statusPopup->Hide();
 
     if( pickedPoint )

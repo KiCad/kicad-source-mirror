@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -88,7 +88,17 @@ public:
                         GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
-    virtual void SetFocus() override;
+    void SetFocus() override;
+
+    bool StatusPopupHasFocus()
+    {
+        return m_statusPopup && m_statusPopup->HasFocus();
+    }
+
+    void SetStatusPopup( wxWindow* aPopup )
+    {
+        m_statusPopup = aPopup;
+    }
 
     /**
      * Switch method of rendering graphics.
@@ -291,6 +301,8 @@ protected:
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;
+
+    wxWindow*                m_statusPopup;
 
     /// Optional overlay for drawing transient debug objects
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;

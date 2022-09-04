@@ -507,8 +507,11 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             return;
         }
 
-        if( !m_parentPanel->HasFocus() )
-            break;
+        if( !m_parentPanel->HasFocus() && !m_parentPanel->StatusPopupHasFocus() )
+        {
+            m_state = IDLE;
+            return;
+        }
 
         double borderSize = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                       m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
@@ -856,7 +859,6 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         }
 
         return true;
-        break;
 
     case IDLE:
         if( borderHit )
@@ -868,7 +870,6 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         }
 
         return false;
-        break;
 
     case DRAG_PANNING:
     case DRAG_ZOOMING:

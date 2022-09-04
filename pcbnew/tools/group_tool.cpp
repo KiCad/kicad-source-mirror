@@ -193,6 +193,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
+    canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
@@ -205,6 +206,8 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
             break;
     }
 
+    canvas()->SetStatusPopup( nullptr );
+    
     return 0;
 }
 

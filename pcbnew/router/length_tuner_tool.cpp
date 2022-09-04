@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "class_draw_panel_gal.h"
+#include <class_draw_panel_gal.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -166,6 +166,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     // Create an instance of PNS_TUNE_STATUS_POPUP.
     PNS_TUNE_STATUS_POPUP statusPopup( frame() );
     statusPopup.Popup();
+    canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
     m_router->Move( end, nullptr );
     updateStatusPopup( statusPopup );
@@ -243,6 +244,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_router->StopRouting();
     frame()->UndoRedoBlock( false );
 
+    canvas()->SetStatusPopup( nullptr );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );

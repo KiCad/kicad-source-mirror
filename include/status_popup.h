@@ -59,6 +59,8 @@ public:
      */
     void Expire( int aMsecs );
 
+    wxWindow* GetPanel() { return m_panel; }
+
 protected:
     void updateSize();
 
@@ -67,9 +69,10 @@ protected:
     ///< Expire timer even handler
     void onExpire( wxTimerEvent& aEvent );
 
-    wxPanel* m_panel;
+protected:
+    wxPanel*    m_panel;
     wxBoxSizer* m_topSizer;
-    wxTimer m_expireTimer;
+    wxTimer     m_expireTimer;
 };
 
 

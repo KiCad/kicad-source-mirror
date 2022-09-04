@@ -320,7 +320,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     auto setCursor =
             [&]()
             {
-                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+                canvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
     Activate();
@@ -335,6 +335,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+    canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -475,8 +476,10 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         getView()->Update( p );
     }
 
+    canvas()->SetStatusPopup( nullptr );
     statusPopup.Hide();
-    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    canvas()->SetCurrentCursor( KICURSOR::ARROW );
     getViewControls()->ForceCursorPosition( false );
     return 0;
 }
