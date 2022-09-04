@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"PO-Revision-Date: 2022-09-05 11:14+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -4665,9 +4665,8 @@ msgid "Bottom"
 msgstr "Abaixo"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Hyperlink"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5251,9 +5250,8 @@ msgid "Cursor"
 msgstr "Cursor"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Mover item"
+msgstr "Itens suspensos"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5528,9 +5526,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "O arquivo KiCad para este idioma não está instalado."
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Exiba os limites da folha"
+msgstr "Mostra a página %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6646,14 +6644,12 @@ msgstr "Redefina %s para os padrões"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "Nenhum barramento foi selecionado"
+msgstr "Nenhum objeto foi selecionado"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Nenhum barramento foi selecionado"
+msgstr "Diversos objetos foram selecionados"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6745,9 +6741,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Arquivos da biblioteca dos símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Arquivos da biblioteca dos símbolos do KiCad"
+msgstr "Arquivos da biblioteca do banco de dados do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10739,9 +10734,8 @@ msgid "Net Classes"
 msgstr "Classes da rede"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Definições de Barramento"
+msgstr "Definições de apelido do barramento"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10996,14 +10990,12 @@ msgid "Model"
 msgstr "Modelo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Diretivas do Spice:"
+msgstr "Dispositivo spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "Tipo da forma:"
+msgstr "Tipo do spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11738,9 +11730,9 @@ msgid "<root sheet>"
 msgstr "<folha raiz>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Vá para a página %s (%s)"
+msgstr "Página %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -11748,14 +11740,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"Hiperlink de destino inválido. Insira uma URL válida (por exemplo, file:// "
+"ou http(s)://) ou \"#<número da página>\" para criar um hiperlink para uma "
+"página neste esquema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
 msgid "Link:"
-msgstr ""
+msgstr "Link:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "Faça deste item de texto um hiperlink clicável"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -12166,34 +12161,30 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Mostre as visualizações dos footprints no seletor dos símbolos"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "O nome do campo '%s' já está em uso."
+msgstr "O apelido '%s' já está em uso."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "O nome do modelo não pode estar vazio."
+msgstr "O nome da net/apelido do membro não pode estar vazio."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Definições de Barramento"
+msgstr "Definições do barramento:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Fonte"
+msgstr "(fonte)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "precisa de uma quantidade para '%s'"
+msgstr "Membros de '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Nome da Rede ou Barramento"
+msgstr "Nome da Net / barramento agrupado"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -14357,19 +14348,23 @@ msgstr ""
 "folha relacionada, mas, não tem nenhuma figura definida."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Houve um erro ao ler a imagem %s."
+msgstr "Houve um erro ao ler a tabela do banco de dados %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Não foi possível carregar o banco de dados da biblioteca: o arquivo de "
+"configurações %s está ausente ou é inválido"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
+"Não foi possível carregar o banco de dados da biblioteca: não foi possível "
+"conectar ao banco de dados %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14451,9 +14446,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "O número %s da conversão do símbolo é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "O número do pino é inválido"
+msgstr "Hyperlink com a url '%s' inválida"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -15221,9 +15216,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Houve uma falha ao inferir o modelo a partir do valor '%s'"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "O número %s da unidade do símbolo é inválido"
+msgstr "O índice do símbolo do pino é inválido: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -17551,9 +17546,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Pressione <ESC> para cancelar o movimento."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "O arquivo '%s' não foi encontrado."
+msgstr "A página '%d' não foi encontrada."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -19095,10 +19090,10 @@ msgid "Restoring '%s'"
 msgstr "Restaurando '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
-"Deseja verificar automaticamente durante a inicialização se há atualizações?"
+"Deseja verificar automaticamente se há atualizações dos plugins durante a "
+"inicialização?"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
@@ -30125,7 +30120,6 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30516,7 +30510,7 @@ msgstr ""
 "\n"
 "<br>\n"
 "\n"
-"### Nome das intensidades dos avisos\n"
+"### Nomenclatura das intensidades dos avisos\n"
 "\n"
 " * warning\n"
 " * error\n"
@@ -30548,7 +30542,7 @@ msgstr ""
 "\n"
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
-"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
 "\n"
 "\n"
 "    (rule heavy_thermals\n"
@@ -30556,7 +30550,7 @@ msgstr ""
 "       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
-"### Observações\n"
+"### Notes\n"
 "\n"
 "A cláusula de versão deve ser a primeira.  Ela indica a versão sintáctica do "
 "arquivo de maneira que \n"
@@ -30579,24 +30573,32 @@ msgstr ""
 "`?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
-"É verdadeiro caso qualquer parte de `A` esteja na região principal do "
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
+"É verdadeiro caso qualquer parte de `A` estiver na região principal do "
 "footprint.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "É verdadeiro caso qualquer parte de `A` esteja na região da parte da frente "
 "do footprint.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "É verdadeiro caso qualquer parte de `A` esteja na região da parte de trás do "
 "footprint.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
-"É verdadeiro caso qualquer parte de `A` esteja dentro do esboço da área em "
+"    A.intersectsArea('<zone_name>')\n"
+"É verdadeiro caso qualquer parte de `A` esteja dentro do contorno da área em "
 "questão.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"É verdadeiro se todo 'A' estiver dentro do contorno da área em questão.\n"
+"\n"
+"NB: esta é potencialmente uma chamada mais cara do que `intersectsArea()`. "
+"Use `intersectsArea()` \n"
+"sempre que for possível.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
@@ -30604,7 +30606,7 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"É verdadeiro caso `A` tenha uma rede que seja parte específica do par "
+"É verdadeiro caso `A` tenha uma net que seja parte específica do par "
 "diferencial.\n"
 "`<net_name>` é o nome principal do par diferencial. Por exemplo, o "
 "`inDiffPair('/CLK')`\n"
@@ -30625,107 +30627,123 @@ msgstr ""
 "camada ou pode ser o nome atribuído na Configuração da placa > \n"
 "Editor de camadas da placa ou o seu nome canônico (ex.: `F.Cu`).\n"
 "\n"
-"Importante: isso retorna verdadeiro caso `A` esteja numa determinada\n"
-"camada, independentemente se a regra foi ou não avaliada para aquela "
-"camada.\n"
-"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da "
-"regra.\n"
+"NB: isso retorna verdadeiro caso `A` esteja numa determinada\n"
+"camada, independentemente se a regra foi ou não avaliada para aquela camada."
+"\n"
+"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da regra."
+"\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsFrontCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsBackCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Descontinuado; em vez disso use `intersectsArea()`.\n"
 "<br><br><br>\n"
 "\n"
 "### Mais exemplos\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
-"       (condition \"A.insideArea('zone3')\"))\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
 "    (rule \"BGA neckdown\"\n"
 "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
 "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.insideCourtyard('U3')\"))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # previne a serigrafia em cima das vias cobertas\n"
+"    # Previne a serigrafia em cima das vias cobertas.\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"\n"
+"    (rule \"Distância entre as vias das diferentes nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"\n"
+"\n"
+"    (rule \"Espaço entre as ilhas das diferentes nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"\n"
+"\n"
+"    (rule \"Furo da ilha para monitorar a folga\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "\n"
-"    (rule \"Pad to Track Clearance\"\n"
+"    (rule \"Ilha para monitorar a folga\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
+"    (rule \"Folga para o corte de 1mm\"\n"
 "        (constraint clearance (min 0.8mm))\n"
 "        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"    (rule \"Tamanho máximo do furo perfurado mecânico\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    (rule \"Max Drill Hole Size PTH\"\n"
+"    (rule \"Tamanho máximo do furo perfurado PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Define uma lacuna otimizada para um par diferencial em particular\n"
+"    # Define uma lacuna otimizada para um par diferencial em particular.\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Define uma folga maior ao redor do par diferencial\n"
+"    # Define uma folga maior ao redor de qualquer par diferencial.\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Não utilize alivio térmico nas ilhas do dissipador de calor\n"
+"    # Não utilize alivio térmico nas ilhas do dissipador de calor.\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
 "\n"
-"    # Requer que todos os quatro alívios térmicos falem com as regiões "
-"principais que estão conectadas\n"
+"    # Requer que todos os quatro alívios térmicos se conectem à região "
+"principal.\n"
 "    (rule fully_spoked_pads\n"
 "        (constraint min_resolved_spokes 4))\n"
 "\n"
-"    # Define a folga do alivio térmico & e fale com a largura de todas as "
-"regiões\n"
+"    # Define a folga do alivio térmico & e conecte-se com a largura para "
+"todas as regiões.\n"
 "    (rule defined_relief\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # Substitui a folga do alivio térmico & e fale com a largura das regiões "
-"GND e PWR\n"
+"    #Substitui a folga do alivio térmico & e conecte-se com a largura das "
+"regiões GND e PWR.\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
 "\n"
-"    # Impeça a absorção de solda a partir das ilhas SMD\n"
+"    # Impeça a absorção de solda a partir das ilhas SMD.\n"
 "    (rule holes_in_pads\n"
 "        (constraint physical_hole_clearance (min 0.2mm))\n"
 "        (condition \"B.Pad_Type == 'SMD'\"))\n"
 "\n"
-"    # Proíbe as substituições da margem da máscara de solda\n"
+"    # Proíbe as substituições da margem da máscara de solda.\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
@@ -30738,7 +30756,7 @@ msgstr ""
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # Verifique a capacidade da corrente\n"
+"    # Verifique a capacidade de transporte da corrente\n"
 "    (rule high-current\n"
 "        (constraint track_width (min 1.0mm))\n"
 "        (constraint connection_width (min 0.8mm))\n"
@@ -30827,9 +30845,8 @@ msgid "Via Gap"
 msgstr "Espaçamento de Via"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Altera as propriedades do texto"
+msgstr "Altera a propriedade"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -34200,11 +34217,10 @@ msgid "Unrecognized layer '%s'"
 msgstr "Camada '%s' não foi reconhecida"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
 msgstr ""
-"Falta o argumento de identificação do footprint (A, B, ou o designador de "
-"referência) para %s."
+"Falta o argumento do footprint (A, B, ou o designador de referência) para %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -34219,11 +34235,10 @@ msgid "Footprint has no back courtyard."
 msgstr "O footprint não tem pedaço atrás."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
 msgstr ""
-"Falta o argumento identificador da regra na área (A, B, ou nome da regra na "
-"área) para %s."
+"Falta o argumento de regra da área (A, B, ou nome da regra na área) para %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -38211,14 +38226,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Mostra/oculta o gerenciador de aparência"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "Propriedades da folha"
+msgstr "Mostra painel de propriedades"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "Mostra/oculta o gerenciador de aparência"
+msgstr "Mostra/oculta o painel de propriedades"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -38664,14 +38677,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Seleciona todas os footprints e as trilhas na mesma página do esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Salvar no Esquema"
+msgstr "Selecione no esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Selecione os itens correspondentes no editor de PCI"
+msgstr "Selecione os itens correspondentes no editor do esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
