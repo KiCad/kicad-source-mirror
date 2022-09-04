@@ -145,13 +145,6 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
     wxString          converted;
     std::vector<bool> braceStack;    // true == formatting construct
 
-    auto hasFormattingPrefix =
-            [&]()
-            {
-                static wxString prefixes = wxT( "~_^" );
-                return !converted.IsEmpty() && prefixes.Find( converted.Last() ) >= 0;
-            };
-
     converted.reserve( aSource.length() );
 
     for( wxUniChar c: aSource )
@@ -167,9 +160,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_LIBID )
         {
-            if( c == '{' && !hasFormattingPrefix() )
-                converted += wxT( "{brace}" );
-            else if( c == '/' )
+            if( c == '/' )
                 converted += wxT( "{slash}" );
             else if( c == '\\' )
                 converted += wxT( "{backslash}" );
@@ -202,9 +193,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_FILENAME )
         {
-            if( c == '{' )
-                converted += wxT( "{brace}" );
-            else if( c == '/' )
+            if( c == '/' )
                 converted += wxT( "{slash}" );
             else if( c == '\\' )
                 converted += wxT( "{backslash}" );
@@ -229,8 +218,6 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         {
             if( c == ' ' )
                 converted += wxT( "{space}" );
-            else if( c == '{' )
-                converted += wxT( "{brace}" );
             else
                 converted += c;
         }
