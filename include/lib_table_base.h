@@ -340,7 +340,7 @@ public:
     /// Delete all rows.
     void Clear()
     {
-        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+        std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
         rows.clear();
         nickIndex.clear();
@@ -525,7 +525,7 @@ protected:
 
     void reindex()
     {
-        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
+        std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
         nickIndex.clear();
 
@@ -561,7 +561,7 @@ protected:
     LIB_TABLE* fallBack;
 
     /// Mutex to protect access to the nickIndex variable
-    mutable std::recursive_mutex m_nickIndexMutex;
+    mutable std::mutex m_nickIndexMutex;
 };
 
 #endif  // _LIB_TABLE_BASE_H_

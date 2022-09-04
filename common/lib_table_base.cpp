@@ -298,9 +298,9 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
 bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 {
-    std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
-
     ensureIndex();
+
+    std::lock_guard<std::mutex> lock( m_nickIndexMutex );
 
     INDEX_CITER it = nickIndex.find( aRow->GetNickName() );
 
