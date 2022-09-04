@@ -491,6 +491,9 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
         std::vector<SCH_ITEM*> items;
+        // Store current unit value, to regenerate it after calculations
+        // (useful in complex hierarchies)
+        std::vector<std::pair<SCH_SYMBOL*, int>> symbolsChanged;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
@@ -498,11 +501,18 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                 items.push_back( item );
 
             // Ensure the hierarchy info stored in SCREENS is built and up to date
-            // (multi-unit symbols and pin mapping)
+            // (multi-unit symbols)
             if( item->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                symbol->UpdateUnit( symbol->GetUnitSelection( &sheet ) );
+                int new_unit = symbol->GetUnitSelection( &sheet );
+
+                // Store the initial unit value, to regenerate it after calculations,
+                // if modified
+                if( symbol->GetUnit() != new_unit )
+                    symbolsChanged.push_back( { symbol, symbol->GetUnit() } );
+
+                symbol->UpdateUnit( new_unit );
             }
         }
 
@@ -512,6 +522,13 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
         // UpdateDanglingState() also adds connected items for SCH_TEXT
         sheet.LastScreen()->TestDanglingEnds( &sheet, aChangedItemHandler );
+
+        // Restore the m_unit member, to avoid changes in current active sheet path
+        // after calculations
+        for( auto& item : symbolsChanged )
+        {
+            item.first->UpdateUnit( item.second );
+        }
     }
 
     if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )

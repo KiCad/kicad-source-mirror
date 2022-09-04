@@ -476,6 +476,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     // If a multi-unit symbol, set up the unit selector and interchangeable checkbox.
     if( m_symbol->GetUnitCount() > 1 )
     {
+        // Ensure symbol unit is the currently selected unit (mandatory in complex hierarchies)
+        // from the current sheet path, because it can be modified by previous calculations
+        m_symbol->UpdateUnit( m_symbol->GetUnitSelection( &GetParent()->GetCurrentSheet() ) );
+
         for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
             m_unitChoice->Append( LIB_SYMBOL::SubReference( ii, false ) );
 
@@ -798,6 +802,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
     GetParent()->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+
+    m_symbol->SetUnit( unit_selection );
 
     return true;
 }
