@@ -2074,8 +2074,15 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     if( selection.GetSize() >= 1 )
         symbol = (SCH_SYMBOL*) selection.Front();
 
-    if( !symbol || symbol->GetEditFlags() != 0 || symbol->IsMissingLibSymbol() )
+    if( !symbol || symbol->GetEditFlags() != 0 )
         return 0;
+
+    if( symbol->IsMissingLibSymbol() )
+    {
+        m_frame->ShowInfoBarError( _( "Symbols with broken library symbol links cannot "
+                                      "be edited." ) );
+        return 0;
+    }
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );
     symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
