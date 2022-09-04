@@ -25,13 +25,16 @@
                     "column": "Manufacturer",
                     "name": "Manufacturer",
                     "visible_on_add": false,
-                    "visible_in_chooser": false
+                    "visible_in_chooser": false,
+                    "show_name": true
                 },
                 {
                     "column": "MPN",
                     "name": "MPN",
                     "visible_on_add": false,
                     "visible_in_chooser": true
+                    ,
+                    "show_name": true
                 },
                 {
                     "column": "Value",
@@ -55,7 +58,8 @@
                     "column": "Power Rating",
                     "name": "Power Rating",
                     "visible_on_add": true,
-                    "visible_in_chooser": false
+                    "visible_in_chooser": false,
+                    "show_name": true
                 },
                 {
                     "column": "Description",

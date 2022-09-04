@@ -81,13 +81,26 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                             if( fieldJson.empty() || !fieldJson.is_object() )
                                 continue;
 
+                            std::string column = fieldJson.contains( "column" )
+                                                 ? fieldJson["column"].get<std::string>() : "";
+
+                            std::string name   = fieldJson.contains( "name" )
+                                                 ? fieldJson["name"].get<std::string>() : "";
+
+                            bool visible_on_add = !fieldJson.contains( "visible_on_add" )
+                                                  || fieldJson["visible_on_add"].get<bool>();
+
+                            bool visible_in_chooser =
+                                    !fieldJson.contains( "visible_in_chooser" )
+                                    || fieldJson["visible_in_chooser"].get<bool>();
+
+                            bool show_name = fieldJson.contains( "show_name" )
+                                             && fieldJson["show_name"].get<bool>();
+
                             table.fields.emplace_back(
                                     DATABASE_FIELD_MAPPING(
                                     {
-                                        fieldJson["column"].get<std::string>(),
-                                        fieldJson["name"].get<std::string>(),
-                                        fieldJson["visible_on_add"].get<bool>(),
-                                        fieldJson["visible_in_chooser"].get<bool>()
+                                        column, name, visible_on_add, visible_in_chooser, show_name
                                     } ) );
                         }
                     }

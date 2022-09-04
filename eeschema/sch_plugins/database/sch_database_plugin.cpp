@@ -328,6 +328,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
             LIB_FIELD& field = symbol->GetValueField();
             field.SetText( value );
             field.SetVisible( mapping.visible_on_add );
+            field.SetNameShown( mapping.show_name );
             continue;
         }
         else if( mapping.name == wxT( "Datasheet" ) )
@@ -335,6 +336,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
             LIB_FIELD& field = symbol->GetDatasheetField();
             field.SetText( value );
             field.SetVisible( mapping.visible_on_add );
+            field.SetNameShown( mapping.show_name );
 
             if( mapping.visible_on_add )
                 field.SetAutoAdded( true );
@@ -347,6 +349,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         field->SetText( value );
         field->SetVisible( mapping.visible_on_add );
         field->SetAutoAdded( true );
+        field->SetNameShown( mapping.show_name );
 
         symbol->AddField( field );
     }
