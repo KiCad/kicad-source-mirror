@@ -1,4 +1,4 @@
-(kicad_sch (version 20220404) (generator eeschema)
+(kicad_sch (version 20220904) (generator eeschema)
 
   (uuid 2e45d1d2-c73f-46e5-98d6-3a9dc360bff5)
 
@@ -13,21 +13,21 @@
 
   (lib_symbols
     (symbol "pic_programmer_schlib:74LS125" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (id 0) (at 5.08 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "74LS125" (id 1) (at 7.62 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 2.54 1.27 0)
-        (effects (font (size 0.254 0.254)) hide)
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "U" (id 0) (at 5.08 3.81 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "74LS125" (id 1) (at 7.62 -2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 2.54 1.27 0)        (effects (font (size 0.254 0.254)) hide)
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "74LS125_0_0"
         (pin power_in line (at -1.27 5.08 270) (length 2.54)
           (name "VCC" (effects (font (size 0.508 0.508))))
@@ -136,18 +136,18 @@
       )
     )
     (symbol "pic_programmer_schlib:7805" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (id 0) (at 3.81 -4.9784 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Value" "7805" (id 1) (at 0 5.08 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Footprint" "" (id 2) (at 1.27 -7.5184 0)
-        (effects (font (size 0.381 0.381)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "U" (id 0) (at 3.81 -4.9784 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Value" "7805" (id 1) (at 0 5.08 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Footprint" "" (id 2) (at 1.27 -7.5184 0)        (effects (font (size 0.381 0.381)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "7805_0_1"
         (rectangle (start -5.08 -3.81) (end 5.08 3.81)
           (stroke (width 0) (type default))
@@ -170,18 +170,18 @@
       )
     )
     (symbol "pic_programmer_schlib:BC237" (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "Q" (id 0) (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) (justify right))
-      )
-      (property "Value" "BC237" (id 1) (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)) (justify right))
-      )
-      (property "Footprint" "Package_TO_SOT_THT:TO-92" (id 2) (at -2.54 -5.08 0)
-        (effects (font (size 0.381 0.381)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "Q" (id 0) (at 0 -3.81 0)        (effects (font (size 1.27 1.27)) (justify right))
+      
+)
+      (property "Value" "BC237" (id 1) (at 0 3.81 0)        (effects (font (size 1.27 1.27)) (justify right))
+      
+)
+      (property "Footprint" "Package_TO_SOT_THT:TO-92" (id 2) (at -2.54 -5.08 0)        (effects (font (size 0.381 0.381)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "BC237_0_1"
         (polyline
           (pts
@@ -250,18 +250,18 @@
       )
     )
     (symbol "pic_programmer_schlib:BC307" (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "Q" (id 0) (at -1.27 -3.81 0)
-        (effects (font (size 1.524 1.524)) (justify right))
-      )
-      (property "Value" "BC307" (id 1) (at 0 3.81 0)
-        (effects (font (size 1.524 1.524)) (justify right))
-      )
-      (property "Footprint" "Package_TO_SOT_THT:TO-92" (id 2) (at -2.54 -5.08 0)
-        (effects (font (size 0.381 0.381)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "Q" (id 0) (at -1.27 -3.81 0)        (effects (font (size 1.524 1.524)) (justify right))
+      
+)
+      (property "Value" "BC307" (id 1) (at 0 3.81 0)        (effects (font (size 1.524 1.524)) (justify right))
+      
+)
+      (property "Footprint" "Package_TO_SOT_THT:TO-92" (id 2) (at -2.54 -5.08 0)        (effects (font (size 0.381 0.381)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "BC307_0_1"
         (polyline
           (pts
@@ -330,21 +330,21 @@
       )
     )
     (symbol "pic_programmer_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (id 0) (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "C" (id 1) (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "C" (id 0) (at 0.635 2.54 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Value" "C" (id 1) (at 0.635 -2.54 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "C_0_1"
         (polyline
           (pts
@@ -375,18 +375,18 @@
       )
     )
     (symbol "pic_programmer_schlib:CONN_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "P" (id 0) (at -1.27 0 90)
-        (effects (font (size 1.016 1.016)))
-      )
-      (property "Value" "CONN_2" (id 1) (at 1.27 0 90)
-        (effects (font (size 1.016 1.016)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "P" (id 0) (at -1.27 0 90)        (effects (font (size 1.016 1.016)))
+      
+)
+      (property "Value" "CONN_2" (id 1) (at 1.27 0 90)        (effects (font (size 1.016 1.016)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "CONN_2_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
           (stroke (width 0) (type default))
@@ -405,21 +405,21 @@
       )
     )
     (symbol "pic_programmer_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (id 0) (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "CP" (id 1) (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "CP* Elko* TantalC* C*elec c_elec* SMD*_Pol" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "C" (id 0) (at 0.635 2.54 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Value" "CP" (id 1) (at 0.635 -2.54 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "CP* Elko* TantalC* C*elec c_elec* SMD*_Pol" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "CP_0_1"
         (rectangle (start -2.286 1.016) (end 2.286 0.508)
           (stroke (width 0.1524) (type default))
@@ -450,21 +450,21 @@
       )
     )
     (symbol "pic_programmer_schlib:D" (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (id 0) (at 0 2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "D" (id 1) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "Diode_* D-Pak_TO252AA *SingleDiode *_Diode_* *SingleDiode*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "D" (id 0) (at 0 2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "D" (id 1) (at 0 -2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "Diode_* D-Pak_TO252AA *SingleDiode *_Diode_* *SingleDiode*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "D_0_1"
         (polyline
           (pts
@@ -497,21 +497,21 @@
       )
     )
     (symbol "pic_programmer_schlib:DB9" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "J" (id 0) (at 0 13.97 0)
-        (effects (font (size 1.778 1.778)))
-      )
-      (property "Value" "DB9" (id 1) (at 0 -13.97 0)
-        (effects (font (size 1.778 1.778)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "DB9*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "J" (id 0) (at 0 13.97 0)        (effects (font (size 1.778 1.778)))
+      
+)
+      (property "Value" "DB9" (id 1) (at 0 -13.97 0)        (effects (font (size 1.778 1.778)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "DB9*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "DB9_0_1"
         (circle (center -1.778 -10.16) (radius 0.762)
           (stroke (width 0) (type default))
@@ -758,21 +758,21 @@
       )
     )
     (symbol "pic_programmer_schlib:D_Schottky" (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (id 0) (at 0 2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "D_Schottky" (id 1) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at -2.54 0 0)
-        (effects (font (size 0.254 0.254)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "D-Pak_TO252AA Diode_* *SingleDiode *SingleDiode* *_Diode_*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "D" (id 0) (at 0 2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "D_Schottky" (id 1) (at 0 -2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at -2.54 0 0)        (effects (font (size 0.254 0.254)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "D-Pak_TO252AA Diode_* *SingleDiode *SingleDiode* *_Diode_*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "D_Schottky_0_1"
         (polyline
           (pts
@@ -809,18 +809,18 @@
       )
     )
     (symbol "pic_programmer_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (id 0) (at 0 0 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Value" "GND" (id 1) (at 0 -1.778 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "#PWR" (id 0) (at 0 0 0)        (effects (font (size 0.762 0.762)) hide)
+      
+)
+      (property "Value" "GND" (id 1) (at 0 -1.778 0)        (effects (font (size 0.762 0.762)) hide)
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "GND_0_1"
         (polyline
           (pts
@@ -841,18 +841,18 @@
       )
     )
     (symbol "pic_programmer_schlib:INDUCTOR" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "L" (id 0) (at -1.27 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "INDUCTOR" (id 1) (at 2.54 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "L" (id 0) (at -1.27 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "INDUCTOR" (id 1) (at 2.54 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "INDUCTOR_0_1"
         (arc (start 0.0254 -5.0546) (mid 1.245 -3.7973) (end 0.0254 -2.54)
           (stroke (width 0.2032) (type default))
@@ -883,18 +883,18 @@
       )
     )
     (symbol "pic_programmer_schlib:JUMPER" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "JP" (id 0) (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "JUMPER" (id 1) (at 0 -2.032 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "JP" (id 0) (at 0 3.81 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "JUMPER" (id 1) (at 0 -2.032 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "JUMPER_0_1"
         (circle (center -2.54 0) (radius 0.889)
           (stroke (width 0.254) (type default))
@@ -919,21 +919,21 @@
       )
     )
     (symbol "pic_programmer_schlib:LED" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (id 0) (at 0 2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "LED" (id 1) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "D" (id 0) (at 0 2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "LED" (id 1) (at 0 -2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "LED_0_1"
         (polyline
           (pts
@@ -984,18 +984,18 @@
       )
     )
     (symbol "pic_programmer_schlib:LT1373" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (id 0) (at 15.24 12.7 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Value" "LT1373" (id 1) (at -12.7 12.7 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "U" (id 0) (at 15.24 12.7 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Value" "LT1373" (id 1) (at -12.7 12.7 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "LT1373_0_1"
         (rectangle (start -17.78 -10.16) (end 17.78 10.16)
           (stroke (width 0.254) (type default))
@@ -1038,21 +1038,21 @@
       )
     )
     (symbol "pic_programmer_schlib:MOUNTING_HOLE" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "P" (id 0) (at 2.032 0 0)
-        (effects (font (size 1.016 1.016)) (justify left))
-      )
-      (property "Value" "MOUNTING_HOLE" (id 1) (at 0 1.397 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "*Hole*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "P" (id 0) (at 2.032 0 0)        (effects (font (size 1.016 1.016)) (justify left))
+      
+)
+      (property "Value" "MOUNTING_HOLE" (id 1) (at 0 1.397 0)        (effects (font (size 0.762 0.762)) hide)
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "ki_fp_filters" "*Hole*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "MOUNTING_HOLE_0_1"
         (circle (center 0 0) (radius 0.7874)
           (stroke (width 0) (type default))
@@ -1061,18 +1061,18 @@
       )
     )
     (symbol "pic_programmer_schlib:POT" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "RV" (id 0) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "POT" (id 1) (at 0 0 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "RV" (id 0) (at 0 -2.54 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "POT" (id 1) (at 0 0 0)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "POT_0_1"
         (rectangle (start -3.81 1.27) (end 3.81 -1.27)
           (stroke (width 0) (type default))
@@ -1104,18 +1104,18 @@
       )
     )
     (symbol "pic_programmer_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "#FLG" (id 0) (at 0 2.413 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Value" "PWR_FLAG" (id 1) (at 0 4.572 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "#FLG" (id 0) (at 0 2.413 0)        (effects (font (size 0.762 0.762)) hide)
+      
+)
+      (property "Value" "PWR_FLAG" (id 1) (at 0 4.572 0)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
           (name "pwr" (effects (font (size 0.508 0.508))))
@@ -1138,21 +1138,21 @@
       )
     )
     (symbol "pic_programmer_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "R" (id 0) (at 2.032 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "R" (id 1) (at 0 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at -1.778 0 90)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "ki_fp_filters" "R_* Resistor_*" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
+      (property "Reference" "R" (id 0) (at 2.032 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "R" (id 1) (at 0 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at -1.778 0 90)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "ki_fp_filters" "R_* Resistor_*" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
       (symbol "R_0_1"
         (rectangle (start -1.016 -2.54) (end 1.016 2.54)
           (stroke (width 0.2032) (type default))
@@ -1171,18 +1171,18 @@
       )
     )
     (symbol "pic_programmer_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (id 0) (at 0 2.54 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Value" "VCC" (id 1) (at 0 2.54 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "#PWR" (id 0) (at 0 2.54 0)        (effects (font (size 0.762 0.762)) hide)
+      
+)
+      (property "Value" "VCC" (id 1) (at 0 2.54 0)        (effects (font (size 0.762 0.762)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "VCC_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
           (name "VCC" (effects (font (size 0.508 0.508))))
@@ -1206,18 +1206,18 @@
       )
     )
     (symbol "pic_programmer_schlib:VPP" (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (id 0) (at 0 5.08 0)
-        (effects (font (size 1.016 1.016)) hide)
-      )
-      (property "Value" "VPP" (id 1) (at 0 3.81 0)
-        (effects (font (size 1.016 1.016)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
+      (property "Reference" "#PWR" (id 0) (at 0 5.08 0)        (effects (font (size 1.016 1.016)) hide)
+      
+)
+      (property "Value" "VPP" (id 1) (at 0 3.81 0)        (effects (font (size 1.016 1.016)))
+      
+)
+      (property "Footprint" "" (id 2) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
+      (property "Datasheet" "" (id 3) (at 0 0 0)        (effects (font (size 1.524 1.524)))
+      
+)
       (symbol "VPP_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
           (name "VPP" (effects (font (size 1.016 1.016))))
@@ -2161,7 +2161,7 @@
     (pin "1" (uuid 278a2343-3bee-4ece-9c08-ce3ad057e9c7))
   )
 
-  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 80.01 0) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 80.01 0) (unit 2)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a4d59)
     (default_instance (reference "U") (unit 1) (value "") (footprint ""))
@@ -2330,7 +2330,7 @@
     (pin "1" (uuid d4cd7aed-ce54-4e4a-899f-0517e29080c3))
   )
 
-  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 129.54 0) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 129.54 0) (unit 3)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a4d61)
     (default_instance (reference "U") (unit 1) (value "") (footprint ""))
@@ -2499,7 +2499,7 @@
     (pin "1" (uuid 167896a0-2580-4e14-b24b-715a38247601))
   )
 
-  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 106.68 0) (mirror y) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:74LS125") (at 110.49 106.68 0) (mirror y) (unit 4)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a4d6b)
     (default_instance (reference "U") (unit 1) (value "") (footprint ""))
