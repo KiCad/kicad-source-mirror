@@ -622,7 +622,6 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
 
 bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 {
-wxLogMessage( "flg %X", (int)m_symbol->GetEditFlags());
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
