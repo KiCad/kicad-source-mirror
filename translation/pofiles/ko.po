@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-29 00:04+0000\n"
+"PO-Revision-Date: 2022-09-05 11:14+0000\n"
 "Last-Translator: KwonHyeokbeom <gurqja3810@naver.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4609,9 +4609,8 @@ msgid "Bottom"
 msgstr "하단"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "하이퍼링크"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5180,9 +5179,8 @@ msgid "Cursor"
 msgstr "커서"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "항목 이동"
+msgstr "호버링된 항목"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5455,9 +5453,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "이 언어에 대한 KiCad 언어 파일이 설치되어 있지 않습니다."
 
 #: common/plotters/PDF_plotter.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "페이지 경계 표시"
+msgstr "페이지 표시 %s"
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -6568,14 +6566,12 @@ msgstr "%s를 기본값으로 초기화"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "선택된 버스 없음"
+msgstr "선택한 객체가 없습니다"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "모듈이 선택되지 않았습니다."
+msgstr "여러 객체가 선택됨"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6665,9 +6661,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "KiCad 레거시 심볼 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad 심볼 라이브러리 파일"
+msgstr "KiCad 데이터베이스 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10596,9 +10591,8 @@ msgid "Net Classes"
 msgstr "네트 클래스"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "버스 정의"
+msgstr "버스 별칭 정의"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10849,14 +10843,12 @@ msgid "Model"
 msgstr "모델"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Spice 지시문:"
+msgstr "Spice 장치:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "모양 유형:"
+msgstr "Spice 유형:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11581,9 +11573,9 @@ msgid "<root sheet>"
 msgstr "<루트 시트>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "%s (%s) 페이지로 이동"
+msgstr "페이지 %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -11591,15 +11583,17 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
+"하이퍼링크 경로가 잘못되었습니다. 유효한 URL(예: file:// 또는 http(s)://) "
+"또는 \"#<페이지 번호>\"을 입력하여 이 회로도의 페이지에 대한 하이퍼링크를 "
+"만드십시오."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:268
-#, fuzzy
 msgid "Link:"
-msgstr "연결"
+msgstr "링크:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "이 텍스트 항목을 클릭 가능한 하이퍼링크로 만들기"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11997,34 +11991,30 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "심볼 선택기에서 풋프린트 미리 보기 표시"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "필드 이름 '%s'은(는) 이미 사용 중입니다."
+msgstr "별칭 이름 '%s'는 이미 사용 중입니다."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "모델 이름은 비워둘 수 없습니다."
+msgstr "멤버 네트/별칭 이름은 비워둘 수 없습니다."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "버스 정의"
+msgstr "버스 정의:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "소스"
+msgstr "(출처)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "'%s'에 대한 숫자가 필요함"
+msgstr "'%s'의 멤버:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "네트 또는 버스 이름"
+msgstr "Net / Nested 버스 이름"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -14118,19 +14108,21 @@ msgstr ""
 "하지만 정의된 형상이 없습니다."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "이미지 %s를 읽는 동안 오류가 발생했습니다."
+msgstr "데이터베이스 테이블 %s 읽기 오류: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "데이터베이스 라이브러리를 로드할 수 없습니다: 설정 파일 %s이 없거나 "
+"잘못되었습니다"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "데이터베이스 라이브러리를 로드할 수 없음: %s 데이터베이스에 연결할 수 "
+"없음(%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -14212,9 +14204,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "잘못된 심볼 변환 번호 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "잘못된 핀 번호"
+msgstr "잘못된 하이퍼링크 URL '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -14963,9 +14955,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "값' %s'에서 모델 유추에 실패"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "잘못된 심볼 유닛 번호 %s"
+msgstr "잘못된 기호 핀 인덱스: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -17267,9 +17259,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "<ESC>를 눌러 이동을 취소하세요."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "'%s' 파일을 찾을 수 없습니다."
+msgstr "'%d' 페이지를 찾을 수 없습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -18798,9 +18790,8 @@ msgid "Restoring '%s'"
 msgstr "'%s' 복원 중"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "시작 시 업데이트를 자동으로 확인하시겠습니까?"
+msgstr "시작할 때 플러그인 업데이트를 자동으로 확인하시겠습니까?"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
@@ -30328,9 +30319,8 @@ msgid "Via Gap"
 msgstr "비아 간격"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "텍스트 속성 편집"
+msgstr "속성 변경"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -33645,9 +33635,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "인식할 수 없는 레이어 '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "%s에 대한 풋프린트 식별자 인수(A, B 또는 참조 지정자)가 없습니다."
+msgstr "%s에 대한 풋프린트 인수(A, B 또는 참조 지정자)가 누락되었습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -33662,10 +33652,9 @@ msgid "Footprint has no back courtyard."
 msgstr "풋프린트에 후면 코트야드가 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr ""
-"%s에 대한 영역 식별자 인수(A, B 또는 규칙 영역 이름)의 규칙이 없습니다."
+msgstr "%s에 대한 규칙 영역 인수(A, B 또는 규칙 영역 이름)가 누락되었습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -37578,14 +37567,12 @@ msgid "Show/hide the appearance manager"
 msgstr "형상 관리자 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "시트 속성"
+msgstr "속성 패널 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "형상 관리자 표시/숨기기"
+msgstr "속성 패널 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -38019,14 +38006,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "같은 회로도 시트에 속한 모든 풋프린트와 배선을 선택합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도에서 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "PCB 편집기에서 해당 항목 선택"
+msgstr "Schematic 편집기에서 해당 항목 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
