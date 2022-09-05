@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-30 03:18+0000\n"
+"PO-Revision-Date: 2022-09-05 11:14+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11631,7 +11631,7 @@ msgstr "リンク:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:270
 msgid "Make this text item a clickable hyperlink"
-msgstr ""
+msgstr "このテキストアイテムをクリック可能なハイパーリンクにする"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:110
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -12038,14 +12038,12 @@ msgid "Alias name '%s' already in use."
 msgstr "エイリアス名 '%s' は既に使われています。"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "モデル名は空欄にできません。"
+msgstr "メンバーのネット/エイリアス名を空にすることはできません。"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "バス定義"
+msgstr "バス定義:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
 msgid "(source)"
@@ -14159,19 +14157,21 @@ msgstr ""
 "ていますが、図は定義されていません。"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "イメージ '%s' の読み込み中にエラーしました。"
+msgstr "データベース テーブル %s の読み取り中にエラーが発生しました: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:174
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
+msgstr "データベースライブラリーを読み込めませんでした: 設定ファイル %s "
+"が見つからないか、無効です"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:216
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "データベースライブラリーを読み込めませんでした: データベース %s "
+"に接続できませんでした (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3184
@@ -15011,9 +15011,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "値 '%s' からモデルを推論できませんでした"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "不正なシンボル のユニット番号 %s"
+msgstr "無効なシンボルピンインデックス： '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
