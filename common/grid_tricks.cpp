@@ -170,7 +170,7 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 
             // We only want to apply this to whole rows.  If the grid allows selecting individual
             // cells, and the selection contains dijoint cells, skip this logic.
-            if( !m_grid->GetSelectedCells().IsEmpty() || !m_sel_row_count )
+            if( !m_grid->GetSelectedCells().IsEmpty() || m_sel_row_count < 2 )
             {
                 // We preserved the selection in toggleCell above; so clear it now that we know
                 // we aren't doing a multi-select edit
