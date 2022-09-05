@@ -239,6 +239,10 @@ void LENGTH_TUNER_TOOL::performTuning()
             meanderSettingsDialog( dummy );
             statusPopup.Show();
         }
+        else
+        {
+            evt->SetPassEvent();
+        }
     }
 
     m_router->StopRouting();
