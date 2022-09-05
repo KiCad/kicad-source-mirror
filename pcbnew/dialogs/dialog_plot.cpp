@@ -1075,6 +1075,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( plotter )
         {
             PlotBoardLayers( board, plotter, plotSequence, m_plotOpts );
+            PlotInteractiveLayer( board, plotter );
             plotter->EndPlot();
             delete plotter->RenderSettings();
             delete plotter;

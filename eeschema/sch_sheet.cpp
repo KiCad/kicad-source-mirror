@@ -1075,13 +1075,18 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
 
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
-    if( !aBackground )
-    {
-        BOX2I    rect( m_pos, m_size );
-        wxString pageNum = GetPageNumber( getSheetPath() );
+    std::vector<wxString> properties;
 
-        aPlotter->HyperlinkBox( rect, EDA_TEXT::GotoPageHref( pageNum ) );
+    properties.emplace_back( EDA_TEXT::GotoPageHref( GetPageNumber( getSheetPath() ) ) );
+
+    for( const SCH_FIELD& field : GetFields() )
+    {
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   field.GetName(),
+                                                   field.GetShownText() ) );
     }
+
+    aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
 
     // Plot sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )

@@ -195,6 +195,13 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
+        else if( aContext == CTX_JS_STR )
+        {
+            if( c == '\'' )
+                converted += wxT( "{quote}" );
+            else
+                converted += c;
+        }
         else if( aContext == CTX_LINE )
         {
             if( c == '\n' || c == '\r' )

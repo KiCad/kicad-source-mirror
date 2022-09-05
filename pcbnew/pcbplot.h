@@ -159,6 +159,11 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayerSequen
                       const PCB_PLOT_PARAMS& aPlotOptions );
 
 /**
+ * Plot interactive items (hypertext links, properties, etc.).
+ */
+void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter );
+
+/**
  * Plot one copper or technical layer.
  *
  * It prepares options and calls the specialized plot function according to the layer type.

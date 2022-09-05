@@ -38,9 +38,9 @@
 #include <ignore.h>
 #include <macros.h>
 #include <trigo.h>
+#include <string_utils.h>
 
 #include <plotters/plotters_pslike.h>
-
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
@@ -709,13 +709,14 @@ void PDF_PLOTTER::ClosePage()
     const double PTsPERMIL = 0.072;
     VECTOR2D     psPaperSize = VECTOR2D( m_pageInfo.GetSizeMils() ) * PTsPERMIL;
 
-    auto iuToPdfUserSpace = [&]( const VECTOR2I& aCoord ) -> VECTOR2D
-                            {
-                                VECTOR2D retval = VECTOR2D( aCoord ) * PTsPERMIL / SCH_IU_PER_MILS;
-                                // PDF y=0 is at bottom of page, invert coordinate
-                                retval.y = psPaperSize.y - retval.y;
-                                return retval;
-                            };
+    auto iuToPdfUserSpace =
+            [&]( const VECTOR2I& aCoord ) -> VECTOR2D
+            {
+                VECTOR2D retval = VECTOR2D( aCoord ) * PTsPERMIL / ( m_IUsPerDecimil * 10 );
+                // PDF y=0 is at bottom of page, invert coordinate
+                retval.y = psPaperSize.y - retval.y;
+                return retval;
+            };
 
     // Handle annotations (at the moment only "link" type objects)
     std::vector<int> hyperlinkHandles;
@@ -955,31 +956,45 @@ bool PDF_PLOTTER::EndPlot()
         const BOX2D&                 box = menuPair.first;
         const std::vector<wxString>& urls = menuPair.second;
 
-        // We currently only support menu links for internal pages.  This vector holds the
-        // page names and numbers.
-        std::vector<std::pair<wxString, int>> pages;
+        // We currently only support menu links for internal pages and property lists.
+        // This vector holds the menu titles and (optional) page numbers.
+        std::vector<std::pair<wxString, int>> menuItems;
 
         for( const wxString& url : urls )
         {
             wxString pageNumber;
 
-            if( EDA_TEXT::IsGotoPageHref( url, &pageNumber ) )
+            if( url.StartsWith( "!" ) )
+            {
+                menuItems.push_back( { url.AfterFirst( '!' ), -1 } );
+            }
+            else if( EDA_TEXT::IsGotoPageHref( url, &pageNumber ) )
             {
                 for( size_t ii = 0; ii < m_pageNumbers.size(); ++ii )
                 {
                     if( m_pageNumbers[ii] == pageNumber )
-                        pages.push_back( { pageNumber, ii } );
+                        menuItems.push_back( { pageNumber, ii } );
                 }
             }
         }
 
         wxString js = wxT( "var aParams = [ " );
 
-        for( const std::pair<wxString, int>& page : pages )
+        for( const std::pair<wxString, int>& menuItem : menuItems )
         {
-            js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%d' }, " ),
-                                    wxString::Format( _( "Show Page %s" ), page.first ),
-                                    page.second );
+            if( menuItem.second < 0 )
+            {
+                js += wxString::Format( wxT( "{ cName: '%s', cReturn: null }, " ),
+                                        EscapeString( menuItem.first, CTX_JS_STR ) );
+            }
+            else
+            {
+                wxString menuText = wxString::Format( _( "Show Page %s" ), menuItem.first );
+
+                js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%d' }, " ),
+                                        EscapeString( menuText, CTX_JS_STR ),
+                                        menuItem.second );
+            }
         }
 
         js += wxT( "]; " );

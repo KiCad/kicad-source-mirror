@@ -76,6 +76,40 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 }
 
 
+void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter )
+{
+    for( const FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        std::vector<wxString> properties;
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Reference designator" ),
+                                                   fp->Reference().GetShownText() ) );
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Value" ),
+                                                   fp->Value().GetShownText() ) );
+
+        for( const auto& [ name, value ] : fp->GetProperties() )
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), name, value ) );
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Footprint" ),
+                                                   fp->GetFPIDAsString() ) );
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Description" ),
+                                                   fp->GetDescription() ) );
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Keywords" ),
+                                                   fp->GetKeywords() ) );
+
+        aPlotter->HyperlinkMenu( fp->GetBoundingBox(), properties );
+    }
+}
+
+
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {

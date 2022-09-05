@@ -912,6 +912,20 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     for( const SCH_FIELD& field : m_fields )
         field.Plot( aPlotter, aBackground );
+
+    if( !m_fields.empty() )
+    {
+        std::vector<wxString> properties;
+
+        for( const SCH_FIELD& field : GetFields() )
+        {
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       field.GetName(),
+                                                       field.GetShownText() ) );
+        }
+
+        aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
+    }
 }
 
 

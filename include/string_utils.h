@@ -55,6 +55,7 @@ enum ESCAPE_CONTEXT
     CTX_LIBID,
     CTX_IPC,
     CTX_QUOTED_STR,
+    CTX_JS_STR,
     CTX_LINE,
     CTX_CSV,
     CTX_FILENAME,
