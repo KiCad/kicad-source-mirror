@@ -133,13 +133,14 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         //if( item->Parent() && !item->Parent()->ViewIsVisible() )
         //    continue;
 
-        if( aNet <= 0 || item->Net() == aNet )
+        if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
+        {
+            continue;
+        }
+        else if( aNet <= 0 || item->Net() == aNet )
         {
             if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
             {
-                if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
-                    continue;
-
                 SEG::ecoord d = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
 
                 if( d < dist[2] )
@@ -173,12 +174,18 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
                 }
             }
         }
+        else if( item->OfKind( ITEM::SOLID_T ) && item->IsFreePad() )
+        {
+            // Allow free pads only when already inside pad
+            if( item->Shape()->Collide( aWhere ) )
+            {
+                prioritized[0] = item;
+                dist[0] = 0;
+            }
+        }
         else if ( item->Net() == 0 && m_router->Settings().Mode() == RM_MarkObstacles )
         {
             // Allow unconnected items as last resort in RM_MarkObstacles mode
-            if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
-                continue;
-
             if( item->Layers().Overlaps( tl ) )
                 prioritized[4] = item;
         }

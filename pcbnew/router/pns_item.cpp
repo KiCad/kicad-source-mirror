@@ -51,6 +51,10 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
         return false;
 
+    // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
+    if( aDifferentNetsOnly && ( IsFreePad() || aOther->IsFreePad() ) )
+        return false;
+
     // check if we are not on completely different layers first
     if( !m_layers.Overlaps( aOther->m_layers ) )
         return false;

@@ -81,6 +81,7 @@ public:
         m_rank = -1;
         m_routable = true;
         m_isVirtual = false;
+        m_isFreePad = false;
         m_isCompoundShapePrimitive = false;
     }
 
@@ -96,6 +97,7 @@ public:
         m_rank = aOther.m_rank;
         m_routable = aOther.m_routable;
         m_isVirtual = aOther.m_isVirtual;
+        m_isFreePad = aOther.m_isFreePad;
         m_isCompoundShapePrimitive = aOther.m_isCompoundShapePrimitive;
     }
 
@@ -232,6 +234,9 @@ public:
     void SetRoutable( bool aRoutable ) { m_routable = aRoutable; }
     bool IsRoutable() const { return m_routable; }
 
+    void SetIsFreePad( bool aIsFreePad = true ) { m_isFreePad = aIsFreePad; }
+    bool IsFreePad() const { return m_isFreePad; }
+
     bool IsVirtual() const
     {
         return m_isVirtual;
@@ -256,6 +261,7 @@ protected:
     int           m_rank;
     bool          m_routable;
     bool          m_isVirtual;
+    bool          m_isFreePad;
     bool          m_isCompoundShapePrimitive;
 };
 

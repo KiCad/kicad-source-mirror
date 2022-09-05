@@ -970,6 +970,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetPadToDie( aPad->GetPadToDieLength() );
     solid->SetOrientation( aPad->GetOrientation() );
 
+    if( aPad->IsFreePad() )
+        solid->SetIsFreePad();
+
     VECTOR2I wx_c = aPad->ShapePos();
     VECTOR2I offset = aPad->GetOffset();
 
