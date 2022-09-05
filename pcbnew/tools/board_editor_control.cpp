@@ -1494,12 +1494,12 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             {
                 selectionTool->ClearSelection();
 
-                for( const wxString& netName : aNetNames )
+                for( const wxString& curr_netName : aNetNames )
                 {
-                    int netCode = board()->GetNetInfo().GetNetItem( netName )->GetNetCode();
+                    int curr_netCode = board()->GetNetInfo().GetNetItem( curr_netName )->GetNetCode();
 
-                    if( netCode > 0 )
-                        selectionTool->SelectAllItemsOnNet( netCode );
+                    if( curr_netCode > 0 )
+                        selectionTool->SelectAllItemsOnNet( curr_netCode );
                 }
 
                 canvas()->ForceRefresh();
