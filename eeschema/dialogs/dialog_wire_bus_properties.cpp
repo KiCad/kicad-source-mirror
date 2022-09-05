@@ -43,6 +43,9 @@ DIALOG_WIRE_BUS_PROPERTIES::DIALOG_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
 {
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
+    KIGFX::COLOR4D canvas = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_colorSwatch->SetSwatchBackground( canvas.ToColour() );
+
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_helpLabel2->SetFont( KIUI::GetInfoFont( this ).Italic() );
 

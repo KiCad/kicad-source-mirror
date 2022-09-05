@@ -50,6 +50,10 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
+    KIGFX::COLOR4D canvas = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_borderColorSwatch->SetSwatchBackground( canvas.ToColour() );
+    m_fillColorSwatch->SetSwatchBackground( canvas.ToColour() );
+
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
