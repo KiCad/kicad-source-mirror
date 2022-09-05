@@ -157,6 +157,20 @@ bool PAD::IsLocked() const
 };
 
 
+bool PAD::IsNoConnectPad() const
+{
+    return GetShortNetname().StartsWith( wxT( "unconnected-(" ) )
+            && ( m_pinType == wxT( "no_connect" ) || m_pinType.EndsWith( wxT( "+no_connect" ) ) );
+}
+
+
+bool PAD::IsFreePad() const
+{
+    return GetShortNetname().StartsWith( wxT( "unconnected-(" ) )
+            && m_pinType == wxT( "free" );
+}
+
+
 LSET PAD::PTHMask()
 {
     static LSET saved = LSET::AllCuMask() | LSET( 2, F_Mask, B_Mask );

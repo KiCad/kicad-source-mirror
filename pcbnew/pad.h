@@ -163,6 +163,18 @@ public:
     }
 
     /**
+     * @return true if the pad is associated with an "unconnected" pin (or a no-connect symbol)
+     * and has no net.
+     */
+    bool IsNoConnectPad() const;
+
+    /**
+     * @return true if the pad is associated with a "free" pin (not-internally-connected) and has
+     * not yet been assigned another net (ie: by being routed to).
+     */
+    bool IsFreePad() const;
+
+    /**
      * Set the new shape of this pad.
      */
     void SetShape( PAD_SHAPE aShape )

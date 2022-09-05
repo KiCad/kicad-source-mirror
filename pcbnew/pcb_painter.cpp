@@ -637,9 +637,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
         // Check if the track is long enough to have a netname displayed
-        int seg_minlenght = track_width * 6;    // min lenght of the visible segment to draw the net name
+        int seg_minlength = track_width * 6;
 
-        if( visibleSeg.Length() < seg_minlenght )
+        if( visibleSeg.Length() < seg_minlength )
             return;
 
         const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
@@ -651,7 +651,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         // If the last position is still on the track, and it's some reasonable distance inside
         // the viewport then don't move the netname; just use the last position.
         if( visibleSeg.Distance( aTrack->m_LastNetnamePosition ) < penWidth
-                && clipBox.Inflate( -seg_minlenght ).Contains( aTrack->m_LastNetnamePosition ) )
+                && clipBox.Inflate( -seg_minlength / 2 ).Contains( aTrack->m_LastNetnamePosition ) )
         {
             textPosition = aTrack->m_LastNetnamePosition;
         }
@@ -1004,14 +1004,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
                 netname = UnescapeString( aPad->GetShortNetname() );
 
-            if( displayOpts->m_PadNoConnects
-                    && aPad->GetShortNetname().StartsWith( wxT( "unconnected-(" ) ) )
+            if( displayOpts->m_PadNoConnects )
             {
-                wxString pinType = aPad->GetPinType();
-
-                if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
+                if( aPad->IsNoConnectPad() )
                     netname = wxT( "x" );
-                else if( pinType == wxT( "free" ) )
+                else if( aPad->IsFreePad() )
                     netname = wxT( "*" );
             }
         }
