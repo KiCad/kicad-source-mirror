@@ -2015,8 +2015,13 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
                                                        field.GetShownText() ) );
         }
 
-        properties.emplace_back( _( "!Description = " ) + m_part->GetDescription() );
-        properties.emplace_back( _( "!Keywords = " ) + m_part->GetKeyWords() );
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Description" ),
+                                                   m_part->GetDescription() ) );
+
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Keywords" ),
+                                                   m_part->GetKeyWords() ) );
 
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
 

@@ -838,6 +838,43 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     aPlotter->FinishTo( m_end );
 
     aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+
+    if( SCHEMATIC* schematic = Schematic() )
+    {
+        std::vector<wxString> properties;
+        BOX2I                 bbox = GetBoundingBox();
+        bbox.Inflate( GetPenWidth() * 3 );
+
+        if( GetLayer() == LAYER_WIRE )
+        {
+            if( SCH_CONNECTION* connection = Connection() )
+            {
+                auto&    netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
+                wxString netName = connection->Name();
+                wxString className = netSettings->GetEffectiveNetClass( netName )->GetName();
+
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Net" ),
+                                                           UnescapeString( netName ) ) );
+
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Net class" ),
+                                                           UnescapeString( className ) ) );
+            }
+        }
+        else if( GetLayer() == LAYER_BUS )
+        {
+            if( SCH_CONNECTION* connection = Connection() )
+            {
+                for( std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+                    properties.emplace_back( wxT( "!" ) + UnescapeString( member->Name() ) );
+            }
+
+        }
+
+        if( !properties.empty() )
+            aPlotter->HyperlinkMenu( bbox, properties );
+    }
 }
 
 
