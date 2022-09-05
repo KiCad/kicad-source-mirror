@@ -330,14 +330,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         std::array<BOARD_ITEM*, 2> a{ track, other };
         std::array<BOARD_ITEM*, 2> b{ other, track };
         std::array<SHAPE*, 2>      a_shape{ trackShape, otherShape.get() };
-        
+
         bool has_error = false;
 
         for( size_t ii = 0; ii < 2 && !has_error; ++ii )
         {
             std::unique_ptr<SHAPE_SEGMENT> holeShape;
 
-            bool has_hole = b[ii]->Type() == PCB_VIA_T || 
+            bool has_hole = b[ii]->Type() == PCB_VIA_T ||
                 ( b[ii]->Type() == PCB_PAD_T && static_cast<PAD*>( b[ii] )->GetDrillSize().x );
 
             // We only test a track item here against an item with a hole.
@@ -532,6 +532,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
+    std::map<BOARD_ITEM*, int>                           freePadsUsageMap;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, LSET> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -580,6 +581,24 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
+                        if( other->Type() == PCB_PAD_T && static_cast<PAD*>( other )->IsFreePad() )
+                        {
+                            if( other->GetEffectiveShape( layer )->Collide( trackShape.get() ) )
+                            {
+                                auto it = freePadsUsageMap.find( other );
+
+                                if( it == freePadsUsageMap.end() )
+                                {
+                                    freePadsUsageMap[ other ] = track->GetNetCode();
+                                    return false;
+                                }
+                                else if( it->second == track->GetNetCode() )
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+
                         return testTrackAgainstItem( track, trackShape.get(), layer, other );
                     },
                     m_largestClearance );
