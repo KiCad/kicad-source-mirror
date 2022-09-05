@@ -414,6 +414,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
+    std::map<BOARD_ITEM*, int>                  freePadsUsageMap;
     std::unordered_map<PTR_PTR_CACHE_KEY, LSET> checkedPairs;
 
     for( PCB_TRACK* track : m_board->Tracks() )
@@ -457,6 +458,24 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
+                        if( other->Type() == PCB_PAD_T && static_cast<PAD*>( other )->IsFreePad() )
+                        {
+                            if( other->GetEffectiveShape( layer )->Collide( trackShape.get() ) )
+                            {
+                                auto it = freePadsUsageMap.find( other );
+
+                                if( it == freePadsUsageMap.end() )
+                                {
+                                    freePadsUsageMap[ other ] = track->GetNetCode();
+                                    return false;
+                                }
+                                else if( it->second == track->GetNetCode() )
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+
                         return testTrackAgainstItem( track, trackShape.get(), layer, other );
                     },
                     m_board->m_DRCMaxClearance );

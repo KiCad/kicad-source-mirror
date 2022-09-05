@@ -296,17 +296,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 }
 
 
-bool isMaskAperture( BOARD_ITEM* aItem )
-{
-    static const LSET saved( 2, F_Mask, B_Mask );
-
-    LSET maskLayers = aItem->GetLayerSet() & saved;
-    LSET otherLayers = aItem->GetLayerSet() & ~saved;
-
-    return maskLayers.count() > 0 && otherLayers.count() == 0;
-}
-
-
 bool isNullAperture( BOARD_ITEM* aItem )
 {
     if( aItem->Type() == PCB_PAD_T )
@@ -329,6 +318,21 @@ bool isNullAperture( BOARD_ITEM* aItem )
 // Simple mask apertures aren't associated with copper items, so they only constitute a bridge
 // when they expose other copper items having at least two distinct nets.  We use a map to record
 // the first net exposed by each mask aperture (on each copper layer).
+//
+// Note that this algorithm is also used for free pads.
+
+bool isMaskAperture( BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_PAD_T && static_cast<PAD*>( aItem )->IsFreePad() )
+        return true;
+
+    static const LSET saved( 2, F_Mask, B_Mask );
+
+    LSET maskLayers = aItem->GetLayerSet() & saved;
+    LSET otherLayers = aItem->GetLayerSet() & ~saved;
+
+    return maskLayers.count() > 0 && otherLayers.count() == 0;
+}
 
 bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BOARD_ITEM* aTestItem,
                                                        PCB_LAYER_ID aTestLayer, int aTestNet,
