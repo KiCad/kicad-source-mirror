@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-30 19:59+0000\n"
+"PO-Revision-Date: 2022-09-06 01:13+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -123,14 +123,14 @@ msgid "Pad %s\t"
 msgstr "Pad %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Área de reglas en %s"
+msgstr "Área de la regla %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zona "
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -3694,14 +3694,12 @@ msgstr ""
 "KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:100
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Asignación de esquema"
+msgstr "Asignaciones de clase de red:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
-#, fuzzy
 msgid "Pattern"
-msgstr "Patrón rayado"
+msgstr "Patrón"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -4650,9 +4648,8 @@ msgid "Bottom"
 msgstr "Inferior"
 
 #: common/eda_text.cpp:1030
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Hipervínculo"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -32273,11 +32270,12 @@ msgstr "(El orificio del pad PTH no deja cobre)"
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr ""
+"(el grupo de pads de atado de red contiene un número de pad desconocido %s)"
 
 #: pcbnew/footprint.cpp:2533
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "(el pad %s aparece en más de un grupo de pad de atado de red)"
 
 #: pcbnew/footprint.cpp:2818 pcbnew/pad.cpp:1747 pcbnew/zone.cpp:1308
 msgid "Clearance Override"
@@ -34736,6 +34734,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"Las fuentes de CADSTAR son diferentes a las de KiCad. Esto probablemente "
+"resultará en problemas de alineación que pueden causar errores DRC. Por "
+"favor, revise los elementos de texto importados cuidadosamente y corrija "
+"manualmente si es necesario."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:194
 #, c-format
@@ -34797,6 +34799,8 @@ msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
 msgstr ""
+"Pad de tamaño cero inválido ignorado en\n"
+"archivo: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:995
 #, c-format
@@ -38829,20 +38833,22 @@ msgstr "Recorre la pista actual un segmento hacia atrás."
 
 #: pcbnew/tools/pcb_actions.cpp:1435
 msgid "Route From Other End"
-msgstr ""
+msgstr "Ruta desde el otro extremo"
 
 #: pcbnew/tools/pcb_actions.cpp:1436
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Confirma los segmentos actuales y comienza el siguiente segmento desde el "
+"extremo más cercano."
 
 #: pcbnew/tools/pcb_actions.cpp:1441
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Intento finalizado"
 
 #: pcbnew/tools/pcb_actions.cpp:1442
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr ""
+msgstr "Intentos de completar la ruta actual hasta el extremo más cercano."
 
 #: pcbnew/tools/pcb_actions.cpp:1447
 msgid ""
