@@ -622,6 +622,7 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
 
 bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 {
+wxLogMessage( "flg %X", (int)m_symbol->GetEditFlags());
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
@@ -677,7 +678,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
     }
 
-    // Restore m_Flag modified by SetUnit() and other change settings
+    // Restore m_Flag modified by SetUnit() and other change settings from the dialog
     m_symbol->ClearFlags();
     m_symbol->SetFlags( flags );
 
@@ -802,8 +803,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
     GetParent()->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
-
-    m_symbol->SetUnit( unit_selection );
 
     return true;
 }
@@ -1193,6 +1192,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
 {
     if( m_dataModel )
     {
+        EDA_ITEM_FLAGS flags = m_symbol->GetFlags();
+
         int unit_selection = m_unitChoice->GetSelection() + 1;
 
         // We need to select a new unit to build the new unit pin list
@@ -1211,6 +1212,10 @@ void DIALOG_SYMBOL_PROPERTIES::OnUnitChoice( wxCommandEvent& event )
         m_dataModel->BuildAttrs();
 
         m_symbol->SetUnit(old_unit );
+
+        // Restore m_Flag modified by SetUnit()
+        m_symbol->ClearFlags();
+        m_symbol->SetFlags( flags );
     }
 
     OnModify();
