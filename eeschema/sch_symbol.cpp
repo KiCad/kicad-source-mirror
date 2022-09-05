@@ -358,8 +358,10 @@ void SCH_SYMBOL::UpdatePins()
     {
         wxASSERT( libPin->Type() == LIB_PIN_T );
 
-        // NW: Don't filter by conversion or unit: this data-structure is used for all instances,
-        // some if which might have different conversions and/or units.
+        // NW: Don't filter by unit: this data-structure is used for all instances,
+        // some if which might have different units.
+        if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )
+            continue;
 
         m_pins.push_back( std::make_unique<SCH_PIN>( libPin, this ) );
 
