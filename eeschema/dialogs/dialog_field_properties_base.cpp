@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,20 +85,26 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxBOTTOM, 5 );
+
+
+	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_nameVisible = new wxCheckBox( this, wxID_ANY, _("Show field name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameVisible->Hide();
 	m_nameVisible->SetToolTip( _("Show the field name in addtion to its value") );
 
-	bSizer9->Add( m_nameVisible, 0, wxLEFT, 5 );
+	bSizer9->Add( m_nameVisible, 0, wxRIGHT|wxLEFT, 20 );
+
+
+	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_cbAllowAutoPlace = new wxCheckBox( this, wxID_ANY, _("Allow autoplacement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAllowAutoPlace->SetValue(true);
 	m_cbAllowAutoPlace->Hide();
 	m_cbAllowAutoPlace->SetToolTip( _("Allow automatic placement of this field in the schematic") );
 
-	bSizer9->Add( m_cbAllowAutoPlace, 0, wxFIXED_MINSIZE, 5 );
+	bSizer9->Add( m_cbAllowAutoPlace, 0, wxFIXED_MINSIZE|wxRIGHT, 37 );
 
 
 	bPropertiesSizer->Add( bSizer9, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
