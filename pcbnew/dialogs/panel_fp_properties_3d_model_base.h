@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,9 +43,9 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 		wxBitmapButton* m_button3DShapeBrowse;
 		wxBitmapButton* m_button3DShapeRemove;
 		wxButton* m_buttonConfig3DPaths;
-		wxBoxSizer* bLowerSizer3D;
+		wxBoxSizer* m_LowerSizer3D;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
@@ -58,7 +57,8 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 
 	public:
 
-		PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 496,216 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_FP_PROPERTIES_3D_MODEL_BASE();
 
 };
