@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-08-30 19:59+0000\n"
+"PO-Revision-Date: 2022-09-07 20:50+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -5221,9 +5221,8 @@ msgid "Cursor"
 msgstr "Kohdistin"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Siirrä kohde"
+msgstr "Leijuvat kohteet"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -6613,14 +6612,12 @@ msgstr "Palauta %s Oletusasetuksille"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "Ei väylää valittu"
+msgstr "Ei valittuja kohteita"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Osaa ei valittu"
+msgstr "Useita kohteita valittu"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -6711,9 +6708,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "KiCadin vanhat symbolikirjastotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad symbolikirjastotiedostot"
+msgstr "KiCad tietokantakirjastotiedostot"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -10672,9 +10668,8 @@ msgid "Net Classes"
 msgstr "Net-luokat"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Väylämääritelmät"
+msgstr "Väyläaliaksen Määritelmät"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10928,14 +10923,12 @@ msgid "Model"
 msgstr "Malli"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Spice direktiivit:"
+msgstr "Spice laite:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "Muoto:"
+msgstr "Spice tyyppi:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
 msgid "Page"
@@ -11663,9 +11656,9 @@ msgid "<root sheet>"
 msgstr "<juurisivu>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Siirry sivulle %s (%s)"
+msgstr "Sivu %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:439
 msgid ""
@@ -12090,23 +12083,21 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Näytä jalanjäljen esikatselut Symbol Chooser -sovelluksessa"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Kentän nimi '%s' on jo käytössä."
+msgstr "Aliasnimi '%s' on jo käytössä."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Mallin nimi ei voi olla tyhjä."
+msgstr "Jäsenverkon/aliaksen nimi ei voi olla tyhjä."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
 msgid "Bus definitions:"
 msgstr "Väylämääritelmät:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Lähde"
+msgstr "(lähde)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
 #, c-format
@@ -12114,9 +12105,8 @@ msgid "Members of '%s':"
 msgstr "Ryhmän '%s' jäsenet:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Netto- tai väylän nimi"
+msgstr "Verkko / Sisäkkäinen Väylän Nimi"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -15091,9 +15081,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Epäonnistui päätellä malli Luvusta '%s'"
 
 #: eeschema/sim/sim_model_spice.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "Virheellinen symboliyksikön numero %s"
+msgstr "Virheellinen symbolinasta indeksi: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -18937,10 +18927,10 @@ msgid "Restoring '%s'"
 msgstr "Palautetaan '%s'"
 
 #: kicad/kicad_manager_frame.cpp:831
-#, fuzzy
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
-"Haluatko tarkistaa päivitykset automaattisesti käynnistyksen yhteydessä?"
+"Haluatko automaattisesti tarkistaa lisäosien päivitykset käynnistyksen "
+"yhteydessä?"
 
 #: kicad/kicad_manager_frame.cpp:832
 msgid "Check for updates"
@@ -25462,7 +25452,6 @@ msgstr ""
 "Paikallinen Välys ja asetukset välilehdeltä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
-#, fuzzy
 msgid "Net Ties"
 msgstr "Verkkosidonnat"
 
@@ -30564,9 +30553,8 @@ msgid "Via Gap"
 msgstr "Läpiviennin Rako"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Muuta tekstin ominaisuuksia"
+msgstr "Muuta ominaisuutta"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1286
 msgid "Layer Top"
@@ -33893,9 +33881,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "Tunnistamaton taso '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Puuttuva jalanjäljen tunnistusmääre (A,B, tai viiteosoitin) -> %s."
+msgstr "Puuttuva jalanjälkiargumentti (A,B, tai viiteosoitin) -> %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -33910,10 +33898,9 @@ msgid "Footprint has no back courtyard."
 msgstr "Jalanjäljellä ei ole takapihaa."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr ""
-"Sääntöalueen tunnisteargumentti (A, B, tai sääntöalueen nimi) puuttuu %s."
+msgstr "Sääntöalueen argumentti (A, B, tai sääntöalueen nimi) -> puuttuu %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -37845,14 +37832,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Näytä / piilota ulkonäönhallinta"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "Arkin ominaisuudet"
+msgstr "Näytä Ominaisuudet Paneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:824
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "Näytä / piilota ulkonäönhallinta"
+msgstr "Näytä/piilota ominaisuuspaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Flip Board View"
@@ -38296,14 +38281,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Tallenna kaaviona"
+msgstr "Valitse Kytkentäkaavio"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Valitse vastaavat kohteet PCB editorissa"
+msgstr "Valitse vastaavat kohteet Kytkentäkaavioeditorissa"
 
 #: pcbnew/tools/pcb_actions.cpp:1307
 msgid "Filter Selected Items..."
