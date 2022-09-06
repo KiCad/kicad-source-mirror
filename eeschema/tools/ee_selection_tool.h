@@ -191,8 +191,10 @@ private:
      * @param aCollector [in, out] Provides collection conditions and stores collected items.
      * @param aWhere point where we should narrow (if relevant)
      * @param aCheckLocked If false, remove locked elements from #collector
+     * @param aSelectedOnly If true, remove non-selected items from #collector
      */
-    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked );
+    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
+                          bool aSelectedOnly = false );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).

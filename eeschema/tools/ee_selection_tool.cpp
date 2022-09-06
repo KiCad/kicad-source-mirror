@@ -818,7 +818,7 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 
 
 void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere,
-                                         bool aCheckLocked )
+                                         bool aCheckLocked, bool aSelectedOnly )
 {
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
@@ -829,6 +829,12 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
         }
 
         if( aCheckLocked && collector[i]->IsLocked() )
+        {
+            collector.Remove( i );
+            continue;
+        }
+
+        if( aSelectedOnly && !collector[i]->IsSelected() )
         {
             collector.Remove( i );
             continue;
@@ -947,7 +953,7 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
     if( !CollectHits( collector, aWhere, aScanTypes ) )
         return false;
 
-    narrowSelection( collector, aWhere, aCheckLocked );
+    narrowSelection( collector, aWhere, aCheckLocked, aSubtract );
 
     return selectPoint( collector, aWhere, aItem, aSelectionCancelledFlag, aAdd, aSubtract,
                         aExclusiveOr );

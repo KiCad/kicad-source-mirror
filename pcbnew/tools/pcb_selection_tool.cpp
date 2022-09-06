@@ -722,6 +722,16 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply the stateful filter
     FilterCollectedItems( collector, false );
 
+    // For subtracting, we only want items that are selected
+    if( m_subtractive )
+    {
+        for( int i = collector.GetCount() - 1; i >= 0; --i )
+        {
+            if( !collector[i]->IsSelected() )
+                collector.Remove( i );
+        }
+    }
+
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
         GuessSelectionCandidates( collector, aWhere );
