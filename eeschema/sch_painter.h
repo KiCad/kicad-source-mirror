@@ -110,10 +110,11 @@ public:
 public:
     bool   m_IsSymbolEditor;
 
-    int    m_ShowUnit;                // Show all units if 0
-    int    m_ShowConvert;             // Show all conversions if 0
+    int    m_ShowUnit;               // Show all units if 0
+    int    m_ShowConvert;            // Show all conversions if 0
 
     bool   m_ShowPinsElectricalType;
+    bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
     bool   m_ShowDisabled;
     bool   m_ShowGraphicsDisabled;
 

@@ -314,9 +314,9 @@ void SYMBOL_VIEWER_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );  // manage show datasheet
-    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
-    m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );     // manage show datasheet
+    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );      // manage context menu
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );  // manage render settings
 
     m_toolManager->InitTools();
 
@@ -343,41 +343,48 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
 
     auto electricalTypesShownCondition =
-        [this] ( const SELECTION& aSel )
-        {
-            return GetRenderSettings()->m_ShowPinsElectricalType;
-        };
+            [this]( const SELECTION& aSel )
+            {
+                return GetRenderSettings()->m_ShowPinsElectricalType;
+            };
+
+    auto pinNumbersShownCondition =
+            [this]( const SELECTION& )
+            {
+                return GetRenderSettings()->m_ShowPinNumbers;
+            };
 
     auto demorganCond =
-        [this] ( const SELECTION& )
-        {
-            LIB_SYMBOL* symbol = GetSelectedSymbol();
+            [this]( const SELECTION& )
+            {
+                LIB_SYMBOL* symbol = GetSelectedSymbol();
 
-            return symbol && symbol->HasConversion();
-        };
+                return symbol && symbol->HasConversion();
+            };
 
     auto demorganStandardCond =
-        [] ( const SELECTION& )
-        {
-            return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
-        };
+            []( const SELECTION& )
+            {
+                return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+            };
 
     auto demorganAlternateCond =
-        [] ( const SELECTION& )
-        {
-            return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
-        };
+            []( const SELECTION& )
+            {
+                return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+            };
 
     auto haveDatasheetCond =
-        [this] ( const SELECTION& )
-        {
-            LIB_SYMBOL* symbol = GetSelectedSymbol();
+            [this]( const SELECTION& )
+            {
+                LIB_SYMBOL* symbol = GetSelectedSymbol();
 
-            return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
-        };
+                return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
+            };
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,       ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( electricalTypesShownCondition ) );
+    mgr->SetConditions( EE_ACTIONS::showPinNumbers,      CHECK( pinNumbersShownCondition ) );
 
     mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
                         ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
@@ -833,6 +840,7 @@ void SYMBOL_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_symbolListWidth = cfg->m_LibViewPanel.cmp_list_width;
 
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
+    GetRenderSettings()->m_ShowPinNumbers = cfg->m_LibViewPanel.show_pin_numbers;
 
     // Set parameters to a reasonable value.
     int maxWidth = cfg->m_LibViewPanel.window.state.size_x - 80;
@@ -859,8 +867,11 @@ void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
     cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
     cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
 
-    if( GetRenderSettings() )
-        cfg->m_LibViewPanel.show_pin_electrical_type = GetRenderSettings()->m_ShowPinsElectricalType;
+    if( KIGFX::SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings() )
+    {
+        cfg->m_LibViewPanel.show_pin_electrical_type = renderSettings->m_ShowPinsElectricalType;
+        cfg->m_LibViewPanel.show_pin_numbers = renderSettings->m_ShowPinNumbers;
+    }
 }
 
 

@@ -221,6 +221,7 @@ public:
     static TOOL_ACTION pushPinNameSize;
     static TOOL_ACTION pushPinNumSize;
     static TOOL_ACTION showElectricalTypes;
+    static TOOL_ACTION showPinNumbers;
     static TOOL_ACTION showSymbolTree;
     static TOOL_ACTION hideSymbolTree;
     static TOOL_ACTION drawSheetOnClipboard;

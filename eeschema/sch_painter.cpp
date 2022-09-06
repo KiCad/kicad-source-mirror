@@ -95,6 +95,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowUnit( 0 ),
         m_ShowConvert( 0 ),
         m_ShowPinsElectricalType( true ),
+        m_ShowPinNumbers( false ),
         m_ShowDisabled( false ),
         m_ShowGraphicsDisabled( false ),
         m_OverrideItemColors( false ),
@@ -1323,6 +1324,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     int   textOffset = libEntry->GetPinNameOffset();
     float nameStrokeWidth = getLineWidth( aPin, drawingShadows );
     float numStrokeWidth = getLineWidth( aPin, drawingShadows );
+    bool  showPinNames = libEntry->ShowPinNames();
+    bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->ShowPinNumbers();
 
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), false );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), false );
@@ -1339,12 +1342,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     // TextOffset > 0 means pin NAMES on inside, pin NUMBERS above and nothing below
     if( textOffset )
     {
-        size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
+        size     [INSIDE] = showPinNames ? aPin->GetNameTextSize() : 0;
         thickness[INSIDE] = nameStrokeWidth;
         colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [INSIDE] = aPin->GetShownName();
 
-        size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
+        size     [ABOVE] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
         thickness[ABOVE] = numStrokeWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [ABOVE] = aPin->GetShownNumber();
@@ -1352,12 +1355,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     // Otherwise pin NAMES go above and pin NUMBERS go below
     else
     {
-        size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
+        size     [ABOVE] = showPinNames ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameStrokeWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [ABOVE] = aPin->GetShownName();
 
-        size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
+        size     [BELOW] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
         thickness[BELOW] = numStrokeWidth;
         colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [BELOW] = aPin->GetShownNumber();

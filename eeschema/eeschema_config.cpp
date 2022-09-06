@@ -149,6 +149,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     }
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
+    GetRenderSettings()->m_ShowPinNumbers = false;
 }
 
 

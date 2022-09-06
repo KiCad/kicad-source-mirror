@@ -77,6 +77,9 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
 
     m_preview->GetGAL()->SetClearColor( backgroundColor );
 
+    settings->m_ShowPinsElectricalType = app_settings->m_LibViewPanel.show_pin_electrical_type;
+    settings->m_ShowPinNumbers = app_settings->m_LibViewPanel.show_pin_numbers;
+
     m_statusPanel = new wxPanel( this );
     m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
     m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );

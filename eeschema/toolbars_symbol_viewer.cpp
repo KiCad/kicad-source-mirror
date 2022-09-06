@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -65,6 +65,10 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( EE_ACTIONS::showElectricalTypes,   ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showPinNumbers,        ACTION_TOOLBAR::TOGGLE );
+
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
@@ -123,6 +127,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::showPinNumbers,      ACTION_MENU::CHECK );
 
 
     //-- Menubar -------------------------------------------------------------

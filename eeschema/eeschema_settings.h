@@ -196,6 +196,7 @@ public:
         int lib_list_width;
         int cmp_list_width;
         bool show_pin_electrical_type;
+        bool show_pin_numbers;
         WINDOW_SETTINGS window;
     };
 

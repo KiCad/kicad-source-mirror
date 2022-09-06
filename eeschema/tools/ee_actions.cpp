@@ -192,6 +192,11 @@ TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.show
         _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
         BITMAPS::pin_show_etype );
 
+TOOL_ACTION EE_ACTIONS::showPinNumbers( "eeschema.SymbolLibraryControl.showPinNumbers",
+        AS_GLOBAL, 0, "",
+        _( "Show Pin Numbers" ), _( "Annotate pins with their numbers" ),
+        BITMAPS::pin );
+
 TOOL_ACTION EE_ACTIONS::showSymbolTree( "eeschema.SymbolLibraryControl.showSymbolTree",
         AS_GLOBAL, 0, "",
         _( "Show Symbol Tree" ), "",

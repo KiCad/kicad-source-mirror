@@ -492,6 +492,19 @@ int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ShowPinNumbers( const TOOL_EVENT& aEvent )
+{
+    KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
+    renderSettings->m_ShowPinNumbers = !renderSettings->m_ShowPinNumbers;
+
+    // Update canvas
+    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
@@ -687,6 +700,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowPinNumbers,        EE_ACTIONS::showPinNumbers.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::showSymbolTree.MakeEvent() );
