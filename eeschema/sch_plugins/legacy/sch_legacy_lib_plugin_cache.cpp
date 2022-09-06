@@ -817,6 +817,16 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
         arc->SetCenter( new_center );
     }
 
+    // In legacy libraries, an arc angle is always <= 180.0 degrees
+    // So if the created arc is > 180 degrees, swap arc ends to have a < 180 deg arc.
+    if( arc->GetArcAngle() > ANGLE_180 )
+    {
+        VECTOR2I new_end = arc->GetStart();
+        VECTOR2I new_start = arc->GetEnd();
+        arc->SetStart( new_start );
+        arc->SetEnd( new_end );
+    }
+
     return arc;
 }
 
