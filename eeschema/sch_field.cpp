@@ -983,13 +983,16 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
         SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
         std::vector<std::pair<wxString, wxString>> pages;
         std::vector<wxString>                      pageHrefs;
+        BOX2I                                      bbox = GetBoundingBox();
 
         label->GetIntersheetRefs( &pages );
 
         for( const std::pair<wxString, wxString>& page : pages )
             pageHrefs.push_back( wxT( "#" ) + page.first );
 
-        aPlotter->HyperlinkMenu( GetBoundingBox(), pageHrefs );
+        bbox.Offset( label->GetSchematicTextOffset( settings ) );
+
+        aPlotter->HyperlinkMenu( bbox, pageHrefs );
     }
 }
 

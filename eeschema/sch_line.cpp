@@ -858,7 +858,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
                                                            UnescapeString( netName ) ) );
 
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Net class" ),
+                                                           _( "Resolved netclass" ),
                                                            UnescapeString( className ) ) );
             }
         }

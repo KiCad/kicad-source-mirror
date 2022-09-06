@@ -955,52 +955,70 @@ bool PDF_PLOTTER::EndPlot()
     {
         const BOX2D&                 box = menuPair.first;
         const std::vector<wxString>& urls = menuPair.second;
-
-        // We currently only support menu links for internal pages and property lists.
-        // This vector holds the menu titles and (optional) page numbers.
-        std::vector<std::pair<wxString, int>> menuItems;
+        wxString                     js = wxT( "var aParams = [ " );
 
         for( const wxString& url : urls )
         {
-            wxString pageNumber;
-
             if( url.StartsWith( "!" ) )
             {
-                menuItems.push_back( { url.AfterFirst( '!' ), -1 } );
+                wxString property = url.AfterFirst( '!' );
+
+                if( property.Find( "http:" ) >= 0 )
+                {
+                    wxString href = property.substr( property.Find( "http:" ) );
+
+                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
+                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ) );
+                }
+                else if( property.Find( "https:" ) >= 0 )
+                {
+                    wxString href = property.substr( property.Find( "https:" ) );
+
+                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
+                                            EscapeString( property, CTX_JS_STR ),
+                                            EscapeString( href, CTX_JS_STR ) );
+                }
+                else
+                {
+                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: null }, " ),
+                                            EscapeString( property, CTX_JS_STR ) );
+                }
             }
-            else if( EDA_TEXT::IsGotoPageHref( url, &pageNumber ) )
+            else if( url.StartsWith( "#" ) )
             {
+                wxString pageNumber = url.AfterFirst( '#' );
+
                 for( size_t ii = 0; ii < m_pageNumbers.size(); ++ii )
                 {
                     if( m_pageNumbers[ii] == pageNumber )
-                        menuItems.push_back( { pageNumber, ii } );
+                    {
+                        wxString menuText = wxString::Format( _( "Show Page %s" ), pageNumber );
+
+                        js += wxString::Format( wxT( "{ cName: '%s', cReturn: '#%d' }, " ),
+                                                EscapeString( menuText, CTX_JS_STR ),
+                                                static_cast<int>( ii ) );
+                        break;
+                    }
                 }
             }
-        }
-
-        wxString js = wxT( "var aParams = [ " );
-
-        for( const std::pair<wxString, int>& menuItem : menuItems )
-        {
-            if( menuItem.second < 0 )
+            else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
             {
-                js += wxString::Format( wxT( "{ cName: '%s', cReturn: null }, " ),
-                                        EscapeString( menuItem.first, CTX_JS_STR ) );
-            }
-            else
-            {
-                wxString menuText = wxString::Format( _( "Show Page %s" ), menuItem.first );
+                wxString menuText = wxString::Format( _( "Open %s" ), url );
 
-                js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%d' }, " ),
+                js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
                                         EscapeString( menuText, CTX_JS_STR ),
-                                        menuItem.second );
+                                        EscapeString( url, CTX_JS_STR ) );
             }
         }
 
         js += wxT( "]; " );
 
         js += wxT( "var cChoice = app.popUpMenuEx.apply\\( app, aParams \\); " );
-        js += wxT( "if\\( cChoice != null \\) this.pageNum = cChoice; " );
+        js += wxT( "if\\( cChoice != null && cChoice.startsWith\\( '#' \\) \\)"
+                   "    this.pageNum = cChoice.slice\\( 1 \\); " );
+        js += wxT( "else if\\( cChoice != null && cChoice.startsWith\\( 'http' \\) \\)"
+                   "    app.launchURL\\( cChoice \\);" );
 
         startPdfObject( menuHandle );
 

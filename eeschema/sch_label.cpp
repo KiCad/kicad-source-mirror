@@ -882,6 +882,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     static std::vector<VECTOR2I> s_poly;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    SCHEMATIC*       schematic = Schematic();
     SCH_CONNECTION*  connection = Connection();
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
@@ -917,6 +918,21 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         std::vector<wxString> properties;
 
+        if( schematic && connection )
+        {
+            auto&    netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
+            wxString netName = connection->Name();
+            wxString className = netSettings->GetEffectiveNetClass( netName )->GetName();
+
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Net" ),
+                                                       UnescapeString( netName ) ) );
+
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Resolved netclass" ),
+                                                       UnescapeString( className ) ) );
+        }
+
         for( const SCH_FIELD& field : GetFields() )
         {
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
@@ -924,7 +940,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
                                                        field.GetShownText() ) );
         }
 
-        aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
+        aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
     }
 }
 
