@@ -397,8 +397,10 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
 
     for( ; idx < m_columns.size() - 1; idx++ )
     {
+        wxASSERT( m_colIdxMap.count( idx ) );
+    
         col    = m_columns[idx];
-        header = col->GetTitle();
+        header = m_colIdxMap[idx];
 
         wxASSERT( m_colWidths.count( header ) );
 
