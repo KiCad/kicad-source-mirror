@@ -92,7 +92,7 @@ void DIALOG_DIELECTRIC_MATERIAL::initMaterialList()
 {
     m_lcMaterials->AppendColumn( _( "Material" ) );
     m_lcMaterials->AppendColumn( _( "Epsilon R" ) );
-    m_lcMaterials->AppendColumn( _( "Loss Tg" ) );
+    m_lcMaterials->AppendColumn( _( "Loss Tan" ) );
 
     m_lcMaterials->SetColumnWidth( 0, m_lcMaterials->GetColumnWidth( 1 ) * 3 / 2 );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,7 +36,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	m_staticTextEpsilonR->Wrap( -1 );
 	fgSizerNewDielectric->Add( m_staticTextEpsilonR, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_staticTextLossTg = new wxStaticText( this, wxID_ANY, _("Loss Tg:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLossTg = new wxStaticText( this, wxID_ANY, _("Loss Tan:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLossTg->Wrap( -1 );
 	fgSizerNewDielectric->Add( m_staticTextLossTg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
