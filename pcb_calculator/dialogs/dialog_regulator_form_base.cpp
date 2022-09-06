@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ DIALOG_REGULATOR_FORM_BASE::DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWind
 	m_staticTextType->Wrap( -1 );
 	fgSizerPrms->Add( m_staticTextType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_choiceRegTypeChoices[] = { _("Separate sense pin"), _("3 terminals regulator") };
+	wxString m_choiceRegTypeChoices[] = { _("Standard Type"), _("3 Terminal Type") };
 	int m_choiceRegTypeNChoices = sizeof( m_choiceRegTypeChoices ) / sizeof( wxString );
 	m_choiceRegType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegTypeNChoices, m_choiceRegTypeChoices, 0 );
 	m_choiceRegType->SetSelection( 0 );
