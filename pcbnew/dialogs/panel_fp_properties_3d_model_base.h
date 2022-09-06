@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,6 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,13 +43,13 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 		wxBitmapButton* m_button3DShapeBrowse;
 		wxBitmapButton* m_button3DShapeRemove;
 		wxButton* m_buttonConfig3DPaths;
-		wxBoxSizer* bLowerSizer3D;
+		wxBoxSizer* m_LowerSizer3D;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAdd3DRow( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAdd3DModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemove3DModel( wxCommandEvent& event ) { event.Skip(); }
@@ -59,7 +58,7 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 
 	public:
 
-		PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 778,286 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_FP_PROPERTIES_3D_MODEL_BASE();
 

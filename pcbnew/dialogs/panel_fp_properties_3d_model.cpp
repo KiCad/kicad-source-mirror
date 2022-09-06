@@ -96,7 +96,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
 
     m_previewPane = new PANEL_PREVIEW_3D_MODEL( this, m_frame, m_footprint, &m_shapes3D_list );
 
-    bLowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
+    m_LowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Configure button logos
     m_button3DShapeAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
