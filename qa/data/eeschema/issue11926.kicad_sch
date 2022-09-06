@@ -1,0 +1,156 @@
+(kicad_sch (version 20220904) (generator eeschema)
+
+  (uuid 53995630-a761-4238-8278-4d7d3725db0d)
+
+  (paper "A4")
+
+  (lib_symbols
+    (symbol "Device:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "R1" (id 0) (at 2.54 1.2701 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Value" "R" (id 1) (at 2.54 -1.2699 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Footprint" "" (id 2) (at -1.778 0 90)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "Datasheet" "~" (id 3) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_keywords" "R res resistor" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_description" "Resistor" (id 5) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_fp_filters" "R_*" (id 6) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (symbol "R_0_1"
+        (rectangle (start -1.016 -2.54) (end 1.016 2.54)
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "R_1_1"
+        (pin passive line (at 0 3.81 270) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 0 3.81 270) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 0 -3.81 90) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+
+
+  (no_connect (at 106.68 58.42) (uuid 18df0416-d7a9-445e-bf63-2b8a73263f6b))
+  (no_connect (at 106.68 73.66) (uuid 6a353ab4-c7d4-46f7-bc6f-b024e2d17a8b))
+
+  (polyline (pts (xy 105.41 58.42) (xy 95.25 58.42))
+    (stroke (width 0) (type default))
+    (uuid 05dab084-2470-4ecd-ac3f-069d5c97ad29)
+  )
+  (polyline (pts (xy 135.89 64.77) (xy 146.05 64.77))
+    (stroke (width 0) (type default))
+    (uuid 47bc1ba9-9264-426d-a149-55c7453cce7a)
+  )
+
+  (text "Stacked pins on top\nshould not trigger\nConnected Pins have No-Connect\nerror here"
+    (at 93.98 60.96 0)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+    (uuid 0ba37af6-5e7d-46e5-8d65-ec7656094fa8)
+  )
+  (text "Stacked pins on top\nshould not prevent ERC from logging\nPin not connected Error here"
+    (at 147.32 67.31 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid c4ad4b08-08ae-4825-a134-c89025429d6d)
+  )
+
+  (symbol (lib_id "Device:R") (at 106.68 62.23 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid 5dcb91f5-7e4e-4dfa-bc34-9f673c6f5a92)
+    (default_instance (reference "") (unit 1) (value "") (footprint ""))
+    (property "Reference" "" (id 0) (at 109.22 60.9599 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "" (id 1) (at 109.22 63.4999 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 104.902 62.23 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 106.68 62.23 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid a29da7fc-4f6c-43c5-aeac-07287752e82e))
+    (pin "1" (uuid a29da7fc-4f6c-43c5-aeac-07287752e82e))
+    (pin "2" (uuid ec18ce3d-d598-4f5b-b86a-f2684103513c))
+  )
+
+  (symbol (lib_id "Device:R") (at 106.68 69.85 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid 819e4b72-d6c8-44c6-a636-7ae596b66d8f)
+    (default_instance (reference "") (unit 1) (value "") (footprint ""))
+    (property "Reference" "" (id 0) (at 109.22 68.5799 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "" (id 1) (at 109.22 71.1199 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 104.902 69.85 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 106.68 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 39785502-da04-4e54-bf24-710e67be6a41))
+    (pin "1" (uuid 39785502-da04-4e54-bf24-710e67be6a41))
+    (pin "2" (uuid a74a2019-40b7-4e63-9e9a-5dde5c954967))
+  )
+
+  (symbol (lib_id "Device:R") (at 134.62 68.58 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid cf81ab99-7011-45b1-a7f3-747f9023f5c0)
+    (default_instance (reference "") (unit 1) (value "") (footprint ""))
+    (property "Reference" "" (id 0) (at 137.16 67.3099 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "" (id 1) (at 137.16 69.8499 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 132.842 68.58 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 134.62 68.58 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 75d487d3-0e29-4474-9e30-a490e82ef98d))
+    (pin "1" (uuid 75d487d3-0e29-4474-9e30-a490e82ef98d))
+    (pin "2" (uuid b76f4903-8952-4375-961b-e7f86fb2e661))
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+
+  (symbol_instances
+    (path "/5dcb91f5-7e4e-4dfa-bc34-9f673c6f5a92"
+      (reference "R1") (unit 1) (value "R") (footprint "")
+    )
+    (path "/819e4b72-d6c8-44c6-a636-7ae596b66d8f"
+      (reference "R2") (unit 1) (value "R") (footprint "")
+    )
+    (path "/cf81ab99-7011-45b1-a7f3-747f9023f5c0"
+      (reference "R3") (unit 1) (value "R") (footprint "")
+    )
+  )
+)

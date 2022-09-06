@@ -40,6 +40,7 @@ set_property( TEST qa_python
 # Shared QA helper libraries
 add_subdirectory( qa_utils )
 add_subdirectory( pcbnew_utils )
+add_subdirectory( schematic_utils )
 
 # Unit tests
 add_subdirectory( unittests )

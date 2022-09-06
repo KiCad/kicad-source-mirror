@@ -114,7 +114,7 @@ public:
 
     bool operator==( const ERC_SETTINGS& other ) const
     {
-        return ( other.m_Severities == m_Severities );
+        return ( other.m_ERCSeverities == m_ERCSeverities );
     }
 
     bool operator!=( const ERC_SETTINGS& other ) const
@@ -165,7 +165,7 @@ public:
 
 public:
 
-    std::map<int, SEVERITY> m_Severities;
+    std::map<int, SEVERITY> m_ERCSeverities;
     std::set<wxString>      m_ErcExclusions;
 
     PIN_ERROR m_PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];

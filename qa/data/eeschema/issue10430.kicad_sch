@@ -1,0 +1,113 @@
+(kicad_sch (version 20220904) (generator eeschema)
+
+  (uuid 0d9df0c3-3213-4fa9-aab7-5d0bde758ba4)
+
+  (paper "A4")
+
+  (lib_symbols
+    (symbol "Power_Management:AP2161W" (in_bom yes) (on_board yes)
+      (property "Reference" "U" (id 0) (at -7.62 -6.35 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Value" "AP2161W" (id 1) (at -7.62 6.35 0)        (effects (font (size 1.27 1.27)) (justify left))
+      
+)
+      (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (id 2) (at 0 -10.16 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2161.pdf" (id 3) (at 0 1.27 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_keywords" "Limit USB Active Low" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_description" "Current limited power switch, single channel, SOT-23-5" (id 5) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_fp_filters" "SOT?23*" (id 6) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (symbol "AP2161W_0_1"
+        (rectangle (start -7.62 5.08) (end 7.62 -5.08)
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+      )
+      (symbol "AP2161W_1_1"
+        (pin power_out line (at 10.16 2.54 180) (length 2.54)
+          (name "OUT" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin power_in line (at 0 -7.62 90) (length 2.54)
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+        (pin open_collector line (at 10.16 -2.54 180) (length 2.54)
+          (name "~{FLG}" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
+        )
+        (pin input line (at -10.16 -2.54 0) (length 2.54)
+          (name "~{EN}" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
+        )
+        (pin power_in line (at -10.16 2.54 0) (length 2.54)
+          (name "IN" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+
+
+  (wire (pts (xy 85.09 81.28) (xy 110.49 81.28))
+    (stroke (width 0) (type default))
+    (uuid 27e1c1f5-72d5-42f5-8cbf-b0e66edfa028)
+  )
+
+  (text_box "There should be 8 errors here:\n4x Pin not connected\n3x Input Pin not connected to output\n1x Label not connected"
+    (at 143.51 71.12 0) (size 39.37 15.24)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1.27 1.27)) (justify left top))
+    (uuid d5e47f66-a2f7-4a57-97f0-58571df6905d)
+  )
+
+  (label "input_label" (at 85.09 81.28 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 7c5bf4a6-f820-4e5e-b50c-798993d688fe)
+  )
+
+  (symbol (lib_id "Power_Management:AP2161W") (at 120.65 83.82 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid e7a1845d-9baf-4d49-988c-c34cdb7edbfb)
+    (default_instance (reference "U1") (unit 1) (value "AP2161W") (footprint "Package_TO_SOT_SMD:SOT-23-5"))
+    (property "Reference" "U1" (id 0) (at 120.65 74.93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "AP2161W" (id 1) (at 120.65 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (id 2) (at 120.65 93.98 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2161.pdf" (id 3) (at 120.65 82.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 8da52586-4dd8-4be2-a9d0-d1dbf5f066a6))
+    (pin "2" (uuid 4cf15f9e-c6cf-4e57-b1f2-9278d309f7fa))
+    (pin "3" (uuid 18d8174e-8ab1-40d9-a248-237a8d20c852))
+    (pin "4" (uuid 20ae559a-da06-4c00-8ab0-a096170650fa))
+    (pin "5" (uuid 45161e74-209a-44f0-883a-8772637eaa18))
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+
+  (symbol_instances
+    (path "/e7a1845d-9baf-4d49-988c-c34cdb7edbfb"
+      (reference "U1") (unit 1) (value "AP2161W") (footprint "Package_TO_SOT_SMD:SOT-23-5")
+    )
+  )
+)

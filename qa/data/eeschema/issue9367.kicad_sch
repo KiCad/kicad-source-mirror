@@ -1,0 +1,86 @@
+(kicad_sch (version 20220904) (generator eeschema)
+
+  (uuid 42cb452b-0025-41f3-ae52-70902384e6c1)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+
+  (no_connect (at 121.92 78.74) (uuid de36d74a-ca9f-4049-b9b3-1ae40137e716))
+
+  (wire (pts (xy 121.92 78.74) (xy 138.43 78.74))
+    (stroke (width 0) (type default))
+    (uuid 5f3fe4fd-c13a-48e9-91d7-50e9781364e3)
+  )
+  (wire (pts (xy 121.92 71.12) (xy 138.43 71.12))
+    (stroke (width 0) (type default))
+    (uuid b929aaf4-57da-46c1-8ebd-39696966af45)
+  )
+  (wire (pts (xy 124.46 97.79) (xy 135.89 97.79))
+    (stroke (width 0) (type default))
+    (uuid ed2d734a-96ab-4f8d-9964-b35fb6f264e1)
+  )
+
+  (text_box "Global labels connect to local labels, so this should be an error connecting RX1 to TX1"
+    (at 146.05 68.58 0) (size 30.48 10.16)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1.27 1.27)) (justify left top))
+    (uuid 8b7979c5-91e0-4622-b5f7-46261e54852f)
+  )
+  (text_box "Because GL2 is subsumed, it should raise an error about not being connected elsewhere"
+    (at 86.36 95.25 0) (size 30.48 8.89)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1.27 1.27)) (justify left top))
+    (uuid a86330ff-260b-47dd-aa97-d0048adacf6a)
+  )
+  (text_box "Two global labels on the same net should be an error"
+    (at 144.78 95.25 0) (size 30.48 6.35)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1.27 1.27)) (justify left top))
+    (uuid e0ed898f-b66d-4e39-bcf1-41f327b1f742)
+  )
+
+  (label "RX1" (at 121.92 71.12 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid a704bc1b-cffd-42f1-b255-604a994f491f)
+  )
+
+  (global_label "GL2" (shape input) (at 124.46 97.79 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 33c2e437-c11c-4ea2-9005-694c58022174)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (id 0) (at 118.2054 97.79 0)
+      (effects (font (size 1.27 1.27)) (justify right) hide)
+    )
+  )
+  (global_label "GL1" (shape input) (at 135.89 97.79 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 36c8b1e4-3cc0-4715-ac55-64a74412c33f)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (id 0) (at 142.1446 97.79 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+  )
+  (global_label "RX1" (shape input) (at 138.43 78.74 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 4d379e56-88a8-4875-8bdc-4cc50cce81b3)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (id 0) (at 144.866 78.74 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+  )
+  (global_label "TX1" (shape input) (at 138.43 71.12 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 595f58ee-7a9d-483b-900c-241205affa97)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (id 0) (at 144.5636 71.12 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

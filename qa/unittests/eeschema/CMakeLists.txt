@@ -44,6 +44,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
+    ${CMAKE_SOURCE_DIR}/qa
     ${INC_AFTER}
     )
 
@@ -66,6 +67,10 @@ set( QA_EESCHEMA_SRCS
     ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_array_options.cpp
 
     sch_plugins/altium/test_altium_parser_sch.cpp
+
+	erc/test_erc_label_not_connected.cpp
+	erc/test_erc_stacking_pins.cpp
+	erc/test_erc_global_labels.cpp
 
     test_eagle_plugin.cpp
     test_lib_part.cpp
@@ -118,6 +123,7 @@ PRIVATE
     scripting
     kimath
     qa_utils
+    qa_schematic_utils
     markdown_lib
     ${GDI_PLUS_LIBRARIES}
     ${Boost_LIBRARIES}

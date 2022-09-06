@@ -43,12 +43,16 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     MOCK_METHOD( ForceSystemPdfBrowser, 1, void( bool ) );
     MOCK_METHOD( SetLanguage, 2, bool( wxString&, bool ) );
     MOCK_METHOD( SetLanguageIdentifier, 1, void( int ) );
-    MOCK_CONST_METHOD( GetSelectedLanguageIdentifier, 0, int() );
     MOCK_METHOD( ReadPdfBrowserInfos, 0, void() );
     MOCK_METHOD( WritePdfBrowserInfos, 0, void() );
     MOCK_METHOD( SetLocalEnvVariable, 2, bool( const wxString&, const wxString& ) );
     MOCK_METHOD( SetLocalEnvVariables, 0, void() );
     MOCK_CONST_METHOD( GetLocalEnvVariables, 0, ENV_VAR_MAP&() );
+
+    int GetSelectedLanguageIdentifier()
+    {
+        return 0;
+    }
 
     // following functions will not be mocked in order to mimic old qa behavior
 //    MOCK_METHOD( App, 0, wxApp&() );

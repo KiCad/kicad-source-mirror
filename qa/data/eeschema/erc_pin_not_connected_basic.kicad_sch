@@ -1,0 +1,124 @@
+(kicad_sch (version 20220904) (generator eeschema)
+
+  (uuid 930e09ef-be9e-430e-bcf9-43a95b2b4bd3)
+
+  (paper "A4")
+
+  (lib_symbols
+    (symbol "Device:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "R" (id 0) (at 2.032 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Value" "R" (id 1) (at 0 0 90)        (effects (font (size 1.27 1.27)))
+      
+)
+      (property "Footprint" "" (id 2) (at -1.778 0 90)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "Datasheet" "~" (id 3) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_keywords" "R res resistor" (id 4) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_description" "Resistor" (id 5) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (property "ki_fp_filters" "R_*" (id 6) (at 0 0 0)        (effects (font (size 1.27 1.27)) hide)
+      
+)
+      (symbol "R_0_1"
+        (rectangle (start -1.016 -2.54) (end 1.016 2.54)
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "R_1_1"
+        (pin passive line (at 0 3.81 270) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 0 -3.81 90) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+
+
+  (wire (pts (xy 100.33 64.77) (xy 121.92 64.77))
+    (stroke (width 0) (type default))
+    (uuid 2a99c91e-9d4e-4da5-805f-13a997903880)
+  )
+  (wire (pts (xy 121.92 64.77) (xy 121.92 74.93))
+    (stroke (width 0) (type default))
+    (uuid 4d25b80e-aa06-42aa-ac68-1573391d082a)
+  )
+  (wire (pts (xy 121.92 88.9) (xy 100.33 88.9))
+    (stroke (width 0) (type default))
+    (uuid 5db2880d-61d4-4000-bc12-7baca2753b3a)
+  )
+  (wire (pts (xy 100.33 88.9) (xy 100.33 64.77))
+    (stroke (width 0) (type default))
+    (uuid 86b8bc48-c479-4fde-b6f7-96ba28544af8)
+  )
+  (wire (pts (xy 121.92 82.55) (xy 121.92 88.9))
+    (stroke (width 0) (type default))
+    (uuid 8b878b60-3239-43c4-9d0e-6d2e5d007191)
+  )
+
+  (symbol (lib_id "Device:R") (at 82.55 46.99 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid 99696aa3-1f0c-481c-9ebe-99494e3bee14)
+    (default_instance (reference "R1") (unit 1) (value "R") (footprint ""))
+    (property "Reference" "R1" (id 0) (at 85.09 46.355 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "R" (id 1) (at 85.09 48.895 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 80.772 46.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 82.55 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 4de30286-088b-443e-98be-1ffca1d383ce))
+    (pin "2" (uuid 346e1d1c-f595-4ef8-9738-4dec17ffcce4))
+  )
+
+  (symbol (lib_id "Device:R") (at 121.92 78.74 0) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid ace4c3cb-296b-45e5-9908-2ee794107b85)
+    (default_instance (reference "R1") (unit 1) (value "R") (footprint ""))
+    (property "Reference" "R1" (id 0) (at 124.46 78.105 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "R" (id 1) (at 124.46 80.645 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 120.142 78.74 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 121.92 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 8a1429e1-1dc8-4c46-99d4-cbd6c8f42c87))
+    (pin "2" (uuid 79487508-b7f8-407c-b22a-ed3b49071572))
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+
+  (symbol_instances
+    (path "/99696aa3-1f0c-481c-9ebe-99494e3bee14"
+      (reference "R1") (unit 1) (value "R") (footprint "")
+    )
+    (path "/ace4c3cb-296b-45e5-9908-2ee794107b85"
+      (reference "R2") (unit 1) (value "R") (footprint "")
+    )
+  )
+)

@@ -90,19 +90,19 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     ResetPinMap();
 
     for( int i = ERCE_FIRST; i <= ERCE_LAST; ++i )
-        m_Severities[ i ] = RPT_SEVERITY_ERROR;
+        m_ERCSeverities[ i ] = RPT_SEVERITY_ERROR;
 
     // Error is the default setting so set non-error priorities here.
-    m_Severities[ERCE_UNSPECIFIED]             = RPT_SEVERITY_UNDEFINED;
-    m_Severities[ERCE_ENDPOINT_OFF_GRID]       = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_PIN_TO_PIN_WARNING]      = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_SIMILAR_LABELS]          = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_GLOBLABEL]               = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_DRIVER_CONFLICT]         = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_BUS_ENTRY_CONFLICT]      = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_LIB_SYMBOL_ISSUES]       = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_NOCONNECT_CONNECTED]     = RPT_SEVERITY_WARNING;
-    m_Severities[ERCE_NOCONNECT_NOT_CONNECTED] = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_UNSPECIFIED]             = RPT_SEVERITY_UNDEFINED;
+    m_ERCSeverities[ERCE_ENDPOINT_OFF_GRID]       = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_PIN_TO_PIN_WARNING]      = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_SIMILAR_LABELS]          = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_GLOBLABEL]               = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_DRIVER_CONFLICT]         = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_BUS_ENTRY_CONFLICT]      = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES]       = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_NOCONNECT_CONNECTED]     = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_NOCONNECT_NOT_CONNECTED] = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json
@@ -114,10 +114,10 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     wxString name = item.GetSettingsKey();
                     int      code = item.GetErrorCode();
 
-                    if( name.IsEmpty() || m_Severities.count( code ) == 0 )
+                    if( name.IsEmpty() || m_ERCSeverities.count( code ) == 0 )
                         continue;
 
-                    ret[std::string( name.ToUTF8() )] = SeverityToString( m_Severities[code] );
+                    ret[std::string( name.ToUTF8() )] = SeverityToString( m_ERCSeverities[code] );
                 }
 
                 return ret;
@@ -135,7 +135,7 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     std::string key( name.ToUTF8() );
 
                     if( aJson.contains( key ) )
-                        m_Severities[code] = SeverityFromString( aJson[key] );
+                        m_ERCSeverities[code] = SeverityFromString( aJson[key] );
                 }
             },
             {} ) );
@@ -232,33 +232,33 @@ SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
     // Warning-or-error is controlled by which errorCode it is
     if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
     {
-        wxASSERT( m_Severities.count( ERCE_PIN_TO_PIN_WARNING ) );
+        wxASSERT( m_ERCSeverities.count( ERCE_PIN_TO_PIN_WARNING ) );
 
-        if( m_Severities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
+        if( m_ERCSeverities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
             return RPT_SEVERITY_IGNORE;
         else
             return RPT_SEVERITY_ERROR;
     }
     else if( aErrorCode == ERCE_PIN_TO_PIN_WARNING )
     {
-        wxASSERT( m_Severities.count( ERCE_PIN_TO_PIN_WARNING ) );
+        wxASSERT( m_ERCSeverities.count( ERCE_PIN_TO_PIN_WARNING ) );
 
-        if( m_Severities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
+        if( m_ERCSeverities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
             return RPT_SEVERITY_IGNORE;
         else
             return RPT_SEVERITY_WARNING;
     }
 
-    wxCHECK_MSG( m_Severities.count( aErrorCode ), RPT_SEVERITY_IGNORE,
+    wxCHECK_MSG( m_ERCSeverities.count( aErrorCode ), RPT_SEVERITY_IGNORE,
             "Missing severity from map in ERC_SETTINGS!" );
 
-    return m_Severities.at( aErrorCode );
+    return m_ERCSeverities.at( aErrorCode );
 }
 
 
 void ERC_SETTINGS::SetSeverity( int aErrorCode, SEVERITY aSeverity )
 {
-    m_Severities[ aErrorCode ] = aSeverity;
+    m_ERCSeverities[ aErrorCode ] = aSeverity;
 }
 
 
