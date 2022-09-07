@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -69,6 +69,8 @@ public:
         int frequencyUnit;
         int lengthUnit;
         wxString conductorMaterialResitivity;
+        wxString conductorTemperature;
+        wxString conductorThermalCoef;
     };
 
     struct WAVELENGTH

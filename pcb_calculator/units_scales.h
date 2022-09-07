@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,16 @@
 #define UNIT_OHM_PER_METER 1.0           // Ohm per meter to Ohm per meter
 #define UNIT_OHM_PER_KILOMETER 1e-3      // Ohm per kilometer to Ohm per meter
 #define UNIT_OHM_PER_FEET 3.28084        // Ohm per feet to Ohm per meter
-#define UNIT_OHM_PER_1000FEET 3.28084e-3 // Ohm per feet to Ohm per meter
+#define UNIT_OHM_PER_1000FEET 3.28084e-3 // Ohm per 1000feet to Ohm per meter
+
+#define UNIT_KILOVOLT 1e-3  // Kilovolt to Volt
+#define UNIT_VOLT 1.0       // Volt to Volt
+#define UNIT_MILLIVOLT 1e+3 // Millivolt to Volt
+
+#define UNIT_MEGAWATT 1e-6  // Kilowatt to Watt
+#define UNIT_KILOWATT 1e-3  // Kilowatt to Watt
+#define UNIT_WATT 1.0       // Watt to Watt
+#define UNIT_MILLIWATT 1e+3 // Milliwatt to Watt
 
 #define UNIT_METER_PER_SECOND 1.0           // meter per second to meter per second
 #define UNIT_KILOMETER_PER_HOUR ( 1 / 3.6 ) // km/h to m/s

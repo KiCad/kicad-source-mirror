@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
+/**
   * @file UnitSelector.cpp
   * a wxChoiceBox to select units in Pcb_Calculator
   */
@@ -214,11 +214,10 @@ UNIT_SELECTOR_LEN_CABLE::UNIT_SELECTOR_LEN_CABLE( wxWindow *parent, wxWindowID i
     Append( _( "feet" ) );
 }
 
-
 /*
  * Function GetUnitScale
  * return the scaling factor to convert users units
- * to normalized units (meter)
+ * to normalized units ( m )
  */
 double UNIT_SELECTOR_LEN_CABLE::GetUnitScale()
 {
@@ -231,6 +230,54 @@ double UNIT_SELECTOR_LEN_CABLE::GetUnitScale()
     case 4: return UNIT_FEET;   break;
     }
     return 1.0;
+}
+
+/*
+ * Function GetUnitScale
+ * return the scaling factor to convert users units
+ * to normalized units ( V )
+ */
+double UNIT_SELECTOR_VOLTAGE::GetUnitScale()
+{
+    switch( GetCurrentSelection() )
+    {
+    case 0: return UNIT_MILLIVOLT; break;
+    case 1: return UNIT_VOLT; break;
+    }
+    return 1.0;
+}
+
+UNIT_SELECTOR_VOLTAGE::UNIT_SELECTOR_VOLTAGE( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                              const wxSize& size, const wxArrayString& choices,
+                                              long style ) :
+        UNIT_SELECTOR( parent, id, pos, size, choices, style )
+{
+    Append( _( "mV" ) );
+    Append( _( "V" ) );
+}
+
+/*
+ * Function GetUnitScale
+ * return the scaling factor to convert users units
+ * to normalized units ( W )
+ */
+double UNIT_SELECTOR_POWER::GetUnitScale()
+{
+    switch( GetCurrentSelection() )
+    {
+    case 0: return UNIT_MILLIWATT; break;
+    case 1: return UNIT_WATT; break;
+    }
+    return 1.0;
+}
+
+UNIT_SELECTOR_POWER::UNIT_SELECTOR_POWER( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                          const wxSize& size, const wxArrayString& choices,
+                                          long style ) :
+        UNIT_SELECTOR( parent, id, pos, size, choices, style )
+{
+    Append( _( "mW" ) );
+    Append( _( "W" ) );
 }
 
 UNIT_SELECTOR_SPEED::UNIT_SELECTOR_SPEED( wxWindow* parent, wxWindowID id, const wxPoint& pos,

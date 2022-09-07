@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
+/**
   * @file UnitSelector.h
   * a wxChoiceBox to select units in Pcb_Calculator
   */
@@ -154,7 +154,35 @@ public:
     /**
      * Function GetUnitScale
      * @return the scaling factor to convert users units
-     * to normalized units ( ohm/m )
+     * to normalized units ( m )
+     */
+    double GetUnitScale() override;
+};
+
+class UNIT_SELECTOR_VOLTAGE : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_VOLTAGE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                           const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( V )
+     */
+    double GetUnitScale() override;
+};
+
+class UNIT_SELECTOR_POWER : public UNIT_SELECTOR
+{
+public:
+    UNIT_SELECTOR_POWER( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                         const wxArrayString& choices, long style = 0 );
+
+    /**
+     * Function GetUnitScale
+     * @return the scaling factor to convert users units
+     * to normalized units ( W )
      */
     double GetUnitScale() override;
 };

@@ -47,4 +47,16 @@ wxArrayString StandardLossTangentList();
  */
 wxArrayString StandardResistivityList();
 
+/**
+ * @return a list of resistivity constants (Er) of some conductors
+ * used to make cable cores
+ */
+wxArrayString StandardCableConductorList();
+
+/**
+ * @return a list of temperature coefficient constants of some conductors
+ * used to make cable cores
+ */
+wxArrayString StandardCableTempCoefList();
+
 #endif  // #ifndef COMMON_DATA_H

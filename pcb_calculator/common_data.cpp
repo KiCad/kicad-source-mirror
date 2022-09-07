@@ -100,3 +100,34 @@ wxArrayString StandardResistivityList()
 
     return list;
 }
+
+wxArrayString StandardCableConductorList()
+{
+    wxArrayString list;
+
+    // Lined the same as StandardCableTempCoefList
+    // Specific resistance list in ohms*meters (rho):
+    list.Clear();
+    list.Add( wxT( "1.72e-8  Cu, Copper" ) );
+    list.Add( wxT( "2.62e-8  Al, Aluminum" ) );
+    list.Add( wxT( "100e-8  NiCr, Nichrome" ) );
+    list.Add( wxT( "9.71e-8  Fe, Iron" ) );
+    list.Add( wxT( "5.6e-8  W, Tungsten" ) );
+
+    return list;
+}
+
+wxArrayString StandardCableTempCoefList()
+{
+    wxArrayString list;
+    // Lined the same as StandardCableConductorList
+    // Specific temperature coefficient (20C):
+    list.Clear();
+    list.Add( wxT( "3.93e-3  Cu, Copper" ) );
+    list.Add( wxT( "4.29e-3  Al, Aluminum" ) );
+    list.Add( wxT( "0.4e-3 NiCr, Nichrome" ) );
+    list.Add( wxT( "5e-3  Fe, Iron" ) );
+    list.Add( wxT( "4.5e-3  W, Tungsten" ) );
+
+    return list;
+}

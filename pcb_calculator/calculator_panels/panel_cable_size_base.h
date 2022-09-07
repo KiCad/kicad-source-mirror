@@ -14,6 +14,8 @@ class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_LEN_CABLE;
 class UNIT_SELECTOR_LINEAR_RESISTANCE;
+class UNIT_SELECTOR_POWER;
+class UNIT_SELECTOR_VOLTAGE;
 
 #include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
@@ -54,6 +56,10 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_textCtrlConductorResistivity;
 		wxButton* m_button_ResistivityConductor;
+		wxStaticText* m_staticText16412;
+		wxStaticText* m_staticText182;
+		wxTextCtrl* m_textCtrlConductorThermCoef;
+		wxButton* m_button_Temp_Coef_Conductor;
 		wxStaticText* m_staticText16411;
 		wxTextCtrl* m_linResistanceCtrl;
 		UNIT_SELECTOR_LINEAR_RESISTANCE* m_linResistanceUnit;
@@ -63,6 +69,9 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText1642;
 		wxTextCtrl* m_AmpacityCtrl;
 		wxStaticText* m_staticText16421;
+		wxStaticText* m_staticText17;
+		wxTextCtrl* m_conductorTempCtrl;
+		wxStaticText* m_staticText181;
 		wxStaticText* m_staticText163;
 		wxTextCtrl* m_currentCtrl;
 		wxStaticText* m_staticText;
@@ -70,14 +79,14 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxTextCtrl* m_lengthCtrl;
 		UNIT_SELECTOR_LEN_CABLE* m_lengthUnit;
 		wxStaticText* m_staticText16121;
-		wxTextCtrl* m_resistanceCtrl;
+		wxTextCtrl* m_resistanceDcCtrl;
 		wxStaticText* m_staticText161211;
 		wxStaticText* m_staticText161212;
 		wxTextCtrl* m_vDropCtrl;
-		wxStaticText* m_staticText1612121;
+		UNIT_SELECTOR_VOLTAGE* m_vDropUnit;
 		wxStaticText* m_staticText1612122;
 		wxTextCtrl* m_powerCtrl;
-		wxStaticText* m_staticText16121211;
+		UNIT_SELECTOR_POWER* m_powerUnit;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnCableSizeChange( wxCommandEvent& event ) { event.Skip(); }
@@ -86,12 +95,15 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		virtual void OnAreaChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnConductorResistivityChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnConductorResistivity_Button( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnConductorThermCoefChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnConductorThermCoefChange_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLinResistanceChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFrequencyChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAmpacityChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnConductorTempChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCurrentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLengthChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnResistanceChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResistanceDcChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVDropChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPowerChange( wxCommandEvent& event ) { event.Skip(); }
 

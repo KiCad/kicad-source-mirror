@@ -50,15 +50,18 @@ public:
     void OnCableSizeChange( wxCommandEvent& aEvent ) override;
     void OnConductorResistivityChange( wxCommandEvent& aEvent ) override;
     void OnConductorResistivity_Button( wxCommandEvent& aEvent ) override;
+    void OnConductorThermCoefChange( wxCommandEvent& aEvent ) override;
+    void OnConductorThermCoefChange_Button( wxCommandEvent& aEvent ) override;
     void OnUpdateUnit( wxCommandEvent& aEvent ) override;
     void OnDiameterChange( wxCommandEvent& aEvent ) override;
     void OnAreaChange( wxCommandEvent& aEvent ) override;
     void OnLinResistanceChange( wxCommandEvent& aEvent ) override;
     void OnFrequencyChange( wxCommandEvent& aEvent ) override;
     void OnAmpacityChange( wxCommandEvent& aEvent ) override;
+    void OnConductorTempChange( wxCommandEvent& aEvent ) override;
     void OnCurrentChange( wxCommandEvent& aEvent ) override;
     void OnLengthChange( wxCommandEvent& aEvent ) override;
-    void OnResistanceChange( wxCommandEvent& aEvent ) override;
+    void OnResistanceDcChange( wxCommandEvent& aEvent ) override;
     void OnVDropChange( wxCommandEvent& aEvent ) override;
     void OnPowerChange( wxCommandEvent& aEvent ) override;
 
@@ -73,27 +76,30 @@ private:
     bool m_updatingUI;
     bool m_updatingDiameter;
     bool m_updatingArea;
+    bool m_updatingConductorMaterialResitivity;
     bool m_updatingLinResistance;
     bool m_updatingFrequency;
     bool m_updatingAmpacity;
     bool m_updatingCurrent;
     bool m_updatingLength;
-    bool m_updatingResistance;
+    bool m_updatingResistanceDc;
     bool m_updatingRVdrop;
     bool m_updatingPower;
 
     bool m_imperial;
 
     // Stored in normalized units
-    double m_button_ResistivityConductor;
     double m_conductorMaterialResitivity;
+    double m_conductorMaterialResitivityRef;
+    double m_conductorMaterialThermalCoef;
     double m_diameter;
+    double m_conductorTemperature;
     double m_current;
     double m_length;
     double m_area;
     double m_linearResistance;
     double m_maxFrequency;
-    double m_resistance;
+    double m_resistanceDc;
     double m_voltageDrop;
     double m_dissipatedPower;
     double m_ampacity;

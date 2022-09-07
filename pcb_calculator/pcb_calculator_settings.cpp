@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -86,6 +86,12 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorMaterialResitivity",
                                                 &m_cableSize.conductorMaterialResitivity, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorTemperature",
+                                                &m_cableSize.conductorTemperature, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorThermalCoef",
+                                                &m_cableSize.conductorThermalCoef, "" ) );
 
     m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
 

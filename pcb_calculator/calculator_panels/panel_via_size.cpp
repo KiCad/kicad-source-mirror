@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,8 +89,8 @@ void PANEL_VIA_SIZE::OnViaEpsilonR_Button( wxCommandEvent& event )
     //Shows a list of current relative dielectric constant(Er) and select a value.
     wxArrayString list = StandardRelativeDielectricConstantList();
 
-    wxString value = wxGetSingleChoice( wxEmptyString, _("Relative Dielectric Constants"),
-                                        list).BeforeFirst( ' ' );
+    wxString value = wxGetSingleChoice( wxEmptyString, _( "Relative Dielectric Constants" ), list )
+                             .BeforeFirst( ' ' );
 
     if( !value.IsEmpty() )
         m_textCtrlPlatingPermittivity->SetValue( value );
@@ -224,7 +224,7 @@ void PANEL_VIA_SIZE::OnViaCalculate( wxCommandEvent& event )
     // platingResistivity is ok: it is in Ohm*m in tables
 
     // Calculate cross-sectional area of the via's cylindrical structure [3]
-    double area = M_PI * (finishedHoleDia + platingThickness) * platingThickness; // m^2
+    double area = M_PI * ( finishedHoleDia + platingThickness ) * platingThickness; // m^2
 
     double viaResistance = platingResistivity * viaLength / area; // Ohms
 
