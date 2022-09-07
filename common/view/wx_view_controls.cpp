@@ -111,8 +111,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), nullptr, this );
 #endif
-    m_parentPanel->Bind( wxEVT_LEAVE_WINDOW,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), this );
+    m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEUP,
@@ -480,7 +480,6 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
-    wxLogTrace( "view", "onLeave" );
 #if !defined USE_MOUSE_CAPTURE
     onMotion( aEvent );
 #endif
@@ -488,7 +487,6 @@ void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
 {
-    wxLogTrace( "view", "onLeave" );
     // This method must be present to suppress the capture-lost assertion
 
     // Set the flag to allow calling m_parentPanel->CaptureMouse()
