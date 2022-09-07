@@ -42,8 +42,9 @@
 #include <kiplatform/ui.h>
 #include <wx/log.h>
 
+#ifdef __WXMSW__
+    #include <Windows.h>
 
-#if defined __WXMSW__
     #define USE_MOUSE_CAPTURE
 #endif
 
@@ -110,8 +111,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), nullptr, this );
 #endif
-    m_parentPanel->Connect( wxEVT_LEAVE_WINDOW,
-                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), nullptr, this );
+    m_parentPanel->Bind( wxEVT_LEAVE_WINDOW,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), nullptr, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEUP,
@@ -479,6 +480,7 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
+    wxLogTrace( "view", "onLeave" );
 #if !defined USE_MOUSE_CAPTURE
     onMotion( aEvent );
 #endif
@@ -486,6 +488,7 @@ void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
 {
+    wxLogTrace( "view", "onLeave" );
     // This method must be present to suppress the capture-lost assertion
 
     // Set the flag to allow calling m_parentPanel->CaptureMouse()
@@ -506,6 +509,21 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             m_state = IDLE;
             return;
         }
+
+        #ifdef __WXMSW__
+        // Hackfix: Need to find better solution
+        // It's possible for the mouse to leave the canvas without triggering any leave events
+        POINT cursorPos;
+        GetCursorPos( &cursorPos );
+        HWND hwndUnderCursor = WindowFromPoint( cursorPos );
+
+        if( hwndUnderCursor != m_parentPanel->GetHWND() )
+        {
+            m_panTimer.Stop();
+            m_state = IDLE;
+            return;
+        }
+        #endif
 
         if( !m_parentPanel->HasFocus() && !m_parentPanel->StatusPopupHasFocus() )
         {
