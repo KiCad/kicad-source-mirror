@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-20 20:10-0700\n"
-"PO-Revision-Date: 2022-03-13 03:55+0000\n"
-"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v6/vi/"
-">\n"
+"PO-Revision-Date: 2022-09-07 20:50+0000\n"
+"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v6/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -9759,12 +9759,14 @@ msgid "You must provide a netlist generator title"
 msgstr "Bạn phải cung cấp một tiêu đề để tạo netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
+#, fuzzy
 msgid "Add Generator..."
-msgstr ""
+msgstr "Thêm Trình tạo"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
+#, fuzzy
 msgid "Remove Generator"
-msgstr ""
+msgstr "Xóa Trình tạo"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:83
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
@@ -9772,25 +9774,30 @@ msgstr ""
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1013
+#, fuzzy
 msgid "Name:"
-msgstr ""
+msgstr "Tên:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:90
+#, fuzzy
 msgid "Command line to run the generator:"
-msgstr ""
+msgstr "Dòng lệnh chạy trình tạo:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
+#, fuzzy
 msgid "Browse Generators..."
-msgstr ""
+msgstr "Duyệt qua Trình tạo ..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:107
+#, fuzzy
 msgid "Script Generator Properties"
-msgstr ""
+msgstr "Thuộc tính trình tạo tập lệnh"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:226
+#, fuzzy
 msgid "Alternate Pin Name"
-msgstr ""
+msgstr "Tên chân Pin thay thế"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
 msgid "Synchronized pins edit mode, and this pin is new"
@@ -9814,12 +9821,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:349
+#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
+msgstr "Chỉ định chân pin thay thế không khả dụng cho các ký hiệu De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
+#, fuzzy
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
+"Biểu tượng symbol này chỉ có một đơn vị. Kiểm soát này không có hiệu lực."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 msgid ""
@@ -9828,12 +9838,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:288
+#, fuzzy
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Nếu được chọn, chân pin này sẽ tồn tại trong tất cả các đơn vị."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:309
+#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr ""
+msgstr "Định nghĩa chân pin thay thế phải có tên."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:329
 #, c-format
@@ -9842,6 +9854,9 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
+"Chân pin này không nằm trên lưới %d mils sẽ làm cho nó\n"
+"khó kết nối trong sơ đồ mạch.\n"
+"Bạn có muốn tiếp tục?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
@@ -9850,23 +9865,27 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
-msgstr ""
+msgstr "chân Pin và tên:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:64
+#, fuzzy
 msgid "Pin num&ber:"
-msgstr ""
+msgstr "Số PIN:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:66
+#, fuzzy
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "Số chân pin: 1 đến 4 chữ cái ASCII và / hoặc chữ số"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:73
+#, fuzzy
 msgid "&X position:"
-msgstr ""
+msgstr "& Vị trí X:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:82
+#, fuzzy
 msgid "&Y position:"
-msgstr ""
+msgstr "& Vị trí Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:89
 msgid "&Pin length:"
@@ -11898,8 +11917,9 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
+#, fuzzy
 msgid "Selection"
-msgstr ""
+msgstr "Lựa chọn"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
 msgid "Draw selected text items as box"
@@ -16627,13 +16647,15 @@ msgstr ""
 #: eeschema/tools/ee_selection_tool.cpp:1629
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
 #: pcbnew/tools/pcb_selection_tool.cpp:1908
+#, fuzzy
 msgid "Select &All\tA"
-msgstr ""
+msgstr "Chọn tất cả"
 
 #: eeschema/tools/ee_selection_tool.cpp:1632
 #: pcbnew/tools/pcb_selection_tool.cpp:1911
+#, fuzzy
 msgid "&Expand Selection\tE"
-msgstr ""
+msgstr "&Mở rộng lựa chọn E"
 
 #: eeschema/tools/sch_drawing_tools.cpp:218
 msgid "Press <ESC> to cancel symbol creation."
@@ -18301,8 +18323,9 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:182
 #: kicad/tools/kicad_manager_actions.cpp:117
+#, fuzzy
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Trình quản lý nội dung và plugin"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:261
 #, fuzzy
@@ -20865,8 +20888,9 @@ msgid "Autoplace components"
 msgstr ""
 
 #: pcbnew/board.cpp:92
+#, fuzzy
 msgid "This is the default net class."
-msgstr ""
+msgstr "Đây là lớp net mặc định."
 
 #: pcbnew/board.cpp:800
 msgid "PCB"
@@ -25782,8 +25806,9 @@ msgid "Scaling:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
+#, fuzzy
 msgid "Auto"
-msgstr ""
+msgstr "Tự Động"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:2"
@@ -30982,7 +31007,7 @@ msgstr ""
 
 #: pcbnew/pcbnew_config.cpp:60
 msgid "Action Plugins"
-msgstr ""
+msgstr "Các Plugin Hoạt động"
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Origins & Axes"
@@ -31846,15 +31871,23 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Số dấu phẩy động không hợp lệ trong\n"
+"tập tin: '%s'\n"
+"dòng: %d\n"
+"độ lệch: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:187
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Thiếu số dấu phẩy động trong\n"
+"tập tin: '%s'\n"
+"dòng: %d\n"
+"độ lệch: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:262
 #, c-format
