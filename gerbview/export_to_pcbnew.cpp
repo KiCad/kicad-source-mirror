@@ -170,7 +170,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-        d_codeDescr->ConvertShapeToPolygon();
+        d_codeDescr->ConvertShapeToPolygon( aGbrItem );
         writePcbPolygon( d_codeDescr->m_Polygon, aLayer, aGbrItem->GetABPosition( seg_start ) );
         break;
 
@@ -281,6 +281,8 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
     case GBR_SPOT_CIRCLE:
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
+    case GBR_SPOT_POLY:
+    case GBR_SPOT_MACRO:
         export_flashed_copper_item( aGbrItem, aLayer );
         break;
 
@@ -395,7 +397,6 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
     static D_CODE  flashed_item_D_CODE( 0 );
 
     D_CODE*        d_codeDescr = aGbrItem->GetDcodeDescr();
-    SHAPE_POLY_SET polygon;
 
     if( d_codeDescr == nullptr )
         d_codeDescr = &flashed_item_D_CODE;
@@ -423,8 +424,9 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
         return;
     }
 
-    d_codeDescr->ConvertShapeToPolygon();
-    writePcbPolygon( d_codeDescr->m_Polygon, aLayer, offset );
+    APERTURE_MACRO* macro = d_codeDescr->GetMacro();
+    SHAPE_POLY_SET* macroShape = macro->GetApertureMacroShape( aGbrItem, VECTOR2I( 0, 0 ) );
+    writePcbPolygon( *macroShape, aLayer, offset );
 }
 
 

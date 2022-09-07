@@ -862,7 +862,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 }
 
 
-void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC,
+void APERTURE_MACRO::DrawApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
                                              const COLOR4D& aColor, const VECTOR2I& aShapePos,
                                              bool aFilledShape )
 {

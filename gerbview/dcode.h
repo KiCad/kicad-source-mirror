@@ -141,7 +141,8 @@ public:
      * @param aShapePos is the actual shape position
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode
      */
-    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+    void DrawFlashedShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
+                           const COLOR4D& aColor,
                            const VECTOR2I& aShapePos, bool aFilledShape );
 
     /**
@@ -157,7 +158,8 @@ public:
      * @param aFilled set to true to draw in filled mode, false to draw in sketch mode.
      * @param aPosition is the actual shape position.
      */
-    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+    void DrawFlashedPolygon( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
+                             const COLOR4D& aColor,
                              bool aFilled, const VECTOR2I& aPosition );
 
     /**
@@ -165,8 +167,10 @@ public:
      *
      * Arcs and circles are approximated by segments.  Useful when a shape is not a graphic
      * primitive (shape with hole, rotated shape ... ) and cannot be easily drawn.
+     * @param aParent is the #GERBER_DRAW_ITEM using this DCode.
+     * Not used in all shapes, used for APT_MACRO
      */
-    void ConvertShapeToPolygon();
+    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent );
 
     /**
      * Calculate a value that can be used to evaluate the size of text when displaying the

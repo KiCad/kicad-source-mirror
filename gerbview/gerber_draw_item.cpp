@@ -323,7 +323,7 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         if( code )
         {
             if( code->m_Polygon.OutlineCount() == 0 )
-                code->ConvertShapeToPolygon();
+                code->ConvertShapeToPolygon( this );
 
             bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2,
                           code->m_Polygon.BBox().GetHeight() / 2 );

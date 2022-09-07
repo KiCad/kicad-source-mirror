@@ -202,7 +202,8 @@ struct APERTURE_MACRO
      * @param aShapePos is the actual shape position.
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
-    void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+    void DrawApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
+                                 const COLOR4D& aColor,
                                  const VECTOR2I& aShapePos, bool aFilledShape );
 
     /**

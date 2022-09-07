@@ -473,7 +473,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         else    // rectangular hole
         {
             if( code->m_Polygon.OutlineCount() == 0 )
-                code->ConvertShapeToPolygon();
+                code->ConvertShapeToPolygon( aItem );
 
             drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
@@ -498,7 +498,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         else
         {
             if( code->m_Polygon.OutlineCount() == 0 )
-                code->ConvertShapeToPolygon();
+                code->ConvertShapeToPolygon( aItem );
 
             drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
@@ -537,7 +537,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         else
         {
             if( code->m_Polygon.OutlineCount() == 0 )
-                code->ConvertShapeToPolygon();
+                code->ConvertShapeToPolygon( aItem );
 
             drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
@@ -546,7 +546,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 
     case GBR_SPOT_POLY:
         if( code->m_Polygon.OutlineCount() == 0 )
-            code->ConvertShapeToPolygon();
+            code->ConvertShapeToPolygon( aItem );
 
         drawPolygon( aItem, code->m_Polygon, aFilled, true );
         break;
