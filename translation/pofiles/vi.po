@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-03-12 04:35+0000\n"
-"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2022-09-07 20:50+0000\n"
+"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -120,9 +120,9 @@ msgid "Pad %s\t"
 msgstr "Khối"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, c-format
+#, c-format, fuzzy
 msgid "Rule area %s\t"
-msgstr ""
+msgstr "Vùng Rule %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
 #, fuzzy, c-format
@@ -299,7 +299,7 @@ msgstr "Lưu với tên..."
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 #: pcbnew/widgets/appearance_controls.cpp:2682
 msgid "Delete viewport..."
-msgstr ""
+msgstr "Xóa chế độ xem ..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Reload board"
@@ -3371,6 +3371,7 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -3386,10 +3387,23 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad có thể báo cáo ẩn danh sự cố và dữ liệu sự kiện đặc biệt cho nhà phát "
+"triển để hỗ trợ xác định các lỗi nghiêm trọng trên cơ sở người dùng hiệu quả "
+"hơn và giúp chức năng hồ sơ hướng dẫn cải tiến.\n"
+"\n"
+"Để liên kết các báo cáo tự động từ cùng một bản cài đặt KiCad, một số nhận "
+"dạng duy nhất được tạo hoàn toàn ngẫu nhiên, nó chỉ được sử dụng cho mục "
+"đích báo cáo sự cố. Không có thông tin nhận dạng cá nhân (PII) bao gồm địa "
+"chỉ IP được lưu trữ hoặc kết nối với số nhận dạng này. Bạn có thể đặt lại id "
+"này bất cứ lúc nào bằng nút được cung cấp.\n"
+"\n"
+"Nếu bạn chọn tự nguyện tham gia, KiCad sẽ tự động xử lý việc gửi các báo cáo "
+"đã nói khi xảy ra sự cố hoặc sự kiện. Các tệp thiết kế của bạn như sơ đồ "
+"hoặc PCB không được chia sẻ trong quá trình này."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Tôi đồng ý cung cấp báo cáo ẩn danh"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
 #, fuzzy
@@ -3764,7 +3778,7 @@ msgstr "Lớp net mặc định là bắt buộc."
 #: common/dialogs/panel_setup_netclasses.cpp:717
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr ""
+msgstr "<b> Nets phù hợp với '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
@@ -3861,7 +3875,7 @@ msgstr "Chỉ định sơ đồ mạch"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:124
 msgid "Pattern"
-msgstr ""
+msgstr "Mẫu"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -4149,15 +4163,23 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Số dấu phẩy động không hợp lệ trong\n"
+"tập tin: '%s'\n"
+"dòng: %d\n"
+"độ lệch: %d"
 
 #: common/dsnlexer.cpp:849
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Thiếu số dấu phẩy động trong\n"
+"tập tin: '%s'\n"
+"dòng: %d\n"
+"độ lệch: %d"
 
 #: common/dsnlexer.cpp:874
 #, fuzzy
@@ -4259,7 +4281,7 @@ msgstr "Trình chỉnh sửa Ảnh"
 
 #: common/eda_base_frame.cpp:1054
 msgid "Action Plugins"
-msgstr ""
+msgstr "Các Plugin Hoạt động"
 
 #: common/eda_base_frame.cpp:1055
 msgid "Origins & Axes"
@@ -4308,8 +4330,9 @@ msgstr "Worksheet"
 
 #: common/eda_base_frame.cpp:1099 kicad/pcm/dialogs/dialog_pcm.cpp:184
 #: kicad/tools/kicad_manager_actions.cpp:118
+#, fuzzy
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Trình quản lý nội dung và plugin"
 
 #: common/eda_base_frame.cpp:1145
 #, fuzzy, c-format
@@ -4863,8 +4886,9 @@ msgid "Bottom"
 msgstr "Dưới"
 
 #: common/eda_text.cpp:1030
+#, fuzzy
 msgid "Hyperlink"
-msgstr ""
+msgstr "Siêu liên kết"
 
 #: common/eda_text.cpp:1033
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5704,8 +5728,9 @@ msgid "Illegal character found in logical library name"
 msgstr "Tìm thấy ký tự bất hợp pháp trong tên thư viện lô-gic"
 
 #: common/lib_table_grid_tricks.cpp:49
+#, fuzzy
 msgid "Activate selected"
-msgstr ""
+msgstr "Kích hoạt đã chọn"
 
 #: common/lib_table_grid_tricks.cpp:51
 #, fuzzy
@@ -5798,6 +5823,7 @@ msgid "Select Preferred Editor"
 msgstr "Chọn Trình soạn thảo Ưu tiên"
 
 #: common/pgm_base.cpp:342
+#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -5806,10 +5832,18 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad có thể báo cáo ẩn danh các sự cố và dữ liệu sự kiện đặc biệt cho các "
+"nhà phát triển để hỗ trợ xác định các lỗi nghiêm trọng trên cơ sở người dùng "
+"hiệu quả hơn và giúp chức năng hồ sơ để hướng dẫn cải tiến. \n"
+"Nếu bạn chọn tự nguyện tham gia, KiCad sẽ tự động xử lý việc gửi các báo cáo "
+"nói trên khi xảy ra sự cố hoặc sự kiện. \n"
+"Các tệp thiết kế của bạn như sơ đồ hoặc PCB không được chia sẻ trong quá "
+"trình này."
 
 #: common/pgm_base.cpp:349
+#, fuzzy
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Yêu cầu chọn tham gia thu thập dữ liệu"
 
 #: common/pgm_base.cpp:398
 #, fuzzy
@@ -5926,8 +5960,9 @@ msgid "Error loading project footprint library table."
 msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:109
+#, fuzzy
 msgid "This is the default net class."
-msgstr ""
+msgstr "Đây là lớp net mặc định."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:315
 #, fuzzy
@@ -6755,12 +6790,14 @@ msgid "User grid: %s (%s)"
 msgstr "Lưới người dùng: %s (%s)"
 
 #: common/tool/selection_tool.cpp:284
+#, fuzzy
 msgid "Select &All\tA"
-msgstr ""
+msgstr "Chọn tất cả"
 
 #: common/tool/selection_tool.cpp:287
+#, fuzzy
 msgid "&Expand Selection\tE"
-msgstr ""
+msgstr "&Mở rộng lựa chọn E"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -6998,8 +7035,9 @@ msgid "No objects selected"
 msgstr "Không có symbol nào được chọn"
 
 #: common/widgets/properties_panel.cpp:89
+#, fuzzy
 msgid "Multiple objects selected"
-msgstr ""
+msgstr "Nhiều đối tượng được chọn"
 
 #: common/widgets/unit_binder.cpp:249
 #, c-format
@@ -7998,12 +8036,14 @@ msgstr "Chỉ trang vẽ hiện tại"
 #: eeschema/dialogs/dialog_annotate_base.cpp:48
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:82
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
+#, fuzzy
 msgid "Selection"
-msgstr ""
+msgstr "Lựa chọn"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
+#, fuzzy
 msgid "Recurse into subsheets"
-msgstr ""
+msgstr "Recurse vào bảng con"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -8059,8 +8099,9 @@ msgid "Annotate Schematic"
 msgstr "Chú thích Sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_assign_netclass.cpp:87
+#, fuzzy
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b> Các Net hiện đang khớp:</b>"
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
@@ -9078,9 +9119,9 @@ msgstr "Vi phạm"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, c-format
+#, c-format, fuzzy
 msgid "Ignored Tests (%s)"
-msgstr ""
+msgstr "Kiểm tra bị Bỏ qua (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -9744,8 +9785,9 @@ msgstr "Định dạng"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:233
 #: pcbnew/dialogs/dialog_plot_base.cpp:121
+#, fuzzy
 msgid "Auto"
-msgstr ""
+msgstr "Tự Động"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
@@ -9758,8 +9800,9 @@ msgid "Standard"
 msgstr "Đồ họa tiêu chuẩn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:46
+#, fuzzy
 msgid "Alternate"
-msgstr ""
+msgstr "Luân phiên"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:114
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9806,8 +9849,9 @@ msgstr "Tên kích thước văn bản"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
+#, fuzzy
 msgid "De Morgan"
-msgstr ""
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:778
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:70
@@ -9877,8 +9921,9 @@ msgid "Group by name"
 msgstr "Nhóm theo tên"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
+#, fuzzy
 msgid "Group Selected"
-msgstr ""
+msgstr "Nhóm đã chọn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
 #, fuzzy
@@ -10381,8 +10426,9 @@ msgid "Save all voltages"
 msgstr "Lưu tất cả các thay đổi"
 
 #: eeschema/dialogs/dialog_netlist.cpp:343
+#, fuzzy
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Viết chỉ thị để lưu tất cả điện áp (. Lưu tất cả)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #, fuzzy
@@ -10390,8 +10436,9 @@ msgid "Save all currents"
 msgstr "Lưu tất cả các thay đổi"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
+#, fuzzy
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Viết một chỉ thị để lưu tất cả các dòng điện (.probe alli)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "External simulator command:"
@@ -10442,12 +10489,14 @@ msgid "You must provide a netlist generator title"
 msgstr "Bạn phải cung cấp một tiêu đề để tạo netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
+#, fuzzy
 msgid "Add Generator..."
-msgstr ""
+msgstr "Thêm Trình tạo"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
+#, fuzzy
 msgid "Remove Generator"
-msgstr ""
+msgstr "Xóa Trình tạo"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:83
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
@@ -10455,52 +10504,66 @@ msgstr ""
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1063
+#, fuzzy
 msgid "Name:"
-msgstr ""
+msgstr "Tên:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:90
+#, fuzzy
 msgid "Command line to run the generator:"
-msgstr ""
+msgstr "Dòng lệnh chạy trình tạo:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
+#, fuzzy
 msgid "Browse Generators..."
-msgstr ""
+msgstr "Duyệt qua Trình tạo ..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:107
+#, fuzzy
 msgid "Script Generator Properties"
-msgstr ""
+msgstr "Thuộc tính trình tạo tập lệnh"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
+#, fuzzy
 msgid "Alternate Pin Name"
-msgstr ""
+msgstr "Tên chân Pin thay thế"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:193
 #: eeschema/dialogs/dialog_symbol_properties.cpp:354
+#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
+msgstr "Chỉ định chân pin thay thế không khả dụng cho các ký hiệu De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
+#, fuzzy
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Thoát khỏi chế độ chân Pin đồng bộ hóa"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
+#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
+"Chế độ chân pin đồng bộ được bật.\n"
+"Các chân pin tương tự sẽ được chỉnh sửa bất kể tùy chọn này."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
+#, fuzzy
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Nếu được chọn, chân pin này sẽ tồn tại trong tất cả các đơn vị."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:294
+#, fuzzy
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
+"Biểu tượng symbol này chỉ có một đơn vị. Kiểm soát này không có hiệu lực."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:315
+#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr ""
+msgstr "Định nghĩa chân pin thay thế phải có tên."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:335
 #, c-format
@@ -10509,38 +10572,51 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
+"Chân pin này không nằm trên lưới %d mils sẽ làm cho nó\n"
+"khó kết nối trong sơ đồ mạch.\n"
+"Bạn có muốn tiếp tục?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
+#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr ""
+msgstr "Chế độ chân Pin được đồng bộ hóa."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
+#, fuzzy
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Chế độ chân pin đồng bộ hóa. pin mới sẽ được thêm vào tất cả các đơn vị."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
+#, fuzzy
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Chế độ chân pin đồng bộ hóa. Các chân pin phù hợp trong các đơn vị khác sẽ "
+"được cập nhật."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
-msgstr ""
+msgstr "chân Pin và tên:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:50
+#, fuzzy
 msgid "Pin num&ber:"
-msgstr ""
+msgstr "Số PIN:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:52
+#, fuzzy
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "Số chân pin: 1 đến 4 chữ cái ASCII và / hoặc chữ số"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:59
+#, fuzzy
 msgid "&X position:"
-msgstr ""
+msgstr "& Vị trí X:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:68
+#, fuzzy
 msgid "&Y position:"
-msgstr ""
+msgstr "& Vị trí Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:75
 msgid "&Pin length:"
