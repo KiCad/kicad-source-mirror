@@ -42,21 +42,26 @@ public:
     {
         m_isHover = false;
         m_lastAddedItem = nullptr;
+        m_orderCounter = 0;
     }
 
     SELECTION( const SELECTION& aOther ) :
             KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_items = aOther.m_items;
+        m_itemsOrders = aOther.m_itemsOrders;
         m_isHover = aOther.m_isHover;
         m_lastAddedItem = aOther.m_lastAddedItem;
+        m_orderCounter = aOther.m_orderCounter;
     }
 
     SELECTION& operator= ( const SELECTION& aOther )
     {
         m_items = aOther.m_items;
+        m_itemsOrders = aOther.m_itemsOrders;
         m_isHover = aOther.m_isHover;
         m_lastAddedItem = aOther.m_lastAddedItem;
+        m_orderCounter = aOther.m_orderCounter;
         return *this;
     }
 
@@ -85,6 +90,8 @@ public:
     virtual void Clear() override
     {
         m_items.clear();
+        m_itemsOrders.clear();
+        m_orderCounter = 0;
     }
 
     virtual unsigned int GetSize() const override
@@ -156,6 +163,8 @@ public:
 
         return sorted_items;
     }
+
+    const std::vector<EDA_ITEM*> GetItemsSortedBySelectionOrder() const;
 
     /// Returns the center point of the selection area bounding box.
     virtual VECTOR2I GetCenter() const;
@@ -266,6 +275,8 @@ public:
 protected:
     std::optional<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
+    std::deque<int>       m_itemsOrders;
+    int                   m_orderCounter;
     EDA_ITEM*             m_lastAddedItem;
     bool                  m_isHover;
 

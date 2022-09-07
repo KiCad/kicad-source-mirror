@@ -38,7 +38,10 @@ void SELECTION::Add( EDA_ITEM* aItem )
 
     if( i == m_items.end() || *i > aItem )
     {
+        m_itemsOrders.insert( m_itemsOrders.begin() + std::distance( m_items.begin(), i ),
+                              m_orderCounter );
         m_items.insert( i, aItem );
+        m_orderCounter++;
         m_lastAddedItem = aItem;
     }
 }
@@ -50,6 +53,7 @@ void SELECTION::Remove( EDA_ITEM* aItem )
 
     if( !( i == m_items.end() || *i > aItem ) )
     {
+        m_itemsOrders.erase( m_itemsOrders.begin() + std::distance( m_items.begin(), i ) );
         m_items.erase( i );
 
         if( aItem == m_lastAddedItem )
@@ -192,4 +196,34 @@ bool SELECTION::OnlyContains( std::vector<KICAD_T> aList ) const
 
                 return ok;
             } ) );
+}
+
+
+const std::vector<EDA_ITEM*> SELECTION::GetItemsSortedBySelectionOrder() const
+{
+    using pairedIterators =
+            std::pair<decltype( m_items.begin() ), decltype( m_itemsOrders.begin() )>;
+
+    // Create a vector of all {selection item, selection order} iterator pairs
+    std::vector<pairedIterators> pairs;
+    auto                         item = m_items.begin();
+    auto                         order = m_itemsOrders.begin();
+
+    for( ; item != m_items.end(); ++item, ++order )
+        pairs.emplace_back( make_pair( item, order ) );
+
+    // Sort the pairs by the selection order
+    std::sort( pairs.begin(), pairs.end(),
+               []( pairedIterators const& a, pairedIterators const& b )
+               {
+                   return *a.second < *b.second;
+               } );
+
+    // Make a vector of just the sortedItems
+    std::vector<EDA_ITEM*> sortedItems;
+
+    for( pairedIterators sortedItem : pairs )
+        sortedItems.emplace_back( *sortedItem.first );
+
+    return sortedItems;
 }
