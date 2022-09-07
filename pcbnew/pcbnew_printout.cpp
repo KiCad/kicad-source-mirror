@@ -176,7 +176,6 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_VIA_THROUGH );
         setVisibility( LAYER_ZONES );
 
-        setVisibility( LAYER_NO_CONNECTS );
         setVisibility( LAYER_DRC_WARNING );
         setVisibility( LAYER_DRC_ERROR );
         setVisibility( LAYER_DRC_EXCLUSION );

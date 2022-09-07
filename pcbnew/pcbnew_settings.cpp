@@ -186,9 +186,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
             &m_Display.m_PadClearance, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_no_connects",
-            &m_Display.m_PadNoConnects, true ) );
-
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_ViewersDisplay.m_DisplayPadFill, true ) );
 
@@ -847,7 +844,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DAnchorEx",           LAYER_ANCHOR );
     migrateLegacyColor( "Color4DAuxItems",           LAYER_AUX_ITEMS );
     migrateLegacyColor( "Color4DGrid",               LAYER_GRID );
-    migrateLegacyColor( "Color4DNoNetPadMarker",     LAYER_NO_CONNECTS );
     migrateLegacyColor( "Color4DNonPlatedEx",        LAYER_NON_PLATEDHOLES );
     migrateLegacyColor( "Color4DPadThruHoleEx",      LAYER_PADS_TH );
     migrateLegacyColor( "Color4DPCBBackground",      LAYER_PCB_BACKGROUND );

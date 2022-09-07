@@ -299,7 +299,6 @@ public:
         bool                 m_PadClearance;
 
         int                  m_NetNames;
-        bool                 m_PadNoConnects;
 
         RATSNEST_MODE        m_RatsnestMode;
 

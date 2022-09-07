@@ -1874,7 +1874,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     renderSettings->LoadDisplayOptions( GetDisplayOptions() );
 
-    SetElementVisibility( LAYER_NO_CONNECTS, GetPcbNewSettings()->m_Display.m_PadNoConnects );
     SetElementVisibility( LAYER_RATSNEST, GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
     GetGalDisplayOptions().ReadWindowSettings( GetPcbNewSettings()->m_Window );

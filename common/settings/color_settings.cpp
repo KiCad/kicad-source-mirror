@@ -143,7 +143,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE );
     CLR( "board.grid",                     LAYER_GRID               );
     CLR( "board.grid_axes",                LAYER_GRID_AXES          );
-    CLR( "board.no_connect",               LAYER_NO_CONNECTS        );
     CLR( "board.pad_plated_hole",          LAYER_PAD_PLATEDHOLES    );
     CLR( "board.pad_through_hole",         LAYER_PADS_TH            );
     CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );

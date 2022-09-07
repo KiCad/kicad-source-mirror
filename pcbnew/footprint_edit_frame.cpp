@@ -152,10 +152,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // them, at least to be able to edit a bad layer
     GetBoard()->SetVisibleAlls();
 
-    // However the "no net" mark on pads is useless, because there are no nets in footprint
-    // editor: make it non visible.
-    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
-
     GetGalDisplayOptions().m_axesEnabled = true;
 
     // In Footprint Editor, set the default paper size to A4 for plot/print

@@ -177,7 +177,7 @@ enum NETNAMES_LAYER_ID: int
  *  GAL layers are "virtual" layers, i.e. not tied into design data.
  *  Some layers here are shared between applications.
  *
- *  NOTE: Be very careful where you add new layers here.  Layers below GAL_LAYER_ID_BITMASK_END
+ *  NOTE: Be very careful where you add new layers here.  Layers up to GAL_LAYER_ID_BITMASK_END
  *  must never be re-ordered and new layers must always be added after this value, because the
  *  layers before this value are mapped to bit locations in legacy board files.
  *
@@ -204,7 +204,7 @@ enum GAL_LAYER_ID: int
     LAYER_RATSNEST           = GAL_LAYER_ID_START + 11,
     LAYER_GRID               = GAL_LAYER_ID_START + 12,
     LAYER_GRID_AXES          = GAL_LAYER_ID_START + 13,
-    LAYER_NO_CONNECTS        = GAL_LAYER_ID_START + 14, ///< show a marker on pads with no nets
+//  LAYER_NO_CONNECTS deprecated                  + 14, ///< show a marker on pads with no nets
     LAYER_MOD_FR             = GAL_LAYER_ID_START + 15, ///< show footprints on front
     LAYER_MOD_BK             = GAL_LAYER_ID_START + 16, ///< show footprints on back
     LAYER_MOD_VALUES         = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
@@ -222,7 +222,7 @@ enum GAL_LAYER_ID: int
     LAYER_AUX_ITEMS          = GAL_LAYER_ID_START + 29, ///< Auxiliary items (guides, rule, etc)
     LAYER_DRAW_BITMAPS       = GAL_LAYER_ID_START + 30, ///< to handle and draw images bitmaps
 
-    /// This is the end of the layers used for visibility bit masks in Pcbnew
+    /// This is the end of the layers used for visibility bit masks in legacy board files
     GAL_LAYER_ID_BITMASK_END = GAL_LAYER_ID_START + 31,
 
     // Layers in this section have visibility controls but were not present in legacy board files.

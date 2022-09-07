@@ -1004,13 +1004,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
                 netname = UnescapeString( aPad->GetShortNetname() );
 
-            if( displayOpts->m_PadNoConnects )
-            {
-                if( aPad->IsNoConnectPad() )
-                    netname = wxT( "x" );
-                else if( aPad->IsFreePad() )
-                    netname = wxT( "*" );
-            }
+            if( aPad->IsNoConnectPad() )
+                netname = wxT( "x" );
+            else if( aPad->IsFreePad() )
+                netname = wxT( "*" );
         }
 
         if( netname.IsEmpty() && padNumber.IsEmpty() )

@@ -967,7 +967,6 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_RATSNEST,
         LAYER_GRID,
         LAYER_GRID_AXES,
-        LAYER_NO_CONNECTS,
         LAYER_MOD_FR,
         LAYER_MOD_BK,
         LAYER_MOD_VALUES,

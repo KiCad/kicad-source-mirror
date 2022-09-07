@@ -351,14 +351,12 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR(),
     RR(),
     RR( _HKI( "Ratsnest" ),         LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
-    RR( _HKI( "No-Connects" ),      LAYER_NO_CONNECTS,        _HKI( "Show a marker on pads which have no net connected" ) ),
     RR( _HKI( "DRC Warnings" ),     LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
     RR( _HKI( "DRC Errors" ),       LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
     RR( _HKI( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
     RR( _HKI( "Anchors" ),          LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
     RR( _HKI( "Shadow on Locked Items" ), LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow marker on locked items" ) ),
-    RR( _HKI( "Shadow on Conflicts" ), LAYER_CONFLICTS_SHADOW,
-                                       _HKI( "Show a shadow on overlapping courtyards while moving footprints" ) ),
+    RR( _HKI( "Shadow on Conflicts" ),    LAYER_CONFLICTS_SHADOW,   _HKI( "Show a shadow on overlapping courtyards while moving footprints" ) ),
     RR( _HKI( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
     RR( _HKI( "Grid" ),             LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
 };

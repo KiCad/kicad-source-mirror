@@ -130,7 +130,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     // So we do not show the default clearance, by setting it to 0
     // The footprint or pad specific clearance will be shown
     GetBoard()->GetDesignSettings().m_NetSettings->m_DefaultNetClass->SetClearance( 0 );
-    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;

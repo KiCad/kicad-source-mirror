@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,10 +46,6 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_OptDisplayPadNumber->SetValue(true);
 	sbAnnotations->Add( m_OptDisplayPadNumber, 0, wxALL, 6 );
 
-	m_OptDisplayPadNoConn = new wxCheckBox( sbAnnotations->GetStaticBox(), wxID_ANY, _("Show pad <no net> indicator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayPadNoConn->SetValue(true);
-	sbAnnotations->Add( m_OptDisplayPadNoConn, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
-
 
 	pcbOptionsSizer->Add( sbAnnotations, 0, wxEXPAND|wxBOTTOM, 5 );
 
@@ -77,7 +73,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_checkCrossProbeOnSelection->SetValue(true);
 	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight footprints corresponding to selected symbols") );
 
-	sbSizer3->Add( m_checkCrossProbeOnSelection, 0, wxALL, 5 );
+	sbSizer3->Add( m_checkCrossProbeOnSelection, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);

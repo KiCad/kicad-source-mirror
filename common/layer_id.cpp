@@ -169,7 +169,6 @@ wxString LayerName( int aLayer )
     case LAYER_PAD_HOLEWALLS:           return _( "Plated hole walls" );
     case LAYER_NON_PLATEDHOLES:         return _( "Non-plated holes" );
     case LAYER_RATSNEST:                return _( "Ratsnest" );
-    case LAYER_NO_CONNECTS:             return _( "No-connects" );
     case LAYER_DRC_WARNING:             return _( "DRC warnings" );
     case LAYER_DRC_ERROR:               return _( "DRC errors" );
     case LAYER_DRC_EXCLUSION:           return _( "DRC exclusions" );
