@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 20:10-0700\n"
+"POT-Creation-Date: 2022-09-07 14:36-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -26416,6 +26416,10 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid "Unable to locate padstack %s in file %s\n"
+#~ msgstr "Unable to locate padstack %s in file %s\n"
 
 #~ msgid ""
 #~ "CADSTAR fonts are different to the ones in KiCad. This will likely result "

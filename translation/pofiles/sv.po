@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 20:10-0700\n"
+"POT-Creation-Date: 2022-09-07 14:36-0700\n"
 "PO-Revision-Date: 2022-08-25 22:22+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
@@ -326,7 +326,7 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:685 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/files-io.cpp:844 eeschema/files-io.cpp:911
+#: eeschema/files-io.cpp:846 eeschema/files-io.cpp:913
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
 #: kicad/tools/kicad_manager_control.cpp:183
@@ -1021,7 +1021,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:980
-#: pcbnew/pad.cpp:996
+#: pcbnew/pad.cpp:1007
 msgid "Rotation"
 msgstr "Rotation"
 
@@ -1154,13 +1154,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:498
+#: eeschema/tools/sch_drawing_tools.cpp:499
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr "Välj Bild"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:499
+#: eeschema/tools/sch_drawing_tools.cpp:500
 #: pagelayout_editor/pl_editor_frame.cpp:854
 msgid "Image Files"
 msgstr "Bildfiler"
@@ -1579,7 +1579,7 @@ msgstr "Bekräftelse"
 #: common/dialog_about/AboutDialog_main.cpp:122
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:282
-#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1464
+#: common/widgets/widget_hotkey_list.cpp:468 eeschema/sch_symbol.cpp:1475
 #: eeschema/symbol_editor/symbol_editor.cpp:649
 #: eeschema/symbol_editor/symbol_editor.cpp:1281
 #: eeschema/symbol_viewer_frame.cpp:405 include/lib_table_grid.h:185
@@ -1932,12 +1932,12 @@ msgstr "Miljövariabler"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
 #: eeschema/fields_grid_table.cpp:212 eeschema/lib_pin.cpp:1043
-#: eeschema/sch_pin.cpp:205 eeschema/sch_symbol.cpp:1433
-#: eeschema/sch_symbol.cpp:1473 eeschema/symbol_editor/symbol_editor.cpp:1253
+#: eeschema/sch_pin.cpp:205 eeschema/sch_symbol.cpp:1444
+#: eeschema/sch_symbol.cpp:1484 eeschema/symbol_editor/symbol_editor.cpp:1253
 #: eeschema/symbol_viewer_frame.cpp:403
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
@@ -3361,7 +3361,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:943
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1706
+#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1717
 #: pcbnew/widgets/appearance_controls.cpp:700
 #: pcbnew/widgets/appearance_controls.cpp:742
 #: pcbnew/widgets/appearance_controls.cpp:2380
@@ -3527,7 +3527,7 @@ msgid "The default net class is required."
 msgstr "Den förvalda nätklassen krävs."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
-#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:948
+#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:959
 #: pcbnew/pcb_track.cpp:770 pcbnew/zone.cpp:591
 msgid "Net Class"
 msgstr "Nätklass"
@@ -3594,7 +3594,7 @@ msgstr "Linjestil"
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:52
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:63
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1130
+#: eeschema/tools/sch_editor_control.cpp:1124
 msgid "Default"
 msgstr "Förinställning"
 
@@ -3643,7 +3643,7 @@ msgstr "Tilldela till valda nät"
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:946
+#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:957
 #: pcbnew/pcb_track.cpp:768 pcbnew/zone.cpp:589
 msgid "Net"
 msgstr "Nät"
@@ -3798,7 +3798,7 @@ msgstr "Linje"
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:602
 #: common/eda_shape.cpp:1632
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1698
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1709
 msgid "Rectangle"
 msgstr "Rektangel"
 
@@ -3995,7 +3995,7 @@ msgid "Inches"
 msgstr "Tum"
 
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:164
-#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:771
+#: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/edit_tool.cpp:770
 #: pcbnew/tools/pcb_actions.cpp:683
 msgid "Constrain to H, V, 45"
 msgstr "Begränsa till H, V, 45"
@@ -4039,15 +4039,15 @@ msgid "Screen"
 msgstr "Skärm"
 
 #: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:970
-#: eeschema/sch_symbol.cpp:1461
+#: eeschema/sch_symbol.cpp:1472
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
-#: pcbnew/pad.cpp:933
+#: pcbnew/pad.cpp:944
 msgid "Footprint"
 msgstr "Fotavtryck"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
-#: pcbnew/pad.cpp:936
+#: pcbnew/pad.cpp:947
 msgid "Pad"
 msgstr "Lödyta"
 
@@ -4172,7 +4172,7 @@ msgstr "Gerber-layout"
 msgid "Draw Item"
 msgstr "Rita Komponent"
 
-#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1186
+#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1197
 msgid "Rect"
 msgstr "Rätt"
 
@@ -4187,8 +4187,8 @@ msgstr "Båge"
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:571 common/eda_shape.cpp:1634
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1184
-#: pcbnew/pad.cpp:1697
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1195
+#: pcbnew/pad.cpp:1708
 msgid "Circle"
 msgstr "Cirkel"
 
@@ -4207,7 +4207,7 @@ msgstr "Polygon"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1722
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1733
 #: pcbnew/pcb_target.cpp:159 pcbnew/pcb_target.cpp:207
 msgid "Shape"
 msgstr "Form"
@@ -4245,7 +4245,7 @@ msgstr "Punkter"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:983
+#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:994
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:127
 #: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1132 pcbnew/pcb_track.cpp:1149
 #: pcbnew/pcb_track.cpp:1168
@@ -4257,7 +4257,7 @@ msgstr "Bredd"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:984
+#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:995
 #: pcbnew/pcb_dimension.cpp:718 pcbnew/pcb_text.cpp:128
 msgid "Height"
 msgstr "Höjd"
@@ -4326,7 +4326,7 @@ msgstr "Normal"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:107
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:55
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
 #: eeschema/fields_grid_table.cpp:217 eeschema/sch_text.cpp:767
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:114
@@ -4347,7 +4347,7 @@ msgstr "Kursiv"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:137
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:56
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
 #: eeschema/fields_grid_table.cpp:218 eeschema/sch_text.cpp:767
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
@@ -4673,7 +4673,7 @@ msgstr "Kan inte kopiera filen '%s'."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/dialogs/panel_setup_rules.cpp:112
-#: pcbnew/tools/edit_tool.cpp:1977
+#: pcbnew/tools/edit_tool.cpp:1982
 msgid "Cut"
 msgstr "Klipp ut"
 
@@ -4701,7 +4701,7 @@ msgstr "Klistra in urklippsceller i matris vid aktuell cell"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:771 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1979
+#: pcbnew/plugins/kicad/pcb_parser.cpp:857 pcbnew/tools/edit_tool.cpp:1984
 msgid "Delete"
 msgstr "Radera"
 
@@ -5291,11 +5291,11 @@ msgstr "Ogiltig båge med radie %f och vinkel %f"
 msgid "Error loading project footprint library table."
 msgstr "Fel vid inläsning av bibliotekstabellen för projektets fotavtryck."
 
-#: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:267
+#: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:268
 msgid "Could not open archive file."
 msgstr "Kunde inte öppna arkivfilen."
 
-#: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:275
+#: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:276
 msgid "Invalid archive file format."
 msgstr "Ogiltigt arkivfilformat."
 
@@ -5304,8 +5304,8 @@ msgstr "Ogiltigt arkivfilformat."
 msgid "Extracting file '%s'."
 msgstr "Extraherar fil '%s'."
 
-#: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:187
-#: kicad/pcm/pcm_task_manager.cpp:232
+#: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:188
+#: kicad/pcm/pcm_task_manager.cpp:233
 msgid "Error extracting file!"
 msgstr "Fel vid extrahering av fil!"
 
@@ -5957,7 +5957,7 @@ msgid "Update schematic with changes made to PCB"
 msgstr "Uppdatera schema med ändringar gjorda på mönsterkort"
 
 #: common/tool/actions.cpp:608
-#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
+#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:68
 msgid "Configure Paths..."
 msgstr "Konfigurera Sökvägar..."
 
@@ -6275,7 +6275,7 @@ msgstr "<skapa nät>"
 msgid "Filter:"
 msgstr "Filter:"
 
-#: common/widgets/paged_dialog.cpp:72 common/widgets/paged_dialog.cpp:379
+#: common/widgets/paged_dialog.cpp:72 common/widgets/paged_dialog.cpp:380
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:290
@@ -6701,7 +6701,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' är inte ett giltigt fotavtryck."
 
 #: cvpcb/cvpcb_mainframe.cpp:749 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1465 eeschema/symbol_editor/symbol_editor.cpp:1282
+#: eeschema/sch_symbol.cpp:1476 eeschema/symbol_editor/symbol_editor.cpp:1282
 #: eeschema/symbol_viewer_frame.cpp:406 pcbnew/footprint.cpp:2404
 #: pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
@@ -6711,8 +6711,8 @@ msgstr "Nyckelord"
 msgid "Pin Count"
 msgstr "Stiftantal"
 
-#: cvpcb/cvpcb_mainframe.cpp:778 eeschema/sch_symbol.cpp:1448
-#: eeschema/sch_symbol.cpp:1452 eeschema/sch_symbol.cpp:1482
+#: cvpcb/cvpcb_mainframe.cpp:778 eeschema/sch_symbol.cpp:1459
+#: eeschema/sch_symbol.cpp:1463 eeschema/sch_symbol.cpp:1493
 #: eeschema/symbol_editor/symbol_editor.cpp:194
 #: pcbnew/tools/pcb_control.cpp:1236
 msgid "Library"
@@ -6834,10 +6834,10 @@ msgstr "Tillgängliga miljövariabler för relativa sökvägar:"
 #: eeschema/dialogs/dialog_rescue_each.cpp:136
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
-#: eeschema/fields_grid_table.cpp:213 eeschema/sch_symbol.cpp:1425
-#: eeschema/sch_symbol.cpp:1472
+#: eeschema/fields_grid_table.cpp:213 eeschema/sch_symbol.cpp:1436
+#: eeschema/sch_symbol.cpp:1483
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -7099,27 +7099,27 @@ msgstr "Radera alla associationer?"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d dubbla tidsstämplar hittades och ersattes."
 
-#: eeschema/annotate.cpp:286
+#: eeschema/annotate.cpp:288
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Uppdaterade %s (enhet %s) från %s till %s."
 
-#: eeschema/annotate.cpp:294
+#: eeschema/annotate.cpp:296
 #, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Uppdaterade %s från %s till %s."
 
-#: eeschema/annotate.cpp:304
+#: eeschema/annotate.cpp:306
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Annoterade %s (enhet %s) som %s."
 
-#: eeschema/annotate.cpp:311
+#: eeschema/annotate.cpp:313
 #, c-format
 msgid "Annotated %s as %s."
 msgstr "Annoterade %s som %s."
 
-#: eeschema/annotate.cpp:328
+#: eeschema/annotate.cpp:330
 msgid "Annotation complete."
 msgstr "Annotering slutförd."
 
@@ -7134,34 +7134,34 @@ msgstr ""
 "%s\n"
 "hittades inte. Skriptet är inte tillgängligt."
 
-#: eeschema/component_references_lister.cpp:608
+#: eeschema/component_references_lister.cpp:627
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Komponent inte annoterad: %s%s (enhet %d)\n"
 
-#: eeschema/component_references_lister.cpp:615
+#: eeschema/component_references_lister.cpp:634
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Komponent inte annoterad: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:633
+#: eeschema/component_references_lister.cpp:652
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr "Fel: symbol %s%s%s (enhet %d) överskrider definierade enheter (%d)\n"
 
-#: eeschema/component_references_lister.cpp:670
-#: eeschema/component_references_lister.cpp:698
+#: eeschema/component_references_lister.cpp:689
+#: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Duplicate items %s%s%s\n"
 msgstr "Dubbla objekt %s%s%s\n"
 
-#: eeschema/component_references_lister.cpp:677
-#: eeschema/component_references_lister.cpp:705
+#: eeschema/component_references_lister.cpp:696
+#: eeschema/component_references_lister.cpp:724
 #, c-format
 msgid "Duplicate items %s%s\n"
 msgstr "Dubbla objekt %s%s\n"
 
-#: eeschema/component_references_lister.cpp:717
+#: eeschema/component_references_lister.cpp:736
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Olika värden för %s%d%s (%s) och %s%d%s (%s)"
@@ -8565,7 +8565,7 @@ msgstr "Siffra"
 #: eeschema/dialogs/dialog_pin_properties.cpp:51
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:227
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
 msgid "Electrical Type"
 msgstr "Elektrisk typ"
 
@@ -8574,7 +8574,7 @@ msgstr "Elektrisk typ"
 #: eeschema/dialogs/dialog_pin_properties.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:228
 #: eeschema/dialogs/dialog_symbol_properties.cpp:156
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:268
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
 msgid "Graphic Style"
 msgstr "Grafisk stil"
 
@@ -8582,14 +8582,14 @@ msgstr "Grafisk stil"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:49
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:220 eeschema/lib_pin.cpp:1054
 #: eeschema/sch_pin.cpp:215
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
 #: pcbnew/footprint.cpp:2382 pcbnew/fp_text_grid_table.cpp:110
-#: pcbnew/pad.cpp:1732
+#: pcbnew/pad.cpp:1743
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -8607,7 +8607,7 @@ msgstr "Namn Textstorlek"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:53
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:221
 msgid "X Position"
 msgstr "X-position"
@@ -8616,7 +8616,7 @@ msgstr "X-position"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:54
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/fields_grid_table.cpp:222
 msgid "Y Position"
 msgstr "Y-position"
@@ -8870,34 +8870,34 @@ msgstr "Fält"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:214
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:46
-#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:39
+#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:35
 #: pcbnew/fp_text_grid_table.cpp:104
 msgid "Show"
 msgstr "Visa"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:215
 msgid "H Align"
 msgstr "H justering"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:216
 msgid "V Align"
 msgstr "V justering"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:466
 #: eeschema/lib_text.cpp:354 eeschema/sch_field.cpp:589
 #: eeschema/sch_text.cpp:778
@@ -9200,7 +9200,7 @@ msgstr "Ny etikett"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:289
-#: pcbnew/pad.cpp:951 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
+#: pcbnew/pad.cpp:962 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
 msgid "Status"
@@ -9585,7 +9585,7 @@ msgstr "Plottade till '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:700
 #: eeschema/dialogs/dialog_plot_schematic.cpp:875
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1051
-#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:940
+#: kicad/pcm/pcm_task_manager.cpp:448 pcbnew/dialogs/dialog_plot.cpp:940
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -9802,7 +9802,7 @@ msgstr "Åtgärder som vidtagits"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:968
-#: eeschema/sch_symbol.cpp:1423 eeschema/sch_symbol.cpp:1470
+#: eeschema/sch_symbol.cpp:1434 eeschema/sch_symbol.cpp:1481
 #: pcbnew/footprint.cpp:2378 pcbnew/fp_text.cpp:271
 msgid "Reference"
 msgstr "Referens"
@@ -10512,7 +10512,7 @@ msgstr "Spice-direktiv:"
 msgid "Load directives from schematic"
 msgstr "Ladda riktlinjer från kretsschemat"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1703
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1714
 msgid "Custom"
 msgstr "Skräddarsydd"
 
@@ -11056,7 +11056,7 @@ msgid "Base Name"
 msgstr "Basnamn"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
 msgid "Alternate Assignment"
 msgstr "Alternativ uppgift"
 
@@ -11175,11 +11175,11 @@ msgstr "Redigera symbol ..."
 msgid "Edit Library Symbol..."
 msgstr "Redigera bibliotekssymbol ..."
 
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:264
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:263
 msgid "Pin Number"
 msgstr "Pinkod"
 
-#: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
+#: eeschema/dialogs/dialog_symbol_properties_base.cpp:264
 msgid "Base Pin Name"
 msgstr "Basstiftets namn"
 
@@ -11196,7 +11196,7 @@ msgstr "Bibliotekslänk:"
 msgid "Spice Model..."
 msgstr "Spice Model ..."
 
-#: eeschema/dialogs/dialog_symbol_properties_base.h:102
+#: eeschema/dialogs/dialog_symbol_properties_base.h:104
 msgid "Symbol Properties"
 msgstr "Symbolegenskaper"
 
@@ -12394,7 +12394,7 @@ msgstr "Dubbla referensbeteckningar"
 msgid "Bus Entry needed"
 msgstr "Bussanslutning behövs"
 
-#: eeschema/fields_grid_table.cpp:136 eeschema/files-io.cpp:821
+#: eeschema/fields_grid_table.cpp:136 eeschema/files-io.cpp:823
 #: eeschema/tools/sch_editor_control.cpp:102
 msgid "Schematic Files"
 msgstr "Kretsschemafiler"
@@ -12411,7 +12411,7 @@ msgstr ""
 "Skapandet av ett projekt aktiveras funktioner såsom textvariabler, "
 "nätklasser och ERC-undantag"
 
-#: eeschema/files-io.cpp:129 eeschema/files-io.cpp:1186
+#: eeschema/files-io.cpp:129 eeschema/files-io.cpp:1188
 #, c-format
 msgid "Schematic '%s' is already open."
 msgstr "Schema '%s' är redan öppen."
@@ -12442,7 +12442,7 @@ msgstr ""
 "blad."
 
 #: eeschema/files-io.cpp:274 eeschema/files-io.cpp:282
-#: eeschema/files-io.cpp:1261 eeschema/sheet.cpp:162
+#: eeschema/files-io.cpp:1263 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Fel vid inläsning av schema '%s'."
@@ -12452,7 +12452,7 @@ msgstr "Fel vid inläsning av schema '%s'."
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Slut på minne vid inläsning av schema '%s'."
 
-#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:1264 eeschema/sheet.cpp:165
+#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:1266 eeschema/sheet.cpp:165
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "Det gick inte att ladda '%s'."
@@ -12528,15 +12528,15 @@ msgstr ""
 "Den här filen skapades av en äldre version av KiCad. Den kommer att "
 "konverteras till det nya formatet när den sparas."
 
-#: eeschema/files-io.cpp:529
+#: eeschema/files-io.cpp:531
 msgid "Schematic is read only."
 msgstr "Schemat är skrivskyddat."
 
-#: eeschema/files-io.cpp:554
+#: eeschema/files-io.cpp:556
 msgid "Insert Schematic"
 msgstr "Importera schema"
 
-#: eeschema/files-io.cpp:582
+#: eeschema/files-io.cpp:584
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
@@ -12546,21 +12546,21 @@ msgstr ""
 "\n"
 "Vill du spara det aktuella dokumentet innan du fortsätter?"
 
-#: eeschema/files-io.cpp:628 pcbnew/files.cpp:163
+#: eeschema/files-io.cpp:630 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:278
 msgid "All supported formats|"
 msgstr "Alla format som stöds"
 
-#: eeschema/files-io.cpp:630
+#: eeschema/files-io.cpp:632
 msgid "Import Schematic"
 msgstr "Importera schemat"
 
-#: eeschema/files-io.cpp:669
+#: eeschema/files-io.cpp:671
 #, c-format
 msgid "Unexpected file extension: '%s'."
 msgstr "Oväntat filnamnstillägg: '%s'."
 
-#: eeschema/files-io.cpp:718
+#: eeschema/files-io.cpp:720
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -12569,12 +12569,12 @@ msgstr ""
 "Kunde inte spara schemafil '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:723 pcbnew/files.cpp:1028
+#: eeschema/files-io.cpp:725 pcbnew/files.cpp:1028
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Det gick inte att skapa temporär fil '%s'."
 
-#: eeschema/files-io.cpp:740
+#: eeschema/files-io.cpp:742
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -12583,22 +12583,22 @@ msgstr ""
 "Fel vid sparning av schemafil '%s'.\n"
 "Det gick inte att byta namn på tillfällig fil '%s'."
 
-#: eeschema/files-io.cpp:746 pcbnew/files.cpp:1046
+#: eeschema/files-io.cpp:748 pcbnew/files.cpp:1046
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Det gick inte att byta namn på temporär fil '%s'."
 
-#: eeschema/files-io.cpp:769 pagelayout_editor/files.cpp:185
+#: eeschema/files-io.cpp:771 pagelayout_editor/files.cpp:185
 #: pcbnew/files.cpp:1079
 #, c-format
 msgid "File '%s' saved."
 msgstr "Filen '%s' sparades."
 
-#: eeschema/files-io.cpp:774
+#: eeschema/files-io.cpp:776
 msgid "File write operation failed."
 msgstr "Filskrivningen misslyckades."
 
-#: eeschema/files-io.cpp:840 eeschema/files-io.cpp:907
+#: eeschema/files-io.cpp:842 eeschema/files-io.cpp:909
 #: kicad/tools/kicad_manager_control.cpp:127
 #: kicad/tools/kicad_manager_control.cpp:224
 #, c-format
@@ -12611,16 +12611,16 @@ msgstr ""
 "\n"
 "Se till att du har skrivbehörighet och försök igen."
 
-#: eeschema/files-io.cpp:976
+#: eeschema/files-io.cpp:978
 msgid "Saving will overwrite existing files."
 msgstr ""
 "Om du sparar projektet i det nya filformatet skrivs befintliga filer över."
 
-#: eeschema/files-io.cpp:977
+#: eeschema/files-io.cpp:979
 msgid "Save Warning"
 msgstr "Sparningsvarning"
 
-#: eeschema/files-io.cpp:980
+#: eeschema/files-io.cpp:982
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -12628,23 +12628,23 @@ msgstr ""
 "Följande filer kommer skrivas över:\n"
 "\n"
 
-#: eeschema/files-io.cpp:981
+#: eeschema/files-io.cpp:983
 msgid "Overwrite Files"
 msgstr "Skriv över filerna"
 
-#: eeschema/files-io.cpp:982
+#: eeschema/files-io.cpp:984
 msgid "Abort Project Save"
 msgstr "Avbryt projekt Spara"
 
-#: eeschema/files-io.cpp:1196
+#: eeschema/files-io.cpp:1198
 msgid "Importing Schematic"
 msgstr "Importerar schema"
 
-#: eeschema/files-io.cpp:1294
+#: eeschema/files-io.cpp:1296
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Den aktuella schemat har modifierats. Spara ändringar?"
 
-#: eeschema/files-io.cpp:1380
+#: eeschema/files-io.cpp:1382
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12657,7 +12657,7 @@ msgstr ""
 "ändrade den/dem.\n"
 "Vill du återställa de senast sparade ändringarna du gjort?"
 
-#: eeschema/files-io.cpp:1391
+#: eeschema/files-io.cpp:1393
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
@@ -12666,23 +12666,23 @@ msgstr ""
 "Filen '%s' kunde inte öppnas.\n"
 "Manuell återhämtning av automatiskt sparade filer krävs."
 
-#: eeschema/files-io.cpp:1437
+#: eeschema/files-io.cpp:1439
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "Följande automatiskt sparad(e) fil(er) kunde inte återställas.\n"
 
-#: eeschema/files-io.cpp:1442
+#: eeschema/files-io.cpp:1444
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Manuell återhämtning krävs för att återställa ovanstående fil(er)."
 
-#: eeschema/files-io.cpp:1464
+#: eeschema/files-io.cpp:1466
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Följande automatiskt sparad(e) fil(er) kunde inte tas bort\n"
 
-#: eeschema/files-io.cpp:1469
+#: eeschema/files-io.cpp:1471
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Manuell borttagning krävs för ovanstående fil(er)."
 
-#: eeschema/files-io.cpp:1480
+#: eeschema/files-io.cpp:1482
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -12693,7 +12693,7 @@ msgstr ""
 "'%s'\n"
 "kunde inte tas bort."
 
-#: eeschema/files-io.cpp:1488
+#: eeschema/files-io.cpp:1490
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -12701,7 +12701,7 @@ msgstr ""
 "Denna fil måste tas bort manuellt, annars kommer autospar-\n"
 "funktionen visas varje gång kretsschemaredigeraren startas."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1444
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1455
 msgid "Alias of"
 msgstr "Alias för"
 
@@ -13507,7 +13507,7 @@ msgid "Footprint's owner (%d) not found."
 msgstr "Fotavtryckets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:74
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:74
 #, c-format
 msgid ""
 "The design is too large and cannot be imported into KiCad. \n"
@@ -13540,7 +13540,7 @@ msgstr ""
 "motsvarighet. Alla grupperade objekt har avgrupperats."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:144
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:160
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:161
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
@@ -13550,7 +13550,7 @@ msgstr ""
 "importen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:258
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:166
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
@@ -13562,7 +13562,7 @@ msgstr ""
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
 msgstr "CADSTAR-schemat kan vara korrupt: det finns inget rotark."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:390
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:386
 #, c-format
 msgid ""
 "Part definition '%s' references symbol '%s' (alternate '%s') which could not "
@@ -13573,7 +13573,7 @@ msgstr ""
 "kunde hittas i symbolbiblioteket. Delen har inte laddats in i KiCad-"
 "biblioteket."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:440
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:441
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
@@ -13582,7 +13582,7 @@ msgstr ""
 "Symbolen '%s' refererar till delen '%s' som inte kunde hittas i biblioteket. "
 "Symbolen laddades inte"
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:549
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:550
 #, c-format
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
@@ -13591,7 +13591,7 @@ msgstr ""
 "Symbol-ID '%s' refererar till biblioteksymbolen '%s' som inte hittades i "
 "biblioteket. Exporterade du alla objekt i designen?"
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:559
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:560
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
@@ -13600,7 +13600,7 @@ msgstr ""
 "Symbol-ID '%s' är en signalreferens eller global signal men den har för "
 "många stift. Det förväntade antalet stift är 1 men %d hittades."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:691
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:692
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
@@ -13609,7 +13609,7 @@ msgstr ""
 "Symbol-ID '%s' är av okänd typ. Det är varken en symbol eller en nät-/"
 "spänningssymbol. Symbolen laddades inte."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:707
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:708
 #, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
@@ -13620,7 +13620,7 @@ msgstr ""
 "inte i KiCad. När symbolen laddas om från biblioteket kommer den återgå till "
 "den ursprungliga 1:1 storleken."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1191
 #, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
@@ -13629,13 +13629,13 @@ msgstr ""
 "Dokumentationssymbol '%s' avser symboldefinition ID '%s' som inte finns i "
 "biblioteket. Symbolen laddades inte."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1297
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1298
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
 "Textvariabler kunde inte ställas in eftersom det inte finns något projekt "
 "bifogat."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1747
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1750
 #, c-format
 msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
@@ -13646,7 +13646,7 @@ msgstr ""
 "CADSTAR-designen men KiCad stöder endast rotationsvinklar multiplar på 90 "
 "grader. De anslutande ledarna behöver fixas manuellt."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1761
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1764
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
@@ -13655,7 +13655,7 @@ msgstr ""
 "Symbolen '%s' referensblad ID '%s' som inte finns i designen. Symbolen "
 "laddades inte."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1896
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1899
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
@@ -13664,7 +13664,7 @@ msgstr ""
 "Net %s refererar till okänt nätelement %s. Nätet var inte korrekt laddat och "
 "kan kräva manuell fixering."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2188
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2191
 #, c-format
 msgid ""
 "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
@@ -13675,7 +13675,7 @@ msgstr ""
 "annat ark i designen. KiCad kräver att alla arksymboler är associerade till "
 "ett ark, så blocket laddades inte."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2213
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2216
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
@@ -13685,7 +13685,7 @@ msgstr ""
 "ark men har ingen figur definierad."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3116
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3125
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kunde inte läsa fil '%s'."
@@ -13962,36 +13962,36 @@ msgstr "(Borttaget objekt)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarkiskt arkstift %s"
 
-#: eeschema/sch_symbol.cpp:1425
+#: eeschema/sch_symbol.cpp:1436
 msgid "Power symbol"
 msgstr "Kraftsymbol"
 
-#: eeschema/sch_symbol.cpp:1429
+#: eeschema/sch_symbol.cpp:1440
 msgid "flags"
 msgstr "flaggor"
 
-#: eeschema/sch_symbol.cpp:1437
+#: eeschema/sch_symbol.cpp:1448
 msgid "Missing parent"
 msgstr "Saknad förälder"
 
-#: eeschema/sch_symbol.cpp:1452
+#: eeschema/sch_symbol.cpp:1463
 msgid "Undefined!!!"
 msgstr "Odefinierad!!!"
 
-#: eeschema/sch_symbol.cpp:1459
+#: eeschema/sch_symbol.cpp:1470
 msgid "<Unknown>"
 msgstr "<Okänd>"
 
-#: eeschema/sch_symbol.cpp:1478
+#: eeschema/sch_symbol.cpp:1489
 msgid "No library defined!"
 msgstr "Inget bibliotek definierat!"
 
-#: eeschema/sch_symbol.cpp:1480
+#: eeschema/sch_symbol.cpp:1491
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbol hittades inte i %s!"
 
-#: eeschema/sch_symbol.cpp:1671
+#: eeschema/sch_symbol.cpp:1682
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
@@ -15235,7 +15235,7 @@ msgstr "Odefinierad!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1260
 #: eeschema/symbol_viewer_frame.cpp:404 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1779
+#: pcbnew/fp_text.cpp:504 pcbnew/pad.cpp:1790
 msgid "Parent"
 msgstr "Förälder"
 
@@ -15416,22 +15416,22 @@ msgstr ""
 "kretsschemaredigeraren öppnats i fristående läge.\n"
 "Du måste starta KiCad-projekthanteraren och skapa ett projekt."
 
-#: eeschema/tools/backannotate.cpp:167
+#: eeschema/tools/backannotate.cpp:164
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
 msgstr "Fotavtryck '%s' har ingen tilldelad symbol."
 
-#: eeschema/tools/backannotate.cpp:199
+#: eeschema/tools/backannotate.cpp:196
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
 msgstr "Fotavtryck '%s' och '%s' länkade till samma symbol."
 
-#: eeschema/tools/backannotate.cpp:264
+#: eeschema/tools/backannotate.cpp:261
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
 msgstr "Det går inte att hitta symbolen för fotavtryck '%s'."
 
-#: eeschema/tools/backannotate.cpp:293
+#: eeschema/tools/backannotate.cpp:290
 #, c-format
 msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
@@ -15440,47 +15440,47 @@ msgstr ""
 "Footprint '%s' finns inte på PCB. Motsvarande symboler i schemat måste "
 "raderas manuellt (om så önskas)."
 
-#: eeschema/tools/backannotate.cpp:306
+#: eeschema/tools/backannotate.cpp:303
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Återlänkning av fotavtryck kräver ett fullständigt annoterat schema."
 
-#: eeschema/tools/backannotate.cpp:309
+#: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
 msgstr "Återlänkning av fotavtryck avbröts av användaren."
 
-#: eeschema/tools/backannotate.cpp:332
+#: eeschema/tools/backannotate.cpp:329
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
 msgstr "Ändra '%s' referensbeteckning till '%s'."
 
-#: eeschema/tools/backannotate.cpp:349
+#: eeschema/tools/backannotate.cpp:346
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
 msgstr "Ändra %s fotavtryckstilldelning från '%s' till '%s'."
 
-#: eeschema/tools/backannotate.cpp:367
+#: eeschema/tools/backannotate.cpp:364
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
 msgstr "Ändra %s -värdet från '%s' till '%s'."
 
-#: eeschema/tools/backannotate.cpp:392
+#: eeschema/tools/backannotate.cpp:389
 #, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "Det går inte att hitta %s stift '%s'."
 
-#: eeschema/tools/backannotate.cpp:533
+#: eeschema/tools/backannotate.cpp:530
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "Byt %s stift %s nätetikett från '%s' till '%s'."
 
-#: eeschema/tools/backannotate.cpp:558
+#: eeschema/tools/backannotate.cpp:555
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
 "Nät %s kunde inte ändras till %s eftersom det drivs av ett "
 "strömförsörjningsstift."
 
-#: eeschema/tools/backannotate.cpp:567
+#: eeschema/tools/backannotate.cpp:564
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Lägg till etiketten '%s' till %s pin %s net."
@@ -16378,7 +16378,7 @@ msgstr "Flytta"
 msgid "Moves the selected item(s)"
 msgstr "Flyttar markerade objekt"
 
-#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1091
+#: eeschema/tools/ee_actions.cpp:761 pcbnew/tools/edit_tool.cpp:1090
 msgid "Drag"
 msgstr "Dra"
 
@@ -16536,37 +16536,37 @@ msgstr "& Expandera val E"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Tryck på <ESC> för att avbryta symbol."
 
-#: eeschema/tools/sch_drawing_tools.cpp:465
+#: eeschema/tools/sch_drawing_tools.cpp:466
 msgid "Press <ESC> to cancel image creation."
 msgstr "Tryck på <ESC> för att avbryta bild."
 
-#: eeschema/tools/sch_drawing_tools.cpp:526
+#: eeschema/tools/sch_drawing_tools.cpp:527
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "Det gick inte att ladda bilden från '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:656
-#: eeschema/tools/sch_drawing_tools.cpp:1173
+#: eeschema/tools/sch_drawing_tools.cpp:657
+#: eeschema/tools/sch_drawing_tools.cpp:1174
 msgid "No new hierarchical labels found."
 msgstr "Inga nya hierarkiska etiketter hittades."
 
-#: eeschema/tools/sch_drawing_tools.cpp:740
+#: eeschema/tools/sch_drawing_tools.cpp:741
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 "Korsningspunkten innehåller inga anslutningsbara ledningar och/eller stift."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1105
+#: eeschema/tools/sch_drawing_tools.cpp:1106
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr "Tryck på <ESC> för att avbryta föremål."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1161
+#: eeschema/tools/sch_drawing_tools.cpp:1162
 msgid "Click over a sheet."
 msgstr "Klicka över ett ark."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1340
+#: eeschema/tools/sch_drawing_tools.cpp:1341
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Tryck på <ESC> för att avbryta blad."
 
@@ -16598,56 +16598,56 @@ msgstr "Redigera %s fält"
 msgid "Edit '%s' Field"
 msgstr "Redigera '%s' fält"
 
-#: eeschema/tools/sch_edit_tool.cpp:1747
+#: eeschema/tools/sch_edit_tool.cpp:1751
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Vill du ta bort de icke refererade stiften från det här arket?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1807
+#: eeschema/tools/sch_edit_tool.cpp:1811
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Ange sidnummer för arkväg %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1810
+#: eeschema/tools/sch_edit_tool.cpp:1814
 msgid "Edit Sheet Page Number"
 msgstr "Ändra bladets sidnummer"
 
-#: eeschema/tools/sch_editor_control.cpp:530
+#: eeschema/tools/sch_editor_control.cpp:524
 msgid "Reached end of schematic."
 msgstr "Uppnådde slutet på schemat."
 
-#: eeschema/tools/sch_editor_control.cpp:531
+#: eeschema/tools/sch_editor_control.cpp:525
 msgid "Reached end of sheet."
 msgstr "Nått slutet på arket."
 
-#: eeschema/tools/sch_editor_control.cpp:535
+#: eeschema/tools/sch_editor_control.cpp:529
 msgid "Find again to wrap around to the start."
 msgstr "Sök igen för att gå tillbaka till början."
 
-#: eeschema/tools/sch_editor_control.cpp:996
+#: eeschema/tools/sch_editor_control.cpp:990
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Fel: dubbletter av underarknamn hittades i det aktuella arket."
 
-#: eeschema/tools/sch_editor_control.cpp:1088
+#: eeschema/tools/sch_editor_control.cpp:1082
 msgid "Net must be labeled to assign a netclass."
 msgstr "Nätet måste märkas för att tilldela en nätklass."
 
-#: eeschema/tools/sch_editor_control.cpp:1094
+#: eeschema/tools/sch_editor_control.cpp:1088
 msgid "Bus has no members to assign netclass to."
 msgstr "Buss har inga medlemmar att tilldela nätklass."
 
-#: eeschema/tools/sch_editor_control.cpp:1127
+#: eeschema/tools/sch_editor_control.cpp:1121
 msgid "Netclasses"
 msgstr "Nätklasser"
 
-#: eeschema/tools/sch_editor_control.cpp:1140
+#: eeschema/tools/sch_editor_control.cpp:1134
 msgid "Assign Netclass"
 msgstr "Tilldela Netclass"
 
-#: eeschema/tools/sch_editor_control.cpp:1141
+#: eeschema/tools/sch_editor_control.cpp:1135
 msgid "Select netclass:"
 msgstr "Välj nätklass:"
 
-#: eeschema/tools/sch_editor_control.cpp:1741
+#: eeschema/tools/sch_editor_control.cpp:1735
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -16658,21 +16658,21 @@ msgstr ""
 "släpptes eftersom destinationen redan har bladet eller ett av dess underblad "
 "som förälder."
 
-#: eeschema/tools/sch_editor_control.cpp:2268
+#: eeschema/tools/sch_editor_control.cpp:2262
 #: pcbnew/tools/board_editor_control.cpp:630
-#: pcbnew/tools/footprint_editor_control.cpp:574
+#: pcbnew/tools/footprint_editor_control.cpp:577
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d dubblett-ID ersatt.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2275
+#: eeschema/tools/sch_editor_control.cpp:2269
 #: pcbnew/tools/board_editor_control.cpp:645
-#: pcbnew/tools/footprint_editor_control.cpp:589
+#: pcbnew/tools/footprint_editor_control.cpp:592
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentiella problem har åtgärdats."
 
-#: eeschema/tools/sch_editor_control.cpp:2282
+#: eeschema/tools/sch_editor_control.cpp:2276
 #: pcbnew/drc/drc_rule_parser.cpp:164
 msgid "No errors found."
 msgstr "Inga fel hittades."
@@ -16917,7 +16917,7 @@ msgstr "Välj lager: %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
 #: pcbnew/footprint.cpp:2373 pcbnew/footprint.cpp:2376 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:955
+#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:966
 #: pcbnew/pcb_dimension.cpp:353 pcbnew/pcb_dimension.cpp:1087
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:120
 #: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1173
@@ -17317,7 +17317,7 @@ msgid "Polarity"
 msgstr "Polaritet"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:296
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1666
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1665
 #: pcbnew/tools/pcb_actions.cpp:310
 msgid "Mirror"
 msgstr "Spegla"
@@ -18460,11 +18460,11 @@ msgstr ""
 msgid "Local file"
 msgstr "Lokal fil"
 
-#: kicad/pcm/pcm_task_manager.cpp:60
+#: kicad/pcm/pcm_task_manager.cpp:61
 msgid "Unable to create download directory!"
 msgstr "Kunde inte skapa nedladdningslatalog!"
 
-#: kicad/pcm/pcm_task_manager.cpp:87
+#: kicad/pcm/pcm_task_manager.cpp:88
 #, c-format
 msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
@@ -18475,22 +18475,22 @@ msgstr ""
 "kan tyda på ett problem med paketet. Rapportera problemet till repositoryts "
 "underhållare om det kvarstår."
 
-#: kicad/pcm/pcm_task_manager.cpp:97
+#: kicad/pcm/pcm_task_manager.cpp:98
 #, c-format
 msgid "Extracting package '%s'."
 msgstr "Extraherar paket '%s'."
 
-#: kicad/pcm/pcm_task_manager.cpp:112
+#: kicad/pcm/pcm_task_manager.cpp:113
 #, c-format
 msgid "Removing downloaded archive '%s'."
 msgstr "Tar bort det nedladdade arkivet '%s'."
 
-#: kicad/pcm/pcm_task_manager.cpp:150
+#: kicad/pcm/pcm_task_manager.cpp:151
 #, c-format
 msgid "Downloading package url: '%s'"
 msgstr "Laddar ned paket-url: '%s'"
 
-#: kicad/pcm/pcm_task_manager.cpp:163
+#: kicad/pcm/pcm_task_manager.cpp:164
 #, c-format
 msgid ""
 "Failed to download url %s\n"
@@ -18499,15 +18499,15 @@ msgstr ""
 "Det gick inte att ladda url %s\n"
 "%s"
 
-#: kicad/pcm/pcm_task_manager.cpp:250
+#: kicad/pcm/pcm_task_manager.cpp:251
 msgid "Aborting package installation."
 msgstr "Avbryter paketinstallation."
 
-#: kicad/pcm/pcm_task_manager.cpp:254
+#: kicad/pcm/pcm_task_manager.cpp:255
 msgid "Extracted package\n"
 msgstr "Extraherat paket\n"
 
-#: kicad/pcm/pcm_task_manager.cpp:298
+#: kicad/pcm/pcm_task_manager.cpp:299
 #, c-format
 msgid ""
 "Unable to parse package metadata:\n"
@@ -18518,15 +18518,15 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm_task_manager.cpp:307
+#: kicad/pcm/pcm_task_manager.cpp:308
 msgid "Archive does not contain a valid metadata.json file"
 msgstr "Arkivet innehåller ingen giltig metadata.json-fil"
 
-#: kicad/pcm/pcm_task_manager.cpp:315
+#: kicad/pcm/pcm_task_manager.cpp:316
 msgid "Archive metadata must have a single version defined"
 msgstr "Arkivets metadata måste ha en enda version definierad"
 
-#: kicad/pcm/pcm_task_manager.cpp:327
+#: kicad/pcm/pcm_task_manager.cpp:328
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
@@ -18535,17 +18535,17 @@ msgstr ""
 "Ett paket med identifierare %s är redan installerat. Du måste avinstallera "
 "detta först."
 
-#: kicad/pcm/pcm_task_manager.cpp:360
+#: kicad/pcm/pcm_task_manager.cpp:361
 #, c-format
 msgid "Removing directory %s"
 msgstr "Tar bort katalog %s"
 
-#: kicad/pcm/pcm_task_manager.cpp:365
+#: kicad/pcm/pcm_task_manager.cpp:366
 #, c-format
 msgid "Failed to remove directory %s"
 msgstr "Kunde inte flytta katalog %s"
 
-#: kicad/pcm/pcm_task_manager.cpp:381
+#: kicad/pcm/pcm_task_manager.cpp:382
 #, c-format
 msgid "Package %s uninstalled"
 msgstr "Paket %s avinstallerat"
@@ -20934,7 +20934,7 @@ msgstr "Position Y"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:964 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:951
+#: pcbnew/footprint.cpp:964 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:962
 #: pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
@@ -22071,11 +22071,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1200
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1211
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1203
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1214
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -23849,8 +23849,8 @@ msgstr "Hålmonteringshål"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:705
-#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1201
-#: pcbnew/pad.cpp:1692
+#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1212
+#: pcbnew/pad.cpp:1703
 msgid "SMD"
 msgstr "SMD"
 
@@ -25475,7 +25475,7 @@ msgstr "Lägg till primitiv"
 msgid "Pad type:"
 msgstr "Lödytetyp:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1691
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1702
 msgid "Through-hole"
 msgstr "Hålmonteringshål"
 
@@ -25483,8 +25483,8 @@ msgstr "Hålmonteringshål"
 msgid "Edge Connector"
 msgstr "Kortkantskontakt"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1223
-#: pcbnew/pad.cpp:1246
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1234
+#: pcbnew/pad.cpp:1257
 msgid "NPTH, Mechanical"
 msgstr "NPTH, Mekanisk"
 
@@ -25511,8 +25511,8 @@ msgid "Circular"
 msgstr "Cirkulär"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1185
-#: pcbnew/pad.cpp:1699
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1196
+#: pcbnew/pad.cpp:1710
 msgid "Oval"
 msgstr "Oval"
 
@@ -25524,11 +25524,11 @@ msgstr "Rektangulär"
 msgid "Trapezoidal"
 msgstr "Trapesformad"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1701
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1712
 msgid "Rounded rectangle"
 msgstr "Rundad rektangel"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1702
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1713
 msgid "Chamfered rectangle"
 msgstr "Fasad rektangel"
 
@@ -25726,23 +25726,23 @@ msgstr ""
 "på en mönsterkortskant\n"
 "Dessa egenskaper anges i Gerber X2-filer."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1707
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1718
 msgid "BGA pad"
 msgstr "BGA-lödyta"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1709
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1720
 msgid "Fiducial, local to footprint"
 msgstr "Lokal referenspunkt för fotavtryck"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1708
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1719
 msgid "Fiducial, global to board"
 msgstr "Global referenspunkt för mönsterkort"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1710
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1721
 msgid "Test point pad"
 msgstr "Testpunkt"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1711
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1722
 msgid "Heatsink pad"
 msgstr "Kylfläns"
 
@@ -27411,7 +27411,7 @@ msgstr "Öppning av fil misslyckades"
 msgid "Unknown error"
 msgstr "Okänt fel"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
+#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:34
 msgid "3D Model(s)"
 msgstr "3D-modell (er)"
 
@@ -28731,7 +28731,7 @@ msgstr "7"
 msgid "Size"
 msgstr "Storlek"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:1008
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:1019
 #: pcbnew/tools/board_inspection_tool.cpp:564
 msgid "Hole"
 msgstr "Hål"
@@ -29312,17 +29312,17 @@ msgstr "Utvärderade DP: er:"
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr "(%s maximal frikopplad längd: %s; faktisk: %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:505
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:517
 #, c-format
 msgid "minimum gap: %s; "
 msgstr "minsta gap: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:509
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:521
 #, c-format
 msgid "maximum gap: %s; "
 msgstr "maximalt gap: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:512
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:524
 #, c-format
 msgid "actual: %s)"
 msgstr "faktiska: %s)"
@@ -29839,23 +29839,23 @@ msgstr "Väntade \"Other\"-typ men var \"%s\""
 msgid "(pad \"%s\")"
 msgstr "(lödyta '%s')"
 
-#: pcbnew/footprint.cpp:2385 pcbnew/pad.cpp:1776 pcbnew/zone.cpp:1429
+#: pcbnew/footprint.cpp:2385 pcbnew/pad.cpp:1787 pcbnew/zone.cpp:1429
 msgid "Clearance Override"
 msgstr "Åsidosatt isolationsavstånd"
 
-#: pcbnew/footprint.cpp:2388 pcbnew/pad.cpp:1753
+#: pcbnew/footprint.cpp:2388 pcbnew/pad.cpp:1764
 msgid "Solderpaste Margin Override"
 msgstr "Lokal marginal för lodpasta"
 
-#: pcbnew/footprint.cpp:2391 pcbnew/pad.cpp:1756
+#: pcbnew/footprint.cpp:2391 pcbnew/pad.cpp:1767
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal proportion för lodpastemarginal"
 
-#: pcbnew/footprint.cpp:2394 pcbnew/pad.cpp:1758 pcbnew/zone.cpp:1440
+#: pcbnew/footprint.cpp:2394 pcbnew/pad.cpp:1769 pcbnew/zone.cpp:1440
 msgid "Thermal Relief Width"
 msgstr "Bredd på termisk avlastning"
 
-#: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1761 pcbnew/zone.cpp:1437
+#: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1772 pcbnew/zone.cpp:1437
 msgid "Thermal Relief Gap"
 msgstr "Gap i termisk avlastning"
 
@@ -30007,7 +30007,7 @@ msgid "Library %s already exists."
 msgstr "Biblioteket %s finns redan."
 
 #: pcbnew/footprint_libraries_utils.cpp:633
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:961
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:965
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2522
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2598
 #, c-format
@@ -30328,7 +30328,7 @@ msgstr ""
 "Aktuellt mönsterkort kommer gå förlorat och åtgärden kan inte ångras. Vill "
 "du fortsätta?"
 
-#: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:189
+#: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:191
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "Det aktuella fotavtrycket har modifierats. Spara ändringar?"
 
@@ -30956,164 +30956,164 @@ msgstr ""
 "fil: '%s'\n"
 "rad: %d"
 
-#: pcbnew/pad.cpp:738 pcbnew/pad.cpp:879 pcbnew/pad.cpp:899 pcbnew/pad.cpp:918
+#: pcbnew/pad.cpp:749 pcbnew/pad.cpp:890 pcbnew/pad.cpp:910 pcbnew/pad.cpp:929
 msgid "pad"
 msgstr "lödyta"
 
-#: pcbnew/pad.cpp:872 pcbnew/pad.cpp:893 pcbnew/pad.cpp:912
+#: pcbnew/pad.cpp:883 pcbnew/pad.cpp:904 pcbnew/pad.cpp:923
 msgid "parent footprint"
 msgstr "förälders fotavtryck"
 
-#: pcbnew/pad.cpp:939 pcbnew/pad.cpp:1728
+#: pcbnew/pad.cpp:950 pcbnew/pad.cpp:1739
 msgid "Pin Name"
 msgstr "Pin-namn"
 
-#: pcbnew/pad.cpp:942 pcbnew/pad.cpp:1730
+#: pcbnew/pad.cpp:953 pcbnew/pad.cpp:1741
 msgid "Pin Type"
 msgstr "Stifttyp"
 
-#: pcbnew/pad.cpp:966
+#: pcbnew/pad.cpp:977
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:967
+#: pcbnew/pad.cpp:978
 msgid "Fiducial global"
 msgstr "Global referenspunkt"
 
-#: pcbnew/pad.cpp:968
+#: pcbnew/pad.cpp:979
 msgid "Fiducial local"
 msgstr "Lokal referenspunkt"
 
-#: pcbnew/pad.cpp:969
+#: pcbnew/pad.cpp:980
 msgid "Test point"
 msgstr "Testpunkt"
 
-#: pcbnew/pad.cpp:970
+#: pcbnew/pad.cpp:981
 msgid "Heat sink"
 msgstr "Kylfläns"
 
-#: pcbnew/pad.cpp:971
+#: pcbnew/pad.cpp:982
 msgid "Castellated"
 msgstr "Krenelerad"
 
-#: pcbnew/pad.cpp:979 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
+#: pcbnew/pad.cpp:990 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
 msgid "Diameter"
 msgstr "Diameter"
 
-#: pcbnew/pad.cpp:1001
+#: pcbnew/pad.cpp:1012
 msgid "Length in Package"
 msgstr "Längd i paketet"
 
-#: pcbnew/pad.cpp:1014
+#: pcbnew/pad.cpp:1025
 msgid "Hole X / Y"
 msgstr "Hål X / Y"
 
-#: pcbnew/pad.cpp:1026 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
+#: pcbnew/pad.cpp:1037 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
 #: pcbnew/router/router_tool.cpp:2141 pcbnew/zone.cpp:640
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Avstånd: %s"
 
-#: pcbnew/pad.cpp:1028 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
+#: pcbnew/pad.cpp:1039 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
 #: pcbnew/pcb_track.cpp:759 pcbnew/router/router_tool.cpp:2129
 #: pcbnew/router/router_tool.cpp:2143 pcbnew/zone.cpp:642
 #, c-format
 msgid "(from %s)"
 msgstr "(från %s)"
 
-#: pcbnew/pad.cpp:1187
+#: pcbnew/pad.cpp:1198
 msgid "Trap"
 msgstr "Fälla"
 
-#: pcbnew/pad.cpp:1188
+#: pcbnew/pad.cpp:1199
 msgid "Roundrect"
 msgstr "Rundad rektangel"
 
-#: pcbnew/pad.cpp:1189
+#: pcbnew/pad.cpp:1200
 msgid "Chamferedrect"
 msgstr "Fasad rektangel"
 
-#: pcbnew/pad.cpp:1190
+#: pcbnew/pad.cpp:1201
 msgid "CustomShape"
 msgstr "Anpassad form"
 
-#: pcbnew/pad.cpp:1202
+#: pcbnew/pad.cpp:1213
 msgid "Conn"
 msgstr "Kontakt"
 
-#: pcbnew/pad.cpp:1215
+#: pcbnew/pad.cpp:1226
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Lödyta %s av %s på %s"
 
-#: pcbnew/pad.cpp:1222 pcbnew/pad.cpp:1228 pcbnew/pad.cpp:1245
+#: pcbnew/pad.cpp:1233 pcbnew/pad.cpp:1239 pcbnew/pad.cpp:1256
 #, c-format
 msgid "Through hole pad %s of %s"
 msgstr "Hålmonterings-lödyta %s för %s"
 
-#: pcbnew/pad.cpp:1237
+#: pcbnew/pad.cpp:1248
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Lödyta %s %s av %s på %s"
 
-#: pcbnew/pad.cpp:1251
+#: pcbnew/pad.cpp:1262
 #, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "Hålmonterings-lödyta %s %s för %s"
 
-#: pcbnew/pad.cpp:1693
+#: pcbnew/pad.cpp:1704
 msgid "Edge connector"
 msgstr "Kantkontakt"
 
-#: pcbnew/pad.cpp:1694
+#: pcbnew/pad.cpp:1705
 msgid "NPTH, mechanical"
 msgstr "NPTH, mekanisk"
 
-#: pcbnew/pad.cpp:1700
+#: pcbnew/pad.cpp:1711
 msgid "Trapezoid"
 msgstr "Trapes"
 
-#: pcbnew/pad.cpp:1712
+#: pcbnew/pad.cpp:1723
 msgid "Castellated pad"
 msgstr "Krenelerad lödyta"
 
-#: pcbnew/pad.cpp:1718
+#: pcbnew/pad.cpp:1729
 msgid "Pad Type"
 msgstr "Lödytetyp"
 
-#: pcbnew/pad.cpp:1726
+#: pcbnew/pad.cpp:1737
 msgid "Pad Number"
 msgstr "Lödytenummer"
 
-#: pcbnew/pad.cpp:1735
+#: pcbnew/pad.cpp:1746
 msgid "Size X"
 msgstr "Storlek X"
 
-#: pcbnew/pad.cpp:1738
+#: pcbnew/pad.cpp:1749
 msgid "Size Y"
 msgstr "Storlek Y"
 
-#: pcbnew/pad.cpp:1741
+#: pcbnew/pad.cpp:1752
 msgid "Hole Size X"
 msgstr "Hålstorlek X"
 
-#: pcbnew/pad.cpp:1744
+#: pcbnew/pad.cpp:1755
 msgid "Hole Size Y"
 msgstr "Hålstorlek Y"
 
-#: pcbnew/pad.cpp:1747 pcbnew/pcb_track.cpp:705
+#: pcbnew/pad.cpp:1758 pcbnew/pcb_track.cpp:705
 msgid "Pad To Die Length"
 msgstr "Längd lödyta till chip"
 
-#: pcbnew/pad.cpp:1750
+#: pcbnew/pad.cpp:1761
 msgid "Soldermask Margin Override"
 msgstr "Lokalt värde för lödmaskens frigång"
 
-#: pcbnew/pad.cpp:1764
+#: pcbnew/pad.cpp:1775
 msgid "Fabrication Property"
 msgstr "Tillverkningsfastighet"
 
-#: pcbnew/pad.cpp:1767
+#: pcbnew/pad.cpp:1778
 msgid "Round Radius Ratio"
 msgstr "Runt radieförhållande"
 
@@ -31720,7 +31720,7 @@ msgstr ""
 "Fyllning hittad på ett Altium-lager (%d) som inte har någon motsvarighet i "
 "KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:92
 msgid ""
 "The selected file indicates that nets might be out of synchronisation with "
 "the schematic. It is recommended that you carry out an 'Align Nets' "
@@ -31732,7 +31732,7 @@ msgstr ""
 "återimporterar för att undvika inkonsekvenser mellan kretskortet och "
 "schemat. "
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:132
 #, c-format
 msgid ""
 "Unable to determine zone fill priorities for layer '%s'. A best attempt has "
@@ -31743,7 +31743,7 @@ msgstr ""
 "har gjorts men det är möjligt att detta orsakat DRC-fel, och att manuell "
 "ändring av zonernas prioritet behövs."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:146
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
@@ -31751,7 +31751,7 @@ msgstr ""
 "CADSTAR-designen innehåller Trunk routing-element, som inte har någon KiCad-"
 "motsvarighet. Dessa element laddades inte."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:153
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
@@ -31760,7 +31760,7 @@ msgstr ""
 "CADSTAR-designen innehåller varianter som inte har någon KiCad-motsvarighet. "
 "Endast varianten '%s' laddades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:189
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:190
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
@@ -31769,7 +31769,7 @@ msgstr ""
 "CADSTAR-skiktet '%s' har ingen KiCad-motsvarighet. Alla element i detta "
 "lager har i stället mappats till KiCad-lagret '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:202
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:203
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
@@ -31778,17 +31778,17 @@ msgstr ""
 "CADSTAR-lagret '%s' har antagits vara ett tekniskt lager. Alla element i "
 "detta lager har avbildats till KiCad-lagret '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:511
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:512
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr "Oväntat lager '%s' i lageruppbyggnad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:668
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:669
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
 msgstr "Designregel %s hittades inte. Detta ignorerades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:697
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:698
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
@@ -31798,7 +31798,7 @@ msgstr ""
 "designregler importerades. Vi rekommenderar att du granskar de designregler "
 "som har tillämpats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:894
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:898
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -31809,7 +31809,7 @@ msgstr ""
 "motsvarighet. Området är varken en spärrzon för vior eller ledare. Området "
 "importerades inte."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:980
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:984
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -31820,7 +31820,7 @@ msgstr ""
 "i KiCad. Vänligen kontrollera de importerade lödytorna då de kan behöva "
 "manuell rättning."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1201
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1205
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -31829,22 +31829,22 @@ msgstr ""
 "CADSTAR-lödytedefinitionen '%s' har hålformen utanför lödytans form. Hålet "
 "har flyttats till mitten av lödytan."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1234
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1238
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR:s lödyte-definition '%s' har importeringsfel: %s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1252
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
 #, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
 msgstr "Kan inte hitta lödyteindex '%d' i fotavtryck '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1285
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1289
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr "Kunde inte hitta grupp-ID %s bland gruppdefinitionerna."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1295
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -31852,7 +31852,7 @@ msgstr ""
 "Kunde inte hitta undergrupp %s i grupp-mappen (överordnad grupp-ID=%s, namn="
 "%s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1368
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1372
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -31861,7 +31861,7 @@ msgstr ""
 "Måttsättning med ID %s är en vinklat mått som inte har någon KiCad-"
 "ekvivalent. En horisontell/vertikal dimension laddades istället."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1379
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1383
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -31872,12 +31872,12 @@ msgstr ""
 "ännu inte i KiCad. Dimensionsobjektet importerades istället med ett internt "
 "format."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1435
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1439
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Oväntad dimensionstyp (ID %s). Denna importerades inte."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1570
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
@@ -31886,7 +31886,7 @@ msgstr ""
 "Dimension %s är en vinkeldimension som inte har någon motsvarighet i KiCad. "
 "Objektet importerades inte."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1610
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1614
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -31897,7 +31897,7 @@ msgstr ""
 "Placeringsområden stöds inte i KiCad. Endast de element som stöds för "
 "området importerades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1619
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1623
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -31906,19 +31906,19 @@ msgstr ""
 "CADSTAR-området '%s' har ingen KiCad-motsvarighet. Ren placeringsområden "
 "stöds inte."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1646
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1650
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
 "Det gick inte att hitta komponenten '%s' i biblioteket (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1763
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1770
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Det gick inte att hitta dokumentationssymbol i biblioteket (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1832
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1839
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -31928,7 +31928,7 @@ msgstr ""
 "aktiverad. Denna inställning har ingen KiCad-ekvivalent, så den har "
 "ignorerats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1840
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1847
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -31937,7 +31937,7 @@ msgstr ""
 "CADSTAR-mallen '%s' har inställningen 'Box Isolated Pins' aktiverad. Denna "
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1848
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1855
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -31946,7 +31946,7 @@ msgstr ""
 "CADSTAR-mallen '%s' har inställningen 'Automatic Repour' aktiverad. Denna "
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1859
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1866
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -31957,7 +31957,7 @@ msgstr ""
 "inställningen 'Sliver Width'. Det finns ingen KiCad-motsvarighet för detta, "
 "så denna inställning ignorerades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1869
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1876
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -31970,7 +31970,7 @@ msgstr ""
 "inställningar. Inställningen för separerad koppar har tillämpats som det "
 "minsta öområdet i KiCad Zone."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1920
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1927
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -31981,7 +31981,7 @@ msgstr ""
 "och vior. KiCad stöder bara en enda inställning för båda. Inställningen för "
 "lödytor har tillämpats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1937
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1944
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -31995,7 +31995,7 @@ msgstr ""
 "kräver att zonens minimibredd bevaras. Zonens minimibredd har därför angetts "
 "som den nya ekerbredden och kommer tillämpas nästa gång zonerna fylls."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1984
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1991
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -32005,7 +32005,7 @@ msgstr ""
 "CADSTAR-lagret '%s' definieras som ett kraftplanlager. Det finns dock inget "
 "nät med sådant namn. Skiktet har laddats men ingen kopparzon skapades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2089
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2096
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -32017,7 +32017,7 @@ msgstr ""
 "eller rutnätsfyllning, eller som en KiCad-ledare om formen var en ofylld "
 "kontur (öppen eller sluten)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2194
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2201
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -32026,7 +32026,7 @@ msgstr ""
 "Nätet '%s' refererar till komponent-ID '%s' som inte finns. Detta har "
 "ignorerats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2200
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2207
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -32035,11 +32035,11 @@ msgstr ""
 "Nätet '%s' refererar till obefintligt padindex '%d' i komponent '%s'. Detta "
 "har ignorerats."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2366
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2373
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr "Textvariabler kunde inte ställas in eftersom inget projekt laddades."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2473
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2490
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -32050,7 +32050,7 @@ msgstr ""
 "stöder endast cirkulära vior, så den här typen har ändrats till att vara en "
 "via med cirkulär form och %.2f mm diameter."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2687
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2709
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -32059,7 +32059,7 @@ msgstr ""
 "Formen för '%s' är rutnätsfylld i CADSTAR, som inte har någon KiCad-"
 "motsvarighet. Använd istället solid fyllning."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3536
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3567
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -32070,7 +32070,7 @@ msgstr ""
 "stöder endast 2 skrafferingar i 90 graders vinkel från varandra "
 "(rutnätsfyllning). Den importerade skrafferingen är fylld met rutnät."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3546
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3577
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -32082,7 +32082,7 @@ msgstr ""
 "använder bredden definierad i den första skrafferingsdefinitionen, d.v.s. "
 "%.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3589
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -32094,7 +32094,7 @@ msgstr ""
 "skrafferingen använder avståndet definierat i den första "
 "skrafferingsdefinitionen, dvs. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3571
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3602
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -32107,7 +32107,7 @@ msgstr ""
 "importerade fyllningen har två skrafferingar 90 grader från varandra, "
 "orienterade %.1f grader från horisontalplanet."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3644
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3675
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -32116,7 +32116,7 @@ msgstr ""
 "Dimensions-ID %s använder en typ av enhet som inte stöds i KiCad. Millimeter "
 "användes istället."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3935
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3966
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -32128,7 +32128,7 @@ msgstr ""
 "KiCads version av \"Net Class\" är närmare CADSTARs \"Net Route Code\" (som "
 "har importerats för alla nät)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3945
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3976
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -32156,7 +32156,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Inget '%s' paket i bibliotek '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1465
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2252
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2256
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
@@ -32166,17 +32166,17 @@ msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en tråd eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1993
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1997
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en text eftersom Eagle-lagret '%s' (%d) inte har kartlagts"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2138
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2142
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en rektangel eftersom Eagle-lagret '%s' (%d) inte mappats"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2325
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2329
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en cirkel eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
@@ -32285,18 +32285,18 @@ msgstr "Ohanterat grafiskt element '%s' på rad %zu."
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Dublett-element för ID %d och sekvens %d på rad %zu."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2330
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2359
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2328
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2357
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr "Ogiltig användardefinierad lödyta '%s'. Ersätter med cirkulär lödyta."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2367
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2365
 #, c-format
 msgid "Could not find custom pad '%s'."
 msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2567
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2568
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
@@ -32309,7 +32309,7 @@ msgid "Cannot convert '%s' to an integer."
 msgstr "Kan inte konvertera '%s' till ett heltal."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:875
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:879
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:242
 #, c-format
 msgid "Footprint library '%s' not found."
@@ -32333,26 +32333,26 @@ msgstr "Okänd token '%s'"
 msgid "Element token contains %d parameters."
 msgstr "Elementtoken innehåller %d parametrar."
 
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:980
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:984
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2642
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Otillräckliga behörigheter för att radera filen '%s'."
 
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:988
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:992
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2650
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Biblioteksmappen '%s' har oväntade undermappar."
 
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:1011
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Oväntad fil '%s' hittad i bibliotek '%s'."
 
-#: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
+#: pcbnew/plugins/geda/gpcb_plugin.cpp:1030
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2687
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3242
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrycksbibliotek '%s' kan inte tas bort."
@@ -32433,12 +32433,12 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d."
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3568
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3570
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Kan inte hantera textavtryck för fotavtryck %s"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4206
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4208
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32449,7 +32449,7 @@ msgstr ""
 "fil: %s\n"
 "rad: %d förskjutning: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4225
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4227
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -32460,8 +32460,8 @@ msgstr ""
 "fil: %s\n"
 "rad: %d förskjutning: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4681
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4759
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4688
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4766
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32474,7 +32474,7 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d."
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4858
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4865
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32487,7 +32487,7 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4971
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4978
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32500,8 +32500,8 @@ msgstr ""
 "rad: %d\n"
 "förskjutning: %d."
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5090
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2496
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5097
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2500
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
@@ -32509,8 +32509,8 @@ msgstr ""
 "Det äldre segmentfyllningsläget stöds inte längre.\n"
 "Konvertera zoner till polygonfyllningar?"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5092
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2498
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5099
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2502
 msgid "Legacy Zone Warning"
 msgstr "Varning för gammal typ av zon (legacy)"
 
@@ -32620,34 +32620,34 @@ msgstr "'$EndMODULE' saknas för MODUL '%s'."
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Okänd lödyteform '%c = 0x%02x' på rad: %d i fotavtryck: '%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1567
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1571
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "Okänd FP_SHAPE-typ:'%c=0x%02x' på rad: %d i fotavtryck: '%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2338
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2342
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "Dubletter av NETCLASS-namn '%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2415
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2426
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2419
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2430
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "Dålig ZAux för CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2441
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2445
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Dålig ZSmoothing för CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2536
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2540
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "Dåligt val för ZClearance för CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2821
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2860
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2825
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2864
 #, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -32656,8 +32656,8 @@ msgstr ""
 "Ogiltigt flyttalsnummer i fil: '%s'\n"
 "rad: %d, förskjutning: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2831
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2870
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2835
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2874
 #, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -32666,12 +32666,12 @@ msgstr ""
 "Flyttalsnummer saknas i fil: '%s'\n"
 "rad: %d, förskjutning: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3012
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3016
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Filen %s är tom."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3015
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3019
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Filen %s är inte ett äldre bibliotek."
@@ -32844,12 +32844,12 @@ msgstr "nätklass 'Default'"
 msgid "user choice"
 msgstr "användarval"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1069
+#: pcbnew/router/pns_kicad_iface.cpp:1070
 #, c-format
 msgid "%s is malformed."
 msgstr "%s är felaktig."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1072
+#: pcbnew/router/pns_kicad_iface.cpp:1073
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -32857,7 +32857,7 @@ msgstr ""
 "Denna zon kan inte hanteras av spårlayoutverktyget.\n"
 "Kontrollera att det inte är en självkorsande polygon."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1690 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1691 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Interaktiv router"
 
@@ -33827,37 +33827,37 @@ msgstr "DRC"
 msgid "Special Tools"
 msgstr "Specialverktyg"
 
-#: pcbnew/tools/edit_tool.cpp:343
+#: pcbnew/tools/edit_tool.cpp:342
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
 msgstr "Kunde inte skala om bågformade ledare %.1f grader eller mer."
 
-#: pcbnew/tools/edit_tool.cpp:675
+#: pcbnew/tools/edit_tool.cpp:674
 msgid "Drag Arc Track"
 msgstr "Dra bågformad ledare"
 
-#: pcbnew/tools/edit_tool.cpp:758
+#: pcbnew/tools/edit_tool.cpp:757
 msgid "Select reference point for move..."
 msgstr "Välj referenspunkt för flytt ..."
 
-#: pcbnew/tools/edit_tool.cpp:1164
+#: pcbnew/tools/edit_tool.cpp:1163
 msgid "Edit track width/via size"
 msgstr "Redigera ledarbredd / via-storlek"
 
-#: pcbnew/tools/edit_tool.cpp:1199
+#: pcbnew/tools/edit_tool.cpp:1198
 msgid "At least two straight track segments must be selected."
 msgstr "Minst två raka ledarsegment måste väljas."
 
-#: pcbnew/tools/edit_tool.cpp:1203
+#: pcbnew/tools/edit_tool.cpp:1202
 msgid "Enter fillet radius:"
 msgstr "Ange filéradie:"
 
-#: pcbnew/tools/edit_tool.cpp:1203 pcbnew/tools/edit_tool.cpp:1365
+#: pcbnew/tools/edit_tool.cpp:1202 pcbnew/tools/edit_tool.cpp:1364
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
 msgstr "Ledaravrundning"
 
-#: pcbnew/tools/edit_tool.cpp:1213
+#: pcbnew/tools/edit_tool.cpp:1212
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -33865,48 +33865,48 @@ msgstr ""
 "En radie på noll angavs.\n"
 "Filetoperationen utfördes inte."
 
-#: pcbnew/tools/edit_tool.cpp:1372
+#: pcbnew/tools/edit_tool.cpp:1371
 msgid "Unable to fillet the selected track segments."
 msgstr "Det går inte att runda av de valda ledarsegmenten."
 
-#: pcbnew/tools/edit_tool.cpp:1374
+#: pcbnew/tools/edit_tool.cpp:1373
 msgid "Some of the track segments could not be filleted."
 msgstr "Vissa av ledarsegmenten kunde inte rundas av."
 
-#: pcbnew/tools/edit_tool.cpp:1519
+#: pcbnew/tools/edit_tool.cpp:1518
 msgid "Rotate"
 msgstr "Rotera"
 
-#: pcbnew/tools/edit_tool.cpp:1743 pcbnew/tools/pcb_actions.cpp:305
+#: pcbnew/tools/edit_tool.cpp:1742 pcbnew/tools/pcb_actions.cpp:305
 msgid "Change Side / Flip"
 msgstr "Byt sida / vänd"
 
-#: pcbnew/tools/edit_tool.cpp:2072
+#: pcbnew/tools/edit_tool.cpp:2078
 msgid "Move exact"
 msgstr "Flytta exakt"
 
-#: pcbnew/tools/edit_tool.cpp:2205
+#: pcbnew/tools/edit_tool.cpp:2211
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Duplicerade %d objekt"
 
-#: pcbnew/tools/edit_tool.cpp:2428
+#: pcbnew/tools/edit_tool.cpp:2434
 msgid "Select reference point for the copy..."
 msgstr "Välj referenspunkt för kopian ..."
 
-#: pcbnew/tools/edit_tool.cpp:2429 pcbnew/tools/edit_tool.cpp:2446
+#: pcbnew/tools/edit_tool.cpp:2435 pcbnew/tools/edit_tool.cpp:2452
 msgid "Selection copied"
 msgstr "Urvalet kopierades"
 
-#: pcbnew/tools/edit_tool.cpp:2430
+#: pcbnew/tools/edit_tool.cpp:2436
 msgid "Copy canceled"
 msgstr "Kopiering avbröts"
 
-#: pcbnew/tools/footprint_editor_control.cpp:347
+#: pcbnew/tools/footprint_editor_control.cpp:350
 msgid "_copy"
 msgstr "_kopiera"
 
-#: pcbnew/tools/footprint_editor_control.cpp:594
+#: pcbnew/tools/footprint_editor_control.cpp:597
 msgid "No footprint problems found."
 msgstr "Inga fotavtrycksproblem hittades."
 
@@ -35550,11 +35550,11 @@ msgstr "Fördela horisontellt"
 msgid "Distribute vertically"
 msgstr "Distribuera vertikalt"
 
-#: pcbnew/tools/position_relative_tool.cpp:151
+#: pcbnew/tools/position_relative_tool.cpp:156
 msgid "Position Relative"
 msgstr "Position Relativ"
 
-#: pcbnew/tools/position_relative_tool.cpp:172
+#: pcbnew/tools/position_relative_tool.cpp:177
 msgid "Click on reference item..."
 msgstr "Klicka på referensobjektet ..."
 
@@ -36444,6 +36444,10 @@ msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-mönsterkort"
 
 #, fuzzy, c-format
+#~ msgid "Unable to locate padstack %s in file %s\n"
+#~ msgstr "Det gick inte att skapa arkivfil \"%s\"\n"
+
+#, fuzzy, c-format
 #~ msgid "Width Constraints: min %s, max %s"
 #~ msgstr "Breddbegränsningar: min %s; opt %s max %s."
 
@@ -37264,10 +37268,6 @@ msgstr "KiCad-mönsterkort"
 
 #~ msgid "Show solid areas of zones in outline mode"
 #~ msgstr "Visa fasta zoner i konturläge"
-
-#, fuzzy, c-format
-#~ msgid "Unable to create archive file '%s'.\n"
-#~ msgstr "Det gick inte att skapa arkivfil \"%s\"\n"
 
 #, c-format
 #~ msgid "Unable to create report file '%s'"
