@@ -62,37 +62,39 @@ int GetPenSizeForNormal( const wxSize& aTextSize )
 
 
 /**
- * Don't allow text to become cluttered up in its own fatness.  Bold fonts are generally around
- * aSize/5 in width, so we limit them to aSize/4, and normal text to aSize/6.
+ * Pen width should not allow characters to become cluttered up in their own fatness.  Normal
+ * text is normally around 15% the fontsize, and bold text around 20%.  So we set a hard limit
+ * at 25%, and a secondary limit for non-decorative text that must be readable at small sizes
+ * at 18%.
  *
  * @param aPenSize is the pen size to clamp.
  * @param aSize is the character size (height or width).
  * @param aBold use true if text accept bold pen size.
  * @return the max pen size allowed.
  */
-int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
+int Clamp_Text_PenSize( int aPenSize, int aSize, bool aStrict )
 {
-    double scale    = aBold ? 4.0 : 6.0;
-    int    maxWidth = KiROUND( (double) aSize / scale );
+    double scale    = aStrict ? 0.18 : 0.25;
+    int    maxWidth = KiROUND( (double) aSize * scale );
 
     return std::min( aPenSize, maxWidth );
 }
 
 
-float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold )
+float Clamp_Text_PenSize( float aPenSize, int aSize, bool aStrict )
 {
-    float scale    = aBold ? 4.0 : 6.0;
-    float maxWidth = (float) aSize / scale;
+    double scale    = aStrict ? 0.18 : 0.25;
+    float maxWidth = (float) aSize * scale;
 
     return std::min( aPenSize, maxWidth );
 }
 
 
-int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aBold )
+int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict )
 {
     int size = std::min( std::abs( aSize.x ), std::abs( aSize.y ) );
 
-    return Clamp_Text_PenSize( aPenSize, size, aBold );
+    return Clamp_Text_PenSize( aPenSize, size, aStrict );
 }
 
 

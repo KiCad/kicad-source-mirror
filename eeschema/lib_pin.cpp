@@ -363,9 +363,9 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     wxSize pinNameSize( m_nameTextSize, m_nameTextSize );
     wxSize pinNumSize( m_numTextSize, m_numTextSize );
 
-    int    namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, false ),
+    int    namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, true ),
                                     aSettings->GetDefaultPenWidth() );
-    int    numPenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, false ),
+    int    numPenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, true ),
                                    aSettings->GetDefaultPenWidth() );
 
     int    name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
@@ -710,9 +710,9 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
         return;
 
     int     x, y;
-    int     namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, false ),
+    int     namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, true ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
-    int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, false ),
+    int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, true ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
     int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
     int     num_offset  = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;

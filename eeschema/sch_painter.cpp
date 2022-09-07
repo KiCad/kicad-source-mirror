@@ -1327,8 +1327,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     bool  showPinNames = libEntry->ShowPinNames();
     bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->ShowPinNumbers();
 
-    nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), false );
-    numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), false );
+    nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
+    numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
 
     int PIN_TEXT_MARGIN = KiROUND( 24 * m_schSettings.m_TextOffsetRatio );
 
