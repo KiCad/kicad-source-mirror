@@ -423,7 +423,7 @@ TOOL_ACTION EE_ACTIONS::swap( "eeschema.InteractiveEdit.swap",
         AS_GLOBAL,
         'S', "",
         _( "Swap" ), _( "Swaps selected items' positions" ),
-        BITMAPS::swap_layer );
+        BITMAPS::swap );
 
 TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL,

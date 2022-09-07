@@ -481,6 +481,7 @@ set( BMAPS_MID
     show_back_assembly_layers
     special_tools
     spreadsheet
+    swap
     swap_layer
     switch_corner_rounding_shape
     text

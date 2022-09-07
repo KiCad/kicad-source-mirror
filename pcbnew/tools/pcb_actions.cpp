@@ -329,7 +329,7 @@ TOOL_ACTION PCB_ACTIONS::swap( "pcbnew.InteractiveEdit.swap",
         AS_GLOBAL,
         'S', "",
         _( "Swap" ), _( "Swaps selected items' positions" ),
-        BITMAPS::swap_layer );
+        BITMAPS::swap );
 
 TOOL_ACTION PCB_ACTIONS::changeTrackWidth( "pcbnew.InteractiveEdit.changeTrackWidth",
         AS_GLOBAL, 0, "",

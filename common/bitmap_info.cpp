@@ -504,6 +504,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_back_assembly_layers].emplace_back( BITMAPS::show_back_assembly_layers, wxT( "show_back_assembly_layers_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::special_tools].emplace_back( BITMAPS::special_tools, wxT( "special_tools_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::spreadsheet].emplace_back( BITMAPS::spreadsheet, wxT( "spreadsheet_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::swap].emplace_back( BITMAPS::swap, wxT( "swap_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::swap_layer].emplace_back( BITMAPS::swap_layer, wxT( "swap_layer_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::switch_corner_rounding_shape].emplace_back( BITMAPS::switch_corner_rounding_shape, wxT( "switch_corner_rounding_shape_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::text].emplace_back( BITMAPS::text, wxT( "text_24.png" ), 24, wxT( "light" ) );
@@ -882,6 +883,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_back_assembly_layers].emplace_back( BITMAPS::show_back_assembly_layers, wxT( "show_back_assembly_layers_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::special_tools].emplace_back( BITMAPS::special_tools, wxT( "special_tools_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::spreadsheet].emplace_back( BITMAPS::spreadsheet, wxT( "spreadsheet_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::swap].emplace_back( BITMAPS::swap, wxT( "swap_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::swap_layer].emplace_back( BITMAPS::swap_layer, wxT( "swap_layer_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::switch_corner_rounding_shape].emplace_back( BITMAPS::switch_corner_rounding_shape, wxT( "switch_corner_rounding_shape_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::text].emplace_back( BITMAPS::text, wxT( "text_dark_24.png" ), 24, wxT( "dark" ) );
