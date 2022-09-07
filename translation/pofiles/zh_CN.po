@@ -14,13 +14,14 @@
 # obit <szpttboy@163.com>, 2021, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Ian McInerney <ian.s.mcinerney@ieee.org>, 2022.
+# Eric <hamburger1024@firemail.cc>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-08-30 03:18+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-09-08 07:39+0000\n"
+"Last-Translator: Eric <hamburger1024@firemail.cc>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8536,23 +8537,20 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "新字段名称："
+msgstr "显示字段名称"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "显示字段名称及其值"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "自动放置规则"
+msgstr "允许自动放置"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:99
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "执行选定元件的自动放置"
+msgstr "允许在原理图中自动放置该字段"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:112
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -10726,7 +10724,6 @@ msgstr "按名称添加信号："
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
 msgstr "没有连接"
 
@@ -13504,7 +13501,6 @@ msgid "Net"
 msgstr "网络"
 
 #: eeschema/sch_label.cpp:932 eeschema/sch_line.cpp:861
-#, fuzzy
 msgid "Resolved netclass"
 msgstr "已解析的网络类"
 
@@ -16358,9 +16354,8 @@ msgid "Assign Netclass..."
 msgstr "关联网络类..."
 
 #: eeschema/tools/ee_actions.cpp:473 pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "将网络类关联给选定导线的网络"
+msgstr "将网络类分配给匹配模式的网络"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "De Morgan Conversion"
@@ -17049,9 +17044,8 @@ msgstr ""
 "被丢弃, 因为目标已有该图框或其子图框之一作为父级。"
 
 #: eeschema/tools/sch_editor_control.cpp:2082
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "无法删除符号库 '%s'。"
+msgstr "无法编辑有损坏的库符号链接的符号。"
 
 #: eeschema/tools/sch_editor_control.cpp:2376
 #: pcbnew/tools/board_editor_control.cpp:590
@@ -18726,14 +18720,13 @@ msgid "Color themes (%d)"
 msgstr "配色主题 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "你确定你想删除 %d 个项目吗？"
+msgstr "你确定要将固定包从版本 %s 更新到 %s 吗？"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
-#, fuzzy
 msgid "Confirm update"
-msgstr "确认修改"
+msgstr "确认更新"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:95
 #: kicad/pcm/dialogs/panel_package.cpp:101
@@ -18854,15 +18847,14 @@ msgid "Applying Package Changes"
 msgstr "应用软件包变更"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
-#, fuzzy
 msgid "Pin package"
-msgstr "软件包"
+msgstr "固定软件包"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with \"Update All\" button."
-msgstr ""
+msgstr "固定包不会影响可用的更新通知，并且按下“全部更新”按钮也不会对其进行更新。"
 
 #: kicad/pcm/dialogs/panel_package.cpp:118
 msgid "Install Pending"
@@ -24119,9 +24111,8 @@ msgid "Schematic Parity (%s)"
 msgstr "原理图一致性 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "编辑忽略的违规项…"
+msgstr "编辑忽略的测试"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -30343,9 +30334,9 @@ msgid "Checking board setup constraints clearance: min %s."
 msgstr "正检查电路板设置约束间隙：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1025
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "正检查电路板设置约束孔尺寸：最小 %s。"
+msgstr "正逐个孔检查电路板设置约束：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1031 pcbnew/drc/drc_engine.cpp:1057
 #: pcbnew/drc/drc_engine.cpp:1489
@@ -30385,9 +30376,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "规则层不匹配；已忽略规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1181
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "条件不满足；忽略规则。"
+msgstr "%s 不是钻孔； 规则被忽略。"
 
 #: pcbnew/drc/drc_engine.cpp:1193
 msgid "Unconditional constraint applied."
@@ -31546,15 +31537,15 @@ msgstr "(金属化焊盘的孔没留下铜)"
 
 #: pcbnew/footprint.cpp:2348
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "（SMD 焊盘出现在铜层正反面）"
 
 #: pcbnew/footprint.cpp:2355 pcbnew/footprint.cpp:2368
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "（SMD 焊盘铜层和掩膜层不匹配）"
 
 #: pcbnew/footprint.cpp:2360 pcbnew/footprint.cpp:2373
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "（SMD 焊盘铜层和膏层不匹配）"
 
 #: pcbnew/footprint.cpp:2559
 #, c-format
@@ -33242,14 +33233,14 @@ msgid "Pad %s of %s on %s"
 msgstr "焊盘　%s (%s) - %s"
 
 #: pcbnew/pad.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "焊盘 %s - %s"
+msgstr "%s 的非金属化焊盘"
 
 #: pcbnew/pad.cpp:1238
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "焊盘 %s - %s"
+msgstr "%s 的非金属化焊盘 %s"
 
 #: pcbnew/pad.cpp:1247
 #, c-format
@@ -33259,12 +33250,12 @@ msgstr "%s 上 %s 的焊盘 %s %s"
 #: pcbnew/pad.cpp:1255
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "%s 的 NPTH"
 
 #: pcbnew/pad.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "焊盘　%s (%s) - %s"
+msgstr "%s 的非金属化焊盘 %s %s"
 
 #: pcbnew/pad.cpp:1688
 msgid "Edge connector"
@@ -34203,7 +34194,7 @@ msgstr "由于未加载任何项目，因此无法设置文本变量。"
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr ""
+msgstr "CADSTAR 设计包含泪滴。 这个导入器还不支持它们，所以设计中的泪滴被忽略了。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2486
 #, c-format
@@ -35727,14 +35718,12 @@ msgid "Duplicate zone"
 msgstr "复制敷铜"
 
 #: pcbnew/tools/board_editor_control.cpp:1484
-#, fuzzy
 msgid "Selection contains no items with labelled nets."
-msgstr "选择包含锁定项, 你要继续吗?"
+msgstr "所选部分中没有带标签网络的项目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:58
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "网络检查"
+msgstr "网络检查工具"
 
 #: pcbnew/tools/board_inspection_tool.cpp:163
 #, c-format
@@ -35887,15 +35876,13 @@ msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "未定义 'physical_hole_clearance' 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "孔对孔间隙："
+msgstr "孔对孔"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:961
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "孔间隙解像度，用于:"
+msgstr "孔对孔间隙解像度，用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Edge Clearance"
@@ -36264,9 +36251,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:93
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "位置偏移："
+msgstr "定位工具"
 
 #: pcbnew/tools/edit_tool.cpp:358
 #, c-format
@@ -37264,22 +37250,20 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "高亮选定网络 (s) 中的所有铜项目"
 
 #: pcbnew/tools/pcb_actions.cpp:784
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "高亮飞线"
+msgstr "隐藏飞线内网络"
 
 #: pcbnew/tools/pcb_actions.cpp:785
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr ""
+msgstr "在未连接网络线/弧的飞线内隐藏所选网络"
 
 #: pcbnew/tools/pcb_actions.cpp:790
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "显示飞线"
+msgstr "显示飞线内网络"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr ""
+msgstr "在未连接网络线/弧的飞线中显示所选网络"
 
 #: pcbnew/tools/pcb_actions.cpp:796
 msgid "Switch to Schematic Editor"
