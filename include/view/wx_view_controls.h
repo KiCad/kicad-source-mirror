@@ -131,6 +131,11 @@ private:
     };
 
     /**
+     * Sets the interaction state, simply a internal setter to make it easier to debug changes
+     */
+    void setState( STATE aNewState );
+
+    /**
      * Compute new viewport settings while in autopanning mode.
      *
      * @param aEvent is an event to be processed and decide if autopanning should happen.

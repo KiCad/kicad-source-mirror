@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -43,8 +43,6 @@
 #include <wx/log.h>
 
 #ifdef __WXMSW__
-    #include <Windows.h>
-
     #define USE_MOUSE_CAPTURE
 #endif
 
@@ -396,6 +394,11 @@ void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
 #endif
 
 
+void WX_VIEW_CONTROLS::setState( STATE aNewState )
+{
+    m_state = aNewState;
+}
+
 void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 {
     switch( m_state )
@@ -406,7 +409,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::PAN ) )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
-            m_state = DRAG_PANNING;
+            setState( DRAG_PANNING );
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
@@ -418,7 +421,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_dragStartPoint   = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_zoomStartPoint = m_dragStartPoint;
-            m_state = DRAG_ZOOMING;
+            setState( DRAG_ZOOMING );
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
@@ -427,7 +430,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         }
 
         if( aEvent.LeftUp() )
-            m_state = IDLE;     // Stop autopanning when user release left mouse button
+            setState( IDLE );     // Stop autopanning when user release left mouse button
 
         break;
 
@@ -435,7 +438,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
     case DRAG_PANNING:
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
         {
-            m_state = IDLE;
+            setState( IDLE );
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
@@ -504,28 +507,25 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     {
         if( !m_settings.m_autoPanEnabled )
         {
-            m_state = IDLE;
+            setState( IDLE );
             return;
         }
 
         #ifdef __WXMSW__
-        // Hackfix: Need to find better solution
-        // It's possible for the mouse to leave the canvas without triggering any leave events
-        POINT cursorPos;
-        GetCursorPos( &cursorPos );
-        HWND hwndUnderCursor = WindowFromPoint( cursorPos );
-
-        if( hwndUnderCursor != m_parentPanel->GetHWND() )
+        // Hackfix: It's possible for the mouse to leave the canvas
+        // without triggering any leave events on windows
+        // Use a MSW only wx function
+        if( !m_parentPanel->IsMouseInWindow() )
         {
             m_panTimer.Stop();
-            m_state = IDLE;
+            setState( IDLE );
             return;
         }
         #endif
 
         if( !m_parentPanel->HasFocus() && !m_parentPanel->StatusPopupHasFocus() )
         {
-            m_state = IDLE;
+            setState( IDLE );
             return;
         }
 
@@ -654,7 +654,7 @@ void WX_VIEW_CONTROLS::CancelDrag()
 {
     if( m_state == DRAG_PANNING || m_state == DRAG_ZOOMING )
     {
-        m_state = IDLE;
+        setState( IDLE );
 #if defined USE_MOUSE_CAPTURE
         if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
             m_parentPanel->ReleaseMouse();
@@ -869,7 +869,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         if( !borderHit )
         {
             m_panTimer.Stop();
-            m_state = IDLE;
+            setState( IDLE );
 
             return false;
         }
@@ -879,7 +879,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     case IDLE:
         if( borderHit )
         {
-            m_state = AUTO_PANNING;
+            setState( AUTO_PANNING );
             m_panTimer.Start( (int) ( 250.0 / 60.0 ) );
 
             return true;
