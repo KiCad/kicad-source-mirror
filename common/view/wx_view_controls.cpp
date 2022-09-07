@@ -507,6 +507,18 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             return;
         }
 
+        #ifdef __WXMSW__
+        // Hackfix: It's possible for the mouse to leave the canvas
+        // without triggering any leave events on windows
+        // Use a MSW only wx function
+        if( !m_parentPanel->IsMouseInWindow() )
+        {
+            m_panTimer.Stop();
+            m_state = IDLE;
+            return;
+        }
+        #endif
+
         if( !m_parentPanel->HasFocus() )
             break;
 
