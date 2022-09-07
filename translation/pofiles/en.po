@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-28 17:06-0700\n"
+"POT-Creation-Date: 2022-09-07 14:31-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1091,6 +1091,9 @@ msgstr "&Help"
 
 msgid "Report"
 msgstr "Report"
+
+msgid "<b>Currently matching nets:</b>"
+msgstr "<b>Currently matching nets:</b>"
 
 msgid "Clear Color"
 msgstr "Clear Color"
@@ -2282,46 +2285,6 @@ msgstr "Variable Name"
 msgid "Text Substitution"
 msgstr "Text Substitution"
 
-msgid "Error:"
-msgstr "Error:"
-
-msgid "Warning:"
-msgstr "Warning:"
-
-msgid "Info:"
-msgstr "Info:"
-
-msgid "Save Report to File"
-msgstr "Save Report to File"
-
-#, c-format
-msgid "Cannot write report to file '%s'."
-msgstr "Cannot write report to file '%s'."
-
-msgid "File save error"
-msgstr "File save error"
-
-msgid "Output Messages"
-msgstr "Output Messages"
-
-msgid "Show:"
-msgstr "Show:"
-
-msgid "All"
-msgstr "All"
-
-msgid "Warnings"
-msgstr "Warnings"
-
-msgid "Actions"
-msgstr "Actions"
-
-msgid "Infos"
-msgstr "Infos"
-
-msgid "Save..."
-msgstr "Save…"
-
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
 
@@ -3306,9 +3269,6 @@ msgstr "Deactivate selected"
 msgid "Unit"
 msgstr "Unit"
 
-msgid "Item"
-msgstr "Item"
-
 #, c-format
 msgid "Unrecognized character '%c'"
 msgstr "Unrecognized character '%c'"
@@ -3382,6 +3342,10 @@ msgstr "The KiCad language file for this language is not installed."
 #, c-format
 msgid "Show Page %s"
 msgstr "Show Page %s"
+
+#, c-format
+msgid "Open %s"
+msgstr "Open %s"
 
 #, c-format
 msgid "Cannot open file '%s'."
@@ -4231,6 +4195,46 @@ msgstr "(double-click to edit)"
 msgid "Hotkey"
 msgstr "Hotkey"
 
+msgid "Error:"
+msgstr "Error:"
+
+msgid "Warning:"
+msgstr "Warning:"
+
+msgid "Info:"
+msgstr "Info:"
+
+msgid "Save Report to File"
+msgstr "Save Report to File"
+
+#, c-format
+msgid "Cannot write report to file '%s'."
+msgstr "Cannot write report to file '%s'."
+
+msgid "File save error"
+msgstr "File save error"
+
+msgid "Output Messages"
+msgstr "Output Messages"
+
+msgid "Show:"
+msgstr "Show:"
+
+msgid "All"
+msgstr "All"
+
+msgid "Warnings"
+msgstr "Warnings"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Infos"
+msgstr "Infos"
+
+msgid "Save..."
+msgstr "Save…"
+
 msgid "All files"
 msgstr "All files"
 
@@ -4928,9 +4932,6 @@ msgstr "Clear Annotation"
 
 msgid "Annotate Schematic"
 msgstr "Annotate Schematic"
-
-msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Currently matching nets:</b>"
 
 msgid "Generate"
 msgstr "Generate"
@@ -5785,17 +5786,23 @@ msgstr "Text:"
 msgid "(%s)"
 msgstr "(%s)"
 
+msgid "Show field name"
+msgstr "Show field name"
+
+msgid "Show the field name in addtion to its value"
+msgstr "Show the field name in addtion to its value"
+
+msgid "Allow autoplacement"
+msgstr "Allow autoplacement"
+
+msgid "Allow automatic placement of this field in the schematic"
+msgstr "Allow automatic placement of this field in the schematic"
+
 msgid "Font:"
 msgstr "Font:"
 
 msgid "KiCad Font"
 msgstr "KiCad Font"
-
-msgid "Horizontal text"
-msgstr "Horizontal text"
-
-msgid "Vertical text"
-msgstr "Vertical text"
 
 msgid "Align left"
 msgstr "Align left"
@@ -5814,6 +5821,12 @@ msgstr "Align vertical center"
 
 msgid "Align bottom"
 msgstr "Align bottom"
+
+msgid "Horizontal text"
+msgstr "Horizontal text"
+
+msgid "Vertical text"
+msgstr "Vertical text"
 
 msgid "Text size:"
 msgstr "Text size:"
@@ -7138,6 +7151,9 @@ msgstr "Sheet Properties"
 
 msgid "Add signal by name:"
 msgstr "Add signal by name:"
+
+msgid "Not Connected"
+msgstr "Not Connected"
 
 #, c-format
 msgid "Failed reading model library '%s'."
@@ -8886,10 +8902,6 @@ msgstr "&Tools"
 msgid "P&references"
 msgstr "P&references"
 
-#, c-format
-msgid "Could not find library file %s."
-msgstr "Could not find library file %s."
-
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
@@ -9144,6 +9156,12 @@ msgstr "Hierarchical Sheet Pin"
 
 msgid "Justification"
 msgstr "Justification"
+
+msgid "Net"
+msgstr "Net"
+
+msgid "Resolved netclass"
+msgstr "Resolved netclass"
 
 #, c-format
 msgid "Label '%s'"
@@ -10695,10 +10713,6 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 
 #, c-format
-msgid "Open %s"
-msgstr "Open %s"
-
-#, c-format
 msgid "Library '%s' already exists."
 msgstr "Library '%s' already exists."
 
@@ -11458,8 +11472,8 @@ msgstr "Update symbol to include any changes from the library"
 msgid "Assign Netclass..."
 msgstr "Assign Netclass..."
 
-msgid "Assign a netclass to the net of the selected wire"
-msgstr "Assign a netclass to the net of the selected wire"
+msgid "Assign a netclass to nets matching a pattern"
+msgstr "Assign a netclass to nets matching a pattern"
 
 msgid "De Morgan Conversion"
 msgstr "De Morgan Conversion"
@@ -11971,6 +11985,9 @@ msgstr ""
 "The pasted sheet '%s'\n"
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
+
+msgid "Symbols with broken library symbol links cannot be edited."
+msgstr "Symbols with broken library symbol links cannot be edited."
 
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
@@ -13172,14 +13189,21 @@ msgid "Color themes (%d)"
 msgstr "Color themes (%d)"
 
 #, c-format
-msgid "Repository (%d)"
-msgstr "Repository (%d)"
+msgid "Are you sure you want to update pinned package from version %s to %s?"
+msgstr "Are you sure you want to update pinned package from version %s to %s?"
+
+msgid "Confirm update"
+msgstr "Confirm update"
 
 msgid "Install"
 msgstr "Install"
 
 msgid "Uninstall"
 msgstr "Uninstall"
+
+#, c-format
+msgid "Repository (%d)"
+msgstr "Repository (%d)"
 
 msgid "Apply Pending Changes"
 msgstr "Apply Pending Changes"
@@ -13250,6 +13274,16 @@ msgstr "Details"
 
 msgid "Applying Package Changes"
 msgstr "Applying Package Changes"
+
+msgid "Pin package"
+msgstr "Pin package"
+
+msgid ""
+"Pinned packages don't affect available update notification and will not be "
+"updated with \"Update All\" button."
+msgstr ""
+"Pinned packages don't affect available update notification and will not be "
+"updated with \"Update All\" button."
 
 msgid "Install Pending"
 msgstr "Install Pending"
@@ -15426,9 +15460,6 @@ msgstr "Nets"
 msgid "Unrouted"
 msgstr "Unrouted"
 
-msgid "Net"
-msgstr "Net"
-
 msgid "Net Name"
 msgstr "Net Name"
 
@@ -17097,6 +17128,9 @@ msgstr "Unconnected Items (%s)"
 #, c-format
 msgid "Schematic Parity (%s)"
 msgstr "Schematic Parity (%s)"
+
+msgid "Edit ignored tests"
+msgstr "Edit ignored tests"
 
 msgid "Design Rules Checker"
 msgstr "Design Rules Checker"
@@ -19997,12 +20031,6 @@ msgstr "Track and Via Dimensions"
 msgid "Set Unused Pad Properties"
 msgstr "Set Unused Pad Properties"
 
-msgid "&Vias"
-msgstr "&Vias"
-
-msgid "&Pads"
-msgstr "&Pads"
-
 msgid "&Remove unused layers"
 msgstr "&Remove unused layers"
 
@@ -21835,6 +21863,10 @@ msgid "Checking board setup constraints clearance: min %s."
 msgstr "Checking board setup constraints clearance: min %s."
 
 #, c-format
+msgid "Checking board setup constraints hole to hole: min %s."
+msgstr "Checking board setup constraints hole to hole: min %s."
+
+#, c-format
 msgid "Checking %s."
 msgstr "Checking %s."
 
@@ -21860,6 +21892,10 @@ msgstr "Rule layer '%s' not matched; rule ignored."
 
 msgid "Rule layer not matched; rule ignored."
 msgstr "Rule layer not matched; rule ignored."
+
+#, c-format
+msgid "%s is not a drilled hole; rule ignored."
+msgstr "%s is not a drilled hole; rule ignored."
 
 msgid "Unconditional constraint applied."
 msgstr "Unconditional constraint applied."
@@ -22714,6 +22750,15 @@ msgstr "(PTH pad has no copper layers)"
 
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(PTH pad's hole leaves no copper)"
+
+msgid "(SMD pad appears on both front and back copper)"
+msgstr "(SMD pad appears on both front and back copper)"
+
+msgid "(SMD pad copper and mask layers don't match)"
+msgstr "(SMD pad copper and mask layers don't match)"
+
+msgid "(SMD pad copper and paste layers don't match)"
+msgstr "(SMD pad copper and paste layers don't match)"
 
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
@@ -24020,16 +24065,24 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s of %s on %s"
 
 #, c-format
-msgid "Through hole pad %s of %s"
-msgstr "Through hole pad %s of %s"
+msgid "NPTH pad of %s"
+msgstr "NPTH pad of %s"
+
+#, c-format
+msgid "PTH pad %s of %s"
+msgstr "PTH pad %s of %s"
 
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s of %s on %s"
 
 #, c-format
-msgid "Through hole pad %s %s of %s"
-msgstr "Through hole pad %s %s of %s"
+msgid "NPTH of %s"
+msgstr "NPTH of %s"
+
+#, c-format
+msgid "PTH pad %s %s of %s"
+msgstr "PTH pad %s %s of %s"
 
 msgid "Edge connector"
 msgstr "Edge connector"
@@ -24611,14 +24664,6 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Invalid zero-sized pad ignored in\n"
-"file: %s"
-msgstr ""
-"Invalid zero-sized pad ignored in\n"
-"file: %s"
-
-#, c-format
-msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
@@ -24819,6 +24864,13 @@ msgstr ""
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr "Text Variables could not be set as there is no project loaded."
 
+msgid ""
+"The CADSTAR design contains teardrops. This importer does not yet support "
+"them, so the teardrops in the design have been ignored."
+msgstr ""
+"The CADSTAR design contains teardrops. This importer does not yet support "
+"them, so the teardrops in the design have been ignored."
+
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -24928,6 +24980,14 @@ msgstr "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid ""
+"Invalid zero-sized pad ignored in\n"
+"file: %s"
+msgstr ""
+"Invalid zero-sized pad ignored in\n"
+"file: %s"
 
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
@@ -26012,8 +26072,11 @@ msgstr "Some zones did not intersect and were not merged."
 msgid "Duplicate zone"
 msgstr "Duplicate zone"
 
-msgid "Net Tools"
-msgstr "Net Tools"
+msgid "Selection contains no items with labelled nets."
+msgstr "Selection contains no items with labelled nets."
+
+msgid "Net Inspection Tools"
+msgstr "Net Inspection Tools"
 
 #, c-format
 msgid "[netclass %s]"
@@ -26107,6 +26170,12 @@ msgstr "Physical hole clearance resolution for:"
 
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "No 'physical_hole_clearance' constraints defined."
+
+msgid "Hole to Hole"
+msgstr "Hole to Hole"
+
+msgid "Hole to hole clearance resolution for:"
+msgstr "Hole to hole clearance resolution for:"
 
 msgid "Edge Clearance"
 msgstr "Edge Clearance"
@@ -26379,8 +26448,8 @@ msgstr "Schematic parity tests require a fully annotated schematic."
 msgid "DRC"
 msgstr "DRC"
 
-msgid "Special Tools"
-msgstr "Special Tools"
+msgid "Positioning Tools"
+msgstr "Positioning Tools"
 
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
@@ -27133,23 +27202,20 @@ msgstr "Toggle Net Highlight"
 msgid "Toggle net highlighting"
 msgstr "Toggle net highlighting"
 
-msgid "Highlight Selected Net"
-msgstr "Highlight Selected Net"
-
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Highlight all copper items on the selected net(s)"
 
-msgid "Hide Net"
-msgstr "Hide Net"
+msgid "Hide Net in Ratsnest"
+msgstr "Hide Net in Ratsnest"
 
-msgid "Hide the ratsnest for the selected net"
-msgstr "Hide the ratsnest for the selected net"
+msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
+msgstr "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 
-msgid "Show Net"
-msgstr "Show Net"
+msgid "Show Net in Ratsnest"
+msgstr "Show Net in Ratsnest"
 
-msgid "Show the ratsnest for the selected net"
-msgstr "Show the ratsnest for the selected net"
+msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
+msgstr "Show the selected net in the ratsnest of unconnected net lines/arcs"
 
 msgid "Switch to Schematic Editor"
 msgstr "Switch to Schematic Editor"
@@ -28504,6 +28570,51 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Item"
+#~ msgstr "Item"
+
+#, c-format
+#~ msgid "Could not find library file %s."
+#~ msgstr "Could not find library file %s."
+
+#~ msgid "Assign a netclass to the net of the selected wire"
+#~ msgstr "Assign a netclass to the net of the selected wire"
+
+#~ msgid "&Vias"
+#~ msgstr "&Vias"
+
+#~ msgid "&Pads"
+#~ msgstr "&Pads"
+
+#, c-format
+#~ msgid "Through hole pad %s of %s"
+#~ msgstr "Through hole pad %s of %s"
+
+#, c-format
+#~ msgid "Through hole pad %s %s of %s"
+#~ msgstr "Through hole pad %s %s of %s"
+
+#~ msgid "Net Tools"
+#~ msgstr "Net Tools"
+
+#~ msgid "Special Tools"
+#~ msgstr "Special Tools"
+
+#~ msgid "Highlight Selected Net"
+#~ msgstr "Highlight Selected Net"
+
+#~ msgid "Hide Net"
+#~ msgstr "Hide Net"
+
+#~ msgid "Hide the ratsnest for the selected net"
+#~ msgstr "Hide the ratsnest for the selected net"
+
+#~ msgid "Show Net"
+#~ msgstr "Show Net"
+
+#~ msgid "Show the ratsnest for the selected net"
+#~ msgstr "Show the ratsnest for the selected net"
 
 #~ msgid "Bus Definitions"
 #~ msgstr "Bus Definitions"
