@@ -165,7 +165,10 @@ bool CONVERT_TOOL::Init()
 
     auto lineToArc = S_C::Count( 1 ) && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
 
-    auto showConvert       = anyPolys || anyLines || lineToArc;
+    auto canCreateArray = S_C::MoreThan( 0 );
+
+    auto showConvertMenu   = anyPolys || anyLines || lineToArc || canCreateArray;
+
     auto canCreatePolyType = anyLines || anyPolys;
     auto canCreateTracks   = anyPolys || graphicToTrack;
 
@@ -174,7 +177,6 @@ bool CONVERT_TOOL::Init()
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
     m_menu->AppendSeparator();
-    m_menu->AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::ShowAlways );
 
     // Currently the code exists, but tracks are not really existing in footprints
     // only segments on copper layers
@@ -183,8 +185,11 @@ bool CONVERT_TOOL::Init()
 
     m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
 
+    m_menu->AppendSeparator();
+    m_menu->AddItem( PCB_ACTIONS::createArray, canCreateArray );
+
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
-    selToolMenu.AddMenu( m_menu, showConvert, 100 );
+    selToolMenu.AddMenu( m_menu, showConvertMenu, 100 );
 
     return true;
 }
