@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-28 17:06-0700\n"
-"PO-Revision-Date: 2022-09-05 11:14+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2022-09-07 20:50+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -12050,9 +12050,9 @@ msgid "(source)"
 msgstr "(ソース)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "'%s' には番号が必要です"
+msgstr "'%s' のメンバー:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
 #, fuzzy
@@ -13325,7 +13325,7 @@ msgstr "シミュレーションモデル %s を読み込めませんでした�
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:388
 #, c-format
 msgid "Could not find library file '%s'"
-msgstr "ライブラリファイル '%s' が見つかりませんでした。"
+msgstr "ライブラリーファイル '%s' が見つかりませんでした"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -31017,7 +31017,7 @@ msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_item.cpp:249
 msgid "Footprint is not valid"
-msgstr "フットプリントが正しくありません。"
+msgstr "フットプリントが無効"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -33939,12 +33939,12 @@ msgstr "全長"
 #: pcbnew/pcb_track.cpp:832
 #, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "幅の制約: 最小 %s, 最大 %s."
+msgstr "幅の制約: 最小 %s, 最大 %s"
 
 #: pcbnew/pcb_track.cpp:839
 #, c-format
 msgid "Width Constraints: min %s"
-msgstr "幅の制約: 最小 %s."
+msgstr "幅の制約: 最小 %s"
 
 #: pcbnew/pcb_track.cpp:853
 msgid "Micro Via"
@@ -35750,9 +35750,9 @@ msgid "Routing Track: %s"
 msgstr "配線: %s"
 
 #: pcbnew/router/router_tool.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved Netclass: %s"
-msgstr "解決済みクリアランス: %s."
+msgstr "解決済みクリアランス: %s"
 
 #: pcbnew/router/router_tool.cpp:2226
 msgid "Routing Track"
@@ -35936,7 +35936,7 @@ msgstr "四角形:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
 msgid "Tracks:"
-msgstr "配線"
+msgstr "配線:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:349
 msgid "Vias and PTH pads"
