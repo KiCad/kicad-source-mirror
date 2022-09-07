@@ -2256,8 +2256,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( padstack == pads.end() )
                     {
-                        wxLogError( _( "Unable to locate padstack %s in file %s\n" ),
-                                      pin->padstack.c_str(), aBoard->GetFileName().wc_str() );
                         continue;
                     }
                     else
