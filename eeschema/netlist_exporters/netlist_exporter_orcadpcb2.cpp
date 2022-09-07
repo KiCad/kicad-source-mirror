@@ -107,6 +107,9 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             // Write pin list:
             for( const PIN_INFO& pin : m_sortedSymbolPinList )
             {
+                if( pin.num.IsEmpty() )     // Erased pin in list
+                    continue;
+
                 netName = pin.netName;
                 netName.Replace( wxT( " " ), wxT( "_" ) );
 
