@@ -451,7 +451,8 @@ void PANEL_FP_PROPERTIES_3D_MODEL::AdjustGridColumnWidths()
     int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN )
                 - m_modelsGrid->GetColSize( COL_PROBLEM );
 
-    m_modelsGrid->SetColSize( COL_FILENAME, width );
+    if( width > 0 )
+        m_modelsGrid->SetColSize( COL_FILENAME, width );
 }
 
 
