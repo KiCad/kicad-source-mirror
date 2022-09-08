@@ -27,6 +27,7 @@
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <fmt/core.h>
 
 
 #define CALL_INSTANCE( ValueType, Notation, func, ... )                  \
@@ -111,9 +112,9 @@ namespace SIM_VALUE_PARSER
                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT );
 
     long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
-    wxString ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
-                                     NOTATION aNotation = NOTATION::SI );
-}
+    std::string ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
+                                        NOTATION aNotation = NOTATION::SI );
+    }
 
 
 template <SIM_VALUE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
@@ -284,7 +285,7 @@ long SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATI
 }
 
 
-wxString SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
+std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
                                                    NOTATION aNotation )
 {
     if( aNotation == NOTATION::SI && aExponent >= -18 && aExponent <= -15 )
@@ -545,10 +546,8 @@ wxString SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
 template <>
 wxString SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
 {
-    LOCALE_IO toggle;
-
     if( m_value )
-        return wxString::Format( "%d", *m_value );
+        return fmt::format( "%d", *m_value );
 
     return "";
 }
@@ -557,8 +556,6 @@ wxString SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
 template <>
 wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
 {
-    LOCALE_IO toggle;
-
     if( m_value )
     {
         long value = std::abs( *m_value );
@@ -570,10 +567,10 @@ wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
             value /= 1000;
         }
 
-        long dummy = 0;
-        wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
+        long        dummy = 0;
+        std::string metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
                 static_cast<double>( exponent ), dummy, aNotation );
-        return wxString::Format( "%ld%s", value, metricSuffix );
+        return fmt::format( "%ld%s", value, metricSuffix );
     }
 
     return "";
@@ -583,19 +580,16 @@ wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
 template <>
 wxString SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
 {
-    LOCALE_IO toggle;
-
     if( m_value )
     {
         double exponent = std::log10( std::abs( *m_value ) );
         long reductionExponent = 0;
 
-        wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent,
-                                                                          reductionExponent,
-                                                                          aNotation );
+        std::string metricSuffix =
+                SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent, reductionExponent, aNotation );
         double reducedValue = *m_value / std::pow( 10, reductionExponent );
 
-        return wxString::Format( "%g%s", reducedValue, metricSuffix );
+        return fmt::format( "%g%s", reducedValue, metricSuffix );
     }
     else
         return "";
@@ -605,10 +599,8 @@ wxString SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
 template <>
 wxString SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
 {
-    LOCALE_IO toggle;
-
     if( m_value )
-        return wxString::Format( "%g+%gi", m_value->real(), m_value->imag() );
+        return fmt::format( "%g+%gi", m_value->real(), m_value->imag() );
 
     return "";
 }
@@ -617,8 +609,6 @@ wxString SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
 template <>
 wxString SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
 {
-    LOCALE_IO toggle;
-
     if( m_value )
         return *m_value;
 
