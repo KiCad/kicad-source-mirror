@@ -572,7 +572,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
         newSheet->SetFileName( relPath.GetFullPath() );
         m_rootSheet = newSheet.get();
-        loadHierarchy( newSheet.get() );
+        loadHierarchy( SCH_SHEET_PATH(), newSheet.get() );
 
         // If we got here, the schematic loaded successfully.
         sheet = newSheet.release();
@@ -583,7 +583,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
         m_rootSheet = &aSchematic->Root();
         sheet = aAppendToMe;
-        loadHierarchy( sheet );
+        loadHierarchy( SCH_SHEET_PATH(), sheet );
     }
 
     wxASSERT( m_currentPath.size() == 1 );  // only the project path should remain
@@ -596,7 +596,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
 // Everything below this comment is recursive.  Modify with care.
 
-void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
+void SCH_SEXPR_PLUGIN::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SCH_SHEET* aSheet )
 {
     SCH_SCREEN* screen = nullptr;
 
@@ -618,7 +618,30 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         wxLogTrace( traceSchLegacyPlugin, "Current path   '%s'", m_currentPath.top() );
         wxLogTrace( traceSchLegacyPlugin, "Loading        '%s'", fileName.GetFullPath() );
 
-        m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
+        SCH_SHEET_PATH ancestorSheetPath = aParentSheetPath;
+
+        while( !ancestorSheetPath.empty() )
+        {
+            if( ancestorSheetPath.LastScreen()->GetFileName() == fileName.GetFullPath() )
+            {
+                if( !m_error.IsEmpty() )
+                    m_error += "\n";
+
+                m_error += wxString::Format( _( "Could not load sheet '%s' because it already "
+                                                "appears as a direct ancestor in the schematic "
+                                                "hierarchy." ),
+                                             fileName.GetFullPath() );
+
+                fileName = wxEmptyString;
+
+                break;
+            }
+
+            ancestorSheetPath.pop_back();
+        }
+
+        if( ancestorSheetPath.empty() )
+            m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
         if( screen )
         {
@@ -659,7 +682,10 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                 aSheet->GetScreen()->SetFileExists( false );
             }
 
-            // This was moved out of the try{} block so that any sheets definitionsthat
+            SCH_SHEET_PATH currentSheetPath = aParentSheetPath;
+            currentSheetPath.push_back( aSheet );
+
+            // This was moved out of the try{} block so that any sheet definitions that
             // the plugin fully parsed before the exception was raised will be loaded.
             for( SCH_ITEM* aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
             {
@@ -667,7 +693,7 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
                 // Recursion starts here.
-                loadHierarchy( sheet );
+                loadHierarchy( currentSheetPath, sheet );
             }
         }
 
