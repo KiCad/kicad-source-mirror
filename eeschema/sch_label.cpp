@@ -465,6 +465,9 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )
     {
+        if( !Schematic() )
+            return false;
+
         if( Schematic()->ResolveCrossReference( token, aDepth ) )
             return true;
     }
@@ -523,10 +526,13 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         if( sheet->ResolveTextVar( token, aDepth ) )
             return true;
     }
-    else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+    else if( Schematic() )
     {
-        if( sheet->ResolveTextVar( token, aDepth ) )
-            return true;
+        if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+        {
+            if( sheet->ResolveTextVar( token, aDepth ) )
+                return true;
+        }
     }
 
     return false;
@@ -882,7 +888,6 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     static std::vector<VECTOR2I> s_poly;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    SCHEMATIC*       schematic = Schematic();
     SCH_CONNECTION*  connection = Connection();
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
