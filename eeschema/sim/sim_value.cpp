@@ -547,7 +547,7 @@ template <>
 wxString SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
 {
     if( m_value )
-        return fmt::format( "%d", *m_value );
+        return fmt::format( "{:d}", *m_value );
 
     return "";
 }
@@ -570,7 +570,7 @@ wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
         long        dummy = 0;
         std::string metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
                 static_cast<double>( exponent ), dummy, aNotation );
-        return fmt::format( "%ld%s", value, metricSuffix );
+        return fmt::format( "{}{}", value, metricSuffix );
     }
 
     return "";
@@ -589,7 +589,7 @@ wxString SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
                 SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent, reductionExponent, aNotation );
         double reducedValue = *m_value / std::pow( 10, reductionExponent );
 
-        return fmt::format( "%g%s", reducedValue, metricSuffix );
+        return fmt::format( "{:g}{}", reducedValue, metricSuffix );
     }
     else
         return "";
@@ -600,7 +600,7 @@ template <>
 wxString SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
 {
     if( m_value )
-        return fmt::format( "%g+%gi", m_value->real(), m_value->imag() );
+        return fmt::format( "{:g}+{:g}i", m_value->real(), m_value->imag() );
 
     return "";
 }
