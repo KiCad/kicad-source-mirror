@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-09-06 01:13+0000\n"
+"PO-Revision-Date: 2022-09-11 13:16+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5156,9 +5156,8 @@ msgid "Cursor"
 msgstr "Cursor"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Hovered items"
-msgstr "Mover elemento"
+msgstr "Elementos sobre los que se pasa el ratón"
 
 #: common/layer_id.cpp:145
 msgid "Highlighted items"
@@ -5430,9 +5429,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "El archivo de KiCad de este idioma no se encuentra instalado."
 
 #: common/plotters/PDF_plotter.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Mostrar límites de hoja"
+msgstr "Mostrar página %s"
 
 #: common/plotters/PDF_plotter.cpp:1007
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:789
@@ -6554,14 +6553,12 @@ msgstr "Restablecer %s a los ajustes predeterminados"
 
 #: common/widgets/properties_panel.cpp:46
 #: common/widgets/properties_panel.cpp:75
-#, fuzzy
 msgid "No objects selected"
-msgstr "No se ha seleccionado un bus"
+msgstr "No hay objetos seleccionados"
 
 #: common/widgets/properties_panel.cpp:89
-#, fuzzy
 msgid "Multiple objects selected"
-msgstr "Módulo no seleccionado"
+msgstr "Múltiples objetos seleccionados"
 
 #: common/widgets/unit_binder.cpp:252
 #, c-format
@@ -6729,9 +6726,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "Archivos de biblioteca de símbolos heredados de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:212
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Archivos de librería de símbolos de kiCad"
+msgstr "Archivos de la biblioteca de la base de datos de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:219
 msgid "All KiCad symbol library files"
@@ -8734,23 +8730,20 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "Nuevo nombre de campo:"
+msgstr "Mostrar el nombre del campo"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Mostrar el nombre del campo además de su valor"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Reglas de autoemplazamiento"
+msgstr "Permitir la autocolocación"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:99
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Realiza un emplazamiento automático de los componentes seleccionados"
+msgstr "Permitir la colocación automática de este campo en el esquema"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:112
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -10740,9 +10733,8 @@ msgid "Net Classes"
 msgstr "Clases de red"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:83
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Definiciones de bus"
+msgstr "Definiciones de alias de bus"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: pcbnew/dialogs/dialog_board_setup.cpp:106
@@ -10962,9 +10954,8 @@ msgstr "Añadir señal por nombre:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
-msgstr "Sin conectar"
+msgstr "No conectado"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
@@ -10985,9 +10976,8 @@ msgid "Source"
 msgstr "Fuente"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:35
-#, fuzzy
 msgid "Instance"
-msgstr "Inductancia:"
+msgstr "Instancia"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "Library:"
@@ -10998,9 +10988,8 @@ msgid "Model:"
 msgstr "Modelo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:57
-#, fuzzy
 msgid "Override"
-msgstr "Sobreescribir"
+msgstr "Anular"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:67
 #: eeschema/dialogs/dialog_sim_model_base.cpp:171
@@ -11008,19 +10997,16 @@ msgid "Model"
 msgstr "Modelo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
-#, fuzzy
 msgid "Spice device:"
-msgstr "Directivas Spice:"
+msgstr "Dispositivo Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:91
-#, fuzzy
 msgid "Spice type:"
-msgstr "Tipo de forma:"
+msgstr "Tipo de Spice:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:106
-#, fuzzy
 msgid "Page"
-msgstr "Página:"
+msgstr "Pagina"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:113
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:40
@@ -11032,29 +11018,24 @@ msgid "Parameters"
 msgstr "Parámetros"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:160
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Código"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Unidad de símbolo"
+msgstr "Pin de símbolo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Mover Pin"
+msgstr "Pin del modelo"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Alternar asignación de pin"
+msgstr "Asignaciones de pines"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "Desactivar símbolo en la simulación"
+msgstr "Excluir el símbolo de la simulación"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -11754,9 +11735,9 @@ msgid "<root sheet>"
 msgstr "<hoja principal>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Ir a página %s (%s)"
+msgstr "Página %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:485
 msgid ""
@@ -11769,9 +11750,8 @@ msgstr ""
 "una página de este esquema."
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:288
-#, fuzzy
 msgid "Link:"
-msgstr "Enlaces"
+msgstr "Enlace:"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:290
 msgid "Make this text item a clickable hyperlink"
@@ -12191,34 +12171,30 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Mostrar vista previa de la huella en el selector de símbolos"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "El nombre de campo '%s' ya está en uso."
+msgstr "El nombre del alias '%s' ya está en uso."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:249
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "El nombre de modelo no puede estar vacío."
+msgstr "El nombre de la red/alias del miembro no puede estar vacío."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Definiciones de bus"
+msgstr "Definiciones de bus:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
-#, fuzzy
 msgid "(source)"
-msgstr "Fuente"
+msgstr "(fuente)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "se necesita un número para '%s'"
+msgstr "Miembros de '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:107
-#, fuzzy
 msgid "Net / Nested Bus Name"
-msgstr "Nombre de red o bus"
+msgstr "Nombre de red/bus anidado"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -12866,9 +12842,8 @@ msgid "More than one name given to this bus or net"
 msgstr "Más de un nombre asignado a este bus o red"
 
 #: eeschema/erc_item.cpp:114
-#, fuzzy
 msgid "Conflicting netclass assignments"
-msgstr "Asignación de huella"
+msgstr "Asignaciones de clases de red en conflicto"
 
 #: eeschema/erc_item.cpp:118
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -13492,9 +13467,9 @@ msgstr ""
 "La anotación tiene que ser corregida antes de simular."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Failed reading %s simulation model."
-msgstr "Fallo en la lectura del modelo de biblioteca '%s'."
+msgstr "Fallo en la lectura del modelo de simulación %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:394
 #, c-format
@@ -13700,9 +13675,8 @@ msgstr "Tipo entrada de bus"
 #: eeschema/sch_bus_entry.cpp:511 eeschema/sch_label.cpp:873
 #: eeschema/sch_line.cpp:919 pcbnew/pad.cpp:958 pcbnew/pcb_track.cpp:894
 #: pcbnew/zone.cpp:537
-#, fuzzy
 msgid "Resolved Netclass"
-msgstr "Clase de red asignada"
+msgstr "Clase de red resuelta"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13843,9 +13817,8 @@ msgstr "Red"
 
 # Pendiente
 #: eeschema/sch_label.cpp:932 eeschema/sch_line.cpp:861
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Clase de red asignada"
+msgstr "Clase de red resuelta"
 
 #: eeschema/sch_label.cpp:1024
 #, c-format
@@ -13853,9 +13826,9 @@ msgid "Label '%s'"
 msgstr "Etiqueta '%s'"
 
 #: eeschema/sch_label.cpp:1201
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Etiqueta directiva"
+msgstr "Etiqueta directiva [%s %s]"
 
 #: eeschema/sch_label.cpp:1477
 #, c-format
@@ -14067,24 +14040,24 @@ msgid "Line's owner (%d) not found."
 msgstr "No se encontró el dueño de la línea (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1488
-#, fuzzy
 msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Actualmente no se soportan los arcos en el esquema."
+msgstr ""
+"El arnés de señales, perteneciente a la parte no es compatible actualmente."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1526
-#, fuzzy
 msgid "Harness connector, belonging to the part is not currently supported."
-msgstr "Actualmente no se soportan los arcos en el esquema."
+msgstr ""
+"El conector del arnés, perteneciente a la parte no es compatible actualmente."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "Harness entry's parent (%d) not found."
-msgstr "No se encontró el propietario de la entrada de hoja (%d)."
+msgstr "El padre de la entrada del arnés (%d) no se encuentra."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1590
-#, fuzzy, c-format
+#, c-format
 msgid "Harness type's parent (%d) not found."
-msgstr "No se encontró el dueño de la línea (%d)."
+msgstr "El padre del tipo de arnés (%d) no se encuentra."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1604
 #, c-format
@@ -14375,9 +14348,9 @@ msgstr ""
 "hoja secundaria, pero no tiene ninguna figura definida."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Error al leer la imagen %s."
+msgstr "Error al leer la tabla de la base de datos %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:184
 #, c-format
@@ -14431,9 +14404,9 @@ msgstr "Nombre de símbolo inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:198
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2473
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'."
+msgstr "El símbolo %s contiene el carácter inválido '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:205
 msgid "Invalid library identifier"
@@ -14473,9 +14446,9 @@ msgid "Invalid symbol convert number %s"
 msgstr "Número de conversión de símbolo inválido %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Número de pin inválido"
+msgstr "Url de hipervínculo inválida '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
@@ -15236,9 +15209,9 @@ msgid "Failed to infer model from Value '%s'"
 msgstr "Fallo al inferir el modelo a partir del valor '%s'"
 
 #: eeschema/sim/sim_model_spice.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol pin index: '%s'"
-msgstr "Número de unidad de símbolo inválido %s"
+msgstr "Índice del pin del símbolo inválido: '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -16814,9 +16787,8 @@ msgid "Assign Netclass..."
 msgstr "Asignar clase de red..."
 
 #: eeschema/tools/ee_actions.cpp:473 pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Asignar una clase de red a la red del cable seleccionado"
+msgstr "Asignar una clase de red a las redes que coinciden con un patrón"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "De Morgan Conversion"
@@ -17522,9 +17494,10 @@ msgstr ""
 "padre."
 
 #: eeschema/tools/sch_editor_control.cpp:2082
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "No puede eliminarse la librería de símbolos '%s'."
+msgstr ""
+"Los símbolos con enlaces de símbolos de biblioteca rotos no pueden ser "
+"editados."
 
 #: eeschema/tools/sch_editor_control.cpp:2376
 #: pcbnew/tools/board_editor_control.cpp:590
@@ -17567,9 +17540,9 @@ msgid "Press <ESC> to cancel move."
 msgstr "Presiona <ESC> para cancelar el movimiento."
 
 #: eeschema/tools/sch_navigate_tool.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%d' not found."
-msgstr "No se ha encontrado el archivo '%s'."
+msgstr "Página '%d' no encontrada."
 
 #: eeschema/tools/symbol_editor_control.cpp:169
 msgid "No symbol library selected."
@@ -17734,9 +17707,8 @@ msgid "5B S-Curve"
 msgstr "Curva S 5B"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "Cambiar unidades"
+msgstr "Cambiar"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
 msgid "Characteristic Curve"
@@ -19126,9 +19098,8 @@ msgstr ""
 "complementosal inicio?"
 
 #: kicad/kicad_manager_frame.cpp:832
-#, fuzzy
 msgid "Check for updates"
-msgstr "Comprobar huella"
+msgstr "Buscar actualizaciones"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
@@ -19235,14 +19206,15 @@ msgid "Color themes (%d)"
 msgstr "Temas de color (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "¿Está seguro de que quiere cambiar todas las huellas?"
+msgstr ""
+"¿Está seguro de que quiere actualizar el paquete anclado de la versión %s a "
+"%s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
-#, fuzzy
 msgid "Confirm update"
-msgstr "Confirmar el cambio"
+msgstr "Confirmar actualización"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:95
 #: kicad/pcm/dialogs/panel_package.cpp:101
@@ -19365,15 +19337,16 @@ msgid "Applying Package Changes"
 msgstr "Aplicando cambios de paquetes"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
-#, fuzzy
 msgid "Pin package"
-msgstr "Empaquetado"
+msgstr "Paquete de pines"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with \"Update All\" button."
 msgstr ""
+"Los paquetes anclados no afectan a la notificación de actualizaciones "
+"disponibles y no se actualizarán con el botón \"Actualizar todo\"."
 
 #: kicad/pcm/dialogs/panel_package.cpp:118
 msgid "Install Pending"
@@ -19460,9 +19433,8 @@ msgid "Pending"
 msgstr "Pendiente"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:38
-#, fuzzy
 msgid "Update All"
-msgstr "Actualizar"
+msgstr "Actualizar todo"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:91
 msgid "Download Size"
@@ -19583,9 +19555,8 @@ msgid "Package updates are available"
 msgstr "Actualizaciones de paquetes disponibles"
 
 #: kicad/pcm/pcm.cpp:1167
-#, fuzzy
 msgid "No package updates available"
-msgstr "No disponible actualmente..."
+msgstr "No hay actualizaciones de paquetes disponibles"
 
 #: kicad/pcm/pcm_task_manager.cpp:77
 msgid "Unable to create download directory!"
@@ -24727,9 +24698,8 @@ msgid "Schematic Parity (%s)"
 msgstr "Paridad del esquema (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Editar las violaciones ignoradas..."
+msgstr "Editar las pruebas ignoradas"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -25717,9 +25687,8 @@ msgstr ""
 "prioritarios y ajustes de las Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:338
-#, fuzzy
 msgid "Net Ties"
-msgstr "Herramientas de redes"
+msgstr "Uniones de red"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:340
 msgid "Pad groups allowed to short different nets:"
@@ -30175,7 +30144,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30516,6 +30484,7 @@ msgstr ""
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
+" * connection\\_width\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -30524,9 +30493,9 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
-" * mechanical\\_clearance\n"
-" * mechanical\\_hole\\_clearance\n"
 " * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
 " * silk\\_clearance\n"
 " * skew\n"
 " * text\\_height\n"
@@ -30539,8 +30508,8 @@ msgstr ""
 " * zone\\_connection\n"
 "\n"
 "Nota: las reglas `clearance` y `hole_clearance` no se ejecutan contra "
-"elementos de la misma red; las reglas `mechanical_clearance` y "
-"`mechanical_hole_clearance` sí lo hacen.\n"
+"elementos de la misma red; las reglas `physical_clearance` y "
+"`physical_hole_clearance` sí lo hacen.\n"
 "<br>\n"
 "\n"
 "### Tipos de elementos\n"
@@ -30615,8 +30584,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -30626,33 +30595,41 @@ msgstr ""
 "Todos los parámetros de funciones soportan comodines simples (`*` y `?`).\n"
 "<br><br>\n"
 "\n"
-"    A.insideCourtyard('<footprint_refdes>')\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
 "Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
 "principal dada.\n"
 "<br><br>\n"
 "\n"
-"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
 "Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
 "frontal dada.\n"
 "<br><br>\n"
 "\n"
-"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
 "Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
 "trasera dada.\n"
 "<br><br>\n"
 "\n"
-"    A.insideArea('<zone_name>')\n"
+"    A.intersectsArea('<zone_name>')\n"
 "Verdadero si alguna parte de `A`se encuentra dentro del contorno de la zona "
 "dada.\n"
 "<br><br>\n"
 "\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"Verdadero si todo `A` se encuentra dentro del contorno de la zona dada.\n"
+"\n"
+"Note: esto es una llamada potencialmente más costosa que `intersectsArea()`"
+".  Use `intersectsArea()` \n"
+"donde sea posible.\n"
+"<br><br>\n"
+" \n"
 "    A.isPlated()\n"
 "Verdadero si `A` tiene un orificio revestido.\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -30676,6 +30653,22 @@ msgstr ""
 "de\n"
 "si la regla está siendo evaluada en esa capa o no.\n"
 "Para lo último, use la cláusula `(layer \"layer_name\")` en la regla.\n"
+"<br><br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Obsoleto; use `intersectsCourtyard()` en su lugar.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Obosoleto; use `intersectsFrontCourtyard()` en su lugar.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Obsoleto; use `intersectsBackCourtyard()` en su lugar.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Obsoleto; use `intersectsArea()` en su lugar.\n"
 "<br><br><br>\n"
 "\n"
 "### Más ejemplos\n"
@@ -30781,6 +30774,13 @@ msgstr ""
 "        (layer \"F.Courtyard\")\n"
 "        (constraint physical_clearance (min 3mm))\n"
 "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Comprobar la capacidad de transporte de corriente\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -30867,9 +30867,8 @@ msgid "Via Gap"
 msgstr "Espaciado de vía"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:98
-#, fuzzy
 msgid "Change property"
-msgstr "Cambiar propiedades de texto"
+msgstr "Cambiar propiedad"
 
 #: pcbnew/dialogs/pcb_properties_panel.cpp:119 pcbnew/pcb_track.cpp:1285
 msgid "Layer Top"
@@ -31113,11 +31112,11 @@ msgstr ""
 "Comprobando las restricciones de configuración de la placa holgura: mín %s."
 
 #: pcbnew/drc/drc_engine.cpp:1025
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
 msgstr ""
-"Comprobando las restricciones de configuración de la placa tamaño del "
-"agujero: mín %s."
+"Comprobación de las restricciones de configuración de la placa de agujero a "
+"agujero: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1031 pcbnew/drc/drc_engine.cpp:1057
 #: pcbnew/drc/drc_engine.cpp:1489
@@ -31158,9 +31157,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Capa de reglas no coincide; regla ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1181
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "Condición no satisfecha; regla ignorada."
+msgstr "%s no es un agujero perforado; regla ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1193
 msgid "Unconditional constraint applied."
@@ -31448,9 +31447,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Longitud diferencial desacoplada demasiado larga"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Footprint is not valid"
-msgstr "El ID de la huella '%s' no es válido."
+msgstr "La huella no es válida"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Footprint component type doesn't match footprint pads"
@@ -31602,9 +31600,8 @@ msgid "Missing severity name."
 msgstr "Falta el nombre de la gravedad."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
-#, fuzzy
 msgid "Checking pad & via annular rings..."
-msgstr "Comprobando anillos anulares de vía..."
+msgstr "Comprobando anillos anulares de pad y vía..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
@@ -32341,15 +32338,15 @@ msgstr "(El orificio del pad PTH no deja cobre)"
 
 #: pcbnew/footprint.cpp:2348
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(El pad SMD aparece tanto en el cobre delantero como en el trasero)"
 
 #: pcbnew/footprint.cpp:2355 pcbnew/footprint.cpp:2368
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(Las capas de cobre y máscara del pad SMD no coinciden)"
 
 #: pcbnew/footprint.cpp:2360 pcbnew/footprint.cpp:2373
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(Las capas de cobre y pasta del pad SMD no coinciden)"
 
 #: pcbnew/footprint.cpp:2559
 #, c-format
@@ -33541,14 +33538,12 @@ msgid "Auto-Place Footprints"
 msgstr "Emplazamiento automático de huellas"
 
 #: pcbnew/menubar_pcb_editor.cpp:414
-#, fuzzy
 msgid "Add Teardrops..."
-msgstr "Añadir lágrimas"
+msgstr "Añadir lágrimas..."
 
 #: pcbnew/menubar_pcb_editor.cpp:415
-#, fuzzy
 msgid "Remove Teardrops..."
-msgstr "Eliminar lágrimas"
+msgstr "Eliminar lágrimas..."
 
 #: pcbnew/menubar_pcb_editor.cpp:435
 msgid "External Plugins"
@@ -34095,14 +34090,14 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s de %s en %s"
 
 #: pcbnew/pad.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "Pad de %s en %s"
+msgstr "Pad NPTH de %s"
 
 #: pcbnew/pad.cpp:1238
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "Pad de %s en %s"
+msgstr "Pad PTH %s de %s"
 
 #: pcbnew/pad.cpp:1247
 #, c-format
@@ -34112,12 +34107,12 @@ msgstr "Pad %s %s de %s en %s"
 #: pcbnew/pad.cpp:1255
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "NPTH de %s"
 
 #: pcbnew/pad.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Pad %s de %s en %s"
+msgstr "Pad PTH %s %s de %s"
 
 #: pcbnew/pad.cpp:1688
 msgid "Edge connector"
@@ -34292,11 +34287,9 @@ msgid "Unrecognized layer '%s'"
 msgstr "Capa no reconocida '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr ""
-"Falta el argumento del identificador de huella (A, B o designador de "
-"referencia) a %s."
+msgstr "Falta el argumento de huella (A, B o designador de referencia) a %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -34311,11 +34304,10 @@ msgid "Footprint has no back courtyard."
 msgstr "La huella no tiene un patio trasero."
 
 #: pcbnew/pcb_expr_evaluator.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
 msgstr ""
-"Falta el argumento del identificador del área de la regla (A, B, o el nombre "
-"del área de la regla) a %s."
+"Falta el argumento de área de regla (A, B o nombre de área de regla) en %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:739
 #, c-format
@@ -34429,14 +34421,14 @@ msgid "Full Length"
 msgstr "Longitud total"
 
 #: pcbnew/pcb_track.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s, max %s"
-msgstr "Restricciones de ancho: mínimo %s; opcional %s; máximo %s."
+msgstr "Restricciones de ancho: min %s, max %s"
 
 #: pcbnew/pcb_track.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: min %s"
-msgstr "Restricción de orificios: mínimo %s."
+msgstr "Restricciones de ancho: min %s"
 
 #: pcbnew/pcb_track.cpp:854
 msgid "Micro Via"
@@ -35127,6 +35119,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
+"El diseño de CADSTAR contiene lágrimas. Este importador aún no los soporta, "
+"por lo que las lágrimas en el diseño han sido ignoradas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2486
 #, c-format
@@ -35407,9 +35401,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Elemento duplicado para el ID %d y la secuencia %d en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2262
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "No puede crearse el archivo '%s'.\n"
+msgstr "No se puede localizar stack del pad %s en el archivo %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2333
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2362
@@ -36290,9 +36284,9 @@ msgid "Routing Track: %s"
 msgstr "Enrutando pista: %s"
 
 #: pcbnew/router/router_tool.cpp:2233
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Margen resuelto: %s."
+msgstr "Clase de red resuelta: %s"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/router_tool.cpp:2238
@@ -36349,15 +36343,14 @@ msgid "Unable to export, please fix and try again"
 msgstr "Imposible exportar, por favor, corrija e inténtelo de nuevo"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr ""
-"El componente de valor '%s' tiene el identificador de referencia vacío."
+msgstr "La huella con el valor '%s' tiene un designador de referencia vacío."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Actualizar huellas que coincidan con el indicador de referencia:"
+msgstr "Varias huellas tienen el designador de referencia '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:76
 msgid ""
@@ -36393,7 +36386,7 @@ msgid "Unsupported via shape: %s"
 msgstr "Forma de vía no soportada: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'"
 msgstr "El archivo Session utiliza un ID de capa '%s' inválido."
 
@@ -36430,30 +36423,26 @@ msgid "%d Teardrops removed."
 msgstr "%d Lágrimas eliminadas."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes:"
-msgstr "Formas redondas"
+msgstr "Formas redondas:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:152
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Best length:"
-msgstr "Mejor longitud"
+msgstr "Mejor longitud:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:60
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:164
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:268
-#, fuzzy
 msgid "Best height:"
-msgstr "Mejor altura"
+msgstr "Mejor altura:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:72
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:176
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:280
-#, fuzzy
 msgid "Max length:"
-msgstr "Longitud máxima"
+msgstr "Longitud máxima:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:105
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:209
@@ -36478,9 +36467,8 @@ msgid "Curved"
 msgstr "Curvado"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:138
-#, fuzzy
 msgid "Rect shapes:"
-msgstr "Formas rectas"
+msgstr "Formas rectas:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:242
 msgid "Tracks:"
@@ -36503,9 +36491,8 @@ msgid "Add teardrops to round shapes only "
 msgstr "Añadir lágrimas solo a las formas redondas "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:360
-#, fuzzy
 msgid "SMD pads"
-msgstr "Pads SMD traseros"
+msgstr "Pads SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:362
 msgid "Add teardrops to not driiled pads, like SMD"
@@ -36520,11 +36507,8 @@ msgid "Add teardrops to two connected tracks of different widths"
 msgstr "Agregar lágrimas a dos pistas conectadas de diferentes anchos"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr ""
-"Permitir que una lágrima se extienda a lo largo de 2 pistas si el segmento "
-"de la primer pista es demasiado corto"
+msgstr "Permitir que las lágrimas abarquen dos segmentos de pista"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:380
 msgid ""
@@ -36535,9 +36519,8 @@ msgstr ""
 "de la primer pista es demasiado corto"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
-#, fuzzy
 msgid "Place teardrops on pads in zones"
-msgstr "Lágrimas en los pads en zonas"
+msgstr "Colocar las lágrimas en los pads en zonas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:385
 msgid ""
@@ -36549,9 +36532,8 @@ msgstr ""
 "Marque esta opción para permitir lágrimas para estos pads."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:395
-#, fuzzy
 msgid "Curve points:"
-msgstr "Puntos de la curva"
+msgstr "Puntos de la curva:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:397
 msgid "Number of segments to build a teardrop with curved shape"
@@ -36727,14 +36709,12 @@ msgid "Duplicate zone"
 msgstr "Duplicar zona"
 
 #: pcbnew/tools/board_editor_control.cpp:1484
-#, fuzzy
 msgid "Selection contains no items with labelled nets."
-msgstr "La selección contienen elementos bloqueados. ¿Desea continuar?"
+msgstr "La selección no contiene elementos con redes etiquetadas."
 
 #: pcbnew/tools/board_inspection_tool.cpp:58
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "Inspector de red"
+msgstr "Herramientas de inspección de redes"
 
 #: pcbnew/tools/board_inspection_tool.cpp:163
 #, c-format
@@ -36796,19 +36776,17 @@ msgid "Resolved width constraints: min %s; max %s."
 msgstr "Restricciones de ancho resueltas: mín %s; máx. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:331
-#, fuzzy
 msgid "Connection Width"
-msgstr "Tipo de conexión:"
+msgstr "Ancho de conexión"
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Resolución de ancho de radios para:"
+msgstr "Resolución de ancho de conexión para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width constraint: %s."
-msgstr "Tipo de conexión de zona resuelta: %s."
+msgstr "Resuelta la restricción del ancho mínimo de conexión: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:346
 #: pcbnew/tools/board_inspection_tool.cpp:1172
@@ -36891,15 +36869,13 @@ msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "No se ha definido ninguna restricción 'physical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "Margen de orificio a orificio:"
+msgstr "De agujero a agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:961
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de la holgura entre agujeros para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Edge Clearance"
@@ -37273,9 +37249,8 @@ msgid "DRC"
 msgstr "DCR"
 
 #: pcbnew/tools/edit_tool.cpp:93
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Desplazamiento:"
+msgstr "Herramientas de posicionamiento"
 
 #: pcbnew/tools/edit_tool.cpp:358
 #, c-format
@@ -38297,24 +38272,24 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Resalta todos los elementos de cobre en las redes seleccionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:784
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Ocultar conexiones de la huella"
+msgstr "Ocultar red en líneas aéreas"
 
 #: pcbnew/tools/pcb_actions.cpp:785
-#, fuzzy
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Mover las redes seleccionadas en la lista derecha a la de la izquierda"
+msgstr ""
+"Ocultar la red seleccionada en las líneas aéreas de líneas/arcos de red no "
+"conectados"
 
 #: pcbnew/tools/pcb_actions.cpp:790
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "Mostrar líneas aéreas"
+msgstr "Mostrar red en líneas aéreas"
 
 #: pcbnew/tools/pcb_actions.cpp:791
-#, fuzzy
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Mover las redes seleccionadas en la lista derecha a la de la izquierda"
+msgstr ""
+"Mostrar la red seleccionada en las líneas aéreas de líneas/arcos de red no "
+"conectados"
 
 #: pcbnew/tools/pcb_actions.cpp:796
 msgid "Switch to Schematic Editor"
@@ -38347,14 +38322,12 @@ msgid "Show/hide the appearance manager"
 msgstr "Mostrar/ocultar el administrador de apariencia"
 
 #: pcbnew/tools/pcb_actions.cpp:831
-#, fuzzy
 msgid "Show Properties Panel"
-msgstr "Propiedades de la página"
+msgstr "Mostrar el panel de propiedades"
 
 #: pcbnew/tools/pcb_actions.cpp:831
-#, fuzzy
 msgid "Show/hide the properties panel"
-msgstr "Mostrar/ocultar el administrador de apariencia"
+msgstr "Mostrar/ocultar el panel de propiedades"
 
 #: pcbnew/tools/pcb_actions.cpp:836
 msgid "Flip Board View"
@@ -38795,14 +38768,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Selecciona todas las huellas y pistas en la misma hoja de esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1308
-#, fuzzy
 msgid "Select on Schematic"
-msgstr "Abrir esquema"
+msgstr "Seleccionar en el esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
-#, fuzzy
 msgid "Selects corresponding items in Schematic editor"
-msgstr "Seleccionar los elementos correspondientes en el editor de PCB"
+msgstr "Selecciona los elementos correspondientes en el editor de esquemas"
 
 #: pcbnew/tools/pcb_actions.cpp:1314
 msgid "Filter Selected Items..."
