@@ -84,6 +84,10 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetColor( i );
 
+    // Ensure the generic LAYER_DRAWINGSHEET has the same color as the specialized
+    // LAYER_GERBVIEW_DRAWINGSHEET
+    m_layerColors[LAYER_DRAWINGSHEET] = m_layerColors[ LAYER_GERBVIEW_DRAWINGSHEET ];
+
     update();
 }
 
