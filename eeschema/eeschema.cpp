@@ -417,7 +417,21 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         ext == KiCadSchematicFileExtension + BackupFileSuffix )
     {
         if( destFile.GetName() == aProjectName )
+        {
             destFile.SetName( aNewProjectName  );
+        }
+        else if( destFile.GetName() == aNewProjectName )
+        {
+            wxString msg;
+
+            if( !aErrors.empty() )
+                aErrors += "\n";
+
+            msg.Printf( _( "Cannot copy file '%s' as it will be overwritten by the new root "
+                           "sheet file." ), destFile.GetFullPath() );
+            aErrors += msg;
+            return;
+        }
 
         // Sheet paths when auto-generated are relative to the root, so those will stay
         // pointing to whatever they were pointing at.

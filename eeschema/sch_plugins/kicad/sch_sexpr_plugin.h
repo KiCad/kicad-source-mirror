@@ -143,7 +143,7 @@ public:
     static void FormatLibSymbol( LIB_SYMBOL* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:
-    void loadHierarchy( SCH_SHEET* aSheet );
+    void loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
     void saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath, int aNestLevel,
