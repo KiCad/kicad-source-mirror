@@ -187,6 +187,8 @@ public:
      */
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
+    PCB_LAYER_ID GetActiveLayer() { return m_frame->GetActiveLayer(); }
+
     /**
      * In general we don't want to select both a parent and any of it's children.  This includes
      * both footprints and their items, and groups and their members.

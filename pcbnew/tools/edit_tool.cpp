@@ -305,8 +305,11 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
 
-                // drop a knee between two segments to a single segment, or a via with two
-                // segments attached to the via
+                if( aCollector.GetCount() > 1 )
+                    sTool->GuessSelectionCandidates( aCollector, aPt );
+
+                // If we have a knee between two segments, or a via attached to two segments,
+                // then drop the selection to a single item.
                 std::initializer_list<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T };
                 std::vector<PCB_TRACK*>        tracks;
                 std::vector<PCB_TRACK*>        vias;
