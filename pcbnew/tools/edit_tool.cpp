@@ -290,20 +290,46 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
 
-                // drop a knee between two segments to a single segment
-                if( aCollector.GetCount() == 2 && dynamic_cast<PCB_TRACK*>( aCollector[0] ) )
+                // drop a knee between two segments to a single segment, or a via with two
+                // segments attached to the via
+                static KICAD_T          trackTypes[] = { PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+                std::vector<PCB_TRACK*> tracks;
+                std::vector<PCB_TRACK*> vias;
+
+                for( EDA_ITEM* item : aCollector )
                 {
-                    static KICAD_T types[] = { PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+                    if( item->IsType( trackTypes ) )
+                        tracks.push_back( static_cast<PCB_TRACK*>( item ) );
+                    else if( item->Type() == PCB_VIA_T )
+                        vias.push_back( static_cast<PCB_TRACK*>( item ) );
+                }
 
-                    PCB_TRACK*  a = static_cast<PCB_TRACK*>( aCollector[0] );
-                    PCB_TRACK*  b = static_cast<PCB_TRACK*>( aCollector[1] );
-                    const auto& c = aCollector[0]->GetBoard()->GetConnectivity();
+                if( tracks.size() == 2 )
+                {
+                    const BOARD*                       board = tracks[0]->GetBoard();
+                    std::shared_ptr<CONNECTIVITY_DATA> c = board->GetConnectivity();
+                    std::vector<BOARD_CONNECTED_ITEM*> cItems;
 
-                    int  dist = a->GetWidth() / 2;
-                    auto connectedItems = c->GetConnectedItemsAtAnchor( a, aPt, types, dist );
+                    if( vias.size() == 1 )
+                    {
+                        cItems = c->GetConnectedItemsAtAnchor( vias[0], aPt, trackTypes,
+                                                               vias[0]->GetWidth() / 2 );
 
-                    if( alg::contains( connectedItems, b ) )
-                        aCollector.Remove( b );
+                        if( alg::contains( cItems, tracks[0] )
+                                && alg::contains( cItems, tracks[1] ) )
+                        {
+                            aCollector.Remove( tracks[0] );
+                            aCollector.Remove( tracks[1] );
+                        }
+                    }
+                    else if( vias.size() == 0 )
+                    {
+                        cItems = c->GetConnectedItemsAtAnchor( tracks[0], aPt, trackTypes,
+                                                               tracks[0]->GetWidth() / 2 );
+
+                        if( alg::contains( cItems, tracks[1] ) )
+                            aCollector.Remove( tracks[1] );
+                    }
                 }
             },
             true /* prompt user regarding locked items */ );
