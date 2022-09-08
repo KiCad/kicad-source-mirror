@@ -839,42 +839,36 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
 
-    if( SCHEMATIC* schematic = Schematic() )
+    // Plot attributes to a hypertext menu
+    std::vector<wxString> properties;
+    BOX2I                 bbox = GetBoundingBox();
+    bbox.Inflate( GetPenWidth() * 3 );
+
+    if( GetLayer() == LAYER_WIRE )
     {
-        std::vector<wxString> properties;
-        BOX2I                 bbox = GetBoundingBox();
-        bbox.Inflate( GetPenWidth() * 3 );
-
-        if( GetLayer() == LAYER_WIRE )
+        if( SCH_CONNECTION* connection = Connection() )
         {
-            if( SCH_CONNECTION* connection = Connection() )
-            {
-                auto&    netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
-                wxString netName = connection->Name();
-                wxString className = netSettings->GetEffectiveNetClass( netName )->GetName();
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Net" ),
+                                                       connection->Name() ) );
 
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Net" ),
-                                                           UnescapeString( netName ) ) );
-
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                           _( "Resolved netclass" ),
-                                                           UnescapeString( className ) ) );
-            }
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Resolved netclass" ),
+                                                       GetEffectiveNetClass()->GetName() ) );
         }
-        else if( GetLayer() == LAYER_BUS )
-        {
-            if( SCH_CONNECTION* connection = Connection() )
-            {
-                for( std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
-                    properties.emplace_back( wxT( "!" ) + UnescapeString( member->Name() ) );
-            }
-
-        }
-
-        if( !properties.empty() )
-            aPlotter->HyperlinkMenu( bbox, properties );
     }
+    else if( GetLayer() == LAYER_BUS )
+    {
+        if( SCH_CONNECTION* connection = Connection() )
+        {
+            for( std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+                properties.emplace_back( wxT( "!" ) + member->Name() );
+        }
+
+    }
+
+    if( !properties.empty() )
+        aPlotter->HyperlinkMenu( bbox, properties );
 }
 
 

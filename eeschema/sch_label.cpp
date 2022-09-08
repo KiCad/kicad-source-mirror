@@ -502,12 +502,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
         *token = wxEmptyString;
 
         if( connection )
-        {
-            PROJECT_FILE&                  projectFile = Schematic()->Prj().GetProjectFile();
-            std::shared_ptr<NET_SETTINGS>& netSettings = projectFile.NetSettings();
-
-            *token = UnescapeString( netSettings->GetEffectiveNetClass( connection->Name() )->GetName() );
-        }
+            *token = GetEffectiveNetClass()->GetName();
 
         return true;
     }
@@ -525,6 +520,11 @@ bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
+        if( sheet->ResolveTextVar( token, aDepth ) )
+            return true;
+    }
+    else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+    {
         if( sheet->ResolveTextVar( token, aDepth ) )
             return true;
     }
@@ -914,34 +914,29 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     for( const SCH_FIELD& field : m_fields )
         field.Plot( aPlotter, aBackground );
 
-    if( !m_fields.empty() )
+    // Plot attributes to a hypertext menu
+    std::vector<wxString> properties;
+
+    if( connection )
     {
-        std::vector<wxString> properties;
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Net" ),
+                                                   connection->Name() ) );
 
-        if( schematic && connection )
-        {
-            auto&    netSettings = schematic->Prj().GetProjectFile().m_NetSettings;
-            wxString netName = connection->Name();
-            wxString className = netSettings->GetEffectiveNetClass( netName )->GetName();
-
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       _( "Net" ),
-                                                       UnescapeString( netName ) ) );
-
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       _( "Resolved netclass" ),
-                                                       UnescapeString( className ) ) );
-        }
-
-        for( const SCH_FIELD& field : GetFields() )
-        {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       field.GetName(),
-                                                       field.GetShownText() ) );
-        }
-
-        aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   _( "Resolved netclass" ),
+                                                   GetEffectiveNetClass()->GetName() ) );
     }
+
+    for( const SCH_FIELD& field : GetFields() )
+    {
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                   field.GetName(),
+                                                   field.GetShownText() ) );
+    }
+
+    if( !properties.empty() )
+        aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
 }
 
 

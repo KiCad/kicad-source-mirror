@@ -2006,6 +2006,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
                 field.Plot( aPlotter, local_background );
         }
 
+        // Plot attributes to a hypertext menu
         std::vector<wxString> properties;
 
         for( const SCH_FIELD& field : GetFields() )
