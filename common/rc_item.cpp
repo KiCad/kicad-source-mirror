@@ -88,6 +88,7 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     case RPT_SEVERITY_ACTION:    severity = wxT( "Severity: action" );    break;
     case RPT_SEVERITY_INFO:      severity = wxT( "Severity: info" );      break;
     case RPT_SEVERITY_EXCLUSION: severity = wxT( "Severity: exclusion" ); break;
+    case RPT_SEVERITY_DEBUG:     severity = wxT( "Severity: debug" );     break;
     default:                   ;
     };
 

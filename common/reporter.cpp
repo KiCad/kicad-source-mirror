@@ -134,6 +134,7 @@ REPORTER& STDOUT_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
     case RPT_SEVERITY_WARNING:   std::cout << "SEVERITY_WARNING: ";   break;
     case RPT_SEVERITY_ERROR:     std::cout << "SEVERITY_ERROR: ";     break;
     case RPT_SEVERITY_ACTION:    std::cout << "SEVERITY_ACTION: ";    break;
+    case RPT_SEVERITY_DEBUG:     std::cout << "SEVERITY_DEBUG: ";    break;
     case RPT_SEVERITY_EXCLUSION:
     case RPT_SEVERITY_IGNORE:    break;
     }
@@ -164,6 +165,7 @@ REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
     case RPT_SEVERITY_UNDEFINED: wxLogMessage( aMsg ); break;
     case RPT_SEVERITY_INFO:      wxLogInfo( aMsg );    break;
     case RPT_SEVERITY_ACTION:    wxLogInfo( aMsg );    break;
+    case RPT_SEVERITY_DEBUG:     wxLogDebug( aMsg );   break;
     case RPT_SEVERITY_EXCLUSION:                       break;
     case RPT_SEVERITY_IGNORE:                          break;
     }
@@ -243,6 +245,7 @@ void INFOBAR_REPORTER::Finalize()
         case RPT_SEVERITY_WARNING:   icon = wxICON_WARNING;     break;
         case RPT_SEVERITY_ERROR:     icon = wxICON_ERROR;       break;
         case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
+        case RPT_SEVERITY_DEBUG:     icon = wxICON_INFORMATION; break;
     }
 
     if( m_message->EndsWith( "\n" ) )
