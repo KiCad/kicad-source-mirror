@@ -104,6 +104,7 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
     m_updatingResistanceDc = false;
     m_updatingRVdrop = false;
     m_updatingPower = false;
+    m_updatingConductorMaterialResitivity = false;
 
     m_imperial = false;
 
