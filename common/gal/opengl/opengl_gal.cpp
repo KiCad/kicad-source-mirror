@@ -123,8 +123,14 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
         {
             return it->second.id;
         }
+        else
+        {
+            // Delete the invalid bitmap cache and its data
+            glDeleteTextures( 1, &it->second.id );
+            m_bitmaps.erase( it );
+        }
 
-        // else if not valid, it will be recreated.
+        // the cached bitmap is not valid and deleted, it will be recreated.
     }
 
     return cacheBitmap( aBitmap );
