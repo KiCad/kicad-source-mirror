@@ -289,7 +289,15 @@ wxString PATHS::GetStockPlugins3DPath()
 #elif defined( __WXMAC__ )
     fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
 #else
-    fn.AssignDir( Pgm().GetExecutablePath() );
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        fn.AssignDir( getWindowsKiCadRoot() );
+    }
+    else
+    {
+        fn.AssignDir( Pgm().GetExecutablePath() );
+    }
+
     fn.AppendDir( wxT( "plugins" ) );
 #endif
 

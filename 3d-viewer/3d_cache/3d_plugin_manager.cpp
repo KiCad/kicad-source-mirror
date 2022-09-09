@@ -120,36 +120,37 @@ S3D_PLUGIN_MANAGER::~S3D_PLUGIN_MANAGER()
 
 void S3D_PLUGIN_MANAGER::loadPlugins( void )
 {
-    std::list< wxString > searchpaths;
-    std::list< wxString > pluginlist;
-    wxFileName fn;
+    std::list<wxString> searchpaths;
+    std::list<wxString> pluginlist;
+    wxFileName          fn;
 
 #ifndef __WXMAC__
-
-#ifdef DEBUG
-    // set up to work from the build directory
-    fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
-    fn.AppendDir( wxT( ".." ) );
-    fn.AppendDir( wxT( "plugins" ) );
-    fn.AppendDir( wxT( "3d" ) );
-
-    std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
-    checkPluginPath( testpath, searchpaths );
-
-    // add subdirectories too
-    wxDir debugPluginDir;
-    wxString subdir;
-
-    debugPluginDir.Open( testpath );
-
-    if( debugPluginDir.IsOpened() && debugPluginDir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
-        checkPluginPath( testpath + subdir, searchpaths );
+        // set up to work from the build directory
+        fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
+        fn.AppendDir( wxT( ".." ) );
+        fn.AppendDir( wxT( "plugins" ) );
+        fn.AppendDir( wxT( "3d" ) );
 
-        while( debugPluginDir.GetNext( &subdir ) )
+        std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
+        checkPluginPath( testpath, searchpaths );
+
+        // add subdirectories too
+        wxDir    debugPluginDir;
+        wxString subdir;
+
+        debugPluginDir.Open( testpath );
+
+        if( debugPluginDir.IsOpened()
+            && debugPluginDir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
+        {
             checkPluginPath( testpath + subdir, searchpaths );
+
+            while( debugPluginDir.GetNext( &subdir ) )
+                checkPluginPath( testpath + subdir, searchpaths );
+        }
     }
-#endif
 
     fn.AssignDir( PATHS::GetStockPlugins3DPath() );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
@@ -312,20 +313,14 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
 void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
                                           std::list< wxString >& aSearchList )
 {
-    // check the existence of a path and add it to the path search list
     if( aPath.empty() )
         return;
 
-    wxLogTrace( MASK_3D_PLUGINMGR, wxT( " * [INFO] checking for 3D plugins in '%s'\n" ),
+    wxLogTrace( MASK_3D_PLUGINMGR, wxT( " * [INFO] checking if valid plugin directory '%s'\n" ),
                 aPath.GetData() );
 
     wxFileName path;
-
-    if( aPath.StartsWith( wxT( "${" ) ) || aPath.StartsWith( wxT( "$(" ) ) )
-        path.Assign( ExpandEnvVarSubstitutions( aPath, nullptr ), wxEmptyString );
-    else
-        path.Assign( aPath, wxT( "" ) );
-
+    path.AssignDir( aPath );
     path.Normalize( FN_NORMALIZE_FLAGS );
 
     if( !wxFileName::DirExists( path.GetFullPath() ) )
