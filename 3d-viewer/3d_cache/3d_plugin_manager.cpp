@@ -153,24 +153,14 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 
     fn.AssignDir( PATHS::GetStockPlugins3DPath() );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
-
-    // check for per-user third party plugins
-    // note: GetUserDataDir() gives '.pcbnew' rather than '.kicad' since it uses the exe name;
-    fn.AssignDir( PATHS::GetUserPlugins3DPath() );
-    checkPluginPath( fn.GetPathWithSep(), searchpaths );
 #else
-
    // Search path on OS X is
-   // (1) User     ~/Library/Application Support/kicad/PlugIns/3d
-   checkPluginPath( PATHS::GetOSXKicadUserDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
-
-   // (2) Machine  /Library/Application Support/kicad/PlugIns/3d
+   // (1) Machine  /Library/Application Support/kicad/PlugIns/3d
    checkPluginPath( PATHS::GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
 
-   // (3) Bundle   kicad.app/Contents/PlugIns/3d
+   // (2) Bundle   kicad.app/Contents/PlugIns/3d
    fn.AssignDir( PATHS::GetStockPlugins3DPath() );
    checkPluginPath( fn.GetPathWithSep(), searchpaths );
-
 #endif
 
     std::list< wxString >::iterator sPL = searchpaths.begin();
