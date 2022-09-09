@@ -77,9 +77,21 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
     m_viaSizesGrid->SetDefaultRowSize(    m_viaSizesGrid->GetDefaultRowSize()    + 4 );
     m_diffPairsGrid->SetDefaultRowSize(   m_diffPairsGrid->GetDefaultRowSize()   + 4 );
 
-    m_trackWidthsGrid->PushEventHandler( new GRID_TRICKS( m_trackWidthsGrid ) );
-    m_viaSizesGrid->PushEventHandler( new GRID_TRICKS( m_viaSizesGrid ) );
-    m_diffPairsGrid->PushEventHandler( new GRID_TRICKS( m_diffPairsGrid ) );
+    m_trackWidthsGrid->PushEventHandler( new GRID_TRICKS( m_trackWidthsGrid,
+                                                          [this]( wxCommandEvent& aEvent )
+                                                          {
+                                                              OnAddTrackWidthsClick( aEvent );
+                                                          } ) );
+    m_viaSizesGrid->PushEventHandler( new GRID_TRICKS( m_viaSizesGrid,
+                                                       [this]( wxCommandEvent& aEvent )
+                                                       {
+                                                           OnAddViaSizesClick( aEvent );
+                                                       } ) );
+    m_diffPairsGrid->PushEventHandler( new GRID_TRICKS( m_diffPairsGrid,
+                                                        [this]( wxCommandEvent& aEvent )
+                                                        {
+                                                            OnAddDiffPairsClick( aEvent );
+                                                        } ) );
 
     m_trackWidthsGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_viaSizesGrid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );

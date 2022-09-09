@@ -89,8 +89,16 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_EnvVars->SetDefaultRowSize( m_EnvVars->GetDefaultRowSize() + 4 );
     m_SearchPaths->SetDefaultRowSize( m_SearchPaths->GetDefaultRowSize() + 4 );
 
-    m_EnvVars->PushEventHandler( new GRID_TRICKS( m_EnvVars ) );
-    m_SearchPaths->PushEventHandler( new GRID_TRICKS( m_SearchPaths ) );
+    m_EnvVars->PushEventHandler( new GRID_TRICKS( m_EnvVars,
+                                                  [this]( wxCommandEvent& aEvent )
+                                                  {
+                                                      OnAddEnvVar( aEvent );
+                                                  } ) );
+    m_SearchPaths->PushEventHandler( new GRID_TRICKS( m_SearchPaths,
+                                                      [this]( wxCommandEvent& aEvent )
+                                                      {
+                                                          OnAddSearchPath( aEvent );
+                                                      } ) );
 
     m_EnvVars->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
     m_SearchPaths->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );

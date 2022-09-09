@@ -24,6 +24,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <dialogs/panel_setup_buses.h>
+#include "grid_tricks.h"
 
 PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BUSES_BASE( aWindow ),
@@ -41,6 +42,21 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
 
     m_source->SetFont( KIUI::GetInfoFont( aWindow ) );
 
+    m_aliasesGrid->PushEventHandler( new GRID_TRICKS( m_aliasesGrid,
+                                                      [this]( wxCommandEvent& aEvent )
+                                                      {
+                                                          OnAddAlias( aEvent );
+                                                      } ) );
+
+    m_membersGrid->PushEventHandler( new GRID_TRICKS( m_membersGrid,
+                                                      [this]( wxCommandEvent& aEvent )
+                                                      {
+                                                          wxIdleEvent dummy;
+                                                          reloadMembersGridOnIdle( dummy );
+
+                                                          OnAddMember( aEvent );
+                                                      } ) );
+
     // wxFormBuilder doesn't include this event...
     m_aliasesGrid->Connect( wxEVT_GRID_CELL_CHANGING,
                             wxGridEventHandler( PANEL_SETUP_BUSES::OnAliasesGridCellChanging ),
@@ -52,6 +68,20 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
     Layout();
 }
 
+
+PANEL_SETUP_BUSES::~PANEL_SETUP_BUSES()
+{
+    // Delete the GRID_TRICKS.
+    m_aliasesGrid->PopEventHandler( true );
+    m_membersGrid->PopEventHandler( true );
+
+    m_aliasesGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                                wxGridEventHandler( PANEL_SETUP_BUSES::OnAliasesGridCellChanging ),
+                                nullptr, this );
+    m_membersGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                                wxGridEventHandler( PANEL_SETUP_BUSES::OnMemberGridCellChanging ),
+                                nullptr, this );
+}
 
 bool PANEL_SETUP_BUSES::TransferDataToWindow()
 {
@@ -175,7 +205,7 @@ void PANEL_SETUP_BUSES::OnAddMember( wxCommandEvent& aEvent )
     if( !m_membersGrid->CommitPendingChanges() )
         return;
 
-    int row = m_aliasesGrid->GetNumberRows();
+    int row = m_membersGrid->GetNumberRows();
     m_membersGrid->AppendRows();
 
     m_membersGrid->MakeCellVisible( row, 0 );
@@ -274,6 +304,7 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
             }
         }
 
+        m_membersGridDirty = true;
         Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
     }
 }
@@ -306,12 +337,15 @@ void PANEL_SETUP_BUSES::doReloadMembersGrid()
         for( const wxString& member : alias->Members() )
             m_membersGrid->SetCellValue( ii++, 0, member );
     }
+
+    m_membersGridDirty = false;
 }
 
 
 void PANEL_SETUP_BUSES::reloadMembersGridOnIdle( wxIdleEvent& aEvent )
 {
-    doReloadMembersGrid();
+    if( m_membersGridDirty )
+        doReloadMembersGrid();
 
     Unbind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
 }
@@ -401,6 +435,7 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
             const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ row ];
             alias->SetName( aliasName );
 
+            m_membersGridDirty = true;
             Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
         }
     }

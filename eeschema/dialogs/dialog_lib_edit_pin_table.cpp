@@ -672,7 +672,10 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
     m_grid->SetTable( m_dataModel );
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
+                                                       {
+                                                           OnAddRow( aEvent );
+                                                       } ) );
 
     // Show/hide columns according to the user's preference
     SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings();

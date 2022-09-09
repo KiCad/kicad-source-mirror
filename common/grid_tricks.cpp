@@ -37,34 +37,52 @@
 #define ROW_SEP     wxT( '\n' )
 
 
-GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
-    m_grid( aGrid )
+GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ) :
+    m_grid( aGrid ),
+    m_addHandler( []( wxCommandEvent& ) {} )
+{
+    init();
+}
+
+
+GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
+    m_grid( aGrid ),
+    m_addHandler( aAddHandler )
+{
+    init();
+}
+
+
+void GRID_TRICKS::init()
 {
     m_sel_row_start = 0;
     m_sel_col_start = 0;
     m_sel_row_count = 0;
     m_sel_col_count = 0;
 
-    aGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK,
-                    wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), nullptr, this );
-    aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK,
-                    wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), nullptr, this );
-    aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK,
-                    wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), nullptr, this );
-    aGrid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK,
-                    wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), nullptr, this );
-    aGrid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK,
-                    wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), nullptr, this );
-    aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED,
-                    wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), nullptr, this );
-    aGrid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( GRID_TRICKS::onCharHook ), nullptr, this );
-    aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), nullptr, this );
-    aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ),
-                    nullptr, this );
+    m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK,
+                     wxGridEventHandler( GRID_TRICKS::onGridCellLeftClick ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK,
+                     wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK,
+                     wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK,
+                     wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK,
+                     wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), nullptr, this );
+    m_grid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED,
+                     wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), nullptr, this );
+    m_grid->Connect( wxEVT_CHAR_HOOK,
+                     wxCharEventHandler( GRID_TRICKS::onCharHook ), nullptr, this );
+    m_grid->Connect( wxEVT_KEY_DOWN,
+                     wxKeyEventHandler( GRID_TRICKS::onKeyDown ), nullptr, this );
+    m_grid->Connect( wxEVT_UPDATE_UI,
+                     wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ), nullptr, this );
 
     // The handlers that control the tooltips must be on the actual grid window, not the grid
-    aGrid->GetGridWindow()->Connect( wxEVT_MOTION,
-                            wxMouseEventHandler( GRID_TRICKS::onGridMotion ), nullptr, this );
+    m_grid->GetGridWindow()->Connect( wxEVT_MOTION,
+                                      wxMouseEventHandler( GRID_TRICKS::onGridMotion ), nullptr,
+                                      this );
 }
 
 
@@ -400,7 +418,15 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 {
     bool handled = false;
 
-    if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )
+    if( ev.GetKeyCode() == WXK_RETURN && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
+    {
+        if( m_grid->CommitPendingChanges() )
+        {
+            wxCommandEvent dummy;
+            m_addHandler( dummy );
+        }
+    }
+    else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )
     {
         if( m_grid->IsCellEditControlShown() && wxTheClipboard->Open() )
         {

@@ -62,7 +62,10 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
 {
     m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
 
-    GRID_TRICKS* trick = new GRID_TRICKS( m_modelsGrid );
+    GRID_TRICKS* trick = new GRID_TRICKS( m_modelsGrid, [this]( wxCommandEvent& aEvent )
+                                                        {
+                                                            OnAdd3DRow( aEvent );
+                                                        } );
     trick->SetTooltipEnable( COL_PROBLEM );
 
     m_modelsGrid->PushEventHandler( trick );

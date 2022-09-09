@@ -54,7 +54,10 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_nameValidator.SetStyle( wxFILTER_EXCLUDE_CHAR_LIST );
     m_nameValidator.SetCharExcludes( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) );
 
-    m_TextVars->PushEventHandler( new GRID_TRICKS( m_TextVars ) );
+    m_TextVars->PushEventHandler( new GRID_TRICKS( m_TextVars, [this]( wxCommandEvent& aEvent )
+                                                               {
+                                                                   OnAddTextVar( aEvent );
+                                                               } ) );
     m_TextVars->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
 
     // wxFormBuilder doesn't include this event...

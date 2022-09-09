@@ -75,7 +75,10 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
 
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
+                                                       {
+                                                           OnAddButtonClick( aEvent );
+                                                       } ) );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 

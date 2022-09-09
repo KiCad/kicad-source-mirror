@@ -161,7 +161,16 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_privateLayersGrid->SetTable( m_privateLayers );
 
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
-    m_privateLayersGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_privateLayersGrid->PushEventHandler( new GRID_TRICKS( m_privateLayersGrid,
+                                                            [this]( wxCommandEvent& aEvent )
+                                                            {
+                                                                OnAddLayer( aEvent );
+                                                            } ) );
+    m_padGroupsGrid->PushEventHandler( new GRID_TRICKS( m_padGroupsGrid,
+                                                        [this]( wxCommandEvent& aEvent )
+                                                        {
+                                                            OnAddPadGroup( aEvent );
+                                                        } ) );
 
     m_itemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_privateLayersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -224,6 +233,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
     m_privateLayersGrid->PopEventHandler( true );
+    m_padGroupsGrid->PopEventHandler( true );
 
     m_page = static_cast<NOTEBOOK_PAGES>( m_NoteBook->GetSelection() );
 

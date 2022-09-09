@@ -184,7 +184,11 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_alternatesGrid->SetDefaultRowSize( m_alternatesGrid->GetDefaultRowSize() + 4 );
 
     m_alternatesGrid->SetTable( m_alternatesDataModel );
-    m_alternatesGrid->PushEventHandler( new GRID_TRICKS( m_alternatesGrid ) );
+    m_alternatesGrid->PushEventHandler( new GRID_TRICKS( m_alternatesGrid,
+                                                         [this]( wxCommandEvent& aEvent )
+                                                         {
+                                                             OnAddAlternate( aEvent );
+                                                         } ) );
 
     if( aPin->GetParent()->HasConversion() )
     {

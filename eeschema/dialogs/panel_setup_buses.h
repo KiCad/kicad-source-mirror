@@ -35,7 +35,7 @@ class PANEL_SETUP_BUSES : public PANEL_SETUP_BUSES_BASE
 public:
     PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame );
 
-    ~PANEL_SETUP_BUSES() {}
+    ~PANEL_SETUP_BUSES();
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -61,6 +61,7 @@ private:
     std::vector< std::shared_ptr<BUS_ALIAS> > m_aliases;
     int                                       m_lastAlias;
     wxString                                  m_lastAliasName;
+    bool                                      m_membersGridDirty;
 
     wxString        m_errorMsg;
     WX_GRID*        m_errorGrid;

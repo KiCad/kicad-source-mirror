@@ -60,6 +60,8 @@ class GRID_TRICKS : public wxEvtHandler
 public:
     explicit GRID_TRICKS( WX_GRID* aGrid );
 
+    GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler );
+
     /**
      * Enable the tooltip for a column.
      *
@@ -85,6 +87,9 @@ public:
     }
 
 protected:
+    /// Shared initialization for various ctors.
+    void init();
+
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
@@ -110,6 +115,7 @@ protected:
     virtual void paste_text( const wxString& cb_text );
     virtual void cutcopy( bool doCopy, bool doDelete );
 
+protected:
     WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
 
     // row & col "selection" acquisition
@@ -119,7 +125,9 @@ protected:
     int      m_sel_row_count;
     int      m_sel_col_count;
 
-    std::bitset<GRIDTRICKS_MAX_COL> m_tooltipEnabled;
+    std::function<void( wxCommandEvent& )> m_addHandler;
+
+    std::bitset<GRIDTRICKS_MAX_COL>        m_tooltipEnabled;
 };
 
 #endif  // _GRID_TRICKS_H_

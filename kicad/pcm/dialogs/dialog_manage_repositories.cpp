@@ -54,7 +54,10 @@ DIALOG_MANAGE_REPOSITORIES::DIALOG_MANAGE_REPOSITORIES(
     addMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &DIALOG_MANAGE_REPOSITORIES::OnAddDefault, this,
                    menuItem->GetId() );
 
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
+                                                       {
+                                                           OnAdd( aEvent );
+                                                       } ) );
 
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
     {
