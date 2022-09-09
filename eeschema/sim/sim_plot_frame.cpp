@@ -895,7 +895,8 @@ void SIM_PLOT_FRAME::updateTuners()
     {
         const wxString& ref = (*it)->GetComponentName();
 
-        if( std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item )
+        if( std::find_if( spiceItems.begin(), spiceItems.end(),
+                          [&]( const NETLIST_EXPORTER_SPICE::ITEM& item )
                 {
                     return item.refName == ref;
                 }) == spiceItems.end() )
@@ -1475,7 +1476,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     if( !m_settingsDlg )
         m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_circuitModel, m_simulator->Settings() );
 
-    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_ALL_FLAGS ) )
+    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS ) )
     {
         DisplayErrorMessage( this, _( "There were errors during netlist export, aborted." ) );
         return;

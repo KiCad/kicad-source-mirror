@@ -611,7 +611,7 @@ void DIALOG_SIM_SETTINGS::loadDirectives()
 
 void DIALOG_SIM_SETTINGS::updateNetlistOpts()
 {
-    m_netlistOpts = NETLIST_EXPORTER_SPICE::OPTION_ALL_FLAGS;
+    m_netlistOpts = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
 
     if( !m_fixPassiveVals->IsChecked() )
         m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;

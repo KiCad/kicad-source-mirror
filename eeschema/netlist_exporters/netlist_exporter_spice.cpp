@@ -68,11 +68,11 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
-    return GenerateNetlist( formatter, aNetlistOptions );
+    return DoWriteNetlist( formatter, aNetlistOptions );
 }
 
 
-bool NETLIST_EXPORTER_SPICE::GenerateNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
     LOCALE_IO dummy;
 
@@ -85,34 +85,44 @@ bool NETLIST_EXPORTER_SPICE::GenerateNetlist( OUTPUTFORMATTER& aFormatter, unsig
     if( !ReadSchematicAndLibraries( aNetlistOptions ) )
         return false;
 
-    aFormatter.Print( 0, ".title %s\n", TO_UTF8( m_title ) );
+    WriteHead( aFormatter, aNetlistOptions );
 
     writeIncludes( aFormatter, aNetlistOptions );
     writeModels( aFormatter );
     WriteDirectives( aFormatter, aNetlistOptions );
     writeItems( aFormatter );
 
-    aFormatter.Print( 0, ".end\n" );
+    WriteTail( aFormatter, aNetlistOptions );
 
     return true;
+}
+
+
+void NETLIST_EXPORTER_SPICE::WriteHead( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+{
+    aFormatter.Print( 0, ".title %s\n", TO_UTF8( m_title ) );
+}
+
+
+void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+{
+    aFormatter.Print( 0, ".end\n" );
 }
 
 
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions )
 {
     std::set<wxString> refNames; // Set of reference names to check for duplication.
-    int NCCounter = 1;
+    int ncCounter = 1;
 
-    ReadDirectives();
+    ReadDirectives( aNetlistOptions );
 
     m_nets.clear();
     m_items.clear();
     m_libParts.clear();
 
-    for( unsigned sheetIndex = 0; sheetIndex < m_schematic->GetSheets().size(); ++sheetIndex )
+    for( SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        SCH_SHEET_PATH sheet = m_schematic->GetSheets().at( sheetIndex );
-
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
@@ -122,7 +132,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
             CreatePinList( symbol, &sheet, true );
 
-            SPICE_ITEM spiceItem;
+            ITEM spiceItem;
 
             if( !readRefName( sheet, *symbol, spiceItem, refNames ) )
                 return false;
@@ -134,7 +144,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                 continue;
 
             readPinNumbers( *symbol, spiceItem );
-            readPinNetNames( *symbol, spiceItem, NCCounter );
+            readPinNetNames( *symbol, spiceItem, ncCounter );
 
             // TODO: transmission line handling?
 
@@ -156,10 +166,10 @@ void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( wxString& aNetName )
 
 wxString NETLIST_EXPORTER_SPICE::GetItemName( const wxString& aRefName ) const
 {
-    const std::list<SPICE_ITEM>& spiceItems = GetItems();
+    const std::list<ITEM>& spiceItems = GetItems();
 
     auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
-                            [aRefName]( const SPICE_ITEM& aItem )
+                            [aRefName]( const ITEM& aItem )
                             {
                                 return aItem.refName == aRefName;
                             } );
@@ -171,13 +181,13 @@ wxString NETLIST_EXPORTER_SPICE::GetItemName( const wxString& aRefName ) const
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReadDirectives()
+void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 {
     m_directives.clear();
 
-    for( unsigned int sheetIndex = 0; sheetIndex < m_schematic->GetSheets().size(); ++sheetIndex )
+    for( const SCH_SHEET_PATH& sheet : GetSheets( aNetlistOptions ) )
     {
-        for( SCH_ITEM* item : m_schematic->GetSheets().at( sheetIndex ).LastScreen()->Items() )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
             wxString text;
 
@@ -233,7 +243,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
 }
 
 
-void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
     wxString path;
@@ -261,7 +271,7 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
 }
 
 
-void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     if( m_libraries.count( aItem.libraryPath ) )
     {
@@ -300,7 +310,7 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aIt
 
 
 bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                          SPICE_ITEM& aItem,
+                                          ITEM& aItem,
                                           std::set<wxString>& aRefNames )
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
@@ -318,7 +328,7 @@ bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 }
 
 
-bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     if( !aItem.model.get() )
     {
@@ -350,24 +360,19 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
+void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     for( const PIN_INFO& pin : m_sortedSymbolPinList )
         aItem.pinNumbers.push_back( pin.num );
 }
 
 
-void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
-                                              int& aNCCounter )
+void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem,
+                                              int& aNcCounter )
 {
     for( const PIN_INFO& pinInfo : m_sortedSymbolPinList )
     {
-        wxString netName = pinInfo.netName;
-        ReplaceForbiddenChars( netName );
-        netName = UnescapeString( netName );
-
-        if( netName == "" )
-            netName = wxString::Format( wxT( "NC-%u" ), aNCCounter++ );
+        wxString netName = GenerateItemPinNetName( pinInfo.netName, aNcCounter );
 
         aItem.pinNetNames.push_back( netName );
         m_nets.insert( netName );
@@ -415,7 +420,7 @@ void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigne
 
 void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
 {
-    for( const SPICE_ITEM& item : m_items )
+    for( const ITEM& item : m_items )
     {
         if( !item.model->IsEnabled() )
             continue;
@@ -427,7 +432,7 @@ void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
 
 void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 {
-    for( const SPICE_ITEM& item : m_items )
+    for( const ITEM& item : m_items )
     {
         if( !item.model->IsEnabled() )
             continue;
@@ -453,3 +458,28 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     for( const wxString& directive : m_directives )
         aFormatter.Print( 0, "%s\n", TO_UTF8( directive ) );
 }
+
+
+wxString NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const wxString& aNetName,
+                                                         int& aNcCounter ) const
+{
+    wxString netName = aNetName;
+
+    ReplaceForbiddenChars( netName );
+    netName = UnescapeString( netName );
+
+    if( netName == "" )
+        netName = wxString::Format( wxT( "NC-%u" ), aNcCounter++ );
+
+    return netName;
+}
+
+
+SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::GetSheets( unsigned aNetlistOptions ) const
+{
+    if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
+        return SCH_SHEET_LIST( m_schematic->CurrentSheet().at( 0 ) );
+    else
+        return m_schematic->GetSheets();
+}
+

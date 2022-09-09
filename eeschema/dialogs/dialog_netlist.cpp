@@ -63,7 +63,8 @@ enum panel_netlist_index {
     PANELPCBNEW = 0,    /* Handle Netlist format Pcbnew */
     PANELORCADPCB2,     /* Handle Netlist format OracdPcb2 */
     PANELCADSTAR,       /* Handle Netlist format CadStar */
-    PANELSPICE,         /* Handle Netlist format Pspice */
+    PANELSPICE,         /* Handle Netlist format Spice */
+    PANELSPICEMODEL,    /* Handle Netlist format Spice Model (subcircuit) */
     PANELCUSTOMBASE     /* First auxiliary panel (custom netlists).
                          * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
 };
@@ -94,6 +95,7 @@ public:
 
     NETLIST_TYPE_ID   m_IdNetType;
     // opt to reformat passive component values (e.g. 1M -> 1Meg):
+    wxCheckBox*       m_CurSheetAsRoot;
     wxCheckBox*       m_SaveAllVoltages;
     wxCheckBox*       m_SaveAllCurrents;
     wxTextCtrl*       m_CommandStringCtrl;
@@ -127,6 +129,8 @@ private:
                                            const wxString & aCommandString,
                                            NETLIST_TYPE_ID aNetTypeId );
     void InstallPageSpice();
+    void InstallPageSpiceModel();
+    
     bool TransferDataFromWindow() override;
     void NetlistUpdateOpt();
 
@@ -175,7 +179,7 @@ private:
 
 public:
     SCH_EDIT_FRAME*      m_Parent;
-    NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
+    NETLIST_PAGE_DIALOG* m_PanelNetType[5 + CUSTOMPANEL_COUNTMAX];
 };
 
 
@@ -202,6 +206,7 @@ private:
 /* Event id for notebook page buttons: */
 enum id_netlist {
     ID_CREATE_NETLIST = ID_END_EESCHEMA_ID_LIST + 1,
+    ID_CUR_SHEET_AS_ROOT,
     ID_SAVE_ALL_VOLTAGES,
     ID_SAVE_ALL_CURRENTS,
     ID_RUN_SIMULATOR
@@ -265,6 +270,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
             new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
 
     InstallPageSpice();
+    InstallPageSpiceModel();
     InstallCustomPages();
 
     SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
@@ -334,21 +340,27 @@ void NETLIST_DIALOG::OnRunSpiceButtUI( wxUpdateUIEvent& aEvent )
 void NETLIST_DIALOG::InstallPageSpice()
 {
     NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
-                    new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
+            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
+                                               _( "Use current sheet as root" ) );
+    page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
+    page->m_CurSheetAsRoot->SetValue( settings.m_SpiceCurSheetAsRoot );
+    page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 
     page->m_SaveAllVoltages = new wxCheckBox( page, ID_SAVE_ALL_VOLTAGES,
                                               _( "Save all voltages" ) );
     page->m_SaveAllVoltages->SetToolTip( _( "Write a directive to save all voltages (.save all)" ) );
     page->m_SaveAllVoltages->SetValue( settings.m_SpiceSaveAllVoltages );
-    page->m_LeftBoxSizer->Add( page->m_SaveAllVoltages, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+    page->m_RightBoxSizer->Add( page->m_SaveAllVoltages, 0, wxBOTTOM | wxRIGHT, 5 );
 
     page->m_SaveAllCurrents = new wxCheckBox( page, ID_SAVE_ALL_CURRENTS,
                                               _( "Save all currents" ) );
     page->m_SaveAllCurrents->SetToolTip( _( "Write a directive to save all currents (.probe alli)" ) );
     page->m_SaveAllCurrents->SetValue( settings.m_SpiceSaveAllCurrents );
-    page->m_RightBoxSizer->Add( page->m_SaveAllCurrents, 0, wxGROW | wxBOTTOM | wxLEFT, 5 );
+    page->m_RightBoxSizer->Add( page->m_SaveAllCurrents, 0, wxBOTTOM | wxRIGHT, 5 );
 
 
     wxString simulatorCommand = settings.m_SpiceCommandString;
@@ -369,6 +381,21 @@ void NETLIST_DIALOG::InstallPageSpice()
     wxButton* button = new wxButton( page, ID_RUN_SIMULATOR,
                                      _( "Create Netlist and Run Simulator Command" ) );
     page->m_LowBoxSizer->Add( button, 0, wxGROW | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
+}
+
+
+void NETLIST_DIALOG::InstallPageSpiceModel()
+{
+    NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICEMODEL] =
+            new NETLIST_PAGE_DIALOG( m_NoteBook, wxT( "Spice Model" ), NET_TYPE_SPICE_MODEL, false );
+
+    SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
+                                               _( "Use current sheet as root" ) );
+    page->m_CurSheetAsRoot->SetToolTip( _( "Export netlist only for the current sheet" ) );
+    page->m_CurSheetAsRoot->SetValue( settings.m_SpiceModelCurSheetAsRoot );
+    page->m_LeftBoxSizer->Add( page->m_CurSheetAsRoot, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 }
 
 
@@ -440,16 +467,20 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 
 void NETLIST_DIALOG::NetlistUpdateOpt()
 {
-    bool saveAllVoltages = m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
-    bool saveAllCurrents = m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
-    wxString spice_cmd_string = m_PanelNetType[ PANELSPICE ]->m_CommandStringCtrl->GetValue();
+    bool saveAllVoltages =  m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
+    bool saveAllCurrents =  m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
+    wxString spiceCmdString = m_PanelNetType[ PANELSPICE ]->m_CommandStringCtrl->GetValue();
+    bool curSheetAsRoot = m_PanelNetType[ PANELSPICE ]->m_CurSheetAsRoot->GetValue();
+    bool spiceModelCurSheetAsRoot = m_PanelNetType[ PANELSPICEMODEL ]->m_CurSheetAsRoot->GetValue();
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
-    settings.m_SpiceSaveAllVoltages     = saveAllVoltages;
-    settings.m_SpiceSaveAllCurrents     = saveAllCurrents;
-    settings.m_SpiceCommandString       = spice_cmd_string;
-    settings.m_NetFormatName            = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
+    settings.m_SpiceSaveAllVoltages  = saveAllVoltages;
+    settings.m_SpiceSaveAllCurrents  = saveAllCurrents;
+    settings.m_SpiceCommandString    = spiceCmdString;
+    settings.m_SpiceCurSheetAsRoot = curSheetAsRoot;
+    settings.m_SpiceModelCurSheetAsRoot = spiceModelCurSheetAsRoot;
+    settings.m_NetFormatName         = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 }
 
 
@@ -480,6 +511,13 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
         if( currPage->m_SaveAllCurrents->GetValue() )
             netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+        if( currPage->m_CurSheetAsRoot->GetValue() )
+            netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
+        break;
+
+    case NET_TYPE_SPICE_MODEL:
+        if( currPage->m_CurSheetAsRoot->GetValue() )
+            netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_CUR_SHEET_AS_ROOT;
         break;
 
     case NET_TYPE_CADSTAR:

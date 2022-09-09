@@ -70,7 +70,7 @@ public:
 
     bool GetNetlist( OUTPUTFORMATTER* aFormatter )
     {
-        return NGSPICE_CIRCUIT_MODEL::GenerateNetlist( *aFormatter, m_options );
+        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( *aFormatter, m_options );
     }
 
     /**

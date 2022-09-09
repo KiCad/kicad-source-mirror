@@ -259,6 +259,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_kicad.cpp
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_spice.cpp
+    netlist_exporters/netlist_exporter_spice_model.cpp
     netlist_exporters/netlist_exporter_xml.cpp
     netlist_exporters/netlist_generator.cpp
 

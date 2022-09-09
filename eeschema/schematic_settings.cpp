@@ -53,8 +53,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_DashedLineDashRatio( 12.0 ),
         m_DashedLineGapRatio( 3.0 ),
         m_SpiceAdjustPassiveValues( false ),
+        m_SpiceCurSheetAsRoot( false ),
         m_SpiceSaveAllVoltages( false ),
         m_SpiceSaveAllCurrents( false ),
+        m_SpiceModelCurSheetAsRoot( true ),
         m_NgspiceSimulatorSettings( nullptr )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
