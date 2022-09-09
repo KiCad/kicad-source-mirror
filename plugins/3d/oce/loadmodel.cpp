@@ -79,6 +79,7 @@
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
 #include <TDataStd_Name.hxx>
+#include <Standard_Version.hxx>
 
 #include "plugins/3dapi/ifsg_all.h"
 
@@ -96,10 +97,10 @@
 // 30 deg (12 faces per circle) = 0.52359878
 #define USER_ANGLE (0.52359878)
 
-typedef std::map< Standard_Real, SGNODE* > COLORMAP;
-typedef std::map< std::string, SGNODE* >   FACEMAP;
-typedef std::map< std::string, std::vector< SGNODE* > > NODEMAP;
-typedef std::pair< std::string, std::vector< SGNODE* > > NODEITEM;
+typedef std::map<std::size_t, SGNODE*>               COLORMAP;
+typedef std::map<std::string, SGNODE*>               FACEMAP;
+typedef std::map<std::string, std::vector<SGNODE*>>  NODEMAP;
+typedef std::pair<std::string, std::vector<SGNODE*>> NODEITEM;
 
 struct DATA;
 
@@ -108,8 +109,13 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
 
 bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
-                  std::vector< SGNODE* >* items, Quantity_Color* color );
+                  std::vector< SGNODE* >* items, Quantity_ColorRGBA* color );
 
+#if OCC_VERSION_HEX >= 0x070500
+#define OCC_COLOR_SPACE Quantity_TOC_sRGB
+#else
+#define OCC_COLOR_SPACE Quantity_TOC_RGB
+#endif
 
 struct DATA
 {
@@ -230,7 +236,7 @@ struct DATA
     }
 
     // return color if found; if not found, create SGAPPEARANCE
-    SGNODE* GetColor( Quantity_Color* colorObj )
+    SGNODE* GetColor( Quantity_ColorRGBA* colorObj )
     {
         if( nullptr == colorObj )
         {
@@ -247,9 +253,16 @@ struct DATA
             return defaultColor;
         }
 
-        Standard_Real id = colorObj->Distance( refColor );
-        std::map< Standard_Real, SGNODE* >::iterator item;
-        item = colors.find( id );
+        Quantity_Color colorRgb = colorObj->GetRGB();
+
+        Standard_Real r, g, b;
+        colorObj->GetRGB().Values( r, g, b, OCC_COLOR_SPACE );
+
+        std::size_t hash = std::hash<double>{}( colorRgb.Distance( refColor ) )
+                           ^ ( std::hash<float>{}( colorObj->Alpha() ) << 1 );
+
+        std::map<std::size_t, SGNODE*>::iterator item;
+        item = colors.find( hash );
 
         if( item != colors.end() )
             return item->second;
@@ -258,8 +271,9 @@ struct DATA
         app.SetShininess( 0.1f );
         app.SetSpecular( 0.12f, 0.12f, 0.12f );
         app.SetAmbient( 0.1f, 0.1f, 0.1f );
-        app.SetDiffuse( colorObj->Red(), colorObj->Green(), colorObj->Blue() );
-        colors.emplace( id, app.GetRawPtr() );
+        app.SetDiffuse( r, g, b );
+        app.SetTransparency( 1.0f - colorObj->Alpha() );
+        colors.emplace( hash, app.GetRawPtr() );
 
         return app.GetRawPtr();
     }
@@ -477,7 +491,7 @@ static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool
 }
 
 
-bool getColor( DATA& data, TDF_Label label, Quantity_Color& color )
+bool getColor( DATA& data, TDF_Label label, Quantity_ColorRGBA& color )
 {
     while( true )
     {
@@ -768,7 +782,7 @@ SCENEGRAPH* LoadModel( char const* filename )
 
 
 bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
-                   std::vector< SGNODE* >* items, Quantity_Color* color )
+                   std::vector<SGNODE*>* items, Quantity_ColorRGBA* color )
 {
     TopoDS_Iterator it;
     bool ret = false;
@@ -792,8 +806,8 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     TDF_Label label;
     data.hasSolid = true;
     std::string partID;
-    Quantity_Color col;
-    Quantity_Color* lcolor = nullptr;
+    Quantity_ColorRGBA col;
+    Quantity_ColorRGBA* lcolor = nullptr;
 
     wxLogTrace( MASK_OCE, wxT( "Processing solid" ) );
 
@@ -1036,8 +1050,8 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 }
 
 
-bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
-                  std::vector< SGNODE* >* items, Quantity_Color* color )
+bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vector<SGNODE*>* items,
+                  Quantity_ColorRGBA* color )
 {
     if( Standard_True == face.IsNull() )
         return false;
@@ -1104,7 +1118,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
     if( triangulation.IsNull() == Standard_True )
         return false;
 
-    Quantity_Color lcolor;
+    Quantity_ColorRGBA lcolor;
 
     // check for a face color; this has precedence over SOLID colors
     do
