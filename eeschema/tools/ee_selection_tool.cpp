@@ -1298,6 +1298,15 @@ bool EE_SELECTION_TOOL::selectMultiple()
                             sch_item->RunOnChildren(
                                     [&]( SCH_ITEM* aChild )
                                     {
+                                        // Filter pins by unit
+                                        if( SCH_PIN* pin = dyn_cast<SCH_PIN*>( aChild ) )
+                                        {
+                                            int unit = pin->GetLibPin()->GetUnit();
+
+                                            if( unit && unit != pin->GetParentSymbol()->GetUnit() )
+                                                return;
+                                        }
+
                                         nearbyChildren.push_back( aChild );
                                     } );
                         }
