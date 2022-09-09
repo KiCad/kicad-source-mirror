@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
 "PO-Revision-Date: 2022-09-11 13:16+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -8664,18 +8664,16 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "新しいフィールド名:"
+msgstr "フィールド名を表示"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
 msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "自動配置ルール"
+msgstr "自動配置を許可する"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:99
 #, fuzzy
@@ -10873,7 +10871,6 @@ msgstr "名前で信号を追加:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
 msgstr "未接続"
 
@@ -13693,7 +13690,6 @@ msgid "Net"
 msgstr "ネット"
 
 #: eeschema/sch_label.cpp:932 eeschema/sch_line.cpp:861
-#, fuzzy
 msgid "Resolved netclass"
 msgstr "解決されたネットクラス"
 
