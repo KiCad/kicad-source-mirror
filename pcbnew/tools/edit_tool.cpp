@@ -313,10 +313,12 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     std::shared_ptr<CONNECTIVITY_DATA> c = board->GetConnectivity();
                     std::vector<BOARD_CONNECTED_ITEM*> cItems;
 
+                    int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+
                     if( vias.size() == 1 )
                     {
                         cItems = c->GetConnectedItemsAtAnchor( vias[0], aPt, trackTypes,
-                                                               vias[0]->GetWidth() / 2 );
+                                                               vias[0]->GetWidth() / 2 + accuracy );
 
                         if( alg::contains( cItems, tracks[0] )
                                 && alg::contains( cItems, tracks[1] ) )
@@ -328,7 +330,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     else if( vias.size() == 0 )
                     {
                         cItems = c->GetConnectedItemsAtAnchor( tracks[0], aPt, trackTypes,
-                                                               tracks[0]->GetWidth() / 2 );
+                                                               tracks[0]->GetWidth() / 2 + accuracy );
 
                         if( alg::contains( cItems, tracks[1] ) )
                             aCollector.Remove( tracks[1] );
