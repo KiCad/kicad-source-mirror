@@ -308,18 +308,28 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 if( aCollector.GetCount() > 1 )
                     sTool->GuessSelectionCandidates( aCollector, aPt );
 
-                // If we have a knee between two segments, or a via attached to two segments,
-                // then drop the selection to a single item.
-                std::initializer_list<KICAD_T> trackTypes = { PCB_TRACE_T, PCB_ARC_T };
-                std::vector<PCB_TRACK*>        tracks;
-                std::vector<PCB_TRACK*>        vias;
+                /*
+                 * If we have a knee between two segments, or a via attached to two segments,
+                 * then drop the selection to a single item.
+                 */
+
+                std::vector<PCB_TRACK*> tracks;
+                std::vector<PCB_TRACK*> vias;
 
                 for( EDA_ITEM* item : aCollector )
                 {
-                    if( item->IsType( trackTypes ) )
+                    switch( item->Type() )
+                    {
+                    case PCB_TRACE_T:
+                    case PCB_ARC_T:
                         tracks.push_back( static_cast<PCB_TRACK*>( item ) );
-                    else if( item->Type() == PCB_VIA_T )
+                        break;
+                    case PCB_VIA_T:
                         vias.push_back( static_cast<PCB_TRACK*>( item ) );
+                        break;
+                    default:
+                        break;
+                    }
                 }
 
                 if( tracks.size() == 2 )
@@ -330,7 +340,8 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 
                     if( vias.size() == 1 )
                     {
-                        cItems = c->GetConnectedItemsAtAnchor( vias[0], aPt, trackTypes,
+                        cItems = c->GetConnectedItemsAtAnchor( vias[0], aPt,
+                                                               { PCB_TRACE_T, PCB_ARC_T },
                                                                vias[0]->GetWidth() / 2 );
 
                         if( alg::contains( cItems, tracks[0] )
@@ -342,7 +353,8 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     }
                     else if( vias.size() == 0 )
                     {
-                        cItems = c->GetConnectedItemsAtAnchor( tracks[0], aPt, trackTypes,
+                        cItems = c->GetConnectedItemsAtAnchor( tracks[0], aPt,
+                                                               { PCB_TRACE_T, PCB_ARC_T },
                                                                tracks[0]->GetWidth() / 2 );
 
                         if( alg::contains( cItems, tracks[1] ) )
