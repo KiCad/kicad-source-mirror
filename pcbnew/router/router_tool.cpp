@@ -1762,10 +1762,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         item->SetLocked( false );
     }
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     Activate();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_router->SyncWorld();
     m_startItem = nullptr;
 
     PNS::ITEM* startItem = nullptr;
@@ -2042,10 +2042,10 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T )
         return 0;
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     Activate();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_router->SyncWorld();
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
     TOOL_MANAGER* toolManager = frame()->GetToolManager();
