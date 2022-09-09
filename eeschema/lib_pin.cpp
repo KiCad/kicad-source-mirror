@@ -886,7 +886,7 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
     if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
         return m_number.Cmp( tmp->m_number );
 
-    int result = m_name.CmpNoCase( tmp->m_name );
+    int result = m_name.Cmp( tmp->m_name );
 
     if( result )
         return result;
