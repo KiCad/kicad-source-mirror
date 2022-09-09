@@ -59,6 +59,20 @@
 using namespace std::placeholders;
 using namespace KIGFX;
 
+// Currently the bitmap cache is disabled because the code has serious issues and
+//  work fine does not work fine:
+// created GL textures are never deleted when a bitmap is deleted
+// the key to retrieve a CACHED_BITMAP is the BITMAP_BASE items* pointer.
+// Because in code many BITMAP_BASE items are temporary cloned for drawing purposes,
+// it creates a lot of CACHED_BITMAP never deleted thus created memory leak
+// So to reenable the bitmaps cache, serious changes in code are needed:
+// At least:
+//  - use a key that works on cloned BITMAP_BASE items
+//  - handle rotated bitmaps without create a new cached item
+//  - add a "garbage collector" to delete not existing BITMAP_BASE items
+// After tests, caching bitmaps do not speedup significantly drawings.
+#define DISABLE_BITMAP_CACHE
+
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include "gl_resources.h"
@@ -94,7 +108,7 @@ private:
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
 
-    std::map<const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
+    std::map< BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
 };
 
 }; // namespace KIGFX
@@ -107,8 +121,24 @@ GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 }
 
 
+int64_t GL_BITMAP_CACHE::GetKey( const BITMAP_BASE* aBitmap )
+{
+    int64_t key = 0;
+    const unsigned char* data = aBitmap->GetImageData()->GetData();
+
+    for( int ii = 0; ii < 8; ii++ )
+    {
+        key <<= 8;
+        key += data[ii];
+    }
+
+    return key;
+}
+
+
 GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 {
+#ifdef DISABLE_BITMAP_CACHE
     auto it = m_bitmaps.find( aBitmap );
 
     if( it != m_bitmaps.end() )
@@ -133,6 +163,7 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
         // the cached bitmap is not valid and deleted, it will be recreated.
     }
 
+#endif
     return cacheBitmap( aBitmap );
 }
 
@@ -188,7 +219,9 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
     bmp.id = textureID;
 
+#ifndef DISABLE_BITMAP_CACHE
     m_bitmaps[aBitmap] = bmp;
+#endif
 
     return textureID;
 }
