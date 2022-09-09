@@ -110,6 +110,12 @@ private:
     void unfilledZoneCheck();
 
     /**
+     * Helper for pasting.  Remove non-enabled layers from the items in \a aItems.  If an item
+     * exists only on non-enabled layers, it will be removed entirely.
+     */
+    void pruneItemLayers( std::vector<BOARD_ITEM*>& aItems );
+
+    /**
      * Add and select or just select for move/place command a list of board items.
      *
      * @param aItems is the list of items

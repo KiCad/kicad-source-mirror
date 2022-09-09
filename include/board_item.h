@@ -148,6 +148,12 @@ public:
     virtual LSET GetLayerSet() const { return LSET( m_layer ); }
     virtual void SetLayerSet( LSET aLayers )
     {
+        if( aLayers.count() == 1 )
+        {
+            SetLayer( aLayers.Seq()[0] );
+            return;
+        }
+
         wxFAIL_MSG( wxT( "Attempted to SetLayerSet() on a single-layer object." ) );
 
         // Derived classes which support multiple layers must implement this
