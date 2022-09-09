@@ -40,7 +40,9 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_spinLabelRepeatStep->SetRange( -100000, 100000 );
+#if wxCHECK_VERSION( 3, 1, 6 )
     m_spinLabelRepeatStep->SetIncrement( 1 );
+#endif
 
 #ifdef __WXOSX_MAC__
     m_leftClickCmdsBook->SetSelection( 1 );
