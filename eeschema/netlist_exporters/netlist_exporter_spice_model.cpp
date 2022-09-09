@@ -31,10 +31,26 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
 {
     aFormatter.Print( 0, "*\n" );
     aFormatter.Print( 0, "\n" );
-    aFormatter.Print( 0, ".subckt" );
+    aFormatter.Print( 0, ".subckt %s\n", TO_UTF8( m_schematic->Prj().GetProjectName() ) );
 
     for( auto const& [key, port] : m_ports )
-        aFormatter.Print( 0, " %s", TO_UTF8( port.name ) );
+    {
+        wxString portDir;
+
+        switch( port.dir )
+        {
+            case L_INPUT:       portDir = "input";   break;
+            case L_OUTPUT:      portDir = "output";  break;
+            case L_BIDI:        portDir = "inout";   break;
+            case L_UNSPECIFIED: portDir = "passive"; break;
+
+            default:
+                wxFAIL_MSG( "Invalid port direction" );
+                break;
+        }
+
+        aFormatter.Print( 0, "+       %s ; %s\n", TO_UTF8( port.name ), TO_UTF8( portDir ) );
+    }
 
     aFormatter.Print( 0, "\n\n" );
 }
