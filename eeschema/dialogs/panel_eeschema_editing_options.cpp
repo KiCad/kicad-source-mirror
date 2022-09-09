@@ -39,6 +39,9 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
+    m_spinLabelRepeatStep->SetRange( -100000, 100000 );
+    m_spinLabelRepeatStep->SetIncrement( 1 );
+
 #ifdef __WXOSX_MAC__
     m_leftClickCmdsBook->SetSelection( 1 );
 #else
