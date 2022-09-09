@@ -979,25 +979,19 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
-    SCH_ITEM* sourceItem = m_frame->GetRepeatItem();
+    const std::vector<std::unique_ptr<SCH_ITEM>>& sourceItems = m_frame->GetRepeatItems();
 
-    if( !sourceItem )
+    if( sourceItems.empty() )
         return 0;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCH_ITEM* newItem = sourceItem->Duplicate();
-    bool      performDrag = false;
+    bool         appendUndo = false;
+    EE_SELECTION newItems;
 
-    // If cloning a symbol then put into 'move' mode.
-    if( newItem->Type() == SCH_SYMBOL_T )
+    for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( true );
-        newItem->Move( cursorPos - newItem->GetPosition() );
-        performDrag = true;
-    }
-    else
-    {
+        SCH_ITEM*          newItem = item->Duplicate();
         EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
         if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
@@ -1008,45 +1002,51 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                 m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
         }
 
-        newItem->Move( VECTOR2I( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
-                                 Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
-    }
-
-    m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
-    newItem->SetFlags( IS_NEW );
-    m_frame->AddToScreen( newItem, m_frame->GetScreen() );
-    m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, false );
-
-    if( newItem->Type() == SCH_SYMBOL_T )
-    {
-        EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
-        SCHEMATIC_SETTINGS&                projSettings = m_frame->Schematic().Settings();
-        int                                annotateStartNum = projSettings.m_AnnotateStartNum;
-
-        if( annotate.automatic )
+        // If cloning a symbol then put into 'move' mode.
+        if( newItem->Type() == SCH_SYMBOL_T )
         {
-            static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
-            NULL_REPORTER reporter;
-            m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
-                                      (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
-                                      annotateStartNum, false, false, reporter, true );
+            VECTOR2I cursorPos = getViewControls()->GetCursorPosition( true );
+            newItem->Move( cursorPos - newItem->GetPosition() );
         }
+        else
+        {
+            newItem->Move( VECTOR2I( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
+                                     Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
+        }
+
+        m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
+        newItem->SetFlags( IS_NEW );
+        m_frame->AddToScreen( newItem, m_frame->GetScreen() );
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, appendUndo );
+        appendUndo = true;
+
+        if( newItem->Type() == SCH_SYMBOL_T )
+        {
+            EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
+            SCHEMATIC_SETTINGS&                projSettings = m_frame->Schematic().Settings();
+            int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+
+            if( annotate.automatic )
+            {
+                static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
+                NULL_REPORTER reporter;
+                m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                                          (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
+                                          annotateStartNum, false, false, reporter, appendUndo );
+            }
+
+            m_toolMgr->RunAction( EE_ACTIONS::move, true );
+        }
+
+        newItems.Add( newItem );
+
+        newItem->ClearFlags();
     }
 
-    // Symbols need to be handled by the move tool.  The move tool will handle schematic
-    // cleanup routines
-    if( performDrag )
-        m_toolMgr->RunAction( EE_ACTIONS::move, true );
-
-    newItem->ClearFlags();
-
-    if( !performDrag && newItem->IsConnectable() )
+    if( !newItems.Empty() )
     {
-        EE_SELECTION new_sel;
-        new_sel.Add( newItem );
-
-        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &new_sel );
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
+        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &newItems );
+        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &newItems );
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->TestDanglingEnds();
@@ -1055,8 +1055,11 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 
-    // Save newItem at the new position.
-    m_frame->SaveCopyForRepeatItem( newItem );
+    if( !newItems.Empty() )
+        m_frame->SaveCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[0] ) );
+
+    for( size_t ii = 1; ii < newItems.GetSize(); ++ii )
+        m_frame->AddCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[ii] ) );
 
     return 0;
 }

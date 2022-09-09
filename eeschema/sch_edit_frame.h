@@ -682,13 +682,16 @@ public:
      * Clone \a aItem and owns that clone in this container.
      */
     void SaveCopyForRepeatItem( const SCH_ITEM* aItem );
+    void AddCopyForRepeatItem( const SCH_ITEM* aItem );
 
     /**
-     * Return the item which is to be repeated with the insert key.
-     *
-     * Such object is owned by this container, and must be cloned.
+     * Return the items which are to be repeated with the insert key.  Such objects are owned by
+     * this container, and must be cloned.
      */
-    SCH_ITEM* GetRepeatItem() const { return m_item_to_repeat; }
+    const std::vector<std::unique_ptr<SCH_ITEM>>& GetRepeatItems() const
+    {
+        return m_items_to_repeat;
+    }
 
     EDA_ITEM* GetItem( const KIID& aId ) const override;
 
@@ -914,7 +917,8 @@ private:
     const SCH_CONNECTION*   m_highlightedConn;    ///< The highlighted net or bus, or nullptr
 
     wxPageSetupDialogData   m_pageSetupData;
-    SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
+    std::vector<std::unique_ptr<SCH_ITEM>> m_items_to_repeat;  ///< For the repeat-last-item cmd
+
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
     int                     m_exec_flags;         ///< Flags of the wxExecute() function

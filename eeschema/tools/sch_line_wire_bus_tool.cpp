@@ -376,7 +376,9 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
+    {
         return doDrawSegments( tool, LAYER_WIRE, false );
+    }
     else
     {
         m_frame->PopTool( tool );
@@ -1151,6 +1153,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
             if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), pt ) )
                 new_ends.push_back( pt );
         }
+
         itemList.PushItem( ITEM_PICKER( screen, wire, UNDO_REDO::NEWITEM ) );
     }
 
@@ -1159,13 +1162,23 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
         wxASSERT( m_busUnfold.entry && m_busUnfold.label );
 
         itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.entry, UNDO_REDO::NEWITEM ) );
+        m_frame->SaveCopyForRepeatItem( m_busUnfold.entry );
+
         itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.label, UNDO_REDO::NEWITEM ) );
+        m_frame->AddCopyForRepeatItem( m_busUnfold.label );
         m_busUnfold.label->ClearEditFlags();
     }
+    else if( !m_wires.empty() )
+    {
+        m_frame->SaveCopyForRepeatItem( m_wires[0] );
+    }
+
+    for( size_t ii = 1; ii < m_wires.size(); ++ii )
+        m_frame->AddCopyForRepeatItem( m_wires[ii] );
 
     // Get the last non-null wire (this is the last created segment).
     if( !m_wires.empty() )
-        m_frame->SaveCopyForRepeatItem( m_wires.back() );
+        m_frame->AddCopyForRepeatItem( m_wires.back() );
 
     // Add the new wires
     for( SCH_LINE* wire : m_wires )

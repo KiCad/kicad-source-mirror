@@ -112,8 +112,7 @@ END_EVENT_TABLE()
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
-        m_highlightedConn( nullptr ),
-        m_item_to_repeat( nullptr )
+        m_highlightedConn( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -297,8 +296,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
         delete m_toolManager;
         m_toolManager = nullptr;
     }
-
-    delete m_item_to_repeat;        // we own the cloned object, see this->SaveCopyForRepeatItem()
 
     SetScreen( nullptr );
 
@@ -590,12 +587,27 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( const SCH_ITEM* aItem )
 
     if( aItem )
     {
-        delete m_item_to_repeat;
+        m_items_to_repeat.clear();
 
-        m_item_to_repeat = (SCH_ITEM*) aItem->Clone();
+        AddCopyForRepeatItem( aItem );
+    }
+}
+
+
+void SCH_EDIT_FRAME::AddCopyForRepeatItem( const SCH_ITEM* aItem )
+{
+    // we cannot store a pointer to an item in the display list here since
+    // that item may be deleted, such as part of a line concatenation or other.
+    // So simply always keep a copy of the object which is to be repeated.
+
+    if( aItem )
+    {
+        std::unique_ptr<SCH_ITEM> repeatItem( static_cast<SCH_ITEM*>( aItem->Clone() ) );
 
         // Clone() preserves the flags, we want 'em cleared.
-        m_item_to_repeat->ClearFlags();
+        repeatItem->ClearFlags();
+
+        m_items_to_repeat.emplace_back( std::move( repeatItem ) );
     }
 }
 
