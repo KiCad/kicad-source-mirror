@@ -451,12 +451,10 @@ protected:
     void renumberPins();
 
     /**
-     * Guess the sheet path of this sheet based on the virtual page number currently set
-     * on the parent screen. (Useful helper function for plotting)
-     *
-     * @return the instance corresponding to this sheet
+     * Get the sheetpath of this sheet.  NB: REQUIRES that the current sheet hierarchy contains
+     * the given sheet.
      */
-    SCH_SHEET_PATH getSheetPath() const;
+    SCH_SHEET_PATH findSelf() const;
 
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override;

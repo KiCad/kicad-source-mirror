@@ -27,6 +27,7 @@
 
 #include <bitmaps.h>
 #include <core/mirror.h>
+#include <core/kicad_algo.h>
 #include <sch_draw_panel.h>
 #include <trigo.h>
 #include <sch_edit_frame.h>
@@ -199,15 +200,31 @@ bool SCH_SHEET::IsRootSheet() const
 
 void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 {
+    auto add =
+            [&]( const wxString& aVar )
+            {
+                if( !alg::contains( *aVars, aVar ) )
+                    aVars->push_back( aVar );
+            };
+
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-        aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
+        add( m_fields[i].GetCanonicalName().Upper() );
 
     for( size_t i = SHEET_MANDATORY_FIELDS; i < m_fields.size(); ++i )
-        aVars->push_back( m_fields[i].GetName() );
+        add( m_fields[i].GetName() );
 
-    aVars->push_back( wxT( "#" ) );
-    aVars->push_back( wxT( "##" ) );
-    aVars->push_back( wxT( "SHEETPATH" ) );
+    SCH_SHEET_PATH sheetPath = findSelf();
+
+    if( sheetPath.size() >= 2 )
+    {
+        sheetPath.pop_back();
+        sheetPath.Last()->GetContextualTextVars( aVars );
+    }
+
+    add( wxT( "#" ) );
+    add( wxT( "##" ) );
+    add( wxT( "SHEETPATH" ) );
+
     m_screen->GetTitleBlock().GetContextualTextVars( aVars );
 }
 
@@ -243,14 +260,8 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 
     if( token->IsSameAs( wxT( "#" ) ) )
     {
-        for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
-        {
-            if( sheet.Last() == this )   // Current sheet path found
-            {
-                *token = wxString::Format( "%s", sheet.GetPageNumber() );
-                return true;
-            }
-        }
+        *token = wxString::Format( "%s", findSelf().GetPageNumber() );
+        return true;
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
     {
@@ -260,8 +271,22 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
     {
-        *token = Schematic()->CurrentSheet().PathHumanReadable();
+        *token = findSelf().PathHumanReadable();
         return true;
+    }
+    else
+    {
+        // See if any of the sheets up the hierarchy can resolve it:
+
+        SCH_SHEET_PATH sheetPath = findSelf();
+
+        if( sheetPath.size() >= 2 )
+        {
+            sheetPath.pop_back();
+
+            if( sheetPath.Last()->ResolveTextVar( token, aDepth ) )
+                return true;
+        }
     }
 
     return false;
@@ -908,20 +933,21 @@ void SCH_SHEET::renumberPins()
 }
 
 
-SCH_SHEET_PATH SCH_SHEET::getSheetPath() const
+SCH_SHEET_PATH SCH_SHEET::findSelf() const
 {
-    SCH_SCREEN*    parentScreen = static_cast<SCH_SCREEN*>( m_parent );
-    size_t         vPageNumParent = parentScreen->GetVirtualPageNumber();
-    SCH_SHEET_LIST sheets = parentScreen->Schematic()->GetSheets();
+    wxCHECK_MSG( Schematic(), SCH_SHEET_PATH(), "Can't call findSelf without a schematic" );
 
-    // We can use the virtual page number as an index to find the instance
-    size_t         parentIdx = std::max<size_t>( 0, std::min( sheets.size(), vPageNumParent ) - 1 );
-    SCH_SHEET_PATH sheetPath = sheets.at( parentIdx );
+    SCH_SHEET_PATH sheetPath = Schematic()->CurrentSheet();
 
-    // Make sure our asumption about the virtual page number being the index-1 is correct
-    wxASSERT( sheetPath.LastScreen()->GetFileName() == parentScreen->GetFileName() );
+    while( !sheetPath.empty() && sheetPath.Last() != this )
+        sheetPath.pop_back();
 
-    sheetPath.push_back( const_cast<SCH_SHEET*>( this ) );
+    if( sheetPath.empty() )
+    {
+        // If we weren't in the hierarchy, then we must be a child of the current sheet.
+        sheetPath = Schematic()->CurrentSheet();
+        sheetPath.push_back( const_cast<SCH_SHEET*>( this ) );
+    }
 
     return sheetPath;
 }
@@ -1077,7 +1103,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
     std::vector<wxString> properties;
 
-    properties.emplace_back( EDA_TEXT::GotoPageHref( GetPageNumber( getSheetPath() ) ) );
+    properties.emplace_back( EDA_TEXT::GotoPageHref( GetPageNumber( findSelf() ) ) );
 
     for( const SCH_FIELD& field : GetFields() )
     {
