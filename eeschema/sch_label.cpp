@@ -86,7 +86,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
         {
             name.Remove( ii + 1 );
             //write out a format string with correct number of leading zeroes
-            outputFormat.Printf( "%%0%dd", dCount );
+            outputFormat.Printf( "%%0%dld", dCount );
             //write out the number using the format string
             outputNumber.Printf( outputFormat, number );
             name << outputNumber << suffix;
@@ -348,12 +348,14 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
 bool SCH_LABEL_BASE::IncrementLabel( int aIncrement )
 {
     wxString text = GetText();
-    bool ReturnVal = IncrementLabelMember( text, aIncrement );
 
-    if( ReturnVal )
+    if( IncrementLabelMember( text, aIncrement ) )
+    {
         SetText( text );
+        return true;
+    }
 
-    return ReturnVal;
+    return false;
 }
 
 
