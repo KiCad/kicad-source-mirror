@@ -27,6 +27,8 @@
 
 
 #include <bitset>
+#include <functional>
+
 #include <wx/grid.h>
 #include <wx/event.h>
 #include <wx/menu.h>
