@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:36-0700\n"
-"PO-Revision-Date: 2022-07-31 19:18+0000\n"
+"PO-Revision-Date: 2022-09-10 09:21+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5781,7 +5781,7 @@ msgstr "編集ウィンドウでグリッドの点または線を表示"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
-msgstr "グリッド プロパティ..."
+msgstr "グリッド設定..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
@@ -30648,7 +30648,7 @@ msgstr "製造用出力"
 
 #: pcbnew/menubar_pcb_editor.cpp:312
 msgid "Add Microwave Shape"
-msgstr "マイクロ波用の形状を作成"
+msgstr "マイクロ波用の形状を追加"
 
 #: pcbnew/menubar_pcb_editor.cpp:347
 msgid "Auto-Place Footprints"
@@ -34360,7 +34360,7 @@ msgstr "リファレンス指定子でフットプリントを選択し、移動
 
 #: pcbnew/tools/pcb_actions.cpp:260
 msgid "Move with Reference"
-msgstr "リファレンスで移動"
+msgstr "参照点を指定して移動"
 
 #: pcbnew/tools/pcb_actions.cpp:261
 msgid "Moves the selected item(s) with a specified starting point"
@@ -34368,7 +34368,7 @@ msgstr "指定された開始位置で選択されたアイテムを移動"
 
 #: pcbnew/tools/pcb_actions.cpp:266
 msgid "Copy with Reference"
-msgstr "リファレンスで移動"
+msgstr "参照点を指定してコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:267
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -34590,7 +34590,7 @@ msgstr "冗長なアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Add Microwave Gap"
-msgstr "マイクロ波用のギャップを作成"
+msgstr "マイクロ波用のギャップを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:471
 msgid "Create gap of specified length for microwave applications"
