@@ -696,6 +696,77 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
 }
 
 
+void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
+{
+    LSET                     enabledLayers = board()->GetEnabledLayers();
+    std::vector<BOARD_ITEM*> returnItems;
+    bool                     fpItemDeleted = false;
+
+    auto processFPItem =
+            [&]( FOOTPRINT* aFootprint, BOARD_ITEM* aItem )
+            {
+                LSET allowed = aItem->GetLayerSet() & enabledLayers;
+
+                if( allowed.any() )
+                {
+                    aItem->SetLayerSet( allowed );
+                }
+                else
+                {
+                    aFootprint->Remove( aItem );
+                    fpItemDeleted = true;
+                }
+            };
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+            if( !enabledLayers.test( fp->Reference().GetLayer() ) )
+                fp->Reference().SetLayer( fp->IsFlipped() ? B_SilkS : F_SilkS );
+
+            if( !enabledLayers.test( fp->Value().GetLayer() ) )
+                fp->Value().SetLayer( fp->IsFlipped() ? B_Fab : F_Fab );
+
+            // NOTE: all traversals from the back as processFPItem() might delete the item
+
+            for( int ii = static_cast<int>( fp->Pads().size() ) - 1; ii >= 0; ii-- )
+                processFPItem( fp, fp->Pads()[ii] );
+
+            for( int ii = static_cast<int>( fp->Zones().size() ) - 1; ii >= 0; ii-- )
+                processFPItem( fp, fp->Zones()[ii] );
+
+            for( int ii = static_cast<int>( fp->GraphicalItems().size() ) - 1; ii >= 0; ii-- )
+                processFPItem( fp, fp->GraphicalItems()[ii] );
+
+            if( fp->GraphicalItems().size() || fp->Pads().size() || fp->Zones().size() )
+                returnItems.push_back( fp );
+        }
+        else
+        {
+            LSET allowed = item->GetLayerSet() & enabledLayers;
+
+            if( allowed.any() )
+            {
+                item->SetLayerSet( allowed );
+                returnItems.push_back( item );
+            }
+        }
+    }
+
+    if( ( returnItems.size() < aItems.size() ) || fpItemDeleted )
+    {
+        DisplayError( m_frame, _( "Warning: some pasted items were on layers which are not "
+                                  "present in the current board.\n"
+                                  "These items could not be pasted.\n" )  );
+    }
+
+    aItems = returnItems;
+}
+
+
 int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
@@ -803,6 +874,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 delete clipBoard;
 
+                pruneItemLayers( pastedItems );
+
                 placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             }
             else
@@ -840,6 +913,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 clipFootprint->SetParent( board() );
                 pastedItems.push_back( clipFootprint );
             }
+
+            pruneItemLayers( pastedItems );
 
             placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             break;
@@ -955,6 +1030,8 @@ int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aRea
     // mark items non-recursively.  That works because the saving of the
     // selection created aBoard that has the group and all descendants in it.
     moveUnflaggedItems( aBoard->Groups(), items, isNew );
+
+    pruneItemLayers( items );
 
     return placeBoardItems( items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
 }
