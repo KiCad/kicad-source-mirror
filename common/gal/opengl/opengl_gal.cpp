@@ -108,7 +108,7 @@ private:
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
 
-    std::map< BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
+    std::map< const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
 };
 
 }; // namespace KIGFX
@@ -121,24 +121,9 @@ GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 }
 
 
-int64_t GL_BITMAP_CACHE::GetKey( const BITMAP_BASE* aBitmap )
-{
-    int64_t key = 0;
-    const unsigned char* data = aBitmap->GetImageData()->GetData();
-
-    for( int ii = 0; ii < 8; ii++ )
-    {
-        key <<= 8;
-        key += data[ii];
-    }
-
-    return key;
-}
-
-
 GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 {
-#ifdef DISABLE_BITMAP_CACHE
+#ifndef DISABLE_BITMAP_CACHE
     auto it = m_bitmaps.find( aBitmap );
 
     if( it != m_bitmaps.end() )
