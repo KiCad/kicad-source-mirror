@@ -126,8 +126,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     wxBoxSizer* treeSizer = new wxBoxSizer( wxVERTICAL );
     treePanel->SetSizer( treeSizer );
 
-    m_tree = new LIB_TREE( treePanel, Prj().SchSymbolLibTable(), aAdapter, LIB_TREE::WIDGETS::ALL,
-                           m_details );
+    m_tree = new LIB_TREE( treePanel, Prj().SchSymbolLibTable(), aAdapter,
+                           LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
 
     treeSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
     treePanel->Layout();

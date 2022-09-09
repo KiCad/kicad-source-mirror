@@ -95,6 +95,11 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     LIB_ID sel = editFrame->GetTargetLibId();
                     return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
                 };
+        auto multiSelectedCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    return editFrame->GetTreeSelectionCount() > 1;
+                };
 
         ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
@@ -109,12 +114,12 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition || libInferredCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition || multiSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition || multiSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libInferredCondition );
         ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::renameSymbol,       symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition || multiSelectedCondition );
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition );
@@ -247,16 +252,24 @@ int SYMBOL_EDITOR_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 
         if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::deleteSymbol ) )
         {
-            LIB_ID          sel = editFrame->GetTreeLIBID();
-            const wxString& libName = sel.GetLibNickname();
-            wxString        msg;
+            bool hasWritableLibs = false;
+            wxString msg;
 
-            if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+            for( LIB_ID& sel : editFrame->GetSelectedLibIds() )
             {
-                msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
-                m_frame->ShowInfoBarError( msg );
-                return 0;
+                const wxString& libName = sel.GetLibNickname();
+
+                if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+                    msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
+                else
+                    hasWritableLibs = true;
             }
+
+            if( !msg.IsEmpty() )
+                m_frame->ShowInfoBarError( msg );
+
+            if( !hasWritableLibs )
+                return 0;
 
             editFrame->DeleteSymbolFromLibrary();
         }

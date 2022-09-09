@@ -98,6 +98,10 @@ public:
      */
     LIB_ID GetTreeLIBID( int* aUnit = nullptr ) const;
 
+    int GetTreeSelectionCount() const;
+
+    int GetTreeLIBIDs( std::vector<LIB_ID>& aSelection ) const;
+
     /**
      * Return the current symbol being edited or NULL if none selected.
      *
@@ -327,6 +331,11 @@ public:
      * symbol on the editor canvas.
      */
     LIB_ID GetTargetLibId() const;
+
+    /**
+     * @return a list of selected items in the symbol tree
+     */
+    std::vector<LIB_ID> GetSelectedLibIds() const;
 
     void FocusOnLibId( const LIB_ID& aLibID );
 

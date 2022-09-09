@@ -45,8 +45,15 @@ class LIB_TABLE;
 class LIB_TREE : public wxPanel
 {
 public:
-    ///< Flags to select extra widgets
-    enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
+    ///< Flags to select extra widgets and options
+    enum FLAGS
+    {
+        NONE        = 0x00,
+        SEARCH      = 0x01,
+        DETAILS     = 0x02,
+        ALL_WIDGETS = 0x0F,
+        MULTISELECT = 0x10
+    };
 
     /**
      * Construct a symbol tree.
@@ -54,12 +61,12 @@ public:
      * @param aParent parent window containing this tree widget
      * @param aLibTable table containing libraries and items to display
      * @param aAdapter a LIB_TREE_MODEL_ADAPTER instance to use
-     * @param aWidgets selection of sub-widgets to include
+     * @param aFlags selection of sub-widgets to include and other options
      * @param aDetails if not null, a custom HTML_WINDOW to hold symbol details. If null this
      *                 will be created inside the LIB_TREE.
      */
     LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, WIDGETS aWidgets = ALL,
+              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, FLAGS aFlags = ALL_WIDGETS,
               HTML_WINDOW* aDetails = nullptr );
 
     ~LIB_TREE() override;
@@ -74,6 +81,21 @@ public:
      * @return the library id of the symbol that has been selected.
      */
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
+
+    int GetSelectionCount() const
+    {
+        return m_tree_ctrl->GetSelectedItemsCount();
+    }
+
+    /**
+     * Retrieves a list of selections for trees that allow multi-selection
+     * @see GetSelectedLibId for details on how aUnit will be filled.
+     * @param aSelection will be filled with a list of selected LIB_IDs
+     * @param aUnit is an optional pointer to a list to fill with unit numbers
+     * @return the number of selected items
+     */
+    int GetSelectedLibIds( std::vector<LIB_ID>& aSelection,
+                           std::vector<int>* aUnit = nullptr ) const;
 
     LIB_TREE_NODE* GetCurrentTreeNode() const;
 

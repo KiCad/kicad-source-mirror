@@ -784,40 +784,47 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 
 void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
 {
-    LIB_ID libId = GetTargetLibId();
+    std::vector<LIB_ID> toDelete = GetSelectedLibIds();
 
-    if( m_libMgr->IsSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() )
-        && !IsOK( this, wxString::Format( _( "The symbol '%s' has been modified.\n"
-                                             "Do you want to remove it from the library?" ),
-                                          libId.GetUniStringLibItemName() ) ) )
+    if( toDelete.empty() )
+        toDelete.emplace_back( GetTargetLibId() );
+
+    for( LIB_ID& libId : toDelete )
     {
-        return;
-    }
+        if( m_libMgr->IsSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() )
+            && !IsOK( this, wxString::Format( _( "The symbol '%s' has been modified.\n"
+                                                 "Do you want to remove it from the library?" ),
+                                              libId.GetUniStringLibItemName() ) ) )
+        {
+            continue;
+        }
 
-    if( m_libMgr->HasDerivedSymbols( libId.GetLibItemName(), libId.GetLibNickname() ) )
-    {
-        wxString msg;
+        if( m_libMgr->HasDerivedSymbols( libId.GetLibItemName(), libId.GetLibNickname() ) )
+        {
+            wxString msg;
 
-        msg.Printf( _( "The symbol %s is used to derive other symbols.\n"
+            msg.Printf(
+                    _( "The symbol %s is used to derive other symbols.\n"
                        "Deleting this symbol will delete all of the symbols derived from it.\n\n"
                        "Do you wish to delete this symbol and all of its derivatives?" ),
                     libId.GetLibItemName().wx_str() );
 
-        wxMessageDialog::ButtonLabel yesButtonLabel( _( "Delete Symbol" ) );
-        wxMessageDialog::ButtonLabel noButtonLabel( _( "Keep Symbol" ) );
+            wxMessageDialog::ButtonLabel yesButtonLabel( _( "Delete Symbol" ) );
+            wxMessageDialog::ButtonLabel noButtonLabel( _( "Keep Symbol" ) );
 
-        wxMessageDialog dlg( this, msg, _( "Warning" ),
-                             wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
-        dlg.SetYesNoLabels( yesButtonLabel, noButtonLabel );
+            wxMessageDialog dlg( this, msg, _( "Warning" ),
+                                 wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
+            dlg.SetYesNoLabels( yesButtonLabel, noButtonLabel );
 
-        if( dlg.ShowModal() == wxID_NO )
-            return;
+            if( dlg.ShowModal() == wxID_NO )
+                continue;
+        }
+
+        if( IsCurrentSymbol( libId ) )
+            emptyScreen();
+
+        m_libMgr->RemoveSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
     }
-
-    if( IsCurrentSymbol( libId ) )
-        emptyScreen();
-
-    m_libMgr->RemoveSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
 
     m_treePane->GetLibTree()->RefreshLibTree();
 }
@@ -825,17 +832,24 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
 
 void SYMBOL_EDIT_FRAME::CopySymbolToClipboard()
 {
-    int dummyUnit;
-    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
-    LIB_SYMBOL* symbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(),
-                                                      libId.GetLibNickname() );
+    std::vector<LIB_ID> symbols;
 
-    if( !symbol )
+    if( GetTreeLIBIDs( symbols ) == 0 )
         return;
 
-    std::unique_ptr< LIB_SYMBOL> tmp = symbol->Flatten();
     STRING_FORMATTER formatter;
-    SCH_SEXPR_PLUGIN::FormatLibSymbol( tmp.get(), formatter );
+
+    for( LIB_ID& libId : symbols )
+    {
+        LIB_SYMBOL* symbol = m_libMgr->GetBufferedSymbol( libId.GetLibItemName(),
+                                                          libId.GetLibNickname() );
+
+        if( !symbol )
+            continue;
+
+        std::unique_ptr<LIB_SYMBOL> tmp = symbol->Flatten();
+        SCH_SEXPR_PLUGIN::FormatLibSymbol( tmp.get(), formatter );
+    }
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
@@ -863,6 +877,8 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
     LIB_SYMBOL* srcSymbol = nullptr;
     LIB_SYMBOL* newSymbol = nullptr;
 
+    std::vector<LIB_SYMBOL*> newSymbols;
+
     if( aFromClipboard )
     {
         wxLogNull doNotLog; // disable logging of failed clipboard actions
@@ -881,17 +897,26 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         clipboard->GetData( data );
         wxString symbolSource = data.GetText();
 
-        STRING_LINE_READER reader( TO_UTF8( symbolSource ), "Clipboard" );
+        std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( TO_UTF8( symbolSource ), "Clipboard" );
 
-        try
+        do
         {
-            newSymbol = SCH_SEXPR_PLUGIN::ParseLibSymbol( reader );
+            try
+            {
+                newSymbol = SCH_SEXPR_PLUGIN::ParseLibSymbol( *reader );
+            }
+            catch( IO_ERROR& e )
+            {
+                wxLogMessage( "Can not paste: %s", e.Problem() );
+                break;
+            }
+
+            if( newSymbol )
+                newSymbols.emplace_back( newSymbol );
+
+            reader.reset( new STRING_LINE_READER( *reader ) );
         }
-        catch( IO_ERROR& e )
-        {
-            wxLogMessage( "Can not paste: %s", e.Problem() );
-            return;
-        }
+        while( newSymbol );
     }
     else
     {
@@ -899,7 +924,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
         wxCHECK( srcSymbol, /* void */ );
 
-        newSymbol = new LIB_SYMBOL( *srcSymbol );
+        newSymbols.emplace_back( new LIB_SYMBOL( *srcSymbol ) );
 
         // Derive from same parent.
         if( srcSymbol->IsAlias() )
@@ -912,16 +937,19 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         }
     }
 
-    if( !newSymbol )
+    if( newSymbols.empty() )
         return;
 
-    ensureUniqueName( newSymbol, lib );
-    m_libMgr->UpdateSymbol( newSymbol, lib );
+    for( LIB_SYMBOL* symbol : newSymbols )
+    {
+        ensureUniqueName( symbol, lib );
+        m_libMgr->UpdateSymbol( symbol, lib );
 
-    LoadOneLibrarySymbolAux( newSymbol, lib, GetUnit(), GetConvert() );
+        LoadOneLibrarySymbolAux( symbol, lib, GetUnit(), GetConvert() );
+    }
 
     SyncLibraries( false );
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newSymbol->GetName() ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newSymbols[0]->GetName() ) );
 
     delete newSymbol;
 }

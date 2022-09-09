@@ -34,7 +34,7 @@
 
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, WIDGETS aWidgets,
+                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, FLAGS aFlags,
                     HTML_WINDOW* aDetails ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                  wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
@@ -44,7 +44,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
-    if( aWidgets & SEARCH )
+    if( aFlags & SEARCH )
     {
         wxBoxSizer* search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -80,17 +80,17 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     }
 
     // Tree control
-    m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                      wxDV_SINGLE );
+    int dvFlags = ( aFlags & MULTISELECT ) ? wxDV_MULTIPLE : wxDV_SINGLE;
+    m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    if( aWidgets & DETAILS )
+    if( aFlags & DETAILS )
         sizer->AddSpacer( 5 );
 
     sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
 
     // Description panel
-    if( aWidgets & DETAILS )
+    if( aFlags & DETAILS )
     {
         if( !aDetails )
         {
@@ -168,6 +168,23 @@ LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
         *aUnit = m_adapter->GetUnitFor( sel );
 
     return m_adapter->GetAliasFor( sel );
+}
+
+
+int LIB_TREE::GetSelectedLibIds( std::vector<LIB_ID>& aSelection, std::vector<int>* aUnit ) const
+{
+    wxDataViewItemArray selection;
+    int count = m_tree_ctrl->GetSelections( selection );
+
+    for( const wxDataViewItem& item : selection )
+    {
+        aSelection.emplace_back( m_adapter->GetAliasFor( item ) );
+
+        if( aUnit )
+            aUnit->emplace_back( m_adapter->GetUnitFor( item ) );
+    }
+
+    return count;
 }
 
 

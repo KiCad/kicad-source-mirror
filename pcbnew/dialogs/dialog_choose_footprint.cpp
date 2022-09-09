@@ -82,7 +82,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_tree = new LIB_TREE( m_hsplitter, Prj().PcbFootprintLibs(), aAdapter,
-                           LIB_TREE::WIDGETS::ALL, details );
+                           LIB_TREE::FLAGS::ALL_WIDGETS, details );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );

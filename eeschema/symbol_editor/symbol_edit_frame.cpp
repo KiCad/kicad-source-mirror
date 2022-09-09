@@ -947,6 +947,17 @@ LIB_ID SYMBOL_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
 }
 
 
+int SYMBOL_EDIT_FRAME::GetTreeSelectionCount() const
+{
+    return m_treePane->GetLibTree()->GetSelectionCount();
+}
+
+int SYMBOL_EDIT_FRAME::GetTreeLIBIDs( std::vector<LIB_ID>& aSelection ) const
+{
+    return m_treePane->GetLibTree()->GetSelectedLibIds( aSelection );
+}
+
+
 LIB_SYMBOL* SYMBOL_EDIT_FRAME::getTargetSymbol() const
 {
     LIB_ID libId = GetTreeLIBID();
@@ -972,6 +983,14 @@ LIB_ID SYMBOL_EDIT_FRAME::GetTargetLibId() const
         id = m_symbol->GetLibId();
 
     return id;
+}
+
+
+std::vector<LIB_ID> SYMBOL_EDIT_FRAME::GetSelectedLibIds() const
+{
+    std::vector<LIB_ID> ids;
+    GetTreeLIBIDs( ids );
+    return ids;
 }
 
 
