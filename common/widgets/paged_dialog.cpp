@@ -335,9 +335,6 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_UP )
     {
-        // We have to special-case WXK_UP as when wxWidgets attempts to select the header we'll
-        // go down to its first child again.
-
         int page = m_treebook->GetSelection();
 
         if( page >= 1 )
@@ -347,6 +344,16 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
             else
                 m_treebook->SetSelection( page - 1 );
         }
+
+        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal focus
+    }
+    else if( aEvent.GetKeyCode() == WXK_DOWN )
+    {
+        int page = m_treebook->GetSelection();
+
+        m_treebook->SetSelection( std::min<int>( page + 1, m_treebook->GetPageCount() - 1 ) );
+
+        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal focus
     }
     else
     {
