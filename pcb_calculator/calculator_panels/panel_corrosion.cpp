@@ -37,30 +37,30 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
         PANEL_CORROSION_BASE( parent, id, pos, size, style, name )
 {
     m_entries.clear();
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Platinum" ), "Pt", -0.57 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Gold" ), "Au", -0.44 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Titanium" ), "Ti", -0.32 ) );
-    m_entries.push_back(
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Platinum" ), "Pt", -0.57 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Gold" ), "Au", -0.44 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Titanium" ), "Ti", -0.32 ) );
+    m_entries.emplace_back(
             CORROSION_TABLE_ENTRY( wxT( "Stainless steel 18-9" ), "X8CrNiS18-9", -0.32 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Silver" ), "Ag", -0.22 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Mercury" ), "Hg", -0.22 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Nickel" ), "Ni", -0.14 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Copper" ), "Cu", 0.0 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Copper-Aluminium" ), "CuAl10", 0.03 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Brass" ), "CuZn39Pb", 0.08 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Bronze" ), "CuSn12", 0.2 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Tin" ), "CuSn12", 0.23 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Lead" ), "Pb", 0.27 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Aluminium-Copper" ), "AlCu4Mg", 0.37 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Cast iron" ), "", 0.38 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Carbon steel" ), "", 0.43 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Aluminium" ), "Al", 0.52 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Cadmium" ), "Al", 0.53 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Iron" ), "Fe", 0.535 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Chrome" ), "Fe", 0.63 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Zinc" ), "Zn", 0.83 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Manganese" ), "Mn", 0.9 ) );
-    m_entries.push_back( CORROSION_TABLE_ENTRY( wxT( "Magnesium" ), "Mg", 1.38 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Silver" ), "Ag", -0.22 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Mercury" ), "Hg", -0.22 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Nickel" ), "Ni", -0.14 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Copper" ), "Cu", 0.0 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Copper-Aluminium" ), "CuAl10", 0.03 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Brass" ), "CuZn39Pb", 0.08 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Bronze" ), "CuSn12", 0.2 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Tin" ), "CuSn12", 0.23 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Lead" ), "Pb", 0.27 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Aluminium-Copper" ), "AlCu4Mg", 0.37 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Cast iron" ), "", 0.38 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Carbon steel" ), "", 0.43 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Aluminium" ), "Al", 0.52 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Cadmium" ), "Al", 0.53 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Iron" ), "Fe", 0.535 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Chrome" ), "Fe", 0.63 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Zinc" ), "Zn", 0.83 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Manganese" ), "Mn", 0.9 ) );
+    m_entries.emplace_back( CORROSION_TABLE_ENTRY( wxT( "Magnesium" ), "Mg", 1.38 ) );
 
     // Resize the table
 
@@ -120,6 +120,7 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
             {
                 m_table->SetCellBackgroundColour( i, j, color_ok );
             }
+            m_table->SetReadOnly( i, j, true );
             j++;
         }
         i++;
@@ -131,6 +132,9 @@ PANEL_CORROSION::PANEL_CORROSION( wxWindow* parent, wxWindowID id, const wxPoint
     m_table->SetRowLabelSize( wxGRID_AUTOSIZE );
     m_table->AutoSizeColumns();
     m_table->AutoSizeRows();
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
+
 }
 
 
