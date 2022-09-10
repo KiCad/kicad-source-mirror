@@ -2739,12 +2739,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
     if( aSubgraph->m_no_connect != nullptr )
     {
-        bool has_invalid_items = false;
-        bool has_other_items = false;
         SCH_PIN* pin = nullptr;
-        std::vector<SCH_ITEM*> invalid_items;
-        VECTOR2I noConnectPos = aSubgraph->m_no_connect->GetPosition();
-        double minDist = 0;
+        std::set<SCH_ITEM*> unique_items;
 
         // Any subgraph that contains both a pin and a no-connect should not
         // contain any other driving items.
@@ -2755,18 +2751,21 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             {
             case SCH_PIN_T:
             {
-                SCH_PIN* candidate = static_cast<SCH_PIN*>( item );
-                double   dist      = VECTOR2I( candidate->GetTransformedPosition() - noConnectPos )
-                                            .SquaredEuclideanNorm();
+                pin = static_cast<SCH_PIN*>( item );
 
-                if( !pin || dist < minDist )
+                // Insert the pin's parent so that we don't flag stacked pins
+                if( auto [existing, success] = unique_items.insert(
+                        static_cast<SCH_ITEM*>( pin->GetParent() ) ); !success )
                 {
-                    pin = candidate;
-                    minDist = dist;
+                    SCH_PIN* ex_pin = static_cast<SCH_PIN*>( *existing );
+
+                    // Stacked pins don't count as connected
+                    // but if they are not stacked, but still in the same symbol
+                    // flag this for an error
+                    if( !pin->IsStacked( ex_pin ) )
+                        unique_items.insert( ex_pin );
                 }
 
-                has_invalid_items |= has_other_items;
-                has_other_items = true;
                 break;
             }
 
@@ -2776,13 +2775,11 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 break;
 
             default:
-                has_invalid_items = true;
-                has_other_items = true;
-                invalid_items.push_back( item );
+                unique_items.insert( item );
             }
         }
 
-        if( pin && has_invalid_items && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+        if( unique_items.size() > 1 && pin && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetItems( pin );
@@ -2793,7 +2790,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ok = false;
         }
 
-        if( !has_other_items && settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED ) )
+        if( unique_items.empty() && settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
             ercItem->SetItems( aSubgraph->m_no_connect );
