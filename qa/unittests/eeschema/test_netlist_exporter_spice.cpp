@@ -138,6 +138,11 @@ public:
 
             m_abort = true;
 
+            // Still display the original netlist in this case.
+            *m_log << "Original Netlist\n";
+            *m_log << "----------------\n";
+            *m_log << netlist << "\n";
+
             return;
         }
 
