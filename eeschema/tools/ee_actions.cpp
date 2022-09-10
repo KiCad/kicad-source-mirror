@@ -696,17 +696,19 @@ TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExcl
 
 TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
         AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Lines drawn at any angle" ),
+        _( "Line Mode for Wires and Buses" ), _( "Draw and drag at any angle" ),
         BITMAPS::lines_any, AF_NONE, (void*) LINE_MODE::LINE_MODE_FREE );
 
 TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
         AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically" ),
+        _( "Line Mode for Wires and Buses" ),
+        _( "Constrain drawing and dragging to horizontal or vertical motions" ),
         BITMAPS::lines90, AF_NONE, (void*) LINE_MODE::LINE_MODE_90);
 
 TOOL_ACTION EE_ACTIONS::lineMode45( "eeschema.EditorControl.lineMode45",
         AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally, vertically, and at a 45 degree angle" ),
+        _( "Line Mode for Wires and Buses" ),
+        _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ),
         BITMAPS::hv45mode, AF_NONE, (void*) LINE_MODE::LINE_MODE_45);
 
 TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
