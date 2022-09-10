@@ -18,8 +18,6 @@
  * http://www.gnu.org/licenses/
  */
 
-
-
 #include <schematic_file_util.h>
 
 #include <settings/settings_manager.h>
@@ -28,7 +26,6 @@
 #include <lib_textbox.h>
 #include <schematic.h>
 #include <sch_screen.h>
-#include <sch_io_mgr.h>
 
 // For SCH parsing
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
@@ -44,7 +41,7 @@ namespace KI_TEST
     #define QA_EESCHEMA_DATA_LOCATION "???"
 #endif
 
-std::string GetEeschemaTestDataDir()
+std::string getEeschemaTestDataDir()
 {
     const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
     std::string fn;
@@ -95,7 +92,6 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJE
     {
     }
 
-
     return schematic;
 }
 
@@ -123,7 +119,7 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
         aSchematic->Reset();
     }
 
-    std::string absPath = GetEeschemaTestDataDir() + aRelPath.ToStdString();
+    std::string absPath = getEeschemaTestDataDir() + aRelPath.ToStdString();
     wxFileName  projectFile( absPath + ".kicad_pro" );
     wxFileName  legacyProject( absPath + ".pro" );
     std::string schematicPath = absPath + ".kicad_sch";
@@ -163,7 +159,6 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
    // SchematicCleanUp must be freed from its UI dependencies.
 
    aSchematic->ConnectionGraph()->Recalculate( sheets, true );
-
 }
 
 } // namespace KI_TEST

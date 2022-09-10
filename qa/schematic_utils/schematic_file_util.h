@@ -31,16 +31,15 @@ class wxString;
 
 namespace KI_TEST
 {
-
-    std::string GetEeschemaTestDataDir();
-
-    void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::string& aFilename );
+    void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet,
+                              const std::string& aFilename );
 
     std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJECT* aProject );
 
-    std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename, PROJECT* aProject );
+    std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename,
+                                                      PROJECT* aProject );
 
     void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
-                    std::unique_ptr<SCHEMATIC>& aSchematic );
+                        std::unique_ptr<SCHEMATIC>& aSchematic );
 }
 #endif /* QA_QA_UTILS_SCHEMATIC_SCHEMATIC_FILE_UTIL_H_ */
