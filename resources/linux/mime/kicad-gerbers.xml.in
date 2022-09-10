@@ -7,13 +7,14 @@
         <!--Try to match with some common opening commands-->
         <magic priority="50">
             <!--A comment line-->
-            <match type="string" offset="0" value="G04"/>
+            <!--The possible 3 characters allow for a null block with *CRLF before the data-->
+            <match type="string" offset="0:3" value="G04"/>
             <!--Some setup macros-->
-            <match type="string" offset="0" value="%FSLA"/>
-            <match type="string" offset="0" value="%MO"/>
-            <match type="string" offset="0" value="%TF."/>
+            <match type="string" offset="0:3" value="%FSLA"/>
+            <match type="string" offset="0:3" value="%MO"/>
+            <match type="string" offset="0:3" value="%TF."/>
             <!--Seems to be common with files exported from some programs-->
-            <match type="string" offset="0" value="G75*"/>
+            <match type="string" offset="0:3" value="G75*"/>
         </magic>
     </mime-type>
     <mime-type type="application/x-gerber-job">
