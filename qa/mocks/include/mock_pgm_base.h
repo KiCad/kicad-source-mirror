@@ -49,7 +49,7 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     MOCK_METHOD( SetLocalEnvVariables, 0, void() );
     MOCK_CONST_METHOD( GetLocalEnvVariables, 0, ENV_VAR_MAP&() );
 
-    int GetSelectedLanguageIdentifier()
+    int GetSelectedLanguageIdentifier() const override
     {
         return 0;
     }
