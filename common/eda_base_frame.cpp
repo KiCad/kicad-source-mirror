@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1078,6 +1078,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
         book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
         book->AddSubPage( CREATE_PANEL( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddSubPage( CREATE_PANEL( PANEL_GBR_COLORS ), _( "Colors" ) );
         book->AddSubPage( CREATE_PANEL( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
     }
     catch( ... )
@@ -1142,18 +1143,15 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
 
     if( fn.IsDir() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to folder '%s'." ),
-                    fn.GetPath() );
+        msg.Printf( _( "Insufficient permissions to folder '%s'." ), fn.GetPath() );
     }
     else if( !fn.FileExists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ),
-                    fn.GetFullName(), fn.GetPath() );
+        msg.Printf( _( "Insufficient permissions to save file '%s'." ), fn.GetFullPath() );
     }
     else if( fn.FileExists() && !fn.IsFileWritable() )
     {
-        msg.Printf( _( "Insufficient permissions to save file '%s'." ),
-                    fn.GetFullPath() );
+        msg.Printf( _( "Insufficient permissions to save file '%s'." ), fn.GetFullPath() );
     }
 
     if( !msg.IsEmpty() )

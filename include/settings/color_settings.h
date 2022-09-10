@@ -51,13 +51,6 @@ using KIGFX::COLOR4D;
 class COLOR_SETTINGS : public JSON_SETTINGS
 {
 public:
-    /**
-     * m_Pallete stores a list of colors that are used, in order, when a list of colors needs to
-     * be generated for an application.  For example, layer colors in GerbView, or default layer
-     * colors in PcbNew.
-     */
-    std::vector<COLOR4D> m_Palette;
-
     explicit COLOR_SETTINGS( const wxString& aFilename = wxT( "user" ),
                              bool aAbsolutePath = false );
 

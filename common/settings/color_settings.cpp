@@ -43,26 +43,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
 
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
 
-    std::vector<COLOR4D> default_palette = {
-            CSS_COLOR( 200, 52,  52,  1 ),
-            CSS_COLOR( 127, 200, 127, 1 ),
-            CSS_COLOR( 206, 125, 44,  1 ),
-            CSS_COLOR( 79,  203, 203, 1 ),
-            CSS_COLOR( 219, 98, 139,  1 ),
-            CSS_COLOR( 167, 165, 198, 1 ),
-            CSS_COLOR( 40,  204, 217, 1 ),
-            CSS_COLOR( 232, 178, 167, 1 ),
-            CSS_COLOR( 242, 237, 161, 1 ),
-            CSS_COLOR( 141, 203, 129, 1 ),
-            CSS_COLOR( 237, 124, 51,  1 ),
-            CSS_COLOR( 91,  195, 235, 1 ),
-            CSS_COLOR( 247, 111, 142, 1 ),
-            CSS_COLOR( 77,  127, 196, 1 )
-            };
-
-    // TODO(JE) in actual usage, how long does the default palette need to be?
-    m_params.emplace_back( new PARAM_LIST<COLOR4D>( "palette", &m_Palette, default_palette ) );
-
     m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
                                             &m_overrideSchItemColors, false ) );
 
@@ -127,8 +107,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
     {
         m_params.emplace_back( new COLOR_MAP_PARAM( "gerbview.layers." + std::to_string( i ), id,
-                                                    default_palette[ i % default_palette.size() ],
-                                                    &m_colors ) );
+                                                    s_defaultTheme.at( id ), &m_colors ) );
     }
 
     CLR( "board.anchor",                   LAYER_ANCHOR             );

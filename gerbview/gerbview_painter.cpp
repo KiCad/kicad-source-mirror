@@ -57,22 +57,14 @@ GERBVIEW_RENDER_SETTINGS::GERBVIEW_RENDER_SETTINGS()
 
 void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
-    size_t palette_size = aSettings->m_Palette.size();
-    size_t palette_idx = 0;
-
     // Layers to draw gerber data read from gerber files:
     for( int i = GERBVIEW_LAYER_ID_START;
          i < GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT; i++ )
     {
-        COLOR4D baseColor = aSettings->GetColor( i );
-
-        if( baseColor == COLOR4D::UNSPECIFIED )
-            baseColor = aSettings->m_Palette[ ( palette_idx++ ) % palette_size ];
-
-        m_layerColors[i] = baseColor;
-        m_layerColorsHi[i] = baseColor.Brightened( 0.5 );
-        m_layerColorsSel[i] = baseColor.Brightened( 0.8 );
-        m_layerColorsDark[i] = baseColor.Darkened( 0.25 );
+        m_layerColors[i] = aSettings->GetColor( i );
+        m_layerColorsHi[i] = m_layerColors[i].Brightened( 0.5 );
+        m_layerColorsSel[i] = m_layerColors[i].Brightened( 0.8 );
+        m_layerColorsDark[i] = m_layerColors[i].Darkened( 0.25 );
     }
 
     // Draw layers specific to Gerbview:

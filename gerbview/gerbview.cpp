@@ -37,6 +37,7 @@
 #include <settings/settings_manager.h>
 #include <dialogs/panel_gerbview_display_options.h>
 #include <dialogs/panel_gerbview_excellon_settings.h>
+#include <dialogs/panel_gerbview_color_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/ffile.h>
 
@@ -70,6 +71,9 @@ static struct IFACE : public KIFACE_BASE
 
         case PANEL_GBR_EXCELLON_OPTIONS:
             return new PANEL_GERBVIEW_EXCELLON_SETTINGS( aParent );
+
+        case PANEL_GBR_COLORS:
+            return new PANEL_GERBVIEW_COLOR_SETTINGS( aParent );
 
         default:
             ;

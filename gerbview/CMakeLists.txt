@@ -17,6 +17,7 @@ include_directories(
 
 
 set( DIALOGS_SRCS
+    dialogs/panel_gerbview_color_settings.cpp
     dialogs/panel_gerbview_display_options.cpp
     dialogs/panel_gerbview_display_options_base.cpp
     dialogs/panel_gerbview_excellon_settings.cpp

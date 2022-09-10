@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,21 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <regex>
-
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <layer_ids.h>
-#include <page_info.h>
-#include <title_block.h>
 #include <panel_fp_editor_color_settings.h>
 
 
 PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParent ) :
-        PANEL_COLOR_SETTINGS( aParent ),
-        m_page( nullptr ),
-        m_titleBlock( nullptr )
+        PANEL_COLOR_SETTINGS( aParent )
 {
      // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
@@ -81,8 +75,6 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParen
 PANEL_FP_EDITOR_COLOR_SETTINGS::~PANEL_FP_EDITOR_COLOR_SETTINGS()
 {
     delete m_currentSettings;
-    delete m_page;
-    delete m_titleBlock;
 }
 
 
