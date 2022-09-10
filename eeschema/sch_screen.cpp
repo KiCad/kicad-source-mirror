@@ -378,7 +378,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aSecon
 
             // Skip connecting lines on different layers (e.g. buses)
             if( item->GetLayer() != line->GetLayer() )
-                break;
+                continue;
 
             for( VECTOR2I pt : { line->GetStartPoint(), line->GetEndPoint() } )
             {
