@@ -296,7 +296,7 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, const COLOR4D& aColor 
     m_frame->m_SelLayerBox->ResyncBitmapOnly();
 
     KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-    auto settings = m_frame->GetSettingsManager()->GetColorSettings();
+    auto settings = m_frame->GetColorSettings();
     view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
@@ -348,7 +348,7 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, const COLOR4D& aColor )
     m_frame->SetVisibleElementColor( aId, aColor );
 
     auto view = m_frame->GetCanvas()->GetView();
-    COLOR_SETTINGS* settings = m_frame->GetSettingsManager()->GetColorSettings();
+    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
 
     view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( aId );

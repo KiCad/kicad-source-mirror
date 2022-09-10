@@ -230,8 +230,9 @@ public:
     void DisplayGridMsg() override;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
-
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
     void ToggleLayerManager();
 

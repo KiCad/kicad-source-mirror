@@ -372,6 +372,14 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
+COLOR_SETTINGS* GERBVIEW_FRAME::GetColorSettings( bool aForceRefresh ) const
+{
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    wxString currentTheme = cfg->m_ColorTheme;
+    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+}
+
+
 void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     wxWindowUpdateLocker no_update( m_LayersManager );
@@ -464,7 +472,7 @@ void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->SetHighContrast( gvconfig()->m_Display.m_HighContrastMode );
-    settings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
+    settings->LoadColors( GetColorSettings() );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
@@ -716,7 +724,7 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
 {
     COLOR4D color = COLOR4D::UNSPECIFIED;
-    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* settings = GetColorSettings();
 
     switch( aLayerID )
     {
@@ -750,7 +758,7 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 
 void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, const COLOR4D& aColor )
 {
-    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* settings = GetColorSettings();
 
     settings->SetColor( aLayerID, aColor );
 
@@ -786,13 +794,13 @@ COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor()
 
 COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
-    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
+    return GetColorSettings()->GetColor( aLayer );
 }
 
 
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, const COLOR4D& aColor )
 {
-    Pgm().GetSettingsManager().GetColorSettings()->SetColor( aLayer, aColor );
+    GetColorSettings()->SetColor( aLayer, aColor );
     ApplyDisplaySettingsToGAL();
 }
 
@@ -875,13 +883,13 @@ void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 
 COLOR4D GERBVIEW_FRAME::GetGridColor()
 {
-    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( LAYER_GRID );
+    return GetColorSettings()->GetColor( LAYER_GERBVIEW_GRID );
 }
 
 
 void GERBVIEW_FRAME::SetGridColor( const COLOR4D& aColor )
 {
-    Pgm().GetSettingsManager().GetColorSettings()->SetColor( LAYER_GRID, aColor );
+    GetColorSettings()->SetColor( LAYER_GERBVIEW_GRID, aColor );
     GetCanvas()->GetGAL()->SetGridColor( aColor );
     m_gridColor = aColor;
 }
@@ -1129,6 +1137,9 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     GetCanvas()->ForceRefresh();
 
     RecreateToolbars();
+    ReFillLayerWidget();                // Update the layers list
+    m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
+
     Layout();
     SendSizeEvent();
 }
