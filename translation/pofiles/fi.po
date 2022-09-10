@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-09-07 20:50+0000\n"
+"PO-Revision-Date: 2022-09-11 13:16+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8699,13 +8699,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "Uusi kentän nimi:"
+msgstr "Näytä kentän nimi"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Näytä kentän nimi sen arvon lisäksi"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
 #, fuzzy
@@ -19087,9 +19086,10 @@ msgid "Color themes (%d)"
 msgstr "Väriteemat (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Haluatko varmasti poistaa %lu kohdetta?"
+msgstr ""
+"Haluatko varmasti päivittää kiinnitetyn paketin versiosta %s versioon %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
 #, fuzzy
@@ -19226,6 +19226,8 @@ msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with \"Update All\" button."
 msgstr ""
+"Kiinnitetyt paketit eivät vaikuta saatavilla oleviin päivitysilmoituksiin, "
+"eikä niitä päivitetä \"Päivitä kaikki\" -painikkeella."
 
 #: kicad/pcm/dialogs/panel_package.cpp:118
 msgid "Install Pending"
@@ -24542,9 +24544,8 @@ msgid "Schematic Parity (%s)"
 msgstr "Kytkentäkaavion Pariteetti (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Muokkaa hylättyjä rikkomuksia..."
+msgstr "Muokkaa ohitettuja testejä"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -30889,9 +30890,9 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Sääntökerros ei täsmää; sääntöä ei noudateta."
 
 #: pcbnew/drc/drc_engine.cpp:1181
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "Ehto ei täyty; sääntö ohitettu."
+msgstr "%s ei ole porattu reikä; sääntö ohitettu."
 
 #: pcbnew/drc/drc_engine.cpp:1193
 msgid "Unconditional constraint applied."
@@ -32057,15 +32058,15 @@ msgstr "(PTH anturan reikään ei jää kuparia)"
 
 #: pcbnew/footprint.cpp:2348
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(SMD-antura näkyy sekä etu- että takakuparissa)"
 
 #: pcbnew/footprint.cpp:2355 pcbnew/footprint.cpp:2368
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(SMD-anturan kupari- ja maskikerrokset eivät täsmää)"
 
 #: pcbnew/footprint.cpp:2360 pcbnew/footprint.cpp:2373
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(SMD-antura kupari- ja tahnakerrokset eivät täsmää)"
 
 #: pcbnew/footprint.cpp:2559
 #, c-format
@@ -33777,9 +33778,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s / %s päällä %s"
 
 #: pcbnew/pad.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "NPTH pad of %s"
-msgstr "Pad of %s päällä %s"
+msgstr "%s:n NPTH-antura"
 
 #: pcbnew/pad.cpp:1238
 #, fuzzy, c-format
@@ -34781,6 +34782,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
+"CADSTAR-design sisältää kyynelpisaroita. Tämä maahantuoja ei vielä tue "
+"niitä, joten suunnittelun kyynelpisarat on jätetty huomiotta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2486
 #, c-format
@@ -36348,9 +36351,8 @@ msgid "Duplicate zone"
 msgstr "Päällekkäinen vyöhyke"
 
 #: pcbnew/tools/board_editor_control.cpp:1484
-#, fuzzy
 msgid "Selection contains no items with labelled nets."
-msgstr "Valinta sisältää lukittuja kohteita. Haluatko jatkaa?"
+msgstr "Valinta ei sisällä kohteita, joissa on nimettyjä verkkoja."
 
 #: pcbnew/tools/board_inspection_tool.cpp:58
 #, fuzzy
@@ -36508,9 +36510,8 @@ msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "Ei 'fyysisen_reiän_välys' rajoitetta määritelty."
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
-#, fuzzy
 msgid "Hole to Hole"
-msgstr "Reiän ja reiän välys:"
+msgstr "Reiästä reikään"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:961
@@ -36888,9 +36889,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:93
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Sijainnin siirtymä:"
+msgstr "Asettelutyökalut"
 
 #: pcbnew/tools/edit_tool.cpp:358
 #, c-format
