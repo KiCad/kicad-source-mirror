@@ -3022,7 +3022,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
         case SCH_PIN_T:
         case SCH_SHEET_PIN_T:
-            hasOtherConnections = true;
             pinCount++;
             break;
 
@@ -3041,13 +3040,14 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
 
+    // Labels that have multiple pins connected are not dangling (may be used for naming segments)
+    // so leave them without errors here
+    if( pinCount > 1 )
+        return true;
+
     if( isGlobal )
     {
-        // This will be set to true if the global is connected to a pin above, but we want to
-        // reset this to false so that globals get flagged if they only have a single instance
-        // connected to a single pin
-        hasOtherConnections = ( pinCount > 1 );
-
+        // Global labels are connected if there is another instance of their name in the circuit
         auto it = m_net_name_to_subgraphs_map.find( name );
 
         if( it != m_net_name_to_subgraphs_map.end() )
@@ -3058,7 +3058,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     }
     else if( text->Type() == SCH_HIER_LABEL_T )
     {
-        // For a hier label, check if the parent pin is connected
+        // Hierarchical labels are connected if their parents are connected
         if( aSubgraph->m_hier_parent
                 && ( aSubgraph->m_hier_parent->m_strong_driver
                         || aSubgraph->m_hier_parent->m_drivers.size() > 1) )
@@ -3080,7 +3080,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                 if( neighbor == aSubgraph )
                     continue;
 
-                if( hasPins( neighbor ) )
+                if( hasPins( neighbor ) && ++pinCount > 1 )
                 {
                     hasOtherConnections = true;
                     break;
