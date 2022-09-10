@@ -643,19 +643,14 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
     case LAYER_DEVICE_BACKGROUND:
         if( shape )
         {
-            COLOR4D fillColor;
-
-            if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-                return false;   // rendered on LAYER_NOTES or LAYER_DEVICE
-            else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
-            else if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-                fillColor = shape->GetFillColor();
-            else
-                return false;
+            if( shape->GetFillMode() != FILL_T::FILLED_WITH_BG_BODYCOLOR )
+            {
+                return false;   // FILLED_SHAPE and FILLED_WITH_COLOR rendered below on
+                                // LAYER_NOTES or LAYER_DEVICE
+            }
 
             m_gal->SetIsFill( true );
-            m_gal->SetFillColor( fillColor );
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false ) );
             m_gal->SetIsStroke( false );
             return true;
         }
@@ -665,8 +660,13 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
     case LAYER_NOTES:
     case LAYER_PRIVATE_NOTES:
     case LAYER_DEVICE:
-        m_gal->SetIsFill( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE );
-        m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+        m_gal->SetIsFill( shape && (   shape->GetFillMode() == FILL_T::FILLED_SHAPE
+                                    || shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR ) );
+
+        if( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+        else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+            m_gal->SetFillColor( shape->GetFillColor() );
 
         if( aItem->GetPenWidth() >= 0 || !shape || !shape->IsFilled() )
         {
@@ -790,7 +790,8 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_PRIVATE_NOTES )
     {
-        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
+        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE
+                || aShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
