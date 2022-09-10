@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,7 +92,7 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	defaults->Add( m_cbShowPinElectricalType, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	leftColumn->Add( defaults, 0, wxEXPAND|wxALL, 5 );
+	leftColumn->Add( defaults, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* repeats;
 	repeats = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Repeated Items") ), wxVERTICAL );
@@ -131,10 +131,10 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	repeats->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
-	leftColumn->Add( repeats, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	leftColumn->Add( repeats, 1, wxEXPAND|wxTOP, 5 );
 
 
-	p1mainSizer->Add( leftColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	p1mainSizer->Add( leftColumn, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	p1mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
