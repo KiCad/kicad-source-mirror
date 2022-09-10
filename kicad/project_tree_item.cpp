@@ -233,6 +233,7 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 
     case TREE_FILE_TYPE::NET:
     case TREE_FILE_TYPE::TXT:
+    case TREE_FILE_TYPE::MD:
     case TREE_FILE_TYPE::REPORT:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &fullFileName );
         break;

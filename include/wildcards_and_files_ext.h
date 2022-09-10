@@ -161,6 +161,7 @@ extern const std::string WorkbookFileExtension;
 extern const std::string PngFileExtension;
 extern const std::string JpegFileExtension;
 extern const std::string TextFileExtension;
+extern const std::string MarkdownFileExtension;
 extern const std::string CsvFileExtension;
 
 

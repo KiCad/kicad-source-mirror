@@ -44,6 +44,7 @@ enum class TREE_FILE_TYPE
     HTML,             // HTML file (.htm, *.html)
     PDF,              // PDF file (.pdf)
     TXT,              // ascii text file (.txt)
+    MD,               // markdown file (.md)
     NET,              // netlist file (.net)
     UNKNOWN,
     DIRECTORY,

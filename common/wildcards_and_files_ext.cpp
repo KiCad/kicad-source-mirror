@@ -171,6 +171,7 @@ const std::string WorkbookFileExtension( "wbk" );
 const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
 const std::string TextFileExtension( "txt" );
+const std::string MarkdownFileExtension( "md" );
 const std::string CsvFileExtension( "csv" );
 
 
