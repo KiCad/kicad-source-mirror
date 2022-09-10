@@ -561,6 +561,7 @@ int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
     auto& galOpts = m_frame->GetGalDisplayOptions();
 
     galOpts.m_forceDisplayCursor = !galOpts.m_forceDisplayCursor;
+    galOpts.WriteConfig( m_toolMgr->GetSettings()->m_Window );
     galOpts.NotifyChanged();
 
     return 0;
@@ -572,6 +573,7 @@ int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = m_frame->GetGalDisplayOptions();
 
     galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
+    galOpts.WriteConfig( m_toolMgr->GetSettings()->m_Window );
     galOpts.NotifyChanged();
 
     return 0;
