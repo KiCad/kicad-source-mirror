@@ -268,75 +268,75 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
     
     //case TYPE::TLINE_Z0:             return { "T"  };
-    case TYPE::TLINE_Z0:             return { "O", "ltra"    };
-    case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
+    case TYPE::TLINE_Z0:             return { "O", "LTRA"    };
+    case TYPE::TLINE_RLGC:           return { "O", "LTRA"    };
 
-    case TYPE::SW_V:                 return { "S", "sw"  };
-    case TYPE::SW_I:                 return { "W", "csw" };
+    case TYPE::SW_V:                 return { "S", "SW"  };
+    case TYPE::SW_I:                 return { "W", "CSW" };
 
-    case TYPE::D:                    return { "D", "d"       };
+    case TYPE::D:                    return { "D", "D"       };
 
-    case TYPE::NPN_GUMMELPOON:       return { "Q", "npn",    "",        "1",  true   };
-    case TYPE::PNP_GUMMELPOON:       return { "Q", "pnp",    "",        "1",  true   };
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",    "",        "1",  true   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",    "",        "1",  true   };
 
-    case TYPE::NPN_VBIC:             return { "Q", "npn",    "",        "4"   };
-    case TYPE::PNP_VBIC:             return { "Q", "pnp",    "",        "4"   };
+    case TYPE::NPN_VBIC:             return { "Q", "NPN",    "",        "4"   };
+    case TYPE::PNP_VBIC:             return { "Q", "PNP",    "",        "4"   };
 
-    case TYPE::NPN_HICUM2:           return { "Q", "npn",    "",        "8"   };
-    case TYPE::PNP_HICUM2:           return { "Q", "pnp",    "",        "8"   };
+    case TYPE::NPN_HICUM2:           return { "Q", "NPN",    "",        "8"   };
+    case TYPE::PNP_HICUM2:           return { "Q", "PNP",    "",        "8"   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "M", "njf",    "",        "1"   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "M", "pjf",    "",        "1"   };
-    case TYPE::NJFET_PARKERSKELLERN: return { "M", "njf",    "",        "2"   };
-    case TYPE::PJFET_PARKERSKELLERN: return { "M", "pjf",    "",        "2"   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",    "",        "1"   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",    "",        "1"   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",    "",        "2"   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",    "",        "2"   };
 
-    case TYPE::NMES_STATZ:           return { "Z", "nmf",    "",        "1"   };
-    case TYPE::PMES_STATZ:           return { "Z", "pmf",    "",        "1"   };
-    case TYPE::NMES_YTTERDAL:        return { "Z", "nmf",    "",        "2"   };
-    case TYPE::PMES_YTTERDAL:        return { "Z", "pmf",    "",        "2"   };
-    case TYPE::NMES_HFET1:           return { "Z", "nmf",    "",        "5"   };
-    case TYPE::PMES_HFET1:           return { "Z", "pmf",    "",        "5"   };
-    case TYPE::NMES_HFET2:           return { "Z", "nmf",    "",        "6"   };
-    case TYPE::PMES_HFET2:           return { "Z", "pmf",    "",        "6"   };
+    case TYPE::NMES_STATZ:           return { "Z", "NMF",    "",        "1"   };
+    case TYPE::PMES_STATZ:           return { "Z", "PMF",    "",        "1"   };
+    case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",    "",        "2"   };
+    case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",    "",        "2"   };
+    case TYPE::NMES_HFET1:           return { "Z", "NMF",    "",        "5"   };
+    case TYPE::PMES_HFET1:           return { "Z", "PMF",    "",        "5"   };
+    case TYPE::NMES_HFET2:           return { "Z", "NMF",    "",        "6"   };
+    case TYPE::PMES_HFET2:           return { "Z", "PMF",    "",        "6"   };
 
-    case TYPE::NMOS_MOS1:            return { "M", "nmos",   "",        "1"   };
-    case TYPE::PMOS_MOS1:            return { "M", "pmos",   "",        "1"   };
-    case TYPE::NMOS_MOS2:            return { "M", "nmos",   "",        "2"   };
-    case TYPE::PMOS_MOS2:            return { "M", "pmos",   "",        "2"   };
-    case TYPE::NMOS_MOS3:            return { "M", "nmos",   "",        "3"   };
-    case TYPE::PMOS_MOS3:            return { "M", "pmos",   "",        "3"   };
-    case TYPE::NMOS_BSIM1:           return { "M", "nmos",   "",        "4"   };
-    case TYPE::PMOS_BSIM1:           return { "M", "pmos",   "",        "4"   };
-    case TYPE::NMOS_BSIM2:           return { "M", "nmos",   "",        "5"   };
-    case TYPE::PMOS_BSIM2:           return { "M", "pmos",   "",        "5"   };
-    case TYPE::NMOS_MOS6:            return { "M", "nmos",   "",        "6"   };
-    case TYPE::PMOS_MOS6:            return { "M", "pmos",   "",        "6"   };
-    case TYPE::NMOS_BSIM3:           return { "M", "nmos",   "",        "8"   };
-    case TYPE::PMOS_BSIM3:           return { "M", "pmos",   "",        "8"   };
-    case TYPE::NMOS_MOS9:            return { "M", "nmos",   "",        "9"   };
-    case TYPE::PMOS_MOS9:            return { "M", "pmos",   "",        "9"   };
-    case TYPE::NMOS_B4SOI:           return { "M", "nmos",   "",        "10"  };
-    case TYPE::PMOS_B4SOI:           return { "M", "pmos",   "",        "10"  };
-    case TYPE::NMOS_BSIM4:           return { "M", "nmos",   "",        "14"  };
-    case TYPE::PMOS_BSIM4:           return { "M", "pmos",   "",        "14"  };
+    case TYPE::NMOS_MOS1:            return { "M", "NMOS",   "",        "1"   };
+    case TYPE::PMOS_MOS1:            return { "M", "PMOS",   "",        "1"   };
+    case TYPE::NMOS_MOS2:            return { "M", "NMOS",   "",        "2"   };
+    case TYPE::PMOS_MOS2:            return { "M", "PMOS",   "",        "2"   };
+    case TYPE::NMOS_MOS3:            return { "M", "NMOS",   "",        "3"   };
+    case TYPE::PMOS_MOS3:            return { "M", "PMOS",   "",        "3"   };
+    case TYPE::NMOS_BSIM1:           return { "M", "NMOS",   "",        "4"   };
+    case TYPE::PMOS_BSIM1:           return { "M", "PMOS",   "",        "4"   };
+    case TYPE::NMOS_BSIM2:           return { "M", "NMOS",   "",        "5"   };
+    case TYPE::PMOS_BSIM2:           return { "M", "PMOS",   "",        "5"   };
+    case TYPE::NMOS_MOS6:            return { "M", "NMOS",   "",        "6"   };
+    case TYPE::PMOS_MOS6:            return { "M", "PMOS",   "",        "6"   };
+    case TYPE::NMOS_BSIM3:           return { "M", "NMOS",   "",        "8"   };
+    case TYPE::PMOS_BSIM3:           return { "M", "PMOS",   "",        "8"   };
+    case TYPE::NMOS_MOS9:            return { "M", "NMOS",   "",        "9"   };
+    case TYPE::PMOS_MOS9:            return { "M", "PMOS",   "",        "9"   };
+    case TYPE::NMOS_B4SOI:           return { "M", "NMOS",   "",        "10"  };
+    case TYPE::PMOS_B4SOI:           return { "M", "PMOS",   "",        "10"  };
+    case TYPE::NMOS_BSIM4:           return { "M", "NMOS",   "",        "14"  };
+    case TYPE::PMOS_BSIM4:           return { "M", "PMOS",   "",        "14"  };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:         return { "M", "nmos",   "",        "55"  };
-    case TYPE::PMOS_B3SOIFD:         return { "M", "pmos",   "",        "55"  };
-    case TYPE::NMOS_B3SOIDD:         return { "M", "nmos",   "",        "56"  };
-    case TYPE::PMOS_B3SOIDD:         return { "M", "pmos",   "",        "56"  };
-    case TYPE::NMOS_B3SOIPD:         return { "M", "nmos",   "",        "57"  };
-    case TYPE::PMOS_B3SOIPD:         return { "M", "pmos",   "",        "57"  };
+    case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",   "",        "55"  };
+    case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",   "",        "55"  };
+    case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",   "",        "56"  };
+    case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",   "",        "56"  };
+    case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",   "",        "57"  };
+    case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",   "",        "57"  };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:          return { "M", "nmos",   "",        "68"  };
-    case TYPE::PMOS_HISIM2:          return { "M", "pmos",   "",        "68"  };
-    case TYPE::NMOS_HISIMHV1:        return { "M", "nmos",   "",        "73", true,  false, "1.2.4" };
-    case TYPE::PMOS_HISIMHV1:        return { "M", "pmos",   "",        "73", true,  false, "1.2.4" };
-    case TYPE::NMOS_HISIMHV2:        return { "M", "nmos",   "",        "73", true,  false, "2.2.0" };
-    case TYPE::PMOS_HISIMHV2:        return { "M", "pmos",   "",        "73", true,  false, "2.2.0" };
+    case TYPE::NMOS_HISIM2:          return { "M", "NMOS",   "",        "68"  };
+    case TYPE::PMOS_HISIM2:          return { "M", "PMOS",   "",        "68"  };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",   "",        "73", true,  false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",   "",        "73", true,  false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",   "",        "73", true,  false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",   "",        "73", true,  false, "2.2.0" };
 
     case TYPE::V:                    return { "V", ""        };
     case TYPE::V_SIN:                return { "V", "",       "SIN"      };
@@ -918,9 +918,11 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
         return "";
 
     wxString result = "";
-    wxString line = "";
 
-    line << wxString::Format( ".model %s %s(\n+", aModelName, GetSpiceInfo().modelType );
+    result << wxString::Format( ".model %s ", aModelName );
+    size_t indentLength = result.Length();
+
+    result << wxString::Format( "%s \n", GetSpiceInfo().modelType );
 
     for( const PARAM& param : GetParams() )
     {
@@ -934,18 +936,9 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
         if( value == "" )
             continue;
         
-        wxString appendix = " " + name + "=" + value;
-
-        if( line.Length() + appendix.Length() > 60 )
-        {
-            result << line << "\n";
-            line = "+" + appendix;
-        }
-        else
-            line << appendix;
+        result << wxString::Format( "+%s%s=%s\n", wxString( ' ', indentLength - 1 ), name, value );
     }
 
-    result << line + " )\n";
     return result;
 }
 
@@ -1536,7 +1529,7 @@ TYPE SIM_MODEL::readTypeFromSpiceStrings( const wxString& aTypeString,
             continue;
 
         // Check if `aTypeString` starts with `typePrefix`.
-        if( aTypeString.Lower().StartsWith( typePrefix )
+        if( aTypeString.Upper().StartsWith( typePrefix )
             && ( level == readLevel->ToString()
                  || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
             && version == aVersion )
