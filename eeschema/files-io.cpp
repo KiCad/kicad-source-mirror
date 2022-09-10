@@ -510,7 +510,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddCloseButton();
-        m_infoBar->ShowMessage( _( "Schematic is read only." ), wxICON_WARNING );
+        m_infoBar->ShowMessage( _( "Schematic is read only." ),
+                                wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
     }
 
 #ifdef PROFILE
@@ -687,6 +688,9 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     // Save
     wxLogTrace( traceAutoSave, "Saving file " + schematicFileName.GetFullPath() );
+
+    if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
+        m_infoBar->Dismiss();
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromSchPath(
             schematicFileName.GetFullPath() );

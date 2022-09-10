@@ -262,7 +262,10 @@ bool PL_EDITOR_FRAME::LoadDrawingSheetFile( const wxString& aFullFileName )
 
         if( fn.FileExists() && !fn.IsFileWritable() )
         {
-            ShowInfoBarWarning( _( "Layout file is read only." ), true );
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "Layout file is read only." ),
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
         }
 
         return true;
@@ -308,6 +311,9 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 
         if( !wxRenameFile( tempFile, aFullFileName ) )
             return false;
+
+        if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
+            m_infoBar->Dismiss();
 
         GetScreen()->SetContentModified( false );
         return true;

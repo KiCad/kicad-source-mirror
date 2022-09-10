@@ -1273,7 +1273,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     {
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddCloseButton();
-        m_infoBar->ShowMessage( _( "Board file is read only." ), wxICON_WARNING );
+        m_infoBar->ShowMessage( _( "Board file is read only." ),
+                                wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
     }
 
     ReCreateLayerBox();
