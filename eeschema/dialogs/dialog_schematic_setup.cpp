@@ -105,18 +105,18 @@ DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 }
 
 
-void DIALOG_SCHEMATIC_SETUP::OnPageChanged( wxBookCtrlEvent& event )
+void DIALOG_SCHEMATIC_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
-    PAGED_DIALOG::OnPageChanged( event );
+    PAGED_DIALOG::onPageChanged( aEvent );
 
-    int page = event.GetSelection();
+    int page = aEvent.GetSelection();
 
     if( Prj().IsReadOnly() )
         KIUI::Disable( m_treebook->GetPage( page ) );
 }
 
 
-void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
+void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
 {
     DIALOG_SCH_IMPORT_SETTINGS importDlg( this, m_frame );
 

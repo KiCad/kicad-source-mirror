@@ -136,9 +136,9 @@ DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 }
 
 
-void DIALOG_BOARD_SETUP::OnPageChanged( wxBookCtrlEvent& aEvent )
+void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
-    PAGED_DIALOG::OnPageChanged( aEvent );
+    PAGED_DIALOG::onPageChanged( aEvent );
 
     int page = aEvent.GetSelection();
 
@@ -155,7 +155,7 @@ void DIALOG_BOARD_SETUP::OnPageChanged( wxBookCtrlEvent& aEvent )
 }
 
 
-void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& aEvent )
+void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
 {
     DIALOG_IMPORT_SETTINGS importDlg( this, m_frame );
 

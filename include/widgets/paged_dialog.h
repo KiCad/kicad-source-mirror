@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,12 +54,11 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void OnClose( wxCloseEvent& event );
-    void OnCancel( wxCommandEvent& event );
-    virtual void OnAuxiliaryAction( wxCommandEvent& event ) { event.Skip(); }
-    void OnResetButton( wxCommandEvent& aEvent );
-    virtual void OnPageChanged( wxBookCtrlEvent& event );
-    virtual void OnPageChanging( wxBookCtrlEvent& aEvent );
+    virtual void onAuxiliaryAction( wxCommandEvent& aEvent ) { aEvent.Skip(); }
+    virtual void onResetButton( wxCommandEvent& aEvent );
+    virtual void onPageChanged( wxBookCtrlEvent& aEvent );
+    virtual void onPageChanging( wxBookCtrlEvent& aEvent );
+    virtual void onCharHook( wxKeyEvent& aEvent );
 
     wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;
@@ -69,8 +68,6 @@ protected:
 
 private:
     wxString    m_title;
-
-    bool        m_dirty;
 
     wxBoxSizer* m_buttonsSizer;
 };

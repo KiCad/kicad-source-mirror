@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -46,8 +46,8 @@ public:
 
 protected:
     // event handlers
-    void OnPageChanged( wxBookCtrlEvent& aEvent ) override;
-    void OnAuxiliaryAction( wxCommandEvent& aEvent ) override;
+    void onPageChanged( wxBookCtrlEvent& aEvent ) override;
+    void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
     PCB_EDIT_FRAME*                  m_frame;
 
