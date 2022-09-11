@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-09-05 11:14+0000\n"
+"PO-Revision-Date: 2022-09-12 20:18+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8481,23 +8481,20 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "Імʼя нового поля:"
+msgstr "Показати назву поля"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "Показати назву поля в доповненні до його значення"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Автоматичне розміщення компонентів"
+msgstr "Дозволити автоматичне розміщення"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:99
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Замінити посадкові місця на зазначені в схемі"
+msgstr "Дозволити автоматичне розміщення поля на схемі"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:112
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -10716,24 +10713,20 @@ msgid "Code"
 msgstr "Код"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:190
-#, fuzzy
 msgid "Symbol Pin"
-msgstr "Символ"
+msgstr "Символ виводу"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:191
-#, fuzzy
 msgid "Model Pin"
-msgstr "Модель"
+msgstr "Модель виводу"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:209
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Альтернативні функції виводів"
+msgstr "Назначення виводів"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:216
-#, fuzzy
 msgid "Exclude symbol from simulation"
-msgstr "Вимкнути символ для симуляції"
+msgstr "Виключити символ з симуляції"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:106
 msgid "Spice Model Editor"
@@ -11160,6 +11153,8 @@ msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
+"Використовуйте альтернативну форму цього символу. \n"
+"Для шлюзу конверсія \"Де Моргана\""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
@@ -38432,63 +38427,63 @@ msgstr ""
 #: pcbnew/zone.cpp:759
 #, c-format
 msgid "Zone %s on %s"
-msgstr ""
+msgstr "Зона %s на %s"
 
 #: pcbnew/zone.cpp:1289
 msgid "Inherited"
-msgstr ""
+msgstr "Успадковано"
 
 #: pcbnew/zone.cpp:1293
 msgid "Thermal reliefs for PTH"
-msgstr ""
+msgstr "Теплові рельєфи для PTH"
 
 #: pcbnew/zone.cpp:1307
 msgid "Min Width"
-msgstr ""
+msgstr "Мінімальна ширина"
 
 #: pcbnew/zone.cpp:1310
 msgid "Pad Connections"
-msgstr ""
+msgstr "Підключення до контактної площадки"
 
 #: pcbnew/zone_filler.cpp:101
 msgid "Checking zone fills..."
-msgstr ""
+msgstr "Перевірка заповнення зон..."
 
 #: pcbnew/zone_filler.cpp:102
 msgid "Building zone fills..."
-msgstr ""
+msgstr "Побудова заливки зони..."
 
 #: pcbnew/zone_filler.cpp:307
 msgid "Removing isolated copper islands..."
-msgstr ""
+msgstr "Усунення ізольованих островів міді..."
 
 #: pcbnew/zone_filler.cpp:430
 msgid "Zone fills are out-of-date. Refill?"
-msgstr ""
+msgstr "Заповнення зон застаріли. Повторно заповнити?"
 
 #: pcbnew/zone_filler.cpp:432
 msgid "Refill"
-msgstr ""
+msgstr "Заповнити"
 
 #: pcbnew/zone_filler.cpp:432
 msgid "Continue without Refill"
-msgstr ""
+msgstr "Продовжити без заповнення"
 
 #: pcbnew/zones.h:64
 msgid "inherited"
-msgstr ""
+msgstr "успадкована"
 
 #: pcbnew/zones.h:66
 msgid "thermal reliefs"
-msgstr ""
+msgstr "теплові рельєфи"
 
 #: pcbnew/zones.h:67
 msgid "solid"
-msgstr ""
+msgstr "щільний"
 
 #: pcbnew/zones.h:68
 msgid "thermal reliefs for PTH"
-msgstr ""
+msgstr "теплові рельєфи для PTH"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
