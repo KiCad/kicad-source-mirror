@@ -669,7 +669,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         if( !aSymbol->FindField( libField.GetName(), false ) )
         {
             wxString   fieldName = libField.GetCanonicalName();
-            SCH_FIELD  newField( VECTOR2I( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
+            SCH_FIELD  newField( VECTOR2I( 0, 0 ), aSymbol->GetFieldCount(), aSymbol, fieldName );
             SCH_FIELD* schField = aSymbol->AddField( newField );
 
             // Careful: the visible bit and position are also set by SetAttributes()
