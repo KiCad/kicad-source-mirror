@@ -471,6 +471,11 @@ void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "REFERENCE" ) );
     aVars->push_back( wxT( "VALUE" ) );
     aVars->push_back( wxT( "LAYER" ) );
+    aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
+    aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
+    aVars->push_back( wxT( "NET_NAME(<pad_number>)" ) );
+    aVars->push_back( wxT( "NET_CLASS(<pad_number>)" ) );
+    aVars->push_back( wxT( "PIN_NAME(<pad_number>)" ) );
 }
 
 
@@ -500,6 +505,28 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
     {
         *token = m_fpid.GetLibItemName();
         return true;
+    }
+    else if( token->StartsWith( wxT( "NET_NAME(" ) )
+                || token->StartsWith( wxT( "NET_CLASS(" ) )
+                || token->StartsWith( wxT( "PIN_NAME(" ) ) )
+    {
+        wxString padNumber = token->AfterFirst( '(' );
+        padNumber = padNumber.BeforeLast( ')' );
+
+        for( PAD* pad : Pads() )
+        {
+            if( pad->GetNumber() == padNumber )
+            {
+                if( token->StartsWith( wxT( "NET_NAME" ) ) )
+                    *token = pad->GetNetname();
+                else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
+                    *token = pad->GetNetClassName();
+                else
+                    *token = pad->GetPinFunction();
+
+                return true;
+            }
+        }
     }
     else if( m_properties.count( *token ) )
     {
