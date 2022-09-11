@@ -160,9 +160,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_LIBID )
         {
-            if( c == '/' )
-                converted += wxT( "{slash}" );
-            else if( c == '\\' )
+            if( c == '\\' )
                 converted += wxT( "{backslash}" );
             else if( c == '<' )
                 converted += wxT( "{lt}" );
