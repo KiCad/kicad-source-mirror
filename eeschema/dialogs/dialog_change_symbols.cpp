@@ -679,6 +679,9 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         }
     }
 
+    if( resetPositions && frame->eeconfig()->m_AutoplaceFields.enable )
+        aSymbol->AutoAutoplaceFields( screen );
+
     aSymbol->SetSchSymbolLibraryName( wxEmptyString );
     screen->Append( aSymbol );
     frame->GetCanvas()->GetView()->Update( aSymbol );
