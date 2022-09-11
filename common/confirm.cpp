@@ -341,11 +341,26 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
 
 bool IsOK( wxWindow* aParent, const wxString& aMessage )
 {
-    wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
-                         wxYES_NO | wxCENTRE | wxICON_QUESTION | wxSTAY_ON_TOP );
-    dlg.SetEscapeId( wxID_NO );
+    // wxMessageDialog no longer responds correctly to the <ESC> key (on at least OSX and MSW)
+    // so we're now using wxRichMessageDialog.
+    //
+    // Note also that we have to repurpose an OK/Cancel version of it because otherwise wxWidgets
+    // uses "destructive" spacing for the "No" button.
 
-    return dlg.ShowModal() == wxID_YES;
+#ifdef __APPLE__
+    // Why is wxICON_QUESTION a light-bulb on Mac?  That has more of a hint or info connotation.
+    int icon = wxICON_WARNING;
+#else
+    int icon = wxICON_QUESTION;
+#endif
+
+    wxRichMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
+                             wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
+
+    dlg.SetOKCancelLabels( _( "Yes" ), _( "No" ) );
+
+
+    return dlg.ShowModal() == wxID_OK;
 }
 
 
