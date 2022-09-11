@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,6 +244,11 @@ public:
      * Return the color of the layer ROW associated with \a aLayer id.
      */
     COLOR4D GetLayerColor( int aLayer ) const;
+
+    /**
+     * Return the color of the Render ROW in position \a aRow.
+     */
+    COLOR4D GetRenderColor( int aRow ) const;
 
     /**
      * Set the state of the checkbox associated with \a aId within the Render tab group of the

@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -764,8 +764,25 @@ COLOR4D LAYER_WIDGET::GetLayerColor( int aLayer ) const
 
     if( row >= 0 )
     {
-        int col = 1;    // bitmap button is column 1
+        const int col = 1;    // bitmap button is column 1
         auto swatch = static_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+        wxASSERT( swatch );
+
+        return swatch->GetSwatchColor();
+    }
+
+    return COLOR4D::UNSPECIFIED;   // it's caller fault, gave me a bad layer
+}
+
+
+COLOR4D LAYER_WIDGET::GetRenderColor( int aRow ) const
+{
+    int row = aRow;
+
+    if( row >= 0 )
+    {
+        const int col = 0;    // bitmap button (swatch) is column 0
+        auto swatch = static_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
         wxASSERT( swatch );
 
         return swatch->GetSwatchColor();

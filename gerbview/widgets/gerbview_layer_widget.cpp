@@ -80,6 +80,41 @@ void GERBER_LAYER_WIDGET::SetLayersManagerTabsText()
     m_notebook->SetPageText( 1, _( "Items" ) );
 }
 
+
+void GERBER_LAYER_WIDGET::CollectCurrentColorSettings(  COLOR_SETTINGS* aColorSettings )
+{
+    std::vector<int>render_layers{ LAYER_DCODES, LAYER_NEGATIVE_OBJECTS, LAYER_GERBVIEW_GRID,
+                            LAYER_GERBVIEW_DRAWINGSHEET, LAYER_GERBVIEW_PAGE_LIMITS,
+                            LAYER_GERBVIEW_BACKGROUND };
+
+    for( int layer: render_layers )
+    {
+        int row = findRenderRow( layer );
+
+        if( row < 0 )
+            continue;
+
+        COLOR4D color = GetRenderColor( row );
+
+        if( color != COLOR4D::UNSPECIFIED )
+            aColorSettings->SetColor( layer, color );
+    }
+
+    for( int layer = GERBVIEW_LAYER_ID_START; layer < GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT; layer++ )
+    {
+        int row = findLayerRow( layer - GERBVIEW_LAYER_ID_START );
+
+        if( row < 0 )   // Not existing in layer list
+            continue;
+
+        COLOR4D color = GetLayerColor( row );
+
+        if( color != COLOR4D::UNSPECIFIED )
+            aColorSettings->SetColor( layer, color );
+    }
+}
+
+
 void GERBER_LAYER_WIDGET::ReFillRender()
 {
     ClearRenderRows();
@@ -296,8 +331,10 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, const COLOR4D& aColor 
     m_frame->m_SelLayerBox->ResyncBitmapOnly();
 
     KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-    auto settings = m_frame->GetColorSettings();
-    view->GetPainter()->GetSettings()->LoadColors( settings );
+    COLOR_SETTINGS* color_settings = m_frame->GetColorSettings();
+    color_settings->SetColor( aLayer, aColor );
+
+    view->GetPainter()->GetSettings()->LoadColors( color_settings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
     m_frame->GetCanvas()->Refresh();
@@ -348,9 +385,11 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, const COLOR4D& aColor )
     m_frame->SetVisibleElementColor( aId, aColor );
 
     auto view = m_frame->GetCanvas()->GetView();
-    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
 
-    view->GetPainter()->GetSettings()->LoadColors( settings );
+    COLOR_SETTINGS* color_settings = m_frame->GetColorSettings();
+    color_settings->SetColor( aId, aColor );
+
+    view->GetPainter()->GetSettings()->LoadColors( color_settings );
     view->UpdateLayerColor( aId );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     view->UpdateAllItems( KIGFX::COLOR );

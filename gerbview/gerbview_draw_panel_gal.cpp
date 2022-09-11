@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,8 +58,16 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     setDefaultLayerDeps();
 
+    COLOR_SETTINGS* color_settings;
+
+    if( auto frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() ) )
+        color_settings = frame->GetColorSettings();
+    else
+        color_settings = Pgm().GetSettingsManager().GetColorSettings();
+
+    wxASSERT( color_settings );
     auto renderSettings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_painter->GetSettings() );
-    renderSettings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
+    renderSettings->LoadColors( color_settings );
 }
 
 

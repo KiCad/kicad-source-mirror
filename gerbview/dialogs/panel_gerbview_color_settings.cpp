@@ -22,7 +22,10 @@
 #include <panel_gerbview_color_settings.h>
 #include <settings/settings_manager.h>
 #include <gerbview_settings.h>
+#include <gerbview_frame.h>
+#include <widgets/gerbview_layer_widget.h>
 
+#include <wx/log.h>
 PANEL_GERBVIEW_COLOR_SETTINGS::PANEL_GERBVIEW_COLOR_SETTINGS( wxWindow* aParent ) :
         PANEL_COLOR_SETTINGS( aParent )
 {
@@ -32,14 +35,25 @@ PANEL_GERBVIEW_COLOR_SETTINGS::PANEL_GERBVIEW_COLOR_SETTINGS( wxWindow* aParent 
     GERBVIEW_SETTINGS* app_settings = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
     COLOR_SETTINGS*    current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
+    // Colors can also be modified from the LayersManager, so collect last settings if exist
+    // (They can be no yet saved on disk)
+    GERBVIEW_FRAME* gbr_mainframe = dynamic_cast<GERBVIEW_FRAME*>(
+                                    wxWindow::FindWindowByName( GERBVIEW_FRAME_NAME ) );
+    if( gbr_mainframe )
+    {
+       gbr_mainframe->m_LayersManager->CollectCurrentColorSettings( current );
+    }
+
     // Saved theme doesn't exist?  Reset to default
     if( current->GetFilename() != app_settings->m_ColorTheme )
         app_settings->m_ColorTheme = current->GetFilename();
 
     createThemeList( app_settings->m_ColorTheme );
 
+
     // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
+
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
@@ -92,7 +106,7 @@ void PANEL_GERBVIEW_COLOR_SETTINGS::createSwatches()
         case LAYER_GERBVIEW_BACKGROUND:   layerName = _( "Background" );       break;
 
         default:
-            layerName = wxString::Format( _( "Layer %d" ), layer + 1 - GERBVIEW_LAYER_ID_START );
+            layerName = wxString::Format( _( "Graphic Layer %d" ), layer + 1 - GERBVIEW_LAYER_ID_START );
             break;
         }
 

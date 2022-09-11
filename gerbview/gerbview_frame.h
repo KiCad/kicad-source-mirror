@@ -526,9 +526,9 @@ public:
     wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
                                                 // gerber data (format..)
 
-protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
+protected:
     FILE_HISTORY            m_zipFileHistory;
     FILE_HISTORY            m_drillFileHistory;
     FILE_HISTORY            m_jobFileHistory;

@@ -374,9 +374,10 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 COLOR_SETTINGS* GERBVIEW_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    GERBVIEW_SETTINGS* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
     wxString currentTheme = cfg->m_ColorTheme;
-    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+    return mgr.GetColorSettings( currentTheme );
 }
 
 
