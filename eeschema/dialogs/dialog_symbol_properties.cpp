@@ -758,8 +758,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                     }
                     else
                     {
-                        SCH_FIELD* newField = otherUnit->AddField( m_fields->at( ii ) );
-                        const_cast<KIID&>( newField->m_Uuid ) = KIID();
+                        SCH_FIELD newField( m_fields->at( ii ) );
+                        const_cast<KIID&>( newField.m_Uuid ) = KIID();
+
+                        newField.Offset( -m_symbol->GetPosition() );
+                        newField.Offset( otherUnit->GetPosition() );
+
+                        newField.SetParent( otherUnit );
+                        otherUnit->AddField( newField );
                     }
                 }
 
