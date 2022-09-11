@@ -3,13 +3,14 @@
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
+# Grzegorz Szymaszek <gszymaszek@short.pl>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-09-11 13:16+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2022-09-12 20:18+0000\n"
+"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -3161,23 +3162,23 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 msgid "Maximum backups to keep:"
-msgstr "Maksymalna ilość przechowywanych kopii:"
+msgstr "Maksymalna liczba przechowywanych kopii:"
 
 #: common/dialogs/panel_common_settings_base.cpp:289
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
-"Jak dużo plików kopi zapasowych będzie przechowywanych (Ustaw 0 by ilość "
+"Jak dużo plików kopii zapasowych będzie przechowywanych (ustaw 0 aby liczba "
 "była nieograniczona)"
 
 #: common/dialogs/panel_common_settings_base.cpp:296
 msgid "Maximum backups per day:"
-msgstr "Maksymalna ilość kopii dziennie:"
+msgstr "Maksymalna liczba kopii dziennie:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
-"Ile kopii plików może być przechowywanych w ciągu jednego dnia (Ustaw 0 by "
-"ilość była nieograniczona)"
+"Ile plików kopii ma być przechowywanych każdego dnia (ustaw 0 aby liczba "
+"była nieograniczona)"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Minimum time between backups:"
@@ -3805,7 +3806,7 @@ msgstr "Opcje pierwszej strony"
 
 #: common/drawing_sheet/ds_draw_item.cpp:143
 msgid "Repeat Count"
-msgstr "Ilość powtórzeń"
+msgstr "Liczba powtórzeń"
 
 #: common/drawing_sheet/ds_draw_item.cpp:146
 msgid "Repeat Label Increment"
@@ -7054,7 +7055,7 @@ msgstr "Słowa kluczowe"
 
 #: cvpcb/cvpcb_mainframe.cpp:774
 msgid "Pin Count"
-msgstr "Ilość pól lutowniczych"
+msgstr "Liczba pól lutowniczych"
 
 #: cvpcb/cvpcb_mainframe.cpp:787 eeschema/sch_symbol.cpp:1525
 #: eeschema/sch_symbol.cpp:1529 eeschema/sch_symbol.cpp:1559
@@ -7500,7 +7501,7 @@ msgstr "Element nie ma numeracji: %s%s\n"
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Błąd: symbol %s%s%s (część %d) przekracza ilość zdefiniowanych części (%d)\n"
+"Błąd: symbol %s%s%s (część %d) przekracza liczbę zdefiniowanych części (%d)\n"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -9358,7 +9359,7 @@ msgstr "Alternatywny"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 msgid "Count"
-msgstr "Ilość"
+msgstr "Liczba"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:115
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
@@ -9455,7 +9456,7 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
 msgid "Pin count:"
-msgstr "Ilość wyprowadzeń:"
+msgstr "Liczba wyprowadzeń:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
 msgid "Duplicate pins:"
@@ -10518,7 +10519,7 @@ msgstr "Oznaczenie"
 #: eeschema/dialogs/dialog_rescue_each.cpp:232
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr "Ilość wystąpień symbolu (%d części):"
+msgstr "Liczba wystąpień symbolu (%d części):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:294
 msgid ""
@@ -11346,7 +11347,7 @@ msgstr "Kolumna Odnośnik nie może być ukryta."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:265
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:666
 msgid "Qty"
-msgstr "Ilość"
+msgstr "Liczba"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:765
 msgid "Group By"
@@ -12599,7 +12600,7 @@ msgstr "Dodaje istniejącą bibliotekę do tabeli"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:128
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:124
 msgid "Remove library from table"
-msgstr "Usuwa bibliotekę z tableli"
+msgstr "Usuwa bibliotekę z tabeli"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
 msgid "Migrate Libraries"
@@ -17728,7 +17729,7 @@ msgstr "Wybór warstwy:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
 msgid "Copper layers count:"
-msgstr "Ilość warstw sygnałowych:"
+msgstr "Liczba warstw sygnałowych:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
@@ -20157,7 +20158,7 @@ msgstr "Powtarzanie parametrów"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:395
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 msgid "Count:"
-msgstr "Ilość:"
+msgstr "Liczba:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:405
 msgid "Step text:"
@@ -22747,7 +22748,7 @@ msgstr "Oznaczenie"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Quantity"
-msgstr "Ilość"
+msgstr "Liczba"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Designation"
@@ -24043,11 +24044,11 @@ msgstr "wartość kroku"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:335
 msgid "horizontal count"
-msgstr "ilość poziomo"
+msgstr "liczba poziomo"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:336
 msgid "vertical count"
-msgstr "ilość pionowo"
+msgstr "liczba pionowo"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:344
 msgid "stagger"
@@ -24055,7 +24056,7 @@ msgstr "przeplot"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:400
 msgid "point count"
-msgstr "ilość wyprowadzeń"
+msgstr "liczba wyprowadzeń"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:445
 msgid "Bad parameters"
@@ -24063,11 +24064,11 @@ msgstr "Niepoprawne parametry"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:34
 msgid "Horizontal count:"
-msgstr "Ilość poziomo:"
+msgstr "Liczba poziomo:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Vertical count:"
-msgstr "Ilość pionowo:"
+msgstr "Liczba pionowo:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:48
 msgid "Horizontal spacing:"
@@ -24183,8 +24184,8 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
-"Dodatni kąt reprezentuje rotację przeciwnie do wskazówek zegara. Kąt 0 "
-"stopni stworzy pełen okrąg podzielony równo na zadaną ilość \"Części\"."
+"Dodatni kąt reprezentuje obrót przeciwnie do wskazówek zegara. Kąt 0 stopni "
+"stworzy pełen okrąg podzielony równo na zadaną liczbę „Części”."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 msgid "How many items in the array."
@@ -26547,11 +26548,11 @@ msgstr "Kod sieci"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:965
 msgid "Pad Count"
-msgstr "Ilość pól lut"
+msgstr "Liczba pól lut"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:966
 msgid "Via Count"
-msgstr "Ilość przelotek"
+msgstr "Liczba przelotek"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:967
 msgid "Via Length"
@@ -26852,7 +26853,7 @@ msgstr "promień"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
 #, c-format
 msgid "corners count %d"
-msgstr "ilość wierzchołków %d"
+msgstr "liczba wierzchołków %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:744
 msgid "Unknown primitive"
@@ -29315,7 +29316,7 @@ msgstr "Zezwalaj na zaokrąglenia poza obrysem strefy"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
 msgid "Min thermal relief spoke count:"
-msgstr "Min. ilość łącz termicznych:"
+msgstr "Min. liczba łącz termicznych:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:439
 msgid "Length tuning"
@@ -31716,7 +31717,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:191
 #, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s maks. ilość %d; obecnie %d)"
+msgstr "(%s maks. liczba: %d; obecnie: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:223
 msgid "Gathering length-constrained connections..."
@@ -31879,7 +31880,7 @@ msgstr "(%s maks. rozmiar %s; obecnie %s)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:173
 #, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s min. ilość łącz %d; obecnie %d)"
+msgstr "(%s min. liczba łącz %d; obecnie %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:195
 msgid "Checking thermal reliefs..."
@@ -36823,7 +36824,7 @@ msgstr "Analiza ilości łącz termicznych dla:"
 #: pcbnew/tools/board_inspection_tool.cpp:681
 #, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Rozpoznano min. ilość łącz termicznych: %d."
+msgstr "Rozpoznano min. liczbę łącz termicznych: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:690
 #: pcbnew/tools/board_inspection_tool.cpp:738
@@ -37013,7 +37014,7 @@ msgstr "CHARAKTERYSTYKA PŁYTKI"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:414
 msgid "Copper Layer Count: "
-msgstr "Ilość warstw sygnałowych: "
+msgstr "Liczba warstw sygnałowych: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:425
 msgid "Board overall dimensions: "
