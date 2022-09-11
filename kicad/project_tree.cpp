@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2012 Jean-Pierre Charras
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( KiBitmap( BITMAPS::file_html ) );              // TREE_HTML
     m_imageList->Add( KiBitmap( BITMAPS::file_pdf ) );               // TREE_PDF
     m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // TREE_TXT
+    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // TREE_MD
     m_imageList->Add( KiBitmap( BITMAPS::netlist ) );                // TREE_NET
     m_imageList->Add( KiBitmap( BITMAPS::unknown ) );                // TREE_UNKNOWN
     m_imageList->Add( KiBitmap( BITMAPS::directory ) );              // TREE_DIRECTORY

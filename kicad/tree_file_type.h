@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,9 @@
 // Identify the type of files handled by KiCad manager
 //
 // When changing this enum  please verify (and perhaps update)
-// PROJECT_TREE_PANE::GetFileExt(),
-// s_AllowedExtensionsToList[]
+// PROJECT_TREE_PANE::GetFileExt(), s_AllowedExtensionsToList[]
+// and the list of images in PROJECT_TREE::LoadIcons(). This icons must me in the same
+// order as TREE_FILE_TYPE
 enum class TREE_FILE_TYPE
 {
     ROOT = 0,
