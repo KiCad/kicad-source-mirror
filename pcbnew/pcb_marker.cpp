@@ -172,8 +172,21 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ) );
     aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
-    aList.emplace_back( _( "Severity" ), GetSeverity() == RPT_SEVERITY_ERROR ? _( "Error" )
-                                                                             : _( "Warning" ) );
+
+    switch( GetSeverity() )
+    {
+    case RPT_SEVERITY_IGNORE:
+        aList.emplace_back( _( "Severity" ), _( "Ignore" ) );
+        break;
+    case RPT_SEVERITY_WARNING:
+        aList.emplace_back( _( "Severity" ), _( "Warning" ) );
+        break;
+    case RPT_SEVERITY_ERROR:
+        aList.emplace_back( _( "Severity" ), _( "Error" ) );
+        break;
+    default:
+        break;
+    }
 
     if( GetMarkerType() == MARKER_DRAWING_SHEET )
     {

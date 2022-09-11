@@ -1178,6 +1178,8 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_fpWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
+    bool showErrors = m_showErrors->GetValue();
+    bool showWarnings = m_showWarnings->GetValue();
     bool errorsOverflowed = false;
     bool warningsOverflowed = false;
     bool markersOverflowed = false;
@@ -1186,31 +1188,36 @@ void DIALOG_DRC::updateDisplayedCounts()
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
     {
-        if( drcEngine->IsErrorLimitExceeded( ii ) && bds.GetSeverity( ii ) != RPT_SEVERITY_IGNORE )
+        if( drcEngine->IsErrorLimitExceeded( ii ) )
         {
             if( bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
-            {
                 errorsOverflowed = true;
-            }
             else if( bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
-            {
                 warningsOverflowed = true;
-            }
 
             if( ii == DRCE_UNCONNECTED_ITEMS )
             {
-                unconnectedOverflowed = true;
+                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                    unconnectedOverflowed = true;
+                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                    unconnectedOverflowed = true;
             }
             else if(    ii == DRCE_MISSING_FOOTPRINT
                      || ii == DRCE_DUPLICATE_FOOTPRINT
                      || ii == DRCE_EXTRA_FOOTPRINT
                      || ii == DRCE_NET_CONFLICT )
             {
-                footprintsOverflowed = true;
+                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                    footprintsOverflowed = true;
+                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                    footprintsOverflowed = true;
             }
             else
             {
-                markersOverflowed = true;
+                if( showWarnings && bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+                    markersOverflowed = true;
+                else if( showErrors && bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+                    markersOverflowed = true;
             }
         }
     }
