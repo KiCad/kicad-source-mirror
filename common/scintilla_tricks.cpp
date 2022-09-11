@@ -79,18 +79,23 @@ void SCINTILLA_TRICKS::onThemeChanged( wxSysColourChangedEvent &aEvent )
 
 void SCINTILLA_TRICKS::setupStyles()
 {
-    wxTextCtrl dummy( m_te->GetParent(), wxID_ANY );
-    wxColour   foreground    = dummy.GetForegroundColour();
-    wxColour   background    = dummy.GetBackgroundColour();
-    wxColour   highlight     = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-    wxColour   highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+    wxTextCtrl     dummy( m_te->GetParent(), wxID_ANY );
+    wxColour       foreground    = dummy.GetForegroundColour();
+    wxColour       background    = dummy.GetBackgroundColour();
+    KIGFX::COLOR4D highlight     = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+    KIGFX::COLOR4D highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
     m_te->StyleSetForeground( wxSTC_STYLE_DEFAULT, foreground );
     m_te->StyleSetBackground( wxSTC_STYLE_DEFAULT, background );
     m_te->StyleClearAll();
 
-    m_te->SetSelForeground( true, highlightText );
-    m_te->SetSelBackground( true, highlight );
+    // Scintilla doesn't handle alpha channel, which at least OSX uses in some highlight colours,
+    // such as "graphite".
+    highlight = highlight.Mix( background, highlight.a ).WithAlpha( 1.0 );
+    highlightText = highlightText.Mix( background, highlightText.a ).WithAlpha( 1.0 );
+
+    m_te->SetSelForeground( true, highlightText.ToColour() );
+    m_te->SetSelBackground( true, highlight.ToColour() );
     m_te->SetCaretForeground( foreground );
 
     if( !m_singleLine )
@@ -106,13 +111,8 @@ void SCINTILLA_TRICKS::setupStyles()
     }
 
     // Set up the brace highlighting
-    unsigned char r = highlight.Red();
-    unsigned char g = highlight.Green();
-    unsigned char b = highlight.Blue();
-    wxColour::MakeGrey( &r, &g, &b );
-    highlight.Set( r, g, b );
-    m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
-    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
+    m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText.ToColour() );
+    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight.Saturate( 0.0 ).ToColour() );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 }
 
