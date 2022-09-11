@@ -770,6 +770,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 {
     const int progressDelta = 50;
 
+    bool      testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+    bool      testIntersects = !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT );
+
     SHAPE_POLY_SET  buffer;
     SHAPE_POLY_SET* boardOutline = nullptr;
     DRC_CONSTRAINT  constraint;
@@ -840,35 +843,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     continue;
 
-                // test for some corners of zoneA inside zoneB
-                for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
+                if( testIntersects )
                 {
-                    VECTOR2I currentVertex = *iterator;
-                    wxPoint pt( currentVertex.x, currentVertex.y );
-
-                    if( smoothed_polys[ia2].Contains( currentVertex ) )
+                    // test for some corners of zoneA inside zoneB
+                    for( auto it = smoothed_polys[ia].IterateWithHoles(); it; it++ )
                     {
-                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                        drce->SetItems( zoneA, zoneB );
-                        drce->SetViolatingRule( constraint.GetParentRule() );
+                        VECTOR2I currentVertex = *it;
+                        wxPoint pt( currentVertex.x, currentVertex.y );
 
-                        reportViolation( drce, pt, layer );
+                        if( smoothed_polys[ia2].Contains( currentVertex ) )
+                        {
+                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                            drce->SetItems( zoneA, zoneB );
+                            drce->SetViolatingRule( constraint.GetParentRule() );
+
+                            reportViolation( drce, pt, layer );
+                        }
                     }
-                }
 
-                // test for some corners of zoneB inside zoneA
-                for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
-                {
-                    VECTOR2I currentVertex = *iterator;
-                    wxPoint pt( currentVertex.x, currentVertex.y );
-
-                    if( smoothed_polys[ia].Contains( currentVertex ) )
+                    // test for some corners of zoneB inside zoneA
+                    for( auto it = smoothed_polys[ia2].IterateWithHoles(); it; it++ )
                     {
-                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                        drce->SetItems( zoneB, zoneA );
-                        drce->SetViolatingRule( constraint.GetParentRule() );
+                        VECTOR2I currentVertex = *it;
+                        wxPoint pt( currentVertex.x, currentVertex.y );
 
-                        reportViolation( drce, pt, layer );
+                        if( smoothed_polys[ia].Contains( currentVertex ) )
+                        {
+                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                            drce->SetItems( zoneB, zoneA );
+                            drce->SetViolatingRule( constraint.GetParentRule() );
+
+                            reportViolation( drce, pt, layer );
+                        }
                     }
                 }
 
@@ -881,10 +887,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     SEG refSegment = *refIt;
 
                     // Iterate through all the segments in smoothed_polys[ia2]
-                    for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
+                    for( auto it = smoothed_polys[ia2].IterateSegmentsWithHoles(); it; it++ )
                     {
                         // Build test segment
-                        SEG testSegment = *testIt;
+                        SEG testSegment = *it;
                         VECTOR2I pt;
 
                         int ax1, ay1, ax2, ay2;
@@ -918,11 +924,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     int actual = conflict.second;
                     std::shared_ptr<DRC_ITEM> drce;
 
-                    if( actual <= 0 )
+                    if( actual <= 0 && testIntersects )
                     {
                         drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
                     }
-                    else
+                    else if( testClearance )
                     {
                         drce = DRC_ITEM::Create( DRCE_CLEARANCE );
                         wxString msg;
@@ -930,15 +936,18 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), zone2zoneClearance ),
-                                      MessageTextFromValue( userUnits(), conflict.second ) );
+                                      MessageTextFromValue( userUnits(), std::max( actual, 0 ) ) );
 
                         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     }
 
-                    drce->SetItems( zoneA, zoneB );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
+                    if( drce )
+                    {
+                        drce->SetItems( zoneA, zoneB );
+                        drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, conflict.first, layer );
+                        reportViolation( drce, conflict.first, layer );
+                    }
                 }
 
                 if( m_drcEngine->IsCancelled() )
