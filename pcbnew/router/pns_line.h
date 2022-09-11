@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -67,9 +67,9 @@ public:
         LINK_HOLDER( LINE_T ),
         m_blockingObstacle( nullptr )
     {
-        m_hasVia = false;
         m_width = 1;        // Dummy value
         m_snapThreshhold = 0;
+        m_via = nullptr;
     }
 
     LINE( const LINE& aOther );
@@ -86,7 +86,7 @@ public:
     {
         m_net = aBase.m_net;
         m_layers = aBase.m_layers;
-        m_hasVia = false;
+        m_via = nullptr;
     }
 
     /**
@@ -96,8 +96,7 @@ public:
         LINK_HOLDER( LINE_T ),
         m_blockingObstacle( nullptr )
     {
-        m_hasVia = true;
-        m_via = aVia;
+        m_via = aVia.Clone();
         m_width = aVia.Diameter();
         m_net = aVia.Net();
         m_layers = aVia.Layers();
@@ -127,11 +126,6 @@ public:
     {
         m_line = aLine;
         m_line.SetWidth( m_width );
-
-        if( m_hasVia && m_line.PointCount() > 0 )
-        {
-            m_via.SetPos( m_line.CPoint( -1 ) );
-        }
     }
 
     ///< Return the shape of the line.
@@ -191,16 +185,16 @@ public:
     ///< Print out all linked segments.
     void ShowLinks() const;
 
-    bool EndsWithVia() const { return m_hasVia; }
+    bool EndsWithVia() const { return m_via != nullptr; }
 
     void AppendVia( const VIA& aVia );
-    void RemoveVia() { m_hasVia = false; }
+    void RemoveVia();
 
-    VIA& Via() { return m_via; }
-    const VIA& Via() const { return m_via; }
+    VIA& Via() { return *m_via; }
+    const VIA& Via() const { return *m_via; }
 
-    void SetViaDiameter( int aDiameter ) { m_via.SetDiameter( aDiameter ); }
-    void SetViaDrill( int aDrill ) { m_via.SetDrill( aDrill ); }
+    void SetViaDiameter( int aDiameter ) { assert(m_via); m_via->SetDiameter( aDiameter ); }
+    void SetViaDrill( int aDrill ) { assert(m_via); m_via->SetDrill( aDrill ); }
 
     virtual void Mark( int aMarker ) const override;
     virtual void Unmark( int aMarker = -1 ) const override;
@@ -250,8 +244,7 @@ private:
 
     int              m_snapThreshhold;      ///< Width to smooth out jagged segments.
 
-    bool             m_hasVia;              ///< Optional via at the end point.
-    VIA              m_via;
+    VIA*             m_via;
 
     ITEM*            m_blockingObstacle;    ///< For mark obstacle mode.
 };

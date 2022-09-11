@@ -89,7 +89,8 @@ public:
 
     virtual ~MOCK_RULE_RESOLVER() {}
 
-    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override
+    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
+                           bool aUseClearanceEpsilon = true ) override
     {
         PNS::CONSTRAINT constraint;
         int             rv = -1;
@@ -192,15 +193,15 @@ public:
         bool operator<( const ITEM_KEY& other ) const
         {
             if( a < other.a )
+            {
                 return true;
+            }
             else if ( a == other.a )
             {
                 if( b < other.b )
                     return true;
                 else if ( b == other.b )
-                {
                     return type < other.type;
-                }
             }
 
             return false;
@@ -211,7 +212,7 @@ public:
     virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
                                     const PNS::ITEM* aCollidingItem ) override
     {
-                                        return false;
+        return false;
     }
 
     void AddMockRule( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
@@ -232,8 +233,7 @@ public:
 
 private:
     std::map<ITEM_KEY, PNS::CONSTRAINT> m_ruleMap;
-
-    int m_clearanceEpsilon;
+    int                                 m_clearanceEpsilon;
 };
 
 struct PNS_TEST_FIXTURE;
@@ -242,11 +242,14 @@ class MOCK_PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE
 {
 public:
     MOCK_PNS_KICAD_IFACE( PNS_TEST_FIXTURE *aFixture ) :
-        m_testFixture( aFixture ) {}
+        m_testFixture( aFixture )
+    {}
+
     ~MOCK_PNS_KICAD_IFACE() {}
 
     void HideItem( PNS::ITEM* aItem ) override {};
-    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false ) override {};
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
+                      bool aIsHeadTrace = false ) override {};
     PNS::RULE_RESOLVER* GetRuleResolver() override;
 
 private:
@@ -256,17 +259,18 @@ private:
 
 struct PNS_TEST_FIXTURE
 {
-    PNS_TEST_FIXTURE() : m_settingsManager( true /* headless */ )
+    PNS_TEST_FIXTURE() :
+        m_settingsManager( true /* headless */ )
     {
         m_router = new PNS::ROUTER;
         m_iface = new MOCK_PNS_KICAD_IFACE( this );
         m_router->SetInterface( m_iface );
     }
 
-    SETTINGS_MANAGER m_settingsManager;
-    PNS::ROUTER* m_router;
-    MOCK_RULE_RESOLVER m_ruleResolver;
-    MOCK_PNS_KICAD_IFACE *m_iface;
+    SETTINGS_MANAGER      m_settingsManager;
+    PNS::ROUTER*          m_router;
+    MOCK_RULE_RESOLVER    m_ruleResolver;
+    MOCK_PNS_KICAD_IFACE* m_iface;
     //std::unique_ptr<BOARD> m_board;
 };
 
@@ -278,18 +282,19 @@ PNS::RULE_RESOLVER* MOCK_PNS_KICAD_IFACE::GetRuleResolver()
 
 static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 {
-    for ( const auto& obs : obstacles )
+    for( const PNS::OBSTACLE& obs : obstacles )
     {
-        printf("%p [%s] - %p [%s], clearance %d\n", obs.m_head, obs.m_head->KindStr().c_str(),
-                                                obs.m_item, obs.m_item->KindStr().c_str(),
-                                                obs.m_clearance );
+        printf( "%p [%s] - %p [%s], clearance %d\n",
+                obs.m_head, obs.m_head->KindStr().c_str(),
+                obs.m_item, obs.m_item->KindStr().c_str(),
+                obs.m_clearance );
     }
 }
 
 BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 {
-    PNS::VIA* v1 = new PNS::VIA ( VECTOR2I( 0, 1000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
-    PNS::VIA* v2 = new PNS::VIA ( VECTOR2I( 0, 2000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
+    PNS::VIA* v1 = new PNS::VIA( VECTOR2I( 0, 1000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
+    PNS::VIA* v2 = new PNS::VIA( VECTOR2I( 0, 2000000 ), LAYER_RANGE( F_Cu, B_Cu ), 500000, 100000 );
 
     std::unique_ptr<PNS::NODE> world ( new PNS::NODE );
 
@@ -330,8 +335,6 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 
         world->QueryColliding( v1, obstacles );
         dumpObstacles( obstacles );
-
-
 
         BOOST_CHECK_EQUAL( obstacles.size(), 2 );
         auto iter = obstacles.begin();

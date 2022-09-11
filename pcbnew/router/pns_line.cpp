@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -44,8 +44,15 @@ LINE::LINE( const LINE& aOther )
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
     m_layers = aOther.m_layers;
-    m_via = aOther.m_via;
-    m_hasVia = aOther.m_hasVia;
+
+    m_via = nullptr;
+
+    if( aOther.m_via )
+    {
+        m_via = aOther.m_via->Clone();
+        m_via->SetOwner( this );
+    }
+
     m_marker = aOther.m_marker;
     m_rank = aOther.m_rank;
     m_blockingObstacle = aOther.m_blockingObstacle;
@@ -56,6 +63,8 @@ LINE::LINE( const LINE& aOther )
 
 LINE::~LINE()
 {
+    if( m_via && m_via->BelongsTo( this ) )
+        delete m_via;
 }
 
 
@@ -66,8 +75,15 @@ LINE& LINE::operator=( const LINE& aOther )
     m_net = aOther.m_net;
     m_movable = aOther.m_movable;
     m_layers = aOther.m_layers;
-    m_via = aOther.m_via;
-    m_hasVia = aOther.m_hasVia;
+
+    m_via = nullptr;
+
+    if( aOther.m_via )
+    {
+        m_via = aOther.m_via->Clone();
+        m_via->SetOwner( this );
+    }
+
     m_marker = aOther.m_marker;
     m_rank = aOther.m_rank;
     m_owner = aOther.m_owner;
@@ -1043,9 +1059,9 @@ void LINE::AppendVia( const VIA& aVia )
         Reverse();
     }
 
-    m_hasVia = true;
-    m_via = aVia;
-    m_via.SetNet( m_net );
+    m_via = aVia.Clone();
+    m_via->SetOwner( this );
+    m_via->SetNet( m_net );
 }
 
 
@@ -1251,8 +1267,21 @@ bool LINE::HasLockedSegments() const
 
 void LINE::Clear()
 {
-    m_hasVia = false;
+    if( m_via && m_via->BelongsTo( this ) )
+    {
+        delete m_via;
+        m_via = nullptr;
+    }
     m_line.Clear();
+}
+
+
+void LINE::RemoveVia()
+{
+    if( m_via && m_via->BelongsTo( this ) )
+        delete m_via;
+
+    m_via = nullptr;
 }
 
 
@@ -1265,4 +1294,5 @@ const std::string SEGMENT::Format( ) const
 }
 
 }
+
 

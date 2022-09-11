@@ -539,17 +539,18 @@ const ITEM_SET NODE::HitTest( const VECTOR2I& aPoint ) const
 
 void NODE::addSolid( SOLID* aSolid )
 {
-    if( aSolid->HasHole() )
+    if( aSolid->HasHole() && aSolid->Hole()->BelongsTo( aSolid ) )
         addHole( aSolid->Hole() );
 
     if( aSolid->IsRoutable() )
         linkJoint( aSolid->Pos(), aSolid->Layers(), aSolid->Net(), aSolid );
 
+    aSolid->SetOwner( this );
     m_index->Add( aSolid );
 }
 
 
-void NODE::Add( std::unique_ptr< SOLID > aSolid )
+void NODE::Add( std::unique_ptr< SOLID >&& aSolid )
 {
     aSolid->SetOwner( this );
     addSolid( aSolid.release() );
@@ -558,10 +559,11 @@ void NODE::Add( std::unique_ptr< SOLID > aSolid )
 
 void NODE::addVia( VIA* aVia )
 {
-    if( aVia->HasHole() )
+    if( aVia->HasHole() && aVia->Hole()->BelongsTo( aVia ) )
         addHole( aVia->Hole() );
 
     linkJoint( aVia->Pos(), aVia->Layers(), aVia->Net(), aVia );
+    aVia->SetOwner( this );
 
     m_index->Add( aVia );
 }
@@ -572,20 +574,18 @@ void NODE::addHole( HOLE* aHole )
     // do we need holes in the connection graph?
     //linkJoint( aHole->Pos(), aHole->Layers(), aHole->Net(), aHole );
 
+    aHole->SetOwner( this );
     m_index->Add( aHole );
 }
 
 
-void NODE::Add( std::unique_ptr< VIA > aVia )
+void NODE::Add( std::unique_ptr< VIA >&& aVia )
 {
-    aVia->SetOwner( this );
     addVia( aVia.release() );
 }
 
-void NODE::Add( ITEM* aItem, bool aAllowRedundant )
+void NODE::add( ITEM* aItem, bool aAllowRedundant )
 {
-    aItem->SetOwner( this );
-
     switch( aItem->Kind() )
     {
     case ITEM::ARC_T:
@@ -660,6 +660,8 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
 
 void NODE::addSegment( SEGMENT* aSeg )
 {
+    aSeg->SetOwner( this );
+
     linkJoint( aSeg->Seg().A, aSeg->Layers(), aSeg->Net(), aSeg );
     linkJoint( aSeg->Seg().B, aSeg->Layers(), aSeg->Net(), aSeg );
 
@@ -667,7 +669,7 @@ void NODE::addSegment( SEGMENT* aSeg )
 }
 
 
-bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
+bool NODE::Add( std::unique_ptr< SEGMENT >&& aSegment, bool aAllowRedundant )
 {
     if( aSegment->Seg().A == aSegment->Seg().B )
     {
@@ -679,7 +681,6 @@ bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
     if( !aAllowRedundant && findRedundantSegment( aSegment.get() ) )
         return false;
 
-    aSegment->SetOwner( this );
     addSegment( aSegment.release() );
 
     return true;
@@ -688,6 +689,8 @@ bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
 
 void NODE::addArc( ARC* aArc )
 {
+    aArc->SetOwner( this );
+
     linkJoint( aArc->Anchor( 0 ), aArc->Layers(), aArc->Net(), aArc );
     linkJoint( aArc->Anchor( 1 ), aArc->Layers(), aArc->Net(), aArc );
 
@@ -695,7 +698,7 @@ void NODE::addArc( ARC* aArc )
 }
 
 
-bool NODE::Add( std::unique_ptr< ARC > aArc, bool aAllowRedundant )
+bool NODE::Add( std::unique_ptr< ARC >&& aArc, bool aAllowRedundant )
 {
     const SHAPE_ARC& arc = aArc->CArc();
 
@@ -705,12 +708,12 @@ bool NODE::Add( std::unique_ptr< ARC > aArc, bool aAllowRedundant )
         return false;
     }
 
-    aArc->SetOwner( this );
     addArc( aArc.release() );
     return true;
 }
 
 
+#if 0   // JEY TODO: clean up
 void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
 {
     switch( aItem->Kind() )
@@ -718,6 +721,8 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
     case ITEM::SOLID_T:   Add( ItemCast<SOLID>( std::move( aItem ) ) );                    break;
     case ITEM::SEGMENT_T: Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant ); break;
     case ITEM::VIA_T:     Add( ItemCast<VIA>( std::move( aItem ) ) );                      break;
+    case ITEM::HOLE_T:
+        break; // ignore holes, they don't exist as independent objects
 
     case ITEM::ARC_T:
         //todo(snh): Add redundant search
@@ -725,21 +730,11 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
         break;
 
     case ITEM::LINE_T:
-    {
-        // fixme(twl): I don't like unique_ptr in this methods as the router has its own garbage
-        // collecting mechanism. This particular case is used exclusively in
-        // ROUTER::GetUpdatedItems() for dumping debug logs. Please don't call Add ( up<LINE> )
-        // otherwise, dragons live here.
-        LINE *l = static_cast<LINE*>( aItem.get() );
-        Add( *l );
-        break;
-    }
-
     default:
         assert( false );
     }
 }
-
+#endif
 
 void NODE::AddEdgeExclusion( std::unique_ptr<SHAPE> aShape )
 {
@@ -766,7 +761,7 @@ void NODE::doRemove( ITEM* aItem )
     if( aItem->BelongsTo( m_root ) && !isRoot() )
     {
         m_override.insert( aItem );
-
+    
         if( aItem->HasHole() )
             m_override.insert( aItem->Hole() );
     }
@@ -793,7 +788,7 @@ void NODE::doRemove( ITEM* aItem )
         if( hole )
         {
             m_index->Remove( hole ); // hole is not directly owned by NODE but by the parent SOLID/VIA.
-            hole->SetOwner( nullptr );
+            hole->SetOwner( hole->ParentPadVia() );
         }
     }
 }
@@ -878,10 +873,10 @@ void NODE::removeSolidIndex( SOLID* aSolid )
 }
 
 
-void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem )
+void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM >&& aNewItem )
 {
     Remove( aOldItem );
-    Add( std::move( aNewItem ) );
+    add( aNewItem.release() );
 }
 
 
@@ -1482,7 +1477,7 @@ void NODE::Commit( NODE* aNode )
     {
         item->SetRank( -1 );
         item->Unmark();
-        Add( std::unique_ptr<ITEM>( item ) );
+        add( item );
     }
 
     releaseChildren();

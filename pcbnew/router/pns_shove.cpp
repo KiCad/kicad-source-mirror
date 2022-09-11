@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -1800,7 +1800,8 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 
     VIA headVia ( *viaToDrag );
     headVia.SetPos( aWhere );
-    headSet.Add( headVia );
+    headSet.Add( &headVia, false ); // headVia is on stack
+
     VIA_HANDLE prevViaHandle;
     NODE* parent = reduceSpringback( headSet, prevViaHandle );
 

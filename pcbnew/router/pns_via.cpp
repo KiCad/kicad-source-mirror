@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -36,7 +36,7 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
     VECTOR2I elementForces[4], force;
     size_t   nf = 0;
 
-    #if 0
+    #if 0   // JEY TODO: why is this commented out?  Needs replacing, or deleting?
     if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES )
     {
         int holeClearance = aNode->GetHoleClearance( this, aOther );
@@ -161,12 +161,12 @@ const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int 
 
     // Chamfer = width * ( 1 - sqrt(2)/2 ) for equilateral octagon
     return OctagonalHull( m_pos - VECTOR2I( width / 2, width / 2 ),
-                         VECTOR2I( width, width ),
-                         cl, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
+                          VECTOR2I( width, width ),
+                          cl, ( 2 * cl + width ) * ( 1.0 - M_SQRT1_2 ) );
 }
 
 
-#if 0
+#if 0   // JEY TODO: is this no longer needed?
 const SHAPE_LINE_CHAIN VIA::HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     int cl = ( aClearance + aWalkaroundThickness / 2 );

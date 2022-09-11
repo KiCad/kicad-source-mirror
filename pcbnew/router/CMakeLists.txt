@@ -19,6 +19,7 @@ set( PCBNEW_PNS_SRCS
     pns_diff_pair_placer.cpp
     pns_dp_meander_placer.cpp
     pns_dragger.cpp
+    pns_hole.cpp
     pns_index.cpp
     pns_item.cpp
     pns_itemset.cpp

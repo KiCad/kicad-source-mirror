@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -73,6 +73,7 @@ public:
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
         m_hole = HOLE::MakeCircularHole( m_pos, aDrill / 2 );
         m_hole->SetNet( aNet );
+        m_hole->SetOwner( this );
         m_viaType = aViaType;
         m_isFree = false;
         m_isVirtual = false;
@@ -87,6 +88,7 @@ public:
         m_diameter = aB.m_diameter;
         m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
         m_hole = aB.m_hole->Clone();
+        m_hole->SetOwner( this );
         m_marker = aB.m_marker;
         m_rank = aB.m_rank;
         m_drill = aB.m_drill;
@@ -97,8 +99,10 @@ public:
 
     virtual ~VIA()
     {
-        if ( m_hole )
+        if ( m_hole && m_hole->BelongsTo( this ) )
+	{
             delete m_hole;
+	}
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -167,9 +171,9 @@ public:
 
     virtual void SetHole( HOLE* aHole ) override
     {
-        if( m_hole )
+        if( m_hole && m_hole->Owner() == this )
         {
-            assert( m_hole->Owner() == nullptr );
+            delete m_hole;
         }
 
         m_hole = aHole;
