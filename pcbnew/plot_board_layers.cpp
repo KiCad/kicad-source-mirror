@@ -1176,7 +1176,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
     renderSettings->SetDefaultPenWidth( Millimeter2iu( 0.0212 ) );  // Hairline at 1200dpi
 
-    if( aLayer < GAL_LAYER_ID_END )
+    if( aLayer >= 0 && aLayer < GAL_LAYER_ID_END )
         renderSettings->SetLayerName( aBoard->GetLayerName( ToLAYER_ID( aLayer ) ) );
 
     plotter->SetRenderSettings( renderSettings );
