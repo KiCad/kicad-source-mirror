@@ -151,6 +151,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         m_curModelType = type;
     }
 
+    m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+
     updateWidgets();
 
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
@@ -288,9 +290,9 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
     // Set all properties to default colors.
     for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
     {
-        SIM_STRING_PROPERTY* prop = dynamic_cast<SIM_STRING_PROPERTY*>( *it );
-
-        if( !prop ) // Not all properties are SIM_PROPERTY yet. TODO.
+        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
+        
+        if( !prop )
             continue;
 
         wxColour bgCol = m_paramGrid->GetGrid()->GetPropertyDefaultCell().GetBgCol();
@@ -298,20 +300,18 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         for( int col = 0; col < m_paramGridMgr->GetColumnCount(); ++col )
         {
-            prop->GetCell( col ).SetBgCol( bgCol );
-            prop->GetCell( col ).SetFgCol( fgCol );
+            ( *it )->GetCell( col ).SetBgCol( bgCol );
+            ( *it )->GetCell( col ).SetFgCol( fgCol );
         }
 
         // Model values other than the currently edited value may have changed. Update them.
         // This feature is called "autofill" and present only in certain models. Don't do it for
         // models that don't have it for performance reasons.
         if( curModel().HasAutofill() )
-            prop->SetValueFromString( prop->GetParam().value->ToString() );
-
-        m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
+            ( *it )->SetValueFromString( prop->GetParam().value->ToString() );
 
         // Most of the values are disabled when the override checkbox is unchecked.
-        prop->Enable( m_useInstanceModelRadioButton->GetValue()
+        ( *it )->Enable( m_useInstanceModelRadioButton->GetValue()
             || ( prop->GetParam().info.isInstanceParam
                  && prop->GetParam().info.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
             || m_overrideCheckbox->GetValue() );

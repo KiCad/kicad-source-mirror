@@ -306,14 +306,22 @@ void SIM_STRING_VALIDATOR::onMouse( wxMouseEvent& aEvent )
 }
 
 
+SIM_PROPERTY::SIM_PROPERTY( std::shared_ptr<SIM_LIBRARY> aLibrary,
+                            std::shared_ptr<SIM_MODEL> aModel,
+                            int aParamIndex )
+    : m_library( std::move( aLibrary ) ),
+      m_model( std::move( aModel ) ),
+      m_paramIndex( aParamIndex )
+{
+}
+
+
 SIM_BOOL_PROPERTY::SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
                                       std::shared_ptr<SIM_LIBRARY> aLibrary,
                                       std::shared_ptr<SIM_MODEL> aModel,
                                       int aParamIndex )
     : wxBoolProperty( aLabel, aName ),
-      m_library( aLibrary ),
-      m_model( aModel ),
-      m_paramIndex( aParamIndex )
+      SIM_PROPERTY( aLibrary, aModel, aParamIndex )
 {
     auto simValue = dynamic_cast<SIM_VALUE_INST<bool>*>(
         m_model->GetParam( m_paramIndex ).value.get() );
@@ -353,11 +361,9 @@ SIM_STRING_PROPERTY::SIM_STRING_PROPERTY( const wxString& aLabel, const wxString
                                           SIM_VALUE::TYPE aValueType,
                                           SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxStringProperty( aLabel, aName ),
+      SIM_PROPERTY( aLibrary, aModel, aParamIndex ),
       m_valueType( aValueType ),
-      m_notation( aNotation ),
-      m_library( aLibrary ),
-      m_model( aModel ),
-      m_paramIndex( aParamIndex )
+      m_notation( aNotation )
 {
     SetValueFromString( GetParam().value->ToString() );
 }
@@ -402,9 +408,7 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
     : wxEnumProperty( aLabel, aName,
                       wxArrayString( aModel->GetParam( aParamIndex ).info.enumValues.size(),
                                      &aModel->GetParam( aParamIndex ).info.enumValues[0]  ) ),
-      m_library( aLibrary ),
-      m_model( aModel ),
-      m_paramIndex( aParamIndex )
+      SIM_PROPERTY( aLibrary, aModel, aParamIndex )
 {
     auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),
                          GetParam().value->ToString() );

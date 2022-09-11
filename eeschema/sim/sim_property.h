@@ -87,7 +87,23 @@ private:
 };
 
 
-class SIM_BOOL_PROPERTY : public wxBoolProperty
+class SIM_PROPERTY
+{
+public:
+    SIM_PROPERTY( std::shared_ptr<SIM_LIBRARY> aLibrary, std::shared_ptr<SIM_MODEL> aModel,
+                  int aParamIndex );
+
+    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
+
+protected:
+    std::shared_ptr<SIM_LIBRARY> m_library; // We hold a shared_ptr to SIM_LIBRARY to prevent its
+                                            // deallocation during this object's lifetime.
+    std::shared_ptr<SIM_MODEL>   m_model;
+    int                          m_paramIndex;
+};
+
+
+class SIM_BOOL_PROPERTY : public wxBoolProperty, public SIM_PROPERTY
 {
 public:
     SIM_BOOL_PROPERTY( const wxString& aLabel, const wxString& aName,
@@ -98,17 +114,10 @@ public:
     wxValidator* DoGetValidator() const override;
     
     void OnSetValue() override;
-
-    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
-
-protected:
-    std::shared_ptr<SIM_LIBRARY> m_library;
-    std::shared_ptr<SIM_MODEL>   m_model;
-    int                          m_paramIndex;
 };
 
 
-class SIM_STRING_PROPERTY : public wxStringProperty
+class SIM_STRING_PROPERTY : public wxStringProperty, public SIM_PROPERTY
 {
 public:
     // We pass shared_ptrs because we need to make sure they are destroyed only after the last time
@@ -125,18 +134,13 @@ public:
     bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 )
         const override;
 
-    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
-
 protected:
     SIM_VALUE::TYPE              m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION  m_notation;
-    std::shared_ptr<SIM_LIBRARY> m_library;
-    std::shared_ptr<SIM_MODEL>   m_model;
-    int                          m_paramIndex;
 };
 
 
-class SIM_ENUM_PROPERTY : public wxEnumProperty
+class SIM_ENUM_PROPERTY : public wxEnumProperty, public SIM_PROPERTY
 {
 public:
     SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aName,
@@ -147,13 +151,6 @@ public:
                        SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     bool IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags = 0 ) const override;
-
-    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
-
-protected:
-    std::shared_ptr<SIM_LIBRARY> m_library;
-    std::shared_ptr<SIM_MODEL>   m_model;
-    int                          m_paramIndex;
 };
 
 #endif // SIM_PROPERTY_H
