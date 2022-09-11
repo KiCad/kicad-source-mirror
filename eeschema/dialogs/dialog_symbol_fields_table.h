@@ -71,6 +71,7 @@ private:
     void OnClose( wxCloseEvent& aEvent ) override;
     void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
 
     SCH_EDIT_FRAME*                m_parent;
     int                            m_showColWidth;

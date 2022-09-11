@@ -1103,42 +1103,42 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 {
-    wxArrayString              headers;
-    std::vector<wxArrayString> fieldNames;
-    int                        col = -1;
+    int col = -1;
+    int row = m_fieldsCtrl->GetSelectedRow();
 
-    headers.Add( _( "User Fields" ) );
+   // Should never occur: "Remove Field..." button should be disabled if invalid selection
+   // via OnFieldsCtrlSelectionChanged()
+    wxCHECK_RET( row != -1, "Some user defined field must be selected first" );
+    wxCHECK_RET( row >= MANDATORY_FIELDS, "Mandatory fields cannot be removed" );
 
-    for( int ii = MANDATORY_FIELDS; ii < m_fieldsCtrl->GetItemCount(); ++ii )
+    wxString fieldName = m_fieldsCtrl->GetTextValue( row, 0 );
+
+    wxString confirm_msg = wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
+                                        fieldName );
+    
+    if( !IsOK( this, confirm_msg ) )
+        return;
+
+    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
     {
-        wxArrayString fieldName;
-        fieldName.Add( m_fieldsCtrl->GetTextValue( ii, 0 ) );
-        fieldNames.emplace_back( fieldName );
+         if( fieldName == m_dataModel->GetColLabelValue( i ) )
+         col = i;
     }
 
-    EDA_LIST_DIALOG dlg( this, _( "Delete Field" ), headers, fieldNames, wxEmptyString );
-    dlg.SetListLabel( _( "Select field:" ) );
+    m_fieldsCtrl->DeleteItem( row );
+    m_dataModel->RemoveColumn( col );
 
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        wxString fieldName = dlg.GetTextSelection();
+    // Make selection and update the state of "Remove field..." button via OnFieldsCtrlSelectionChanged()
+    // Safe to decrement row index because we always have mandatory fields
+    m_fieldsCtrl->SelectRow( --row );
 
-        for( int ii = 0; ii < m_dataModel->GetNumberCols(); ++ii )
-        {
-            if( fieldName == m_dataModel->GetColLabelValue( ii ) )
-                col = ii;
-        }
-    }
+    if( row < MANDATORY_FIELDS )
+        m_removeFieldButton->Enable( false );
 
-    if( col >= 0 )
-    {
-        m_fieldsCtrl->DeleteItem( col );
-        m_dataModel->RemoveColumn( col );
-
-        wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
+    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
                                 m_fieldsCtrl->GetItemCount(), 1 );
-        m_grid->ProcessTableMessage( msg );
-    }
+   
+    m_grid->ProcessTableMessage( msg );
 
     // set up attributes on the new quantities column
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -1172,6 +1172,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_IBEAM );
 }
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnFieldsCtrlSelectionChanged( wxDataViewEvent& event )
+{
+    int row = m_fieldsCtrl->GetSelectedRow();
+
+    if( row >= MANDATORY_FIELDS )
+        m_removeFieldButton->Enable( true );
+    else
+        m_removeFieldButton->Enable( false );
+}
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 {
