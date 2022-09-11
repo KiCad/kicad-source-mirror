@@ -480,7 +480,7 @@ public:
     /**
      * Return a list of bus aliases defined in this screen
      */
-    std::unordered_set< std::shared_ptr<BUS_ALIAS> > GetBusAliases() const
+    std::set< std::shared_ptr<BUS_ALIAS> > GetBusAliases() const
     {
         return m_aliases;
     }
@@ -568,7 +568,7 @@ private:
     bool        m_fileExists;
 
     /// List of bus aliases stored in this screen.
-    std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
+    std::set< std::shared_ptr< BUS_ALIAS > > m_aliases;
 
     /// Library symbols required for this schematic.
     std::map<wxString, LIB_SYMBOL*> m_libSymbols;

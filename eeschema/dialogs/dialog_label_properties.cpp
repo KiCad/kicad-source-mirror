@@ -259,7 +259,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 existingLabels.insert( UnescapeString( label->GetText() ) );
             }
 
-            std::unordered_set<std::shared_ptr<BUS_ALIAS>> sheetAliases = screen->GetBusAliases();
+            std::set<std::shared_ptr<BUS_ALIAS>> sheetAliases = screen->GetBusAliases();
             busAliases.insert( busAliases.end(), sheetAliases.begin(), sheetAliases.end() );
         }
 

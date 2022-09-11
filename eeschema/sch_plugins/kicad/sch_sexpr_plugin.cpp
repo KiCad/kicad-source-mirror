@@ -368,10 +368,8 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
     m_out->Print( 1, ")\n\n" );
 
-    for( const auto& alias : screen->GetBusAliases() )
-    {
+    for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
         saveBusAlias( alias, 1 );
-    }
 
     // Enforce item ordering
     auto cmp =

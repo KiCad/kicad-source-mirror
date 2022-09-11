@@ -1454,10 +1454,8 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
     m_out->Print( 0, "Comment9 %s\n", EscapedUTF8( tb.GetComment( 8 ) ).c_str() );
     m_out->Print( 0, "$EndDescr\n" );
 
-    for( const auto& alias : screen->GetBusAliases() )
-    {
+    for( const std::shared_ptr<BUS_ALIAS>& alias : screen->GetBusAliases() )
         saveBusAlias( alias );
-    }
 
     // Enforce item ordering
     auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };

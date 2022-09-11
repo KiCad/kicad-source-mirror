@@ -784,7 +784,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 
     for( unsigned i = 0; i < all_sheets.size(); i++ )
     {
-        for( const auto& alias : all_sheets[i].LastScreen()->GetBusAliases() )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
             m_bus_alias_cache[ alias->GetName() ] = alias;
     }
 
@@ -1410,7 +1410,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     for( unsigned i = 0; i < all_sheets.size(); i++ )
     {
-        for( const auto& alias : all_sheets[i].LastScreen()->GetBusAliases() )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : all_sheets[i].LastScreen()->GetBusAliases() )
             m_bus_alias_cache[ alias->GetName() ] = alias;
     }
 

@@ -224,9 +224,9 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const auto& sheet : GetSheets() )
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
     {
-        for( const auto& alias : sheet.LastScreen()->GetBusAliases() )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : sheet.LastScreen()->GetBusAliases() )
         {
             if( alias->GetName() == aLabel )
                 return alias;
