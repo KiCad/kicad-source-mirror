@@ -314,17 +314,14 @@ public:
      *                        at the same coordinates as an existing one).
      * @return true if added
      */
-    bool Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
-    void Add( std::unique_ptr< SOLID >   aSolid );
-    void Add( std::unique_ptr< VIA >     aVia );
-    bool Add( std::unique_ptr< ARC >     aArc, bool aAllowRedundant = false );
+    bool Add( std::unique_ptr< SEGMENT >&& aSegment, bool aAllowRedundant = false );
+    void Add( std::unique_ptr< SOLID >&&   aSolid );
+    void Add( std::unique_ptr< VIA >&&     aVia );
+    bool Add( std::unique_ptr< ARC >&&     aArc, bool aAllowRedundant = false );
 
     void Add( LINE& aLine, bool aAllowRedundant = false );
 
-    void Add( ITEM* aItem, bool aAllowRedundant = false );
-
     void AddEdgeExclusion( std::unique_ptr<SHAPE> aShape );
-
     bool QueryEdgeExclusions( const VECTOR2I& aPos ) const;
 
     /**
@@ -349,7 +346,7 @@ public:
      * @param aOldItem item to be removed
      * @param aNewItem item add instead
      */
-    void Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem );
+    void Replace( ITEM* aOldItem, std::unique_ptr< ITEM >&& aNewItem );
     void Replace( LINE& aOldLine, LINE& aNewLine );
 
     /**
@@ -462,9 +459,13 @@ public:
         return m_collisionQueryScope;
     }
 
-    void Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant = false );
+    void AddRaw( ITEM* aItem, bool aAllowRedundant = false )
+    {
+        add( aItem, aAllowRedundant );
+    }
 
 private:
+    void add( ITEM* aItem, bool aAllowRedundant = false );
 
     /// nodes are not copyable
     NODE( const NODE& aB );
