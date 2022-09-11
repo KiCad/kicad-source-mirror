@@ -25,6 +25,7 @@
 #include <sim/sim_model.h>
 #include <sim/sim_model_behavioral.h>
 #include <sim/sim_model_ideal.h>
+#include <sim/sim_model_mutual_inductor.h>
 #include <sim/sim_model_ngspice.h>
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_spice.h>
@@ -126,15 +127,13 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
-    //case TYPE::R_ADV:                return { DEVICE_TYPE::R,      "ADV",            "Advanced"                   };
     case TYPE::R_BEHAVIORAL:         return { DEVICE_TYPE_::R,      "=",              "Behavioral"                 };
 
     case TYPE::C:                    return { DEVICE_TYPE_::C,      "",               "Ideal"                      };
-    //case TYPE::C_ADV:                return { DEVICE_TYPE::C,      "ADV",            "Advanced"                   };
     case TYPE::C_BEHAVIORAL:         return { DEVICE_TYPE_::C,      "=",              "Behavioral"                 };
 
     case TYPE::L:                    return { DEVICE_TYPE_::L,      "",               "Ideal"                      };
-    //case TYPE::L_ADV:                return { DEVICE_TYPE::L,      "ADV",            "Advanced"                   };
+    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };       
     case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE_::L,      "=",              "Behavioral"                 };
 
     case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "Z0",             "Characteristic impedance"   };
@@ -256,15 +255,13 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     switch( aType )
     {
     case TYPE::R:                    return { "R", ""        };
-    //case TYPE::R_ADV:                return { "R", "r"       };
     case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        "0",   false, true   };
 
     case TYPE::C:                    return { "C", ""        };
-    //case TYPE::C_ADV:                return { "C", "c",      };
     case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        "0",   false, true   };
 
     case TYPE::L:                    return { "L", ""        };
-    //case TYPE::L_ADV:                return { "L", "l"       };
+    case TYPE::L_MUTUAL:             return { "K", ""        };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
     
     //case TYPE::TLINE_Z0:             return { "T"  };
@@ -1450,6 +1447,9 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::C:
     case TYPE::L:
         return std::make_unique<SIM_MODEL_IDEAL>( aType );
+
+    case TYPE::L_MUTUAL:
+        return std::make_unique<SIM_MODEL_MUTUAL_INDUCTOR>();
 
     case TYPE::R_BEHAVIORAL:
     case TYPE::C_BEHAVIORAL:

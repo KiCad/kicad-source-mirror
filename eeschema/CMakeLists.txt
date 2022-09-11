@@ -280,15 +280,16 @@ set( EESCHEMA_SRCS
     sim/sim_library_spice.cpp
     sim/sim_model.cpp
     sim/sim_model_behavioral.cpp
-    sim/sim_model_xspice.cpp
     sim/sim_model_ideal.cpp
+    sim/sim_model_mutual_inductor.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data.cpp
     sim/sim_model_spice.cpp
     sim/sim_model_source.cpp
-    sim/sim_model_switch.cpp
     sim/sim_model_subckt.cpp
+    sim/sim_model_switch.cpp
     sim/sim_model_tline.cpp
+    sim/sim_model_xspice.cpp
     sim/sim_value.cpp
 
     tools/assign_footprints.cpp

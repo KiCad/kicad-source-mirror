@@ -160,15 +160,13 @@ public:
         NONE,
 
         R,
-        //R_ADV,
         R_BEHAVIORAL,
 
         C,
-        //C_ADV,
         C_BEHAVIORAL,
 
         L,
-        //L_ADV,
+        L_MUTUAL,
         L_BEHAVIORAL,
 
         TLINE_Z0,
