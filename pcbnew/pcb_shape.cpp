@@ -53,6 +53,38 @@ PCB_SHAPE::~PCB_SHAPE()
 }
 
 
+bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
+{
+    if( BOARD_ITEM::IsType( aScanTypes ) )
+        return true;
+
+    bool sametype = false;
+
+    for( KICAD_T scanType : aScanTypes )
+    {
+        if( scanType == PCB_LOCATE_GRAPHIC_T )
+            return true;
+        else if( scanType == PCB_LOCATE_BOARD_EDGE_T )
+            sametype = m_layer == Edge_Cuts;
+        else if( scanType == PCB_SHAPE_LOCATE_ARC_T )
+            sametype = m_shape == SHAPE_T::ARC;
+        else if( scanType == PCB_SHAPE_LOCATE_CIRCLE_T )
+            sametype = m_shape == SHAPE_T::CIRCLE;
+        else if( scanType == PCB_SHAPE_LOCATE_RECT_T )
+            sametype = m_shape == SHAPE_T::RECT;
+        else if( scanType == PCB_SHAPE_LOCATE_SEGMENT_T )
+            sametype = m_shape == SHAPE_T::SEGMENT;
+        else if( scanType == PCB_SHAPE_LOCATE_POLY_T )
+            sametype = m_shape == SHAPE_T::POLY;
+
+        if( sametype )
+            return true;
+    }
+
+    return false;
+}
+
+
 const VECTOR2I PCB_SHAPE::GetFocusPosition() const
 {
     // For some shapes return the visual center, but for not filled polygonal shapes,
