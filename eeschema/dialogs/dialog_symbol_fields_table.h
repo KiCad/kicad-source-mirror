@@ -45,7 +45,7 @@ public:
 
 private:
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
-                   bool defaultSortBy );
+                   bool defaultSortBy, bool addedByUser = false );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -73,14 +73,13 @@ private:
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;
 
+private:
     SCH_EDIT_FRAME*                m_parent;
     int                            m_showColWidth;
     int                            m_groupByColWidth;
 
     SCH_REFERENCE_LIST             m_symbolsList;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
-    static int                     m_newFieldsOption;   // Store the option choice for new fields
-                                                        // during a session:
 };
 
 #endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */

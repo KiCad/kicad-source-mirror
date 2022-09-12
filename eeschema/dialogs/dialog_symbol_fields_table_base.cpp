@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,12 +32,12 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_addFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_addFieldButton, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_removeFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Remove Field..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeFieldButton->Enable( false );
 
-	bLeftSizer->Add( m_removeFieldButton, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_removeFieldButton, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );

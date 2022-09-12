@@ -28,6 +28,8 @@
 #include <symbol_library.h>
 #include <confirm.h>
 #include <eda_doc.h>
+//#include "eda_list_dialog.h"
+#include <wildcards_and_files_ext.h>
 #include <eeschema_settings.h>
 #include <general.h>
 #include <grid_tricks.h>
@@ -43,13 +45,9 @@
 #include <widgets/wx_grid.h>
 #include <wx/ffile.h>
 #include <wx/grid.h>
-#include <wx/msgdlg.h>
 #include <wx/textdlg.h>
 #include <wx/filedlg.h>
-
 #include "dialog_symbol_fields_table.h"
-#include "eda_list_dialog.h"
-#include <wildcards_and_files_ext.h>
 
 #define DISPLAY_NAME_COLUMN   0
 #define SHOW_FIELD_COLUMN     1
@@ -180,6 +178,7 @@ protected:
     std::vector<wxString> m_fieldNames;
     int                   m_sortColumn;
     bool                  m_sortAscending;
+    std::vector<wxString> m_userAddedFields;
 
     // However, the grid view can vary in two ways:
     //   1) the componentRefs can be grouped into fewer rows
@@ -206,9 +205,12 @@ public:
         m_symbolsList.SplitReferences();
     }
 
-    void AddColumn( const wxString& aFieldName )
+    void AddColumn( const wxString& aFieldName, bool aAddedByUser )
     {
         m_fieldNames.push_back( aFieldName );
+
+        if( aAddedByUser )
+            m_userAddedFields.push_back( aFieldName );
 
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
@@ -673,6 +675,9 @@ public:
                 // Add a not existing field if it has a value for this symbol
                 bool createField = !destField && !srcValue.IsEmpty();
 
+                if( alg::contains( m_userAddedFields, srcName ) )
+                    createField = true;
+
                 if( createField )
                 {
                     const VECTOR2I symbolPos = symbol.GetPosition();
@@ -987,9 +992,9 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aDisplayName,
                                            const wxString& aCanonicalName,
-                                           bool defaultShow, bool defaultSortBy )
+                                           bool defaultShow, bool defaultSortBy, bool addedByUser )
 {
-    m_dataModel->AddColumn( aCanonicalName );
+    m_dataModel->AddColumn( aCanonicalName, addedByUser );
 
     wxVector<wxVariant> fieldsCtrlRow;
 
@@ -1086,7 +1091,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     cfg->m_FieldEditorPanel.fields_show[key] = true;
 
-    AddField( fieldName, fieldName, true, false );
+    AddField( fieldName, fieldName, true, false, true );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED,
                             m_fieldsCtrl->GetItemCount(), 1 );
