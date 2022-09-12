@@ -463,7 +463,7 @@ TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
 
 TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL,
-        MD_SHIFT + 'S', LEGACY_HK_NAME( "Set Grid Origin" ),
+        'S', LEGACY_HK_NAME( "Set Grid Origin" ),
         _( "Grid Origin" ), _( "Set the grid origin point" ),
         BITMAPS::grid_select_axis );
 

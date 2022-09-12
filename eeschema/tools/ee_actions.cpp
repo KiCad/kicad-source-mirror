@@ -328,7 +328,7 @@ TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierar
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL,
-        MD_SHIFT + 'S', LEGACY_HK_NAME( "Add Sheet" ),
+        'S', LEGACY_HK_NAME( "Add Sheet" ),
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
         BITMAPS::add_hierarchical_subsheet, AF_ACTIVATE, (void*) SCH_SHEET_T );
 
@@ -421,7 +421,7 @@ TOOL_ACTION EE_ACTIONS::mirrorH( "eeschema.InteractiveEdit.mirrorH",
 
 TOOL_ACTION EE_ACTIONS::swap( "eeschema.InteractiveEdit.swap",
         AS_GLOBAL,
-        'S', "",
+        MD_SHIFT + 'S', "",
         _( "Swap" ), _( "Swaps selected items' positions" ),
         BITMAPS::swap );
 
