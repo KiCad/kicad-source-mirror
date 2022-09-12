@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-11 13:16+0000\n"
+"PO-Revision-Date: 2022-09-15 14:16+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -9998,15 +9998,13 @@ msgstr "El simulador requiere un esquema completamente anotado."
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #: eeschema/dialogs/dialog_netlist.cpp:395
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Guardar hoja &Actual como..."
+msgstr "Utilizar la hoja actual como raíz"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "¿Eliminar las anotaciones existentes de la hoja activa?"
+msgstr "Exportar netlist solo para la hoja actual"
 
 #: eeschema/dialogs/dialog_netlist.cpp:354
 msgid "Save all voltages"
@@ -10496,18 +10494,18 @@ msgid "Pen width:"
 msgstr "Grosor del trazo:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
-msgstr "Otras opciones:"
+msgstr "Otras opciones"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Un archivo por capa"
+msgstr "Abrir archivo después del trazado"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
 msgstr ""
+"Abrir el archivo de salida con la aplicación asociada después de un trazado "
+"exitoso"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -11447,9 +11445,9 @@ msgid "Field name '%s' already in use."
 msgstr "El nombre de campo '%s' ya está en uso."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "¿Está seguro de que desea eliminar el elemento?"
+msgstr "¿Está seguro de que quiere eliminar el campo '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1364
 msgid "Unsaved data"
@@ -12724,6 +12722,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"No se puede copiar el archivo '%s' ya que será sobrescrito por el nuevo "
+"archivo de hoja raíz."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -14030,7 +14030,7 @@ msgstr "El bezier tiene %d puntos de control. Se esperan al menos 2."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "No se ha importado la elipse en (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
 #, fuzzy, c-format
@@ -14454,6 +14454,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"No se ha podido cargar la hoja '%s' porque ya aparece como ancestro directo "
+"en la jerarquía del esquema."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1378
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -16668,7 +16670,7 @@ msgstr "Voltea los elementos seleccionados de izquierda a derecha"
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "Intercambiar"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
 #, fuzzy
@@ -17094,6 +17096,7 @@ msgstr "Líneas dibujadas en cualquier ángulo"
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
+"Restringir el dibujo y el arrastre a movimientos horizontales o verticales"
 
 #: eeschema/tools/ee_actions.cpp:717
 #, fuzzy
@@ -20875,7 +20878,7 @@ msgstr "Aumento de temperatura:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Coeficiente térmico a 20 grados C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20901,7 +20904,7 @@ msgstr "Temperatura ambiente:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "Temperatura máxima del conductor sin carga Referencia: 20 grados C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20922,7 +20925,7 @@ msgstr "Long."
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "La longitud incluye la ruta de retorno"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
 #, fuzzy
@@ -38993,6 +38996,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Advertencia: algunos elementos pegados estaban en capas que no están "
+"presentes en la placa actual.\n"
+"Estos elementos no se han podido pegar.\n"
 
 #: pcbnew/tools/pcb_control.cpp:924
 msgid "Invalid clipboard contents"
