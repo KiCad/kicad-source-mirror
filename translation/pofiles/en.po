@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-07 14:31-0700\n"
+"POT-Creation-Date: 2022-09-12 13:19-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -933,6 +933,12 @@ msgstr "Information"
 
 msgid "Confirmation"
 msgstr "Confirmation"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
 
 msgid "Description"
 msgstr "Description"
@@ -3232,9 +3238,6 @@ msgstr "Non-plated holes"
 
 msgid "Ratsnest"
 msgstr "Ratsnest"
-
-msgid "No-connects"
-msgstr "No-connects"
 
 msgid "DRC warnings"
 msgstr "DRC warnings"
@@ -6479,6 +6482,12 @@ msgstr "Export Netlist"
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
 
+msgid "Use current sheet as root"
+msgstr "Use current sheet as root"
+
+msgid "Export netlist only for the current sheet"
+msgstr "Export netlist only for the current sheet"
+
 msgid "Save all voltages"
 msgstr "Save all voltages"
 
@@ -6802,6 +6811,15 @@ msgstr "Content fit, user units"
 
 msgid "Pen width:"
 msgstr "Pen width:"
+
+msgid "Other options"
+msgstr "Other options"
+
+msgid "Open file after plot"
+msgstr "Open file after plot"
+
+msgid "Open output file with associated application after successful plot"
+msgstr "Open output file with associated application after successful plot"
 
 msgid "Plot Schematic Options"
 msgstr "Plot Schematic Options"
@@ -7447,14 +7465,9 @@ msgstr "Field must have a name."
 msgid "Field name '%s' already in use."
 msgstr "Field name '%s' already in use."
 
-msgid "User Fields"
-msgstr "User Fields"
-
-msgid "Delete Field"
-msgstr "Delete Field"
-
-msgid "Select field:"
-msgstr "Select field:"
+#, c-format
+msgid "Are you sure you want to remove the field '%s'?"
+msgstr "Are you sure you want to remove the field '%s'?"
 
 msgid "Unsaved data"
 msgstr "Unsaved data"
@@ -8338,6 +8351,12 @@ msgstr ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 
+#, c-format
+msgid ""
+"Cannot copy file '%s' as it will be overwritten by the new root sheet file."
+msgstr ""
+"Cannot copy file '%s' as it will be overwritten by the new root sheet file."
+
 msgid "Error loading drawing sheet."
 msgstr "Error loading drawing sheet."
 
@@ -8761,12 +8780,6 @@ msgstr "Root"
 #, c-format
 msgid "(page %s)"
 msgstr "(page %s)"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "No"
-msgstr "No"
 
 msgid "H Justification"
 msgstr "H Justification"
@@ -9284,10 +9297,6 @@ msgstr ""
 "Unknown or unexpected record found inside \"FileHeader\" section, Record id: "
 "%d."
 
-#, c-format
-msgid "Pin's owner (%d) not found."
-msgstr "Pin's owner (%d) not found."
-
 msgid "Pin has unexpected orientation."
 msgstr "Pin has unexpected orientation."
 
@@ -9301,71 +9310,23 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Pin has unexpected inner edge type."
 
 #, c-format
-msgid "Label's owner (%d) not found."
-msgstr "Label's owner (%d) not found."
-
-#, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier has %d control points. At least 2 are expected."
 
 #, c-format
-msgid "Bezier's owner (%d) not found."
-msgstr "Bezier's owner (%d) not found."
-
-#, c-format
-msgid "Polyline's owner (%d) not found."
-msgstr "Polyline's owner (%d) not found."
-
-#, c-format
-msgid "Polygon's owner (%d) not found."
-msgstr "Polygon's owner (%d) not found."
-
-#, c-format
-msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Rounded rectangle's owner (%d) not found."
-
-#, c-format
-msgid "Arc's owner (%d) not found."
-msgstr "Arc's owner (%d) not found."
-
-#, c-format
-msgid "Line's owner (%d) not found."
-msgstr "Line's owner (%d) not found."
-
-msgid "Signal harness, belonging to the part is not currently supported."
-msgstr "Signal harness, belonging to the part is not currently supported."
-
-msgid "Harness connector, belonging to the part is not currently supported."
-msgstr "Harness connector, belonging to the part is not currently supported."
-
-#, c-format
-msgid "Harness entry's parent (%d) not found."
-msgstr "Harness entry's parent (%d) not found."
-
-#, c-format
-msgid "Harness type's parent (%d) not found."
-msgstr "Harness type's parent (%d) not found."
+msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
+msgstr "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 
 #, c-format
 msgid ""
-"Altium's Harness Connector (%s) was imported as Hierarchical sheet. Please "
-"review imported schematic, as KiCad does not natively support these Altium "
-"elements."
+"Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
+"review the imported schematic."
 msgstr ""
-"Altium's Harness Connector (%s) was imported as Hierarchical sheet. Please "
-"review imported schematic, as KiCad does not natively support these Altium "
-"elements."
+"Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
+"review the imported schematic."
 
-#, c-format
-msgid "Rectangle's owner (%d) not found."
-msgstr "Rectangle's owner (%d) not found."
-
-#, c-format
-msgid "Sheet entry's owner (%d) not found."
-msgstr "Sheet entry's owner (%d) not found."
-
-msgid "Power Port has unknown style, use bar instead."
-msgstr "Power Port has unknown style, use bar instead."
+msgid "Power Port with unknown style imported as 'Bar' type."
+msgstr "Power Port with unknown style imported as 'Bar' type."
 
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
@@ -9373,11 +9334,11 @@ msgstr "Power symbol creates a global label with name '%s'"
 
 #, c-format
 msgid ""
-"Altium's Harness port (%s) was imported as Text box. Please review imported "
-"schematic, as KiCad does not natively support these Altium elements."
+"Altium's harness port (%s) was imported as a text box. Please review the "
+"imported schematic."
 msgstr ""
-"Altium's Harness port (%s) was imported as Text box. Please review imported "
-"schematic, as KiCad does not natively support these Altium elements."
+"Altium's harness port (%s) was imported as a text box. Please review the "
+"imported schematic."
 
 #, c-format
 msgid "Port %s has no connections."
@@ -9394,26 +9355,6 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
-
-#, c-format
-msgid "Sheetname's owner (%d) not found."
-msgstr "Sheetname's owner (%d) not found."
-
-#, c-format
-msgid "Filename's owner (%d) not found."
-msgstr "Filename's owner (%d) not found."
-
-#, c-format
-msgid "Designator's owner (%d) not found."
-msgstr "Designator's owner (%d) not found."
-
-#, c-format
-msgid "Implementation's owner (%d) not found."
-msgstr "Implementation's owner (%d) not found."
-
-#, c-format
-msgid "Footprint's owner (%d) not found."
-msgstr "Footprint's owner (%d) not found."
 
 #, c-format
 msgid ""
@@ -9702,6 +9643,14 @@ msgstr "Invalid symbol library name"
 
 msgid "Invalid symbol library ID"
 msgstr "Invalid symbol library ID"
+
+#, c-format
+msgid ""
+"Could not load sheet '%s' because it already appears as a direct ancestor in "
+"the schematic hierarchy."
+msgstr ""
+"Could not load sheet '%s' because it already appears as a direct ancestor in "
+"the schematic hierarchy."
 
 #, c-format
 msgid "Symbol library '%s' already exists."
@@ -11205,6 +11154,12 @@ msgstr "Show Pin Electrical Types"
 msgid "Annotate pins with their electrical types"
 msgstr "Annotate pins with their electrical types"
 
+msgid "Show Pin Numbers"
+msgstr "Show Pin Numbers"
+
+msgid "Annotate pins with their numbers"
+msgstr "Annotate pins with their numbers"
+
 msgid "Show Symbol Tree"
 msgstr "Show Symbol Tree"
 
@@ -11417,6 +11372,12 @@ msgstr "Mirror Horizontally"
 
 msgid "Flips selected item(s) from left to right"
 msgstr "Flips selected item(s) from left to right"
+
+msgid "Swap"
+msgstr "Swap"
+
+msgid "Swaps selected items' positions"
+msgstr "Swaps selected items' positions"
 
 msgid "Properties..."
 msgstr "Properties…"
@@ -11716,14 +11677,18 @@ msgstr "Show markers for excluded electrical rules checker violations"
 msgid "Line Mode for Wires and Buses"
 msgstr "Line Mode for Wires and Buses"
 
-msgid "Lines drawn at any angle"
-msgstr "Lines drawn at any angle"
+msgid "Draw and drag at any angle"
+msgstr "Draw and drag at any angle"
 
-msgid "Lines drawn horizontally and vertically"
-msgstr "Lines drawn horizontally and vertically"
+msgid "Constrain drawing and dragging to horizontal or vertical motions"
+msgstr "Constrain drawing and dragging to horizontal or vertical motions"
 
-msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
-msgstr "Lines drawn horizontally, vertically, and at a 45 degree angle"
+msgid ""
+"Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
+"motions"
+msgstr ""
+"Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
+"motions"
 
 msgid "Switch to next line mode"
 msgstr "Switch to next line mode"
@@ -12260,6 +12225,16 @@ msgstr "Select Layer: %s"
 
 msgid "Layer"
 msgstr "Layer"
+
+msgid "DCodes"
+msgstr "DCodes"
+
+msgid "Negative Objects"
+msgstr "Negative Objects"
+
+#, c-format
+msgid "Graphic Layer %d"
+msgstr "Graphic Layer %d"
 
 msgid "Show D codes"
 msgstr "Show D codes"
@@ -12868,14 +12843,8 @@ msgstr "Layers"
 msgid "Items"
 msgstr "Items"
 
-msgid "DCodes"
-msgstr "DCodes"
-
 msgid "Show DCodes identification"
 msgstr "Show DCodes identification"
-
-msgid "Negative Objects"
-msgstr "Negative Objects"
 
 msgid "Show negative objects in this color"
 msgstr "Show negative objects in this color"
@@ -14407,8 +14376,11 @@ msgstr "AWG29"
 msgid "AWG30"
 msgstr "AWG30"
 
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "Electrical Resistivity in Ohm*m"
+msgid "Electrical Resistivity in Ohm*m at 20 deg C"
+msgstr "Electrical Resistivity in Ohm*m at 20 deg C"
+
+msgid "Temperature coefficient"
+msgstr "Temperature coefficient"
 
 msgid "Wire properties"
 msgstr "Wire properties"
@@ -14425,8 +14397,20 @@ msgstr "mm^2"
 msgid "Conductor resistivity:"
 msgstr "Conductor resistivity:"
 
+msgid "Specific resistance in Ohm*m at 20 deg C"
+msgstr "Specific resistance in Ohm*m at 20 deg C"
+
 msgid "..."
 msgstr "…"
+
+msgid "ohm-meter"
+msgstr "ohm-meter"
+
+msgid "Temperature Coefficient:"
+msgstr "Temperature Coefficient:"
+
+msgid "Thermal coefficient at 20 deg C"
+msgstr "Thermal coefficient at 20 deg C"
 
 msgid "Linear resistance:"
 msgstr "Linear resistance:"
@@ -14441,14 +14425,29 @@ msgstr "Ampacity:"
 msgid "Application"
 msgstr "Application"
 
+msgid "Cable temperature:"
+msgstr "Cable temperature:"
+
+msgid "Off-Load max conductor temp. Reference: 20 deg C"
+msgstr "Off-Load max conductor temp. Reference: 20 deg C"
+
+msgid "deg C"
+msgstr "deg C"
+
 msgid "Current:"
 msgstr "Current:"
 
 msgid "Length:"
 msgstr "Length:"
 
-msgid "Resistance:"
-msgstr "Resistance:"
+msgid "Length includes the return path"
+msgstr "Length includes the return path"
+
+msgid "Resistance DC:"
+msgstr "Resistance DC:"
+
+msgid "DC Resistance of the conductor"
+msgstr "DC Resistance of the conductor"
 
 msgid "ohm"
 msgstr "ohm"
@@ -14456,14 +14455,8 @@ msgstr "ohm"
 msgid "Voltage drop:"
 msgstr "Voltage drop:"
 
-msgid "mV"
-msgstr "mV"
-
 msgid "Dissipated power:"
 msgstr "Dissipated power:"
-
-msgid "mW"
-msgstr "mW"
 
 msgid "10% / 5%"
 msgstr "10% / 5%"
@@ -14618,9 +14611,6 @@ msgstr "Current calculation is underestimated due to long fusing time."
 msgid "Ambient temperature:"
 msgstr "Ambient temperature:"
 
-msgid "deg C"
-msgstr "deg C"
-
 msgid "Melting point:"
 msgstr "Melting point:"
 
@@ -14748,9 +14738,6 @@ msgstr "Conductor length:"
 msgid "Copper resistivity:"
 msgstr "Copper resistivity:"
 
-msgid "ohm-meter"
-msgstr "ohm-meter"
-
 msgid "External Layer Traces"
 msgstr "External Layer Traces"
 
@@ -14765,6 +14752,9 @@ msgstr "Cross-section area:"
 
 msgid "mm ^ 2"
 msgstr "mm²"
+
+msgid "Resistance:"
+msgstr "Resistance:"
 
 msgid "Power loss:"
 msgstr "Power loss:"
@@ -14858,6 +14848,9 @@ msgstr "Results"
 
 msgid "Relative Dielectric Constants"
 msgstr "Relative Dielectric Constants"
+
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "Electrical Resistivity in Ohm*m"
 
 msgid "Finished hole diameter (D):"
 msgstr "Finished hole diameter (D):"
@@ -15008,12 +15001,6 @@ msgstr "Data file error."
 
 msgid "Volt"
 msgstr "Volt"
-
-msgid "Separate sense pin"
-msgstr "Separate sense pin"
-
-msgid "3 terminals regulator"
-msgstr "3 terminals regulator"
 
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
@@ -15407,6 +15394,12 @@ msgstr "km"
 msgid "feet"
 msgstr "feet"
 
+msgid "mV"
+msgstr "mV"
+
+msgid "mW"
+msgstr "mW"
+
 msgid "m/s"
 msgstr "m/s"
 
@@ -15515,14 +15508,14 @@ msgstr "Material"
 msgid "Epsilon R"
 msgstr "Epsilon R"
 
-msgid "Loss Tg"
-msgstr "Loss Tg"
+msgid "Loss Tan"
+msgstr "Loss Tan"
 
 msgid "Epsilon R:"
 msgstr "Epsilon R:"
 
-msgid "Loss Tg:"
-msgstr "Loss Tg:"
+msgid "Loss Tan:"
+msgstr "Loss Tan:"
 
 msgid "Common materials:"
 msgstr "Common materials:"
@@ -15676,9 +15669,6 @@ msgstr "Remove Dielectric Layer..."
 
 msgid "Id"
 msgstr "Id"
-
-msgid "Loss Tan"
-msgstr "Loss Tan"
 
 msgid "Board thickness from stackup:"
 msgstr "Board thickness from stackup:"
@@ -20091,9 +20081,6 @@ msgstr "Show or hide net names on pads and/or tracks."
 
 msgid "Show pad numbers"
 msgstr "Show pad numbers"
-
-msgid "Show pad <no net> indicator"
-msgstr "Show pad <no net> indicator"
 
 msgid "Clearance Outlines"
 msgstr "Clearance Outlines"
@@ -27727,6 +27714,15 @@ msgstr ""
 msgid "Item locked."
 msgstr "Item locked."
 
+msgid ""
+"Warning: some pasted items were on layers which are not present in the "
+"current board.\n"
+"These items could not be pasted.\n"
+msgstr ""
+"Warning: some pasted items were on layers which are not present in the "
+"current board.\n"
+"These items could not be pasted.\n"
+
 msgid "Invalid clipboard contents"
 msgstr "Invalid clipboard contents"
 
@@ -27948,12 +27944,6 @@ msgstr "Show footprint text marked as invisible"
 
 msgid "Show unconnected nets as a ratsnest"
 msgstr "Show unconnected nets as a ratsnest"
-
-msgid "No-Connects"
-msgstr "No-Connects"
-
-msgid "Show a marker on pads which have no net connected"
-msgstr "Show a marker on pads which have no net connected"
 
 msgid "DRC Warnings"
 msgstr "DRC Warnings"
@@ -28570,6 +28560,146 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "No-connects"
+#~ msgstr "No-connects"
+
+#~ msgid "User Fields"
+#~ msgstr "User Fields"
+
+#~ msgid "Delete Field"
+#~ msgstr "Delete Field"
+
+#~ msgid "Select field:"
+#~ msgstr "Select field:"
+
+#, c-format
+#~ msgid "Pin's owner (%d) not found."
+#~ msgstr "Pin's owner (%d) not found."
+
+#, c-format
+#~ msgid "Label's owner (%d) not found."
+#~ msgstr "Label's owner (%d) not found."
+
+#, c-format
+#~ msgid "Bezier's owner (%d) not found."
+#~ msgstr "Bezier's owner (%d) not found."
+
+#, c-format
+#~ msgid "Polyline's owner (%d) not found."
+#~ msgstr "Polyline's owner (%d) not found."
+
+#, c-format
+#~ msgid "Polygon's owner (%d) not found."
+#~ msgstr "Polygon's owner (%d) not found."
+
+#, c-format
+#~ msgid "Rounded rectangle's owner (%d) not found."
+#~ msgstr "Rounded rectangle's owner (%d) not found."
+
+#, c-format
+#~ msgid "Arc's owner (%d) not found."
+#~ msgstr "Arc's owner (%d) not found."
+
+#, c-format
+#~ msgid "Line's owner (%d) not found."
+#~ msgstr "Line's owner (%d) not found."
+
+#~ msgid "Signal harness, belonging to the part is not currently supported."
+#~ msgstr "Signal harness, belonging to the part is not currently supported."
+
+#~ msgid "Harness connector, belonging to the part is not currently supported."
+#~ msgstr ""
+#~ "Harness connector, belonging to the part is not currently supported."
+
+#, c-format
+#~ msgid "Harness entry's parent (%d) not found."
+#~ msgstr "Harness entry's parent (%d) not found."
+
+#, c-format
+#~ msgid "Harness type's parent (%d) not found."
+#~ msgstr "Harness type's parent (%d) not found."
+
+#, c-format
+#~ msgid ""
+#~ "Altium's Harness Connector (%s) was imported as Hierarchical sheet. "
+#~ "Please review imported schematic, as KiCad does not natively support "
+#~ "these Altium elements."
+#~ msgstr ""
+#~ "Altium's Harness Connector (%s) was imported as Hierarchical sheet. "
+#~ "Please review imported schematic, as KiCad does not natively support "
+#~ "these Altium elements."
+
+#, c-format
+#~ msgid "Rectangle's owner (%d) not found."
+#~ msgstr "Rectangle's owner (%d) not found."
+
+#, c-format
+#~ msgid "Sheet entry's owner (%d) not found."
+#~ msgstr "Sheet entry's owner (%d) not found."
+
+#~ msgid "Power Port has unknown style, use bar instead."
+#~ msgstr "Power Port has unknown style, use bar instead."
+
+#, c-format
+#~ msgid ""
+#~ "Altium's Harness port (%s) was imported as Text box. Please review "
+#~ "imported schematic, as KiCad does not natively support these Altium "
+#~ "elements."
+#~ msgstr ""
+#~ "Altium's Harness port (%s) was imported as Text box. Please review "
+#~ "imported schematic, as KiCad does not natively support these Altium "
+#~ "elements."
+
+#, c-format
+#~ msgid "Sheetname's owner (%d) not found."
+#~ msgstr "Sheetname's owner (%d) not found."
+
+#, c-format
+#~ msgid "Filename's owner (%d) not found."
+#~ msgstr "Filename's owner (%d) not found."
+
+#, c-format
+#~ msgid "Designator's owner (%d) not found."
+#~ msgstr "Designator's owner (%d) not found."
+
+#, c-format
+#~ msgid "Implementation's owner (%d) not found."
+#~ msgstr "Implementation's owner (%d) not found."
+
+#, c-format
+#~ msgid "Footprint's owner (%d) not found."
+#~ msgstr "Footprint's owner (%d) not found."
+
+#~ msgid "Lines drawn at any angle"
+#~ msgstr "Lines drawn at any angle"
+
+#~ msgid "Lines drawn horizontally and vertically"
+#~ msgstr "Lines drawn horizontally and vertically"
+
+#~ msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
+#~ msgstr "Lines drawn horizontally, vertically, and at a 45 degree angle"
+
+#~ msgid "Separate sense pin"
+#~ msgstr "Separate sense pin"
+
+#~ msgid "3 terminals regulator"
+#~ msgstr "3 terminals regulator"
+
+#~ msgid "Loss Tg"
+#~ msgstr "Loss Tg"
+
+#~ msgid "Loss Tg:"
+#~ msgstr "Loss Tg:"
+
+#~ msgid "Show pad <no net> indicator"
+#~ msgstr "Show pad <no net> indicator"
+
+#~ msgid "No-Connects"
+#~ msgstr "No-Connects"
+
+#~ msgid "Show a marker on pads which have no net connected"
+#~ msgstr "Show a marker on pads which have no net connected"
 
 #~ msgid "Item"
 #~ msgstr "Item"
