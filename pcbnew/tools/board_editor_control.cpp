@@ -1490,16 +1490,17 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     canvas()->ForceRefresh();
 
     DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, board()->GetNetClassAssignmentCandidates(),
-            [&]( const std::vector<wxString>& aNetNames )
+            [this]( const std::vector<wxString>& aNetNames )
             {
-                selectionTool->ClearSelection();
+                PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                selTool->ClearSelection();
 
                 for( const wxString& curr_netName : aNetNames )
                 {
                     int curr_netCode = board()->GetNetInfo().GetNetItem( curr_netName )->GetNetCode();
 
                     if( curr_netCode > 0 )
-                        selectionTool->SelectAllItemsOnNet( curr_netCode );
+                        selTool->SelectAllItemsOnNet( curr_netCode );
                 }
 
                 canvas()->ForceRefresh();
