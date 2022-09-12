@@ -272,7 +272,8 @@ wxString UnescapeString( const wxString& aSource )
     for( size_t i = 0; i < sourceLen; ++i )
     {
         wxUniChar ch = aSource[i];
-        if( ( ch == '$' || ch == '^' || ch == '_' )
+
+        if( ( ch == '$' || ch == '~' || ch == '^' || ch == '_' )
                 && i + 1 < sourceLen && aSource[i+1] == '{' )
         {
             for( ; i < sourceLen; ++i )
