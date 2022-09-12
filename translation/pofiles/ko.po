@@ -28,10 +28,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 14:31-0700\n"
-"PO-Revision-Date: 2022-09-05 11:14+0000\n"
+"PO-Revision-Date: 2022-09-12 20:18+0000\n"
 "Last-Translator: KwonHyeokbeom <gurqja3810@naver.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8635,23 +8635,20 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:90
-#, fuzzy
 msgid "Show field name"
-msgstr "새 필드 이름:"
+msgstr "필드 이름 표시"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:92
 msgid "Show the field name in addtion to its value"
-msgstr ""
+msgstr "값과 함께 필드 이름 표시"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:96
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "자동 배치 규칙"
+msgstr "자동 배치 허용"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:99
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "선택한 부품에 대해 자동 배치를 수행"
+msgstr "회로도에서 이 필드의 자동 배치 허용"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:112
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -10836,9 +10833,8 @@ msgstr "이름으로 신호 추가:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
-msgstr "연결 없음"
+msgstr "연결되지 않음"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
@@ -13642,9 +13638,8 @@ msgid "Net"
 msgstr "네트"
 
 #: eeschema/sch_label.cpp:932 eeschema/sch_line.cpp:861
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "해결된 네트클래스"
+msgstr "해결된 넷클래스"
 
 #: eeschema/sch_label.cpp:1024
 #, c-format
