@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,14 @@
 #ifndef __DIALOG_IMPORT_GFX_H__
 #define __DIALOG_IMPORT_GFX_H__
 
+#include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include "dialog_import_gfx_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
 
 class GRAPHICS_IMPORT_MGR;
+
 
 class DIALOG_IMPORT_GFX : public DIALOG_IMPORT_GFX_BASE
 {
@@ -51,25 +53,17 @@ public:
      * items must be moved by the mouse cursor to the final position
      * false means the imported items are placed to the final position after import.
      */
-    bool IsPlacementInteractive()
-    {
-        return m_placementInteractive;
-    }
+    bool IsPlacementInteractive() { return m_placementInteractive; }
 
     /**
      * @return true if the items should be added into a group when being placed.
      */
-    bool ShouldGroupItems()
-    {
-        return m_shouldGroupItems;
-    }
+    bool ShouldGroupItems() { return m_shouldGroupItems; }
 
     bool TransferDataFromWindow() override;
 
 private:
     // Virtual event handlers
-    void onUnitPositionSelection( wxCommandEvent& event ) override;
-    void onUnitWidthSelection( wxCommandEvent& event ) override;
     void onBrowseFiles( wxCommandEvent& event ) override;
     void onFilename( wxCommandEvent& event );
     void originOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
@@ -89,28 +83,19 @@ private:
         m_shouldGroupItems = m_groupItems->GetValue();
     }
 
-    void updatePcbImportOffsets_mm();
-    double getDXFDefaultLineWidthMM();
-    void showDXFDefaultLineWidth();
-    void showPcbImportOffsets();
-
-    PCB_BASE_FRAME*      m_parent;
+private:
+    PCB_BASE_FRAME*                           m_parent;
     std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
     std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
-    static int           m_originUnits;
-    VECTOR2D             m_origin;              // This is the offset to add to imported coordinates
-                                                // Always in mm
 
-    static wxString      m_filename;
+    UNIT_BINDER          m_xOrigin;
+    UNIT_BINDER          m_yOrigin;
+    UNIT_BINDER          m_defaultLineWidth;
+
     static bool          m_shouldGroupItems;
     static bool          m_placementInteractive;
-    static int           m_layer;
-    double               m_dxfLineWidth;        // always in mm: line width when a line width
-                                                // is not specified
-    static int           m_dxfLineWidthUnits;
-    static double        m_scaleImport;         // a scale factor to change the size of imported
-                                                // items m_scaleImport =1.0 means keep original size
-    static int           m_dxfUnits;
+    static double        m_importScale;         // a scale factor to change the size of imported
+                                                // items m_importScale =1.0 means keep original size
 };
 
 #endif    //  __DIALOG_IMPORT_GFX_H__

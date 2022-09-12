@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerFile;
 	bSizerFile = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextFile = new wxStaticText( this, wxID_ANY, _("File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFile->Wrap( -1 );
 	m_staticTextFile->SetToolTip( _("Only vectors will be imported.  Bitmaps and fonts will be ignored.") );
 
@@ -34,7 +34,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	bSizerFile->Add( m_textCtrlFileName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerFile->Add( m_browseButton, 0, wxALL, 5 );
+	bSizerFile->Add( m_browseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizerMain->Add( bSizerFile, 0, wxALL|wxEXPAND, 10 );
@@ -58,51 +58,47 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerPosSettings;
 	bSizerPosSettings = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextXpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextXpos->Wrap( -1 );
-	bSizerPosSettings->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_xLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_xLabel->Wrap( -1 );
+	bSizerPosSettings->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_DxfPcbXCoord = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_xCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
-	if ( !m_DxfPcbXCoord->HasFlag( wxTE_MULTILINE ) )
+	if ( !m_xCtrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_DxfPcbXCoord->SetMaxLength( 10 );
+	m_xCtrl->SetMaxLength( 10 );
 	}
 	#else
-	m_DxfPcbXCoord->SetMaxLength( 10 );
+	m_xCtrl->SetMaxLength( 10 );
 	#endif
-	m_DxfPcbXCoord->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
+	m_xCtrl->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
 
-	bSizerPosSettings->Add( m_DxfPcbXCoord, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerPosSettings->Add( m_xCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextYpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextYpos->Wrap( -1 );
-	bSizerPosSettings->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_xUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_xUnits->Wrap( -1 );
+	bSizerPosSettings->Add( m_xUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_DxfPcbYCoord = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_yLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_yLabel->Wrap( -1 );
+	bSizerPosSettings->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_yCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
-	if ( !m_DxfPcbYCoord->HasFlag( wxTE_MULTILINE ) )
+	if ( !m_yCtrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_DxfPcbYCoord->SetMaxLength( 10 );
+	m_yCtrl->SetMaxLength( 10 );
 	}
 	#else
-	m_DxfPcbYCoord->SetMaxLength( 10 );
+	m_yCtrl->SetMaxLength( 10 );
 	#endif
-	m_DxfPcbYCoord->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
+	m_yCtrl->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
 
-	bSizerPosSettings->Add( m_DxfPcbYCoord, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizerPosSettings->Add( m_yCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnits->Wrap( -1 );
-	bSizerPosSettings->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxString m_DxfPcbPositionUnitsChoices[] = { _("mm"), _("inch") };
-	int m_DxfPcbPositionUnitsNChoices = sizeof( m_DxfPcbPositionUnitsChoices ) / sizeof( wxString );
-	m_DxfPcbPositionUnits = new wxChoice( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DxfPcbPositionUnitsNChoices, m_DxfPcbPositionUnitsChoices, 0 );
-	m_DxfPcbPositionUnits->SetSelection( 0 );
-	m_DxfPcbPositionUnits->SetToolTip( _("Select PCB grid units") );
-
-	bSizerPosSettings->Add( m_DxfPcbPositionUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_yUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_yUnits->Wrap( -1 );
+	bSizerPosSettings->Add( m_yUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bSizerUserPos->Add( bSizerPosSettings, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
@@ -138,12 +134,12 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
 
-	m_staticTextscale = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextscale->Wrap( -1 );
-	fgSizerImportSettings->Add( m_staticTextscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_importScaleLabel = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importScaleLabel->Wrap( -1 );
+	fgSizerImportSettings->Add( m_importScaleLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textCtrlImportScale = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerImportSettings->Add( m_textCtrlImportScale, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_importScaleCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerImportSettings->Add( m_importScaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
@@ -183,18 +179,16 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgDxfImportSettings->SetFlexibleDirection( wxBOTH );
 	fgDxfImportSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextLineWidth = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextLineWidth->Wrap( -1 );
-	fgDxfImportSettings->Add( m_staticTextLineWidth, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_lineWidthLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	fgDxfImportSettings->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textCtrlLineWidth = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgDxfImportSettings->Add( m_textCtrlLineWidth, 0, wxEXPAND, 5 );
+	m_lineWidthCtrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgDxfImportSettings->Add( m_lineWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	wxString m_choiceUnitLineWidthChoices[] = { _("mm"), _("mils"), _("inches") };
-	int m_choiceUnitLineWidthNChoices = sizeof( m_choiceUnitLineWidthChoices ) / sizeof( wxString );
-	m_choiceUnitLineWidth = new wxChoice( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitLineWidthNChoices, m_choiceUnitLineWidthChoices, 0 );
-	m_choiceUnitLineWidth->SetSelection( 0 );
-	fgDxfImportSettings->Add( m_choiceUnitLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_lineWidthUnits = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthUnits->Wrap( -1 );
+	fgDxfImportSettings->Add( m_lineWidthUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLineWidth1->Wrap( -1 );
@@ -239,9 +233,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_rbInteractivePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onAbsolutePlacement ), NULL, this );
 	m_rbAbsolutePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
-	m_DxfPcbPositionUnits->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitPositionSelection ), NULL, this );
 	m_groupItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onGroupItems ), NULL, this );
-	m_choiceUnitLineWidth->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitWidthSelection ), NULL, this );
 }
 
 DIALOG_IMPORT_GFX_BASE::~DIALOG_IMPORT_GFX_BASE()
@@ -252,8 +244,6 @@ DIALOG_IMPORT_GFX_BASE::~DIALOG_IMPORT_GFX_BASE()
 	m_rbInteractivePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onAbsolutePlacement ), NULL, this );
 	m_rbAbsolutePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
-	m_DxfPcbPositionUnits->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitPositionSelection ), NULL, this );
 	m_groupItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onGroupItems ), NULL, this );
-	m_choiceUnitLineWidth->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onUnitWidthSelection ), NULL, this );
 
 }
