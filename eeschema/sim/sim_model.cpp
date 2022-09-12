@@ -886,9 +886,9 @@ void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
                     if( !SetParamFromSpiceCode( paramName, subnode->string() ) )
                     {
                         THROW_IO_ERROR( wxString::Format(
-                                            _( "Failed to set parameter '%s' to '%s'" ),
-                                            paramName,
-                                            subnode->string() ) );
+                                        _( "Failed to set parameter '%s' to '%s'" ),
+                                        paramName,
+                                        subnode->string() ) );
                     }
                 }
                 else

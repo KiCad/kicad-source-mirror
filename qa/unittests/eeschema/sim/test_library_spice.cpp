@@ -203,7 +203,7 @@ BOOST_AUTO_TEST_CASE( Diodes )
                 break;
             
             case 18:
-                BOOST_CHECK_EQUAL( modelName, "D18" );
+                BOOST_CHECK_EQUAL( modelName, "D<>/?:\\|[]!@#$%^&-_18" );
                 BOOST_CHECK_EQUAL( model.FindParam( "n" )->value->ToString(), "-1.1" );
                 BOOST_CHECK_EQUAL( model.FindParam( "m_" )->value->ToString(), "2.2" );
                 BOOST_CHECK_EQUAL( model.FindParam( "is" )->value->ToString(), "-3.3m" );

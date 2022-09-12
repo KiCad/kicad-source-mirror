@@ -198,7 +198,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             else
                 continue;
 
-            tao::pegtl::string_input<> in( ( text + "\n" ).ToUTF8(), "from_content" );
+            tao::pegtl::string_input<> in( text.ToUTF8(), "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
             try

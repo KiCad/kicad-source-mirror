@@ -36,7 +36,7 @@ namespace SIM_LIBRARY_SPICE_PARSER
 
     // TODO: unknownLine is already handled in spiceUnit.
     struct library : spiceSource {};
-    struct libraryGrammar : must<library, tao::pegtl::eof> {};
+    struct libraryGrammar : must<library> {};
 
 
     template <typename Rule> struct librarySelector : std::false_type {};

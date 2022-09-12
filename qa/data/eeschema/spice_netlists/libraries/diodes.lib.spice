@@ -99,7 +99,8 @@
 + 	 N = 6.6G ;
 
 * All valid combinations of + - signs.
-.model D18 D
+* Non-alphanumeric characters in model name.
+.model D<>/?:\|[]!@#$%^&-_18 D
 + N -1.1, MJ +2.2, JS -3.3e-3, IBV +4.4e+4, CJ0 5.5e-5, BV 6.6e+6
 
 * Multiple empty-line continuations.

@@ -40,39 +40,39 @@ namespace SPICE_GRAMMAR
     // NOTE: In Ngspice, a '$' opening a comment must be preceded by ' ', ',', or '\t'. We don't
     //       implement that here - this may cause problems in the future.
     // Ngspice supports '//' for comments.
-    struct eolCommentStart : sor<one<';', '$'>,
+    struct eolfCommentStart : sor<one<';', '$'>,
                                  string<'/', '/'>> {};
 
-    struct eolComment : seq<eolCommentStart,
-                            until<eol>> {};
+    struct eolfComment : seq<eolfCommentStart,
+                            until<eolf>> {};
                                             
 
     struct commentLine : seq<opt<garbage>,
                              one<'*'>,
-                             until<eol>> {};
+                             until<eolf>> {};
 
 
-    struct newline : seq<sor<eol,
-                             eolComment>,
+    struct newline : seq<sor<eolf,
+                             eolfComment>,
                          not_at<one<'+'>>> {};
 
     struct backslashContinuation : seq<string<'\\', '\\'>,
                                        opt<trailers>,
-                                       eol> {};
+                                       eolf> {};
 
-    struct commentBackslashContinuation : seq<eolCommentStart,
-                                              seq<star<not_at<eol>,
+    struct commentBackslashContinuation : seq<eolfCommentStart,
+                                              seq<star<not_at<eolf>,
                                                        not_at<string<'\\', '\\'>,
                                                               opt<trailers>,
-                                                              eol>,
+                                                              eolf>,
                                                        any>,
                                                   string<'\\', '\\'>,
                                                   opt<trailers>,
-                                                  eol>> {};
+                                                  eolf>> {};
                                                   
 
-    struct plusContinuation : seq<sor<eol,
-                                      eolComment>,
+    struct plusContinuation : seq<sor<eolf,
+                                      eolfComment>,
                                   star<commentLine>,
                                   opt<leaders>,
                                   one<'+'>> {};
@@ -96,7 +96,7 @@ namespace SPICE_GRAMMAR
                                     opt<one<'+', '-'>>>>> {};
 
     struct token : seq<tokenStart,
-                       star<not_at<eol>,
+                       star<not_at<eolf>,
                             not_at<backslashContinuation>,
                             not_one<' ', '\t', '=', '(', ')', ',', '+', '-', '*', '/', '^', ';'>>>
         {};
@@ -111,8 +111,9 @@ namespace SPICE_GRAMMAR
     struct paramValuePairs : seq<opt<paramValuePair>,
                                  star<sep,
                                       paramValuePair>> {};
-    struct modelName : star<sor<alnum,
-                                one<'!', '#', '$', '%', '[', ']', '_'>>> {};
+    struct modelName : plus<not_at<garbage>, any> {};
+                       /*sor<alnum,
+                                one<'!', '#', '$', '%', '[', ']', '_'>>> {};*/
                      /*seq<alpha,
                            star<sor<alnum,
                                     one<'!', '#', '$', '%', '[', ']', '_'>>>> {};*/
@@ -175,7 +176,8 @@ namespace SPICE_GRAMMAR
                                dotSubcktParams>,
                            opt<sep>,
                            newline,
-                           until<dotSubcktEnd, spiceUnit>> {};
+                           until<dotSubcktEnd,
+                                 spiceUnit>> {};
 
 
     struct modelUnit : sor<dotModel,
@@ -227,7 +229,7 @@ namespace SPICE_GRAMMAR
                          one<'.'>,
                          until<newline>> {};
 
-    struct unknownLine : until<newline> {};
+    struct unknownLine : seq<plus<not_at<newline>, any>, until<newline>> {};
 
 
     struct spiceUnit : sor<modelUnit,
@@ -236,12 +238,13 @@ namespace SPICE_GRAMMAR
                            dotInclude,
                            dotLine,
                            kLine,
+                           eol, // Empty line. This is necessary to terminate on EOF.
                            unknownLine> {};
-    struct spiceUnitGrammar : must<spiceUnit, tao::pegtl::eof> {};
+    struct spiceUnitGrammar : must<spiceUnit> {};
 
 
     struct spiceSource : star<spiceUnit> {};
-    struct spiceSourceGrammar : must<spiceSource, tao::pegtl::eof> {};
+    struct spiceSourceGrammar : must<spiceSource> {};
 }
 
 #endif // SPICE_GRAMMAR_H
