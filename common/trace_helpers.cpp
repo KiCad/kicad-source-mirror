@@ -53,6 +53,7 @@ const wxChar* const traceDisplayLocation = wxT( "KICAD_DISPLAY_LOCATION" );
 const wxChar* const traceSchSheetPaths = wxT( "KICAD_SCH_SHEET_PATHS" );
 const wxChar* const traceEnvVars = wxT( "KICAD_ENV_VARS" );
 const wxChar* const traceGalProfile = wxT( "KICAD_GAL_PROFILE" );
+const wxChar* const traceKiCad2Step = wxT( "KICAD2STEP" );
 
 
 wxString dump( const wxArrayString& aArray )

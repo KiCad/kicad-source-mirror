@@ -23,6 +23,7 @@
  */
 
 #include <wx/choicdlg.h>
+#include <wx/log.h>
 #include <wx/stdpaths.h>
 #include <wx/process.h>
 #include <wx/string.h>
@@ -39,15 +40,18 @@
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
+#include <trace_helpers.h>
 #include <widgets/text_ctrl_eval.h>
 #include <wildcards_and_files_ext.h>
 #include <filename_resolver.h>
+
 
 #ifdef KICAD_STEP_EXPORT_LIB
 #include <kicad2step.h>
 #endif
 
-class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
+
+class DIALOG_EXPORT_STEP : public DIALOG_EXPORT_STEP_BASE
 {
 public:
     enum STEP_ORG_OPT
@@ -59,15 +63,8 @@ public:
         STEP_ORG_USER,          // origin is entered by user
     };
 
-private:
-    PCB_EDIT_FRAME* m_parent;
-    STEP_ORG_OPT    m_STEP_org_opt;  // The last preference for STEP Origin:
-    bool            m_noVirtual;     // remember last preference for No Virtual Component
-    int             m_OrgUnits;      // remember last units for User Origin
-    double          m_XOrg;          // remember last User Origin X value
-    double          m_YOrg;          // remember last User Origin Y value
-    wxString        m_boardPath;     // path to the exported board file
-    static int      m_toleranceLastChoice;  // Store m_tolerance option during a session
+    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath );
+    ~DIALOG_EXPORT_STEP();
 
 protected:
     void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
@@ -107,12 +104,20 @@ protected:
         return m_cbOverwriteFile->GetValue();
     }
 
-public:
-    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath );
-    ~DIALOG_EXPORT_STEP();
+private:
+    PCB_EDIT_FRAME* m_parent;
+    STEP_ORG_OPT    m_STEP_org_opt;  // The last preference for STEP Origin:
+    bool            m_noVirtual;     // remember last preference for No Virtual Component
+    int             m_OrgUnits;      // remember last units for User Origin
+    double          m_XOrg;          // remember last User Origin X value
+    double          m_YOrg;          // remember last User Origin Y value
+    wxString        m_boardPath;     // path to the exported board file
+    static int      m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
 
+
 int DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
+
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -144,7 +149,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
             _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ),
             wxDefaultPosition,
             wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
-    bSizerTop->Add( m_filePickerSTEP, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+    bSizerTop->Add( m_filePickerSTEP, 1, wxTOP | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
 
     m_filePickerSTEP->SetPath( path );
 
@@ -159,11 +164,11 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     switch( m_STEP_org_opt )
     {
-        default: break;
-        case STEP_ORG_PLOT_AXIS: m_rbDrillAndPlotOrigin->SetValue( true ); break;
-        case STEP_ORG_GRID_AXIS: m_rbGridOrigin->SetValue( true ); break;
-        case STEP_ORG_USER: m_rbUserDefinedOrigin->SetValue( true ); break;
-        case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
+    default: break;
+    case STEP_ORG_PLOT_AXIS: m_rbDrillAndPlotOrigin->SetValue( true );   break;
+    case STEP_ORG_GRID_AXIS: m_rbGridOrigin->SetValue( true );           break;
+    case STEP_ORG_USER: m_rbUserDefinedOrigin->SetValue( true );         break;
+    case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
     }
 
     m_OrgUnits  = cfg->m_ExportStep.origin_units;
@@ -333,6 +338,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     // Check if the board outline is continuous
     // max dist from one endPt to next startPt to build a closed shape:
     int chainingEpsilon = Millimeter2iu( tolerance );
+
     // Arc to segment approx error (not critical here: we do not use the outline shape):
     int maxError = Millimeter2iu( 0.005 );
     bool success = BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, maxError,
@@ -367,17 +373,16 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
 #ifndef KICAD_STEP_EXPORT_LIB
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
-
 #ifdef __WXMAC__
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
-        if( appK2S.GetPath().Find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
-        {
-            appK2S.AppendDir( wxT( ".." ) );
-            appK2S.AppendDir( wxT( ".." ) );
-            appK2S.AppendDir( wxT( ".." ) );
-            appK2S.AppendDir( wxT( ".." ) );
-            appK2S.AppendDir( wxT( "MacOS" ) );
-        }
+    if( appK2S.GetPath().Find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
+    {
+        appK2S.AppendDir( wxT( ".." ) );
+        appK2S.AppendDir( wxT( ".." ) );
+        appK2S.AppendDir( wxT( ".." ) );
+        appK2S.AppendDir( wxT( ".." ) );
+        appK2S.AppendDir( wxT( "MacOS" ) );
+    }
 #endif
 
     appK2S.SetName( wxT( "kicad2step" ) );
@@ -398,45 +403,45 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     switch( orgOpt )
     {
-        case DIALOG_EXPORT_STEP::STEP_ORG_0:
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_0:
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
-            cmdK2S.Append( wxT( " --drill-origin" ) );
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
+        cmdK2S.Append( wxT( " --drill-origin" ) );
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
-            cmdK2S.Append( wxT( " --grid-origin" ) );
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
+        cmdK2S.Append( wxT( " --grid-origin" ) );
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+    case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+    {
+        xOrg = GetXOrg();
+        yOrg = GetYOrg();
+
+        if( GetOrgUnitsChoice() == 1 )
         {
-            xOrg = GetXOrg();
-            yOrg = GetYOrg();
-
-            if( GetOrgUnitsChoice() == 1 )
-            {
-                // selected reference unit is in inches, and STEP units are mm
-                xOrg *= 25.4;
-                yOrg *= 25.4;
-            }
-
-            LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
-                                             quote, xOrg, yOrg, quote ) );
+            // selected reference unit is in inches, and STEP units are mm
+            xOrg *= 25.4;
+            yOrg *= 25.4;
         }
-            break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
-        {
-            BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-            xOrg = Iu2Millimeter( bbox.GetCenter().x );
-            yOrg = Iu2Millimeter( bbox.GetCenter().y );
-            LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
-                                             quote, xOrg, yOrg, quote ) );
-        }
-            break;
+        LOCALE_IO dummy;
+        cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
+                                         quote, xOrg, yOrg, quote ) );
+        break;
+    }
+
+    case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
+    {
+        BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+        xOrg = Iu2Millimeter( bbox.GetCenter().x );
+        yOrg = Iu2Millimeter( bbox.GetCenter().y );
+        LOCALE_IO dummy;
+        cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
+                                         quote, xOrg, yOrg, quote ) );
+        break;
+    }
     }
 
     {
@@ -445,12 +450,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                                          quote, tolerance, quote ) );
     }
 
+    // Input file path.
     cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
-                                     quote, m_filePickerSTEP->GetPath(), quote ) );  // input file path
+                                     quote, m_filePickerSTEP->GetPath(), quote ) );
 
-    cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ),
-                                     quote,  m_boardPath, quote ) );                 // output file path
 
+    // Output file path.
+    cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), quote,  m_boardPath, quote ) );
+
+    wxLogTrace( traceKiCad2Step, wxT( "KiCad2Step command: %s" ), cmdK2S );
     wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 
 #else
@@ -467,43 +475,43 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     switch( orgOpt )
     {
-        case DIALOG_EXPORT_STEP::STEP_ORG_0:
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_0:
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
-            params.m_useDrillOrigin = true;
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
+        params.m_useDrillOrigin = true;
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
-            params.m_useGridOrigin = true;
-            break;
+    case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
+        params.m_useGridOrigin = true;
+        break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+    case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+    {
+        xOrg = GetXOrg();
+        yOrg = GetYOrg();
+
+        if( GetOrgUnitsChoice() == 1 )
         {
-            xOrg = GetXOrg();
-            yOrg = GetYOrg();
-
-            if( GetOrgUnitsChoice() == 1 )
-            {
-                // selected reference unit is in inches, and STEP units are mm
-                xOrg *= 25.4;
-                yOrg *= 25.4;
-            }
-
-            params.m_xOrigin = xOrg;
-            params.m_yOrigin = yOrg;
+            // selected reference unit is in inches, and STEP units are mm
+            xOrg *= 25.4;
+            yOrg *= 25.4;
         }
-            break;
 
-        case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
-        {
-            BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-            xOrg = Iu2Millimeter( bbox.GetCenter().x );
-            yOrg = Iu2Millimeter( bbox.GetCenter().y );
-            params.m_xOrigin = xOrg;
-            params.m_yOrigin = yOrg;
-        }
-            break;
+        params.m_xOrigin = xOrg;
+        params.m_yOrigin = yOrg;
+        break;
+    }
+
+    case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
+    {
+        BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
+        xOrg = Iu2Millimeter( bbox.GetCenter().x );
+        yOrg = Iu2Millimeter( bbox.GetCenter().y );
+        params.m_xOrigin = xOrg;
+        params.m_yOrigin = yOrg;
+        break;
+    }
     }
 
     KICAD2STEP converter( params );

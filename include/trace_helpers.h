@@ -205,6 +205,13 @@ extern const wxChar* const traceEnvVars;
  */
 extern const wxChar* const traceGalProfile;
 
+/**
+ * Flag to enable KiCad2Step debug tracing.
+ *
+ * Use "KICAD2STEP" to enable.
+ */
+extern const wxChar* const traceKiCad2Step;
+
 ///@}
 
 /**
