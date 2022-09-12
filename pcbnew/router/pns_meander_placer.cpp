@@ -252,6 +252,10 @@ const ITEM_SET MEANDER_PLACER::Traces()
     return ITEM_SET( &m_currentTrace );
 }
 
+const VECTOR2I& MEANDER_PLACER::CurrentStart() const
+{
+    return m_currentStart;
+}
 
 const VECTOR2I& MEANDER_PLACER::CurrentEnd() const
 {

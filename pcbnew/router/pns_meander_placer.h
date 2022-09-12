@@ -73,6 +73,9 @@ public:
     /// @copydoc PLACEMENT_ALGO::Traces()
     const ITEM_SET Traces() override;
 
+    /// @copydoc PLACEMENT_ALGO::CurrentStart()
+    const VECTOR2I& CurrentStart() const override;
+
     /// @copydoc PLACEMENT_ALGO::CurrentEnd()
     const VECTOR2I& CurrentEnd() const override;
 

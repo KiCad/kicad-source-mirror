@@ -124,6 +124,13 @@ public:
     virtual const ITEM_SET Traces() = 0;
 
     /**
+     * Function CurrentStart()
+     *
+     * Returns the current start of the line(s) being placed/tuned.
+     */
+    virtual const VECTOR2I& CurrentStart() const = 0;
+
+    /**
      * Function CurrentEnd()
      *
      * Returns the current end of the line(s) being placed/tuned. It may not be equal
@@ -191,8 +198,6 @@ public:
     virtual void GetModifiedNets( std::vector<int> &aNets ) const
     {
     }
-
-    
 };
 
 }

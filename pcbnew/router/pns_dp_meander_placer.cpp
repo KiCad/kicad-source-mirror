@@ -413,6 +413,12 @@ const ITEM_SET DP_MEANDER_PLACER::Traces()
 }
 
 
+const VECTOR2I& DP_MEANDER_PLACER::CurrentStart() const
+{
+    return m_currentStart;
+}
+
+
 const VECTOR2I& DP_MEANDER_PLACER::CurrentEnd() const
 {
     return m_currentEnd;
