@@ -462,6 +462,86 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 }
 
 
+bool ROUTER::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers )
+{
+    // Can't finish something with no connections
+    if( GetCurrentNets().empty() )
+        return false;
+
+    PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( Placer() );
+
+    if( placer == nullptr )
+        return false;
+
+    PNS::LINE     trace = placer->Trace();
+    PNS::NODE*    lastNode = placer->CurrentNode( true );
+    PNS::TOPOLOGY topo( lastNode );
+
+    // If the user has drawn a line, get the anchor nearest to the line end
+    if( trace.SegmentCount() > 0 )
+        return topo.NearestUnconnectedAnchorPoint( &trace, aOtherEnd, aOtherEndLayers );
+
+    // Otherwise, find the closest anchor to our start point
+
+    // Get joint from placer start item
+    JOINT* jt = lastNode->FindJoint( placer->CurrentStart(), placer->CurrentLayer(),
+                                     placer->CurrentNets()[0] );
+
+    if( !jt )
+        return false;
+
+    // Get unconnected item from joint
+    int        anchor;
+    PNS::ITEM* it = topo.NearestUnconnectedItem( jt, &anchor );
+
+    if( !it )
+        return false;
+
+    aOtherEnd = it->Anchor( anchor );
+    aOtherEndLayers = it->Layers();
+
+    return true;
+}
+
+
+bool ROUTER::Finish()
+{
+    if( m_state != ROUTE_TRACK )
+        return false;
+
+    LINE_PLACER* placer = dynamic_cast<LINE_PLACER*>( Placer() );
+
+    if( placer == nullptr )
+        return false;
+
+    // Get our current line and position and nearest ratsnest to them if it exists
+    PNS::LINE   current = placer->Trace();
+    VECTOR2I    currentEnd = placer->CurrentEnd();
+    VECTOR2I    otherEnd;
+    LAYER_RANGE otherEndLayers;
+
+    // Get the anchor nearest to the end of the trace the user is routing
+    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
+        return false;
+
+    // Keep moving until we don't change position
+    VECTOR2I moveResultPoint;
+    do
+    {
+        moveResultPoint = Placer()->CurrentEnd();
+        Move( otherEnd, &current );
+    } while( Placer()->CurrentEnd() != moveResultPoint );
+
+    // If we've made it, fix the route and we're done
+    if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
+    {
+        return FixRoute( otherEnd, &current, false );
+    }
+
+    return false;
+}
+
+
 bool ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
 {
     m_iface->EraseView();

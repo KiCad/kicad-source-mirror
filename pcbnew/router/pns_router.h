@@ -143,6 +143,7 @@ public:
     bool RoutingInProgress() const;
     bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
     bool Move( const VECTOR2I& aP, ITEM* aItem );
+    bool Finish();
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
@@ -220,6 +221,9 @@ private:
 
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
     bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
+
+    bool getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers );
+
 
 private:
     BOX2I                           m_visibleViewArea;

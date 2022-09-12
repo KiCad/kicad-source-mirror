@@ -1263,8 +1263,35 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::routerAttemptFinish )
-                 || evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
+        else if( evt->IsAction( &PCB_ACTIONS::routerAttemptFinish ) )
+        {
+            bool* autoRouted = evt->Parameter<bool*>();
+
+            if( m_router->Finish() )
+            {
+                // When we're routing a group of signals automatically we want
+                // to break up the undo stack every time we have to manually route
+                // so the user gets nice checkpoints. Remove the APPEND_UNDO flag.
+                if( autoRouted != nullptr )
+                    *autoRouted = true;
+
+                break;
+            }
+            else
+            {
+                // This acts as check if we were called by the autorouter; we don't want
+                // to reset APPEND_UNDO if we're auto finishing after route-other-end
+                if( autoRouted != nullptr )
+                {
+                    *autoRouted = false;
+                    m_iface->SetCommitFlags( 0 );
+                }
+
+                // Warp the mouse so the user is at the point we managed to route to
+                controls()->WarpMouseCursor( m_router->Placer()->CurrentEnd(), true, true );
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
         {
             PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( m_router->Placer() );
 
@@ -1310,49 +1337,6 @@ void ROUTER_TOOL::performRouting()
 
                 // Warp the mouse to wherever we actually ended up routing to
                 controls()->WarpMouseCursor( currentEnd, true, true );
-            }
-            else
-            {
-                VECTOR2I moveResultPoint;
-                bool*    autoRouted = evt->Parameter<bool*>();
-
-                if( autoRouted != nullptr )
-                    *autoRouted = false;
-
-                // Keep moving until we don't change position
-                do
-                {
-                    moveResultPoint = m_router->Placer()->CurrentEnd();
-                    m_router->Move( otherEnd, &current );
-                } while( m_router->Placer()->CurrentEnd() != moveResultPoint );
-
-                // Fix the route and end routing if we made it to the destination
-                if( moveResultPoint == otherEnd
-                    && otherEndLayers.Overlaps( m_router->GetCurrentLayer() ) )
-                {
-                    if( m_router->FixRoute( otherEnd, &current, false ) )
-                    {
-                        // When we're routing a group of signals automatically we want
-                        // to break up the undo stack every time we have to manually route
-                        // so the user gets nice checkpoints. Remove the APPEND_UNDO flag.
-                        if( autoRouted != nullptr )
-                        {
-                            *autoRouted = true;
-                        }
-
-                        break;
-                    }
-                    // This acts as check if we were called by the autorouter; we don't want
-                    // to reset APPEND_UNDO if we're auto finishing after route-other-end
-                    else if( autoRouted != nullptr )
-                        m_iface->SetCommitFlags( 0 );
-                }
-                // Otherwise warp the mouse so the user is at the point we managed to route to
-                else
-                {
-                    m_iface->SetCommitFlags( 0 );
-                    controls()->WarpMouseCursor( moveResultPoint, true, true );
-                }
             }
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
