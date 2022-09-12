@@ -2798,25 +2798,26 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
         {
-            DRC_CONSTRAINT constraint;
+            DRC_CONSTRAINT        constraint;
+            int                   clearance;
+            BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
+            ZONE*                 zone = dynamic_cast<ZONE*>( aOther );
 
-            if( ( aOther->Type() == PCB_ZONE_T || aOther->Type() == PCB_FP_ZONE_T )
-                    && static_cast<ZONE*>( aOther )->GetIsRuleArea() )
+            if( zone && zone->GetIsRuleArea() )
             {
-                ZONE* ruleArea = static_cast<ZONE*>( aOther );
-
-                if( ruleArea->GetDoNotAllowVias() )
-                    return ruleArea->Outline()->Collide( aVia->GetPosition(), aVia->GetWidth() / 2 );
+                if( zone->GetDoNotAllowVias() )
+                    return zone->Outline()->Collide( aVia->GetPosition(), aVia->GetWidth() / 2 );
 
                 return false;
             }
 
-            BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
+            if( connectedItem )
+            {
+                int connectedItemNet = connectedItem->GetNetCode();
 
-            if( cItem && cItem->GetNetCode() == aVia->GetNetCode() )
-                return false;
-
-            int  clearance;
+                if( connectedItemNet == 0 || connectedItemNet == aVia->GetNetCode() )
+                    return false;
+            }
 
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
