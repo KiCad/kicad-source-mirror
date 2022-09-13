@@ -484,6 +484,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     }
 
     hb_buffer_destroy( buf );
+    hb_font_destroy( referencedFont );
 
     VECTOR2I cursorDisplacement( cursor.x * scaleFactor.x, -cursor.y * scaleFactor.y );
 
