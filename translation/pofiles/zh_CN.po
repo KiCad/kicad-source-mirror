@@ -15,13 +15,14 @@
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # Ian McInerney <ian.s.mcinerney@ieee.org>, 2022.
 # Eric <hamburger1024@firemail.cc>, 2022.
+# Eric <hamburger1024@mailbox.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-08 07:39+0000\n"
-"Last-Translator: Eric <hamburger1024@firemail.cc>\n"
+"PO-Revision-Date: 2022-09-15 14:16+0000\n"
+"Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9788,15 +9789,13 @@ msgstr "仿真器需要一张完整批注的原理图。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #: eeschema/dialogs/dialog_netlist.cpp:395
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "仅当前图框"
+msgstr "将当前图框用作根"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "仅保存当前图页"
+msgstr "仅导出当前图框的网表"
 
 #: eeschema/dialogs/dialog_netlist.cpp:354
 msgid "Save all voltages"
@@ -10276,18 +10275,16 @@ msgid "Pen width:"
 msgstr "画笔宽度："
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
-msgstr "其他选项："
+msgstr "其他选项"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "每个文件一层"
+msgstr "绘制后打开文件"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "绘制成功后用关联应用打开输出文件"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -11216,9 +11213,9 @@ msgid "Field name '%s' already in use."
 msgstr "字段名称 \"%s\" 已经被占用。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "确定要删除 \"%s\"？"
+msgstr "你确定要删除字段 \"%s\"吗？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1364
 msgid "Unsaved data"
@@ -12440,7 +12437,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
-msgstr ""
+msgstr "无法复制文件“%s”，因为它将被新的根图框文件覆盖。"
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -13701,21 +13698,18 @@ msgstr "贝塞尔曲线有 %d 个控制点。预期至少 2 个。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "未在 (X = %d; Y = %d) 处导入不受支持的椭圆。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
-msgstr ""
-"Altium 的线束连接器（%s）被导入为分级表。请检查导入的原理图，因 KiCad 并不原"
-"生支持这些 Altium 元素。"
+msgstr "Altium 的线束连接器（%s）被导入为分级表。请检查导入的原理图。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "电源端口有未知的类型，使用条。"
+msgstr "未知样式的电源端口导入为“Bar”类型。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2052
 #, c-format
@@ -13723,13 +13717,11 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
-msgstr ""
-"Altium 的线束端口（%s）被导入为文本框。请检查导入的原理图，因 KiCad 并不原生"
-"支持这些 Altium 元素。"
+msgstr "Altium 的线束端口（%s）被导入为文本框。请检查导入的原理图。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -14086,7 +14078,7 @@ msgstr "无效的符号库 ID"
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr ""
+msgstr "无法加载图框“%s”，因为它已在原理图层次结构中显示为直接原型。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1378
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -15943,14 +15935,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "显示引脚的电气类型"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Show Pin Numbers"
 msgstr "显示引脚编号"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "显示引脚的电气类型"
+msgstr "用引脚编号注释引脚"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Show Symbol Tree"
@@ -16240,12 +16230,11 @@ msgstr "从左到右翻转选定的项目"
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "交换"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "将选中的项目顺时针旋转"
+msgstr "交换所选项目的位置"
 
 #: eeschema/tools/ee_actions.cpp:431 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -16644,20 +16633,18 @@ msgid "Line Mode for Wires and Buses"
 msgstr "导线和总线的线模式"
 
 #: eeschema/tools/ee_actions.cpp:705
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "任意角度画的线"
+msgstr "任意角度绘制和拖动"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
+msgstr "将绘图和拖动限制为水平或垂直运动"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
-msgstr "绘制图形线时，强制水平、垂直或 45 度。"
+msgstr "将绘图和拖动限制为水平、垂直或 45 度角运动"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Switch to next line mode"
@@ -17424,7 +17411,7 @@ msgid "Negative Objects"
 msgstr "负片对象"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "图形层 %d"
 
@@ -20305,14 +20292,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "电阻率（以 Ohm*m 为单位）"
+msgstr "20 摄氏度电阻率（以 Ohm*m 为单位）"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "温升"
+msgstr "温度系数"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20336,9 +20321,8 @@ msgid "Conductor resistivity:"
 msgstr "导体电阻率："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "电阻率 欧姆*米"
+msgstr "指定 20 摄氏度时电阻（单位：Ohm*m）"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20359,13 +20343,12 @@ msgid "ohm-meter"
 msgstr "欧姆 - 米"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "温升："
+msgstr "温度系数："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "20℃时的热系数"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20385,13 +20368,12 @@ msgid "Application"
 msgstr "应用程序"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "环境温度："
+msgstr "电线温度："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "空载最大导体温度。 参考：20 摄氏度"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20412,17 +20394,15 @@ msgstr "长度："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "长度包括返回路径"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "阻抗："
+msgstr "直流电电阻："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "导体的特性阻抗"
+msgstr "导体的直流电电阻"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -21948,9 +21928,8 @@ msgid "Epsilon R:"
 msgstr "Epsilon R（相对介电常数）:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Loss Tangent（损耗角正切）"
+msgstr "Loss Tangent（损耗角正切）："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -37957,6 +37936,8 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"警告：某些粘贴的项目位于当前电路板中不存在的层上。\n"
+"无法粘贴这些项目。\n"
 
 #: pcbnew/tools/pcb_control.cpp:924
 msgid "Invalid clipboard contents"
