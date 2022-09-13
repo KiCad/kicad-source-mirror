@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-12 20:18+0000\n"
+"PO-Revision-Date: 2022-09-15 14:16+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11808,6 +11808,9 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
+"Дії клацання лівою кнопкою миші (і перетягування) залежать від 3 "
+"клавіш-модифікаторів:\n"
+"Option, Shift і Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:173
 #: pcbnew/dialogs/panel_edit_options_base.cpp:202
@@ -11858,19 +11861,17 @@ msgstr ""
 "Показувати попередній перегляд посадкового місця в діалозі вибору символів"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Alias name '%s' already in use."
-msgstr "Імʼя поля '%s' вже використовується."
+msgstr "Псевдонім '%s' вже використовується."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:280
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Ім'я звʼязку не може бути пустим."
+msgstr "Ім'я учасника зв'язку/псевдоніму не може бути пустим."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:23
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Визначення шин"
+msgstr "Визначення шин:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:72
 msgid "(source)"
@@ -12356,6 +12357,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Неможливо скопіювати файл '%s' , оскільки він буде перезаписаний новим "
+"кореневим файлом аркуша."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -13460,9 +13463,8 @@ msgid "Net"
 msgstr "Зв'язок"
 
 #: eeschema/sch_label.cpp:934 eeschema/sch_line.cpp:856
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Вирішено клас звʼязків"
+msgstr "Вирішений мережевий клас"
 
 #: eeschema/sch_label.cpp:1026
 #, c-format
@@ -13640,23 +13642,22 @@ msgstr "Крива Безьє є контрольні точки %d . Очіку
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Непідтримуваний еліпс не було імпортовано в (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
 "З’єднувач групи сигналів Altium (%s) було імпортовано як ієрархічний аркуш. "
-"Перегляньте імпортовану схему, оскільки KiCad не підтримує ці елементи "
-"Altium."
+"Перегляньте імпортовану схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
-"Порт живлення має невідомий стиль, замість нього використовуйте панель."
+"Порт живлення має невідомий стиль, з невідомим стилем, імпортованим як тип "
+"'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2052
 #, c-format
@@ -13664,14 +13665,13 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Символ живлення створює глобальну мітку з назвою '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
 "Порт групи сигналів Altium (%s) було імпортовано як текстове поле. "
-"Перегляньте імпортовану схему, оскільки KiCad не підтримує ці елементи "
-"Altium."
+"Перегляньте імпортовану схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -14061,6 +14061,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Не вдалося завантажити аркуш '%s', оскільки він уже є прямим предком в "
+"ієрархії схеми."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1378
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -15825,14 +15827,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Позначте виводи їхніми електричними типами"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Показати номер виводу"
+msgstr "Показати номери виводів"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Позначте виводи їхніми електричними типами"
+msgstr "Позначте виводи їхніми номерами"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Show Symbol Tree"
@@ -16124,12 +16124,11 @@ msgstr "Перевернути вибрані елемент зліва напр
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "Заміна"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Обертати обраний предмет за годинниковою стрілкою"
+msgstr "Замінити місцями вибрані елементи"
 
 #: eeschema/tools/ee_actions.cpp:431 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -16205,9 +16204,8 @@ msgid "Assign Netclass..."
 msgstr "Призначити клас звʼязків..."
 
 #: eeschema/tools/ee_actions.cpp:484 pcbnew/tools/pcb_actions.cpp:681
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Задати клас звʼязків для звʼязків виділеного провідника"
+msgstr "Призначте клас мережі, які відповідають шаблону"
 
 #: eeschema/tools/ee_actions.cpp:489
 msgid "De Morgan Conversion"
@@ -16534,20 +16532,22 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Лінійний режим для провідників і шин"
 
 #: eeschema/tools/ee_actions.cpp:705
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Креслення ліній під будь яким кутом"
+msgstr "Креслити та перетягувати під будь-яким кутом"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
+"Обмежувати креслення та перетягування горизонтальними або вертикальними "
+"рухами"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
-msgstr "Горизонтальні, вертикальні лінії і під кутом 45°"
+msgstr ""
+"Обмежувати малювання та перетягування рухами по горизонталі, вертикалі або "
+"під кутом 45°"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Switch to next line mode"
@@ -16908,9 +16908,9 @@ msgstr ""
 "вкладених аркушів як батьківський."
 
 #: eeschema/tools/sch_editor_control.cpp:2082
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "Бібліотека символів '%s' не може бути видалена."
+msgstr ""
+"Символи з пошкодженими посиланнями на символи бібліотеки не можна редагувати."
 
 #: eeschema/tools/sch_editor_control.cpp:2376
 #: pcbnew/tools/board_editor_control.cpp:590
@@ -17322,7 +17322,7 @@ msgid "Negative Objects"
 msgstr "Негативні об'єкти"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "Графічний шар %d"
 
@@ -18609,15 +18609,13 @@ msgid "Color themes (%d)"
 msgstr "Кольорові теми (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr ""
-"Ви впевнені, що хочете закрити менеджер пакетів і скасувати внесені зміни?"
+msgstr "Ви впевнені, що бажаєте оновити закріплений пакет із версії %s на %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
-#, fuzzy
 msgid "Confirm update"
-msgstr "Підтвердити зміну"
+msgstr "Підтвердити оновлення"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:95
 #: kicad/pcm/dialogs/panel_package.cpp:101
@@ -18739,15 +18737,16 @@ msgid "Applying Package Changes"
 msgstr "Застосування змін пакунка"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
-#, fuzzy
 msgid "Pin package"
-msgstr "Пакет"
+msgstr "Пакет виводів"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
 "Pinned packages don't affect available update notification and will not be "
 "updated with \"Update All\" button."
 msgstr ""
+"Закріплені пакети не впливають на сповіщення про доступні оновлення та не "
+"оновлюються за допомогою кнопки «Оновити все»."
 
 #: kicad/pcm/dialogs/panel_package.cpp:118
 msgid "Install Pending"
@@ -20232,14 +20231,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Електричний опір в Ом*м"
+msgstr "Питомий електричний опір в Ом*м при 20 °C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Підвищення температури"
+msgstr "Температурний коефіцієнт"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20263,9 +20260,8 @@ msgid "Conductor resistivity:"
 msgstr "Питомий опір провідника:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Питомий опір в омах * метрів"
+msgstr "Питомий опір в Ом*м при 20°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20286,13 +20282,12 @@ msgid "ohm-meter"
 msgstr "Ом-метр"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Підвищення температури:"
+msgstr "Температурний коефіцієнт:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Термічний коефіцієнт при 20°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20312,13 +20307,13 @@ msgid "Application"
 msgstr "Застосунки"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Навколишня температура:"
+msgstr "Температура кабелю:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
 msgstr ""
+"Максимальна температура провідника без навантаження Рекомендований: 20°C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20339,17 +20334,15 @@ msgstr "Довжина:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "Довжина включає зворотний шлях"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "Опір:"
+msgstr "Опір DC:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "Типовий повний опір провідника"
+msgstr "Опір провідника постійному струму"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -21885,9 +21878,8 @@ msgid "Epsilon R:"
 msgstr "Епсилон R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Тангенс діалектичних втрат"
+msgstr "Тангенс діалектичних втрат:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -24109,9 +24101,8 @@ msgid "Schematic Parity (%s)"
 msgstr "Невідповідність схеми (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Редагувати ігноровані порушення..."
+msgstr "Редагувати проігноровані тести"
 
 #: pcbnew/dialogs/dialog_drc_base.h:108 pcbnew/tools/pcb_actions.cpp:240
 msgid "Design Rules Checker"
@@ -24216,9 +24207,8 @@ msgid "Update selected footprint(s)"
 msgstr "Оновити вибрані посадкові місця"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "Оновити посадкові місця з позначеннями"
+msgstr "Оновити посадкові місця з позначеннями:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
@@ -26843,119 +26833,119 @@ msgstr "Використовуйте акцент на контурі"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
 msgid "Thermal Relief Overrides"
-msgstr ""
+msgstr "Перевизначення теплового рельєфу"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 msgid "Relief gap:"
-msgstr ""
+msgstr "Відступ термоз'єднання:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:744
 msgid "Spoke width:"
-msgstr ""
+msgstr "Товщина термоз'єднання:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:755
 msgid "Spoke angle:"
-msgstr ""
+msgstr "Кут термоз'єднання:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:789
 msgid "Primitives list:"
-msgstr ""
+msgstr "Список примітивів:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:793
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr ""
+msgstr "Примітка: координати відносно документа прив’язки, орієнтація 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:812
 msgid "Edit Primitive"
-msgstr ""
+msgstr "Редагувати примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:815
 msgid "Duplicate Primitive"
-msgstr ""
+msgstr "Дублювати примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Transform Primitive"
-msgstr ""
+msgstr "Перетворити примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
 msgid "Delete Primitive"
-msgstr ""
+msgstr "Видалити примітив"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:837
 msgid "Custom Shape Primitives"
-msgstr ""
+msgstr "Форма примітиву користувача"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:974
 msgid "Preview pad in sketch mode"
-msgstr ""
+msgstr "Попередній перегляд контакту в контурному режимі"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1132
 msgid "Start point"
-msgstr ""
+msgstr "Початкова точка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1158
 msgid "Control point 1"
-msgstr ""
+msgstr "Контрольна точка 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1184
 msgid "Control point 2"
-msgstr ""
+msgstr "Контрольна точка 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1210
 msgid "End point"
-msgstr ""
+msgstr "Кінцева точка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1320
 msgid "Move vector"
-msgstr ""
+msgstr "Перемістити вектор"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1369
 msgid "Scaling factor:"
-msgstr ""
+msgstr "Коефіцієнт масштабування:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1391
 msgid "Duplicate:"
-msgstr ""
+msgstr "Дублікат:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1559
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr ""
+msgstr "Координати по відношенню до пади прив’язки, повороту 0.0 нрадусів."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:362
 msgid "Pad Custom Shape Geometry Transform"
-msgstr ""
+msgstr "Перетворення контактної площадки складної форми"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:403
 msgid "Basic Shape Polygon"
-msgstr ""
+msgstr "Базові полігони форми"
 
 #: pcbnew/dialogs/dialog_plot.cpp:132
 msgid "Plot on All Layers"
-msgstr ""
+msgstr "Креслити на всіх шарах"
 
 #: pcbnew/dialogs/dialog_plot.cpp:161
 msgid "Move current selection up"
-msgstr ""
+msgstr "Перемістити поточний вибір вгору"
 
 #: pcbnew/dialogs/dialog_plot.cpp:168
 msgid "Move current selection down"
-msgstr ""
+msgstr "Перемістити поточний вибір вниз"
 
 #: pcbnew/dialogs/dialog_plot.cpp:179
 msgid "Generate Drill Files..."
-msgstr ""
+msgstr "Генерувати Drill файли..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:790
 msgid "HPGL pen size constrained."
-msgstr ""
+msgstr "Розмір HPGL пера обмежено."
 
 #: pcbnew/dialogs/dialog_plot.cpp:808
 msgid "X scale constrained."
-msgstr ""
+msgstr "X масштабування обмежено."
 
 #: pcbnew/dialogs/dialog_plot.cpp:820
 msgid "Y scale constrained."
-msgstr ""
+msgstr "Y масштабування обмежено."
 
 #: pcbnew/dialogs/dialog_plot.cpp:836
 #, c-format
@@ -26963,55 +26953,57 @@ msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
 msgstr ""
+"Корекція ширини обмежена. Значення корекції ширини має бути в діапазоні [%s; "
+"%s] для поточних правил проектування."
 
 #: pcbnew/dialogs/dialog_plot.cpp:934
 msgid "No layer selected, Nothing to plot"
-msgstr ""
+msgstr "Шар не вибрано, немає чого креслити"
 
 #: pcbnew/dialogs/dialog_plot.cpp:999
 msgid "Warning: Scale option set to a very small value"
-msgstr ""
+msgstr "Попередження: встановлено дуже маленьке значення значення масштабу"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1002
 msgid "Warning: Scale option set to a very large value"
-msgstr ""
+msgstr "Попередження: встановлено дуже велике значення параметра масштабу"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr ""
+msgstr "Формат графіка:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Gerber"
-msgstr ""
+msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:53
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:269
 msgid "Include Layers"
-msgstr ""
+msgstr "Включити шари"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:74
 msgid "Plot border and title block"
-msgstr ""
+msgstr "Креслити рамку і титульний блок"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:79
 msgid "Plot footprint values"
-msgstr ""
+msgstr "Креслити значення посадкового місця"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:83
 msgid "Plot reference designators"
-msgstr ""
+msgstr "Креслити позначення"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:87
 msgid "Force plotting of invisible values / refs"
-msgstr ""
+msgstr "Креслити приховані значення/позначення"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plot invisible footprint values and reference designators"
-msgstr ""
+msgstr "Примусово креслити приховані значення і/або позначення посадкових місць"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Sketch pads on fabrication layers"
-msgstr ""
+msgstr "Контури контактних площадок на шарах виробництва"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
