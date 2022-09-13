@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-12 20:18+0000\n"
-"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2022-09-15 14:16+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9984,15 +9984,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #: eeschema/dialogs/dialog_netlist.cpp:395
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Tylko bieżący arkusz"
+msgstr "Użyj bieżącego arkusza jako nadrzędnego"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Czy usunąć istniejącą numerację dla bieżącego arkusza?"
+msgstr "Eksportuj listę sieci tylko dla obecnego arkusza"
 
 #: eeschema/dialogs/dialog_netlist.cpp:354
 msgid "Save all voltages"
@@ -10482,18 +10480,18 @@ msgid "Pen width:"
 msgstr "Grubość pisaka:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
-msgstr "Pozostałe opcje:"
+msgstr "Pozostałe opcje"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Jeden plik na warstwę"
+msgstr "Otwórz plik po wykonaniu rysunku"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
 msgstr ""
+"Otwiera wygenerowany plik za pomocą przypisanej mu aplikacji po poprawnym "
+"procesie rysowania"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -11431,9 +11429,9 @@ msgid "Field name '%s' already in use."
 msgstr "Pole o nazwie '%s' jest już używane."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Czy chcesz usunąć '%s'?"
+msgstr "Czy jesteś pewien, by usunąć pole '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1364
 msgid "Unsaved data"
@@ -12698,6 +12696,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Nie można skopiować pliku '%s' ponieważ zostanie nadpisany przez nowy plik "
+"arkusza głównego."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -14004,22 +14004,20 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Niewspierana elipsa nie została zaimportowana na (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
 "Łącze wiązki przewodów Altium (%s) zostało zaimportowane jako arkusz "
-"hierarchiczny. Proszę przejrzeć zaimportowany schemat, ponieważ KiCad nie "
-"obsługuje natywnie tych elementów programu Altium."
+"hierarchiczny. Proszę przejrzeć zaimportowany schemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Port zasilania ma nieznany styl, użyj stylu grubej linii."
+msgstr "Port zasilania z nieznanym stylem zaimportowano jako styl grubej linii."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2052
 #, c-format
@@ -14027,14 +14025,13 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Symbol zasilania tworzy globalną etykietę z nazwą '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
 "Port wiązki Altium (%s) został zaimportowany jako pole tekstowe. Proszę "
-"przejrzeć zaimportowany schemat, ponieważ KiCad nie obsługuje natywnie tych "
-"elementów programu Altium."
+"przejrzeć zaimportowany schemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -14428,6 +14425,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Nie można załadować arkusza '%s' ponieważ obecnie występuje jako bezpośredni "
+"przodek w hierarchii."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1378
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -16342,14 +16341,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Pokaż typ elektryczny pinu"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Show Pin Numbers"
 msgstr "Pokaż numery pinów"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Pokaż typ elektryczny pinu"
+msgstr "Opisuje piny na podstawie ich numerów"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Show Symbol Tree"
@@ -16641,12 +16638,11 @@ msgstr "Przenosi wybrane elementy z lewa na prawo"
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "Zamień"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Obraca wybrane elementy w prawo"
+msgstr "Zamienia pozycje wybranych elementów"
 
 #: eeschema/tools/ee_actions.cpp:431 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -17056,22 +17052,20 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Tryb rysowania linii dla połączeń i magistral"
 
 #: eeschema/tools/ee_actions.cpp:705
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Linie można rysować pod dowolnym kątem"
+msgstr "Rysuj i przeciągaj pod dowolnym kątem"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
+msgstr "Ogranicz rysowanie i przeciąganie do ruchów poziomych lub pionowych"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Podczas rysowania linii graficznych wymuszaj pozycję poziomą, pionową lub "
-"pod kątem 45 stopni."
+"Ogranicza rysowanie i przeciąganie do ruchów w poziomie, pionie lub pod "
+"kątem 45 stopni"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Switch to next line mode"
@@ -17849,7 +17843,7 @@ msgid "Negative Objects"
 msgstr "Obiekty negatywowe"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "Warstwa grafiki %d"
 
@@ -20767,14 +20761,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Elektryczna rezystywność w Ω*m"
+msgstr "Elektryczna rezystywność w Ω*m przy 20ºC"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Przyrost temperatury"
+msgstr "Współczynnik temperaturowy"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20798,9 +20790,8 @@ msgid "Conductor resistivity:"
 msgstr "Rezystywność przewodnika:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Rezystancja charakterystyczna w Ω * metr"
+msgstr "Rezystancja charakterystyczna w Ω*m przy 20ºC"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20821,13 +20812,12 @@ msgid "ohm-meter"
 msgstr "Ω/m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Przyrost temperatury:"
+msgstr "Współczynnik temperaturowy:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Współczynnik cieplny przy 20ºC"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20847,13 +20837,12 @@ msgid "Application"
 msgstr "Aplikacja"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Temperatura otoczenia:"
+msgstr "Temperatura przewodu:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "Maks. temp. przewodu bez obciążenia. W odniesieniu do: 20ºC"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20874,17 +20863,15 @@ msgstr "Długość:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "Długość, uwzględniając ścieżkę powrotną"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "Rezystancja:"
+msgstr "Rezystancja DC:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "Impedancja charakterystyczna połączenia"
+msgstr "Rezystancja DC przewodu"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -22428,9 +22415,8 @@ msgid "Epsilon R:"
 msgstr "Epsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Tangens strat"
+msgstr "Tangens strat:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -38868,6 +38854,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Uwaga: Niektóre z wklejonych elementów znajdowały się na warstwach, których "
+"nie ma na bieżącej płytce.\n"
+"Nie udało się wkleić tych elementów.\n"
 
 #: pcbnew/tools/pcb_control.cpp:924
 msgid "Invalid clipboard contents"
