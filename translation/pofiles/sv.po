@@ -9500,9 +9500,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:321 pcbnew/dialogs/dialog_plot.cpp:398
 #: pcbnew/exporters/gen_footprints_placefile.cpp:217
 #: pcbnew/exporters/gen_footprints_placefile.cpp:227
-#, fuzzy
 msgid "Plot Output Directory"
-msgstr "Plot-filernas utmatningskatalog"
+msgstr "Utmatningskatalog för plottfiler"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:278
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
