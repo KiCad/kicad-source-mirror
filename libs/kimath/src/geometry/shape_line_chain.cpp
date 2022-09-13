@@ -1791,6 +1791,12 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
                                                bool aAllowInternalShapePoints ) const
 {
+    if( PointCount() == 0 )
+    {
+        // The only right answer here is "don't crash".
+        return { 0, 0 };
+    }
+
     int min_d = INT_MAX;
     int nearest = 0;
 
@@ -1842,6 +1848,12 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
 
 const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const SEG& aSeg, int& dist ) const
 {
+    if( PointCount() == 0 )
+    {
+        // The only right answer here is "don't crash".
+        return { 0, 0 };
+    }
+
     int nearest = 0;
 
     dist = INT_MAX;
