@@ -1168,6 +1168,9 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     std::map<wxString, wxString> oldProperties = brd->GetProperties();
     std::map<wxString, wxString> newProperties;
 
+    PAGE_INFO   oldPageInfo = brd->GetPageSettings();
+    TITLE_BLOCK oldTitleBlock = brd->GetTitleBlock();
+
     // Keep also the count of copper layers, to adjust if necessary
     int initialCopperLayerCount = brd->GetCopperLayerCount();
     LSET initialEnabledLayers = brd->GetEnabledLayers();
@@ -1218,6 +1221,9 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
         newProperties[ prop.first ] = prop.second;
 
     brd->SetProperties( newProperties );
+
+    brd->SetPageSettings( oldPageInfo );
+    brd->SetTitleBlock( oldTitleBlock );
 
     // rebuild nets and ratsnest before any use of nets
     brd->BuildListOfNets();
