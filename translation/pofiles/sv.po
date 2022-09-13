@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-11 13:16+0000\n"
+"PO-Revision-Date: 2022-09-15 14:16+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9949,15 +9949,13 @@ msgstr "Simulatorn kräver ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:348
 #: eeschema/dialogs/dialog_netlist.cpp:395
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Endast nuvarande blad"
+msgstr "Använd aktuellt blad som rot"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Exportera till andra ark"
+msgstr "Exportera nätlista endast för aktuellt ark"
 
 #: eeschema/dialogs/dialog_netlist.cpp:354
 msgid "Save all voltages"
@@ -10206,9 +10204,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:319 pcbnew/dialogs/dialog_plot.cpp:519
 #: pcbnew/exporters/gen_footprints_placefile.cpp:229
 #: pcbnew/exporters/gen_footprints_placefile.cpp:239
-#, fuzzy
 msgid "Plot Output Directory"
-msgstr "Plot-filernas utmatningskatalog"
+msgstr "Utmatningskatalog för plottfiler"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:276
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -10445,18 +10442,16 @@ msgid "Pen width:"
 msgstr "Pennans bredd:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
-msgstr "Andra alternativ:"
+msgstr "Övriga alternativ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "En fil per lager"
+msgstr "Öppna fil efter plottning"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Öppna skapad fil med associerad applikation efter lyckad plottning"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -11394,9 +11389,9 @@ msgid "Field name '%s' already in use."
 msgstr "Fältnamnet '%s' används redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Är du säker på att du vill ta bort ”%s”?"
+msgstr "Är du säker på att du vill ta bort fältet '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1364
 msgid "Unsaved data"
@@ -12651,6 +12646,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Kan inte kopiera fil '%s' eftersom den kommer att skrivas över av det nya "
+"rotarkets fil."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -13943,7 +13940,7 @@ msgstr "Bezier har %d kontrollpunkter. Åtminstone 2 förväntas."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Ellips som ej stöds importerades inte vid (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
 #, fuzzy, c-format
@@ -14360,6 +14357,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Kunde inte läsa in ark '%s' eftersom det redan förekommer som direkt "
+"förälder i schemahierarkin."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1378
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -16265,9 +16264,8 @@ msgid "Show Pin Numbers"
 msgstr "Visa stiftnummer"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Kommentera stift med deras elektriska typer"
+msgstr "Märk stift med deras nummer"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Show Symbol Tree"
@@ -16560,12 +16558,11 @@ msgstr "Vänd markerade objekt från vänster till höger"
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "Byt plats"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Rotera valda objekt medurs"
+msgstr "Byter plats på de valda objektens positioner"
 
 #: eeschema/tools/ee_actions.cpp:431 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -16970,22 +16967,20 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Linjeläge för ledare och bussar"
 
 #: eeschema/tools/ee_actions.cpp:705
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Linjer ritade i valfri vinkel"
+msgstr "Rita och dra i valfri vinkel"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr ""
+msgstr "Begränsa ritning och dragning till horisontella och vertikala rörelser"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Vid ritning av grafiska linjer tvingas horisontellt, vertikalt eller 45 "
-"grader."
+"Begränsa ritning och dragning till rörelse horisontellt, vertikalt eller i "
+"45 graders vinkel"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Switch to next line mode"
@@ -17534,23 +17529,23 @@ msgstr "15A log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C omvänd Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C omvänd Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C omvänd Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Linjär"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "4B S-Curve"
@@ -20681,14 +20676,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Elektrisk resistivitet i Ohm * m"
+msgstr "Elektrisk resistivitet i Ohm * m vid 20 grader C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Temperaturstegring"
+msgstr "Temperaturkoefficient"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20712,11 +20705,9 @@ msgid "Conductor resistivity:"
 msgstr "Ledarresistivitet:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
 msgstr ""
-"Pläteringsmaterialets elektriska resistivitet (specifika motstånd) i ohm * "
-"meter"
+"Elektrisk resistivitet (specifikt motstånd) i ohm * meter vid 20 grader C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20737,13 +20728,12 @@ msgid "ohm-meter"
 msgstr "ohmmeter"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Temperaturstegring:"
+msgstr "Temperaturkoefficient:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Termisk koefficient vid 20 grader C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20763,13 +20753,12 @@ msgid "Application"
 msgstr "Applikation"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Omgivningstemperatur:"
+msgstr "Kabeltemperatur:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "Högsta temperatur för obelastad ledare. Referens: 20 grader C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20790,17 +20779,15 @@ msgstr "Längd:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "Längd inkluderar återledare"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "Motstånd:"
+msgstr "DC-resistans:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "Ledarens karakteristiska impedans"
+msgstr "Ledarens likströmsresistans"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -22351,9 +22338,8 @@ msgid "Epsilon R:"
 msgstr "Epsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Förlust Tan"
+msgstr "Förlusttangent:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -36551,9 +36537,8 @@ msgstr "Hål till hål"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:961
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "Tar reda på hålmarginal för:"
+msgstr "Tar reda på frigång hål till hål för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Edge Clearance"
@@ -38632,6 +38617,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Varning: vissa inklistrade objekt var på lager som inte existerar i det "
+"aktuella mönsterkortet.\n"
+"Dessa objekt kunde inte klistras in.\n"
 
 #: pcbnew/tools/pcb_control.cpp:924
 msgid "Invalid clipboard contents"
