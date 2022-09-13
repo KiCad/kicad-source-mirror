@@ -79,6 +79,9 @@ public:
     /// entire connection.
     static TOOL_ACTION selectConnection;
 
+    /// Removes all tracks from the selected items to the first pad
+    static TOOL_ACTION unrouteSelected;
+
     /// Select all connections belonging to a single net.
     static TOOL_ACTION selectNet;
 

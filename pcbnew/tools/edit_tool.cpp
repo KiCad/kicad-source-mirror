@@ -168,6 +168,12 @@ bool EDIT_TOOL::Init()
                                                    PCB_PAD_T,
                                                    PCB_ZONE_T };
 
+    static std::vector<KICAD_T> unroutableTypes = { PCB_TRACE_T,
+                                                    PCB_ARC_T,
+                                                    PCB_VIA_T,
+                                                    PCB_PAD_T,
+                                                    PCB_FOOTPRINT_T };
+
     static std::vector<KICAD_T> trackTypes = { PCB_TRACE_T,
                                                PCB_ARC_T,
                                                PCB_VIA_T };
@@ -178,6 +184,8 @@ bool EDIT_TOOL::Init()
 
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
+                                                      && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes ) );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )

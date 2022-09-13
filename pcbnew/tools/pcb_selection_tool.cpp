@@ -1087,6 +1087,42 @@ void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 }
 
 
+int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
+{
+    std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
+
+    // Get all footprints and pads
+    std::vector<BOARD_CONNECTED_ITEM*> toUnroute;
+
+    for( EDA_ITEM* item : selectedItems )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+                toUnroute.push_back( pad );
+        }
+        else if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
+        {
+            toUnroute.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        }
+    }
+
+    // Clear selection so we don't delete our footprints/pads
+    ClearSelection( true );
+
+    // Get the tracks on our list of pads, then delete them
+    selectAllConnectedTracks( toUnroute, STOP_CONDITION::STOP_AT_PAD );
+    m_toolMgr->RunAction( ACTIONS::doDelete, true );
+
+    // Reselect our footprint/pads as they were in our original selection
+    for( EDA_ITEM* item : selectedItems )
+        if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_PAD_T )
+            select( item );
+
+    return 0;
+}
+
+
 int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
     unsigned initialCount = 0;
@@ -2949,6 +2985,7 @@ void PCB_SELECTION_TOOL::setTransitions()
 
     Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::unrouteSelected,     PCB_ACTIONS::unrouteSelected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelection,       PCB_ACTIONS::syncSelection.MakeEvent() );

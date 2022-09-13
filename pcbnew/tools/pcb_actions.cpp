@@ -1286,6 +1286,12 @@ TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectCo
         _( "Selects a connection or expands an existing selection to junctions, pads, or entire connections" ),
         BITMAPS::add_tracks );
 
+TOOL_ACTION PCB_ACTIONS::unrouteSelected( "pcbnew.InteractiveSelection.unrouteSelected",
+        AS_GLOBAL, 0, "",
+        _( "Unroute Selected" ),
+        _( "Unroutes selected items to the nearest pad." ),
+        BITMAPS::general_deletions );
+
 TOOL_ACTION PCB_ACTIONS::syncSelection( "pcbnew.InteractiveSelection.SyncSelection",
         AS_GLOBAL );
 

@@ -289,6 +289,11 @@ private:
     int expandConnection( const TOOL_EVENT& aEvent );
 
     /**
+     * Unroute the selected board connected items.
+     */
+    int unrouteSelected( const TOOL_EVENT& aEvent );
+
+    /**
      * Select all copper connections belonging to the same net(s) as the items in the selection.
      */
     int selectNet( const TOOL_EVENT& aEvent );
