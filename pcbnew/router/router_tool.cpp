@@ -1293,50 +1293,18 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
         {
-            PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( m_router->Placer() );
+            bool needsAppend = m_router->Placer()->HasPlacedAnything();
 
-            if( placer == nullptr )
-                break;
-
-            // Get our current line and position and nearest ratsnest to them if it exists
-            PNS::LINE   current = placer->Trace();
-            VECTOR2I    currentEnd = placer->CurrentEnd();
-            VECTOR2I    otherEnd;
-            LAYER_RANGE otherEndLayers;
-
-            if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
-                break;
-
-            if( evt->IsAction( &PCB_ACTIONS::routerContinueFromEnd ) )
+            if( m_router->ContinueFromEnd() )
             {
-                // Commit routing will put the router on no layer, so save it
-                int currentLayer = m_router->GetCurrentLayer();
-
-                // Commit whatever we've fixed and restart routing from the other end
-                if( m_router->Placer()->HasPlacedAnything() )
-                {
-                    m_router->CommitRouting();
-                    m_iface->SetCommitFlags( APPEND_UNDO );
-                }
-                else
-                    m_router->StopRouting();
-
-                if( otherEndLayers.Overlaps( currentLayer ) )
-                    m_router->StartRouting( otherEnd, &current, currentLayer );
-                else
-                {
-                    m_router->StartRouting( otherEnd, &current, otherEndLayers.Start() );
-                    syncRouterAndFrameLayer();
-                }
-
-                m_startSnapPoint = otherEnd;
-
-                // Attempt to route to our current position
-                m_router->Move( currentEnd, &current );
-                VECTOR2I moveResultPoint = m_router->Placer()->CurrentEnd();
+                syncRouterAndFrameLayer();
+                m_startSnapPoint = m_router->Placer()->CurrentStart();
 
                 // Warp the mouse to wherever we actually ended up routing to
-                controls()->WarpMouseCursor( currentEnd, true, true );
+                controls()->WarpMouseCursor( m_router->Placer()->CurrentEnd(), true, true );
+
+                // We want the next router commit to be one undo at the UI layer
+                m_iface->SetCommitFlags( needsAppend ? APPEND_UNDO : 0 );
             }
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )

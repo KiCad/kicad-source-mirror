@@ -542,6 +542,38 @@ bool ROUTER::Finish()
 }
 
 
+bool ROUTER::ContinueFromEnd()
+{
+    LINE_PLACER* placer = dynamic_cast<LINE_PLACER*>( Placer() );
+
+    if( placer == nullptr )
+        return false;
+
+    LINE        current = placer->Trace();
+    int         currentLayer = GetCurrentLayer();
+    VECTOR2I    currentEnd = placer->CurrentEnd();
+    VECTOR2I    otherEnd;
+    LAYER_RANGE otherEndLayers;
+
+    // Get the anchor nearest to the end of the trace the user is routing
+    if( !getNearestRatnestAnchor( otherEnd, otherEndLayers ) )
+        return false;
+
+    CommitRouting();
+
+    // Commit whatever we've fixed and restart routing from the other end
+    int nextLayer = otherEndLayers.Overlaps( currentLayer ) ? currentLayer : otherEndLayers.Start();
+
+    if( !StartRouting( otherEnd, &current, nextLayer ) )
+        return false;
+
+    // Attempt to route to our current position
+    Move( currentEnd, &current );
+
+    return true;
+}
+
+
 bool ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
 {
     m_iface->EraseView();
