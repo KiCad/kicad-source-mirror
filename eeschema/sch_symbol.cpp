@@ -1026,6 +1026,8 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "SYMBOL_NAME" ) );
     aVars->push_back( wxT( "SYMBOL_DESCRIPTION" ) );
     aVars->push_back( wxT( "SYMBOL_KEYWORDS" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_BOM" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
 }
 
 
@@ -1126,6 +1128,16 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
         *token = GetKeyWords();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
+    {
+        * token = this->GetIncludeInBom() ? wxT( "" ) : _( "Excluded from BOM" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
+    {
+        * token = this->GetIncludeOnBoard() ? wxT( "" ) : _( "Excluded from board" );
         return true;
     }
 
