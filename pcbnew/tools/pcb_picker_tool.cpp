@@ -27,8 +27,6 @@
 #include "pcb_actions.h"
 #include "pcb_grid_helper.h"
 #include <view/view_controls.h>
-#include <tool/tool_manager.h>
-#include "pcb_selection_tool.h"
 
 
 PCB_PICKER_TOOL::PCB_PICKER_TOOL() :
@@ -57,6 +55,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             [&]() 
             {
                 frame->GetCanvas()->SetCurrentCursor( m_cursor );
+                controls->ShowCursor( true );
             };
 
     // Set initial cursor
@@ -172,6 +171,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
+    controls->ShowCursor( false );
 
     if( !tool.empty() )
         frame->PopTool( tool );
