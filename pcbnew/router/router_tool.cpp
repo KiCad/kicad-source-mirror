@@ -467,11 +467,16 @@ bool ROUTER_TOOL::Init()
             };
 
     auto hasOtherEnd = [&]( const SELECTION& )
-            {
-                VECTOR2I    unusedEnd;
-                LAYER_RANGE unusedEndLayers;
-                return getNearestRatnestAnchor( unusedEnd, unusedEndLayers );
-            };
+    {
+        // Need to have something unconnected to finish to
+        return getEditFrame<PCB_EDIT_FRAME>()
+                       ->GetBoard()
+                       ->GetConnectivity()
+                       ->GetRatsnestForNet( m_router->GetCurrentNets()[0] )
+                       ->GetEdges()
+                       .size()
+               > 0;
+    };
 
     menu.AddItem( ACTIONS::cancelInteractive,         SELECTION_CONDITIONS::ShowAlways, 1 );
     menu.AddSeparator( 1 );
@@ -648,78 +653,6 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
-}
-
-
-bool ROUTER_TOOL::getNearestRatnestAnchor( VECTOR2I& aOtherEnd, LAYER_RANGE& aOtherEndLayers )
-{
-    // Can't finish something with no connections
-    if( m_router->GetCurrentNets().empty() )
-        return false;
-
-    PNS::LINE_PLACER* placer = dynamic_cast<PNS::LINE_PLACER*>( m_router->Placer() );
-
-    if( placer == nullptr )
-        return false;
-
-    PNS::LINE     current = placer->Trace();
-    PNS::NODE*    lastNode = placer->CurrentNode( true );
-    PNS::TOPOLOGY topo( lastNode );
-
-    VECTOR2I currentEndPos   = placer->CurrentEnd();
-    VECTOR2I currentStartPos = m_startSnapPoint;
-    int      currentLayer    = m_router->GetCurrentLayer();
-
-    // If we have an active line being routed, attempt finish from line front using
-    // dynamic ratnest topology
-    if( current.PointCount() > 0 )
-        return topo.NearestUnconnectedAnchorPoint( &current, aOtherEnd, aOtherEndLayers );
-
-    // No line, find nearest static ratsnest item for net
-    auto    connectivity = getEditFrame<PCB_EDIT_FRAME>()->GetBoard()->GetConnectivity();
-    RN_NET* net = connectivity->GetRatsnestForNet( m_router->GetCurrentNets()[0] );
-    auto    edges = net->GetEdges();
-
-    // Need to have something unconnected to finish to
-    if( edges.size() == 0 )
-        return false;
-
-    // Default to the first item if we don't have a position
-    std::shared_ptr<CN_ANCHOR> nearest = edges[0].GetSourceNode();
-
-    double currentDistance = DBL_MAX;
-
-    // Find nearest unconnected end
-    for( const CN_EDGE& edge : edges )
-    {
-        VECTOR2I    sourcePos = edge.GetSourcePos();
-        VECTOR2I    targetPos = edge.GetTargetPos();
-        double      sourceDistance = ( currentEndPos - sourcePos ).EuclideanNorm();
-        double      targetDistance = ( currentEndPos - targetPos ).EuclideanNorm();
-        LAYER_RANGE sourceLayers = edge.GetSourceNode()->Item()->Layers();
-        LAYER_RANGE targetLayers = edge.GetTargetNode()->Item()->Layers();
-
-        // Basically look for the closest ratnest item that isn't this item
-        // (same point, same layer)
-        if( ( sourcePos != m_startSnapPoint || !sourceLayers.Overlaps( currentLayer ) )
-            && ( sourceDistance < currentDistance ) )
-        {
-            nearest = edge.GetSourceNode();
-            currentDistance = sourceDistance;
-        }
-
-        if( ( targetPos != m_startSnapPoint || !targetLayers.Overlaps( currentLayer ) )
-            && ( targetDistance < currentDistance ) )
-        {
-            nearest = edge.GetTargetNode();
-            currentDistance = targetDistance;
-        }
-    }
-
-    aOtherEnd = nearest->Pos();
-    aOtherEndLayers = nearest->Item()->Layers();
-
-    return true;
 }
 
 
