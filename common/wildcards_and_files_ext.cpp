@@ -32,6 +32,7 @@
 #include <wx/filedlg.h>
 #include <wx/regex.h>
 #include <wx/translation.h>
+#include <regex>
 
 bool compareFileExtensions( const std::string& aExtension,
         const std::vector<std::string>& aReference, bool aCaseSensitive )
@@ -131,6 +132,8 @@ const std::string ProjectFileExtension( "kicad_pro" );
 const std::string LegacyProjectFileExtension( "pro" );
 const std::string ProjectLocalSettingsFileExtension( "kicad_prl" );
 const std::string LegacySchematicFileExtension( "sch" );
+const std::string EagleSchematicFileExtension( "sch" );
+const std::string CadstarSchematicFileExtension( "csa" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
@@ -145,6 +148,8 @@ const std::string DatabaseLibraryFileExtension( "kicad_dbl" );
 const std::string ArchiveFileExtension( "zip" );
 
 const std::string LegacyPcbFileExtension( "brd" );
+const std::string EaglePcbFileExtension( "brd" );
+const std::string CadstarPcbFileExtension( "cpa" );
 const std::string KiCadPcbFileExtension( "kicad_pcb" );
 const std::string DrawingSheetFileExtension( "kicad_wks" );
 const std::string DesignRulesFileExtension( "kicad_dru" );
@@ -173,6 +178,31 @@ const std::string JpegFileExtension( "jpg" );
 const std::string TextFileExtension( "txt" );
 const std::string MarkdownFileExtension( "md" );
 const std::string CsvFileExtension( "csv" );
+
+/**
+ * Gerber files extensions Kicad is to open
+ */
+const std::vector<std::string> GerberFileExtensions =
+{
+    GerberFileExtension, GerberJobFileExtension,
+    "gbl", "gbo", "gbp", "gbs", "gko",
+    "gm1", "gm2", "gm3", "gm4", "gm5", "gm6", "gm7", "gm8", "gm9",
+    "g1", "g3",
+    "gpt", "gpb", "gtl", "gto", "gtp", "gts", "pho", "pos"
+};
+
+const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
+
+
+bool IsExtensionAccepted( const wxString& aExt, const std::vector<std::string> acceptedExts )
+{
+    for( auto extPtr = acceptedExts.begin(); extPtr != acceptedExts.end(); extPtr++ )
+    {
+        if( aExt.ToStdString() == *extPtr )
+            return true;
+    }
+    return false;
+}
 
 
 bool IsProtelExtension( const wxString& ext )

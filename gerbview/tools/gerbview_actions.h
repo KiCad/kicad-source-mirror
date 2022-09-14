@@ -93,6 +93,10 @@ public:
     static TOOL_ACTION highlightComponent;
     static TOOL_ACTION highlightAttribute;
     static TOOL_ACTION highlightDCode;
+
+    // Drag and drop
+    static TOOL_ACTION loadZipFile;
+    static TOOL_ACTION loadGerbFiles;
 };
 
 #endif  // __GERBVIEW_ACTIONS_H

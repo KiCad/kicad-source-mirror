@@ -1123,6 +1123,36 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 }
 
 
+void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
+{
+    wxString* files = aEvent.GetFiles();
+    for( int nb = 0; nb < aEvent.GetNumberOfFiles(); nb++ )
+    {
+        const wxFileName fn = wxFileName( files[nb] );
+        for( const auto& [ext, tool] : m_acceptedExts )
+        {
+            if( IsExtensionAccepted( fn.GetExt(), { ext.ToStdString() } ) )
+            {
+                m_AcceptedFiles.emplace( m_AcceptedFiles.end(), fn );
+                break;
+            }
+        }
+    }
+    DoWithAcceptedFiles();
+    m_AcceptedFiles.clear();
+}
+
+
+void EDA_BASE_FRAME::DoWithAcceptedFiles()
+{
+    for( auto file : m_AcceptedFiles )
+    {
+        wxString fn = file.GetFullPath();
+        m_toolManager->RunAction( *m_acceptedExts.at( file.GetExt() ), true, &fn );
+    }
+}
+
+
 bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
 {
     wxString msg;

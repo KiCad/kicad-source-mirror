@@ -291,6 +291,8 @@ private:
     wxString    m_mruImagePath;         // Most recently used path for placing a new image
                                         // only on page 1, not on page 1
     VECTOR2I m_grid_origin;
+
+    void DoWithAcceptedFiles() override;
 };
 
 #endif /* _PL_EDITOR_FRAME_H */

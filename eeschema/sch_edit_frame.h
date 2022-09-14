@@ -465,6 +465,16 @@ public:
     bool AppendSchematic();
 
     /**
+     * Add a sheet file into the current sheet and updates display
+     *
+     * @note Used in AppendSchematic() and SCH_EDIT_TOOL::ddAppendFile() (so it is public)
+     *
+     * @param aFullFileName Path and name of sheet
+     * @return True if the sheet was properly added
+     */
+    bool AddSheetAndUpdateDisplay( const wxString aFullFileName );
+
+    /**
      * Check if any of the screens has unsaved changes and asks the user whether to save or
      * drop them.
      *

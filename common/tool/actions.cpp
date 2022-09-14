@@ -671,6 +671,9 @@ TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
         _( "Report a problem with KiCad" ),
         BITMAPS::bug );
 
+TOOL_ACTION ACTIONS::ddAddLibrary( "common.Control.ddaddLibrary",
+        AS_GLOBAL );
+
 // System-wide selection Events
 
 const TOOL_EVENT EVENTS::PointSelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.pointSelected" );
@@ -684,4 +687,3 @@ const TOOL_EVENT EVENTS::InhibitSelectionEditing( TC_MESSAGE, TA_ACTION, "common
 const TOOL_EVENT EVENTS::UninhibitSelectionEditing( TC_MESSAGE, TA_ACTION, "common.Interactive.uninhibit" );
 
 const TOOL_EVENT EVENTS::DisambiguatePoint( TC_MESSAGE, TA_ACTION, "common.Interactive.disambiguate" );
-

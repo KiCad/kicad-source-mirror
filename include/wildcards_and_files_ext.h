@@ -120,6 +120,8 @@ extern const std::string ProjectFileExtension;
 extern const std::string LegacyProjectFileExtension;
 extern const std::string ProjectLocalSettingsFileExtension;
 extern const std::string LegacySchematicFileExtension;
+extern const std::string EagleSchematicFileExtension;
+extern const std::string CadstarSchematicFileExtension;
 extern const std::string KiCadSchematicFileExtension;
 extern const std::string OrCadPcb2NetlistFileExtension;
 extern const std::string NetlistFileExtension;
@@ -133,6 +135,8 @@ extern const std::string DatabaseLibraryFileExtension;
 extern const std::string ArchiveFileExtension;
 
 extern const std::string LegacyPcbFileExtension;
+extern const std::string EaglePcbFileExtension;
+extern const std::string CadstarPcbFileExtension;
 extern const std::string KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
 extern const std::string KiCadSymbolLibFileExtension;
@@ -164,6 +168,17 @@ extern const std::string TextFileExtension;
 extern const std::string MarkdownFileExtension;
 extern const std::string CsvFileExtension;
 
+extern const std::vector<std::string> GerberFileExtensions;
+extern const wxString GerberFileExtensionWildCard;
+
+/**
+ * Checks if the file extension is in accepted extensions
+ * @param aExt is the extension to test
+ * @param acceptedExts Array with extensions to test against
+ *
+ * @return true if the extension is in array
+ */
+bool IsExtensionAccepted( const wxString& aExt, const std::vector<std::string> acceptedExts );
 
 bool IsProtelExtension( const wxString& ext );
 

@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <kiplatform/app.h>
 #include <painter.h>
+#include <wildcards_and_files_ext.h>
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>
 #include <tool/editor_conditions.h>
@@ -72,6 +73,9 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
 
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner )
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::OnSelectPage )
+
+    // Drop files event
+    EVT_DROP_FILES( PL_EDITOR_FRAME::OnDropFiles )
 END_EVENT_TABLE()
 
 
@@ -113,6 +117,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetCanvas( drawPanel );
 
     LoadSettings( config() );
+
+    m_acceptedExts.emplace( DrawingSheetFileExtension, nullptr );
+    DragAcceptFiles( true );
 
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( IU_PER_MILS );
     SetScreen( new BASE_SCREEN( pageSizeIU ) );

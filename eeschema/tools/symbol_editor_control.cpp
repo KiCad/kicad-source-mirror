@@ -139,6 +139,16 @@ int SYMBOL_EDITOR_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::DdAddLibrary( const TOOL_EVENT& aEvent )
+{
+    wxString libFile = *aEvent.Parameter<wxString*>();
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->DdAddLibrary( libFile );
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
@@ -678,6 +688,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::DdAddLibrary,          ACTIONS::ddAddLibrary.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveLibraryAs.MakeEvent() );

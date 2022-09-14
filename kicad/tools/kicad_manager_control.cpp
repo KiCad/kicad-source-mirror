@@ -26,6 +26,7 @@
 #include <kicad_manager_frame.h>
 #include <kiplatform/policy.h>
 #include <confirm.h>
+#include <eda_tools.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
@@ -40,6 +41,10 @@
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include "dialog_pcm.h"
+#include <macros.h>
+#include <sch_io_mgr.h>
+#include <io_mgr.h>
+#include <import_proj.h>
 
 #if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_new_project.h"
@@ -336,6 +341,95 @@ int KICAD_MANAGER_CONTROL::CloseProject( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
+int KICAD_MANAGER_CONTROL::ImportNonKicadProj( const TOOL_EVENT& aEvent )
+{
+    if( !aEvent.Parameter<wxString*>() )
+        return -1;
+
+    wxFileName droppedFileName( *aEvent.Parameter<wxString*>() );
+
+    wxString schFileExtension, pcbFileExtension;
+    int      schFileType, pcbFileType;
+
+    // Define extensions to use according to dropped file.
+    // Eagle project.
+    if( droppedFileName.GetExt() == EagleSchematicFileExtension
+        || droppedFileName.GetExt() == EaglePcbFileExtension )
+    {
+        // Check if droppedFile is an eagle file.
+        // If not, return and do not import files.
+        if( !IsFileFromEDATool( droppedFileName, EAGLE ) )
+            return -1;
+
+        schFileExtension = EagleSchematicFileExtension;
+        pcbFileExtension = EaglePcbFileExtension;
+        schFileType = SCH_IO_MGR::SCH_EAGLE;
+        pcbFileType = IO_MGR::EAGLE;
+    }
+    else
+    {
+        // Cadstar project.
+        if( droppedFileName.GetExt() == CadstarSchematicFileExtension
+            || droppedFileName.GetExt() == CadstarPcbFileExtension )
+        {
+            schFileExtension = CadstarSchematicFileExtension;
+            pcbFileExtension = CadstarPcbFileExtension;
+            schFileType = SCH_IO_MGR::SCH_CADSTAR_ARCHIVE;
+            pcbFileType = IO_MGR::CADSTAR_PCB_ARCHIVE;
+        }
+        else
+            return -1;
+    }
+
+    IMPORT_PROJ_HELPER importProj( m_frame, droppedFileName.GetFullPath(), schFileExtension,
+                                   pcbFileExtension );
+
+    // Check if the project directory is empty
+    wxDir directory( importProj.GetProjPath() );
+
+    if( directory.HasFiles() )
+    {
+        // Append a new directory with the same name of the project file
+        // Keep iterating until we find an empty directory
+        importProj.CreateEmptyDirForProject();
+
+        if( !wxMkdir( importProj.GetProjPath() ) )
+            return -1;
+    }
+
+    importProj.SetProjAbsolutePath();
+
+    if( !importProj.CopyImportedFiles( false ) )
+    {
+        wxRmdir( importProj.GetProjPath() ); // Remove the previous created directory, before leaving.
+        return -1;
+    }
+
+    m_frame->CloseProject( true );
+
+    m_frame->CreateNewProject( importProj.GetProjFullPath(), false /* Don't create stub files */ );
+    m_frame->LoadProject( importProj.GetProj() );
+
+    importProj.AssociateFilesWithProj( schFileType, pcbFileType );
+    m_frame->ReCreateTreePrj();
+    m_frame->LoadProject( importProj.GetProj() );
+    return 0;
+}
+
+int KICAD_MANAGER_CONTROL::LoadProject( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.Parameter<wxString*>() )
+        m_frame->LoadProject( wxFileName( *aEvent.Parameter<wxString*>() ) );
+    return 0;
+}
+
+int KICAD_MANAGER_CONTROL::ViewDroppedViewers( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.Parameter<wxString*>() )
+        wxExecute( *aEvent.Parameter<wxString*>(), wxEXEC_ASYNC );
+    return 0;
+}
 
 class SAVE_AS_TRAVERSER : public wxDirTraverser
 {
@@ -815,12 +909,15 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 
 void KICAD_MANAGER_CONTROL::setTransitions()
 {
-    Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::OpenDemoProject, KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::OpenProject,     KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::CloseProject,    KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,   ACTIONS::saveAs.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewProject,         KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewFromTemplate,    KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenDemoProject,    KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenProject,        KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::CloseProject,       KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,      ACTIONS::saveAs.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::LoadProject,        KICAD_MANAGER_ACTIONS::loadProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ImportNonKicadProj, KICAD_MANAGER_ACTIONS::importNonKicadProj.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ViewDroppedViewers, KICAD_MANAGER_ACTIONS::viewDroppedGerbers.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UpdateMenu,      ACTIONS::updateMenu.MakeEvent() );

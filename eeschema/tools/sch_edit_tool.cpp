@@ -2285,6 +2285,13 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
+{
+    wxString aFileName = *aEvent.Parameter<wxString*>();
+    return ( m_frame->AddSheetAndUpdateDisplay( aFileName ) ? 0 : 1 );
+}
+
+
 void SCH_EDIT_TOOL::setTransitions()
 {
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
@@ -2321,4 +2328,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditPageNumber,     EE_ACTIONS::editPageNumber.MakeEvent() );
+
+    Go( &SCH_EDIT_TOOL::DdAppendFile,       EE_ACTIONS::ddAppendFile.MakeEvent() );
 }

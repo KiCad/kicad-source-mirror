@@ -65,6 +65,15 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( "kicad.Control.closeProject",
         _( "Close Project" ), _( "Close the current project" ),
         BITMAPS::project_close );
 
+TOOL_ACTION KICAD_MANAGER_ACTIONS::loadProject( "kicad.Control.loadProject",
+        AS_GLOBAL);
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::importNonKicadProj( "kicad.Control.importNonKicadProj",
+        AS_GLOBAL );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::viewDroppedGerbers( "kicad.Control.viewDroppedGerbers",
+        AS_GLOBAL );
+
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
@@ -129,5 +138,3 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherSch( "kicad.Control.editOtherSch",
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( "kicad.Control.editOtherPCB",
         AS_GLOBAL );
-
-

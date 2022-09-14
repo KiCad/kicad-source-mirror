@@ -500,6 +500,10 @@ public:
     static TOOL_ACTION convertToLines;
     static TOOL_ACTION convertToArc;
     static TOOL_ACTION convertToTracks;
+
+    /// Drag and drop
+    static TOOL_ACTION ddAppendBoard;
+    static TOOL_ACTION ddImportFootprint;
 };
 
 #endif

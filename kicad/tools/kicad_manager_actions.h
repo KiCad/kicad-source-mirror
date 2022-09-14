@@ -36,6 +36,9 @@ public:
     static TOOL_ACTION openDemoProject;
     static TOOL_ACTION openProject;
     static TOOL_ACTION closeProject;
+    static TOOL_ACTION loadProject;
+    static TOOL_ACTION importNonKicadProj;
+    static TOOL_ACTION viewDroppedGerbers;
 
     static TOOL_ACTION editSchematic;
     static TOOL_ACTION editSymbols;

@@ -68,6 +68,10 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
 
+    // Drag and drop
+    int LoadZipfile( const TOOL_EVENT& aEvent );
+    int LoadGerbFiles( const TOOL_EVENT& aEvent );
+
     ///< Set up handlers for various events.
     void setTransitions() override;
 

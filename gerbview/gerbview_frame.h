@@ -496,6 +496,8 @@ private:
     void OnClearDrlFileHistory( wxCommandEvent& aEvent );
     void OnClearGbrFileHistory( wxCommandEvent& aEvent );
 
+    void DoWithAcceptedFiles() override;
+
     /**
      * Loads the file provided or shows a dialog to get the file(s) from the user.
      *

@@ -50,6 +50,15 @@ public:
     int OpenDemoProject( const TOOL_EVENT& aEvent );
     int CloseProject( const TOOL_EVENT& aEvent );
     int SaveProjectAs( const TOOL_EVENT& aEvent );
+    int LoadProject( const TOOL_EVENT& aEvent );
+
+    /**
+     * @brief Imports a non kicad project from a sch/pcb dropped file.
+     * No error is displayed if the project can not be imported.
+     */
+    int ImportNonKicadProj( const TOOL_EVENT& aEvent );
+
+    int ViewDroppedViewers( const TOOL_EVENT& aEvent );
 
     int Refresh( const TOOL_EVENT& aEvent );
     int UpdateMenu( const TOOL_EVENT& aEvent );

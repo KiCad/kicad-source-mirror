@@ -460,6 +460,46 @@ int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
+int GERBVIEW_CONTROL::LoadZipfile( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadZipArchiveFile( *aEvent.Parameter<wxString*>() );
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::LoadGerbFiles( const TOOL_EVENT& aEvent )
+{
+    // The event parameter is a string containing names of dropped files.
+    // Each file name has been enclosed with "", so file names with space character are allowed.
+    wxString files = *aEvent.Parameter<wxString*>();
+    // ie : files = "file1""another file""file3"...
+
+    std::vector<wxString> aFileNameList;
+
+    // Isolate each file name, deletting ""
+    files = files.AfterFirst( '"' );
+
+    // Gerber files are enclosed with "".
+    // Load files names in array.
+    while( !files.empty() )
+    {
+        wxString fileName = files.BeforeFirst( '"' );
+        // Check if file exists. If not, keep on and ignore fileName
+        if( wxFileName( fileName ).Exists() )
+            aFileNameList.push_back( fileName );
+        files = files.AfterFirst( '"' );
+        files = files.AfterFirst( '"' );
+    }
+
+    if( !aFileNameList.empty() )
+        m_frame->OpenProjectFiles( aFileNameList, KICTL_CREATE );
+
+    return 0;
+}
+
+
 void GERBVIEW_CONTROL::setTransitions()
 {
     Go( &GERBVIEW_CONTROL::OpenAutodetected,   GERBVIEW_ACTIONS::openAutodetected.MakeEvent() );
@@ -499,4 +539,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::UnselectedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::ClearedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, ACTIONS::updateUnits.MakeEvent() );
+
+    Go( &GERBVIEW_CONTROL::LoadZipfile,        GERBVIEW_ACTIONS::loadZipFile.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::LoadGerbFiles,      GERBVIEW_ACTIONS::loadGerbFiles.MakeEvent() );
 }

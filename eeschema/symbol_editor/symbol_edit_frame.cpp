@@ -91,6 +91,9 @@ BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, EDA_DRAW_FRAME )
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_UNIT_NUMBER, SYMBOL_EDIT_FRAME::OnUpdateUnitNumber )
 
+    // Drop files event
+    EVT_DROP_FILES( SYMBOL_EDIT_FRAME::OnDropFiles )
+
 END_EVENT_TABLE()
 
 
@@ -238,6 +241,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->SetBoundary( bbox );
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    m_acceptedExts.emplace( KiCadSymbolLibFileExtension, &ACTIONS::ddAddLibrary );
+    DragAcceptFiles( true );
 
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Library changes are unsaved" ) );
 
@@ -897,6 +903,41 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
 
     return fn.GetFullPath();
+}
+
+
+void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
+{
+        // Select the target library table (global/project)
+    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
+
+    if( !libTable )
+        return;
+
+    wxFileName fn = wxFileName( aLibFile );
+
+    wxString libName = fn.GetName();
+
+    if( libName.IsEmpty() )
+        return;
+
+    if( m_libMgr->LibraryExists( libName ) )
+    {
+        DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
+        return;
+    }
+
+    if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
+    {
+        DisplayError( this, _( "Could not open the library file." ) );
+        return;
+    }
+
+    bool globalTable = ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
+    saveSymbolLibTables( globalTable, !globalTable );
+
+    std::string packet = fn.GetFullPath().ToStdString();
+    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
 }
 
 

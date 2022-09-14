@@ -107,15 +107,6 @@ static const wxChar* s_allowedExtensionsToList[] = {
 };
 
 
-/* TODO: Check if these file extension and wildcard definitions are used
- *       in any of the other KiCad programs and move them into the common
- *       library as required.
- */
-
-// Gerber file extension wildcard.
-const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
-
-
 /**
  * The frame that shows the tree list of files and subdirectories inside the working directory.
  *
@@ -1288,5 +1279,3 @@ void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 {
     m_leftWin->FileWatcherReset();
 }
-
-

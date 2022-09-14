@@ -28,27 +28,18 @@
  * @brief routines for importing a non-KiCad project
  */
 
-
-#include <wx/filefn.h>
-#include <wx/filename.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
 
-#include <common.h>
 #include <confirm.h>
-#include <kiway.h>
-#include <macros.h>
-#include <richio.h>
 #include <wildcards_and_files_ext.h>
-#include <kiway_player.h>
-#include <stdexcept>
-#include "pgm_kicad.h"
 
 #include <io_mgr.h>
 #include <sch_io_mgr.h>
 
 #include "kicad_manager_frame.h"
+#include <import_proj.h>
 
 
 void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
@@ -71,28 +62,21 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     // disjoint.
     CloseProject( true );
 
-    wxFileName sch( schdlg.GetPath() );
-    sch.SetExt( aSchFileExtension );
-
-    wxFileName pcb( sch );
-    pcb.SetExt( aPcbFileExtension );
-
-    wxFileName pro( sch );
-    pro.SetExt( ProjectFileExtension );
+    IMPORT_PROJ_HELPER importProj( this, schdlg.GetPath(), aSchFileExtension, aPcbFileExtension );
 
     wxString protitle = _( "KiCad Project Destination" );
 
     // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
     // file is actually selected.
-    wxDirDialog prodlg( this, protitle, pro.GetPath(), wxDD_DEFAULT_STYLE );
+    wxDirDialog prodlg( this, protitle, importProj.GetProjPath(), wxDD_DEFAULT_STYLE );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
         return;
 
-    pro.SetPath( prodlg.GetPath() );
+    importProj.SetProjPath( prodlg.GetPath() );
 
     // Check if the project directory is empty
-    wxDir directory( pro.GetPath() );
+    wxDir directory( importProj.GetProjPath() );
 
     if( directory.HasFiles() )
     {
@@ -107,19 +91,9 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
         {
             // Append a new directory with the same name of the project file
             // Keep iterating until we find an empty directory
-            wxString newDir = pro.GetName();
-            int      attempt = 0;
+            importProj.CreateEmptyDirForProject();
 
-            pro.AppendDir( newDir );
-
-            while( pro.DirExists() )
-            {
-                pro.RemoveLastDir();
-                wxString suffix = wxString::Format( "_%d", ++attempt );
-                pro.AppendDir( newDir + suffix );
-            }
-
-            if( !wxMkdir( pro.GetPath() ) )
+            if( !wxMkdir( importProj.GetProjPath() ) )
             {
                 msg = _( "Error creating new directory. Please try a different path. The "
                          "project cannot be imported." );
@@ -133,101 +107,15 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
 
     std::string packet;
 
-    pro.SetExt( ProjectFileExtension );
+    importProj.SetProjAbsolutePath();
 
-    if( !pro.IsAbsolute() )
-        pro.MakeAbsolute();
+    if( !importProj.CopyImportedFiles() )
+        return;
 
-    wxFileName schCopy( pro );
-    schCopy.SetExt( aSchFileExtension );
+    CreateNewProject( importProj.GetProjFullPath(), false /* Don't create stub files */ );
+    LoadProject( importProj.GetProj() );
 
-    if( sch.Exists() && !schCopy.SameAs( sch ) )
-    {
-        if( !wxCopyFile( sch.GetFullPath(), schCopy.GetFullPath(), true ) )
-        {
-            ///< @todo Should we remove the newly created folder?
-            msg.Printf( _( "Cannot copy file '%s'\n"
-                           "to '%s'\n"
-                           "The project cannot be imported." ),
-                        sch.GetFullPath(), schCopy.GetFullPath() );
-
-            wxMessageDialog schCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-            schCopyErrorDlg.ShowModal();
-            return;
-        }
-    }
-
-    wxFileName pcbCopy( pro );
-    pcbCopy.SetExt( aPcbFileExtension );
-
-    if( pcb.Exists() && !pcbCopy.SameAs( pcb ) )
-    {
-        if( !wxCopyFile( pcb.GetFullPath(), pcbCopy.GetFullPath(), true ) )
-        {
-            ///< @todo Should we remove copied schematic file and the newly created folder?
-            msg.Printf( _( "Cannot copy file '%s'\n"
-                           "to '%s'\n"
-                           "The project cannot be imported." ),
-                        pcb.GetFullPath(), pcbCopy.GetFullPath() );
-
-            wxMessageDialog brdCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-            brdCopyErrorDlg.ShowModal();
-            return;
-        }
-    }
-
-    CreateNewProject( pro.GetFullPath(), false /* Don't create stub files */ );
-    LoadProject( pro );
-
-    if( schCopy.FileExists() )
-    {
-        KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, true );
-
-        wxWindow* blocking_dialog = schframe->Kiway().GetBlockingDialog();
-
-        if( blocking_dialog )
-            blocking_dialog->Close( true );
-
-        packet = StrPrintf( "%d\n%s", aSchFileType, TO_UTF8( schCopy.GetFullPath() ) );
-        schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
-
-        if( !schframe->IsShown() )
-            schframe->Show( true );
-
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( schframe->IsIconized() )
-            schframe->Iconize( false );
-
-        schframe->Raise();
-
-        if( !schCopy.SameAs( sch ) ) // Do not delete the original file!
-            wxRemoveFile( schCopy.GetFullPath() );
-    }
-
-    if( pcbCopy.FileExists() )
-    {
-        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
-
-        wxWindow* blocking_dialog = pcbframe->Kiway().GetBlockingDialog();
-
-        if( blocking_dialog )
-            blocking_dialog->Close( true );
-
-        if( !pcbframe->IsVisible() )
-            pcbframe->Show( true );
-
-        packet = StrPrintf( "%d\n%s", aPcbFileType, TO_UTF8( pcbCopy.GetFullPath() ) );
-        pcbframe->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_IMPORT_FILE, packet, this );
-
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( pcbframe->IsIconized() )
-            pcbframe->Iconize( false );
-
-        pcbframe->Raise();
-
-        if( !pcbCopy.SameAs( pcb ) ) // Do not delete the original file!
-            wxRemoveFile( pcbCopy.GetFullPath() );
-    }
+    importProj.AssociateFilesWithProj( aSchFileType, aPcbFileType );
 
     ReCreateTreePrj();
     m_active_project = true;

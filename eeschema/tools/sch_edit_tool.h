@@ -78,6 +78,9 @@ public:
     ///< Run the deletion tool.
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
+    /// Drag and drop
+    int DdAppendFile( const TOOL_EVENT& aEvent );
+
 private:
     void editFieldText( SCH_FIELD* aField );
 

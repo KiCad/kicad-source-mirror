@@ -901,3 +901,7 @@ TOOL_ACTION EE_ACTIONS::saveCurrSheetCopyAs( "eeschema.EditorControl.saveCurrShe
         0, "",
         _( "Save Current Sheet Copy As..." ), _( "Save a copy of the current sheet to another location or name" ),
         BITMAPS::save_as );
+
+// Drag and drop
+TOOL_ACTION EE_ACTIONS::ddAppendFile( "eeschema.EditorControl.ddAppendFile",
+        AS_GLOBAL );

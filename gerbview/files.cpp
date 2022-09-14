@@ -37,6 +37,7 @@
 #include <view/view.h>
 #include <widgets/wx_progress_reporters.h>
 #include "widgets/gerbview_layer_widget.h"
+#include <tool/tool_manager.h>
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in GerbView to load files" )
@@ -671,4 +672,28 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
     }
 
     return true;
+}
+
+void GERBVIEW_FRAME::DoWithAcceptedFiles()
+{
+    wxString gerbFn; // param to be sent with action event.
+
+    for( auto file : m_AcceptedFiles )
+    {
+        if( IsExtensionAccepted( file.GetExt(), { ArchiveFileExtension } ) )
+        {
+            wxString fn = file.GetFullPath();
+            // Open zip archive in editor
+            m_toolManager->RunAction( *m_acceptedExts.at( ArchiveFileExtension ), true, &fn );
+        }
+        else
+        {
+            // Store FileName in variable to open later
+            gerbFn += '"' + file.GetFullPath() + '"';
+        }
+    }
+
+    // Open files in editor
+    if( !gerbFn.IsEmpty() )
+        m_toolManager->RunAction( *m_acceptedExts.at( DrillFileExtension ), true, &gerbFn );
 }

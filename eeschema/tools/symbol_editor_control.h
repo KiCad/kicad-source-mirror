@@ -70,6 +70,8 @@ public:
     int ToggleSymbolTree( const TOOL_EVENT& aEvent );
     int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 
+    int DdAddLibrary( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

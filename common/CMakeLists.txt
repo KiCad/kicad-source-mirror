@@ -313,6 +313,7 @@ set( COMMON_SRCS
     eda_pattern_match.cpp
     eda_shape.cpp
     eda_text.cpp
+    eda_tools.cpp
     eda_units.cpp
     env_paths.cpp
     env_vars.cpp
@@ -713,4 +714,3 @@ make_lexer(
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
 add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
 target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
-

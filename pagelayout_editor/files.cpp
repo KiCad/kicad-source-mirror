@@ -321,3 +321,9 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 
     return false;
 }
+
+void PL_EDITOR_FRAME::DoWithAcceptedFiles()
+{
+    for( wxFileName file : m_AcceptedFiles )
+        OpenProjectFiles( { file.GetFullPath() }, KICTL_CREATE );
+}

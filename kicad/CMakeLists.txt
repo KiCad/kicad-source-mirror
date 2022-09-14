@@ -21,6 +21,7 @@ set( KICAD_SRCS
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
     files-io.cpp
+    import_proj.cpp
     import_project.cpp
     kicad.cpp
     kicad_manager_frame.cpp

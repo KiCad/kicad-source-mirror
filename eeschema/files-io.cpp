@@ -524,7 +524,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
 bool SCH_EDIT_FRAME::AppendSchematic()
 {
-    wxString    fullFileName;
     SCH_SCREEN* screen = GetScreen();
 
     if( !screen )
@@ -542,9 +541,13 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    fullFileName = dlg.GetPath();
+    return AddSheetAndUpdateDisplay( dlg.GetPath() );
+}
 
-    if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), fullFileName ) )
+
+bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
+{
+    if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), aFullFileName ) )
         return false;
 
     initScreenZoom();
@@ -1502,4 +1505,3 @@ const wxString& SCH_EDIT_FRAME::getAutoSaveFileName() const
 
     return autoSaveFileName;
 }
-
