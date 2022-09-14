@@ -229,7 +229,8 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawShape( const std::string& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint );
+    bool drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
+                    std::optional<VECTOR2D> aStartingPoint );
 
     /**
      * Start drawing an arc.
@@ -239,7 +240,8 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint );
+    bool drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
+                  std::optional<VECTOR2D> aStartingPoint );
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.
@@ -274,7 +276,7 @@ private:
 
     /**
      * Clamps the end vector to respect numeric limits of difference representation
-     * 
+     *
      * @param aOrigin - the origin vector.
      * @param aEnd - the end vector.
      * @return clamped end vector.
@@ -304,7 +306,7 @@ private:
 
     /**
      * Clamps the end vector to respect numeric limits of radius representation
-     * 
+     *
      * @param aOrigin - the origin vector.
      * @param aEnd - the end vector.
      * @return clamped end vector.

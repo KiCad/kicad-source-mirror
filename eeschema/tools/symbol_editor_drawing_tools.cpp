@@ -95,8 +95,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -145,9 +144,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = item
-                                && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr() == tool;
+        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
+                                && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() )
         {
@@ -159,7 +157,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -189,7 +187,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -341,8 +339,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -376,9 +373,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = item
-                                && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr() == tool;
+        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
+                                && evt->Matches( aEvent );
 
         if( evt->IsCancelInteractive() )
         {
@@ -388,7 +384,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -408,7 +404,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -542,8 +538,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -564,12 +559,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
             break;
         }
         else if( evt->IsActivate() )
         {
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
             break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )

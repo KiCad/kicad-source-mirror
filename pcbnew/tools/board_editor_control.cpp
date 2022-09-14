@@ -982,8 +982,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -1058,7 +1057,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1074,7 +1073,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool( tool );
+                frame()->PopTool( aEvent );
                 break;
             }
         }
@@ -1570,7 +1569,6 @@ void BOARD_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME*
 
 int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
-    std::string      tool = *aEvent.GetCommandStr();
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1584,7 +1582,7 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
             return false;   // drill origin is a one-shot; don't continue with tool
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
 
     return 0;
 }

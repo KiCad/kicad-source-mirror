@@ -333,7 +333,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    std::string  tool = *aEvent.GetCommandStr();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -401,7 +400,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
 
     return 0;
 }

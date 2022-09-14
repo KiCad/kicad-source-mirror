@@ -829,7 +829,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsActivate() )
     {
-        auto tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
+        auto tool = m_toolNameIndex.find( aEvent.getCommandStr() );
 
         if( tool != m_toolNameIndex.end() )
         {
@@ -1153,9 +1153,8 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         if( GetToolHolder() && !GetToolHolder()->GetDoImmediateActions() )
         {
             // An tool-selection-event has no position
-            if( mod_event.GetCommandStr()
-                    && *mod_event.GetCommandStr() != GetToolHolder()->CurrentToolName()
-                    && !mod_event.ForceImmediate() )
+            if( mod_event.getCommandStr() != GetToolHolder()->CurrentToolName()
+                && !mod_event.ForceImmediate() )
             {
                 mod_event.SetHasPosition( false );
             }

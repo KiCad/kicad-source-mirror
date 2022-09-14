@@ -78,8 +78,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -122,7 +121,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -138,7 +137,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -226,8 +225,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -333,7 +331,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_frame->PopTool( tool );
+    m_frame->PopTool( aEvent );
     return 0;
 }
 

@@ -554,8 +554,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
     // do not capture or auto-pan until we start placing the table
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -586,7 +585,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
         if( evt->IsCancelInteractive() )
         {
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
             cancelled = true;
             break;
         }
@@ -617,7 +616,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 cancelled = true;
                 break;
             }
@@ -638,7 +637,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
                 if( destLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
                 {
                     // The user did not pick any layer.
-                    m_frame->PopTool( tool );
+                    m_frame->PopTool( aEvent );
                     cancelled = true;
                     break;
                 }
@@ -663,7 +662,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             }
 
             commit.Push( wxT( "Placing items" ) );
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
 
             break;
         }

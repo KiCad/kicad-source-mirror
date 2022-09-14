@@ -110,8 +110,20 @@ public:
      * "tools", such as rectangle and circle, or wire and bus.  So each user-level tool is
      * actually a #TOOL_ACTION.
      */
-    virtual void PushTool( const std::string& actionName );
-    virtual void PopTool( const std::string& actionName );
+
+    /**
+     * @brief Pushes a tool to the stack.
+     *
+     * @param aEvent The event that is starting the tool to be pushed to the stack.
+     */
+    virtual void PushTool( const TOOL_EVENT& aEvent );
+
+    /**
+     * @brief Pops a tool from the stack.
+     *
+     * @param aEvent The event that started the tool that was pushed to the stack.
+     */
+    virtual void PopTool( const TOOL_EVENT& aEvent );
 
     bool ToolStackIsEmpty() { return m_toolStack.empty(); }
 

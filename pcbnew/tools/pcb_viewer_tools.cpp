@@ -197,8 +197,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     auto& view     = *getView();
     auto& controls = *getViewControls();
 
-    std::string tool = *aEvent.GetCommandStr();
-    frame()->PushTool( tool );
+    frame()->PushTool( aEvent );
 
     TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     PCB_GRID_HELPER            grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
@@ -253,7 +252,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool( tool );
+                frame()->PopTool( aEvent );
                 break;
             }
         }
@@ -269,7 +268,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool( tool );
+                frame()->PopTool( aEvent );
                 break;
             }
         }

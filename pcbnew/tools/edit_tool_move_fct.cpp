@@ -439,9 +439,7 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-// Note: aEvent MUST NOT be const&; the source will get de-allocated if we go into the picker's
-// event loop.
-int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
+int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD*                board = editFrame->GetBoard();
@@ -485,8 +483,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     if( selection.Empty() )
         return 0;
 
-    std::string tool = *aEvent.GetCommandStr();
-    editFrame->PushTool( tool );
+    editFrame->PushTool( aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -500,7 +497,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         if( is_hover )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        editFrame->PopTool( tool );
+        editFrame->PopTool( aEvent );
         return 0;
     }
 
@@ -546,7 +543,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     BOX2I           originalBBox;
     bool            updateBBox = true;
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
-    TOOL_EVENT*     evt = &aEvent;
+    TOOL_EVENT      copy = aEvent;
+    TOOL_EVENT*     evt = &copy;
     VECTOR2I        prevPos;
 
     bool hv45Mode        = false;
@@ -926,7 +924,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
-    editFrame->PopTool( tool );
+    editFrame->PopTool( aEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     return restore_state ? -1 : 0;

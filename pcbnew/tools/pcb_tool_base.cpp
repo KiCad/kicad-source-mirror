@@ -36,7 +36,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/tool_event_utils.h>
 
-void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
+void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
 {

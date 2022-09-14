@@ -518,7 +518,6 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         if( m_isFootprintEditor && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
             return 0;
 
-        std::string      tool = *aEvent.GetCommandStr();
         PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
         if( !picker )   // Happens in footprint wizard
@@ -535,7 +534,7 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
                     return false;   // drill origin is a one-shot; don't continue with tool
                 } );
 
-        m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+        m_toolMgr->RunAction( ACTIONS::pickerTool, true );
     }
 
     return 0;
@@ -558,7 +557,6 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstFootprint() )
         return 0;
 
-    std::string      tool = *aEvent.GetCommandStr();
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     m_pickerItem = nullptr;
@@ -644,7 +642,7 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->Refresh();
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
 
     return 0;
 }

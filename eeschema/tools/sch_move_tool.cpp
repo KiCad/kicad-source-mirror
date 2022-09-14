@@ -144,20 +144,20 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     if( selection.Empty() )
     {
         // Note that it's important to go through push/pop even when the selection is empty.
         // This keeps other tools from having to special-case an empty move.
-        m_frame->PopTool( tool );
+        m_frame->PopTool( aEvent );
         return 0;
     }
 
     bool        restore_state = false;
     bool        chain_commands = false;
-    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    TOOL_EVENT  copy = aEvent;
+    TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
     int         snapLayer = UNDEFINED_LAYER;
 
@@ -910,7 +910,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_dragAdditions.clear();
     m_lineConnectionCache.clear();
     m_moveInProgress = false;
-    m_frame->PopTool( tool );
+    m_frame->PopTool( aEvent );
     return 0;
 }
 

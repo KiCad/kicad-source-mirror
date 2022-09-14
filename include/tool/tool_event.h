@@ -39,6 +39,7 @@
 class TOOL_ACTION;
 class TOOL_MANAGER;
 class TOOL_BASE;
+class TOOLS_HOLDER;
 
 /**
  * Internal (GUI-independent) event definitions.
@@ -368,8 +369,8 @@ public:
 
         if( m_category == TC_COMMAND || m_category == TC_MESSAGE )
         {
-            if( (bool) m_commandStr && (bool) aEvent.m_commandStr )
-                return *m_commandStr == *aEvent.m_commandStr;
+            if( !m_commandStr.empty() && !aEvent.getCommandStr().empty() )
+                return m_commandStr == aEvent.m_commandStr;
 
             if( (bool) m_commandId && (bool) aEvent.m_commandId )
                 return *m_commandId == *aEvent.m_commandId;
@@ -466,11 +467,6 @@ public:
         return m_commandId;
     }
 
-    std::optional<std::string> GetCommandStr() const
-    {
-        return m_commandStr;
-    }
-
     void SetMousePosition( const VECTOR2D& aP )
     {
         m_mousePos = aP;
@@ -478,8 +474,12 @@ public:
 
 private:
     friend class TOOL_DISPATCHER;
+    friend class TOOL_MANAGER;
+    friend class TOOLS_HOLDER;
 
     void init();
+
+    const std::string& getCommandStr() const { return m_commandStr; }
 
     void setMouseDragOrigin( const VECTOR2D& aP )
     {
@@ -551,7 +551,7 @@ private:
     TOOL_BASE* m_firstResponder;
 
     std::optional<int> m_commandId;
-    std::optional<std::string> m_commandStr;
+    std::string        m_commandStr;
 };
 
 typedef std::optional<TOOL_EVENT> OPT_TOOL_EVENT;

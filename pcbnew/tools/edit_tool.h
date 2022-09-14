@@ -185,7 +185,7 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isRouterActive() const;
 
-    int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false );
+    int doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference = false );
 
     VECTOR2I getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
                               const VECTOR2D& aBBoxOffset );

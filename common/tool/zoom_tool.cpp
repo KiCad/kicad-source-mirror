@@ -60,12 +60,7 @@ void ZOOM_TOOL::Reset( RESET_REASON aReason )
 
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    std::string tool;
-
-    if( aEvent.GetCommandStr() )
-        tool = *aEvent.GetCommandStr();
-
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
         [&]()
@@ -102,7 +97,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Exit zoom tool
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_frame->PopTool( tool );
+    m_frame->PopTool( aEvent );
     return 0;
 }
 

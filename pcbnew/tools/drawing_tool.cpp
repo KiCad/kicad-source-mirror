@@ -313,11 +313,10 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( tool, &line, startingPoint ) )
+    while( drawShape( aEvent, &line, startingPoint ) )
     {
         if( line )
         {
@@ -387,11 +386,10 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( tool, &rect, startingPoint ) )
+    while( drawShape( aEvent, &rect, startingPoint ) )
     {
         if( rect )
         {
@@ -447,11 +445,10 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( tool, &circle, startingPoint ) )
+    while( drawShape( aEvent, &circle, startingPoint ) )
     {
         if( circle )
         {
@@ -495,14 +492,13 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     Activate();
 
     if( aEvent.HasPosition() )
         startingPoint = aEvent.Position();
 
-    while( drawArc( tool, &arc, startingPoint ) )
+    while( drawArc( aEvent, &arc, startingPoint ) )
     {
         if( arc )
         {
@@ -553,8 +549,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     auto setCursor =
             [&]()
             {
@@ -610,13 +605,13 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
 
             if( immediateMode )
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -643,7 +638,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -715,7 +710,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
                 if( immediateMode )
                 {
-                    m_frame->PopTool( tool );
+                    m_frame->PopTool( aEvent );
                     break;
                 }
             }
@@ -797,8 +792,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -832,7 +826,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -848,7 +842,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1079,8 +1073,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1130,7 +1123,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1150,7 +1143,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1560,8 +1553,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -1636,7 +1628,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->ForceCursorPosition( false );
 
-    m_frame->PopTool( tool );
+    m_frame->PopTool( aEvent );
 
     return 0;
 }
@@ -1659,8 +1651,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -1701,7 +1692,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1710,7 +1701,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_frame->PopTool( tool );
+            m_frame->PopTool( aEvent );
             break;
         }
         else
@@ -1759,7 +1750,7 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 }
 
 
-bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
+bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                               std::optional<VECTOR2D> aStartingPoint )
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
@@ -2152,7 +2143,7 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 }
 
 
-bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
+bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                             std::optional<VECTOR2D> aStartingPoint )
 {
     PCB_SHAPE*&  graphic = *aGraphic;
@@ -2498,8 +2489,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -2554,7 +2544,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             {
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -2574,7 +2564,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( tool );
+                m_frame->PopTool( aEvent );
                 break;
             }
         }
@@ -3216,8 +3206,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
 
-    doInteractiveItemPlacement( *aEvent.GetCommandStr(), &placer, _( "Place via" ),
-                                IPO_REPEAT | IPO_SINGLE_CLICK );
+    doInteractiveItemPlacement( aEvent, &placer, _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;
 }

@@ -43,16 +43,13 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER       grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
-    std::string tool = *aEvent.Parameter<std::string*>();
-
-    if( !tool.empty() )
-        frame->PushTool( tool );
+    frame->PushTool( aEvent );
 
     Activate();
     setControls();
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 frame->GetCanvas()->SetCurrentCursor( m_cursor );
                 controls->ShowCursor( true );
@@ -173,8 +170,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
 
-    if( !tool.empty() )
-        frame->PopTool( tool );
+    frame->PopTool( aEvent );
 
     return 0;
 }

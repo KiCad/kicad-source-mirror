@@ -1534,8 +1534,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().value();
-    frame->PushTool( tool );
+    frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -1632,7 +1631,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     }
 
     m_iface->SetCommitFlags( 0 );
-    frame->PopTool( tool );
+    frame->PopTool( aEvent );
     return 0;
 }
 
@@ -1654,8 +1653,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    frame->PushTool( tool );
+    frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -1684,7 +1682,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            frame->PopTool( tool );
+            frame->PopTool( aEvent );
             break;
         }
         else if( evt->IsActivate() )
@@ -1696,7 +1694,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame->PopTool( tool );
+                frame->PopTool( aEvent );
                 break;
             }
         }
@@ -1769,7 +1767,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( m_cancelled )
         {
-            frame->PopTool( tool );
+            frame->PopTool( aEvent );
             break;
         }
     }

@@ -1539,7 +1539,6 @@ int BOARD_INSPECTION_TOOL::ClearHighlight( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
-    std::string       tool = *aEvent.GetCommandStr();
     PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     BOARD*            board = getModel<BOARD>();
 
@@ -1610,7 +1609,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 }
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true );
 
     return 0;
 }

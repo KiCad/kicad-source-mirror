@@ -274,8 +274,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = *aEvent.GetCommandStr();
-    frame()->PushTool( tool );
+    frame()->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -338,7 +337,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_savedSizes = m_router->Sizes();
 
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    frame()->PopTool( tool );
+    frame()->PopTool( aEvent );
     return 0;
 }
 

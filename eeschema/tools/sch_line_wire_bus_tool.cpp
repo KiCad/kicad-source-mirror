@@ -302,8 +302,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 
     DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( aEvent.HasPosition() )
@@ -316,7 +315,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         startSegments( params->layer, cursorPos, params->sourceSegment );
     }
 
-    return doDrawSegments( tool, params->layer, params->quitOnDraw );
+    return doDrawSegments( aEvent, params->layer, params->quitOnDraw );
 }
 
 
@@ -331,8 +330,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString  net;
     SCH_LINE* segment = nullptr;
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
     Activate();
 
     if( netPtr )
@@ -377,11 +375,11 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     // If we have an unfolded wire to draw, then draw it
     if( segment )
     {
-        return doDrawSegments( tool, LAYER_WIRE, false );
+        return doDrawSegments( aEvent, LAYER_WIRE, false );
     }
     else
     {
-        m_frame->PopTool( tool );
+        m_frame->PopTool( aEvent );
         return 0;
     }
 }
@@ -574,7 +572,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw )
+int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw )
 {
     SCH_SCREEN*           screen = m_frame->GetScreen();
     SCH_LINE*             segment = nullptr;
@@ -647,9 +645,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         bool      twoSegments = currentMode != LINE_MODE::LINE_MODE_FREE;
 
         // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = ( segment || m_busUnfold.in_progress )
-                                && evt->IsActivate() && evt->HasPosition()
-                                && evt->GetCommandStr() == aTool;
+        bool isSyntheticClick = ( segment || m_busUnfold.in_progress ) && evt->IsActivate()
+                                && evt->HasPosition() && evt->Matches( aTool );
 
         setCursor();
         grid.SetMask( GRID_HELPER::ALL );

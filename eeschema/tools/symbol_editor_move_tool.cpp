@@ -110,8 +110,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    std::string tool = *aEvent.GetCommandStr();
-    m_frame->PushTool( tool );
+    m_frame->PushTool( aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -120,7 +119,8 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     bool        restore_state = false;
     bool        chain_commands = false;
-    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    TOOL_EVENT  copy = aEvent;
+    TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
@@ -365,7 +365,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     m_moveInProgress = false;
-    m_frame->PopTool( tool );
+    m_frame->PopTool( aEvent );
     return 0;
 }
 
