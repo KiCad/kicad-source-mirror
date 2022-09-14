@@ -122,6 +122,10 @@ public:
     void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth ) override;
 
+    /// @copydoc GAL::DrawSegmentChain()
+    void DrawSegmentChain( const std::vector<VECTOR2D>& aPointList, double aWidth ) override;
+    void DrawSegmentChain( const SHAPE_LINE_CHAIN& aLineChain, double aWidth ) override;
+
     /// @copydoc GAL::DrawCircle()
     void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
 
@@ -142,6 +146,9 @@ public:
     void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
     void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override;
 
+    /// @copydoc GAL::DrawPolylines()
+    void DrawPolylines( const std::vector<std::vector<VECTOR2D>>& aPointLists ) override;
+
     /// @copydoc GAL::DrawPolygon()
     void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override;
     void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
@@ -150,6 +157,9 @@ public:
 
     /// @copydoc GAL::DrawGlyph()
     virtual void DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal ) override;
+
+    /// @copydoc GAL::DrawGlyphs()
+    virtual void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs ) override;
 
     /// @copydoc GAL::DrawCurve()
     void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
@@ -382,8 +392,18 @@ private:
      *
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
+     * @param aReserve if set to false, call reserveLineQuads beforehand
+     * to reserve the right amount of vertices.
      */
-    void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                       bool aReserve = true );
+
+    /**
+     * @brief Reserves specified number of line quads.
+     *
+     * @param aLineCount the number of line quads to reserve.
+     */
+    void reserveLineQuads( const int aLineCount );
 
     /**
      * Draw a semicircle.
@@ -414,17 +434,44 @@ private:
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semicircle.
      * @param aAngle is the angle of the semicircle.
+     * @param aReserve if set to false, reserve 3 vertices for each semicircle.
      *
      */
-    void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
+    void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle,
+                                bool aReserve = true );
+
+    /**
+     * Internal method for circle drawing.
+     *
+     * @param aReserve if set to false, reserve 3 vertices for each circle.
+     */
+    void drawCircle( const VECTOR2D& aCenterPoint, double aRadius, bool aReserve = true );
 
     /**
      * Generic way of drawing a polyline stored in different containers.
      *
      * @param aPointGetter is a function to obtain coordinates of n-th vertex.
      * @param aPointCount is the number of points to be drawn.
+     * @param aReserve if set to false, reserve aPointCount - 1 line quads.
      */
-    void drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter, int aPointCount );
+    void drawPolyline( const std::function<VECTOR2D( int )>& aPointGetter, int aPointCount,
+                       bool aReserve = true );
+
+    /**
+     * Generic way of drawing a chain of segments stored in different containers.
+     *
+     * @param aPointGetter is a function to obtain coordinates of n-th vertex.
+     * @param aPointCount is the number of points to be drawn.
+     * @param aReserve if set to false, do not reserve vertices internally.
+     */
+    void drawSegmentChain( const std::function<VECTOR2D( int )>& aPointGetter, int aPointCount,
+                           double aWidth, bool aReserve = true );
+
+    /**
+     * Internal method for segment drawing
+     */
+    void drawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth,
+                      bool aReserve = true );
 
     /**
      * Draw a filled polygon. It does not need the last point to have the same coordinates
@@ -443,7 +490,6 @@ private:
      */
     void drawTriangulatedPolyset( const SHAPE_POLY_SET& aPoly, bool aStrokeTriangulation );
 
-
     /**
      * Draw a single character using bitmap font.
      *
@@ -451,8 +497,9 @@ private:
      *
      * @param aChar is the character to be drawn.
      * @return Width of the drawn glyph.
+     * @param aReserve if set to false, reserve 6 vertices for each character.
      */
-    int drawBitmapChar( unsigned long aChar );
+    int drawBitmapChar( unsigned long aChar, bool aReserve = true );
 
     /**
      * Draw an overbar over the currently drawn text.
@@ -463,8 +510,9 @@ private:
      *
      * @param aLength is the width of the overbar.
      * @param aHeight is the height for the overbar.
+     * @param aReserve if set to false, reserve 6 vertices for each overbar.
      */
-    void drawBitmapOverbar( double aLength, double aHeight );
+    void drawBitmapOverbar( double aLength, double aHeight, bool aReserve = true );
 
     /**
      * Compute a size of text drawn using bitmap font with current text setting applied.

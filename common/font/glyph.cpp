@@ -27,6 +27,8 @@ using namespace KIFONT;
 
 STROKE_GLYPH::STROKE_GLYPH( const STROKE_GLYPH& aGlyph )
 {
+    reserve( aGlyph.size() );
+
     for( const std::vector<VECTOR2D>& pointList : aGlyph )
         push_back( pointList );
 

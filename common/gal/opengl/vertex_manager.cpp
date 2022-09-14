@@ -111,17 +111,17 @@ bool VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
     else
     {
         newVertex = m_container->Allocate( 1 );
-    }
 
-    if( newVertex == nullptr )
-    {
-        if( show_err )
+        if( newVertex == nullptr )
         {
-            DisplayError( nullptr, wxT( "VERTEX_MANAGER::Vertex: Vertex allocation error" ) );
-            show_err = false;
-        }
+            if( show_err )
+            {
+                DisplayError( nullptr, wxT( "VERTEX_MANAGER::Vertex: Vertex allocation error" ) );
+                show_err = false;
+            }
 
-        return false;
+            return false;
+        }
     }
 
     putVertex( *newVertex, aX, aY, aZ );

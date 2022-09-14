@@ -90,6 +90,10 @@ public:
     /// @copydoc GAL::DrawRectangle()
     void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
+    /// @copydoc GAL::DrawSegmentChain()
+    void DrawSegmentChain( const std::vector<VECTOR2D>& aPointList, double aWidth ) override;
+    void DrawSegmentChain( const SHAPE_LINE_CHAIN& aLineChain, double aWidth ) override;
+
     /// @copydoc GAL::DrawPolyline()
     void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
     void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override
@@ -98,6 +102,13 @@ public:
     }
 
     void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override { drawPoly( aLineChain ); }
+
+    /// @copydoc GAL::DrawPolylines()
+    void DrawPolylines( const std::vector<std::vector<VECTOR2D>>& aPointLists ) override
+    {
+        for( const std::vector<VECTOR2D>& points : aPointLists )
+            drawPoly( points );
+    }
 
     /// @copydoc GAL::DrawPolygon()
     void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
@@ -111,6 +122,13 @@ public:
 
     /// @copydoc GAL::DrawGlyph()
     void DrawGlyph( const KIFONT::GLYPH& aPolySet, int aNth, int aTotal ) override;
+
+    /// @copydoc GAL::DrawGlyphs()
+    void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs ) override
+    {
+        for( size_t i = 0; i < aGlyphs.size(); i++ )
+            DrawGlyph( *aGlyphs[i], i, aGlyphs.size() );
+    }
 
     /// @copydoc GAL::DrawCurve()
     void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,

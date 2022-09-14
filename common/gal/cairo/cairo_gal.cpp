@@ -234,6 +234,25 @@ void CAIRO_GAL_BASE::syncLineWidth( bool aForceWidth, double aWidth )
 }
 
 
+void CAIRO_GAL_BASE::DrawSegmentChain( const std::vector<VECTOR2D>& aPointList, double aWidth )
+{
+    for( size_t i = 0; i + 1 < aPointList.size(); ++i )
+        DrawSegment( aPointList[i], aPointList[i + 1], aWidth );
+}
+
+
+void CAIRO_GAL_BASE::DrawSegmentChain( const SHAPE_LINE_CHAIN& aLineChain, double aWidth )
+{
+    int numPoints = aLineChain.PointCount();
+
+    if( aLineChain.IsClosed() )
+        numPoints += 1;
+
+    for( int i = 0; i + 1 < numPoints; ++i )
+        DrawSegment( aLineChain.CPoint( i ), aLineChain.CPoint( i + 1 ), aWidth );
+}
+
+
 void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                                   double aWidth )
 {

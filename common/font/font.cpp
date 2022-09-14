@@ -264,8 +264,7 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
     (void) drawMarkup( aBoundingBox, &glyphs, aText, aPosition, aSize, aAngle, aMirror, aOrigin,
                        textStyle );
 
-    for( const std::unique_ptr<GLYPH>& glyph : glyphs )
-        aGal->DrawGlyph( *glyph.get() );
+    aGal->DrawGlyphs( glyphs );
 }
 
 

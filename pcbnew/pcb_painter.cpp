@@ -1629,11 +1629,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
             if( outline_mode )
             {
-                for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
-                {
-                    SEG seg = shape.Outline( 0 ).Segment( ii );
-                    m_gal->DrawSegment( seg.A, seg.B, thickness );
-                }
+                m_gal->DrawSegmentChain( shape.Outline( 0 ), thickness );
             }
             else
             {
@@ -1642,11 +1638,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
                 if( thickness > 0 )
                 {
-                    for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
-                    {
-                        SEG seg = shape.Outline( 0 ).Segment( ii );
-                        m_gal->DrawSegment( seg.A, seg.B, thickness );
-                    }
+                    m_gal->DrawSegmentChain( shape.Outline( 0 ), thickness );
                 }
 
                 if( aShape->IsFilled() )
@@ -1682,8 +1674,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 BEZIER_POLY converter( pointCtrl );
                 converter.GetPoly( output, thickness );
 
-                for( unsigned ii = 0; ii + 1 < output.size(); ++ii )
-                    m_gal->DrawSegment( output[ii], output[ii+1], thickness );
+                m_gal->DrawSegmentChain( output, thickness );
             }
             else
             {
@@ -1867,8 +1858,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
         if( cache )
         {
-            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                m_gal->DrawGlyph( *glyph.get() );
+            m_gal->DrawGlyphs( *cache );
         }
         else
         {
@@ -1953,8 +1943,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
     if( cache )
     {
-        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-            m_gal->DrawGlyph( *glyph.get() );
+        m_gal->DrawGlyphs( *cache );
     }
     else
     {
@@ -2022,8 +2011,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 
         if( cache )
         {
-            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                m_gal->DrawGlyph( *glyph.get() );
+            m_gal->DrawGlyphs( *cache );
         }
         else
         {
@@ -2092,8 +2080,7 @@ void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
 
     if( cache )
     {
-        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-            m_gal->DrawGlyph( *glyph.get() );
+        m_gal->DrawGlyphs( *cache );
     }
     else
     {

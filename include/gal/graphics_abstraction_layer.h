@@ -106,7 +106,16 @@ public:
      * @param aWidth        is a width of the segment
      */
     virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
-                              double aWidth ) {};
+                              double aWidth ){};
+
+    /**
+     * Draw a chain of rounded segments.
+     *
+     * @param aPointList is a list of 2D-Vectors containing the chain points.
+     * @param aWidth     is a width of the segments
+     */
+    virtual void DrawSegmentChain( const std::vector<VECTOR2D>& aPointList, double aWidth ){};
+    virtual void DrawSegmentChain( const SHAPE_LINE_CHAIN& aLineChain, double aWidth ){};
 
     /**
      * Draw a polyline
@@ -117,6 +126,13 @@ public:
     virtual void DrawPolyline( const std::vector<VECTOR2D>& aPointList ) {};
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) {};
     virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) {};
+
+    /**
+     * Draw multiple polylines
+     *
+     * @param aPointLists are lists of 2D-Vectors containing the polyline points.
+     */
+    virtual void DrawPolylines( const std::vector<std::vector<VECTOR2D>>& aPointLists ){};
 
     /**
      * Draw a circle using world coordinates.
@@ -173,9 +189,14 @@ public:
     }
 
     /**
-     * Draw a polygon representing an outline font glyph.
+     * Draw a polygon representing a font glyph.
      */
     virtual void DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth = 0, int aTotal = 1 ) {};
+
+    /**
+     * Draw polygons representing font glyphs.
+     */
+    virtual void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs ) {};
 
     /**
      * Draw a polygon.
