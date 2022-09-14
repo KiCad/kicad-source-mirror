@@ -241,6 +241,20 @@ public:
     void SetUnit( int aUnit );
 
     /**
+     * Return true if the given unit \a aUnit has a display name set.
+     *
+     * @return true if the display name of a unit is set, otherwise false.
+     */
+    bool HasUnitDisplayName( int aUnit );
+
+    /**
+     * Return the display name for a given unit \a aUnit.
+     *
+     * @return the display name of a unit if set, or the ordinal name of the unit otherwise.
+     */
+    wxString GetUnitDisplayName( int aUnit );
+
+    /**
      * Change the unit number to \a aUnit without setting any internal flags.
      * This has meaning only for symbols made up of multiple units per package.
      *

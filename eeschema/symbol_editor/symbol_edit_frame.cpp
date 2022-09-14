@@ -474,6 +474,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol && m_symbol->IsMulti() && !m_symbol->UnitsLocked();
             };
 
+    auto hasMultipleUnitsCond =
+            [this]( const SELECTION& )
+            {
+                return m_symbol && m_symbol->IsMulti();
+            };
+
     auto syncedPinsModeCond =
             [this]( const SELECTION& )
             {
@@ -497,6 +503,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                         ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganAlternateCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleSyncedPinsMode,
                         ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
+    mgr->SetConditions( EE_ACTIONS::setUnitDisplayName,
+                        ACTION_CONDITIONS().Enable( isEditableCond && hasMultipleUnitsCond ) );
 
 // Only enable a tool if the symbol is edtable
 #define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )
@@ -594,9 +602,8 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
     {
         for( int i = 0; i < m_symbol->GetUnitCount(); i++ )
         {
-            wxString sub  = LIB_SYMBOL::SubReference( i+1, false );
-            wxString unit = wxString::Format( _( "Unit %s" ), sub );
-            m_unitSelectBox->Append( unit );
+            wxString unitDisplayName = m_symbol->GetUnitDisplayName( i + 1 );
+            m_unitSelectBox->Append( unitDisplayName );
         }
     }
 

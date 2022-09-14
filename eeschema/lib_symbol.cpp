@@ -150,6 +150,8 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     m_description    = aSymbol.m_description;
     m_keyWords       = aSymbol.m_keyWords;
 
+    aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
+
     ClearSelected();
 
     for( const LIB_ITEM& oldItem : aSymbol.m_drawings )
@@ -205,6 +207,9 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_libId          = aSymbol.m_libId;
     m_description    = aSymbol.m_description;
     m_keyWords       = aSymbol.m_keyWords;
+
+    m_unitDisplayNames.clear();
+    aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
 
     m_drawings.clear();
 
@@ -369,6 +374,16 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
             return ( m_includeOnBoard ) ? 1 : -1;
     }
 
+    // Compare unit display names
+    if( m_unitDisplayNames < aRhs.m_unitDisplayNames )
+    {
+        return -1;
+    }
+    else if( m_unitDisplayNames > aRhs.m_unitDisplayNames )
+    {
+        return 1;
+    }
+
     return 0;
 }
 
@@ -376,6 +391,50 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
 wxString LIB_SYMBOL::GetUnitReference( int aUnit )
 {
     return LIB_SYMBOL::SubReference( aUnit, false );
+}
+
+
+bool LIB_SYMBOL::HasUnitDisplayName( int aUnit )
+{
+    return ( m_unitDisplayNames.count( aUnit ) == 1 );
+}
+
+
+wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit )
+{
+    if( HasUnitDisplayName( aUnit ) )
+    {
+        return m_unitDisplayNames[aUnit];
+    }
+    else
+    {
+        return wxString::Format( _( "Unit %s" ), GetUnitReference( aUnit ) );
+    }
+}
+
+
+void LIB_SYMBOL::CopyUnitDisplayNames( std::map<int, wxString>& aTarget ) const
+{
+    for( const auto& it : m_unitDisplayNames )
+    {
+        aTarget[it.first] = it.second;
+    }
+}
+
+
+void LIB_SYMBOL::SetUnitDisplayName( int aUnit, const wxString& aName )
+{
+    if( aUnit <= GetUnitCount() )
+    {
+        if( aName.Length() > 0 )
+        {
+            m_unitDisplayNames[aUnit] = aName;
+        }
+        else
+        {
+            m_unitDisplayNames.erase( aUnit );
+        }
+    }
 }
 
 

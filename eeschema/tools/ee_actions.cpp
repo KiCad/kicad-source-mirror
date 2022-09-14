@@ -182,6 +182,10 @@ TOOL_ACTION EE_ACTIONS::updateSymbolFields( "eeschema.SymbolLibraryControl.updat
         _( "Update Symbol Fields..." ), _( "Update symbol to match changes made in parent symbol" ),
         BITMAPS::refresh );
 
+TOOL_ACTION EE_ACTIONS::setUnitDisplayName( "eeschema.SymbolLibraryControl.setUnitDisplayName",
+                                            AS_GLOBAL, 0, "", _( "Set Unit Display Name..." ),
+                                            _( "Set the display name for a unit" ) );
+
 TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",
         AS_GLOBAL, 0, "",
         _( "Add Symbol to Schematic" ), _( "Add Symbol to Schematic" ),

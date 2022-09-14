@@ -147,6 +147,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     // Inherit the include in bill of materials and board netlist settings from library symbol.
     m_inBom = aSymbol.GetIncludeInBom();
     m_onBoard = aSymbol.GetIncludeOnBoard();
+
 }
 
 
@@ -427,6 +428,22 @@ int SCH_SYMBOL::GetUnitCount() const
         return m_part->GetUnitCount();
 
     return 0;
+}
+
+
+wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit )
+{
+    wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), LIB_SYMBOL::SubReference( aUnit ) ) ) );
+
+    return m_part->GetUnitDisplayName( aUnit );
+}
+
+
+bool SCH_SYMBOL::HasUnitDisplayName( int aUnit )
+{
+    wxCHECK( m_part, false );
+
+    return m_part->HasUnitDisplayName( aUnit );
 }
 
 

@@ -42,6 +42,7 @@
 #include "symbol_editor_edit_tool.h"
 #include "dialog_lib_textbox_properties.h"
 #include "lib_textbox.h"
+#include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
@@ -646,6 +647,47 @@ int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName( const TOOL_EVENT& aEvent )
+{
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+
+    if( !symbol )
+        return 0;
+
+    int unitid = m_frame->GetUnit();
+
+    if( unitid == 0 )
+    {
+        return -1;
+    }
+
+    wxString promptText = wxString::Format( _( "Enter display name for unit %s" ),
+                                            symbol->GetUnitReference( unitid ) );
+    wxString currentvalue;
+
+    if( symbol->HasUnitDisplayName( unitid ) )
+    {
+        currentvalue = symbol->GetUnitDisplayName( unitid );
+    }
+
+    wxTextEntryDialog dlg( m_frame, promptText, _( "Set Unit Display Name" ), currentvalue );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
+        symbol->SetUnitDisplayName( unitid, dlg.GetValue() );
+        m_frame->RebuildSymbolUnitsList();
+        m_frame->OnModify();
+    }
+    else
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetSymbolFromUndoList();
@@ -854,4 +896,5 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, EE_ACTIONS::updateSymbolFields.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName, EE_ACTIONS::setUnitDisplayName.MakeEvent() );
 }

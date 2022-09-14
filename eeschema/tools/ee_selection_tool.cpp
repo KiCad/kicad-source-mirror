@@ -225,6 +225,18 @@ bool EE_SELECTION_TOOL::Init()
                        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
             };
 
+    auto symbolDisplayNameIsEditable =
+            [&]( const SELECTION& sel )
+            {
+                if ( !m_isSymbolEditor )
+                    return false;
+
+                SYMBOL_EDIT_FRAME* symEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+                return symEditFrame->GetCurSymbol() && symEditFrame->GetCurSymbol()->IsMulti() 
+                        && symEditFrame->IsSymbolEditable() && !symEditFrame->IsSymbolAlias();
+            };
+
     auto& menu = m_menu.GetMenu();
 
     menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
@@ -260,6 +272,8 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddSeparator( 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   haveSymbol && EE_CONDITIONS::Empty, 400 );
     menu.AddItem( EE_ACTIONS::pinTable,           haveSymbol && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::setUnitDisplayName,
+                  haveSymbol && symbolDisplayNameIsEditable && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );

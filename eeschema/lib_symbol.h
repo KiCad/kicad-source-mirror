@@ -527,6 +527,26 @@ public:
     wxString GetUnitReference( int aUnit ) override;
 
     /**
+     * Return true if the given unit \a aUnit has a display name defined
+     */
+    bool HasUnitDisplayName( int aUnit ) override;
+
+    /**
+     * Return the user-defined display name for \a aUnit for symbols with units.
+     */
+    wxString GetUnitDisplayName( int aUnit ) override;
+
+    /**
+     * Copy all unit display names into the given map \a aTarget
+     */
+    void CopyUnitDisplayNames( std::map<int, wxString>& aTarget ) const;
+
+    /**
+     * Set the user-defined display name for \a aUnit to \a aName for symbols with units.
+     */
+    void SetUnitDisplayName( int aUnit, const wxString& aName );
+
+    /**
      * @return true if the symbol has multiple units per symbol.
      * When true, the reference has a sub reference to identify symbol.
      */
@@ -731,6 +751,7 @@ private:
     static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
                                             ///< symbol id from the symbol number: only 'A', 'a'
                                             ///< or '1' can be used, other values have no sense.
+    std::map<int, wxString> m_unitDisplayNames;
 };
 
 #endif  //  CLASS_LIBENTRY_H

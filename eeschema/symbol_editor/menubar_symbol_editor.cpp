@@ -98,6 +98,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     editMenu->AppendSeparator();
     editMenu->Add( EE_ACTIONS::pinTable );
+    editMenu->Add( EE_ACTIONS::setUnitDisplayName );
     editMenu->Add( EE_ACTIONS::updateSymbolFields );
 
 

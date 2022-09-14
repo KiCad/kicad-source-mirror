@@ -228,6 +228,13 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
             aFormatter.Print( aNestLevel + 1, "(symbol %s_%d_%d\"\n",
                               name.c_str(), unit.m_unit, unit.m_convert );
 
+            // if the unit has a display name, write that
+            if( aSymbol->HasUnitDisplayName( unit.m_unit ) )
+            {
+                name = aSymbol->GetUnitDisplayName( unit.m_unit );
+                aFormatter.Print( aNestLevel + 2, "(unit_name %s)\n",
+                                  aFormatter.Quotes( name ).c_str() );
+            }
             // Enforce item ordering
             auto cmp =
                     []( const LIB_ITEM* a, const LIB_ITEM* b )

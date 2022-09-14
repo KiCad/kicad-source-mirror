@@ -192,6 +192,7 @@ public:
     static TOOL_ACTION importSymbol;
     static TOOL_ACTION exportSymbol;
     static TOOL_ACTION updateSymbolFields;
+    static TOOL_ACTION setUnitDisplayName;
 
     // Hierarchy navigation
     static TOOL_ACTION changeSheet;

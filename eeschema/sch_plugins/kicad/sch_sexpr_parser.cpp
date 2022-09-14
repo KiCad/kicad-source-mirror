@@ -168,6 +168,7 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
     long tmp;
     wxString name;
     wxString error;
+    wxString unitDisplayName;
     LIB_ITEM* item;
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
 
@@ -335,6 +336,17 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
 
                 switch( token )
                 {
+                case T_unit_name:
+                    token = NextTok();
+
+                    if( IsSymbol( token ) )
+                    {
+                        unitDisplayName = FromUTF8();
+                        symbol->SetUnitDisplayName( m_unit, unitDisplayName );
+                    }
+                    NeedRIGHT();
+                    break;
+
                 case T_arc:
                 case T_bezier:
                 case T_circle:

@@ -156,7 +156,16 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     m_LibId = aParent->m_LibId;
 
     m_Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
-    m_Desc = wxEmptyString;
+
+    if( aItem->HasUnitDisplayName( aUnit ) )
+    {
+        m_Desc = aItem->GetUnitDisplayName( aUnit );
+    }
+    else
+    {
+        m_Desc = wxEmptyString;
+    }
+
     m_MatchName = wxEmptyString;
 
     m_IntrinsicRank = -aUnit;
