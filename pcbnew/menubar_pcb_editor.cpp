@@ -83,10 +83,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         ACTION_CONDITIONS cond;
         cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
         RegisterUIUpdateHandler( item->GetId(), cond );
-
-        fileMenu->Add( PCB_ACTIONS::appendBoard );
-        fileMenu->AppendSeparator();
     }
+
+    fileMenu->Add( PCB_ACTIONS::appendBoard );
+    fileMenu->AppendSeparator();
 
     fileMenu->Add( ACTIONS::save );
 
