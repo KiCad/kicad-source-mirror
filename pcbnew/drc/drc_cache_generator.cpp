@@ -198,7 +198,6 @@ bool DRC_CACHE_GENERATOR::Run()
             m_drcEngine->ReportProgress( static_cast<double>( done ) / allZones.size() );
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 
     return !m_drcEngine->IsCancelled();
