@@ -35,7 +35,6 @@
  */
 
 #include <base_units.h>
-#include <fmt/format.h>
 #include <string_utils.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
@@ -214,24 +213,24 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol,
         value_to_print = To_User_Unit( aUnits, value_to_print );
     }
 
-    std::string buf;
+    char buf[50];
 
     if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
     {
-        buf = fmt::format( "{:.16f}", value_to_print );
+        int len = snprintf( buf, sizeof( buf ) - 1, "%.10f", value_to_print );
 
-        // remove trailing zeros
-        while( !buf.empty() && buf[buf.size() - 1] == '0' )
-        {
-            buf.pop_back();
-        }
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( len >= 0 && ( buf[len]=='.' || buf[len]==',' ) )
+            buf[len] = '\0';
     }
     else
     {
-        buf = fmt::format( "{:.10g}", value_to_print );
+        snprintf( buf, sizeof( buf ) - 1, "%.10g", value_to_print );
     }
 
-    wxString stringValue( buf );
+    wxString stringValue( buf, wxConvUTF8 );
 
     if( aAddUnitSymbol )
         stringValue += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, aType );
