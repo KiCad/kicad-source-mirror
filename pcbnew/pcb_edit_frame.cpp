@@ -97,6 +97,8 @@
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_search_pane.h>
+#include <wx/fdrepdlg.h>
 #include <widgets/infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
@@ -191,6 +193,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_supportsAutoSave = true;
     m_probingSchToPcb = false;
     m_show_properties = true;
+    m_show_search = false;
 
     // We don't know what state board was in when it was last saved, so we have to
     // assume dirty
@@ -248,6 +251,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
+    m_searchPane = new PCB_SEARCH_PANE( this );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -297,11 +301,25 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
                       .Center() );
 
+
+    m_auimgr.AddPane( m_searchPane, EDA_PANE()
+                                                 .Name( SearchPaneName() )
+                                                 .Bottom()
+                                                 .Caption( _( "Search" ) )
+                                                 .PaneBorder( false )
+                                                 .MinSize( 180, -1 )
+                                                 .BestSize( 180, -1 )
+                                                 .CloseButton( true )
+                                                 .DestroyOnClose( false ) );
+
+
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
 
     bool showProperties = ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel && m_show_properties;
     m_auimgr.GetPane( "PropertiesManager" ).Show( showProperties );
+
+    m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;

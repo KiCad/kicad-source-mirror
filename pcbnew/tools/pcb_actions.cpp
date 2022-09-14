@@ -837,6 +837,11 @@ TOOL_ACTION PCB_ACTIONS::showProperties( "pcbnew.Control.showProperties",
         _( "Show Properties Panel" ), _( "Show/hide the properties panel" ),
         BITMAPS::tools );
 
+TOOL_ACTION PCB_ACTIONS::showSearch( "pcbnew.Control.showSearch",
+        AS_GLOBAL, 0, "",
+        _( "Show Search Panel" ), _( "Show/hide the search panel" ),
+        BITMAPS::tools );
+
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0, "",
         _( "Flip Board View" ), _( "View board from the opposite side" ),

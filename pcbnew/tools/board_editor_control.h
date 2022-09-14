@@ -60,6 +60,7 @@ public:
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
 
+    int Search( const TOOL_EVENT& aEvent );
     int Find( const TOOL_EVENT& aEvent );
     int FindNext( const TOOL_EVENT& aEvent );
 
@@ -78,6 +79,7 @@ public:
     int ShowEeschema( const TOOL_EVENT& aEvent );
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );
+    int ToggleSearch( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );
 
     // Track & via size control

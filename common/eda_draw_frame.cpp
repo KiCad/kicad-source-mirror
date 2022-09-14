@@ -59,6 +59,7 @@
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
+#include <widgets/search_pane.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
@@ -1089,6 +1090,17 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 
     if( m_auxiliaryToolBar )    // Additional tools under main toolbar
        ReCreateAuxiliaryToolbar();
+}
+
+
+void EDA_DRAW_FRAME::ShowChangedLanguage()
+{
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    if( m_searchPane )
+    {
+        m_searchPane->OnLanguageChange();
+    }
 }
 
 

@@ -370,6 +370,8 @@ set( PCBNEW_CLASS_SRCS
     widgets/appearance_controls_base.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
+    widgets/pcb_search_pane.cpp
+    widgets/search_handlers.cpp
 
     )
 

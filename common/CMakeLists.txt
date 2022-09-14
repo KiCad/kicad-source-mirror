@@ -190,6 +190,9 @@ set( COMMON_WIDGET_SRCS
     widgets/paged_dialog.cpp
     widgets/progress_reporter_base.cpp
     widgets/properties_panel.cpp
+    widgets/search_pane.cpp
+    widgets/search_pane_base.cpp
+    widgets/search_pane_tab.cpp
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp

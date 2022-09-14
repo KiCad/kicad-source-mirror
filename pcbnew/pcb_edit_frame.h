@@ -125,6 +125,11 @@ public:
     std::vector<BOARD_ITEM*> FindItemsFromSyncSelection( std::string syncStr );
 
     /**
+     * @return the name of the wxAuiPaneInfo managing the Search panel
+     */
+    static const wxString SearchPaneName() { return wxT( "Search" ); }
+
+    /**
      * Show the Find dialog.
      */
     void ShowFindDialog();
@@ -296,6 +301,7 @@ public:
 
     void ToggleLayersManager();
     void ToggleProperties();
+    void ToggleSearch();
 
     /**
      * Create an ASCII footprint position file.
@@ -645,7 +651,7 @@ public:
      * @param aItems are the items to try to select on schematic.
      * @param aFocusItem set to item to select and focus on even if selection can't be
      *                   represented in Schematic editor fully.
-     * @param aForce select elements in Schematic editor whether or not the user has 
+     * @param aForce select elements in Schematic editor whether or not the user has
      *               the select option chosen.
      */
     void SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems, EDA_ITEM* aFocusItem,
@@ -808,6 +814,7 @@ public:
 
     bool m_show_layer_manager_tools;
     bool m_show_properties;
+    bool m_show_search;
 
     bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
 

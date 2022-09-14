@@ -41,6 +41,7 @@ class COLOR_SETTINGS;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
 class wxFindReplaceData;
+class SEARCH_PANE;
 
 namespace KIGFX
 {
@@ -444,6 +445,11 @@ public:
      */
     void RecreateToolbars();
 
+    /**
+     * Redraw the menus and what not in current language.
+     */
+    void ShowChangedLanguage() override;
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -509,6 +515,7 @@ protected:
     int                m_msgFrameHeight;
 
     COLOR_SETTINGS*    m_colorSettings;
+    SEARCH_PANE*       m_searchPane;
 
     ///< The current canvas type.
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;

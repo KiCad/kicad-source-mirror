@@ -47,6 +47,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/pcb_search_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
@@ -790,6 +791,20 @@ void PCB_EDIT_FRAME::ToggleProperties()
 
     m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
     m_auimgr.Update();
+}
+
+
+void PCB_EDIT_FRAME::ToggleSearch()
+{
+    m_show_search = !m_show_search;
+
+    m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
+    m_auimgr.Update();
+
+    if( m_show_search )
+    {
+        m_searchPane->FocusSearch();
+    }
 }
 
 
