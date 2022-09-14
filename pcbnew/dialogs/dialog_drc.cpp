@@ -476,17 +476,24 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         std::vector<CN_EDGE> edges;
         m_frame->GetBoard()->GetConnectivity()->GetUnconnectedEdges( edges );
 
-        for( const CN_EDGE& edge : edges )
+        if( item->Type() == PCB_ZONE_T )
         {
-            if( edge.GetSourceNode()->Parent() == a  && edge.GetTargetNode()->Parent() == b )
+            for( const CN_EDGE& edge : edges )
             {
-                if( item == a )
-                    m_frame->FocusOnLocation( edge.GetSourcePos() );
-                else
-                    m_frame->FocusOnLocation( edge.GetTargetPos() );
+                if( edge.GetSourceNode()->Parent() == a  && edge.GetTargetNode()->Parent() == b )
+                {
+                    if( item == a )
+                        m_frame->FocusOnLocation( edge.GetSourcePos() );
+                    else
+                        m_frame->FocusOnLocation( edge.GetTargetPos() );
 
-                break;
+                    break;
+                }
             }
+        }
+        else
+        {
+            m_frame->FocusOnItem( item, principalLayer );
         }
     }
     else if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
