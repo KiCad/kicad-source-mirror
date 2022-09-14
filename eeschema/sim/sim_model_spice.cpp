@@ -26,6 +26,8 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
+using SPICE_GENERATOR = SIM_MODEL_SPICE::SPICE_GENERATOR;
+
 
 namespace SIM_MODEL_SPICE_PARSER
 {
@@ -36,8 +38,85 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
-SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType )
-    : SIM_MODEL( aType )
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SPICE_GENERATOR::ItemName( const wxString& aRefName ) const
+{
+    wxString elementType = m_model.GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString();
+
+    if( aRefName != "" && aRefName.StartsWith( elementType ) )
+        return aRefName;
+    else
+        return elementType + aRefName;
+}
+
+
+wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+
+    for( const PIN& pin : GetPins() )
+    {
+        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
+
+        if( it != aSymbolPinNumbers.end() )
+        {
+            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
+            result << " " << aPinNetNames.at( symbolPinIndex );
+        }
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::ItemModelName( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SPICE_GENERATOR::ItemParams() const
+{
+    wxString result;
+
+    for( const PARAM& param : GetInstanceParams() )
+    {
+        if( param.info.name != "model" )
+            result << "";
+        else
+            result << " " << param.value->ToString();
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
+{
+    std::vector<wxString> pinNumbers;
+    std::vector<wxString> pinNetNames;
+
+    for( int i = 0; i < m_model.GetPinCount(); ++i )
+    {
+        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
+        pinNetNames.push_back( wxString::FromCDouble( i + 1 ) );
+    }
+
+    return ItemLine( "", aModelName, pinNumbers, pinNetNames );
+}
+
+
+SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType ) :
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 
@@ -81,87 +160,10 @@ void SIM_MODEL_SPICE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 }
 
 
-wxString SIM_MODEL_SPICE::GenerateSpiceModelLine( const wxString& aModelName ) const
-{
-    return "";
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpiceItemName( const wxString& aRefName ) const
-{
-    wxString elementType = GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString();
-
-    if( aRefName != "" && aRefName.StartsWith( elementType ) )
-        return aRefName;
-    else
-        return elementType + aRefName;
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpicePreview( const wxString& aModelName ) const
-{
-    std::vector<wxString> pinNumbers;
-    std::vector<wxString> pinNetNames;
-
-    for( int i = 0; i < GetPinCount(); ++i )
-    {
-        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
-        pinNetNames.push_back( wxString::FromCDouble( i + 1 ) );
-    }
-
-    return GenerateSpiceItemLine( "", aModelName, pinNumbers, pinNetNames );
-}
-
-
 void SIM_MODEL_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
         AddPin( { "", wxString::FromCDouble( symbolPinIndex + 1 ) } );
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpiceItemPins( const wxString& aRefName,
-                                                 const wxString& aModelName,
-                                                 const std::vector<wxString>& aSymbolPinNumbers,
-                                                 const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString result;
-
-    for( const PIN& pin : GetSpicePins() )
-    {
-        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
-                             pin.symbolPinNumber );
-
-        if( it != aSymbolPinNumbers.end() )
-        {
-            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << " " << aPinNetNames.at( symbolPinIndex );
-        }
-    }
-
-    return result;
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpiceItemModelName( const wxString& aModelName ) const
-{
-    return "";
-}
-
-
-wxString SIM_MODEL_SPICE::GenerateSpiceItemParams() const
-{
-    wxString result;
-
-    for( const PARAM& param : GetSpiceInstanceParams() )
-    {
-        if( param.info.name != "model" )
-            result << "";
-        else
-            result << " " << param.value->ToString();
-    }
-
-    return result;
 }
 
 

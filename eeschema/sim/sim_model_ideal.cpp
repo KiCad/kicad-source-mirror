@@ -26,10 +26,33 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
+using SPICE_GENERATOR = SIM_MODEL_IDEAL::SPICE_GENERATOR;
 
-SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
-    : SIM_MODEL( aType ),
-      m_isInferred( false )
+
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString valueStr = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
+
+    if( valueStr != "" )
+        return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, valueStr, aSymbolPinNumbers,
+                                                     aPinNetNames );
+    else
+        return "";
+}
+
+
+SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType ) :
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+    m_isInferred( false )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F"   );
@@ -81,26 +104,6 @@ void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 
     if( m_isInferred )
         inferredWriteDataFields( aFields );
-}
-
-
-wxString SIM_MODEL_IDEAL::GenerateSpiceModelLine( const wxString& aModelName ) const
-{
-    return "";
-}
-
-
-wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
-                                                 const wxString& aModelName,
-                                                 const std::vector<wxString>& aSymbolPinNumbers,
-                                                 const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString valueStr = GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
-
-    if( valueStr != "" )
-        return SIM_MODEL::GenerateSpiceItemLine( aRefName, valueStr, aSymbolPinNumbers, aPinNetNames );
-    else
-        return "";
 }
 
 

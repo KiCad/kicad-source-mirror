@@ -31,11 +31,19 @@
 class SIM_MODEL_SUBCKT : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+        std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+    };
+
+
     SIM_MODEL_SUBCKT( TYPE aType );
 
     void ReadSpiceCode( const wxString& aSpiceCode ) override;
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-    std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
 protected:
@@ -43,6 +51,7 @@ protected:
 
 private:
     bool requiresSpiceModelLine() const override { return true; }
+
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

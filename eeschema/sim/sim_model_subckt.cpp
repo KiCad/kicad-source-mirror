@@ -27,6 +27,8 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
+using SPICE_GENERATOR = SIM_MODEL_SUBCKT::SPICE_GENERATOR;
+
 
 namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 {
@@ -46,8 +48,29 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 }
 
 
-SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType )
-    : SIM_MODEL( aType )
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
+{
+    std::vector<wxString> currentNames;
+
+    for( const PIN& pin : GetPins() )
+    {
+        currentNames.push_back( wxString::Format( "I(%s:%s)",
+                                                  ItemName( aRefName ),
+                                                  pin.name ) );
+    }
+
+    return currentNames;
+}
+
+
+SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType ) :
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
 {
 }
 
@@ -119,27 +142,6 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
     }
 
     m_spiceCode = aSpiceCode;
-}
-
-
-wxString SIM_MODEL_SUBCKT::GenerateSpiceModelLine( const wxString& aModelName ) const
-{
-    return "";
-}
-
-
-std::vector<wxString> SIM_MODEL_SUBCKT::GenerateSpiceCurrentNames( const wxString& aRefName ) const
-{
-    std::vector<wxString> currentNames;
-
-    for( const PIN& pin : GetPins() )
-    {
-        currentNames.push_back( wxString::Format( "I(%s:%s)",
-                                                  GenerateSpiceItemName( aRefName ),
-                                                  pin.name ) );
-    }
-
-    return currentNames;
 }
 
 

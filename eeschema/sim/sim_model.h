@@ -108,6 +108,50 @@ namespace SIM_MODEL_GRAMMAR
 class SIM_MODEL
 {
 public:
+    struct PIN;
+    struct PARAM;
+
+    class SPICE_GENERATOR
+    {
+    public:
+        SPICE_GENERATOR( const SIM_MODEL& aModel ) : m_model( aModel ) {}
+
+        virtual wxString ModelLine( const wxString& aModelName ) const;
+
+        wxString ItemLine( const wxString& aRefName,
+                           const wxString& aModelName ) const;
+        wxString ItemLine( const wxString& aRefName,
+                           const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers ) const;
+        virtual wxString ItemLine( const wxString& aRefName,
+                                   const wxString& aModelName,
+                                   const std::vector<wxString>& aSymbolPinNumbers,
+                                   const std::vector<wxString>& aPinNetNames ) const;
+        virtual wxString ItemName( const wxString& aRefName ) const;
+        virtual wxString ItemPins( const wxString& aRefName,
+                                   const wxString& aModelName,
+                                   const std::vector<wxString>& aSymbolPinNumbers,
+                                   const std::vector<wxString>& aPinNetNames ) const;
+        virtual wxString ItemModelName( const wxString& aModelName ) const;
+        virtual wxString ItemParams() const;
+
+        virtual wxString TuningLine( const wxString& aSymbol ) const;
+        
+        virtual std::vector<wxString> CurrentNames( const wxString& aRefName ) const;
+
+        virtual wxString Preview( const wxString& aModelName ) const;
+
+    protected:
+        virtual std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const
+        {
+            return m_model.GetPins();
+        }
+
+        std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const;
+
+        const SIM_MODEL& m_model;
+    };
+
     static constexpr auto REFERENCE_FIELD = "Reference";
     static constexpr auto VALUE_FIELD = "Value";
 
@@ -463,6 +507,8 @@ public:
     static void SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
                                const wxString& aValue );
 
+    const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
+
 
     // Move semantics.
     // Rule of five.
@@ -471,7 +517,6 @@ public:
     SIM_MODEL( const SIM_MODEL& aOther ) = delete;
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
-
 
     virtual void ReadSpiceCode( const wxString& aSpiceCode );
 
@@ -493,23 +538,7 @@ public:
 
     virtual bool HasToIncludeSpiceLibrary() const { return GetBaseModel() && !HasOverrides(); }
 
-    virtual wxString GenerateSpiceModelLine( const wxString& aModelName ) const;
-
-    virtual wxString GenerateSpiceItemName( const wxString& aRefName ) const;
-    wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
-    wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers ) const;
-    virtual wxString GenerateSpiceItemLine( const wxString& aRefName,
-                                            const wxString& aModelName,
-                                            const std::vector<wxString>& aSymbolPinNumbers,
-                                            const std::vector<wxString>& aPinNetNames ) const;
-
-    virtual wxString GenerateSpiceTuningLine( const wxString& aSymbol ) const;
-
-    virtual wxString GenerateSpicePreview( const wxString& aModelName ) const;
-
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
-    virtual std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const;
 
     void AddPin( const PIN& aPin );
     int FindModelPinIndex( const wxString& aSymbolPinNumber );
@@ -541,7 +570,6 @@ public:
     const PARAM* FindParam( const wxString& aParamName ) const;
 
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
-    std::vector<std::reference_wrapper<const PARAM>> GetSpiceInstanceParams() const;
 
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
@@ -564,19 +592,13 @@ public:
     bool IsEnabled() const { return m_isEnabled; }
 
 protected:
-    SIM_MODEL( TYPE aType );
+    SIM_MODEL( TYPE aType ) : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ) {}
+    SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
 
     virtual void CreatePins( unsigned aSymbolPinCount );
 
     template <typename T>
     void WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const;
-
-    virtual wxString GenerateSpiceItemPins( const wxString& aRefName,
-                                            const wxString& aModelName,
-                                            const std::vector<wxString>& aSymbolPinNumbers,
-                                            const std::vector<wxString>& aPinNetNames ) const;
-    virtual wxString GenerateSpiceItemModelName( const wxString& aModelName ) const;
-    virtual wxString GenerateSpiceItemParams() const;
 
     virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
@@ -585,11 +607,6 @@ protected:
 
     void ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
     void ParseDisabledField( const wxString& aDisabledField );
-
-    virtual std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const
-    {
-        return GetPins();
-    }
 
     virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                         SIM_VALUE_GRAMMAR::NOTATION aNotation
@@ -629,6 +646,7 @@ private:
     virtual std::vector<wxString> getPinNames() const { return {}; }
 
 
+    std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;
     const SIM_MODEL* m_baseModel;
 
     const TYPE m_type;

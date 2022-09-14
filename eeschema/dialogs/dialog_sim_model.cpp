@@ -338,7 +338,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         wxTextFile file;
         wxString text;
 
-        text << curModel().GenerateSpicePreview( modelName );
+        text << curModel().SpiceGenerator().Preview( modelName );
         text << "\n";
         text << "--- FILE SOURCE (" << path << ") ---\n";
         text << "\n";
@@ -356,7 +356,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         }
     }
     else
-        m_codePreview->SetText( curModel().GenerateSpicePreview( modelName ) );
+        m_codePreview->SetText( curModel().SpiceGenerator().Preview( modelName ) );
 
     m_codePreview->SetEditable( false ); // ???
     m_wasCodePreviewUpdated = true;

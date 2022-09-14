@@ -823,7 +823,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                                                    symbol->GetFields() );
 
                     wxString ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
-                    std::vector<wxString> currentNames = model->GenerateSpiceCurrentNames( ref );
+                    std::vector<wxString> currentNames = model->SpiceGenerator().CurrentNames( ref );
 
                     if( currentNames.size() == 0 )
                         return true;

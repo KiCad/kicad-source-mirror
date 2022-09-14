@@ -31,6 +31,25 @@
 class SIM_MODEL_SPICE : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+
+        wxString ItemName( const wxString& aRefName ) const override;
+        wxString ItemPins( const wxString& aRefName,
+                           const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers,
+                           const std::vector<wxString>& aPinNetNames ) const override;
+        wxString ItemModelName( const wxString& aModelName ) const override;
+        wxString ItemParams() const override;
+
+        wxString Preview( const wxString& aModelName ) const override;
+    };
+
+
     DEFINE_ENUM_CLASS_WITH_ITERATOR( SPICE_PARAM,
         TYPE,
         MODEL,
@@ -53,29 +72,16 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
-
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-    wxString GenerateSpiceItemName( const wxString& aRefName ) const override;
-    wxString GenerateSpicePreview( const wxString& aModelName ) const override;
-
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
 
-    wxString GenerateSpiceItemPins( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const override;
-
-    wxString GenerateSpiceItemModelName( const wxString& aModelName ) const override;
-
-    wxString GenerateSpiceItemParams() const override;
 
     bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
                                     = SIM_VALUE_GRAMMAR::NOTATION::SPICE ) override;
 
 private:
-    std::vector<PARAM::INFO> makeParamInfos();
+    static std::vector<PARAM::INFO> makeParamInfos();
 
     template <typename T>
     void readLegacyDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
@@ -83,6 +89,7 @@ private:
     void parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aLegacyPinsField );
 
     bool requiresSpiceModelLine() const override { return false; }
+
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

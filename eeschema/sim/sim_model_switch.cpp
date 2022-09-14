@@ -24,8 +24,84 @@
 
 #include <sim/sim_model_switch.h>
 
+using SPICE_GENERATOR = SIM_MODEL_SWITCH::SPICE_GENERATOR;
 
-SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) : SIM_MODEL( aType )
+
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+    
+    switch( m_model.GetType() )
+    {
+    case TYPE::SW_V:
+    {
+        result << SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers,
+                                                        aPinNetNames );
+        break;
+    }
+
+    case TYPE::SW_I:
+    {
+        wxString vsourceName = "V__" + aRefName;
+
+        // Current switches measure input current through a voltage source.
+        result << vsourceName << " " << aPinNetNames[0] << " " << aPinNetNames[1] << " 0\n";
+
+        result << SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, vsourceName + " " + aModelName,
+                                                        aSymbolPinNumbers, aPinNetNames );
+        break;
+    }
+
+    default:
+        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SWITCH" );
+        break;
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::ItemParams() const
+{
+    wxString result;
+
+    for( const PARAM& param : GetInstanceParams() )
+    {
+        // The only instance param is "ic", which is positional.
+        wxString value = param.value->ToSpiceString();
+        
+        if( value == "none" )
+            result << "";
+        else
+            result << value;
+    }
+
+    return result;
+}
+
+
+std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR::GetPins() const
+{
+    switch( m_model.GetType() )
+    {
+    case TYPE::SW_V:
+        return { m_model.GetPin( 2 ), m_model.GetPin( 3 ), m_model.GetPin( 0 ), m_model.GetPin( 1 ) };
+
+    case TYPE::SW_I:
+        return { m_model.GetPin( 2 ), m_model.GetPin( 3 ) };
+
+    default:
+        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SWITCH" );
+        return {};
+    }
+}
+
+
+SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
 {
     static std::vector<PARAM::INFO> vsw = makeSwVParamInfos();
     static std::vector<PARAM::INFO> isw = makeSwIParamInfos();
@@ -51,62 +127,6 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) : SIM_MODEL( aType )
 }
 
 
-wxString SIM_MODEL_SWITCH::GenerateSpiceItemParams() const
-{
-    wxString result;
-
-    for( const PARAM& param : GetSpiceInstanceParams() )
-    {
-        // The only instance param is "ic", which is positional.
-        wxString value = param.value->ToSpiceString();
-        
-        if( value == "none" )
-            result << "";
-        else
-            result << value;
-    }
-
-    return result;
-}
-
-
-wxString SIM_MODEL_SWITCH::GenerateSpiceItemLine( const wxString& aRefName,
-                                                  const wxString& aModelName,
-                                                  const std::vector<wxString>& aSymbolPinNumbers,
-                                                  const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString result;
-    
-    switch( GetType() )
-    {
-    case TYPE::SW_V:
-    {
-        result << SIM_MODEL::GenerateSpiceItemLine( aRefName, aModelName, aSymbolPinNumbers,
-                                                    aPinNetNames );
-        break;
-    }
-
-    case TYPE::SW_I:
-    {
-        wxString vsourceName = "V__" + aRefName;
-
-        // Current switches measure input current through a voltage source.
-        result << vsourceName << " " << aPinNetNames[0] << " " << aPinNetNames[1] << " 0\n";
-
-        result << SIM_MODEL::GenerateSpiceItemLine( aRefName, vsourceName + " " + aModelName,
-                                                    aSymbolPinNumbers, aPinNetNames );
-        break;
-    }
-
-    default:
-        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SWITCH" );
-        break;
-    }
-
-    return result;
-}
-
-
 wxString SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
 {
     if( aParam.info.name == "ic" && aParam.value->ToString() == "none" )
@@ -115,23 +135,6 @@ wxString SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aI
     }
 
     return SIM_MODEL::GenerateParamValuePair( aParam, aIsFirst );
-}
-
-
-std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL_SWITCH::GetSpicePins() const
-{
-    switch( GetType() )
-    {
-    case TYPE::SW_V:
-        return { GetPin( 2 ), GetPin( 3 ), GetPin( 0 ), GetPin( 1 ) };
-
-    case TYPE::SW_I:
-        return { GetPin( 2 ), GetPin( 3 ) };
-
-    default:
-        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SWITCH" );
-        return {};
-    }
 }
 
 

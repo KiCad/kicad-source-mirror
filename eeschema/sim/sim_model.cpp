@@ -42,6 +42,7 @@
 
 #include <iterator>
 
+using SPICE_GENERATOR = SIM_MODEL::SPICE_GENERATOR;
 using DEVICE_TYPE = SIM_MODEL::DEVICE_TYPE_;
 using TYPE = SIM_MODEL::TYPE;
 
@@ -83,36 +84,220 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+{
+    LOCALE_IO toggle;
+
+    if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
+        return "";
+
+    wxString result = "";
+
+    result << wxString::Format( ".model %s ", aModelName );
+    size_t indentLength = result.Length();
+
+    result << wxString::Format( "%s \n", m_model.GetSpiceInfo().modelType );
+
+    for( const PARAM& param : m_model.GetParams() )
+    {
+        if( param.info.isSpiceInstanceParam )
+            continue;
+
+        wxString name = ( param.info.spiceModelName == "" ) ?
+            param.info.name : param.info.spiceModelName;
+        wxString value = param.value->ToSpiceString();
+
+        if( value == "" )
+            continue;
+
+        result << wxString::Format( "+%s%s=%s\n", wxString( ' ', indentLength - 1 ), name, value );
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName ) const
+{
+    // Use linear symbol pin numbers enumeration. Used in model preview.
+
+    std::vector<wxString> pinNumbers;
+
+    for( int i = 0; i < m_model.GetPinCount(); ++i )
+        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
+
+    return ItemLine( aRefName, aModelName, pinNumbers );
+}
+
+
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers ) const
+{
+    std::vector<wxString> pinNetNames;
+
+    for( const PIN& pin : GetPins() )
+        pinNetNames.push_back( pin.name );
+
+    return ItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNetNames );
+}
+
+
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+    result << ItemName( aRefName );
+    result << ItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
+    result << ItemModelName( aModelName );
+    result << ItemParams();
+    result << "\n";
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::ItemName( const wxString& aRefName ) const
+{
+    if( aRefName != "" && aRefName.StartsWith( m_model.GetSpiceInfo().itemType ) )
+        return aRefName;
+    else
+        return m_model.GetSpiceInfo().itemType + aRefName;
+}
+
+
+wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString result;
+    int ncCounter = 0;
+
+    for( const PIN& pin : GetPins() )
+    {
+        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
+                             pin.symbolPinNumber );
+
+        if( it == aSymbolPinNumbers.end() )
+        {
+            LOCALE_IO toggle;
+            result << wxString::Format( " NC-%s-%u", aRefName, ncCounter++ );
+        }
+        else
+        {
+            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
+            result << " " << aPinNetNames.at( symbolPinIndex );
+        }
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::ItemModelName( const wxString& aModelName ) const
+{
+    return " " + aModelName;
+}
+
+
+wxString SPICE_GENERATOR::ItemParams() const
+{
+    wxString result;
+
+    for( const PARAM& param : GetInstanceParams() )
+    {
+        wxString name = ( param.info.spiceInstanceName == "" ) ?
+            param.info.name : param.info.spiceInstanceName;
+        wxString value = param.value->ToSpiceString();
+
+        if( value != "" )
+            result << " " << name << "=" << value;
+    }
+
+    return result;
+}
+
+
+wxString SPICE_GENERATOR::TuningLine( const wxString& aSymbol ) const
+{
+    // TODO.
+    return "";
+}
+
+
+std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
+{
+    LOCALE_IO toggle;
+    return { wxString::Format( "I(%s)", ItemName( aRefName ) ) };
+}
+
+
+wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
+{
+    wxString spiceCode = ModelLine( aModelName );
+
+    if( spiceCode == "" )
+        spiceCode = m_model.m_spiceCode;
+
+    if( spiceCode == "" && m_model.GetBaseModel() )
+        spiceCode = m_model.GetBaseModel()->m_spiceCode;
+
+    wxString itemLine = ItemLine( "", aModelName );
+    if( spiceCode != "" )
+        spiceCode << "\n";
+
+    spiceCode << itemLine;
+    return spiceCode.Trim();
+}
+
+
+std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SPICE_GENERATOR::GetInstanceParams() const
+{
+    std::vector<std::reference_wrapper<const PARAM>> instanceParams;
+
+    for( const PARAM& param : m_model.GetParams() )
+    {
+        if( param.info.isSpiceInstanceParam )
+            instanceParams.emplace_back( param );
+    }
+
+    return instanceParams;
+}
+
+
 SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 {
     switch( aDeviceType )
     {
-    case DEVICE_TYPE_::NONE:      return { "",       ""                  };
-    case DEVICE_TYPE_::R:         return { "R",      "Resistor"          };
-    case DEVICE_TYPE_::C:         return { "C",      "Capacitor"         };
-    case DEVICE_TYPE_::L:         return { "L",      "Inductor"          };
-    case DEVICE_TYPE_::TLINE:     return { "TLINE",  "Transmission Line" };
-    case DEVICE_TYPE_::SW:        return { "SW",     "Switch"            };
+        case DEVICE_TYPE_::NONE:      return { "",       ""                  };
+        case DEVICE_TYPE_::R:         return { "R",      "Resistor"          };
+        case DEVICE_TYPE_::C:         return { "C",      "Capacitor"         };
+        case DEVICE_TYPE_::L:         return { "L",      "Inductor"          };
+        case DEVICE_TYPE_::TLINE:     return { "TLINE",  "Transmission Line" };
+        case DEVICE_TYPE_::SW:        return { "SW",     "Switch"            };
 
-    case DEVICE_TYPE_::D:         return { "D",      "Diode"             };
-    case DEVICE_TYPE_::NPN:       return { "NPN",    "NPN BJT"           };
-    case DEVICE_TYPE_::PNP:       return { "PNP",    "PNP BJT"           };
+        case DEVICE_TYPE_::D:         return { "D",      "Diode"             };
+        case DEVICE_TYPE_::NPN:       return { "NPN",    "NPN BJT"           };
+        case DEVICE_TYPE_::PNP:       return { "PNP",    "PNP BJT"           };
 
-    case DEVICE_TYPE_::NJFET:     return { "NJFET",  "N-channel JFET"    };
-    case DEVICE_TYPE_::PJFET:     return { "PJFET",  "P-channel JFET"    };
+        case DEVICE_TYPE_::NJFET:     return { "NJFET",  "N-channel JFET"    };
+        case DEVICE_TYPE_::PJFET:     return { "PJFET",  "P-channel JFET"    };
 
-    case DEVICE_TYPE_::NMOS:      return { "NMOS",   "N-channel MOSFET"  };
-    case DEVICE_TYPE_::PMOS:      return { "PMOS",   "P-channel MOSFET"  };
-    case DEVICE_TYPE_::NMES:      return { "NMES",   "N-channel MESFET"  };
-    case DEVICE_TYPE_::PMES:      return { "PMES",   "P-channel MESFET"  };
+        case DEVICE_TYPE_::NMOS:      return { "NMOS",   "N-channel MOSFET"  };
+        case DEVICE_TYPE_::PMOS:      return { "PMOS",   "P-channel MOSFET"  };
+        case DEVICE_TYPE_::NMES:      return { "NMES",   "N-channel MESFET"  };
+        case DEVICE_TYPE_::PMES:      return { "PMES",   "P-channel MESFET"  };
 
-    case DEVICE_TYPE_::V:         return { "V",      "Voltage Source"    };
-    case DEVICE_TYPE_::I:         return { "I",      "Current Source"    };
+        case DEVICE_TYPE_::V:         return { "V",      "Voltage Source"    };
+        case DEVICE_TYPE_::I:         return { "I",      "Current Source"    };
 
-    case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
-    case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
-    case DEVICE_TYPE_::SPICE:     return { "SPICE",  "Raw Spice Element" };
-    case DEVICE_TYPE_::_ENUM_END: break;
+        case DEVICE_TYPE_::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
+        case DEVICE_TYPE_::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
+        case DEVICE_TYPE_::SPICE:     return { "SPICE",  "Raw Spice Element" };
+        case DEVICE_TYPE_::_ENUM_END: break;
     }
 
     wxFAIL;
@@ -907,123 +1092,6 @@ void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
 }
 
 
-wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
-{
-    LOCALE_IO toggle;
-
-    if( !HasSpiceNonInstanceOverrides() && !requiresSpiceModelLine() )
-        return "";
-
-    wxString result = "";
-
-    result << wxString::Format( ".model %s ", aModelName );
-    size_t indentLength = result.Length();
-
-    result << wxString::Format( "%s \n", GetSpiceInfo().modelType );
-
-    for( const PARAM& param : GetParams() )
-    {
-        if( param.info.isSpiceInstanceParam )
-            continue;
-
-        wxString name = ( param.info.spiceModelName == "" ) ?
-            param.info.name : param.info.spiceModelName;
-        wxString value = param.value->ToSpiceString();
-
-        if( value == "" )
-            continue;
-        
-        result << wxString::Format( "+%s%s=%s\n", wxString( ' ', indentLength - 1 ), name, value );
-    }
-
-    return result;
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
-{
-    if( aRefName != "" && aRefName.StartsWith( GetSpiceInfo().itemType ) )
-        return aRefName;
-    else
-        return GetSpiceInfo().itemType + aRefName;
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
-                                           const wxString& aModelName ) const
-{
-    // Use linear symbol pin numbers enumeration. Used in model preview.
-
-    std::vector<wxString> pinNumbers;
-
-    for( int i = 0; i < GetPinCount(); ++i )
-        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
-
-    return GenerateSpiceItemLine( aRefName, aModelName, pinNumbers );
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
-                                           const wxString& aModelName,
-                                           const std::vector<wxString>& aSymbolPinNumbers ) const
-{
-    std::vector<wxString> pinNetNames;
-
-    for( const PIN& pin : GetPins() )
-        pinNetNames.push_back( pin.name );
-
-    return GenerateSpiceItemLine( aRefName, aModelName, aSymbolPinNumbers, pinNetNames );
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
-                                           const wxString& aModelName,
-                                           const std::vector<wxString>& aSymbolPinNumbers,
-                                           const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString result;
-    result << GenerateSpiceItemName( aRefName );
-    result << GenerateSpiceItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
-    result << GenerateSpiceItemModelName( aModelName );
-    result << GenerateSpiceItemParams();
-    result << "\n";
-    return result;
-}
-
-
-wxString SIM_MODEL::GenerateSpiceTuningLine( const wxString& aSymbol ) const
-{
-    // TODO.
-    return "";
-}
-
-
-wxString SIM_MODEL::GenerateSpicePreview( const wxString& aModelName ) const
-{
-    wxString spiceCode = GenerateSpiceModelLine( aModelName );
-
-    if( spiceCode == "" )
-        spiceCode = m_spiceCode;
-
-    if( spiceCode == "" && GetBaseModel() )
-        spiceCode = GetBaseModel()->m_spiceCode;
-
-    wxString itemLine = GenerateSpiceItemLine( "", aModelName );
-    if( spiceCode != "" )
-        spiceCode << "\n";
-
-    spiceCode << itemLine;
-    return spiceCode.Trim();
-}
-
-
-std::vector<wxString> SIM_MODEL::GenerateSpiceCurrentNames( const wxString& aRefName ) const
-{
-    LOCALE_IO toggle;
-    return { wxString::Format( "I(%s)", GenerateSpiceItemName( aRefName ) ) };
-}
-
-
 void SIM_MODEL::AddPin( const PIN& aPin )
 {
     m_pins.push_back( aPin );
@@ -1093,20 +1161,6 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams
         params.emplace_back( GetParam( i ) );
 
     return params;
-}
-
-
-std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetSpiceInstanceParams() const
-{
-    std::vector<std::reference_wrapper<const PARAM>> spiceInstanceParams;
-
-    for( const PARAM& param : GetParams() )
-    {
-        if( param.info.isSpiceInstanceParam )
-            spiceInstanceParams.emplace_back( param );
-    }
-
-    return spiceInstanceParams;
 }
 
 
@@ -1190,8 +1244,12 @@ bool SIM_MODEL::HasSpiceNonInstanceOverrides() const
 }
 
 
-SIM_MODEL::SIM_MODEL( TYPE aType ) : m_baseModel( nullptr ), m_type( aType ),
-                                     m_isEnabled( true ), m_isInferred( false )
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) : 
+    m_spiceGenerator( std::move( aSpiceGenerator ) ),
+    m_baseModel( nullptr ),
+    m_type( aType ),
+    m_isEnabled( true ),
+    m_isInferred( false )
 {
 }
 
@@ -1235,59 +1293,6 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString
     SetFieldValue( aFields, TYPE_FIELD, "" );
     SetFieldValue( aFields, PARAMS_FIELD, "" );
     SetFieldValue( aFields, DISABLED_FIELD, "" );
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemPins( const wxString& aRefName,
-                                           const wxString& aModelName,
-                                           const std::vector<wxString>& aSymbolPinNumbers,
-                                           const std::vector<wxString>& aPinNetNames ) const
-{
-    wxString result;
-    int ncCounter = 0;
-
-    for( const PIN& pin : GetSpicePins() )
-    {
-        auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
-                             pin.symbolPinNumber );
-
-        if( it == aSymbolPinNumbers.end() )
-        {
-            LOCALE_IO toggle;
-            result << wxString::Format( " NC-%s-%u", aRefName, ncCounter++ );
-        }
-        else
-        {
-            long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << " " << aPinNetNames.at( symbolPinIndex );
-        }
-    }
-
-    return result;
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemModelName( const wxString& aModelName ) const
-{
-    return " " + aModelName;
-}
-
-
-wxString SIM_MODEL::GenerateSpiceItemParams() const
-{
-    wxString result;
-
-    for( const PARAM& param : GetSpiceInstanceParams() )
-    {
-        wxString name = ( param.info.spiceInstanceName == "" ) ?
-            param.info.name : param.info.spiceInstanceName;
-        wxString value = param.value->ToSpiceString();
-
-        if( value != "" )
-            result << " " << name << "=" << value;
-    }
-
-    return result;
 }
 
 

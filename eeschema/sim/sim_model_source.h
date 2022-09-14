@@ -46,16 +46,27 @@ namespace SIM_MODEL_SOURCE_GRAMMAR
 class SIM_MODEL_SOURCE : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+        wxString ItemLine( const wxString& aRefName,
+                           const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers,
+                           const std::vector<wxString>& aPinNetNames ) const override;
+
+    private:
+        wxString getParamValueString( const wxString& aParamName,
+                                      const wxString& aDefaultValue ) const;
+    };
+
+
     SIM_MODEL_SOURCE( TYPE aType );
 
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-    wxString GenerateSpiceItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const override;
 
     bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI )
@@ -71,8 +82,6 @@ private:
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
     std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
-
-    wxString getParamValueString( const wxString& aParamName, const wxString& aDefaultValue ) const;
 
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
 
@@ -93,6 +102,7 @@ private:
     static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( wxString aPrefix, wxString aUnit );
 
     static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, wxString aUnit );
+
 
     bool m_isInferred;
 };

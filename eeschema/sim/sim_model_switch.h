@@ -31,16 +31,23 @@
 class SIM_MODEL_SWITCH : public SIM_MODEL
 {
 public:
-    SIM_MODEL_SWITCH( TYPE aType );
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString GenerateSpiceItemParams() const override;
-    wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const override;
+        wxString ItemLine( const wxString& aRefName, const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers,
+                           const std::vector<wxString>& aPinNetNames ) const override;
+        wxString ItemParams() const override;
+        std::vector<std::reference_wrapper<const PIN>> GetPins() const override;
+    };
+
+
+    SIM_MODEL_SWITCH( TYPE aType );
 
 protected:
     wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
-    std::vector<std::reference_wrapper<const PIN>> GetSpicePins() const override;
 
 private:
     std::vector<wxString> getPinNames() const override

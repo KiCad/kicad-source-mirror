@@ -25,34 +25,15 @@
 #include <sim/sim_model_ngspice.h>
 #include <locale_io.h>
 
+using SPICE_GENERATOR = SIM_MODEL_NGSPICE::SPICE_GENERATOR;
 using TYPE = SIM_MODEL::TYPE;
 
 
-SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
-    : SIM_MODEL( aType )
-{
-    const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
-
-    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
-    {
-        // For now, only the geometry parameters.
-        if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
-            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
-        {
-            AddParam( paramInfo, getIsOtherVariant() );
-        }
-    }
-
-    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
-        AddParam( paramInfo, getIsOtherVariant() );
-}
-
-
-std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxString& aRefName ) const
+std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
 {
     LOCALE_IO toggle;
 
-    switch( TypeInfo( GetType() ).deviceType )
+    switch( m_model.GetTypeInfo().deviceType )
     {
         case DEVICE_TYPE_::NPN:
         case DEVICE_TYPE_::PNP:
@@ -74,12 +55,32 @@ std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxStri
         case DEVICE_TYPE_::C:
         case DEVICE_TYPE_::L:
         case DEVICE_TYPE_::D:
-            return SIM_MODEL::GenerateSpiceCurrentNames( aRefName );
+            return CurrentNames( aRefName );
 
         default:
             wxFAIL_MSG( "Unhandled model device type in SIM_MODEL_NGSPICE" );
             return {};
     }
+}
+
+
+SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
+    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
+{
+    const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
+
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
+    {
+        // For now, only the geometry parameters.
+        if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
+            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY )
+        {
+            AddParam( paramInfo, getIsOtherVariant() );
+        }
+    }
+
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
+        AddParam( paramInfo, getIsOtherVariant() );
 }
 
 

@@ -177,7 +177,7 @@ wxString NETLIST_EXPORTER_SPICE::GetItemName( const wxString& aRefName ) const
     if( it == spiceItems.end() )
         return "";
 
-    return it->model->GenerateSpiceItemName( aRefName );
+    return it->model->SpiceGenerator().ItemName( aRefName );
 }
 
 
@@ -425,7 +425,7 @@ void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
         if( !item.model->IsEnabled() )
             continue;
 
-        aFormatter.Print( 0, "%s", TO_UTF8( item.model->GenerateSpiceModelLine( item.modelName ) ) );
+        aFormatter.Print( 0, "%s", TO_UTF8( item.model->SpiceGenerator().ModelLine( item.modelName ) ) );
     }
 }
 
@@ -438,10 +438,10 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
             continue;
 
         aFormatter.Print( 0, "%s",
-                          TO_UTF8( item.model->GenerateSpiceItemLine( item.refName,
-                                                                      item.modelName,
-                                                                      item.pinNumbers,
-                                                                      item.pinNetNames ) ) );
+                          TO_UTF8( item.model->SpiceGenerator().ItemLine( item.refName,
+                                                                          item.modelName,
+                                                                          item.pinNumbers,
+                                                                          item.pinNetNames ) ) );
     }
 }
 

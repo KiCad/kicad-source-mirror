@@ -75,7 +75,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
             for( const auto& item : m_circuitModel->GetItems() )
             {
                 // Add all possible currents for the primitive.
-                for( const auto& currentName : item.model->GenerateSpiceCurrentNames( item.refName ) )
+                for( const auto& currentName : item.model->SpiceGenerator().CurrentNames( item.refName ) )
                     m_signals->Append( currentName );
             }
         }

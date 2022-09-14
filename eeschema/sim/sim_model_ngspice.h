@@ -33,9 +33,16 @@ class SIM_MODEL_NGSPICE : public SIM_MODEL
 public:
     friend struct MODEL_INFO_MAP;
 
-    SIM_MODEL_NGSPICE( TYPE aType );
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
 
-    std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
+        std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+    };
+
+
+    SIM_MODEL_NGSPICE( TYPE aType );
 
     bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;

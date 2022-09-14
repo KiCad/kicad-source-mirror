@@ -31,6 +31,19 @@
 class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+        wxString ItemLine( const wxString& aRefName,
+                           const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers,
+                           const std::vector<wxString>& aPinNetNames ) const override;
+    };
+
+
     SIM_MODEL_BEHAVIORAL( TYPE aType );
 
     void ReadDataSchFields( unsigned aSymbolPinCount,
@@ -41,12 +54,6 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-
-    wxString GenerateSpiceItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
     bool parseValueField( const wxString& aValueField );
@@ -60,6 +67,7 @@ private:
     std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParams( wxString aName, wxString aDescription, wxString aUnit );
+
 
     bool m_isInferred;
 };

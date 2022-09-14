@@ -31,12 +31,19 @@
 class SIM_MODEL_TLINE : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+    };
+
+
     SIM_MODEL_TLINE( TYPE aType );
 
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
 
 private:
     template <typename T>

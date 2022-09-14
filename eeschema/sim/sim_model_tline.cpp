@@ -25,12 +25,53 @@
 #include <sim/sim_model_tline.h>
 #include <locale_io.h>
 
+using SPICE_GENERATOR = SIM_MODEL_TLINE::SPICE_GENERATOR;
 using PARAM = SIM_MODEL::PARAM;
 
 
-SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType )
-    : SIM_MODEL( aType ),
-      m_isInferred( false )
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+{
+    wxString r, l, g, c, len;
+
+    switch( m_model.GetType() )
+    {
+    case TYPE::TLINE_Z0:
+    {
+        auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "z0" )->value );
+        auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
+
+        if( !z0.HasValue() || !td.HasValue() )
+            return wxString::Format( ".model %s LTRA()\n", aModelName );
+
+        r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
+        l = ( td * z0 ).ToSpiceString();
+        g = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
+        c = ( td / z0 ).ToSpiceString();
+        len = SIM_VALUE_FLOAT( 1 ).ToSpiceString();
+        break;
+    }
+
+    case TYPE::TLINE_RLGC:
+        r = m_model.FindParam( "r" )->value->ToSpiceString();
+        l = m_model.FindParam( "l" )->value->ToSpiceString();
+        g = m_model.FindParam( "g" )->value->ToSpiceString();
+        c = m_model.FindParam( "c" )->value->ToSpiceString();
+        len = m_model.FindParam( "len" )->value->ToSpiceString();
+        break;
+
+    default:
+        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
+        return "";
+    }
+
+    return wxString::Format( ".model %s LTRA( r=%s l=%s g=%s c=%s len=%s )\n",
+                             aModelName, r, l, g, c, len );
+}
+
+
+SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+    m_isInferred( false )
 {
     static std::vector<PARAM::INFO> z0 = makeZ0ParamInfos();
     static std::vector<PARAM::INFO> rlgc = makeRlgcParamInfos();
@@ -69,46 +110,6 @@ void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 
     if( m_isInferred )
         inferredWriteDataFields( aFields );
-}
-
-
-wxString SIM_MODEL_TLINE::GenerateSpiceModelLine( const wxString& aModelName ) const
-{
-    wxString r, l, g, c, len;
-
-    switch( GetType() )
-    {
-    case TYPE::TLINE_Z0:
-    {
-        auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "z0" )->value );
-        auto td = static_cast<const SIM_VALUE_FLOAT&>( *FindParam( "td" )->value );
-
-        if( !z0.HasValue() || !td.HasValue() )
-            return wxString::Format( ".model %s ltra()\n", aModelName );
-
-        r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
-        l = ( td * z0 ).ToSpiceString();
-        g = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
-        c = ( td / z0 ).ToSpiceString();
-        len = SIM_VALUE_FLOAT( 1 ).ToSpiceString();
-        break;
-    }
-
-    case TYPE::TLINE_RLGC:
-        r = FindParam( "r" )->value->ToSpiceString();
-        l = FindParam( "l" )->value->ToSpiceString();
-        g = FindParam( "g" )->value->ToSpiceString();
-        c = FindParam( "c" )->value->ToSpiceString();
-        len = FindParam( "len" )->value->ToSpiceString();
-        break;
-
-    default:
-        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_TLINE" );
-        return "";
-    }
-
-    return wxString::Format( ".model %s ltra( r=%s l=%s g=%s c=%s len=%s )\n",
-                             aModelName, r, l, g, c, len );
 }
 
 

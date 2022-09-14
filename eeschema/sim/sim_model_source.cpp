@@ -27,6 +27,8 @@
 #include <pegtl/contrib/parse_tree.hpp>
 #include <locale_io.h>
 
+using SPICE_GENERATOR = SIM_MODEL_SOURCE::SPICE_GENERATOR;
+
 
 namespace SIM_MODEL_SOURCE_PARSER
 {
@@ -38,63 +40,36 @@ namespace SIM_MODEL_SOURCE_PARSER
 }
 
 
-SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
-    : SIM_MODEL( aType ),
-      m_isInferred( false )
-{
-    for( const SIM_MODEL::PARAM::INFO& paramInfo : makeParamInfos( aType ) )
-        AddParam( paramInfo );
-}
-
-
-void SIM_MODEL_SOURCE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataSchFields( aFields );
-
-    if( m_isInferred )
-        inferredWriteDataFields( aFields );
-}
-
-
-void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
-{
-    SIM_MODEL::WriteDataLibFields( aFields );
-
-    if( m_isInferred )
-        inferredWriteDataFields( aFields );
-}
-
-
-wxString SIM_MODEL_SOURCE::GenerateSpiceModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
-                                                  const wxString& aModelName,
-                                                  const std::vector<wxString>& aSymbolPinNumbers,
-                                                  const std::vector<wxString>& aPinNetNames ) const
+wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aSymbolPinNumbers,
+                                    const std::vector<wxString>& aPinNetNames ) const
 {
     LOCALE_IO toggle;
     wxString model;
 
-    wxString ac = FindParam( "ac" )->value->ToSpiceString();
-    wxString ph = FindParam( "ph" )->value->ToSpiceString();
+    wxString ac = m_model.FindParam( "ac" )->value->ToSpiceString();
+    wxString ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
     if( ac != "" )
         model << wxString::Format( "AC %s %s ", ac, ph );
 
-    if( GetSpiceInfo().inlineTypeString != "" )
+    if( m_model.GetSpiceInfo().inlineTypeString != "" )
     {
         wxString args = "";
         
-        switch( GetType() )
+        switch( m_model.GetType() )
         {
         case TYPE::V_PWL:
         case TYPE::I_PWL:
         {
-            tao::pegtl::string_input<> in( GetParam( 0 ).value->ToString().ToUTF8(),
+            tao::pegtl::string_input<> in( m_model.GetParam( 0 ).value->ToString().ToUTF8(),
                                            "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
@@ -158,8 +133,8 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
             args << getParamValueString( "dt", "0" ) << " ";
             args << getParamValueString( "td", "0" ) << " ";
 
-            auto min = dynamic_cast<SIM_VALUE_FLOAT&>( *FindParam( "max" )->value );
-            auto max = dynamic_cast<SIM_VALUE_FLOAT&>( *FindParam( "min" )->value );
+            auto min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
+            auto max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
             SIM_VALUE_FLOAT range = max - min;
             SIM_VALUE_FLOAT offset = ( max + min ) / SIM_VALUE_FLOAT( 2 );
 
@@ -196,7 +171,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
             break;*/
 
         default:
-            for( const PARAM& param : GetParams() )
+            for( const PARAM& param : m_model.GetParams() )
             {
                 wxString argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
@@ -206,12 +181,51 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
             break;
         }
 
-        model << wxString::Format( "%s( %s)", GetSpiceInfo().inlineTypeString, args );
+        model << wxString::Format( "%s( %s)", m_model.GetSpiceInfo().inlineTypeString, args );
     }
     else
-        model << GetParam( 0 ).value->ToSpiceString();
+        model << m_model.GetParam( 0 ).value->ToSpiceString();
 
-    return SIM_MODEL::GenerateSpiceItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
+    return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
+}
+
+
+wxString SPICE_GENERATOR::getParamValueString( const wxString& aParamName,
+                                               const wxString& aDefaultValue ) const
+{
+    wxString result = m_model.FindParam( aParamName )->value->ToSpiceString();
+
+    if( result == "" )
+        result = aDefaultValue;
+
+    return result;
+}
+
+
+SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
+    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+      m_isInferred( false )
+{
+    for( const SIM_MODEL::PARAM::INFO& paramInfo : makeParamInfos( aType ) )
+        AddParam( paramInfo );
+}
+
+
+void SIM_MODEL_SOURCE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataSchFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataLibFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
 }
 
 
@@ -260,18 +274,6 @@ void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
         value = GetDeviceTypeInfo().fieldValue;
 
     WriteInferredDataFields( aFields, value );
-}
-
-
-wxString SIM_MODEL_SOURCE::getParamValueString( const wxString& aParamName,
-                                                const wxString& aDefaultValue ) const
-{
-    wxString result = FindParam( aParamName )->value->ToSpiceString();
-
-    if( result == "" )
-        result = aDefaultValue;
-
-    return result;
 }
 
 

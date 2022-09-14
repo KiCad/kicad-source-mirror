@@ -31,6 +31,19 @@
 class SIM_MODEL_IDEAL : public SIM_MODEL
 {
 public:
+    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
+    {
+    public:
+        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
+
+        wxString ModelLine( const wxString& aModelName ) const override;
+        wxString ItemLine( const wxString& aRefName,
+                           const wxString& aModelName,
+                           const std::vector<wxString>& aSymbolPinNumbers,
+                           const std::vector<wxString>& aPinNetNames ) const override;
+    };
+
+
     SIM_MODEL_IDEAL( TYPE aType );
 
     void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
@@ -38,13 +51,6 @@ public:
 
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
-
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-    wxString GenerateSpiceItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const override;
-
 
 private:
     template <typename T>
