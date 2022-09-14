@@ -2700,27 +2700,25 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         if( !m_isFootprintEditor && parent && parent->Type() == PCB_FOOTPRINT_T )
             start = parent;
 
+        // If a group is entered, disallow selections of objects outside the group.
+        if( m_enteredGroup && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
+        {
+            aCollector.Remove( item );
+            continue;
+        }
+
         // If any element is a member of a group, replace those elements with the top containing
         // group.
-        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor );
-
-        if( aTop )
+        if( PCB_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
         {
-            if( aTop != item )
+            if( top != item )
             {
-                toAdd.insert( aTop );
-                aTop->SetFlags( TEMP_SELECTED );
+                toAdd.insert( top );
+                top->SetFlags(CANDIDATE );
 
                 aCollector.Remove( item );
                 continue;
             }
-        }
-        else if( m_enteredGroup
-                    && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
-        {
-            // If a group is entered, disallow selections of objects outside the group.
-            aCollector.Remove( item );
-            continue;
         }
 
         // Footprints are a bit easier as they can't be nested.
