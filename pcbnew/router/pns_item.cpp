@@ -19,12 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <zone.h>
 #include "pns_node.h"
 #include "pns_item.h"
 #include "pns_line.h"
 #include "pns_router.h"
-#include "pns_utils.h"
 
 #include <geometry/shape_compound.h>
 #include <geometry/shape_poly_set.h>
@@ -60,12 +58,42 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     int          clearanceEpsilon = aNode->GetRuleResolver()->ClearanceEpsilon();
     bool         collisionsFound = false;
 
-    printf( "******************** CollideSimple %lu\n", aCtx->obstacles.size() );
+    //printf( "******************** CollideSimple %lu\n", aCtx->obstacles.size() );
 
     //printf( "h %p n %p t %p ctx %p\n", aHead, aNode, this, aCtx );
 
     if( aHead == this )  // we cannot be self-colliding
         return false;
+
+    // prevent bogus collisions between the item and its own hole.
+    // FIXME: figure out a cleaner way of doing that
+    if( holeI && aHead == holeI->ParentPadVia() )
+        return false;
+
+    if( holeH && this == holeH->ParentPadVia() )
+        return false;
+
+    if( holeH && this == holeH )
+        return false;
+
+    if( holeI && aHead == holeI )
+        return false;
+
+    // Special cases for "head" lines with vias attached at the end.  Note that this does not
+    // support head-line-via to head-line-via collisions, but you can't route two independent
+    // tracks at once so it shouldn't come up.
+
+    if( const auto line = dyn_cast<const LINE*>( this ) )
+    {
+        if( line->EndsWithVia() )
+            collisionsFound |= line->Via().collideSimple( aHead, aNode, aCtx );
+    }
+
+    if( const auto line = dyn_cast<const LINE*>( aHead ) )
+    {
+        if( line->EndsWithVia() )
+            collisionsFound |= line->Via().collideSimple( this, aNode, aCtx );
+    }
 
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
     // of the clearance value.
@@ -93,142 +121,14 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( !m_layers.Overlaps( aHead->m_layers ) )
         return false;
 
-    auto checkKeepout =
-            []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
-            {
-                if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( { PCB_ARC_T, PCB_TRACE_T } ) )
-                    return true;
+    if( holeH )
+        collisionsFound |= collideSimple( holeH, aNode, aCtx );
 
-                if( aKeepout->GetDoNotAllowVias() && aOther->Type() == PCB_VIA_T )
-                    return true;
+    if( holeI )
+        collisionsFound |= holeI->collideSimple( aHead, aNode, aCtx );
 
-                if( aKeepout->GetDoNotAllowPads() && aOther->Type() == PCB_PAD_T )
-                    return true;
-
-                // Incomplete test, but better than nothing:
-                if( aKeepout->GetDoNotAllowFootprints() && aOther->Type() == PCB_PAD_T )
-                {
-                    return !aKeepout->GetParentFootprint()
-                            || aKeepout->GetParentFootprint() != aOther->GetParentFootprint();
-                }
-
-                return false;
-            };
-
-    const ZONE* zoneA = dynamic_cast<ZONE*>( Parent() );
-    const ZONE* zoneB = dynamic_cast<ZONE*>( aHead->Parent() );
-
-    if( zoneA && aHead->Parent() && !checkKeepout( zoneA, aHead->Parent() ) )
-        return false;
-
-    if( zoneB && Parent() && !checkKeepout( zoneB, Parent() ) )
-        return false;
-
-    // fixme: this f***ing singleton must go...
-    ROUTER *router = ROUTER::GetInstance();
-    ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
-
-    bool thisNotFlashed = false;
-    bool otherNotFlashed = false;
-
-    if( iface )
-    {
-        thisNotFlashed = !iface->IsFlashedOnLayer( this, aHead->Layer() );
-        otherNotFlashed = !iface->IsFlashedOnLayer( aHead, Layer() );
-    }
-
-    if( ( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES
-          || ( thisNotFlashed || otherNotFlashed ) ) )
-    {
-        if( holeI && holeI->ParentPadVia() != aHead && holeI != aHead )
-        {
-            int holeClearance = aNode->GetClearance( this, holeI );
-            printf("HCH1 %d\n", holeClearance);
-
-            if( holeI->Shape()->Collide( shapeH, holeClearance + lineWidthH - clearanceEpsilon ) )
-            {
-                if( aCtx )
-                {
-                    OBSTACLE obs;
-                    obs.m_clearance = holeClearance;
-                    obs.m_head = const_cast<ITEM*>( aHead );
-                    obs.m_item = const_cast<HOLE*>( holeI );
-
-                    aCtx->obstacles.insert( obs );
-                    dumpObstacles( aCtx->obstacles );
-                    collisionsFound = true;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-
-        if( holeH && holeH->ParentPadVia() != this && holeH != this )
-        {
-            int holeClearance = aNode->GetClearance( this, holeH );
-
-            printf("HCH2 %d\n", holeClearance);
-
-            if( holeH->Shape()->Collide( shapeI, holeClearance + lineWidthI - clearanceEpsilon ) )
-            {
-                if( aCtx )
-                {
-                    OBSTACLE obs;
-                    obs.m_clearance = holeClearance;
-                    obs.m_head = const_cast<HOLE*>( holeH );
-                    obs.m_item = const_cast<ITEM*>( this );
-
-                    aCtx->obstacles.insert( obs );
-                    dumpObstacles( aCtx->obstacles );
-                    collisionsFound = true;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-
-        if( holeI && holeH && ( holeI != holeH ) )
-        {
-            int holeClearance = aNode->GetClearance( holeI, holeH );
-
-            printf("HCH3 %d\n", holeClearance);
-
-            if( holeI->Shape()->Collide( holeH->Shape(), holeClearance - clearanceEpsilon ) )
-            {
-                if( aCtx )
-                {
-                    OBSTACLE obs;
-                    obs.m_clearance = holeClearance;
-
-                    // printf("pushh3 %p %p\n", obs.m_head, obs.m_item );
-
-                    obs.m_head = const_cast<HOLE*>( holeH );
-                    obs.m_item = const_cast<HOLE*>( holeI );
-
-                    aCtx->obstacles.insert( obs );
-                    dumpObstacles( aCtx->obstacles );
-
-                    collisionsFound = true;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-    }
-
-    printf("HCHE\n");
-
-    if( !aHead->Layers().IsMultilayer() && thisNotFlashed )
-        return false;
-
-    if( !Layers().IsMultilayer() && otherNotFlashed )
-        return false;
+    if( holeH && holeI )
+        collisionsFound |= holeI->collideSimple( holeH, aNode, aCtx );
 
     int clearance;
 
@@ -236,28 +136,35 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     {
         clearance = aCtx->options.m_overrideClearance;
     }
+    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead ) )
+    {
+        clearance = 0;    // keepouts are exact boundary; no clearance
+    }
     else
     {
         clearance = aNode->GetClearance( this, aHead );
     }
 
-    // prevent bogus collisions between the item and its own hole. FIXME: figure out a cleaner way of doing that
-    if( holeI && aHead == holeI->ParentPadVia() )
-        return false;
+    // fixme: this f***ing singleton must go...
+    ROUTER*       router = ROUTER::GetInstance();
+    ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
 
-    if( holeH && this == holeH->ParentPadVia() )
-        return false;
+    if( iface )
+    {
+        if( !iface->IsFlashedOnLayer( this, aHead->Layer() ) )
+            return collisionsFound;
 
-    if( holeH && this == holeH )
-        return false;
-
-    if( holeI && aHead == holeI )
-        return false;
+        if( !iface->IsFlashedOnLayer( aHead, Layer() ) )
+            return collisionsFound;
+    }
 
     if( clearance >= 0 )
     {
+        // Note: we can't do castellation or net-tie processing in GetClearance() because they
+        // depend on *where* the collision is.
+
         bool checkCastellation = ( m_parent && m_parent->GetLayer() == Edge_Cuts );
-        bool checkNetTie = aNode->GetRuleResolver()->IsInNetTie( this );
+        bool checkNetTie = ( m_parent && aNode->GetRuleResolver()->IsInNetTie( this ) );
 
         if( checkCastellation || checkNetTie )
         {
@@ -301,17 +208,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                     obs.m_head = const_cast<ITEM*>( aHead );
                     obs.m_item = const_cast<ITEM*>( this );
                     obs.m_clearance = clearance;
-
-                    //printf( "i %p h %p ih %p hh %p\n", this ,aHead, holeI, holeH );
-                    printf( "HCHX %d %d\n", clearance, clearance + lineWidthH + lineWidthI - clearanceEpsilon);
-                    //printf( "pushc %p %p cl %d cle %d\n", obs.m_head, obs.m_item, clearance, clearance + lineWidthH + lineWidthI - clearanceEpsilon );
-                    //printf( "SH %s\n", shapeH->Format().c_str(), aHead );
-                    //printf( "SI %s\n", shapeI->Format().c_str(), this );
-
                     aCtx->obstacles.insert( obs );
-
-                    dumpObstacles( aCtx->obstacles );
-                    printf("--EndDump\n");
                 }
                 else
                 {
@@ -329,26 +226,6 @@ bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, COLLISION_SEARCH_CONT
 {
     if( collideSimple( aOther, aNode, aCtx ) )
         return true;
-
-    // Special cases for "head" lines with vias attached at the end.  Note that this does not
-    // support head-line-via to head-line-via collisions, but you can't route two independent
-    // tracks at once so it shouldn't come up.
-
-    if( m_kind == LINE_T )
-    {
-        const LINE* line = static_cast<const LINE*>( this );
-
-        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aCtx ) )
-            return true;
-    }
-
-    if( aOther->m_kind == LINE_T )
-    {
-        const LINE* line = static_cast<const LINE*>( aOther ); // fixme
-
-        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aCtx ) )
-            return true;
-    }
 
     return false;
 }

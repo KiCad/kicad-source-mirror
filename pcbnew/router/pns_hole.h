@@ -61,6 +61,11 @@ public:
 
     ITEM* ParentPadVia() const { return m_parentPadVia; }
 
+    BOARD_ITEM* Parent() const override
+    {
+        return m_parentPadVia ? m_parentPadVia->Parent() : nullptr;
+    }
+
     void SetCenter( const VECTOR2I& aCenter );
     void SetRadius( int aRadius );
 
