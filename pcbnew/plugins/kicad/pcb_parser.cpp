@@ -2462,7 +2462,8 @@ void PCB_PARSER::parseNETCLASS()
 PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
-                 CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, nullptr,
+                 CurTok() == T_gr_rect || CurTok() == T_gr_bbox || CurTok() == T_gr_line ||
+                 CurTok() == T_gr_poly, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
 
     T                          token;
@@ -2603,6 +2604,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         NeedRIGHT();
         break;
 
+    case T_gr_bbox:
     case T_gr_rect:
         shape->SetShape( SHAPE_T::RECT );
         token = NextTok();
@@ -2704,7 +2706,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     }
 
     default:
-        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gr_rect" );
+        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, gr_rect or gr_bbox" );
     }
 
     bool foundFill = false;
@@ -4980,6 +4982,10 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                                            dummyShape->GetWidth(), dummyShape->IsFilled() );
                     break;
 
+                case T_gr_bbox:
+                    dummyShape = parsePCB_SHAPE();
+                    pad->AddPrimitiveAnnotationBox( dummyShape->GetStart(), dummyShape->GetEnd() );
+                    break;
 
                 case T_gr_poly:
                     dummyShape = parsePCB_SHAPE();
@@ -4995,7 +5001,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                     break;
 
                 default:
-                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect or gr_poly" );
+                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
                     break;
                 }
 

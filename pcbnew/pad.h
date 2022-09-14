@@ -292,6 +292,11 @@ public:
     void AddPrimitiveCurve( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCtrl1,
                             const VECTOR2I& aCtrl2, int aThickness );
 
+    /**
+     * Has meaning only for custom shape pads.  Allows one to specify the box in which to place
+     * the pad number and/or net name (if they are being displayed).
+     */
+    void AddPrimitiveAnnotationBox( const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );
 
@@ -723,7 +728,7 @@ private:
      * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
      * to m_Pos (NOT shapePos) at orient 0.
      */
-    std::vector<std::shared_ptr<PCB_SHAPE>> m_editPrimitives;
+    std::vector<std::shared_ptr<PCB_SHAPE>>   m_editPrimitives;
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;

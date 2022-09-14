@@ -85,6 +85,9 @@ public:
 
     wxString SHAPE_T_asString() const;
 
+    bool IsAnnotationProxy() const { return m_annotationProxy; }
+    void SetIsAnnotationProxy( bool aIsProxy = true ) { m_annotationProxy = aIsProxy; }
+
     bool IsFilled() const
     {
         return GetFillMode() != FILL_T::NO_FILL;
@@ -376,6 +379,7 @@ protected:
     SHAPE_POLY_SET        m_poly;              // Stores the S_POLYGON shape
 
     int                   m_editState;
+    bool                  m_annotationProxy;   // A shape storing the position of an annotation
 };
 
 #endif  // EDA_SHAPE_H

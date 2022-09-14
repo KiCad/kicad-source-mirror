@@ -55,6 +55,9 @@ EDA_SHAPE::~EDA_SHAPE()
 
 wxString EDA_SHAPE::ShowShape() const
 {
+    if( IsAnnotationProxy() )
+        return _( "Number Box" );
+
     switch( m_shape )
     {
     case SHAPE_T::SEGMENT: return _( "Line" );
@@ -599,7 +602,10 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
 
     case SHAPE_T::RECT:
-        aList.emplace_back( shape, _( "Rectangle" ) );
+        if( IsAnnotationProxy() )
+            aList.emplace_back( shape, _( "Pad Number Box" ) );
+        else
+            aList.emplace_back( shape, _( "Rectangle" ) );
 
         msg = MessageTextFromValue( units, std::abs( GetEnd().x - GetStart().x ) );
         aList.emplace_back( _( "Width" ), msg );
@@ -773,7 +779,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         return TestSegmentHit( aPosition, GetStart(), GetEnd(), maxdist );
 
     case SHAPE_T::RECT:
-        if( IsFilled() )            // Filled rect hit-test
+        if( IsAnnotationProxy() || IsFilled() )         // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
@@ -783,7 +789,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
             return poly.Collide( aPosition, maxdist );
         }
-        else                        // Open rect hit-test
+        else                                            // Open rect hit-test
         {
             std::vector<VECTOR2I> pts = GetRectCorners();
 
@@ -1094,7 +1100,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( IsFilled() && !aEdgeOnly )
+        if( ( IsFilled() || IsAnnotationProxy() ) && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
 
         if( width > 0 || !IsFilled() || aEdgeOnly )
@@ -1517,7 +1523,7 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( IsFilled() )
+        if( IsFilled() || IsAnnotationProxy() )
         {
             aCornerBuffer.NewOutline();
 

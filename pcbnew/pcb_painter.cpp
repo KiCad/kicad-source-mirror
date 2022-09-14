@@ -1017,6 +1017,50 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         VECTOR2D position = padBBox.Centre();
         VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
 
+        if( aPad->GetFlags() & ENTERED )
+        {
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( aPad->GetParentFootprint() );
+
+            // Find the number box
+            for( const BOARD_ITEM* aItem : fp->GraphicalItems() )
+            {
+                if( aItem->Type() == PCB_FP_SHAPE_T )
+                {
+                    const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( aItem );
+
+                    if( shape->IsAnnotationProxy() )
+                    {
+                        position = shape->GetCenter();
+                        padsize = shape->GetBotRight() - shape->GetTopLeft();
+
+                        // We normally draw a bit outside the pad, but this will be somewhat
+                        // unexpected when the user has drawn a box.
+                        padsize *= 0.9;
+
+                        break;
+                    }
+                }
+            }
+        }
+        else if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
+        {
+            // See if we have a number box
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
+            {
+                if( primitive->IsAnnotationProxy() )
+                {
+                    position = aPad->GetPosition() + primitive->GetCenter();
+                    padsize = primitive->GetBotRight() - primitive->GetTopLeft();
+
+                    // We normally draw a bit outside the pad, but this will be somewhat
+                    // unexpected when the user has drawn a box.
+                    padsize *= 0.9;
+
+                    break;
+                }
+            }
+        }
+
         if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
         {
             // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
@@ -1486,7 +1530,16 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( outline_mode )
+            if( aShape->IsAnnotationProxy() )
+            {
+                m_gal->DrawSegment( pts[0], pts[1], thickness );
+                m_gal->DrawSegment( pts[1], pts[2], thickness );
+                m_gal->DrawSegment( pts[2], pts[3], thickness );
+                m_gal->DrawSegment( pts[3], pts[0], thickness );
+                m_gal->DrawSegment( pts[0], pts[2], thickness );
+                m_gal->DrawSegment( pts[1], pts[3], thickness );
+            }
+            else if( outline_mode )
             {
                 m_gal->DrawSegment( pts[0], pts[1], thickness );
                 m_gal->DrawSegment( pts[1], pts[2], thickness );

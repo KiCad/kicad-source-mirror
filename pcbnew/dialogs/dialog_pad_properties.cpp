@@ -706,38 +706,48 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         {
         case SHAPE_T::SEGMENT:
             bs_info[0] = _( "Segment" );
-            bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
+            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case SHAPE_T::BEZIER:
             bs_info[0] = _( "Bezier" );
-            bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
+            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case SHAPE_T::ARC:
             bs_info[0] = _( "Arc" );
-            bs_info[1] = _( "center" ) + wxS( " " )+ formatCoord( m_units, primitive->GetCenter() );
-            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
-            bs_info[3] = _( "angle" ) + wxS( " " )+ EDA_UNIT_UTILS::FormatAngle( primitive->GetArcAngle() );
+            bs_info[1] = _( "center" ) + wxS( " " ) + formatCoord( m_units, primitive->GetCenter() );
+            bs_info[2] = _( "start" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[3] = _( "angle" ) + wxS( " " ) + EDA_UNIT_UTILS::FormatAngle( primitive->GetArcAngle() );
             break;
 
         case SHAPE_T::CIRCLE:
             if( primitive->GetWidth() )
-                bs_info[0] = _( "ring" );
+                bs_info[0] = _( "Ring" );
             else
-                bs_info[0] = _( "circle" );
+                bs_info[0] = _( "Circle" );
 
-            bs_info[1] = formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "radius" ) + wxS( " " )+ MessageTextFromValue( m_units,
-                                                                           primitive->GetRadius() );
+            bs_info[1] = _( "at" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "radius" ) + wxS( " " ) + MessageTextFromValue( m_units,
+                                                                            primitive->GetRadius() );
             break;
 
         case SHAPE_T::POLY:
             bs_info[0] = _( "Polygon" );
             bs_info[1] = wxString::Format( _( "corners count %d" ),
                                            primitive->GetPolyShape().Outline( 0 ).PointCount() );
+            break;
+
+        case SHAPE_T::RECT:
+            if( primitive->IsAnnotationProxy() )
+                bs_info[0] = _( "Number box" );
+            else
+                bs_info[0] = _( "Rectangle" );
+
+            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         default:
@@ -2164,7 +2174,8 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
             _( "Arc" ),
             _( "Bezier" ),
             _( "Ring/Circle" ),
-            _( "Polygon" )
+            _( "Polygon" ),
+            _( "Number box" ),
     };
 
     int type = wxGetSingleChoiceIndex( _( "Shape type:" ), _( "Add Primitive" ),
@@ -2175,10 +2186,14 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
         return;
 
     SHAPE_T listtype[] = { SHAPE_T::SEGMENT, SHAPE_T::ARC, SHAPE_T::BEZIER, SHAPE_T::CIRCLE,
-                           SHAPE_T::POLY };
+                           SHAPE_T::POLY, SHAPE_T::RECT };
 
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
+
+    if( type == arrayDim( shapelist ) - 1 )
+        primitive->SetIsAnnotationProxy();
+
     primitive->SetStroke( STROKE_PARAMS( m_board->GetDesignSettings().GetLineThickness( F_Cu ),
                                          PLOT_DASH_TYPE::SOLID ) );
     primitive->SetFilled( true );

@@ -1764,9 +1764,18 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                 break;
 
             case SHAPE_T::RECT:
-                m_out->Print( nested_level, "(gr_rect (start %s) (end %s)",
-                              FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                if( primitive->IsAnnotationProxy() )
+                {
+                    m_out->Print( nested_level, "(gr_bbox (start %s) (end %s)",
+                                  FormatInternalUnits( primitive->GetStart() ).c_str(),
+                                  FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                }
+                else
+                {
+                    m_out->Print( nested_level, "(gr_rect (start %s) (end %s)",
+                                  FormatInternalUnits( primitive->GetStart() ).c_str(),
+                                  FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                }
                 break;
 
             case SHAPE_T::ARC:

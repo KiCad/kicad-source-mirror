@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,11 +136,25 @@ void PAD::AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickne
 void PAD::AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
                             bool aFilled)
 {
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T:: RECT );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECT );
     item->SetFilled( aFilled );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
     item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
+    item->SetParent( this );
+    m_editPrimitives.emplace_back( item );
+    SetDirty();
+}
+
+
+void PAD::AddPrimitiveAnnotationBox( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+{
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECT );
+    item->SetIsAnnotationProxy();
+    item->SetFilled( false );
+    item->SetStart( aStart );
+    item->SetEnd( aEnd );
+    item->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -195,8 +209,11 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
 
     for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
     {
-        primitive->TransformShapeWithClearanceToPolygon( polyset, UNDEFINED_LAYER, 0, aError,
-                                                         aErrorLoc );
+        if( !primitive->IsAnnotationProxy() )
+        {
+            primitive->TransformShapeWithClearanceToPolygon( polyset, UNDEFINED_LAYER, 0, aError,
+                                                             aErrorLoc );
+        }
     }
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );

@@ -158,12 +158,34 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( true );
         break;
 
+    case SHAPE_T::RECT:
+        if( m_shape->IsAnnotationProxy() )
+            SetTitle( _( "Number Box" ) );
+        else
+            SetTitle( _( "Rectangle" ) );
+
+        m_startX.SetValue( m_shape->GetStart().x );
+        m_startY.SetValue( m_shape->GetStart().y );
+        m_endX.SetValue( m_shape->GetEnd().x );
+        m_endY.SetValue( m_shape->GetEnd().y );
+        m_ctrl1X.Show( false, true );
+        m_ctrl1Y.Show( false, true );
+        m_ctrl2X.Show( false, true );
+        m_ctrl2Y.Show( false, true );
+        m_staticTextPosCtrl1->Show( false );
+        m_staticTextPosCtrl1->SetSize( 0, 0 );
+        m_staticTextPosCtrl2->Show( false );
+        m_staticTextPosCtrl2->SetSize( 0, 0 );
+        m_radius.Show( false );
+        m_filledCtrl->Show( false );
+        break;
+
     case SHAPE_T::POLY:
         // polygon has a specific dialog editor. So nothing here
         break;
 
     default:
-        SetTitle( "Unknown basic shape" );
+        SetTitle( "Unknown Basic Shape" );
         break;
     }
 
@@ -190,6 +212,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     switch( m_shape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
         m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
         break;
@@ -217,7 +240,6 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         break;
 
     default:
-        SetTitle( "Unknown basic shape" );
         break;
     }
 

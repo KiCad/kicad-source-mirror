@@ -130,6 +130,7 @@ generator
 grid_origin
 group
 gr_arc
+gr_bbox
 gr_circle
 gr_curve
 gr_line

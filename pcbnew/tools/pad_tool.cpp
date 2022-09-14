@@ -644,6 +644,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstFootprint() );
 
             shape->SetShape( primitive->GetShape() );
+            shape->SetIsAnnotationProxy( primitive->IsAnnotationProxy());
             shape->SetFilled( primitive->IsFilled() );
             shape->SetStroke( primitive->GetStroke() );
 
@@ -687,6 +688,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
         aPad->DeletePrimitivesList();
+        aPad->SetFlags( ENTERED );
         m_editPad = aPad->m_Uuid;
     }
 
@@ -720,6 +722,9 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 
                     if( shape->GetLayer() != aLayer )
                         continue;
+
+                    if( shape->IsAnnotationProxy() )    // Pad number (and net name) box
+                        return (FP_SHAPE*) item;
 
                     SHAPE_POLY_SET drawPoly;
                     shape->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0, maxError,
@@ -821,11 +826,14 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 
         pcbShape->Move( - aPad->GetPosition() );
         pcbShape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+        pcbShape->SetIsAnnotationProxy( fpShape->IsAnnotationProxy());
         aPad->AddPrimitive( pcbShape );
 
         fpShape->SetFlags( STRUCT_DELETED );
         commit.Remove( fpShape );
     }
+
+    aPad->ClearFlags( ENTERED );
 
     commit.Push( _( "Recombine pads" ) );
 }

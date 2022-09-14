@@ -208,6 +208,8 @@ public:
     /// Compound assignment operator
     VECTOR2<T>& operator*=( const VECTOR2<T>& aVector );
 
+    VECTOR2<T>& operator*=( const T& aScalar );
+
     /// Compound assignment operator
     VECTOR2<T>& operator+=( const T& aScalar );
 
@@ -332,6 +334,15 @@ VECTOR2<T>& VECTOR2<T>::operator*=( const VECTOR2<T>& aVector )
 {
     x *= aVector.x;
     y *= aVector.y;
+    return *this;
+}
+
+
+template <class T>
+VECTOR2<T>& VECTOR2<T>::operator*=( const T& aScalar )
+{
+    x *= aScalar;
+    y *= aScalar;
     return *this;
 }
 
