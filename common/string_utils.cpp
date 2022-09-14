@@ -31,6 +31,7 @@
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <string_utils.h>
+#include <fmt/core.h>
 
 
 /**
@@ -1090,29 +1091,27 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
 
 std::string Double2Str( double aValue )
 {
-    char    buf[50];
+    std::string buf;
     int     len;
 
     if( aValue != 0.0 && std::fabs( aValue ) <= 0.0001 )
     {
-        // For these small values, %f works fine,
-        // and %g gives an exponent
-        len = sprintf( buf,  "%.16f", aValue );
+        // For these small values, 'f' works fine,
+        // and 'g' can result in exponent notation
+        buf = fmt::format( "{:.16f}", aValue );
 
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        if( buf[len] == '.' )
-            buf[len] = '\0';
-        else
-            ++len;
+        // remove trailing zeros
+        while( !buf.empty() && buf[buf.size() - 1] == '0' )
+        {
+            buf.pop_back();
+        }
     }
     else
     {
-        // For these values, %g works fine, and sometimes %f
+        // For these values, 'g' works fine, and sometimes 'f'
         // gives a bad value (try aValue = 1.222222222222, with %.16f format!)
-        len = sprintf( buf, "%.10g", aValue );
+        buf = fmt::format( "{:.10g}", aValue );
     }
 
-    return std::string( buf, len );
+    return buf;
 }
