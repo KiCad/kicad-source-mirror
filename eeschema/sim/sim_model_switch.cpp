@@ -51,16 +51,22 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) : SIM_MODEL( aType )
 }
 
 
-wxString SIM_MODEL_SWITCH::GenerateSpiceItemParamValuePair( const PARAM& aParam,
-                                                            bool& aIsFirst ) const
+wxString SIM_MODEL_SWITCH::GenerateSpiceItemParams() const
 {
-    // The only instance param is "ic", which is positional.
-    wxString value = aParam.value->ToSpiceString();
-    
-    if( value == "none" )
-        return "";
-    else
-        return value;
+    wxString result;
+
+    for( const PARAM& param : GetSpiceInstanceParams() )
+    {
+        // The only instance param is "ic", which is positional.
+        wxString value = param.value->ToSpiceString();
+        
+        if( value == "none" )
+            result << "";
+        else
+            result << value;
+    }
+
+    return result;
 }
 
 

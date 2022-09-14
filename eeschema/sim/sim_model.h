@@ -541,6 +541,7 @@ public:
     const PARAM* FindParam( const wxString& aParamName ) const;
 
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
+    std::vector<std::reference_wrapper<const PARAM>> GetSpiceInstanceParams() const;
 
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
@@ -574,7 +575,8 @@ protected:
                                             const wxString& aModelName,
                                             const std::vector<wxString>& aSymbolPinNumbers,
                                             const std::vector<wxString>& aPinNetNames ) const;
-    virtual wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
+    virtual wxString GenerateSpiceItemModelName( const wxString& aModelName ) const;
+    virtual wxString GenerateSpiceItemParams() const;
 
     virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
@@ -622,7 +624,7 @@ private:
 
     wxString parseFieldFloatValue( wxString aFieldFloatValue );
 
-    virtual bool requiresSpiceModel() const;
+    virtual bool requiresSpiceModelLine() const;
 
     virtual std::vector<wxString> getPinNames() const { return {}; }
 

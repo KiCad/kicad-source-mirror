@@ -135,7 +135,7 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemPins( const wxString& aRefName,
         if( it != aSymbolPinNumbers.end() )
         {
             long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << aPinNetNames.at( symbolPinIndex ) << " ";
+            result << " " << aPinNetNames.at( symbolPinIndex );
         }
     }
 
@@ -143,13 +143,25 @@ wxString SIM_MODEL_SPICE::GenerateSpiceItemPins( const wxString& aRefName,
 }
 
 
-wxString SIM_MODEL_SPICE::GenerateSpiceItemParamValuePair( const PARAM& aParam,
-                                                           bool& aIsFirst ) const
+wxString SIM_MODEL_SPICE::GenerateSpiceItemModelName( const wxString& aModelName ) const
 {
-    if( aParam.info.name != "model" )
-        return "";
+    return "";
+}
 
-    return aParam.value->ToString();
+
+wxString SIM_MODEL_SPICE::GenerateSpiceItemParams() const
+{
+    wxString result;
+
+    for( const PARAM& param : GetSpiceInstanceParams() )
+    {
+        if( param.info.name != "model" )
+            result << "";
+        else
+            result << " " << param.value->ToString();
+    }
+
+    return result;
 }
 
 

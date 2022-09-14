@@ -34,12 +34,13 @@ SIM_MODEL_MUTUAL_INDUCTOR::SIM_MODEL_MUTUAL_INDUCTOR() : SIM_MODEL( SIM_MODEL::T
 }
 
 
-wxString SIM_MODEL_MUTUAL_INDUCTOR::GenerateSpiceItemParamValuePair( const PARAM& aParam,
-                                                                     bool& aIsFirst ) const
+wxString SIM_MODEL_MUTUAL_INDUCTOR::GenerateSpiceItemParams() const
 {
     wxString result;
 
-    result << aParam.value->ToSimpleString() << " ";
+    for( const PARAM& param : GetSpiceInstanceParams() )
+        result << param.value->ToSimpleString() << " ";
+
     return result;
 }
 

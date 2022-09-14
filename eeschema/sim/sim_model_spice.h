@@ -66,7 +66,9 @@ protected:
                                     const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
-    wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    wxString GenerateSpiceItemModelName( const wxString& aModelName ) const override;
+
+    wxString GenerateSpiceItemParams() const override;
 
     bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
@@ -80,7 +82,7 @@ private:
 
     void parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aLegacyPinsField );
 
-    bool requiresSpiceModel() const override { return false; }
+    bool requiresSpiceModelLine() const override { return false; }
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

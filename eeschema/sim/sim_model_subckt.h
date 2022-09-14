@@ -42,7 +42,7 @@ protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
 
 private:
-    bool requiresSpiceModel() const override { return true; }
+    bool requiresSpiceModelLine() const override { return true; }
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };

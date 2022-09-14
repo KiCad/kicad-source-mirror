@@ -33,7 +33,7 @@ class SIM_MODEL_SWITCH : public SIM_MODEL
 public:
     SIM_MODEL_SWITCH( TYPE aType );
 
-    wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    wxString GenerateSpiceItemParams() const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName,
                                     const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const override;
@@ -48,7 +48,7 @@ private:
         return { "ctrl+", "ctrl-", "no+", "no-" };
     }
 
-    bool requiresSpiceModel() const override { return true; }
+    bool requiresSpiceModelLine() const override { return true; }
 
     static const std::vector<PARAM::INFO> makeSwVParamInfos();
     static const std::vector<PARAM::INFO> makeSwIParamInfos();

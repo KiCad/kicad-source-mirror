@@ -911,7 +911,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 {
     LOCALE_IO toggle;
 
-    if( !HasSpiceNonInstanceOverrides() && !requiresSpiceModel() )
+    if( !HasSpiceNonInstanceOverrides() && !requiresSpiceModelLine() )
         return "";
 
     wxString result = "";
@@ -982,22 +982,10 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const std::vector<wxString>& aPinNetNames ) const
 {
     wxString result;
-    result << GenerateSpiceItemName( aRefName ) << " ";
+    result << GenerateSpiceItemName( aRefName );
     result << GenerateSpiceItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
-
-    if( requiresSpiceModel() )
-        result << aModelName << " ";
-
-    bool isFirst = false;
-
-    for( const PARAM& param : GetParams() )
-    {
-        if( !param.info.isSpiceInstanceParam )
-            continue;
-
-        result << GenerateSpiceItemParamValuePair( param, isFirst );
-    }
-
+    result << GenerateSpiceItemModelName( aModelName );
+    result << GenerateSpiceItemParams();
     result << "\n";
     return result;
 }
@@ -1102,9 +1090,23 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams
     std::vector<std::reference_wrapper<const PARAM>> params;
 
     for( int i = 0; i < GetParamCount(); ++i )
-        params.push_back( GetParam( i ) );
+        params.emplace_back( GetParam( i ) );
 
     return params;
+}
+
+
+std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetSpiceInstanceParams() const
+{
+    std::vector<std::reference_wrapper<const PARAM>> spiceInstanceParams;
+
+    for( const PARAM& param : GetParams() )
+    {
+        if( param.info.isSpiceInstanceParam )
+            spiceInstanceParams.emplace_back( param );
+    }
+
+    return spiceInstanceParams;
 }
 
 
@@ -1252,12 +1254,12 @@ wxString SIM_MODEL::GenerateSpiceItemPins( const wxString& aRefName,
         if( it == aSymbolPinNumbers.end() )
         {
             LOCALE_IO toggle;
-            result << wxString::Format( "NC-%s-%u ", aRefName, ncCounter++ );
+            result << wxString::Format( " NC-%s-%u", aRefName, ncCounter++ );
         }
         else
         {
             long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << aPinNetNames.at( symbolPinIndex ) << " ";
+            result << " " << aPinNetNames.at( symbolPinIndex );
         }
     }
 
@@ -1265,21 +1267,25 @@ wxString SIM_MODEL::GenerateSpiceItemPins( const wxString& aRefName,
 }
 
 
-wxString SIM_MODEL::GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+wxString SIM_MODEL::GenerateSpiceItemModelName( const wxString& aModelName ) const
+{
+    return " " + aModelName;
+}
+
+
+wxString SIM_MODEL::GenerateSpiceItemParams() const
 {
     wxString result;
 
-    if( aIsFirst )
-        aIsFirst = false;
-    else
-        result << " ";
+    for( const PARAM& param : GetSpiceInstanceParams() )
+    {
+        wxString name = ( param.info.spiceInstanceName == "" ) ?
+            param.info.name : param.info.spiceInstanceName;
+        wxString value = param.value->ToSpiceString();
 
-    wxString name = ( aParam.info.spiceInstanceName == "" ) ?
-        aParam.info.name : aParam.info.spiceInstanceName;
-    wxString value = aParam.value->ToSpiceString();
-
-    if( value != "" )
-        result << name << "=" << value;
+        if( value != "" )
+            result << " " << name << "=" << value;
+    }
 
     return result;
 }
@@ -1682,7 +1688,7 @@ wxString SIM_MODEL::parseFieldFloatValue( wxString aFieldFloatValue )
 }
 
 
-bool SIM_MODEL::requiresSpiceModel() const
+bool SIM_MODEL::requiresSpiceModelLine() const
 {
     for( const PARAM& param : GetParams() )
     {

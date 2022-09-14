@@ -95,6 +95,8 @@ protected:
     static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
 
 private:
+    bool requiresSpiceModelLine() const override { return false; }
+
     std::vector<wxString> getPinNames() const override;
 
     MODEL_TYPE getModelType() const;

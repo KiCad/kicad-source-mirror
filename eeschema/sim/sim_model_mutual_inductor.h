@@ -33,7 +33,7 @@ class SIM_MODEL_MUTUAL_INDUCTOR : public SIM_MODEL
 public:
     SIM_MODEL_MUTUAL_INDUCTOR();
 
-    wxString GenerateSpiceItemParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    wxString GenerateSpiceItemParams() const override;
 
 private:
     static const std::vector<PARAM::INFO> makeParamInfos();
