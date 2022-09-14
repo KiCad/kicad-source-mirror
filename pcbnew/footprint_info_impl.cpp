@@ -191,18 +191,17 @@ void FOOTPRINT_LIST_IMPL::loadLibs()
     for( size_t ii = 0; ii < num_returns; ++ii )
         returns[ii] = tp.submit( loader_job );
 
-    for( const std::future<size_t>& retval : returns )
+    for( const std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
                 m_cancelled = true;
 
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 }
 
@@ -258,18 +257,17 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
     for( size_t ii = 0; ii < num_elements; ++ii )
         returns[ii] = tp.submit( fp_thread );
 
-    for( const std::future<size_t>& retval : returns )
+    for( const std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             if( m_progress_reporter )
                 m_progress_reporter->KeepRefreshing();
 
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 
     std::unique_ptr<FOOTPRINT_INFO> fpi;

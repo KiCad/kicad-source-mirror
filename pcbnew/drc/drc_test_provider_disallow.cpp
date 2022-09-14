@@ -170,16 +170,15 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     for( const std::pair<ZONE*, ZONE*>& areaZonePair : toCache )
         returns.emplace_back( tp.submit( query_areas, areaZonePair ) );
 
-    for( const std::future<size_t>& retval : returns )
+    for( const std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / toCache.size() );
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 
     if( m_drcEngine->IsCancelled() )

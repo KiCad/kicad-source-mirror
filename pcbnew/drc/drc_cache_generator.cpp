@@ -189,14 +189,14 @@ bool DRC_CACHE_GENERATOR::Run()
     for( ZONE* zone : allZones )
         returns.emplace_back( tp.submit( cache_zones, zone ) );
 
-    for( const std::future<size_t>& retval : returns )
+    for( const std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / allZones.size() );
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
         while( status != std::future_status::ready );
     }

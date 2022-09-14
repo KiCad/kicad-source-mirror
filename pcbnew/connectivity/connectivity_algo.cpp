@@ -262,18 +262,18 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
             returns[ii] = tp.submit( conn_lambda, ii, &m_itemList, m_progressReporter );
 
-        for( const std::future<size_t>& retval : returns )
+        for( const std::future<size_t>& ret : returns )
         {
             // Here we balance returns with a 250ms timeout to allow UI updating
-            std::future_status status;
-            do
+            std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+
+            while( status != std::future_status::ready )
             {
                 if( m_progressReporter )
                     m_progressReporter->KeepRefreshing();
 
-                status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+                status = ret.wait_for( std::chrono::milliseconds( 250 ) );
             }
-            while( status != std::future_status::ready );
         }
 
         if( m_progressReporter )
@@ -482,18 +482,17 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     for( size_t ii = 0; ii < zitems.size(); ++ii )
         returns[ii] = tp.submit( cache_zones, zitems[ii] );
 
-    for( const std::future<size_t>& retval : returns )
+    for( const std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             if( aReporter )
                 aReporter->KeepRefreshing();
 
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
 
     }
 

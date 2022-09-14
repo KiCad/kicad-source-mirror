@@ -826,16 +826,15 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         returns.emplace_back( tp.submit( build_netlayer_polys, netLayer.Netcode, netLayer.Layer ) );
     }
 
-    for( std::future<size_t>& retval : returns )
+    for( std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 
     returns.clear();
@@ -847,16 +846,15 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             returns.emplace_back( tp.submit( min_checker, itemsPoly, netLayer.Layer, minWidth ) );
     }
 
-    for( std::future<size_t>& retval : returns )
+    for( std::future<size_t>& ret : returns )
     {
-        std::future_status status;
+        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-        do
+        while( status != std::future_status::ready )
         {
             m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
-            status = retval.wait_for( std::chrono::milliseconds( 250 ) );
+            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-        while( status != std::future_status::ready );
     }
 
     return true;

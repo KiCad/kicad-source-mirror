@@ -270,16 +270,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         for( const std::future<int>& ret : returns )
         {
-            std::future_status status;
+            std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
 
-            do
+            while( status != std::future_status::ready )
             {
                 if( m_progressReporter )
                     m_progressReporter->KeepRefreshing();
 
                 status = ret.wait_for( std::chrono::milliseconds( 250 ) );
             }
-            while( status != std::future_status::ready );
+
         }
 
         alg::delete_if( toFill, [&]( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool
