@@ -405,8 +405,9 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
     if( !aField->CanAutoplace() )
         aFormatter.Print( aNestLevel, " (do_not_autoplace)" );
 
+    aFormatter.Print( 0, "\n" );
     aField->Format( &aFormatter, aNestLevel, 0 );
-    aFormatter.Print( aNestLevel, "\n)\n" );
+    aFormatter.Print( aNestLevel, ")\n" );
 }
 
 
