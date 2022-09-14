@@ -208,12 +208,15 @@ public:
         }
     };
 
-    virtual bool IsInNetTie( const PNS::ITEM* aA ) override { return false; }
-    virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
-                                    const PNS::ITEM* aCollidingItem ) override
+    bool IsInNetTie( const PNS::ITEM* aA ) override { return false; }
+
+    bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
+                            const PNS::ITEM* aCollidingItem ) override
     {
         return false;
     }
+
+    bool IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB ) override { return false; }
 
     void AddMockRule( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
                       PNS::CONSTRAINT aConstraint )

@@ -178,7 +178,7 @@ public:
     std::string KindStr() const;
 
     void SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; }
-    BOARD_ITEM* Parent() const { return m_parent; }
+    virtual BOARD_ITEM* Parent() const { return m_parent; }
 
     void SetNet( int aNet ) { m_net = aNet; }
     int Net() const { return m_net;  }

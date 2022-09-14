@@ -116,6 +116,8 @@ public:
     virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
                                     const PNS::ITEM* aCollidingItem ) override;
 
+    virtual bool IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) override;
@@ -246,6 +248,46 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
     {
         return drcEngine->IsNetTieExclusion( aItem->Net(), ToLAYER_ID( aItem->Layer() ),
                                              aCollisionPos, collidingItem );
+    }
+
+    return false;
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB )
+{
+    auto checkKeepout =
+            []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
+            {
+                if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( { PCB_ARC_T, PCB_TRACE_T } ) )
+                    return true;
+
+                if( aKeepout->GetDoNotAllowVias() && aOther->Type() == PCB_VIA_T )
+                    return true;
+
+                if( aKeepout->GetDoNotAllowPads() && aOther->Type() == PCB_PAD_T )
+                    return true;
+
+                // Incomplete test, but better than nothing:
+                if( aKeepout->GetDoNotAllowFootprints() && aOther->Type() == PCB_PAD_T )
+                {
+                    return !aKeepout->GetParentFootprint()
+                            || aKeepout->GetParentFootprint() != aOther->GetParentFootprint();
+                }
+
+                return false;
+            };
+
+    if( const ZONE* zoneA = dynamic_cast<ZONE*>( aA->Parent() ) )
+    {
+        if( zoneA->GetIsRuleArea() && aB->Parent() )
+            return checkKeepout( zoneA, aB->Parent() );
+    }
+
+    if( const ZONE* zoneB = dynamic_cast<ZONE*>( aB->Parent() ) )
+    {
+        if( zoneB->GetIsRuleArea() && aA->Parent() )
+            return checkKeepout( zoneB, aA->Parent() );
     }
 
     return false;
@@ -435,7 +477,8 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                     rv = constraint.m_Value.Min();
             }
         }
-        else if( isHole( aA ) || isHole( aB ) )
+
+        if( isHole( aA ) || isHole( aB ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
@@ -1459,7 +1502,7 @@ bool PNS_KICAD_IFACE_BASE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer 
     if( aLayer < 0 )
         return true;
 
-    if( aItem->Parent() )
+    if( !aItem->OfKind( PNS::ITEM::HOLE_T ) && aItem->Parent() )
     {
         switch( aItem->Parent()->Type() )
         {
