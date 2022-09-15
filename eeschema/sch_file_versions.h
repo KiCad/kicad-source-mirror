@@ -45,7 +45,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220102   // Fonts.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126   // Text boxes.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328   // Text box start/end -> at/size.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914     // Symbol unit display names.
 
 
 /**
