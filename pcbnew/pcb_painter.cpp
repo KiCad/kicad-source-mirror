@@ -1854,6 +1854,12 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         else
             attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
+        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+        {
+            attrs.m_Mirrored = !attrs.m_Mirrored;
+            attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
+        }
+
         std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
 
         if( cache )
@@ -1931,6 +1937,12 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
+    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+    {
+        attrs.m_Mirrored = !attrs.m_Mirrored;
+        attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
+    }
+
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -2007,6 +2019,12 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         else
             attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
+        if( m_gal->IsFlippedX() && !( aText->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+        {
+            attrs.m_Mirrored = !attrs.m_Mirrored;
+            attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
+        }
+
         std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
 
         if( cache )
@@ -2075,6 +2093,12 @@ void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
     attrs.m_Angle = aTextBox->GetDrawRotation();
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
+
+    if( m_gal->IsFlippedX() && !( aTextBox->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+    {
+        attrs.m_Mirrored = !attrs.m_Mirrored;
+        attrs.m_Halign = static_cast<GR_TEXT_H_ALIGN_T>( -attrs.m_Halign );
+    }
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
 
@@ -2349,6 +2373,9 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     const PCB_TEXT& text = aDimension->Text();
     wxString        resolvedText = text.GetShownText();
     TEXT_ATTRIBUTES attrs = text.GetAttributes();
+
+    if( m_gal->IsFlippedX() && !( aDimension->GetLayerSet() & LSET::PhysicalLayersMask() ).any() )
+        attrs.m_Mirrored = !attrs.m_Mirrored;
 
     if( outline_mode )
         attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
