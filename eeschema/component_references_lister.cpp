@@ -685,14 +685,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 
             if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
             {
-                msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
+                msg.Printf( _( "Item not annotated: %s%s (unit %d)" ),
                             flatList[ii].GetRef(),
                             tmp,
                             flatList[ii].m_unit );
             }
             else
             {
-                msg.Printf( _( "Item not annotated: %s%s\n" ), flatList[ii].GetRef(), tmp );
+                msg.Printf( _( "Item not annotated: %s%s" ), flatList[ii].GetRef(), tmp );
             }
 
             aHandler( ERCE_UNANNOTATED, msg, &flatList[ii], nullptr );
@@ -710,7 +710,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n" ),
+            msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)" ),
                         flatList[ii].GetRef(),
                         tmp,
                         LIB_SYMBOL::SubReference( flatList[ii].m_unit ),

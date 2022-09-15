@@ -280,7 +280,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
-                    erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet." ) );
+                    erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
 
                     SCH_MARKER* marker = new SCH_MARKER( erc, text->GetPosition() );
                     screen->Append( marker );
@@ -435,7 +435,7 @@ int ERC_TESTER::TestNoConnectPins()
                 ercItem->SetItems( pair.second[0], pair.second[1],
                                    pair.second.size() > 2 ? pair.second[2] : nullptr,
                                    pair.second.size() > 3 ? pair.second[3] : nullptr );
-                ercItem->SetErrorMessage( _( "Pins with \"no connection\" type are connected" ) );
+                ercItem->SetErrorMessage( _( "Pins with 'no connection' type are connected" ) );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
                 sheet.LastScreen()->Append( marker );
@@ -732,7 +732,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( _( "The current configuration does not include the library '%s'." ),
+                msg.Printf( _( "The current configuration does not include the library '%s'" ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
@@ -743,7 +743,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( _( "The library '%s' is not enabled in the current configuration." ),
+                msg.Printf( _( "The library '%s' is not enabled in the current configuration" ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
@@ -758,7 +758,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Symbol '%s' not found in symbol library '%s'.",
+                msg.Printf( _( "Symbol '%s' not found in symbol library '%s'" ),
                             UnescapeString( symbolName ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
@@ -774,7 +774,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Symbol '%s' has been modified in library '%s'.",
+                msg.Printf( _( "Symbol '%s' has been modified in library '%s'" ),
                             UnescapeString( symbolName ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );

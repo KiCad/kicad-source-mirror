@@ -148,7 +148,7 @@ void DIALOG_ERC::UpdateAnnotationWarning()
         if( !m_infoBar->IsShown() )
         {
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
-                                                           _("Show Annotation dialog"),
+                                                           _( "Show Annotation dialog" ),
                                                            wxEmptyString );
 
             button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
