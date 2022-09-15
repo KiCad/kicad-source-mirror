@@ -154,6 +154,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         if( zone->GetIsRuleArea() )
             continue;
 
+        // Degenerate zones will cause trouble; skip them
+        if( zone->GetNumCorners() <= 2 )
+            continue;
+
         if( m_commit )
             m_commit->Modify( zone );
 
@@ -243,6 +247,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( zoneLock.owns_lock() )
                 {
                     SHAPE_POLY_SET fillPolys;
+
                     if( !fillSingleZone( zone, layer, fillPolys ) )
                         return 0;
 
