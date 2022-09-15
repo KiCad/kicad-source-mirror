@@ -3002,29 +3002,33 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             PAD*        pad = findPad( via );
 
             if( track )
+            {
                 via->SetNetCode( track->GetNetCode() );
+                via->SetIsFree( false );
+            }
             else if( pad )
+            {
                 via->SetNetCode( pad->GetNetCode() );
+                via->SetIsFree( false );
+            }
             else
+            {
                 via->SetNetCode( findStitchedZoneNet( via ) );
+                via->SetIsFree( via->GetNetCode() > 0 );
+            }
 
-            if( !m_allowDRCViolations && checkDRCViolation( via ) )
+            if( checkDRCViolation( via ) )
             {
                 m_frame->ShowInfoBarError( _( "Via location violates DRC." ), true,
                                            WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
-                via->SetNetCode( 0 );
-                return false;
+
+                if( !m_allowDRCViolations )
+                    return false;
             }
             else
             {
                 if( infobar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION )
                     infobar->Dismiss();
-            }
-
-            if( !track && !pad )
-            {
-                via->SetNetCode( findStitchedZoneNet( via ) );
-                via->SetIsFree();
             }
 
             aCommit.Add( via );
