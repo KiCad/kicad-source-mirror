@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,12 +38,12 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_cbAutoStartWires = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Automatically start wires on unconnected pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAutoStartWires->SetToolTip( _("When enabled, you can start wiring by clicking on unconnected pins even when the wire tool is not active") );
 
-	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxALL, 5 );
 
-    m_escClearsNetHighlight = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_cbAutoStartWires->SetToolTip( _("First <ESC> in selection tool clears selection, next clears net highlighting") );
+	m_escClearsNetHighlight = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("<ESC> clears net highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_escClearsNetHighlight->SetToolTip( _("First <ESC> in selection tool clears selection, next clears net highlighting") );
 
-   	sbSizerEditOpt->Add( m_escClearsNetHighlight, 0, wxALL, 5 );
+	sbSizerEditOpt->Add( m_escClearsNetHighlight, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bLeftColumn->Add( sbSizerEditOpt, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -282,7 +282,6 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
-	bPanelSizer->Fit( this );
 }
 
 PANEL_EESCHEMA_EDITING_OPTIONS_BASE::~PANEL_EESCHEMA_EDITING_OPTIONS_BASE()
