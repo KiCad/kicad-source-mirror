@@ -59,14 +59,16 @@ public:
      * Construct a symbol tree.
      *
      * @param aParent parent window containing this tree widget
+     * @param aRecentSearchesKey a key into a global map storing recent searches (usually "power",
+     *                           "symbols", or "footprints", but could be further differentiated)
      * @param aLibTable table containing libraries and items to display
      * @param aAdapter a LIB_TREE_MODEL_ADAPTER instance to use
      * @param aFlags selection of sub-widgets to include and other options
      * @param aDetails if not null, a custom HTML_WINDOW to hold symbol details. If null this
      *                 will be created inside the LIB_TREE.
      */
-    LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, FLAGS aFlags = ALL_WIDGETS,
+    LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_TABLE* aLibTable,
+              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, int aFlags = ALL_WIDGETS,
               HTML_WINDOW* aDetails = nullptr );
 
     ~LIB_TREE() override;
@@ -186,6 +188,8 @@ protected:
      */
     void setState( const STATE& aState );
 
+    void updateRecentSearchMenu();
+
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
@@ -210,8 +214,10 @@ protected:
     wxDataViewCtrl*  m_tree_ctrl;
     HTML_WINDOW*     m_details_ctrl;
     wxTimer*         m_debounceTimer;
+    bool             m_inTimerEvent;
 
     LIB_ID           m_last_libid;
+    wxString         m_recentSearchesKey;
 };
 
 ///< Custom event sent when a new symbol is preselected

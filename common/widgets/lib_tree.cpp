@@ -23,6 +23,7 @@
  */
 
 #include <widgets/lib_tree.h>
+#include <core/kicad_algo.h>
 #include <macros.h>
 #include <wxdataviewctrl_helpers.h>
 #include <wx/sizer.h>
@@ -33,13 +34,20 @@
 #include <wx/timer.h>
 
 
-LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, FLAGS aFlags,
+constexpr int RECENT_SEARCHES_MAX = 10;
+
+std::map<wxString, std::vector<wxString>> g_recentSearches;
+
+
+LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_TABLE* aLibTable,
+                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, int aFlags,
                     HTML_WINDOW* aDetails ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                  wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
         m_lib_table( aLibTable ), m_adapter( aAdapter ), m_query_ctrl( nullptr ),
-        m_details_ctrl( nullptr )
+        m_details_ctrl( nullptr ),
+        m_inTimerEvent( false ),
+        m_recentSearchesKey( aRecentSearchesKey )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -75,6 +83,17 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 #endif
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
         m_query_ctrl->Bind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
+
+        m_query_ctrl->Bind( wxEVT_MENU,
+                [this]( wxCommandEvent& aEvent )
+                {
+                    wxString search;
+                    size_t   idx = aEvent.GetId() - 1;
+
+                    if( idx < g_recentSearches[ m_recentSearchesKey ].size() )
+                        m_query_ctrl->SetValue( g_recentSearches[ m_recentSearchesKey ][idx] );
+                },
+                1, RECENT_SEARCHES_MAX );
 
         Bind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
     }
@@ -124,6 +143,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
         m_query_ctrl->SetDescriptiveText( _( "Filter" ) );
         m_query_ctrl->SetFocus();
         m_query_ctrl->SetValue( wxEmptyString );
+        updateRecentSearchMenu();
 
         // Force an update of the adapter with the empty text to ensure preselect is done
         Regenerate( false );
@@ -232,6 +252,35 @@ void LIB_TREE::SetSearchString( const wxString& aSearchString )
 wxString LIB_TREE::GetSearchString() const
 {
     return m_query_ctrl->GetValue();
+}
+
+
+void LIB_TREE::updateRecentSearchMenu()
+{
+    wxString newEntry = GetSearchString();
+
+    std::vector<wxString>& recents = g_recentSearches[ m_recentSearchesKey ];
+
+    if( !newEntry.IsEmpty() )
+    {
+        if( alg::contains( recents, newEntry ) )
+            alg::delete_matching( recents, newEntry );
+
+        if( recents.size() >= RECENT_SEARCHES_MAX )
+            recents.pop_back();
+
+        recents.insert( recents.begin(), newEntry );
+    }
+
+    wxMenu* menu = new wxMenu();
+
+    for( const wxString& recent : recents )
+        menu->Append( menu->GetMenuItemCount() + 1, recent );
+
+    if( recents.empty() )
+        menu->Append( wxID_ANY, _( "recent searches" ) );
+
+    m_query_ctrl->SetMenu( menu );
 }
 
 
@@ -406,6 +455,8 @@ void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 
 void LIB_TREE::onQueryEnter( wxCommandEvent& aEvent )
 {
+    updateRecentSearchMenu();
+
     if( GetSelectedLibId().IsValid() )
         postSelectEvent();
 }
@@ -413,7 +464,9 @@ void LIB_TREE::onQueryEnter( wxCommandEvent& aEvent )
 
 void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
 {
+    m_inTimerEvent = true;
     Regenerate( false );
+    m_inTimerEvent = false;
 }
 
 
@@ -425,26 +478,34 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     switch( aKeyStroke.GetKeyCode() )
     {
     case WXK_UP:
+        updateRecentSearchMenu();
         selectIfValid( GetPrevItem( *m_tree_ctrl, sel ) );
         break;
 
     case WXK_DOWN:
+        updateRecentSearchMenu();
         selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
         break;
 
     case WXK_ADD:
+        updateRecentSearchMenu();
+
         if( type == LIB_TREE_NODE::LIB )
             m_tree_ctrl->Expand( sel );
 
         break;
 
     case WXK_SUBTRACT:
+        updateRecentSearchMenu();
+
         if( type == LIB_TREE_NODE::LIB )
             m_tree_ctrl->Collapse( sel );
 
         break;
 
     case WXK_RETURN:
+        updateRecentSearchMenu();
+
         if( type == LIB_TREE_NODE::LIB )
             toggleExpand( sel );
         else
@@ -476,6 +537,9 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
 
 void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
+    if( !m_inTimerEvent )
+        updateRecentSearchMenu();
+
     if( !m_tree_ctrl->IsFrozen() )
         postPreselectEvent();
 }

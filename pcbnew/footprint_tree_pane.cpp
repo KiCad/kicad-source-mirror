@@ -34,7 +34,8 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new LIB_TREE( this, &GFootprintTable, m_frame->GetLibTreeAdapter(), LIB_TREE::SEARCH );
+    m_tree = new LIB_TREE( this, wxT( "footprints" ), &GFootprintTable,
+                           m_frame->GetLibTreeAdapter(), LIB_TREE::SEARCH );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs

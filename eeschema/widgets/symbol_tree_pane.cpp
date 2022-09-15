@@ -39,9 +39,8 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_M
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new LIB_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(), m_libMgr->GetAdapter(),
-                           static_cast<LIB_TREE::FLAGS>( LIB_TREE::SEARCH |
-                                                         LIB_TREE::MULTISELECT ) );
+    m_tree = new LIB_TREE( this, wxT( "symbols" ), &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
+                           m_libMgr->GetAdapter(), LIB_TREE::SEARCH | LIB_TREE::MULTISELECT );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
