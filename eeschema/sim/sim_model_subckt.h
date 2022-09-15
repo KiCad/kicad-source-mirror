@@ -26,21 +26,22 @@
 #define SIM_MODEL_SUBCIRCUIT_H
 
 #include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+
+
+class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
+{
+public:
+    using SPICE_GENERATOR::SPICE_GENERATOR;
+
+    wxString ModelLine( const wxString& aModelName ) const override;
+    std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+};
 
 
 class SIM_MODEL_SUBCKT : public SIM_MODEL
 {
 public:
-    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
-    {
-    public:
-        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
-
-        wxString ModelLine( const wxString& aModelName ) const override;
-        std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
-    };
-
-
     SIM_MODEL_SUBCKT( TYPE aType );
 
     void ReadSpiceCode( const wxString& aSpiceCode ) override;

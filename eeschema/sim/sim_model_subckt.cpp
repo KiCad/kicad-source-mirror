@@ -27,8 +27,6 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
-using SPICE_GENERATOR = SIM_MODEL_SUBCKT::SPICE_GENERATOR;
-
 
 namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 {
@@ -48,17 +46,17 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 }
 
 
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_SUBCKT::ModelLine( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
+std::vector<wxString> SPICE_GENERATOR_SUBCKT::CurrentNames( const wxString& aRefName ) const
 {
     std::vector<wxString> currentNames;
 
-    for( const PIN& pin : GetPins() )
+    for( const SIM_MODEL::PIN& pin : GetPins() )
     {
         currentNames.push_back( wxString::Format( "I(%s:%s)",
                                                   ItemName( aRefName ),
@@ -70,7 +68,7 @@ std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) 
 
 
 SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ) )
 {
 }
 

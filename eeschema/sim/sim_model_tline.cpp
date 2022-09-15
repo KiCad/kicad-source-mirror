@@ -25,17 +25,16 @@
 #include <sim/sim_model_tline.h>
 #include <locale_io.h>
 
-using SPICE_GENERATOR = SIM_MODEL_TLINE::SPICE_GENERATOR;
 using PARAM = SIM_MODEL::PARAM;
 
 
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_TLINE::ModelLine( const wxString& aModelName ) const
 {
     wxString r, l, g, c, len;
 
     switch( m_model.GetType() )
     {
-    case TYPE::TLINE_Z0:
+    case SIM_MODEL::TYPE::TLINE_Z0:
     {
         auto z0 = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "z0" )->value );
         auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
@@ -51,7 +50,7 @@ wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
         break;
     }
 
-    case TYPE::TLINE_RLGC:
+    case SIM_MODEL::TYPE::TLINE_RLGC:
         r = m_model.FindParam( "r" )->value->ToSpiceString();
         l = m_model.FindParam( "l" )->value->ToSpiceString();
         g = m_model.FindParam( "g" )->value->ToSpiceString();
@@ -70,7 +69,8 @@ wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
 
 
 SIM_MODEL_TLINE::SIM_MODEL_TLINE( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+    SIM_MODEL( aType,
+               std::make_unique<SPICE_GENERATOR_TLINE>( *this ) ),
     m_isInferred( false )
 {
     static std::vector<PARAM::INFO> z0 = makeZ0ParamInfos();

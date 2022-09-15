@@ -27,8 +27,6 @@
 #include <pegtl/contrib/parse_tree.hpp>
 #include <locale_io.h>
 
-using SPICE_GENERATOR = SIM_MODEL_SOURCE::SPICE_GENERATOR;
-
 
 namespace SIM_MODEL_SOURCE_PARSER
 {
@@ -40,13 +38,13 @@ namespace SIM_MODEL_SOURCE_PARSER
 }
 
 
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_SOURCE::ModelLine( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
+wxString SPICE_GENERATOR_SOURCE::ItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aSymbolPinNumbers,
                                     const std::vector<wxString>& aPinNetNames ) const
@@ -66,8 +64,8 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
         
         switch( m_model.GetType() )
         {
-        case TYPE::V_PWL:
-        case TYPE::I_PWL:
+        case SIM_MODEL::TYPE::V_PWL:
+        case SIM_MODEL::TYPE::I_PWL:
         {
             tao::pegtl::string_input<> in( m_model.GetParam( 0 ).value->ToString().ToUTF8(),
                                            "from_content" );
@@ -102,15 +100,15 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
 
         // TODO: dt should be tstep by default.
 
-        case TYPE::V_WHITENOISE:
-        case TYPE::I_WHITENOISE:
+        case SIM_MODEL::TYPE::V_WHITENOISE:
+        case SIM_MODEL::TYPE::I_WHITENOISE:
             args << getParamValueString( "rms", "0" ) << " ";
             args << getParamValueString( "dt", "0" ) << " ";
             args << "0 0 0 0 0 ";
             break;
 
-        case TYPE::V_PINKNOISE:
-        case TYPE::I_PINKNOISE:
+        case SIM_MODEL::TYPE::V_PINKNOISE:
+        case SIM_MODEL::TYPE::I_PINKNOISE:
             args << "0 ";
             args << getParamValueString( "dt", "0" ) << " ";
             args << getParamValueString( "slope", "0" ) << " ";
@@ -118,16 +116,16 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
             args << "0 0 0 ";
             break;
 
-        case TYPE::V_BURSTNOISE:
-        case TYPE::I_BURSTNOISE:
+        case SIM_MODEL::TYPE::V_BURSTNOISE:
+        case SIM_MODEL::TYPE::I_BURSTNOISE:
             args << "0 0 0 0 ";
             args << getParamValueString( "ampl", "0" ) << " ";
             args << getParamValueString( "tcapt", "0" ) << " ";
             args << getParamValueString( "temit", "0" ) << " ";
             break;
         
-        case TYPE::V_RANDUNIFORM:
-        case TYPE::I_RANDUNIFORM:
+        case SIM_MODEL::TYPE::V_RANDUNIFORM:
+        case SIM_MODEL::TYPE::I_RANDUNIFORM:
         {
             args << "1 ";
             args << getParamValueString( "dt", "0" ) << " ";
@@ -143,8 +141,8 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
         }
             break;
 
-        case TYPE::V_RANDNORMAL:
-        case TYPE::I_RANDNORMAL:
+        case SIM_MODEL::TYPE::V_RANDNORMAL:
+        case SIM_MODEL::TYPE::I_RANDNORMAL:
             args << "2 ";
             args << getParamValueString( "dt", "0" ) << " ";
             args << getParamValueString( "td", "0" ) << " ";
@@ -152,8 +150,8 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
             args << getParamValueString( "mean", "0" ) << " ";
             break;
 
-        case TYPE::V_RANDEXP:
-        case TYPE::I_RANDEXP:
+        case SIM_MODEL::TYPE::V_RANDEXP:
+        case SIM_MODEL::TYPE::I_RANDEXP:
             args << "3 ";
             args << getParamValueString( "dt", "0" ) << " ";
             args << getParamValueString( "td", "0" ) << " ";
@@ -161,8 +159,8 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
             args << getParamValueString( "offset", "0" ) << " ";
             break;
 
-        /*case TYPE::V_RANDPOISSON:
-        case TYPE::I_RANDPOISSON:
+        /*case SIM_MODEL::TYPE::V_RANDPOISSON:
+        case SIM_MODEL::TYPE::I_RANDPOISSON:
             args << "4 ";
             args << FindParam( "dt" )->value->ToSpiceString() << " ";
             args << FindParam( "td" )->value->ToSpiceString() << " ";
@@ -171,7 +169,7 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
             break;*/
 
         default:
-            for( const PARAM& param : m_model.GetParams() )
+            for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
             {
                 wxString argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
@@ -186,11 +184,11 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
     else
         model << m_model.GetParam( 0 ).value->ToSpiceString();
 
-    return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
+    return SPICE_GENERATOR::ItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
 }
 
 
-wxString SPICE_GENERATOR::getParamValueString( const wxString& aParamName,
+wxString SPICE_GENERATOR_SOURCE::getParamValueString( const wxString& aParamName,
                                                const wxString& aDefaultValue ) const
 {
     wxString result = m_model.FindParam( aParamName )->value->ToSpiceString();
@@ -203,7 +201,7 @@ wxString SPICE_GENERATOR::getParamValueString( const wxString& aParamName,
 
 
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
-    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SOURCE>( *this ) ),
       m_isInferred( false )
 {
     for( const SIM_MODEL::PARAM::INFO& paramInfo : makeParamInfos( aType ) )

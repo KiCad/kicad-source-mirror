@@ -26,18 +26,21 @@
 #define SIM_MODEL_MUTUAL_INDUCTOR_H
 
 #include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+
+
+class SPICE_GENERATOR_MUTUAL_INDUCTOR : public SPICE_GENERATOR
+{
+public:
+    using SPICE_GENERATOR::SPICE_GENERATOR;
+
+    wxString ItemParams() const override;
+};
 
 
 class SIM_MODEL_MUTUAL_INDUCTOR : public SIM_MODEL
 {
 public:
-    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
-    {
-    public:
-        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
-
-        wxString ItemParams() const override;
-    };
 
     SIM_MODEL_MUTUAL_INDUCTOR();
 

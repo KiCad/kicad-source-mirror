@@ -276,6 +276,7 @@ set( EESCHEMA_SRCS
 
     # Some simulation features must be built even if libngspice is not linked.
     sim/spice_settings.cpp
+    sim/spice_generator.cpp
     sim/sim_library.cpp
     sim/sim_library_spice.cpp
     sim/sim_model.cpp

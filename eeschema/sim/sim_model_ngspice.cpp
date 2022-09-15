@@ -25,36 +25,33 @@
 #include <sim/sim_model_ngspice.h>
 #include <locale_io.h>
 
-using SPICE_GENERATOR = SIM_MODEL_NGSPICE::SPICE_GENERATOR;
-using TYPE = SIM_MODEL::TYPE;
 
-
-std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
+std::vector<wxString> SPICE_GENERATOR_NGSPICE::CurrentNames( const wxString& aRefName ) const
 {
     LOCALE_IO toggle;
 
     switch( m_model.GetTypeInfo().deviceType )
     {
-        case DEVICE_TYPE_::NPN:
-        case DEVICE_TYPE_::PNP:
+        case SIM_MODEL::DEVICE_TYPE_::NPN:
+        case SIM_MODEL::DEVICE_TYPE_::PNP:
             return { wxString::Format( "I(%s:c)", aRefName ),
                      wxString::Format( "I(%s:b)", aRefName ),
                      wxString::Format( "I(%s:e)", aRefName ) };
 
-        case DEVICE_TYPE_::NJFET:
-        case DEVICE_TYPE_::PJFET:
-        case DEVICE_TYPE_::NMES:
-        case DEVICE_TYPE_::PMES:
-        case DEVICE_TYPE_::NMOS:
-        case DEVICE_TYPE_::PMOS:
+        case SIM_MODEL::DEVICE_TYPE_::NJFET:
+        case SIM_MODEL::DEVICE_TYPE_::PJFET:
+        case SIM_MODEL::DEVICE_TYPE_::NMES:
+        case SIM_MODEL::DEVICE_TYPE_::PMES:
+        case SIM_MODEL::DEVICE_TYPE_::NMOS:
+        case SIM_MODEL::DEVICE_TYPE_::PMOS:
             return { wxString::Format( "I(%s:d)", aRefName ),
                      wxString::Format( "I(%s:g)", aRefName ),
                      wxString::Format( "I(%s:s)", aRefName ) };
 
-        case DEVICE_TYPE_::R:
-        case DEVICE_TYPE_::C:
-        case DEVICE_TYPE_::L:
-        case DEVICE_TYPE_::D:
+        case SIM_MODEL::DEVICE_TYPE_::R:
+        case SIM_MODEL::DEVICE_TYPE_::C:
+        case SIM_MODEL::DEVICE_TYPE_::L:
+        case SIM_MODEL::DEVICE_TYPE_::D:
             return CurrentNames( aRefName );
 
         default:
@@ -65,7 +62,7 @@ std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) 
 
 
 SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
-    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
+    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
 {
     const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
 

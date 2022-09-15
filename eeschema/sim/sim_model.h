@@ -38,6 +38,7 @@
 #include <enum_vector.h>
 
 class SIM_LIBRARY;
+class SPICE_GENERATOR;
 
 
 namespace SIM_MODEL_GRAMMAR
@@ -108,49 +109,10 @@ namespace SIM_MODEL_GRAMMAR
 class SIM_MODEL
 {
 public:
+    friend class SPICE_GENERATOR;
+
     struct PIN;
     struct PARAM;
-
-    class SPICE_GENERATOR
-    {
-    public:
-        SPICE_GENERATOR( const SIM_MODEL& aModel ) : m_model( aModel ) {}
-
-        virtual wxString ModelLine( const wxString& aModelName ) const;
-
-        wxString ItemLine( const wxString& aRefName,
-                           const wxString& aModelName ) const;
-        wxString ItemLine( const wxString& aRefName,
-                           const wxString& aModelName,
-                           const std::vector<wxString>& aSymbolPinNumbers ) const;
-        virtual wxString ItemLine( const wxString& aRefName,
-                                   const wxString& aModelName,
-                                   const std::vector<wxString>& aSymbolPinNumbers,
-                                   const std::vector<wxString>& aPinNetNames ) const;
-        virtual wxString ItemName( const wxString& aRefName ) const;
-        virtual wxString ItemPins( const wxString& aRefName,
-                                   const wxString& aModelName,
-                                   const std::vector<wxString>& aSymbolPinNumbers,
-                                   const std::vector<wxString>& aPinNetNames ) const;
-        virtual wxString ItemModelName( const wxString& aModelName ) const;
-        virtual wxString ItemParams() const;
-
-        virtual wxString TuningLine( const wxString& aSymbol ) const;
-        
-        virtual std::vector<wxString> CurrentNames( const wxString& aRefName ) const;
-
-        virtual wxString Preview( const wxString& aModelName ) const;
-
-    protected:
-        virtual std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const
-        {
-            return m_model.GetPins();
-        }
-
-        std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> GetInstanceParams() const;
-
-        const SIM_MODEL& m_model;
-    };
 
     static constexpr auto REFERENCE_FIELD = "Reference";
     static constexpr auto VALUE_FIELD = "Value";
@@ -512,7 +474,7 @@ public:
 
     // Move semantics.
     // Rule of five.
-    virtual ~SIM_MODEL() = default;
+    virtual ~SIM_MODEL(); // = default in implementation file.
     SIM_MODEL() = delete;
     SIM_MODEL( const SIM_MODEL& aOther ) = delete;
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
@@ -592,7 +554,7 @@ public:
     bool IsEnabled() const { return m_isEnabled; }
 
 protected:
-    SIM_MODEL( TYPE aType ) : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ) {}
+    SIM_MODEL( TYPE aType );
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
 
     virtual void CreatePins( unsigned aSymbolPinCount );

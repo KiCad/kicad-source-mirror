@@ -50,6 +50,7 @@
 #include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
+#include <sim/spice_generator.h>
 #include <symbol_viewer_frame.h>
 #include <status_popup.h>
 #include <tool/picker_tool.h>

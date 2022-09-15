@@ -26,8 +26,6 @@
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
-using SPICE_GENERATOR = SIM_MODEL_SPICE::SPICE_GENERATOR;
-
 
 namespace SIM_MODEL_SPICE_PARSER
 {
@@ -38,15 +36,16 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_SPICE::ModelLine( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR::ItemName( const wxString& aRefName ) const
+wxString SPICE_GENERATOR_SPICE::ItemName( const wxString& aRefName ) const
 {
-    wxString elementType = m_model.GetParam( static_cast<int>( SPICE_PARAM::TYPE ) ).value->ToString();
+    wxString elementType = m_model.GetParam(
+        static_cast<int>( SIM_MODEL_SPICE::SPICE_PARAM::TYPE ) ).value->ToString();
 
     if( aRefName != "" && aRefName.StartsWith( elementType ) )
         return aRefName;
@@ -55,14 +54,14 @@ wxString SPICE_GENERATOR::ItemName( const wxString& aRefName ) const
 }
 
 
-wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+wxString SPICE_GENERATOR_SPICE::ItemPins( const wxString& aRefName,
+                                          const wxString& aModelName,
+                                          const std::vector<wxString>& aSymbolPinNumbers,
+                                          const std::vector<wxString>& aPinNetNames ) const
 {
     wxString result;
 
-    for( const PIN& pin : GetPins() )
+    for( const SIM_MODEL::PIN& pin : GetPins() )
     {
         auto it = std::find( aSymbolPinNumbers.begin(), aSymbolPinNumbers.end(),
                              pin.symbolPinNumber );
@@ -78,17 +77,17 @@ wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR::ItemModelName( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_SPICE::ItemModelName( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR::ItemParams() const
+wxString SPICE_GENERATOR_SPICE::ItemParams() const
 {
     wxString result;
 
-    for( const PARAM& param : GetInstanceParams() )
+    for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
         if( param.info.name != "model" )
             result << "";
@@ -100,7 +99,7 @@ wxString SPICE_GENERATOR::ItemParams() const
 }
 
 
-wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_SPICE::Preview( const wxString& aModelName ) const
 {
     std::vector<wxString> pinNumbers;
     std::vector<wxString> pinNetNames;
@@ -116,7 +115,7 @@ wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
 
 
 SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SPICE>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 

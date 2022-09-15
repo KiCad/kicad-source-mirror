@@ -24,14 +24,12 @@
 
 #include <sim/sim_model_mutual_inductor.h>
 
-using SPICE_GENERATOR = SIM_MODEL_MUTUAL_INDUCTOR::SPICE_GENERATOR;
 
-
-wxString SPICE_GENERATOR::ItemParams() const
+wxString SPICE_GENERATOR_MUTUAL_INDUCTOR::ItemParams() const
 {
     wxString result;
 
-    for( const PARAM& param : GetInstanceParams() )
+    for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
         result << " " << param.value->ToSpiceString();
 
     return result;
@@ -39,7 +37,8 @@ wxString SPICE_GENERATOR::ItemParams() const
 
 
 SIM_MODEL_MUTUAL_INDUCTOR::SIM_MODEL_MUTUAL_INDUCTOR() :
-    SIM_MODEL( SIM_MODEL::TYPE::L_MUTUAL, std::make_unique<SPICE_GENERATOR>( *this ) )
+    SIM_MODEL( SIM_MODEL::TYPE::L_MUTUAL,
+               std::make_unique<SPICE_GENERATOR_MUTUAL_INDUCTOR>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 

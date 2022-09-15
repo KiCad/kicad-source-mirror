@@ -29,6 +29,7 @@
 #include <sim/sim_plot_frame.h>
 
 #include <sim/ngspice_helpers.h>
+#include <sim/spice_generator.h>
 
 
 DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent,

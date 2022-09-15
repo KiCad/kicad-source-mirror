@@ -26,20 +26,22 @@
 #define SIM_MODEL_NGSPICE_H
 
 #include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+
+
+class SPICE_GENERATOR_NGSPICE : public SPICE_GENERATOR
+{
+public:
+    using SPICE_GENERATOR::SPICE_GENERATOR;
+
+    std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+};
 
 
 class SIM_MODEL_NGSPICE : public SIM_MODEL
 {
 public:
     friend struct MODEL_INFO_MAP;
-
-    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
-    {
-    public:
-        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
-
-        std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
-    };
 
 
     SIM_MODEL_NGSPICE( TYPE aType );

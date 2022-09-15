@@ -24,34 +24,32 @@
 
 #include <sim/sim_model_switch.h>
 
-using SPICE_GENERATOR = SIM_MODEL_SWITCH::SPICE_GENERATOR;
 
-
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+wxString SPICE_GENERATOR_SWITCH::ItemLine( const wxString& aRefName,
+                                           const wxString& aModelName,
+                                           const std::vector<wxString>& aSymbolPinNumbers,
+                                           const std::vector<wxString>& aPinNetNames ) const
 {
     wxString result;
     
     switch( m_model.GetType() )
     {
-    case TYPE::SW_V:
+    case SIM_MODEL::TYPE::SW_V:
     {
-        result << SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers,
-                                                        aPinNetNames );
+        result << SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers,
+                                             aPinNetNames );
         break;
     }
 
-    case TYPE::SW_I:
+    case SIM_MODEL::TYPE::SW_I:
     {
         wxString vsourceName = "V__" + aRefName;
 
         // Current switches measure input current through a voltage source.
         result << vsourceName << " " << aPinNetNames[0] << " " << aPinNetNames[1] << " 0\n";
 
-        result << SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName, vsourceName + " " + aModelName,
-                                                        aSymbolPinNumbers, aPinNetNames );
+        result << SPICE_GENERATOR::ItemLine( aRefName, vsourceName + " " + aModelName,
+                                             aSymbolPinNumbers, aPinNetNames );
         break;
     }
 
@@ -64,11 +62,11 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR::ItemParams() const
+wxString SPICE_GENERATOR_SWITCH::ItemParams() const
 {
     wxString result;
 
-    for( const PARAM& param : GetInstanceParams() )
+    for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
         // The only instance param is "ic", which is positional.
         wxString value = param.value->ToSpiceString();
@@ -83,14 +81,14 @@ wxString SPICE_GENERATOR::ItemParams() const
 }
 
 
-std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR::GetPins() const
+std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR_SWITCH::GetPins() const
 {
     switch( m_model.GetType() )
     {
-    case TYPE::SW_V:
+    case SIM_MODEL::TYPE::SW_V:
         return { m_model.GetPin( 2 ), m_model.GetPin( 3 ), m_model.GetPin( 0 ), m_model.GetPin( 1 ) };
 
-    case TYPE::SW_I:
+    case SIM_MODEL::TYPE::SW_I:
         return { m_model.GetPin( 2 ), m_model.GetPin( 3 ) };
 
     default:
@@ -101,7 +99,7 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SPICE_GENERATOR::GetPi
 
 
 SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SWITCH>( *this ) )
 {
     static std::vector<PARAM::INFO> vsw = makeSwVParamInfos();
     static std::vector<PARAM::INFO> isw = makeSwIParamInfos();

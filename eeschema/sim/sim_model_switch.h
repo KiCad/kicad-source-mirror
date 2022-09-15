@@ -26,24 +26,25 @@
 #define SIM_MODEL_SWITCH_H
 
 #include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+
+
+class SPICE_GENERATOR_SWITCH : public SPICE_GENERATOR
+{
+public:
+    using SPICE_GENERATOR::SPICE_GENERATOR;
+
+    wxString ItemLine( const wxString& aRefName, const wxString& aModelName,
+                       const std::vector<wxString>& aSymbolPinNumbers,
+                       const std::vector<wxString>& aPinNetNames ) const override;
+    wxString ItemParams() const override;
+    std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const override;
+};
 
 
 class SIM_MODEL_SWITCH : public SIM_MODEL
 {
 public:
-    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
-    {
-    public:
-        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
-
-        wxString ItemLine( const wxString& aRefName, const wxString& aModelName,
-                           const std::vector<wxString>& aSymbolPinNumbers,
-                           const std::vector<wxString>& aPinNetNames ) const override;
-        wxString ItemParams() const override;
-        std::vector<std::reference_wrapper<const PIN>> GetPins() const override;
-    };
-
-
     SIM_MODEL_SWITCH( TYPE aType );
 
 protected:

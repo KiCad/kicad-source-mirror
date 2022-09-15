@@ -26,30 +26,31 @@
 #define SIM_MODEL_SPICE_H
 
 #include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+
+
+class SPICE_GENERATOR_SPICE : public SPICE_GENERATOR
+{
+public:
+    using SPICE_GENERATOR::SPICE_GENERATOR;
+
+    wxString ModelLine( const wxString& aModelName ) const override;
+
+    wxString ItemName( const wxString& aRefName ) const override;
+    wxString ItemPins( const wxString& aRefName,
+                       const wxString& aModelName,
+                       const std::vector<wxString>& aSymbolPinNumbers,
+                       const std::vector<wxString>& aPinNetNames ) const override;
+    wxString ItemModelName( const wxString& aModelName ) const override;
+    wxString ItemParams() const override;
+
+    wxString Preview( const wxString& aModelName ) const override;
+};
 
 
 class SIM_MODEL_SPICE : public SIM_MODEL
 {
 public:
-    class SPICE_GENERATOR : public SIM_MODEL::SPICE_GENERATOR
-    {
-    public:
-        using SIM_MODEL::SPICE_GENERATOR::SPICE_GENERATOR;
-
-        wxString ModelLine( const wxString& aModelName ) const override;
-
-        wxString ItemName( const wxString& aRefName ) const override;
-        wxString ItemPins( const wxString& aRefName,
-                           const wxString& aModelName,
-                           const std::vector<wxString>& aSymbolPinNumbers,
-                           const std::vector<wxString>& aPinNetNames ) const override;
-        wxString ItemModelName( const wxString& aModelName ) const override;
-        wxString ItemParams() const override;
-
-        wxString Preview( const wxString& aModelName ) const override;
-    };
-
-
     DEFINE_ENUM_CLASS_WITH_ITERATOR( SPICE_PARAM,
         TYPE,
         MODEL,

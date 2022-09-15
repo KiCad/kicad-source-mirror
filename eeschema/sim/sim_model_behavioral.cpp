@@ -25,43 +25,41 @@
 #include <sim/sim_model_behavioral.h>
 #include <locale_io.h>
 
-using SPICE_GENERATOR = SIM_MODEL_BEHAVIORAL::SPICE_GENERATOR;
 
-
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+wxString SPICE_GENERATOR_BEHAVIORAL::ModelLine( const wxString& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+wxString SPICE_GENERATOR_BEHAVIORAL::ItemLine( const wxString& aRefName,
+                                               const wxString& aModelName,
+                                               const std::vector<wxString>& aSymbolPinNumbers,
+                                               const std::vector<wxString>& aPinNetNames ) const
 {
     LOCALE_IO toggle;
 
     switch( m_model.GetType() )
     {
-    case TYPE::R_BEHAVIORAL:
-    case TYPE::C_BEHAVIORAL:
-    case TYPE::L_BEHAVIORAL:
-        return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName,
-                                                     m_model.GetParam( 0 ).value->ToString(),
-                                                     aSymbolPinNumbers,
-                                                     aPinNetNames );
+    case SIM_MODEL::TYPE::R_BEHAVIORAL:
+    case SIM_MODEL::TYPE::C_BEHAVIORAL:
+    case SIM_MODEL::TYPE::L_BEHAVIORAL:
+        return SPICE_GENERATOR::ItemLine( aRefName,
+                                          m_model.GetParam( 0 ).value->ToString(),
+                                          aSymbolPinNumbers,
+                                          aPinNetNames );
 
-    case TYPE::V_BEHAVIORAL:
-        return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName,
-                wxString::Format( "V=%s", m_model.GetParam( 0 ).value->ToString() ),
-                                  aSymbolPinNumbers,
-                                  aPinNetNames );
+    case SIM_MODEL::TYPE::V_BEHAVIORAL:
+        return SPICE_GENERATOR::ItemLine( aRefName,
+                                          wxString::Format( "V=%s", m_model.GetParam( 0 ).value->ToString() ),
+                                          aSymbolPinNumbers,
+                                          aPinNetNames );
 
-    case TYPE::I_BEHAVIORAL:
-        return SIM_MODEL::SPICE_GENERATOR::ItemLine( aRefName,
-                wxString::Format( "I=%s", m_model.GetParam( 0 ).value->ToString() ),
-                                  aSymbolPinNumbers,
-                                  aPinNetNames );
+    case SIM_MODEL::TYPE::I_BEHAVIORAL:
+        return SPICE_GENERATOR::ItemLine( aRefName,
+                                          wxString::Format( "I=%s", m_model.GetParam( 0 ).value->ToString() ),
+                                          aSymbolPinNumbers,
+                                          aPinNetNames );
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_BEHAVIORAL" );
@@ -71,7 +69,7 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
 
 
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) ),
+    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) ),
     m_isInferred( false )
 {
     static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
