@@ -64,6 +64,7 @@ struct TOOL_MANAGER::TOOL_STATE
         contextMenu        = aState.contextMenu;
         contextMenuTrigger = aState.contextMenuTrigger;
         cofunc             = aState.cofunc;
+        initialEvent       = aState.initialEvent;
         wakeupEvent        = aState.wakeupEvent;
         waitEvents         = aState.waitEvents;
         transitions        = aState.transitions;
@@ -102,6 +103,9 @@ struct TOOL_MANAGER::TOOL_STATE
     /// Tool execution context
     COROUTINE<int, const TOOL_EVENT&>* cofunc;
 
+    /// The first event that triggered activation of the tool.
+    TOOL_EVENT initialEvent;
+
     /// The event that triggered the execution/wakeup of the tool after Wait() call
     TOOL_EVENT wakeupEvent;
 
@@ -125,6 +129,7 @@ struct TOOL_MANAGER::TOOL_STATE
         contextMenu        = aState.contextMenu;
         contextMenuTrigger = aState.contextMenuTrigger;
         cofunc             = aState.cofunc;
+        initialEvent       = aState.initialEvent;
         wakeupEvent        = aState.wakeupEvent;
         waitEvents         = aState.waitEvents;
         transitions        = aState.transitions;
@@ -781,7 +786,8 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                     // got match? Run the handler.
                     setActiveState( st );
                     st->idle = false;
-                    st->cofunc->Call( aEvent );
+                    st->initialEvent = aEvent;
+                    st->cofunc->Call( st->initialEvent );
                     handled = true;
 
                     if( !st->cofunc->Running() )
