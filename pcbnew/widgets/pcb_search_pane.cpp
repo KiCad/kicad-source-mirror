@@ -75,24 +75,36 @@ void PCB_SEARCH_PANE::onBoardChanged( wxCommandEvent& event )
 
 void PCB_SEARCH_PANE::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
 
 void PCB_SEARCH_PANE::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
 
 void PCB_SEARCH_PANE::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
 
 void PCB_SEARCH_PANE::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
@@ -104,12 +116,18 @@ void PCB_SEARCH_PANE::OnBoardNetSettingsChanged( BOARD& aBoard )
 
 void PCB_SEARCH_PANE::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
 
 void PCB_SEARCH_PANE::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShown() )
+        return;
+
     RefreshSearch();
 }
 
