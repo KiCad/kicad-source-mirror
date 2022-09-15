@@ -26,6 +26,7 @@
 #include <erc_settings.h>
 #include <erc.h>
 #include <settings/settings_manager.h>
+#include <locale_io.h>
 
 
 struct ERC_REGRESSION_TEST_FIXTURE
@@ -41,6 +42,8 @@ struct ERC_REGRESSION_TEST_FIXTURE
 
 BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
 {
+    LOCALE_IO dummy;
+
     // Check not-connected ERC errors
 
     std::vector<std::pair<wxString, int>> tests =

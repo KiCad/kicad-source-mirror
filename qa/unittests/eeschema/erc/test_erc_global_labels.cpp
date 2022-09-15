@@ -26,7 +26,7 @@
 #include <erc_settings.h>
 #include <erc.h>
 #include <settings/settings_manager.h>
-
+#include <locale_io.h>
 
 struct ERC_REGRESSION_TEST_FIXTURE
 {
@@ -41,8 +41,9 @@ struct ERC_REGRESSION_TEST_FIXTURE
 
 BOOST_FIXTURE_TEST_CASE( ERCGlobalLabels, ERC_REGRESSION_TEST_FIXTURE )
 {
-    // Check for Errors when using global labels
+    LOCALE_IO dummy;
 
+    // Check for Errors when using global labels
     std::vector<std::pair<wxString, int>> tests =
     {
         { "issue9367",                   8  }
