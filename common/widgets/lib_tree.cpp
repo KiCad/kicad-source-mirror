@@ -257,6 +257,12 @@ wxString LIB_TREE::GetSearchString() const
 
 void LIB_TREE::updateRecentSearchMenu()
 {
+#ifdef __WXMSW__
+    // Sadly there's a bug somewhere (presumably in wxWidgets, although possibly in the way we
+    // interact with wxWidgets) that causes the search button and drop-down menu to OK the dialog
+// on MSW, resulting in very unexpected behaviour.  #11743
+    m_query_ctrl->ShowSearchButton( false );
+#else
     wxString newEntry = GetSearchString();
 
     std::vector<wxString>& recents = g_recentSearches[ m_recentSearchesKey ];
@@ -281,6 +287,7 @@ void LIB_TREE::updateRecentSearchMenu()
         menu->Append( wxID_ANY, _( "recent searches" ) );
 
     m_query_ctrl->SetMenu( menu );
+#endif
 }
 
 
