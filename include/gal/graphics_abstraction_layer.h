@@ -196,7 +196,12 @@ public:
     /**
      * Draw polygons representing font glyphs.
      */
-    virtual void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs ) {};
+    virtual void DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& aGlyphs )
+    {
+        for( size_t i = 0; i < aGlyphs.size(); i++ )
+            DrawGlyph( *aGlyphs[i], i, aGlyphs.size() );
+    }
+
 
     /**
      * Draw a polygon.
