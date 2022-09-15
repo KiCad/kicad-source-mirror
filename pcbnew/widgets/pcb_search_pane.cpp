@@ -23,7 +23,7 @@
 
 
 PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
-        m_pcbFrame( aFrame ), SEARCH_PANE( aFrame )
+        SEARCH_PANE( aFrame ), m_pcbFrame( aFrame )
 {
     m_brd = m_pcbFrame->GetBoard();
 

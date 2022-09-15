@@ -130,7 +130,7 @@ private:
                                            NETLIST_TYPE_ID aNetTypeId );
     void InstallPageSpice();
     void InstallPageSpiceModel();
-    
+
     bool TransferDataFromWindow() override;
     void NetlistUpdateOpt();
 
@@ -226,6 +226,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* aParent, const wxString& a
     m_IdNetType           = aIdNetType;
     m_pageNetFmtName      = aTitle;
     m_CommandStringCtrl   = nullptr;
+    m_CurSheetAsRoot      = nullptr;
     m_TitleStringCtrl     = nullptr;
     m_SaveAllVoltages     = nullptr;
     m_SaveAllCurrents     = nullptr;
