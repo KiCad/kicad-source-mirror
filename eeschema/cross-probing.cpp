@@ -553,6 +553,12 @@ bool sheetContainsOnlyWantedItems(
     SCH_REFERENCE_LIST references;
     aSheetPath.GetSymbols( references, false, true );
 
+    if( references.GetCount() == 0 )    // Empty sheet, obviously do not contain wanted items
+    {
+        aCache.emplace( aSheetPath, false );
+        return false;
+    }
+
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
         SCH_REFERENCE& schRef = references[ii];
