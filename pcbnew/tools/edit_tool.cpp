@@ -188,6 +188,8 @@ bool EDIT_TOOL::Init()
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
                                                       && SELECTION_CONDITIONS::OnlyTypes( unroutableTypes ) );
+    menu.AddItem( PCB_ACTIONS::moveIndividually,  SELECTION_CONDITIONS::NotEmpty
+                                                      && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
@@ -2238,6 +2240,7 @@ void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
     Go( &EDIT_TOOL::Move,                PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::MoveIndividually,    PCB_ACTIONS::moveIndividually.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );

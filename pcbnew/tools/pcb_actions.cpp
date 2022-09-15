@@ -270,6 +270,12 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         _( "Move" ), _( "Moves the selected item(s)" ),
         BITMAPS::move, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::moveIndividually( "pcbnew.InteractiveMove.moveIndividually",
+        AS_GLOBAL,
+        MD_CTRL + 'M', "",
+        _( "Move Individually" ), _( "Moves the selected items one-by-one" ),
+        BITMAPS::move, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::moveWithReference( "pcbnew.InteractiveMove.moveWithReference",
         AS_GLOBAL, 0, "",
         _( "Move with Reference" ),

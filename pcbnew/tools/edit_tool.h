@@ -81,6 +81,11 @@ public:
     int Move( const TOOL_EVENT& aEvent );
 
     /**
+     * Move a selection of items one-at-a-time.
+     */
+    int MoveIndividually( const TOOL_EVENT& aEvent );
+
+    /**
      * Invoke the PNS router to drag tracks or do an offline resizing of an arc track
      * if a single arc track is selected.
      */

@@ -392,6 +392,34 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::MoveIndividually( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
+    EDA_ITEMS sortedItems = selTool->GetSelection().GetItemsSortedBySelectionOrder();
+
+    if( sortedItems.size() == 0 )
+        return 0;
+
+    for( EDA_ITEM* item : sortedItems )
+    {
+        selTool->ClearSelection();
+        selTool->AddItemToSel( item );
+        doMoveSelection( aEvent );
+    }
+
+    selTool->AddItemsToSel( &sortedItems );
+
+    return 0;
+}
+
+
 int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -582,7 +610,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
 
         if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
-                || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
+                || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                || evt->IsAction( &PCB_ACTIONS::moveIndividually ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
@@ -703,7 +732,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
             {
                 // Prepare to start dragging
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
-                       || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
+                       || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                       || evt->IsAction( &PCB_ACTIONS::moveIndividually ) )
                     && ( editFrame->GetPcbNewSettings()->m_TrackDragAction != TRACK_DRAG_ACTION::MOVE ) )
                 {
                     if( invokeInlineRouter( PNS::DM_ANY ) )
