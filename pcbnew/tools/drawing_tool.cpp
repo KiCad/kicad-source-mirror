@@ -2376,7 +2376,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
-                if( !(item->GetLayerSet() & lset ).any() )
+                if( !( item->GetLayerSet() & lset ).any() )
                     continue;
 
                 if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item ) )
@@ -2577,7 +2577,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             {
                 for( ZONE* z : m_board->Zones() )
                 {
-                    if( z->IsOnLayer( m_frame->GetActiveLayer() ) )
+                    if( z->IsOnLayer( layer ) )
                     {
                         if( z->HitTestFilledArea( layer, position ) )
                             return z->GetNetCode();
