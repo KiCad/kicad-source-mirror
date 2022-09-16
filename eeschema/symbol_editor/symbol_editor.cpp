@@ -34,7 +34,7 @@
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <symbol_tree_pane.h>
 #include <project/project_file.h>
 #include <widgets/lib_tree.h>
@@ -99,78 +99,6 @@ void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
         SetCurLib( selectedLib );
 
     updateTitle();
-}
-
-
-wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
-{
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
-    PROJECT&         prj = Prj();
-
-    if( prj.SchSymbolLibTable()->IsEmpty() )
-    {
-        ShowInfoBarError( _( "No symbol libraries are loaded." ) );
-        return wxEmptyString;
-    }
-
-    wxArrayString headers;
-
-    headers.Add( _( "Library" ) );
-
-    std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
-
-    for( const wxString& name : libNicknames )
-    {
-        // Exclude read only libraries.
-        if( m_libMgr->IsLibraryReadOnly( name ) )
-            continue;
-
-        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
-                || alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
-        {
-            wxArrayString item;
-
-            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + name );
-            itemsToDisplay.push_back( item );
-        }
-    }
-
-    for( const wxString& name : libNicknames )
-    {
-        // Exclude read only libraries.
-        if( m_libMgr->IsLibraryReadOnly( name ) )
-            continue;
-
-        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
-                && !alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
-        {
-            wxArrayString item;
-
-            item.Add( name );
-            itemsToDisplay.push_back( item );
-        }
-    }
-
-    wxString oldLibName = prj.GetRString( PROJECT::SCH_LIB_SELECT );
-
-    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName,
-                         false );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return wxEmptyString;
-
-    wxString libName = dlg.GetTextSelection();
-
-    if( !libName.empty() )
-    {
-        if( prj.SchSymbolLibTable()->HasLibrary( libName ) )
-            prj.SetRString( PROJECT::SCH_LIB_SELECT, libName );
-        else
-            libName = wxEmptyString;
-    }
-
-    return libName;
 }
 
 

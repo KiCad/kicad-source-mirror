@@ -29,7 +29,7 @@
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <symbol_edit_frame.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
@@ -314,8 +314,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        SYMBOL_EDIT_FRAME*      editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-        SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+        SYMBOL_EDIT_FRAME*          editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        LIB_SYMBOL_LIBRARY_MANAGER& libMgr    = editFrame->GetLibManager();
 
         LIB_ID   libId = editFrame->GetTreeLIBID();
         wxString libName = libId.GetLibNickname();

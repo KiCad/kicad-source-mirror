@@ -177,6 +177,8 @@ public:
     static TOOL_ACTION exportNetlist;
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION addSymbolToSchematic;
+    static TOOL_ACTION exportSymbolsToLibrary;
+    static TOOL_ACTION exportSymbolsToNewLibrary;
 
     // Library management
     static TOOL_ACTION saveLibraryAs;

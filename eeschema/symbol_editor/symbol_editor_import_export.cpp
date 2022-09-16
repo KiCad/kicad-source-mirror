@@ -28,7 +28,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_library.h>
 #include <wildcards_and_files_ext.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <wx/filename.h>
 #include <wx/filedlg.h>
 #include <string_utils.h>
@@ -204,7 +204,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     SetStatusText( msg );
 
     // See if the user wants it added to a library table (global or project)
-    SYMBOL_LIB_TABLE* libTable = selectSymLibTable( true );
+    SYMBOL_LIB_TABLE* libTable = SelectSymLibTable( true );
 
     if( libTable )
     {

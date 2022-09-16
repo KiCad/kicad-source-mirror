@@ -42,7 +42,7 @@ class DIALOG_LIB_TEXT_PROPERTIES;
 class SYMBOL_TREE_PANE;
 class LIB_TREE_NODE;
 class LIB_ID;
-class SYMBOL_LIBRARY_MANAGER;
+class LIB_SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_EDITOR_SETTINGS;
 class EDA_LIST_DIALOG;
 
@@ -114,7 +114,7 @@ public:
      */
     void SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom );
 
-    SYMBOL_LIBRARY_MANAGER& GetLibManager();
+    LIB_SYMBOL_LIBRARY_MANAGER& GetLibManager();
 
     SELECTION& GetCurrentSelection() override;
 
@@ -428,16 +428,6 @@ private:
     void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
 
     /**
-     * Display a list of loaded libraries in the symbol library and allows the user to select
-     * a library.
-     *
-     * This list is sorted, with the library cache always at end of the list
-     *
-     * @return the library nickname used in the symbol library table.
-     */
-    wxString SelectLibraryFromList();
-
-    /**
      * Load a symbol from the current active library, optionally setting the selected unit
      * and convert.
      *
@@ -460,14 +450,6 @@ private:
      */
     bool LoadOneLibrarySymbolAux( LIB_SYMBOL* aLibEntry, const wxString& aLibrary, int aUnit,
                                   int aConvert );
-
-    /**
-     * Display a dialog asking the user to select a symbol library table.
-     *
-     * @param aOptional if set the Cancel button will be relabelled "Skip".
-     * @return Pointer to the selected symbol library table or nullptr if canceled.
-     */
-    SYMBOL_LIB_TABLE* selectSymLibTable( bool aOptional = false );
 
     ///< Create a backup copy of a file with requested extension.
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
@@ -562,7 +544,7 @@ private:
     wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
                                                  // symbol has multiple units)
     SYMBOL_TREE_PANE*       m_treePane;          // symbol search tree widget
-    SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
+    LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;        // manager taking care of temporary modifications
     SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
 
     LIB_ID                  m_centerItemOnIdle;

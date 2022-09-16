@@ -33,11 +33,13 @@
 #include <dialogs/dialog_assign_netclass.h>
 #include <project_rescue.h>
 #include <erc.h>
+#include <fmt.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
+#include <paths.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
@@ -51,6 +53,7 @@
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <sim/spice_generator.h>
+#include "symbol_library_manager.h"
 #include <symbol_viewer_frame.h>
 #include <status_popup.h>
 #include <tool/picker_tool.h>
@@ -740,6 +743,106 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     EE_SELECTION& selection = aForce ? selTool->RequestSelection() : selTool->GetSelection();
 
     m_frame->SendSelectItemsToPcb( selection.GetItemsSortedBySelectionOrder(), aForce );
+}
+
+
+int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
+{
+    bool createNew = aEvent.IsAction( &EE_ACTIONS::exportSymbolsToNewLibrary );
+
+    SCH_REFERENCE_LIST symbols;
+    m_frame->Schematic().GetSheets().GetSymbols( symbols, false );
+
+    std::map<LIB_ID, LIB_SYMBOL*> libSymbols;
+    std::map<LIB_ID, std::vector<SCH_SYMBOL*>> symbolMap;
+
+    for( size_t i = 0; i < symbols.GetCount(); ++i )
+    {
+        SCH_SYMBOL* symbol = symbols[i].GetSymbol();
+        LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
+        LIB_ID id = libSymbol->GetLibId();
+
+        if( libSymbols.count( id ) )
+        {
+            wxASSERT_MSG( libSymbols[id]->Compare( *libSymbol, LIB_ITEM::COMPARE_FLAGS::ERC ) == 0,
+                          "Two symbols have the same LIB_ID but are different!" );
+        }
+        else
+        {
+            libSymbols[id] = libSymbol;
+        }
+
+        symbolMap[id].emplace_back( symbol );
+    }
+
+    SYMBOL_LIBRARY_MANAGER mgr( *m_frame );
+
+    wxString targetLib;
+
+    if( createNew )
+    {
+        wxFileName fn;
+        SYMBOL_LIB_TABLE* libTable = m_frame->SelectSymLibTable();
+
+        if( !m_frame->LibraryFileBrowser( false, fn, KiCadSymbolLibFileWildcard(),
+                                          KiCadSymbolLibFileExtension, false,
+                                          ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
+                                          PATHS::GetDefaultUserSymbolsPath() ) )
+        {
+            return 0;
+        }
+
+        targetLib = fn.GetName();
+
+        if( libTable->HasLibrary( targetLib, false ) )
+        {
+            DisplayError( m_frame, wxString::Format( _( "Library '%s' already exists." ),
+                                                     targetLib ) );
+            return 0;
+        }
+
+        if( !mgr.CreateLibrary( fn.GetFullPath(), libTable ) )
+        {
+            DisplayError( m_frame, wxString::Format( _( "Could not add library '%s'." ),
+                                                     targetLib ) );
+            return 0;
+        }
+    }
+    else
+    {
+        targetLib = m_frame->SelectLibraryFromList();
+    }
+
+    if( targetLib.IsEmpty() )
+        return 0;
+
+    bool map = IsOK( m_frame, _( "Update symbols in schematic to refer to new library?" ) );
+
+    SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
+    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
+
+    wxFileName dest = row->GetFullURI( true );
+    dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
+    for( const std::pair<const LIB_ID, LIB_SYMBOL*>& it : libSymbols )
+    {
+        LIB_SYMBOL* origSym = it.second;
+        LIB_SYMBOL* newSym = origSym->Flatten().release();
+
+        pi->SaveSymbol( dest.GetFullPath(), newSym );
+
+        if( map )
+        {
+            LIB_ID id = it.first;
+            id.SetLibNickname( targetLib );
+
+            for( SCH_SYMBOL* symbol : symbolMap[it.first] )
+                symbol->SetLibId( id );
+        }
+    }
+
+    return 0;
 }
 
 
@@ -2475,4 +2578,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,   EE_ACTIONS::showPythonConsole.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::RepairSchematic,       EE_ACTIONS::repairSchematic.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, EE_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, EE_ACTIONS::exportSymbolsToNewLibrary.MakeEvent() );
 }

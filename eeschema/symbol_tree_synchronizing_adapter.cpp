@@ -26,7 +26,7 @@
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <symbol_tree_synchronizing_adapter.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
 #include <string_utils.h>
@@ -252,7 +252,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         }
         else if( node->m_Type == LIB_TREE_NODE::LIB )
         {
-            SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
+            LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
             SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
 
             if( lib )

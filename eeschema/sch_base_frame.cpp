@@ -24,8 +24,11 @@
 
 #include <base_units.h>
 #include <kiway.h>
+#include <lib_tree_model_adapter.h>
 #include <pgm_base.h>
+#include <eda_list_dialog.h>
 #include <eeschema_settings.h>
+#include <project/project_file.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
@@ -41,6 +44,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <wx/choicdlg.h>
 
 #if defined( KICAD_USE_3DCONNEXION )
 #include <navlib/nl_schematic_plugin.h>
@@ -245,6 +249,50 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
     }
 
     return success;
+}
+
+
+SYMBOL_LIB_TABLE* SCH_BASE_FRAME::SelectSymLibTable( bool aOptional )
+{
+    // If no project is loaded, always work with the global table
+    if( Prj().IsNullProject() )
+    {
+        SYMBOL_LIB_TABLE* ret = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+
+        if( aOptional )
+        {
+            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
+                                 _( "Add To Global Library Table" ), wxYES_NO );
+
+            if( dlg.ShowModal() != wxID_OK )
+                ret = nullptr;
+        }
+
+        return ret;
+    }
+
+    wxArrayString libTableNames;
+    libTableNames.Add( _( "Global" ) );
+    libTableNames.Add( _( "Project" ) );
+
+    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
+                              _( "Add To Library Table" ), libTableNames );
+
+    if( aOptional )
+    {
+        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
+        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
+    }
+
+    if( dlg.ShowModal() != wxID_OK )
+        return nullptr;
+
+    switch( dlg.GetSelection() )
+    {
+    case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    case 1:  return Prj().SchSymbolLibTable();
+    default: return nullptr;
+    }
 }
 
 
@@ -509,4 +557,76 @@ void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
         m_spaceMouse->SetFocus( false );
     }
 #endif
+}
+
+
+wxString SCH_BASE_FRAME::SelectLibraryFromList()
+{
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    PROJECT&         prj = Prj();
+
+    if( prj.SchSymbolLibTable()->IsEmpty() )
+    {
+        ShowInfoBarError( _( "No symbol libraries are loaded." ) );
+        return wxEmptyString;
+    }
+
+    wxArrayString headers;
+
+    headers.Add( _( "Library" ) );
+
+    std::vector< wxArrayString > itemsToDisplay;
+    std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
+
+    for( const wxString& name : libNicknames )
+    {
+        // Exclude read only libraries.
+        if( !prj.SchSymbolLibTable()->IsSymbolLibWritable( name ) )
+            continue;
+
+        if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
+            || alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
+        {
+            wxArrayString item;
+
+            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + name );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    for( const wxString& name : libNicknames )
+    {
+        // Exclude read only libraries.
+        if( !prj.SchSymbolLibTable()->IsSymbolLibWritable( name ) )
+            continue;
+
+        if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
+            && !alg::contains( cfg->m_Session.pinned_symbol_libs, name ) )
+        {
+            wxArrayString item;
+
+            item.Add( name );
+            itemsToDisplay.push_back( item );
+        }
+    }
+
+    wxString oldLibName = prj.GetRString( PROJECT::SCH_LIB_SELECT );
+
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName,
+                         false );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return wxEmptyString;
+
+    wxString libName = dlg.GetTextSelection();
+
+    if( !libName.empty() )
+    {
+        if( prj.SchSymbolLibTable()->HasLibrary( libName ) )
+            prj.SetRString( PROJECT::SCH_LIB_SELECT, libName );
+        else
+            libName = wxEmptyString;
+    }
+
+    return libName;
 }

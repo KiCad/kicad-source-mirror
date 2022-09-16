@@ -191,6 +191,23 @@ public:
                                             const LIB_ID& aPreselectedLibId,
                                             int aUnit, int aConvert );
 
+    /**
+     * Display a list of loaded libraries and allows the user to select a library.
+     *
+     * This list is sorted, with the library cache always at end of the list
+     *
+     * @return the library nickname used in the symbol library table.
+     */
+    wxString SelectLibraryFromList();
+
+    /**
+     * Display a dialog asking the user to select a symbol library table.
+     *
+     * @param aOptional if set the Cancel button will be relabelled "Skip".
+     * @return Pointer to the selected symbol library table or nullptr if canceled.
+     */
+    SYMBOL_LIB_TABLE* SelectSymLibTable( bool aOptional = false );
+
     virtual void RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
 
     void HardRedraw() override;

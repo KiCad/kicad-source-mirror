@@ -121,6 +121,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetIcon( BITMAPS::export_file );
     submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard, ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
     submenuExport->Add( EE_ACTIONS::exportNetlist,        ACTION_MENU::NORMAL, _( "Netlist..." ) );
+    submenuExport->Add( EE_ACTIONS::exportSymbolsToLibrary, ACTION_MENU::NORMAL,
+                        _( "Symbols to Library..." ) );
+    submenuExport->Add( EE_ACTIONS::exportSymbolsToNewLibrary, ACTION_MENU::NORMAL,
+                        _( "Symbols to New Library..." ) );
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();

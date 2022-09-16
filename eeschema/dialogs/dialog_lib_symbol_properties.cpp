@@ -26,7 +26,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <math/util.h> // for KiROUND
 #include <sch_symbol.h>
 #include <kiplatform/ui.h>

@@ -676,6 +676,20 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
         BITMAPS::post_bom );
 
+TOOL_ACTION EE_ACTIONS::exportSymbolsToLibrary( "eeschema.EditorControl.exportSymbolsToLibrary",
+       AS_GLOBAL, 0, "",
+       _( "Export Symbols to Library..." ),
+       _( "Add symbols used in schematic to an existing symbol library\n"
+          "(does not remove other symbols from this library)" ),
+       BITMAPS::library_archive );
+
+TOOL_ACTION EE_ACTIONS::exportSymbolsToNewLibrary( "eeschema.EditorControl.exportSymbolsToNewLibrary",
+       AS_GLOBAL, 0, "",
+       _( "Export Symbols to New Library..." ),
+       _( "Create a new symbol library using the symbols used in the schematic\n"
+          "(if the library already exists it will be replaced)" ),
+       BITMAPS::library_archive_as );
+
 TOOL_ACTION EE_ACTIONS::selectOnPCB( "eeschema.EditorControl.selectOnPCB",
         AS_GLOBAL, 0, "",
         _( "Select on PCB" ),

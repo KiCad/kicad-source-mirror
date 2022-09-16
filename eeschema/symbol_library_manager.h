@@ -33,7 +33,6 @@
 #include <set>
 #include <memory>
 #include <wx/arrstr.h>
-#include <symbol_tree_synchronizing_adapter.h>
 #include <sch_io_mgr.h>
 #include <sch_screen.h>
 
@@ -41,7 +40,7 @@ class LIB_SYMBOL;
 class SYMBOL_LIB;
 class PROGRESS_REPORTER;
 class SCH_PLUGIN;
-class SYMBOL_EDIT_FRAME;
+class SCH_BASE_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
 class LIB_LOGGER;
@@ -53,14 +52,8 @@ class LIB_LOGGER;
 class SYMBOL_LIBRARY_MANAGER
 {
 public:
-    SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame );
+    SYMBOL_LIBRARY_MANAGER( SCH_BASE_FRAME& aFrame );
     ~SYMBOL_LIBRARY_MANAGER();
-
-    /**
-     * Updates the #SYMBOL_LIBRARY_MANAGER data to synchronize with Symbol Library Table.
-     */
-    void Sync( const wxString& aForceRefresh,
-               std::function<void( int, int, const wxString& )> aProgressCallback );
 
     /**
      * Preloads all symbol libraries in the symbol library table using SYMBOL_ASYNC_LOADER.
@@ -240,11 +233,6 @@ public:
      */
     wxString GetUniqueLibraryName() const;
 
-    /**
-     * Return the adapter object that provides the stored data.
-     */
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetAdapter() { return m_adapter; }
-
     void GetRootSymbolNames( const wxString& aLibName, wxArrayString& aRootSymbolNames );
 
     /**
@@ -257,20 +245,18 @@ public:
 
     size_t GetLibraryCount() const;
 
-private:
+protected:
+    virtual void OnDataChanged() const {}
+
     ///< Extract library name basing on the file name.
     static wxString getLibraryName( const wxString& aFilePath );
 
     ///< Helper function to add either existing or create new library
     bool addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE* aTable );
 
+
     ///< Return the current Symbol Library Table.
     SYMBOL_LIB_TABLE* symTable() const;
-
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()
-    {
-        return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
-    }
 
     ///< Class to store a working copy of a LIB_SYMBOL object and editor context.
     class SYMBOL_BUFFER
@@ -423,11 +409,8 @@ private:
     ///< The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    SYMBOL_EDIT_FRAME& m_frame;        ///< Parent frame
+    SCH_BASE_FRAME&    m_frame;        ///< Parent frame
     LIB_LOGGER*        m_logger;
-    int                m_syncHash;     ///< Symbol lib table hash value from last synchronization
-
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 };
 
 #endif /* SYMBOL_LIBRARY_MANAGER_H */

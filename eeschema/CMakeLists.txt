@@ -163,6 +163,7 @@ set( EESCHEMA_WIDGETS
 
 set ( EESCHEMA_LIBEDIT_SRCS
     symbol_editor/lib_logger.cpp
+    symbol_editor/lib_symbol_library_manager.cpp
     symbol_editor/menubar_symbol_editor.cpp
     symbol_editor/symbol_edit_frame.cpp
     symbol_editor/symbol_editor.cpp
@@ -170,7 +171,6 @@ set ( EESCHEMA_LIBEDIT_SRCS
     symbol_editor/symbol_editor_plotter.cpp
     symbol_editor/symbol_editor_settings.cpp
     symbol_editor/symbol_editor_undo_redo.cpp
-    symbol_editor/symbol_library_manager.cpp
     symbol_editor/toolbars_symbol_editor.cpp
 
 )
@@ -248,6 +248,7 @@ set( EESCHEMA_SRCS
     symbol_checker.cpp
     symbol_lib_table.cpp
     symbol_library.cpp
+    symbol_library_manager.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
     symbol_viewer_frame.cpp

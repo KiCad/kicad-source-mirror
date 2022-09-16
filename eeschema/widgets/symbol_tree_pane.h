@@ -32,7 +32,7 @@
 
 class LIB_TREE;
 class SYMBOL_EDIT_FRAME;
-class SYMBOL_LIBRARY_MANAGER;
+class LIB_SYMBOL_LIBRARY_MANAGER;
 class wxBoxSizer;
 
 /**
@@ -41,7 +41,7 @@ class wxBoxSizer;
 class SYMBOL_TREE_PANE : public wxPanel
 {
 public:
-    SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
+    SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL_LIBRARY_MANAGER* aLibMgr );
     ~SYMBOL_TREE_PANE();
 
     LIB_TREE* GetLibTree() const
@@ -53,9 +53,9 @@ protected:
     void onSymbolSelected( wxCommandEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& aEvent );
 
-    SYMBOL_EDIT_FRAME*      m_symbolEditFrame;
-    LIB_TREE*               m_tree;             ///< symbol search tree widget
-    SYMBOL_LIBRARY_MANAGER* m_libMgr;
+    SYMBOL_EDIT_FRAME*          m_symbolEditFrame;
+    LIB_TREE*                   m_tree;             ///< symbol search tree widget
+    LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;
 };
 
 #endif /* SYM_TREE_PANE_H */

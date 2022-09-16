@@ -36,7 +36,7 @@
 #include <kiplatform/app.h>
 #include <kiway_express.h>
 #include <symbol_edit_frame.h>
-#include <symbol_library_manager.h>
+#include <lib_symbol_library_manager.h>
 #include <lib_text.h>
 #include <symbol_editor_settings.h>
 #include <paths.h>
@@ -71,7 +71,6 @@
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
-#include <wx/choicdlg.h>
 #include <string_utils.h>
 
 
@@ -129,7 +128,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     LoadSettings( m_settings );
 
-    m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
+    m_libMgr = new LIB_SYMBOL_LIBRARY_MANAGER( *this );
     bool loadingCancelled = false;
 
     {
@@ -820,7 +819,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 }
 
 
-SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
+LIB_SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 {
     wxASSERT( m_libMgr );
     return *m_libMgr;
@@ -850,7 +849,7 @@ bool SYMBOL_EDIT_FRAME::SynchronizePins()
 wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
     // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
+    SYMBOL_LIB_TABLE* libTable = SelectSymLibTable();
 
     if( !libTable )
         return wxEmptyString;
@@ -909,7 +908,7 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
 {
         // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
+    SYMBOL_LIB_TABLE* libTable = SelectSymLibTable();
 
     if( !libTable )
         return;
@@ -1100,50 +1099,6 @@ void SYMBOL_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_
     {
         static_cast<LIB_TREE_NODE_LIB_ID*>( aTreeItem.GetID() )->Update( aSymbol );
         m_treePane->GetLibTree()->RefreshLibTree();
-    }
-}
-
-
-SYMBOL_LIB_TABLE* SYMBOL_EDIT_FRAME::selectSymLibTable( bool aOptional )
-{
-    // If no project is loaded, always work with the global table
-    if( Prj().IsNullProject() )
-    {
-        SYMBOL_LIB_TABLE* ret = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-
-        if( aOptional )
-        {
-            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
-                                 _( "Add To Global Library Table" ), wxYES_NO );
-
-            if( dlg.ShowModal() != wxID_OK )
-                ret = nullptr;
-        }
-
-        return ret;
-    }
-
-    wxArrayString libTableNames;
-    libTableNames.Add( _( "Global" ) );
-    libTableNames.Add( _( "Project" ) );
-
-    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
-                              _( "Add To Library Table" ), libTableNames );
-
-    if( aOptional )
-    {
-        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
-        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
-    }
-
-    if( dlg.ShowModal() != wxID_OK )
-        return nullptr;
-
-    switch( dlg.GetSelection() )
-    {
-    case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    case 1:  return Prj().SchSymbolLibTable();
-    default: return nullptr;
     }
 }
 

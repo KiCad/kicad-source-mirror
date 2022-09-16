@@ -44,12 +44,9 @@
 #include "lib_logger.h"
 
 
-SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
-        m_frame( aFrame ),
-        m_syncHash( 0 )
+SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SCH_BASE_FRAME& aFrame ) :
+        m_frame( aFrame )
 {
-    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( &m_frame, this );
-    m_adapter->ShowUnits( false );
     m_logger = new LIB_LOGGER();
 }
 
@@ -57,19 +54,6 @@ SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
 SYMBOL_LIBRARY_MANAGER::~SYMBOL_LIBRARY_MANAGER()
 {
     delete m_logger;
-}
-
-
-void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
-                                   std::function<void( int, int,
-                                                       const wxString& )> aProgressCallback )
-{
-    m_logger->Activate();
-    {
-        getAdapter()->Sync( aForceRefresh, aProgressCallback );
-        m_syncHash = symTable()->GetModifyHash();
-    }
-    m_logger->Deactivate();
 }
 
 
@@ -210,8 +194,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         if( row )
         {
-            original = row->GetFullURI( true );
-            original.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+
         }
 
         destination.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
@@ -508,7 +491,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const
     wxCHECK( symbolBuf, false );
 
     libBuf.UpdateBuffer( symbolBuf, aSymbol );
-    m_frame.SyncLibraries( false );
+    OnDataChanged();
 
     return true;
 }
@@ -546,7 +529,7 @@ LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const wxString& aAlias, const wxStr
     else
     {
         symbolBuf->SetSymbol( new LIB_SYMBOL( original ) );
-        m_frame.SyncLibraries( false );
+        OnDataChanged();
     }
 
     return LIB_ID( aLibrary, original.GetName() );
@@ -561,7 +544,7 @@ bool SYMBOL_LIBRARY_MANAGER::RevertLibrary( const wxString& aLibrary )
         return false;
 
     m_libs.erase( it );
-    m_frame.SyncLibraries( false );
+    OnDataChanged();
 
     return true;
 }
@@ -602,7 +585,7 @@ bool SYMBOL_LIBRARY_MANAGER::RemoveSymbol( const wxString& aAlias, const wxStrin
     bool retv = true;
 
     retv &= libBuf.DeleteBuffer( symbolBuf );
-    m_frame.SyncLibraries( false );
+    OnDataChanged();
 
     return retv;
 }
@@ -754,7 +737,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
         }
     }
 
-    m_frame.SyncLibraries( false );
+    OnDataChanged();
 
     return true;
 }
