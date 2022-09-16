@@ -986,7 +986,10 @@ bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const
 
 void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const
 {
-    int epsilon = Millimeter2iu( 0.001 );
+    int   epsilon = Millimeter2iu( 0.001 );
+    BOX2I bbox = GetCachedBoundingBox();
+
+    bbox.Inflate( epsilon );
 
     for( ZONE* candidate : GetBoard()->Zones() )
     {
@@ -1000,6 +1003,9 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones 
             continue;
 
         if( candidate->GetNetCode() != GetNetCode() )
+            continue;
+
+        if( !candidate->GetCachedBoundingBox().Intersects( bbox ) )
             continue;
 
         for( auto iter = m_Poly->CIterate(); iter; iter++ )
