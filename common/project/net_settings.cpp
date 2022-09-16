@@ -48,7 +48,7 @@ static std::optional<int> getInPcbUnits( const nlohmann::json& aObj, const std::
 static int getInSchUnits( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
 {
     if( aObj.contains( aKey ) && aObj[aKey].is_number() )
-        return SchMils2iu( aObj[aKey].get<double>() );
+        return schIUScale.MilsToIU( aObj[aKey].get<double>() );
     else
         return aDefault;
 };
@@ -67,8 +67,8 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 // fields are used in which units system.
                 nlohmann::json nc_json = {
                     { "name",            nc->GetName().ToUTF8() },
-                    { "wire_width",      SchIu2Mils( nc->GetWireWidth() ) },
-                    { "bus_width",       SchIu2Mils( nc->GetBusWidth() ) },
+                    { "wire_width",      schIUScale.IUToMils( nc->GetWireWidth() ) },
+                    { "bus_width",       schIUScale.IUToMils( nc->GetBusWidth() ) },
                     { "line_style",      nc->GetLineStyle() },
                     { "schematic_color", nc->GetSchematicColor() },
                     { "pcb_color",       nc->GetPcbColor() }

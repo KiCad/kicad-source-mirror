@@ -92,6 +92,19 @@ struct EDA_IU_SCALE
     {
         return (int) ( mm < 0 ? ( mm * IU_PER_MM - 0.5 ) : ( mm * IU_PER_MM + 0.5 ) );
     }
+
+    constexpr inline int MilsToIU( int mils ) const
+    {
+        double x = mils * IU_PER_MILS;
+        return int( x < 0 ? x - 0.5 : x + 0.5 );
+    }
+
+    constexpr inline double IUToMils( int iu ) const
+    {
+        double mils = iu / IU_PER_MILS;
+
+        return static_cast<int>( mils < 0 ? mils - 0.5 : mils + 0.5 );
+    }
 };
 
 constexpr EDA_IU_SCALE gerbIUScale = EDA_IU_SCALE( GERB_IU_PER_MM );
@@ -156,19 +169,5 @@ constexpr inline int Millimeter2iu( double mm )
 
 constexpr int ARC_LOW_DEF  = Millimeter2iu( 0.02 );
 constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
-
-#else
-constexpr double PCB_IU_PER_MILS = (PCB_IU_PER_MM * 0.0254);
-constexpr double SCH_IU_PER_MILS = (SCH_IU_PER_MM * 0.0254);
-
-constexpr inline int SchMils2iu( double mils )
-{
-    double x = mils * SCH_IU_PER_MILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
-constexpr inline double SchIu2Mils( int iu )
-{
-    return iu / SCH_IU_PER_MILS;
-}
 
 #endif

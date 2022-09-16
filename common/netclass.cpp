@@ -41,8 +41,8 @@ const int DEFAULT_DIFF_PAIR_WIDTH  = pcbIUScale.mmToIU( 0.2 );
 const int DEFAULT_DIFF_PAIR_GAP    = pcbIUScale.mmToIU( 0.25 );
 const int DEFAULT_DIFF_PAIR_VIAGAP = pcbIUScale.mmToIU( 0.25 );
 
-const int DEFAULT_WIRE_WIDTH       = SchMils2iu( 6 );
-const int DEFAULT_BUS_WIDTH        = SchMils2iu( 12 );
+const int DEFAULT_WIRE_WIDTH       = schIUScale.MilsToIU( 6 );
+const int DEFAULT_BUS_WIDTH        = schIUScale.MilsToIU( 12 );
 
 const int DEFAULT_LINE_STYLE = 0; // solid
 
