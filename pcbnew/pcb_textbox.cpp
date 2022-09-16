@@ -39,7 +39,7 @@
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
     PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECT ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
+    EDA_TEXT( pcbIUScale )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -308,17 +308,17 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Text Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ), MessageTextFromValue( units, GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ), MessageTextFromValue( units, GetTextHeight() ) );
+    aList.emplace_back( _( "Text Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
+    aList.emplace_back( _( "Text Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
 
-    wxString msg = MessageTextFromValue( units, std::abs( GetEnd().x - GetStart().x ) );
+    wxString msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().x - GetStart().x ) );
     aList.emplace_back( _( "Box Width" ), msg );
 
-    msg = MessageTextFromValue( units, std::abs( GetEnd().y - GetStart().y ) );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().y - GetStart().y ) );
     aList.emplace_back( _( "Box Height" ), msg );
 
-    m_stroke.GetMsgPanelInfo( units, aList );
+    m_stroke.GetMsgPanelInfo( pcbIUScale, units, aList );
 }
 
 

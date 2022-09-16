@@ -60,8 +60,8 @@ using KIGFX::PCB_RENDER_SETTINGS;
 PAD::PAD( FOOTPRINT* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
-    m_size.x = m_size.y   = Mils2iu( 60 );       // Default pad size 60 mils.
-    m_drill.x = m_drill.y = Mils2iu( 30 );       // Default drill size 30 mils.
+    m_size.x = m_size.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 60 ); // Default pad size 60 mils.
+    m_drill.x = m_drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
     m_orient              = ANGLE_0;
     m_lengthPadToDie      = 0;
 
@@ -987,12 +987,12 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( ( GetShape() == PAD_SHAPE::CIRCLE || GetShape() == PAD_SHAPE::OVAL ) &&
         m_size.x == m_size.y )
     {
-        aList.emplace_back( _( "Diameter" ), MessageTextFromValue( units, m_size.x ) );
+        aList.emplace_back( _( "Diameter" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_size.x ) );
     }
     else
     {
-        aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_size.x ) );
-        aList.emplace_back( _( "Height" ), MessageTextFromValue( units, m_size.y ) );
+        aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_size.x ) );
+        aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_size.y ) );
     }
 
     EDA_ANGLE fp_orient = parentFootprint ? parentFootprint->GetOrientation() : ANGLE_0;
@@ -1008,7 +1008,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     if( GetPadToDieLength() )
     {
-        msg = MessageTextFromValue(units, GetPadToDieLength() );
+        msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetPadToDieLength() );
         aList.emplace_back( _( "Length in Package" ), msg );
     }
 
@@ -1018,14 +1018,14 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
         {
             aList.emplace_back( _( "Hole" ),
                                 wxString::Format( wxT( "%s" ),
-                                                  MessageTextFromValue( units, m_drill.x ) ) );
+                                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_drill.x ) ) );
         }
         else
         {
             aList.emplace_back( _( "Hole X / Y" ),
                                 wxString::Format( wxT( "%s / %s" ),
-                                                  MessageTextFromValue( units, m_drill.x ),
-                                                  MessageTextFromValue( units, m_drill.y ) ) );
+                                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_drill.x ),
+                                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_drill.y ) ) );
         }
     }
 
@@ -1035,7 +1035,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( !source.IsEmpty() )
     {
         aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              MessageTextFromValue( units, clearance ) ),
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
                             wxString::Format( _( "(from %s)" ),
                                               source ) );
     }

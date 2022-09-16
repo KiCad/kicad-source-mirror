@@ -30,11 +30,13 @@
 using namespace KIGFX::PREVIEW;
 
 TWO_POINT_ASSISTANT::TWO_POINT_ASSISTANT( const TWO_POINT_GEOMETRY_MANAGER& aManager,
-                                          EDA_UNITS aUnits, GEOM_SHAPE aShape ) :
+                                          const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                          GEOM_SHAPE aShape ) :
         EDA_ITEM( NOT_USED ),
         m_constructMan( aManager ),
         m_units( aUnits ),
-        m_shape( aShape )
+        m_shape( aShape ),
+        m_iuScale( aIuScale )
 {
 }
 
@@ -80,21 +82,23 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     if( m_shape == GEOM_SHAPE::SEGMENT )
     {
-        cursorStrings.push_back( DimensionLabel( "l", radVec.EuclideanNorm(), m_units ) );
+        cursorStrings.push_back(
+                DimensionLabel( "l", radVec.EuclideanNorm(), m_iuScale, m_units ) );
         cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), deltaAngle.AsDegrees(),
-                                                 EDA_UNITS::DEGREES ) );
+                                                 m_iuScale, EDA_UNITS::DEGREES ) );
     }
     else if( m_shape == GEOM_SHAPE::RECT )
     {
-        cursorStrings.push_back( DimensionLabel( "x", std::abs( radVec.x ), m_units ) );
-        cursorStrings.push_back( DimensionLabel( "y", std::abs( radVec.y ), m_units ) );
+        cursorStrings.push_back( DimensionLabel( "x", std::abs( radVec.x ), m_iuScale, m_units ) );
+        cursorStrings.push_back( DimensionLabel( "y", std::abs( radVec.y ), m_iuScale, m_units ) );
     }
     else if( m_shape == GEOM_SHAPE::CIRCLE )
     {
         KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
         preview_ctx.DrawLine( origin, end, false );
 
-        cursorStrings.push_back( DimensionLabel( "r", radVec.EuclideanNorm(), m_units ) );
+        cursorStrings.push_back(
+                DimensionLabel( "r", radVec.EuclideanNorm(), m_iuScale, m_units ) );
     }
 
     // place the text next to cursor, on opposite side from drawing

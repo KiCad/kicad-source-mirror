@@ -76,14 +76,14 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         break;
     }
 
-    wxString value = StringFromValue( editFrame.GetUserUnits(), gap_size );
+    wxString value = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, editFrame.GetUserUnits(), gap_size );
     WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create Microwave Footprint" ), value );
 
     if( dlg.ShowQuasiModal() != wxID_OK )
         return nullptr; // cancelled by user
 
     value    = dlg.GetValue();
-    gap_size = ValueFromString( editFrame.GetUserUnits(), value );
+    gap_size = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, editFrame.GetUserUnits(), value );
 
     bool abort = false;
 

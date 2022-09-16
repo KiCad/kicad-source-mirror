@@ -60,9 +60,9 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
 
     aParent->GetZoneSettings().ExportSetting( *this );
 
-    m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
-    m_thermalReliefSpokeWidth = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
-    m_thermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
+    m_ZoneMinThickness = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THICKNESS_MIL );
+    m_thermalReliefSpokeWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
+    m_thermalReliefGap = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THERMAL_RELIEF_GAP_MIL );
 
     m_needRefill = false;   // True only after edits.
 }
@@ -577,7 +577,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     aList.emplace_back( _( "Fill Mode" ), msg );
 
-    msg = MessageTextFromValue( units, m_area, true, EDA_DATA_TYPE::AREA );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_area, true, EDA_DATA_TYPE::AREA );
     aList.emplace_back( _( "Filled Area" ), msg );
 
     wxString source;
@@ -586,7 +586,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     if( !source.IsEmpty() )
     {
         aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              MessageTextFromValue( units, clearance ) ),
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
                             wxString::Format( _( "(from %s)" ),
                                               source ) );
     }
@@ -937,7 +937,7 @@ void ZONE::HatchBorder()
 
 int ZONE::GetDefaultHatchPitch()
 {
-    return Mils2iu( ZONE_BORDER_HATCH_DIST_MIL );
+    return EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_BORDER_HATCH_DIST_MIL );
 }
 
 
@@ -1258,7 +1258,7 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         aCornerBuffer.Append( *m_FilledPolysList.at( aLayer ) );
         return;
     }
-    
+
     SHAPE_POLY_SET temp_buf = m_FilledPolysList.at( aLayer )->CloneDropTriangulation();
 
     // Rebuild filled areas only if clearance is not 0

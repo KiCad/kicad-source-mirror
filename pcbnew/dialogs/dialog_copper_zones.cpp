@@ -503,10 +503,11 @@ void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 
 bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 {
-    if( !m_clearance.Validate( 0, Mils2iu( ZONE_CLEARANCE_MAX_VALUE_MIL ) ) )
+    if( !m_clearance.Validate( 0, EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  ZONE_CLEARANCE_MAX_VALUE_MIL ) ) )
         return false;
 
-    if( !m_minWidth.Validate( Mils2iu( ZONE_THICKNESS_MIN_VALUE_MIL ), INT_MAX ) )
+    if( !m_minWidth.Validate( EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THICKNESS_MIN_VALUE_MIL ),
+                              INT_MAX ) )
         return false;
 
     if( !m_cornerRadius.Validate( 0, INT_MAX ) )

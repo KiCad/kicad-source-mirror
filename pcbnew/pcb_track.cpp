@@ -788,15 +788,15 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_Width ) );
+    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_Width ) );
 
     if( Type() == PCB_ARC_T )
     {
         double radius = static_cast<PCB_ARC*>( this )->GetRadius();
-        aList.emplace_back( _( "Radius" ), MessageTextFromValue( units, radius ) );
+        aList.emplace_back( _( "Radius" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, radius ) );
     }
 
-    aList.emplace_back( _( "Segment Length" ), MessageTextFromValue( units, GetLength() ) );
+    aList.emplace_back( _( "Segment Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetLength() ) );
 
     // Display full track length (in Pcbnew)
     if( board && GetNetCode() > 0 )
@@ -807,14 +807,14 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        aList.emplace_back( _( "Routed Length" ), MessageTextFromValue( units, trackLen ) );
+        aList.emplace_back( _( "Routed Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, trackLen ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = MessageTextFromValue( units, lenPadToDie );
+            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, lenPadToDie );
             aList.emplace_back( _( "Pad To Die Length" ), msg );
 
-            msg = MessageTextFromValue( units, trackLen + lenPadToDie );
+            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, trackLen + lenPadToDie );
             aList.emplace_back( _( "Full Length" ), msg );
         }
     }
@@ -823,7 +823,7 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     int clearance = GetOwnClearance( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          MessageTextFromValue( units, clearance ) ),
+                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
     MINOPTMAX<int> c = GetWidthConstraint( &source );
@@ -831,14 +831,14 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( c.HasMax() )
     {
         aList.emplace_back( wxString::Format( _( "Width Constraints: min %s, max %s" ),
-                                              MessageTextFromValue( units, c.Min() ),
-                                              MessageTextFromValue( units, c.Max() ) ),
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Min() ),
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Max() ) ),
                             wxString::Format( _( "(from %s)" ), source ) );
     }
     else
     {
         aList.emplace_back( wxString::Format( _( "Width Constraints: min %s" ),
-                                              MessageTextFromValue( units, c.Min() ) ),
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Min() ) ),
                             wxString::Format( _( "(from %s)" ), source ) );
     }
 }
@@ -863,11 +863,11 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), m_Width );
 
     aList.emplace_back( _( "Diameter" ), msg );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetDrillValue() );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), GetDrillValue() );
 
     aList.emplace_back( _( "Hole" ), msg );
 
@@ -875,13 +875,13 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     int clearance = GetOwnClearance( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          MessageTextFromValue( units, clearance ) ),
+                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Annular Width: %s" ),
-                                          MessageTextFromValue( units, minAnnulus ) ),
+                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, minAnnulus ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 }
 
@@ -1029,7 +1029,7 @@ wxString PCB_TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
                                                  : _("Track %s on %s, length %s" ),
                              GetNetnameMsg(),
                              GetLayerName(),
-                             MessageTextFromValue( aUnits, GetLength() ) );
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, GetLength() ) );
 }
 
 

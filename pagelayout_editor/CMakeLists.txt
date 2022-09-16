@@ -45,7 +45,6 @@ set( PL_EDITOR_SRCS
     )
 
 set( PL_EDITOR_EXTRA_SRCS
-    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
 )
 
 if( WIN32 )

@@ -306,7 +306,7 @@ public:
                        bool aItalic = false, bool aBold = false,
                        const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
-            EDA_TEXT( 0, aText )
+            EDA_TEXT( drawSheetIUScale, aText )
     {
         SetTextPos( aPos );
         SetTextSize( aSize );

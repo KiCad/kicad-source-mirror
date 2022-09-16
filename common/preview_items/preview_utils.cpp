@@ -30,7 +30,8 @@ double KIGFX::PREVIEW::PreviewOverlayDeemphAlpha( bool aDeemph )
 }
 
 
-wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits,
+wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal,
+                                         const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                          bool aIncludeUnits )
 {
     wxString str;
@@ -52,7 +53,7 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, ED
     case EDA_UNITS::UNSCALED:    fmtStr = wxT( "%f" );   break;
     }
 
-    str << wxString::Format( fmtStr, To_User_Unit( aUnits, aVal ) );
+    str << wxString::Format( fmtStr, EDA_UNIT_UTILS::UI::ToUserUnit( aIuScale, aUnits, aVal ) );
 
     if( aIncludeUnits )
         str << EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits );

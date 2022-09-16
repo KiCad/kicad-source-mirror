@@ -71,6 +71,23 @@ constexpr double PCB_IU_PER_MM  = 1e6;  // Pcbnew IU is 1 nanometer.
 constexpr double PL_IU_PER_MM   = 1e3;  // internal units in micron (should be enough)
 constexpr double SCH_IU_PER_MM  = 1e4;  // Schematic internal units 1=100nm
 
+
+struct EDA_IU_SCALE
+{
+    const double IU_PER_MM;
+    const double IU_PER_MILS;
+
+    constexpr EDA_IU_SCALE( double aIUPerMM ) :
+            IU_PER_MM( aIUPerMM ), IU_PER_MILS( aIUPerMM * 0.0254 )
+    {
+    }
+};
+
+constexpr EDA_IU_SCALE gerbIUScale = EDA_IU_SCALE( GERB_IU_PER_MM );
+constexpr EDA_IU_SCALE pcbIUScale = EDA_IU_SCALE( PCB_IU_PER_MM );
+constexpr EDA_IU_SCALE drawSheetIUScale = EDA_IU_SCALE( PL_IU_PER_MM );
+constexpr EDA_IU_SCALE schIUScale = EDA_IU_SCALE( SCH_IU_PER_MM );
+
 /// Scaling factor to convert mils to internal units.
 #if defined(PCBNEW) || defined(CVPCB)
 constexpr double IU_PER_MM = PCB_IU_PER_MM;

@@ -204,7 +204,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER            grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
     bool                       originSet = false;
     EDA_UNITS                  units = frame()->GetUserUnits();
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units,
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, pcbIUScale, units,
                                       displayOptions().m_DisplayInvertXAxis,
                                       displayOptions().m_DisplayInvertYAxis );
 

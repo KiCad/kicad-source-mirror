@@ -98,7 +98,8 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperConn, DRC_REGRESSION_TEST_FIXTURE )
 
             for( const DRC_ITEM& item : violations )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                BOOST_TEST_MESSAGE( item.ShowReport( pcbIUScale, EDA_UNITS::INCHES,
+                                                     RPT_SEVERITY_ERROR,
                                                      itemMap ) );
             }
 

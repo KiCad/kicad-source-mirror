@@ -241,8 +241,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                         msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetParentRule()->m_Name,
-                                      MessageTextFromValue( userUnits(), minClearance ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), minClearance ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
 
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     }

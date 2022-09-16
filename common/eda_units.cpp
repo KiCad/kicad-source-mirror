@@ -23,6 +23,7 @@
 
 #include <eda_units.h>
 #include <math/util.h>      // for KiROUND
+#include <convert_to_biu.h>
 #include <macros.h>
 
 bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
@@ -133,4 +134,417 @@ std::string EDA_UNIT_UTILS::FormatAngle( const EDA_ANGLE& aAngle )
     len = snprintf( temp, sizeof( temp ), "%.10g", aAngle.AsDegrees() );
 
     return std::string( temp, len );
+}
+
+
+std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue )
+{
+    char   buf[50];
+    double engUnits = aValue;
+    int    len;
+
+    engUnits /= aIuScale.IU_PER_MM;
+
+    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    {
+        len = snprintf( buf, sizeof( buf ), "%.10f", engUnits );
+
+        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr, std::string( "" ) );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( buf[len] == '.' )
+            buf[len] = '\0';
+        else
+            ++len;
+    }
+    else
+    {
+        len = snprintf( buf, sizeof( buf ), "%.10g", engUnits );
+
+        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr, std::string( "" ) );
+    }
+
+    return std::string( buf, len );
+}
+
+
+std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
+                                                 const wxPoint&      aPoint )
+{
+    return FormatInternalUnits( aIuScale, aPoint.x ) + " "
+           + FormatInternalUnits( aIuScale, aPoint.y );
+}
+
+
+std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
+                                                 const VECTOR2I&     aPoint )
+{
+    return FormatInternalUnits( aIuScale, aPoint.x ) + " "
+           + FormatInternalUnits( aIuScale, aPoint.y );
+}
+
+
+std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const wxSize& aSize )
+{
+    return FormatInternalUnits( aIuScale, aSize.GetWidth() ) + " "
+           + FormatInternalUnits( aIuScale, aSize.GetHeight() );
+}
+
+#define IU_TO_MM( x, scale ) ( x / scale.IU_PER_MM )
+#define IU_TO_IN( x, scale ) ( x / scale.IU_PER_MILS / 1000 )
+#define IU_TO_MILS( x, scale ) ( x / scale.IU_PER_MILS )
+#define MM_TO_IU( x, scale ) ( x * scale.IU_PER_MM )
+#define IN_TO_IU( x, scale ) ( x * scale.IU_PER_MILS * 1000 )
+#define MILS_TO_IU( x, scale ) ( x * scale.IU_PER_MILS )
+
+double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
+                                       double aValue )
+{
+    switch( aUnit )
+    {
+    case EDA_UNITS::MILLIMETRES:
+        return IU_TO_MM( aValue, aIuScale );
+
+    case EDA_UNITS::MILS:
+        return IU_TO_MILS( aValue, aIuScale );
+
+    case EDA_UNITS::INCHES:
+        return IU_TO_IN( aValue, aIuScale );
+
+    case EDA_UNITS::DEGREES:
+        return aValue;
+
+    default:
+        return aValue;
+    }
+}
+
+
+/**
+ * Convert a value to a string using double notation.
+ *
+ * For readability, the mantissa has 3 or more digits,
+ * the trailing 0 are removed if the mantissa has more than 3 digits
+ * and some trailing 0
+ * This function should be used to display values in dialogs because a value
+ * entered in mm (for instance 2.0 mm) could need up to 8 digits mantissa
+ * if displayed in inch to avoid truncation or rounding made just by the printf function.
+ * otherwise the actual value is rounded when read from dialog and converted
+ * in internal units, and therefore modified.
+ */
+wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                              double aValue, bool aAddUnitSymbol,
+                                              EDA_DATA_TYPE aType )
+{
+    double value_to_print = aValue;
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        value_to_print = ToUserUnit( aIuScale, aUnits, value_to_print );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::AREA:
+        value_to_print = ToUserUnit( aIuScale, aUnits, value_to_print );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::DISTANCE:
+        value_to_print = ToUserUnit( aIuScale, aUnits, value_to_print );
+    }
+
+    char buf[50];
+
+    if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
+    {
+        int len = snprintf( buf, sizeof( buf ) - 1, "%.10f", value_to_print );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        if( len >= 0 && ( buf[len] == '.' || buf[len] == ',' ) )
+            buf[len] = '\0';
+    }
+    else
+    {
+        snprintf( buf, sizeof( buf ) - 1, "%.10g", value_to_print );
+    }
+
+    wxString stringValue( buf, wxConvUTF8 );
+
+    if( aAddUnitSymbol )
+        stringValue += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, aType );
+
+    return stringValue;
+}
+
+
+
+/**
+ * Convert a value to a string using double notation.
+ *
+ * For readability, the mantissa has 0, 1, 3 or 4 digits, depending on units
+ * for unit = inch the mantissa has 3 digits (Eeschema) or 4 digits
+ * for unit = mil the mantissa has 0 digits (Eeschema) or 1 digits
+ * for unit = mm the mantissa has 3 digits (Eeschema) or 4 digits
+ * Should be used only to display info in status,
+ * but not in dialogs, because 4 digits only
+ * could truncate the actual value
+ */
+
+
+// A lower-precision (for readability) version of StringFromValue()
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                   int aValue,
+                               bool aAddUnitLabel,
+                               EDA_DATA_TYPE aType )
+{
+    return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
+}
+
+
+// A lower-precision (for readability) version of StringFromValue()
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                   long long int aValue,
+                               bool aAddUnitLabel,
+                               EDA_DATA_TYPE aType )
+{
+    return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
+}
+
+
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel )
+{
+    if( aAddUnitLabel )
+        return wxString::Format( wxT( "%.1f°" ), aValue.AsDegrees() );
+    else
+        return wxString::Format( wxT( "%.1f" ), aValue.AsDegrees() );
+}
+
+
+// A lower-precision (for readability) version of StringFromValue()
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                   double aValue, bool aAddUnitLabel,
+                                                   EDA_DATA_TYPE aType )
+{
+    wxString      text;
+    const wxChar* format;
+    double        value = aValue;
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        value = ToUserUnit( aIuScale, aUnits, value );
+        // Fall through to continue computation
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::AREA:
+        value = ToUserUnit( aIuScale, aUnits, value );
+        // Fall through to continue computation
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::DISTANCE:
+        value = ToUserUnit( aIuScale, aUnits, value );
+    }
+
+    switch( aUnits )
+    {
+    default:
+    case EDA_UNITS::MILLIMETRES:
+#if defined( EESCHEMA )
+        format = wxT( "%.2f" );
+#else
+        format = wxT( "%.4f" );
+#endif
+        break;
+
+    case EDA_UNITS::MILS:
+#if defined( EESCHEMA )
+        format = wxT( "%.0f" );
+#else
+        format = wxT( "%.2f" );
+#endif
+        break;
+
+    case EDA_UNITS::INCHES:
+#if defined( EESCHEMA )
+        format = wxT( "%.3f" );
+#else
+        format = wxT( "%.4f" );
+#endif
+        break;
+
+    case EDA_UNITS::DEGREES:
+        // 3 digits in mantissa should be good for rotation in degree
+        format = wxT( "%.3f" );
+        break;
+
+    case EDA_UNITS::UNSCALED:
+        format = wxT( "%.0f" );
+        break;
+    }
+
+    text.Printf( format, value );
+
+    if( aAddUnitLabel )
+        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, aType );
+
+    return text;
+}
+
+
+double EDA_UNIT_UTILS::UI::FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                         double aValue )
+{
+    switch( aUnits )
+    {
+    case EDA_UNITS::MILLIMETRES:
+        return MM_TO_IU( aValue, aIuScale );
+
+    case EDA_UNITS::MILS:
+        return MILS_TO_IU( aValue, aIuScale );
+
+    case EDA_UNITS::INCHES:
+        return IN_TO_IU( aValue, aIuScale );
+
+    default:
+    case EDA_UNITS::DEGREES:
+    case EDA_UNITS::UNSCALED:
+    case EDA_UNITS::PERCENT:
+        return aValue;
+    }
+}
+
+
+double EDA_UNIT_UTILS::UI::DoubleValueFromString( const wxString& aTextValue )
+{
+    double dtmp = 0;
+
+    // Acquire the 'right' decimal point separator
+    const struct lconv* lc = localeconv();
+
+    wxChar   decimal_point = lc->decimal_point[0];
+    wxString buf( aTextValue.Strip( wxString::both ) );
+
+    // Convert any entered decimal point separators to the 'right' one
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
+    // Find the end of the numeric part
+    unsigned brk_point = 0;
+
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+
+        if( !( ( ch >= '0' && ch <= '9' ) || ( ch == decimal_point ) || ( ch == '-' )
+               || ( ch == '+' ) ) )
+            break;
+
+        ++brk_point;
+    }
+
+    // Extract the numeric part
+    buf.Left( brk_point ).ToDouble( &dtmp );
+
+    return dtmp;
+}
+
+
+double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                              const wxString& aTextValue, EDA_DATA_TYPE aType )
+{
+    double dtmp = 0;
+
+    // Acquire the 'right' decimal point separator
+    const struct lconv* lc = localeconv();
+
+    wxChar      decimal_point = lc->decimal_point[0];
+    wxString    buf( aTextValue.Strip( wxString::both ) );
+
+    // Convert any entered decimal point separators to the 'right' one
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
+    // Find the end of the numeric part
+    unsigned brk_point = 0;
+
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+
+        if( !( (ch >= '0' && ch <= '9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+            break;
+
+        ++brk_point;
+    }
+
+    // Extract the numeric part
+    buf.Left( brk_point ).ToDouble( &dtmp );
+
+    // Check the optional unit designator (2 ch significant)
+    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+
+    if( aUnits == EDA_UNITS::MILLIMETRES || aUnits == EDA_UNITS::MILS
+      || aUnits == EDA_UNITS::INCHES )
+    {
+        if( unit == wxT( "mm" ) )
+        {
+            aUnits = EDA_UNITS::MILLIMETRES;
+        }
+        else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )
+        {
+            aUnits = EDA_UNITS::MILS;
+        }
+        else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+        {
+            aUnits = EDA_UNITS::INCHES;
+        }
+        else if( unit == "oz" ) // 1 oz = 1.37 mils
+        {
+            aUnits = EDA_UNITS::MILS;
+            dtmp *= 1.37;
+        }
+    }
+    else if( aUnits == EDA_UNITS::DEGREES )
+    {
+        if( unit == wxT( "ra" ) ) // Radians
+            dtmp *= 180.0f / M_PI;
+    }
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        dtmp = FromUserUnit( aIuScale, aUnits, dtmp );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::AREA:
+        dtmp = FromUserUnit( aIuScale, aUnits, dtmp );
+        KI_FALLTHROUGH;
+
+    case EDA_DATA_TYPE::DISTANCE:
+        dtmp = FromUserUnit( aIuScale, aUnits, dtmp );
+    }
+
+    return dtmp;
+}
+
+
+long long int EDA_UNIT_UTILS::UI::ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                               const wxString& aTextValue, EDA_DATA_TYPE aType )
+{
+    double value = DoubleValueFromString( aIuScale, aUnits, aTextValue, aType );
+
+    return KiROUND<double, long long int>( value );
+}
+
+
+long long int EDA_UNIT_UTILS::UI::ValueFromString( const wxString& aTextValue )
+{
+    double value = DoubleValueFromString( aTextValue );
+
+    return KiROUND<double, long long int>( value );
 }

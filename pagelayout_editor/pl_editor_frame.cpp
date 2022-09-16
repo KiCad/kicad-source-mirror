@@ -82,7 +82,7 @@ END_EVENT_TABLE()
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
                         wxDefaultPosition, wxDefaultSize,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME ),
+                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME, drawSheetIUScale ),
         m_propertiesPagelayout( nullptr ),
         m_propertiesFrameWidth( 200 ),
         m_originSelectBox( nullptr ),
@@ -672,7 +672,8 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
     default:                     gridformatter = "grid %f";   break;
     }
 
-    double grid = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x );
+    double grid = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, m_userUnits,
+                                                  GetCanvas()->GetGAL()->GetGridSize().x );
     line.Printf( gridformatter, grid );
 
     SetStatusText( line, 4 );
@@ -718,8 +719,10 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display absolute coordinates:
     VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
     VECTOR2D coord = cursorPos - originCoord;
-    double   dXpos = To_User_Unit( GetUserUnits(), coord.x * Xsign );
-    double   dYpos = To_User_Unit( GetUserUnits(), coord.y * Ysign );
+    double   dXpos =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(), coord.x * Xsign );
+    double dYpos =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(), coord.y * Ysign );
 
     wxString absformatter = wxT( "X %.4g  Y %.4g" );
     wxString locformatter = wxT( "dx %.4g  dy %.4g" );
@@ -744,8 +747,8 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     {
         double dx = cursorPos.x - GetScreen()->m_LocalOrigin.x;
         double dy = cursorPos.y - GetScreen()->m_LocalOrigin.y;
-        dXpos = To_User_Unit( GetUserUnits(), dx * Xsign );
-        dYpos = To_User_Unit( GetUserUnits(), dy * Ysign );
+        dXpos = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(), dx * Xsign );
+        dYpos = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, GetUserUnits(), dy * Ysign );
         line.Printf( locformatter, dXpos, dYpos );
         SetStatusText( line, 3 );
     }
@@ -938,10 +941,11 @@ void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
     VECTOR2D size = GetPageSettings().GetSizeIU( IU_PER_MILS );
 
     std::vector<MSG_PANEL_ITEM> msgItems;
-    msgItems.emplace_back( _( "Page Width" ), MessageTextFromValue( GetUserUnits(), size.x ) );
+    msgItems.emplace_back( _( "Page Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue(
+                                                      GetIuScale(), GetUserUnits(), size.x ) );
 
-    msgItems.emplace_back(
-            _( "Page Height" ), MessageTextFromValue( GetUserUnits(), size.y ) );
+    msgItems.emplace_back( _( "Page Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue(
+                                                       GetIuScale(), GetUserUnits(), size.y ) );
 
     SetMsgPanel( msgItems );
 }

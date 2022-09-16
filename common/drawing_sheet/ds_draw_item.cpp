@@ -139,15 +139,19 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "First Page Option" ), msg );
 
-    msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_RepeatCount );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), EDA_UNITS::UNSCALED,
+                                                    dataItem->m_RepeatCount );
     aList.emplace_back( _( "Repeat Count" ), msg );
 
-    msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_IncrementLabel );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), EDA_UNITS::UNSCALED,
+                                                    dataItem->m_IncrementLabel );
     aList.emplace_back( _( "Repeat Label Increment" ), msg );
 
     msg.Printf( wxT( "(%s, %s)" ),
-                MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.x ),
-                MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.y ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), aFrame->GetUserUnits(),
+                                      dataItem->m_IncrementVector.x ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), aFrame->GetUserUnits(),
+                                      dataItem->m_IncrementVector.y ) );
 
     aList.emplace_back( _( "Repeat Position Increment" ), msg );
 
@@ -380,8 +384,10 @@ bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccur
 wxString DS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),
-                             MessageTextFromValue( aUnits, std::abs( GetStart().x - GetEnd().x ) ),
-                             MessageTextFromValue( aUnits, std::abs( GetStart().y - GetEnd().y ) ) );
+            EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits,
+                                                      std::abs( GetStart().x - GetEnd().x ) ),
+            EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits,
+                                                      std::abs( GetStart().y - GetEnd().y ) ) );
 }
 
 
@@ -413,7 +419,7 @@ bool DS_DRAW_ITEM_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 wxString DS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Line, length %s" ),
-                             MessageTextFromValue( aUnits, EuclideanNorm( GetStart() - GetEnd() ) ) );
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits, EuclideanNorm( GetStart() - GetEnd() ) ) );
 }
 
 

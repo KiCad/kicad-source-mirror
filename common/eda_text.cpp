@@ -87,18 +87,21 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 }
 
 
-EDA_TEXT::EDA_TEXT( int aDefaultSizeIu, const wxString& aText ) :
+EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_text( aText ),
+        m_IuScale( aIuScale ),
         m_bounding_box_cache_valid( false ),
         m_bounding_box_cache_line( -1 ),
         m_bounding_box_cache_inverted( false )
 {
-    SetTextSize( VECTOR2I( aDefaultSizeIu, aDefaultSizeIu ) );
+    SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
+                           EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
     cacheShownText();
 }
 
 
-EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText )
+EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
+    m_IuScale( aText.m_IuScale )
 {
     m_text = aText.m_text;
     m_shown_text = aText.m_shown_text;
@@ -780,8 +783,8 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
     // Text size
     aFormatter->Print( 0, " (size %s %s)",
-                       FormatInternalUnits( GetTextHeight() ).c_str(),
-                       FormatInternalUnits( GetTextWidth() ).c_str() );
+                       EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextHeight() ).c_str(),
+                       EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextWidth() ).c_str() );
 
     if( GetLineSpacing() != 1.0 )
     {
@@ -792,7 +795,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( GetTextThickness() )
     {
         aFormatter->Print( 0, " (thickness %s)",
-                           FormatInternalUnits( GetTextThickness() ).c_str() );
+                EDA_UNIT_UTILS::FormatInternalUnits( m_IuScale, GetTextThickness() ).c_str() );
     }
 
     if( IsBold() )

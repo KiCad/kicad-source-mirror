@@ -79,12 +79,12 @@ protected:
 
     double GetXOrg() const
     {
-        return DoubleValueFromString( EDA_UNITS::UNSCALED, m_STEP_Xorg->GetValue() );
+        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_STEP_Xorg->GetValue() );
     }
 
     double GetYOrg()
     {
-        return DoubleValueFromString( EDA_UNITS::UNSCALED, m_STEP_Yorg->GetValue() );
+        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_STEP_Yorg->GetValue() );
     }
 
     STEP_ORG_OPT GetOriginOption();

@@ -179,23 +179,28 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true );
+                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
+                                                           pin->GetNumberTextSize(), true );
                 break;
 
             case COL_NAME_SIZE:
-                val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true );
+                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
+                                                           pin->GetNameTextSize(), true );
                 break;
 
             case COL_LENGTH:
-                val = StringFromValue( aUserUnits, pin->GetLength(), true );
+                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
+                                                           pin->GetLength(), true );
                 break;
 
             case COL_POSX:
-                val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
+                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
+                                                           pin->GetPosition().x, true );
                 break;
 
             case COL_POSY:
-                val = StringFromValue( aUserUnits, -pin->GetPosition().y, true );
+                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
+                                                           -pin->GetPosition().y, true );
                 break;
 
             case COL_VISIBLE:
@@ -348,25 +353,29 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( ValueFromString( m_frame->GetUserUnits(), aValue ) );
+                pin->SetNumberTextSize( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_NAME_SIZE:
-                pin->SetNameTextSize( ValueFromString( m_frame->GetUserUnits(), aValue ) );
+                pin->SetNameTextSize( EDA_UNIT_UTILS::UI::ValueFromString(
+                        schIUScale, m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_LENGTH:
-                pin->ChangeLength( ValueFromString( m_frame->GetUserUnits(), aValue ) );
+                pin->ChangeLength( EDA_UNIT_UTILS::UI::ValueFromString(
+                        schIUScale, m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_POSX:
-                pin->SetPosition( wxPoint( ValueFromString( m_frame->GetUserUnits(), aValue ),
+                pin->SetPosition( wxPoint( EDA_UNIT_UTILS::UI::ValueFromString(
+                                         schIUScale, m_frame->GetUserUnits(), aValue ),
                                            pin->GetPosition().y ) );
                 break;
 
             case COL_POSY:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                           -ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
+                                 -EDA_UNIT_UTILS::UI::ValueFromString(
+                                         schIUScale, m_frame->GetUserUnits(), aValue ) ) );
                 break;
 
             case COL_VISIBLE:
@@ -454,12 +463,14 @@ public:
             break;
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            res = cmp( ValueFromString( units, lhStr ), ValueFromString( units, rhStr ) );
+            res = cmp( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, lhStr ),
+                       EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, rhStr ) );
             break;
         case COL_LENGTH:
         case COL_POSX:
         case COL_POSY:
-            res = cmp( ValueFromString( units, lhStr ), ValueFromString( units, rhStr ) );
+            res = cmp( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, lhStr ),
+                       EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, rhStr ) );
             break;
         case COL_VISIBLE:
         case COL_DEMORGAN:

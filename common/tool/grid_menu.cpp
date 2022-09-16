@@ -94,22 +94,26 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
     {
-        int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize );
+        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( aParent->GetIuScale(), EDA_UNITS::MILLIMETRES, gridSize );
 
-        msg.Printf( _( "Grid: %s (%s)" ),
-                    MessageTextFromValue( primaryUnit, val ),
-                    MessageTextFromValue( secondaryUnit, val ) );
+        msg.Printf(
+                _( "Grid: %s (%s)" ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), primaryUnit, val ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), secondaryUnit,
+                                                          val ) );
 
         aGridsList->Add( msg );
     }
 
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x );
+        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( aParent->GetIuScale(),EDA_UNITS::INCHES,
+                                                             aCfg->m_Window.grid.user_grid_x );
 
         msg.Printf( _( "User grid: %s (%s)" ),
-                    MessageTextFromValue( primaryUnit, val ),
-                    MessageTextFromValue( secondaryUnit, val ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), primaryUnit, val ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), secondaryUnit,
+                                                          val ) );
 
         aGridsList->Add( msg );
     }

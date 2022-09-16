@@ -222,7 +222,8 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
  */
 static double rotationFromString( const wxString& aValue )
 {
-    double rotation = DoubleValueFromString( EDA_UNITS::DEGREES, aValue );
+    double rotation =
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES, aValue );
 
     if( rotation > MAX_ROTATION )
     {
@@ -319,17 +320,26 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
         // Write settings back to the parent
         FP_3DMODEL* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
-        modelInfo->m_Scale.x = DoubleValueFromString( EDA_UNITS::UNSCALED, xscale->GetValue() );
-        modelInfo->m_Scale.y = DoubleValueFromString( EDA_UNITS::UNSCALED, yscale->GetValue() );
-        modelInfo->m_Scale.z = DoubleValueFromString( EDA_UNITS::UNSCALED, zscale->GetValue() );
+        modelInfo->m_Scale.x = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::UNSCALED, xscale->GetValue() );
+        modelInfo->m_Scale.y = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::UNSCALED, yscale->GetValue() );
+        modelInfo->m_Scale.z = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::UNSCALED, zscale->GetValue() );
 
         modelInfo->m_Rotation.x = rotationFromString( xrot->GetValue() );
         modelInfo->m_Rotation.y = rotationFromString( yrot->GetValue() );
         modelInfo->m_Rotation.z = rotationFromString( zrot->GetValue() );
 
-        modelInfo->m_Offset.x = DoubleValueFromString( m_userUnits, xoff->GetValue() ) / IU_PER_MM;
-        modelInfo->m_Offset.y = DoubleValueFromString( m_userUnits, yoff->GetValue() ) / IU_PER_MM;
-        modelInfo->m_Offset.z = DoubleValueFromString( m_userUnits, zoff->GetValue() ) / IU_PER_MM;
+        modelInfo->m_Offset.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                           xoff->GetValue() )
+                                / pcbIUScale.IU_PER_MM;
+        modelInfo->m_Offset.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                           yoff->GetValue() )
+                                / pcbIUScale.IU_PER_MM;
+        modelInfo->m_Offset.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                           zoff->GetValue() )
+                                / pcbIUScale.IU_PER_MM;
 
         // Update the dummy footprint for the preview
         UpdateDummyFootprint( false );
@@ -363,7 +373,7 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign 
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::UNSCALED, textCtrl->GetValue() );
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED, textCtrl->GetValue() );
 
     curr_value += ( SCALE_INCREMENT * aSign );
     curr_value = std::max( 1/MAX_SCALE, curr_value );
@@ -383,7 +393,8 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() );
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES,
+                                                                   textCtrl->GetValue() );
 
     curr_value += ( ROTATION_INCREMENT * aSign );
     curr_value = std::max( -MAX_ROTATION, curr_value );
@@ -405,7 +416,9 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
         textCtrl = zoff;
 
     double step_mm = OFFSET_INCREMENT_MM;
-    double curr_value_mm = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
+    double curr_value_mm =
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits, textCtrl->GetValue() )
+            / pcbIUScale.IU_PER_MM;
 
     if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCHES )
     {
@@ -432,7 +445,8 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::UNSCALED, textCtrl->GetValue() );
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED,
+                                                                   textCtrl->GetValue() );
 
     curr_value += step;
     curr_value = std::max( 1/MAX_SCALE, curr_value );
@@ -454,7 +468,8 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() );
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES,
+                                                                   textCtrl->GetValue() );
 
     curr_value += step;
     curr_value = std::max( -MAX_ROTATION, curr_value );
@@ -484,7 +499,9 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step_mm = -step_mm;
 
-    double curr_value_mm = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
+    double curr_value_mm = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                      textCtrl->GetValue() )
+                           / pcbIUScale.IU_PER_MM;
 
     curr_value_mm += step_mm;
     curr_value_mm = std::max( -MAX_OFFSET, curr_value_mm );

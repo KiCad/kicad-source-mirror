@@ -437,16 +437,16 @@ wxString LIB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
     case SHAPE_T::ARC:
         return wxString::Format( _( "Arc, radius %s" ),
-                                 MessageTextFromValue( aUnits, GetRadius() ) );
+                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, GetRadius() ) );
 
     case SHAPE_T::CIRCLE:
         return wxString::Format( _( "Circle, radius %s" ),
-                                 MessageTextFromValue( aUnits, GetRadius() ) );
+                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, GetRadius() ) );
 
     case SHAPE_T::RECT:
         return wxString::Format( _( "Rectangle, width %s height %s" ),
-                                 MessageTextFromValue( aUnits, std::abs( m_start.x - m_end.x ) ),
-                                 MessageTextFromValue( aUnits, std::abs( m_start.y - m_end.y ) ) );
+                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, std::abs( m_start.x - m_end.x ) ),
+                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, std::abs( m_start.y - m_end.y ) ) );
 
     case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),

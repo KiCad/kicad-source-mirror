@@ -118,12 +118,12 @@ protected:
             if( via.m_Drill > 0 )
             {
                 msg.Printf( _("Via %s, hole %s" ),
-                            MessageTextFromValue( units, via.m_Diameter ),
-                            MessageTextFromValue( units, via.m_Drill ) );
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Drill ) );
             }
             else
             {
-                msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter ) );
+                msg.Printf( _( "Via %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ) );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
@@ -1795,7 +1795,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
     // drawing assistant overlay
     // TODO: workaround because EDA_SHAPE_TYPE_T is not visible from commons.
     KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape ) );
-    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, userUnits, geomShape );
+    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, pcbIUScale, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;
@@ -2169,7 +2169,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
 
     // Arc drawing assistant overlay
-    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, m_frame->GetUserUnits() );
+    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, pcbIUScale, m_frame->GetUserUnits() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;

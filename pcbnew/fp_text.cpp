@@ -40,7 +40,7 @@
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
+    EDA_TEXT( pcbIUScale )
 {
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
@@ -295,9 +295,9 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( _( "Angle" ), msg );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
-    aList.emplace_back( _( "Height" ), MessageTextFromValue(units, GetTextHeight() ) );
+    aList.emplace_back( _( "Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
+    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
+    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
 }
 
 

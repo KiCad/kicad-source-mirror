@@ -1371,12 +1371,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 int actual_clearance = a_shape->GetClearance( b_shape.get() );
 
                 msgItems.emplace_back( _( "Resolved clearance" ),
-                                       MessageTextFromValue( units, constraint.m_Value.Min() ) );
+                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
                     msgItems.emplace_back( _( "Actual clearance" ),
-                                           MessageTextFromValue( units, actual_clearance ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, actual_clearance ) );
                 }
             }
         }
@@ -1417,12 +1417,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
                 msgItems.emplace_back( _( "Resolved hole clearance" ),
-                                       MessageTextFromValue( units, constraint.m_Value.Min() ) );
+                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
 
                 if( actual > -1 && actual < std::numeric_limits<int>::max() )
                 {
                     msgItems.emplace_back( _( "Actual hole clearance" ),
-                                           MessageTextFromValue( units, actual ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, actual ) );
                 }
             }
         }
@@ -1454,12 +1454,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 if( edgeLayer == Edge_Cuts )
                 {
                     msgItems.emplace_back( _( "Resolved edge clearance" ),
-                                           MessageTextFromValue( units, constraint.m_Value.Min() ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
                 }
                 else
                 {
                     msgItems.emplace_back( _( "Resolved margin clearance" ),
-                                           MessageTextFromValue( units, constraint.m_Value.Min() ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
                 }
             }
         }

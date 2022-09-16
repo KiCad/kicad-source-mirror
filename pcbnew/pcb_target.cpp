@@ -154,8 +154,8 @@ void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    aList.emplace_back( _( "Size" ), MessageTextFromValue( units, GetSize() ) );
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetWidth() ) );
+    aList.emplace_back( _( "Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetSize() ) );
+    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetWidth() ) );
     aList.emplace_back( _( "Shape" ), GetShape() == 0 ? wxT( "+" ) : wxT( "X" ) );
 }
 

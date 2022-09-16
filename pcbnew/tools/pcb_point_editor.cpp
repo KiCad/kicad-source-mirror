@@ -841,8 +841,8 @@ void PCB_POINT_EDITOR::pinEditedCorner( VECTOR2I& aTopLeft, VECTOR2I& aTopRight,
                                         VECTOR2I& aBotLeft, VECTOR2I& aBotRight,
                                         const VECTOR2I& aHole, const VECTOR2I& aHoleSize ) const
 {
-    int minWidth = Mils2iu( 1 );
-    int minHeight = Mils2iu( 1 );
+    int minWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
+    int minHeight = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
 
     if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
     {
@@ -1105,11 +1105,12 @@ void PCB_POINT_EDITOR::updateItem() const
         pinEditedCorner( topLeft, topRight, botLeft, botRight );
 
         double oldWidth = bitmap->GetSize().x;
-        double newWidth = std::max( topRight.x - topLeft.x, Mils2iu( 50 ) );
+        double newWidth = std::max( topRight.x - topLeft.x, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
         double widthRatio = newWidth / oldWidth;
 
         double oldHeight = bitmap->GetSize().y;
-        double newHeight = std::max( botLeft.y - topLeft.y, Mils2iu( 50 ) );
+        double newHeight =
+                std::max( botLeft.y - topLeft.y, EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 50 ) );
         double heightRatio = newHeight / oldHeight;
 
         bitmap->SetImageScale( bitmap->GetImageScale() * std::min( widthRatio, heightRatio ) );

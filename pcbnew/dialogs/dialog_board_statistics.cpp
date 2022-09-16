@@ -436,13 +436,13 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     if( m_hasOutline )
     {
         m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(),
+                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(),
                                                          m_boardWidth ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(),
+                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(),
                                                          m_boardHeight ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(), m_boardArea, true,
+                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardArea, true,
                                                          EDA_DATA_TYPE::AREA ) );
     }
     else
@@ -501,9 +501,9 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
                 currentRow, drillType_t::COL_COUNT, wxString::Format( wxT( "%i" ), type.qty ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_SHAPE, shapeStr );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_X_SIZE,
-                MessageTextFromValue( GetUserUnits(), type.xSize ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), type.xSize ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_Y_SIZE,
-                MessageTextFromValue( GetUserUnits(), type.ySize ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), type.ySize ) );
         m_gridDrills->SetCellValue(
                 currentRow, drillType_t::COL_PLATED, type.isPlated ? _( "PTH" ) : _( "NPTH" ) );
         m_gridDrills->SetCellValue(
@@ -693,11 +693,11 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     if( m_hasOutline )
     {
         msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) <<
-               MessageTextFromValue( GetUserUnits(), m_boardWidth ) << wxT( "\n" );
+               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardWidth ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) <<
-               MessageTextFromValue( GetUserUnits(), m_boardHeight ) << wxT( "\n" );
+               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardHeight ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Area" ) + wxS( ": " ) <<
-               MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
+               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
         msg << wxT( "\n" );
     }
     else

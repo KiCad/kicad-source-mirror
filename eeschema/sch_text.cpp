@@ -114,7 +114,7 @@ TEXT_SPIN_STYLE TEXT_SPIN_STYLE::MirrorY()
 
 SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
-        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), text )
+        EDA_TEXT( schIUScale, text )
 {
     m_layer = LAYER_NOTES;
 
@@ -498,7 +498,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 
     switch( GetTextSpinStyle() )

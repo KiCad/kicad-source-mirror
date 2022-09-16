@@ -41,7 +41,7 @@
 
 LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId ) :
     LIB_ITEM( LIB_FIELD_T, aParent ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
+    EDA_TEXT( schIUScale )
 {
     Init( aId );
 }
@@ -49,7 +49,7 @@ LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId ) :
 
 LIB_FIELD::LIB_FIELD( int aId ) :
     LIB_ITEM( LIB_FIELD_T, nullptr ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
+    EDA_TEXT( schIUScale )
 {
     Init( aId );
 }
@@ -57,7 +57,7 @@ LIB_FIELD::LIB_FIELD( int aId ) :
 
 LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
     LIB_ITEM( LIB_FIELD_T, nullptr ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ) )
+    EDA_TEXT( schIUScale )
 {
     Init( aId );
     m_name = aName;
@@ -515,7 +515,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 
     switch ( GetHorizJustify() )

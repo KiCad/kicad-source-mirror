@@ -110,9 +110,9 @@ public:
                 || m_color != aOther.m_color;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
+    void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale, int nestLevel ) const;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+    void GetMsgPanelInfo( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
                           bool aIncludeStyle = true, bool aIncludeWidth = true );
 
     // Helper functions

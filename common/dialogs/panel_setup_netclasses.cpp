@@ -235,10 +235,11 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     int       row = 0;
 
     auto setCell =
-            [&]( int aRow, int aCol, int aValue )
-            {
-                m_netclassGrid->SetCellValue( aRow, aCol, StringFromValue( units, aValue, true ) );
-            };
+        [&]( int aRow, int aCol, int aValue )
+        {
+            m_netclassGrid->SetCellValue( aRow, aCol,
+                    EDA_UNIT_UTILS::UI::StringFromValue( m_frame->GetIuScale(), units, aValue, true ) );
+        };
 
     auto netclassToGridRow =
             [&]( int aRow, const std::shared_ptr<NETCLASS>& nc )
@@ -341,7 +342,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     auto getCell =
             [this, units]( int aRow, int aCol ) -> long long int
             {
-                return ValueFromString( units, m_netclassGrid->GetCellValue( aRow, aCol ) );
+                return EDA_UNIT_UTILS::UI::ValueFromString( m_frame->GetIuScale(),units, m_netclassGrid->GetCellValue( aRow, aCol ) );
             };
 
     auto getCellStr =

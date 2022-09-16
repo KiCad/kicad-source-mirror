@@ -39,7 +39,7 @@
 
 LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), wxEmptyString )
+    EDA_TEXT( schIUScale, wxEmptyString )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
 }
@@ -371,7 +371,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 
     switch ( GetHorizJustify() )

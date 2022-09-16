@@ -190,7 +190,8 @@ wxString STROKE_PARAMS::GetLineStyleToken( PLOT_DASH_TYPE aStyle )
 }
 
 
-void STROKE_PARAMS::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+void STROKE_PARAMS::GetMsgPanelInfo( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                     std::vector<MSG_PANEL_ITEM>& aList,
                                      bool aIncludeStyle, bool aIncludeWidth )
 {
     if( aIncludeStyle )
@@ -211,25 +212,26 @@ void STROKE_PARAMS::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITE
 
     if( aIncludeWidth )
     {
-        aList.emplace_back( _( "Line Width" ), MessageTextFromValue( aUnits, GetWidth() ) );
+        aList.emplace_back( _( "Line Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, GetWidth() ) );
     }
 }
 
 
-void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const
+void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIuScale,
+                            int aNestLevel ) const
 {
     wxASSERT( aFormatter != nullptr );
 
     if( GetColor() == KIGFX::COLOR4D::UNSPECIFIED )
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s))",
-                           FormatInternalUnits(GetWidth() ).c_str(),
+                           EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
                            TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ) );
     }
     else
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
-                           FormatInternalUnits(GetWidth() ).c_str(),
+                           EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
                            TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ),
                            KiROUND( GetColor().r * 255.0 ),
                            KiROUND( GetColor().g * 255.0 ),

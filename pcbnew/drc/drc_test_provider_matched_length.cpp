@@ -115,15 +115,15 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
             {
                 msg.Printf( _( "(%s min length: %s; actual: %s)" ),
                               aConstraint.GetName(),
-                              MessageTextFromValue( userUnits(), minLen ),
-                              MessageTextFromValue( userUnits(), ent.total ) );
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), minLen ),
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.total ) );
             }
             else if( maxViolation )
             {
                 msg.Printf( _( "(%s max length: %s; actual: %s)" ),
                               aConstraint.GetName(),
-                              MessageTextFromValue( userUnits(), maxLen ),
-                              MessageTextFromValue( userUnits(), ent.total ) );
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), maxLen ),
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.total ) );
             }
 
             drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
@@ -159,10 +159,10 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 
             msg.Printf( _( "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)" ),
                           aConstraint.GetName(),
-                          MessageTextFromValue( userUnits(), aConstraint.GetValue().Max() ),
-                          MessageTextFromValue( userUnits(), skew ),
-                          MessageTextFromValue( userUnits(), avgLength ),
-                          MessageTextFromValue( userUnits(), ent.total ) );
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), aConstraint.GetValue().Max() ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), skew ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), avgLength ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.total ) );
 
             drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + msg );
 
@@ -378,10 +378,10 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                                             ent.from,
                                             ent.to,
                                             (int) ent.items.size(),
-                                            MessageTextFromValue( userUnits(), ent.total ),
-                                            MessageTextFromValue( userUnits(), ent.totalRoute ),
-                                            MessageTextFromValue( userUnits(), ent.totalVia ),
-                                            MessageTextFromValue( userUnits(), ent.totalPadToDie ),
+                                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.total ),
+                                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.totalRoute ),
+                                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.totalVia ),
+                                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), ent.totalPadToDie ),
                                             ent.viaCount ) );
             }
 

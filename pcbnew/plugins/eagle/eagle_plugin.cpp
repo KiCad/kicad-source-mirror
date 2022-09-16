@@ -2621,7 +2621,7 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
                              entry.first,
                              eClass.name,
                              m_classMap[ entry.first ]->GetName(),
-                             StringFromValue( EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
+                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
 
                 m_customRules += wxT( "\n" ) + rule;
             }

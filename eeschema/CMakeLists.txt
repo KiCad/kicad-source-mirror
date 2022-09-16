@@ -318,7 +318,6 @@ set( EESCHEMA_SRCS
 
 set( EESCHEMA_COMMON_SRCS
 
-    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     )
 
 

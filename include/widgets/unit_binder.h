@@ -53,9 +53,12 @@ public:
      * Can be nullptr.
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
-    UNIT_BINDER( EDA_BASE_FRAME* aParent,
+    UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                  bool aAllowEval = true );
+
+    UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale, wxStaticText* aLabel, wxWindow* aValueCtrl,
+                 wxStaticText* aUnitLabel, bool aAllowEval = true );
 
     ~UNIT_BINDER() override;
 
@@ -224,6 +227,7 @@ protected:
     wxStaticText*     m_unitLabel;      ///< Can be nullptr
 
     ///< Currently used units.
+    const EDA_IU_SCALE& m_iuScale;
     EDA_UNITS         m_units;
     bool              m_negativeZero;   ///< Indicates "-0" should be displayed for 0.
     EDA_DATA_TYPE     m_dataType;

@@ -129,7 +129,7 @@ public:
      *
      * @return wxString - the simple multi-line report text.
      */
-    virtual wxString ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
+    virtual wxString ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SEVERITY aSeverity,
                                  const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
 
     int GetErrorCode() const { return m_errorCode; }
@@ -163,7 +163,8 @@ public:
     /**
      * Format a coordinate or position to text.
      */
-    static wxString ShowCoord( EDA_UNITS aUnits, const VECTOR2I& aPos );
+    static wxString ShowCoord( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                               const VECTOR2I& aPos );
 
 protected:
     int           m_errorCode;         ///< The error code's numeric value

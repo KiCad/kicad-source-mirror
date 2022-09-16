@@ -304,7 +304,7 @@ ANNOTATE_ALGO_T DIALOG_ANNOTATE::GetAnnotateAlgo()
 
 int DIALOG_ANNOTATE::GetStartNumber()
 {
-    return ValueFromString( EDA_UNITS::UNSCALED, m_textNumberAfter->GetValue() );
+    return EDA_UNIT_UTILS::UI::ValueFromString( m_textNumberAfter->GetValue() );
 }
 
 

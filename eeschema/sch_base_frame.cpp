@@ -85,7 +85,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxString& aTitle, const wxPoint& aPosition,
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
-                        aFrameName ),
+                        aFrameName, schIUScale ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" )
 #if defined( KICAD_USE_3DCONNEXION )
         ,m_spaceMouse( nullptr )
@@ -184,14 +184,16 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     VECTOR2D d         = cursorPos - screen->m_LocalOrigin;
 
     line.Printf( "X %s  Y %s",
-                 MessageTextFromValue( GetUserUnits(), cursorPos.x, false ),
-                 MessageTextFromValue( GetUserUnits(), cursorPos.y, false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                           cursorPos.x, false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), cursorPos.y, false ) );
     SetStatusText( line, 2 );
 
     line.Printf( "dx %s  dy %s  dist %s",
-                 MessageTextFromValue( GetUserUnits(), d.x, false ),
-                 MessageTextFromValue( GetUserUnits(), d.y, false ),
-                 MessageTextFromValue( GetUserUnits(), hypot( d.x, d.y ), false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), d.x, false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), d.y, false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                              hypot( d.x, d.y ), false ) );
     SetStatusText( line, 3 );
 
     DisplayGridMsg();

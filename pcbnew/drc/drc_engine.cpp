@@ -607,7 +607,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
-#define REPORT_VALUE( v ) MessageTextFromValue( UNITS, v )
+#define REPORT_VALUE( v ) EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, UNITS, v )
 
 DRC_CONSTRAINT DRC_ENGINE::EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
                                                PCB_LAYER_ID aLayer, REPORTER* aReporter )
@@ -910,7 +910,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case MIN_RESOLVED_SPOKES_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s min spoke count: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              MessageTextFromValue( EDA_UNITS::UNSCALED, c->constraint.m_Value.Min() ) ) )
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::UNSCALED, c->constraint.m_Value.Min() ) ) )
                     break;
 
                 case ZONE_CONNECTION_CONSTRAINT:
@@ -938,8 +938,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                         if( implicit )
                         {
-                            min = StringFromValue( UNITS, c->constraint.m_Value.Min(), true );
-                            opt = StringFromValue( UNITS, c->constraint.m_Value.Opt(), true );
+                            min = EDA_UNIT_UTILS::UI::StringFromValue(
+                                    pcbIUScale, UNITS, c->constraint.m_Value.Min(), true );
+                            opt = EDA_UNIT_UTILS::UI::StringFromValue(
+                                    pcbIUScale, UNITS, c->constraint.m_Value.Opt(), true );
 
                             switch( c->constraint.m_Type )
                             {
@@ -1035,13 +1037,16 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         else
                         {
                             if( c->constraint.m_Value.HasMin() )
-                                min = StringFromValue( UNITS, c->constraint.m_Value.Min(), true );
+                                min = EDA_UNIT_UTILS::UI::StringFromValue(
+                                        pcbIUScale, UNITS, c->constraint.m_Value.Min(), true );
 
                             if( c->constraint.m_Value.HasOpt() )
-                                opt = StringFromValue( UNITS, c->constraint.m_Value.Opt(), true );
+                                opt = EDA_UNIT_UTILS::UI::StringFromValue(
+                                        pcbIUScale, UNITS, c->constraint.m_Value.Opt(), true );
 
                             if( c->constraint.m_Value.HasMax() )
-                                max = StringFromValue( UNITS, c->constraint.m_Value.Max(), true );
+                                max = EDA_UNIT_UTILS::UI::StringFromValue(
+                                        pcbIUScale, UNITS, c->constraint.m_Value.Max(), true );
 
                             REPORT( wxString::Format( _( "Checking %s: min %s; opt %s; max %s." ),
                                                       EscapeHTML( c->constraint.GetName() ),

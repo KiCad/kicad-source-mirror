@@ -247,16 +247,16 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     {
                         msg.Printf( _( "(%s min annular width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), v_min ),
-                                      MessageTextFromValue( userUnits(), annularWidth ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), v_min ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), annularWidth ) );
                     }
 
                     if( fail_max )
                     {
                         msg.Printf( _( "(%s max annular width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), v_max ),
-                                      MessageTextFromValue( userUnits(), annularWidth ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), v_max ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), annularWidth ) );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

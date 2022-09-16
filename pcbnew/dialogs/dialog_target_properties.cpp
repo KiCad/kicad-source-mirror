@@ -88,7 +88,7 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataToWindow()
 bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
 {
     // Zero-size targets are hard to see/select.
-    if( !m_Size.Validate( Mils2iu( 1 ), INT_MAX ) )
+    if( !m_Size.Validate( EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 ), INT_MAX ) )
         return false;
 
     BOARD_COMMIT commit( m_Parent );

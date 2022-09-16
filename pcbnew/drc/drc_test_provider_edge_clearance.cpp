@@ -121,8 +121,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              MessageTextFromValue( userUnits(), minClearance ),
-                              MessageTextFromValue( userUnits(), actual ) );
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), minClearance ),
+                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             }

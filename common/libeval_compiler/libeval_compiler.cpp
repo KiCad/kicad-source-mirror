@@ -1011,7 +1011,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                             m_unitResolver->GetSupportedUnitsMessage() );
                 reportError( CST_CODEGEN, msg, node->srcPos );
 
-                value = DoubleValueFromString( EDA_UNITS::UNSCALED, *node->value.str );
+                value = EDA_UNIT_UTILS::UI::DoubleValueFromString( *node->value.str );
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, value );

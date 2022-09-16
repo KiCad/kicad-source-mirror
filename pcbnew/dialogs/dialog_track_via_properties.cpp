@@ -307,9 +307,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = StringFromValue( m_frame->GetUserUnits(), viaDimension->m_Diameter )
+            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Diameter )
                             + wxT( " / " )
-                            + StringFromValue( m_frame->GetUserUnits(), viaDimension->m_Drill );
+                            + EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Drill );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
 
             if( viaSelection == wxNOT_FOUND
@@ -352,7 +352,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = StringFromValue( m_frame->GetUserUnits(), width );
+            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), width );
             m_DesignRuleWidthsCtrl->Append( msg );
 
             if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
@@ -407,9 +407,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &m_frame->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = StringFromValue( m_frame->GetUserUnits(), viaDimension->m_Diameter )
+            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Diameter )
                             + wxT( " / " )
-                            + StringFromValue( m_frame->GetUserUnits(), viaDimension->m_Drill );
+                            + EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Drill );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
         }
 
@@ -428,7 +428,7 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = m_frame->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = StringFromValue( m_frame->GetUserUnits(), width );
+            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), width );
             m_DesignRuleWidthsCtrl->Append( msg );
         }
 

@@ -148,16 +148,24 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
     DS_DATA_MODEL&   model = DS_DATA_MODEL::GetTheInstance();
 
     // Set default parameters
-    m_defaultLineWidth.SetDoubleValue( From_User_Unit( units, model.m_DefaultLineWidth ) );
+    m_defaultLineWidth.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.m_DefaultLineWidth ) );
 
-    m_defaultTextSizeX.SetDoubleValue( From_User_Unit( units, model.m_DefaultTextSize.x ) );
-    m_defaultTextSizeY.SetDoubleValue( From_User_Unit( units, model.m_DefaultTextSize.y ) );
-    m_defaultTextThickness.SetDoubleValue( From_User_Unit( units, model.m_DefaultTextThickness ) );
+    m_defaultTextSizeX.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.m_DefaultTextSize.x ) );
+    m_defaultTextSizeY.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.m_DefaultTextSize.y ) );
+    m_defaultTextThickness.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit(
+            drawSheetIUScale,units, model.m_DefaultTextThickness ) );
 
-    m_textLeftMargin.SetDoubleValue( From_User_Unit( units, model.GetLeftMargin() ) );
-    m_textRightMargin.SetDoubleValue( From_User_Unit( units, model.GetRightMargin() ) );
-    m_textTopMargin.SetDoubleValue( From_User_Unit( units, model.GetTopMargin() ) );
-    m_textBottomMargin.SetDoubleValue( From_User_Unit( units, model.GetBottomMargin() ) );
+    m_textLeftMargin.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.GetLeftMargin() ) );
+    m_textRightMargin.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.GetRightMargin() ) );
+    m_textTopMargin.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.GetTopMargin() ) );
+    m_textBottomMargin.SetDoubleValue(
+            EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale,units, model.GetBottomMargin() ) );
 }
 
 
@@ -167,17 +175,25 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
     DS_DATA_MODEL&   model = DS_DATA_MODEL::GetTheInstance();
 
     // Import default parameters from widgets
-    model.m_DefaultLineWidth = To_User_Unit( units, m_defaultLineWidth.GetValue() );
+    model.m_DefaultLineWidth = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                               m_defaultLineWidth.GetValue() );
 
-    model.m_DefaultTextSize.x = To_User_Unit( units, m_defaultTextSizeX.GetValue() );
-    model.m_DefaultTextSize.y = To_User_Unit( units, m_defaultTextSizeY.GetValue() );
-    model.m_DefaultTextThickness = To_User_Unit( units, m_defaultTextThickness.GetValue() );
+    model.m_DefaultTextSize.x = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                                m_defaultTextSizeX.GetValue() );
+    model.m_DefaultTextSize.y = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                                m_defaultTextSizeY.GetValue() );
+    model.m_DefaultTextThickness = EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                                m_defaultTextThickness.GetValue() );
 
     // Get page margins values
-    model.SetRightMargin( To_User_Unit( units, m_textRightMargin.GetValue() ) );
-    model.SetBottomMargin( To_User_Unit( units, m_textBottomMargin.GetValue() ) );
-    model.SetLeftMargin( To_User_Unit( units, m_textLeftMargin.GetValue() ) );
-    model.SetTopMargin( To_User_Unit( units, m_textTopMargin.GetValue() ) );
+    model.SetRightMargin( EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                          m_textRightMargin.GetValue() ) );
+    model.SetBottomMargin( EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                           m_textBottomMargin.GetValue() ) );
+    model.SetLeftMargin( EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                         m_textLeftMargin.GetValue() ) );
+    model.SetTopMargin( EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units,
+                                                         m_textTopMargin.GetValue() ) );
 
     return true;
 }
@@ -207,8 +223,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     }
 
     // Position/ start point
-    m_textPosX.SetDoubleValue( From_User_Unit( units, aItem->m_Pos.m_Pos.x ) );
-    m_textPosY.SetDoubleValue( From_User_Unit( units, aItem->m_Pos.m_Pos.y ) );
+    m_textPosX.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_Pos.m_Pos.x ) );
+    m_textPosY.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_Pos.m_Pos.y ) );
 
     switch(  aItem->m_Pos.m_Anchor )
     {
@@ -219,8 +235,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     }
 
     // End point
-    m_textEndX.SetDoubleValue( From_User_Unit( units, aItem->m_End.m_Pos.x ) );
-    m_textEndY.SetDoubleValue( From_User_Unit( units, aItem->m_End.m_Pos.y ) );
+    m_textEndX.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_End.m_Pos.x ) );
+    m_textEndY.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_End.m_Pos.y ) );
 
     switch( aItem->m_End.m_Anchor )
     {
@@ -230,7 +246,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     case LT_CORNER: m_comboBoxCornerEnd->SetSelection( 1 ); break;
     }
 
-    m_lineWidth.SetDoubleValue( From_User_Unit( units, aItem->m_LineWidth ) );
+    m_lineWidth.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_LineWidth ) );
 
     // Now, set prms more specific to DS_DATA_ITEM types
     // For a given type, disable widgets which are not relevant,
@@ -252,8 +268,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         m_textCtrlRotation->SetValue( msg );
 
         // Constraints:
-        m_constraintX.SetDoubleValue( From_User_Unit( units, item->m_BoundingBoxSize.x ) );
-        m_constraintY.SetDoubleValue( From_User_Unit( units, item->m_BoundingBoxSize.y ) );
+        m_constraintX.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, item->m_BoundingBoxSize.x ) );
+        m_constraintY.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, item->m_BoundingBoxSize.y ) );
 
         // Font Options
         m_fontCtrl->SetFontSelection( item->m_Font );
@@ -284,8 +300,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         }
 
         // Text size
-        m_textSizeX.SetDoubleValue( From_User_Unit( units, item->m_TextSize.x ) );
-        m_textSizeY.SetDoubleValue( From_User_Unit( units, item->m_TextSize.y ) );
+        m_textSizeX.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, item->m_TextSize.x ) );
+        m_textSizeY.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, item->m_TextSize.y ) );
     }
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
@@ -338,8 +354,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     msg.Printf( wxT( "%d" ), aItem->m_RepeatCount );
     m_textCtrlRepeatCount->SetValue( msg );
 
-    m_textStepX.SetDoubleValue( From_User_Unit( units, aItem->m_IncrementVector.x ) );
-    m_textStepY.SetDoubleValue( From_User_Unit( units, aItem->m_IncrementVector.y ) );
+    m_textStepX.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_IncrementVector.x ) );
+    m_textStepY.SetDoubleValue( EDA_UNIT_UTILS::UI::FromUserUnit( drawSheetIUScale, units, aItem->m_IncrementVector.y ) );
 
     // The number of widgets was modified, so recalculate sizers
     m_swItemProperties->Layout();
@@ -445,11 +461,14 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     }
 
     // Import thickness
-    aItem->m_LineWidth = To_User_Unit( units, m_lineWidth.GetValue() );
+    aItem->m_LineWidth =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_lineWidth.GetValue() );
 
     // Import Start point
-    aItem->m_Pos.m_Pos.x = To_User_Unit( units, m_textPosX.GetValue() );
-    aItem->m_Pos.m_Pos.y = To_User_Unit( units, m_textPosY.GetValue() );
+    aItem->m_Pos.m_Pos.x =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textPosX.GetValue() );
+    aItem->m_Pos.m_Pos.y =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textPosY.GetValue() );
 
     switch( m_comboBoxCornerPos->GetSelection() )
     {
@@ -460,8 +479,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     }
 
     // Import End point
-    aItem->m_End.m_Pos.x = To_User_Unit( units, m_textEndX.GetValue() );
-    aItem->m_End.m_Pos.y = To_User_Unit( units, m_textEndY.GetValue() );
+    aItem->m_End.m_Pos.x =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textEndX.GetValue() );
+    aItem->m_End.m_Pos.y =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textEndY.GetValue() );
 
     switch( m_comboBoxCornerEnd->GetSelection() )
     {
@@ -477,8 +498,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
     msg.ToLong( &itmp );
     aItem->m_RepeatCount = itmp;
 
-    aItem->m_IncrementVector.x = To_User_Unit( units, m_textStepX.GetValue() );
-    aItem->m_IncrementVector.y = To_User_Unit( units, m_textStepY.GetValue() );
+    aItem->m_IncrementVector.x =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textStepX.GetValue() );
+    aItem->m_IncrementVector.y =
+            EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textStepY.GetValue() );
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
     {
@@ -512,15 +535,19 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
             item->m_Font = m_fontCtrl->GetFontSelection( item->m_Bold, item->m_Italic );
 
         msg = m_textCtrlRotation->GetValue();
-        item->m_Orient = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
+        item->m_Orient = EDA_UNIT_UTILS::UI::DoubleValueFromString( drawSheetIUScale, EDA_UNITS::UNSCALED, msg );
 
         // Import text size
-        item->m_TextSize.x = To_User_Unit( units, m_textSizeX.GetValue() );
-        item->m_TextSize.y = To_User_Unit( units, m_textSizeY.GetValue() );
+        item->m_TextSize.x =
+                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textSizeX.GetValue() );
+        item->m_TextSize.y =
+                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_textSizeY.GetValue() );
 
         // Import constraints:
-        item->m_BoundingBoxSize.x = To_User_Unit( units, m_constraintX.GetValue() );
-        item->m_BoundingBoxSize.y = To_User_Unit( units, m_constraintY.GetValue() );
+        item->m_BoundingBoxSize.x =
+                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_constraintX.GetValue() );
+        item->m_BoundingBoxSize.y =
+                EDA_UNIT_UTILS::UI::ToUserUnit( drawSheetIUScale, units, m_constraintY.GetValue() );
     }
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
@@ -528,7 +555,8 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
         DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
 
         msg = m_textCtrlRotation->GetValue();
-        item->m_Orient = EDA_ANGLE( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ), DEGREES_T );
+        item->m_Orient = EDA_ANGLE(
+                EDA_UNIT_UTILS::UI::DoubleValueFromString( drawSheetIUScale,EDA_UNITS::UNSCALED, msg ), DEGREES_T );
     }
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP )

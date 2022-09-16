@@ -124,7 +124,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 
     wxString format = wxT( "%." ) + wxString::Format( wxT( "%i" ), precision ) + wxT( "f" );
 
-    text.Printf( format, To_User_Unit( m_units, val ) );
+    text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, m_units, val ) );
 
     if( m_suppressZeroes )
     {
@@ -336,9 +336,9 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Font" ), m_text.GetDrawFont()->GetName() );
     aList.emplace_back( _( "Text Thickness" ),
-                        MessageTextFromValue( units, m_text.GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ), MessageTextFromValue( units, m_text.GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ), MessageTextFromValue( units, m_text.GetTextHeight() ) );
+                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextThickness() ) );
+    aList.emplace_back( _( "Text Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextHeight() ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     units = aFrame->GetUserUnits();
@@ -347,8 +347,8 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                           MessageTextFromValue( units, startCoord.x ),
-                                           MessageTextFromValue( units, startCoord.y ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
 
         aList.emplace_back( start, wxEmptyString );
     }
@@ -356,12 +356,12 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                           MessageTextFromValue( units, startCoord.x ),
-                                           MessageTextFromValue( units, startCoord.y ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
         VECTOR2I endCoord = originTransforms.ToDisplayAbs( GetEnd() );
         wxString end   = wxString::Format( wxT( "@(%s, %s)" ),
-                                           MessageTextFromValue( units, endCoord.x ),
-                                           MessageTextFromValue( units, endCoord.y ) );
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, endCoord.x ),
+                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, endCoord.y ) );
 
         aList.emplace_back( start, end );
     }
@@ -738,7 +738,7 @@ void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_P
 {
     PCB_DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
 
-    aList.emplace_back( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(), m_height ) );
+    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), m_height ) );
 }
 
 
@@ -1091,8 +1091,8 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
     wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                       MessageTextFromValue( units, startCoord.x ),
-                                       MessageTextFromValue( units, startCoord.y ) );
+                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
+                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
 
     aList.emplace_back( start, wxEmptyString );
 

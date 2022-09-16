@@ -166,7 +166,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
         wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
         wxString txt = textCtrl->GetValue();
 
-        int item_thickness = ValueFromString( m_frame->GetUserUnits(), txt );
+        int item_thickness = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), txt );
         min_thickness += item_thickness;
     }
 
@@ -180,7 +180,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
     else
     {
         title.Printf( _( "Enter expected board thickness (min value %s):" ),
-                      StringFromValue( m_frame->GetUserUnits(), min_thickness, true ) );
+                      EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), min_thickness, true ) );
     }
 
     wxTextEntryDialog dlg( this, title, _( "Adjust Unlocked Dielectric Layers" ) );
@@ -190,12 +190,12 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
 
     wxString result = dlg.GetValue();
 
-    int iu_thickness = ValueFromString( m_frame->GetUserUnits(), result );
+    int iu_thickness = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), result );
 
     if( iu_thickness <= min_thickness )
     {
         wxMessageBox( wxString::Format( _("Value too small (min value %s)." ),
-                      StringFromValue( m_frame->GetUserUnits(), min_thickness, true ) ) );
+                      EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), min_thickness, true ) ) );
         return;
     }
 
@@ -204,7 +204,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
     if( items_candidate.size() )
     {
         int thickness_layer = ( iu_thickness - min_thickness ) / items_candidate.size();
-        wxString txt = StringFromValue( m_frame->GetUserUnits(), thickness_layer, true );
+        wxString txt = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), thickness_layer, true );
 
         for( BOARD_STACKUP_ROW_UI_ITEM* ui_item : items_candidate )
         {
@@ -442,11 +442,11 @@ int PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
         wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
         wxString txt = textCtrl->GetValue();
 
-        int item_thickness = ValueFromString( m_frame->GetUserUnits(), txt );
+        int item_thickness = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), txt );
         thickness += item_thickness;
     }
 
-    wxString thicknessStr = StringFromValue( m_units, thickness, true );
+    wxString thicknessStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_units, thickness, true );
 
     // The text in the event will translate to the value for the text control
     // and is only updated if it changed
@@ -517,7 +517,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_ThicknessCtrl );
 
             if( textCtrl )
-                textCtrl->ChangeValue( StringFromValue( m_units,
+                textCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_units,
                                         item->GetThickness( sub_item ), true ) );
 
             if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
@@ -763,7 +763,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     {
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
         textCtrl->SetMinSize( m_numericTextCtrlSize );
-        textCtrl->ChangeValue( StringFromValue( m_units, item->GetThickness( aSublayerIdx ), true ) );
+        textCtrl->ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_units, item->GetThickness( aSublayerIdx ), true ) );
         m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         m_controlItemsList.push_back( textCtrl );
         textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -1088,7 +1088,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
             txt = textCtrl->GetValue();
 
-            int new_thickness = ValueFromString( m_frame->GetUserUnits(), txt );
+            int new_thickness = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), txt );
             item->SetThickness( new_thickness, sub_item );
 
             if( new_thickness < 0 )
@@ -1409,7 +1409,7 @@ void PANEL_SETUP_BOARD_STACKUP::onThicknessChange( wxCommandEvent& event )
     BOARD_STACKUP_ITEM* item = GetStackupItem( row );
     int idx = GetSublayerId( row );
 
-    item->SetThickness( ValueFromString( m_frame->GetUserUnits(), value ), idx );
+    item->SetThickness( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), value ), idx );
 
     computeBoardThickness();
 }

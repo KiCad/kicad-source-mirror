@@ -853,7 +853,7 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 
     switch( GetTextSpinStyle() )

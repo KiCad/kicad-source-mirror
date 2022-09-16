@@ -73,7 +73,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType, const wxString& aTitle,
                     const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                    const wxString& aFrameName );
+                    const wxString& aFrameName, const EDA_IU_SCALE& aIuScale );
 
     ~EDA_DRAW_FRAME();
 
@@ -450,6 +450,8 @@ public:
      */
     void ShowChangedLanguage() override;
 
+    const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -523,6 +525,7 @@ protected:
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
     EDA_DRAW_PANEL_GAL*         m_canvas;
+    const EDA_IU_SCALE&         m_iuScale;
 
     ///< This the frame's interface to setting GAL display options.
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;

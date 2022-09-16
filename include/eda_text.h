@@ -71,7 +71,7 @@ using KIGFX::COLOR4D;
 class EDA_TEXT
 {
 public:
-    EDA_TEXT( int aDefaultSizeIu, const wxString& aText = wxEmptyString );
+    EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText = wxEmptyString );
 
     EDA_TEXT( const EDA_TEXT& aText );
 
@@ -377,6 +377,8 @@ private:
     wxString         m_text;
     wxString         m_shown_text;           // Cache of unescaped text for efficient access
     bool             m_shown_text_has_text_var_refs;
+
+    std::reference_wrapper<const EDA_IU_SCALE> m_IuScale;
 
     mutable wxString                                    m_render_cache_text;
     mutable EDA_ANGLE                                   m_render_cache_angle;

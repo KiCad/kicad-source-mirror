@@ -507,16 +507,16 @@ void PCB_PLUGIN::formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel,
         if( ind < 0 )
         {
             m_out->Print( nestLevel, "(xy %s)",
-                          FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, outline.CPoint( ii ) ).c_str() );
             needNewline = true;
         }
         else
         {
             const SHAPE_ARC& arc = outline.Arc( ind );
             m_out->Print( nestLevel, "(arc (start %s) (mid %s) (end %s))",
-                          FormatInternalUnits( arc.GetP0() ).c_str(),
-                          FormatInternalUnits( arc.GetArcMid() ).c_str(),
-                          FormatInternalUnits( arc.GetP1() ).c_str() );
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc.GetP0() ).c_str(),
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc.GetArcMid() ).c_str(),
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc.GetP1() ).c_str() );
             needNewline = true;
 
             do
@@ -591,18 +591,18 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
     BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
-                  FormatInternalUnits( dsnSettings.m_SolderMaskExpansion ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, dsnSettings.m_SolderMaskExpansion ).c_str() );
 
     if( dsnSettings.m_SolderMaskMinWidth )
     {
         m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
-                      FormatInternalUnits( dsnSettings.m_SolderMaskMinWidth ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, dsnSettings.m_SolderMaskMinWidth ).c_str() );
     }
 
     if( dsnSettings.m_SolderPasteMargin != 0 )
     {
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
-                      FormatInternalUnits( dsnSettings.m_SolderPasteMargin ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, dsnSettings.m_SolderPasteMargin ).c_str() );
     }
 
     if( dsnSettings.m_SolderPasteMarginRatio != 0 )
@@ -621,8 +621,8 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
     if( origin != VECTOR2I( 0, 0 ) )
     {
         m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
-                      FormatInternalUnits( origin.x ).c_str(),
-                      FormatInternalUnits( origin.y ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, origin.x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, origin.y ).c_str() );
     }
 
     origin = dsnSettings.GetGridOrigin();
@@ -630,8 +630,8 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
     if( origin != VECTOR2I( 0, 0 ) )
     {
         m_out->Print( aNestLevel+1, "(grid_origin %s %s)\n",
-                      FormatInternalUnits( origin.x ).c_str(),
-                      FormatInternalUnits( origin.y ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, origin.x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, origin.y ).c_str() );
     }
 
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
@@ -647,7 +647,7 @@ void PCB_PLUGIN::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, "(general\n" );
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
-                  FormatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, dsnSettings.GetBoardThickness() ).c_str() );
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -855,21 +855,21 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel+1, "(pts (xy %s %s) (xy %s %s))\n",
-                  FormatInternalUnits( aDimension->GetStart().x ).c_str(),
-                  FormatInternalUnits( aDimension->GetStart().y ).c_str(),
-                  FormatInternalUnits( aDimension->GetEnd().x ).c_str(),
-                  FormatInternalUnits( aDimension->GetEnd().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetStart().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetStart().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetEnd().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetEnd().y ).c_str() );
 
     if( aligned )
     {
         m_out->Print( aNestLevel+1, "(height %s)\n",
-                      FormatInternalUnits( aligned->GetHeight() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aligned->GetHeight() ).c_str() );
     }
 
     if( radial )
     {
         m_out->Print( aNestLevel+1, "(leader_length %s)\n",
-                      FormatInternalUnits( radial->GetLeaderLength() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, radial->GetLeaderLength() ).c_str() );
     }
 
     if( ortho )
@@ -905,21 +905,21 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     }
 
     m_out->Print( aNestLevel+1, "(style (thickness %s) (arrow_length %s) (text_position_mode %d)",
-                  FormatInternalUnits( aDimension->GetLineThickness() ).c_str(),
-                  FormatInternalUnits( aDimension->GetArrowLength() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetLineThickness() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetArrowLength() ).c_str(),
                   static_cast<int>( aDimension->GetTextPositionMode() ) );
 
     if( aligned )
     {
         m_out->Print( 0, " (extension_height %s)",
-                     FormatInternalUnits( aligned->GetExtensionHeight() ).c_str() );
+                     EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aligned->GetExtensionHeight() ).c_str() );
     }
 
     if( leader )
         m_out->Print( 0, " (text_frame %d)", static_cast<int>( leader->GetTextBorder() ) );
 
     m_out->Print( 0, " (extension_offset %s)",
-                  FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aDimension->GetExtensionOffset() ).c_str() );
 
     if( aDimension->GetKeepTextAligned() )
         m_out->Print( 0, " keep_text_aligned" );
@@ -939,30 +939,30 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     case SHAPE_T::SEGMENT:
         m_out->Print( aNestLevel, "(gr_line%s (start %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetEnd() ).c_str() );
         break;
 
     case SHAPE_T::RECT:
         m_out->Print( aNestLevel, "(gr_rect%s (start %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetEnd() ).c_str() );
         break;
 
     case SHAPE_T::CIRCLE:
         m_out->Print( aNestLevel, "(gr_circle%s (center %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetEnd() ).c_str() );
         break;
 
     case SHAPE_T::ARC:
         m_out->Print( aNestLevel, "(gr_arc%s (start %s) (mid %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetArcMid() ).c_str(),
-                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetArcMid() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetEnd() ).c_str() );
         break;
 
     case SHAPE_T::POLY:
@@ -985,10 +985,10 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     case SHAPE_T::BEZIER:
         m_out->Print( aNestLevel, "(gr_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatInternalUnits( aShape->GetBezierC1() ).c_str(),
-                      FormatInternalUnits( aShape->GetBezierC2() ).c_str(),
-                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetBezierC1() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetBezierC2() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aShape->GetEnd() ).c_str() );
         break;
 
     default:
@@ -998,7 +998,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    aShape->GetStroke().Format( m_out, aNestLevel + 1 );
+    aShape->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aShape->GetShape() == SHAPE_T::POLY )
@@ -1028,8 +1028,8 @@ void PCB_PLUGIN::format( const PCB_BITMAP* aBitmap, int aNestLevel ) const
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( aNestLevel, "(image (at %s %s)",
-                  FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aBitmap->GetPosition().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aBitmap->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aBitmap->GetPosition().y ).c_str() );
 
     formatLayer( aBitmap->GetLayer() );
 
@@ -1076,30 +1076,30 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
     case SHAPE_T::SEGMENT:
         m_out->Print( aNestLevel, "(fp_line%s (start %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetEnd0() ).c_str() );
         break;
 
     case SHAPE_T::RECT:
         m_out->Print( aNestLevel, "(fp_rect%s (start %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetEnd0() ).c_str() );
         break;
 
     case SHAPE_T::CIRCLE:
         m_out->Print( aNestLevel, "(fp_circle%s (center %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetEnd0() ).c_str() );
         break;
 
     case SHAPE_T::ARC:
         m_out->Print( aNestLevel, "(fp_arc%s (start %s) (mid %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetArcMid0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetArcMid0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetEnd0() ).c_str() );
         break;
 
     case SHAPE_T::POLY:
@@ -1121,10 +1121,10 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
     case SHAPE_T::BEZIER:
         m_out->Print( aNestLevel, "(fp_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetBezierC1_0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetBezierC2_0() ).c_str(),
-                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetBezierC1_0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetBezierC2_0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFPShape->GetEnd0() ).c_str() );
         break;
 
     default:
@@ -1134,7 +1134,7 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    aFPShape->GetStroke().Format( m_out, aNestLevel + 1 );
+    aFPShape->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aFPShape->GetShape() == SHAPE_T::POLY )
@@ -1159,11 +1159,11 @@ void PCB_PLUGIN::format( const PCB_TARGET* aTarget, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(target %s (at %s) (size %s)",
                   ( aTarget->GetShape() ) ? "x" : "plus",
-                  FormatInternalUnits( aTarget->GetPosition() ).c_str(),
-                  FormatInternalUnits( aTarget->GetSize() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTarget->GetPosition() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTarget->GetSize() ).c_str() );
 
     if( aTarget->GetWidth() != 0 )
-        m_out->Print( 0, " (width %s)", FormatInternalUnits( aTarget->GetWidth() ).c_str() );
+        m_out->Print( 0, " (width %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTarget->GetWidth() ).c_str() );
 
     formatLayer( aTarget->GetLayer() );
 
@@ -1218,7 +1218,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
         m_out->Print( aNestLevel+1, "(at %s",
-                      FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFootprint->GetPosition() ).c_str() );
 
         if( !aFootprint->GetOrientation().IsZero() )
             m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aFootprint->GetOrientation() ).c_str() );
@@ -1256,13 +1256,13 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     if( aFootprint->GetLocalSolderMaskMargin() != 0 )
     {
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                      FormatInternalUnits( aFootprint->GetLocalSolderMaskMargin() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFootprint->GetLocalSolderMaskMargin() ).c_str() );
     }
 
     if( aFootprint->GetLocalSolderPasteMargin() != 0 )
     {
         m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                      FormatInternalUnits( aFootprint->GetLocalSolderPasteMargin() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFootprint->GetLocalSolderPasteMargin() ).c_str() );
     }
 
     if( aFootprint->GetLocalSolderPasteMarginRatio() != 0 )
@@ -1274,7 +1274,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     if( aFootprint->GetLocalClearance() != 0 )
     {
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
-                      FormatInternalUnits( aFootprint->GetLocalClearance() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aFootprint->GetLocalClearance() ).c_str() );
     }
 
     if( aFootprint->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
@@ -1551,17 +1551,17 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->IsLocked() )
         m_out->Print( 0, " locked" );
 
-    m_out->Print( 0, " (at %s", FormatInternalUnits( aPad->GetPos0() ).c_str() );
+    m_out->Print( 0, " (at %s", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetPos0() ).c_str() );
 
     if( !aPad->GetOrientation().IsZero() )
         m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aPad->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")" );
 
-    m_out->Print( 0, " (size %s)", FormatInternalUnits( aPad->GetSize() ).c_str() );
+    m_out->Print( 0, " (size %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetSize() ).c_str() );
 
     if( (aPad->GetDelta().x) != 0 || (aPad->GetDelta().y != 0 ) )
-        m_out->Print( 0, " (rect_delta %s)", FormatInternalUnits( aPad->GetDelta() ).c_str() );
+        m_out->Print( 0, " (rect_delta %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetDelta() ).c_str() );
 
     VECTOR2I sz = aPad->GetDrillSize();
     VECTOR2I shapeoffset = aPad->GetOffset();
@@ -1575,13 +1575,13 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             m_out->Print( 0, " oval" );
 
         if( sz.x > 0 )
-            m_out->Print( 0,  " %s", FormatInternalUnits( sz.x ).c_str() );
+            m_out->Print( 0,  " %s", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, sz.x ).c_str() );
 
         if( sz.y > 0  && sz.x != sz.y )
-            m_out->Print( 0,  " %s", FormatInternalUnits( sz.y ).c_str() );
+            m_out->Print( 0,  " %s", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, sz.y ).c_str() );
 
         if( (shapeoffset.x != 0) || (shapeoffset.y != 0) )
-            m_out->Print( 0, " (offset %s)", FormatInternalUnits( aPad->GetOffset() ).c_str() );
+            m_out->Print( 0, " (offset %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetOffset() ).c_str() );
 
         m_out->Print( 0, ")" );
     }
@@ -1664,19 +1664,19 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetPadToDieLength() != 0 )
     {
         StrPrintf( &output, " (die_length %s)",
-                   FormatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetPadToDieLength() ).c_str() );
     }
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
     {
         StrPrintf( &output, " (solder_mask_margin %s)",
-                   FormatInternalUnits( aPad->GetLocalSolderMaskMargin() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetLocalSolderMaskMargin() ).c_str() );
     }
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
     {
         StrPrintf( &output, " (solder_paste_margin %s)",
-                   FormatInternalUnits( aPad->GetLocalSolderPasteMargin() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetLocalSolderPasteMargin() ).c_str() );
     }
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
@@ -1688,7 +1688,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetLocalClearance() != 0 )
     {
         StrPrintf( &output, " (clearance %s)",
-                   FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetLocalClearance() ).c_str() );
     }
 
     if( aPad->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
@@ -1700,7 +1700,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetThermalSpokeWidth() != 0 )
     {
         StrPrintf( &output, " (thermal_bridge_width %s)",
-                   FormatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetThermalSpokeWidth() ).c_str() );
     }
 
     if( ( aPad->GetShape() == PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_45 )
@@ -1713,7 +1713,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetThermalGap() != 0 )
     {
         StrPrintf( &output, " (thermal_gap %s)",
-                   FormatInternalUnits( aPad->GetThermalGap() ).c_str() );
+                   EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aPad->GetThermalGap() ).c_str() );
     }
 
     if( output.size() )
@@ -1759,44 +1759,44 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             {
             case SHAPE_T::SEGMENT:
                 m_out->Print( nested_level, "(gr_line (start %s) (end %s)",
-                              FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 break;
 
             case SHAPE_T::RECT:
                 if( primitive->IsAnnotationProxy() )
                 {
                     m_out->Print( nested_level, "(gr_bbox (start %s) (end %s)",
-                                  FormatInternalUnits( primitive->GetStart() ).c_str(),
-                                  FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 }
                 else
                 {
                     m_out->Print( nested_level, "(gr_rect (start %s) (end %s)",
-                                  FormatInternalUnits( primitive->GetStart() ).c_str(),
-                                  FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 }
                 break;
 
             case SHAPE_T::ARC:
                 m_out->Print( nested_level, "(gr_arc (start %s) (mid %s) (end %s)",
-                              FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetArcMid() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetArcMid() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 break;
 
             case SHAPE_T::CIRCLE:
                 m_out->Print( nested_level, "(gr_circle (center %s) (end %s)",
-                              FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 break;
 
             case SHAPE_T::BEZIER:
                 m_out->Print( nested_level, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
-                              FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetBezierC1() ).c_str(),
-                              FormatInternalUnits( primitive->GetBezierC2() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetStart() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetBezierC1() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetBezierC2() ).c_str(),
+                              EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetEnd() ).c_str() );
                 break;
 
             case SHAPE_T::POLY:
@@ -1816,7 +1816,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             }
 
             m_out->Print( 0, " (width %s)",
-                          FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, primitive->GetWidth() ).c_str() );
 
             // The filled flag represents if a solid fill is present on circles,
             // rectangles and polygons
@@ -1852,7 +1852,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     m_out->Print( 0, " %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FormatInternalUnits( aText->GetTextPos() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aText->GetTextPos() ).c_str() );
 
 
     if( !aText->GetTextAngle().IsZero() )
@@ -1887,8 +1887,8 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     if( aTextBox->GetShape() == SHAPE_T::RECT )
     {
         m_out->Print( aNestLevel + 1, "(start %s) (end %s)",
-                      FormatInternalUnits( aTextBox->GetStart() ).c_str(),
-                      FormatInternalUnits( aTextBox->GetEnd() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTextBox->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTextBox->GetEnd() ).c_str() );
     }
     else if( aTextBox->GetShape() == SHAPE_T::POLY )
     {
@@ -1915,7 +1915,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel + 1, m_ctl | CTL_OMIT_HIDE );
 
     if( aTextBox->GetStroke().GetWidth() > 0 )
-        aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
+        aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );
@@ -1969,7 +1969,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
                   type.c_str(),
                   locked.c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FormatInternalUnits( aText->GetPos0() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aText->GetPos0() ).c_str() );
 
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle,
     // but internally the angle is held relative to its parent footprint.  parent
@@ -2031,8 +2031,8 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
     if( aTextBox->GetShape() == SHAPE_T::RECT )
     {
         m_out->Print( aNestLevel, "(start %s) (end %s)",
-                      FormatInternalUnits( aTextBox->GetStart0() ).c_str(),
-                      FormatInternalUnits( aTextBox->GetEnd0() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTextBox->GetStart0() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTextBox->GetEnd0() ).c_str() );
     }
     else if( aTextBox->GetShape() == SHAPE_T::POLY )
     {
@@ -2059,7 +2059,7 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel + 1, m_ctl | CTL_OMIT_HIDE );
 
     if( aTextBox->GetStroke().GetWidth() > 0 )
-        aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
+        aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );
@@ -2105,8 +2105,8 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             m_out->Print( 0, " locked" );
 
         m_out->Print( 0, " (at %s) (size %s)",
-                      FormatInternalUnits( aTrack->GetStart() ).c_str(),
-                      FormatInternalUnits( aTrack->GetWidth() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTrack->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTrack->GetWidth() ).c_str() );
 
         // Old boards were using UNDEFINED_DRILL_DIAMETER value in file for via drill when
         // via drill was the netclass value.
@@ -2114,9 +2114,9 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         // always store the drill value, because netclass value is not stored in the board file.
         // Otherwise the drill value of some (old) vias can be unknown
         if( via->GetDrill() != UNDEFINED_DRILL_DIAMETER )
-            m_out->Print( 0, " (drill %s)", FormatInternalUnits( via->GetDrill() ).c_str() );
+            m_out->Print( 0, " (drill %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrill() ).c_str() );
         else    // Probably old board!
-            m_out->Print( 0, " (drill %s)", FormatInternalUnits( via->GetDrillValue() ).c_str() );
+            m_out->Print( 0, " (drill %s)", EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, via->GetDrillValue() ).c_str() );
 
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( LSET::Name( layer1 ) ).c_str(),
@@ -2140,10 +2140,10 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
         m_out->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s) (width %s)",
                       locked.c_str(),
-                      FormatInternalUnits( arc->GetStart() ).c_str(),
-                      FormatInternalUnits( arc->GetMid() ).c_str(),
-                      FormatInternalUnits( arc->GetEnd() ).c_str(),
-                      FormatInternalUnits( arc->GetWidth() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc->GetMid() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc->GetEnd() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, arc->GetWidth() ).c_str() );
 
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( arc->GetLayer() ) ).c_str() );
     }
@@ -2153,9 +2153,9 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
         m_out->Print( aNestLevel, "(segment%s (start %s) (end %s) (width %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aTrack->GetStart() ).c_str(),
-                      FormatInternalUnits( aTrack->GetEnd() ).c_str(),
-                      FormatInternalUnits( aTrack->GetWidth() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTrack->GetStart() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTrack->GetEnd() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aTrack->GetWidth() ).c_str() );
 
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aTrack->GetLayer() ) ).c_str() );
     }
@@ -2210,7 +2210,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     }
 
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
-                  FormatInternalUnits( aZone->GetBorderHatchPitch() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetBorderHatchPitch() ).c_str() );
 
     if( aZone->GetAssignedPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetAssignedPriority() );
@@ -2257,10 +2257,10 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     }
 
     m_out->Print( 0, " (clearance %s))\n",
-                  FormatInternalUnits( aZone->GetLocalClearance() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetLocalClearance() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(min_thickness %s)",
-                  FormatInternalUnits( aZone->GetMinThickness() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetMinThickness() ).c_str() );
 
     // We continue to write this for 3rd-party parsers, but we no longer read it (as of V7).
     m_out->Print( 0, " (filled_areas_thickness no)" );
@@ -2290,8 +2290,8 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
         m_out->Print( 0, " (mode hatch)" );
 
     m_out->Print( 0, " (thermal_gap %s) (thermal_bridge_width %s)",
-                  FormatInternalUnits( aZone->GetThermalReliefGap() ).c_str(),
-                  FormatInternalUnits( aZone->GetThermalReliefSpokeWidth() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetThermalReliefGap() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetThermalReliefSpokeWidth() ).c_str() );
 
     if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
     {
@@ -2315,22 +2315,22 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 
         if( aZone->GetCornerRadius() != 0 )
             m_out->Print( 0, " (radius %s)",
-                          FormatInternalUnits( aZone->GetCornerRadius() ).c_str() );
+                          EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetCornerRadius() ).c_str() );
     }
 
     if( aZone->GetIslandRemovalMode() != ISLAND_REMOVAL_MODE::ALWAYS )
     {
         m_out->Print( 0, " (island_removal_mode %d) (island_area_min %s)",
                       static_cast<int>( aZone->GetIslandRemovalMode() ),
-                      FormatInternalUnits( aZone->GetMinIslandArea() / IU_PER_MM ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetMinIslandArea() / IU_PER_MM ).c_str() );
     }
 
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",
-                      FormatInternalUnits( aZone->GetHatchThickness() ).c_str(),
-                      FormatInternalUnits( aZone->GetHatchGap() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetHatchThickness() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetHatchGap() ).c_str(),
                       Double2Str( aZone->GetHatchOrientation().AsDegrees() ).c_str() );
 
         if( aZone->GetHatchSmoothingLevel() > 0 )

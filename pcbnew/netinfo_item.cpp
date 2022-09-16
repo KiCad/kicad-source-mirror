@@ -128,15 +128,15 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             std::tie( count, lengthNet, lengthPadToDie ) = board->GetTrackLength( *startTrack );
 
             // Displays the full net length (tracks on pcb + internal ICs connections ):
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet + lengthPadToDie );
+            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), lengthNet + lengthPadToDie );
             aList.emplace_back( _( "Net Length" ), msg );
 
             // Displays the net length of tracks only:
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet );
+            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), lengthNet );
             aList.emplace_back( _( "On Board" ), msg );
 
             // Displays the net length of internal ICs connections (wires inside ICs):
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
+            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), lengthPadToDie );
             aList.emplace_back( _( "In Package" ), msg );
         }
     }

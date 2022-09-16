@@ -117,7 +117,8 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
 
             for( const std::shared_ptr<CLEANUP_ITEM>& item : realRunItems )
             {
-                BOOST_TEST_MESSAGE( item->ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                BOOST_TEST_MESSAGE( item->ShowReport( pcbIUScale, EDA_UNITS::INCHES,
+                                                      RPT_SEVERITY_ERROR,
                                                       itemMap ) );
             }
 
@@ -199,7 +200,8 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
 
             for( const DRC_ITEM& item : violations )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                BOOST_TEST_MESSAGE( item.ShowReport( pcbIUScale, EDA_UNITS::INCHES,
+                                                     RPT_SEVERITY_ERROR,
                                                      itemMap ) );
             }
 

@@ -319,10 +319,10 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
         msg.Printf( _( "Corner %d" ), row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currPoints[row].x, true );
+        msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_currPoints[row].x, true );
         m_gridCornersList->SetCellValue( row, 0, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currPoints[row].y, true );
+        msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_currPoints[row].y, true );
         m_gridCornersList->SetCellValue( row, 1, msg );
     }
 
@@ -563,9 +563,9 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
         return;
 
     if( col == 0 )  // Set the X value
-        m_currPoints[row].x = ValueFromString( GetUserUnits(), msg );
+        m_currPoints[row].x = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, GetUserUnits(), msg );
     else            // Set the Y value
-        m_currPoints[row].y = ValueFromString( GetUserUnits(), msg );
+        m_currPoints[row].y = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, GetUserUnits(), msg );
 
     Validate();
 
@@ -602,7 +602,7 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
 {
     VECTOR2I  move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
     EDA_ANGLE rotation = m_rotation.GetAngleValue();
-    double    scale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_scaleCtrl->GetValue() );
+    double    scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_scaleCtrl->GetValue() );
 
     // Avoid too small / too large scale, which could create issues:
     if( scale < 0.01 )

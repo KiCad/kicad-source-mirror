@@ -406,11 +406,11 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 static_cast<long>( EDA_UNITS::INCHES ) ) );
 
         // Convert to internal units
-        x = From_User_Unit( u, x );
-        y = From_User_Unit( u, y );
+        x = EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, u, x );
+        y = EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, u, y );
 
-        Set( "window.grid.user_grid_x", StringFromValue( u, x ) );
-        Set( "window.grid.user_grid_y", StringFromValue( u, y ) );
+        Set( "window.grid.user_grid_x", EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, u, x ) );
+        Set( "window.grid.user_grid_y", EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, u, y ) );
     }
 
     return ret;

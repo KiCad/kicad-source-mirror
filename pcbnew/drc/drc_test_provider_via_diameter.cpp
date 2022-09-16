@@ -120,15 +120,15 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     {
                         msg.Printf( _( "(%s min diameter %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), constraintDiameter ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintDiameter ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
                     }
                     else if( fail_max )
                     {
                         msg.Printf( _( "(%s max diameter %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), constraintDiameter ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintDiameter ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

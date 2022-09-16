@@ -61,7 +61,7 @@ add_executable( test_pns
     ../../qa_utils/test_app_main.cpp
     ../../qa_utils/utility_program.cpp
     ../../qa_utils/mocks.cpp
-    ../../../common/base_units.cpp
+    
     playground.cpp
     main.cpp
   )

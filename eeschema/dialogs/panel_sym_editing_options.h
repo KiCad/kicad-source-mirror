@@ -23,7 +23,7 @@
 #include <widgets/unit_binder.h>
 #include "panel_sym_editing_options_base.h"
 
-class EDA_BASE_FRAME;
+class EDA_DRAW_FRAME;
 
 
 class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE

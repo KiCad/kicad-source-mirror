@@ -38,7 +38,9 @@ namespace PREVIEW
     class ARC_ASSISTANT : public EDA_ITEM
     {
     public:
-        ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits );
+        ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager,
+                       const EDA_IU_SCALE& aIuScale,
+                       EDA_UNITS aUnits );
 
         const BOX2I ViewBBox() const override;
 
@@ -69,6 +71,7 @@ namespace PREVIEW
 
     private:
         const ARC_GEOM_MANAGER& m_constructMan;
+        const EDA_IU_SCALE&     m_iuScale;
         EDA_UNITS               m_units;
     };
 } // namespace PREVIEW

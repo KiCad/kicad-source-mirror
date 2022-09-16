@@ -398,7 +398,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     if( theArc->GetAngle() + maxTangentDeviation >= ANGLE_180 )
     {
         wxString msg = wxString::Format( _( "Unable to resize arc tracks of %s or greater." ),
-                                         MessageTextFromValue( ANGLE_180 - maxTangentDeviation ) );
+                                         EDA_UNIT_UTILS::UI::MessageTextFromValue( ANGLE_180 - maxTangentDeviation ) );
         frame()->ShowInfoBarError( msg );
 
         return 0; // don't bother with > 180 degree arcs

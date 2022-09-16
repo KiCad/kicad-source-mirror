@@ -66,7 +66,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 {
     wxString msg;
     msg.Printf( m_stCircleToPolyWarning->GetLabel(),
-                StringFromValue( m_Frame->GetUserUnits(), ARC_HIGH_DEF, true ) );
+                EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), ARC_HIGH_DEF, true ) );
     m_stCircleToPolyWarning->SetLabel( msg );
 
     m_useHeightForLengthCalcs->SetValue( m_BrdSettings->m_UseHeightForLengthCalcs );

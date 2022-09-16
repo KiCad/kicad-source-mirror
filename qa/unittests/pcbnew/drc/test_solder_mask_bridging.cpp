@@ -82,7 +82,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( pcbIUScale, EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
 
         BOOST_ERROR( wxString::Format( "DRC solder mask bridge test failed board <%s>", brd_name ) );
     }

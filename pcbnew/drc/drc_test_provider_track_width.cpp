@@ -130,15 +130,15 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     {
                         msg.Printf( _( "(%s min width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), constraintWidth ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintWidth ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
                     }
                     else
                     {
                         msg.Printf( _( "(%s max width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), constraintWidth ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintWidth ),
+                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
                     }
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

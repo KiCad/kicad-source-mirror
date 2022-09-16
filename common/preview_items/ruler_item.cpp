@@ -53,7 +53,7 @@ static int getShadowLayer( KIGFX::GAL* aGal )
 
 
 static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-                               const VECTOR2D& aRulerVec, EDA_UNITS aUnits,
+                               const VECTOR2D& aRulerVec, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                bool aDrawingDropShadows, bool aFlipX, bool aFlipY )
 {
     // draw the cursor labels
@@ -67,13 +67,13 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     if( aFlipY )
         temp.y = -temp.y;
 
-    cursorStrings.push_back( DimensionLabel( "x", temp.x, aUnits ) );
-    cursorStrings.push_back( DimensionLabel( "y", temp.y, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( "x", temp.x, aIuScale, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( "y", temp.y, aIuScale, aUnits ) );
 
-    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
+    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aIuScale, aUnits ) );
 
     EDA_ANGLE angle = -EDA_ANGLE( aRulerVec );
-    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
+    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(), aIuScale,
                                              EDA_UNITS::DEGREES ) );
 
     temp = aRulerVec;
@@ -148,7 +148,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aMinorTickLen length of minor ticks in IU
  */
 void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
-                         double aMinorTickLen, EDA_UNITS aUnits, bool aDrawingDropShadows )
+                         double aMinorTickLen, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, bool aDrawingDropShadows )
 {
     KIGFX::GAL*   gal = aView->GetGAL();
     KIFONT::FONT* font = KIFONT::FONT::GetFont();
@@ -220,7 +220,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
         if( drawLabel )
         {
-            wxString label = DimensionLabel( "", tickSpace * i, aUnits, false );
+            wxString label = DimensionLabel( "", tickSpace * i, aIuScale, aUnits, false );
             font->Draw( gal, label, tickPos + labelOffset, labelAttrs );
         }
     }
@@ -267,11 +267,12 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits,
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, const EDA_IU_SCALE& aIuScale, EDA_UNITS userUnits,
         bool aFlipX, bool aFlipY )
         : EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
           m_geomMgr( aGeomMgr ),
           m_userUnits( userUnits ),
+          m_iuScale( aIuScale ),
           m_flipX( aFlipX ),
           m_flipY( aFlipY )
 {
@@ -330,13 +331,14 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     VECTOR2D rulerVec( end - origin );
 
-    drawCursorStrings( aView, end, rulerVec, m_userUnits, drawingDropShadows, m_flipX, m_flipY );
+    drawCursorStrings( aView, end, rulerVec, m_iuScale, m_userUnits, drawingDropShadows, m_flipX,
+                       m_flipY );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal->GetWorldScale();
     const double majorTickLen = minorTickLen * majorTickLengthFactor;
 
-    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_userUnits, drawingDropShadows );
+    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_iuScale, m_userUnits, drawingDropShadows );
 
     drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
 

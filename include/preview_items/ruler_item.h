@@ -41,7 +41,7 @@ class TWO_POINT_GEOMETRY_MANAGER;
 class RULER_ITEM : public EDA_ITEM
 {
 public:
-    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS userUnits, bool aFlipX,
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, const EDA_IU_SCALE& aIuScale, EDA_UNITS userUnits, bool aFlipX,
             bool aFlipY );
 
     ///< @copydoc EDA_ITEM::ViewBBox()
@@ -85,6 +85,7 @@ public:
 private:
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
     EDA_UNITS                         m_userUnits;
+    const EDA_IU_SCALE&               m_iuScale;
     bool                              m_flipX;
     bool                              m_flipY;
 };

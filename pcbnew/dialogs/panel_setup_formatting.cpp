@@ -41,10 +41,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 {
     const PCB_PLOT_PARAMS& settings = m_frame->GetBoard()->GetPlotOptions();
 
-    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_dashLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED,
                                                  settings.GetDashedLineDashRatio() ) );
 
-    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED,
                                                 settings.GetDashedLineGapRatio() ) );
 
     return true;
@@ -55,11 +55,9 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 {
     PCB_PLOT_PARAMS settings = m_frame->GetBoard()->GetPlotOptions();
 
-    settings.SetDashedLineDashRatio( DoubleValueFromString( EDA_UNITS::UNSCALED,
-                                                            m_dashLengthCtrl->GetValue() ) );
+    settings.SetDashedLineDashRatio( EDA_UNIT_UTILS::UI::DoubleValueFromString( m_dashLengthCtrl->GetValue() ) );
 
-    settings.SetDashedLineGapRatio( DoubleValueFromString( EDA_UNITS::UNSCALED,
-                                                           m_gapLengthCtrl->GetValue() ) );
+    settings.SetDashedLineGapRatio( EDA_UNIT_UTILS::UI::DoubleValueFromString( m_gapLengthCtrl->GetValue() ) );
 
     m_frame->GetBoard()->SetPlotOptions( settings );
 
@@ -79,9 +77,9 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( BOARD* aBoard )
 {
     const PCB_PLOT_PARAMS& importedSettings = aBoard->GetPlotOptions();
 
-    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_dashLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED,
                                                  importedSettings.GetDashedLineDashRatio() ) );
 
-    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED,
                                                 importedSettings.GetDashedLineGapRatio() ) );
 }

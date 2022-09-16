@@ -632,7 +632,7 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
     case EDA_UNITS::INCHES:      format = wxT( "%.5f" ); break;
     }
 
-    text.Printf( format, To_User_Unit( aUnits, aValue ) );
+    text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, aUnits, aValue ) );
 
     if( aIncludeLabel )
         text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );

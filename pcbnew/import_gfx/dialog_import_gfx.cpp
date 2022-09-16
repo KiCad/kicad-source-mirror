@@ -139,7 +139,7 @@ DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
     cfg->m_ImportGraphics.origin_y              = Iu2Millimeter( m_yOrigin.GetValue() );
     cfg->m_ImportGraphics.dxf_units             = m_choiceDxfUnits->GetSelection();
 
-    m_importScale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_importScaleCtrl->GetValue() );
+    m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
                                     wxCommandEventHandler( DIALOG_IMPORT_GFX::onFilename ),
@@ -215,7 +215,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
     }
 
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
-    double   scale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_importScaleCtrl->GetValue() );
+    double   scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
     VECTOR2D origin( m_xOrigin.GetValue() / scale, m_yOrigin.GetValue() / scale );
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )

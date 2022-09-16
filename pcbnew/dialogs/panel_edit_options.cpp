@@ -34,7 +34,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnit
                                         bool isFootprintEditor ) :
         PANEL_EDIT_OPTIONS_BASE( aParent ),
         m_isFootprintEditor( isFootprintEditor ),
-        m_rotationAngle( aUnitsProvider, m_rotationAngleLabel, m_rotationAngleCtrl,
+        m_rotationAngle( aUnitsProvider, pcbIUScale, m_rotationAngleLabel, m_rotationAngleCtrl,
                          m_rotationAngleUnits )
 {
     m_magneticPads->Show( m_isFootprintEditor );

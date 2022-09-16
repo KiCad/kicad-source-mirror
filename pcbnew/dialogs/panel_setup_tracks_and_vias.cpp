@@ -141,7 +141,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortTrackWidthsClick( wxCommandEvent& aEvent
         msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
 
         if( !msg.IsEmpty() )
-            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg ) );
+            trackWidths.push_back( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg ) );
     }
 
     std::sort( trackWidths.begin(), trackWidths.end() );
@@ -166,12 +166,12 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortViaSizesClick( wxCommandEvent& aEvent )
         if( !msg.IsEmpty() )
         {
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg );
+            via_dim.m_Diameter = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
             if( !msg.IsEmpty() )
-                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg );
+                via_dim.m_Drill = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             vias.push_back( via_dim );
         }
@@ -199,15 +199,15 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnSortDiffPairsClick( wxCommandEvent& aEvent )
         if( !msg.IsEmpty() )
         {
             DIFF_PAIR_DIMENSION diffPair_dim;
-            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg );
+            diffPair_dim.m_Width = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
-            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg );
+            diffPair_dim.m_Gap = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
 
             if( !msg.IsEmpty() )
-                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg );
+                diffPair_dim.m_ViaGap = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             diffPairs.push_back( diffPair_dim );
         }
@@ -289,7 +289,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
 
         if( !msg.IsEmpty() )
-            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg ) );
+            trackWidths.push_back( EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg ) );
     }
 
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
@@ -299,12 +299,12 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         if( !msg.IsEmpty() )
         {
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg );
+            via_dim.m_Diameter = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
             if( !msg.IsEmpty() )
-                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg );
+                via_dim.m_Drill = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             vias.push_back( via_dim );
         }
@@ -317,15 +317,15 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         if( !msg.IsEmpty() )
         {
             DIFF_PAIR_DIMENSION diffPair_dim;
-            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg );
+            diffPair_dim.m_Width = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
-            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg );
+            diffPair_dim.m_Gap = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
 
             if( !msg.IsEmpty() )
-                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg );
+                diffPair_dim.m_ViaGap = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_Frame->GetUserUnits(), msg );
 
             diffPairs.push_back( diffPair_dim );
         }
@@ -401,7 +401,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
 
     m_trackWidthsGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true );
+    wxString val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aWidth, true );
     m_trackWidthsGrid->SetCellValue( i, TR_WIDTH_COL, val );
 }
 
@@ -412,12 +412,12 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( const int aSize, const int aDri
 
     m_viaSizesGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aSize, true );
+    wxString val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aSize, true );
     m_viaSizesGrid->SetCellValue( i, VIA_SIZE_COL, val );
 
     if( aDrill > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aDrill, true );
+        val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aDrill, true );
         m_viaSizesGrid->SetCellValue( i, VIA_DRILL_COL, val );
     }
 }
@@ -430,18 +430,18 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( const int aWidth, const int a
 
     m_diffPairsGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true );
+    wxString val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aWidth, true );
     m_diffPairsGrid->SetCellValue( i, DP_WIDTH_COL, val );
 
     if( aGap > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aGap, true );
+        val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aGap, true );
         m_diffPairsGrid->SetCellValue( i, DP_GAP_COL, val );
     }
 
     if( aViaGap > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aViaGap, true );
+        val = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), aViaGap, true );
         m_diffPairsGrid->SetCellValue( i, DP_VIA_GAP_COL, val );
     }
 }

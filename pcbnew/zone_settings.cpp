@@ -41,9 +41,9 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZonePriority = 0;
     m_FillMode = ZONE_FILL_MODE::POLYGONS; // Mode for filling zone
     // Zone clearance value
-    m_ZoneClearance = Mils2iu( ZONE_CLEARANCE_MIL );
+    m_ZoneClearance = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
-    m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
+    m_ZoneMinThickness = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THICKNESS_MIL );
     m_HatchThickness = 0;           // good value of grid line thickness for ZFM_GRID_PATTERN
     m_HatchGap = 0;                 // good value of grid line gap for ZFM_GRID_PATTERN
     m_HatchOrientation = ANGLE_0;   // Grid style: orientation of grid lines
@@ -55,15 +55,15 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
                                                                          // outlines only, short
                                                                          // hatches or full hatches
-    m_BorderHatchPitch = Mils2iu( ZONE_BORDER_HATCH_DIST_MIL );
+    m_BorderHatchPitch = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_BORDER_HATCH_DIST_MIL );
 
     m_Layers.reset().set( F_Cu );
     m_Name = wxEmptyString;
 
     // thickness of the gap in thermal reliefs:
-    m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
+    m_ThermalReliefGap = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THERMAL_RELIEF_GAP_MIL );
     // thickness of the copper bridge in thermal reliefs:
-    m_ThermalReliefSpokeWidth = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
+    m_ThermalReliefSpokeWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
 
     m_padConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
 

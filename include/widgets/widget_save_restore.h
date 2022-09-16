@@ -24,6 +24,7 @@
 #ifndef WIDGETS_WIDGET_SAVE_RESTORE__H
 #define WIDGETS_WIDGET_SAVE_RESTORE__H
 
+#include <eda_units.h>
 #include <vector>
 
 class wxCheckBox;
@@ -40,7 +41,7 @@ class EDA_ANGLE;
 class WIDGET_SAVE_RESTORE
 {
 public:
-    WIDGET_SAVE_RESTORE( bool& aValidFlag ) :
+    WIDGET_SAVE_RESTORE( const EDA_IU_SCALE& aIuScale, bool& aValidFlag ) :
         m_valid( aValidFlag )
     {
     }

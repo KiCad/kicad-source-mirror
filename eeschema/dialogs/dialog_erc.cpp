@@ -983,7 +983,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
             default:                                 break;
             }
 
-            msg << marker->GetRCItem()->ShowReport( GetUserUnits(), severity, itemMap );
+            msg << marker->GetRCItem()->ShowReport( schIUScale, GetUserUnits(), severity, itemMap );
         }
     }
 

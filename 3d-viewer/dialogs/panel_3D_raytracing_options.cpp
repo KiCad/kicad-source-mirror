@@ -49,12 +49,12 @@ void PANEL_3D_RAYTRACING_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
     m_numSamples_Reflections->SetValue( aCfg->m_Render.raytrace_nrsamples_reflections );
     m_numSamples_Refractions->SetValue( aCfg->m_Render.raytrace_nrsamples_refractions );
 
-    m_spreadFactor_Shadows->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                       aCfg->m_Render.raytrace_spread_shadows * 100.0f ) );
-    m_spreadFactor_Reflections->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                           aCfg->m_Render.raytrace_spread_reflections * 100.0f ) );
-    m_spreadFactor_Refractions->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                           aCfg->m_Render.raytrace_spread_refractions * 100.0f ) );
+    m_spreadFactor_Shadows->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+            pcbIUScale, EDA_UNITS::PERCENT, aCfg->m_Render.raytrace_spread_shadows * 100.0f ) );
+    m_spreadFactor_Reflections->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+            pcbIUScale, EDA_UNITS::PERCENT, aCfg->m_Render.raytrace_spread_reflections * 100.0f ) );
+    m_spreadFactor_Refractions->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+            pcbIUScale, EDA_UNITS::PERCENT, aCfg->m_Render.raytrace_spread_refractions * 100.0f ) );
 
     m_recursiveLevel_Reflections->SetValue( aCfg->m_Render.raytrace_recursivelevel_reflections );
     m_recursiveLevel_Refractions->SetValue( aCfg->m_Render.raytrace_recursivelevel_refractions );
@@ -70,7 +70,8 @@ void PANEL_3D_RAYTRACING_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
     auto transfer_value =
             []( wxTextCtrl* aCtrl, int aValue )
             {
-                aCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED, aValue ) );
+        aCtrl->SetValue(
+                EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED, aValue ) );
             };
 
     transfer_color( aCfg->m_Render.raytrace_lightColorCamera, m_colourPickerCameraLight );
@@ -136,11 +137,17 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.raytrace_nrsamples_refractions = m_numSamples_Refractions->GetValue();
 
     cfg->m_Render.raytrace_spread_shadows =
-            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Shadows->GetValue() ) / 100.0f;
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::PERCENT,
+                                                       m_spreadFactor_Shadows->GetValue() )
+            / 100.0f;
     cfg->m_Render.raytrace_spread_reflections =
-            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Reflections->GetValue() ) / 100.0f;
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::PERCENT,
+                                                       m_spreadFactor_Reflections->GetValue() )
+            / 100.0f;
     cfg->m_Render.raytrace_spread_refractions =
-            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Refractions->GetValue() ) / 100.0f;
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::PERCENT,
+                                                       m_spreadFactor_Refractions->GetValue() )
+            / 100.0f;
 
     cfg->m_Render.raytrace_recursivelevel_reflections = m_recursiveLevel_Reflections->GetValue();
     cfg->m_Render.raytrace_recursivelevel_refractions = m_recursiveLevel_Refractions->GetValue();
@@ -161,7 +168,8 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
     auto get_value =
             []( wxTextCtrl* aCtrl )
             {
-                return DoubleValueFromString( EDA_UNITS::UNSCALED, aCtrl->GetValue() );
+                return EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::UNSCALED,
+                                                                  aCtrl->GetValue() );
             };
 
     cfg->m_Render.raytrace_lightElevation[0] = get_value( m_lightElevation1 );

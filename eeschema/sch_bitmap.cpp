@@ -204,8 +204,8 @@ void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 {
     aList.emplace_back( _( "Bitmap" ), wxEmptyString );
 
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().x ) );
-    aList.emplace_back( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().y ) );
+    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(), GetSize().x ) );
+    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(), GetSize().y ) );
 }
 
 

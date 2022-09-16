@@ -367,8 +367,8 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
                                      "rounded to a %s, %s grid." ),
                                   fpLocation ? _( "footprint location" )
                                              : _( "reference designator location" ),
-                                  MessageTextFromValue( m_units, m_sortGridx ),
-                                  MessageTextFromValue( m_units, m_sortGridy ) );
+                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, m_sortGridx ),
+                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, m_sortGridy ) );
 
     ShowReport( aMessage, RPT_SEVERITY_INFO );
 }
@@ -397,15 +397,15 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
 
     if( m_gridIndex >= ( int ) m_settings->m_Window.grid.sizes.size() )
     {
-        m_sortGridx = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_settings->m_Window.grid.user_grid_x );
-        m_sortGridy = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_settings->m_Window.grid.user_grid_y );
+        m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.user_grid_x );
+        m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.user_grid_y );
     }
     else
     {
-        m_sortGridx = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_settings->m_Window.grid.sizes[ m_gridIndex ] );
+        m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.sizes[m_gridIndex] );
         m_sortGridy = m_sortGridx;
     }
 
@@ -482,8 +482,8 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
     return wxString::Format( wxT( "%s, %s" ),
-                             MessageTextFromValue( m_units, aX ),
-                             MessageTextFromValue( m_units, aY ) );
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, aX ),
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, aY ) );
 }
 
 

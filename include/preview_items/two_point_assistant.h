@@ -50,8 +50,8 @@ enum class GEOM_SHAPE
 class TWO_POINT_ASSISTANT : public EDA_ITEM
 {
 public:
-    TWO_POINT_ASSISTANT( const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits,
-                         GEOM_SHAPE aShape );
+    TWO_POINT_ASSISTANT( const TWO_POINT_GEOMETRY_MANAGER& aManager, const EDA_IU_SCALE& aIuScale,
+                         EDA_UNITS aUnits, GEOM_SHAPE aShape );
 
     const BOX2I ViewBBox() const override;
 
@@ -88,6 +88,7 @@ private:
     const TWO_POINT_GEOMETRY_MANAGER& m_constructMan;
     EDA_UNITS                         m_units;
     GEOM_SHAPE                        m_shape;
+    const EDA_IU_SCALE&               m_iuScale;
 };
 
 } // namespace PREVIEW

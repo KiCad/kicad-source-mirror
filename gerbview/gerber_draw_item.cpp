@@ -661,10 +661,10 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     aList.emplace_back( _( "Graphic Layer" ), msg );
 
     // Display item position
-    auto xStart = To_User_Unit( aFrame->GetUserUnits(), m_Start.x );
-    auto yStart = To_User_Unit( aFrame->GetUserUnits(), m_Start.y );
-    auto xEnd   = To_User_Unit( aFrame->GetUserUnits(), m_End.x );
-    auto yEnd   = To_User_Unit( aFrame->GetUserUnits(), m_End.y );
+    auto xStart = EDA_UNIT_UTILS::UI::ToUserUnit( gerbIUScale, aFrame->GetUserUnits(), m_Start.x );
+    auto yStart = EDA_UNIT_UTILS::UI::ToUserUnit( gerbIUScale, aFrame->GetUserUnits(), m_Start.y );
+    auto xEnd = EDA_UNIT_UTILS::UI::ToUserUnit( gerbIUScale, aFrame->GetUserUnits(), m_End.x );
+    auto yEnd = EDA_UNIT_UTILS::UI::ToUserUnit( gerbIUScale, aFrame->GetUserUnits(), m_End.y );
 
     if( m_Flashed )
     {

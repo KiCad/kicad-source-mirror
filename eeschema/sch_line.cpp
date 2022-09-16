@@ -724,7 +724,7 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
     }
 
     return wxString::Format( txtfmt,
-                             MessageTextFromValue( aUnits, EuclideanNorm( m_start - m_end ) ) );
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, EuclideanNorm( m_start - m_end ) ) );
 }
 
 
@@ -897,7 +897,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     if( GetEffectiveLineStyle() != lineStyle )
         aList.emplace_back( _( "Line Style" ), _( "from netclass" ) );
     else
-        m_stroke.GetMsgPanelInfo( aFrame->GetUserUnits(), aList, true, false );
+        m_stroke.GetMsgPanelInfo( schIUScale, aFrame->GetUserUnits(), aList, true, false );
 
     SCH_CONNECTION* conn = nullptr;
 

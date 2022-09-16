@@ -45,7 +45,7 @@ using KIGFX::SCH_RENDER_SETTINGS;
 LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
                           const wxString& text ) :
         LIB_SHAPE( aParent, SHAPE_T::RECT, aLineWidth, aFillType, LIB_TEXTBOX_T ),
-        EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), text )
+        EDA_TEXT( schIUScale, text )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
@@ -434,15 +434,15 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( units, GetTextWidth() ) );
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, GetTextWidth() ) );
 
-    wxString msg = MessageTextFromValue( units, std::abs( GetEnd().x - GetStart().x ) );
+    wxString msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, std::abs( GetEnd().x - GetStart().x ) );
     aList.emplace_back( _( "Box Width" ), msg );
 
-    msg = MessageTextFromValue( units, std::abs( GetEnd().y - GetStart().y ) );
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, std::abs( GetEnd().y - GetStart().y ) );
     aList.emplace_back( _( "Box Height" ), msg );
 
-    m_stroke.GetMsgPanelInfo( units, aList );
+    m_stroke.GetMsgPanelInfo( schIUScale, units, aList );
 }
 
 

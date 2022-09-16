@@ -44,11 +44,11 @@ wxString RC_ITEM::GetErrorMessage() const
 }
 
 
-wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const VECTOR2I& aPos )
+wxString RC_ITEM::ShowCoord( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, const VECTOR2I& aPos )
 {
     return wxString::Format( wxT( "@(%s, %s)" ),
-                             MessageTextFromValue( aUnits, aPos.x ),
-                             MessageTextFromValue( aUnits, aPos.y ) );
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, aPos.x ),
+                             EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, aPos.y ) );
 }
 
 
@@ -76,7 +76,7 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 }
 
 
-wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
+wxString RC_ITEM::ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SEVERITY aSeverity,
                               const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     wxString severity;
@@ -120,9 +120,9 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
                                  GetErrorMessage(),
                                  GetViolatingRuleDesc(),
                                  severity,
-                                 ShowCoord( aUnits, mainItem->GetPosition() ),
+                                 ShowCoord( aIuScale, aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ),
-                                 ShowCoord( aUnits, auxItem->GetPosition() ),
+                                 ShowCoord( aIuScale, aUnits, auxItem->GetPosition() ),
                                  auxItem->GetSelectMenuText( aUnits ) );
     }
     else if( mainItem )
@@ -132,7 +132,7 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
                                  GetErrorMessage(),
                                  GetViolatingRuleDesc(),
                                  severity,
-                                 ShowCoord( aUnits, mainItem->GetPosition() ),
+                                 ShowCoord( aIuScale, aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ) );
     }
     else

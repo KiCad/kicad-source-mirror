@@ -115,8 +115,7 @@ bool PANEL_EESCHEMA_ANNOTATION_OPTIONS::TransferDataFromWindow()
     if( schFrame )
     {
         SCHEMATIC_SETTINGS& projSettings = schFrame->Schematic().Settings();
-        projSettings.m_AnnotateStartNum =
-                ValueFromString( EDA_UNITS::UNSCALED, m_textNumberAfter->GetValue() );
+        projSettings.m_AnnotateStartNum = EDA_UNIT_UTILS::UI::ValueFromString( m_textNumberAfter->GetValue() );
     }
 
     return true;

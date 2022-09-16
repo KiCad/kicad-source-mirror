@@ -583,7 +583,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
-        return StringFromValue( m_frame->GetUserUnits(), field.GetTextHeight(), true );
+        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(), field.GetTextHeight(), true );
 
     case FDC_ORIENTATION:
         if( field.GetTextAngle().IsHorizontal() )
@@ -592,10 +592,12 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
             return _( "Vertical" );
 
     case FDC_POSX:
-        return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().x, true );
+        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(),
+                                                    field.GetTextPos().x, true );
 
     case FDC_POSY:
-        return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().y, true );
+        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(),
+                                                    field.GetTextPos().y, true );
 
     case FDC_FONT:
         if( field.GetFont() )
@@ -709,8 +711,9 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( wxSize( ValueFromString( m_frame->GetUserUnits(), aValue ),
-                                   ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
+        field.SetTextSize(
+                wxSize( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ),
+                        EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue ) ) );
         break;
 
     case FDC_ORIENTATION:
@@ -728,9 +731,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         pos = field.GetTextPos();
 
         if( aCol == FDC_POSX )
-            pos.x = ValueFromString( m_frame->GetUserUnits(), aValue );
+            pos.x = EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(), aValue );
         else
-            pos.y = ValueFromString( m_frame->GetUserUnits(), aValue );
+            pos.y = EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, m_frame->GetUserUnits(),
+                                                         aValue );
 
         field.SetTextPos( pos );
         break;

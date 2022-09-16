@@ -59,7 +59,7 @@
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT( Mils2iu( DEFAULT_SIZE_TEXT ), wxEmptyString ),
+    EDA_TEXT( schIUScale, wxEmptyString ),
     m_id( 0 ),
     m_name( aName ),
     m_showName( false ),
@@ -725,7 +725,7 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 
     switch ( GetHorizJustify() )

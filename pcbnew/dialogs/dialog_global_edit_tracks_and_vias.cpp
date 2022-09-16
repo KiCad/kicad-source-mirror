@@ -236,7 +236,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     auto setNetclassValue =
             [this, units]( int aRow, int aCol, int aVal )
             {
-                m_netclassGrid->SetCellValue( aRow, aCol, StringFromValue( units, aVal, true ) );
+                m_netclassGrid->SetCellValue( aRow, aCol, EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, aVal, true ) );
             };
 
     auto buildRow =

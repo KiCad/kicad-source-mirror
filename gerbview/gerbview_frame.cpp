@@ -58,7 +58,8 @@
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
-                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
+                        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME,
+                        gerbIUScale ),
           m_TextInfo( nullptr ),
           m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
                             ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
@@ -899,8 +900,10 @@ void GERBVIEW_FRAME::DisplayGridMsg()
     wxString line;
 
     line.Printf( wxT( "grid X %s  Y %s" ),
-                 MessageTextFromValue( m_userUnits, gridSize.x, false ),
-                 MessageTextFromValue( m_userUnits, gridSize.y, false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.x,
+                                                           false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.y,
+                                                           false ) );
 
     SetStatusText( line, 4 );
     SetStatusText( line, 4 );
@@ -924,16 +927,18 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         double    ro = hypot( v.x, v.y );
 
         line.Printf( wxT( "r %s  theta %s" ),
-                     MessageTextFromValue( GetUserUnits(), ro, false ),
-                     MessageTextFromValue( EDA_UNITS::DEGREES, theta.AsDegrees(), false ) );
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), ro, false ),
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), EDA_UNITS::DEGREES, theta.AsDegrees(), false ) );
 
         SetStatusText( line, 3 );
     }
 
     // Display absolute coordinates:
     line.Printf( wxT( "X %s  Y %s" ),
-                 MessageTextFromValue( GetUserUnits(), cursorPos.x, false ),
-                 MessageTextFromValue( GetUserUnits(), cursorPos.y, false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                           cursorPos.x, false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                           cursorPos.y, false ) );
     SetStatusText( line, 2 );
 
     if( !GetShowPolarCoords() )
@@ -943,9 +948,12 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         double dYpos = cursorPos.y - GetScreen()->m_LocalOrigin.y;
 
         line.Printf( wxT( "dx %s  dy %s  dist %s" ),
-                     MessageTextFromValue( GetUserUnits(), dXpos, false ),
-                     MessageTextFromValue( GetUserUnits(), dYpos, false ),
-                     MessageTextFromValue( GetUserUnits(), hypot( dXpos, dYpos ), false ) );
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), dXpos,
+                                                               false ),
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), dYpos,
+                                                               false ),
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                               hypot( dXpos, dYpos ), false ) );
         SetStatusText( line, 3 );
     }
 

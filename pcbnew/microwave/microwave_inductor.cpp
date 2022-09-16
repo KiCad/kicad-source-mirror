@@ -364,14 +364,15 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     aInductorPattern.m_Length = min_len;
 
     // Enter the desired length.
-    msg = StringFromValue( editFrame.GetUserUnits(), aInductorPattern.m_Length );
+    msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, editFrame.GetUserUnits(), aInductorPattern.m_Length );
     WX_TEXT_ENTRY_DIALOG dlg( &editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowQuasiModal() != wxID_OK )
         return nullptr; // canceled by user
 
     msg = dlg.GetValue();
-    aInductorPattern.m_Length = ValueFromString( editFrame.GetUserUnits(), msg );
+    aInductorPattern.m_Length =
+            EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, editFrame.GetUserUnits(), msg );
 
     // Control values (ii = minimum length)
     if( aInductorPattern.m_Length < min_len )

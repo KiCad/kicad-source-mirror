@@ -157,15 +157,15 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
         {
             msg.Printf( _( "(%s min width %s; actual %s)" ),
                           constraint.GetName(),
-                          MessageTextFromValue( userUnits(), constraintValue ),
-                          MessageTextFromValue( userUnits(), holeMinor ) );
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintValue ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), holeMinor ) );
         }
         else
         {
             msg.Printf( _( "(%s max width %s; actual %s)" ),
                           constraint.GetName(),
-                          MessageTextFromValue( userUnits(), constraintValue ),
-                          MessageTextFromValue( userUnits(), holeMajor ) );
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintValue ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), holeMajor ) );
         }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
@@ -226,15 +226,15 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro,
         {
             msg.Printf( _( "(%s min width %s; actual %s)" ),
                           constraint.GetName(),
-                          MessageTextFromValue( userUnits(), constraintValue ),
-                          MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintValue ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), via->GetDrillValue() ) );
         }
         else
         {
             msg.Printf( _( "(%s max width %s; actual %s)" ),
                           constraint.GetName(),
-                          MessageTextFromValue( userUnits(), constraintValue ),
-                          MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraintValue ),
+                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), via->GetDrillValue() ) );
         }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );

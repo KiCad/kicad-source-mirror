@@ -209,9 +209,9 @@ void PCB_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 {
     aList.emplace_back( _( "Bitmap" ), wxEmptyString );
 
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().x ) );
+    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), GetSize().x ) );
     aList.emplace_back( _( "Height" ),
-                        MessageTextFromValue( aFrame->GetUserUnits(), GetSize().y ) );
+                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), GetSize().y ) );
     aList.emplace_back( _( "Layer" ), LayerName( m_layer ) );
 }
 

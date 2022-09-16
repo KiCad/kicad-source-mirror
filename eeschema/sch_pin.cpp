@@ -222,7 +222,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Length" ), MessageTextFromValue( units, GetLength() ), true );
+    aList.emplace_back( _( "Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, GetLength() ), true );
 
     int i = PinOrientationIndex( GetOrientation() );
     aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );

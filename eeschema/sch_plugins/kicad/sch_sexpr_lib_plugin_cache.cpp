@@ -172,7 +172,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
 
             if( aSymbol->GetPinNameOffset() != Mils2iu( DEFAULT_PIN_NAME_OFFSET ) )
                 aFormatter.Print( 0, " (offset %s)",
-                                  FormatInternalUnits( aSymbol->GetPinNameOffset() ).c_str() );
+                                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPinNameOffset() ).c_str() );
 
             if( !aSymbol->ShowPinNames() )
                 aFormatter.Print( 0, " hide" );
@@ -402,8 +402,8 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
                       aField->GetId(),
-                      FormatInternalUnits( aField->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aField->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
                       aField->GetTextAngle().AsDegrees() );
 
     if( aField->IsNameShown() )
@@ -427,10 +427,10 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter
     aFormatter.Print( aNestLevel, "(pin %s %s (at %s %s %s) (length %s)",
                       getPinElectricalTypeToken( aPin->GetType() ),
                       getPinShapeToken( aPin->GetShape() ),
-                      FormatInternalUnits( aPin->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aPin->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getPinAngle( aPin->GetOrientation() ) ).c_str(),
-                      FormatInternalUnits( aPin->GetLength() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetLength() ).c_str() );
 
     if( !aPin->IsVisible() )
         aFormatter.Print( 0, " hide\n" );
@@ -440,13 +440,13 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter
     // This follows the EDA_TEXT effects formatting for future expansion.
     aFormatter.Print( aNestLevel + 1, "(name %s (effects (font (size %s %s))))\n",
                       aFormatter.Quotew( aPin->GetName() ).c_str(),
-                      FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
-                      FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNameTextSize() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNameTextSize() ).c_str() );
 
     aFormatter.Print( aNestLevel + 1, "(number %s (effects (font (size %s %s))))\n",
                       aFormatter.Quotew( aPin->GetNumber() ).c_str(),
-                      FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
-                      FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNumberTextSize() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNumberTextSize() ).c_str() );
 
 
     for( const std::pair<const wxString, LIB_PIN::ALT>& alt : aPin->GetAlternates() )
@@ -469,8 +469,8 @@ void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormat
     aFormatter.Print( aNestLevel, "(text%s %s (at %s %s %g)\n",
                       aText->IsPrivate() ? " private" : "",
                       aFormatter.Quotew( aText->GetText() ).c_str(),
-                      FormatInternalUnits( aText->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
                       (double) aText->GetTextAngle().AsTenthsOfADegree() );
 
     aText->EDA_TEXT::Format( &aFormatter, aNestLevel, 0 );
@@ -491,13 +491,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
     aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
-                      FormatInternalUnits( pos.x ).c_str(),
-                      FormatInternalUnits( pos.y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
-                      FormatInternalUnits( size.x ).c_str(),
-                      FormatInternalUnits( size.y ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str() );
 
-    aTextBox->GetStroke().Format( &aFormatter, aNestLevel + 1 );
+    aTextBox->GetStroke().Format( &aFormatter, schIUScale, aNestLevel + 1 );
     aFormatter.Print( 0, "\n" );
 
     formatFill( &aFormatter, aNestLevel + 1, aTextBox->GetFillMode(), aTextBox->GetFillColor() );

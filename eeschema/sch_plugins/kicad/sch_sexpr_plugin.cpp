@@ -686,8 +686,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( 0, " (lib_id %s) (at %s %s %s)",
                   m_out->Quotew( aSymbol->GetLibId().Format().wx_str() ).c_str(),
-                  FormatInternalUnits( aSymbol->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aSymbol->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     bool mirrorX = aSymbol->GetOrientation() & SYM_MIRROR_X;
@@ -833,8 +833,8 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
                   aField->GetId(),
-                  FormatInternalUnits( aField->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aField->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
     if( aField->IsNameShown() )
@@ -863,8 +863,8 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
     wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
 
     m_out->Print( aNestLevel, "(image (at %s %s)",
-                  FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aBitmap->GetPosition().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBitmap->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBitmap->GetPosition().y ).c_str() );
 
     if( aBitmap->GetImage()->GetScale() != 1.0 )
         m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
@@ -907,10 +907,10 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)",
-                  FormatInternalUnits( aSheet->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aSheet->GetPosition().y ).c_str(),
-                  FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
-                  FormatInternalUnits( aSheet->GetSize().GetHeight() ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetSize().GetWidth() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSheet->GetSize().GetHeight() ).c_str() );
 
     if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced)" );
@@ -921,7 +921,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                           aSheet->GetBorderColor() );
 
     stroke.SetWidth( aSheet->GetBorderWidth() );
-    stroke.Format( m_out, aNestLevel + 1 );
+    stroke.Format( m_out, schIUScale, aNestLevel + 1 );
 
     m_out->Print( 0, "\n" );
 
@@ -945,8 +945,8 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)\n",
                       EscapedUTF8( pin->GetText() ).c_str(),
                       getSheetPinShapeToken( pin->GetShape() ),
-                      FormatInternalUnits( pin->GetPosition().x ).c_str(),
-                      FormatInternalUnits( pin->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pin->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getSheetPinAngle( pin->GetSide() ) ).c_str() );
 
         pin->Format( m_out, aNestLevel + 1, 0 );
@@ -965,9 +965,9 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
     wxCHECK_RET( aJunction != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(junction (at %s %s) (diameter %s) (color %d %d %d %s)\n",
-                  FormatInternalUnits( aJunction->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aJunction->GetPosition().y ).c_str(),
-                  FormatInternalUnits( aJunction->GetDiameter() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aJunction->GetDiameter() ).c_str(),
                   KiROUND( aJunction->GetColor().r * 255.0 ),
                   KiROUND( aJunction->GetColor().g * 255.0 ),
                   KiROUND( aJunction->GetColor().b * 255.0 ),
@@ -984,8 +984,8 @@ void SCH_SEXPR_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel
     wxCHECK_RET( aNoConnect != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(no_connect (at %s %s) (uuid %s))\n",
-                  FormatInternalUnits( aNoConnect->GetPosition().x ).c_str(),
-                  FormatInternalUnits( aNoConnect->GetPosition().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aNoConnect->GetPosition().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aNoConnect->GetPosition().y ).c_str(),
                   TO_UTF8( aNoConnect->m_Uuid.AsString() ) );
 }
 
@@ -1005,12 +1005,12 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     else
     {
         m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s)\n",
-                      FormatInternalUnits( aBusEntry->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aBusEntry->GetPosition().y ).c_str(),
-                      FormatInternalUnits( aBusEntry->GetSize().GetWidth() ).c_str(),
-                      FormatInternalUnits( aBusEntry->GetSize().GetHeight() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetSize().GetWidth() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aBusEntry->GetSize().GetHeight() ).c_str() );
 
-        aBusEntry->GetStroke().Format( m_out, aNestLevel + 1 );
+        aBusEntry->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
 
         m_out->Print( 0, "\n" );
 
@@ -1077,12 +1077,12 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
 
     m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))\n",
                   TO_UTF8( lineType ),
-                  FormatInternalUnits( aLine->GetStartPoint().x ).c_str(),
-                  FormatInternalUnits( aLine->GetStartPoint().y ).c_str(),
-                  FormatInternalUnits( aLine->GetEndPoint().x ).c_str(),
-                  FormatInternalUnits( aLine->GetEndPoint().y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetStartPoint().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetStartPoint().y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetEndPoint().x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aLine->GetEndPoint().y ).c_str() );
 
-    line_stroke.Format( m_out, aNestLevel + 1 );
+    line_stroke.Format( m_out, schIUScale, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aLine->m_Uuid.AsString() ) );
@@ -1107,7 +1107,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         SCH_DIRECTIVE_LABEL* flag = static_cast<SCH_DIRECTIVE_LABEL*>( aText );
 
         m_out->Print( 0, " (length %s)",
-                      FormatInternalUnits( flag->GetPinLength() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, flag->GetPinLength() ).c_str() );
     }
 
     EDA_ANGLE angle = aText->GetTextAngle();
@@ -1136,16 +1136,16 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
     if( aText->GetText().Length() < 50 )
     {
         m_out->Print( 0, " (at %s %s %s)",
-                      FormatInternalUnits( aText->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
     else
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
-                      FormatInternalUnits( aText->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
     }
 
@@ -1178,13 +1178,13 @@ void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
     m_out->Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
-                  FormatInternalUnits( pos.x ).c_str(),
-                  FormatInternalUnits( pos.y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
-                  FormatInternalUnits( size.x ).c_str(),
-                  FormatInternalUnits( size.y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str() );
 
-    aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
+    aTextBox->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
     formatFill( m_out, aNestLevel + 1, aTextBox->GetFillMode(), aTextBox->GetFillColor() );
     m_out->Print( 0, "\n" );

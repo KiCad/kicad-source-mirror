@@ -100,16 +100,19 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_suffixCtrl->ChangeValue( settings.m_IntersheetRefsSuffix );
     m_listOwnPage->SetValue( settings.m_IntersheetRefsListOwnPage );
 
-    m_textOffsetRatioCtrl->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+    m_textOffsetRatioCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, EDA_UNITS::PERCENT,
                                                       settings.m_TextOffsetRatio * 100.0 ) );
 
-    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_dashLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+                                                 schIUScale, EDA_UNITS::UNSCALED,
                                                  settings.m_DashedLineDashRatio ) );
 
-    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+                                                schIUScale, EDA_UNITS::UNSCALED,
                                                 settings.m_DashedLineGapRatio ) );
 
-    m_labelSizeRatioCtrl->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+    m_labelSizeRatioCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+                                                     schIUScale, EDA_UNITS::PERCENT,
                                                      settings.m_LabelSizeRatio * 100.0 ) );
 
     return true;
@@ -154,17 +157,21 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_IntersheetRefsSuffix      = m_suffixCtrl->GetValue();
     settings.m_IntersheetRefsListOwnPage = m_listOwnPage->GetValue();
 
-    settings.m_TextOffsetRatio = DoubleValueFromString( EDA_UNITS::PERCENT,
-                                                        m_textOffsetRatioCtrl->GetValue() ) / 100.0;
+    settings.m_TextOffsetRatio =
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::PERCENT,
+                                                       m_textOffsetRatioCtrl->GetValue() )
+            / 100.0;
 
-    settings.m_DashedLineDashRatio = DoubleValueFromString( EDA_UNITS::UNSCALED,
-                                                            m_dashLengthCtrl->GetValue() );
+    settings.m_DashedLineDashRatio = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            schIUScale, EDA_UNITS::UNSCALED, m_dashLengthCtrl->GetValue() );
 
-    settings.m_DashedLineGapRatio = DoubleValueFromString( EDA_UNITS::UNSCALED,
-                                                           m_gapLengthCtrl->GetValue() );
+    settings.m_DashedLineGapRatio = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            schIUScale, EDA_UNITS::UNSCALED, m_gapLengthCtrl->GetValue() );
 
-    settings.m_LabelSizeRatio = DoubleValueFromString( EDA_UNITS::PERCENT,
-                                                       m_labelSizeRatioCtrl->GetValue() ) / 100.0;
+    settings.m_LabelSizeRatio =
+            EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::PERCENT,
+                                                       m_labelSizeRatioCtrl->GetValue() )
+            / 100.0;
 
     return true;
 }
@@ -189,9 +196,11 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     wxString labelSizeRatio = wxString::Format( "%f", aSettings.m_LabelSizeRatio * 100.0 );
     m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
 
-    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_dashLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+                                                 schIUScale, EDA_UNITS::UNSCALED,
                                                  aSettings.m_DashedLineDashRatio ) );
 
-    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+    m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue(
+                                                schIUScale, EDA_UNITS::UNSCALED,
                                                 aSettings.m_DashedLineGapRatio ) );
 }

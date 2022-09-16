@@ -139,12 +139,12 @@ public:
 
     double GetXRef()
     {
-        return DoubleValueFromString( EDA_UNITS::UNSCALED, m_VRML_Xref->GetValue() );
+        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Xref->GetValue() );
     }
 
     double GetYRef()
     {
-        return DoubleValueFromString( EDA_UNITS::UNSCALED, m_VRML_Yref->GetValue() );
+        return EDA_UNIT_UTILS::UI::DoubleValueFromString( m_VRML_Yref->GetValue() );
     }
 
     int GetUnits()

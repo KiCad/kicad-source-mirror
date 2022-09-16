@@ -220,7 +220,7 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_graphicsGrid->SetCellValue( row, col, StringFromValue( m_units, val, true ) )
+    m_graphicsGrid->SetCellValue( row, col, EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_units, val, true ) )
 
 #define DISABLE_CELL( row, col ) \
     m_graphicsGrid->SetReadOnly( row, col ); \
@@ -317,7 +317,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 
 int PANEL_FP_EDITOR_DEFAULTS::getGridValue( int aRow, int aCol )
 {
-    return ValueFromString( m_units, m_graphicsGrid->GetCellValue( aRow, aCol ) );
+    return EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_units, m_graphicsGrid->GetCellValue( aRow, aCol ) );
 }
 
 

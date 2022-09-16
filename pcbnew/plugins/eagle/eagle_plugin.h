@@ -25,7 +25,7 @@
 #ifndef EAGLE_PLUGIN_H
 #define EAGLE_PLUGIN_H
 
-#include <convert_to_biu.h>
+#include <eda_units.h>
 #include <io_mgr.h>
 #include <layer_ids.h>
 #include <netclass.h>
@@ -55,27 +55,27 @@ struct ERULES
 
         mvStopFrame         ( 1.0 ),
         mvCreamFrame        ( 0.0 ),
-        mlMinStopFrame      ( Mils2iu( 4.0 ) ),
-        mlMaxStopFrame      ( Mils2iu( 4.0 ) ),
-        mlMinCreamFrame     ( Mils2iu( 0.0 ) ),
-        mlMaxCreamFrame     ( Mils2iu( 0.0 ) ),
+        mlMinStopFrame      ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  4.0 ) ),
+        mlMaxStopFrame      ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  4.0 ) ),
+        mlMinCreamFrame     ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  0.0 ) ),
+        mlMaxCreamFrame     ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  0.0 ) ),
 
         psTop               ( EPAD::UNDEF ),
         psBottom            ( EPAD::UNDEF ),
         psFirst             ( EPAD::UNDEF ),
 
         srRoundness         ( 0.0 ),
-        srMinRoundness      ( Mils2iu( 0.0 ) ),
-        srMaxRoundness      ( Mils2iu( 0.0 ) ),
+        srMinRoundness      ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  0.0 ) ),
+        srMaxRoundness      ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  0.0 ) ),
 
         rvPadTop            ( 0.25 ),
         // rvPadBottom      ( 0.25 ),
-        rlMinPadTop         ( Mils2iu( 10 ) ),
-        rlMaxPadTop         ( Mils2iu( 20 ) ),
+        rlMinPadTop         ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  10 ) ),
+        rlMaxPadTop         ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  20 ) ),
 
         rvViaOuter          ( 0.25 ),
-        rlMinViaOuter       ( Mils2iu( 10 ) ),
-        rlMaxViaOuter       ( Mils2iu( 20 ) ),
+        rlMinViaOuter       ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  10 ) ),
+        rlMaxViaOuter       ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  20 ) ),
         mdWireWire          ( 0 )
     {}
 

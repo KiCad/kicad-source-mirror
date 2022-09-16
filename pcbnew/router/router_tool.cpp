@@ -231,7 +231,7 @@ protected:
             if( i == 0 )
                 msg = _( "Track netclass width" );
             else
-                msg.Printf( _( "Track %s" ), MessageTextFromValue( units, width ) );
+                msg.Printf( _( "Track %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, width ) );
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -250,10 +250,10 @@ protected:
             {
                 if( via.m_Drill > 0 )
                     msg.Printf( _("Via %s, hole %s" ),
-                                MessageTextFromValue( units, via.m_Diameter ),
-                                MessageTextFromValue( units, via.m_Drill ) );
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Drill ) );
                 else
-                    msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter ) );
+                    msg.Printf( _( "Via %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ) );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
@@ -357,13 +357,13 @@ protected:
                 if( diffPair.m_ViaGap <= 0 )
                 {
                     msg.Printf( _( "Width %s" ),
-                                    MessageTextFromValue( units, diffPair.m_Width ) );
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ) );
                 }
                 else
                 {
                     msg.Printf( _( "Width %s, via gap %s" ),
-                                    MessageTextFromValue( units, diffPair.m_Width ),
-                                    MessageTextFromValue( units, diffPair.m_ViaGap ) );
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_ViaGap ) );
                 }
             }
             else
@@ -371,15 +371,15 @@ protected:
                 if( diffPair.m_ViaGap <= 0 )
                 {
                     msg.Printf( _( "Width %s, gap %s" ),
-                                    MessageTextFromValue( units, diffPair.m_Width ),
-                                    MessageTextFromValue( units, diffPair.m_Gap ) );
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Gap ) );
                 }
                 else
                 {
                     msg.Printf( _( "Width %s, gap %s, via gap %s" ),
-                                    MessageTextFromValue( units, diffPair.m_Width ),
-                                    MessageTextFromValue( units, diffPair.m_Gap ),
-                                    MessageTextFromValue( units, diffPair.m_ViaGap ) );
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Gap ),
+                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_ViaGap ) );
                 }
             }
 
@@ -2414,7 +2414,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
 
     int width = isDiffPair ? sizes.DiffPairWidth() : sizes.TrackWidth();
     items.emplace_back( wxString::Format( _( "Track Width: %s" ),
-                                          MessageTextFromValue( units, width ) ),
+                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, width ) ),
                         wxString::Format( _( "(from %s)" ), sizes.GetWidthSource() ) );
 
     if( m_startItem )
@@ -2428,7 +2428,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
                                        m_router->GetCurrentLayer(), &constraint ) )
         {
             items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                        MessageTextFromValue( units, constraint.m_Value.Min() ) ),
+                                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) ),
                                 wxString::Format( _( "(from %s)" ), constraint.m_RuleName ) );
         }
     }
@@ -2436,7 +2436,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
     if( isDiffPair )
     {
         items.emplace_back( _( "Diff Pair Gap" ),
-                            MessageTextFromValue( units, sizes.DiffPairGap() ) );
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, sizes.DiffPairGap() ) );
     }
 
     frame()->SetMsgPanel( items );

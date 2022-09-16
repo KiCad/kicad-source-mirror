@@ -317,8 +317,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
             colMaterial.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( m_frame->GetUserUnits(), stackup_item->GetThickness( j ),
-                                         true ) );
+            t->SetText( EDA_UNIT_UTILS::UI::StringFromValue(
+                    pcbIUScale, m_frame->GetUserUnits(), stackup_item->GetThickness( j ), true ) );
             colThickness.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
@@ -326,12 +326,12 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
             colColor.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, stackup_item->GetEpsilonR( j ),
-                                         false ) );
+            t->SetText( EDA_UNIT_UTILS::UI::StringFromValue(
+                    pcbIUScale, EDA_UNITS::UNSCALED, stackup_item->GetEpsilonR( j ), false ) );
             colEpsilon.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, stackup_item->GetLossTangent( j ),
+            t->SetText( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED, stackup_item->GetLossTangent( j ),
                                          false ) );
             colTanD.push_back( t );
         }
@@ -400,7 +400,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     objects.push_back( t );
 
     cursorPos.y = cursorPos.y + t->GetBoundingBox().GetHeight()
-                  + From_User_Unit( EDA_UNITS::MILLIMETRES, 1.0 );
+                  + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MILLIMETRES, 1.0 );
 
     std::vector<std::vector<PCB_TEXT*>> texts;
     std::vector<PCB_TEXT*>              colLabel1;
@@ -415,7 +415,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     colLabel1.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-    t->SetText( StringFromValue( EDA_UNITS::UNSCALED, settings.GetCopperLayerCount(), false ) );
+    t->SetText( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED, settings.GetCopperLayerCount(), false ) );
     colData1.push_back( t );
 
     SHAPE_POLY_SET outline;
@@ -427,8 +427,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
     t->SetText( wxString::Format( wxT( "%s x %s" ),
-                MessageTextFromValue( m_frame->GetUserUnits(), size.GetWidth(), true ),
-                MessageTextFromValue( m_frame->GetUserUnits(), size.GetHeight(), true ) ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), size.GetWidth(), true ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), size.GetHeight(), true ) ) );
     colData1.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
@@ -437,8 +437,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
     t->SetText( wxString::Format( wxT( "%s / %s" ),
-                MessageTextFromValue( m_frame->GetUserUnits(), settings.m_TrackMinWidth, true ),
-                MessageTextFromValue( m_frame->GetUserUnits(), settings.m_MinClearance, true ) ) );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), settings.m_TrackMinWidth, true ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), settings.m_MinClearance, true ) ) );
     colData1.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
@@ -462,7 +462,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     colLabel2.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-    text = MessageTextFromValue( m_frame->GetUserUnits(), settings.GetBoardThickness(), true );
+    text = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), settings.GetBoardThickness(), true );
 
     t->SetText( text );
     colData2.push_back( t );
@@ -479,7 +479,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
 
     double holeSize = std::min( settings.m_MinThroughDrill, settings.m_ViasMinSize );
-    text            = MessageTextFromValue( m_frame->GetUserUnits(), holeSize, true );
+    text            = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), holeSize, true );
     t->SetText( text );
     colData2.push_back( t );
 
@@ -534,7 +534,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const VECTOR2I&
     }
 
     tableSize->x = tableSize2.x;
-    tableSize->y = cursorPos.y + tableSize2.y + From_User_Unit( EDA_UNITS::MILLIMETRES, 2.0 );
+    tableSize->y = cursorPos.y + tableSize2.y
+                   + EDA_UNIT_UTILS::UI::FromUserUnit( pcbIUScale, EDA_UNITS::MILLIMETRES, 2.0 );
 
     return objects;
 }

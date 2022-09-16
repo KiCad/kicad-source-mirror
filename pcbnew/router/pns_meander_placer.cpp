@@ -283,9 +283,9 @@ const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( aUnits, m_lastLength );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength );
     status += wxT( "/" );
-    status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength );
 
     return status;
 }

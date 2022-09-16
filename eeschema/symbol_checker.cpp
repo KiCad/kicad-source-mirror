@@ -116,12 +116,12 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                " of converted." ),
                             next->GetNumber(),
                             nextName,
-                            MessageTextFromValue( aDisplayUnits, next->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -next->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, next->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -next->GetPosition().y ),
                             pin->GetNumber(),
                             pin->GetName(),
-                            MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
             }
             else
             {
@@ -130,12 +130,12 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                " in units %s and %s of converted." ),
                             next->GetNumber(),
                             nextName,
-                            MessageTextFromValue( aDisplayUnits, next->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -next->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, next->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -next->GetPosition().y ),
                             pin->GetNumber(),
                             pinName,
-                            MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                             aSymbol->GetUnitReference( next->GetUnit() ),
                             aSymbol->GetUnitReference( pin->GetUnit() ) );
             }
@@ -148,12 +148,12 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>." ),
                             next->GetNumber(),
                             nextName,
-                            MessageTextFromValue( aDisplayUnits, next->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -next->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, next->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -next->GetPosition().y ),
                             pin->GetNumber(),
                             pinName,
-                            MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
             }
             else
             {
@@ -162,12 +162,12 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                " in units %s and %s." ),
                             next->GetNumber(),
                             nextName,
-                            MessageTextFromValue( aDisplayUnits, next->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -next->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, next->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -next->GetPosition().y ),
                             pin->GetNumber(),
                             pinName,
-                            MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                            MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                            EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                             aSymbol->GetUnitReference( next->GetUnit() ),
                             aSymbol->GetUnitReference( pin->GetUnit() ) );
             }
@@ -242,8 +242,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " of converted." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
                 }
                 else
                 {
@@ -251,8 +251,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " in unit %c of converted." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1 );
                 }
             }
@@ -263,8 +263,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                     msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
                 }
                 else
                 {
@@ -272,8 +272,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " in unit %c." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1 );
                 }
             }
@@ -296,8 +296,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " of converted." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
                 }
                 else
                 {
@@ -305,8 +305,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " in unit %c of converted." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1 );
                 }
             }
@@ -317,8 +317,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ) );
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ) );
                 }
                 else
                 {
@@ -326,8 +326,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                    " in unit %c." ),
                                 pin->GetNumber(),
                                 pinName,
-                                MessageTextFromValue( aDisplayUnits, pin->GetPosition().x ),
-                                MessageTextFromValue( aDisplayUnits, -pin->GetPosition().y ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, pin->GetPosition().x ),
+                                EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aDisplayUnits, -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1 );
                 }
             }

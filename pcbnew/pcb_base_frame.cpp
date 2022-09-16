@@ -73,7 +73,7 @@ wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName ) :
-        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, pcbIUScale ),
         m_pcb( nullptr ),
         m_originTransforms( *this ),
         m_spaceMouse( nullptr )
@@ -783,8 +783,10 @@ void PCB_BASE_FRAME::DisplayGridMsg()
     wxString line;
 
     line.Printf( wxT( "grid X %s  Y %s" ),
-                 MessageTextFromValue( m_userUnits, gridSize.x, false ),
-                 MessageTextFromValue( m_userUnits, gridSize.y, false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.x,
+                                                           false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.y,
+                                                           false ) );
 
     SetStatusText( line, 4 );
 }
@@ -810,7 +812,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         double   ro = hypot( dx, dy );
 
         line.Printf( wxT( "r %s  theta %.3f" ),
-                     MessageTextFromValue( GetUserUnits(), ro, false ), theta );
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), ro, false ),
+                theta );
 
         SetStatusText( line, 3 );
     }
@@ -821,8 +824,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     // Display absolute coordinates:
     line.Printf( wxT( "X %s  Y %s" ),
-                 MessageTextFromValue( GetUserUnits(), userXpos, false ),
-                 MessageTextFromValue( GetUserUnits(), userYpos, false ) );
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), userXpos,
+                                                           false ),
+                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), userYpos,
+                                                           false ) );
     SetStatusText( line, 2 );
 
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
@@ -836,9 +841,12 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         userYpos = m_originTransforms.ToDisplayRelY( relYpos );
 
         line.Printf( wxT( "dx %s  dy %s  dist %s" ),
-                     MessageTextFromValue( GetUserUnits(), userXpos, false ),
-                     MessageTextFromValue( GetUserUnits(), userYpos, false ),
-                     MessageTextFromValue( GetUserUnits(), hypot( userXpos, userYpos ), false ) );
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                               userXpos, false ),
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                               userYpos, false ),
+                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
+                                                               hypot( userXpos, userYpos ), false ) );
         SetStatusText( line, 3 );
     }
 

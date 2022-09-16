@@ -383,7 +383,6 @@ set( PCBNEW_SRCS
 
 # extra sources from common
 set( PCBNEW_COMMON_SRCS
-    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     )
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS

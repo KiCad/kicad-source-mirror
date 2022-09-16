@@ -652,10 +652,10 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
             {
                 if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )
                     aFormatter->Print( 0, " (thickness %s locked)",
-                                       FormatInternalUnits( item->GetThickness( idx ) ).c_str() );
+                                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, item->GetThickness( idx ) ).c_str() );
                 else
                     aFormatter->Print( 0, " (thickness %s)",
-                                       FormatInternalUnits( item->GetThickness( idx ) ).c_str() );
+                                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, item->GetThickness( idx ) ).c_str() );
             }
 
             if( item->HasMaterialValue( idx ) )

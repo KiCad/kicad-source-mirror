@@ -161,7 +161,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
         m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
         m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
         m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
-        m_cfg_persister( s_arrayOptions.m_OptionsSet )
+        m_cfg_persister( pcbIUScale, s_arrayOptions.m_OptionsSet )
 {
     // Configure display origin transforms
     m_hSpacing.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
@@ -391,7 +391,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     {
         auto   newCirc = std::make_unique<ARRAY_CIRCULAR_OPTIONS>();
         bool   ok = true;
-        double angle = DoubleValueFromString( EDA_UNITS::UNSCALED, m_entryCircAngle->GetValue() );
+        double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_entryCircAngle->GetValue() );
 
         newCirc->m_centre.x = m_hCentre.GetValue();
         newCirc->m_centre.y = m_vCentre.GetValue();
