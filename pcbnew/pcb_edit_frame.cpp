@@ -357,7 +357,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 if( GetCanvas()->GetView()->GetViewport() != m_lastViewport )
                 {
                     m_lastViewport = GetCanvas()->GetView()->GetViewport();
-                    m_redrawNetnamesTimer.StartOnce( 200 );
+                    m_redrawNetnamesTimer.StartOnce( 500 );
                 }
 
                 // Do not forget to pass the Idle event to other clients:
@@ -507,6 +507,11 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 
 void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
 {
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( !cfg || cfg->m_Display.m_NetNames < 2 )
+        return;
+
     KIGFX::VIEW* view = GetCanvas()->GetView();
 
     for( PCB_TRACK* track : GetBoard()->Tracks() )
