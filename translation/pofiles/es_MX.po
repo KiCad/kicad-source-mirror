@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-09-15 14:16+0000\n"
+"PO-Revision-Date: 2022-09-19 02:29+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -14033,21 +14033,18 @@ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "No se ha importado la elipse en (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
-"El conector de arnés de Altium (%s) fue importado como hoja jerárquica. Por "
-"favor, revise el esquema importado, ya que KiCad no soporta nativamente "
-"estos elementos de Altium."
+"El conector de arnés de Altium (%s) fue importado como hoja no jerárquica. "
+"Por favor, revise el esquema importado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
-"El puerto de alimentación tiene un estilo desconocido, utilice la barra en "
-"su lugar."
+"El estilo desconocido del puerto de alimentación se importó como tipo 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2052
 #, c-format
@@ -14055,14 +14052,13 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "El símbolo de potencia crea una etiqueta global con el nombre '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
 "El puerto de arnés de Altium (%s) se importó como cuadro de texto. Revise el "
-"esquema importado, ya que KiCad no admite de forma nativa estos elementos "
-"Altium."
+"esquema importado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -16372,14 +16368,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Anotar pines con sus tipos eléctricos"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Mostrar Número de Pin"
+msgstr "Mostrar números de pin"
 
 #: eeschema/tools/ee_actions.cpp:197
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Anotar pines con sus tipos eléctricos"
+msgstr "Anotar los pines con sus números"
 
 #: eeschema/tools/ee_actions.cpp:202
 msgid "Show Symbol Tree"
@@ -16673,9 +16667,8 @@ msgid "Swap"
 msgstr "Intercambiar"
 
 #: eeschema/tools/ee_actions.cpp:425 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Gira los elementos seleccionados en sentido horario"
+msgstr "Intercambia las posiciones de los elementos seleccionados"
 
 #: eeschema/tools/ee_actions.cpp:431 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -17089,9 +17082,8 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Modo de línea para cables y buses"
 
 #: eeschema/tools/ee_actions.cpp:705
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Líneas dibujadas en cualquier ángulo"
+msgstr "Dibuja y arrastra en cualquier ángulo"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
@@ -17099,13 +17091,12 @@ msgstr ""
 "Restringir el dibujo y el arrastre a movimientos horizontales o verticales"
 
 #: eeschema/tools/ee_actions.cpp:717
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Cuando se dibujan líneas gráficas, forzarlas a horizontales, verticales, o "
-"45 grados."
+"Limitar el dibujo y el arrastre a movimientos horizontales, verticales o en "
+"ángulo de 45 grados"
 
 #: eeschema/tools/ee_actions.cpp:722
 msgid "Switch to next line mode"
@@ -17885,7 +17876,7 @@ msgid "Negative Objects"
 msgstr "Objetos negativos"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "Capa gráfica %d"
 
@@ -20818,14 +20809,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Resistividad eléctrica en ohm*metro"
+msgstr "Resistividad eléctrica en Ohm*m a 20 grados C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Aumento de temperatura"
+msgstr "Coeficiente de temperatura"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20849,9 +20838,8 @@ msgid "Conductor resistivity:"
 msgstr "Resistividad del conductor:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Resistencia específica en ohm * metro"
+msgstr "Resistencia específica en Ohm*m a 20 grados C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20872,9 +20860,8 @@ msgid "ohm-meter"
 msgstr "ohm-metro"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Aumento de temperatura:"
+msgstr "Coeficiente de temperatura:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
@@ -20898,9 +20885,8 @@ msgid "Application"
 msgstr "Aplicación"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Temperatura ambiente:"
+msgstr "Temperatura del cable:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
@@ -20928,14 +20914,12 @@ msgid "Length includes the return path"
 msgstr "La longitud incluye la ruta de retorno"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "Resistencia:"
+msgstr "Resistencia DC:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "Impedancia característica del conductor"
+msgstr "Resistencia DC del conductor"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -22488,9 +22472,8 @@ msgid "Epsilon R:"
 msgstr "Épsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Tangente de pérdida"
+msgstr "Tangente de pérdida:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -25697,8 +25680,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el "
-"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
