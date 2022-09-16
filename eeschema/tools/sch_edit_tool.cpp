@@ -2058,27 +2058,39 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
                     bbox.Inflate( -label->GetLabelBoxExpansion() );
 
-                bbox.Inflate( new_textbox->GetTextMargin() );
+                // Careful: GetTextMargin() is dependent on font size...
+                new_textbox->SetTextSize( dynamic_cast<EDA_TEXT*>( item )->GetTextSize() );
 
-                new_textbox->SetPosition( bbox.GetPosition() );
-                new_textbox->SetEnd( bbox.GetEnd() );
+                int margin = new_textbox->GetTextMargin();
+                bbox.Inflate( margin );
+
+                // Add 1/20 of the margin at the end to reduce line-breaking changes.
+                int slop = margin / 20;
 
                 switch( orientation )
                 {
                 case TEXT_SPIN_STYLE::SPIN::RIGHT:
+                    new_textbox->SetPosition( bbox.GetPosition() );
+                    new_textbox->SetEnd( bbox.GetEnd() + VECTOR2I( slop, 0 ) );
                     break;
 
                 case TEXT_SPIN_STYLE::SPIN::LEFT:
                     new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    new_textbox->SetPosition( bbox.GetPosition() - VECTOR2I( slop, 0 ) );
+                    new_textbox->SetEnd( bbox.GetEnd() );
                     break;
 
                 case TEXT_SPIN_STYLE::SPIN::UP:
                     new_textbox->SetTextAngle( ANGLE_VERTICAL );
+                    new_textbox->SetPosition( bbox.GetPosition() - VECTOR2I( 0, slop ) );
+                    new_textbox->SetEnd( bbox.GetEnd() );
                     break;
 
                 case TEXT_SPIN_STYLE::SPIN::BOTTOM:
                     new_textbox->SetTextAngle( ANGLE_VERTICAL );
                     new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    new_textbox->SetPosition( bbox.GetPosition() );
+                    new_textbox->SetEnd( bbox.GetEnd() + VECTOR2I( 0, slop ) );
                     break;
                 }
 
