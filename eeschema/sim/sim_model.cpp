@@ -37,6 +37,7 @@
 #include <sim/spice_grammar.h>
 #include <locale_io.h>
 #include <lib_symbol.h>
+#include <confirm.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -711,7 +712,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const wxString& aSpiceCode )
     }
     catch( const IO_ERROR& e )
     {
-        wxLogDebug( "%s", e.What() );
+        DisplayErrorMessage( nullptr, e.What() );
         // Demote to raw Spice element and try again.
         std::unique_ptr<SIM_MODEL> rawSpiceModel = create( TYPE::SPICE );
 
