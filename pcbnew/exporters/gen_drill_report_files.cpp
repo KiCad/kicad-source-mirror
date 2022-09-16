@@ -44,7 +44,7 @@
 /* Conversion utilities - these will be used often in there... */
 inline double diameter_in_inches( double ius )
 {
-    return ius * 0.001 / IU_PER_MILS;
+    return ius * 0.001 / pcbIUScale.IU_PER_MILS;
 }
 
 
@@ -98,7 +98,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     {
     case PLOT_FORMAT::GERBER:
         plotter = new GERBER_PLOTTER();
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        plotter->SetViewport( offset, pcbIUScale.IU_PER_MILS / 10, scale, false );
         plotter->SetGerberCoordinatesFormat( 5 ); // format x.5 unit = mm
         break;
 
@@ -111,7 +111,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     case PLOT_FORMAT::SVG:
     {
         PAGE_INFO pageA4( wxT( "A4" ) );
-        wxSize    pageSizeIU = pageA4.GetSizeIU( IU_PER_MILS );
+        wxSize    pageSizeIU = pageA4.GetSizeIU( pcbIUScale.IU_PER_MILS );
 
         // Reserve a 10 mm margin around the page.
         int margin = pcbIUScale.mmToIU( 10 );
@@ -147,7 +147,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             plotter = new PS_PLOTTER;
 
         plotter->SetPageSettings( pageA4 );
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        plotter->SetViewport( offset, pcbIUScale.IU_PER_MILS / 10, scale, false );
         break;
     }
 
@@ -162,7 +162,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         plotter = dxf_plotter;
         plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        plotter->SetViewport( offset, pcbIUScale.IU_PER_MILS / 10, scale, false );
         break;
     }
     }

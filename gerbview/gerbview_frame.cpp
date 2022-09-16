@@ -122,7 +122,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     SetVisibleLayers( LSET::AllLayersMask() );         // All draw layers visible.
 
-    SetScreen( new BASE_SCREEN( GetPageSettings().GetSizeIU( IU_PER_MILS ) ) );
+    SetScreen( new BASE_SCREEN( GetPageSettings().GetSizeIU( gerbIUScale.IU_PER_MILS ) ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
     m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
@@ -829,12 +829,12 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     m_paper = aPageSettings;
 
     if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( IU_PER_MILS ) );
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( gerbIUScale.IU_PER_MILS ) );
 
     GERBVIEW_DRAW_PANEL_GAL* drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
     // Prepare drawing-sheet template
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(),
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( gerbIUScale.IU_PER_MILS, &GetPageSettings(),
                                                                &Prj(), &GetTitleBlock() );
 
     if( GetScreen() )
@@ -862,7 +862,7 @@ const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return GetPageSettings().GetSizeIU( IU_PER_MILS );
+    return GetPageSettings().GetSizeIU( gerbIUScale.IU_PER_MILS );
 }
 
 

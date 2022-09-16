@@ -2499,7 +2499,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
 
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
 
-    m_sheetOffset = { 0, pageInfo.GetHeightIU( IU_PER_MILS ) };
+    m_sheetOffset = { 0, pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) };
 }
 
 

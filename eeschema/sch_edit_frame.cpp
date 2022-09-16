@@ -1276,7 +1276,7 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
     aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aSettings );
-    PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, fileName );
+    PrintDrawingSheet( aSettings, GetScreen(), schIUScale.IU_PER_MILS, fileName );
 }
 
 
@@ -1695,8 +1695,8 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
     if( aIncludeAllVisible )
     {
         // Get the whole page size and return that
-        int sizeX = GetScreen()->GetPageSettings().GetWidthIU( IU_PER_MILS );
-        int sizeY = GetScreen()->GetPageSettings().GetHeightIU( IU_PER_MILS );
+        int sizeX = GetScreen()->GetPageSettings().GetWidthIU( schIUScale.IU_PER_MILS );
+        int sizeY = GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
         bBoxDoc   = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sizeX, sizeY ) );
     }
     else

@@ -176,7 +176,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
     if( aDrawingSheet )
     {
-        wsItems.SetMilsToIUfactor( IU_PER_MILS );
+        wsItems.SetMilsToIUfactor( schIUScale.IU_PER_MILS );
         wsItems.SetPageNumber( "1" );
         wsItems.SetSheetCount( 1 );
         wsItems.SetFileName( "dummyFilename" );

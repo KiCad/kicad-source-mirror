@@ -212,7 +212,7 @@ static const wxString getShapeName( FOOTPRINT* aFootprint )
 
 
 // GerbTool chokes on units different than INCH so this is the conversion factor
-const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
+const static double SCALE_FACTOR = 1000.0 * pcbIUScale.IU_PER_MILS;
 
 
 /* Two helper functions to calculate coordinates of footprints in gencad values

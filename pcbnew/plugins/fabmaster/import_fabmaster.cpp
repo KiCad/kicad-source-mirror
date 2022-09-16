@@ -277,19 +277,19 @@ double FABMASTER::processScaleFactor( size_t aRow )
         std::transform(units.begin(), units.end(),units.begin(), ::toupper);
 
         if( units == "MILS" )
-            retval = IU_PER_MILS;
+            retval = pcbIUScale.IU_PER_MILS;
         else if( units == "MILLIMETERS" )
             retval = IU_PER_MM;
         else if( units == "MICRONS" )
             retval = IU_PER_MM * 10.0;
         else if( units == "INCHES" )
-            retval = IU_PER_MILS * 1000.0;
+            retval = pcbIUScale.IU_PER_MILS * 1000.0;
     }
 
     if( retval < 1.0 )
     {
         wxLogError( _( "Could not find units value, defaulting to mils." ) );
-        retval = IU_PER_MILS;
+        retval = pcbIUScale.IU_PER_MILS;
     }
 
     return retval;

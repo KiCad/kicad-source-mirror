@@ -638,8 +638,8 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     // center board
     BOX2I bbbox = m_board->GetBoardEdgesBoundingBox();
 
-    int w = m_board->GetPageSettings().GetWidthIU( IU_PER_MILS );
-    int h = m_board->GetPageSettings().GetHeightIU( IU_PER_MILS );
+    int w = m_board->GetPageSettings().GetWidthIU( pcbIUScale.IU_PER_MILS );
+    int h = m_board->GetPageSettings().GetHeightIU( pcbIUScale.IU_PER_MILS );
 
     int desired_x = ( w - bbbox.GetWidth() ) / 2;
     int desired_y = ( h - bbbox.GetHeight() ) / 2;

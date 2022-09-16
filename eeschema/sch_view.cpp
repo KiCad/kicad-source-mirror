@@ -82,8 +82,8 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 void SCH_VIEW::ResizeSheetWorkingArea( const SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
-    double           max_size_x = page_info.GetWidthIU( IU_PER_MILS ) * 3.0;
-    double           max_size_y = page_info.GetHeightIU( IU_PER_MILS ) * 3.0;
+    double           max_size_x = page_info.GetWidthIU( schIUScale.IU_PER_MILS ) * 3.0;
+    double           max_size_y = page_info.GetHeightIU( schIUScale.IU_PER_MILS ) * 3.0;
     m_boundary.SetOrigin( -max_size_x / 4, -max_size_y / 4 );
     m_boundary.SetSize( max_size_x, max_size_y );
 }
@@ -94,7 +94,7 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     for( SCH_ITEM* item : aScreen->Items() )
         Add( item );
 
-    m_drawingSheet.reset( new DS_PROXY_VIEW_ITEM( static_cast<int>( IU_PER_MILS ),
+    m_drawingSheet.reset( new DS_PROXY_VIEW_ITEM( static_cast<int>( schIUScale.IU_PER_MILS ),
                                                   &aScreen->GetPageSettings(),
                                                   &aScreen->Schematic()->Prj(),
                                                   &aScreen->GetTitleBlock() ) );

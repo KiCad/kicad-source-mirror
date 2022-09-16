@@ -250,7 +250,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
 
-    m_drawingSheet = new DS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
+    m_drawingSheet = new DS_PROXY_VIEW_ITEM( (int) schIUScale.IU_PER_MILS, m_page, nullptr, m_titleBlock );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
     view->Add( m_drawingSheet );
@@ -501,7 +501,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
         view->SetScale( 1.0 );
         VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
 
-        VECTOR2I psize( m_page->GetWidthIU( IU_PER_MILS ), m_page->GetHeightIU( IU_PER_MILS ) );
+        VECTOR2I psize( m_page->GetWidthIU( schIUScale.IU_PER_MILS ), m_page->GetHeightIU( schIUScale.IU_PER_MILS ) );
         double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
                                                     fabs( psize.y / screenSize.y ) );
 

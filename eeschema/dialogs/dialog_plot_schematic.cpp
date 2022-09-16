@@ -557,7 +557,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDXF( const wxString&  aFileName,
     plotter->SetColorMode( getModeColor() );
 
     // Currently, plot units are in decimil
-    plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
+    plotter->SetViewport( aPlotOffset, schIUScale.IU_PER_MILS/10, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );
@@ -662,8 +662,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFiles( bool aPlotAll, bool aPlotFrameRef,
 
         if( getPlotOriginAndUnits() == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
         {
-            plotOffset.x = plotPage.GetWidthIU( IU_PER_MILS ) / 2;
-            plotOffset.y = -plotPage.GetHeightIU( IU_PER_MILS ) / 2;
+            plotOffset.x = plotPage.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
+            plotOffset.y = -plotPage.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
         }
 
         try
@@ -725,7 +725,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
     plotter->SetRenderSettings( aRenderSettings );
     plotter->RenderSettings()->LoadColors( getColorSettings() );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
+    plotter->SetViewport( aPlot0ffset, schIUScale.IU_PER_MILS/10, aScale, false );
 
     // TODO this could be configurable
     plotter->SetTargetChordLength( schIUScale.mmToIU( 0.6 ) );
@@ -907,8 +907,8 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScr
     if( m_plotBackgroundColor->GetValue() && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
-        wxPoint end( aPlotter->PageSettings().GetWidthIU( IU_PER_MILS ),
-                     aPlotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
+        wxPoint end( aPlotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                     aPlotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
         aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -963,7 +963,7 @@ void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aSc
     aPlotter->SetPageSettings( plotPage );
 
     // Currently, plot units are in decimil
-    aPlotter->SetViewport( wxPoint( 0, 0 ), IU_PER_MILS/10, scale, false );
+    aPlotter->SetViewport( wxPoint( 0, 0 ), schIUScale.IU_PER_MILS/10, scale, false );
 }
 
 
@@ -1083,7 +1083,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     plotter->SetColorMode( getModeColor() );
 
     // Currently, plot units are in decimil
-    plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
+    plotter->SetViewport( aPlot0ffset, schIUScale.IU_PER_MILS/10, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );
@@ -1101,8 +1101,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU( IU_PER_MILS ),
-                     plotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
+        wxPoint end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                     plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
         plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
@@ -1216,7 +1216,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
     double scale = 1.0;
 
     // Currently, plot units are in decimil
-    plotter->SetViewport( plot_offset, IU_PER_MILS/10, scale, false );
+    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS/10, scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-SVG" ) );
@@ -1234,8 +1234,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
     if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU( IU_PER_MILS ),
-                     plotter->PageSettings().GetHeightIU( IU_PER_MILS ) );
+        wxPoint end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
+                     plotter->PageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) );
         plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 

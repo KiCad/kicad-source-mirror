@@ -120,7 +120,7 @@ VECTOR2I BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
     else
     {
         // Position new components in the center of the page when the board is empty.
-        wxSize pageSize = m_board->GetPageSettings().GetSizeIU( IU_PER_MILS );
+        wxSize pageSize = m_board->GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS );
 
         bestPosition.x = pageSize.GetWidth() / 2;
         bestPosition.y = pageSize.GetHeight() / 2;

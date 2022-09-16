@@ -340,8 +340,8 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
         BOX2I     bbox = m_board->ComputeBoundingBox();
         PAGE_INFO currpageInfo = m_board->GetPageSettings();
 
-        currpageInfo.SetWidthMils(  bbox.GetWidth() / IU_PER_MILS );
-        currpageInfo.SetHeightMils( bbox.GetHeight() / IU_PER_MILS );
+        currpageInfo.SetWidthMils(  bbox.GetWidth() / pcbIUScale.IU_PER_MILS );
+        currpageInfo.SetHeightMils( bbox.GetHeight() / pcbIUScale.IU_PER_MILS );
         m_board->SetPageSettings( currpageInfo );
         plot_opts.SetUseAuxOrigin( true );
         VECTOR2I origin = bbox.GetOrigin();

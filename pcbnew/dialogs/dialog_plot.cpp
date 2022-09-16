@@ -228,7 +228,7 @@ void DIALOG_PLOT::init_Dialog()
     }
 
     // Set units and value for HPGL pen size (this param is in mils).
-    m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
+    m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
@@ -784,9 +784,9 @@ void DIALOG_PLOT::applyPlotSettings()
     // is in use
     if( getPlotFormat() == PLOT_FORMAT::HPGL )
     {
-        if( !tempOptions.SetHPGLPenDiameter( m_defaultPenSize.GetValue() / IU_PER_MILS ) )
+        if( !tempOptions.SetHPGLPenDiameter( m_defaultPenSize.GetValue() / pcbIUScale.IU_PER_MILS ) )
         {
-            m_defaultPenSize.SetValue( tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
+            m_defaultPenSize.SetValue( tempOptions.GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS );
             msg.Printf( _( "HPGL pen size constrained." ) );
             reporter.Report( msg, RPT_SEVERITY_INFO );
         }

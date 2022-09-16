@@ -1052,7 +1052,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 
-        double offsetFactor = 1000.0f * IU_PER_MILS / 25.4f;
+        double offsetFactor = 1000.0f * pcbIUScale.IU_PER_MILS / 25.4f;
 
         // adjust 3D shape local offset position
         // they are given in mm, so they are converted in board IU.

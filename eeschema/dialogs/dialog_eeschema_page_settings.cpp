@@ -28,7 +28,7 @@
 
 DIALOG_EESCHEMA_PAGE_SETTINGS::DIALOG_EESCHEMA_PAGE_SETTINGS( EDA_DRAW_FRAME* aParent,
                                                               wxSize          aMaxUserSizeMils ) :
-        DIALOG_PAGES_SETTINGS( aParent, IU_PER_MILS, aMaxUserSizeMils )
+        DIALOG_PAGES_SETTINGS( aParent, schIUScale.IU_PER_MILS, aMaxUserSizeMils )
 {
 }
 

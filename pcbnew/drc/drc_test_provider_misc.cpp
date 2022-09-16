@@ -302,7 +302,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     if( !drawingSheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
 
-    drawItems.SetMilsToIUfactor( IU_PER_MILS );
+    drawItems.SetMilsToIUfactor( pcbIUScale.IU_PER_MILS );
     drawItems.SetPageNumber( wxT( "1" ) );
     drawItems.SetSheetCount( 1 );
     drawItems.SetFileName( wxT( "dummyFilename" ) );

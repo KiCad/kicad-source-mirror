@@ -124,7 +124,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SC
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
                                          const EE_SELECTION& aSkip )
 {
-    constexpr int snapRange = SNAP_RANGE * IU_PER_MILS;
+    constexpr int snapRange = SNAP_RANGE * schIUScale.IU_PER_MILS;
 
     VECTOR2I pt = aOrigin;
     VECTOR2I snapDist( snapRange, snapRange );

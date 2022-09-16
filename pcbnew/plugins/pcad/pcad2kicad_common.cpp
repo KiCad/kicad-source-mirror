@@ -161,7 +161,7 @@ double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe,
         else
         {
             ls.ToCDouble( &i );
-            i *= IU_PER_MILS;
+            i *= pcbIUScale.IU_PER_MILS;
         }
     }
     else

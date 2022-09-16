@@ -242,7 +242,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
         if( strncasecmp( param1, "Unit", 4 ) == 0 )
         {
             if( strncasecmp( param2, "inch", 4 ) == 0 )
-                unitconv = IU_PER_MILS*1000;
+                unitconv = pcbIUScale.IU_PER_MILS*1000;
 
             if( strncasecmp( param2, "mm", 2 ) == 0 )
                 unitconv = IU_PER_MM;

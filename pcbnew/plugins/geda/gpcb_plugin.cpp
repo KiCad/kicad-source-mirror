@@ -309,11 +309,11 @@ long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 
 FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 {
-    #define TEXT_DEFAULT_SIZE  ( 40*IU_PER_MILS )
-    #define OLD_GPCB_UNIT_CONV IU_PER_MILS
+    #define TEXT_DEFAULT_SIZE  ( 40*pcbIUScale.IU_PER_MILS )
+    #define OLD_GPCB_UNIT_CONV pcbIUScale.IU_PER_MILS
 
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
-    #define NEW_GPCB_UNIT_CONV ( 0.01*IU_PER_MILS )
+    #define NEW_GPCB_UNIT_CONV ( 0.01*pcbIUScale.IU_PER_MILS )
 
     int                        paramCnt;
 
@@ -398,7 +398,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     // Calculate size: default height is 40 mils, width 30 mil.
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
     int thsize = parseInt( parameters[paramCnt-3], TEXT_DEFAULT_SIZE ) / 100;
-    thsize = std::max( (int)( 5 * IU_PER_MILS ), thsize ); // Ensure a minimal size = 5 mils
+    thsize = std::max( (int)( 5 * pcbIUScale.IU_PER_MILS ), thsize ); // Ensure a minimal size = 5 mils
     int twsize = thsize * 30 / 40;
     int thickness = thsize / 8;
 

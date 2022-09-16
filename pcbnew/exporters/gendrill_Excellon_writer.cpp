@@ -361,7 +361,7 @@ void EXCELLON_WRITER::SetFormat( bool aMetric, ZEROS_FMT aZerosFmt, int aLeftDig
     if( m_unitsMetric )
         m_conversionUnits = 1.0 / IU_PER_MM;        // EXCELLON units = mm
     else
-        m_conversionUnits = 0.001 / IU_PER_MILS;    // EXCELLON units = INCHES
+        m_conversionUnits = 0.001 / pcbIUScale.IU_PER_MILS;    // EXCELLON units = INCHES
 
     // Set the zero counts. if aZerosFmt == DECIMAL_FORMAT, these values
     // will be set, but not used.

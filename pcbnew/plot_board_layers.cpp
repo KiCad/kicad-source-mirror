@@ -1007,7 +1007,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     const PAGE_INFO* sheet_info;
     double paperscale; // Page-to-paper ratio
     wxSize paperSizeIU;
-    wxSize           pageSizeIU( pageInfo.GetSizeIU( IU_PER_MILS ) );
+    wxSize           pageSizeIU( pageInfo.GetSizeIU( pcbIUScale.IU_PER_MILS ) );
     bool autocenter = false;
 
     // Special options: to fit the sheet to an A4 sheet replace the paper size. However there
@@ -1018,7 +1018,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     if( aPlotOpts->GetA4Output() )
     {
         sheet_info  = &pageA4;
-        paperSizeIU = pageA4.GetSizeIU( IU_PER_MILS );
+        paperSizeIU = pageA4.GetSizeIU( pcbIUScale.IU_PER_MILS );
         paperscale  = (double) paperSizeIU.x / pageSizeIU.x;
         autocenter  = true;
     }
@@ -1069,7 +1069,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
 
     aPlotter->SetPageSettings( *sheet_info );
 
-    aPlotter->SetViewport( offset, IU_PER_MILS/10, compound_scale, aPlotOpts->GetMirror() );
+    aPlotter->SetViewport( offset, pcbIUScale.IU_PER_MILS/10, compound_scale, aPlotOpts->GetMirror() );
 
     // Has meaning only for gerber plotter. Must be called only after SetViewport
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
@@ -1106,7 +1106,7 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS
 {
     // Compute penDiam (the value is given in mils) in pcb units, with plot scale (if Scale is 2,
     // penDiam value is always m_HPGLPenDiam so apparent penDiam is actually penDiam / Scale
-    int penDiam = KiROUND( aPlotOpts->GetHPGLPenDiameter() * IU_PER_MILS / aPlotOpts->GetScale() );
+    int penDiam = KiROUND( aPlotOpts->GetHPGLPenDiameter() * pcbIUScale.IU_PER_MILS / aPlotOpts->GetScale() );
 
     // Set HPGL-specific options and start
     aPlotter->SetPenSpeed( aPlotOpts->GetHPGLPenSpeed() );

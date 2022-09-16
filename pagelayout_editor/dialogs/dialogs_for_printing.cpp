@@ -169,7 +169,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     // Change scale factor and offset to print the whole page.
 
-    pageSizeIU = m_parent->GetPageSettings().GetSizeIU( IU_PER_MILS );
+    pageSizeIU = m_parent->GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
     FitThisSizeToPaper( pageSizeIU );
     fitRect = GetLogicalPaperRect();
 
@@ -199,11 +199,11 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
         if( dataItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
         {
             BITMAP_BASE* bitmap = static_cast<DS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
-            bitmap->SetPixelSizeIu( IU_PER_MILS * 1000 / bitmap->GetPPI() );
+            bitmap->SetPixelSizeIu( drawSheetIUScale.IU_PER_MILS * 1000 / bitmap->GetPPI() );
         }
     }
 
-    m_parent->PrintDrawingSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
+    m_parent->PrintDrawingSheet( &renderSettings, screen, drawSheetIUScale.IU_PER_MILS, wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
 

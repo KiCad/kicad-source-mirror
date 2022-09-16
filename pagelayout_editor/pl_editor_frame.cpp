@@ -121,7 +121,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_acceptedExts.emplace( DrawingSheetFileExtension, nullptr );
     DragAcceptFiles( true );
 
-    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( IU_PER_MILS );
+    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
     SetScreen( new BASE_SCREEN( pageSizeIU ) );
 
     setupTools();
@@ -474,7 +474,7 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 
 const BOX2I PL_EDITOR_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU( IU_PER_MILS ) );
+    BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS ) );
     return rv;
 }
 
@@ -570,7 +570,7 @@ void PL_EDITOR_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     m_pageLayout.SetPageSettings( aPageSettings );
 
     if( GetScreen() )
-        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( IU_PER_MILS ) );
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU( drawSheetIUScale.IU_PER_MILS ) );
 }
 
 
@@ -585,7 +585,7 @@ const wxSize PL_EDITOR_FRAME::GetPageSizeIU() const
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_pageLayout.GetPageSettings().GetSizeIU( IU_PER_MILS );
+    return m_pageLayout.GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
 }
 
 
@@ -773,11 +773,11 @@ void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
         if( dataItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
         {
             BITMAP_BASE* bitmap = static_cast<DS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
-            bitmap->SetPixelSizeIu( IU_PER_MILS * 1000 / bitmap->GetPPI() );
+            bitmap->SetPixelSizeIu( drawSheetIUScale.IU_PER_MILS * 1000 / bitmap->GetPPI() );
         }
     }
 
-    PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
+    PrintDrawingSheet( aSettings, GetScreen(), drawSheetIUScale.IU_PER_MILS, wxEmptyString );
 
     GetCanvas()->DisplayDrawingSheet();
     GetCanvas()->Refresh();
@@ -864,7 +864,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
         }
 
         // Set the scale factor for pl_editor (it is set for Eeschema by default)
-        image->SetPixelSizeIu( IU_PER_MILS * 1000.0 / image->GetPPI() );
+        image->SetPixelSizeIu( drawSheetIUScale.IU_PER_MILS * 1000.0 / image->GetPPI() );
         item = new DS_DATA_ITEM_BITMAP( image );
     }
     break;
@@ -938,7 +938,7 @@ bool PL_EDITOR_FRAME::GetPageNumberOption() const
 #if 1
 void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
 {
-    VECTOR2D size = GetPageSettings().GetSizeIU( IU_PER_MILS );
+    VECTOR2D size = GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
 
     std::vector<MSG_PANEL_ITEM> msgItems;
     msgItems.emplace_back( _( "Page Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue(

@@ -323,12 +323,12 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
         break;
 
     case EDA_UNITS::INCHES:
-        scale = IU_PER_MILS * 1000;
+        scale = gerbIUScale.IU_PER_MILS * 1000;
         units = wxT( "in" );
         break;
 
     case EDA_UNITS::MILS:
-        scale = IU_PER_MILS;
+        scale = gerbIUScale.IU_PER_MILS;
         units = wxT( "mil" );
         break;
 

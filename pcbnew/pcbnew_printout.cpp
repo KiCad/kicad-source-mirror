@@ -126,7 +126,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
 int PCBNEW_PRINTOUT::milsToIU( double aMils ) const
 {
-    return KiROUND( IU_PER_MILS * aMils );
+    return KiROUND( pcbIUScale.IU_PER_MILS * aMils );
 }
 
 

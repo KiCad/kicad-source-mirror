@@ -2885,7 +2885,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
     // mm to nanometers.  The deci-mil legacy files have no such "Units" marker
     // so we must assume the file is in deci-mils until told otherwise.
 
-    diskToBiu = IU_PER_MILS / 10;    // BIUs are nanometers
+    diskToBiu = pcbIUScale.IU_PER_MILS / 10;    // BIUs are nanometers
 }
 
 

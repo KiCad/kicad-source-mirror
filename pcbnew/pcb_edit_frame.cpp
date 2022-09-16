@@ -233,7 +233,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
 
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU( IU_PER_MILS ) ) );
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS ) ) );
 
     // PCB drawings start in the upper left corner.
     GetScreen()->m_Center = false;
@@ -529,7 +529,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
     // Prepare drawing-sheet template
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( IU_PER_MILS,
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale.IU_PER_MILS,
                                                                &m_pcb->GetPageSettings(),
                                                                m_pcb->GetProject(),
                                                                &m_pcb->GetTitleBlock() );

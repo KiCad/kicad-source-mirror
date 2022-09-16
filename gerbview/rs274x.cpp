@@ -208,7 +208,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
     bool     y_fmt_known = false;
 
     // conv_scale = scaling factor from inch to Internal Unit
-    double   conv_scale = IU_PER_MILS * 1000;
+    double   conv_scale = gerbIUScale.IU_PER_MILS * 1000;
 
     if( m_GerbMetric )
         conv_scale /= 25.4;
@@ -380,7 +380,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         else if( code == MILLIMETER )
             m_GerbMetric = true;
 
-        conv_scale = m_GerbMetric ? IU_PER_MILS / 25.4 : IU_PER_MILS;
+        conv_scale = m_GerbMetric ? gerbIUScale.IU_PER_MILS / 25.4 : gerbIUScale.IU_PER_MILS;
         break;
 
     case FILE_ATTRIBUTE:    // Command %TF ...

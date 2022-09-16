@@ -49,7 +49,7 @@
 
     def ToMils(iu):
         if type(iu) in [int,float]:
-            return float(iu) / float(IU_PER_MILS)
+            return float(iu) / float(pcbIUScale.IU_PER_MILS)
         elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(ToMils,iu))
         else:
@@ -57,7 +57,7 @@
 
     def FromMils(mils):
         if type(mils) in [int,float]:
-            return int(float(mils)*float(IU_PER_MILS))
+            return int(float(mils)*float(pcbIUScale.IU_PER_MILS))
         elif type(mils) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(FromMils,mils))
         else:

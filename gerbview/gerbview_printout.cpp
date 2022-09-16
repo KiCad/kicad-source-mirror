@@ -75,7 +75,7 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
 
 int GERBVIEW_PRINTOUT::milsToIU( double aMils ) const
 {
-    return KiROUND( IU_PER_MILS * aMils );
+    return KiROUND( gerbIUScale.IU_PER_MILS * aMils );
 }
 
 

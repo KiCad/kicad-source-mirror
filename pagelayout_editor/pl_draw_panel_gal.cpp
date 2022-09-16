@@ -93,7 +93,7 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
 
     m_pageDrawItem.reset();
 
-    model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), IU_PER_MILS );
+    model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), drawSheetIUScale.IU_PER_MILS );
 
     // To show the formatted texts instead of raw texts in drawing sheet editor, we need
     // a dummy DS_DRAW_ITEM_LIST.
@@ -101,7 +101,7 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
     dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
     dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
     dummy.SetProject( &m_edaFrame->Prj() );
-    dummy.SetMilsToIUfactor( IU_PER_MILS );
+    dummy.SetMilsToIUfactor( drawSheetIUScale.IU_PER_MILS );
 
     for( DS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( &dummy, m_view );

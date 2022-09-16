@@ -485,7 +485,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     // the drawings into the dc size
     // scale is the ratio resolution (in PPI) / internal units
     double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
-    double inch2Iu = 1000.0 * IU_PER_MILS;
+    double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
     double scale = ppi / inch2Iu;
 
     wxSize dcsize = DrawArea.GetSize();

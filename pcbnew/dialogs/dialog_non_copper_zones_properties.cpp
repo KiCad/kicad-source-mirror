@@ -74,7 +74,7 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
     return dlg.ShowQuasiModal();
 }
 
-#define MIN_THICKNESS 10*IU_PER_MILS
+#define MIN_THICKNESS 10*pcbIUScale.IU_PER_MILS
 
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
                                                                 ZONE_SETTINGS* aSettings,
