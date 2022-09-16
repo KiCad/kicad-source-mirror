@@ -36,6 +36,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
+#include <scintilla_tricks.h>
 #include "string_utils.h"
 #include "ngspice_helpers.h"
 #include <pgm_base.h>
@@ -1617,8 +1618,12 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
                      nullptr, this );
 
+            m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( text, wxT( "{}" ), false );
+
             finishDialogSettings();
         }
+
+        std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
     };
 
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
