@@ -296,7 +296,7 @@ public:
     virtual ~VAR_REF() {};
 
     virtual VAR_TYPE_T GetType() const = 0;
-    virtual VALUE GetValue( CONTEXT* aCtx ) = 0;
+    virtual VALUE* GetValue( CONTEXT* aCtx ) = 0;
 };
 
 
@@ -312,7 +312,7 @@ public:
 
     virtual ~CONTEXT()
     {
-        for( auto &v : m_ownedValues )
+        for( VALUE* v : m_ownedValues )
         {
             delete v;
         }
@@ -321,6 +321,12 @@ public:
     VALUE* AllocValue()
     {
         m_ownedValues.emplace_back( new VALUE );
+        return m_ownedValues.back();
+    }
+
+    VALUE* StoreValue( VALUE* aValue )
+    {
+        m_ownedValues.emplace_back( aValue );
         return m_ownedValues.back();
     }
 

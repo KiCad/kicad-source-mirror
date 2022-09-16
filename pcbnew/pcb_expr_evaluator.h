@@ -103,7 +103,7 @@ public:
         m_matchingTypes[type_hash] = prop;
     }
 
-    virtual LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 
     BOARD_ITEM* GetObject( const LIBEVAL::CONTEXT* aCtx ) const;
 
@@ -126,7 +126,7 @@ public:
         //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
-    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 };
 
 
@@ -141,7 +141,7 @@ public:
         //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
-    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 };
 
 
@@ -155,7 +155,7 @@ public:
         //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
     }
 
-    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+    LIBEVAL::VALUE* GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 };
 
 
