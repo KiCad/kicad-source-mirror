@@ -373,7 +373,7 @@ bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // When looking for an "exact" hit aAccuracy will be 0 which works poorly for very thin
     // lines.  Give it a floor.
-    int accuracy = std::max( aAccuracy, Millimeter2iu( 0.1 ) );
+    int accuracy = std::max( aAccuracy, pcbIUScale.mmToIU( 0.1 ) );
 
     return HitTestForCorner( aPosition, accuracy * 2 ) || HitTestForEdge( aPosition, accuracy );
 }
@@ -772,9 +772,9 @@ void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
                                   bool aRebuildBorderHatch )
 {
     aBorderHatchPitch = std::max( aBorderHatchPitch,
-                                  Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ) );
+                                  pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ) );
     aBorderHatchPitch = std::min( aBorderHatchPitch,
-                                  Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) );
+                                  pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) );
     SetBorderHatchPitch( aBorderHatchPitch );
     m_borderStyle = aBorderHatchStyle;
 
@@ -986,7 +986,7 @@ bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const
 
 void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const
 {
-    int   epsilon = Millimeter2iu( 0.001 );
+    int   epsilon = pcbIUScale.mmToIU( 0.001 );
     BOX2I bbox = GetCachedBoundingBox();
 
     bbox.Inflate( epsilon );

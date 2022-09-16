@@ -1437,7 +1437,7 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
     if( m_schSettings.m_ShowPinsElectricalType )
     {
-        size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
+        size[OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, schIUScale.mmToIU( 0.7 ) );
         thickness[OUTSIDE] = float( size[OUTSIDE] ) / 8.0F;
         colour   [OUTSIDE] = getRenderColor( aPin, LAYER_PRIVATE_NOTES, drawingShadows );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();

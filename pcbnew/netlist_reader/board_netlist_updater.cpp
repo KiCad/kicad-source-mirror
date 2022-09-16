@@ -114,7 +114,7 @@ VECTOR2I BOARD_NETLIST_UPDATER::estimateFootprintInsertionPosition()
         if( bbox.GetWidth() || bbox.GetHeight() )
         {
             bestPosition.x = bbox.Centre().x;
-            bestPosition.y = bbox.GetBottom() + Millimeter2iu( 10 );
+            bestPosition.y = bbox.GetBottom() + pcbIUScale.mmToIU( 10 );
         }
     }
     else

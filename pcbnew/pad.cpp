@@ -461,7 +461,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
             // Avoid degenerated shapes (0 length segments) that always create issues
             // For roundrect pad very near a circle, use only a circle
-            const int min_len = Millimeter2iu( 0.0001);
+            const int min_len = pcbIUScale.mmToIU( 0.0001);
 
             if( half_size.x < min_len && half_size.y < min_len )
             {
@@ -1430,7 +1430,7 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( divisor == 0 )
             return HIDE;
 
-        return ( double ) Millimeter2iu( 5 ) / divisor;
+        return ( double ) pcbIUScale.mmToIU( 5 ) / divisor;
     }
 
     // Passed all tests; show.

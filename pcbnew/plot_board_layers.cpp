@@ -729,7 +729,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             int smallDrill = ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
-                             ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) :
+                             ? pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) :
                              INT_MAX;
 
             for( FOOTPRINT* footprint : aBoard->Footprints() )
@@ -964,7 +964,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     // Slightly inflate polygons to avoid any gap between them and other shapes,
     // These gaps are created by arc to segments approximations
-    areas.Inflate( Millimeter2iu( 0.002 ), 6 );
+    areas.Inflate( pcbIUScale.mmToIU( 0.002 ), 6 );
 
     // Now, only polygons with a too small thickness are stored in areas.
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
@@ -1174,7 +1174,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
 
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = new KIGFX::PCB_RENDER_SETTINGS();
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
-    renderSettings->SetDefaultPenWidth( Millimeter2iu( 0.0212 ) );  // Hairline at 1200dpi
+    renderSettings->SetDefaultPenWidth( pcbIUScale.mmToIU( 0.0212 ) );  // Hairline at 1200dpi
 
     if( aLayer >= 0 && aLayer < GAL_LAYER_ID_END )
         renderSettings->SetLayerName( aBoard->GetLayerName( ToLAYER_ID( aLayer ) ) );

@@ -114,7 +114,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         wxSize    pageSizeIU = pageA4.GetSizeIU( IU_PER_MILS );
 
         // Reserve a 10 mm margin around the page.
-        int margin = Millimeter2iu( 10 );
+        int margin = pcbIUScale.mmToIU( 10 );
 
         // Calculate a scaling factor to print the board on the sheet
         double Xscale = double( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
@@ -171,7 +171,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     plotter->SetColorMode( false );
 
     KIGFX::PCB_RENDER_SETTINGS renderSettings;
-    renderSettings.SetDefaultPenWidth( Millimeter2iu( 0.2 ) );
+    renderSettings.SetDefaultPenWidth( pcbIUScale.mmToIU( 0.2 ) );
 
     plotter->SetRenderSettings( &renderSettings );
 
@@ -239,7 +239,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     int      intervalle = 0;
     char     line[1024];
     wxString msg;
-    int      textmarginaftersymbol = Millimeter2iu( 2 );
+    int      textmarginaftersymbol = pcbIUScale.mmToIU( 2 );
 
     // Set Drill Symbols width
     plotter->SetCurrentLineWidth( -1 );
@@ -248,7 +248,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     plotDrillMarks( plotter );
 
     // Print a list of symbols used.
-    int    charSize = Millimeter2iu( 2 );  // text size in IUs
+    int    charSize = pcbIUScale.mmToIU( 2 );  // text size in IUs
 
     // real char scale will be 1/scale, because the global plot scale is scale
     // for scale < 1.0 ( plot bigger actual size)
@@ -289,7 +289,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         if( bottom_limit && ( plotY+intervalle > bottom_limit ) )
         {
             plotY = bbbox.GetBottom() + intervalle;
-            plotX += max_line_len + Millimeter2iu( 10 );//column_width;
+            plotX += max_line_len + pcbIUScale.mmToIU( 10 );//column_width;
             max_line_len = 0;
         }
 

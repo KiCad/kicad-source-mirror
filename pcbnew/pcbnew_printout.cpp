@@ -244,7 +244,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
         break;
 
     case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
-        painter.SetDrillMarks( false, Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) );
+        painter.SetDrillMarks( false, pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) );
 
         painter.GetSettings()->SetLayerColor( LAYER_PAD_PLATEDHOLES, COLOR4D::BLACK );
         painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );

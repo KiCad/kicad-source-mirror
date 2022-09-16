@@ -681,7 +681,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.
     BOX2I zone_boundingbox = aZone->GetCachedBoundingBox();
-    int   extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
+    int   extra_margin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
     // largest clearance value found in the netclasses and rules
@@ -1047,7 +1047,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // min_width should not.  Therefore we subtract epsilon from the min_width when
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
-    int epsilon = Millimeter2iu( 0.001 );
+    int epsilon = pcbIUScale.mmToIU( 0.001 );
     int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
     // Solid polygons are deflated and inflated during calculations.  Deflating doesn't cause
@@ -1297,7 +1297,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // min_width should not.  Therefore we subtract epsilon from the min_width when
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
-    int epsilon = Millimeter2iu( 0.001 );
+    int epsilon = pcbIUScale.mmToIU( 0.001 );
     int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
     aFillPolys.Deflate( half_min_width - epsilon, numSegs );
@@ -1491,7 +1491,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // This margin also avoid problems due to rounding coordinates in next calculations
     // that can create incorrect polygons
     int thickness = std::max( aZone->GetHatchThickness(),
-                              aZone->GetMinThickness() + Millimeter2iu( 0.001 ) );
+                              aZone->GetMinThickness() + pcbIUScale.mmToIU( 0.001 ) );
 
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
@@ -1539,13 +1539,13 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
         #define SMOOTH_MIN_VAL_MM 0.02
         #define SMOOTH_SMALL_VAL_MM 0.04
 
-        if( smooth_value > Millimeter2iu( SMOOTH_MIN_VAL_MM ) )
+        if( smooth_value > pcbIUScale.mmToIU( SMOOTH_MIN_VAL_MM ) )
         {
             SHAPE_POLY_SET smooth_hole;
             smooth_hole.AddOutline( hole_base );
             int smooth_level = aZone->GetHatchSmoothingLevel();
 
-            if( smooth_value < Millimeter2iu( SMOOTH_SMALL_VAL_MM ) && smooth_level > 1 )
+            if( smooth_value < pcbIUScale.mmToIU( SMOOTH_SMALL_VAL_MM ) && smooth_level > 1 )
                 smooth_level = 1;
 
             // Use a larger smooth_value to compensate the outline tickness
@@ -1556,7 +1556,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             smooth_value = std::min( smooth_value, aZone->GetHatchGap() / 2 );
 
             // the error to approximate a circle by segments when smoothing corners by a arc
-            int error_max = std::max( Millimeter2iu( 0.01 ), smooth_value / 20 );
+            int error_max = std::max( pcbIUScale.mmToIU( 0.01 ), smooth_value / 20 );
 
             switch( smooth_level )
             {

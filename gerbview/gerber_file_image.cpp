@@ -359,8 +359,8 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
         break;
 
     case EDA_UNITS::MILLIMETRES:
-        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Millimeter( m_ImageJustifyOffset.x ),
-                                        Iu2Millimeter( m_ImageJustifyOffset.y ) );
+        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUTomm( m_ImageJustifyOffset.x ),
+                                        gerbIUScale.IUTomm( m_ImageJustifyOffset.y ) );
         break;
 
     default:

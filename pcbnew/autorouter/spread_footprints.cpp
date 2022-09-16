@@ -276,7 +276,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
                     sub_area.SetWidth( placementArea.GetW()*scale );
                     sub_area.SetHeight( placementArea.GetH()*scale );
                     // Add a margin around the sheet placement area:
-                    sub_area.Inflate( Millimeter2iu( 1.5 ) );
+                    sub_area.Inflate( pcbIUScale.mmToIU( 1.5 ) );
 
                     placementSheetAreas.push_back( sub_area );
 

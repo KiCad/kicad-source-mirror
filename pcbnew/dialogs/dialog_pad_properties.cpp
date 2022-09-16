@@ -315,7 +315,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     KIGFX::COLOR4D axis_color = LIGHTBLUE;
 
     m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color, KIGFX::ORIGIN_VIEWITEM::CROSS,
-                                               Millimeter2iu( 0.2 ),
+                                               pcbIUScale.mmToIU( 0.2 ),
                                                VECTOR2D( m_dummyPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 

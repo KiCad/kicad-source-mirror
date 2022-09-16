@@ -811,7 +811,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     }
 
     BOX2I bbox( m_pos );
-    bbox.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the bbox
+    bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) );   // Give a min size to the bbox
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -967,7 +967,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     if( rawPolys.OutlineCount() == 0 )
     {
         // generate a small dummy rectangular outline around the anchor
-        const int halfsize = Millimeter2iu( 1.0 );
+        const int halfsize = pcbIUScale.mmToIU( 1.0 );
 
         rawPolys.NewOutline();
 
@@ -1799,8 +1799,8 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
     // Update the 3D models
     for( FP_3DMODEL& model : Models() )
     {
-        model.m_Offset.x += Iu2Millimeter( moveVector.x );
-        model.m_Offset.y -= Iu2Millimeter( moveVector.y );
+        model.m_Offset.x += pcbIUScale.IUTomm( moveVector.x );
+        model.m_Offset.y -= pcbIUScale.IUTomm( moveVector.y );
     }
 
     m_cachedBoundingBox.Move( moveVector );
@@ -2265,8 +2265,8 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( !list_front.size() && !list_back.size() )
         return;
 
-    int errorMax = Millimeter2iu( 0.02 );         // max error for polygonization
-    int chainingEpsilon = Millimeter2iu( 0.02 );  // max dist from one endPt to next startPt
+    int errorMax = pcbIUScale.mmToIU( 0.02 );         // max error for polygonization
+    int chainingEpsilon = pcbIUScale.mmToIU( 0.02 );  // max dist from one endPt to next startPt
 
     if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, errorMax, chainingEpsilon,
                                  aErrorHandler ) )

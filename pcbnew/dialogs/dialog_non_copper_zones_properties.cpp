@@ -191,14 +191,14 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     int bestvalue = m_settings.m_HatchThickness;
 
     if( bestvalue <= 0 )     // No defined value for m_hatchWidth
-        bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, pcbIUScale.mmToIU( 1.0 ) );
 
     m_hatchWidth.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
     bestvalue = m_settings.m_HatchGap;
 
     if( bestvalue <= 0 )     // No defined value for m_hatchGap
-        bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
+        bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, pcbIUScale.mmToIU( 1.5 ) );
 
     m_hatchGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
@@ -262,8 +262,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     case 2: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
 
-    if( !m_outlineHatchPitch.Validate( Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ),
-                                       Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+    if( !m_outlineHatchPitch.Validate( pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ),
+                                       pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
         return false;
 
     m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();

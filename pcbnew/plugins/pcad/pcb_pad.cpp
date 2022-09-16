@@ -219,7 +219,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
         {
             int sm_margin = ( m_Shapes[0]->m_Width - m_Hole ) / 2;
             pad->SetLocalSolderMaskMargin( sm_margin );
-            pad->SetLocalClearance( sm_margin + Millimeter2iu( 0.254 ) );
+            pad->SetLocalClearance( sm_margin + pcbIUScale.mmToIU( 0.254 ) );
         }
 
         pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );

@@ -2095,7 +2095,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             // TODO: Load as arc...
 
             SHAPE_ARC        tempArc( centerPoint, startPoint, arcAngle );
-            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( Millimeter2iu( 0.1 ) );
+            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( schIUScale.mmToIU( 0.1 ) );
 
             // Load the arc as a series of piece-wise segments
 

@@ -599,11 +599,11 @@ void DIALOG_PLOT_SCHEMATIC::setHpglPenWidth()
 {
     m_HPGLPenSize = m_penWidth.GetValue();
 
-    if( m_HPGLPenSize > Millimeter2iu( 2 ) )
-        m_HPGLPenSize = Millimeter2iu( 2 );
+    if( m_HPGLPenSize > schIUScale.mmToIU( 2 ) )
+        m_HPGLPenSize = schIUScale.mmToIU( 2 );
 
-    if( m_HPGLPenSize < Millimeter2iu( 0.01 ) )
-        m_HPGLPenSize = Millimeter2iu( 0.01 );
+    if( m_HPGLPenSize < schIUScale.mmToIU( 0.01 ) )
+        m_HPGLPenSize = schIUScale.mmToIU( 0.01 );
 }
 
 
@@ -728,7 +728,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
     // TODO this could be configurable
-    plotter->SetTargetChordLength( Millimeter2iu( 0.6 ) );
+    plotter->SetTargetChordLength( schIUScale.mmToIU( 0.6 ) );
 
     switch( aOriginAndUnits )
     {

@@ -1687,7 +1687,7 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
     // provide good scaling at varying component sizes.  Bigger components need less
     // scaling than small ones.
-    double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
+    double currTextHeight = pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE );
 
     double compRatio = bbSize.y / currTextHeight; // Ratio of component to text height
 

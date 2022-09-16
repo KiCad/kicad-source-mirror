@@ -877,7 +877,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
 
         // Ensure non null area. If happen, gives a minimal size.
         if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
-            bbbox.Inflate( Millimeter2iu( 1.0 ) );
+            bbbox.Inflate( pcbIUScale.mmToIU( 1.0 ) );
 
         aOutlines.RemoveAllContours();
         aOutlines.NewOutline();
@@ -923,7 +923,7 @@ void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
 
     // Ensure non null area. If happen, gives a minimal size.
     if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
-        bbbox.Inflate( Millimeter2iu( 1.0 ) );
+        bbbox.Inflate( pcbIUScale.mmToIU( 1.0 ) );
 
     // Inflate slightly (by 1/10th the size of the box)
     bbbox.Inflate( bbbox.GetWidth() / 10, bbbox.GetHeight() / 10 );

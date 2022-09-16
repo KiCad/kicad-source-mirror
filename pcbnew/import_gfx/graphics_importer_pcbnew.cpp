@@ -38,7 +38,7 @@
 GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW()
 {
     m_layer = Dwgs_User;
-    m_millimeterToIu = Millimeter2iu( 1.0 );
+    m_millimeterToIu = pcbIUScale.mmToIU( 1.0 );
 }
 
 

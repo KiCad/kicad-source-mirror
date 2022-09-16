@@ -114,10 +114,10 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // Some tools in P&P files have the type and size defined.
     // they are position flash (round), pad1 flash (diamond), other pads flash (round)
     // and component outline thickness (polyline)
-    int flash_position_shape_diam = Millimeter2iu( 0.3 ); // defined size for position shape (circle)
-    int pad1_mark_size = Millimeter2iu( 0.36 );           // defined size for pad 1 position (diamond)
+    int flash_position_shape_diam = pcbIUScale.mmToIU( 0.3 ); // defined size for position shape (circle)
+    int pad1_mark_size = pcbIUScale.mmToIU( 0.36 );           // defined size for pad 1 position (diamond)
     int other_pads_mark_size = 0;                         // defined size for position shape (circle)
-    int line_thickness = Millimeter2iu( 0.1 );            // defined size for component outlines
+    int line_thickness = pcbIUScale.mmToIU( 0.1 );            // defined size for component outlines
 
     brd_plotter.SetLayerSet( LSET( aLayer ) );
     int cmp_count = 0;

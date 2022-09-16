@@ -65,7 +65,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         m_connectivity->Add( footprint );
 
-    m_gridSize = Millimeter2iu( STEP_AR_MM );
+    m_gridSize = pcbIUScale.mmToIU( STEP_AR_MM );
     m_progressReporter = nullptr;
     m_refreshCallback = nullptr;
     m_minCost = 0.0;
@@ -838,8 +838,8 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
     m_matrix.m_GridRouting = m_gridSize; //(int) m_frame->GetScreen()->GetGridSize().x;
 
     // Ensure Board.m_GridRouting has a reasonable value:
-    if( m_matrix.m_GridRouting < Millimeter2iu( 0.25 ) )
-        m_matrix.m_GridRouting = Millimeter2iu( 0.25 );
+    if( m_matrix.m_GridRouting < pcbIUScale.mmToIU( 0.25 ) )
+        m_matrix.m_GridRouting = pcbIUScale.mmToIU( 0.25 );
 
     // Compute footprint parameters used in autoplace
     if( genPlacementRoutingMatrix( ) == 0 )

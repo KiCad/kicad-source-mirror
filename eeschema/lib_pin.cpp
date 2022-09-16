@@ -550,7 +550,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
     // Use a reasonable (small) size to draw the text
     int         textSize = ( m_nameTextSize * 3 ) / 4;
 
-    #define ETXT_MAX_SIZE Millimeter2iu( 0.7 )
+    #define ETXT_MAX_SIZE schIUScale.mmToIU( 0.7 )
 
     if( textSize > ETXT_MAX_SIZE )
         textSize = ETXT_MAX_SIZE;
@@ -572,7 +572,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
         color = color.Mix( bg, 0.5f );
 
     VECTOR2I txtpos = aPosition;
-    int offset = Millimeter2iu( 0.4 );
+    int               offset = schIUScale.mmToIU( 0.4 );
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_LEFT;
     EDA_ANGLE orient = ANGLE_HORIZONTAL;
 
@@ -1242,7 +1242,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
 
     if( includeType )
     {
-        double   fontSize = std::max( m_nameTextSize * 3 / 4, Millimeter2iu( 0.7 ) );
+        double   fontSize = std::max( m_nameTextSize * 3 / 4, schIUScale.mmToIU( 0.7 ) );
         VECTOR2I typeTextSize = font->StringBoundaryLimits( GetElectricalTypeName(),
                                                             VECTOR2D( fontSize, fontSize ),
                                                             fontSize / 8.0, false, false );

@@ -39,7 +39,7 @@ static std::optional<int> getInPcbUnits( const nlohmann::json& aObj, const std::
                                std::optional<int> aDefault = std::optional<int>() )
 {
     if( aObj.contains( aKey ) && aObj[aKey].is_number() )
-        return PcbMm2iu( aObj[aKey].get<double>() );
+        return pcbIUScale.mmToIU( aObj[aKey].get<double>() );
     else
         return aDefault;
 };
@@ -77,7 +77,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 auto saveInPcbUnits =
                         []( nlohmann::json& json, const std::string& aKey, int aValue )
                         {
-                            json.push_back( { aKey, PcbIu2mm( aValue ) } );
+                            json.push_back( { aKey, pcbIUScale.IUTomm( aValue ) } );
                         };
 
                 if( nc->HasClearance() )

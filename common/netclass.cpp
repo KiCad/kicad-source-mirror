@@ -31,15 +31,15 @@
 const char NETCLASS::Default[] = "Default";
 
 // Initial values for netclass initialization
-const int DEFAULT_CLEARANCE        = PcbMm2iu( 0.2 ); // track to track and track to pads clearance
-const int DEFAULT_VIA_DIAMETER     = PcbMm2iu( 0.8 );
-const int DEFAULT_VIA_DRILL        = PcbMm2iu( 0.4 );
-const int DEFAULT_UVIA_DIAMETER    = PcbMm2iu( 0.3 );
-const int DEFAULT_UVIA_DRILL       = PcbMm2iu( 0.1 );
-const int DEFAULT_TRACK_WIDTH      = PcbMm2iu( 0.25 );
-const int DEFAULT_DIFF_PAIR_WIDTH  = PcbMm2iu( 0.2 );
-const int DEFAULT_DIFF_PAIR_GAP    = PcbMm2iu( 0.25 );
-const int DEFAULT_DIFF_PAIR_VIAGAP = PcbMm2iu( 0.25 );
+const int DEFAULT_CLEARANCE        = pcbIUScale.mmToIU( 0.2 ); // track to track and track to pads clearance
+const int DEFAULT_VIA_DIAMETER     = pcbIUScale.mmToIU( 0.8 );
+const int DEFAULT_VIA_DRILL        = pcbIUScale.mmToIU( 0.4 );
+const int DEFAULT_UVIA_DIAMETER    = pcbIUScale.mmToIU( 0.3 );
+const int DEFAULT_UVIA_DRILL       = pcbIUScale.mmToIU( 0.1 );
+const int DEFAULT_TRACK_WIDTH      = pcbIUScale.mmToIU( 0.25 );
+const int DEFAULT_DIFF_PAIR_WIDTH  = pcbIUScale.mmToIU( 0.2 );
+const int DEFAULT_DIFF_PAIR_GAP    = pcbIUScale.mmToIU( 0.25 );
+const int DEFAULT_DIFF_PAIR_VIAGAP = pcbIUScale.mmToIU( 0.25 );
 
 const int DEFAULT_WIRE_WIDTH       = SchMils2iu( 6 );
 const int DEFAULT_BUS_WIDTH        = SchMils2iu( 12 );

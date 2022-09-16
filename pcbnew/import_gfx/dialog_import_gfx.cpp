@@ -134,9 +134,9 @@ DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
     cfg->m_ImportGraphics.layer                 = m_SelLayerBox->GetLayerSelection();
     cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
     cfg->m_ImportGraphics.last_file             = m_textCtrlFileName->GetValue();
-    cfg->m_ImportGraphics.dxf_line_width        = Iu2Millimeter( m_defaultLineWidth.GetValue() );
-    cfg->m_ImportGraphics.origin_x              = Iu2Millimeter( m_xOrigin.GetValue() );
-    cfg->m_ImportGraphics.origin_y              = Iu2Millimeter( m_yOrigin.GetValue() );
+    cfg->m_ImportGraphics.dxf_line_width        = pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
+    cfg->m_ImportGraphics.origin_x              = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
+    cfg->m_ImportGraphics.origin_y              = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
     cfg->m_ImportGraphics.dxf_units             = m_choiceDxfUnits->GetSelection();
 
     m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
@@ -230,7 +230,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
             else
                 dxfPlugin->SetUnit( it->first );
 
-            m_importer->SetLineWidthMM( Iu2Millimeter( m_defaultLineWidth.GetValue() ) );
+            m_importer->SetLineWidthMM( pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() ) );
         }
         else
         {
@@ -239,7 +239,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
 
         m_importer->SetPlugin( std::move( plugin ) );
         m_importer->SetLayer( PCB_LAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
-        m_importer->SetImportOffsetMM( { Iu2Millimeter( origin.x ), Iu2Millimeter( origin.y ) } );
+        m_importer->SetImportOffsetMM( { pcbIUScale.IUTomm( origin.x ), pcbIUScale.IUTomm( origin.y ) } );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
 

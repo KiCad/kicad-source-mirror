@@ -777,7 +777,7 @@ BITMAPS GERBER_DRAW_ITEM::GetMenuImage() const
 bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 {
     // In case the item has a very tiny width defined, allow it to be selected
-    const int MIN_HIT_TEST_RADIUS = Millimeter2iu( 0.01 );
+    const int MIN_HIT_TEST_RADIUS = gerbIUScale.mmToIU( 0.01 );
 
     // calculate aRefPos in XY Gerber axis:
     VECTOR2I ref_pos = GetXYPosition( aRefPos );
@@ -968,7 +968,7 @@ double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
         // the level of details is chosen experimentally, to show
         // only a readable text:
-        double level = (double)Millimeter2iu( 3 );
+        double level = (double) gerbIUScale.mmToIU( 3 );
         return level / ( size + 1 );
     }
 

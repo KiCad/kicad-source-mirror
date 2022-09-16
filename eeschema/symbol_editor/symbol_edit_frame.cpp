@@ -233,8 +233,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 600mm x 600mm with a origin at the area center looks like a large working area
-    double max_size_x = Millimeter2iu( 600 );
-    double max_size_y = Millimeter2iu( 600 );
+    double max_size_x = schIUScale.mmToIU( 600 );
+    double max_size_y = schIUScale.mmToIU( 600 );
     BOX2D bbox;
     bbox.SetOrigin( -max_size_x /2, -max_size_y/2 );
     bbox.SetSize( max_size_x, max_size_y );
@@ -1300,8 +1300,8 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
     if( !m_symbol )
     {
         // Gives a reasonable drawing area size
-        int width = Millimeter2iu( 50 );
-        int height = Millimeter2iu( 30 );
+        int width = schIUScale.mmToIU( 50 );
+        int height = schIUScale.mmToIU( 30 );
 
         return BOX2I( VECTOR2I( -width/2, -height/2 ),
                       VECTOR2I( width, height ) );

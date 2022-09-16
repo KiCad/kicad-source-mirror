@@ -96,7 +96,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
     // Use a really tight chaining epsilon here so that we report errors that might affect
     // other tools (such as STEP export).
-    constexpr int chainingEpsilon = Millimeter2iu( 0.02 ) / 100;
+    constexpr int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ) / 100;
 
     if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
                                     chainingEpsilon, &errorHandler ) )

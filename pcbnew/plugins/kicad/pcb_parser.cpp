@@ -2828,7 +2828,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     // external tools can generate invalid files.
     if( stroke.GetWidth() <= 0 && !shape->IsFilled() )
     {
-        stroke.SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+        stroke.SetWidth( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
     }
 
     shape->SetStroke( stroke );
@@ -4551,7 +4551,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
     // external tools can generate invalid files.
     if( stroke.GetWidth() <= 0 && !shape->IsFilled() )
     {
-        stroke.SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+        stroke.SetWidth( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
     }
 
     shape->SetStroke( stroke );

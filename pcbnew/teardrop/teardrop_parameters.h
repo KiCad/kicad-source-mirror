@@ -49,8 +49,8 @@ class TEARDROP_PARAMETERS
 public:
     TEARDROP_PARAMETERS( TARGET_TD aTdType ):
         m_TdType( aTdType ),
-        m_TdMaxLen( Millimeter2iu( 1.0 ) ),
-        m_TdMaxHeight( Millimeter2iu( 2.0 ) ),
+        m_TdMaxLen( pcbIUScale.mmToIU( 1.0 ) ),
+        m_TdMaxHeight( pcbIUScale.mmToIU( 2.0 ) ),
         m_LengthRatio( 0.5),
         m_HeightRatio( 1.0 ),
         m_CurveSegCount( 0 ),

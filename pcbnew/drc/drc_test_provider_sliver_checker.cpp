@@ -84,7 +84,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     if( !reportPhase( _( "Running sliver detection on copper layers..." ) ) )
         return false;   // DRC cancelled
 
-    int    widthTolerance = Millimeter2iu( ADVANCED_CFG::GetCfg().m_SliverWidthTolerance );
+    int    widthTolerance = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_SliverWidthTolerance );
     double angleTolerance = ADVANCED_CFG::GetCfg().m_SliverAngleTolerance;
     int    testLength = widthTolerance / ( 2 * sin( DEG2RAD( angleTolerance / 2 ) ) );
     LSET   copperLayerSet = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();

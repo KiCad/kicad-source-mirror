@@ -579,4 +579,4 @@ void GERBVIEW_PAINTER::drawApertureMacro( GERBER_DRAW_ITEM* aParent, bool aFille
 }
 
 
-const double GERBVIEW_RENDER_SETTINGS::MAX_FONT_SIZE = Millimeter2iu( 10.0 );
+const double GERBVIEW_RENDER_SETTINGS::MAX_FONT_SIZE = gerbIUScale.mmToIU( 10.0 );

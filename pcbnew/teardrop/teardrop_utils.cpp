@@ -721,7 +721,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrP
     VECTOR2I pointD = aViaPad.m_Pos;
     // add a small offset in order to have the aViaPad.m_Pos reference point inside
     // the teardrop area, just in case...
-    int offset = Millimeter2iu( 0.001 );
+    int offset = pcbIUScale.mmToIU( 0.001 );
     pointD += VECTOR2I( int( -vecT.x*offset), int(-vecT.y*offset) );
 
     VECTOR2I pointC, pointE;     // Point on PADVIA outlines

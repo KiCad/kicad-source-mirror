@@ -225,7 +225,8 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER, "-" );
     wxSize page_sizeIU = m_editorFrame->GetPageSizeIU();
     GetGridList()->SetCellValue( row, COL_TEXTSTRING, wxString::Format( _( "Size: %.1fx%.1fmm" ),
-                                 Iu2Millimeter( page_sizeIU.x ), Iu2Millimeter( page_sizeIU.y ) ) );
+                                                   drawSheetIUScale.IUTomm( page_sizeIU.x ),
+                                                   drawSheetIUScale.IUTomm( page_sizeIU.y ) ) );
     GetGridList()->SetCellRenderer (row, COL_BITMAP, new BitmapGridCellRenderer( root_xpm ) );
     GetGridList()->SetReadOnly( row, COL_BITMAP );
     m_itemsList.push_back( nullptr );   // this item is not a DS_DATA_ITEM, just a pseudo item

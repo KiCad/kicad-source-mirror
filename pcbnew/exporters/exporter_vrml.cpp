@@ -115,7 +115,7 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
         m_layer_z[i] = 0;
 
     // this default only makes sense if the output is in mm
-    m_brd_thickness = Iu2Millimeter( m_board->GetDesignSettings().GetBoardThickness() );
+    m_brd_thickness = pcbIUScale.IUTomm( m_board->GetDesignSettings().GetBoardThickness() );
 
     // TODO: figure out a way to share all these stackup color definitions...
     initStaticColorList();
@@ -544,7 +544,7 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     // VRML_LAYER board;
     m_3D_board.Tesselate( &m_holes );
     double brdz = m_brd_thickness / 2.0
-                  - ( Millimeter2iu( ART_OFFSET / 2.0 ) ) * m_BoardToVrmlScale;
+                  - ( pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) ) * m_BoardToVrmlScale;
 
     if( m_UseInlineModelsInBrdfile )
     {
@@ -577,14 +577,14 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PASTE ),
                             &m_top_paste, true, true,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_PASTE, &m_top_paste,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            true );
     }
@@ -596,14 +596,14 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_TOP_SOLDMASK ),
                             &m_top_soldermask, true, true,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_TOP_SOLDMASK, &m_top_soldermask,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            true );
     }
@@ -630,13 +630,13 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PASTE ),
                             &m_bot_paste, true, false,
                             GetLayerZ( B_Cu )
-                            - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                            - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_PASTE, &m_bot_paste,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( B_Cu ) - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            false );
     }
@@ -648,14 +648,14 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_BOT_SOLDMASK ),
                             &m_bot_soldermask, true, false,
-                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            GetLayerZ( B_Cu ) - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_BOT_SOLDMASK, &m_bot_soldermask,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( B_Cu ) - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            false );
     }
@@ -667,17 +667,17 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PASTE ),
                             &m_plated_holes, false, false,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
-                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            GetLayerZ( B_Cu ) - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale );
     }
     else
     {
         create_vrml_shell( m_OutputPCB, VRML_COLOR_PASTE, &m_plated_holes,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( F_Cu ) + pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           GetLayerZ( B_Cu ) - pcbIUScale.mmToIU( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale );
     }
 
@@ -734,7 +734,7 @@ void EXPORTER_PCB_VRML::ComputeLayer3D_Zpos()
     }
 
     // To avoid rounding interference, we apply an epsilon to each successive layer
-    double epsilon_z = Millimeter2iu( ART_OFFSET ) * m_BoardToVrmlScale;
+    double epsilon_z = pcbIUScale.mmToIU( ART_OFFSET ) * m_BoardToVrmlScale;
     SetLayerZ( B_Paste, -half_thickness - epsilon_z );
     SetLayerZ( B_Adhes, -half_thickness - epsilon_z );
     SetLayerZ( B_SilkS, -half_thickness - epsilon_z * 3 );
@@ -857,7 +857,7 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         if( m_UseInlineModelsInBrdfile )
             max_error /= 2.54;      // The board is exported with a size reduced by 2.54
 
-        int nsides = GetArcToSegmentCount( via->GetDrillValue(), Millimeter2iu( max_error ),
+        int nsides = GetArcToSegmentCount( via->GetDrillValue(), pcbIUScale.mmToIU( max_error ),
                                            FULL_CIRCLE );
 
         double minSegLength = M_PI * 2.0 * hole_radius / nsides;
@@ -891,7 +891,7 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
         if( m_UseInlineModelsInBrdfile )
             max_error /= 2.54;      // The board is exported with a size reduced by 2.54
 
-        int nsides = GetArcToSegmentCount( hole_drill, Millimeter2iu( max_error ),
+        int nsides = GetArcToSegmentCount( hole_drill, pcbIUScale.mmToIU( max_error ),
                                            FULL_CIRCLE );
         double minSegLength = M_PI * hole_drill / nsides;
         double maxSegLength = minSegLength*2.0;

@@ -719,9 +719,9 @@ struct ARC_DATA_MM
 
     SHAPE_ARC GenerateArc() const
     {
-        SHAPE_ARC arc( VECTOR2D( PcbMm2iu( m_center_x ), PcbMm2iu( m_center_y ) ),
-                       VECTOR2D( PcbMm2iu( m_start_x ), PcbMm2iu( m_start_y ) ),
-                       EDA_ANGLE( m_center_angle, DEGREES_T ), PcbMm2iu( m_width ) );
+        SHAPE_ARC arc( VECTOR2D( pcbIUScale.mmToIU( m_center_x ), pcbIUScale.mmToIU( m_center_y ) ),
+                       VECTOR2D( pcbIUScale.mmToIU( m_start_x ), pcbIUScale.mmToIU( m_start_y ) ),
+                       EDA_ANGLE( m_center_angle, DEGREES_T ), pcbIUScale.mmToIU( m_width ) );
 
         return arc;
     }
@@ -836,17 +836,17 @@ BOOST_AUTO_TEST_CASE( CollideArc )
             SHAPE* arc1_slc_sh = &arc1_slc;
             SHAPE* arc2_slc_sh = &arc2_slc;
 
-            bool result_arc_to_arc =
-                    arc1_sh->Collide( arc2_sh, PcbMm2iu( c.m_clearance ), &actual, &location );
+            bool result_arc_to_arc = arc1_sh->Collide( arc2_sh, pcbIUScale.mmToIU( c.m_clearance ),
+                                                       &actual, &location );
 
             // For arc to chain collisions, we need to re-calculate the clearances because the
             // SHAPE_LINE_CHAIN is zero width
-            int clearance = PcbMm2iu( c.m_clearance ) + ( arc2.GetWidth() / 2 );
+            int clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc2.GetWidth() / 2 );
 
             bool result_arc_to_chain =
                     arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
-            clearance = PcbMm2iu( c.m_clearance ) + ( arc1.GetWidth() / 2 );
+            clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc1.GetWidth() / 2 );
             bool result_chain_to_arc =
                     arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
 

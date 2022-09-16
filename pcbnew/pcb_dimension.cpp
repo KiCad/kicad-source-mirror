@@ -49,7 +49,7 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
         m_precision( 4 ),
         m_suppressZeroes( false ),
-        m_lineThickness( Millimeter2iu( 0.2 ) ),
+        m_lineThickness( pcbIUScale.mmToIU( 0.2 ) ),
         m_arrowLength( Mils2iu( 50 ) ),
         m_extensionOffset( 0 ),
         m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),

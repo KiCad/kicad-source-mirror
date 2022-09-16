@@ -50,7 +50,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <progress_reporter.h>
 
-const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = Millimeter2iu( 20 );
+const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS

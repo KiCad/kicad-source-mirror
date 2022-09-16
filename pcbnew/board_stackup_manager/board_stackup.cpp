@@ -120,14 +120,14 @@ void BOARD_STACKUP_ITEM::RemoveDielectricPrms( int aDielectricPrmsIdx )
 int BOARD_STACKUP_ITEM::GetCopperDefaultThickness()
 {
     // A reasonable thickness for copper layers:
-    return Millimeter2iu( 0.035 );
+    return pcbIUScale.mmToIU( 0.035 );
 }
 
 
 int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
 {
     // A reasonable thickness for solder mask:
-    return Millimeter2iu( 0.01 );
+    return pcbIUScale.mmToIU( 0.01 );
 }
 
 
@@ -500,7 +500,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
     if( aSettings == nullptr && aActiveCopperLayersCount > 0 )
         activeCuLayerCount = aActiveCopperLayersCount;
 
-    int brd__thickness = aSettings ? aSettings->GetBoardThickness() : Millimeter2iu( 1.6 );
+    int brd__thickness = aSettings ? aSettings->GetBoardThickness() : pcbIUScale.mmToIU( 1.6 );
     int diel_thickness = brd__thickness -
                          ( BOARD_STACKUP_ITEM::GetCopperDefaultThickness() * activeCuLayerCount );
 

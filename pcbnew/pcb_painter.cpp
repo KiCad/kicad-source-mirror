@@ -1893,7 +1893,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         // Draw the box with a larger thickness than box thickness to show
         // the shadow mask
         std::vector<VECTOR2I> pts = aTextBox->GetCorners();
-        int line_thickness = std::max( thickness*3, Millimeter2iu( 0.2 ) );
+        int line_thickness = std::max( thickness*3, pcbIUScale.mmToIU( 0.2 ) );
 
         for( size_t ii = 0; ii < pts.size(); ++ii )
             m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], line_thickness );
@@ -2472,4 +2472,4 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 }
 
 
-const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = Millimeter2iu( 10.0 );
+const double PCB_RENDER_SETTINGS::MAX_FONT_SIZE = pcbIUScale.mmToIU( 10.0 );

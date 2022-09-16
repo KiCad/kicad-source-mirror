@@ -81,6 +81,13 @@ struct EDA_IU_SCALE
             IU_PER_MM( aIUPerMM ), IU_PER_MILS( aIUPerMM * 0.0254 )
     {
     }
+
+    constexpr inline double IUTomm( int iu ) const { return iu / IU_PER_MM; }
+
+    constexpr inline int mmToIU( double mm ) const
+    {
+        return (int) ( mm < 0 ? ( mm * IU_PER_MM - 0.5 ) : ( mm * IU_PER_MM + 0.5 ) );
+    }
 };
 
 constexpr EDA_IU_SCALE gerbIUScale = EDA_IU_SCALE( GERB_IU_PER_MM );
@@ -136,12 +143,6 @@ constexpr inline int Millimeter2iu( double mm )
 }
 
 /// Convert mm to internal units (iu).
-constexpr inline double Iu2Millimeter( int iu )
-{
-    return iu / IU_PER_MM;
-}
-
-/// Convert mm to internal units (iu).
 // constexpr inline double Iu2Mils( int iu )
 // {
 //     return iu / IU_PER_MILS;
@@ -167,15 +168,6 @@ constexpr inline int SchMils2iu( double mils )
 constexpr inline double SchIu2Mils( int iu )
 {
     return iu / SCH_IU_PER_MILS;
-}
-
-constexpr inline int PcbMm2iu( double mm )
-{
-    return (int) ( mm < 0 ? mm * PCB_IU_PER_MM - 0.5 : mm * PCB_IU_PER_MM + 0.5 );
-}
-constexpr inline double PcbIu2mm( int iu )
-{
-    return iu / PCB_IU_PER_MM;
 }
 
 #endif

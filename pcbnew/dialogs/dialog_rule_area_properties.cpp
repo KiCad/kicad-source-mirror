@@ -221,8 +221,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
         break;
     }
 
-    if( !m_outlineHatchPitch.Validate( Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ),
-                                       Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+    if( !m_outlineHatchPitch.Validate( pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ),
+                                       pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
         return false;
 
     m_zonesettings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();

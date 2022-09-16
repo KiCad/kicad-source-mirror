@@ -212,7 +212,7 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( a->GetCenter0() - b->GetCenter0() ).EuclideanNorm() > Millimeter2iu( 0.0001 ) )
+        if( ( a->GetCenter0() - b->GetCenter0() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0001 ) )
             return true;
 
         break;

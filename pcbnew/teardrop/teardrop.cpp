@@ -70,7 +70,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     teardrop->SetLayer( aTrack->GetLayer() );
     teardrop->SetNetCode( aTrack->GetNetCode() );
     teardrop->SetLocalClearance( 0 );
-    teardrop->SetMinThickness( Millimeter2iu( 0.0254 ) );  // The minimum zone thickness
+    teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetPadConnection( ZONE_CONNECTION::FULL );
     teardrop->SetIsFilled( false );
     teardrop->SetZoneName( aTeardropVariant == TD_TYPE_PADVIA ?
@@ -93,7 +93,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks )
 {
     // Init parameters:
-    m_tolerance = Millimeter2iu( 0.01 );
+    m_tolerance = pcbIUScale.mmToIU( 0.01 );
 
     int count = 0;      // Number of created teardrop
 
@@ -204,12 +204,12 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
     // Exact shapes can be calculated only on a full zone refill, **much more** time consuming
     if( m_createdTdList.size() )
     {
-        int epsilon = Millimeter2iu( 0.001 );
+        int epsilon = pcbIUScale.mmToIU( 0.001 );
 
         for( ZONE* zone: m_createdTdList )
         {
             int half_min_width = zone->GetMinThickness() / 2;
-            int numSegs = GetArcToSegmentCount( half_min_width, Millimeter2iu( 0.005 ), FULL_CIRCLE );
+            int numSegs = GetArcToSegmentCount( half_min_width, pcbIUScale.mmToIU( 0.005 ), FULL_CIRCLE );
             SHAPE_POLY_SET filledPolys = *zone->Outline();
 
             filledPolys.Deflate( half_min_width - epsilon, numSegs );

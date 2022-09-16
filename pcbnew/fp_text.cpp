@@ -48,7 +48,7 @@ FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     SetKeepUpright( true );
 
     // Set text thickness to a default value
-    SetTextThickness( Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
+    SetTextThickness( pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ) );
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists

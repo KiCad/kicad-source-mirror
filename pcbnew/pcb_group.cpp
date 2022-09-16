@@ -227,7 +227,7 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
     for( BOARD_ITEM* item : m_items )
         bbox.Merge( item->GetBoundingBox() );
 
-    bbox.Inflate( Millimeter2iu( 0.25 ) ); // Give a min size to the bbox
+    bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Give a min size to the bbox
 
     return bbox;
 }

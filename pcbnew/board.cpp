@@ -94,7 +94,7 @@ BOARD::BOARD() :
     m_SolderMask = new ZONE( this );
     m_SolderMask->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
     m_SolderMask->SetOutline( new SHAPE_POLY_SET() );
-    int infinity = ( std::numeric_limits<int>::max() / 2 ) - Millimeter2iu( 1 );
+    int infinity = ( std::numeric_limits<int>::max() / 2 ) - pcbIUScale.mmToIU( 1 );
     m_SolderMask->Outline()->NewOutline();
     m_SolderMask->Outline()->Append( VECTOR2I( -infinity, -infinity ) );
     m_SolderMask->Outline()->Append( VECTOR2I( -infinity, +infinity ) );
@@ -1882,7 +1882,7 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
-    int chainingEpsilon = Millimeter2iu( 0.02 );  // max dist from one endPt to next startPt
+    int chainingEpsilon = pcbIUScale.mmToIU( 0.02 ); // max dist from one endPt to next startPt
 
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
                                               chainingEpsilon, aErrorHandler );

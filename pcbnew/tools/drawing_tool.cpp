@@ -73,7 +73,7 @@
 #include <string_utils.h>
 #include <zone.h>
 
-const unsigned int DRAWING_TOOL::COORDS_PADDING = Millimeter2iu( 20 );
+const unsigned int DRAWING_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -3230,7 +3230,7 @@ int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
 }
 
 
-const unsigned int DRAWING_TOOL::WIDTH_STEP = Millimeter2iu( 0.1 );
+const unsigned int DRAWING_TOOL::WIDTH_STEP = pcbIUScale.mmToIU( 0.1 );
 
 
 void DRAWING_TOOL::setTransitions()

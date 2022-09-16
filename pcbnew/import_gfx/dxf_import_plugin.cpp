@@ -84,7 +84,6 @@
 // the value 0.0218 is equivalent to about 5 degrees arc,
 #define MIN_BULGE 0.0218
 
-//#define SCALE_FACTOR(x) millimeter2iu(x)  /* no longer used */
 #define SCALE_FACTOR(x) (x)
 
 

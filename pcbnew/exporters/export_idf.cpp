@@ -40,14 +40,12 @@
 #include "3d_cache/3d_cache.h"
 #include "filename_resolver.h"
 
-#ifndef PCBNEW
-#define PCBNEW                  // needed to define the right value of Millimeter2iu(x)
-#endif
-#include <convert_to_biu.h>     // to define Millimeter2iu(x)
+
+#include <convert_to_biu.h>     // to define pcbIUScale.FromMillimeter(x)
 
 
 // assumed default graphical line thickness: == 0.1mm
-#define LINE_WIDTH (Millimeter2iu( 0.1 ))
+#define LINE_WIDTH (pcbIUScale.mmToIU( 0.1 ))
 
 
 static FILENAME_RESOLVER* resolver;

@@ -34,7 +34,7 @@
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 
-#define DCODE_DEFAULT_SIZE Millimeter2iu( 0.1 )
+#define DCODE_DEFAULT_SIZE gerbIUScale.mmToIU( 0.1 )
 
 /* Format Gerber: NOTES:
  * Tools and D_CODES

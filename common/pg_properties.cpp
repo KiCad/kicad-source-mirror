@@ -220,7 +220,7 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
             return wxString::Format( wxT( "%g mils" ), Iu2Mils( aVariant.GetLong() ) );
 
         case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxT( "%g mm" ), Iu2Millimeter( aVariant.GetLong() ) );
+            return wxString::Format( wxT( "%g mm" ), pcbIUScale.IUTomm( aVariant.GetLong() ) );
 
         case EDA_UNITS::UNSCALED:
             return wxString::Format( wxT( "%li" ), aVariant.GetLong() );

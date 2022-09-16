@@ -663,7 +663,7 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) 
         else
         {
             BOX2I newFootprintBB( { 0, 0 }, { 0, 0 } );
-            newFootprintBB.Inflate( Millimeter2iu( 12 ) );
+            newFootprintBB.Inflate( pcbIUScale.mmToIU( 12 ) );
             return newFootprintBB;
         }
     }

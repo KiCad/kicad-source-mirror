@@ -40,7 +40,7 @@
 
 
 /// Factor to convert the maker unit shape to internal units:
-#define SCALING_FACTOR  Millimeter2iu( 0.1625 )
+#define SCALING_FACTOR  pcbIUScale.mmToIU( 0.1625 )
 
 
 

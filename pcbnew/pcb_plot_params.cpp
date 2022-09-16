@@ -138,7 +138,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_skipNPTH_Pads              = false;
 
     // line width to plot items in outline mode.
-    m_sketchPadLineWidth         = Millimeter2iu( 0.1 );
+    m_sketchPadLineWidth         = pcbIUScale.mmToIU( 0.1 );
 
     m_default_colors = std::make_shared<COLOR_SETTINGS>();
     m_colors         = m_default_colors.get();

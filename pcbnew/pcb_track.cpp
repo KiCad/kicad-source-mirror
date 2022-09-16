@@ -51,7 +51,7 @@ using KIGFX::PCB_RENDER_SETTINGS;
 PCB_TRACK::PCB_TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
-    m_Width = Millimeter2iu( 0.2 );     // Gives a reasonable default width
+    m_Width = pcbIUScale.mmToIU( 0.2 );     // Gives a reasonable default width
 }
 
 
@@ -640,7 +640,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             return HIDE;
 
         // Netnames will be shown only if zoom is appropriate
-        return ( double ) Millimeter2iu( 4 ) / ( m_Width + 1 );
+        return ( double ) pcbIUScale.mmToIU( 4 ) / ( m_Width + 1 );
     }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -765,7 +765,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         }
 
         // Netnames will be shown only if zoom is appropriate
-        return m_Width == 0 ? HIDE : ( (double)Millimeter2iu( 10 ) / m_Width );
+        return m_Width == 0 ? HIDE : ( (double)pcbIUScale.mmToIU( 10 ) / m_Width );
     }
 
     // Passed all tests; show.

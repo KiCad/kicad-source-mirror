@@ -1883,15 +1883,15 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
             // line widths.
             switch( layer )
             {
-            case Edge_Cuts: width = Millimeter2iu( DEFAULT_EDGE_WIDTH );      break;
+            case Edge_Cuts: width = pcbIUScale.mmToIU( DEFAULT_EDGE_WIDTH );      break;
 
             case F_SilkS:
-            case B_SilkS:   width = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ); break;
+            case B_SilkS:   width = pcbIUScale.mmToIU( DEFAULT_SILK_LINE_WIDTH ); break;
 
             case F_CrtYd:
-            case B_CrtYd:   width = Millimeter2iu( DEFAULT_COURTYARD_WIDTH ); break;
+            case B_CrtYd:   width = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ); break;
 
-            default:        width = Millimeter2iu( DEFAULT_LINE_WIDTH );      break;
+            default:        width = pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH );      break;
             }
         }
     }

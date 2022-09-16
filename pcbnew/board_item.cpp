@@ -75,7 +75,7 @@ bool BOARD_ITEM::IsLocked() const
 
 STROKE_PARAMS BOARD_ITEM::GetStroke() const
 {
-    wxCHECK( false, STROKE_PARAMS( Millimeter2iu( DEFAULT_LINE_WIDTH ) ) );
+    wxCHECK( false, STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) ) );
 }
 
 

@@ -1219,9 +1219,9 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
 
         modelSettings.m_Filename = modelTuple->second;
 
-        modelSettings.m_Offset.x = Iu2Millimeter((int) elem.modelPosition.x - fpPosition.x );
-        modelSettings.m_Offset.y = -Iu2Millimeter((int) elem.modelPosition.y - fpPosition.y );
-        modelSettings.m_Offset.z = Iu2Millimeter( (int) elem.modelPosition.z );
+        modelSettings.m_Offset.x = pcbIUScale.IUTomm((int) elem.modelPosition.x - fpPosition.x );
+        modelSettings.m_Offset.y = -pcbIUScale.IUTomm((int) elem.modelPosition.y - fpPosition.y );
+        modelSettings.m_Offset.z = pcbIUScale.IUTomm( (int) elem.modelPosition.z );
 
         EDA_ANGLE orientation = footprint->GetOrientation();
 

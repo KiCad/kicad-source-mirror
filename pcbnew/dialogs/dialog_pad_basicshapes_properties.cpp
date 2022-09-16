@@ -489,7 +489,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    int minsize( Millimeter2iu( 0.5 ) );
+    int minsize( pcbIUScale.mmToIU( 0.5 ) );
 
     for( unsigned ii = 0; ii < m_currPoints.size(); ++ii )
     {

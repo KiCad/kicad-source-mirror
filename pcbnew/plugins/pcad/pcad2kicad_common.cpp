@@ -156,7 +156,7 @@ double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe,
                 i = i * (0.0254 / 0.025);
 #endif
 
-            i = Millimeter2iu( i );
+            i = pcbIUScale.mmToIU( i );
         }
         else
         {

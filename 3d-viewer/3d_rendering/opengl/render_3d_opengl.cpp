@@ -1364,16 +1364,16 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
 
     brd_center_pos.y = -brd_center_pos.y;
 
-    const int xsize = std::max( brd_size.x, Millimeter2iu( 100 ) ) * 1.2;
-    const int ysize = std::max( brd_size.y, Millimeter2iu( 100 ) ) * 1.2;
+    const int xsize = std::max( brd_size.x, pcbIUScale.mmToIU( 100 ) ) * 1.2;
+    const int ysize = std::max( brd_size.y, pcbIUScale.mmToIU( 100 ) ) * 1.2;
 
     // Grid limits, in 3D units
     double  xmin = ( brd_center_pos.x - xsize / 2 ) * scale;
     double  xmax = ( brd_center_pos.x + xsize / 2 ) * scale;
     double  ymin = ( brd_center_pos.y - ysize / 2 ) * scale;
     double  ymax = ( brd_center_pos.y + ysize / 2 ) * scale;
-    double  zmin = Millimeter2iu( -50 ) * scale;
-    double  zmax = Millimeter2iu( 100 ) * scale;
+    double  zmin = pcbIUScale.mmToIU( -50 ) * scale;
+    double  zmax = pcbIUScale.mmToIU( 100 ) * scale;
 
     // Set rasterised line width (min value = 1)
     glLineWidth( 1 );

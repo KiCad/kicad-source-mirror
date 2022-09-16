@@ -841,7 +841,7 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     // Store m_PSWidthAdjust in mm in user config
-    cfg->m_Plot.ps_fine_width_adjust = Iu2Millimeter( m_PSWidthAdjust );
+    cfg->m_Plot.ps_fine_width_adjust = pcbIUScale.IUTomm( m_PSWidthAdjust );
 
     tempOptions.SetFormat( getPlotFormat() );
 

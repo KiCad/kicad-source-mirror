@@ -49,13 +49,13 @@ BOOST_FIXTURE_TEST_SUITE( SchInternalUnits, TEST_SCH_INTERNAL_UNITS )
 
 BOOST_AUTO_TEST_CASE( ConvertToInternalUnits )
 {
-    BOOST_CHECK_EQUAL( Millimeter2iu( 1.0 ), 10000 );
+    BOOST_CHECK_EQUAL( schIUScale.mmToIU( 1.0 ), 10000 );
 }
 
 
 BOOST_AUTO_TEST_CASE( ConvertFromInternalUnits )
 {
-    BOOST_CHECK_EQUAL( static_cast< int >( Iu2Millimeter( 10000 ) ), 1 );
+    BOOST_CHECK_EQUAL( static_cast< int >( schIUScale.IUTomm( 10000 ) ), 1 );
 }
 
 

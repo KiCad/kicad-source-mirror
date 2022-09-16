@@ -337,10 +337,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     // Check if the board outline is continuous
     // max dist from one endPt to next startPt to build a closed shape:
-    int chainingEpsilon = Millimeter2iu( tolerance );
+    int chainingEpsilon = pcbIUScale.mmToIU( tolerance );
 
     // Arc to segment approx error (not critical here: we do not use the outline shape):
-    int maxError = Millimeter2iu( 0.005 );
+    int maxError = pcbIUScale.mmToIU( 0.005 );
     bool success = BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, maxError,
                                               chainingEpsilon, nullptr );
     if( !success )
@@ -435,8 +435,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
     {
         BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-        xOrg = Iu2Millimeter( bbox.GetCenter().x );
-        yOrg = Iu2Millimeter( bbox.GetCenter().y );
+        xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
+        yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
         LOCALE_IO dummy;
         cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6fx%.6fmm%c" ),
                                          quote, xOrg, yOrg, quote ) );
@@ -506,8 +506,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
     {
         BOX2I bbox = m_parent->GetBoard()->ComputeBoundingBox( true );
-        xOrg = Iu2Millimeter( bbox.GetCenter().x );
-        yOrg = Iu2Millimeter( bbox.GetCenter().y );
+        xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
+        yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
         params.m_xOrigin = xOrg;
         params.m_yOrigin = yOrg;
         break;

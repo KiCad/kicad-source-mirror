@@ -65,7 +65,7 @@ using namespace std::placeholders;
 #include <pcb_target.h>
 #include <zone_filler.h>
 
-const unsigned int EDIT_TOOL::COORDS_PADDING = Millimeter2iu( 20 );
+const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
