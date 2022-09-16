@@ -73,8 +73,6 @@ set( GERBVIEW_SRCS
     )
 
 set( GERBVIEW_EXTRA_SRCS
-    ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
-    ${CMAKE_SOURCE_DIR}/common/lset.cpp
 )
 
 if( WIN32 )
