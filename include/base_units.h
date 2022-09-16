@@ -32,22 +32,6 @@
 #ifndef _BASE_UNITS_H_
 #define _BASE_UNITS_H_
 
-#include <string>
-
 #include <eda_units.h>
-#include <convert_to_biu.h>
-#include <math/vector2d.h>
-#include <geometry/eda_angle.h>
-
-//TODO: Abstract Base Units to a single class
-
-/**
- * Used for holding indeterminate values, such as with multiple selections
- * holding different values or controls which do not wish to set a value.
- */
-#define INDETERMINATE_STATE _( "-- mixed values --" )
-#define INDETERMINATE_ACTION _( "-- leave unchanged --" )
-
-
 
 #endif   // _BASE_UNITS_H_

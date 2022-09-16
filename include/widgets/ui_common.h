@@ -35,6 +35,13 @@ class wxTextCtrl;
 class wxTextEntry;
 class wxWindow;
 
+/**
+ * Used for holding indeterminate values, such as with multiple selections
+ * holding different values or controls which do not wish to set a value.
+ */
+#define INDETERMINATE_STATE _( "-- mixed values --" )
+#define INDETERMINATE_ACTION _( "-- leave unchanged --" )
+
 namespace KIUI
 {
 
