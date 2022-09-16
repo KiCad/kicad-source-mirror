@@ -319,49 +319,35 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 
                 for( EDA_ITEM* item : aCollector )
                 {
-                    switch( item->Type() )
+                    if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
                     {
-                    case PCB_TRACE_T:
-                    case PCB_ARC_T:
-                        tracks.push_back( static_cast<PCB_TRACK*>( item ) );
-                        break;
-                    case PCB_VIA_T:
-                        vias.push_back( static_cast<PCB_TRACK*>( item ) );
-                        break;
-                    default:
-                        break;
+                        if( track->Type() == PCB_VIA_T )
+                            vias.push_back( track );
+                        else
+                            tracks.push_back( track );
                     }
                 }
 
-                if( tracks.size() == 2 )
+                auto connected = []( PCB_TRACK* track, const VECTOR2I& pt )
+                                 {
+                                     return track->GetStart() == pt || track->GetEnd() == pt;
+                                 };
+
+                if( tracks.size() == 2 && vias.size() == 0 )
                 {
-                    const BOARD*                       board = tracks[0]->GetBoard();
-                    std::shared_ptr<CONNECTIVITY_DATA> c = board->GetConnectivity();
-                    std::vector<BOARD_CONNECTED_ITEM*> cItems;
-
-                    int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
-
-                    if( vias.size() == 1 )
+                    if( connected( tracks[0], tracks[1]->GetStart() )
+                            || connected( tracks[0], tracks[1]->GetEnd() ) )
                     {
-                        cItems = c->GetConnectedItemsAtAnchor( vias[0], aPt,
-                                                               { PCB_TRACE_T, PCB_ARC_T },
-                                                               vias[0]->GetWidth() / 2 + accuracy );
-
-                        if( alg::contains( cItems, tracks[0] )
-                                && alg::contains( cItems, tracks[1] ) )
-                        {
-                            aCollector.Remove( tracks[0] );
-                            aCollector.Remove( tracks[1] );
-                        }
+                        aCollector.Remove( tracks[1] );
                     }
-                    else if( vias.size() == 0 )
+                }
+                else if( tracks.size() == 2 && vias.size() == 1 )
+                {
+                    if( connected( tracks[0], vias[0]->GetPosition() )
+                            && connected( tracks[1], vias[0]->GetPosition() ) )
                     {
-                        cItems = c->GetConnectedItemsAtAnchor( tracks[0], aPt,
-                                                               { PCB_TRACE_T, PCB_ARC_T },
-                                                               tracks[0]->GetWidth() / 2 + accuracy );
-
-                        if( alg::contains( cItems, tracks[1] ) )
-                            aCollector.Remove( tracks[1] );
+                        aCollector.Remove( tracks[0] );
+                        aCollector.Remove( tracks[1] );
                     }
                 }
             },
