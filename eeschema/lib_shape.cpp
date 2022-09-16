@@ -131,7 +131,7 @@ void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 
 void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                      const TRANSFORM& aTransform ) const
+                      const TRANSFORM& aTransform, bool aDimmed ) const
 {
     if( IsPrivate() )
         return;
@@ -218,6 +218,14 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
     }
 
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
+
     aPlotter->SetColor( color );
     aPlotter->SetDash( penWidth, lineStyle );
 
@@ -261,7 +269,7 @@ int LIB_SHAPE::GetPenWidth() const
 
 
 void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                       const TRANSFORM& aTransform )
+                       const TRANSFORM& aTransform, bool aDimmed )
 {
     if( IsPrivate() )
         return;
@@ -280,6 +288,14 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( LAYER_DEVICE );
+
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;

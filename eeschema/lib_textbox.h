@@ -84,7 +84,7 @@ public:
     BITMAPS GetMenuImage() const override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& offset,
-               const TRANSFORM& aTransform ) const override;
+               const TRANSFORM& aTransform, bool aDimmed ) const override;
 
     EDA_ITEM* Clone() const override
     {
@@ -99,7 +99,7 @@ private:
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+                const TRANSFORM& aTransform, bool aDimmed ) override;
 };
 
 

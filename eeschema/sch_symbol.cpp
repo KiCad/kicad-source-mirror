@@ -147,6 +147,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     // Inherit the include in bill of materials and board netlist settings from library symbol.
     m_inBom = aSymbol.GetIncludeInBom();
     m_onBoard = aSymbol.GetIncludeOnBoard();
+    m_DNP = false;
 
 }
 
@@ -178,6 +179,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_isInNetlist = aSymbol.m_isInNetlist;
     m_inBom       = aSymbol.m_inBom;
     m_onBoard     = aSymbol.m_onBoard;
+    m_DNP         = aSymbol.m_DNP;
 
     if( aSymbol.m_part )
         SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part.get() ) );
@@ -456,11 +458,11 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
     if( m_part )
     {
-        m_part->Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts );
+        m_part->Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts, GetDNP() );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Print( aSettings, m_pos + aOffset, 0, 0, opts );
+        dummy()->Print( aSettings, m_pos + aOffset, 0, 0, opts, GetDNP() );
     }
 
     for( SCH_FIELD& field : m_fields )
@@ -1045,6 +1047,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "SYMBOL_KEYWORDS" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOM" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
+    aVars->push_back( wxT( "DNP" ) );
 }
 
 
@@ -1149,12 +1152,17 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
     {
-        * token = this->GetIncludeInBom() ? wxT( "" ) : _( "Excluded from BOM" );
+        *token = this->GetIncludeInBom() ? wxT( "" ) : _( "Excluded from BOM" );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
     {
-        * token = this->GetIncludeOnBoard() ? wxT( "" ) : _( "Excluded from board" );
+        *token = this->GetIncludeOnBoard() ? wxT( "" ) : _( "Excluded from board" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "DNP" ) ) )
+    {
+        *token = this->GetDNP() ? wxT( "" ) : _( "DNP" );
         return true;
     }
 
@@ -1379,7 +1387,7 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
 }
 
 
-int SCH_SYMBOL::GetOrientation()
+int SCH_SYMBOL::GetOrientation() const
 {
     int rotate_values[] =
     {
@@ -1399,18 +1407,18 @@ int SCH_SYMBOL::GetOrientation()
 
     // Try to find the current transform option:
     TRANSFORM transform = m_transform;
+    SCH_SYMBOL temp( *this );
 
     for( int type_rotate : rotate_values )
     {
-        SetOrientation( type_rotate );
+        temp.SetOrientation( type_rotate );
 
-        if( transform == m_transform )
+        if( transform == temp.GetTransform() )
             return type_rotate;
     }
 
     // Error: orientation not found in list (should not happen)
     wxFAIL_MSG( "Schematic symbol orientation matrix internal error." );
-    m_transform = transform;
 
     return SYM_NORMAL;
 }
@@ -2029,7 +2037,8 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         for( bool local_background : { true, false } )
         {
-            tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
+            tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp,
+                    GetDNP() );
 
             for( SCH_FIELD field : m_fields )
                 field.Plot( aPlotter, local_background );
@@ -2083,7 +2092,7 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
             tempPin->SetShape( symbolPin->GetShape() );
-            tempPin->Plot( aPlotter, false, m_pos, transform);
+            tempPin->Plot( aPlotter, false, m_pos, transform, GetDNP() );
         }
     }
 }

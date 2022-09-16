@@ -322,9 +322,10 @@ public:
      * @param aMulti - unit if multiple units per symbol.
      * @param aConvert - Symbol conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
+     * @param aDimmed - Reduce brightness of symbol
      */
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti, int aConvert,
-                const LIB_SYMBOL_OPTIONS& aOpts );
+                const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed );
 
     /**
      * Plot lib symbol to plotter.
@@ -337,9 +338,10 @@ public:
      * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
+     * @param aDimmed - Reduce brightness of symbol
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-               const VECTOR2I& aOffset, const TRANSFORM& aTransform ) const;
+               const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const;
 
     /**
      * Plot Lib Fields only of the symbol to plotter.
@@ -351,9 +353,10 @@ public:
      * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
+     * @param aDimmed - reduce brightness of fields
      */
     void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                        const VECTOR2I& aOffset, const TRANSFORM& aTransform );
+                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.

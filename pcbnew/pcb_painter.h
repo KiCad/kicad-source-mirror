@@ -96,7 +96,7 @@ public:
         return luma < 0.5;
     }
 
-    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
+    const COLOR4D& GetBackgroundColor() const override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override
     {

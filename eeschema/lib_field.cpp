@@ -135,17 +135,24 @@ KIFONT::FONT* LIB_FIELD::GetDrawFont() const
 
 
 void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                       const TRANSFORM& aTransform )
+                       const TRANSFORM& aTransform, bool aDimmed )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsVisible() ? GetDefaultLayer() : LAYER_HIDDEN );
+    COLOR4D  bg = aSettings->GetBackgroundColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();
     int      penWidth = GetEffectivePenWidth( aSettings );
     VECTOR2I text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
+    if( blackAndWhiteMode || bg == COLOR4D::UNSPECIFIED )
+        bg = COLOR4D::WHITE;
+
     if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
                  GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
@@ -316,7 +323,7 @@ void LIB_FIELD::Rotate( const VECTOR2I& center, bool aRotateCCW )
 
 
 void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                      const TRANSFORM& aTransform ) const
+                      const TRANSFORM& aTransform, bool aDimmed ) const
 {
     if( GetText().IsEmpty() || aBackground )
         return;
@@ -340,6 +347,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     VECTOR2I          textpos = aTransform.TransformCoordinate( bbox.Centre() ) + aOffset;
 
     COLOR4D color;
+    COLOR4D bg;
 
     if( aPlotter->GetColorMode() )
     {
@@ -347,11 +355,20 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             color = GetTextColor();
         else
             color = aPlotter->RenderSettings()->GetLayerColor( GetDefaultLayer() );
+
+        bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+        if( bg == COLOR4D::UNSPECIFIED )
+            bg = COLOR4D::WHITE;
     }
     else
     {
         color = COLOR4D::BLACK;
+        bg = COLOR4D::WHITE;
     }
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     int penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
 

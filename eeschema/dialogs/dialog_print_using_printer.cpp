@@ -490,6 +490,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( cfg->m_Printing.use_theme && theme )
         renderSettings.LoadColors( theme );
 
+    renderSettings.SetBackgroundColor( bgColor );
+
     // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
     // if they just use the PCB layer.
     renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,

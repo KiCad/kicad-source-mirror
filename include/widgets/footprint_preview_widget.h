@@ -105,8 +105,8 @@ public:
     /**
      * Get the colors to use in a preview widget to match the preview panel.
      */
-    virtual const KIGFX::COLOR4D& GetBackgroundColor() = 0;
-    virtual const KIGFX::COLOR4D& GetForegroundColor() = 0;
+    virtual const KIGFX::COLOR4D& GetBackgroundColor() const = 0;
+    virtual const KIGFX::COLOR4D& GetForegroundColor() const = 0;
 
     /**
      * Return a footprint preview panel instance via Kiface. May return null

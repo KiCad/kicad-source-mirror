@@ -2546,6 +2546,11 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_dnp:
+            symbol->SetDNP( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_fields_autoplaced:
             symbol->SetFieldsAutoplaced();
             NeedRIGHT();

@@ -620,7 +620,7 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 
 
 void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aUnit,
-                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
+                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -646,7 +646,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
                     continue;
 
                 if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                    shape.Print( aSettings, aOffset, (void*) false, aOpts.transform );
+                    shape.Print( aSettings, aOffset, (void*) false, aOpts.transform, aDimmed );
             }
         }
     }
@@ -677,33 +677,42 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
         if( item.Type() == LIB_PIN_T )
         {
-            item.Print( aSettings, aOffset, (void*) &aOpts, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) &aOpts, aOpts.transform, aDimmed );
         }
         else if( item.Type() == LIB_FIELD_T )
         {
-            item.Print( aSettings, aOffset, (void*) NULL, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) NULL, aOpts.transform, aDimmed );
         }
         else if( item.Type() == LIB_SHAPE_T )
         {
             LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
             bool       forceNoFill = shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
 
-            shape.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
+            shape.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform, aDimmed );
         }
         else
         {
-            item.Print( aSettings, aOffset, (void*) false, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) false, aOpts.transform, aDimmed );
         }
     }
 }
 
 
-void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                       const VECTOR2I& aOffset, const TRANSFORM& aTransform ) const
+void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aConvert, bool aBackground,
+        const VECTOR2I &aOffset, const TRANSFORM &aTransform, bool aDimmed ) const
 {
     wxASSERT( aPlotter != nullptr );
 
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
+    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
+
+    aPlotter->SetColor( color );
 
     for( const LIB_ITEM& item : m_drawings )
     {
@@ -722,17 +731,26 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackgro
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aBackground, aOffset, aTransform );
+        item.Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
     }
 }
 
 
 void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                                const VECTOR2I& aOffset, const TRANSFORM& aTransform )
+                                const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed )
 {
     wxASSERT( aPlotter != nullptr );
 
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS ) );
+    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS );
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
+
+    aPlotter->SetColor( color );
 
     for( LIB_ITEM& item : m_drawings )
     {
@@ -757,7 +775,7 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
             field.SetText( text );
         }
 
-        item.Plot( aPlotter, aBackground, aOffset, aTransform );
+        item.Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
         field.SetText( tmp );
     }
 }

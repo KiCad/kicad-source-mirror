@@ -143,9 +143,10 @@ public:
      *              items what can be filled ). used in printing or moving objects mode or to
      *              pass reference to the lib symbol for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
+     * @param aDimmed Dim the color on the printout
      */
     virtual void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                        const TRANSFORM& aTransform );
+                        const TRANSFORM& aTransform, bool aDimmed );
 
     virtual int GetPenWidth() const = 0;
 
@@ -263,9 +264,10 @@ public:
      * @param aOffset Plot offset position.
      * @param aFill Flag to indicate whether or not the object is filled.
      * @param aTransform The plot transform.
+     * @param aDimmed if true, reduce color to background
      */
     virtual void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                       const TRANSFORM& aTransform ) const = 0;
+                       const TRANSFORM& aTransform, bool aDimmed ) const = 0;
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
@@ -312,7 +314,7 @@ protected:
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
     virtual void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                        const TRANSFORM& aTransform ) = 0;
+                        const TRANSFORM& aTransform, bool aDimmed ) = 0;
 
 private:
     friend class LIB_SYMBOL;

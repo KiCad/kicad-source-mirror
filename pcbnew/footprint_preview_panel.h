@@ -55,8 +55,8 @@ public:
 
     virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
 
-    virtual const KIGFX::COLOR4D& GetBackgroundColor() override;
-    virtual const KIGFX::COLOR4D& GetForegroundColor() override;
+    virtual const KIGFX::COLOR4D& GetBackgroundColor() const override;
+    virtual const KIGFX::COLOR4D& GetForegroundColor() const override;
 
     virtual wxWindow* GetWindow() override;
     BOARD* GetBoard() { return m_dummyBoard.get(); }

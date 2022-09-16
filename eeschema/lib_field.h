@@ -165,7 +165,7 @@ public:
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform ) const override;
+               const TRANSFORM& aTransform, bool aDimmed ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -210,7 +210,7 @@ private:
      * the m_Text
      */
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+                const TRANSFORM& aTransform, bool aDimmed ) override;
 
     /**
      * Calculate the new circle at \a aPosition when editing.

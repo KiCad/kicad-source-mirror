@@ -349,6 +349,12 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
+            if( symbol->GetDNP() )
+            {
+                xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
+            }
+
             if( const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef() )
             {
                 if( part->GetDescription().size() )

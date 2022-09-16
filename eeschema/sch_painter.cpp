@@ -183,26 +183,29 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
     m_schematic( nullptr )
 { }
 
-
-#define HANDLE_ITEM( type_id, type_name ) \
-    case type_id: draw( (type_name *) item, aLayer ); break
-
-
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 {
-    const auto item = dynamic_cast<const EDA_ITEM*>( aItem );
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
 
     if( !item )
         return false;
 
+    draw( item, aLayer, false );
+
+    return false;
+}
+
+void SCH_PAINTER::draw( const EDA_ITEM *aItem, int aLayer, bool aDimmed )
+{
+
 #ifdef CONNECTIVITY_DEBUG
 
-    auto sch_item = dynamic_cast<const SCH_ITEM*>( item );
+    auto sch_item = dynamic_cast<const SCH_ITEM*>( aItem );
     auto conn = sch_item ? sch_item->Connection( *g_CurrentSheet ) : nullptr;
 
     if( conn )
     {
-        auto pos = item->GetBoundingBox().Centre();
+        auto pos = aItem->GetBoundingBox().Centre();
         auto label = conn->Name( true );
 
         m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
@@ -217,50 +220,96 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
     if( m_schSettings.GetDrawBoundingBoxes() )
     {
-        BOX2I box = item->GetBoundingBox();
+        BOX2I box = aItem->GetBoundingBox();
 
-        if( item->Type() == SCH_SYMBOL_T )
-            box = static_cast<const SCH_SYMBOL*>( item )->GetBodyBoundingBox();
+        if( aItem->Type() == SCH_SYMBOL_T )
+            box = static_cast<const SCH_SYMBOL*>( aItem )->GetBodyBoundingBox();
 
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
+        m_gal->SetStrokeColor( aItem->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
                                                   : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
         m_gal->SetLineWidth( Mils2iu( 3 ) );
         m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
     }
 
-    switch( item->Type() )
+    switch( aItem->Type() )
     {
-    HANDLE_ITEM( LIB_SYMBOL_T, LIB_SYMBOL );
-    HANDLE_ITEM( LIB_SHAPE_T, LIB_SHAPE );
-    HANDLE_ITEM( LIB_PIN_T, LIB_PIN );
-    HANDLE_ITEM( LIB_FIELD_T, LIB_FIELD );
-    HANDLE_ITEM( LIB_TEXT_T, LIB_TEXT );
-    HANDLE_ITEM( LIB_TEXTBOX_T, LIB_TEXTBOX );
-    HANDLE_ITEM( SCH_SYMBOL_T, SCH_SYMBOL );
-    HANDLE_ITEM( SCH_JUNCTION_T, SCH_JUNCTION );
-    HANDLE_ITEM( SCH_LINE_T, SCH_LINE );
-    HANDLE_ITEM( SCH_SHAPE_T, SCH_SHAPE );
-    HANDLE_ITEM( SCH_TEXT_T, SCH_TEXT );
-    HANDLE_ITEM( SCH_TEXTBOX_T, SCH_TEXTBOX );
-    HANDLE_ITEM( SCH_LABEL_T, SCH_LABEL );
-    HANDLE_ITEM( SCH_DIRECTIVE_LABEL_T, SCH_DIRECTIVE_LABEL );
-    HANDLE_ITEM( SCH_FIELD_T, SCH_FIELD );
-    HANDLE_ITEM( SCH_HIER_LABEL_T, SCH_HIERLABEL );
-    HANDLE_ITEM( SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL );
-    HANDLE_ITEM( SCH_SHEET_T, SCH_SHEET );
-    HANDLE_ITEM( SCH_SHEET_PIN_T, SCH_HIERLABEL );
-    HANDLE_ITEM( SCH_NO_CONNECT_T, SCH_NO_CONNECT );
-    HANDLE_ITEM( SCH_BUS_WIRE_ENTRY_T, SCH_BUS_ENTRY_BASE );
-    HANDLE_ITEM( SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE );
-    HANDLE_ITEM( SCH_BITMAP_T, SCH_BITMAP );
-    HANDLE_ITEM( SCH_MARKER_T, SCH_MARKER );
+        case LIB_SYMBOL_T:
+            draw( static_cast<const LIB_SYMBOL*>( aItem ), aLayer );
+            break;
+        case LIB_SHAPE_T:
+            draw( static_cast<const LIB_SHAPE*>( aItem ), aLayer, aDimmed );
+            break;
+        case LIB_PIN_T:
+            draw( static_cast<const LIB_PIN*>( aItem ), aLayer, aDimmed  );
+            break;
+        case LIB_FIELD_T:
+            draw( static_cast<const LIB_FIELD*>( aItem ), aLayer, aDimmed  );
+            break;
+        case LIB_TEXT_T:
+            draw( static_cast<const LIB_TEXT*>( aItem ), aLayer, aDimmed  );
+            break;
+        case LIB_TEXTBOX_T:
+            draw( static_cast<const LIB_TEXTBOX*>( aItem ), aLayer, aDimmed  );
+            break;
+        case SCH_SYMBOL_T:
+            draw( static_cast<const SCH_SYMBOL*>( aItem ), aLayer );
+            break;
+        case SCH_JUNCTION_T:
+            draw( static_cast<const SCH_JUNCTION*>( aItem ), aLayer );
+            break;
+        case SCH_LINE_T:
+            draw( static_cast<const SCH_LINE*>( aItem ), aLayer );
+            break;
+        case SCH_SHAPE_T:
+            draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer );
+            break;
+        case SCH_TEXT_T:
+            draw( static_cast<const SCH_TEXT*>( aItem ), aLayer );
+            break;
+        case SCH_TEXTBOX_T:
+            draw( static_cast<const SCH_TEXTBOX*>( aItem ), aLayer );
+            break;
+        case SCH_LABEL_T:
+            draw( static_cast<const SCH_LABEL*>( aItem ), aLayer );
+            break;
+        case SCH_DIRECTIVE_LABEL_T:
+            draw( static_cast<const SCH_DIRECTIVE_LABEL*>( aItem ), aLayer );
+            break;
+        case SCH_FIELD_T:
+            draw( static_cast<const SCH_FIELD*>( aItem ), aLayer, aDimmed );
+            break;
+        case SCH_HIER_LABEL_T:
+            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer );
+            break;
+        case SCH_GLOBAL_LABEL_T:
+            draw( static_cast<const SCH_GLOBALLABEL*>( aItem ), aLayer );
+            break;
+        case SCH_SHEET_T:
+            draw( static_cast<const SCH_SHEET*>( aItem ), aLayer );
+            break;
+        case SCH_SHEET_PIN_T:
+            draw( static_cast<const SCH_HIERLABEL*>( aItem ), aLayer );
+            break;
+        case SCH_NO_CONNECT_T:
+            draw( static_cast<const SCH_NO_CONNECT*>( aItem ), aLayer );
+            break;
+        case SCH_BUS_WIRE_ENTRY_T:
+            draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
+            break;
+        case SCH_BUS_BUS_ENTRY_T:
+            draw( static_cast<const SCH_BUS_ENTRY_BASE*>( aItem ), aLayer );
+            break;
+        case SCH_BITMAP_T:
+            draw( static_cast<const SCH_BITMAP*>( aItem ), aLayer );
+            break;
+        case SCH_MARKER_T:
+            draw( static_cast<const SCH_MARKER*>( aItem ), aLayer );
+            break;
 
-    default: return false;
+        default: return;
     }
-
-    return false;
 }
 
 
@@ -305,7 +354,8 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 }
 
 
-COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const
+COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDrawingShadows,
+            bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -408,6 +458,12 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
             || ( m_schSettings.m_ShowGraphicsDisabled && aItem->Type() != LIB_FIELD_T ) )
     {
         color = color.Darken( 0.5f );
+    }
+
+    if( aDimmed )
+    {
+        COLOR4D sheetColour = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+        color = color.Mix( sheetColour, 0.5f );
     }
 
     return color;
@@ -587,7 +643,7 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 
 
 void SCH_PAINTER::draw( const LIB_SYMBOL *aSymbol, int aLayer, bool aDrawFields, int aUnit,
-                        int aConvert )
+                        int aConvert, bool aDimmed )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -615,12 +671,12 @@ void SCH_PAINTER::draw( const LIB_SYMBOL *aSymbol, int aLayer, bool aDrawFields,
         if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
             continue;
 
-        Draw( &item, aLayer );
+        draw( &item, aLayer, aDimmed );
     }
 }
 
 
-bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
+bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimmed )
 {
     const EDA_SHAPE* shape = dynamic_cast<const EDA_SHAPE*>( aItem );
 
@@ -632,8 +688,8 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, true ) );
-            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, true ) );
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, true ) );
+            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, true, aDimmed ) );
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, true, aDimmed ) );
             return true;
         }
 
@@ -650,7 +706,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
             }
 
             m_gal->SetIsFill( true );
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false ) );
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false, aDimmed ) );
             m_gal->SetIsStroke( false );
             return true;
         }
@@ -664,15 +720,27 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
                                     || shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR ) );
 
         if( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+        {
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false, aDimmed ) );
+        }
         else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-            m_gal->SetFillColor( shape->GetFillColor() );
+        {
+            COLOR4D fillColour = shape->GetFillColor();
+
+            if( aDimmed )
+            {
+                fillColour = fillColour.Mix(
+                        m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ), 0.5f );
+            }
+
+            m_gal->SetFillColor( fillColour );
+        }
 
         if( aItem->GetPenWidth() >= 0 || !shape || !shape->IsFilled() )
         {
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, false ) );
-            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false, aDimmed ) );
         }
         else
         {
@@ -687,7 +755,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
+void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDNP )
 {
     if( !isUnitAndConversionShown( aShape ) )
         return;
@@ -695,12 +763,12 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
     if( aShape->IsPrivate() && !m_schSettings.m_IsSymbolEditor )
         return;
 
-    if( !setDeviceColors( aShape, aLayer ) )
+    if( !setDeviceColors( aShape, aLayer, aDNP ) )
         return;
 
     bool           drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
-    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows );
+    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows, aDNP );
 
     auto drawShape =
             [&]( const LIB_SHAPE* shape )
@@ -836,7 +904,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -863,12 +931,12 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     if( !foundLayer )
         return;
 
-    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
+    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows, aDimmed );
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
         if( m_schSettings.m_IsSymbolEditor || eeconfig()->m_Appearance.show_hidden_fields )
-            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
+            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
         else
             return;
     }
@@ -908,7 +976,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
+void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aText ) )
         return;
@@ -921,12 +989,12 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
     if( drawingShadows && !( aText->IsBrightened() || aText->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aText, LAYER_DEVICE, drawingShadows );
+    COLOR4D color = getRenderColor( aText, LAYER_DEVICE, drawingShadows, aDimmed );
 
     if( !aText->IsVisible() )
     {
         if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
-            color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
+            color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows, aDimmed );
         else
             return;
     }
@@ -980,7 +1048,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
+void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aTextBox ) )
         return;
@@ -993,7 +1061,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows );
+    COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows, aDimmed );
     float   borderWidth = getLineWidth( aTextBox, drawingShadows );
 
     auto drawText =
@@ -1119,7 +1187,7 @@ void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aC
 }
 
 
-void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
+void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aPin ) )
         return;
@@ -1132,13 +1200,13 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     VECTOR2I pos = mapCoords( aPin->GetPosition() );
-    COLOR4D  color = getRenderColor( aPin, LAYER_PIN, drawingShadows );
+    COLOR4D  color = getRenderColor( aPin, LAYER_PIN, drawingShadows, aDimmed );
 
     if( !aPin->IsVisible() )
     {
         if( !m_schematic || eeconfig()->m_Appearance.show_hidden_pins )
         {
-            color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
+            color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
         }
         else
         {
@@ -2071,14 +2139,14 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 }
 
 
-void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
+void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSymbol->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, aSymbol->GetDNP() );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2134,7 +2202,8 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
             tempPin->ClearFlags( IS_DANGLING );
     }
 
-    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert(),
+            aSymbol->GetDNP() );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
@@ -2149,7 +2218,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer )
+void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2161,12 +2230,12 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer )
 
     aLayer = aField->GetLayer();
 
-    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
+    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows, aDimmed );
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
         if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
-            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
+            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
         else
             return;
     }
@@ -2286,7 +2355,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, false );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2329,7 +2398,7 @@ void SCH_PAINTER::draw( const SCH_LABEL *aLabel, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, false );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2349,7 +2418,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, false );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2397,7 +2466,7 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, false );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -2458,7 +2527,7 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
-            draw( &field, aLayer );
+            draw( &field, aLayer, false );
     }
 
     if( aLayer == LAYER_HIERLABEL || aLayer == LAYER_SELECTION_SHADOWS )

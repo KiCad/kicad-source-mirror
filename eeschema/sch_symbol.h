@@ -307,7 +307,7 @@ public:
      *
      * @return the orientation and mirror of the symbol.
      */
-    int GetOrientation();
+    int GetOrientation() const;
 
     /**
      * Return the list of system text vars & fields for this symbol.
@@ -736,6 +736,9 @@ public:
     bool GetIncludeOnBoard() const { return m_onBoard; }
     void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_onBoard = aIncludeOnBoard; }
 
+    bool GetDNP() const { return m_DNP; }
+    void SetDNP( bool aDNP ) { m_DNP = aDNP; }
+
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override;
 
 private:
@@ -776,6 +779,7 @@ private:
     bool        m_isInNetlist;  ///< True if the symbol should appear in the netlist
     bool        m_inBom;        ///< True to include in bill of materials export.
     bool        m_onBoard;      ///< True to include in netlist when updating board.
+    bool        m_DNP;          ///< True if symbol is set to 'Do Not Populate'.
 
     // Defines the hierarchical path and reference of the symbol.  This allows support
     // for multiple references to a single sub-sheet.

@@ -99,7 +99,7 @@ public:
     void NormalizeJustification( bool inverse );
 
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform ) const override;
+               const TRANSFORM& aTransform, bool aDimmed ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
@@ -122,7 +122,7 @@ private:
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+                const TRANSFORM& aTransform, bool aDimmed ) override;
 };
 
 

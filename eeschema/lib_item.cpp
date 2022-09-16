@@ -134,9 +134,9 @@ const wxString& LIB_ITEM::GetDefaultFont() const
 
 
 void LIB_ITEM::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                      const TRANSFORM& aTransform )
+                      const TRANSFORM& aTransform, bool aDimmed )
 {
-    print( aSettings, aOffset, aData, aTransform );
+    print( aSettings, aOffset, aData, aTransform, aDimmed );
 }
 
 

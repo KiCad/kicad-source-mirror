@@ -222,7 +222,7 @@ KIFONT::FONT* LIB_TEXTBOX::GetDrawFont() const
 
 
 void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                         const TRANSFORM& aTransform )
+                         const TRANSFORM& aTransform, bool aDimmed )
 {
     if( IsPrivate() )
         return;
@@ -246,6 +246,14 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
         if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
             color = aSettings->GetLayerColor( LAYER_DEVICE );
+
+        COLOR4D bg = aSettings->GetBackgroundColor();
+
+        if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+            bg = COLOR4D::WHITE;
+
+        if( aDimmed )
+            color = color.Mix( bg, 0.5f );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
             lineStyle = PLOT_DASH_TYPE::SOLID;
@@ -280,6 +288,14 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
     if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( LAYER_DEVICE );
+
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
 
@@ -353,7 +369,7 @@ BITMAPS LIB_TEXTBOX::GetMenuImage() const
 
 
 void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                        const TRANSFORM& aTransform ) const
+                        const TRANSFORM& aTransform, bool aDimmed ) const
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -362,7 +378,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( aBackground )
     {
-        LIB_SHAPE::Plot( aPlotter, aBackground, aOffset, aTransform );
+        LIB_SHAPE::Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
         return;
     }
 
@@ -392,6 +408,14 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
         color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 

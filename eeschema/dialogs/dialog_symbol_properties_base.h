@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,6 +65,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_ShowPinNameButt;
 		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
+		wxCheckBox* m_cbDNP;
 		wxButton* m_updateSymbolBtn;
 		wxButton* m_changeSymbolBtn;
 		wxButton* m_editSchematicSymbolBtn;

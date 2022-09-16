@@ -260,7 +260,7 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
 
 
 void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
-                     const TRANSFORM& aTransform ) const
+                     const TRANSFORM& aTransform, bool aDimmed ) const
 {
     wxASSERT( plotter != nullptr );
 
@@ -269,6 +269,8 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
 
     if( aBackground )
         return;
+
+    RENDER_SETTINGS* settings = plotter->RenderSettings();
 
     BOX2I bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis
@@ -280,11 +282,18 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     int      t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
     VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
     COLOR4D  color = GetTextColor();
+    COLOR4D  bg = settings->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
 
     if( !plotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-        color = plotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+        color = settings->GetLayerColor( LAYER_DEVICE );
 
-    RENDER_SETTINGS* settings = plotter->RenderSettings();
+    if( !IsVisible() )
+        bg = settings->GetLayerColor( LAYER_HIDDEN );
+    else if( !plotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
@@ -312,7 +321,7 @@ KIFONT::FONT* LIB_TEXT::GetDrawFont() const
 
 
 void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                      const TRANSFORM& aTransform )
+                      const TRANSFORM& aTransform, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetTextColor();
@@ -321,6 +330,17 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
     if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( LAYER_DEVICE );
+
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( !IsVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     // Calculate the text orientation, according to the symbol orientation/mirror (needed when
     // draw text in schematic)

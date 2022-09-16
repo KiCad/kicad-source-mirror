@@ -60,7 +60,7 @@ public:
         return luma < 0.5;
     }
 
-    const COLOR4D& GetBackgroundColor() override { return m_backgroundColor; }
+    const COLOR4D& GetBackgroundColor() const override { return m_backgroundColor; }
     void SetBackgroundColor( const COLOR4D& aColor ) override { m_backgroundColor = aColor; }
 
     void SetNormalColor( const COLOR4D& aColor ) { m_normalColor = aColor; }

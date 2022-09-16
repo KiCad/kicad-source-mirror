@@ -148,7 +148,7 @@ public:
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+                const TRANSFORM& aTransform, bool aDimmed ) override;
 
     /**
      * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
@@ -211,10 +211,11 @@ public:
      * If TextInside then the text is been put inside (moving from x1, y1 in
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
-    void PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPinOrient,
-                       int aTextInside, bool aDrawPinNum, bool aDrawPinName ) const;
+    void PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPinOrient, int aTextInside,
+            bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const;
 
-    void PlotSymbol( PLOTTER* aPlotter, const VECTOR2I& aPosition, int aOrientation ) const;
+    void PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOrientation,
+            bool aDimmed ) const;
 
     void Offset( const VECTOR2I& aOffset ) override;
 
@@ -230,7 +231,7 @@ public:
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform ) const override;
+               const TRANSFORM& aTransform, bool aDimmed ) const override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -255,7 +256,8 @@ protected:
      * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos, int aOrientation );
+    void printPinSymbol( const RENDER_SETTINGS *aSettings, const VECTOR2I &aPos, int aOrientation,
+            bool aDimmed );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -266,13 +268,13 @@ protected:
      * Pin Name:    substring between '~' is negated
      */
     void printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos, int aPinOrient,
-                        int aTextInside, bool aDrawPinNum, bool aDrawPinName );
+                        int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
      */
     void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
-                                     int aOrientation );
+                                     int aOrientation, bool aDimmed );
 
 private:
     /**

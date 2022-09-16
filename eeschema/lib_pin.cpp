@@ -199,7 +199,7 @@ VECTOR2I LIB_PIN::GetPinRoot() const
 
 
 void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                     const TRANSFORM& aTransform )
+                     const TRANSFORM& aTransform, bool aDimmed )
 {
     LIB_SYMBOL_OPTIONS* opts = (LIB_SYMBOL_OPTIONS*) aData;
     bool                drawHiddenFields   = opts ? opts->draw_hidden_fields : false;
@@ -218,14 +218,15 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
 
     if( IsVisible() || drawHiddenFields )
     {
-        printPinSymbol( aSettings, pos1, orient );
+        printPinSymbol( aSettings, pos1, orient, aDimmed );
 
         printPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(),
                        opts->force_draw_pin_text || part->ShowPinNumbers(),
-                       opts->force_draw_pin_text || part->ShowPinNames() );
+                       opts->force_draw_pin_text || part->ShowPinNames(),
+                       aDimmed );
 
         if( showPinType )
-            printPinElectricalTypeName( aSettings, pos1, orient );
+            printPinElectricalTypeName( aSettings, pos1, orient, aDimmed );
 
         if( show_connect_point
                 && m_type != ELECTRICAL_PINTYPE::PT_NC
@@ -233,19 +234,38 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
         {
             wxDC* DC = aSettings->GetPrintDC();
             COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PIN : LAYER_HIDDEN );
+
+            COLOR4D bg = aSettings->GetBackgroundColor();
+
+            if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+                bg = COLOR4D::WHITE;
+
+            if( aDimmed )
+                color = color.Mix( bg, 0.5f );
+
             GRCircle( DC, pos1, TARGET_PIN_RADIUS, 0, color );
         }
     }
 }
 
 
-void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos, int aOrient )
+void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos, int aOrient, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     MapX1, MapY1, x1, y1;
     int     width = GetEffectivePenWidth( aSettings );
     int     posX = aPos.x, posY = aPos.y, len = m_length;
     COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PIN : LAYER_HIDDEN );
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( !IsVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     MapX1 = MapY1 = 0;
     x1    = posX;
@@ -351,7 +371,7 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
 
 
 void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos, int aPinOrient,
-                             int aTextInside, bool aDrawPinNum, bool aDrawPinName )
+                             int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed )
 {
     if( !aDrawPinName && !aDrawPinNum )
         return;
@@ -372,8 +392,21 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     int    num_offset = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
-    COLOR4D NameColor = aSettings->GetLayerColor( IsVisible() ? LAYER_PINNAM : LAYER_HIDDEN );
-    COLOR4D NumColor  = aSettings->GetLayerColor( IsVisible() ? LAYER_PINNUM : LAYER_HIDDEN );
+    COLOR4D nameColor = aSettings->GetLayerColor( IsVisible() ? LAYER_PINNAM : LAYER_HIDDEN );
+    COLOR4D numColor  = aSettings->GetLayerColor( IsVisible() ? LAYER_PINNUM : LAYER_HIDDEN );
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( !IsVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
+    if( aDimmed )
+    {
+        nameColor = nameColor.Mix( bg, 0.5f );
+        numColor = numColor.Mix( bg, 0.5f );
+    }
 
     int x1 = aPinPos.x;
     int y1 = aPinPos.y;
@@ -405,14 +438,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
                 if( aPinOrient == PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
-                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, ANGLE_HORIZONTAL,
+                    GRPrintText( DC, VECTOR2I( x, y1 ), nameColor, name, ANGLE_HORIZONTAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - aTextInside;
-                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, ANGLE_HORIZONTAL,
+                    GRPrintText( DC, VECTOR2I( x, y1 ), nameColor, name, ANGLE_HORIZONTAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
@@ -420,7 +453,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
             if( aDrawPinNum )
             {
-                GRPrintText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor,
+                GRPrintText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), numColor,
                              number, ANGLE_HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                              GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
             }
@@ -434,14 +467,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, ANGLE_VERTICAL,
+                    GRPrintText( DC, VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
                                  number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                  GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
@@ -452,14 +485,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, ANGLE_VERTICAL,
+                    GRPrintText( DC, VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
                                  number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                  GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
@@ -474,14 +507,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name, ANGLE_HORIZONTAL,
+                GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), nameColor, name, ANGLE_HORIZONTAL,
                              pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
                              namePenWidth, false, false, font );
             }
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number, ANGLE_HORIZONTAL,
+                GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), numColor, number, ANGLE_HORIZONTAL,
                              pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
                              numPenWidth, false, false, font );
             }
@@ -491,14 +524,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y) / 2;
-                GRPrintText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name, ANGLE_VERTICAL,
+                GRPrintText( DC, VECTOR2I( x1 - name_offset, y ), nameColor, name, ANGLE_VERTICAL,
                              pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
                              namePenWidth, false, false, font );
             }
 
             if( aDrawPinNum )
             {
-                GRPrintText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                GRPrintText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
                              number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                              GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false, font );
             }
@@ -509,7 +542,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
 
 void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
-                                          int aOrientation )
+                                          int aOrientation, bool aDimmed )
 {
     wxDC*       DC = aSettings->GetPrintDC();
     wxString    typeName = GetElectricalTypeName();
@@ -527,6 +560,16 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
 
     // Get a suitable color
     COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PRIVATE_NOTES : LAYER_HIDDEN );
+    COLOR4D bg = aSettings->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( !IsVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     VECTOR2I txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
@@ -561,11 +604,19 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
 }
 
 
-void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const VECTOR2I& aPosition, int aOrientation ) const
+void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOrientation,
+        bool aDimmed ) const
 {
     int     MapX1, MapY1, x1, y1;
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_PIN );
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
     int     penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+        color = color.Mix( bg, 0.5f );
 
     aPlotter->SetColor( color );
     aPlotter->SetCurrentLineWidth( penWidth );
@@ -693,9 +744,8 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const VECTOR2I& aPosition, int aOri
     }
 }
 
-
-void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPinOrient,
-                            int aTextInside, bool aDrawPinNum, bool aDrawPinName ) const
+void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPinOrient,
+        int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const
 {
     wxString name = GetShownName();
     wxString number = GetShownNumber();
@@ -720,6 +770,16 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
     /* Get the num and name colors */
     COLOR4D nameColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNAM );
     COLOR4D numColor  = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNUM );
+    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+    {
+        nameColor = nameColor.Mix( bg, 0.5f );
+        numColor = numColor.Mix( bg, 0.5f );
+    }
 
     int x1 = aPinPos.x;
     int y1 = aPinPos.y;
@@ -1064,7 +1124,7 @@ void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 
 void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                    const TRANSFORM& aTransform ) const
+                    const TRANSFORM& aTransform, bool aDimmed ) const
 {
     if( !IsVisible() || aBackground )
         return;
@@ -1072,9 +1132,10 @@ void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset
     int     orient = PinDrawOrient( aTransform );
     VECTOR2I pos = aTransform.TransformCoordinate( m_position ) + aOffset;
 
-    PlotSymbol( aPlotter, pos, orient );
+    PlotSymbol( aPlotter, pos, orient, aDimmed );
     PlotPinTexts( aPlotter, pos, orient, GetParent()->GetPinNameOffset(),
-                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames() );
+                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
+                  aDimmed );
 }
 
 

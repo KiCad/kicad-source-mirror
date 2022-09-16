@@ -78,7 +78,7 @@ public:
         update();       // recompute other shades of the color
     }
 
-    const COLOR4D& GetBackgroundColor() override
+    const COLOR4D& GetBackgroundColor() const override
     {
         return m_layerColors[ LAYER_GERBVIEW_BACKGROUND ];
     }

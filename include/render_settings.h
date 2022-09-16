@@ -229,7 +229,7 @@ public:
     /**
      * Return current background color settings.
      */
-    virtual const COLOR4D& GetBackgroundColor() = 0;
+    virtual const COLOR4D& GetBackgroundColor() const = 0;
 
     /**
      * Set the background color.

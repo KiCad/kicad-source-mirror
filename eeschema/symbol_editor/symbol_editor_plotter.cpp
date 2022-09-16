@@ -68,15 +68,15 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
         plotPos.x = pageInfo.GetWidthIU( IU_PER_MILS ) / 2;
         plotPos.y = pageInfo.GetHeightIU( IU_PER_MILS ) / 2;
 
-        m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp );
+        m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp, false );
 
         // Plot lib fields, not plotted by m_symbol->Plot():
-        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), background, plotPos, temp );
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), background, plotPos, temp, false );
 
-        m_symbol->Plot( plotter, GetUnit(), GetConvert(), !background, plotPos, temp );
+        m_symbol->Plot( plotter, GetUnit(), GetConvert(), !background, plotPos, temp, false );
 
         // Plot lib fields, not plotted by m_symbol->Plot():
-        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), !background, plotPos, temp );
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), !background, plotPos, temp, false );
     }
 
     plotter->EndPlot();
@@ -99,5 +99,5 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    m_symbol->Print( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS() );
+    m_symbol->Print( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS(), false );
 }

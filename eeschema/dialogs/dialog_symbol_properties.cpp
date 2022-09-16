@@ -530,6 +530,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
+    m_cbDNP->SetValue( m_symbol->GetDNP() );
 
     if( m_part )
     {
@@ -709,6 +710,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_symbol->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
     m_symbol->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+    m_symbol->SetDNP( m_cbDNP->IsChecked() );
 
     // Update any assignments
     if( m_dataModel )
@@ -777,6 +779,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+                otherUnit->SetDNP( m_cbDNP->IsChecked() );
 
                 if( m_dataModel )
                 {

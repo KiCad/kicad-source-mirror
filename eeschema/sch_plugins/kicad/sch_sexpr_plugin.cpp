@@ -721,6 +721,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
     m_out->Print( 0, " (on_board %s)", ( aSymbol->GetIncludeOnBoard() ) ? "yes" : "no" );
+    m_out->Print( 0, " (dnp %s)", ( aSymbol->GetDNP() ) ? "yes" : "no" );
 
     if( aSymbol->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
         m_out->Print( 0, " (fields_autoplaced)" );

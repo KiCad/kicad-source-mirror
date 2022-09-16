@@ -73,7 +73,7 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 }
 
 
-const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetBackgroundColor()
+const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetBackgroundColor() const
 {
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
@@ -82,7 +82,7 @@ const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetBackgroundColor()
 }
 
 
-const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor()
+const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor() const
 {
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
