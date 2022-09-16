@@ -249,7 +249,9 @@ void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
     cfg->m_Printing.title_block = m_checkReference->IsChecked();
 
     if( m_checkBackgroundColor->IsEnabled() )
-        cfg->m_Printing.background  = m_checkBackgroundColor->IsChecked();
+        cfg->m_Printing.background = m_checkBackgroundColor->IsChecked();
+    else
+        cfg->m_Printing.background = false;
 
     cfg->m_Printing.use_theme   = m_checkUseColorTheme->IsChecked();
 
