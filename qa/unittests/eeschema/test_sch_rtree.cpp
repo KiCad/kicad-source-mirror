@@ -104,8 +104,8 @@ BOOST_AUTO_TEST_CASE( Junctions )
 {
     for( int i = 0; i < 100; i++ )
     {
-        SCH_JUNCTION* junction =
-                new SCH_JUNCTION( VECTOR2I( Mils2iu( 100 ) * i, Mils2iu( 100 ) * i ) );
+        SCH_JUNCTION* junction = new SCH_JUNCTION(
+                VECTOR2I( schIUScale.MilsToIU( 100 ) * i, schIUScale.MilsToIU( 100 ) * i ) );
         m_tree.insert( junction );
     }
 
@@ -128,9 +128,12 @@ BOOST_AUTO_TEST_CASE( Junctions )
 
     BOOST_CHECK_EQUAL( count, 0 );
 
-    BOX2I small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
-    BOX2I med_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 100 ), Mils2iu( 100 ) ) );
-    BOX2I big_bbox( VECTOR2I( 0, 0 ), VECTOR2I( Mils2iu( 5000 ), Mils2iu( 5000 ) ) );
+    BOX2I small_bbox( VECTOR2I( -1, -1 ),
+                      VECTOR2I( schIUScale.MilsToIU( 2 ), schIUScale.MilsToIU( 2 ) ) );
+    BOX2I med_bbox( VECTOR2I( 0, 0 ),
+                    VECTOR2I( schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 100 ) ) );
+    BOX2I big_bbox( VECTOR2I( 0, 0 ),
+                    VECTOR2I( schIUScale.MilsToIU( 5000 ), schIUScale.MilsToIU( 5000 ) ) );
 
     count = 0;
 
@@ -193,12 +196,12 @@ BOOST_AUTO_TEST_CASE( MixedElements )
         int x_sign = ( i % 2 == 0 ) ? -1 : 1;
         int y_sign = ( i % 3 == 0 ) ? -1 : 1;
 
-        SCH_JUNCTION* junction = new SCH_JUNCTION( VECTOR2I( Mils2iu( 100 ) * i * x_sign,
-                                                             Mils2iu( 100 ) * i * y_sign ) );
+        SCH_JUNCTION* junction = new SCH_JUNCTION( VECTOR2I( schIUScale.MilsToIU( 100 ) * i * x_sign,
+                                                             schIUScale.MilsToIU( 100 ) * i * y_sign ) );
         m_tree.insert( junction );
 
-        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( VECTOR2I( Mils2iu( 150 ) * i * y_sign,
-                                                           Mils2iu( 150 ) * i * x_sign ) );
+        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( VECTOR2I( schIUScale.MilsToIU( 150 ) * i * y_sign,
+                                                           schIUScale.MilsToIU( 150 ) * i * x_sign ) );
         m_tree.insert( nc );
     }
 
@@ -222,7 +225,7 @@ BOOST_AUTO_TEST_CASE( MixedElements )
 
     BOOST_CHECK_EQUAL( count, 100 );
 
-    BOX2I small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( Mils2iu( 2 ), Mils2iu( 2 ) ) );
+    BOX2I small_bbox( VECTOR2I( -1, -1 ), VECTOR2I( schIUScale.MilsToIU( 2 ), schIUScale.MilsToIU( 2 ) ) );
 
     count = 0;
 
@@ -262,10 +265,10 @@ BOOST_AUTO_TEST_CASE( MixedElements )
 // where the first case may or may not match
 BOOST_AUTO_TEST_CASE( SingleElementTree )
 {
-    SCH_JUNCTION* junction = new SCH_JUNCTION( VECTOR2I( Mils2iu( 100 ), Mils2iu( 100 ) ) );
+    SCH_JUNCTION* junction = new SCH_JUNCTION( VECTOR2I( schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 100 ) ) );
     m_tree.insert( junction );
 
-    SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( VECTOR2I( Mils2iu( 150 ), Mils2iu( 150 ) ) );
+    SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
     m_tree.insert( nc );
 
     int count = 0;

@@ -369,7 +369,7 @@ void DIALOG_LIB_TEXTBOX_PROPERTIES::onBorderChecked( wxCommandEvent& event )
     bool border = m_borderCheckbox->GetValue();
 
     if( border && m_borderWidth.GetValue() < 0 )
-        m_borderWidth.SetValue( Mils2iu( m_frame->libeditconfig()->m_Defaults.line_width ) );
+        m_borderWidth.SetValue( schIUScale.MilsToIU( m_frame->libeditconfig()->m_Defaults.line_width ) );
 
     m_borderWidth.Enable( border );
     m_borderColorLabel->Enable( border );

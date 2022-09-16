@@ -25,12 +25,12 @@
 #ifndef PCBNEW_H
 #define PCBNEW_H
 
-#include <convert_to_biu.h> // to define Mils2iu() conversion function
+#include <convert_to_biu.h> // to define pcbIUScale.MilsToIU() conversion function
 
 // These are only here for algorithmic safety, not to tell the user what to do
-#define TEXTS_MIN_SIZE  Mils2iu( 1 )        ///< Minimum text size in internal units (1 mil)
-#define TEXTS_MAX_SIZE  Mils2iu( 10000 )    ///< Maximum text size in internal units (10 inches)
-#define TEXTS_MAX_WIDTH Mils2iu( 10000 )    ///< Maximum text width in internal units (10 inches)
+#define TEXTS_MIN_SIZE  pcbIUScale.MilsToIU( 1 )        ///< Minimum text size in internal units (1 mil)
+#define TEXTS_MAX_SIZE  pcbIUScale.MilsToIU( 10000 )    ///< Maximum text size in internal units (10 inches)
+#define TEXTS_MAX_WIDTH pcbIUScale.MilsToIU( 10000 )    ///< Maximum text width in internal units (10 inches)
 
 
 #endif // PCBNEW_H

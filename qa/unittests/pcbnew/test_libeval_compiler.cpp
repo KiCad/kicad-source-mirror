@@ -75,7 +75,7 @@ const static std::vector<EXPR_TO_TEST> simpleExpressions = {
 const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
     { "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", false, VAL( 0.0 ) },
     { "A.Width > B.Width", false, VAL( 0.0 ) },
-    { "A.Width + B.Width", false, VAL( Mils2iu(10) + Mils2iu(20) ) },
+    { "A.Width + B.Width", false, VAL( pcbIUScale.MilsToIU(10) + pcbIUScale.MilsToIU(20) ) },
     { "A.Netclass", false, VAL( "HV" ) },
     { "(A.Netclass == 'HV') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
     { "A.Netclass + 1.0", false, VAL( 1.0 ) },
@@ -171,8 +171,8 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
 
     trackB.SetLayer( F_Cu );
 
-    trackA.SetWidth( Mils2iu( 10 ) );
-    trackB.SetWidth( Mils2iu( 20 ) );
+    trackA.SetWidth( pcbIUScale.MilsToIU( 10 ) );
+    trackB.SetWidth( pcbIUScale.MilsToIU( 20 ) );
 
     for( const auto& expr : introspectionExpressions )
     {

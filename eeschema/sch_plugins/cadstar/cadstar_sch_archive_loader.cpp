@@ -282,8 +282,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 
         for( LAYER_ID sheetID : orphanSheets )
         {
-            VECTOR2I pos( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
-            wxSize   siz( Mils2iu( 1000 ), Mils2iu( 1000 ) );
+            VECTOR2I pos( x * schIUScale.MilsToIU( 1000 ), y * schIUScale.MilsToIU( 1000 ) );
+            wxSize   siz( schIUScale.MilsToIU( 1000 ), schIUScale.MilsToIU( 1000 ) );
 
             loadSheetAndChildSheets( sheetID, pos, siz, rootPath );
 
@@ -664,7 +664,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( (VECTOR2I)sym.Origin + terminalPosOffset ) );
                 netLabel->SetText( "***UNKNOWN NET****" ); // This should be later updated when we load the netlist
-                netLabel->SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
+                netLabel->SetTextSize( wxSize( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ) ) );
 
                 SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( sym.SymdefID );
 
@@ -2417,7 +2417,7 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
 {
     wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
                      != Assignments.Codedefs.LineCodes.end(),
-             Mils2iu( DEFAULT_WIRE_WIDTH_MILS ) );
+             schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS ) );
 
     return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );
 }

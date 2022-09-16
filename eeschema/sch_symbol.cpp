@@ -80,12 +80,12 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
-        square->MoveTo( VECTOR2I( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEnd( VECTOR2I( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->MoveTo( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
-        text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
+        text->SetTextSize( wxSize( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         symbol->AddDrawItem( square );
@@ -266,7 +266,7 @@ bool SCH_SYMBOL::IsMovableFromAnchorPoint() const
     // going to end up moving the symbol's pins off-grid.
 
     // The minimal grid size allowed to place a pin is 25 mils
-    const int min_grid_size = Mils2iu( 25 );
+    const int min_grid_size = schIUScale.MilsToIU( 25 );
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {

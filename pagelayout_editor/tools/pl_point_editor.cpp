@@ -343,7 +343,8 @@ void PL_POINT_EDITOR::updateItem() const
         VECTOR2I           botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I           botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
+        pinEditedCorner( getEditedPointIndex(), drawSheetIUScale.MilsToIU( 1 ),
+                         drawSheetIUScale.MilsToIU( 1 ),
                          topLeft, topRight, botLeft, botRight );
 
         VECTOR2I start_delta, end_delta;

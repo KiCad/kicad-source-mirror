@@ -534,14 +534,14 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
         {
             VECTOR2I position;
 
-            position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-            position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+            position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             sheet->SetPosition( position );
 
             wxSize  size;
 
-            size.SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
-            size.SetHeight( Mils2Iu( parseInt( aReader, line, &line ) ) );
+            size.SetWidth( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ) );
+            size.SetHeight( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ) );
             sheet->SetSize( size );
         }
         else if( strCompare( "U", line, &line ) )   // Sheet UUID.
@@ -563,7 +563,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             if( fieldId == 0 || fieldId == 1 )      // Sheet name and file name.
             {
                 parseQuotedString( text, aReader, line, &line );
-                size = Mils2Iu( parseInt( aReader, line, &line ) );
+                size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
                 SCH_FIELD& field = sheet->GetFields()[ fieldId ];
                 field.SetText( text );
@@ -606,11 +606,11 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 VECTOR2I position;
 
-                position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-                position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+                position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+                position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
                 sheetPin->SetPosition( position );
 
-                size = Mils2Iu( parseInt( aReader, line, &line ) );
+                size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
                 sheetPin->SetTextSize( wxSize( size, size ) );
 
@@ -648,8 +648,8 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
         {
             VECTOR2I position;
 
-            position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-            position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+            position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             bitmap->SetPosition( position );
         }
         else if( strCompare( "Scale", line, &line ) )
@@ -735,8 +735,8 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 
     VECTOR2I position;
 
-    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     junction->SetPosition( position );
 
     return junction.release();
@@ -757,8 +757,8 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 
     VECTOR2I position;
 
-    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     no_connect->SetPosition( position );
 
     return no_connect.release();
@@ -798,7 +798,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 
         else if( buf == T_WIDTH )
         {
-            int size = Mils2Iu( parseInt( aReader, line, &line ) );
+            int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             wire->SetLineWidth( size );
         }
         else if( buf == T_STYLE )
@@ -858,10 +858,10 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 
     VECTOR2I begin, end;
 
-    begin.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    begin.y = Mils2Iu( parseInt( aReader, line, &line ) );
-    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    begin.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    begin.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    end.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    end.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
@@ -900,10 +900,10 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
     VECTOR2I pos;
     wxSize size;
 
-    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
-    size.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    size.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    size.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     size.x -= pos.x;
     size.y -= pos.y;
@@ -954,8 +954,8 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     // Parse the parameters common to all text objects.
     VECTOR2I position;
 
-    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    position.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     text->SetPosition( position );
 
     int spinStyle = parseInt( aReader, line, &line );
@@ -978,7 +978,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 
     text->SetTextSpinStyle( static_cast<TEXT_SPIN_STYLE::SPIN>( spinStyle ) );
 
-    int size = Mils2Iu( parseInt( aReader, line, &line ) );
+    int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     text->SetTextSize( wxSize( size, size ) );
 
@@ -1145,8 +1145,8 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
         {
             VECTOR2I pos;
 
-            pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-            pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
+            pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             symbol->SetPosition( pos );
         }
         else if( strCompare( "AR", line, &line ) )
@@ -1215,9 +1215,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
 
             char orientation = parseChar( aReader, line, &line );
             VECTOR2I pos;
-            pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-            pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
-            int size = Mils2Iu( parseInt( aReader, line, &line ) );
+            pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+            int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
             if( index >= symbol->GetFieldCount() )

@@ -49,7 +49,7 @@ PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID a
 {
     m_pos = pos;
     m_image = new BITMAP_BASE();
-    m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
+    m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
 }
 
 
@@ -57,7 +57,7 @@ PCB_BITMAP::PCB_BITMAP( const PCB_BITMAP& aPCBBitmap ) : BOARD_ITEM( aPCBBitmap 
 {
     m_pos = aPCBBitmap.m_pos;
     m_image = new BITMAP_BASE( *aPCBBitmap.m_image );
-    m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
+    m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
 }
 
 
@@ -76,7 +76,7 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
         delete m_image;
         m_image = new BITMAP_BASE( *bitmap->m_image );
         m_pos = bitmap->m_pos;
-        m_image->SetPixelSizeIu( (float) Mils2iu( 1000 ) / m_image->GetPPI() );
+        m_image->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 ) / m_image->GetPPI() );
     }
 
     return *this;

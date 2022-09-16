@@ -52,7 +52,7 @@ static int GetLastPinLength()
     if( g_LastPinLength == -1 )
     {
         auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        g_LastPinLength = Mils2iu( settings->m_Defaults.pin_length );
+        g_LastPinLength = schIUScale.MilsToIU( settings->m_Defaults.pin_length );
     }
 
     return g_LastPinLength;
@@ -63,7 +63,7 @@ static int GetLastPinNameSize()
     if( g_LastPinNameSize == -1 )
     {
         auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        g_LastPinNameSize = Mils2iu( settings->m_Defaults.pin_name_size );
+        g_LastPinNameSize = schIUScale.MilsToIU( settings->m_Defaults.pin_name_size );
     }
 
     return g_LastPinNameSize;
@@ -74,7 +74,7 @@ static int GetLastPinNumSize()
     if( g_LastPinNumSize == -1 )
     {
         auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        g_LastPinNumSize = Mils2iu( settings->m_Defaults.pin_num_size );
+        g_LastPinNumSize = schIUScale.MilsToIU( settings->m_Defaults.pin_num_size );
     }
 
     return g_LastPinNumSize;
@@ -424,10 +424,10 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 
     switch( pin->GetOrientation() )
     {
-    case PIN_UP:    step.x = Mils2iu(settings->m_Repeat.pin_step);   break;
-    case PIN_DOWN:  step.x = Mils2iu(settings->m_Repeat.pin_step);   break;
-    case PIN_LEFT:  step.y = Mils2iu(-settings->m_Repeat.pin_step);  break;
-    case PIN_RIGHT: step.y = Mils2iu(-settings->m_Repeat.pin_step);  break;
+    case PIN_UP:    step.x = schIUScale.MilsToIU(settings->m_Repeat.pin_step);   break;
+    case PIN_DOWN:  step.x = schIUScale.MilsToIU(settings->m_Repeat.pin_step);   break;
+    case PIN_LEFT:  step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
+    case PIN_RIGHT: step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
     }
 
     pin->Offset( step );

@@ -1810,7 +1810,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( nullptr );
-            sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
+            sheet->SetBorderWidth( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sheet->GetFields()[ SHEETNAME ].SetText( "Untitled Sheet" );
@@ -1901,8 +1901,8 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
     VECTOR2I pos = aSheet->GetPosition();
     VECTOR2I size = aPos - pos;
 
-    size.x = std::max( size.x, Mils2iu( MIN_SHEET_WIDTH ) );
-    size.y = std::max( size.y, Mils2iu( MIN_SHEET_HEIGHT ) );
+    size.x = std::max( size.x, schIUScale.MilsToIU( MIN_SHEET_WIDTH ) );
+    size.y = std::max( size.y, schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
 
     VECTOR2I grid = m_frame->GetNearestGridPosition( pos + size );
     aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );

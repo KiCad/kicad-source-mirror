@@ -675,7 +675,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
             VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-            pinEditedCorner( Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight, botLeft, botRight,
+            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
                              &gridHelper );
 
             if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -735,7 +735,7 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight, botLeft, botRight,
+        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
                          &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -825,7 +825,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
             VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-            pinEditedCorner( Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight, botLeft, botRight,
+            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
                              &gridHelper );
 
             if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -885,7 +885,7 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight, botLeft, botRight,
+        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight, botLeft, botRight,
                          &gridHelper );
 
         if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
@@ -935,7 +935,7 @@ void EE_POINT_EDITOR::updateParentItem() const
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
-        pinEditedCorner( Mils2iu( 50 ), Mils2iu( 50 ), topLeft, topRight, botLeft, botRight,
+        pinEditedCorner( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ), topLeft, topRight, botLeft, botRight,
                          &gridHelper );
 
         double oldWidth = bitmap->GetSize().x;

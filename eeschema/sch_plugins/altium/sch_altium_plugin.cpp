@@ -1830,48 +1830,48 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, Mils2iu( -50 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( -50 ) } );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE )
         {
             LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
             aKsymbol->AddDrawItem( circle );
-            circle->SetStroke( STROKE_PARAMS( Mils2iu( 5 ), PLOT_DASH_TYPE::SOLID ) );
-            circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
-            circle->SetEnd( circle->GetPosition() + VECTOR2I( Mils2iu( 25 ), 0 ) );
+            circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), PLOT_DASH_TYPE::SOLID ) );
+            circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -75 ) } );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 25 ), 0 ) );
         }
         else
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
-            line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
-            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
         }
 
-        return { 0, Mils2iu( 150 ) };
+        return { 0, schIUScale.MilsToIU( 150 ) };
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::WAVE )
     {
         LIB_SHAPE* line = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line );
-        line->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line->AddPoint( { 0, 0 } );
-        line->AddPoint( { 0, Mils2iu( -72 ) } );
+        line->AddPoint( { 0, schIUScale.MilsToIU( -72 ) } );
 
         LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier );
-        bezier->SetStroke( STROKE_PARAMS( Mils2iu( 5 ), PLOT_DASH_TYPE::SOLID ) );
-        bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -50 ) } );
-        bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -87 ) } );
-        bezier->AddPoint( { Mils2iu( -30 ), Mils2iu( -63 ) } );
-        bezier->AddPoint( { Mils2iu( -30 ), Mils2iu( -100 ) } );
+        bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), PLOT_DASH_TYPE::SOLID ) );
+        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
+        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
+        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
+        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
 
-        return { 0, Mils2iu( 150 ) };
+        return { 0, schIUScale.MilsToIU( 150 ) };
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND
              || aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND
@@ -1880,129 +1880,129 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, Mils2iu( -100 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND )
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line3->AddPoint( { Mils2iu( -70 ), Mils2iu( -130 ) } );
-            line3->AddPoint( { Mils2iu( 70 ), Mils2iu( -130 ) } );
+            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line3->AddPoint( { schIUScale.MilsToIU( -70 ), schIUScale.MilsToIU( -130 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( 70 ), schIUScale.MilsToIU( -130 ) } );
 
             LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line4 );
-            line4->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line4->AddPoint( { Mils2iu( -40 ), Mils2iu( -160 ) } );
-            line4->AddPoint( { Mils2iu( 40 ), Mils2iu( -160 ) } );
+            line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line4->AddPoint( { schIUScale.MilsToIU( -40 ), schIUScale.MilsToIU( -160 ) } );
+            line4->AddPoint( { schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( -160 ) } );
 
             LIB_SHAPE* line5 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line5 );
-            line5->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line5->AddPoint( { Mils2iu( -10 ), Mils2iu( -190 ) } );
-            line5->AddPoint( { Mils2iu( 10 ), Mils2iu( -190 ) } );
+            line5->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line5->AddPoint( { schIUScale.MilsToIU( -10 ), schIUScale.MilsToIU( -190 ) } );
+            line5->AddPoint( { schIUScale.MilsToIU( 10 ), schIUScale.MilsToIU( -190 ) } );
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND )
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -200 ) } );
-            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -200 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::EARTH )
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line2->AddPoint( { Mils2iu( -150 ), Mils2iu( -200 ) } );
-            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -200 ) } );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->AddPoint( { schIUScale.MilsToIU( -150 ), schIUScale.MilsToIU( -200 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -200 ) } );
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line3->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
-            line3->AddPoint( { Mils2iu( -50 ), Mils2iu( -200 ) } );
+            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line3->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -200 ) } );
         }
         else // ASCH_POWER_PORT_STYLE::GOST_ARROW
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
-            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
-            line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
 
-            return { 0, Mils2iu( 150 ) }; // special case
+            return { 0, schIUScale.MilsToIU( 150 ) }; // special case
         }
 
-        return { 0, Mils2iu( 250 ) };
+        return { 0, schIUScale.MilsToIU( 250 ) };
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND
              || aStyle == ASCH_POWER_PORT_STYLE::GOST_EARTH )
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, Mils2iu( -160 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( -160 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -160 ) } );
-        line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -160 ) } );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -160 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -160 ) } );
 
         LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line3 );
-        line3->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        line3->AddPoint( { Mils2iu( -60 ), Mils2iu( -200 ) } );
-        line3->AddPoint( { Mils2iu( 60 ), Mils2iu( -200 ) } );
+        line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line3->AddPoint( { schIUScale.MilsToIU( -60 ), schIUScale.MilsToIU( -200 ) } );
+        line3->AddPoint( { schIUScale.MilsToIU( 60 ), schIUScale.MilsToIU( -200 ) } );
 
         LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line4 );
-        line4->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        line4->AddPoint( { Mils2iu( -20 ), Mils2iu( -240 ) } );
-        line4->AddPoint( { Mils2iu( 20 ), Mils2iu( -240 ) } );
+        line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line4->AddPoint( { schIUScale.MilsToIU( -20 ), schIUScale.MilsToIU( -240 ) } );
+        line4->AddPoint( { schIUScale.MilsToIU( 20 ), schIUScale.MilsToIU( -240 ) } );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND )
-            return { 0, Mils2iu( 300 ) };
+            return { 0, schIUScale.MilsToIU( 300 ) };
 
         LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
         aKsymbol->AddDrawItem( circle );
-        circle->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
-        circle->SetEnd( circle->GetPosition() + VECTOR2I( Mils2iu( 120 ), 0 ) );
+        circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -160 ) } );
+        circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 120 ), 0 ) );
 
-        return { 0, Mils2iu( 350 ) };
+        return { 0, schIUScale.MilsToIU( 350 ) };
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_BAR )
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, Mils2iu( -200 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( -200 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -200 ) } );
-        line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -200 ) } );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -200 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -200 ) } );
 
-        return { 0, Mils2iu( 250 ) };
+        return { 0, schIUScale.MilsToIU( 250 ) };
     }
     else
     {
@@ -2014,17 +2014,17 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
 
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, Mils2iu( -100 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
-        line2->AddPoint( { Mils2iu( -50 ), Mils2iu( -100 ) } );
-        line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -100 ) } );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -100 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -100 ) } );
 
-        return { 0, Mils2iu( 150 ) };
+        return { 0, schIUScale.MilsToIU( 150 ) };
     }
 }
 
@@ -2134,7 +2134,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessPort( const ASCH_PORT& aElem )
 
     int height = aElem.Height;
     if( height <= 0 )
-        height = Mils2iu( 100 ); //  chose default 50 grid
+        height = schIUScale.MilsToIU( 100 ); //  chose default 50 grid
 
     textBox->SetStartX( ( aElem.Location + m_sheetOffset ).x );
     textBox->SetStartY( ( aElem.Location + m_sheetOffset ).y - ( height / 2 ) );
@@ -2296,7 +2296,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     {
         SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
         wire->SetEndPoint( end );
-        wire->SetLineWidth( Mils2iu( 2 ) );
+        wire->SetLineWidth( schIUScale.MilsToIU( 2 ) );
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );
     }
@@ -2304,7 +2304,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     {
         SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_BUS );
         wire->SetEndPoint( end );
-        wire->SetLineWidth( Mils2iu( 2 ) );
+        wire->SetLineWidth( schIUScale.MilsToIU( 2 ) );
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );
     }

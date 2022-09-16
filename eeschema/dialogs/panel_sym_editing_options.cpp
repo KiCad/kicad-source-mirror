@@ -44,11 +44,11 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
 
 void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg )
 {
-    m_lineWidth.SetValue( Mils2iu( aCfg->m_Defaults.line_width ) );
-    m_textSize.SetValue( Mils2iu( aCfg->m_Defaults.text_size ) );
-    m_pinLength.SetValue( Mils2iu( aCfg->m_Defaults.pin_length ) );
-    m_pinNumberSize.SetValue( Mils2iu( aCfg->m_Defaults.pin_num_size ) );
-    m_pinNameSize.SetValue( Mils2iu( aCfg->m_Defaults.pin_name_size ) );
+    m_lineWidth.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.line_width ) );
+    m_textSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.text_size ) );
+    m_pinLength.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_length ) );
+    m_pinNumberSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_num_size ) );
+    m_pinNameSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_name_size ) );
     m_choicePinDisplacement->SetSelection( aCfg->m_Repeat.pin_step == 50 ? 1 : 0 );
     m_spinRepeatLabel->SetValue( aCfg->m_Repeat.label_delta );
     m_cbShowPinElectricalType->SetValue( aCfg->m_ShowPinElectricalType );

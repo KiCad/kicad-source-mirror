@@ -704,7 +704,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
         while( sheetNode )
         {
-            VECTOR2I                   pos    = VECTOR2I( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
+            VECTOR2I                   pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ), y * schIUScale.MilsToIU( 1000 ) );
             std::unique_ptr<SCH_SHEET> sheet  = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
             wxString                   pageNo = wxString::Format( wxT( "%d" ), i );
@@ -937,7 +937,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     // Calculate the new sheet size.
     BOX2I    sheetBoundingBox = getSheetBbox( m_currentSheet );
     VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
-    targetSheetSize += VECTOR2I( Mils2iu( 1500 ), Mils2iu( 1500 ) );
+    targetSheetSize += VECTOR2I( schIUScale.MilsToIU( 1500 ), schIUScale.MilsToIU( 1500 ) );
 
     // Get current Eeschema sheet size.
     wxSize    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
@@ -959,8 +959,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     // round the translation to nearest 100mil to place it on the grid.
     VECTOR2I translation = sheetcentre - itemsCentre;
-    translation.x       = translation.x - translation.x % Mils2iu( 100 );
-    translation.y       = translation.y - translation.y % Mils2iu( 100 );
+    translation.x       = translation.x - translation.x % schIUScale.MilsToIU( 100 );
+    translation.y       = translation.y - translation.y % schIUScale.MilsToIU( 100 );
 
     // Add global net labels for the named power input pins in this sheet
     for( SCH_ITEM* item : m_currentSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
@@ -1139,7 +1139,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             {
                 label->SetPosition( firstWire->GetStartPoint() );
                 label->SetText( escapeName( netName ) );
-                label->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
+                label->SetTextSize( wxSize( schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( 40 ) ) );
 
                 if( firstWire->GetEndPoint().x > firstWire->GetStartPoint().x )
                     label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
@@ -1932,20 +1932,20 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlN
     default:  wxFAIL_MSG( wxString::Format( wxT( "Unhandled orientation (%d degrees)." ), roti ) );
     }
 
-    pin->SetLength( Mils2iu( 300 ) );  // Default pin length when not defined.
+    pin->SetLength( schIUScale.MilsToIU( 300 ) );  // Default pin length when not defined.
 
     if( aEPin->length )
     {
         wxString length = aEPin->length.Get();
 
         if( length == wxT( "short" ) )
-            pin->SetLength( Mils2iu( 100 ) );
+            pin->SetLength( schIUScale.MilsToIU( 100 ) );
         else if( length == wxT( "middle" ) )
-            pin->SetLength( Mils2iu( 200 ) );
+            pin->SetLength( schIUScale.MilsToIU( 200 ) );
         else if( length == wxT( "long" ) )
-            pin->SetLength( Mils2iu( 300 ) );
+            pin->SetLength( schIUScale.MilsToIU( 300 ) );
         else if( length == wxT( "point" ) )
-            pin->SetLength( Mils2iu( 0 ) );
+            pin->SetLength( schIUScale.MilsToIU( 0 ) );
     }
 
     // emulate the visibility of pin elements
@@ -2041,15 +2041,15 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_left )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
         int height = yMax - yMin;
         int x1 = xMin;
-        int x2 = x1 + Mils2iu( 150 );
-        int legendPosX = xMin + Mils2iu( 75 );
+        int x2 = x1 + schIUScale.MilsToIU( 150 );
+        int legendPosX = xMin + schIUScale.MilsToIU( 75 );
         double rowSpacing = height / double( eframe.rows );
         double legendPosY = yMax - ( rowSpacing / 2 );
 
@@ -2069,7 +2069,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY -= rowSpacing;
@@ -2079,15 +2079,15 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_right )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
         int height = yMax - yMin;
-        int x1 = xMax - Mils2iu( 150 );
+        int x1 = xMax - schIUScale.MilsToIU( 150 );
         int x2 = xMax;
-        int legendPosX = xMax - Mils2iu( 75 );
+        int legendPosX = xMax - schIUScale.MilsToIU( 75 );
         double rowSpacing = height / double( eframe.rows );
         double legendPosY = yMax - ( rowSpacing / 2 );
 
@@ -2107,7 +2107,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY -= rowSpacing;
@@ -2117,15 +2117,15 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_top )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
         int width = xMax - xMin;
         int y1 = yMin;
-        int y2 = yMin + Mils2iu( 150 );
-        int legendPosY = yMax - Mils2iu( 75 );
+        int y2 = yMin + schIUScale.MilsToIU( 150 );
+        int legendPosY = yMax - schIUScale.MilsToIU( 75 );
         double columnSpacing = width / double( eframe.columns );
         double legendPosX = xMin + ( columnSpacing / 2 );
 
@@ -2145,7 +2145,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -2155,15 +2155,15 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_bottom )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
         int width = xMax - xMin;
-        int y1 = yMax - Mils2iu( 150 );
+        int y1 = yMax - schIUScale.MilsToIU( 150 );
         int y2 = yMax;
-        int legendPosY = yMin + Mils2iu( 75 );
+        int legendPosY = yMin + schIUScale.MilsToIU( 75 );
         double columnSpacing = width / double( eframe.columns );
         double legendPosX = xMin + ( columnSpacing / 2 );
 
@@ -2183,7 +2183,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            legendText->SetTextSize( wxSize( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -2296,7 +2296,7 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
 
             // Create a vector pointing in the direction of the wire, 50 mils long
             VECTOR2I wireDirection( segAttached->B - segAttached->A );
-            wireDirection = wireDirection.Resize( Mils2iu( 50 ) );
+            wireDirection = wireDirection.Resize( schIUScale.MilsToIU( 50 ) );
             const VECTOR2I origPos( labelPos );
 
             // Flags determining the search direction
@@ -2402,8 +2402,8 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
             auto entrySize =
                     []( int signX, int signY ) -> VECTOR2I
                     {
-                        return VECTOR2I( Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signX,
-                                        Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signY );
+                        return VECTOR2I( schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) * signX,
+                                        schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) * signY );
                     };
 
             auto testBusHit =
@@ -2976,7 +2976,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
                     SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                     netLabel->SetPosition( aSymbol->GetPinPhysicalPosition( pin ) );
                     netLabel->SetText( extractNetName( pin->GetName() ) );
-                    netLabel->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
+                    netLabel->SetTextSize( wxSize( schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( 40 ) ) );
 
                     switch( pin->GetOrientation() )
                     {

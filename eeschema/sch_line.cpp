@@ -62,11 +62,11 @@ SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
         m_startIsDangling = m_endIsDangling = false;
 
     if( layer == LAYER_WIRE )
-        m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+        m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     else if( layer == LAYER_BUS )
-        m_lastResolvedWidth = Mils2iu( DEFAULT_BUS_WIDTH_MILS );
+        m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_BUS_WIDTH_MILS );
     else
-        m_lastResolvedWidth = Mils2iu( DEFAULT_LINE_WIDTH_MILS );
+        m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
     m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
@@ -303,7 +303,7 @@ int SCH_LINE::GetPenWidth() const
         if( schematic )
             return schematic->Settings().m_DefaultLineWidth;
 
-        return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
+        return schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
     case LAYER_WIRE:
         if( m_stroke.GetWidth() > 0 )

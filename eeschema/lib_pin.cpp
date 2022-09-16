@@ -106,15 +106,15 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
     if( pgm )
     {
         auto* settings = pgm->GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        m_length       = Mils2iu( settings->m_Defaults.pin_length );
-        m_numTextSize  = Mils2iu( settings->m_Defaults.pin_num_size );
-        m_nameTextSize = Mils2iu( settings->m_Defaults.pin_name_size );
+        m_length       = schIUScale.MilsToIU( settings->m_Defaults.pin_length );
+        m_numTextSize  = schIUScale.MilsToIU( settings->m_Defaults.pin_num_size );
+        m_nameTextSize = schIUScale.MilsToIU( settings->m_Defaults.pin_name_size );
     }
     else    // Use hardcoded eeschema defaults: symbol_editor settings are not existing.
     {
-        m_length       = Mils2iu( DEFAULT_PIN_LENGTH );
-        m_numTextSize  = Mils2iu( DEFAULT_PINNUM_SIZE );
-        m_nameTextSize = Mils2iu( DEFAULT_PINNAME_SIZE );
+        m_length       = schIUScale.MilsToIU( DEFAULT_PIN_LENGTH );
+        m_numTextSize  = schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE );
+        m_nameTextSize = schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE );
     }
 }
 
@@ -388,8 +388,8 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     int    numPenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, true ),
                                    aSettings->GetDefaultPenWidth() );
 
-    int    name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
-    int    num_offset = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
+    int    name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
+    int    num_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
     COLOR4D nameColor = aSettings->GetLayerColor( IsVisible() ? LAYER_PINNAM : LAYER_HIDDEN );
@@ -764,8 +764,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
     int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, true ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
-    int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
-    int     num_offset  = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
+    int     name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
+    int     num_offset  = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
     COLOR4D nameColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNAM );
@@ -1237,7 +1237,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
         VECTOR2I nameSize = font->StringBoundaryLimits( name, fontSize, penWidth, false, false );
 
         nameTextLength = nameSize.x + nameTextOffset;
-        nameTextHeight = nameSize.y + Mils2iu( PIN_TEXT_MARGIN );
+        nameTextHeight = nameSize.y + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
     }
 
     if( includeType )
@@ -1247,7 +1247,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
                                                             VECTOR2D( fontSize, fontSize ),
                                                             fontSize / 8.0, false, false );
 
-        typeTextLength = typeTextSize.x + Mils2iu( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS;
+        typeTextLength = typeTextSize.x + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS;
         minsizeV = std::max( minsizeV, typeTextSize.y / 2 );
     }
 
@@ -1257,7 +1257,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
-    begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
+    begin.y = std::max( minsizeV, numberTextHeight + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) );
     begin.x = std::min( -typeTextLength, m_length - ( numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position

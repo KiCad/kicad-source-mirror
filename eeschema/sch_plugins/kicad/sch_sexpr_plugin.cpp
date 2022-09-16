@@ -842,7 +842,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
         m_out->Print( aNestLevel, " (show_name)" );
 
     if( !aField->IsDefaultFormatting()
-      || ( aField->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
+      || ( aField->GetTextHeight() != schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) ) )
     {
         m_out->Print( 0, "\n" );
         aField->Format( m_out, aNestLevel, 0 );

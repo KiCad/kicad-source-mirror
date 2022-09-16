@@ -2222,7 +2222,7 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 
         int ptSize = 12;
         int scaledSize = abs( KiROUND( m_gal->GetScreenWorldMatrix().GetScale().x * ptSize ) );
-        int unscaledSize = Mils2iu( ptSize );
+        int unscaledSize = pcbIUScale.MilsToIU( ptSize );
 
         // Scale by zoom a bit, but not too much
         int      textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;

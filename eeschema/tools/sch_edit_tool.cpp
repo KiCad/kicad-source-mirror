@@ -1117,8 +1117,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         }
         else
         {
-            newItem->Move( VECTOR2I( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
-                                     Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
+            newItem->Move( VECTOR2I( schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_x ),
+                                     schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_y ) ) );
         }
 
         m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );

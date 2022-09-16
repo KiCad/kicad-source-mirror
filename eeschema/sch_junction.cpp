@@ -45,7 +45,7 @@ SCH_JUNCTION::SCH_JUNCTION( const VECTOR2I& aPosition, int aDiameter, SCH_LAYER_
     m_diameter = aDiameter;
     m_layer = aLayer;
 
-    m_lastResolvedDiameter = KiROUND( Mils2iu( DEFAULT_WIRE_WIDTH_MILS ) * 1.7 );
+    m_lastResolvedDiameter = KiROUND( schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS ) * 1.7 );
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -83,7 +83,7 @@ SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
     else if( Schematic() )
         m_lastResolvedDiameter = Schematic()->Settings().m_JunctionSize;
     else
-        m_lastResolvedDiameter = Mils2iu( DEFAULT_JUNCTION_DIAM );
+        m_lastResolvedDiameter = schIUScale.MilsToIU( DEFAULT_JUNCTION_DIAM );
 
     if( m_lastResolvedDiameter != 1 )  // Diameter 1 means user doesn't want to draw junctions
     {

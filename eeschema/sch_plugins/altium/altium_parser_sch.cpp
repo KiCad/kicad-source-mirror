@@ -45,8 +45,8 @@ constexpr int Altium2KiCadUnit( const int val, const int frac )
 {
     constexpr double int_limit = ( std::numeric_limits<int>::max() - 10 ) / 2.54;
 
-    double dbase = 10 * Mils2iu( val );
-    double dfrac = Mils2iu( frac ) / 10000.0;
+    double dbase = 10 * schIUScale.MilsToIU( val );
+    double dfrac = schIUScale.MilsToIU( frac ) / 10000.0;
 
     return KiROUND( Clamp<double>( -int_limit, ( dbase + dfrac ) / 10.0, int_limit ) ) * 10;
 }

@@ -448,7 +448,7 @@ bool SCH_SHEET::HasUndefinedPins() const
 
 int bumpToNextGrid( const int aVal, const int aDirection )
 {
-    constexpr int gridSize = Mils2iu( 50 );
+    constexpr int gridSize = schIUScale.MilsToIU( 50 );
 
     int base = aVal / gridSize;
     int excess = abs( aVal % gridSize );
@@ -498,7 +498,7 @@ int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
     else
         pinMinWidth = m_pos.x + m_size.x - pinsLeft;
 
-    return std::max( pinMinWidth, Mils2iu( MIN_SHEET_WIDTH ) );
+    return std::max( pinMinWidth, schIUScale.MilsToIU( MIN_SHEET_WIDTH ) );
 }
 
 
@@ -532,7 +532,7 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
     else
         pinMinHeight = m_pos.y + m_size.y - pinsTop;
 
-    return std::max( pinMinHeight, Mils2iu( MIN_SHEET_HEIGHT ) );
+    return std::max( pinMinHeight, schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
 }
 
 
@@ -582,7 +582,7 @@ int SCH_SHEET::GetPenWidth() const
     if( Schematic() )
         return Schematic()->Settings().m_DefaultLineWidth;
 
-    return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
+    return schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 }
 
 

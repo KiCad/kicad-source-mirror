@@ -65,10 +65,10 @@
 #include <eeschema_settings.h>
 #include <core/arraydim.h>
 
-#define FIELD_PADDING Mils2iu( 10 )            // arbitrarily chosen for aesthetics
-#define WIRE_V_SPACING Mils2iu( 100 )
-#define HPADDING Mils2iu( 25 )
-#define VPADDING Mils2iu( 25 )
+#define FIELD_PADDING schIUScale.MilsToIU( 10 )            // arbitrarily chosen for aesthetics
+#define WIRE_V_SPACING schIUScale.MilsToIU( 100 )
+#define HPADDING schIUScale.MilsToIU( 25 )
+#define VPADDING schIUScale.MilsToIU( 25 )
 
 /**
  * Round up/down to the nearest multiple of n
@@ -175,10 +175,10 @@ public:
             if( m_align_to_grid )
             {
                 if( abs( field_side.x ) > 0 )
-                    pos.x = round_n( pos.x, Mils2iu( 50 ), field_side.x >= 0 );
+                    pos.x = round_n( pos.x, schIUScale.MilsToIU( 50 ), field_side.x >= 0 );
 
                 if( abs( field_side.y ) > 0 )
-                    pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y >= 0 );
+                    pos.y = round_n( pos.y, schIUScale.MilsToIU( 50 ), field_side.y >= 0 );
             }
 
             field->SetPosition( pos );
@@ -226,7 +226,7 @@ protected:
             if( !aDynamic )
                 total_height += WIRE_V_SPACING;
             else if( m_align_to_grid )
-                total_height += round_n( field_height, Mils2iu( 50 ), true );
+                total_height += round_n( field_height, schIUScale.MilsToIU( 50 ), true );
             else
                 total_height += field_height + FIELD_PADDING;
         }
@@ -702,7 +702,7 @@ protected:
         else if( m_align_to_grid )
         {
             field_height = aField->GetBoundingBox().GetHeight();
-            padding = round_n( field_height, Mils2iu( 50 ), true ) - field_height;
+            padding = round_n( field_height, schIUScale.MilsToIU( 50 ), true ) - field_height;
         }
         else
         {

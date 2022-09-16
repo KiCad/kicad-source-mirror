@@ -801,7 +801,7 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
     // this is because all symbols are using a 50 mils grid to place pins, and therefore
     // the wires must be on the 50 mils grid
     // So raise an error if a pin is not on a 25 mil (or bigger: 50 mil or 100 mil) grid
-    const int min_grid_size = Mils2iu( 25 );
+    const int min_grid_size = schIUScale.MilsToIU( 25 );
     const int clamped_grid_size = ( aGridSize < min_grid_size ) ? min_grid_size : aGridSize;
 
     SCH_SCREENS screens( m_schematic->Root() );

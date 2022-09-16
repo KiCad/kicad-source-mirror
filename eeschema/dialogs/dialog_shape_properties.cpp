@@ -111,7 +111,7 @@ void DIALOG_SHAPE_PROPERTIES::onBorderChecked( wxCommandEvent& event )
     bool border = m_borderCheckbox->GetValue();
 
     if( border && m_borderWidth.GetValue() < 0 )
-        m_borderWidth.SetValue( Mils2iu( m_frame->eeconfig()->m_Drawing.default_line_thickness ) );
+        m_borderWidth.SetValue( schIUScale.MilsToIU( m_frame->eeconfig()->m_Drawing.default_line_thickness ) );
 
     m_borderWidth.Enable( border );
     m_borderColorLabel->Enable( border );

@@ -176,11 +176,11 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
     switch( unit )
     {
         case EDA_UNITS::INCHES:
-            newValueIU = Mils2iu( value * 1000.0 );
+            newValueIU = pcbIUScale.MilsToIU( value * 1000.0 );
             break;
 
         case EDA_UNITS::MILS:
-            newValueIU = Mils2iu( value );
+            newValueIU = pcbIUScale.MilsToIU( value );
             break;
 
         case EDA_UNITS::MILLIMETRES:

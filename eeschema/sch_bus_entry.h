@@ -28,7 +28,7 @@
 #include <gal/color4d.h>
 #include <sch_item.h>
 
-#define TARGET_BUSENTRY_RADIUS Mils2iu( 12 )   // Circle diameter drawn at the ends
+#define TARGET_BUSENTRY_RADIUS schIUScale.MilsToIU( 12 )   // Circle diameter drawn at the ends
 
 
 /**

@@ -54,8 +54,8 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
 
 void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg )
 {
-    m_hPitch.SetValue( Mils2iu( aCfg->m_Drawing.default_repeat_offset_x ) );
-    m_vPitch.SetValue( Mils2iu( aCfg->m_Drawing.default_repeat_offset_y ) );
+    m_hPitch.SetValue( schIUScale.MilsToIU( aCfg->m_Drawing.default_repeat_offset_x ) );
+    m_vPitch.SetValue( schIUScale.MilsToIU( aCfg->m_Drawing.default_repeat_offset_y ) );
     m_spinLabelRepeatStep->SetValue( aCfg->m_Drawing.repeat_label_increment );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();

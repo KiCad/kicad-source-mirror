@@ -1038,8 +1038,8 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const VECTOR2I& pos ) :
 {
     m_layer      = LAYER_NETCLASS_REFS;
     m_shape      = LABEL_FLAG_SHAPE::F_ROUND;
-    m_pinLength  = Mils2iu( 100 );
-    m_symbolSize = Mils2iu( 20 );
+    m_pinLength  = schIUScale.MilsToIU( 100 );
+    m_symbolSize = schIUScale.MilsToIU( 20 );
     m_isDangling = true;
 }
 
@@ -1555,7 +1555,7 @@ const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
     case TEXT_SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
-        x += Mils2iu( DANGLING_SYMBOL_SIZE );
+        x += schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -1563,13 +1563,13 @@ const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
         dx = height;
         dy = -length;
         x -= height / 2;
-        y += Mils2iu( DANGLING_SYMBOL_SIZE );
+        y += schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         break;
 
     case TEXT_SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
-        x -= Mils2iu( DANGLING_SYMBOL_SIZE );
+        x -= schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -1577,7 +1577,7 @@ const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
         dx = height;
         dy = length;
         x -= height / 2;
-        y -= Mils2iu( DANGLING_SYMBOL_SIZE );
+        y -= schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         break;
     }
 

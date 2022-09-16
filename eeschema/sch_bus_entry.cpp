@@ -47,8 +47,8 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool
     SCH_ITEM( nullptr, aType )
 {
     m_pos    = pos;
-    m_size.x = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
-    m_size.y = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
+    m_size.x = schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE );
+    m_size.y = schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE );
 
     m_stroke.SetWidth( 0 );
     m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
@@ -59,7 +59,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool
 
     m_isDanglingStart = m_isDanglingEnd = true;
 
-    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
@@ -71,7 +71,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, bool aFlipY ) :
     m_layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
 
-    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
@@ -92,7 +92,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, int aQuadrant ) :
     m_layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
 
-    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
@@ -105,7 +105,7 @@ SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const VECTOR2I& pos, bool aFlipY ) :
     m_connected_bus_items[0] = nullptr;
     m_connected_bus_items[1] = nullptr;
 
-    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
     m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }

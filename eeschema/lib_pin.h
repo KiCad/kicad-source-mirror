@@ -32,7 +32,7 @@
 #include <lib_symbol.h>
 
 // Circle diameter drawn at the active end of pins:
-#define TARGET_PIN_RADIUS   Mils2iu( 15 )
+#define TARGET_PIN_RADIUS   schIUScale.MilsToIU( 15 )
 
 // Pin visibility flag bit:
 #define PIN_INVISIBLE 1    // Set makes pin invisible

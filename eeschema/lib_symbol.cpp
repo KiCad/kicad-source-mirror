@@ -105,7 +105,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 {
     m_lastModDate    = 0;
     m_unitCount      = 1;
-    m_pinNameOffset  = Mils2iu( DEFAULT_PIN_NAME_OFFSET );
+    m_pinNameOffset  = schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET );
     m_options        = ENTRY_NORMAL;
     m_unitsLocked    = false;
     m_showPinNumbers = true;

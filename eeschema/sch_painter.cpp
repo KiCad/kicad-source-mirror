@@ -162,12 +162,12 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
-        square->MoveTo( VECTOR2I( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEnd( VECTOR2I( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->MoveTo( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
-        text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
+        text->SetTextSize( wxSize( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         symbol->AddDrawItem( square );
@@ -229,7 +229,7 @@ void SCH_PAINTER::draw( const EDA_ITEM *aItem, int aLayer, bool aDimmed )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( aItem->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
                                                   : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
-        m_gal->SetLineWidth( Mils2iu( 3 ) );
+        m_gal->SetLineWidth( schIUScale.MilsToIU( 3 ) );
         m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
     }
 
@@ -350,7 +350,7 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return (float) std::fabs( matrix.GetScale().x * milsWidth ) + Mils2iu( milsWidth );
+    return (float) std::fabs( matrix.GetScale().x * milsWidth ) + schIUScale.MilsToIU( milsWidth );
 }
 
 
@@ -472,7 +472,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDr
 
 float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const
 {
-    wxCHECK( aItem, static_cast<float>( Mils2iu( DEFAULT_LINE_WIDTH_MILS ) ) );
+    wxCHECK( aItem, static_cast<float>( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) ) );
 
     int pen = 0;
 
@@ -1461,9 +1461,9 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
     }
 
     float insideOffset  = textOffset                                     - thickness[INSIDE]  / 2.0;
-    float outsideOffset = Mils2iu( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0;
-    float aboveOffset   = Mils2iu( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[ABOVE]   / 2.0;
-    float belowOffset   = Mils2iu( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[BELOW]   / 2.0;
+    float outsideOffset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0;
+    float aboveOffset   = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[ABOVE]   / 2.0;
+    float belowOffset   = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[BELOW]   / 2.0;
 
     if( isDangling )
         outsideOffset += TARGET_PIN_RADIUS / 2.0;
@@ -1615,8 +1615,8 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                       bool aDrawingShadows, bool aBrightened )
 {
-    VECTOR2I radius( aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
-                     aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ) );
+    VECTOR2I radius( aWidth + schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
+                     aWidth + schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ) );
 
     // Dangling symbols must be drawn in a slightly different colour so they can be seen when
     // they overlap with a junction dot.
@@ -1898,7 +1898,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     {
         if( aText->IsDangling() )
         {
-            drawDanglingSymbol( aText->GetTextPos(), color, Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
+            drawDanglingSymbol( aText->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
                                 drawingShadows, aText->IsBrightened() );
         }
 
@@ -2481,7 +2481,7 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color, Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
+            drawDanglingSymbol( aLabel->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
                                 drawingShadows, aLabel->IsBrightened() );
         }
 

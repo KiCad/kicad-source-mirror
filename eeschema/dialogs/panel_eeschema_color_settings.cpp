@@ -286,27 +286,27 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
         STROKE_PARAMS stroke = wire->GetStroke();
-        stroke.SetWidth( Mils2iu( 6 ) );
+        stroke.SetWidth( schIUScale.MilsToIU( 6 ) );
 
         if( line.first != LAYER_NOTES )
         {
             stroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );
 
             if( line.first == LAYER_BUS )
-                stroke.SetWidth( Mils2iu( 12 ) );
+                stroke.SetWidth( schIUScale.MilsToIU( 12 ) );
 
         }
 
         wire->SetStroke( stroke );
 
-        wire->SetStartPoint( VECTOR2I( Mils2iu( line.second.first.x ),
-                                       Mils2iu( line.second.first.y ) ) );
-        wire->SetEndPoint( VECTOR2I( Mils2iu( line.second.second.x ),
-                                     Mils2iu( line.second.second.y ) ) );
+        wire->SetStartPoint( VECTOR2I( schIUScale.MilsToIU( line.second.first.x ),
+                                       schIUScale.MilsToIU( line.second.first.y ) ) );
+        wire->SetEndPoint( VECTOR2I( schIUScale.MilsToIU( line.second.second.x ),
+                                     schIUScale.MilsToIU( line.second.second.y ) ) );
         addItem( wire );
     }
 
-#define MILS_POINT( x, y ) VECTOR2I( Mils2iu( x ), Mils2iu( y ) )
+#define MILS_POINT( x, y ) VECTOR2I( schIUScale.MilsToIU( x ), schIUScale.MilsToIU( y ) )
 
     SCH_NO_CONNECT* nc = new SCH_NO_CONNECT;
     nc->SetPosition( MILS_POINT( 2525, 1300 ) );
@@ -379,7 +379,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
-        comp_body->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        comp_body->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
         comp_body->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
         comp_body->AddPoint( MILS_POINT( p.x + 200, p.y ) );
@@ -391,7 +391,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         LIB_PIN* pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 300, p.y + 100 ) );
-        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetLength( schIUScale.MilsToIU( 100 ) );
         pin->SetOrientation( PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "1" ) );
@@ -403,7 +403,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 300, p.y - 100 ) );
-        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetLength( schIUScale.MilsToIU( 100 ) );
         pin->SetOrientation( PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "2" ) );
@@ -415,7 +415,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin = new LIB_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x + 300, p.y ) );
-        pin->SetLength( Mils2iu( 100 ) );
+        pin->SetLength( schIUScale.MilsToIU( 100 ) );
         pin->SetOrientation( PIN_LEFT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
         pin->SetNumber( wxT( "3" ) );
@@ -430,7 +430,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     SCH_SHEET* s = new SCH_SHEET(
         /* aParent */ nullptr,
         /* aPosition */ MILS_POINT( 4000, 1300 ),
-        /* aSize */ wxSize( Mils2iu( 800 ), Mils2iu( 1300 ) ) );
+        /* aSize */ wxSize( schIUScale.MilsToIU( 800 ), schIUScale.MilsToIU( 1300 ) ) );
     s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
     s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
     s->AutoplaceFields( nullptr, false );

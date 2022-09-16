@@ -42,7 +42,7 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const VECTOR2I& pos ) :
     SCH_ITEM( nullptr, SCH_NO_CONNECT_T )
 {
     m_pos    = pos;
-    m_size   = Mils2iu( DEFAULT_NOCONNECT_SIZE );      ///< No-connect symbol size.
+    m_size   = schIUScale.MilsToIU( DEFAULT_NOCONNECT_SIZE );      ///< No-connect symbol size.
 
     SetLayer( LAYER_NOCONNECT );
 }

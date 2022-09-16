@@ -326,7 +326,7 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     }
 
     pos += tmp.size() + 1;
-    symbol->SetPinNameOffset( Mils2Iu( (int)num ) );
+    symbol->SetPinNameOffset( schIUScale.MilsToIU( (int)num ) );
 
     tmp = tokens.GetNextToken();                  // Show pin numbers.
 
@@ -566,13 +566,13 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     VECTOR2I pos;
 
-    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     field->SetPosition( pos );
 
     wxSize textSize;
 
-    textSize.x = textSize.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    textSize.x = textSize.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     field->SetTextSize( textSize );
 
     char textOrient = parseChar( aReader, line, &line );
@@ -758,12 +758,12 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     VECTOR2I center;
 
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     arc->SetPosition( center );
 
-    (void) Mils2Iu( parseInt( aReader, line, &line ) );
+    (void) schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     EDA_ANGLE angle1( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
     EDA_ANGLE angle2( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
@@ -771,7 +771,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
 
     arc->SetStroke( stroke );
 
@@ -785,10 +785,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
     {
         VECTOR2I arcStart, arcEnd;
 
-        arcStart.x = Mils2Iu( parseInt( aReader, line, &line ) );
-        arcStart.y = Mils2Iu( parseInt( aReader, line, &line ) );
-        arcEnd.x = Mils2Iu( parseInt( aReader, line, &line ) );
-        arcEnd.y = Mils2Iu( parseInt( aReader, line, &line ) );
+        arcStart.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        arcStart.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        arcEnd.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        arcEnd.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
@@ -842,17 +842,17 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
 
     VECTOR2I center;
 
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
-    int radius = Mils2Iu( parseInt( aReader, line, &line ) );
+    int radius = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     circle->SetStart( center );
     circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
 
     circle->SetStroke( stroke );
 
@@ -879,13 +879,13 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     VECTOR2I center;
 
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     text->SetPosition( center );
 
     wxSize size;
 
-    size.x = size.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    size.x = size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     text->SetTextSize( size );
     text->SetVisible( !parseInt( aReader, line, &line ) );
     text->SetUnit( parseInt( aReader, line, &line ) );
@@ -973,20 +973,20 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     VECTOR2I pos;
 
-    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pos.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     rectangle->SetPosition( pos );
 
     VECTOR2I end;
 
-    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    end.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    end.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     rectangle->SetEnd( end );
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
     rectangle->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
 
     rectangle->SetStroke( stroke );
 
@@ -1036,7 +1036,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    position.x = Mils2Iu( (int) num );
+    position.x = schIUScale.MilsToIU( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -1047,7 +1047,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    position.y = Mils2Iu( (int) num );
+    position.y = schIUScale.MilsToIU( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -1058,7 +1058,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    int length = Mils2Iu( (int) num );
+    int length = schIUScale.MilsToIU( (int) num );
 
 
     tmp = tokens.GetNextToken();
@@ -1081,7 +1081,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    int numberTextSize = Mils2Iu( (int) num );
+    int numberTextSize = schIUScale.MilsToIU( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -1092,7 +1092,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    int nameTextSize = Mils2Iu( (int) num );
+    int nameTextSize = schIUScale.MilsToIU( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -1228,7 +1228,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
 
     polyLine->SetStroke( stroke );
 
@@ -1236,8 +1236,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
 
     for( int i = 0; i < points; i++ )
     {
-        pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-        pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+        pt.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+        pt.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
         polyLine->AddPoint( pt );
     }
 
@@ -1264,26 +1264,26 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke ( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke ( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
 
     bezier->SetStroke( stroke );
 
     VECTOR2I pt;
 
-    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pt.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     bezier->SetStart( pt );
 
-    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pt.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     bezier->SetBezierC1( pt );
 
-    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pt.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     bezier->SetBezierC2( pt );
 
-    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    pt.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     bezier->SetEnd( pt );
 
     bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );

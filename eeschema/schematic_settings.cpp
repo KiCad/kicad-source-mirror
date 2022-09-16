@@ -102,11 +102,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_DashedLineGapRatio, 3.0 ) );     // Default from ISO 128-2
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
-            &m_DefaultLineWidth, Mils2iu( defaultLineThickness ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            &m_DefaultLineWidth, schIUScale.MilsToIU( defaultLineThickness ), schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ),
             1 / schIUScale.IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size",
-            &m_DefaultTextSize, Mils2iu( defaultTextSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            &m_DefaultTextSize, schIUScale.MilsToIU( defaultTextSize ), schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ),
             1 / schIUScale.IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
@@ -116,7 +116,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_LabelSizeRatio, DEFAULT_LABEL_SIZE_RATIO, 0.0, 2.0 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
-            &m_PinSymbolSize, Mils2iu( defaultPinSymbolSize ), Mils2iu( 0 ), Mils2iu( 1000 ),
+            &m_PinSymbolSize, schIUScale.MilsToIU( defaultPinSymbolSize ), schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 1000 ),
             1 / schIUScale.IU_PER_MILS ) );
 
     // m_JunctionSize is only a run-time cache of the calculated size.  Do not save it.

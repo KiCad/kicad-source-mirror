@@ -47,7 +47,7 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
     m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );
     m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE_FIELD ) );
 
-    m_pinTextPosition.SetValue( Mils2iu( DEFAULT_PIN_NAME_OFFSET ) );
+    m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 
     // initial focus should be on first editable field.
     m_textName->SetFocus();

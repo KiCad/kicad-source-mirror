@@ -123,7 +123,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DimensionSuppressZeroes  = false;
     m_DimensionTextPosition    = DIM_TEXT_POSITION::OUTSIDE;
     m_DimensionKeepTextAligned = true;
-    m_DimensionArrowLength     = Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH );
+    m_DimensionArrowLength     = pcbIUScale.MilsToIU( DEFAULT_DIMENSION_ARROW_LENGTH );
     m_DimensionExtensionOffset = pcbIUScale.mmToIU( DEFAULT_DIMENSION_EXTENSION_OFFSET );
 
     m_useCustomTrackVia = false;
@@ -699,14 +699,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM<int>( "defaults.dimensions.arrow_length",
             &m_DimensionArrowLength,
-            Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
+            pcbIUScale.MilsToIU( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.dimensions.extension_offset",
             &m_DimensionExtensionOffset,
             pcbIUScale.mmToIU( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
-            &m_defaultZoneSettings.m_ZoneClearance, Mils2iu( ZONE_CLEARANCE_MIL ),
+            &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.MilsToIU( ZONE_CLEARANCE_MIL ),
             pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "defaults.pads",

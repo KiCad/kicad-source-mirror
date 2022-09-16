@@ -165,12 +165,12 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
         if( !aSymbol->ShowPinNumbers() )
             aFormatter.Print( 0, " (pin_numbers hide)" );
 
-        if( aSymbol->GetPinNameOffset() != Mils2iu( DEFAULT_PIN_NAME_OFFSET )
+        if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET )
           || !aSymbol->ShowPinNames() )
         {
             aFormatter.Print( 0, " (pin_names" );
 
-            if( aSymbol->GetPinNameOffset() != Mils2iu( DEFAULT_PIN_NAME_OFFSET ) )
+            if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) )
                 aFormatter.Print( 0, " (offset %s)",
                                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPinNameOffset() ).c_str() );
 

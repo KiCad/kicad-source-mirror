@@ -161,7 +161,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         SYMBOL_EDITOR_SETTINGS* cfg = m_parent->GetSettings();
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
 
-        m_textSize.SetValue( Mils2iu( cfg->m_Defaults.text_size ) );
+        m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
         m_CommonUnit->SetValue( !tools->GetDrawSpecificUnit() );
         m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );

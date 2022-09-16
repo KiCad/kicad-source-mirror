@@ -173,7 +173,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         // Set the default line width (pen width which should be used for
         // items that do not have a pen size defined (like frame ref)
         // the default line width is stored in mils in config
-        m_defaultLineWidth.SetValue( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
+        m_defaultLineWidth.SetValue( schIUScale.MilsToIU( cfg->m_Drawing.default_line_thickness ) );
     }
 
     // Initialize HPGL specific widgets

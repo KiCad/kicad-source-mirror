@@ -44,8 +44,8 @@ LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_
 
 bool LIB_SHAPE::HitTest( const VECTOR2I& aPosRef, int aAccuracy ) const
 {
-    if( aAccuracy < Mils2iu( MINIMUM_SELECTION_DISTANCE ) )
-        aAccuracy = Mils2iu( MINIMUM_SELECTION_DISTANCE );
+    if( aAccuracy < schIUScale.MilsToIU( MINIMUM_SELECTION_DISTANCE ) )
+        aAccuracy = schIUScale.MilsToIU( MINIMUM_SELECTION_DISTANCE );
 
     return hitTest( DefaultTransform.TransformCoordinate( aPosRef ), aAccuracy );
 }

@@ -930,7 +930,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     VECTOR2I      midPoint( 1, 1 );
     VECTOR2I      endPoint( 0, 1 );
     bool          hasMidPoint = false;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
 
     // Parameters for legacy format
@@ -1076,7 +1076,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
 
     T             token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
 
     std::unique_ptr<LIB_SHAPE> bezier = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::BEZIER );
@@ -1159,7 +1159,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
     T             token;
     VECTOR2I      center( 0, 0 );
     int           radius = 1;     // defaulting to 0 could result in troublesome math....
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
 
     std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
@@ -1344,7 +1344,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                 {
                     // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
                     // so duplicate parsing is not required.
-                    EDA_TEXT text( Mils2iu( DEFAULT_SIZE_TEXT ) );
+                    EDA_TEXT text( schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) );
 
                     parseEDA_TEXT( &text, true );
                     pin->SetNameTextSize( text.GetTextHeight() );
@@ -1378,7 +1378,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                 {
                     // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
                     // so duplicate parsing is not required.
-                    EDA_TEXT text( Mils2iu( DEFAULT_SIZE_TEXT ) );
+                    EDA_TEXT text( schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) );
 
                     parseEDA_TEXT( &text, false );
                     pin->SetNumberTextSize( text.GetTextHeight() );
@@ -1433,7 +1433,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parsePolyLine()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a poly." ) );
 
     T token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> poly = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::POLY );
 
@@ -1501,7 +1501,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rectangle." ) );
 
     T token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECT );
 
@@ -1621,7 +1621,7 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
     VECTOR2I      size;
     bool          foundEnd = false;
     bool          foundSize = false;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
 
@@ -2803,7 +2803,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a sheet." ) );
 
     T token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     SCH_FIELD* field;
     std::vector<SCH_FIELD> fields;
@@ -3003,7 +3003,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bus entry." ) );
 
     T token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry = std::make_unique<SCH_BUS_WIRE_ENTRY>();
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -3054,7 +3054,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 SCH_SHAPE* SCH_SEXPR_PARSER::parseSchPolyLine()
 {
     T             token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     int           layer = LAYER_NOTES;
 
@@ -3118,7 +3118,7 @@ SCH_LINE* SCH_SEXPR_PARSER::parseLine()
     // parseSchPolyLine() that can handle true polygons, and not only one segment.
 
     T             token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     int           layer;
 
     switch( CurTok() )
@@ -3190,7 +3190,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
     VECTOR2I      startPoint;
     VECTOR2I      midPoint;
     VECTOR2I      endPoint;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
 
@@ -3254,7 +3254,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchCircle()
     T             token;
     VECTOR2I      center;
     int           radius = 0;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE );
 
@@ -3312,7 +3312,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchRectangle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rectangle." ) );
 
     T             token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECT );
 
@@ -3367,7 +3367,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchBezier()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
 
     T             token;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_SHAPE> bezier = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER );
 
@@ -3606,7 +3606,7 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
     VECTOR2I      size;
     bool          foundEnd = false;
     bool          foundSize = false;
-    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>();
 

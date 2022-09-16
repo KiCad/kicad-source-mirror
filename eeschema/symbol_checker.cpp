@@ -79,7 +79,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     // this is because all aSymbols are using a 50 mils grid to place pins, and therefore
     // the wires must be on the 50 mils grid
     // So raise an error if a pin is not on a 25 (or bigger :50 or 100) mils grid
-    const int min_grid_size = Mils2iu( 25 );
+    const int min_grid_size = schIUScale.MilsToIU( 25 );
     const int clamped_grid_size = ( aGridForPins < min_grid_size ) ? min_grid_size : aGridForPins;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )

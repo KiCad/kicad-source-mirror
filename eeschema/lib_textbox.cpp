@@ -47,7 +47,7 @@ LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
         LIB_SHAPE( aParent, SHAPE_T::RECT, aLineWidth, aFillType, LIB_TEXTBOX_T ),
         EDA_TEXT( schIUScale, text )
 {
-    SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
+    SetTextSize( wxSize( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ), schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
     SetMultilineAllowed( true );
@@ -332,8 +332,8 @@ wxString LIB_TEXTBOX::GetShownText( int aDepth ) const
 
 bool LIB_TEXTBOX::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( aAccuracy < Mils2iu( MINIMUM_SELECTION_DISTANCE ) )
-        aAccuracy = Mils2iu( MINIMUM_SELECTION_DISTANCE );
+    if( aAccuracy < schIUScale.MilsToIU( MINIMUM_SELECTION_DISTANCE ) )
+        aAccuracy = schIUScale.MilsToIU( MINIMUM_SELECTION_DISTANCE );
 
     BOX2I rect = GetBoundingBox();
 

@@ -128,11 +128,6 @@ constexpr double IU_PER_MM = SCH_IU_PER_MM;
 #ifndef UNKNOWN_IU
 constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
 
-constexpr inline int Mils2iu( int mils )
-{
-    double x = mils * IU_PER_MILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
 
 #if defined(EESCHEMA)
 constexpr inline int Iu2Mils( int iu )
@@ -155,12 +150,6 @@ constexpr inline int Millimeter2iu( double mm )
 {
     return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5 );
 }
-
-/// Convert mm to internal units (iu).
-// constexpr inline double Iu2Mils( int iu )
-// {
-//     return iu / IU_PER_MILS;
-// }
 
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.

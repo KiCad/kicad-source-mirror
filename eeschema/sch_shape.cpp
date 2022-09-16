@@ -238,7 +238,7 @@ int SCH_SHAPE::GetPenWidth() const
     if( schematic )
         return schematic->Settings().m_DefaultLineWidth;
 
-    return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
+    return schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 }
 
 
