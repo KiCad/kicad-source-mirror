@@ -106,7 +106,7 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
     m_Cache3Dmodels = nullptr;
     m_UseInlineModelsInBrdfile = false;
     m_UseRelPathIn3DModelFilename = false;
-    m_BoardToVrmlScale = MM_PER_IU;
+    m_BoardToVrmlScale = pcbIUScale.MM_PER_IU;
 
     for( int ii = 0; ii < VRML_COLOR_LAST; ++ii )
         m_sgmaterial[ii] = nullptr;
@@ -1233,12 +1233,12 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
     // Otherwise we use 1mm as VRML unit
     if( m_UseInlineModelsInBrdfile )
     {
-        m_BoardToVrmlScale = MM_PER_IU / 2.54;
+        m_BoardToVrmlScale = pcbIUScale.MM_PER_IU / 2.54;
         SetOffset( -aXRef / 2.54, aYRef / 2.54 );
     }
     else
     {
-        m_BoardToVrmlScale = MM_PER_IU;
+        m_BoardToVrmlScale = pcbIUScale.MM_PER_IU;
         SetOffset( -aXRef, aYRef );
     }
 

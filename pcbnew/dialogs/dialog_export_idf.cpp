@@ -196,8 +196,8 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
     {
         BOX2I bbox = GetBoard()->GetBoardEdgesBoundingBox();
 
-        aXRef = bbox.Centre().x * MM_PER_IU;
-        aYRef = bbox.Centre().y * MM_PER_IU;
+        aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
+        aYRef = bbox.Centre().y * pcbIUScale.MM_PER_IU;
     }
     else
     {

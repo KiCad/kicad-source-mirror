@@ -76,9 +76,13 @@ struct EDA_IU_SCALE
 {
     const double IU_PER_MM;
     const double IU_PER_MILS;
+    const double MM_PER_IU;
+
 
     constexpr EDA_IU_SCALE( double aIUPerMM ) :
-            IU_PER_MM( aIUPerMM ), IU_PER_MILS( aIUPerMM * 0.0254 )
+            IU_PER_MM( aIUPerMM ),
+            IU_PER_MILS( aIUPerMM * 0.0254 ),
+            MM_PER_IU( 1 / IU_PER_MM )
     {
     }
 
@@ -132,9 +136,6 @@ constexpr inline double Iu2Mils( int iu )
     return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
 }
 #endif
-
-// Other definitions used in a few files
-constexpr double MM_PER_IU = ( 1 / IU_PER_MM );
 
 /// Convert mm to internal units (iu).
 constexpr inline int Millimeter2iu( double mm )

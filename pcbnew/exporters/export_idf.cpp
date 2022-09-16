@@ -590,7 +590,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
     resolver = Prj().Get3DCacheManager()->GetResolver();
 
     bool ok = true;
-    double scale = MM_PER_IU;   // we must scale internal units to mm for IDF
+    double scale = pcbIUScale.MM_PER_IU;   // we must scale internal units to mm for IDF
     IDF3::IDF_UNIT idfUnit;
 
     if( aUseThou )
