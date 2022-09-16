@@ -31,6 +31,7 @@
 #include <wx/stc/stc.h>
 
 #include <algorithm>
+#include "wx/listctrl.h"
 
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
 // This is not a simple page index because some dialogs have dynamic page sets.
@@ -333,6 +334,14 @@ void PAGED_DIALOG::UpdateResetButton( int aPage )
 
 void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
 {
+    if( dynamic_cast<wxTextEntry*>( aEvent.GetEventObject() )
+            || dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() )
+            || dynamic_cast<wxListView*>( aEvent.GetEventObject() ) )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     if( aEvent.GetKeyCode() == WXK_UP )
     {
         int page = m_treebook->GetSelection();
