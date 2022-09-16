@@ -953,7 +953,6 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
     }
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
-    GetCanvas()->GetViewControls()->ShowCursor( true );
 }
 
 
