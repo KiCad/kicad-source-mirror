@@ -1232,7 +1232,8 @@ void SCH_SHEET_LIST::MigrateSimModelNameFields()
 
                         std::unique_ptr<SIM_VALUE> simValue =
                             SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT );
-                        simValue->FromString( prefix + unit + suffix, SIM_VALUE::NOTATION::SPICE );
+                        simValue->FromString( ( prefix + unit + suffix ).ToStdString(),
+                                              SIM_VALUE::NOTATION::SPICE );
 
                         if( value == simValue->ToString() )
                             continue; // Can stay the same.

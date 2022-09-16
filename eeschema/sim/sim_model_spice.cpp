@@ -190,7 +190,7 @@ bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
         AddParam( *m_paramInfos.back() );
     }
 
-    return GetParam( paramIndex ).value->FromString( wxString( aParamValue ), aNotation );
+    return GetParam( paramIndex ).value->FromString( aParamValue.ToStdString(), aNotation );
 }
 
 

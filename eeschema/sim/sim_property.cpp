@@ -237,7 +237,7 @@ bool SIM_STRING_VALIDATOR::TransferFromWindow()
 
 bool SIM_STRING_VALIDATOR::isValid( const wxString& aString )
 {
-    return SIM_VALUE_GRAMMAR::IsValid( aString, m_valueType, m_notation );
+    return SIM_VALUE_GRAMMAR::IsValid( aString.ToStdString(), m_valueType, m_notation );
 }
 
 

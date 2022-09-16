@@ -107,7 +107,7 @@ namespace SIM_VALUE_PARSER
         std::optional<long> metricSuffixExponent;
     };
 
-    PARSE_RESULT Parse( const wxString& aString,
+    PARSE_RESULT Parse( const std::string& aString,
                         NOTATION aNotation = NOTATION::SI,
                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT );
 
@@ -124,11 +124,11 @@ static inline void doIsValid( tao::pegtl::string_input<>& aIn )
 }
 
 
-bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
+bool SIM_VALUE_GRAMMAR::IsValid( const std::string& aString,
                                 SIM_VALUE::TYPE aValueType,
                                 NOTATION aNotation )
 {
-    tao::pegtl::string_input<> in( aString.ToUTF8(), "from_content" );
+    tao::pegtl::string_input<> in( aString, "from_content" );
 
     try
     {
@@ -186,13 +186,13 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
 }
 
 
-SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
+SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const std::string& aString,
                                                         NOTATION aNotation,
                                                         SIM_VALUE::TYPE aValueType )
 {
     LOCALE_IO toggle;
 
-    tao::pegtl::string_input<> in( aString.ToUTF8(), "from_content" );
+    tao::pegtl::string_input<> in( aString, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
     PARSE_RESULT result;
 
@@ -217,7 +217,7 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
     }
     catch( const std::invalid_argument& e )
     {
-        wxFAIL_MSG( wxString::Format( "Parsing simulator value failed: %s", e.what() ) );
+        wxFAIL_MSG( fmt::format( "Parsing simulator value failed: {:s}", e.what() ) );
         result.isOk = false;
     }
 
@@ -280,7 +280,7 @@ long SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATI
         break;
     }
 
-    wxFAIL_MSG( wxString::Format( "Unknown simulator value suffix: '%s'", aMetricSuffix ) );
+    wxFAIL_MSG( fmt::format( "Unknown simulator value suffix: '{:s}'", aMetricSuffix ) );
     return 0;
 }
 
@@ -359,7 +359,7 @@ std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aR
 }
 
 
-std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, wxString aString )
+std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, std::string aString )
 {
     std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( aType );
     value->FromString( aString );
@@ -387,7 +387,7 @@ std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType )
 }
 
 
-void SIM_VALUE::operator=( const wxString& aString )
+void SIM_VALUE::operator=( const std::string& aString )
 {
     FromString( aString );
 }
@@ -408,7 +408,7 @@ template SIM_VALUE_BOOL::SIM_VALUE_INST( const bool& aValue );
 template SIM_VALUE_INT::SIM_VALUE_INST( const long& aValue );
 template SIM_VALUE_FLOAT::SIM_VALUE_INST( const double& aValue );
 template SIM_VALUE_COMPLEX::SIM_VALUE_INST( const std::complex<double>& aValue );
-template SIM_VALUE_STRING::SIM_VALUE_INST( const wxString& aValue );
+template SIM_VALUE_STRING::SIM_VALUE_INST( const std::string& aValue );
 
 
 template <typename T>
@@ -419,7 +419,7 @@ bool SIM_VALUE_INST<T>::HasValue() const
 
 
 template <>
-bool SIM_VALUE_BOOL::FromString( const wxString& aString, NOTATION aNotation )
+bool SIM_VALUE_BOOL::FromString( const std::string& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
     m_value = std::nullopt;
@@ -445,7 +445,7 @@ bool SIM_VALUE_BOOL::FromString( const wxString& aString, NOTATION aNotation )
 
 
 template <>
-bool SIM_VALUE_INT::FromString( const wxString& aString, NOTATION aNotation )
+bool SIM_VALUE_INT::FromString( const std::string& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
     m_value = std::nullopt;
@@ -468,7 +468,7 @@ bool SIM_VALUE_INT::FromString( const wxString& aString, NOTATION aNotation )
 
 
 template <>
-bool SIM_VALUE_FLOAT::FromString( const wxString& aString, NOTATION aNotation )
+bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation )
 {
     SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
     m_value = std::nullopt;
@@ -501,7 +501,7 @@ bool SIM_VALUE_FLOAT::FromString( const wxString& aString, NOTATION aNotation )
 
 
 template <>
-bool SIM_VALUE_COMPLEX::FromString( const wxString& aString,
+bool SIM_VALUE_COMPLEX::FromString( const std::string& aString,
                                                            NOTATION aNotation )
 {
     // TODO
@@ -519,7 +519,7 @@ bool SIM_VALUE_COMPLEX::FromString( const wxString& aString,
 
 
 template <>
-bool SIM_VALUE_STRING::FromString( const wxString& aString, NOTATION aNotation )
+bool SIM_VALUE_STRING::FromString( const std::string& aString, NOTATION aNotation )
 {
     m_value = aString;
     return true;
@@ -527,11 +527,11 @@ bool SIM_VALUE_STRING::FromString( const wxString& aString, NOTATION aNotation )
 
 
 template <typename T>
-wxString SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
 {
     static_assert( std::is_same<T, std::vector<T>>::value );
 
-    wxString string = "";
+    std::string string = "";
 
     for( auto it = m_value.cbegin(); it != m_value.cend(); it++ )
     {
@@ -544,7 +544,7 @@ wxString SIM_VALUE_INST<T>::ToString( NOTATION aNotation ) const
 
 
 template <>
-wxString SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
 {
     if( m_value )
         return fmt::format( "{:d}", *m_value );
@@ -554,7 +554,7 @@ wxString SIM_VALUE_BOOL::ToString( NOTATION aNotation ) const
 
 
 template <>
-wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_INT::ToString( NOTATION aNotation ) const
 {
     if( m_value )
     {
@@ -578,7 +578,7 @@ wxString SIM_VALUE_INT::ToString( NOTATION aNotation ) const
 
 
 template <>
-wxString SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
 {
     if( m_value )
     {
@@ -597,7 +597,7 @@ wxString SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
 
 
 template <>
-wxString SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
 {
     if( m_value )
         return fmt::format( "{:g}+{:g}i", m_value->real(), m_value->imag() );
@@ -607,7 +607,7 @@ wxString SIM_VALUE_COMPLEX::ToString( NOTATION aNotation ) const
 
 
 template <>
-wxString SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
+std::string SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
 {
     if( m_value )
         return *m_value;
@@ -617,25 +617,21 @@ wxString SIM_VALUE_STRING::ToString( NOTATION aNotation ) const
 
 
 template <typename T>
-wxString SIM_VALUE_INST<T>::ToSimpleString() const
+std::string SIM_VALUE_INST<T>::ToSimpleString() const
 {
     if( m_value )
-    {
-        wxString result = "";
-        result << *m_value;
-        return result;
-    }
+        return fmt::format( "{}", *m_value );
 
     return "";
 }
 
 
 template <>
-wxString SIM_VALUE_COMPLEX::ToSimpleString() const
+std::string SIM_VALUE_COMPLEX::ToSimpleString() const
 {
     // TODO
 
-    /*wxString result = "";
+    /*std::string result = "";
     result << *m_value;
 
     return result;*/
@@ -665,7 +661,7 @@ bool SIM_VALUE_BOOL::operator==( const bool& aOther ) const
 template bool SIM_VALUE_INT::operator==( const long& aOther ) const;
 template bool SIM_VALUE_FLOAT::operator==( const double& aOther ) const;
 template bool SIM_VALUE_COMPLEX::operator==( const std::complex<double>& aOther ) const;
-template bool SIM_VALUE_STRING::operator==( const wxString& aOther ) const;
+template bool SIM_VALUE_STRING::operator==( const std::string& aOther ) const;
 
 
 template <typename T>

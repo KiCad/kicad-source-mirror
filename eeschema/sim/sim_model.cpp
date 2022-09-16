@@ -1003,7 +1003,7 @@ bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const wxString& aValue,
     if( m_spiceCode != "" )
         return false;
 
-    return m_params.at( aParamIndex ).value->FromString( aValue, aNotation );
+    return m_params.at( aParamIndex ).value->FromString( aValue.ToStdString(), aNotation );
 }
 
 
@@ -1350,7 +1350,8 @@ TYPE SIM_MODEL::readTypeFromSpiceStrings( const wxString& aTypeString,
                                           const wxString& aVersion,
                                           bool aSkipDefaultLevel )
 {
-    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT, aLevel );
+    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT,
+                                                              aLevel.ToStdString() );
 
     for( TYPE type : TYPE_ITERATOR() )
     {
