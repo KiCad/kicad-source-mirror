@@ -1624,7 +1624,10 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
     if( m_schematicFrame == nullptr || m_simulator == nullptr )
         return;
 
-    NETLIST_VIEW_DIALOG dlg( this, m_simulator->GetNetlist() );
+    STRING_FORMATTER formatter;
+    m_circuitModel->GetNetlist( &formatter );
+
+    NETLIST_VIEW_DIALOG dlg( this, formatter.GetString() );
     dlg.ShowModal();
 }
 
