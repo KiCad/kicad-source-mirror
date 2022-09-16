@@ -191,7 +191,6 @@ protected:
     void updateRecentSearchMenu();
 
     void onQueryText( wxCommandEvent& aEvent );
-    void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
     void onQueryMouseMoved( wxMouseEvent& aEvent );
 

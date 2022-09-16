@@ -75,10 +75,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
 
 #if wxCHECK_VERSION( 3, 1, 1 )
-        m_query_ctrl->Bind( wxEVT_SEARCH, &LIB_TREE::onQueryEnter, this );
         m_query_ctrl->Bind( wxEVT_SEARCH_CANCEL, &LIB_TREE::onQueryText, this );
 #else
-        m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &LIB_TREE::onQueryEnter, this );
         m_query_ctrl->Bind( wxEVT_SEARCHCTRL_CANCEL_BTN, &LIB_TREE::onQueryText, this );
 #endif
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
@@ -257,12 +255,6 @@ wxString LIB_TREE::GetSearchString() const
 
 void LIB_TREE::updateRecentSearchMenu()
 {
-#ifdef __WXMSW__
-    // Sadly there's a bug somewhere (presumably in wxWidgets, although possibly in the way we
-    // interact with wxWidgets) that causes the search button and drop-down menu to OK the dialog
-// on MSW, resulting in very unexpected behaviour.  #11743
-    m_query_ctrl->ShowSearchButton( false );
-#else
     wxString newEntry = GetSearchString();
 
     std::vector<wxString>& recents = g_recentSearches[ m_recentSearchesKey ];
@@ -287,7 +279,6 @@ void LIB_TREE::updateRecentSearchMenu()
         menu->Append( wxID_ANY, _( "recent searches" ) );
 
     m_query_ctrl->SetMenu( menu );
-#endif
 }
 
 
@@ -460,15 +451,6 @@ void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 }
 
 
-void LIB_TREE::onQueryEnter( wxCommandEvent& aEvent )
-{
-    updateRecentSearchMenu();
-
-    if( GetSelectedLibId().IsValid() )
-        postSelectEvent();
-}
-
-
 void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
 {
     m_inTimerEvent = true;
@@ -513,10 +495,10 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     case WXK_RETURN:
         updateRecentSearchMenu();
 
-        if( type == LIB_TREE_NODE::LIB )
+        if( GetSelectedLibId().IsValid() )
+            postSelectEvent();
+        else if( type == LIB_TREE_NODE::LIB )
             toggleExpand( sel );
-        else
-            aKeyStroke.Skip();  // pass on to search box to select node
 
         break;
 
