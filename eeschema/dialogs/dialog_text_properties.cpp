@@ -75,11 +75,17 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     else
     {
         m_hAlignCenter->Show( false );
+        m_separator3->Show( false );
+        m_vAlignTop->Show( false );
         m_vAlignCenter->Show( false );
+        m_vAlignBottom->Show( false );
 
         wxSizer* parentSizer = m_vAlignTop->GetContainingSizer();
         parentSizer->Detach( m_hAlignCenter );
+        parentSizer->Detach( m_separator3 );
+        parentSizer->Detach( m_vAlignTop );
         parentSizer->Detach( m_vAlignCenter );
+        parentSizer->Detach( m_vAlignBottom );
         parentSizer->Layout();
 
         m_borderCheckbox->Show( false );
@@ -262,19 +268,19 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         switch( static_cast<SCH_TEXT*>( m_currentItem )->GetTextSpinStyle() )
         {
         case TEXT_SPIN_STYLE::RIGHT:
-            m_hAlignRight->Check( true );
+            m_hAlignLeft->Check( true );    // Spin style to right means text aligned left
             m_horizontal->Check( true );
             break;
         case TEXT_SPIN_STYLE::LEFT:
-            m_hAlignLeft->Check( true );
+            m_hAlignRight->Check( true );   // Spin style to left means text aligned right
             m_horizontal->Check( true );
             break;
         case TEXT_SPIN_STYLE::UP:
-            m_vAlignTop->Check( true );
+            m_hAlignLeft->Check( true );  // Spin style up means text aligned to bottom
             m_vertical->Check( true );
             break;
-        case TEXT_SPIN_STYLE::BOTTOM:
-            m_vAlignBottom->Check( true );
+        case TEXT_SPIN_STYLE::BOTTOM:       // Spin style down means text aligned to top
+            m_hAlignRight->Check( true );
             m_vertical->Check( true );
             break;
         }
@@ -527,14 +533,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
             if( m_vertical->IsChecked() )
                 textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
             else
-                textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+                textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
         }
         else
         {
             if( m_vertical->IsChecked() )
                 textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
             else
-                textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+                textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
         }
     }
     else
