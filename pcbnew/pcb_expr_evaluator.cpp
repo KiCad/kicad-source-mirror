@@ -897,7 +897,8 @@ class PCB_LAYER_VALUE : public LIBEVAL::VALUE
 {
 public:
     PCB_LAYER_VALUE( PCB_LAYER_ID aLayer ) :
-        LIBEVAL::VALUE( double( aLayer ) )
+        LIBEVAL::VALUE( LayerName( aLayer ) ),
+        m_layer( aLayer )
     {};
 
     virtual bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
@@ -930,25 +931,25 @@ public:
             mask = i->second;
         }
 
-        PCB_LAYER_ID layerId = ToLAYER_ID( (int) AsDouble() );
-
-        return mask.Contains( layerId );
+        return mask.Contains( m_layer );
     }
+
+protected:
+    PCB_LAYER_ID m_layer;
 };
 
 
-LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+LIBEVAL::VALUE* PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
+    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+
     if( m_itemIndex == 2 )
-    {
-        PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
-        return PCB_LAYER_VALUE( context->GetLayer() );
-    }
+        return new PCB_LAYER_VALUE( context->GetLayer() );
 
     BOARD_ITEM* item = GetObject( aCtx );
 
     if( !item )
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 
     auto it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
@@ -958,12 +959,12 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         // simpler "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
         // value when the property doesn't appear on a particular object.
 
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
     }
     else
     {
         if( m_type == LIBEVAL::VT_NUMERIC )
-            return LIBEVAL::VALUE( (double) item->Get<int>( it->second ) );
+            return new LIBEVAL::VALUE( (double) item->Get<int>( it->second ) );
         else
         {
             wxString str;
@@ -971,7 +972,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             if( !m_isEnum )
             {
                 str = item->Get<wxString>( it->second );
-                return LIBEVAL::VALUE( str );
+                return new LIBEVAL::VALUE( str );
             }
             else
             {
@@ -979,51 +980,56 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
                 bool valid = any.GetAs<wxString>( &str );
 
                 if( valid )
-                    return LIBEVAL::VALUE( str );
+                {
+                    if( it->second->Name() == wxT( "Layer" ) )
+                        return new PCB_LAYER_VALUE( context->GetBoard()->GetLayerID( str ) );
+                    else
+                        return new LIBEVAL::VALUE( str );
+                }
             }
 
-            return LIBEVAL::VALUE();
+            return new LIBEVAL::VALUE();
         }
     }
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+LIBEVAL::VALUE* PCB_EXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     BOARD_ITEM* item = GetObject( aCtx );
 
     if( !item )
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 
     if( item->IsConnected() )
-        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetClassName() );
+        return new LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetClassName() );
     else
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+LIBEVAL::VALUE* PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     BOARD_ITEM* item = GetObject( aCtx );
 
     if( !item )
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 
     if( item->IsConnected() )
-        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetname() );
+        return new LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetname() );
     else
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 }
 
 
-LIBEVAL::VALUE PCB_EXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+LIBEVAL::VALUE* PCB_EXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     BOARD_ITEM* item = GetObject( aCtx );
 
     if( !item )
-        return LIBEVAL::VALUE();
+        return new LIBEVAL::VALUE();
 
-    return LIBEVAL::VALUE( ENUM_MAP<KICAD_T>::Instance().ToString( item->Type() ) );
+    return new LIBEVAL::VALUE( ENUM_MAP<KICAD_T>::Instance().ToString( item->Type() ) );
 }
 
 

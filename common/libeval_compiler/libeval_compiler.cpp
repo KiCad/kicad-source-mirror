@@ -1038,7 +1038,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 reportError( CST_CODEGEN, msg, node->srcPos - (int) node->value.str->length() );
             }
 
-            node->SetUop( TR_UOP_PUSH_VALUE, std::move( vref ) );
+            node->SetUop( TR_UOP_PUSH_VAR, std::move( vref ) );
             node->isTerminal = true;
             break;
         }
@@ -1090,10 +1090,12 @@ void UOP::Exec( CONTEXT* ctx )
     {
     case TR_UOP_PUSH_VAR:
     {
-        VALUE* value = ctx->AllocValue();
+        VALUE* value = nullptr;
 
         if( m_ref )
-            value->Set( m_ref->GetValue( ctx ) );
+            value = ctx->StoreValue( m_ref->GetValue( ctx ) );
+        else
+            value = ctx->AllocValue();
 
         ctx->Push( value );
     }
@@ -1162,10 +1164,20 @@ void UOP::Exec( CONTEXT* ctx )
             result = arg1Value > arg2Value ? 1 : 0;
             break;
         case TR_OP_EQUAL:
-            result = arg1 && arg2 && arg1->EqualTo( ctx, arg2 ) ? 1 : 0;
+            if( !arg1 || !arg2 )
+                result = arg1 == arg2 ? 1 : 0;
+            else if( arg2->GetType() == VT_UNDEFINED )
+                result = arg2->EqualTo( ctx, arg1 ) ? 1 : 0;
+            else
+                result = arg1->EqualTo( ctx, arg2 ) ? 1 : 0;
             break;
         case TR_OP_NOT_EQUAL:
-            result = arg1 && arg2 && arg1->NotEqualTo( ctx, arg2 ) ? 1 : 0;
+            if( !arg1 || !arg2 )
+                result = arg1 != arg2 ? 1 : 0;
+            else if( arg2->GetType() == VT_UNDEFINED )
+                result = arg2->NotEqualTo( ctx, arg1 ) ? 1 : 0;
+            else
+                result = arg1->NotEqualTo( ctx, arg2 ) ? 1 : 0;
             break;
         case TR_OP_BOOL_AND:
             result = arg1Value != 0.0 && arg2Value != 0.0 ? 1 : 0;
