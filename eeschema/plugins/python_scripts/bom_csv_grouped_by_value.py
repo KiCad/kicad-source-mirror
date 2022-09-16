@@ -25,19 +25,10 @@ import kicad_utils
 import csv
 import sys
 
-# A helper function to convert a UTF8/Unicode/locale string read in netlist
-# for python2 or python3 (Windows/unix)
+# A helper function to filter/convert a string read in netlist
+#currently: do nothing
 def fromNetlistText( aText ):
-    currpage = sys.stdout.encoding      #the current code page. can be none
-    if currpage is None:
-        return aText
-    if currpage != 'utf-8':
-        try:
-            return aText.encode('utf-8').decode(currpage)
-        except UnicodeDecodeError:
-            return aText
-    else:
-        return aText
+    return aText
 
 def myEqu(self, other):
     """myEqu is a more advanced equivalence function for components which is
@@ -74,7 +65,7 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
-    f = kicad_utils.open_file_write(sys.argv[2], 'w')
+    f = kicad_utils.open_file_writeUTF8(sys.argv[2], 'w')
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
     print( __file__, ":", e, sys.stderr )
