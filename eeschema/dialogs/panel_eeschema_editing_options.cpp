@@ -102,8 +102,8 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
 
-    cfg->m_Drawing.default_repeat_offset_x = Iu2Mils( (int) m_hPitch.GetValue() );
-    cfg->m_Drawing.default_repeat_offset_y = Iu2Mils( (int) m_vPitch.GetValue() );
+    cfg->m_Drawing.default_repeat_offset_x = schIUScale.IUToMils( (int) m_hPitch.GetValue() );
+    cfg->m_Drawing.default_repeat_offset_y = schIUScale.IUToMils( (int) m_vPitch.GetValue() );
     cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
 
     cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();

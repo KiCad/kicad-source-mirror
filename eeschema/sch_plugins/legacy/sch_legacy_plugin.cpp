@@ -1594,8 +1594,8 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
 
     // Save the position
     m_out->Print( 0, "P %d %d\n",
-                  Iu2Mils( aSymbol->GetPosition().x ),
-                  Iu2Mils( aSymbol->GetPosition().y ) );
+                  schIUScale.IUToMils( aSymbol->GetPosition().x ),
+                  schIUScale.IUToMils( aSymbol->GetPosition().y ) );
 
     /* If this is a complex hierarchy; save hierarchical references.
      * but for simple hierarchies it is not necessary.
@@ -1646,8 +1646,8 @@ void SCH_LEGACY_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol )
 
     // Unit number, position, box ( old standard )
     m_out->Print( 0, "\t%-4d %-4d %-4d\n", aSymbol->GetUnit(),
-                  Iu2Mils( aSymbol->GetPosition().x ),
-                  Iu2Mils( aSymbol->GetPosition().y ) );
+                  schIUScale.IUToMils( aSymbol->GetPosition().x ),
+                  schIUScale.IUToMils( aSymbol->GetPosition().y ) );
 
     TRANSFORM transform = aSymbol->GetTransform();
 
@@ -1677,9 +1677,9 @@ void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
                   aField->GetId(),
                   EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
                   aField->GetTextAngle().IsHorizontal() ? 'H' : 'V',
-                  Iu2Mils( aField->GetLibPosition().x ),
-                  Iu2Mils( aField->GetLibPosition().y ),
-                  Iu2Mils( aField->GetTextWidth() ),
+                  schIUScale.IUToMils( aField->GetLibPosition().x ),
+                  schIUScale.IUToMils( aField->GetLibPosition().y ),
+                  schIUScale.IUToMils( aField->GetTextWidth() ),
                   !aField->IsVisible(),
                   hjustify, vjustify,
                   aField->IsItalic() ? 'I' : 'N',
@@ -1703,8 +1703,8 @@ void SCH_LEGACY_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap )
 
     m_out->Print( 0, "$Bitmap\n" );
     m_out->Print( 0, "Pos %-4d %-4d\n",
-                  Iu2Mils( aBitmap->GetPosition().x ),
-                  Iu2Mils( aBitmap->GetPosition().y ) );
+                  schIUScale.IUToMils( aBitmap->GetPosition().x ),
+                  schIUScale.IUToMils( aBitmap->GetPosition().y ) );
     m_out->Print( 0, "Scale %f\n", aBitmap->GetImage()->GetScale() );
     m_out->Print( 0, "Data\n" );
 
@@ -1739,10 +1739,10 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
     m_out->Print( 0, "$Sheet\n" );
     m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n",
-                  Iu2Mils( aSheet->GetPosition().x ),
-                  Iu2Mils( aSheet->GetPosition().y ),
-                  Iu2Mils( aSheet->GetSize().x ),
-                  Iu2Mils( aSheet->GetSize().y ) );
+                  schIUScale.IUToMils( aSheet->GetPosition().x ),
+                  schIUScale.IUToMils( aSheet->GetPosition().y ),
+                  schIUScale.IUToMils( aSheet->GetSize().x ),
+                  schIUScale.IUToMils( aSheet->GetSize().y ) );
 
     m_out->Print( 0, "U %8.8X\n", aSheet->m_Uuid.AsLegacyTimestamp() );
 
@@ -1752,12 +1752,12 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
     if( !sheetName.GetText().IsEmpty() )
         m_out->Print( 0, "F0 %s %d\n",
                       EscapedUTF8( sheetName.GetText() ).c_str(),
-                      Iu2Mils( sheetName.GetTextSize().x ) );
+                      schIUScale.IUToMils( sheetName.GetTextSize().x ) );
 
     if( !fileName.GetText().IsEmpty() )
         m_out->Print( 0, "F1 %s %d\n",
                       EscapedUTF8( fileName.GetText() ).c_str(),
-                      Iu2Mils( fileName.GetTextSize().x ) );
+                      schIUScale.IUToMils( fileName.GetTextSize().x ) );
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
@@ -1788,9 +1788,9 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n",
                       pin->GetNumber(),
                       EscapedUTF8( pin->GetText() ).c_str(),     // supplies wrapping quotes
-                      type, side, Iu2Mils( pin->GetPosition().x ),
-                      Iu2Mils( pin->GetPosition().y ),
-                      Iu2Mils( pin->GetTextWidth() ) );
+                      type, side, schIUScale.IUToMils( pin->GetPosition().x ),
+                      schIUScale.IUToMils( pin->GetPosition().y ),
+                      schIUScale.IUToMils( pin->GetTextWidth() ) );
     }
 
     m_out->Print( 0, "$EndSheet\n" );
@@ -1802,8 +1802,8 @@ void SCH_LEGACY_PLUGIN::saveJunction( SCH_JUNCTION* aJunction )
     wxCHECK_RET( aJunction != nullptr, "SCH_JUNCTION* is NULL" );
 
     m_out->Print( 0, "Connection ~ %-4d %-4d\n",
-                  Iu2Mils( aJunction->GetPosition().x ),
-                  Iu2Mils( aJunction->GetPosition().y ) );
+                  schIUScale.IUToMils( aJunction->GetPosition().x ),
+                  schIUScale.IUToMils( aJunction->GetPosition().y ) );
 }
 
 
@@ -1812,8 +1812,8 @@ void SCH_LEGACY_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect )
     wxCHECK_RET( aNoConnect != nullptr, "SCH_NOCONNECT* is NULL" );
 
     m_out->Print( 0, "NoConn ~ %-4d %-4d\n",
-                  Iu2Mils( aNoConnect->GetPosition().x ),
-                  Iu2Mils( aNoConnect->GetPosition().y ) );
+                  schIUScale.IUToMils( aNoConnect->GetPosition().x ),
+                  schIUScale.IUToMils( aNoConnect->GetPosition().y ) );
 }
 
 
@@ -1823,14 +1823,14 @@ void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
 
     if( aBusEntry->GetLayer() == LAYER_WIRE )
         m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
-                      Iu2Mils( aBusEntry->GetPosition().x ),
-                      Iu2Mils( aBusEntry->GetPosition().y ),
-                      Iu2Mils( aBusEntry->GetEnd().x ), Iu2Mils( aBusEntry->GetEnd().y ) );
+                      schIUScale.IUToMils( aBusEntry->GetPosition().x ),
+                      schIUScale.IUToMils( aBusEntry->GetPosition().y ),
+                      schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
     else
         m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
-                      Iu2Mils( aBusEntry->GetPosition().x ),
-                      Iu2Mils( aBusEntry->GetPosition().y ),
-                      Iu2Mils( aBusEntry->GetEnd().x ), Iu2Mils( aBusEntry->GetEnd().y ) );
+                      schIUScale.IUToMils( aBusEntry->GetPosition().x ),
+                      schIUScale.IUToMils( aBusEntry->GetPosition().y ),
+                      schIUScale.IUToMils( aBusEntry->GetEnd().x ), schIUScale.IUToMils( aBusEntry->GetEnd().y ) );
 }
 
 
@@ -1852,7 +1852,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     if( aLine->IsGraphicLine() )
     {
         if( aLine->GetLineSize() != 0 )
-            m_out->Print( 0, " %s %d", T_WIDTH, Iu2Mils( aLine->GetLineSize() ) );
+            m_out->Print( 0, " %s %d", T_WIDTH, schIUScale.IUToMils( aLine->GetLineSize() ) );
 
         m_out->Print( 0, " %s %s", T_STYLE,
                       TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );
@@ -1867,8 +1867,8 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     m_out->Print( 0, "\n" );
 
     m_out->Print( 0, "\t%-4d %-4d %-4d %-4d",
-                  Iu2Mils( aLine->GetStartPoint().x ), Iu2Mils( aLine->GetStartPoint().y ),
-                  Iu2Mils( aLine->GetEndPoint().x ), Iu2Mils( aLine->GetEndPoint().y ) );
+                  schIUScale.IUToMils( aLine->GetStartPoint().x ), schIUScale.IUToMils( aLine->GetStartPoint().y ),
+                  schIUScale.IUToMils( aLine->GetEndPoint().x ), schIUScale.IUToMils( aLine->GetEndPoint().y ) );
 
     m_out->Print( 0, "\n");
 }
@@ -1924,10 +1924,10 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
             spinStyle = 0;
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
-                      Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
+                      schIUScale.IUToMils( aText->GetPosition().x ), schIUScale.IUToMils( aText->GetPosition().y ),
                       spinStyle,
-                      Iu2Mils( aText->GetTextWidth() ),
-                      italics, Iu2Mils( aText->GetTextThickness() ), TO_UTF8( text ) );
+                      schIUScale.IUToMils( aText->GetTextWidth() ),
+                      italics, schIUScale.IUToMils( aText->GetTextThickness() ), TO_UTF8( text ) );
     }
     else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
     {
@@ -1937,12 +1937,12 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
-                      Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
+                      schIUScale.IUToMils( aText->GetPosition().x ), schIUScale.IUToMils( aText->GetPosition().y ),
                       static_cast<int>( aText->GetTextSpinStyle() ),
-                      Iu2Mils( aText->GetTextWidth() ),
+                      schIUScale.IUToMils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,
-                      Iu2Mils( aText->GetTextThickness() ), TO_UTF8( text ) );
+                      schIUScale.IUToMils( aText->GetTextThickness() ), TO_UTF8( text ) );
     }
 }
 

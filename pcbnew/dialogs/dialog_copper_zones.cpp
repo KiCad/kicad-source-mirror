@@ -576,10 +576,10 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     }
 
     storePersistentNetSortConfigurations();
-    cfg->m_Zones.clearance                   = Iu2Mils( m_settings.m_ZoneClearance );
-    cfg->m_Zones.min_thickness               = Iu2Mils( m_settings.m_ZoneMinThickness );
-    cfg->m_Zones.thermal_relief_gap          = Iu2Mils( m_settings.m_ThermalReliefGap );
-    cfg->m_Zones.thermal_relief_copper_width = Iu2Mils( m_settings.m_ThermalReliefSpokeWidth );
+    cfg->m_Zones.clearance                   = pcbIUScale.IUToMils( m_settings.m_ZoneClearance );
+    cfg->m_Zones.min_thickness               = pcbIUScale.IUToMils( m_settings.m_ZoneMinThickness );
+    cfg->m_Zones.thermal_relief_gap          = pcbIUScale.IUToMils( m_settings.m_ThermalReliefGap );
+    cfg->m_Zones.thermal_relief_copper_width = pcbIUScale.IUToMils( m_settings.m_ThermalReliefSpokeWidth );
 
     m_settings.SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
     m_settings.SetMinIslandArea( m_islandThreshold.GetValue() );

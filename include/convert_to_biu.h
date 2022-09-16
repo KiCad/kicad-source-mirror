@@ -129,22 +129,6 @@ constexpr double IU_PER_MM = SCH_IU_PER_MM;
 constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
 
 
-#if defined(EESCHEMA)
-constexpr inline int Iu2Mils( int iu )
-{
-    double mils = iu / IU_PER_MILS;
-
-    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
-}
-#else
-constexpr inline double Iu2Mils( int iu )
-{
-    double mils = iu / IU_PER_MILS;
-
-    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
-}
-#endif
-
 /// Convert mm to internal units (iu).
 constexpr inline int Millimeter2iu( double mm )
 {

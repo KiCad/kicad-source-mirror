@@ -349,13 +349,13 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     switch( aMainFrame->GetUserUnits() )
     {
     case EDA_UNITS::MILS:
-        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ),
-                                        Iu2Mils( m_ImageJustifyOffset.y ) );
+        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUToMils( m_ImageJustifyOffset.x ),
+                                        gerbIUScale.IUToMils( m_ImageJustifyOffset.y ) );
         break;
 
     case EDA_UNITS::INCHES:
-        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ) / 1000.0,
-                                        Iu2Mils( m_ImageJustifyOffset.y ) / 1000.0 );
+        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUToMils( m_ImageJustifyOffset.x ) / 1000.0,
+                                        gerbIUScale.IUToMils( m_ImageJustifyOffset.y ) / 1000.0 );
         break;
 
     case EDA_UNITS::MILLIMETRES:

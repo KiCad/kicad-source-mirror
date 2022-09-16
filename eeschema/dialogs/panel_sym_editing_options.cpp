@@ -71,11 +71,11 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-    settings->m_Defaults.line_width = Iu2Mils( (int) m_lineWidth.GetValue() );
-    settings->m_Defaults.text_size = Iu2Mils( (int) m_textSize.GetValue() );
-    settings->m_Defaults.pin_length = Iu2Mils( (int) m_pinLength.GetValue() );
-    settings->m_Defaults.pin_num_size = Iu2Mils( (int) m_pinNumberSize.GetValue() );
-    settings->m_Defaults.pin_name_size = Iu2Mils( (int) m_pinNameSize.GetValue() );
+    settings->m_Defaults.line_width = schIUScale.IUToMils( (int) m_lineWidth.GetValue() );
+    settings->m_Defaults.text_size = schIUScale.IUToMils( (int) m_textSize.GetValue() );
+    settings->m_Defaults.pin_length = schIUScale.IUToMils( (int) m_pinLength.GetValue() );
+    settings->m_Defaults.pin_num_size = schIUScale.IUToMils( (int) m_pinNumberSize.GetValue() );
+    settings->m_Defaults.pin_name_size = schIUScale.IUToMils( (int) m_pinNameSize.GetValue() );
     settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
     settings->m_Repeat.pin_step = m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
     settings->m_ShowPinElectricalType = m_cbShowPinElectricalType->GetValue();

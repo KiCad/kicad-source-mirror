@@ -945,10 +945,10 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     // Increase if necessary
     if( pageSizeIU.x < targetSheetSize.x )
-        pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
+        pageInfo.SetWidthMils( schIUScale.IUToMils( targetSheetSize.x ) );
 
     if( pageSizeIU.y < targetSheetSize.y )
-        pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
+        pageInfo.SetHeightMils( schIUScale.IUToMils( targetSheetSize.y ) );
 
     // Set the new sheet size.
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );

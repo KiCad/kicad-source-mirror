@@ -157,7 +157,7 @@ class SDIPWizard(RowedFootprint):
         pads = self.parameters["Pads"]
         rows = pads[self.row_count_key]
         pad_count = pads[self.pad_count_key]
-        row_dist_mil = pcbnew.Iu2Mils(int(self.parameters["Pads"][self.row_spacing_key])) #int(self.parameters["Pads"][self.row_spacing_key] / 2.54 * 100)
+        row_dist_mil = pcbnew.pcbIUScale.IUToMils(int(self.parameters["Pads"][self.row_spacing_key])) #int(self.parameters["Pads"][self.row_spacing_key] / 2.54 * 100)
         pad_shape = ""
 
         if pads[self.pad_width_key] != pads[self.pad_length_key]:

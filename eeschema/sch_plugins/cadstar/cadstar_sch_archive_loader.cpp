@@ -226,8 +226,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
         // Update page size always
         PAGE_INFO pageInfo = sheet->GetScreen()->GetPageSettings();
-        pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
-        pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
+        pageInfo.SetWidthMils( schIUScale.IUToMils( targetSheetSize.x ) );
+        pageInfo.SetHeightMils( schIUScale.IUToMils( targetSheetSize.y ) );
 
         // Set the new sheet size.
         sheet->GetScreen()->SetPageSettings( pageInfo );

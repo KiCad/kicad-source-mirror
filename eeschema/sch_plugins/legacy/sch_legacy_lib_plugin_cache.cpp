@@ -1403,7 +1403,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& 
         aFormatter.Print( 0, " ~" );
 
     aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
-                      0, Iu2Mils( aSymbol->GetPinNameOffset() ),
+                      0, schIUScale.IUToMils( aSymbol->GetPinNameOffset() ),
                       aSymbol->ShowPinNumbers() ? 'Y' : 'N',
                       aSymbol->ShowPinNames() ? 'Y' : 'N',
                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
@@ -1524,19 +1524,19 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormat
     endAngle.Normalize180();
 
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-                      Iu2Mils( aArc->GetPosition().x ),
-                      Iu2Mils( aArc->GetPosition().y ),
-                      Iu2Mils( aArc->GetRadius() ),
+                      schIUScale.IUToMils( aArc->GetPosition().x ),
+                      schIUScale.IUToMils( aArc->GetPosition().y ),
+                      schIUScale.IUToMils( aArc->GetRadius() ),
                       startAngle.AsTenthsOfADegree(),
                       endAngle.AsTenthsOfADegree(),
                       aArc->GetUnit(),
                       aArc->GetConvert(),
-                      Iu2Mils( aArc->GetWidth() ),
+                      schIUScale.IUToMils( aArc->GetWidth() ),
                       fill_tab[ static_cast<int>( aArc->GetFillMode() ) - 1 ],
-                      Iu2Mils( aArc->GetStart().x ),
-                      Iu2Mils( aArc->GetStart().y ),
-                      Iu2Mils( aArc->GetEnd().x ),
-                      Iu2Mils( aArc->GetEnd().y ) );
+                      schIUScale.IUToMils( aArc->GetStart().x ),
+                      schIUScale.IUToMils( aArc->GetStart().y ),
+                      schIUScale.IUToMils( aArc->GetEnd().x ),
+                      schIUScale.IUToMils( aArc->GetEnd().y ) );
 }
 
 
@@ -1548,10 +1548,10 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
                       (unsigned)aBezier->GetBezierPoints().size(),
                       aBezier->GetUnit(),
                       aBezier->GetConvert(),
-                      Iu2Mils( aBezier->GetWidth() ) );
+                      schIUScale.IUToMils( aBezier->GetWidth() ) );
 
     for( const VECTOR2I& pt : aBezier->GetBezierPoints() )
-        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
+        aFormatter.Print( 0, " %d %d", schIUScale.IUToMils( pt.x ), schIUScale.IUToMils( pt.y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillMode() ) - 1 ] );
 }
@@ -1562,12 +1562,12 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMATTER& a
     wxCHECK_RET( aCircle && aCircle->GetShape() == SHAPE_T::CIRCLE, "Invalid CIRCLE object." );
 
     aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n",
-                      Iu2Mils( aCircle->GetPosition().x ),
-                      Iu2Mils( aCircle->GetPosition().y ),
-                      Iu2Mils( aCircle->GetRadius() ),
+                      schIUScale.IUToMils( aCircle->GetPosition().x ),
+                      schIUScale.IUToMils( aCircle->GetPosition().y ),
+                      schIUScale.IUToMils( aCircle->GetRadius() ),
                       aCircle->GetUnit(),
                       aCircle->GetConvert(),
-                      Iu2Mils( aCircle->GetWidth() ),
+                      schIUScale.IUToMils( aCircle->GetWidth() ),
                       fill_tab[ static_cast<int>( aCircle->GetFillMode() ) - 1 ] );
 }
 
@@ -1597,9 +1597,9 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTE
     aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
                       id,
                       EscapedUTF8( text ).c_str(),       // wraps in quotes
-                      Iu2Mils( aField->GetTextPos().x ),
-                      Iu2Mils( aField->GetTextPos().y ),
-                      Iu2Mils( aField->GetTextWidth() ),
+                      schIUScale.IUToMils( aField->GetTextPos().x ),
+                      schIUScale.IUToMils( aField->GetTextPos().y ),
+                      schIUScale.IUToMils( aField->GetTextWidth() ),
                       aField->GetTextAngle().IsHorizontal() ? 'H' : 'V',
                       aField->IsVisible() ? 'V' : 'I',
                       hjustify, vjustify,
@@ -1649,12 +1649,12 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFo
 
     aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
                       aPin->GetNumber().IsEmpty() ? "~" : TO_UTF8( aPin->GetNumber() ),
-                      Iu2Mils( aPin->GetPosition().x ),
-                      Iu2Mils( aPin->GetPosition().y ),
-                      Iu2Mils( (int) aPin->GetLength() ),
+                      schIUScale.IUToMils( aPin->GetPosition().x ),
+                      schIUScale.IUToMils( aPin->GetPosition().y ),
+                      schIUScale.IUToMils( (int) aPin->GetLength() ),
                       (int) aPin->GetOrientation(),
-                      Iu2Mils( aPin->GetNumberTextSize() ),
-                      Iu2Mils( aPin->GetNameTextSize() ),
+                      schIUScale.IUToMils( aPin->GetNumberTextSize() ),
+                      schIUScale.IUToMils( aPin->GetNameTextSize() ),
                       aPin->GetUnit(),
                       aPin->GetConvert(),
                       Etype );
@@ -1693,10 +1693,10 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTE
                       (int) aPolyLine->GetPolyShape().Outline( 0 ).GetPointCount(),
                       aPolyLine->GetUnit(),
                       aPolyLine->GetConvert(),
-                      Iu2Mils( aPolyLine->GetWidth() ) );
+                      schIUScale.IUToMils( aPolyLine->GetWidth() ) );
 
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
-        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
+        aFormatter.Print( 0, " %d %d", schIUScale.IUToMils( pt.x ), schIUScale.IUToMils( pt.y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aPolyLine->GetFillMode() ) - 1 ] );
 }
@@ -1707,13 +1707,13 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMAT
     wxCHECK_RET( aRectangle && aRectangle->GetShape() == SHAPE_T::RECT, "Invalid RECT object." );
 
     aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n",
-                      Iu2Mils( aRectangle->GetPosition().x ),
-                      Iu2Mils( aRectangle->GetPosition().y ),
-                      Iu2Mils( aRectangle->GetEnd().x ),
-                      Iu2Mils( aRectangle->GetEnd().y ),
+                      schIUScale.IUToMils( aRectangle->GetPosition().x ),
+                      schIUScale.IUToMils( aRectangle->GetPosition().y ),
+                      schIUScale.IUToMils( aRectangle->GetEnd().x ),
+                      schIUScale.IUToMils( aRectangle->GetEnd().y ),
                       aRectangle->GetUnit(),
                       aRectangle->GetConvert(),
-                      Iu2Mils( aRectangle->GetWidth() ),
+                      schIUScale.IUToMils( aRectangle->GetWidth() ),
                       fill_tab[ static_cast<int>( aRectangle->GetFillMode() ) - 1 ] );
 }
 
@@ -1733,9 +1733,9 @@ void SCH_LEGACY_PLUGIN_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& 
 
     aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s",
                       (double) aText->GetTextAngle().AsTenthsOfADegree(),
-                      Iu2Mils( aText->GetTextPos().x ),
-                      Iu2Mils( aText->GetTextPos().y ),
-                      Iu2Mils( aText->GetTextWidth() ),
+                      schIUScale.IUToMils( aText->GetTextPos().x ),
+                      schIUScale.IUToMils( aText->GetTextPos().y ),
+                      schIUScale.IUToMils( aText->GetTextWidth() ),
                       !aText->IsVisible(),
                       aText->GetUnit(),
                       aText->GetConvert(),
