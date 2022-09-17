@@ -163,9 +163,9 @@ int playground_main_func( int argc, char* argv[] )
     {
         const ARC_DATA& d = test_data[i];
 
-        SHAPE_ARC arc( VECTOR2D( Millimeter2iu( d.cx ), Millimeter2iu( d.cy ) ),
-                       VECTOR2D( Millimeter2iu( d.sx ), Millimeter2iu( d.sy ) ),
-                       EDA_ANGLE( d.ca, DEGREES_T ), Millimeter2iu( d.w ) );
+        SHAPE_ARC arc( VECTOR2D( pcbIUScale.mmToIU( d.cx ), pcbIUScale.mmToIU( d.cy ) ),
+                       VECTOR2D( pcbIUScale.mmToIU( d.sx ), pcbIUScale.mmToIU( d.sy ) ),
+                       EDA_ANGLE( d.ca, DEGREES_T ), pcbIUScale.mmToIU( d.w ) );
 
         arcs.push_back( arc );
 

@@ -184,7 +184,7 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
             break;
 
         case EDA_UNITS::MILLIMETRES:
-            newValueIU = Millimeter2iu( value );
+            newValueIU = pcbIUScale.mmToIU( value );
             break;
 
         case EDA_UNITS::UNSCALED:

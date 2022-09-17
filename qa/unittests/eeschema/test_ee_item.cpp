@@ -65,8 +65,8 @@ public:
             m_pin( &m_symbol ),
             m_ercItem( ERC_ITEM::Create( ERCE_DRIVER_CONFLICT ) )
     {
-        m_sheet.SetPosition( wxPoint( Millimeter2iu( 5 ), Millimeter2iu( 10 ) ) );
-        m_sheet.SetSize( wxSize( Millimeter2iu( 50 ), Millimeter2iu( 100 ) ) );
+        m_sheet.SetPosition( wxPoint( schIUScale.mmToIU( 5 ), schIUScale.mmToIU( 10 ) ) );
+        m_sheet.SetSize( wxSize( schIUScale.mmToIU( 50 ), schIUScale.mmToIU( 100 ) ) );
     }
 
     EDA_ITEM* Instantiate( KICAD_T aType )
@@ -100,7 +100,7 @@ public:
             // XXX: m_sheet pins currently have to have their initial positions calculated manually.
             return new SCH_SHEET_PIN( &m_sheet,
                                       wxPoint( m_sheet.GetPosition().x,
-                                               m_sheet.GetPosition().y + Millimeter2iu( 40 ) ),
+                                               m_sheet.GetPosition().y + schIUScale.mmToIU( 40 ) ),
                                       "test aPin" );
 
         case SCH_SHEET_T:           return new SCH_SHEET();

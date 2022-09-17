@@ -98,7 +98,7 @@ void AddRectCourtyard( FOOTPRINT& aFootprint, const RECT_DEFINITION& aRect )
 {
     const PCB_LAYER_ID layer = aRect.m_front ? F_CrtYd : B_CrtYd;
 
-    const int width = Millimeter2iu( 0.1 );
+    const int width = pcbIUScale.mmToIU( 0.1 );
 
     KI_TEST::DrawRect( aFootprint, aRect.m_centre, aRect.m_size, aRect.m_corner_rad, width, layer );
 }
@@ -177,7 +177,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -195,7 +195,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -207,12 +207,12 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
                 },
-                { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, // One footprint is far from the other
+                { pcbIUScale.mmToIU( 3 ), pcbIUScale.mmToIU( 1 ) }, // One footprint is far from the other
             },
         },
         {}, // no collisions
@@ -225,7 +225,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -237,12 +237,12 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
                 },
-                { Millimeter2iu( 1 ), Millimeter2iu( 0 ) }, // Just touching
+                { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0 ) }, // Just touching
             },
         },
         {}, // Touching means not colliding
@@ -255,7 +255,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -267,12 +267,12 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
                 },
-                { Millimeter2iu( 0.5 ), Millimeter2iu( 0 ) }, // Partial overlap
+                { pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0 ) }, // Partial overlap
             },
         },
         {
@@ -287,7 +287,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -299,7 +299,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         false,
                     },
@@ -317,13 +317,13 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
                     {
-                        { Millimeter2iu( 2 ), Millimeter2iu( 0 ) },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 0 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -335,7 +335,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
                         0,
                         true,
                     },
@@ -356,8 +356,8 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 {
                     {
                         { 0, 0 },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
-                        Millimeter2iu( 0.5 ),
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
+                        pcbIUScale.mmToIU( 0.5 ),
                         true,
                     },
                 },
@@ -367,9 +367,9 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                 "U2",
                 {
                     {
-                        { Millimeter2iu( 0.9 ), Millimeter2iu( 0.9 ) },
-                        { Millimeter2iu( 1 ), Millimeter2iu( 1 ) },
-                        Millimeter2iu( 0.5 ),
+                        { pcbIUScale.mmToIU( 0.9 ), pcbIUScale.mmToIU( 0.9 ) },
+                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
+                        pcbIUScale.mmToIU( 0.5 ),
                         true,
                     },
                 },

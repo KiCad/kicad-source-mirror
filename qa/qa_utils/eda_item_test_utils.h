@@ -32,8 +32,8 @@
 template <typename T>
 static void IterateOverPositionsAndReferences( T* aItem, void ( *aCallback )( T*, wxPoint ) )
 {
-    constexpr int XSTEP = static_cast<int>( Millimeter2iu( 100 ) );
-    constexpr int YSTEP = static_cast<int>( Millimeter2iu( 50 ) );
+    constexpr int XSTEP = static_cast<int>( schIUScale.mmToIU( 100 ) );
+    constexpr int YSTEP = static_cast<int>( schIUScale.mmToIU( 50 ) );
     constexpr int XMIN = -1 * XSTEP;
     constexpr int XMAX = 1 * XSTEP;
     constexpr int YMIN = -1 * YSTEP;

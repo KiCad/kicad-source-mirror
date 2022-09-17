@@ -128,19 +128,14 @@ constexpr double IU_PER_MM = SCH_IU_PER_MM;
 #ifndef UNKNOWN_IU
 constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
 
-
-/// Convert mm to internal units (iu).
-constexpr inline int Millimeter2iu( double mm )
-{
-    return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5 );
-}
-
+#ifndef SWIG
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.
 // Warning: too small values can create very long calculation time in zone filling
 // 0.05 to 0.005 mm are reasonable values
 
-constexpr int ARC_LOW_DEF  = Millimeter2iu( 0.02 );
-constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
+constexpr int ARC_LOW_DEF  = pcbIUScale.mmToIU( 0.02 );
+constexpr int ARC_HIGH_DEF = pcbIUScale.mmToIU( 0.005 );
+#endif
 
 #endif

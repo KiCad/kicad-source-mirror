@@ -90,10 +90,10 @@ public:
         {
             FP_ZONE* fpZone = new FP_ZONE( &m_footprint );
 
-            fpZone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( -50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( 50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( 50 ) ), -1 );
-            fpZone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( -50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
 
             return fpZone;
         }
@@ -112,10 +112,10 @@ public:
         {
             ZONE* zone = new ZONE( &m_board );
 
-            zone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( -50 ) ), -1 );
-            zone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( 50 ) ), -1 );
-            zone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( 50 ) ), -1 );
-            zone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( -50 ) ), -1 );
+            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
+            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( -100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) ), -1 );
+            zone->AppendCorner( wxPoint( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( -50 ) ), -1 );
 
             return zone;
         }

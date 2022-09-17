@@ -110,8 +110,8 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
             {
                 "U1",
                 { // Unclosed polygon
-                    { { 0, 0 }, { 0, Millimeter2iu( 10 ) } },
-                    { { 0, Millimeter2iu( 10 ) }, { Millimeter2iu( 10 ), Millimeter2iu( 10 ) } },
+                    { { 0, 0 }, { 0, pcbIUScale.mmToIU( 10 ) } },
+                    { { 0, pcbIUScale.mmToIU( 10 ) }, { pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) } },
                 },
                 { 0, 0 },
             },
@@ -129,8 +129,8 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
             {
                 "U1",
                 { // Unclosed polygon - two disjoint segments
-                    { { 0, 0 }, { 0, Millimeter2iu( 10 ) } },
-                    { { Millimeter2iu( 10 ), 0 }, { Millimeter2iu( 10 ), Millimeter2iu( 10 ) } },
+                    { { 0, 0 }, { 0, pcbIUScale.mmToIU( 10 ) } },
+                    { { pcbIUScale.mmToIU( 10 ), 0 }, { pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) } },
                 },
                 { 0, 0 },
             },
@@ -150,14 +150,14 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { // Closed polygon - triangle
                     {
                         { 0, 0 },
-                        { 0, Millimeter2iu( 10 ) },
+                        { 0, pcbIUScale.mmToIU( 10 ) },
                     },
                     {
-                        { 0, Millimeter2iu( 10 ) },
-                        { Millimeter2iu( 10 ), Millimeter2iu( 10 ) }
+                        { 0, pcbIUScale.mmToIU( 10 ) },
+                        { pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) }
                     },
                     {
-                        { Millimeter2iu( 10 ), Millimeter2iu( 10 ) },
+                        { pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) },
                         { 0, 0 }
                     },
                 },
@@ -168,7 +168,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { // Un-Closed polygon - one seg
                     {
                         { 0, 0 },
-                        { 0, Millimeter2iu( 10 ) },
+                        { 0, pcbIUScale.mmToIU( 10 ) },
                     },
                 },
                 { 0, 0 },
@@ -197,7 +197,7 @@ std::unique_ptr<FOOTPRINT> MakeInvalidCourtyardTestFP( BOARD& aBoard,
     for( const SEG& seg : aFPDef.m_segs )
     {
         const PCB_LAYER_ID layer = F_CrtYd; // aRect.m_front ? F_CrtYd : B_CrtYd;
-        const int          width = Millimeter2iu( 0.1 );
+        const int          width = pcbIUScale.mmToIU( 0.1 );
 
         KI_TEST::DrawSegment( *footprint, seg, width, layer );
     }

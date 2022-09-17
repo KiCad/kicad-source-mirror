@@ -121,7 +121,7 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 2 ), Millimeter2iu( 2 ) },
+            { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) },
             { 0, 0 },
             1,
             true,
@@ -130,12 +130,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -143,8 +143,8 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 2 ), Millimeter2iu( 2 ) },
-            { Millimeter2iu( 0.1 ), Millimeter2iu( 0.2 ) },
+            { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) },
+            { schIUScale.mmToIU( 0.1 ), schIUScale.mmToIU( 0.2 ) },
             1,
             true,
             false,
@@ -153,12 +153,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0.1 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2.1 ), Millimeter2iu( 2.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0.2 ), Millimeter2iu( 4.0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2.2 ), Millimeter2iu( 4.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 0.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0.1 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2.1 ), schIUScale.mmToIU( 2.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0.2 ), schIUScale.mmToIU( 4.0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2.2 ), schIUScale.mmToIU( 4.2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -166,7 +166,7 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 3 ), Millimeter2iu( 2 ) },
+            { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 2 ) },
             { 0, 0 },
             3,
             true,
@@ -176,12 +176,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 1 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 4 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 5 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 1 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 4 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 5 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -189,7 +189,7 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 3 ), Millimeter2iu( 2 ) },
+            { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 2 ) },
             { 0, 0 },
             2,
             false,
@@ -199,12 +199,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 3 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 5 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 1 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 3 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 3 ), schIUScale.mmToIU( 5 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -212,7 +212,7 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 2 ), Millimeter2iu( 2 ) },
+            { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) },
             { 0, 0 },
             1,
             true,
@@ -221,12 +221,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -234,7 +234,7 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         {
             2,
             3,
-            { Millimeter2iu( 2 ), Millimeter2iu( 2 ) },
+            { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) },
             { 0, 0 },
             1,
             true,
@@ -243,12 +243,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 2 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 2 ), schIUScale.mmToIU( 4 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
 };
@@ -308,13 +308,13 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
             { 0, 0 },
             false,
         },
-        { Millimeter2iu( 10 ), 0 },
+        { schIUScale.mmToIU( 10 ), 0 },
         {
             // diamond shape
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -10 ), schIUScale.mmToIU( -10 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -20 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { {schIUScale.mmToIU( -10 ), schIUScale.mmToIU( 10 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
         },
     },
     {
@@ -325,12 +325,12 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
             { 0, 0 },
             true,
         },
-        { Millimeter2iu( 10 ), 0 },
+        { schIUScale.mmToIU( 10 ), 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, EDA_ANGLE( 90.0, DEGREES_T ) },
-            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 180.0, DEGREES_T ) },
-            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) }, EDA_ANGLE( 270.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -10 ), schIUScale.mmToIU( -10 ) }, EDA_ANGLE( 90.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -20 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 180.0, DEGREES_T ) },
+            { {schIUScale.mmToIU( -10 ), schIUScale.mmToIU( 10 ) }, EDA_ANGLE( 270.0, DEGREES_T ) },
         },
     },
     {
@@ -341,12 +341,12 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
             { 0, 0 },
             true,
         },
-        { Millimeter2iu( 10 ), 0 },
+        { schIUScale.mmToIU( 10 ), 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( 0 ), schIUScale.mmToIU( 0 ) }, EDA_ANGLE( 0.0, DEGREES_T ) },
             // 10 * [ 1-sin(45), sin(45) ]
-            { { Millimeter2iu( -2.9289321881 ), Millimeter2iu( -7.0710678118 ) }, EDA_ANGLE( 45.0, DEGREES_T ) },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, EDA_ANGLE( 90.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -2.9289321881 ), schIUScale.mmToIU( -7.0710678118 ) }, EDA_ANGLE( 45.0, DEGREES_T ) },
+            { { schIUScale.mmToIU( -10 ), schIUScale.mmToIU( -10 ) }, EDA_ANGLE( 90.0, DEGREES_T ) },
         },
     },
 };
