@@ -1130,7 +1130,7 @@ void VIEW::ClearTargets()
 void VIEW::Redraw()
 {
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalRealTime;
+    PROF_TIMER totalRealTime;
 #endif /* KICAD_GAL_PROFILE */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();

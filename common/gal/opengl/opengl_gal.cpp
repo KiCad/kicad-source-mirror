@@ -444,7 +444,7 @@ VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 void OPENGL_GAL::BeginDrawing()
 {
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
+    PROF_TIMER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
 #endif /* KICAD_GAL_PROFILE */
 
     wxASSERT_MSG( m_isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "

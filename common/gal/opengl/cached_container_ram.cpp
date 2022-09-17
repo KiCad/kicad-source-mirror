@@ -101,7 +101,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
         return false;
 
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalTime;
+    PROF_TIMER totalTime;
 #endif /* KICAD_GAL_PROFILE */
 
     VERTEX* newBufferMem = static_cast<VERTEX*>( malloc( aNewSize * VERTEX_SIZE ) );

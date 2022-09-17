@@ -207,7 +207,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 void CN_CONNECTIVITY_ALGO::searchConnections()
 {
 #ifdef PROFILE
-    PROF_COUNTER garbage_collection( "garbage-collection" );
+    PROF_TIMER garbage_collection( "garbage-collection" );
 #endif
     std::vector<CN_ITEM*> garbage;
     garbage.reserve( 1024 );
@@ -219,7 +219,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 #ifdef PROFILE
     garbage_collection.Show();
-    PROF_COUNTER search_basic( "search-basic" );
+    PROF_TIMER search_basic( "search-basic" );
 #endif
 
     thread_pool& tp = GetKiCadThreadPool();

@@ -108,7 +108,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
 
 #ifdef PROFILE
-    PROF_COUNTER openFiles( "OpenProjectFile" );
+    PROF_TIMER openFiles( "OpenProjectFile" );
 #endif
 
     wxFileName pro = fullFileName;

@@ -161,7 +161,7 @@ void CONNECTIVITY_DATA::Move( const VECTOR2I& aDelta )
 void CONNECTIVITY_DATA::updateRatsnest()
 {
 #ifdef PROFILE
-    PROF_COUNTER rnUpdate( "update-ratsnest" );
+    PROF_TIMER rnUpdate( "update-ratsnest" );
 #endif
 
     std::vector<RN_NET*> dirty_nets;

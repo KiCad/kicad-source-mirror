@@ -1478,7 +1478,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
 #ifdef PROFILE
-    PROF_COUNTER   timer;
+    PROF_TIMER timer;
 #endif
 
     // Ensure schematic graph is accurate

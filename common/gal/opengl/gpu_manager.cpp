@@ -272,7 +272,7 @@ void GPU_NONCACHED_MANAGER::DrawIndices( const VERTEX_ITEM* aItem )
 void GPU_NONCACHED_MANAGER::EndDrawing()
 {
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalRealTime;
+    PROF_TIMER totalRealTime;
 #endif /* KICAD_GAL_PROFILE */
 
     if( m_container->GetSize() == 0 )

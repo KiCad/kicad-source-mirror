@@ -317,7 +317,7 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
     triangEdges.reserve( m_nodes.size() + m_boardEdges.size() );
 
 #ifdef PROFILE
-    PROF_COUNTER cnt("triangulate");
+    PROF_TIMER cnt( "triangulate" );
 #endif
     m_triangulator->Triangulate( triangEdges );
 #ifdef PROFILE
@@ -331,7 +331,7 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
 
 // Get the minimal spanning tree
 #ifdef PROFILE
-    PROF_COUNTER cnt2("mst");
+    PROF_TIMER cnt2( "mst" );
 #endif
     kruskalMST( triangEdges, aExclusions );
 #ifdef PROFILE

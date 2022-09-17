@@ -142,7 +142,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
         return false;
 
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalTime;
+    PROF_TIMER totalTime;
 #endif /* KICAD_GAL_PROFILE */
 
     GLuint newBuffer;
@@ -243,7 +243,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
         return false;
 
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalTime;
+    PROF_TIMER totalTime;
 #endif /* KICAD_GAL_PROFILE */
 
     GLuint  newBuffer;

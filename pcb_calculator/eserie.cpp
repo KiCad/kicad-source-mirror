@@ -187,7 +187,7 @@ void E_SERIE::combine4( uint32_t aSize )
     m_results.at( S4R ).e_value = m_results.at( S3R ).e_value;         // 4R becomes better than 3R solution
 
     #ifdef BENCHMARK
-        PROF_COUNTER timer;                     // start timer to count execution time
+        PROF_TIMER timer;                     // start timer to count execution time
     #endif
 
     for( i = 0; i < aSize; i++ )                         // 4R search outer loop

@@ -309,7 +309,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
         return;
 
 #ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalTime;
+    PROF_TIMER totalTime;
 #endif /* KICAD_GAL_PROFILE */
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
