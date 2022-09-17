@@ -35,8 +35,7 @@ namespace SIM_LIBRARY_SPICE_PARSER
     using namespace SPICE_GRAMMAR;
 
     // TODO: unknownLine is already handled in spiceUnit.
-    struct library : spiceSource {};
-    struct libraryGrammar : must<library> {};
+    struct libraryGrammar : spiceSourceGrammar {};
 
 
     template <typename Rule> struct librarySelector : std::false_type {};
@@ -57,7 +56,9 @@ void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
     {
         tao::pegtl::file_input in( aFilePath.ToStdString() );
         auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
-                                                  SIM_LIBRARY_SPICE_PARSER::librarySelector>
+                                                  SIM_LIBRARY_SPICE_PARSER::librarySelector,
+                                                  tao::pegtl::nothing,
+                                                  SIM_LIBRARY_SPICE_PARSER::control>
             ( in );
 
         SIM_LIBRARY::ReadFile( aFilePath );

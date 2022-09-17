@@ -44,7 +44,7 @@ namespace NETLIST_EXPORTER_SPICE_PARSER
 {
     using namespace SPICE_GRAMMAR;
 
-    struct textGrammar : spiceSourceGrammar {};
+    struct textGrammar : must<spiceSourceNothrow> {};
 
     template <typename Rule> struct textSelector : std::false_type {};
     template <> struct textSelector<modelUnit> : std::true_type {};
@@ -204,7 +204,8 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
             try
             {
                 root = tao::pegtl::parse_tree::parse<NETLIST_EXPORTER_SPICE_PARSER::textGrammar,
-                                                     NETLIST_EXPORTER_SPICE_PARSER::textSelector>
+                                                     NETLIST_EXPORTER_SPICE_PARSER::textSelector,
+                                                     NETLIST_EXPORTER_SPICE_PARSER::control>
                     ( in );
             }
             catch( const tao::pegtl::parse_error& e )

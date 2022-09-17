@@ -87,7 +87,6 @@ namespace SIM_MODEL_GRAMMAR
                                      opt<sep>,
                                      sor<quotedString,
                                          unquotedString>> {};
-
     struct fieldParamValuePairs : list<fieldParamValuePair, sep> {};
     struct fieldParamValuePairsGrammar : must<opt<sep>,
                                               opt<fieldParamValuePairs>,

@@ -88,6 +88,10 @@ namespace SPICE_GRAMMAR
     struct sep : sor<plus<continuation>,
                      garbage> {};
 
+    struct modelName : plus<not_at<garbage>, any> {};
+
+    struct dotModelType : plus<alpha> {};
+
     // Ngspice has some heuristic logic to allow + and - in tokens. We replicate that here.
     struct tokenStart : seq<opt<one<'+', '-'>>,
                             opt<seq<star<sor<tao::pegtl::digit,
@@ -108,25 +112,20 @@ namespace SPICE_GRAMMAR
                                 sep,
                                 paramValue> {};
     struct paramValuePairs : list<paramValuePair, sep> {};
-
-    struct modelName : plus<not_at<garbage>, any> {};
-
-    struct dotModelType : plus<alpha> {};
     struct dotModel : seq<opt<sep>,
-                          TAO_PEGTL_ISTRING( ".model" ),
-                          sep,
-                          modelName,
-                          sep,
-                          dotModelType,
-                          opt<sep,
-                              paramValuePairs>,
-                          opt<sep>,
-                          newline> {};
+                          if_must<TAO_PEGTL_ISTRING( ".model" ),
+                                  sep,
+                                  modelName,
+                                  sep,
+                                  dotModelType,
+                                  opt<sep,
+                                      paramValuePairs>,
+                                  opt<sep>,
+                                  newline>> {};
 
 
     struct dotSubcktPinName : seq<not_at<TAO_PEGTL_ISTRING( "params:" )>,
-                                  plus<not_at<space>,
-                                       any>> {};
+                                  plus<not_at<space>, any>> {};
     struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
     struct dotSubcktParams : seq<TAO_PEGTL_ISTRING( "params:" ),
                                  sep,
@@ -135,23 +134,24 @@ namespace SPICE_GRAMMAR
                               until<newline>> {};
     struct spiceUnit;
     struct dotSubckt : seq<opt<sep>,
-                           TAO_PEGTL_ISTRING( ".subckt" ),
-                           sep,
-                           modelName,
-                           opt<sep,
-                               dotSubcktPinSequence>,
-                           opt<sep,
-                               dotSubcktParams>,
-                           opt<sep>,
-                           newline,
-                           until<dotSubcktEnd,
-                                 spiceUnit>> {};
+                           if_must<TAO_PEGTL_ISTRING( ".subckt" ),
+                                   sep,
+                                   modelName,
+                                   opt<sep,
+                                       dotSubcktPinSequence>,
+                                   opt<sep,
+                                       dotSubcktParams>,
+                                   opt<sep>,
+                                   newline,
+                                   until<dotSubcktEnd,
+                                         spiceUnit>>> {};
 
 
     struct modelUnit : sor<dotModel,
                            dotSubckt> {};
 
 
+    // Intentionally no if_must<>.
     struct dotControl : seq<opt<sep>,
                             TAO_PEGTL_ISTRING( ".control" ),
                             until<TAO_PEGTL_ISTRING( ".endc" )>,
@@ -159,6 +159,7 @@ namespace SPICE_GRAMMAR
 
 
     struct dotTitleTitle : star<not_at<newline>, any> {};
+    // Intentionally no if_must<>.
     struct dotTitle : seq<opt<sep>,
                           TAO_PEGTL_ISTRING( ".title" ),
                           sep,
@@ -169,6 +170,7 @@ namespace SPICE_GRAMMAR
     struct dotIncludePathWithoutQuotes : star<not_one<'"'>> {};
     struct dotIncludePathWithoutApostrophes : star<not_one<'\''>> {};
     struct dotIncludePath : star<not_at<newline>, any> {};
+    // Intentionally no if_must<>.
     struct dotInclude : seq<opt<sep>,
                             TAO_PEGTL_ISTRING( ".include" ),
                             sep,
@@ -183,6 +185,13 @@ namespace SPICE_GRAMMAR
                             newline> {};
 
 
+    // Intentionally no if_must<>.
+    struct dotLine : seq<opt<sep>,
+                         one<'.'>,
+                         until<newline>> {};
+
+
+    // Intentionally no if_must<>.
     struct kLine : seq<opt<sep>,
                        one<'K'>,
                        until<sep>,
@@ -192,12 +201,8 @@ namespace SPICE_GRAMMAR
                        until<sep>,
                        until<newline>> {};
 
-
-    struct dotLine : seq<opt<sep>,
-                         one<'.'>,
-                         until<newline>> {};
-
-    struct unknownLine : seq<plus<not_at<newline>, any>, until<newline>> {};
+    struct unknownLine : seq<plus<not_at<newline>, any>,
+                             until<newline>> {};
 
 
     struct spiceUnit : sor<modelUnit,
@@ -212,7 +217,36 @@ namespace SPICE_GRAMMAR
 
 
     struct spiceSource : star<spiceUnit> {};
-    struct spiceSourceGrammar : must<spiceSource> {};
+    struct spiceSourceNothrow : star<try_catch<spiceUnit>> {};
+    struct spiceSourceGrammar : spiceSource {};
+
+
+    template <typename> inline constexpr const char* errorMessage = nullptr;
+    template <> inline constexpr auto errorMessage<newline> =
+        "expected newline not followed by a line continuation";
+    template <> inline constexpr auto errorMessage<sep> =
+        "expected token separator (typ. one or more whitespace, parenthesis, '=', ',', line continuation)";
+    template <> inline constexpr auto errorMessage<opt<sep>> = "";
+    template <> inline constexpr auto errorMessage<modelName> = "expected model name";
+    template <> inline constexpr auto errorMessage<dotModelType> = "expected model type";
+    template <> inline constexpr auto errorMessage<opt<sep,
+                                                       paramValuePairs>> = "";
+    template <> inline constexpr auto errorMessage<opt<sep,
+                                                       dotSubcktPinSequence>> = "";
+    template <> inline constexpr auto errorMessage<opt<sep,
+                                                       dotSubcktParams>> = "";
+    template <> inline constexpr auto errorMessage<until<dotSubcktEnd,
+                                                         spiceUnit>> =
+        "expected a (possibly empty) sequence of Spice lines followed by an .ends line";
+
+    // We create a custom PEGTL control to modify the parser error messages.
+    struct error
+    {
+        template <typename Rule> static constexpr bool raise_on_failure = false;
+        template <typename Rule> static constexpr auto message = errorMessage<Rule>;
+    };
+
+    template <typename Rule> using control = must_if<error>::control<Rule>;
 }
 
 #endif // SPICE_GRAMMAR_H

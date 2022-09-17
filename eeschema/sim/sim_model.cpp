@@ -390,7 +390,8 @@ TYPE SIM_MODEL::ReadTypeFromSpiceCode( const wxString& aSpiceCode )
     try
     {
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector>
+                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
+                                             SIM_MODEL_SPICE_PARSER::control>
             ( in );
     }
     catch( const tao::pegtl::parse_error& e )
@@ -853,7 +854,8 @@ void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
     try
     {
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector>
+                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
+                                             SIM_MODEL_SPICE_PARSER::control>
             ( in );
     }
     catch( tao::pegtl::parse_error& e )
