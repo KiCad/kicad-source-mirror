@@ -126,7 +126,6 @@ constexpr double IU_PER_MM = SCH_IU_PER_MM;
 #endif
 
 #ifndef UNKNOWN_IU
-constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
 
 #ifndef SWIG
 // The max error is the distance between the middle of a segment, and the circle
