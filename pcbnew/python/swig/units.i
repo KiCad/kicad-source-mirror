@@ -33,7 +33,7 @@
 %{
     def ToMM(iu):
         if type(iu) in [int,float]:
-            return float(iu) / float(IU_PER_MM)
+            return float(iu) / float(pcbIUScale.IU_PER_MM)
         elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(ToMM,iu))
         else:
@@ -41,7 +41,7 @@
 
     def FromMM(mm):
         if type(mm) in [int,float]:
-            return int(float(mm) * float(IU_PER_MM))
+            return int(float(mm) * float(pcbIUScale.IU_PER_MM))
         elif type(mm) in [wxPoint,wxSize,VECTOR2I]:
             return tuple(map(FromMM,mm))
         else:
