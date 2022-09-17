@@ -210,7 +210,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 BOX2I inflatedBBox = aZone->GetCachedBoundingBox();
                 inflatedBBox.Inflate( m_worstClearance );
 
-                return inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() );
+                if( !inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() ) )
+                    return false;
+
+                return aZone->Outline()->Collide( aOtherZone->Outline(), m_worstClearance );
             };
 
     auto fill_lambda =
