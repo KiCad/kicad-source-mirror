@@ -128,12 +128,9 @@ wxString EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS aUnits, EDA_DATA_TY
 
 std::string EDA_UNIT_UTILS::FormatAngle( const EDA_ANGLE& aAngle )
 {
-    char temp[50];
-    int  len;
+    std::string temp = fmt::format( "{:.10g}", aAngle.AsDegrees() );
 
-    len = snprintf( temp, sizeof( temp ), "%.10g", aAngle.AsDegrees() );
-
-    return std::string( temp, len );
+    return temp;
 }
 
 

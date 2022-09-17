@@ -608,7 +608,7 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
     if( dsnSettings.m_SolderPasteMarginRatio != 0 )
     {
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
-                      Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
+                      FormatDouble2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
     }
 
     if( dsnSettings.m_AllowSoldermaskBridgesInFPs )
@@ -1268,7 +1268,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     if( aFootprint->GetLocalSolderPasteMarginRatio() != 0 )
     {
         m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
-                      Double2Str( aFootprint->GetLocalSolderPasteMarginRatio() ).c_str() );
+                      FormatDouble2Str( aFootprint->GetLocalSolderPasteMarginRatio() ).c_str() );
     }
 
     if( aFootprint->GetLocalClearance() != 0 )
@@ -1384,19 +1384,19 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                 m_out->Print( aNestLevel+2, "(opacity %0.4f)", bs3D->m_Opacity );
 
             m_out->Print( aNestLevel+2, "(offset (xyz %s %s %s))\n",
-                          Double2Str( bs3D->m_Offset.x ).c_str(),
-                          Double2Str( bs3D->m_Offset.y ).c_str(),
-                          Double2Str( bs3D->m_Offset.z ).c_str() );
+                          FormatDouble2Str( bs3D->m_Offset.x ).c_str(),
+                          FormatDouble2Str( bs3D->m_Offset.y ).c_str(),
+                          FormatDouble2Str( bs3D->m_Offset.z ).c_str() );
 
             m_out->Print( aNestLevel+2, "(scale (xyz %s %s %s))\n",
-                          Double2Str( bs3D->m_Scale.x ).c_str(),
-                          Double2Str( bs3D->m_Scale.y ).c_str(),
-                          Double2Str( bs3D->m_Scale.z ).c_str() );
+                          FormatDouble2Str( bs3D->m_Scale.x ).c_str(),
+                          FormatDouble2Str( bs3D->m_Scale.y ).c_str(),
+                          FormatDouble2Str( bs3D->m_Scale.z ).c_str() );
 
             m_out->Print( aNestLevel+2, "(rotate (xyz %s %s %s))\n",
-                          Double2Str( bs3D->m_Rotation.x ).c_str(),
-                          Double2Str( bs3D->m_Rotation.y ).c_str(),
-                          Double2Str( bs3D->m_Rotation.z ).c_str() );
+                          FormatDouble2Str( bs3D->m_Rotation.x ).c_str(),
+                          FormatDouble2Str( bs3D->m_Rotation.y ).c_str(),
+                          FormatDouble2Str( bs3D->m_Rotation.z ).c_str() );
 
             m_out->Print( aNestLevel+1, ")\n" );
         }
@@ -1607,7 +1607,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetShape() == PAD_SHAPE::ROUNDRECT || aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT)
     {
         m_out->Print( 0,  " (roundrect_rratio %s)",
-                      Double2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
+                      FormatDouble2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
     }
 
     // Output the chamfer corners for chamfered rect pads
@@ -1616,7 +1616,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, "\n" );
 
         m_out->Print( aNestLevel+1,  "(chamfer_ratio %s)",
-                      Double2Str( aPad->GetChamferRectRatio() ).c_str() );
+                      FormatDouble2Str( aPad->GetChamferRectRatio() ).c_str() );
 
         m_out->Print( 0, " (chamfer" );
 
@@ -1682,7 +1682,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
     {
         StrPrintf( &output, " (solder_paste_margin_ratio %s)",
-                   Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+                   FormatDouble2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
     }
 
     if( aPad->GetLocalClearance() != 0 )
@@ -2331,20 +2331,20 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",
                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetHatchThickness() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetHatchGap() ).c_str(),
-                      Double2Str( aZone->GetHatchOrientation().AsDegrees() ).c_str() );
+                      FormatDouble2Str( aZone->GetHatchOrientation().AsDegrees() ).c_str() );
 
         if( aZone->GetHatchSmoothingLevel() > 0 )
         {
             m_out->Print( 0, "\n" );
             m_out->Print( aNestLevel+2, "(hatch_smoothing_level %d) (hatch_smoothing_value %s)",
                           aZone->GetHatchSmoothingLevel(),
-                          Double2Str( aZone->GetHatchSmoothingValue() ).c_str() );
+                          FormatDouble2Str( aZone->GetHatchSmoothingValue() ).c_str() );
         }
 
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+2, "(hatch_border_algorithm %s) (hatch_min_hole_area %s)",
                       aZone->GetHatchBorderAlgorithm() ? "hatch_thickness" : "min_thickness",
-                      Double2Str( aZone->GetHatchHoleMinArea() ).c_str() );
+                      FormatDouble2Str( aZone->GetHatchHoleMinArea() ).c_str() );
     }
 
     m_out->Print( 0, ")\n" );

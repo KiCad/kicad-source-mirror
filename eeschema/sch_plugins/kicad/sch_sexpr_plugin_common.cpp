@@ -52,7 +52,7 @@ void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFillMode,
                            KiROUND( aFillColor.r * 255.0 ),
                            KiROUND( aFillColor.g * 255.0 ),
                            KiROUND( aFillColor.b * 255.0 ),
-                           Double2Str( aFillColor.a ).c_str() );
+                           FormatDouble2Str( aFillColor.a ).c_str() );
     }
     else
     {

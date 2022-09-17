@@ -48,7 +48,7 @@
 
 #include <locale_io.h>
 #include <eda_list_dialog.h>
-#include <string_utils.h>               // for Double2Str()
+#include <string_utils.h>               // for UIDouble2Str()
 
 
 // Some wx widget ID to know what widget has fired a event:
@@ -573,7 +573,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
         if( item->HasEpsilonRValue() )
         {
-            wxString txt = Double2Str( item->GetEpsilonR( sub_item ) );
+            wxString txt = UIDouble2Str( item->GetEpsilonR( sub_item ) );
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_EpsilonCtrl );
 
             if( textCtrl )
@@ -582,7 +582,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
         if( item->HasLossTangentValue() )
         {
-            wxString txt = Double2Str( item->GetLossTangent( sub_item ) );
+            wxString txt = UIDouble2Str( item->GetLossTangent( sub_item ) );
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_LossTgCtrl );
 
             if( textCtrl )
@@ -832,7 +832,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->HasEpsilonRValue() )
     {
-        wxString txt = Double2Str( item->GetEpsilonR( aSublayerIdx ) );
+        wxString txt = UIDouble2Str( item->GetEpsilonR( aSublayerIdx ) );
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );
@@ -846,7 +846,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->HasLossTangentValue() )
     {
-        wxString txt = Double2Str( item->GetLossTangent( aSublayerIdx ) );;
+        wxString txt = UIDouble2Str( item->GetLossTangent( aSublayerIdx ) );;
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );

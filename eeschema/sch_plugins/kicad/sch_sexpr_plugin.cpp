@@ -972,7 +972,7 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
                   KiROUND( aJunction->GetColor().r * 255.0 ),
                   KiROUND( aJunction->GetColor().g * 255.0 ),
                   KiROUND( aJunction->GetColor().b * 255.0 ),
-                  Double2Str( aJunction->GetColor().a ).c_str() );
+                  FormatDouble2Str( aJunction->GetColor().a ).c_str() );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aJunction->m_Uuid.AsString() ) );
 

@@ -26,7 +26,7 @@
 #include "stackup_predefined_prms.h"
 #include "dielectric_material.h"
 #include <core/arraydim.h>
-#include <string_utils.h>               // for Double2Str()
+#include <string_utils.h>               // for UIDouble2Str()
 
 
 // A list of available substrate material
@@ -70,7 +70,7 @@ wxString DIELECTRIC_SUBSTRATE::FormatEpsilonR()
 {
     // return a wxString to print/display Epsilon R
     // note: we do not want scientific notation
-    wxString txt = Double2Str( m_EpsilonR );
+    wxString txt = UIDouble2Str( m_EpsilonR );
     return txt;
 }
 
@@ -79,7 +79,7 @@ wxString DIELECTRIC_SUBSTRATE::FormatLossTangent()
 {
     // return a wxString to print/display Loss Tangent
     // note: we do not want scientific notation
-    wxString txt = Double2Str( m_LossTangent );
+    wxString txt = UIDouble2Str( m_LossTangent );
     return txt;
 }
 

@@ -39,8 +39,6 @@
 
 using namespace DRAWINGSHEET_T;
 
-#define double2Str Double2Str
-
 // A helper function to write tokens:
 static const char* getTokenName( T aTok )
 {
@@ -210,17 +208,17 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aSheet ) const
     // Write default values:
     m_out->Print( nestLevel, "(setup " );
     m_out->Print( 0, "(textsize %s %s)",
-                  double2Str( aSheet->m_DefaultTextSize.x ).c_str(),
-                  double2Str( aSheet->m_DefaultTextSize.y ).c_str() );
-    m_out->Print( 0, "(linewidth %s)", double2Str( aSheet->m_DefaultLineWidth ).c_str() );
-    m_out->Print( 0, "(textlinewidth %s)", double2Str( aSheet->m_DefaultTextThickness ).c_str() );
+                  FormatDouble2Str( aSheet->m_DefaultTextSize.x ).c_str(),
+                  FormatDouble2Str( aSheet->m_DefaultTextSize.y ).c_str() );
+    m_out->Print( 0, "(linewidth %s)", FormatDouble2Str( aSheet->m_DefaultLineWidth ).c_str() );
+    m_out->Print( 0, "(textlinewidth %s)", FormatDouble2Str( aSheet->m_DefaultTextThickness ).c_str() );
     m_out->Print( 0, "\n" );
 
     // Write margin values
-    m_out->Print( nestLevel, "(left_margin %s)", double2Str( aSheet->GetLeftMargin() ).c_str() );
-    m_out->Print( 0, "(right_margin %s)", double2Str( aSheet->GetRightMargin() ).c_str() );
-    m_out->Print( 0, "(top_margin %s)", double2Str( aSheet->GetTopMargin() ).c_str() );
-    m_out->Print( 0, "(bottom_margin %s)", double2Str( aSheet->GetBottomMargin() ).c_str() );
+    m_out->Print( nestLevel, "(left_margin %s)", FormatDouble2Str( aSheet->GetLeftMargin() ).c_str() );
+    m_out->Print( 0, "(right_margin %s)", FormatDouble2Str( aSheet->GetRightMargin() ).c_str() );
+    m_out->Print( 0, "(top_margin %s)", FormatDouble2Str( aSheet->GetTopMargin() ).c_str() );
+    m_out->Print( 0, "(bottom_margin %s)", FormatDouble2Str( aSheet->GetBottomMargin() ).c_str() );
     m_out->Print( 0, ")\n" );
 
     // Save the graphical items on the drawing sheet
@@ -244,7 +242,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     formatOptions( aItem );
 
     if( aItem->m_Orient )
-        m_out->Print( 0, " (rotate %s)", double2Str(aItem->m_Orient ).c_str() );
+        m_out->Print( 0, " (rotate %s)", FormatDouble2Str( aItem->m_Orient ).c_str() );
 
     // Write font info, only if it is not the default setup
     bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
@@ -258,13 +256,13 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
             m_out->Print( 0, " (face \"%s\")", aItem->m_Font->NameAsToken() );
 
         if( write_thickness )
-            m_out->Print( 0, " (linewidth %s)", double2Str( aItem->m_LineWidth ).c_str() );
+            m_out->Print( 0, " (linewidth %s)", FormatDouble2Str( aItem->m_LineWidth ).c_str() );
 
         if( write_size )
         {
             m_out->Print( 0, " (size %s %s)",
-                          double2Str( aItem->m_TextSize.x ).c_str(),
-                          double2Str( aItem->m_TextSize.y ).c_str() );
+                          FormatDouble2Str( aItem->m_TextSize.x ).c_str(),
+                          FormatDouble2Str( aItem->m_TextSize.y ).c_str() );
         }
 
         if( aItem->m_Bold )
@@ -279,7 +277,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
                           KiROUND( aItem->m_TextColor.r * 255.0 ),
                           KiROUND( aItem->m_TextColor.g * 255.0 ),
                           KiROUND( aItem->m_TextColor.b * 255.0 ),
-                          Double2Str( aItem->m_TextColor.a ).c_str() );
+                          FormatDouble2Str( aItem->m_TextColor.a ).c_str() );
         }
 
         m_out->Print( 0, ")" );
@@ -307,10 +305,10 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
 
     // write constraints
     if( aItem->m_BoundingBoxSize.x )
-        m_out->Print( 0, " (maxlen %s)", double2Str(aItem->m_BoundingBoxSize.x ).c_str() );
+        m_out->Print( 0, " (maxlen %s)", FormatDouble2Str( aItem->m_BoundingBoxSize.x ).c_str() );
 
     if( aItem->m_BoundingBoxSize.y )
-        m_out->Print( 0, " (maxheight %s)", double2Str(aItem->m_BoundingBoxSize.y ).c_str() );
+        m_out->Print( 0, " (maxheight %s)", FormatDouble2Str(aItem->m_BoundingBoxSize.y ).c_str() );
 
     formatRepeatParameters( aItem );
 
@@ -335,7 +333,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int a
     formatOptions( aItem );
 
     if( aItem->m_LineWidth && aItem->m_LineWidth != aModel->m_DefaultLineWidth )
-        m_out->Print( 0, " (linewidth %s)", double2Str( aItem->m_LineWidth ).c_str() );
+        m_out->Print( 0, " (linewidth %s)", FormatDouble2Str( aItem->m_LineWidth ).c_str() );
 
     formatRepeatParameters( aItem );
 
@@ -356,10 +354,10 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
     formatRepeatParameters( aItem );
 
     if( !aItem->m_Orient.IsZero() )
-        m_out->Print( 0, " (rotate %s)", double2Str( aItem->m_Orient.AsDegrees() ).c_str() );
+        m_out->Print( 0, " (rotate %s)", FormatDouble2Str( aItem->m_Orient.AsDegrees() ).c_str() );
 
     if( aItem->m_LineWidth )
-        m_out->Print( 0, " (linewidth %s)\n", double2Str( aItem->m_LineWidth ).c_str() );
+        m_out->Print( 0, " (linewidth %s)\n", FormatDouble2Str( aItem->m_LineWidth ).c_str() );
 
     if( !aItem->m_Info.IsEmpty() )
         m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
@@ -386,8 +384,8 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
             }
 
             m_out->Print( nestLevel, " (xy %s %s)",
-                          double2Str( pos.x ).c_str(),
-                          double2Str( pos.y ).c_str() );
+                          FormatDouble2Str( pos.x ).c_str(),
+                          FormatDouble2Str( pos.y ).c_str() );
         }
 
         m_out->Print( 0, ")\n" );
@@ -404,7 +402,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
     formatCoordinate( "pos", aItem->m_Pos );
     formatOptions( aItem );
 
-    m_out->Print( 0, " (scale %s)", double2Str( aItem->m_ImageBitmap->GetScale() ).c_str() );
+    m_out->Print( 0, " (scale %s)", FormatDouble2Str( aItem->m_ImageBitmap->GetScale() ).c_str() );
 
     formatRepeatParameters( aItem );
     m_out->Print( 0,"\n");
@@ -429,8 +427,8 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
 void DS_DATA_MODEL_IO::formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const
 {
     m_out->Print( 0, " (%s %s %s", aToken,
-                  double2Str( aCoord.m_Pos.x ).c_str(),
-                  double2Str( aCoord.m_Pos.y ).c_str() );
+                  FormatDouble2Str( aCoord.m_Pos.x ).c_str(),
+                  FormatDouble2Str( aCoord.m_Pos.y ).c_str() );
 
     switch( aCoord.m_Anchor )
     {
@@ -452,10 +450,10 @@ void DS_DATA_MODEL_IO::formatRepeatParameters( DS_DATA_ITEM* aItem ) const
     m_out->Print( 0, " (repeat %d)", aItem->m_RepeatCount );
 
     if( aItem->m_IncrementVector.x )
-        m_out->Print( 0, " (incrx %s)", double2Str(aItem-> m_IncrementVector.x ).c_str() );
+        m_out->Print( 0, " (incrx %s)", FormatDouble2Str( aItem->m_IncrementVector.x ).c_str() );
 
     if( aItem->m_IncrementVector.y )
-        m_out->Print( 0, " (incry %s)", double2Str( aItem->m_IncrementVector.y ).c_str() );
+        m_out->Print( 0, " (incry %s)", FormatDouble2Str( aItem->m_IncrementVector.y ).c_str() );
 
     if( aItem->m_IncrementLabel != 1 && aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
         m_out->Print( 0, " (incrlabel %d)", aItem->m_IncrementLabel );

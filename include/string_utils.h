@@ -353,6 +353,16 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
  * this helper function uses the %f format when needed, or %g when %f is
  * not well working and then removes trailing 0
  */
-std::string Double2Str( double aValue );
+std::string UIDouble2Str( double aValue );
+
+/**
+ * Print a float number without using scientific notation and no trailing 0
+ * This function is intended in uses to write to file, it ignores locale
+ *
+ * We cannot always just use the %g or the %f format to print a fp number
+ * this helper function uses the %f format when needed, or %g when %f is
+ * not well working and then removes trailing 0
+ */
+std::string FormatDouble2Str( double aValue );
 
 #endif  // STRING_UTILS_H

@@ -28,6 +28,7 @@
 
 #include <clocale>
 #include <cmath>
+#include <fmt/core.h>
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <string_utils.h>
@@ -1088,7 +1089,30 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
 }
 
 
-std::string Double2Str( double aValue )
+std::string FormatDouble2Str( double aValue )
+{
+    std::string buf;
+
+    if( aValue != 0.0 && std::fabs( aValue ) <= 0.0001 )
+    {
+        buf = fmt::format( "{:.16f}", aValue );
+
+        // remove trailing zeros
+        while( !buf.empty() && buf[buf.size() - 1] == '0' )
+        {
+            buf.pop_back();
+        }
+    }
+    else
+    {
+        buf = fmt::format( "{:.10g}", aValue );
+    }
+
+    return buf;
+}
+
+
+std::string UIDouble2Str( double aValue )
 {
     char    buf[50];
     int     len;

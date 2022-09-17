@@ -82,6 +82,8 @@ namespace EDA_UNIT_UTILS
     /**
      * Converts \a aAngle from board units to a string appropriate for writing to file.
      *
+     * This should only be used for writing to files  as it ignores locale
+     *
      * @note Internal angles for board items can be either degrees or tenths of degree
      *       on how KiCad is built.
      * @param aAngle A angle value to convert.
@@ -92,6 +94,8 @@ namespace EDA_UNIT_UTILS
     /**
      * Converts \a aValue from internal units to a string appropriate for writing
      * to file.
+     *
+     * This should only be used for writing to files as it ignores locale
      *
      * @note Internal units for board items can be either deci-mils or nanometers depending
      *       on how KiCad is built.

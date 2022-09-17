@@ -789,7 +789,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( GetLineSpacing() != 1.0 )
     {
         aFormatter->Print( 0, " (line_spacing %s)",
-                           Double2Str( GetLineSpacing() ).c_str() );
+                           FormatDouble2Str( GetLineSpacing() ).c_str() );
     }
 
     if( GetTextThickness() )
@@ -810,7 +810,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                            KiROUND( GetTextColor().r * 255.0 ),
                            KiROUND( GetTextColor().g * 255.0 ),
                            KiROUND( GetTextColor().b * 255.0 ),
-                           Double2Str( GetTextColor().a ).c_str() );
+                           FormatDouble2Str( GetTextColor().a ).c_str() );
     }
 
     aFormatter->Print( 0, ")"); // (font

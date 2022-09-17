@@ -236,7 +236,7 @@ void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIu
                            KiROUND( GetColor().r * 255.0 ),
                            KiROUND( GetColor().g * 255.0 ),
                            KiROUND( GetColor().b * 255.0 ),
-                           Double2Str( GetColor().a ).c_str() );
+                           FormatDouble2Str( GetColor().a ).c_str() );
     }
 }
 

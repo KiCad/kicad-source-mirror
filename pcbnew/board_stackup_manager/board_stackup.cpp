@@ -266,7 +266,7 @@ wxString BOARD_STACKUP_ITEM::FormatEpsilonR( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Epsilon R
     // note: we do not want scientific notation
-    wxString txt = Double2Str( GetEpsilonR( aDielectricSubLayer ) );
+    wxString txt = UIDouble2Str( GetEpsilonR( aDielectricSubLayer ) );
     return txt;
 }
 
@@ -275,7 +275,7 @@ wxString BOARD_STACKUP_ITEM::FormatLossTangent( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Loss Tangent
     // note: we do not want scientific notation
-    wxString txt = Double2Str( GetLossTangent( aDielectricSubLayer ) );
+    wxString txt = UIDouble2Str( GetLossTangent( aDielectricSubLayer ) );
     return txt;
 }
 
@@ -666,7 +666,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
 
             if( item->HasLossTangentValue() && item->HasMaterialValue( idx ) )
                 aFormatter->Print( 0, " (loss_tangent %s)",
-                                   Double2Str(item->GetLossTangent( idx ) ).c_str() );
+                                   FormatDouble2Str( item->GetLossTangent( idx ) ).c_str() );
         }
 
         aFormatter->Print( 0, ")\n" );
