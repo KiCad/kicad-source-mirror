@@ -84,6 +84,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <macros_swig.h>
     #include <kiid.h>
     #include <cstddef>
+    #include <base_units.h>
     #include <eda_item.h>
     #include <eda_units.h>
     #include <common.h>
@@ -114,6 +115,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include kiid.h
 %include core/typeinfo.h
 %include eda_item.h
+%include base_units.h
 %include eda_units.h
 %include common.h
 %include richio.h

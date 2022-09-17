@@ -43,10 +43,6 @@
 // mostly for KICAD_T
 %include typeinfo.i
 
-%{
-#include <base_units.h>
-%}
-%include <base_units.h>
 
 %{
 #include <lib_id.h>
