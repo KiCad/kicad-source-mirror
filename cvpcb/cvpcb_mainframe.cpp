@@ -429,6 +429,10 @@ void CVPCB_MAINFRAME::onTextFilterChanged( wxCommandEvent& event )
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
     // of available footprints which match the filter
 
+    // GTK loses the search-control's focus when updating the footprints list box, so we record
+    // the insertion point here and then restore it (and the focus) at the end.
+    long pos = m_tcFilterString->GetInsertionPoint();
+
     COMPONENT* symbol = GetSelectedComponent();
     wxString   libraryName = m_librariesListBox->GetSelectedLibrary();
 
@@ -443,6 +447,9 @@ void CVPCB_MAINFRAME::onTextFilterChanged( wxCommandEvent& event )
     RefreshFootprintViewer();
 
     DisplayStatus();
+
+    m_tcFilterString->SetFocus();
+    m_tcFilterString->SetInsertionPoint( pos );
 }
 
 
