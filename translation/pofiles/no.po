@@ -71,9 +71,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Forenkling av polygoner av kobberlag"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:801
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Forenkling av polygoner av kobberlag"
+msgstr "%d kobberlag forenkles"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:840
 msgid "Simplify holes contours"
@@ -84,9 +84,9 @@ msgid "Build Tech layers"
 msgstr "Bygg tekniske lag"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Bygg tekniske lag"
+msgstr "Bygg teknisk lag %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1048
 msgid "Build BVH for holes and vias"
@@ -126,9 +126,9 @@ msgid "Load OpenGL: layers"
 msgstr "Last OpenGL: lag"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Last OpenGL: lag"
+msgstr "Last OpenGL lag %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:670
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
@@ -18299,9 +18299,8 @@ msgid "Failed to output data"
 msgstr "Kunne ikke laste inn \"%s\""
 
 #: kicad/dialogs/dialog_template_selector.cpp:144
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html> <h1> Malvelger </h1> </html>"
+msgstr "<h1>Malvelger</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:246
 msgid "Select Templates Directory"
@@ -32003,9 +32002,8 @@ msgid "removed annular ring"
 msgstr "fjernet ringring"
 
 #: pcbnew/pcb_track.cpp:674
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Spor: %s (%s)"
+msgstr "Spor (bue)"
 
 #: pcbnew/pcb_track.cpp:689
 #, fuzzy
