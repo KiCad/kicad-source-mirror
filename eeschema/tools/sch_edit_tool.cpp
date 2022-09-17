@@ -69,6 +69,7 @@
 #include <symbol_editor_settings.h>
 #include <core/kicad_algo.h>
 #include <wx/textdlg.h>
+#include "project/net_settings.h"
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -1885,6 +1886,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             SCH_ITEM*        newtext     = nullptr;
             VECTOR2I         position    = item->GetPosition();
             wxString         txt;
+            wxString         href;
             TEXT_SPIN_STYLE  orientation = TEXT_SPIN_STYLE::SPIN::RIGHT;
             LABEL_FLAG_SHAPE shape       = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
@@ -1899,6 +1901,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 txt = UnescapeString( label->GetText() );
                 orientation = label->GetTextSpinStyle();
                 shape = label->GetShape();
+                href = label->GetHyperlink();
                 break;
             }
 
@@ -1914,6 +1917,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                     txt = dirlabel->GetFields()[0].GetText();
 
                 orientation = dirlabel->GetTextSpinStyle();
+                href = dirlabel->GetHyperlink();
                 break;
             }
 
@@ -1923,6 +1927,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
                 txt = text->GetText();
                 orientation = text->GetTextSpinStyle();
+                href = text->GetHyperlink();
                 break;
             }
 
@@ -1971,6 +1976,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 }
 
                 position = m_frame->GetNearestGridPosition( position );
+                href = textbox->GetHyperlink();
                 break;
             }
 
@@ -1979,14 +1985,17 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 break;
             }
 
-            auto prepareForNetName =
-                    []( wxString& aText )
+            auto getValidNetname =
+                    []( const wxString& aText )
                 {
                     wxString local_txt = aText;
                     local_txt.Replace( "\n", "_" );
                     local_txt.Replace( "\r", "_" );
                     local_txt.Replace( "\t", "_" );
-                    local_txt.Replace( " ", "_" );
+
+                    // Bus groups can have spaces; bus vectors and signal names cannot
+                    if( !NET_SETTINGS::ParseBusGroup( aText, nullptr, nullptr ) )
+                        local_txt.Replace( " ", "_" );
 
                     // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
                     return EscapeString( local_txt, CTX_NETNAME );
@@ -1996,30 +2005,33 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             {
             case SCH_LABEL_T:
             {
-                SCH_LABEL_BASE* new_label = new SCH_LABEL( position, prepareForNetName( txt ) );
+                SCH_LABEL_BASE* new_label = new SCH_LABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
                 new_label->SetTextSpinStyle( orientation );
+                new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
             }
 
             case SCH_GLOBAL_LABEL_T:
             {
-                SCH_LABEL_BASE* new_label = new SCH_GLOBALLABEL( position, prepareForNetName( txt ) );
+                SCH_LABEL_BASE* new_label = new SCH_GLOBALLABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
                 new_label->SetTextSpinStyle( orientation );
+                new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
             }
 
             case SCH_HIER_LABEL_T:
             {
-                SCH_LABEL_BASE* new_label = new SCH_HIERLABEL( position, prepareForNetName( txt ) );
+                SCH_LABEL_BASE* new_label = new SCH_HIERLABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
                 new_label->SetTextSpinStyle( orientation );
+                new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
             }
@@ -2037,6 +2049,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
                 new_label->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
                 new_label->SetTextSpinStyle( orientation );
+                new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
             }
@@ -2046,6 +2059,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_TEXT* new_text = new SCH_TEXT( position, txt );
 
                 new_text->SetTextSpinStyle( orientation );
+                new_text->SetHyperlink( href );
                 newtext = new_text;
                 break;
             }
@@ -2094,6 +2108,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                     break;
                 }
 
+                new_textbox->SetHyperlink( href );
                 newtext = new_textbox;
                 break;
             }
