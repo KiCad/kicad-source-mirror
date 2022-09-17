@@ -213,7 +213,7 @@ namespace SPICE_GRAMMAR
                            kLine,
                            eol, // Empty line. This is necessary to terminate on EOF.
                            unknownLine> {};
-    struct spiceUnitGrammar : must<spiceUnit> {};
+    struct spiceUnitGrammar : spiceUnit {};
 
 
     struct spiceSource : star<spiceUnit> {};

@@ -82,6 +82,7 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
     {
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitGrammar,
                                              SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitSelector,
+                                             tao::pegtl::nothing,
                                              SIM_MODEL_SUBCKT_SPICE_PARSER::control>
             ( in );
     }
