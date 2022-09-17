@@ -97,7 +97,7 @@ struct EDA_IU_SCALE
         return int( x < 0 ? x - 0.5 : x + 0.5 );
     }
 
-    constexpr inline double IUToMils( int iu ) const
+    constexpr inline int IUToMils( int iu ) const
     {
         double mils = iu / IU_PER_MILS;
 

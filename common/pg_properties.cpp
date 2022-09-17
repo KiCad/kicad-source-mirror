@@ -214,10 +214,10 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     switch( PROPERTY_MANAGER::Instance().GetUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxT( "%g in" ), pcbIUScale.IUToMils( aVariant.GetLong() ) / 1000.0 );
+            return wxString::Format( wxT( "%d in" ), pcbIUScale.IUToMils( aVariant.GetLong() ) / 1000.0 );
 
         case EDA_UNITS::MILS:
-            return wxString::Format( wxT( "%g mils" ), pcbIUScale.IUToMils( aVariant.GetLong() ) );
+            return wxString::Format( wxT( "%d mils" ), pcbIUScale.IUToMils( aVariant.GetLong() ) );
 
         case EDA_UNITS::MILLIMETRES:
             return wxString::Format( wxT( "%g mm" ), pcbIUScale.IUTomm( aVariant.GetLong() ) );

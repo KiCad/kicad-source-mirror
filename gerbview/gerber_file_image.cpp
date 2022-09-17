@@ -345,26 +345,11 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
     aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg );
 
-    switch( aMainFrame->GetUserUnits() )
-    {
-    case EDA_UNITS::MILS:
-        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUToMils( m_ImageJustifyOffset.x ),
-                                        gerbIUScale.IUToMils( m_ImageJustifyOffset.y ) );
-        break;
-
-    case EDA_UNITS::INCHES:
-        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUToMils( m_ImageJustifyOffset.x ) / 1000.0,
-                                        gerbIUScale.IUToMils( m_ImageJustifyOffset.y ) / 1000.0 );
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        msg.Printf( wxT( "X=%f Y=%f" ), gerbIUScale.IUTomm( m_ImageJustifyOffset.x ),
-                                        gerbIUScale.IUTomm( m_ImageJustifyOffset.y ) );
-        break;
-
-    default:
-        wxASSERT_MSG( false, wxT( "Invalid unit" ) );
-    }
+    msg.Printf( wxT( "X=%s Y=%s" ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( gerbIUScale, aMainFrame->GetUserUnits(),
+                                                          m_ImageJustifyOffset.x ),
+                EDA_UNIT_UTILS::UI::MessageTextFromValue( gerbIUScale, aMainFrame->GetUserUnits(),
+                                                          m_ImageJustifyOffset.y ) );
 
     aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg );
 }
