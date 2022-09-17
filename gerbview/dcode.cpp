@@ -31,7 +31,7 @@
 #include <trigo.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
-#include <convert_to_biu.h>
+#include <eda_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 
 #define DCODE_DEFAULT_SIZE gerbIUScale.mmToIU( 0.1 )

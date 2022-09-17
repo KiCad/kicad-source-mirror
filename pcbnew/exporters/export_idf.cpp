@@ -41,7 +41,7 @@
 #include "filename_resolver.h"
 
 
-#include <convert_to_biu.h>     // to define pcbIUScale.FromMillimeter(x)
+#include <base_units.h>     // to define pcbIUScale.FromMillimeter(x)
 
 
 // assumed default graphical line thickness: == 0.1mm

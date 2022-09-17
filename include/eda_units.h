@@ -27,7 +27,7 @@
 
 #include <wx/string.h>
 #include <geometry/eda_angle.h>
-#include <convert_to_biu.h>
+#include <base_units.h>
 
 /**
  * The type of unit.

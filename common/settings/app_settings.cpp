@@ -20,6 +20,7 @@
 
 #include <class_draw_panel_gal.h>
 #include <common.h>
+#include <eda_units.h>
 #include <layer_ids.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>

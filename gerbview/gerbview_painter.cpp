@@ -25,7 +25,6 @@
 #include <settings/color_settings.h>
 #include <gerbview_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <convert_to_biu.h>
 #include <gerbview.h>
 #include <trigo.h>
 

@@ -21,7 +21,6 @@
 
 #include <base_screen.h>
 #include <lib_symbol.h>
-#include <convert_to_biu.h>
 #include <default_values.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>

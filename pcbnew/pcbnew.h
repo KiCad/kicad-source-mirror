@@ -25,7 +25,7 @@
 #ifndef PCBNEW_H
 #define PCBNEW_H
 
-#include <convert_to_biu.h> // to define pcbIUScale.MilsToIU() conversion function
+#include <eda_units.h> // to define pcbIUScale.MilsToIU() conversion function
 
 // These are only here for algorithmic safety, not to tell the user what to do
 #define TEXTS_MIN_SIZE  pcbIUScale.MilsToIU( 1 )        ///< Minimum text size in internal units (1 mil)

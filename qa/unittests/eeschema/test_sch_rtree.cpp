@@ -26,7 +26,7 @@
  * Test suite for SCH_SHEET
  */
 
-#include <convert_to_biu.h>
+#include <base_units.h>
 #include <ignore.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>

@@ -20,7 +20,6 @@
 #ifndef KICAD_SCHEMATIC_SETTINGS_H
 #define KICAD_SCHEMATIC_SETTINGS_H
 
-#include <convert_to_biu.h>
 #include <default_values.h>
 #include <settings/nested_settings.h>
 #include <template_fieldnames.h>

@@ -27,7 +27,7 @@
 #define __SHAPE_ARC_H
 
 #include <geometry/shape.h>
-#include <convert_to_biu.h>
+#include <base_units.h>
 #include <math/vector2d.h>   // for VECTOR2I
 #include <geometry/eda_angle.h>
 

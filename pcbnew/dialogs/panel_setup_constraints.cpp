@@ -23,7 +23,6 @@
 
 #include <board_design_settings.h>
 #include <board.h>
-#include <convert_to_biu.h>
 #include <math/util.h>
 #include <panel_setup_constraints.h>
 #include <panel_setup_constraints_base.h>

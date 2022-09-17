@@ -32,8 +32,6 @@
 #ifndef __SCH_SEXPR_PARSER_H__
 #define __SCH_SEXPR_PARSER_H__
 
-#include <convert_to_biu.h>                      // IU_PER_MM
-
 #include <symbol_library.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>

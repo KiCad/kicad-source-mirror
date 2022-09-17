@@ -96,7 +96,6 @@ principle should be easily implemented by adapting the current STL containers.
     #include <title_block.h>
     #include <marker_base.h>
     #include <eda_text.h>
-    #include <convert_to_biu.h>
     #include <id.h>
     #include <build_version.h>
     #include <layer_ids.h>

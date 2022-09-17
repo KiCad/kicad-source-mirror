@@ -23,7 +23,6 @@
 
 #include <board_design_settings.h>
 #include <charconv>
-#include <convert_to_biu.h>
 #include <layer_ids.h>
 #include <macros.h>
 #include <math/util.h> // for KiROUND

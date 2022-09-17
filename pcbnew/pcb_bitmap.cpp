@@ -39,7 +39,6 @@
 #include <pcb_bitmap.h>
 #include <trigo.h>
 #include <geometry/shape_rect.h>
-#include <convert_to_biu.h>
 
 #include <wx/mstream.h>
 

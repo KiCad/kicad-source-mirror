@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <convert_to_biu.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>

@@ -41,7 +41,6 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
-#include <convert_to_biu.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>

@@ -43,8 +43,6 @@
 // mostly for KICAD_T
 %include typeinfo.i
 
-%include <convert_to_biu.h>
-
 %{
 #include <lib_id.h>
 %}

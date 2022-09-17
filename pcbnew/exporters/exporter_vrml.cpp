@@ -38,7 +38,6 @@
 #include "pad.h"
 #include "pcb_text.h"
 #include "pcb_track.h"
-#include "convert_to_biu.h"
 #include <core/arraydim.h>
 #include <filename_resolver.h>
 #include "plugins/3dapi/ifsg_all.h"

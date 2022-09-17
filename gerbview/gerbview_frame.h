@@ -27,7 +27,6 @@
 #include <eda_draw_frame.h>
 #include <layer_ids.h>
 #include <gerbview.h>
-#include <convert_to_biu.h>
 #include <gbr_layout.h>
 #include <page_info.h>
 #include <gbr_display_options.h>

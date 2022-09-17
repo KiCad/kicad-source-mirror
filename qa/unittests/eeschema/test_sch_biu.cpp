@@ -29,7 +29,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <convert_to_biu.h>
+#include <base_units.h>
 
 
 class TEST_SCH_INTERNAL_UNITS

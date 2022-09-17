@@ -27,7 +27,7 @@
 #include <common.h>
 #include <macros.h>
 #include <validators.h>
-#include <convert_to_biu.h>
+#include <eda_units.h>
 #include <property.h>
 #include <widgets/color_swatch.h>
 

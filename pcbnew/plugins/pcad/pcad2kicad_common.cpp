@@ -30,7 +30,6 @@
 #include <pcad/pcad2kicad_common.h>
 
 #include <common.h>
-#include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
 #include <xnode.h>

@@ -23,7 +23,7 @@
  * @brief Reads in a CADSTAR Schematic Archive (*.csa) file
  */
 
-#include <convert_to_biu.h> // SCH_IU_PER_MM
+#include <base_units.h>
 #include <macros.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 #include <progress_reporter.h>

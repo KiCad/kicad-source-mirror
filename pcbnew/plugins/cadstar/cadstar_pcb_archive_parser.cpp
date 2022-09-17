@@ -23,8 +23,8 @@
  * @brief Parses a CADSTAR PCB Archive file
  */
 
+#include <base_units.h>
 #include <cadstar_pcb_archive_parser.h>
-#include <convert_to_biu.h> // PCB_IU_PER_MM
 #include <macros.h>
 #include <progress_reporter.h>
 #include <wx/translation.h>

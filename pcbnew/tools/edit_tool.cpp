@@ -32,7 +32,6 @@
 #include <fp_shape.h>
 #include <fp_textbox.h>
 #include <collectors.h>
-#include <convert_to_biu.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>

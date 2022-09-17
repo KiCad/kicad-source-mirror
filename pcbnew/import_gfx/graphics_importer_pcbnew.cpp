@@ -32,8 +32,6 @@
 #include <memory>
 #include <tuple>
 
-#include "convert_to_biu.h"
-
 
 GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW()
 {

@@ -30,7 +30,6 @@
 #include <board_item_container.h>
 #include <board_item.h>
 #include <collectors.h>
-#include <convert_to_biu.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lib_id.h>
 #include <list>

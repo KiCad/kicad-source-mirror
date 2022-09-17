@@ -25,7 +25,7 @@
 #define EDA_ITEM_TEST_UTILS_H
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
-#include <convert_to_biu.h>
+#include <base_units.h>
 #include <eda_item.h>
 
 

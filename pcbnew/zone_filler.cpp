@@ -46,7 +46,6 @@
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
 #include <confirm.h>
-#include <convert_to_biu.h>
 #include <thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"

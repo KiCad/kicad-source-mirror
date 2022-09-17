@@ -23,6 +23,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <eda_units.h>
 #include <string_utils.h>
 #include <wx/log.h>
 

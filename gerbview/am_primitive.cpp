@@ -28,7 +28,6 @@
  */
 
 #include <trigo.h>
-#include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
 

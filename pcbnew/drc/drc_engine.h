@@ -28,6 +28,7 @@
 #include <vector>
 #include <unordered_map>
 
+#include <eda_units.h>
 #include <geometry/shape.h>
 
 #include <drc/drc_rule.h>

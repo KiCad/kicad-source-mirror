@@ -85,7 +85,6 @@
 #include <fp_shape.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
-#include <convert_to_biu.h>
 #include <trigo.h>
 #include <confirm.h>
 #include <math/util.h>      // for KiROUND

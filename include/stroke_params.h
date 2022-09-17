@@ -26,6 +26,7 @@
 
 #include <map>
 #include <bitmaps.h>
+#include <eda_units.h>
 #include <gal/color4d.h>
 #include <wx/translation.h>
 #include <geometry/shape.h>

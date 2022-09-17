@@ -23,7 +23,6 @@
 
 #include <eda_units.h>
 #include <math/util.h>      // for KiROUND
-#include <convert_to_biu.h>
 #include <macros.h>
 
 bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )

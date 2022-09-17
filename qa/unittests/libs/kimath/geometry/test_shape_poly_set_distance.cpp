@@ -24,8 +24,6 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <convert_to_biu.h>
-
 #include <geometry/shape_poly_set.h>
 
 #include <qa_utils/geometry/poly_set_construction.h>
