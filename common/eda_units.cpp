@@ -22,6 +22,7 @@
  */
 
 #include <eda_units.h>
+#include <fmt/core.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 
@@ -138,7 +139,7 @@ std::string EDA_UNIT_UTILS::FormatAngle( const EDA_ANGLE& aAngle )
 
 std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue )
 {
-    char   buf[50];
+    std::string buf;
     double engUnits = aValue;
     int    len;
 
@@ -146,28 +147,20 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, i
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
-        len = snprintf( buf, sizeof( buf ), "%.10f", engUnits );
+        buf = fmt::format( "{:.10f}", engUnits );
 
-        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
-        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr, std::string( "" ) );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        if( buf[len] == '.' )
-            buf[len] = '\0';
-        else
-            ++len;
+        // remove trailing zeros
+        while( !buf.empty() && buf[buf.size() - 1] == '0' )
+        {
+            buf.pop_back();
+        }
     }
     else
     {
-        len = snprintf( buf, sizeof( buf ), "%.10g", engUnits );
-
-        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
-        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == nullptr, std::string( "" ) );
+        buf = fmt::format( "{:.10g}", engUnits );
     }
 
-    return std::string( buf, len );
+    return buf;
 }
 
 
