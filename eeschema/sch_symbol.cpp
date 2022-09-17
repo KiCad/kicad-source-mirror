@@ -99,6 +99,7 @@ static LIB_SYMBOL* dummy()
 SCH_SYMBOL::SCH_SYMBOL() :
     SCH_ITEM( nullptr, SCH_SYMBOL_T )
 {
+    m_DNP = false;
     Init( VECTOR2I( 0, 0 ) );
 }
 
