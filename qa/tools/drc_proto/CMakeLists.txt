@@ -57,7 +57,6 @@ add_executable( drc_proto
     ../../qa_utils/test_app_main.cpp
     ../../qa_utils/utility_program.cpp
     ../../qa_utils/stdstream_line_reader.cpp
-    ../../../common/base_units.cpp
 )
 
 add_dependencies( drc_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )

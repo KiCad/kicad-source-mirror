@@ -44,6 +44,11 @@
 %include typeinfo.i
 
 %{
+#include <base_units.h>
+%}
+%include <base_units.h>
+
+%{
 #include <lib_id.h>
 %}
 %include lib_id.h
