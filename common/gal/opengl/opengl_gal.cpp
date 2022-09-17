@@ -2228,6 +2228,7 @@ void OPENGL_GAL::drawSegmentChain( const std::function<VECTOR2D( int )>& aPointG
         if( startx == endx || starty == endy )
         {
             vertices += 3; // One circle
+            continue;
         }
 
         if( m_isFillEnabled || aWidth == 1.0 )

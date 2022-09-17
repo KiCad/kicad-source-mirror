@@ -167,6 +167,8 @@ void VERTEX_MANAGER::SetItem( VERTEX_ITEM& aItem ) const
 
 void VERTEX_MANAGER::FinishItem() const
 {
+    assert( m_reservedSpace == 0 && m_reserved == nullptr );
+
     m_container->FinishItem();
 }
 
