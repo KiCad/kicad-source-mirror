@@ -227,9 +227,6 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 
     m_zonesettings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
 
-    auto cfg = m_parent->GetPcbNewSettings();
-    cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_ZoneBorderDisplayStyle );
-
     m_zonesettings.m_Locked = m_cbLocked->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.
 

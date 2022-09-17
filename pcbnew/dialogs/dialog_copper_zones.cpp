@@ -550,10 +550,6 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
 
-    PCBNEW_SETTINGS* cfg = m_Parent->GetPcbNewSettings();
-
-    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
-
     m_settings.m_ZoneClearance = m_clearance.GetValue();
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
@@ -576,10 +572,6 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     }
 
     storePersistentNetSortConfigurations();
-    cfg->m_Zones.clearance                   = pcbIUScale.IUToMils( m_settings.m_ZoneClearance );
-    cfg->m_Zones.min_thickness               = pcbIUScale.IUToMils( m_settings.m_ZoneMinThickness );
-    cfg->m_Zones.thermal_relief_gap          = pcbIUScale.IUToMils( m_settings.m_ThermalReliefGap );
-    cfg->m_Zones.thermal_relief_copper_width = pcbIUScale.IUToMils( m_settings.m_ThermalReliefSpokeWidth );
 
     m_settings.SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
     m_settings.SetMinIslandArea( m_islandThreshold.GetValue() );

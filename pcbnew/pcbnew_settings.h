@@ -279,12 +279,7 @@ public:
 
     struct ZONES
     {
-        int         hatching_style;
         int         net_sort_mode;
-        double      clearance;
-        double      min_thickness;
-        double      thermal_relief_gap;
-        double      thermal_relief_copper_width;
     };
 
     struct DISPLAY_OPTIONS

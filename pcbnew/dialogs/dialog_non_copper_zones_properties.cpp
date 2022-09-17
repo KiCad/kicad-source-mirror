@@ -292,9 +292,6 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings.m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
-    auto cfg = m_parent->GetPcbNewSettings();
-    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
-
     m_settings.m_Locked = m_cbLocked->GetValue();
 
     // Get the layer selection for this zone

@@ -358,23 +358,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "export_vrml.origin_mode",
             &m_ExportVrml.origin_mode, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "zones.hatching_style",
-            &m_Zones.hatching_style, 0 ) );
-
     m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
             &m_Zones.net_sort_mode, -1 ) );
-
-    m_params.emplace_back( new PARAM<double>( "zones.clearance",
-            &m_Zones.clearance, ZONE_CLEARANCE_MIL ) );
-
-    m_params.emplace_back( new PARAM<double>( "zones.min_thickness",
-            &m_Zones.min_thickness, ZONE_THICKNESS_MIL ) );
-
-    m_params.emplace_back( new PARAM<double>( "zones.thermal_relief_gap",
-            &m_Zones.thermal_relief_gap, ZONE_THERMAL_RELIEF_GAP_MIL ) );
-
-    m_params.emplace_back( new PARAM<double>( "zones.thermal_relief_copper_width",
-            &m_Zones.thermal_relief_copper_width, ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL ) );
 
     m_params.emplace_back( new PARAM<int>( "import_graphics.layer",
             &m_ImportGraphics.layer, Dwgs_User ) );
