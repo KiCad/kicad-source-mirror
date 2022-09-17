@@ -49,9 +49,7 @@ namespace SIM_MODEL_GRAMMAR
 
 
     struct legacyPinNumber : digits {};
-    struct legacyPinSequence : seq<opt<legacyPinNumber>,
-                                   star<sep,
-                                        legacyPinNumber>> {};
+    struct legacyPinSequence : list<legacyPinNumber, sep> {};
 
     struct legacyPinSequenceGrammar : must<legacyPinSequence,
                                            tao::pegtl::eof> {};
@@ -59,12 +57,9 @@ namespace SIM_MODEL_GRAMMAR
 
     struct pinNumber : plus<not_at<sep>,
                             any> {};
-    struct pinSequence : seq<opt<pinNumber>,
-                             star<sep,
-                                  pinNumber>> {};
-
+    struct pinSequence : list<pinNumber, sep> {};
     struct pinSequenceGrammar : must<opt<sep>,
-                                     pinSequence,
+                                     opt<pinSequence>,
                                      opt<sep>,
                                      tao::pegtl::eof> {};
 
@@ -90,17 +85,12 @@ namespace SIM_MODEL_GRAMMAR
                                      opt<sep>,
                                      one<'='>,
                                      opt<sep>,
-                                     sor<//number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>,
-                                         //number<SIM_VALUE::TYPE_INT, NOTATION::SI>,
-                                         quotedString,
+                                     sor<quotedString,
                                          unquotedString>> {};
 
-    struct fieldParamValuePairs : seq<opt<fieldParamValuePair>,
-                                      star<sep,
-                                           fieldParamValuePair>> {};
-
+    struct fieldParamValuePairs : list<fieldParamValuePair, sep> {};
     struct fieldParamValuePairsGrammar : must<opt<sep>,
-                                              fieldParamValuePairs,
+                                              opt<fieldParamValuePairs>,
                                               opt<sep>,
                                               tao::pegtl::eof> {};
 }

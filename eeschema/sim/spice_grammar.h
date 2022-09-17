@@ -107,33 +107,10 @@ namespace SPICE_GRAMMAR
     struct paramValuePair : seq<param,
                                 sep,
                                 paramValue> {};
+    struct paramValuePairs : list<paramValuePair, sep> {};
 
-    struct paramValuePairs : seq<opt<paramValuePair>,
-                                 star<sep,
-                                      paramValuePair>> {};
     struct modelName : plus<not_at<garbage>, any> {};
-                       /*sor<alnum,
-                                one<'!', '#', '$', '%', '[', ']', '_'>>> {};*/
-                     /*seq<alpha,
-                           star<sor<alnum,
-                                    one<'!', '#', '$', '%', '[', ']', '_'>>>> {};*/
-    /*struct dotModelType : sor<TAO_PEGTL_ISTRING( "R" ),
-                              TAO_PEGTL_ISTRING( "C" ),
-                              TAO_PEGTL_ISTRING( "L" ),
-                              TAO_PEGTL_ISTRING( "SW" ),
-                              TAO_PEGTL_ISTRING( "CSW" ),
-                              TAO_PEGTL_ISTRING( "URC" ),
-                              TAO_PEGTL_ISTRING( "LTRA" ),
-                              TAO_PEGTL_ISTRING( "D" ),
-                              TAO_PEGTL_ISTRING( "NPN" ),
-                              TAO_PEGTL_ISTRING( "PNP" ),
-                              TAO_PEGTL_ISTRING( "NJF" ),
-                              TAO_PEGTL_ISTRING( "PJF" ),
-                              TAO_PEGTL_ISTRING( "NMOS" ),
-                              TAO_PEGTL_ISTRING( "PMOS" ),
-                              TAO_PEGTL_ISTRING( "NMF" ),
-                              TAO_PEGTL_ISTRING( "PMF" ),
-                              TAO_PEGTL_ISTRING( "VDMOS" )> {};*/
+
     struct dotModelType : plus<alpha> {};
     struct dotModel : seq<opt<sep>,
                           TAO_PEGTL_ISTRING( ".model" ),
@@ -141,15 +118,8 @@ namespace SPICE_GRAMMAR
                           modelName,
                           sep,
                           dotModelType,
-                          opt<sor<seq<opt<sep>,
-                                      one<'('>,
-                                      opt<sep>,
-                                      paramValuePairs,
-                                      opt<sep>,
-                                      // Ngspice doesn't require the parentheses to match, though.
-                                      one<')'>>,
-                                  seq<sep,
-                                      paramValuePairs>>>,
+                          opt<sep,
+                              paramValuePairs>,
                           opt<sep>,
                           newline> {};
 
@@ -157,9 +127,7 @@ namespace SPICE_GRAMMAR
     struct dotSubcktPinName : seq<not_at<TAO_PEGTL_ISTRING( "params:" )>,
                                   plus<not_at<space>,
                                        any>> {};
-    struct dotSubcktPinSequence : seq<opt<dotSubcktPinName>,
-                                      star<sep,
-                                           dotSubcktPinName>> {};
+    struct dotSubcktPinSequence : list<dotSubcktPinName, sep> {};
     struct dotSubcktParams : seq<TAO_PEGTL_ISTRING( "params:" ),
                                  sep,
                                  paramValuePairs> {};
