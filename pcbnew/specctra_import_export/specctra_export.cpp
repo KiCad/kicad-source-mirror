@@ -157,14 +157,14 @@ namespace DSN {
 static inline double scale( int kicadDist )
 {
     // nanometers to um
-    return kicadDist / ( IU_PER_MM / 1000.0 );
+    return kicadDist / ( pcbIUScale.IU_PER_MM / 1000.0 );
 }
 
 
 ///< Convert integer internal units to float um
 static inline double IU2um( int kicadDist )
 {
-    return kicadDist * (1000.0 / IU_PER_MM);
+    return kicadDist * ( 1000.0 / pcbIUScale.IU_PER_MM );
 }
 
 

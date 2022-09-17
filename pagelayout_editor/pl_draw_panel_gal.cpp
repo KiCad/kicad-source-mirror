@@ -50,7 +50,7 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
     m_view = new KIGFX::VIEW( true );
     m_view->SetGAL( m_gal );
 
-    GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
+    GetGAL()->SetWorldUnitLength( 1.0/drawSheetIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 
     m_painter = std::make_unique<KIGFX::DS_PAINTER>( m_gal );
 
@@ -137,7 +137,7 @@ bool PL_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     setDefaultLayerDeps();
 
-    GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
+    GetGAL()->SetWorldUnitLength( 1.0/drawSheetIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 
     return rv;
 }

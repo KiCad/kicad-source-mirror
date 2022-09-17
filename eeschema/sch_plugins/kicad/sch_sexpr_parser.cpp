@@ -448,7 +448,7 @@ LIB_ITEM* SCH_SEXPR_PARSER::ParseDrawItem()
 
 int SCH_SEXPR_PARSER::parseInternalUnits()
 {
-    auto retval = parseDouble() * IU_PER_MM;
+    auto retval = parseDouble() * schIUScale.IU_PER_MM;
 
     // Schematic internal units are represented as integers.  Any values that are
     // larger or smaller than the schematic units represent undefined behavior for
@@ -461,7 +461,7 @@ int SCH_SEXPR_PARSER::parseInternalUnits()
 
 int SCH_SEXPR_PARSER::parseInternalUnits( const char* aExpected )
 {
-    auto retval = parseDouble( aExpected ) * IU_PER_MM;
+    auto retval = parseDouble( aExpected ) * schIUScale.IU_PER_MM;
 
     constexpr double int_limit = std::numeric_limits<int>::max() * 0.7071;
 
@@ -471,7 +471,7 @@ int SCH_SEXPR_PARSER::parseInternalUnits( const char* aExpected )
 
 void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 {
-    STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+    STROKE_PARAMS_PARSER strokeParser( reader, schIUScale.IU_PER_MM );
     strokeParser.SyncLineReaderWith( *this );
 
     strokeParser.ParseStroke( aStroke );

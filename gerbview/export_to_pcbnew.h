@@ -170,7 +170,7 @@ private:
      */
     double MapToPcbUnits( int aValue ) const
     {
-        return aValue / IU_PER_MM;
+        return aValue / gerbIUScale.IU_PER_MM;
     }
 
 private:

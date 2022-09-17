@@ -79,7 +79,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
     switch( m_frame->GetUserUnits() )
     {
     case EDA_UNITS::MILLIMETRES:
-        scale = IU_PER_MM;
+        scale = gerbIUScale.IU_PER_MM;
         units = wxT( "mm" );
         break;
 

@@ -206,7 +206,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
 
             double drill_um = strtod( diam_txt.c_str(), 0 );
 
-            drill_diam_iu = int( drill_um * (IU_PER_MM / 1000.0) );
+            drill_diam_iu = int( drill_um * ( pcbIUScale.IU_PER_MM / 1000.0 ) );
 
             if( drill_diam_iu == aViaDrillDefault )
                 drill_diam_iu = UNDEFINED_DRILL_DIAMETER;

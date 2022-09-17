@@ -279,9 +279,9 @@ double FABMASTER::processScaleFactor( size_t aRow )
         if( units == "MILS" )
             retval = pcbIUScale.IU_PER_MILS;
         else if( units == "MILLIMETERS" )
-            retval = IU_PER_MM;
+            retval = pcbIUScale.IU_PER_MM;
         else if( units == "MICRONS" )
-            retval = IU_PER_MM * 10.0;
+            retval = pcbIUScale.IU_PER_MM * 10.0;
         else if( units == "INCHES" )
             retval = pcbIUScale.IU_PER_MILS * 1000.0;
     }

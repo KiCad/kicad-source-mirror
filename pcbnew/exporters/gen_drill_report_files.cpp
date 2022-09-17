@@ -50,7 +50,7 @@ inline double diameter_in_inches( double ius )
 
 inline double diameter_in_mm( double ius )
 {
-    return ius / IU_PER_MM;
+    return ius / pcbIUScale.IU_PER_MM;
 }
 
 
@@ -335,8 +335,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );
 
-        if( intervalle < ( plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth ) )
-            intervalle = plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth;
+        if( intervalle < ( plot_diam + ( 1 * pcbIUScale.IU_PER_MM / scale ) + TextWidth ) )
+            intervalle = plot_diam + ( 1 * pcbIUScale.IU_PER_MM / scale ) + TextWidth;
 
         // Evaluate the text horizontal size, to know the maximal column size
         // This is a rough value, but ok to create a new column to plot next texts

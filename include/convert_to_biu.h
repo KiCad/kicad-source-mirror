@@ -112,21 +112,6 @@ constexpr EDA_IU_SCALE pcbIUScale = EDA_IU_SCALE( PCB_IU_PER_MM );
 constexpr EDA_IU_SCALE drawSheetIUScale = EDA_IU_SCALE( PL_IU_PER_MM );
 constexpr EDA_IU_SCALE schIUScale = EDA_IU_SCALE( SCH_IU_PER_MM );
 
-/// Scaling factor to convert mils to internal units.
-#if defined(PCBNEW) || defined(CVPCB)
-constexpr double IU_PER_MM = PCB_IU_PER_MM;
-#elif defined(GERBVIEW)
-constexpr double IU_PER_MM = GERB_IU_PER_MM;
-#elif defined(PL_EDITOR)
-constexpr double IU_PER_MM = PL_IU_PER_MM;
-#elif defined(EESCHEMA)
-constexpr double IU_PER_MM = SCH_IU_PER_MM;
-#else
-#define UNKNOWN_IU
-#endif
-
-#ifndef UNKNOWN_IU
-
 #ifndef SWIG
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.
@@ -135,6 +120,4 @@ constexpr double IU_PER_MM = SCH_IU_PER_MM;
 
 constexpr int ARC_LOW_DEF  = pcbIUScale.mmToIU( 0.02 );
 constexpr int ARC_HIGH_DEF = pcbIUScale.mmToIU( 0.005 );
-#endif
-
 #endif

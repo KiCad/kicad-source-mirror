@@ -375,7 +375,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             // the mouse move and search pads that are on the line.
             int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
             // Search will be made every 0.1 mm:
-            int segments = distance / int( 0.1*IU_PER_MM ) + 1;
+            int           segments = distance / int( 0.1 * pcbIUScale.IU_PER_MM ) + 1;
             const wxPoint line_step( ( cursorPos - oldCursorPos ) / segments );
 
             collector.Empty();

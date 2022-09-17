@@ -73,7 +73,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_cornerRadius = 0;
 
     m_removeIslands = ISLAND_REMOVAL_MODE::AREA;
-    m_minIslandArea = 10 * IU_PER_MM * IU_PER_MM;
+    m_minIslandArea = 10 * pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
 
     SetIsRuleArea( false );
     SetDoNotAllowCopperPour( false );

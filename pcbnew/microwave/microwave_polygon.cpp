@@ -225,7 +225,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
         return;
     }
 
-    double   unitconv = IU_PER_MM;
+    double unitconv = pcbIUScale.IU_PER_MM;
     g_ShapeScaleX = g_ShapeScaleY = 1.0;
 
     FILE_LINE_READER fileReader( File, fullFileName );
@@ -245,7 +245,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
                 unitconv = pcbIUScale.IU_PER_MILS*1000;
 
             if( strncasecmp( param2, "mm", 2 ) == 0 )
-                unitconv = IU_PER_MM;
+                unitconv = pcbIUScale.IU_PER_MM;
         }
 
         if( strncasecmp( param1, "$ENDCOORD", 8 ) == 0 )

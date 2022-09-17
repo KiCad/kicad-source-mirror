@@ -152,7 +152,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         m_HPGLPaperSizeSelect = cfg->m_PlotPanel.hpgl_paper_size;
 
         // HPGL Pen Size is stored in mm in config
-        m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * IU_PER_MM;
+        m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * schIUScale.IU_PER_MM;
 
         // Switch to the last save plot format
         PLOT_FORMAT fmt = static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format );
@@ -343,7 +343,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.open_file_after_plot = getOpenFileAfterPlot();
 
         // HPGL Pen Size is stored in mm in config
-        cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
+        cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / schIUScale.IU_PER_MM;
     }
 
     aSettings->LoadColors( colors );

@@ -58,9 +58,9 @@ struct TSubRect : public CRectPlacement::TRect
 typedef std::vector<TSubRect> CSubRectArray;
 
 // Use 0.01 mm units to calculate placement, to avoid long calculation time
-const int scale = (int)(0.01 * IU_PER_MM);
+const int scale = (int) ( 0.01 * pcbIUScale.IU_PER_MM );
 
-const int PADDING = (int)(1 * IU_PER_MM);
+const int PADDING = (int) ( 1 * pcbIUScale.IU_PER_MM );
 
 // Populates a list of rectangles, from a list of footprints
 void fillRectList( CSubRectArray& vecSubRects, std::vector <FOOTPRINT*>& aFootprintList )

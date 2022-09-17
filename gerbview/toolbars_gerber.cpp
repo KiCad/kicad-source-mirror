@@ -318,7 +318,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     switch( GetUserUnits() )
     {
     case EDA_UNITS::MILLIMETRES:
-        scale = IU_PER_MM;
+        scale = gerbIUScale.IU_PER_MM;
         units = wxT( "mm" );
         break;
 

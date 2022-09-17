@@ -288,7 +288,7 @@ void convertOblong2Segment( wxSize aSize, const EDA_ANGLE& aOrient, VECTOR2I& aS
 void GERBER_WRITER::SetFormat( int aRightDigits )
 {
     /* Set conversion scale depending on drill file units */
-    m_conversionUnits = 1.0 / IU_PER_MM;        // Gerber units = mm
+    m_conversionUnits = 1.0 / pcbIUScale.IU_PER_MM; // Gerber units = mm
 
     // Set precision (unit is mm).
     m_precision.m_Lhs = 4;

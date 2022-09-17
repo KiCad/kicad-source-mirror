@@ -183,7 +183,7 @@ int PCB_PARSER::parseBoardUnits()
     // to confirm or experiment.  Use a similar strategy in both places, here
     // and in the test program. Make that program with:
     // $ make test-nm-biu-to-ascii-mm-round-tripping
-    auto retval = parseDouble() * IU_PER_MM;
+    auto retval = parseDouble() * pcbIUScale.IU_PER_MM;
 
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
@@ -197,7 +197,7 @@ int PCB_PARSER::parseBoardUnits()
 
 int PCB_PARSER::parseBoardUnits( const char* aExpected )
 {
-    auto retval = parseDouble( aExpected ) * IU_PER_MM;
+    auto retval = parseDouble( aExpected ) * pcbIUScale.IU_PER_MM;
 
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
@@ -515,7 +515,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
     // 60mils is 1.524mm
     if( !foundTextSize )
     {
-        const double defaultTextSize = 1.524 * IU_PER_MM;
+        const double defaultTextSize = 1.524 * pcbIUScale.IU_PER_MM;
 
         aText->SetTextSize( wxSize( defaultTextSize, defaultTextSize ) );
     }
@@ -2749,7 +2749,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         case T_stroke:
         {
-            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
             strokeParser.SyncLineReaderWith( *this );
 
             strokeParser.ParseStroke( stroke );
@@ -3081,7 +3081,7 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
 
         case T_stroke:
         {
-            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
             strokeParser.SyncLineReaderWith( *this );
 
             strokeParser.ParseStroke( stroke );
@@ -4157,7 +4157,7 @@ FP_TEXTBOX* PCB_PARSER::parseFP_TEXTBOX()
 
         case T_stroke:
         {
-            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
             strokeParser.SyncLineReaderWith( *this );
 
             strokeParser.ParseStroke( stroke );
@@ -4472,7 +4472,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
         case T_stroke:
         {
-            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
             strokeParser.SyncLineReaderWith( *this );
 
             strokeParser.ParseStroke( stroke );
@@ -5780,7 +5780,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 case T_island_area_min:
                 {
                     int area = parseBoardUnits( T_island_area_min );
-                    zone->SetMinIslandArea( area * IU_PER_MM );
+                    zone->SetMinIslandArea( area * pcbIUScale.IU_PER_MM );
                     NeedRIGHT();
                     break;
                 }

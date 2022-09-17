@@ -37,7 +37,7 @@
 /**
  * Scale conversion from 3d model units to pcb units
  */
-#define UNITS3D_TO_UNITSPCB (IU_PER_MM)
+#define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
                                     CAMERA& aCamera ) :
@@ -1387,7 +1387,7 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
             glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
                        transparency );
 
-        const int delta = KiROUND( ii * griSizeMM * IU_PER_MM );
+        const int delta = KiROUND( ii * griSizeMM * pcbIUScale.IU_PER_MM );
 
         if( delta <= xsize / 2 )    // Draw grid lines parallel to X axis
         {
@@ -1439,7 +1439,7 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
             glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
                        transparency );
 
-        const double delta = ii * griSizeMM * IU_PER_MM;
+        const double delta = ii * griSizeMM * pcbIUScale.IU_PER_MM;
 
         glBegin( GL_LINES );
         xmax = ( brd_center_pos.x + delta ) * scale;
@@ -1469,7 +1469,7 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
         else
             glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b, transparency );
 
-        const double delta = ii * griSizeMM * IU_PER_MM * scale;
+        const double delta = ii * griSizeMM * pcbIUScale.IU_PER_MM * scale;
 
         if( delta <= zmax )
         {

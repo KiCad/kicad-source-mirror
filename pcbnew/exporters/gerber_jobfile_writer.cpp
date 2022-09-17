@@ -55,7 +55,7 @@ GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
 {
     m_pcb = aPcb;
     m_reporter = aReporter;
-    m_conversionUnits = 1.0 / IU_PER_MM; // Gerber units = mm
+    m_conversionUnits = 1.0 / pcbIUScale.IU_PER_MM; // Gerber units = mm
 }
 
 std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText )

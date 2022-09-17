@@ -1372,7 +1372,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     // Is a point on the boundary of the polygon inside or outside?  This small epsilon lets
     // us avoid the question.
-    int epsilon = KiROUND( IU_PER_MM * 0.04 );  // about 1.5 mil
+    int epsilon = KiROUND( pcbIUScale.IU_PER_MM * 0.04 ); // about 1.5 mil
 
     for( PAD* pad : aSpokedPadsList )
     {

@@ -342,7 +342,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
-    double gridsize = 0.001 * IU_PER_MM;
+    double gridsize = 0.001 * pcbIUScale.IU_PER_MM;
     view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
 
     // And do not show the grid:

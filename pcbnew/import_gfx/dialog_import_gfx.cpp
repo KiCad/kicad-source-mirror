@@ -85,9 +85,9 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
     m_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
 
-    m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * IU_PER_MM );
-    m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * IU_PER_MM );
-    m_defaultLineWidth.SetValue( cfg->m_ImportGraphics.dxf_line_width * IU_PER_MM );
+    m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * pcbIUScale.IU_PER_MM );
+    m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * pcbIUScale.IU_PER_MM );
+    m_defaultLineWidth.SetValue( cfg->m_ImportGraphics.dxf_line_width * pcbIUScale.IU_PER_MM );
 
     m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
     m_rbInteractivePlacement->SetValue( m_placementInteractive );

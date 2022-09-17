@@ -613,7 +613,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
             if( !strcmp( data, "mm" ) )
             {
-                diskToBiu = IU_PER_MM;
+                diskToBiu = pcbIUScale.IU_PER_MM;
             }
         }
         else if( TESTLINE( "LayerCount" ) )
@@ -2876,7 +2876,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
-    biuToDisk = 1.0/IU_PER_MM;      // BIUs are nanometers & file is mm
+    biuToDisk = 1.0 / pcbIUScale.IU_PER_MM; // BIUs are nanometers & file is mm
 
     // Conversion factor for loading KICAD legacy file format into BIUs in RAM
     // Start by assuming the *.brd file is in deci-mils.
@@ -3006,7 +3006,7 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
             const char* units = strtok_r( line + SZ( "Units" ), delims, &data );
 
             if( !strcmp( units, "mm" ) )
-                m_owner->diskToBiu = IU_PER_MM;
+                m_owner->diskToBiu = pcbIUScale.IU_PER_MM;
 
         }
         else if( TESTLINE( "$INDEX" ) )

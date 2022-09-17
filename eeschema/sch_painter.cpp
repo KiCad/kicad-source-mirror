@@ -107,7 +107,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
     SetDashLengthRatio( 12 );       // From ISO 128-2
     SetGapLengthRatio( 3 );         // From ISO 128-2
 
-    m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * IU_PER_MM;
+    m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * schIUScale.IU_PER_MM;
 }
 
 

@@ -265,7 +265,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
     BOARD_PRINTOUT::setupGal( aGal );
-    aGal->SetWorldUnitLength( 0.001/IU_PER_MM /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+    aGal->SetWorldUnitLength( 0.001/pcbIUScale.IU_PER_MM /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
 }
 
 

@@ -42,7 +42,7 @@
 /**
   * Scale conversion from 3d model units to pcb units
   */
-#define UNITS3D_TO_UNITSPCB (IU_PER_MM)
+#define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 /**
  * Trace mask used to enable or disable the trace output of this class.

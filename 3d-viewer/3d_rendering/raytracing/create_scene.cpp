@@ -65,7 +65,7 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 /**
   * Scale conversion from 3d model units to pcb units
   */
-#define UNITS3D_TO_UNITSPCB ( IU_PER_MM )
+#define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 
 void RENDER_3D_RAYTRACE::setupMaterials()
@@ -76,7 +76,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
     MATERIAL::SetDefaultRefractionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_refractions );
     MATERIAL::SetDefaultReflectionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_reflections );
 
-    double mmTo3Dunits = IU_PER_MM * m_boardAdapter.BiuTo3dUnits();
+    double mmTo3Dunits = pcbIUScale.IU_PER_MM * m_boardAdapter.BiuTo3dUnits();
 
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
     {

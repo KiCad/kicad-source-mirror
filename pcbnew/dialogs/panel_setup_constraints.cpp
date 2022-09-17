@@ -131,9 +131,9 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
 
-    m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
+    m_BrdSettings->m_MaxError = Clamp<int>( pcbIUScale.IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
                                             m_maxError.GetValue(),
-                                            IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
+                                            pcbIUScale.IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
     m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
     m_BrdSettings->m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();

@@ -2322,7 +2322,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     {
         m_out->Print( 0, " (island_removal_mode %d) (island_area_min %s)",
                       static_cast<int>( aZone->GetIslandRemovalMode() ),
-                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetMinIslandArea() / IU_PER_MM ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aZone->GetMinIslandArea() / pcbIUScale.IU_PER_MM ).c_str() );
     }
 
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )

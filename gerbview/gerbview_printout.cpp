@@ -91,7 +91,7 @@ void GERBVIEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerS
 void GERBVIEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
     BOARD_PRINTOUT::setupGal( aGal );
-    aGal->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
+    aGal->SetWorldUnitLength( 1.0/ gerbIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 }
 
 

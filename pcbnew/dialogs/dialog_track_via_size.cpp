@@ -32,7 +32,7 @@
 
 #include "board_design_settings.h"
 
-const int minSize = (int)( 0.01 * IU_PER_MM );
+const int minSize = (int) ( 0.01 * pcbIUScale.IU_PER_MM );
 
 DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( EDA_DRAW_FRAME* aParent,
                                               BOARD_DESIGN_SETTINGS& aSettings ) :

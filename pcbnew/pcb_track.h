@@ -70,7 +70,7 @@ enum class VIATYPE : int
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 // Used for tracks and vias for algorithmic safety, not to enforce constraints
-#define GEOMETRY_MIN_SIZE ( int )( 0.001 * IU_PER_MM )
+#define GEOMETRY_MIN_SIZE (int) ( 0.001 * pcbIUScale.IU_PER_MM )
 
 
 class PCB_TRACK : public BOARD_CONNECTED_ITEM

@@ -705,7 +705,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     if( isEndTrackOnStartPt )
         newEnd = trackOnEnd->GetEnd();
 
-    int maxLengthIU = KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * IU_PER_MM );
+    int maxLengthIU =
+            KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * pcbIUScale.IU_PER_MM );
 
     if( !processTrack( trackOnStart, trackOnStartCopy, maxLengthIU ) )
         theArc->SetStart( newStart );

@@ -977,7 +977,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         const SHAPE_LINE_CHAIN& path = areas.COutline( ii );
 
         // polygon area in mm^2 :
-        double curr_area = path.Area() / ( IU_PER_MM * IU_PER_MM );
+        double curr_area = path.Area() / ( pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM );
 
         // Skip very small polygons: they are certainly artifacts created by
         // arc approximations and polygon transforms
@@ -1088,7 +1088,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
  */
 static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 {
-    const int margin = 5 * IU_PER_MM;   // Add a 5 mm margin around the board
+    const int margin = 5 * pcbIUScale.IU_PER_MM; // Add a 5 mm margin around the board
     aPlotter->SetNegative( true );
     aPlotter->SetColor( WHITE );        // Which will be plotted as black
 

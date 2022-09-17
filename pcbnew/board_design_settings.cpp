@@ -757,13 +757,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 // The parameters are removed, so we just have to manually load them here and
                 // they will get saved with the board
                 if( std::optional<double> optval = Get<double>( "rules.solder_mask_clearance" ) )
-                    m_SolderMaskExpansion = static_cast<int>( *optval * IU_PER_MM );
+                    m_SolderMaskExpansion = static_cast<int>( *optval * pcbIUScale.IU_PER_MM );
 
                 if( std::optional<double> optval = Get<double>( "rules.solder_mask_min_width" ) )
-                    m_SolderMaskMinWidth = static_cast<int>( *optval * IU_PER_MM );
+                    m_SolderMaskMinWidth = static_cast<int>( *optval * pcbIUScale.IU_PER_MM );
 
                 if( std::optional<double> optval = Get<double>( "rules.solder_paste_clearance" ) )
-                    m_SolderPasteMargin = static_cast<int>( *optval * IU_PER_MM );
+                    m_SolderPasteMargin = static_cast<int>( *optval * pcbIUScale.IU_PER_MM );
 
                 if( std::optional<double> optval = Get<double>( "rules.solder_paste_margin_ratio" ) )
                     m_SolderPasteMarginRatio = *optval;
