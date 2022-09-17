@@ -1,13 +1,14 @@
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
+# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-12 13:19-0700\n"
-"PO-Revision-Date: 2022-06-27 00:52+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2022-09-19 02:29+0000\n"
+"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -71,9 +72,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Forenkling av polygoner av kobberlag"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Forenkling av polygoner av kobberlag"
+msgstr "%d kobberlag forenkles"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -84,9 +85,9 @@ msgid "Build Tech layers"
 msgstr "Bygg tekniske lag"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:915
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Bygg tekniske lag"
+msgstr "Bygg teknisk lag %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1082
 msgid "Build BVH for holes and vias"
@@ -118,9 +119,9 @@ msgid "Rule area %s\t"
 msgstr "Regelområde på %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Soner"
+msgstr "Sone %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -135,9 +136,9 @@ msgid "Load OpenGL: layers"
 msgstr "Last OpenGL: lag"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:577
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Last OpenGL: lag"
+msgstr "Last OpenGL lag %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:676
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:789
@@ -18488,18 +18489,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b> Ingen flere tilgjengelige lag </b> i Gerbview for å laste filer"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b> Ikke lastet: </b> <i> %s </i>"
+msgstr "<b> Ikke lastet: </b> <i> %s </i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b> Ikke lastet: </b> <i> %s </i>"
+msgstr "<b>Tomt for minne under innlasting: </b> <i> %s </i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -19294,9 +19291,8 @@ msgid "Failed to output data"
 msgstr "Kunne ikke laste inn \"%s\""
 
 #: kicad/dialogs/dialog_template_selector.cpp:148
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html> <h1> Malvelger </h1> </html>"
+msgstr "<h1>Malvelger</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:253
 msgid "Select Templates Directory"
@@ -26547,9 +26543,8 @@ msgid "Map File Format"
 msgstr "Kartfilformat"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
-#, fuzzy
 msgid "Creates a drill map in PDF or other formats"
-msgstr "Lager et borekart i PS, HPGL eller andre formater"
+msgstr "Lager et borekart i PDF eller andre formater"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -34831,9 +34826,8 @@ msgid "removed annular ring"
 msgstr "fjernet ringring"
 
 #: pcbnew/pcb_track.cpp:784
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Fest til spor:"
+msgstr "Spor (bue)"
 
 #: pcbnew/pcb_track.cpp:799
 #, fuzzy
