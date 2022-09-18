@@ -127,7 +127,7 @@ private:
 };
 
 typedef SIM_VALUE_INST<bool> SIM_VALUE_BOOL;
-typedef SIM_VALUE_INST<long> SIM_VALUE_INT;
+typedef SIM_VALUE_INST<int> SIM_VALUE_INT;
 typedef SIM_VALUE_INST<double> SIM_VALUE_FLOAT;
 typedef SIM_VALUE_INST<std::complex<double>> SIM_VALUE_COMPLEX;
 typedef SIM_VALUE_INST<std::string> SIM_VALUE_STRING;

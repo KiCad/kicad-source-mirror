@@ -101,18 +101,18 @@ namespace SIM_VALUE_PARSER
         bool isOk = true;
         bool isEmpty = true;
         std::string significand;
-        std::optional<long> intPart;
-        std::optional<long> fracPart;
-        std::optional<long> exponent;
-        std::optional<long> metricSuffixExponent;
+        std::optional<int64_t> intPart;
+        std::optional<int64_t> fracPart;
+        std::optional<int>     exponent;
+        std::optional<int>     metricSuffixExponent;
     };
 
     PARSE_RESULT Parse( const std::string& aString,
                         NOTATION aNotation = NOTATION::SI,
                         SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE_FLOAT );
 
-    long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
-    std::string ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
+    int MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
+    std::string ExponentToMetricSuffix( double aExponent, int& aReductionExponent,
                                         NOTATION aNotation = NOTATION::SI );
     }
 
@@ -172,7 +172,7 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
     }
     else if( aNode.is_type<SIM_VALUE_PARSER::exponent>() )
     {
-        aParseResult.exponent = std::stol( aNode.string() );
+        aParseResult.exponent = std::stoi( aNode.string() );
         aParseResult.isEmpty = false;
     }
     else if( aNode.is_type<SIM_VALUE_PARSER::metricSuffix<ValueType, Notation>>() )
@@ -225,7 +225,7 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const std::string& aStri
 }
 
 
-long SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation )
+int SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation )
 {
     switch( aNotation )
     {
@@ -285,8 +285,8 @@ long SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATI
 }
 
 
-std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
-                                                   NOTATION aNotation )
+std::string SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, int& aReductionExponent,
+                                                      NOTATION aNotation )
 {
     if( aNotation == NOTATION::SI && aExponent >= -18 && aExponent <= -15 )
     {
@@ -405,7 +405,7 @@ SIM_VALUE_INST<T>::SIM_VALUE_INST( const T& aValue ) : m_value( aValue )
 }
 
 template SIM_VALUE_BOOL::SIM_VALUE_INST( const bool& aValue );
-template SIM_VALUE_INT::SIM_VALUE_INST( const long& aValue );
+template SIM_VALUE_INT::SIM_VALUE_INST( const int& aValue );
 template SIM_VALUE_FLOAT::SIM_VALUE_INST( const double& aValue );
 template SIM_VALUE_COMPLEX::SIM_VALUE_INST( const std::complex<double>& aValue );
 template SIM_VALUE_STRING::SIM_VALUE_INST( const std::string& aValue );
@@ -459,7 +459,7 @@ bool SIM_VALUE_INT::FromString( const std::string& aString, NOTATION aNotation )
     if( !parseResult.intPart || ( parseResult.fracPart && *parseResult.fracPart != 0 ) )
         return false;
 
-    long exponent = parseResult.exponent ? *parseResult.exponent : 0;
+    int exponent = parseResult.exponent ? *parseResult.exponent : 0;
     exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
 
     m_value = static_cast<double>( *parseResult.intPart ) * std::pow( 10, exponent );
@@ -484,7 +484,7 @@ bool SIM_VALUE_FLOAT::FromString( const std::string& aString, NOTATION aNotation
     if( parseResult.significand.empty() || parseResult.significand == "." )
         return false;
 
-    long exponent = parseResult.exponent ? *parseResult.exponent : 0;
+    int exponent = parseResult.exponent ? *parseResult.exponent : 0;
     exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
 
     try
@@ -558,8 +558,8 @@ std::string SIM_VALUE_INT::ToString( NOTATION aNotation ) const
 {
     if( m_value )
     {
-        long value = std::abs( *m_value );
-        long exponent = 0;
+        int value = std::abs( *m_value );
+        int exponent = 0;
 
         while( value != 0 && value % 1000 == 0 )
         {
@@ -567,10 +567,10 @@ std::string SIM_VALUE_INT::ToString( NOTATION aNotation ) const
             value /= 1000;
         }
 
-        long        dummy = 0;
+        int         dummy = 0;
         std::string metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
                 static_cast<double>( exponent ), dummy, aNotation );
-        return fmt::format( "{}{}", value, metricSuffix );
+        return fmt::format( "{:d}{:s}", value, metricSuffix );
     }
 
     return "";
@@ -583,7 +583,7 @@ std::string SIM_VALUE_FLOAT::ToString( NOTATION aNotation ) const
     if( m_value )
     {
         double exponent = std::log10( std::abs( *m_value ) );
-        long reductionExponent = 0;
+        int    reductionExponent = 0;
 
         std::string metricSuffix =
                 SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent, reductionExponent, aNotation );
@@ -658,7 +658,7 @@ bool SIM_VALUE_BOOL::operator==( const bool& aOther ) const
 }
 
 
-template bool SIM_VALUE_INT::operator==( const long& aOther ) const;
+template bool SIM_VALUE_INT::operator==( const int& aOther ) const;
 template bool SIM_VALUE_FLOAT::operator==( const double& aOther ) const;
 template bool SIM_VALUE_COMPLEX::operator==( const std::complex<double>& aOther ) const;
 template bool SIM_VALUE_STRING::operator==( const std::string& aOther ) const;
@@ -675,7 +675,7 @@ bool SIM_VALUE_INST<T>::operator==( const SIM_VALUE& aOther ) const
     return false;
 }
 
-    template <typename T>
+template <typename T>
 SIM_VALUE_INST<T> operator+( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
 {
     return SIM_VALUE_INST( aLeft.m_value.value() + aRight.m_value.value() );
@@ -687,7 +687,7 @@ template SIM_VALUE_FLOAT operator+( const SIM_VALUE_FLOAT& aLeft,
                                     const SIM_VALUE_FLOAT& aRight );
 
 
-    template <typename T>
+template <typename T>
 SIM_VALUE_INST<T> operator-( const SIM_VALUE_INST<T>& aLeft, const SIM_VALUE_INST<T>& aRight )
 {
     return SIM_VALUE_INST( aLeft.m_value.value() - aRight.m_value.value() );
