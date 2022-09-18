@@ -89,6 +89,13 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
     if( aParamName == "level" || aParamName == "version" )
         return true;
 
+    // Ignore purely informative LTspice-specific parameters "mfg", "icrating", "vceo".
+    if( aParamName == "mfg" || aParamName == "icrating" || aParamName == "vceo" )
+        return true;
+
+    // Also ignore "type" parameter, because Ngspice does that too.
+    if( aParamName == "type" )
+        return true;
 
     // First we try to use the name as is. Note that you can't set instance parameters from this
     // function, it's generally for ".model" cards, not for instantiations.
