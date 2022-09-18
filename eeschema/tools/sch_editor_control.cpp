@@ -469,7 +469,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
         searchAllSheets = !( schSearchData.searchCurrentSheetOnly );
     }
-    catch( const std::bad_cast& e )
+    catch( const std::bad_cast& )
     {
     }
 
@@ -624,7 +624,7 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( data );
         currentSheetOnly = schSearchData.searchCurrentSheetOnly;
     }
-    catch( const std::bad_cast& e )
+    catch( const std::bad_cast& )
     {
     }
 
@@ -781,7 +781,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                     // TODO: We need to unify this library-model inheritance stuff into one
                     // abstraction.
-                    
+
                     // It might not be the best idea to have to load a file every time current is
                     // probed either.
 

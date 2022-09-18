@@ -26,6 +26,7 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/treebook.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////

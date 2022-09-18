@@ -208,7 +208,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                                                      NETLIST_EXPORTER_SPICE_PARSER::control>
                     ( in );
             }
-            catch( const tao::pegtl::parse_error& e )
+            catch( const tao::pegtl::parse_error& )
             {
                 continue;
             }

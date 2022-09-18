@@ -138,7 +138,6 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale, i
 {
     std::string buf;
     double engUnits = aValue;
-    int    len;
 
     engUnits /= aIuScale.IU_PER_MM;
 

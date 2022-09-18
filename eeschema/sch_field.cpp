@@ -547,7 +547,7 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
         searchAndReplace = schSearchData.searchAndReplace;
         replaceReferences = schSearchData.replaceReferences;
     }
-    catch( const std::bad_cast& e )
+    catch( const std::bad_cast& )
     {
     }
 
@@ -622,7 +622,7 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
         const SCH_SEARCH_DATA& schSearchData = dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
         replaceReferences = schSearchData.replaceReferences;
     }
-    catch( const std::bad_cast& e )
+    catch( const std::bad_cast& )
     {
     }
 

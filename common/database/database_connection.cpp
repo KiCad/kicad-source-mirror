@@ -273,7 +273,7 @@ bool DATABASE_CONNECTION::getQuoteChar()
 
         wxLogTrace( traceDatabase, wxT( "Quote char retrieved: %c" ), m_quoteChar );
     }
-    catch( nanodbc::database_error& e )
+    catch( nanodbc::database_error& )
     {
         wxLogTrace( traceDatabase, wxT( "Exception while querying quote char: %s" ), m_lastError );
         return false;
