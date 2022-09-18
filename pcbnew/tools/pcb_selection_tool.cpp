@@ -549,7 +549,10 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
         enum DISPOSITION { BEFORE = 1, AFTER, BOTH };
 
         std::map<EDA_ITEM*, DISPOSITION> itemDispositions;
+        GENERAL_COLLECTORS_GUIDE         guide = getCollectorsGuide();
         GENERAL_COLLECTOR                collector;
+
+        collector.SetGuide( &guide );
 
         for( EDA_ITEM* item : m_selection )
         {
