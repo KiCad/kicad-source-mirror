@@ -66,6 +66,7 @@
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                       wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME ),
+        m_footprintListPendingUpdate( false ),
         m_viewerPendingUpdate( false )
 {
     m_symbolsListBox      = nullptr;
