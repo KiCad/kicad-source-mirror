@@ -68,7 +68,7 @@ std::vector<wxString> SPICE_GENERATOR_SUBCKT::CurrentNames( const wxString& aRef
 
 
 SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ) )
+    SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ) )
 {
 }
 

@@ -25,7 +25,7 @@
 #ifndef SIM_MODEL_SUBCIRCUIT_H
 #define SIM_MODEL_SUBCIRCUIT_H
 
-#include <sim/sim_model.h>
+#include <sim/sim_model_spice.h>
 #include <sim/spice_generator.h>
 
 
@@ -39,10 +39,10 @@ public:
 };
 
 
-class SIM_MODEL_SUBCKT : public SIM_MODEL
+class SIM_MODEL_SUBCKT : public SIM_MODEL_SPICE
 {
 public:
-    SIM_MODEL_SUBCKT( TYPE aType );
+    SIM_MODEL_SUBCKT( SIM_MODEL::TYPE aType );
 
     void ReadSpiceCode( const wxString& aSpiceCode ) override;
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;

@@ -34,7 +34,6 @@
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 
-#include <sim/spice_grammar.h>
 #include <locale_io.h>
 #include <lib_symbol.h>
 #include <confirm.h>
@@ -68,20 +67,6 @@ namespace SIM_MODEL_PARSER
 }
 
 
-namespace SIM_MODEL_SPICE_PARSER
-{
-    using namespace SPICE_GRAMMAR;
-
-    template <typename Rule> struct spiceUnitSelector : std::false_type {};
-
-    template <> struct spiceUnitSelector<dotModel> : std::true_type {};
-    template <> struct spiceUnitSelector<modelName> : std::true_type {};
-    template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
-    template <> struct spiceUnitSelector<param> : std::true_type {};
-    template <> struct spiceUnitSelector<paramValue> : std::true_type {};
-
-    template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
-}
 SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 {
     switch( aDeviceType )
@@ -122,7 +107,7 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE_ aDeviceType )
 SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
-    {
+    { 
     case TYPE::NONE:                 return { DEVICE_TYPE_::NONE,   "",               ""                           };
 
     case TYPE::R:                    return { DEVICE_TYPE_::R,      "",               "Ideal"                      };
@@ -132,7 +117,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::C_BEHAVIORAL:         return { DEVICE_TYPE_::C,      "=",              "Behavioral"                 };
 
     case TYPE::L:                    return { DEVICE_TYPE_::L,      "",               "Ideal"                      };
-    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };
+    case TYPE::L_MUTUAL:             return { DEVICE_TYPE_::L,      "MUTUAL",         "Mutual"                     };       
     case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE_::L,      "=",              "Behavioral"                 };
 
     case TYPE::TLINE_Z0:             return { DEVICE_TYPE_::TLINE,  "Z0",             "Characteristic impedance"   };
@@ -142,7 +127,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SW_I:                 return { DEVICE_TYPE_::SW,     "I",              "Current-controlled"         };
 
     case TYPE::D:                    return { DEVICE_TYPE_::D,      "",               ""                           };
-
+    
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE_::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE_::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::NPN_VBIC:             return { DEVICE_TYPE_::NPN,    "VBIC",           "VBIC"                       };
@@ -239,7 +224,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 
     case TYPE::SUBCKT:               return { DEVICE_TYPE_::SUBCKT, "",               ""                           };
     case TYPE::XSPICE:               return { DEVICE_TYPE_::XSPICE, "",               ""                           };
-    case TYPE::SPICE:                return { DEVICE_TYPE_::SPICE,  "",               ""                           };
+    case TYPE::RAWSPICE:                return { DEVICE_TYPE_::SPICE,  "",               ""                           };
 
     case TYPE::_ENUM_END:             break;
     }
@@ -262,7 +247,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::L:                    return { "L", ""        };
     case TYPE::L_MUTUAL:             return { "K", ""        };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
-
+    
     //case TYPE::TLINE_Z0:             return { "T"  };
     case TYPE::TLINE_Z0:             return { "O", "LTRA"    };
     case TYPE::TLINE_RLGC:           return { "O", "LTRA"    };
@@ -370,7 +355,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::XSPICE:               return { "A"  };
 
     case TYPE::NONE:
-    case TYPE::SPICE:
+    case TYPE::RAWSPICE:
         return {};
 
     case TYPE::_ENUM_END:
@@ -379,88 +364,6 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
     wxFAIL;
     return {};
-}
-
-
-TYPE SIM_MODEL::ReadTypeFromSpiceCode( const wxString& aSpiceCode )
-{
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        wxLogDebug( "%s", e.what() );
-        return TYPE::NONE;
-    }
-
-    for( const auto& node : root->children )
-    {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
-        {
-            wxString paramName;
-            wxString typeString;
-            wxString level;
-            wxString version;
-
-            for( const auto& subnode : node->children )
-            {
-                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
-                {
-                    typeString = subnode->string();
-                    TYPE type = readTypeFromSpiceStrings( typeString );
-
-                    if( type != TYPE::SPICE )
-                        return type;
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
-                {
-                    paramName = subnode->string();
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
-                {
-                    wxASSERT( paramName != "" );
-
-                    if( paramName == "level" )
-                        level = subnode->string();
-                    else if( paramName == "version" )
-                        version = subnode->string();
-                }
-                else
-                {
-                    wxFAIL_MSG( "Unhandled parse tree subnode" );
-                    return TYPE::NONE;
-                }
-            }
-
-            // Type was not determined from Spice type string alone, so now we take `level` and
-            // `version` variables into account too. This is suboptimal since we read the model
-            // twice this way, and moreover the code is now somewhat duplicated.
-
-            return readTypeFromSpiceStrings( typeString, level, version, false );
-        }
-        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotSubckt>() )
-            return TYPE::SUBCKT;
-        else
-        {
-            wxFAIL_MSG( "Unhandled parse tree node" );
-            return TYPE::NONE;
-        }
-    }
-
-    wxFAIL_MSG( "Could not derive type from Spice code" );
-    return TYPE::NONE;
 }
 
 
@@ -606,7 +509,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
                 }
             }
         }
-        catch( const tao::pegtl::parse_error& )
+        catch( const tao::pegtl::parse_error& e )
         {
         }
 
@@ -628,7 +531,7 @@ TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
         || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_ENABLED_FIELD ) != ""
         || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_LIB_FIELD ) != "" )
     {
-        return TYPE::SPICE;
+        return TYPE::RAWSPICE;
     }
     else
         return TYPE::NONE;
@@ -696,7 +599,7 @@ void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount )
 {
-    std::unique_ptr<SIM_MODEL> model = create( aType );
+    std::unique_ptr<SIM_MODEL> model = Create( aType );
 
     // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
     model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
@@ -704,32 +607,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCou
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const wxString& aSpiceCode )
-{
-    std::unique_ptr<SIM_MODEL> model = create( ReadTypeFromSpiceCode( aSpiceCode ) );
-
-    try
-    {
-        model->ReadSpiceCode( aSpiceCode );
-    }
-    catch( const IO_ERROR& e )
-    {
-        DisplayErrorMessage( nullptr, e.What() );
-        // Demote to raw Spice element and try again.
-        std::unique_ptr<SIM_MODEL> rawSpiceModel = create( TYPE::SPICE );
-
-        rawSpiceModel->ReadSpiceCode( aSpiceCode );
-        return rawSpiceModel;
-    }
-
-    return model;
-}
-
-
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
                                               unsigned         aSymbolPinCount )
 {
-    std::unique_ptr<SIM_MODEL> model = create( aBaseModel.GetType() );
+    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
 
     model->SetBaseModel( aBaseModel );
     model->ReadDataFields( aSymbolPinCount, static_cast<const std::vector<void>*>( nullptr ) );
@@ -741,7 +622,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    std::unique_ptr<SIM_MODEL> model = create( aBaseModel.GetType() );
+    std::unique_ptr<SIM_MODEL> model = Create( aBaseModel.GetType() );
 
     model->SetBaseModel( aBaseModel );
     model->ReadDataFields( aSymbolPinCount, &aFields );
@@ -761,7 +642,7 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::create( ReadTypeFromFields( aFields ) );
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( ReadTypeFromFields( aFields ) );
 
     model->ReadDataFields( aSymbolPinCount, &aFields );
     return model;
@@ -842,75 +723,6 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldNa
 
 
 SIM_MODEL::~SIM_MODEL() = default;
-
-
-void SIM_MODEL::ReadSpiceCode( const wxString& aSpiceCode )
-{
-    // The default behavior is to treat the Spice param=value pairs as the model parameters and
-    // values (for many models the correspondence is not exact, so this function is overridden).
-
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-
-    for( const auto& node : root->children )
-    {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
-        {
-            wxString paramName = "";
-
-            for( const auto& subnode : node->children )
-            {
-                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
-                {
-                    paramName = subnode->string();
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
-                {
-                    wxASSERT( !paramName.IsEmpty() );
-
-                    if( !SetParamFromSpiceCode( paramName, subnode->string() ) )
-                    {
-                        THROW_IO_ERROR( wxString::Format(
-                                        _( "Failed to set parameter '%s' to '%s'" ),
-                                        paramName,
-                                        subnode->string() ) );
-                    }
-                }
-                else
-                {
-                    wxFAIL_MSG( "Unhandled parse tree subnode" );
-                }
-            }
-        }
-        else
-        {
-            wxFAIL_MSG( "Unhandled parse tree node" );
-        }
-    }
-
-    m_spiceCode = aSpiceCode;
-}
 
 
 void SIM_MODEL::AddPin( const PIN& aPin )
@@ -1003,10 +815,6 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
-    // Models sourced from a library are immutable.
-    if( m_spiceCode != "" )
-        return false;
-
     return m_params.at( aParamIndex ).value->FromString( aValue.ToStdString(), aNotation );
 }
 
@@ -1021,7 +829,7 @@ bool SIM_MODEL::SetParamValue( const wxString& aParamName, const wxString& aValu
                             {
                                 return param.info.name == aParamName.Lower();
                             } );
-
+    
     if( it == params.end() )
         return false;
 
@@ -1065,13 +873,85 @@ bool SIM_MODEL::HasSpiceNonInstanceOverrides() const
 }
 
 
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
+{
+    switch( aType )
+    {
+    case TYPE::R:
+    case TYPE::C:
+    case TYPE::L:
+        return std::make_unique<SIM_MODEL_IDEAL>( aType );
+
+    case TYPE::L_MUTUAL:
+        return std::make_unique<SIM_MODEL_MUTUAL_INDUCTOR>();
+
+    case TYPE::R_BEHAVIORAL:
+    case TYPE::C_BEHAVIORAL:
+    case TYPE::L_BEHAVIORAL:
+    case TYPE::V_BEHAVIORAL:
+    case TYPE::I_BEHAVIORAL:
+        return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
+    
+    case TYPE::TLINE_Z0:
+    case TYPE::TLINE_RLGC:
+        return std::make_unique<SIM_MODEL_TLINE>( aType );
+
+    case TYPE::SW_V:
+    case TYPE::SW_I:
+        return std::make_unique<SIM_MODEL_SWITCH>( aType );
+
+    case TYPE::V:
+    case TYPE::I:
+    case TYPE::V_SIN:
+    case TYPE::I_SIN:
+    case TYPE::V_PULSE:
+    case TYPE::I_PULSE:
+    case TYPE::V_EXP:
+    case TYPE::I_EXP:
+    /*case TYPE::V_SFAM:
+    case TYPE::I_SFAM:
+    case TYPE::V_SFFM:
+    case TYPE::I_SFFM:*/
+    case TYPE::V_PWL:
+    case TYPE::I_PWL:
+    case TYPE::V_WHITENOISE:
+    case TYPE::I_WHITENOISE:
+    case TYPE::V_PINKNOISE:
+    case TYPE::I_PINKNOISE:
+    case TYPE::V_BURSTNOISE:
+    case TYPE::I_BURSTNOISE:
+    case TYPE::V_RANDUNIFORM:
+    case TYPE::I_RANDUNIFORM:
+    case TYPE::V_RANDNORMAL:
+    case TYPE::I_RANDNORMAL:
+    case TYPE::V_RANDEXP:
+    case TYPE::I_RANDEXP:
+    //case TYPE::V_RANDPOISSON:
+    //case TYPE::I_RANDPOISSON:
+        return std::make_unique<SIM_MODEL_SOURCE>( aType );
+
+    case TYPE::SUBCKT:
+        return std::make_unique<SIM_MODEL_SUBCKT>( aType );
+
+    case TYPE::XSPICE:
+        return std::make_unique<SIM_MODEL_XSPICE>( aType );
+
+    case TYPE::RAWSPICE:
+        return std::make_unique<SIM_MODEL_RAW_SPICE>();
+
+    default:
+        return std::make_unique<SIM_MODEL_NGSPICE>( aType );
+    }
+}
+
+
 SIM_MODEL::SIM_MODEL( TYPE aType ) :
     SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR>( *this ) )
 {
 }
 
 
-SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) : 
     m_spiceGenerator( std::move( aSpiceGenerator ) ),
     m_baseModel( nullptr ),
     m_type( aType ),
@@ -1174,7 +1054,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
     try
     {
         // Using parse tree instead of actions because we don't care about performance that much,
-        // and having a tree greatly simplifies some things.
+        // and having a tree greatly simplifies some things. 
         root = tao::pegtl::parse_tree::parse<
             SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
             SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -1193,7 +1073,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
             paramName = node->string();
         // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>()
+        else if( node->is_type<SIM_MODEL_PARSER::quotedStringContent>() 
             || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
@@ -1267,119 +1147,6 @@ void SIM_MODEL::ParseDisabledField( const wxString& aDisabledField )
 
     if( c == 'y' || c == 't' || c == '1' )
         m_isEnabled = false;
-}
-
-
-bool SIM_MODEL::SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
-                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
-{
-    return SetParamValue( aParamName, aParamValue, aNotation );
-}
-
-
-std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
-{
-    switch( aType )
-    {
-    case TYPE::R:
-    case TYPE::C:
-    case TYPE::L:
-        return std::make_unique<SIM_MODEL_IDEAL>( aType );
-
-    case TYPE::L_MUTUAL:
-        return std::make_unique<SIM_MODEL_MUTUAL_INDUCTOR>();
-
-    case TYPE::R_BEHAVIORAL:
-    case TYPE::C_BEHAVIORAL:
-    case TYPE::L_BEHAVIORAL:
-    case TYPE::V_BEHAVIORAL:
-    case TYPE::I_BEHAVIORAL:
-        return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
-
-    case TYPE::TLINE_Z0:
-    case TYPE::TLINE_RLGC:
-        return std::make_unique<SIM_MODEL_TLINE>( aType );
-
-    case TYPE::SW_V:
-    case TYPE::SW_I:
-        return std::make_unique<SIM_MODEL_SWITCH>( aType );
-
-    case TYPE::V:
-    case TYPE::I:
-    case TYPE::V_SIN:
-    case TYPE::I_SIN:
-    case TYPE::V_PULSE:
-    case TYPE::I_PULSE:
-    case TYPE::V_EXP:
-    case TYPE::I_EXP:
-    /*case TYPE::V_SFAM:
-    case TYPE::I_SFAM:
-    case TYPE::V_SFFM:
-    case TYPE::I_SFFM:*/
-    case TYPE::V_PWL:
-    case TYPE::I_PWL:
-    case TYPE::V_WHITENOISE:
-    case TYPE::I_WHITENOISE:
-    case TYPE::V_PINKNOISE:
-    case TYPE::I_PINKNOISE:
-    case TYPE::V_BURSTNOISE:
-    case TYPE::I_BURSTNOISE:
-    case TYPE::V_RANDUNIFORM:
-    case TYPE::I_RANDUNIFORM:
-    case TYPE::V_RANDNORMAL:
-    case TYPE::I_RANDNORMAL:
-    case TYPE::V_RANDEXP:
-    case TYPE::I_RANDEXP:
-    //case TYPE::V_RANDPOISSON:
-    //case TYPE::I_RANDPOISSON:
-        return std::make_unique<SIM_MODEL_SOURCE>( aType );
-
-    case TYPE::SUBCKT:
-        return std::make_unique<SIM_MODEL_SUBCKT>( aType );
-
-    case TYPE::XSPICE:
-        return std::make_unique<SIM_MODEL_XSPICE>( aType );
-
-    case TYPE::SPICE:
-        return std::make_unique<SIM_MODEL_RAW_SPICE>( aType );
-
-    default:
-        return std::make_unique<SIM_MODEL_NGSPICE>( aType );
-    }
-}
-
-
-TYPE SIM_MODEL::readTypeFromSpiceStrings( const wxString& aTypeString,
-                                          const wxString& aLevel,
-                                          const wxString& aVersion,
-                                          bool aSkipDefaultLevel )
-{
-    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT,
-                                                              aLevel.ToStdString() );
-
-    for( TYPE type : TYPE_ITERATOR() )
-    {
-        wxString typePrefix = SpiceInfo( type ).modelType;
-        wxString level = SpiceInfo( type ).level;
-        wxString version = SpiceInfo( type ).version;
-        bool isDefaultLevel = SpiceInfo( type ).isDefaultLevel;
-
-        if( typePrefix == "" )
-            continue;
-
-        // Check if `aTypeString` starts with `typePrefix`.
-        if( aTypeString.Upper().StartsWith( typePrefix )
-            && ( level == readLevel->ToString()
-                 || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
-            && version == aVersion )
-        {
-            return type;
-        }
-    }
-
-    // If the type string is not recognized, demote to a raw Spice element. This way the user won't
-    // have an error if there is a type KiCad does not recognize.
-    return TYPE::SPICE;
 }
 
 

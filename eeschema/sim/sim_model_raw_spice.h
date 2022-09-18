@@ -25,7 +25,7 @@
 #ifndef SIM_MODEL_RAW_SPICE_H
 #define SIM_MODEL_RAW_SPICE_H
 
-#include <sim/sim_model.h>
+#include <sim/sim_model_spice.h>
 #include <sim/spice_generator.h>
 
 
@@ -51,6 +51,8 @@ public:
 class SIM_MODEL_RAW_SPICE : public SIM_MODEL
 {
 public:
+    friend class SPICE_GENERATOR_RAW_SPICE;
+
     DEFINE_ENUM_CLASS_WITH_ITERATOR( SPICE_PARAM,
         TYPE,
         MODEL,
@@ -64,7 +66,7 @@ public:
     static constexpr auto LEGACY_LIB_FIELD = "Spice_Lib_File";
 
 
-    SIM_MODEL_RAW_SPICE( TYPE aType );
+    SIM_MODEL_RAW_SPICE();
 
     //bool ReadSpiceCode( const std::string& aSpiceCode ) override;
     void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
@@ -75,11 +77,6 @@ public:
 
 protected:
     void CreatePins( unsigned aSymbolPinCount ) override;
-
-
-    bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
-                                SIM_VALUE_GRAMMAR::NOTATION aNotation
-                                    = SIM_VALUE_GRAMMAR::NOTATION::SPICE ) override;
 
 private:
     static std::vector<PARAM::INFO> makeParamInfos();

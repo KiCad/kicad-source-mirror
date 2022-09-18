@@ -114,8 +114,8 @@ wxString SPICE_GENERATOR_RAW_SPICE::Preview( const wxString& aModelName ) const
 }
 
 
-SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) )
+SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE() :
+    SIM_MODEL( TYPE::RAWSPICE, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 
@@ -163,34 +163,6 @@ void SIM_MODEL_RAW_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
         AddPin( { "", wxString::FromCDouble( symbolPinIndex + 1 ) } );
-}
-
-
-bool SIM_MODEL_RAW_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
-                                                 const wxString& aParamValue,
-                                                 SIM_VALUE_GRAMMAR::NOTATION aNotation )
-{
-    int paramIndex = 0;
-
-    for(; paramIndex < GetParamCount(); ++paramIndex )
-    {
-        if( GetParam( paramIndex ).info.name == aParamName.Lower() )
-            break;
-    }
-
-    if( paramIndex == GetParamCount() )
-    {
-        // No parameter with this name found. Create a new one.
-        std::unique_ptr<PARAM::INFO> paramInfo = std::make_unique<PARAM::INFO>();
-
-        paramInfo->name = aParamName.Lower();
-        paramInfo->type = SIM_VALUE::TYPE_STRING;
-        m_paramInfos.push_back( std::move( paramInfo ) );
-
-        AddParam( *m_paramInfos.back() );
-    }
-
-    return GetParam( paramIndex ).value->FromString( aParamValue.ToStdString(), aNotation );
 }
 
 

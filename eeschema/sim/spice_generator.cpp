@@ -181,12 +181,6 @@ wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
 {
     wxString spiceCode = ModelLine( aModelName );
 
-    if( spiceCode == "" )
-        spiceCode = m_model.m_spiceCode;
-
-    if( spiceCode == "" && m_model.GetBaseModel() )
-        spiceCode = m_model.GetBaseModel()->m_spiceCode;
-
     wxString itemLine = ItemLine( "", aModelName );
     if( spiceCode != "" )
         spiceCode << "\n";

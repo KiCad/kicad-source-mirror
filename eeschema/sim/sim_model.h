@@ -296,7 +296,7 @@ public:
 
         SUBCKT,
         XSPICE,
-        SPICE
+        RAWSPICE
     )
 
     struct INFO
@@ -427,8 +427,6 @@ public:
     static SPICE_INFO SpiceInfo( TYPE aType );
 
 
-    static TYPE ReadTypeFromSpiceCode( const wxString& aSpiceCode );
-
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
@@ -438,8 +436,7 @@ public:
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
 
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount = 0 );
-    static std::unique_ptr<SIM_MODEL> Create( const wxString& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount );
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel,
                                               unsigned         aSymbolPinCount );
 
@@ -468,8 +465,6 @@ public:
     SIM_MODEL( const SIM_MODEL& aOther ) = delete;
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
-
-    virtual void ReadSpiceCode( const wxString& aSpiceCode );
 
     template <typename T>
     void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
@@ -543,6 +538,8 @@ public:
     bool IsEnabled() const { return m_isEnabled; }
 
 protected:
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
+
     SIM_MODEL( TYPE aType );
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
 
@@ -559,19 +556,12 @@ protected:
     void ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
     void ParseDisabledField( const wxString& aDisabledField );
 
-    virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
-                                        SIM_VALUE_GRAMMAR::NOTATION aNotation
-                                            = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
-
     template <typename T>
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
                                  bool aAllowOnlyFirstValue = false,
                                  bool aAllowParamValuePairs = true );
 
-    wxString m_spiceCode;
-
 private:
-    static std::unique_ptr<SIM_MODEL> create( TYPE aType );
     static TYPE readTypeFromSpiceStrings( const wxString& aTypeString,
                                           const wxString& aLevel = "",
                                           const wxString& aVersion = "",

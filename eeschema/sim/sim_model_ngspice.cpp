@@ -61,8 +61,8 @@ std::vector<wxString> SPICE_GENERATOR_NGSPICE::CurrentNames( const wxString& aRe
 }
 
 
-SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
-    : SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
+SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
+    SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
 {
     const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
 

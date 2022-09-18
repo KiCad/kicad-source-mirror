@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_library_spice.h>
+#include <sim/sim_model_spice.h>
 #include <sim/spice_grammar.h>
 #include <ki_exception.h>
 #include <locale_io.h>
@@ -70,7 +71,7 @@ void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
         {
             if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
             {
-                m_models.push_back( SIM_MODEL::Create( node->string() ) );
+                m_models.push_back( SIM_MODEL_SPICE::Create( node->string() ) );
 
                 if( node->children.size() < 1
                     || !node->children.at( 0 )->is_type<SIM_LIBRARY_SPICE_PARSER::modelName>() )
