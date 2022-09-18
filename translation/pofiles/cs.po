@@ -18247,7 +18247,7 @@ msgstr "Uložit balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:498
 msgid "Downloading package"
-msgstr "Stáhnout balíček"
+msgstr "Stahuje se balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:516
 msgid ""
