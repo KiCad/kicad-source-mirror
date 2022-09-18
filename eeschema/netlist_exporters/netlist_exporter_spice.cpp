@@ -24,7 +24,7 @@
  */
 
 #include "netlist_exporter_spice.h"
-#include <sim/sim_model_spice.h>
+#include <sim/sim_model_raw_spice.h>
 #include <sim/spice_grammar.h>
 #include <common.h>
 #include <confirm.h>
@@ -348,9 +348,9 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
     }
 
     // Special case for legacy models.
-    if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
+    if( auto model = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model.get() ) )
     {
-        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
+        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
         wxString path = model->GetParam( libParamIndex ).value->ToString();
 
         if( path != "" )

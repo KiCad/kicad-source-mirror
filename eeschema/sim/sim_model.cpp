@@ -28,7 +28,7 @@
 #include <sim/sim_model_mutual_inductor.h>
 #include <sim/sim_model_ngspice.h>
 #include <sim/sim_model_source.h>
-#include <sim/sim_model_spice.h>
+#include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_subckt.h>
 #include <sim/sim_model_switch.h>
 #include <sim/sim_model_tline.h>
@@ -623,10 +623,10 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
 template <typename T>
 TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
 {
-    if( GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_TYPE_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_MODEL_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_ENABLED_FIELD ) != ""
-        || GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_LIB_FIELD ) != "" )
+    if( GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_TYPE_FIELD ) != ""
+        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_MODEL_FIELD ) != ""
+        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_ENABLED_FIELD ) != ""
+        || GetFieldValue( &aFields, SIM_MODEL_RAW_SPICE::LEGACY_LIB_FIELD ) != "" )
     {
         return TYPE::SPICE;
     }
@@ -1341,7 +1341,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
         return std::make_unique<SIM_MODEL_XSPICE>( aType );
 
     case TYPE::SPICE:
-        return std::make_unique<SIM_MODEL_SPICE>( aType );
+        return std::make_unique<SIM_MODEL_RAW_SPICE>( aType );
 
     default:
         return std::make_unique<SIM_MODEL_NGSPICE>( aType );

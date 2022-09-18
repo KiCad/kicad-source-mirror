@@ -25,7 +25,7 @@
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>
 #include <sim/sim_library_spice.h>
-#include <sim/sim_model_spice.h>
+#include <sim/sim_model_raw_spice.h>
 #include <widgets/wx_grid.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
@@ -329,7 +329,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
 
     m_codePreview->SetEditable( true ); // ???
 
-    if( dynamic_cast<SIM_MODEL_SPICE*>( &curModel() ) )
+    if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( &curModel() ) )
     {
         // For raw Spice models display the whole file instead.
         
