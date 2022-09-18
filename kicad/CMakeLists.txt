@@ -107,6 +107,13 @@ if( KICAD_WIN32_INSTALL_PDBS )
     install(FILES $<TARGET_PDB_FILE:kicad> DESTINATION ${KICAD_BIN})
 endif()
 
+if( MSVC )
+    # Allow for MSVC to run from the build directory
+    add_custom_command( TARGET kicad POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pcm/schemas" "${CMAKE_BINARY_DIR}/schemas"
+        )
+endif()
+
 if( APPLE )
     # "install( CODE ... )" will launch its own CMake, so no variables from
     # this CMake instance are accessible... use helper to transfer
