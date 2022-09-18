@@ -23,7 +23,7 @@
   "overrides": [
     {
       "name": "python3",
-      "version": "3.9.10#1"
+      "version": "3.9.14"
     },
     {
       "name": "wxwidgets",
