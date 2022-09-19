@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-17 11:23+0200\n"
+"POT-Creation-Date: 2022-09-18 19:33-0700\n"
 "PO-Revision-Date: 2022-09-17 11:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -4853,7 +4853,7 @@ msgstr "Erreur de chargement de la fonte '%s'."
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Fonte '%s' introuvable; remplacée par '%s'."
 
-#: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:940
+#: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:965
 #: eeschema/symbol_editor/symbol_library_manager.cpp:97
 #: eeschema/symbol_tree_model_adapter.cpp:105
 msgid "Load Error"
@@ -7111,38 +7111,38 @@ msgstr ""
 msgid "Assign Footprints"
 msgstr "Assigner Empreintes"
 
-#: cvpcb/cvpcb_mainframe.cpp:110 pcbnew/dialogs/panel_fp_lib_table.cpp:1088
+#: cvpcb/cvpcb_mainframe.cpp:111 pcbnew/dialogs/panel_fp_lib_table.cpp:1088
 msgid "Footprint Libraries"
 msgstr "Librairies d'Empreintes"
 
-#: cvpcb/cvpcb_mainframe.cpp:114
+#: cvpcb/cvpcb_mainframe.cpp:115
 msgid "Symbol : Footprint Assignments"
 msgstr "Symbole: Attribution Empreintes"
 
-#: cvpcb/cvpcb_mainframe.cpp:117
+#: cvpcb/cvpcb_mainframe.cpp:118
 msgid "Filtered Footprints"
 msgstr "Empreintes Filtrées"
 
-#: cvpcb/cvpcb_mainframe.cpp:151
+#: cvpcb/cvpcb_mainframe.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "Apply, Save Schematic && Continue"
 msgstr "Appliquer, Sauver Schematique && Continuer"
 
-#: cvpcb/cvpcb_mainframe.cpp:221
+#: cvpcb/cvpcb_mainframe.cpp:222
 msgid "Symbol to footprint changes are unsaved"
 msgstr "Les association symboles/empreintes ne sont pas sauvées"
 
-#: cvpcb/cvpcb_mainframe.cpp:396
+#: cvpcb/cvpcb_mainframe.cpp:397
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
 "Les liens symboles/empreintes ont été modifiés. Sauver les changements?"
 
-#: cvpcb/cvpcb_mainframe.cpp:607 cvpcb/tools/cvpcb_association_tool.cpp:208
+#: cvpcb/cvpcb_mainframe.cpp:632 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
 msgid "'%s' is not a valid footprint."
 msgstr "'%s' n’est pas une empreinte valide."
 
-#: cvpcb/cvpcb_mainframe.cpp:758 eeschema/generate_alias_info.cpp:39
+#: cvpcb/cvpcb_mainframe.cpp:783 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1580 eeschema/sch_symbol.cpp:2063
 #: eeschema/symbol_editor/symbol_editor.cpp:1322
 #: eeschema/symbol_viewer_frame.cpp:450 pcbnew/generate_footprint_info.cpp:37
@@ -7150,60 +7150,60 @@ msgstr "'%s' n’est pas une empreinte valide."
 msgid "Keywords"
 msgstr "Mots Clés"
 
-#: cvpcb/cvpcb_mainframe.cpp:774
+#: cvpcb/cvpcb_mainframe.cpp:799
 msgid "Pin Count"
 msgstr "Nombre de Pin"
 
-#: cvpcb/cvpcb_mainframe.cpp:787 eeschema/sch_symbol.cpp:1563
+#: cvpcb/cvpcb_mainframe.cpp:812 eeschema/sch_symbol.cpp:1563
 #: eeschema/sch_symbol.cpp:1567 eeschema/sch_symbol.cpp:1597
 #: eeschema/symbol_editor/symbol_editor.cpp:118
 #: pcbnew/tools/pcb_control.cpp:1321
 msgid "Library"
 msgstr "Librairie"
 
-#: cvpcb/cvpcb_mainframe.cpp:800
+#: cvpcb/cvpcb_mainframe.cpp:825
 msgid "Search Text"
 msgstr "Rechercher Texte"
 
-#: cvpcb/cvpcb_mainframe.cpp:804
+#: cvpcb/cvpcb_mainframe.cpp:829
 msgid "No Filtering"
 msgstr "Pas de Filtrage"
 
-#: cvpcb/cvpcb_mainframe.cpp:806
+#: cvpcb/cvpcb_mainframe.cpp:831
 #, c-format
 msgid "Filtered by %s"
 msgstr "Filtré par %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:820
+#: cvpcb/cvpcb_mainframe.cpp:845
 #, c-format
 msgid "Description: %s;  Keywords: %s"
 msgstr "Description: %s; Mots Clé: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:852
+#: cvpcb/cvpcb_mainframe.cpp:877
 #, c-format
 msgid "Library location: %s"
 msgstr "Emplacement librairie: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:854
+#: cvpcb/cvpcb_mainframe.cpp:879
 msgid "Library location: unknown"
 msgstr "Emplacement de la librairie : inconnu"
 
-#: cvpcb/cvpcb_mainframe.cpp:867
+#: cvpcb/cvpcb_mainframe.cpp:892
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Aucune librairie d'empreintes PCB listée dans la table de librairie courante."
 
-#: cvpcb/cvpcb_mainframe.cpp:868
+#: cvpcb/cvpcb_mainframe.cpp:893
 msgid "Configuration Error"
 msgstr "Erreur de Configuration"
 
-#: cvpcb/cvpcb_mainframe.cpp:872 pcbnew/footprint_edit_frame.cpp:929
+#: cvpcb/cvpcb_mainframe.cpp:897 pcbnew/footprint_edit_frame.cpp:929
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
 msgstr "Chargement Librairies d'Empreintes"
 
-#: cvpcb/cvpcb_mainframe.cpp:938
+#: cvpcb/cvpcb_mainframe.cpp:963
 #, c-format
 msgid ""
 "Error loading schematic.\n"
@@ -13467,7 +13467,7 @@ msgid "Bezier Curve, %d points"
 msgstr "Courbe de Bézier, %d points"
 
 #: eeschema/lib_symbol.cpp:411 eeschema/sch_symbol.cpp:439
-#: eeschema/tools/sch_edit_tool.cpp:117
+#: eeschema/tools/sch_edit_tool.cpp:118
 #, c-format
 msgid "Unit %s"
 msgstr "Unité %s"
@@ -13844,8 +13844,7 @@ msgstr "Hiérarchie Schématique"
 msgid "New schematic file is unsaved"
 msgstr "Le nouveau fichier schématique n'est pas sauvé"
 
-#: eeschema/sch_edit_frame.cpp:799 eeschema/sim/sim_plot_frame - Copie.cpp:1650
-#: eeschema/sim/sim_plot_frame.cpp:1655
+#: eeschema/sch_edit_frame.cpp:799 eeschema/sim/sim_plot_frame.cpp:1655
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1226
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -13886,15 +13885,14 @@ msgstr "L'appairage des empreintes nécessite un schéma complètement numérot�
 msgid "Could not open CvPcb"
 msgstr "Ne peut pas ouvrir CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1445 eeschema/sim/sim_plot_frame - Copie.cpp:355
-#: eeschema/sim/sim_plot_frame.cpp:356 kicad/kicad_manager_frame.cpp:761
-#: pcbnew/footprint_edit_frame.cpp:888 pcbnew/pcb_edit_frame.cpp:1461
+#: eeschema/sch_edit_frame.cpp:1445 eeschema/sim/sim_plot_frame.cpp:356
+#: kicad/kicad_manager_frame.cpp:761 pcbnew/footprint_edit_frame.cpp:888
+#: pcbnew/pcb_edit_frame.cpp:1461
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
 
-#: eeschema/sch_edit_frame.cpp:1448 eeschema/sim/sim_plot_frame - Copie.cpp:358
-#: eeschema/sim/sim_plot_frame.cpp:359 pcbnew/footprint_edit_frame.cpp:897
-#: pcbnew/pcb_edit_frame.cpp:1464
+#: eeschema/sch_edit_frame.cpp:1448 eeschema/sim/sim_plot_frame.cpp:359
+#: pcbnew/footprint_edit_frame.cpp:897 pcbnew/pcb_edit_frame.cpp:1464
 msgid "[Unsaved]"
 msgstr "[Non sauvé]"
 
@@ -15267,25 +15265,25 @@ msgstr "Créer une Nouvelle Feuille"
 msgid "Discard New Sheet"
 msgstr "Abandonner Nouvelle Feuille"
 
-#: eeschema/sim/sim_model.cpp:895
-#, c-format
-msgid "Failed to set parameter '%s' to '%s'"
-msgstr "Impossible de définir le paramètre '%s' à '%s'"
-
-#: eeschema/sim/sim_model.cpp:1245
+#: eeschema/sim/sim_model.cpp:1125
 #, c-format
 msgid "%s describes %lu pins, expected %u"
 msgstr "%s décrit %lu pins, attendu %u"
 
-#: eeschema/sim/sim_model.cpp:1518
+#: eeschema/sim/sim_model.cpp:1285
 #, c-format
 msgid "Failed to infer model from Value '%s'"
 msgstr "Impossible de déduire le modèle à partir de la valeur '%s'"
 
-#: eeschema/sim/sim_model_spice.cpp:318
+#: eeschema/sim/sim_model_raw_spice.cpp:291
 #, c-format
 msgid "Invalid symbol pin index: '%s'"
 msgstr "Index de la pin du symbole invalide : '%s'"
+
+#: eeschema/sim/sim_model_spice.cpp:217
+#, c-format
+msgid "Failed to set parameter '%s' to '%s'"
+msgstr "Impossible de définir le paramètre '%s' à '%s'"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15294,123 +15292,99 @@ msgstr ""
 "Cette simulation ne fournit aucun tracé. SVP se référer à la fenêtre des "
 "messages pour les résultats"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:170
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Run/Stop Simulation"
 msgstr "Lancer/Stopper Simulation"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:171
 #: eeschema/sim/sim_plot_frame.cpp:172 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr "Lancer la Simulation"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:172
 #: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Add Signals"
 msgstr "Ajouter Signaux"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:173
 #: eeschema/sim/sim_plot_frame.cpp:174
 msgid "Add signals to plot"
 msgstr "Ajouter des signaux à tracer"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:174
 #: eeschema/sim/sim_plot_frame.cpp:175
 msgid "Probe"
 msgstr "Sonde"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:175
 #: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Probe signals on the schematic"
 msgstr "Sonde de signaux dans la schématique"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:176
 #: eeschema/sim/sim_plot_frame.cpp:177 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr "Ajustage"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:177
 #: eeschema/sim/sim_plot_frame.cpp:178
 msgid "Tune component values"
 msgstr "Ajuster les valeurs du composant"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:178
 #: eeschema/sim/sim_plot_frame.cpp:179
 msgid "Sim Parameters"
 msgstr "Paramètres Sim"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:179
 #: eeschema/sim/sim_plot_frame.cpp:180
 msgid "Simulation parameters and settings"
 msgstr "Paramètres et réglages de simulation"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:360
 #: eeschema/sim/sim_plot_frame.cpp:361 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
 msgstr "Simulateur Spice"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:476 Copie.cpp:1484
 #: eeschema/sim/sim_plot_frame.cpp:477 eeschema/sim/sim_plot_frame.cpp:1482
 msgid "There were errors during netlist export, aborted."
 msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:493 Copie.cpp:1857
 #: eeschema/sim/sim_plot_frame.cpp:494 eeschema/sim/sim_plot_frame.cpp:1878
 msgid "Another simulation is already running."
 msgstr "Une autre simulation est déjà en cours."
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:520
 #: eeschema/sim/sim_plot_frame.cpp:521
 #, c-format
 msgid "Plot%u - "
 msgstr "Tracé%u - "
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:650
 #: eeschema/sim/sim_plot_frame.cpp:651
 msgid "Error: simulation type not defined!\n"
 msgstr "Erreur : type de simulation non défini !\n"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:656
 #: eeschema/sim/sim_plot_frame.cpp:657
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Erreur : le type de simulation ne prend pas en charge le tracé!\n"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:834 Copie.cpp:1692
 #: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1697
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1116
 #: eeschema/sim/sim_plot_frame.cpp:1114
 msgid "noname"
 msgstr "sansnom"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1165
 #: eeschema/sim/sim_plot_frame.cpp:1163
 msgid "Open simulation workbook"
 msgstr "Ouvrir le classeur de travail de simulation"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1194
 #: eeschema/sim/sim_plot_frame.cpp:1192
 msgid "Save Simulation Workbook As"
 msgstr "Sauver Classeur de Travail de Simulation Sous"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1210
 #: eeschema/sim/sim_plot_frame.cpp:1208
 msgid "Save Plot as Image"
 msgstr "Sauver Tracé comme Fichier Image"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1227
 #: eeschema/sim/sim_plot_frame.cpp:1225
 msgid "Save Plot Data"
 msgstr "Sauver Données de Tracé"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1532
 #: eeschema/sim/sim_plot_frame.cpp:1530
 msgid "You need to run plot-providing simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1788
 #: eeschema/sim/sim_plot_frame.cpp:1809
 msgid ""
 "\n"
@@ -15423,22 +15397,18 @@ msgstr ""
 "Résultats de simulation:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1877
 #: eeschema/sim/sim_plot_frame.cpp:1898
 msgid "Hide Signal"
 msgstr "Masquer le Signal"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1877
 #: eeschema/sim/sim_plot_frame.cpp:1898
 msgid "Erase the signal from plot screen"
 msgstr "Supprimer le signal de l’écran de tracé"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1883
 #: eeschema/sim/sim_plot_frame.cpp:1904
 msgid "Hide Cursor"
 msgstr "Masquer le Curseur"
 
-#: eeschema/sim/sim_plot_frame - Copie.cpp:1885
 #: eeschema/sim/sim_plot_frame.cpp:1906
 msgid "Show Cursor"
 msgstr "Afficher le Curseur"
@@ -17533,58 +17503,58 @@ msgstr "Cliquez sur une feuille."
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Appuyez <ESC> sur pour annuler la création de feuilles."
 
-#: eeschema/tools/sch_edit_tool.cpp:80
+#: eeschema/tools/sch_edit_tool.cpp:81
 msgid "Symbol Unit"
 msgstr "Unité de Symbole"
 
-#: eeschema/tools/sch_edit_tool.cpp:100
+#: eeschema/tools/sch_edit_tool.cpp:101
 msgid "no symbol selected"
 msgstr "pas de symbole sélectionné"
 
-#: eeschema/tools/sch_edit_tool.cpp:109
+#: eeschema/tools/sch_edit_tool.cpp:110
 msgid "symbol is not multi-unit"
 msgstr "le symbole n'est pas multi-unité"
 
-#: eeschema/tools/sch_edit_tool.cpp:394 eeschema/tools/sch_edit_tool.cpp:435
-#: eeschema/tools/sch_edit_tool.cpp:474
+#: eeschema/tools/sch_edit_tool.cpp:395 eeschema/tools/sch_edit_tool.cpp:436
+#: eeschema/tools/sch_edit_tool.cpp:475
 msgid "Edit Main Fields"
 msgstr "Édition Champs Principaux"
 
-#: eeschema/tools/sch_edit_tool.cpp:495
+#: eeschema/tools/sch_edit_tool.cpp:496
 msgid "Change To"
 msgstr "Changer Pour"
 
-#: eeschema/tools/sch_edit_tool.cpp:1109
+#: eeschema/tools/sch_edit_tool.cpp:1110
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1377 eeschema/tools/sch_edit_tool.cpp:1380
+#: eeschema/tools/sch_edit_tool.cpp:1378 eeschema/tools/sch_edit_tool.cpp:1381
 #: eeschema/tools/symbol_editor_edit_tool.cpp:532
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1382
+#: eeschema/tools/sch_edit_tool.cpp:1383
 #: eeschema/tools/symbol_editor_edit_tool.cpp:534
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Édition Champ '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1912
+#: eeschema/tools/sch_edit_tool.cpp:1915
 msgid "<empty>"
 msgstr "<Vide>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2214
+#: eeschema/tools/sch_edit_tool.cpp:2229
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2274
+#: eeschema/tools/sch_edit_tool.cpp:2289
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2277
+#: eeschema/tools/sch_edit_tool.cpp:2292
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -18528,7 +18498,7 @@ msgstr "Justification X"
 msgid "Y Justify"
 msgstr "Justification Y"
 
-#: gerbview/gerber_file_image.cpp:369
+#: gerbview/gerber_file_image.cpp:354
 msgid "Image Justify Offset"
 msgstr "Offset Image Justifiée"
 
@@ -23988,18 +23958,18 @@ msgstr "Distance de chanfreinage:"
 msgid "Fillet radius:"
 msgstr "Rayon de l'arrondi:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:574
+#: pcbnew/dialogs/dialog_copper_zones.cpp:570
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 "La largeur des freins thermique ne peut pas être plus petite que la largeur "
 "minimum."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:602
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:313
+#: pcbnew/dialogs/dialog_copper_zones.cpp:594
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:310
 msgid "No layer selected."
 msgstr "Pas de couche sélectionnée."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:886
+#: pcbnew/dialogs/dialog_copper_zones.cpp:878
 msgid "<no net> will result in an isolated copper island."
 msgstr "<pas de net> créera un îlot de cuivre isolé."
 
@@ -39318,7 +39288,7 @@ msgstr "Supprimer un sommet de la zone ou polygone"
 msgid "Select"
 msgstr "Sélection"
 
-#: pcbnew/tools/pcb_selection_tool.cpp:1100
+#: pcbnew/tools/pcb_selection_tool.cpp:1103
 msgid "Select/Expand Connection..."
 msgstr "Sélectionner/Expandre Connexion..."
 
@@ -40269,11 +40239,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -40284,10 +40249,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -40301,10 +40265,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -40314,9 +40277,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -40331,10 +40294,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -40347,11 +40306,6 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
-
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -40363,6 +40317,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -40416,6 +40374,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "ring"
 #~ msgstr "anneau"
