@@ -27,10 +27,12 @@
 
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
+#include <sim/spice_model_parser.h>
 
 
 class SPICE_GENERATOR_SPICE : public SPICE_GENERATOR
 {
+public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
     wxString Preview( const wxString& aModelName ) const override;
@@ -41,15 +43,18 @@ class SIM_MODEL_SPICE : public SIM_MODEL
 {
 public:
     friend class SPICE_GENERATOR_SPICE;
+    friend class SPICE_MODEL_PARSER;
 
-    static TYPE ReadTypeFromSpiceCode( const wxString& aSpiceCode );
     static std::unique_ptr<SIM_MODEL_SPICE> Create( const wxString& aSpiceCode );
-    
-    virtual void ReadSpiceCode( const wxString& aSpiceCode );
+
+    SIM_MODEL_SPICE( TYPE aType,
+                     std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
+
+    SIM_MODEL_SPICE( TYPE aType,
+                     std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+                     std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser );
 
 protected:
-    using SIM_MODEL::SIM_MODEL;
-
     bool SetParamValue( unsigned aParamIndex, const wxString& aParamValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation
                             = SIM_VALUE_GRAMMAR::NOTATION::SI ) override;
@@ -61,10 +66,7 @@ protected:
     wxString m_spiceCode;
 
 private:
-    static TYPE readTypeFromSpiceStrings( const wxString& aTypeString,
-                                          const wxString& aLevel = "",
-                                          const wxString& aVersion = "",
-                                          bool aSkipDefaultLevel = true );
+    std::unique_ptr<SPICE_MODEL_PARSER> m_spiceModelParser;
 };
 
 #endif // SIM_MODEL_SPICE_H

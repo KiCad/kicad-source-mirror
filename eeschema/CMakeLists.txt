@@ -340,6 +340,7 @@ if( KICAD_SPICE )
         sim/sim_plot_panel.cpp
         sim/sim_property.cpp
         sim/sim_workbook.cpp
+        sim/spice_model_parser.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
         widgets/tuner_slider.cpp

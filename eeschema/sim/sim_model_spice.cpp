@@ -24,27 +24,9 @@
 
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_raw_spice.h>
+#include <sim/spice_model_parser.h>
 
-#include <sim/spice_grammar.h>
 #include <confirm.h>
-#include <pegtl.hpp>
-#include <pegtl/contrib/parse_tree.hpp>
-
-
-namespace SIM_MODEL_SPICE_PARSER
-{
-    using namespace SPICE_GRAMMAR;
-
-    template <typename Rule> struct spiceUnitSelector : std::false_type {};
-
-    template <> struct spiceUnitSelector<dotModel> : std::true_type {};
-    template <> struct spiceUnitSelector<modelName> : std::true_type {};
-    template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
-    template <> struct spiceUnitSelector<param> : std::true_type {};
-    template <> struct spiceUnitSelector<paramValue> : std::true_type {};
-
-    template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
-}
 
 
 wxString SPICE_GENERATOR_SPICE::Preview( const wxString& aModelName ) const
@@ -66,96 +48,14 @@ wxString SPICE_GENERATOR_SPICE::Preview( const wxString& aModelName ) const
 }
 
 
-SIM_MODEL::TYPE SIM_MODEL_SPICE::ReadTypeFromSpiceCode( const wxString& aSpiceCode )
-{
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        wxLogDebug( "%s", e.what() );
-        return TYPE::NONE;
-    }
-
-    for( const auto& node : root->children )
-    {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
-        {
-            wxString paramName;
-            wxString typeString;
-            wxString level;
-            wxString version;
-
-            for( const auto& subnode : node->children )
-            {
-                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
-                {
-                    typeString = subnode->string();
-                    TYPE type = readTypeFromSpiceStrings( typeString );
-
-                    if( type != TYPE::RAWSPICE )
-                        return type;
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
-                {
-                    paramName = subnode->string();
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
-                {
-                    wxASSERT( paramName != "" );
-
-                    if( paramName == "level" )
-                        level = subnode->string();
-                    else if( paramName == "version" )
-                        version = subnode->string();
-                }
-                else
-                {
-                    wxFAIL_MSG( "Unhandled parse tree subnode" );
-                    return TYPE::NONE;
-                }
-            }
-
-            // Type was not determined from Spice type string alone, so now we take `level` and
-            // `version` variables into account too. This is suboptimal since we read the model
-            // twice this way, and moreover the code is now somewhat duplicated.
-
-            return readTypeFromSpiceStrings( typeString, level, version, false );
-        }
-        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotSubckt>() )
-            return TYPE::SUBCKT;
-        else
-        {
-            wxFAIL_MSG( "Unhandled parse tree node" );
-            return TYPE::NONE;
-        }
-    }
-
-    wxFAIL_MSG( "Could not derive type from Spice code" );
-    return TYPE::NONE;
-}
-
-
 std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const wxString& aSpiceCode )
 {
     auto model = static_cast<SIM_MODEL_SPICE*>(
-            SIM_MODEL::Create( ReadTypeFromSpiceCode( aSpiceCode ) ).release() );
+            SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aSpiceCode ) ).release() );
 
     try
     {
-        model->ReadSpiceCode( aSpiceCode );
+        model->m_spiceModelParser->ReadModel( aSpiceCode );
     }
     catch( const IO_ERROR& e )
     {
@@ -166,72 +66,20 @@ std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const wxString& aSpice
 }
 
 
-void SIM_MODEL_SPICE::ReadSpiceCode( const wxString& aSpiceCode )
+SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
+                                  std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator ) :
+    SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
+    m_spiceModelParser( std::make_unique<SPICE_MODEL_PARSER>( *this ) )
 {
-    // The default behavior is to treat the Spice param=value pairs as the model parameters and
-    // values (for many models the correspondence is not exact, so this function is overridden).
+}
 
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector,
-                                             tao::pegtl::nothing,
-                                             SIM_MODEL_SPICE_PARSER::control>
-            ( in );
-    }
-    catch( tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-
-    for( const auto& node : root->children )
-    {
-        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
-        {
-            wxString paramName = "";
-
-            for( const auto& subnode : node->children )
-            {
-                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
-                {
-                    // Do nothing.
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
-                {
-                    paramName = subnode->string();
-                }
-                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
-                {
-                    wxASSERT( !paramName.IsEmpty() );
-
-                    if( !SetParamFromSpiceCode( paramName, subnode->string() ) )
-                    {
-                        THROW_IO_ERROR( wxString::Format(
-                                        _( "Failed to set parameter '%s' to '%s'" ),
-                                        paramName,
-                                        subnode->string() ) );
-                    }
-                }
-                else
-                {
-                    wxFAIL_MSG( "Unhandled parse tree subnode" );
-                }
-            }
-        }
-        else
-        {
-            wxFAIL_MSG( "Unhandled parse tree node" );
-        }
-    }
-
-    m_spiceCode = aSpiceCode;
+SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
+                                  std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
+                                  std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser ) :
+    SIM_MODEL( aType, std::move( aSpiceGenerator ) ),
+    m_spiceModelParser( std::move( aSpiceModelParser ) )
+{
 }
 
 
@@ -251,38 +99,4 @@ bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
                                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     return SIM_MODEL::SetParamValue( aParamName, aParamValue, aNotation );
-}
-
-
-SIM_MODEL::TYPE SIM_MODEL_SPICE::readTypeFromSpiceStrings( const wxString& aTypeString,
-                                                           const wxString& aLevel,
-                                                           const wxString& aVersion,
-                                                           bool aSkipDefaultLevel )
-{
-    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT,
-                                                              aLevel.ToStdString() );
-
-    for( TYPE type : TYPE_ITERATOR() )
-    {
-        wxString typePrefix = SpiceInfo( type ).modelType;
-        wxString level = SpiceInfo( type ).level;
-        wxString version = SpiceInfo( type ).version;
-        bool isDefaultLevel = SpiceInfo( type ).isDefaultLevel;
-
-        if( typePrefix == "" )
-            continue;
-
-        // Check if `aTypeString` starts with `typePrefix`.
-        if( aTypeString.Upper().StartsWith( typePrefix )
-            && ( level == readLevel->ToString()
-                 || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
-            && version == aVersion )
-        {
-            return type;
-        }
-    }
-
-    // If the type string is not recognized, demote to a raw Spice element. This way the user won't
-    // have an error if there is a type KiCad does not recognize.
-    return TYPE::RAWSPICE;
 }

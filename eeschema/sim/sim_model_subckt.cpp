@@ -67,13 +67,7 @@ std::vector<wxString> SPICE_GENERATOR_SUBCKT::CurrentNames( const wxString& aRef
 }
 
 
-SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT( TYPE aType ) :
-    SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ) )
-{
-}
-
-
-void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
+void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const wxString& aSpiceCode )
 {
     tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -91,6 +85,8 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
         THROW_IO_ERROR( e.what() );
     }
 
+    SIM_MODEL_SUBCKT& model = static_cast<SIM_MODEL_SUBCKT&>( m_model );
+
     for( const auto& node : root->children )
     {
         if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )
@@ -102,7 +98,7 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
-                    AddPin( { subnode->string(), wxString::FromCDouble( GetPinCount() + 1 ) } );
+                    model.AddPin( { subnode->string(), wxString::FromCDouble( model.GetPinCount() + 1 ) } );
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktParams>() )
                 {
@@ -110,12 +106,12 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                     {
                         if( subsubnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::param>() )
                         {
-                            m_paramInfos.push_back( std::make_unique<PARAM::INFO>() );
-                            m_paramInfos.back()->name = subsubnode->string();
-                            m_paramInfos.back()->isInstanceParam = true;
-                            m_paramInfos.back()->isSpiceInstanceParam = true;
+                            model.m_paramInfos.push_back( std::make_unique<SIM_MODEL::PARAM::INFO>() );
+                            model.m_paramInfos.back()->name = subsubnode->string();
+                            model.m_paramInfos.back()->isInstanceParam = true;
+                            model.m_paramInfos.back()->isSpiceInstanceParam = true;
 
-                            AddParam( *m_paramInfos.back() );
+                            model.AddParam( *model.m_paramInfos.back() );
                         }
                         else
                         {
@@ -130,8 +126,8 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
                         SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE_FLOAT,
                             SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
                 {
-                    wxASSERT( m_paramInfos.size() > 0 );
-                    m_paramInfos.back()->defaultValue = subnode->string();
+                    wxASSERT( model.m_paramInfos.size() > 0 );
+                    model.m_paramInfos.back()->defaultValue = subnode->string();
                 }
             }
         }
@@ -141,7 +137,15 @@ void SIM_MODEL_SUBCKT::ReadSpiceCode( const wxString& aSpiceCode )
         }
     }
 
-    m_spiceCode = aSpiceCode;
+    model.m_spiceCode = aSpiceCode;
+}
+
+
+SIM_MODEL_SUBCKT::SIM_MODEL_SUBCKT() :
+    SIM_MODEL_SPICE( TYPE::SUBCKT,
+                     std::make_unique<SPICE_GENERATOR_SUBCKT>( *this ),
+                     std::make_unique<SPICE_MODEL_PARSER_SUBCKT>( *this ) )
+{
 }
 
 

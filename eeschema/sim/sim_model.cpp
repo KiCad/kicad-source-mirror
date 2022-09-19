@@ -931,7 +931,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
         return std::make_unique<SIM_MODEL_SOURCE>( aType );
 
     case TYPE::SUBCKT:
-        return std::make_unique<SIM_MODEL_SUBCKT>( aType );
+        return std::make_unique<SIM_MODEL_SUBCKT>();
 
     case TYPE::XSPICE:
         return std::make_unique<SIM_MODEL_XSPICE>( aType );

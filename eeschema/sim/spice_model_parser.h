@@ -22,48 +22,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SPICE_MODEL_PARSER_H
+#define SPICE_MODEL_PARSER_H
 
-#include <sim/sim_model_spice.h>
-#include <sim/spice_generator.h>
+#include <sim/sim_model.h>
+
+class SIM_MODEL_SPICE;
 
 
-class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
+class SPICE_MODEL_PARSER
 {
 public:
-    using SPICE_GENERATOR::SPICE_GENERATOR;
+    static SIM_MODEL::TYPE ReadType( const wxString& aSpiceCode );
 
-    wxString ModelLine( const wxString& aModelName ) const override;
-    std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
-};
+    SPICE_MODEL_PARSER( SIM_MODEL_SPICE& aModel ) : m_model( aModel ) {}
 
-
-class SPICE_MODEL_PARSER_SUBCKT : public SPICE_MODEL_PARSER
-{
-public:
-    using SPICE_MODEL_PARSER::SPICE_MODEL_PARSER;
-
-    void ReadModel( const wxString& aSpiceCode ) override;
-};
-
-
-class SIM_MODEL_SUBCKT : public SIM_MODEL_SPICE
-{
-public:
-    friend class SPICE_MODEL_PARSER_SUBCKT;
-
-    SIM_MODEL_SUBCKT();
-
-    void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
+    virtual void ReadModel( const wxString& aSpiceCode );
 
 protected:
-    void CreatePins( unsigned aSymbolPinCount ) override;
+    static SIM_MODEL::TYPE ReadTypeFromSpiceStrings( const wxString& aTypeString,
+                                                     const wxString& aLevel = "",
+                                                     const wxString& aVersion = "",
+                                                     bool aSkipDefaultLevel = true );
 
-private:
-    bool requiresSpiceModelLine() const override { return true; }
-
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
+    SIM_MODEL_SPICE& m_model;
 };
 
-#endif // SIM_MODEL_SUBCIRCUIT_H
+#endif // SPICE_MODEL_PARSER
