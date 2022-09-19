@@ -67,7 +67,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                       wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME,
                       unityScale ),
-        m_footprintListPendingUpdate( false ),
         m_viewerPendingUpdate( false )
 {
     m_symbolsListBox      = nullptr;
@@ -220,12 +219,17 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Start the main processing loop
     m_toolManager->InvokeTool( "cvpcb.Control" );
 
+    m_filterTimer->StartOnce( 100 );
+
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Symbol to footprint changes are unsaved" ) );
 }
 
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
+    // Stop the timer during destruction early to avoid potential race conditions (that do happen)
+    m_filterTimer->Stop();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -381,6 +385,9 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     // Attach the events to the tool dispatcher
     Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
+    m_filterTimer = new wxTimer( this );
+    Bind( wxEVT_TIMER, &CVPCB_MAINFRAME::onTextFilterChangedTimer, this, m_filterTimer->GetId() );
 }
 
 
@@ -431,19 +438,12 @@ void CVPCB_MAINFRAME::onTextFilterChanged( wxCommandEvent& event )
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
     // of available footprints which match the filter
 
-    if( !m_footprintListPendingUpdate )
-    {
-        Bind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintListOnIdle, this );
-        m_footprintListPendingUpdate = true;
-    }
+    m_filterTimer->StartOnce( 200 );
 }
 
 
-void CVPCB_MAINFRAME::updateFootprintListOnIdle( wxIdleEvent& aEvent )
+void CVPCB_MAINFRAME::onTextFilterChangedTimer( wxTimerEvent& aEvent )
 {
-    Unbind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintListOnIdle, this );
-    m_footprintListPendingUpdate = false;
-
     // GTK loses the search-control's focus on a Refresh event, so we record the focus and
     // insertion point here and then restore them at the end.
     bool searchCtrlHasFocus = m_tcFilterString->HasFocus();

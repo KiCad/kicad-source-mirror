@@ -345,7 +345,7 @@ private:
 
     void updateFootprintViewerOnIdle( wxIdleEvent& aEvent );
 
-    void updateFootprintListOnIdle( wxIdleEvent& aEvent );
+    void onTextFilterChangedTimer( wxTimerEvent& aEvent );
 
     /**
      * Read the .equ files and populate the list of equivalents.
@@ -396,7 +396,7 @@ private:
     CVPCB_UNDO_REDO_LIST      m_undoList;
     CVPCB_UNDO_REDO_LIST      m_redoList;
 
-    bool                      m_footprintListPendingUpdate;
+    wxTimer*                  m_filterTimer;
     bool                      m_viewerPendingUpdate;
 
 };
