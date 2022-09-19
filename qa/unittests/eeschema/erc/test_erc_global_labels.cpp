@@ -46,7 +46,7 @@ BOOST_FIXTURE_TEST_CASE( ERCGlobalLabels, ERC_REGRESSION_TEST_FIXTURE )
     // Check for Errors when using global labels
     std::vector<std::pair<wxString, int>> tests =
     {
-        { "issue9367",                   8  }
+        { "issue9367",                   9  }
     };
 
     for( const std::pair<wxString, int>& test : tests )
