@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-15 14:16+0000\n"
+"PO-Revision-Date: 2022-09-21 11:21+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -3009,13 +3009,12 @@ msgid "Show icons in menus"
 msgstr "Visa ikoner i menyer"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Visa ikoner i menyer"
+msgstr "Visa rullningslister i redigerare"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Denna ändring verkställs när redigeraren startas om."
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -4344,9 +4343,8 @@ msgstr "Rita Komponent"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Siffra"
+msgstr "Nummerruta"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4419,9 +4417,8 @@ msgid "Points"
 msgstr "Punkter"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Lödytenummer"
+msgstr "Ruta för lödytenummer"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -5864,9 +5861,8 @@ msgid "Find"
 msgstr "Sök"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "Sök i andra textobjekt"
+msgstr "Sök efter objekt"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6529,7 +6525,7 @@ msgstr "Välj en Fil"
 
 #: common/widgets/lib_tree.cpp:279
 msgid "recent searches"
-msgstr ""
+msgstr "senaste sökningar"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7523,14 +7519,14 @@ msgstr ""
 "hittades inte. Skriptet är inte tillgängligt."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Komponent inte annoterad: %s%s (enhet %d)\n"
+msgstr "Komponent inte numrerad: %s%s (enhet %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Komponent inte annoterad: %s%s\n"
+msgstr "Komponent inte numrerad: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
 #, fuzzy, c-format
@@ -9981,7 +9977,7 @@ msgstr "Simulatorn kräver ett fullständigt annoterat schema."
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
 msgid "Use current sheet as root"
-msgstr "Använd aktuellt blad som rot"
+msgstr "Använd aktuellt ark som rot"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
@@ -10980,7 +10976,6 @@ msgstr "Lägg till signal efter namn:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
 msgstr "Ingen anslutning"
 
@@ -11583,9 +11578,8 @@ msgstr ""
 "kapslingar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "Exportera inte"
+msgstr "Monteras ej"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12743,7 +12737,6 @@ msgid "No Connection"
 msgstr "Ingen förbindelse"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
 msgstr "Oupplöst textvariabel i ritningsarket."
 
@@ -12758,7 +12751,6 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "%s och %s har tilldelats olika fotavtryck"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
 msgstr "Stift med typ \"ingen anslutning\" är anslutna"
 
@@ -12773,24 +12765,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Stift %s är anslutet till både %s och %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Den aktuella konfigurationen inkluderar inte biblioteket '%s'."
+msgstr "Den aktuella konfigurationen inkluderar inte biblioteket '%s'"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
+msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Symbol '%s' hittades inte i bibliotek '%s'"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Symbol '%s' hittades inte i bibliotek '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13997,14 +13989,13 @@ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Ellips som ej stöds importerades inte vid (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
 "Altiums kontakt för kabelstam (%s) importerades som hierarkiskt ark. "
-"Vänligen kontrollera det importerade kretsschema, då KiCad inte stödjer "
-"dessa Altium-element."
+"Vänligen kontrollera det importerade kretsschemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
 #, fuzzy
@@ -14017,13 +14008,13 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power-symbolen skapar en global etikett med namnet '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
 "Altiums kabelstamsport (%s) importerades som textruta. Vänligen kontrollera "
-"det importerade kretsschemat, då KiCad inte stödjer dessa Altium-element."
+"det importerade kretsschemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -14549,19 +14540,17 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarkiskt arkstift %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Uteslut från BOM"
+msgstr "Uteslut från materiallista (BOM)"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
 msgstr "Uteslut från mönsterkort"
 
 #: eeschema/sch_symbol.cpp:1166
 #, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -16312,11 +16301,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Sätt enhetens visningsnamn..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Ge enheten ett visningsnamn"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -16331,7 +16320,6 @@ msgid "Annotate pins with their electrical types"
 msgstr "Kommentera stift med deras elektriska typer"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
 msgstr "Visa stiftnummer"
 
@@ -17505,13 +17493,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "Symbolen härrör inte från en annan symbol."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Ange sidnummer för arkväg %s"
+msgstr "Ange visningsnamn för enhet %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Sätt enhetens visningsnamn"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -20814,7 +20802,7 @@ msgstr "Temperaturkoefficient:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr "Termisk koefficient vid 20 grader C"
+msgstr "Temperaturkoefficient vid 20 grader C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -22248,12 +22236,12 @@ msgstr "Skapa en matris"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:889
 msgid "Autoplacing components..."
-msgstr "Autoplacement-komponenter ..."
+msgstr "Autoplacerar komponenter..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:905
 #, c-format
 msgid "Autoplacing %s"
-msgstr "Autoplacement %s"
+msgstr "Autoplacerar %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -22314,7 +22302,7 @@ msgstr "Nät"
 
 #: pcbnew/board.cpp:1253 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Unrouted"
-msgstr "Obruten"
+msgstr "Ej ledningsdragna"
 
 #: pcbnew/board_connected_item.cpp:160
 #: pcbnew/dialogs/dialog_net_inspector.cpp:964 pcbnew/netinfo_item.cpp:85
@@ -26825,9 +26813,8 @@ msgid "angle"
 msgstr "vinkel"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "Sökväg"
+msgstr "vid"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -26840,9 +26827,8 @@ msgstr "antal hörn %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "Siffra"
+msgstr "Nummerruta"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -33579,24 +33565,29 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Tog bort %s 'exkludera från BOM' tillverkningsattribut."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Lägg till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr ""
+"Lägg till tillverkningsattribut 'exkludera från materiallista (BOM)' för "
+"'%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Ta bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr "Ta bort tillverkningsattribut 'exkludera från BOM' för '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Lade till %s 'exkludera från BOM' tillverkningsattribut."
+msgstr ""
+"Lade till tillverkningsattribut 'exkludera från materiallista (BOM)' för "
+"'%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Tog bort %s 'exkludera från BOM' tillverkningsattribut."
+msgstr ""
+"Tog bort tillverkningsattribut 'exkludera från materiallista (BOM)' för '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -34042,9 +34033,8 @@ msgid "Export netlist used to update schematics"
 msgstr "Exportera nätlista för uppdatering av kretsschema"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "Söktext"
+msgstr "Sök"
 
 #: pcbnew/pcb_edit_frame.cpp:382
 msgid "New PCB file is unsaved"
@@ -38097,14 +38087,12 @@ msgid "Show/hide the properties panel"
 msgstr "Visa / dölj dialogruta för egenskaper"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Visa dialogruta för egenskaper"
+msgstr "Visa dialogruta för sökning"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Visa / dölj dialogruta för egenskaper"
+msgstr "Visa / dölj dialogruta för sökning"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Flip Board View"
@@ -38716,18 +38704,16 @@ msgstr ""
 "Försöker göra klart nuvarande ledardragning till närmaste nätlinjeända."
 
 #: pcbnew/tools/pcb_actions.cpp:1465
-#, fuzzy
 msgid "Route Selected"
-msgstr "Grupp vald"
+msgstr "Ledning vald"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1472
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Dra ledare från andra ändan"
+msgstr "Dra vald ledare från andra ändan"
 
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
