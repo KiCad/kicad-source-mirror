@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
 "PO-Revision-Date: 2022-09-21 11:21+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2981,13 +2981,12 @@ msgid "Show icons in menus"
 msgstr "在菜单中显示图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "在菜单中显示图标"
+msgstr "在编辑器中显示滚动条"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "该更改在重新启动编辑器时生效。"
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -4283,9 +4282,8 @@ msgstr "绘制项目"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "编号"
+msgstr "编号框"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4358,9 +4356,8 @@ msgid "Points"
 msgstr "点"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "焊盘编号"
+msgstr "焊盘编号框"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -5782,9 +5779,8 @@ msgid "Find"
 msgstr "查找"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "搜索其他文本项"
+msgstr "搜索项目"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6444,7 +6440,7 @@ msgstr "选择一个文件"
 
 #: common/widgets/lib_tree.cpp:279
 msgid "recent searches"
-msgstr ""
+msgstr "最近搜索"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7416,19 +7412,19 @@ msgstr ""
 "没有找到。脚本不可用。"
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "未批注项目： %s%s(单元 %d)\n"
+msgstr "未批注项目： %s%s (单元 %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "未批注项目： %s%s\n"
+msgstr "未批注项目： %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "错误：符号 %s%s%s(单元 %d) 超出定义的单元 (%d)\n"
+msgstr "错误：符号 %s%s%s(单元 %d) 超出定义的单元 (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -11403,9 +11399,8 @@ msgstr ""
 "不需要布局电路板，如机械插件和外壳"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "不导出"
+msgstr "不填充"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12533,9 +12528,8 @@ msgid "No Connection"
 msgstr "未连接"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "图纸中未解析的文本变量。"
+msgstr "图纸中未解析的文本变量"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12548,9 +12542,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "关联给 %s 和 %s 的封装不同"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "连接了“无连接”类型的管脚"
+msgstr "连接了“无连接”类型的引脚"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12563,24 +12556,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "当前配置不包含库 '%s'。"
+msgstr "当前配置不包含库 '%s'"
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "当前配置中未启用库 '%s'。"
+msgstr "当前配置中未启用库 '%s'"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "符号 \"%s\" 在符号库中 \"%s\" 没有找到。"
+msgstr "在符号库中 \"%s\" 没有找到符号 \"%s\""
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "符号 \"%s\" 在库中 \"%s\" 没有找到。"
+msgstr "符号 \"%s\" 在库中 \"%s\" 已被更改"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -14265,19 +14258,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "层次图框引脚 %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "从 BOM 中排除"
+msgstr "排除在 BOM 外"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
-msgstr "从电路板中排除"
+msgstr "排除在电路板外"
 
 #: eeschema/sch_symbol.cpp:1166
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -15988,11 +15978,11 @@ msgstr "更新符号以匹配父符号中所做的任何变更"
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "设置单元显示名…"
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "设置单元的显示名"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17162,14 +17152,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "符号不是从另一个符号派生的。"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "输入图框路径 %s 的页码"
+msgstr "输入单元 %s 的显示名"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
-#, fuzzy
 msgid "Set Unit Display Name"
-msgstr "按名称筛选字段"
+msgstr "设置单元显示名"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -26338,9 +26327,8 @@ msgid "angle"
 msgstr "角度"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "t"
+msgstr "位于"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -26353,9 +26341,8 @@ msgstr "拐角计数 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "编号"
+msgstr "编号框"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -33011,24 +32998,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "删除了 %s “从 BOM 中排除”的制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "给 %s 添加“从 BOM 中排除”制造属性。"
+msgstr "添加 %s\"排除在位置文件之外\"生产属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "删除 %s “从 BOM 中排除”的制造属性。"
+msgstr "删除 %s “排除在位置文件”生产属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
+msgstr "添加了 %s“排除在位置文件之外”生产属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "删除了 %s “从 BOM 中排除”的制造属性。"
+msgstr "删除了 %s “排除在位置文件之外”的生产属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -33472,9 +33459,8 @@ msgid "Export netlist used to update schematics"
 msgstr "导出用于更新原理图的网表"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "搜索文本"
+msgstr "搜索"
 
 #: pcbnew/pcb_edit_frame.cpp:382
 msgid "New PCB file is unsaved"
@@ -37425,14 +37411,12 @@ msgid "Show/hide the properties panel"
 msgstr "显示/隐藏属性面板"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "显示属性面板"
+msgstr "显示搜索面板"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "显示/隐藏属性面板"
+msgstr "显示/隐藏搜索面板"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Flip Board View"
@@ -38037,30 +38021,28 @@ msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr "试图完成当前布线到最近的飞线端。"
 
 #: pcbnew/tools/pcb_actions.cpp:1465
-#, fuzzy
 msgid "Route Selected"
-msgstr "选中的组"
+msgstr "布线所选项"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr ""
+msgstr "从飞线锚点按顺序布线选中项目。"
 
 #: pcbnew/tools/pcb_actions.cpp:1472
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "从另一端进行布线"
+msgstr "从另一端布线所选项"
 
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr ""
+msgstr "从飞线锚点另一端按顺序布线选中项目。"
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "尝试完成所选（自动布线）"
 
 #: pcbnew/tools/pcb_actions.cpp:1480
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "按顺序尝试自动布线所选焊盘。"
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid ""
