@@ -419,7 +419,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
     // All fileNames are now in m_AcceptedFiles vector.
     // Check if contains a project file name and load project.
     // If not, open files in dedicated app.
-    for( auto fileName : m_AcceptedFiles )
+    for( const wxFileName& fileName : m_AcceptedFiles )
     {
         if( IsExtensionAccepted( fileName.GetExt(),
                                  { ProjectFileExtension, LegacyProjectFileExtension } ) )

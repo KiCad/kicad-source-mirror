@@ -1137,7 +1137,7 @@ void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
 
 void EDA_BASE_FRAME::DoWithAcceptedFiles()
 {
-    for( auto file : m_AcceptedFiles )
+    for( const wxFileName& file : m_AcceptedFiles )
     {
         wxString fn = file.GetFullPath();
         m_toolManager->RunAction( *m_acceptedExts.at( file.GetExt() ), true, &fn );

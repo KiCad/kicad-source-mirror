@@ -678,7 +678,7 @@ void GERBVIEW_FRAME::DoWithAcceptedFiles()
 {
     wxString gerbFn; // param to be sent with action event.
 
-    for( auto file : m_AcceptedFiles )
+    for( const wxFileName& file : m_AcceptedFiles )
     {
         if( IsExtensionAccepted( file.GetExt(), { ArchiveFileExtension } ) )
         {
