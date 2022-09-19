@@ -355,7 +355,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

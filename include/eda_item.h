@@ -34,7 +34,7 @@
 #include <eda_search_data.h>
 #include <view/view_item.h>
 #include <kiid.h>
-
+#include <units_provider.h>
 
 enum class BITMAPS : unsigned int;
 
@@ -370,7 +370,7 @@ public:
      *
      * @return The menu text string.
      */
-    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const;
+    virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const;
 
     /**
      * Return a pointer to an image to be used in menus.

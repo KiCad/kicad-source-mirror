@@ -316,7 +316,7 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Box Height" ),
                         aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) ));
 
-    m_stroke.GetMsgPanelInfo( pcbIUScale, aFrame->GetUserUnits(), aList );
+    m_stroke.GetMsgPanelInfo( aFrame, aList );
 }
 
 
@@ -398,7 +398,7 @@ bool PCB_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-wxString PCB_TEXTBOX::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB Text Box on %s"), GetLayerName() );
 }

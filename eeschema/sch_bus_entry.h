@@ -178,7 +178,7 @@ public:
                 ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
     }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -225,7 +225,7 @@ public:
         return aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS;
     }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     EDA_ITEM* Clone() const override;
 

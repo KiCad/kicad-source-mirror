@@ -94,7 +94,7 @@ EDA_ITEM* PCB_VIA::Clone() const
 }
 
 
-wxString PCB_VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_VIA::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxString formatStr;
 
@@ -1015,13 +1015,13 @@ bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
 }
 
 
-wxString PCB_TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_TRACK::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( Type() == PCB_ARC_T ? _("Track (arc) %s on %s, length %s" )
                                                  : _("Track %s on %s, length %s" ),
                              GetNetnameMsg(),
                              GetLayerName(),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, GetLength() ) );
+                             aUnitsProvider->MessageTextFromValue( GetLength() ) );
 }
 
 

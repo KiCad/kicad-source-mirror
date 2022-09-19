@@ -44,7 +44,8 @@ DRC_TEST_PROVIDER_REGISTRY::~DRC_TEST_PROVIDER_REGISTRY()
 
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
-    m_drcEngine( nullptr )
+        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ),
+        m_drcEngine( nullptr )
 {
 }
 
@@ -109,12 +110,6 @@ void DRC_TEST_PROVIDER::reportAux( wxString fmt, ... )
     str.PrintfV( fmt, vargs );
     va_end( vargs );
     m_drcEngine->ReportAux( str );
-}
-
-
-EDA_UNITS DRC_TEST_PROVIDER::userUnits() const
-{
-    return m_drcEngine->UserUnits();
 }
 
 

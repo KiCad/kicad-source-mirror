@@ -1025,8 +1025,8 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     std::map<KIID, EDA_ITEM*> itemMap;
     m_frame->GetBoard()->FillItemMap( itemMap );
 
-    EDA_UNITS              units = GetUserUnits();
     BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+    UNITS_PROVIDER         unitsProvider( pcbIUScale, GetUserUnits() );
     int                    count;
 
     fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_frame->GetBoard()->GetFileName() ) );
@@ -1047,7 +1047,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
         if( severity == RPT_SEVERITY_EXCLUSION )
             severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, units, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
     count = m_ratsnestProvider->GetCount();
@@ -1059,7 +1059,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
         const std::shared_ptr<RC_ITEM>& item = m_ratsnestProvider->GetItem( i );
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, units, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
     count = m_fpWarningsProvider->GetCount();
@@ -1071,7 +1071,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
         const std::shared_ptr<RC_ITEM>& item = m_fpWarningsProvider->GetItem( i );
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, units, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
 

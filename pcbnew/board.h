@@ -625,7 +625,7 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     /**
      * Extract the board outlines and build a closed polygon from lines, arcs and circle items

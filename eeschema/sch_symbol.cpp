@@ -1662,8 +1662,6 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter )
 
 bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
-
     // Symbols are searchable via the child field and pin item text.
     return false;
 }
@@ -1781,7 +1779,7 @@ LIB_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 }
 
 
-wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_SYMBOL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
                              GetField( REFERENCE_FIELD )->GetShownText(),

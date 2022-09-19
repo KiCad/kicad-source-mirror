@@ -109,8 +109,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     msg.Printf( _( "(%s min height %s; actual %s)" ),
                                   constraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraint.Value().Min() ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actualHeight ) );
+                                  MessageTextFromValue( constraint.Value().Min() ),
+                                  MessageTextFromValue( actualHeight ) );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
@@ -126,8 +126,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     msg.Printf( _( "(%s max height %s; actual %s)" ),
                                   constraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraint.Value().Max() ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actualHeight ) );
+                                  MessageTextFromValue( constraint.Value().Max() ),
+                                  MessageTextFromValue( actualHeight ) );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                     drcItem->SetItems( item );
@@ -229,8 +229,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                         msg.Printf( _( "(%s min thickness %s; actual %s)" ),
                                       constraint.GetName(),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraint.Value().Min() ),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actualThickness ) );
+                                      MessageTextFromValue( constraint.Value().Min() ),
+                                      MessageTextFromValue( actualThickness ) );
 
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( item );
@@ -246,8 +246,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                         msg.Printf( _( "(%s max thickness %s; actual %s)" ),
                                       constraint.GetName(),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), constraint.Value().Max() ),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actualThickness ) );
+                                      MessageTextFromValue( constraint.Value().Max() ),
+                                      MessageTextFromValue( actualThickness ) );
 
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( item );

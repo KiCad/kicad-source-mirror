@@ -447,22 +447,22 @@ void LIB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-wxString LIB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString LIB_SHAPE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
         return wxString::Format( _( "Arc, radius %s" ),
-                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, GetRadius() ) );
+                                 aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
     case SHAPE_T::CIRCLE:
         return wxString::Format( _( "Circle, radius %s" ),
-                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, GetRadius() ) );
+                                 aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
     case SHAPE_T::RECT:
         return wxString::Format( _( "Rectangle, width %s height %s" ),
-                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, std::abs( m_start.x - m_end.x ) ),
-                                 EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, aUnits, std::abs( m_start.y - m_end.y ) ) );
+                                 aUnitsProvider->MessageTextFromValue( std::abs( m_start.x - m_end.x ) ),
+                                 aUnitsProvider->MessageTextFromValue( std::abs( m_start.y - m_end.y ) ) );
 
     case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),

@@ -1322,7 +1322,7 @@ BITMAPS LIB_PIN::GetMenuImage() const
 }
 
 
-wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString LIB_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( !m_name.IsEmpty() )
     {

@@ -450,67 +450,6 @@ public:
      */
     void ShowChangedLanguage() override;
 
-    const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }
-
-    /**
-     * Converts \a aValue in internal units into a united string.
-     *
-     * For readability, trailing 0s are removed if the mantissa has 3 or more digits.
-     * This function should be used to display values in dialogs because a value entered in mm
-     * (for instance 2.0 mm) could need up to 8 digits mantissa if displayed in inch to avoid
-     * truncation or rounding made just by the printf function.
-     *
-     * @param aValue = value in internal units
-     * @param aAddUnitLabel = true to add symbol unit to the string value
-     * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
-     */
-    wxString StringFromValue( double aValue, bool aAddUnitLabel = false,
-                              EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
-    {
-        return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUserUnits(), aValue,
-                                                    aAddUnitLabel, aType );
-    }
-
-    wxString StringFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = false )
-    {
-        return EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::DEGREES,
-                                                    aValue.AsDegrees(), aAddUnitLabel,
-                                                    EDA_DATA_TYPE::DISTANCE );
-    }
-
-    /**
-     * A lower-precision version of StringFromValue().
-     *
-     * Should ONLY be used for status text and messages.  Not suitable for dialogs, files, etc.
-     * where the loss of precision matters.
-     */
-    wxString MessageTextFromValue( double aValue, bool aAddUnitLabel = true,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
-    {
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), aValue,
-                                                         aAddUnitLabel, aType );
-    }
-
-    wxString MessageTextFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = true )
-    {
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::DEGREES,
-                                                         aValue.AsDegrees() );
-    }
-
-    /**
-     * Converts \a aTextValue in \a aUnits to internal units used by the frame.
-     * @warning This utilizes the current locale and will break if decimal formats differ
-     *
-     * @param aTextValue A reference to a wxString object containing the string to convert.
-     * @return internal units value
-     */
-    long long int ValueFromString( const wxString& aTextValue,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
-    {
-        return EDA_UNIT_UTILS::UI::ValueFromString( GetIuScale(), GetUserUnits(), aTextValue,
-                                                    aType );
-    }
-
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -584,7 +523,6 @@ protected:
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
     EDA_DRAW_PANEL_GAL*         m_canvas;
-    const EDA_IU_SCALE&         m_iuScale;
 
     ///< This the frame's interface to setting GAL display options.
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;

@@ -628,7 +628,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
     }
 
-    m_stroke.GetMsgPanelInfo( aFrame->GetIuScale(), aFrame->GetUserUnits(), aList );
+    m_stroke.GetMsgPanelInfo( aFrame, aList );
 }
 
 

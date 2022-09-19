@@ -119,7 +119,7 @@ std::shared_ptr<SHAPE> PCB_TARGET::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-wxString PCB_TARGET::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_TARGET::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     // Targets are on *every* layer by definition
     return _( "Target" );

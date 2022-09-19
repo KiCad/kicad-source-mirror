@@ -67,7 +67,7 @@ class KIWAY_PLAYER : public EDA_BASE_FRAME
 public:
     KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                   const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                  long aStyle, const wxString& aWdoName = wxFrameNameStr );
+                  long aStyle, const wxString& aFrameName, const EDA_IU_SCALE& aIuScale );
 
     /// Don't use this one, only wxformbuilder uses it, and it must be augmented with
     /// a SetKiway() early in derived constructor.

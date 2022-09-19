@@ -25,6 +25,7 @@
 #define RC_ITEM_H
 
 #include <wx/dataview.h>
+#include <units_provider.h>
 #include <kiid.h>
 #include <reporter.h>
 #include <math/vector2d.h>
@@ -129,7 +130,7 @@ public:
      *
      * @return wxString - the simple multi-line report text.
      */
-    virtual wxString ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SEVERITY aSeverity,
+    virtual wxString ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
                                  const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
 
     int GetErrorCode() const { return m_errorCode; }
@@ -159,12 +160,6 @@ public:
     {
         return wxEmptyString;
     }
-
-    /**
-     * Format a coordinate or position to text.
-     */
-    static wxString ShowCoord( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                               const VECTOR2I& aPos );
 
 protected:
     int           m_errorCode;         ///< The error code's numeric value

@@ -234,11 +234,11 @@ int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 
 bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
 {
-    EDA_UNITS userUnits = getEditFrame<EDA_DRAW_FRAME>()->GetUserUnits();
-    EDA_ITEM* current = nullptr;
-    SELECTION highlightGroup;
-    bool      selectAll = false;
-    bool      expandSelection = false;
+    UNITS_PROVIDER* unitsProvider = getEditFrame<EDA_DRAW_FRAME>();
+    EDA_ITEM*       current = nullptr;
+    SELECTION       highlightGroup;
+    bool            selectAll = false;
+    bool            expandSelection = false;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -263,18 +263,18 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
             {
 #ifdef __WXMAC__
                 menuText = wxString::Format( "%s\t%d",
-                                             item->GetSelectMenuText( userUnits ),
+                                             item->GetSelectMenuText( unitsProvider ),
                                              i + 1 );
 #else
                 menuText = wxString::Format( "&%d  %s\t%d",
                                              i + 1,
-                                             item->GetSelectMenuText( userUnits ),
+                                             item->GetSelectMenuText( unitsProvider ),
                                              i + 1 );
 #endif
             }
             else
             {
-                menuText = item->GetSelectMenuText( userUnits );
+                menuText = item->GetSelectMenuText( unitsProvider );
             }
 
             menu.Add( menuText, i + 1, item->GetMenuImage() );

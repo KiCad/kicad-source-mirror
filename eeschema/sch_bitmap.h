@@ -124,7 +124,7 @@ public:
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return wxString( _( "Image" ) );
     }

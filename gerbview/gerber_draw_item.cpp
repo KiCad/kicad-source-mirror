@@ -993,7 +993,7 @@ INSPECT_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString GERBER_DRAW_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString GERBER_DRAW_ITEM::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxString layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
 

@@ -28,7 +28,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <eda_units.h>
+#include <units_provider.h>
 #include <geometry/shape.h>
 
 #include <drc/drc_rule.h>
@@ -79,7 +79,7 @@ typedef std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
  * Note that EvalRules() has yet another optional REPORTER for reporting resolution info to
  * the user.
  */
-class DRC_ENGINE
+class DRC_ENGINE : public UNITS_PROVIDER
 {
 public:
     DRC_ENGINE( BOARD* aBoard = nullptr, BOARD_DESIGN_SETTINGS* aSettings = nullptr );
@@ -159,7 +159,6 @@ public:
 
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
-    EDA_UNITS UserUnits() const { return m_userUnits; }
     bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
     bool GetTestFootprints() const { return m_testFootprints; }
 
@@ -238,7 +237,6 @@ protected:
     bool                                    m_rulesValid;
     std::vector<DRC_TEST_PROVIDER*>         m_testProviders;
 
-    EDA_UNITS                  m_userUnits;
     std::vector<int>           m_errorLimits;
     bool                       m_reportAllTrackErrors;
     bool                       m_testFootprints;

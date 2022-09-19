@@ -99,7 +99,7 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

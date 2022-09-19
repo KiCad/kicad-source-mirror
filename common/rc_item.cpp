@@ -44,11 +44,11 @@ wxString RC_ITEM::GetErrorMessage() const
 }
 
 
-wxString RC_ITEM::ShowCoord( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, const VECTOR2I& aPos )
+static wxString showCoord( UNITS_PROVIDER* aUnitsProvider, const VECTOR2I& aPos )
 {
     return wxString::Format( wxT( "@(%s, %s)" ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, aPos.x ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, aPos.y ) );
+                             aUnitsProvider->MessageTextFromValue( aPos.x ),
+                             aUnitsProvider->MessageTextFromValue( aPos.y ) );
 }
 
 
@@ -76,7 +76,7 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 }
 
 
-wxString RC_ITEM::ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SEVERITY aSeverity,
+wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
                               const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     wxString severity;
@@ -120,10 +120,10 @@ wxString RC_ITEM::ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SE
                                  GetErrorMessage(),
                                  GetViolatingRuleDesc(),
                                  severity,
-                                 ShowCoord( aIuScale, aUnits, mainItem->GetPosition() ),
-                                 mainItem->GetSelectMenuText( aUnits ),
-                                 ShowCoord( aIuScale, aUnits, auxItem->GetPosition() ),
-                                 auxItem->GetSelectMenuText( aUnits ) );
+                                 showCoord( aUnitsProvider, mainItem->GetPosition()),
+                                 mainItem->GetSelectMenuText( aUnitsProvider ),
+                                 showCoord( aUnitsProvider, auxItem->GetPosition()),
+                                 auxItem->GetSelectMenuText( aUnitsProvider ) );
     }
     else if( mainItem )
     {
@@ -132,8 +132,8 @@ wxString RC_ITEM::ShowReport( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, SE
                                  GetErrorMessage(),
                                  GetViolatingRuleDesc(),
                                  severity,
-                                 ShowCoord( aIuScale, aUnits, mainItem->GetPosition() ),
-                                 mainItem->GetSelectMenuText( aUnits ) );
+                                 showCoord( aUnitsProvider, mainItem->GetPosition()),
+                                 mainItem->GetSelectMenuText( aUnitsProvider ) );
     }
     else
     {
@@ -374,7 +374,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         else
         {
             EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
-            aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+            aVariant = item->GetSelectMenuText( m_editFrame );
         }
 
         break;
@@ -382,21 +382,21 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     case RC_TREE_NODE::AUX_ITEM:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        aVariant = item->GetSelectMenuText( m_editFrame );
     }
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem2ID() );
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        aVariant = item->GetSelectMenuText( m_editFrame );
     }
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
     {
         EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
-        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+        aVariant = item->GetSelectMenuText( m_editFrame );
     }
         break;
     }

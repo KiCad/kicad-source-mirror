@@ -1350,7 +1350,7 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString FOOTPRINT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FOOTPRINT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxString reference = GetReference();
 

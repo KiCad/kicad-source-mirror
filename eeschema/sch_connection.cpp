@@ -439,7 +439,9 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
 
     if( SCH_ITEM* driver = Driver() )
     {
-        msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
+        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+
+        msg.Printf( "%s at %p", driver->GetSelectMenuText( &unitsProvider ), driver );
         aList.emplace_back( wxT( "Connection Source" ), msg );
     }
 #endif

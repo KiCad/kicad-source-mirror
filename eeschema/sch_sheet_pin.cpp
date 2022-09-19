@@ -325,7 +325,7 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 }
 
 
-wxString SCH_SHEET_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_SHEET_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Sheet Pin %s" ),
                              KIUI::EllipsizeMenuText( GetShownText() ) );

@@ -206,10 +206,10 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
 
         if( mainItem )
-            mainText = mainItem->GetSelectMenuText( aFrame->GetUserUnits() );
+            mainText = mainItem->GetSelectMenuText( aFrame );
 
         if( auxItem )
-            auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
+            auxText = auxItem->GetSelectMenuText( aFrame );
 
         aList.emplace_back( mainText, auxText );
     }
@@ -236,7 +236,7 @@ std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-wxString PCB_MARKER::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_MARKER::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     // m_rcItem->GetErrorMessage() could be used instead, but is probably too long
     // for menu duty.

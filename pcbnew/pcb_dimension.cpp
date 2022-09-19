@@ -318,28 +318,29 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Suffix" ), GetSuffix() );
 
-    EDA_UNITS units;
+    // Use our own UNITS_PROVIDER to report dimension info in dimension's units rather than
+    // in frame's units.
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    unitsProvider.SetUserUnits( GetUnits() );
 
-    GetUnits( units );
-    aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( units ) );
+    aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( GetUnits() ) );
 
     aList.emplace_back( _( "Font" ), m_text.GetDrawFont()->GetName() );
     aList.emplace_back( _( "Text Thickness" ),
-                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextThickness() ) );
+                        unitsProvider.MessageTextFromValue( m_text.GetTextThickness() ) );
     aList.emplace_back( _( "Text Width" ),
-                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextWidth() ) );
+                        unitsProvider.MessageTextFromValue( m_text.GetTextWidth() ) );
     aList.emplace_back( _( "Text Height" ),
-                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextHeight() ) );
+                        unitsProvider.MessageTextFromValue( m_text.GetTextHeight() ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
-    units = aFrame->GetUserUnits();
 
     if( Type() == PCB_DIM_CENTER_T || Type() == PCB_FP_DIM_CENTER_T )
     {
         VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
+                                           aFrame->MessageTextFromValue( startCoord.x ),
+                                           aFrame->MessageTextFromValue( startCoord.y ) );
 
         aList.emplace_back( start, wxEmptyString );
     }
@@ -347,12 +348,12 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
+                                           aFrame->MessageTextFromValue( startCoord.x ),
+                                           aFrame->MessageTextFromValue( startCoord.y ) );
         VECTOR2I endCoord = originTransforms.ToDisplayAbs( GetEnd() );
         wxString end   = wxString::Format( wxT( "@(%s, %s)" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, endCoord.x ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, endCoord.y ) );
+                                           aFrame->MessageTextFromValue( endCoord.x ),
+                                           aFrame->MessageTextFromValue( endCoord.y ) );
 
         aList.emplace_back( start, end );
     }
@@ -446,7 +447,7 @@ const BOX2I PCB_DIMENSION_BASE::GetBoundingBox() const
 }
 
 
-wxString PCB_DIMENSION_BASE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_DIMENSION_BASE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Dimension '%s' on %s" ), GetText(), GetLayerName() );
 }
@@ -729,11 +730,12 @@ void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_P
 {
     PCB_DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
 
-    EDA_UNITS units;
-    GetUnits( units );
+    // Use our own UNITS_PROVIDER to report dimension info in dimension's units rather than
+    // in frame's units.
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    unitsProvider.SetUserUnits( GetUnits() );
 
-    aList.emplace_back( _( "Height" ),
-                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_height ) );
+    aList.emplace_back( _( "Height" ), unitsProvider.MessageTextFromValue( m_height ) );
 }
 
 
@@ -1082,12 +1084,11 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     aList.emplace_back( _( "Leader" ), m_text.GetShownText() );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
-    EDA_UNITS         units = aFrame->GetUserUnits();
 
     VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
     wxString start = wxString::Format( wxT( "@(%s, %s)" ),
-                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.x ),
-                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, startCoord.y ) );
+                                       aFrame->MessageTextFromValue( startCoord.x ),
+                                       aFrame->MessageTextFromValue( startCoord.y ) );
 
     aList.emplace_back( start, wxEmptyString );
 

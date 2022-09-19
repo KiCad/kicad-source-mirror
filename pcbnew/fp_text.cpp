@@ -300,7 +300,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 }
 
 
-wxString FP_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FP_TEXT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     switch( m_Type )
     {

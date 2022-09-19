@@ -158,7 +158,7 @@ public:
     wxString GetSuffix() const { return m_suffix; }
     void SetSuffix( const wxString& aSuffix );
 
-    void GetUnits( EDA_UNITS& aUnits ) const { aUnits = m_units; }
+    EDA_UNITS GetUnits() const { return m_units; }
     void SetUnits( EDA_UNITS aUnits );
 
     DIM_UNITS_MODE GetUnitsMode() const;
@@ -245,7 +245,7 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     const BOX2I ViewBBox() const override;
 

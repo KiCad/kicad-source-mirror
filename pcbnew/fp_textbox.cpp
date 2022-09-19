@@ -322,11 +322,11 @@ void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     msg = aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) );
     aList.emplace_back( _( "Box Height" ), msg );
 
-    m_stroke.GetMsgPanelInfo( pcbIUScale, aFrame->GetUserUnits(), aList );
+    m_stroke.GetMsgPanelInfo( aFrame, aList );
 }
 
 
-wxString FP_TEXTBOX::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FP_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Footprint Text Box of %s" ),
                              static_cast<FOOTPRINT*>( GetParent() )->GetReference() );

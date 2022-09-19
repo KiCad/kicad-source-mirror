@@ -83,12 +83,13 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
     {
         BOOST_CHECK_EQUAL( violations.size(), 8 );
 
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE(
-                    item.ShowReport( pcbIUScale, EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
         BOOST_ERROR( "Custom rule severity test failed" );
     }

@@ -136,7 +136,7 @@ public:
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

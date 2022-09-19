@@ -497,8 +497,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_
 
         msg.Printf( _( "Internal clearance violation (%s clearance %s; actual %s)" ),
                       aConstraint.GetName(),
-                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), collision.second ) );
+                      MessageTextFromValue( clearance ),
+                      MessageTextFromValue( collision.second ) );
 
         drce->SetErrorMessage( msg );
         drce->SetItems( aParentItem );
@@ -548,8 +548,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER
 
                     msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   aConstraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                                  MessageTextFromValue( clearance ),
+                                  MessageTextFromValue( actual ) );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aZone );
@@ -607,8 +607,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
 
             msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( clearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, other );
@@ -660,8 +660,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                              MessageTextFromValue( clearance ),
+                              MessageTextFromValue( actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, other );
@@ -677,8 +677,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* aIte
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                              MessageTextFromValue( clearance ),
+                              MessageTextFromValue( actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, other );
@@ -771,8 +771,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                              MessageTextFromValue( clearance ),
+                              MessageTextFromValue( actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aItem, zone );
@@ -812,8 +812,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
                     msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                                  MessageTextFromValue( clearance ),
+                                  MessageTextFromValue( actual ) );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aItem, zone );

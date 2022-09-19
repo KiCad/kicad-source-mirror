@@ -190,7 +190,7 @@ wxString STROKE_PARAMS::GetLineStyleToken( PLOT_DASH_TYPE aStyle )
 }
 
 
-void STROKE_PARAMS::GetMsgPanelInfo( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+void STROKE_PARAMS::GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider,
                                      std::vector<MSG_PANEL_ITEM>& aList,
                                      bool aIncludeStyle, bool aIncludeWidth )
 {
@@ -211,9 +211,7 @@ void STROKE_PARAMS::GetMsgPanelInfo( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUn
     }
 
     if( aIncludeWidth )
-    {
-        aList.emplace_back( _( "Line Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( aIuScale, aUnits, GetWidth() ) );
-    }
+        aList.emplace_back( _( "Line Width" ), aUnitsProvider->MessageTextFromValue( GetWidth() ) );
 }
 
 

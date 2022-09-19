@@ -64,12 +64,12 @@ void drcPrintDebugMessage( int level, const wxString& msg, const char *function,
 
 
 DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
+    UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ),
     m_designSettings ( aSettings ),
     m_board( aBoard ),
     m_drawingSheet( nullptr ),
     m_schematicNetlist( nullptr ),
     m_rulesValid( false ),
-    m_userUnits( EDA_UNITS::MILLIMETRES ),
     m_reportAllTrackErrors( false ),
     m_testFootprints( false ),
     m_reporter( nullptr ),
@@ -564,7 +564,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
 void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints )
 {
-    m_userUnits = aUnits;
+    SetUserUnits( aUnits );
 
     m_reportAllTrackErrors = aReportAllTrackErrors;
     m_testFootprints = aTestFootprints;
@@ -595,7 +595,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
 
-        if( !provider->Run() )
+        if( !provider->RunTests( aUnits ) )
             break;
     }
 
@@ -606,10 +606,6 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
 
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
-#define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
-#define REPORT_VALUE( v ) EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, UNITS, v )
-#define REPORT_UNSCALED_VALUE( v ) \
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, v )
 
 DRC_CONSTRAINT DRC_ENGINE::EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
                                                PCB_LAYER_ID aLayer, REPORTER* aReporter )
@@ -735,8 +731,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                          EscapeHTML( a->GetSelectMenuText( UNITS ) ),
-                                          REPORT_VALUE( overrideA ) ) )
+                                          EscapeHTML( a->GetSelectMenuText( this ) ),
+                                          MessageTextFromValue( overrideA ) ) )
 
                 override_val = ac->GetLocalClearanceOverrides( &msg );
             }
@@ -745,8 +741,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                          EscapeHTML( b->GetSelectMenuText( UNITS ) ),
-                                          EscapeHTML( REPORT_VALUE( overrideB ) ) ) )
+                                          EscapeHTML( b->GetSelectMenuText( this ) ),
+                                          EscapeHTML( MessageTextFromValue( overrideB ) ) ) )
 
                 if( overrideB > override_val )
                     override_val = bc->GetLocalClearanceOverrides( &msg );
@@ -763,7 +759,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                         REPORT( "" )
                         REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                                  REPORT_VALUE( override_val ) ) )
+                                                  MessageTextFromValue( override_val ) ) )
                     }
                 }
                 else
@@ -775,7 +771,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                         REPORT( "" )
                         REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
-                                                  REPORT_VALUE( override_val ) ) )
+                                                  MessageTextFromValue( override_val ) ) )
                     }
                 }
 
@@ -794,7 +790,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; zone connection: %s." ),
-                                      EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( pad->GetSelectMenuText( this ) ),
                                       EscapeHTML( PrintZoneConnection( override ) ) ) )
 
             constraint.SetName( msg );
@@ -811,8 +807,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal relief gap: %s." ),
-                                      EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( gap_override ) ) ) )
+                                      EscapeHTML( pad->GetSelectMenuText( this ) ),
+                                      EscapeHTML( MessageTextFromValue( gap_override ) ) ) )
 
             constraint.SetName( msg );
             constraint.m_Value.SetMin( gap_override );
@@ -828,8 +824,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal spoke width: %s." ),
-                                      EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
+                                      EscapeHTML( pad->GetSelectMenuText( this ) ),
+                                      EscapeHTML( MessageTextFromValue( spoke_override ) ) ) )
 
             if( zone && zone->GetMinThickness() > spoke_override )
             {
@@ -837,8 +833,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 REPORT( "" )
                 REPORT( wxString::Format( _( "%s min thickness: %s." ),
-                                          EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
-                                          EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
+                                          EscapeHTML( zone->GetSelectMenuText( this ) ),
+                                          EscapeHTML( MessageTextFromValue( spoke_override ) ) ) )
             }
 
             constraint.SetName( msg );
@@ -882,37 +878,38 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( c->constraint.m_Value.Min() ) ) )
+                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
                     break;
 
                 case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( c->constraint.m_Value.Max() ) ) )
+                                              MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
                     break;
 
                 case SKEW_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s max skew: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( c->constraint.m_Value.Max() ) ) )
+                                              MessageTextFromValue( c->constraint.m_Value.Max() ) ) )
                     break;
 
                 case THERMAL_RELIEF_GAP_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s gap: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( c->constraint.m_Value.Min() ) ) )
+                                              MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
                     break;
 
                 case THERMAL_SPOKE_WIDTH_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( c->constraint.m_Value.Opt() ) ) )
+                                              MessageTextFromValue( c->constraint.m_Value.Opt() ) ) )
                     break;
 
                 case MIN_RESOLVED_SPOKES_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s min spoke count: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_UNSCALED_VALUE( c->constraint.m_Value.Min() ) ) )
+                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
+                                                                                        c->constraint.m_Value.Min() ) ) )
                     break;
 
                 case ZONE_CONNECTION_CONSTRAINT:
@@ -940,8 +937,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                         if( implicit )
                         {
-                            min = REPORT_VALUE( c->constraint.m_Value.Min() );
-                            opt = REPORT_VALUE( c->constraint.m_Value.Opt() );
+                            min = MessageTextFromValue( c->constraint.m_Value.Min() );
+                            opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
 
                             switch( c->constraint.m_Type )
                             {
@@ -1037,13 +1034,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         else
                         {
                             if( c->constraint.m_Value.HasMin() )
-                                min = REPORT_VALUE( c->constraint.m_Value.Min() );
+                                min = MessageTextFromValue( c->constraint.m_Value.Min() );
 
                             if( c->constraint.m_Value.HasOpt() )
-                                opt = REPORT_VALUE( c->constraint.m_Value.Opt() );
+                                opt = MessageTextFromValue( c->constraint.m_Value.Opt() );
 
                             if( c->constraint.m_Value.HasMax() )
-                                max = REPORT_VALUE( c->constraint.m_Value.Max() );
+                                max = MessageTextFromValue( c->constraint.m_Value.Max() );
 
                             REPORT( wxString::Format( _( "Checking %s: min %s; opt %s; max %s." ),
                                                       EscapeHTML( c->constraint.GetName() ),
@@ -1181,7 +1178,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         const BOARD_ITEM* x = !hasDrilledHole( a ) ? a : b;
 
                         REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
-                                                  x->GetSelectMenuText( UNITS ) ) )
+                                                  x->GetSelectMenuText( this ) ) )
                     }
 
                     return false;
@@ -1319,8 +1316,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      EscapeHTML( a->GetSelectMenuText( UNITS ) ),
-                                      REPORT_VALUE( localA ) ) )
+                                      EscapeHTML( a->GetSelectMenuText( this ) ),
+                                      MessageTextFromValue( localA ) ) )
 
             if( localA > clearance )
             {
@@ -1336,8 +1333,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      EscapeHTML( b->GetSelectMenuText( UNITS ) ),
-                                      REPORT_VALUE( localB ) ) )
+                                      EscapeHTML( b->GetSelectMenuText( this ) ),
+                                      MessageTextFromValue( localB ) ) )
 
             if( localB > clearance )
             {
@@ -1351,7 +1348,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         REPORT( "" )
         REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                  REPORT_VALUE( m_designSettings->m_MinClearance ) ) )
+                                  MessageTextFromValue( m_designSettings->m_MinClearance ) ) )
 
         if( clearance < m_designSettings->m_MinClearance )
         {
@@ -1366,7 +1363,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         REPORT( "" )
         REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                  REPORT_VALUE( m_designSettings->m_MinClearance ) ) )
+                                  MessageTextFromValue( m_designSettings->m_MinClearance ) ) )
 
         if( constraint.m_Value.Min() < m_designSettings->m_MinClearance )
         {
@@ -1387,7 +1384,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "%s zone connection: %s." ),
-                                          EscapeHTML( parentFootprint->GetSelectMenuText( UNITS ) ),
+                                          EscapeHTML( parentFootprint->GetSelectMenuText( this ) ),
                                           EscapeHTML( PrintZoneConnection( local ) ) ) )
 
                 constraint.SetParentRule( nullptr );
@@ -1403,7 +1400,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s pad connection: %s." ),
-                                      EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( zone->GetSelectMenuText( this ) ),
                                       EscapeHTML( PrintZoneConnection( local ) ) ) )
 
             constraint.SetParentRule( nullptr );
@@ -1420,8 +1417,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s thermal relief gap: %s." ),
-                                      EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( local ) ) ) )
+                                      EscapeHTML( zone->GetSelectMenuText( this ) ),
+                                      EscapeHTML( MessageTextFromValue( local ) ) ) )
 
             constraint.SetParentRule( nullptr );
             constraint.SetName( _( "zone" ) );
@@ -1437,8 +1434,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
             REPORT( "" )
             REPORT( wxString::Format( _( "%s thermal spoke width: %s." ),
-                                      EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( local ) ) ) )
+                                      EscapeHTML( zone->GetSelectMenuText( this ) ),
+                                      EscapeHTML( MessageTextFromValue( local ) ) ) )
 
             constraint.SetParentRule( nullptr );
             constraint.SetName( _( "zone" ) );
@@ -1530,8 +1527,6 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
 
 
 #undef REPORT
-#undef UNITS
-#undef REPORT_VALUE
 
 
 bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )

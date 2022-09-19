@@ -180,7 +180,7 @@ public:
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     ///< @copydoc EDA_ITEM::GetSelectMenuText
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage
     BITMAPS GetMenuImage() const override;

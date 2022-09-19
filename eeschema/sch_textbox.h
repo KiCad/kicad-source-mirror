@@ -100,7 +100,7 @@ public:
 
     virtual bool IsReplaceable() const override { return true; }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

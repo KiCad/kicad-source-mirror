@@ -235,7 +235,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     EDA_ITEM* Clone() const override;
 

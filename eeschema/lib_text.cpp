@@ -438,7 +438,7 @@ const BOX2I LIB_TEXT::GetBoundingBox() const
 }
 
 
-wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString LIB_TEXT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }

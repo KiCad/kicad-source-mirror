@@ -222,7 +222,7 @@ public:
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
     ///< @copydoc EDA_ITEM::GetSelectMenuText()
-    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    virtual wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage()
     BITMAPS GetMenuImage() const override;

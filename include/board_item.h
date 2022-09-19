@@ -341,7 +341,7 @@ public:
         BOARD_ITEM( nullptr, NOT_USED )
     {}
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return _( "(Deleted Item)" );
     }

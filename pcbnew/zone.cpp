@@ -724,7 +724,7 @@ bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplicatio
 }
 
 
-wxString ZONE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString ZONE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxString layerDesc;
     int      count = 0;

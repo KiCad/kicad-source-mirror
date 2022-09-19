@@ -1093,9 +1093,10 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 
     if( !poly->IsTriangulationUpToDate() )
     {
-        KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
-                                                 aZone->GetSelectMenuText( GetUnits() ) ),
-                      KIDIALOG::KD_WARNING );
+        UNITS_PROVIDER unitsProvider( pcbIUScale, GetUnits() );
+        KIDIALOG       dlg( nullptr, wxString::Format( _( "%s is malformed." ),
+                                                       aZone->GetSelectMenuText( &unitsProvider ) ),
+                            KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the router.\n"
                                                    "Please verify it is not a self-intersecting "
                                                    "polygon." ) ) );

@@ -92,7 +92,7 @@ public:
                                         || aItem->Type() == SCH_SYMBOL_T );
     }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override
     {
         return wxString( _( "Junction" ) );
     }

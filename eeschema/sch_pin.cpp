@@ -191,17 +191,16 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 }
 
 
-wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_PIN::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "Symbol %s %s",
                              GetParentSymbol()->GetField( REFERENCE_FIELD )->GetShownText(),
-                             m_libPin->GetSelectMenuText( aUnits ) );
+                             m_libPin->GetSelectMenuText( aUnitsProvider ) );
 }
 
 
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
@@ -222,7 +221,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, GetLength() ), true );
+    aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ), true );
 
     int i = PinOrientationIndex( GetOrientation() );
     aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );

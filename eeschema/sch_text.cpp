@@ -393,7 +393,7 @@ void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 }
 
 
-wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_TEXT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Graphic Text '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }

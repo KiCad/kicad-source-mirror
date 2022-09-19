@@ -1020,7 +1020,7 @@ const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 }
 
 
-wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_LABEL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
@@ -1191,7 +1191,7 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 }
 
 
-wxString SCH_DIRECTIVE_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_DIRECTIVE_LABEL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( m_fields.empty() )
     {
@@ -1473,7 +1473,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 }
 
 
-wxString SCH_GLOBALLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_GLOBALLABEL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Global Label '%s'" ), KIUI::EllipsizeMenuText( GetShownText() ) );
 }
@@ -1606,7 +1606,7 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 }
 
 
-wxString SCH_HIERLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_HIERLABEL::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Label '%s'" ),
                              KIUI::EllipsizeMenuText( GetShownText() ) );

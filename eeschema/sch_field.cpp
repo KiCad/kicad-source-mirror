@@ -553,9 +553,6 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
 
     wxString text = GetShownText();
 
-    wxLogTrace( traceFindItem, wxT( "    child item " )
-                    + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
-
     if( !IsVisible() && !searchHiddenFields )
         return false;
 
@@ -704,7 +701,7 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter )
 }
 
 
-wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_FIELD::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetShownText() ) );
 }

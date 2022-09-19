@@ -259,7 +259,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-wxString PCB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_SHAPE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "%s on %s" ), ShowShape(), GetLayerName() );
 }

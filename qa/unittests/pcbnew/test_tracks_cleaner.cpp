@@ -112,13 +112,14 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
             BOOST_CHECK_EQUAL( dryRunItems.size(), entry.m_Expected );
             BOOST_CHECK_EQUAL( realRunItems.size(), entry.m_Expected );
 
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
 
             for( const std::shared_ptr<CLEANUP_ITEM>& item : realRunItems )
             {
-                BOOST_TEST_MESSAGE( item->ShowReport( pcbIUScale, EDA_UNITS::INCHES,
-                                                      RPT_SEVERITY_ERROR,
+                BOOST_TEST_MESSAGE( item->ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
                                                       itemMap ) );
             }
 
@@ -195,13 +196,14 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
         }
         else
         {
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
 
             for( const DRC_ITEM& item : violations )
             {
-                BOOST_TEST_MESSAGE( item.ShowReport( pcbIUScale, EDA_UNITS::INCHES,
-                                                     RPT_SEVERITY_ERROR,
+                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
                                                      itemMap ) );
             }
 

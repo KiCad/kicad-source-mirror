@@ -280,8 +280,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 
                         msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                                      MessageTextFromValue( clearance ),
+                                      MessageTextFromValue( actual ) );
 
                         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                         drce->SetItems( item );

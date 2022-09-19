@@ -363,7 +363,7 @@ void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 }
 
 
-wxString SCH_TEXTBOX::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_TEXTBOX::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Graphic Text Box" ) );
 }
@@ -435,8 +435,6 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
 void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
@@ -446,13 +444,13 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    aList.emplace_back( _( "Text Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, GetTextWidth() ) );
+    aList.emplace_back( _( "Text Size" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
 
-    wxString msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, std::abs( GetEnd().x - GetStart().x ) );
-    aList.emplace_back( _( "Box Width" ), msg );
+    aList.emplace_back( _( "Box Width" ),
+                        aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) ) );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, std::abs( GetEnd().y - GetStart().y ) );
-    aList.emplace_back( _( "Box Height" ), msg );
+    aList.emplace_back( _( "Box Height" ),
+                        aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) ) );
 
-    m_stroke.GetMsgPanelInfo( schIUScale, units, aList );
+    m_stroke.GetMsgPanelInfo( aFrame, aList );
 }

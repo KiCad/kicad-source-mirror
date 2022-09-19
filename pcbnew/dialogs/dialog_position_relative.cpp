@@ -243,13 +243,14 @@ void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 
 void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 {
-    wxString reference = _( "<none selected>" );
-    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+    UNITS_PROVIDER unitsProvider( pcbIUScale, GetUserUnits() );
+    BOARD_ITEM*    item = dynamic_cast<BOARD_ITEM*>( aItem );
+    wxString       reference = _( "<none selected>" );
 
     if( item )
     {
         m_anchor_position = item->GetPosition();
-        reference = item->GetSelectMenuText( GetUserUnits() );
+        reference = item->GetSelectMenuText( &unitsProvider );
     }
 
     m_referenceInfo->SetLabel( wxString::Format( _( "Reference item: %s" ), reference ) );

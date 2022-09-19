@@ -44,7 +44,7 @@
 #include <widgets/ui_common.h>
 #include <widgets/infobar.h>
 #include <undo_redo_container.h>
-#include <eda_units.h>
+#include <units_provider.h>
 #include <origin_transforms.h>
 
 // Option for main frames
@@ -101,7 +101,8 @@ wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
  * calling it from the derived class's SaveSettings().  This class is not a #KIWAY_PLAYER
  * because #KICAD_MANAGER_FRAME is derived from it and that class is not a player.
  */
-class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
+class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER,
+                       public UNITS_PROVIDER
 {
 public:
     /**
@@ -115,24 +116,9 @@ public:
 
     EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxString& aTitle,
                     const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                    const wxString& aFrameName, KIWAY* aKiway );
-
-    EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway );
+                    const wxString& aFrameName, KIWAY* aKiway, const EDA_IU_SCALE& aIuScale );
 
     ~EDA_BASE_FRAME();
-
-    /**
-     * Return the user units currently in use.
-     */
-    EDA_UNITS GetUserUnits() const
-    {
-        return m_userUnits;
-    }
-
-    void SetUserUnits( EDA_UNITS aUnits )
-    {
-        m_userUnits = aUnits;
-    }
 
     void ChangeUserUnits( EDA_UNITS aUnits );
 

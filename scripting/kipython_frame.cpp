@@ -87,7 +87,8 @@ output.SetParent( parent )
 
 KIPYTHON_FRAME::KIPYTHON_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             KIWAY_PLAYER( aKiway, aParent, FRAME_PYTHON, wxT( "KiPython" ), wxDefaultPosition,
-                    wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KiPython" ) )
+                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KiPython" ),
+                          unityScale )
 {
     CallAfter( [&](){ SetupPythonEditor(); } );
 

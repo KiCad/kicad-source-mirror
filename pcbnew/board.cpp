@@ -868,7 +868,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 }
 
 
-wxString BOARD::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString BOARD::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB" ) );
 }

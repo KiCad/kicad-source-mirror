@@ -105,7 +105,7 @@ INSPECT_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData,
 }
 
 
-wxString EDA_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString EDA_ITEM::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     wxFAIL_MSG( wxT( "GetSelectMenuText() was not overridden for schematic item type " ) +
                 GetClass() );

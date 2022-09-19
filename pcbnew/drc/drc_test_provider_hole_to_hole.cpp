@@ -305,8 +305,8 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
 
             msg.Printf( _( "(%s min %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), minClearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( minClearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, aOther );

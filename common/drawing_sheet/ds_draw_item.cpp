@@ -188,7 +188,7 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const BOX2I& aRect, bool aContains, int aAccura
 }
 
 
-wxString DS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_TEXT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Text '%s'" ), GetShownText() );
 }
@@ -283,7 +283,7 @@ bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const BOX2I& aRect, bool aContained, in
 }
 
 
-wxString DS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return _( "Imported Shape" );
 }
@@ -379,13 +379,11 @@ bool DS_DRAW_ITEM_RECT::HitTest( const BOX2I& aRect, bool aContained, int aAccur
 }
 
 
-wxString DS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_RECT::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),
-            EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits,
-                                                      std::abs( GetStart().x - GetEnd().x ) ),
-            EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits,
-                                                      std::abs( GetStart().y - GetEnd().y ) ) );
+                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().x - GetEnd().x ) ),
+                             aUnitsProvider->MessageTextFromValue( std::abs( GetStart().y - GetEnd().y ) ) );
 }
 
 
@@ -414,10 +412,10 @@ bool DS_DRAW_ITEM_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 }
 
 
-wxString DS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_LINE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Line, length %s" ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( drawSheetIUScale, aUnits, EuclideanNorm( GetStart() - GetEnd() ) ) );
+                             aUnitsProvider->MessageTextFromValue( EuclideanNorm( GetStart() - GetEnd() ) ) );
 }
 
 
@@ -462,13 +460,13 @@ bool DS_DRAW_ITEM_BITMAP::HitTest( const BOX2I& aRect, bool aContains, int aAccu
 }
 
 
-wxString DS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_BITMAP::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return _( "Image" );
 }
 
 
-wxString DS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_PAGE::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return _( "Page Limits" );
 }

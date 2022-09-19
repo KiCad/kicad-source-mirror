@@ -757,8 +757,8 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                                 wxString msg;
 
                                 msg.Printf( _( "Minimum connection width %s; actual %s" ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), aMinWidth ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), dist ) );
+                                              MessageTextFromValue( aMinWidth ),
+                                              MessageTextFromValue( dist ) );
 
                                 drce->SetErrorMessage( msg + wxS( " " ) + layerDesc( aLayer ) );
                                 drce->SetViolatingRule( c.GetParentRule() );

@@ -140,7 +140,7 @@ public:
 
     wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    wxString GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     BITMAPS GetMenuImage() const override;
 

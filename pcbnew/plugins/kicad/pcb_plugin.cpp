@@ -2077,8 +2077,7 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
         const PCB_VIA* via = static_cast<const PCB_VIA*>( aTrack );
         BOARD*         board = (BOARD*) via->GetParent();
 
-        wxCHECK_RET( board != nullptr, wxT( "Via " ) +
-                     via->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) + wxT( " has no parent." ) );
+        wxCHECK_RET( board != nullptr, wxT( "Via has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 

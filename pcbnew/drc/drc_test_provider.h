@@ -69,10 +69,10 @@ public:
  * Represent a DRC "provider" which runs some DRC functions over a #BOARD and spits out
  * #DRC_ITEMs and positions as needed.
  */
-class DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER : public UNITS_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER ();
+    DRC_TEST_PROVIDER();
     virtual ~DRC_TEST_PROVIDER() = default;
 
     static void Init();
@@ -81,6 +81,12 @@ public:
     {
         m_drcEngine = engine;
         m_stats.clear();
+    }
+
+    bool RunTests( EDA_UNITS aUnits )
+    {
+        SetUserUnits( aUnits );
+        return Run();
     }
 
     /**

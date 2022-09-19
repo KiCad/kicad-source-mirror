@@ -154,17 +154,17 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
     if( !aItem )
         return wxString();
 
-    wxString s = aItem->GetSelectMenuText( m_frame->GetUserUnits() );
+    wxString msg = aItem->GetSelectMenuText( m_frame );
 
     if( aItem->IsConnected() && !isNPTHPad( aItem ) )
     {
         BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
-        s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
-                                            cItem->GetEffectiveNetClass()->GetName() );
+        msg += wxS( " " ) + wxString::Format( _( "[netclass %msg]" ),
+                                              cItem->GetEffectiveNetClass()->GetName() );
     }
 
-    return s;
+    return msg;
 };
 
 

@@ -222,8 +222,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                              MessageTextFromValue( clearance ),
+                              MessageTextFromValue( actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( track, other );
@@ -266,8 +266,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
                     msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                                  MessageTextFromValue( clearance ),
+                                  MessageTextFromValue( actual ) );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( track, other );
@@ -350,8 +350,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
 
             msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( clearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( aItem, aZone );
@@ -391,8 +391,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
 
                     msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                                  MessageTextFromValue( clearance ),
+                                  MessageTextFromValue( actual ) );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     drce->SetItems( aItem, aZone );
@@ -603,8 +603,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
                 msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                              MessageTextFromValue( clearance ),
+                              MessageTextFromValue( actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( pad, other );
@@ -636,8 +636,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
             msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( clearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
@@ -659,8 +659,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
             msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( clearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, other );
@@ -682,8 +682,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
             msg.Printf( _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), clearance ),
-                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), actual ) );
+                          MessageTextFromValue( clearance ),
+                          MessageTextFromValue( actual ) );
 
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
             drce->SetItems( pad, otherVia );
@@ -935,8 +935,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
                         msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), zone2zoneClearance ),
-                                      EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), std::max( actual, 0 ) ) );
+                                      MessageTextFromValue( zone2zoneClearance ),
+                                      MessageTextFromValue( std::max( actual, 0 ) ) );
 
                         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                     }

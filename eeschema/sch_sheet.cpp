@@ -914,8 +914,6 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
 bool SCH_SHEET::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
-
     // Sheets are searchable via the child field and pin item text.
     return false;
 }
@@ -1035,7 +1033,7 @@ void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
-wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString SCH_SHEET::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Sheet %s" ),
                              m_fields[ SHEETNAME ].GetText() );

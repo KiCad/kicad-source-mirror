@@ -450,8 +450,9 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 {
     wxCHECK( aBoard, false );
 
-    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&      bds = aBoard->GetDesignSettings();
     std::shared_ptr<DRC_ENGINE> engine = bds.m_DRCEngine;
+    UNITS_PROVIDER              unitsProvider( pcbIUScale, aUnits );
 
     if( !engine )
     {
@@ -533,7 +534,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     for( const std::shared_ptr<DRC_ITEM>& item : violations )
     {
         SEVERITY severity = item->GetParent()->GetSeverity();
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, aUnits, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", static_cast<int>( unconnected.size() ) );
@@ -541,7 +542,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     for( const std::shared_ptr<DRC_ITEM>& item : unconnected )
     {
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, aUnits, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
     fprintf( fp, "\n** Found %d Footprint errors **\n", static_cast<int>( footprints.size() ) );
@@ -549,7 +550,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     for( const std::shared_ptr<DRC_ITEM>& item : footprints )
     {
         SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( pcbIUScale, aUnits, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
     }
 
     fprintf( fp, "\n** End of Report **\n" );

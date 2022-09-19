@@ -420,8 +420,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         int totalLen = std::max( itemSet.totalLengthN, itemSet.totalLengthP );
         reportAux( wxString::Format( wxT( "   - coupled length: %s, total length: %s" ),
-                                     EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), itemSet.totalCoupled ),
-                                     EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), totalLen ) ) );
+                                     MessageTextFromValue( itemSet.totalCoupled ),
+                                     MessageTextFromValue( totalLen ) ) );
 
         int totalUncoupled = totalLen - itemSet.totalCoupled;
 
@@ -438,8 +438,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 msg = wxString::Format( _( "(%s maximum uncoupled length: %s; actual: %s)" ),
                                           maxUncoupledConstraint->GetParentRule()->m_Name,
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), val.Max() ),
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), totalUncoupled ) );
+                                          MessageTextFromValue( val.Max() ),
+                                          MessageTextFromValue( totalUncoupled ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
 
@@ -490,14 +490,14 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     if( val.HasMin() )
                         msg += wxString::Format( _( "minimum gap: %s; " ),
-                                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), val.Min() ) );
+                                                   MessageTextFromValue( val.Min() ) );
 
                     if( val.HasMax() )
                         msg += wxString::Format( _( "maximum gap: %s; " ),
-                                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), val.Max() ) );
+                                                   MessageTextFromValue( val.Max() ) );
 
                     msg += wxString::Format( _( "actual: %s)" ),
-                                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits(), dp.computedGap ) );
+                                             MessageTextFromValue( dp.computedGap ) );
 
                     drcItem->SetErrorMessage( msg );
 

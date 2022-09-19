@@ -310,7 +310,7 @@ void PCB_GROUP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_GROUP::GetSelectMenuText( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( m_name.empty() )
     {

@@ -984,9 +984,13 @@ void CONNECTION_GRAPH::collectAllDriverValues()
                 break;
             }
             default:
+            {
+                UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+
                 wxLogTrace( ConnTrace, "Unexpected strong driver %s",
-                            driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+                            driver->GetSelectMenuText( &unitsProvider ) );
                 break;
+            }
             }
         }
     }
@@ -1174,10 +1178,12 @@ void CONNECTION_GRAPH::processSubGraphs()
                     }
                     else
                     {
+                        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILLIMETRES );
+
                         wxLogTrace( ConnTrace,
-                                "%ld (%s) weakly driven by unique sheet pin %s, promoting",
-                                subgraph->m_code, name,
-                                subgraph->m_driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+                                    "%ld (%s) weakly driven by unique sheet pin %s, promoting",
+                                    subgraph->m_code, name,
+                                    subgraph->m_driver->GetSelectMenuText( &unitsProvider ) );
 
                         subgraph->m_strong_driver = true;
                     }

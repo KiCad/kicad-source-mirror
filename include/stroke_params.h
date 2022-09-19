@@ -26,7 +26,7 @@
 
 #include <map>
 #include <bitmaps.h>
-#include <eda_units.h>
+#include <units_provider.h>
 #include <gal/color4d.h>
 #include <wx/translation.h>
 #include <geometry/shape.h>
@@ -113,7 +113,7 @@ public:
 
     void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale, int nestLevel ) const;
 
-    void GetMsgPanelInfo( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+    void GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider, std::vector<MSG_PANEL_ITEM>& aList,
                           bool aIncludeStyle = true, bool aIncludeWidth = true );
 
     // Helper functions
