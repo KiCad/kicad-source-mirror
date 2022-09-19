@@ -264,24 +264,37 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 return 1;
             };
 
+
+    auto tesselate_lambda =
+            [&]( std::pair<ZONE*, PCB_LAYER_ID> aFillItem ) -> int
+            {
+                PCB_LAYER_ID layer = aFillItem.second;
+                ZONE*        zone = aFillItem.first;
+
+                zone->CacheTriangulation( layer );
+                return 1;
+
+            };
+
     // Calculate the copper fills (NB: this is multi-threaded)
     //
-    std::vector<std::pair<std::future<int>, bool>> returns;
+    std::vector<std::pair<std::future<int>, int>> returns;
     returns.reserve( toFill.size() );
     size_t finished = 0;
+
 
     thread_pool& tp = GetKiCadThreadPool();
 
     for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
-        returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), false ) );
+        returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), 0 ) );
 
-    while( finished != toFill.size() )
+    while( finished != 2 * toFill.size() )
     {
         for( size_t ii = 0; ii < returns.size(); ++ii )
         {
             auto& ret = returns[ii];
 
-            if( ret.second )
+            if( ret.second > 1 )
                 continue;
 
             std::future_status status = ret.first.wait_for( std::chrono::seconds( 0 ) );
@@ -291,7 +304,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( ret.first.get() )
                 {
                     ++finished;
-                    ret.second = true;
+
+                    if( ret.second == 0 )
+                        returns[ii].first = tp.submit( tesselate_lambda, toFill[ii] );
+
+                    ret.second++;
                 }
                 else
                 {
@@ -311,10 +328,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             m_progressReporter->KeepRefreshing();
         }
     }
-
-    // Triangulate the copper fills (NB: this is multi-threaded)
-    //
-    m_board->CacheTriangulation( m_progressReporter, aZones );
 
     // Now update the connectivity to check for isolated copper islands
     // (NB: FindIsolatedCopperIslands() is multi-threaded)
