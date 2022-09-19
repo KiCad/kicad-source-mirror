@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:34-0700\n"
-"PO-Revision-Date: 2022-08-25 22:22+0000\n"
+"PO-Revision-Date: 2022-09-21 11:23+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -20828,12 +20828,12 @@ msgstr "Skapa en matris"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:923
 msgid "Autoplacing components..."
-msgstr "Autoplacement-komponenter ..."
+msgstr "Autoplacerar komponenter..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:940
 #, c-format
 msgid "Autoplacing %s"
-msgstr "Autoplacement %s"
+msgstr "Autoplacerar %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -20893,7 +20893,7 @@ msgstr "Nät"
 
 #: pcbnew/board.cpp:1180 pcbnew/pcb_draw_panel_gal.cpp:481
 msgid "Unrouted"
-msgstr "Obruten"
+msgstr "Ej ledningsdragna"
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetName"
