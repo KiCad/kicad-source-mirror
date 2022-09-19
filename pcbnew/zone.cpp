@@ -211,7 +211,7 @@ bool ZONE::UnFill()
     }
 
     m_isFilled = false;
-    m_fillFlags.clear();
+    m_fillFlags.reset();
 
     return change;
 }

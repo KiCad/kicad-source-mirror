@@ -246,56 +246,70 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 // Now we're ready to fill.
                 std::unique_lock<std::mutex> zoneLock( zone->GetLock(), std::try_to_lock );
 
-                if( zoneLock.owns_lock() )
-                {
-                    SHAPE_POLY_SET fillPolys;
+                if( !zoneLock.owns_lock() )
+                    return 0;
 
-                    if( !fillSingleZone( zone, layer, fillPolys ) )
-                        return 0;
 
-                    zone->SetFilledPolysList( layer, fillPolys );
-                    zone->SetFillFlag( layer, true );
+                SHAPE_POLY_SET fillPolys;
 
-                    if( m_progressReporter )
-                        m_progressReporter->AdvanceProgress();
-                }
+                if( !fillSingleZone( zone, layer, fillPolys ) )
+                    return 0;
 
-                return 0;
+                zone->SetFilledPolysList( layer, fillPolys );
+                zone->SetFillFlag( layer, true );
+
+                if( m_progressReporter )
+                    m_progressReporter->AdvanceProgress();
+
+                return 1;
             };
 
     // Calculate the copper fills (NB: this is multi-threaded)
     //
-    while( !toFill.empty() )
+    std::vector<std::pair<std::future<int>, bool>> returns;
+    returns.reserve( toFill.size() );
+    size_t finished = 0;
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
+        returns.emplace_back( std::make_pair( tp.submit( fill_lambda, fillItem ), false ) );
+
+    while( finished != toFill.size() )
     {
-        std::vector<std::future<int>> returns;
-        returns.reserve( toFill.size() );
-
-        thread_pool& tp = GetKiCadThreadPool();
-
-        for( const std::pair<ZONE*, PCB_LAYER_ID>& fillItem : toFill )
-            returns.emplace_back( tp.submit( fill_lambda, fillItem ) );
-
-        for( const std::future<int>& ret : returns )
+        for( size_t ii = 0; ii < returns.size(); ++ii )
         {
-            std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+            auto& ret = returns[ii];
 
-            while( status != std::future_status::ready )
+            if( ret.second )
+                continue;
+
+            std::future_status status = ret.first.wait_for( std::chrono::seconds( 0 ) );
+
+            if( status == std::future_status::ready )
             {
-                if( m_progressReporter )
-                    m_progressReporter->KeepRefreshing();
-
-                status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+                if( ret.first.get() )
+                {
+                    ++finished;
+                    ret.second = true;
+                }
+                else
+                {
+                    returns[ii].first = tp.submit( fill_lambda, toFill[ii] );
+                }
             }
-
         }
 
-        alg::delete_if( toFill, [&]( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool
-                                {
-                                    return pair.first->GetFillFlag( pair.second );
-                                } );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
 
-        if( m_progressReporter && m_progressReporter->IsCancelled() )
-            break;
+
+        if( m_progressReporter )
+        {
+            if( m_progressReporter->IsCancelled() )
+                break;
+
+            m_progressReporter->KeepRefreshing();
+        }
     }
 
     // Triangulate the copper fills (NB: this is multi-threaded)

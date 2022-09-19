@@ -232,10 +232,10 @@ public:
 
     int GetFillFlag( PCB_LAYER_ID aLayer )
     {
-        return m_fillFlags.count( aLayer ) ? m_fillFlags[ aLayer ] : false;
+        return m_fillFlags.test( aLayer );
     }
 
-    void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags[ aLayer ] = aFlag; }
+    void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags.set( aLayer, aFlag); }
 
     bool IsFilled() const { return m_isFilled; }
     void SetIsFilled( bool isFilled ) { m_isFilled = isFilled; }
@@ -875,7 +875,7 @@ protected:
 
     /// Temp variables used while filling
     BOX2I                                  m_bboxCache;
-    std::map<PCB_LAYER_ID, bool>           m_fillFlags;
+    LSET                                   m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date
     std::map<PCB_LAYER_ID, MD5_HASH>       m_filledPolysHash;
