@@ -432,7 +432,7 @@ void PCB_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aHighlightMode,
 {
 }
 
-void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
+void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
 {
