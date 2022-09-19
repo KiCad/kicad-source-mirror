@@ -136,10 +136,10 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
-        return GetValue( m_rows[ aRow ], aCol, m_frame->GetUserUnits() );
+        return GetValue( m_rows[ aRow ], aCol, m_frame );
     }
 
-    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_UNITS aUserUnits )
+    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_DRAW_FRAME* aParentFrame )
     {
         wxString fieldValue;
 
@@ -179,28 +179,23 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
-                                                           pin->GetNumberTextSize(), true );
+                val = aParentFrame->StringFromValue( pin->GetNumberTextSize(), true );
                 break;
 
             case COL_NAME_SIZE:
-                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
-                                                           pin->GetNameTextSize(), true );
+                val = aParentFrame->StringFromValue( pin->GetNameTextSize(), true );
                 break;
 
             case COL_LENGTH:
-                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
-                                                           pin->GetLength(), true );
+                val = aParentFrame->StringFromValue( pin->GetLength(), true );
                 break;
 
             case COL_POSX:
-                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
-                                                           pin->GetPosition().x, true );
+                val = aParentFrame->StringFromValue( pin->GetPosition().x, true );
                 break;
 
             case COL_POSY:
-                val = EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, aUserUnits,
-                                                           -pin->GetPosition().y, true );
+                val = aParentFrame->StringFromValue( -pin->GetPosition().y, true );
                 break;
 
             case COL_VISIBLE:
@@ -259,11 +254,13 @@ public:
 
         LIB_PINS pins = m_rows[ aRow ];
 
-        // If the NUMBER column is edited and the pins are grouped, renumber, and add or remove pins based on the comma separated list of pins.
+        // If the NUMBER column is edited and the pins are grouped, renumber, and add or
+        // remove pins based on the comma separated list of pins.
         if( aCol == COL_NUMBER && m_pinTable->IsDisplayGrouped() )
         {
             wxStringTokenizer tokenizer( aValue, "," );
             size_t            i = 0;
+
             while( tokenizer.HasMoreTokens() )
             {
                 wxString pinName = tokenizer.GetNextToken();
@@ -308,10 +305,9 @@ public:
                 i++;
             }
 
-            while( i < pins.size() )
+            while( pins.size() > i )
             {
-                LIB_PIN* pin = pins.back();
-                m_pinTable->RemovePin( pin );
+                m_pinTable->RemovePin( pins.back() );
                 pins.pop_back();
             }
 
@@ -430,17 +426,17 @@ public:
     }
 
     static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs, int sortCol, bool ascending,
-                         EDA_UNITS units )
+                         EDA_DRAW_FRAME* parentFrame )
     {
-        wxString lhStr = GetValue( lhs, sortCol, units );
-        wxString rhStr = GetValue( rhs, sortCol, units );
+        wxString lhStr = GetValue( lhs, sortCol, parentFrame );
+        wxString rhStr = GetValue( rhs, sortCol, parentFrame );
 
         if( lhStr == rhStr )
         {
             // Secondary sort key is always COL_NUMBER
             sortCol = COL_NUMBER;
-            lhStr = GetValue( lhs, sortCol, units );
-            rhStr = GetValue( rhs, sortCol, units );
+            lhStr = GetValue( lhs, sortCol, parentFrame );
+            rhStr = GetValue( rhs, sortCol, parentFrame );
         }
 
         bool res;
@@ -463,14 +459,14 @@ public:
             break;
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            res = cmp( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, lhStr ),
-                       EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, rhStr ) );
+            res = cmp( parentFrame->ValueFromString( lhStr ),
+                       parentFrame->ValueFromString( rhStr ) );
             break;
         case COL_LENGTH:
         case COL_POSX:
         case COL_POSY:
-            res = cmp( EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, lhStr ),
-                       EDA_UNIT_UTILS::UI::ValueFromString( schIUScale, units, rhStr ) );
+            res = cmp( parentFrame->ValueFromString( lhStr ),
+                       parentFrame->ValueFromString( rhStr ) );
             break;
         case COL_VISIBLE:
         case COL_DEMORGAN:
@@ -578,7 +574,7 @@ public:
         std::sort( m_rows.begin(), m_rows.end(),
                    [ aSortCol, ascending, this ]( const LIB_PINS& lhs, const LIB_PINS& rhs ) -> bool
                    {
-                       return compare( lhs, rhs, aSortCol, ascending, m_frame->GetUserUnits() );
+                       return compare( lhs, rhs, aSortCol, ascending, m_frame );
                    } );
     }
 

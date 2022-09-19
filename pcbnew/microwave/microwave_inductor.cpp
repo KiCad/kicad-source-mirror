@@ -354,25 +354,21 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
      * (Radius decreases if necessary)
      */
 
-    PAD*     pad;
-    wxString msg;
-
-    PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+    PAD*            pad;
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
     wxPoint pt      = aInductorPattern.m_End - aInductorPattern.m_Start;
-    int  min_len = KiROUND( EuclideanNorm( pt ) );
+    int     min_len = KiROUND( EuclideanNorm( pt ) );
     aInductorPattern.m_Length = min_len;
 
     // Enter the desired length.
-    msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, editFrame.GetUserUnits(), aInductorPattern.m_Length );
-    WX_TEXT_ENTRY_DIALOG dlg( &editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
+    wxString             msg = editFrame->StringFromValue( aInductorPattern.m_Length );
+    WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowQuasiModal() != wxID_OK )
         return nullptr; // canceled by user
 
-    msg = dlg.GetValue();
-    aInductorPattern.m_Length =
-            EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, editFrame.GetUserUnits(), msg );
+    aInductorPattern.m_Length = editFrame->ValueFromString( dlg.GetValue() );
 
     // Control values (ii = minimum length)
     if( aInductorPattern.m_Length < min_len )
@@ -405,13 +401,13 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     // Generate footprint. the value is also used as footprint name.
     msg = wxT( "L" );
-    WX_TEXT_ENTRY_DIALOG cmpdlg( &editFrame, _( "Component Value:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG cmpdlg( editFrame, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowQuasiModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 
-    FOOTPRINT* footprint = editFrame.CreateNewFootprint( msg, true );
+    FOOTPRINT* footprint = editFrame->CreateNewFootprint( msg, true );
 
     footprint->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
     footprint->SetAttributes( FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM );

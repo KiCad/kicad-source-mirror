@@ -127,8 +127,6 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "PCB Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
@@ -142,9 +140,9 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
-    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
-    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
+    aList.emplace_back( _( "Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
+    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
+    aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
 }
 
 

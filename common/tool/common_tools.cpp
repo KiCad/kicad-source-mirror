@@ -54,20 +54,21 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
 
     GRID_SETTINGS& settings = m_toolMgr->GetSettings()->m_Window.grid;
+    EDA_IU_SCALE   scale = m_frame->GetIuScale();
 
     m_grids.clear();
 
     for( const wxString& gridDef : settings.sizes )
     {
-        int gridSize = (int) EDA_UNIT_UTILS::UI::ValueFromString( m_frame->GetIuScale(), EDA_UNITS::MILLIMETRES, gridDef );
+        int gridSize = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                                  gridDef );
         m_grids.emplace_back( gridSize, gridSize );
     }
 
-    m_grids.emplace_back(
-            EDA_UNIT_UTILS::UI::ValueFromString( m_frame->GetIuScale(), EDA_UNITS::MILLIMETRES,
-                                                 settings.user_grid_x ),
-            EDA_UNIT_UTILS::UI::ValueFromString( m_frame->GetIuScale(), EDA_UNITS::MILLIMETRES,
-                                                 settings.user_grid_y ) );
+    m_grids.emplace_back( EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                               settings.user_grid_x ),
+                          EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                               settings.user_grid_y ) );
 
     OnGridChanged();
 }

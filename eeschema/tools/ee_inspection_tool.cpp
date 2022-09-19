@@ -203,7 +203,7 @@ int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 
 
 extern void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                           int aGridForPins, EDA_UNITS aDisplayUnits );
+                           int aGridForPins, EDA_DRAW_FRAME* aUnitsProvider );
 
 int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
@@ -216,7 +216,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     std::vector<wxString> messages;
     const int grid_size = KiROUND( getView()->GetGAL()->GetGridSize().x );
 
-    CheckLibSymbol( symbol, messages, grid_size, units );
+    CheckLibSymbol( symbol, messages, grid_size, m_frame );
 
     if( messages.empty() )
     {

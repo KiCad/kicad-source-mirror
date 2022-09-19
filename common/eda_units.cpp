@@ -99,30 +99,36 @@ void EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
 }
 
 
-wxString EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
+wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
 {
     wxString label;
 
     switch( aUnits )
     {
-    case EDA_UNITS::MILLIMETRES: label = wxT( " mm" ); break;
-    case EDA_UNITS::DEGREES: label = wxT( "°" ); break;
-    case EDA_UNITS::MILS: label = wxT( " mils" ); break;
-    case EDA_UNITS::INCHES: label = wxT( " in" ); break;
-    case EDA_UNITS::PERCENT: label = wxT( "%" ); break;
-    case EDA_UNITS::UNSCALED: break;
-    default: UNIMPLEMENTED_FOR( "Unknown units" ); break;
+    case EDA_UNITS::MILLIMETRES: label = wxT( " mm" );   break;
+    case EDA_UNITS::DEGREES:     label = wxT( "°" );     break;
+    case EDA_UNITS::MILS:        label = wxT( " mils" ); break;
+    case EDA_UNITS::INCHES:      label = wxT( " in" );   break;
+    case EDA_UNITS::PERCENT:     label = wxT( "%" );     break;
+    case EDA_UNITS::UNSCALED:                            break;
+    default: UNIMPLEMENTED_FOR( "Unknown units" );       break;
     }
 
     switch( aType )
     {
-    case EDA_DATA_TYPE::VOLUME: label += wxT( "³" ); break;
-    case EDA_DATA_TYPE::AREA: label += wxT( "²" ); break;
-    case EDA_DATA_TYPE::DISTANCE: break;
+    case EDA_DATA_TYPE::VOLUME:   label += wxT( "³" );   break;
+    case EDA_DATA_TYPE::AREA:     label += wxT( "²" );   break;
+    case EDA_DATA_TYPE::DISTANCE:                        break;
     default: UNIMPLEMENTED_FOR( "Unknown measurement" ); break;
     }
 
     return label;
+}
+
+
+wxString EDA_UNIT_UTILS::GetLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
+{
+    return GetText( aUnits, aType ).Trim( false );
 }
 
 
@@ -225,7 +231,7 @@ double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS a
  * in internal units, and therefore modified.
  */
 wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                              double aValue, bool aAddUnitSymbol,
+                                              double aValue, bool aAddUnitsText,
                                               EDA_DATA_TYPE aType )
 {
     double value_to_print = aValue;
@@ -263,8 +269,8 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 
     wxString stringValue( buf, wxConvUTF8 );
 
-    if( aAddUnitSymbol )
-        stringValue += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, aType );
+    if( aAddUnitsText )
+        stringValue += EDA_UNIT_UTILS::GetText( aUnits, aType );
 
     return stringValue;
 }
@@ -315,7 +321,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( EDA_ANGLE aValue, bool aAddUn
 
 // A lower-precision (for readability) version of StringFromValue()
 wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                                   double aValue, bool aAddUnitLabel,
+                                                   double aValue, bool aAddUnitsText,
                                                    EDA_DATA_TYPE aType )
 {
     wxString      text;
@@ -377,8 +383,8 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
     text.Printf( format, value );
 
-    if( aAddUnitLabel )
-        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, aType );
+    if( aAddUnitsText )
+        text += EDA_UNIT_UTILS::GetText( aUnits, aType );
 
     return text;
 }

@@ -295,8 +295,6 @@ wxString PCB_TEXTBOX::GetShownText( int aDepth ) const
 
 void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
@@ -308,17 +306,17 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Text Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
+    aList.emplace_back( _( "Text Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
+    aList.emplace_back( _( "Text Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
 
-    wxString msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().x - GetStart().x ) );
-    aList.emplace_back( _( "Box Width" ), msg );
+    aList.emplace_back( _( "Box Width" ),
+                        aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) ) );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().y - GetStart().y ) );
-    aList.emplace_back( _( "Box Height" ), msg );
+    aList.emplace_back( _( "Box Height" ),
+                        aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) ));
 
-    m_stroke.GetMsgPanelInfo( pcbIUScale, units, aList );
+    m_stroke.GetMsgPanelInfo( pcbIUScale, aFrame->GetUserUnits(), aList );
 }
 
 

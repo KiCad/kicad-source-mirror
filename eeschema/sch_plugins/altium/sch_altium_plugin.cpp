@@ -1429,29 +1429,30 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
     // To do: Import true ellipses when KiCad supports them
     if( elem.Radius != elem.SecondaryRadius )
     {
-        m_reporter->Report(
-                wxString::Format( _( "Unsupported ellipse was not imported at (X = %d; Y = %d)." ),
-                                  ( elem.Center + m_sheetOffset ).x, ( elem.Center + m_sheetOffset ).y ),
-                RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Unsupported ellipse was not imported at "
+                                                 "(X = %d; Y = %d)." ),
+                                              ( elem.Center + m_sheetOffset ).x,
+                                              ( elem.Center + m_sheetOffset ).y ),
+                            RPT_SEVERITY_ERROR );
         return;
     }
 
     if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
-            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
+        SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
 
-            circle->SetPosition( elem.Center + m_sheetOffset );
-            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
-            circle->SetStroke( STROKE_PARAMS( 0.1, PLOT_DASH_TYPE::SOLID ) );
+        circle->SetPosition( elem.Center + m_sheetOffset );
+        circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
+        circle->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
 
-            circle->SetFillColor( GetColorFromInt( elem.AreaColor ) );
+        circle->SetFillColor( GetColorFromInt( elem.AreaColor ) );
 
-            if( elem.IsSolid )
-                circle->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-            else
-                circle->SetFilled( false );
+        if( elem.IsSolid )
+            circle->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+        else
+            circle->SetFilled( false );
 
-            m_currentSheet->GetScreen()->Append( circle );
+        m_currentSheet->GetScreen()->Append( circle );
     }
     else
     {
@@ -1460,9 +1461,9 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
         if( libSymbolIt == m_libSymbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            m_reporter->Report(
-                    wxString::Format( wxT( "Ellipse's owner (%d) not found." ), elem.OwnerIndex ),
-                    RPT_SEVERITY_DEBUG );
+            m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
+                                                  elem.OwnerIndex ),
+                                RPT_SEVERITY_DEBUG );
             return;
         }
 
@@ -1475,7 +1476,7 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
 
         circle->SetPosition( GetRelativePosition( elem.Center + m_sheetOffset, symbol ) );
         circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
-        circle->SetStroke( STROKE_PARAMS( 0.1, PLOT_DASH_TYPE::SOLID ) );
+        circle->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
 
         circle->SetFillColor( GetColorFromInt( elem.AreaColor ) );
 

@@ -346,10 +346,8 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg );
 
     msg.Printf( wxT( "X=%s Y=%s" ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( gerbIUScale, aMainFrame->GetUserUnits(),
-                                                          m_ImageJustifyOffset.x ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( gerbIUScale, aMainFrame->GetUserUnits(),
-                                                          m_ImageJustifyOffset.y ) );
+                aMainFrame->MessageTextFromValue( m_ImageJustifyOffset.x ),
+                aMainFrame->MessageTextFromValue( m_ImageJustifyOffset.y ) );
 
     aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg );
 }

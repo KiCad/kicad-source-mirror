@@ -1141,8 +1141,6 @@ void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset
 
 void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
@@ -1153,7 +1151,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( _( "Style" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
     // Display pin length
-    aList.emplace_back( _( "Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, m_length, true ) );
+    aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( m_length, true ) );
 
     int i = PinOrientationIndex( m_orientation );
     aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
@@ -1161,8 +1159,8 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     VECTOR2I pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coords are top to bottom; lib item coords are bottom to top
 
-    aList.emplace_back( _( "Pos X" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, pinpos.x, true ) );
-    aList.emplace_back( _( "Pos Y" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( schIUScale, units, pinpos.y, true ) );
+    aList.emplace_back( _( "Pos X" ), aFrame->MessageTextFromValue( pinpos.x, true ) );
+    aList.emplace_back( _( "Pos Y" ), aFrame->MessageTextFromValue( pinpos.y, true ) );
 }
 
 

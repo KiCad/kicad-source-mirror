@@ -251,6 +251,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
                                                                   PCB_BASE_FRAME* aFrame,
                                                                   PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
+        m_frame( aFrame ),
         m_shape( aShape ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {
@@ -319,10 +320,10 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
         msg.Printf( _( "Corner %d" ), row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
 
-        msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_currPoints[row].x, true );
+        msg = m_frame->StringFromValue( m_currPoints[row].x, true );
         m_gridCornersList->SetCellValue( row, 0, msg );
 
-        msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_currPoints[row].y, true );
+        msg = m_frame->StringFromValue( m_currPoints[row].y, true );
         m_gridCornersList->SetCellValue( row, 1, msg );
     }
 

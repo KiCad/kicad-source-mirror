@@ -26,19 +26,18 @@
 #include <algorithm>
 
 #include <pgm_base.h>
-#include <base_units.h>
 #include <eda_draw_frame.h>
 #include <bitmaps.h>
 #include <netclass.h>
 #include <confirm.h>
 #include <grid_tricks.h>
 #include <dialogs/panel_setup_netclasses.h>
-#include "widgets/wx_html_report_box.h"
 #include <tool/tool_manager.h>
-#include <widgets/wx_grid.h>
 #include <string_utils.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/wx_html_report_box.h>
+#include <widgets/wx_grid.h>
 #include <wx/treebook.h>
 #include <project/net_settings.h>
 
@@ -231,14 +230,12 @@ void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
 
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
-    EDA_UNITS units = m_frame->GetUserUnits();
-    int       row = 0;
+    int row = 0;
 
     auto setCell =
         [&]( int aRow, int aCol, int aValue )
         {
-            m_netclassGrid->SetCellValue( aRow, aCol,
-                    EDA_UNIT_UTILS::UI::StringFromValue( m_frame->GetIuScale(), units, aValue, true ) );
+            m_netclassGrid->SetCellValue( aRow, aCol, m_frame->StringFromValue( aValue, true ) );
         };
 
     auto netclassToGridRow =
@@ -336,13 +333,12 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    EDA_UNITS units = m_frame->GetUserUnits();
-    int       row = 0;
+    int row = 0;
 
     auto getCell =
-            [this, units]( int aRow, int aCol ) -> long long int
+            [this]( int aRow, int aCol ) -> long long int
             {
-                return EDA_UNIT_UTILS::UI::ValueFromString( m_frame->GetIuScale(),units, m_netclassGrid->GetCellValue( aRow, aCol ) );
+                return m_frame->ValueFromString( m_netclassGrid->GetCellValue( aRow, aCol ) );
             };
 
     auto getCellStr =

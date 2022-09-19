@@ -259,7 +259,6 @@ EDA_ANGLE FP_TEXT::GetDrawRotation() const
 
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
     wxString msg;
 
     static const wxString text_type_msg[3] =
@@ -295,9 +294,9 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( _( "Angle" ), msg );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
-    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
-    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
+    aList.emplace_back( _( "Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
+    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
+    aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
 }
 
 

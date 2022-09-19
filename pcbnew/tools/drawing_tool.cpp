@@ -97,7 +97,6 @@ protected:
     void update() override
     {
         PCB_EDIT_FRAME*        frame = (PCB_EDIT_FRAME*) getToolManager()->GetToolHolder();
-        EDA_UNITS              units = frame->GetUserUnits();
         BOARD_DESIGN_SETTINGS& bds = frame->GetBoard()->GetDesignSettings();
         bool                   useIndex = !bds.m_UseConnectedTrackWidth
                                                 && !bds.UseCustomTrackViaSize();
@@ -118,12 +117,13 @@ protected:
             if( via.m_Drill > 0 )
             {
                 msg.Printf( _("Via %s, hole %s" ),
-                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ),
-                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Drill ) );
+                            frame->MessageTextFromValue( via.m_Diameter ),
+                            frame->MessageTextFromValue( via.m_Drill ) );
             }
             else
             {
-                msg.Printf( _( "Via %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ) );
+                msg.Printf( _( "Via %s" ),
+                            frame->MessageTextFromValue( via.m_Diameter ) );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,14 +54,10 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
 
     if( g_menuOrientations.IsEmpty() )
     {
-        g_menuOrientations.push_back(
-                "0" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back(
-                "90" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back(
-                "-90" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
-        g_menuOrientations.push_back(
-                "180" + EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back( "0" + EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back( "90" + EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back( "-90" + EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
+        g_menuOrientations.push_back( "180" + EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
     }
 
     m_orientationColAttr = new wxGridCellAttr;
@@ -203,25 +199,25 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetText();
 
     case FPT_WIDTH:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), text.GetTextWidth(), true );
+        return m_frame->StringFromValue( text.GetTextWidth(), true );
 
     case FPT_HEIGHT:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), text.GetTextHeight(), true );
+        return m_frame->StringFromValue( text.GetTextHeight(), true );
 
     case FPT_THICKNESS:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), text.GetTextThickness(), true );
+        return m_frame->StringFromValue( text.GetTextThickness(), true );
 
     case FPT_LAYER:
         return text.GetLayerName();
 
     case FPT_ORIENTATION:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::DEGREES, text.GetTextAngle().AsDegrees(), true );
+        return m_frame->StringFromValue( text.GetTextAngle(), true );
 
     case FPT_XOFFSET:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), text.GetPos0().x, true );
+        return m_frame->StringFromValue( text.GetPos0().x, true );
 
     case FPT_YOFFSET:
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), text.GetPos0().y, true );
+        return m_frame->StringFromValue( text.GetPos0().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking

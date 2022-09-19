@@ -1299,7 +1299,6 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     std::shared_ptr<DRC_ENGINE> drcEngine = m_frame->GetBoard()->GetDesignSettings().m_DRCEngine;
     DRC_CONSTRAINT              constraint;
 
-    EDA_UNITS                   units = m_frame->GetUserUnits();
     std::vector<MSG_PANEL_ITEM> msgItems;
 
     if( routerTool && routerTool->RoutingInProgress() )
@@ -1346,8 +1345,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection[0] );
         BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection[1] );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetSelectMenuText( units ),
-                                               b->GetSelectMenuText( units ) ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( a->GetSelectMenuText( m_frame->GetUserUnits() ),
+                                               b->GetSelectMenuText( m_frame->GetUserUnits() ) ) );
 
         BOARD_CONNECTED_ITEM* a_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( a );
         BOARD_CONNECTED_ITEM* b_conn = dyn_cast<BOARD_CONNECTED_ITEM*>( b );
@@ -1371,12 +1370,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 int actual_clearance = a_shape->GetClearance( b_shape.get() );
 
                 msgItems.emplace_back( _( "Resolved clearance" ),
-                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
+                                       m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
                 if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
                     msgItems.emplace_back( _( "Actual clearance" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, actual_clearance ) );
+                                           m_frame->MessageTextFromValue( actual_clearance ) );
                 }
             }
         }
@@ -1417,12 +1416,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
                 constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
                 msgItems.emplace_back( _( "Resolved hole clearance" ),
-                                       EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
+                                       m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
                 if( actual > -1 && actual < std::numeric_limits<int>::max() )
                 {
                     msgItems.emplace_back( _( "Actual hole clearance" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, actual ) );
+                                           m_frame->MessageTextFromValue( actual ) );
                 }
             }
         }
@@ -1454,12 +1453,12 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 if( edgeLayer == Edge_Cuts )
                 {
                     msgItems.emplace_back( _( "Resolved edge clearance" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
                 }
                 else
                 {
                     msgItems.emplace_back( _( "Resolved margin clearance" ),
-                                           EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) );
+                                           m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
                 }
             }
         }

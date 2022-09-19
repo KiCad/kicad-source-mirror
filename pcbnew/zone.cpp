@@ -26,8 +26,6 @@
 #include <bitmaps.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
-#include <core/mirror.h>
-#include <advanced_config.h>
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>
 #include <board.h>
@@ -487,8 +485,7 @@ bool ZONE::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleI
 
 void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-    wxString  msg;
+    wxString msg;
 
     if( GetIsRuleArea() )
         msg = _( "Rule Area" );
@@ -577,8 +574,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     aList.emplace_back( _( "Fill Mode" ), msg );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_area, true, EDA_DATA_TYPE::AREA );
-    aList.emplace_back( _( "Filled Area" ), msg );
+    aList.emplace_back( _( "Filled Area" ),
+                        aFrame->MessageTextFromValue( m_area, true, EDA_DATA_TYPE::AREA ) );
 
     wxString source;
     int      clearance = GetOwnClearance( UNDEFINED_LAYER, &source );
@@ -586,7 +583,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     if( !source.IsEmpty() )
     {
         aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
+                                              aFrame->MessageTextFromValue( clearance ) ),
                             wxString::Format( _( "(from %s)" ),
                                               source ) );
     }
@@ -768,8 +765,7 @@ int ZONE::GetBorderHatchPitch() const
 
 
 void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
-                                  int aBorderHatchPitch,
-                                  bool aRebuildBorderHatch )
+                                  int aBorderHatchPitch, bool aRebuildBorderHatch )
 {
     aBorderHatchPitch = std::max( aBorderHatchPitch,
                                   pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ) );

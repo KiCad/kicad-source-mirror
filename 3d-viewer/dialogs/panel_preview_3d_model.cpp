@@ -222,8 +222,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
  */
 static double rotationFromString( const wxString& aValue )
 {
-    double rotation =
-            EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES, aValue );
+    double rotation = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES, aValue );
 
     if( rotation > MAX_ROTATION )
     {
@@ -251,7 +250,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 {
     return wxString::Format( wxT( "%.2f%s" ),
                              aValue,
-                             EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+                             EDA_UNIT_UTILS::GetText( EDA_UNITS::DEGREES ) );
 }
 
 
@@ -265,7 +264,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 
     return wxString::Format( wxT( "%.6f%s" ),
                              aValue,
-                             EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_userUnits ) );
+                             EDA_UNIT_UTILS::GetText( m_userUnits ) );
 }
 
 
@@ -393,7 +392,7 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES,
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES,
                                                                    textCtrl->GetValue() );
 
     curr_value += ( ROTATION_INCREMENT * aSign );
@@ -468,7 +467,7 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::DEGREES,
+    double curr_value = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES,
                                                                    textCtrl->GetValue() );
 
     curr_value += step;

@@ -223,8 +223,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 {
-    EDA_UNITS units = m_parent->GetUserUnits();
-    int       row = 0;
+    int row = 0;
 
     m_netclassGrid->SetCellValue( row, GRID_TRACKSIZE, _( "Track Width" ) );
     m_netclassGrid->SetCellValue( row, GRID_VIASIZE, _( "Via Diameter" ) );
@@ -234,9 +233,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
     row++;
 
     auto setNetclassValue =
-            [this, units]( int aRow, int aCol, int aVal )
+            [this]( int aRow, int aCol, int aVal )
             {
-                m_netclassGrid->SetCellValue( aRow, aCol, EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, aVal, true ) );
+                m_netclassGrid->SetCellValue( aRow, aCol, m_parent->StringFromValue( aVal, true ) );
             };
 
     auto buildRow =

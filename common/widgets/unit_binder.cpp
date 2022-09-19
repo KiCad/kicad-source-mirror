@@ -76,8 +76,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, const EDA_IU_SCALE& aIUScale,
     }
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
+        m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 
     m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
                           nullptr, this );
@@ -105,8 +104,7 @@ void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
     m_units = aUnits;
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
+        m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 }
 
 
@@ -121,8 +119,7 @@ void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
     m_dataType = aDataType;
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
+        m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 }
 
 
@@ -259,7 +256,8 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         double val_min_iu = EDA_UNIT_UTILS::UI::FromUserUnit( m_iuScale, aUnits, aMin );
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, val_min_iu,  true ) );
+                                           EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
+                                                                                val_min_iu,  true ) );
 
         textEntry->SelectAll();
 
@@ -274,7 +272,8 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         double val_max_iu = EDA_UNIT_UTILS::UI::FromUserUnit( m_iuScale, aUnits, aMax );
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, val_max_iu, true ) );
+                                           EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
+                                                                                val_max_iu, true ) );
 
         textEntry->SelectAll();
 
@@ -290,29 +289,28 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
 
 void UNIT_BINDER::SetValue( long long int aValue )
 {
-    double value = aValue;
-    double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
+    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, displayValue,
+                                                              false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
-        SetValue( wxT( "-" ) + EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, displayValue, false, m_dataType ) );
+        SetValue( wxT( "-" ) + textValue );
     else
-        SetValue( EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, displayValue,
-                                                       false, m_dataType ) );
+        SetValue( textValue );
 }
 
 
 void UNIT_BINDER::SetDoubleValue( double aValue )
 {
-    double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
-    displayValue = setPrecision( displayValue, false );
+    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
+                                                              setPrecision( displayValue, false ),
+                                                              false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
-        SetValue( wxT( "-" )
-                  + EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
-                                                         displayValue, false, m_dataType ) );
+        SetValue( wxT( "-" ) + textValue );
     else
-        SetValue( EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units, displayValue,
-                                                       false, m_dataType ) );
+        SetValue( textValue );
 }
 
 
@@ -336,38 +334,35 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
         m_eval.Clear();
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
+        m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 }
 
 
 void UNIT_BINDER::ChangeValue( int aValue )
 {
-    double value = aValue;
-    double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
+    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
+                                                              setPrecision( displayValue, false ),
+                                                              false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
-        ChangeValue( wxT( "-" )
-                     + EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
-                                                            displayValue, false ) );
+        ChangeValue( wxT( "-" ) + textValue );
     else
-        ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
-                                                          displayValue, false ) );
+        ChangeValue( textValue );
 }
 
 
 void UNIT_BINDER::ChangeDoubleValue( double aValue )
 {
-    double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
-    displayValue = setPrecision( displayValue, false );
+    double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    wxString textValue = EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
+                                                              setPrecision( displayValue, false ),
+                                                              false, m_dataType );
 
     if( displayValue == 0 && m_negativeZero )
-        ChangeValue( wxT( "-" )
-                     + EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
-                                                            displayValue, false, m_dataType ) );
+        ChangeValue( wxT( "-" ) + textValue );
     else
-        ChangeValue( EDA_UNIT_UTILS::UI::StringFromValue( m_iuScale, m_units,
-                                                          displayValue, false, m_dataType ) );
+        ChangeValue( textValue );
 }
 
 
@@ -391,8 +386,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
         m_eval.Clear();
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
+        m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
 }
 
 
@@ -418,7 +412,8 @@ long long int UNIT_BINDER::GetValue()
         return 0;
     }
 
-    long long int displayValue = EDA_UNIT_UTILS::UI::ValueFromString( m_iuScale, m_units, value, m_dataType );
+    long long int displayValue = EDA_UNIT_UTILS::UI::ValueFromString( m_iuScale, m_units, value,
+                                                                      m_dataType );
     return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 

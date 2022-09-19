@@ -239,7 +239,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_LayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
 
 #define SET_INT_VALUE( aRow, aCol, aValue ) \
-        m_grid->SetCellValue( aRow, aCol, EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), aValue, true ) )
+        m_grid->SetCellValue( aRow, aCol, m_parent->StringFromValue( aValue, true ) )
 
 #define SET_BOOL_VALUE( aRow, aCol, aValue ) \
         attr = new wxGridCellAttr; \

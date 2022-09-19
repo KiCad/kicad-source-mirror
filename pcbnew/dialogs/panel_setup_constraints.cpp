@@ -64,8 +64,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDI
 bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 {
     wxString msg;
-    msg.Printf( m_stCircleToPolyWarning->GetLabel(),
-                EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), ARC_HIGH_DEF, true ) );
+    msg.Printf( m_stCircleToPolyWarning->GetLabel(), m_Frame->StringFromValue( ARC_HIGH_DEF, true ) );
     m_stCircleToPolyWarning->SetLabel( msg );
 
     m_useHeightForLengthCalcs->SetValue( m_BrdSettings->m_UseHeightForLengthCalcs );

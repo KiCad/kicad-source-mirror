@@ -41,14 +41,14 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     int        pad_count = 2;
     EDA_ANGLE  angle     = ANGLE_0;
 
-    PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
 
     // Ref and value text size (O = use board default value.
     // will be set to a value depending on the footprint size, if possible
     int text_size = 0;
 
     // Enter the size of the gap or stub
-    int gap_size = editFrame.GetDesignSettings().GetCurrentTrackWidth();
+    int gap_size = editFrame->GetDesignSettings().GetCurrentTrackWidth();
 
     switch( aFootprintShape )
     {
@@ -76,21 +76,21 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         break;
     }
 
-    wxString value = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, editFrame.GetUserUnits(), gap_size );
-    WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create Microwave Footprint" ), value );
+    wxString             value = editFrame->StringFromValue( gap_size );
+    WX_TEXT_ENTRY_DIALOG dlg( editFrame, msg, _( "Create Microwave Footprint" ), value );
 
     if( dlg.ShowQuasiModal() != wxID_OK )
         return nullptr; // cancelled by user
 
     value    = dlg.GetValue();
-    gap_size = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, editFrame.GetUserUnits(), value );
+    gap_size = editFrame->ValueFromString( value );
 
     bool abort = false;
 
     if( aFootprintShape == MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC )
     {
         msg = wxT( "0.0" );
-        WX_TEXT_ENTRY_DIALOG angledlg( &editFrame, _( "Angle in degrees:" ),
+        WX_TEXT_ENTRY_DIALOG angledlg( editFrame, _( "Angle in degrees:" ),
                                        _( "Create Microwave Footprint" ), msg );
 
         if( angledlg.ShowQuasiModal() != wxID_OK )
@@ -102,7 +102,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
         if( !msg.ToDouble( &fval ) )
         {
-            DisplayError( &editFrame, _( "Incorrect number, abort" ) );
+            DisplayError( editFrame, _( "Incorrect number, abort" ) );
             abort = true;
         }
 
@@ -181,7 +181,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     }
 
     // Update the footprint and board
-    editFrame.OnModify();
+    editFrame->OnModify();
 
     return footprint;
 }

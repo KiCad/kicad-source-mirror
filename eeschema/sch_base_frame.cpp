@@ -184,16 +184,14 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     VECTOR2D d         = cursorPos - screen->m_LocalOrigin;
 
     line.Printf( "X %s  Y %s",
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
-                                                           cursorPos.x, false ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), cursorPos.y, false ) );
+                 MessageTextFromValue( cursorPos.x, false ),
+                 MessageTextFromValue( cursorPos.y, false ) );
     SetStatusText( line, 2 );
 
     line.Printf( "dx %s  dy %s  dist %s",
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), d.x, false ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), d.y, false ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
-                                                              hypot( d.x, d.y ), false ) );
+                 MessageTextFromValue( d.x, false ),
+                 MessageTextFromValue( d.y, false ),
+                 MessageTextFromValue( hypot( d.x, d.y ), false ) );
     SetStatusText( line, 3 );
 
     DisplayGridMsg();

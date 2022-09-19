@@ -776,7 +776,6 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 // see class_track.h
 void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
     BOARD*    board = GetBoard();
 
@@ -788,15 +787,15 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_Width ) );
+    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( m_Width ) );
 
     if( Type() == PCB_ARC_T )
     {
         double radius = static_cast<PCB_ARC*>( this )->GetRadius();
-        aList.emplace_back( _( "Radius" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, radius ) );
+        aList.emplace_back( _( "Radius" ), aFrame->MessageTextFromValue( radius ) );
     }
 
-    aList.emplace_back( _( "Segment Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetLength() ) );
+    aList.emplace_back( _( "Segment Length" ), aFrame->MessageTextFromValue( GetLength() ) );
 
     // Display full track length (in Pcbnew)
     if( board && GetNetCode() > 0 )
@@ -807,14 +806,14 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        aList.emplace_back( _( "Routed Length" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, trackLen ) );
+        aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, lenPadToDie );
+            msg = aFrame->MessageTextFromValue( lenPadToDie );
             aList.emplace_back( _( "Pad To Die Length" ), msg );
 
-            msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, trackLen + lenPadToDie );
+            msg = aFrame->MessageTextFromValue( trackLen + lenPadToDie );
             aList.emplace_back( _( "Full Length" ), msg );
         }
     }
@@ -823,7 +822,7 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     int clearance = GetOwnClearance( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
+                                          aFrame->MessageTextFromValue( clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
     MINOPTMAX<int> c = GetWidthConstraint( &source );
@@ -831,14 +830,14 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( c.HasMax() )
     {
         aList.emplace_back( wxString::Format( _( "Width Constraints: min %s, max %s" ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Min() ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Max() ) ),
+                                              aFrame->MessageTextFromValue( c.Min() ),
+                                              aFrame->MessageTextFromValue( c.Max() ) ),
                             wxString::Format( _( "(from %s)" ), source ) );
     }
     else
     {
         aList.emplace_back( wxString::Format( _( "Width Constraints: min %s" ),
-                                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, c.Min() ) ),
+                                              aFrame->MessageTextFromValue( c.Min() ) ),
                             wxString::Format( _( "(from %s)" ), source ) );
     }
 }
@@ -846,7 +845,6 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
 void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
 
     switch( GetViaType() )
@@ -862,26 +860,20 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
-
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), m_Width );
-
-    aList.emplace_back( _( "Diameter" ), msg );
-
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), GetDrillValue() );
-
-    aList.emplace_back( _( "Hole" ), msg );
+    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( m_Width ) );
+    aList.emplace_back( _( "Hole" ), aFrame->MessageTextFromValue( GetDrillValue() ) );
 
     wxString  source;
     int clearance = GetOwnClearance( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, clearance ) ),
+                                          aFrame->MessageTextFromValue( clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
     aList.emplace_back( wxString::Format( _( "Min Annular Width: %s" ),
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, minAnnulus ) ),
+                                          aFrame->MessageTextFromValue( minAnnulus ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 }
 
@@ -1179,39 +1171,6 @@ void PCB_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     }
     }
 }
-
-
-#if defined(DEBUG)
-
-wxString PCB_TRACK::ShowState( int stateBits )
-{
-    wxString ret;
-
-    if( stateBits & IS_LINKED )
-        ret << wxT( " | IS_LINKED" );
-
-    if( stateBits & IN_EDIT )
-        ret << wxT( " | IN_EDIT" );
-
-    if( stateBits & IS_DRAGGING )
-        ret << wxT( " | IS_DRAGGING" );
-
-    if( stateBits & DO_NOT_DRAW )
-        ret << wxT( " | DO_NOT_DRAW" );
-
-    if( stateBits & IS_DELETED )
-        ret << wxT( " | IS_DELETED" );
-
-    if( stateBits & END_ONPAD )
-        ret << wxT( " | END_ONPAD" );
-
-    if( stateBits & BEGIN_ONPAD )
-        ret << wxT( " | BEGIN_ONPAD" );
-
-    return ret;
-}
-
-#endif
 
 
 static struct TRACK_VIA_DESC

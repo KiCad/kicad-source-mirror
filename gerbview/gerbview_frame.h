@@ -165,14 +165,6 @@ public:
     void SetLayerColor( int aLayer, const COLOR4D& aColor );
 
     /**
-     * This is usually the background color, but can be another color in order to see
-     * negative objects.
-     *
-     * @return the color of negative items.
-     */
-    COLOR4D GetNegativeItemsColor();
-
-    /**
      * Change out all the layers in m_Layers; called upon loading new gerber files.
      */
     void ReFillLayerWidget();

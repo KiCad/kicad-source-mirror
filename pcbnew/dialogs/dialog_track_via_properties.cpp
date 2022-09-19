@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -298,8 +298,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_netSelector->Disable();
         }
 
-        m_DesignRuleViasUnit->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+        m_DesignRuleViasUnit->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
 
         int viaSelection = wxNOT_FOUND;
 
@@ -307,9 +306,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Diameter )
-                            + wxT( " / " )
-                            + EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Drill );
+            wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
+                                    + wxT( " / " )
+                                    + m_frame->StringFromValue( viaDimension->m_Drill );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
 
             if( viaSelection == wxNOT_FOUND
@@ -343,16 +342,15 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        m_DesignRuleWidthsUnits->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+        m_DesignRuleWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
 
         int widthSelection = wxNOT_FOUND;
 
         // 0 is the netclass place-holder
         for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
-            int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), width );
+            int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
+            wxString msg = m_frame->StringFromValue( width );
             m_DesignRuleWidthsCtrl->Append( msg );
 
             if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
@@ -407,15 +405,14 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &m_frame->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Diameter )
-                            + wxT( " / " )
-                            + EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), viaDimension->m_Drill );
+            wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
+                                    + wxT( " / " )
+                                    + m_frame->StringFromValue( viaDimension->m_Drill );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
         }
 
         m_DesignRuleViasCtrl->SetSelection( viaSel );
-        m_DesignRuleViasUnit->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleViasUnit->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
     }
 
     if( m_tracks )
@@ -427,14 +424,13 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
         // 0 is the netclass place-holder
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
-            int width = m_frame->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_frame->GetUserUnits(), width );
+            int      width = m_frame->GetDesignSettings().m_TrackWidthList[ii];
+            wxString msg = m_frame->StringFromValue( width );
             m_DesignRuleWidthsCtrl->Append( msg );
         }
 
         m_DesignRuleWidthsCtrl->SetSelection( trackSel );
-        m_DesignRuleWidthsUnits->SetLabel(
-                EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
     }
 
     aEvent.Skip();

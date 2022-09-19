@@ -78,13 +78,11 @@ void PCB_DIMENSION_BASE::updateText()
         break;
 
     case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
-        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units );
+        text += EDA_UNIT_UTILS::GetText( m_units );
         break;
 
     case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
-        text += wxT( " (" );
-        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( m_units ).Trim( false );
-        text += wxT( ")" );
+        text += wxT( " (" ) + EDA_UNIT_UTILS::GetText( m_units ).Trim( false ) + wxT( ")" );
         break;
     }
 
@@ -308,20 +306,11 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
         switch( GetPrecision() )
         {
-        case 6:
-            msg = wxT( "0.00 in / 0 mils / 0.0 mm" );
-            break;
-        case 7:
-            msg = wxT( "0.000 in / 0 mils / 0.00 mm" );
-            break;
-        case 8:
-            msg = wxT( "0.0000 in / 0.0 mils / 0.000 mm" );
-            break;
-        case 9:
-            msg = wxT( "0.00000 in / 0.00 mils / 0.0000 mm" );
-            break;
-        default:
-            msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
+        case 6:  msg = wxT( "0.00 in / 0 mils / 0.0 mm" );          break;
+        case 7:  msg = wxT( "0.000 in / 0 mils / 0.00 mm" );        break;
+        case 8:  msg = wxT( "0.0000 in / 0.0 mils / 0.000 mm" );    break;
+        case 9:  msg = wxT( "0.00000 in / 0.00 mils / 0.0000 mm" ); break;
+        default: msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
         }
 
         aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ) );
@@ -332,13 +321,15 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     EDA_UNITS units;
 
     GetUnits( units );
-    aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( units ).Trim( false ) );
+    aList.emplace_back( _( "Units" ), EDA_UNIT_UTILS::GetLabel( units ) );
 
     aList.emplace_back( _( "Font" ), m_text.GetDrawFont()->GetName() );
     aList.emplace_back( _( "Text Thickness" ),
                         EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextHeight() ) );
+    aList.emplace_back( _( "Text Width" ),
+                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ),
+                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_text.GetTextHeight() ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     units = aFrame->GetUserUnits();
@@ -738,7 +729,11 @@ void PCB_DIM_ALIGNED::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_P
 {
     PCB_DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
 
-    aList.emplace_back( _( "Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aFrame->GetUserUnits(), m_height ) );
+    EDA_UNITS units;
+    GetUnits( units );
+
+    aList.emplace_back( _( "Height" ),
+                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, m_height ) );
 }
 
 

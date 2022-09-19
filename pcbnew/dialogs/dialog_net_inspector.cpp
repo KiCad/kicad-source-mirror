@@ -1295,7 +1295,7 @@ wxString DIALOG_NET_INSPECTOR::formatCount( unsigned int aValue ) const
 
 wxString DIALOG_NET_INSPECTOR::formatLength( int64_t aValue ) const
 {
-    return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), static_cast<long long int>( aValue ) );
+    return m_frame->MessageTextFromValue( static_cast<long long int>( aValue ) );
 }
 
 

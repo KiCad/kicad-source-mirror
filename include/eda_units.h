@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,11 +73,24 @@ namespace EDA_UNIT_UTILS
     /**
      * Get the units string for a given units type.
      *
-     * @param aUnits - The units requested.
-     * @param aType - The data type of the unit (e.g. distance, area, etc.)
+     * This version is for appending to a value string.
+     *
+     * @param aUnits The units requested.
+     * @param aType DISTANCE, AREA, or VOLUME
+     * @return The human readable units string with appropriate separators.
+     */
+    wxString GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+
+    /**
+     * Get the units string for a given units type.
+     *
+     * This version is for setting a wxStaticText label.
+     *
+     * @param aUnits The units requested.
+     * @param aType DISTANCE, AREA, or VOLUME
      * @return The human readable units string.
      */
-    wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    wxString GetLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Converts \a aAngle from board units to a string appropriate for writing to file.
@@ -92,8 +105,7 @@ namespace EDA_UNIT_UTILS
     std::string FormatAngle( const EDA_ANGLE& aAngle );
 
     /**
-     * Converts \a aValue from internal units to a string appropriate for writing
-     * to file.
+     * Converts \a aValue from internal units to a string appropriate for writing to file.
      *
      * This should only be used for writing to files as it ignores locale
      *
@@ -127,64 +139,53 @@ namespace EDA_UNIT_UTILS
         double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 
         /**
-         * Function StringFromValue
-         * returns the string from \a aValue according to units (inch, mm ...) for display,
-         * and the initial unit for value.
+         * Returns the string from \a aValue according to \a aUnits (inch, mm ...) for display.
          *
-         * For readability, the mantissa has 3 or more digits (max 8 digits),
-         * the trailing 0 are removed if the mantissa has more than 3 digits
-         * and some trailing 0
-         * This function should be used to display values in dialogs because a value
-         * entered in mm (for instance 2.0 mm) could need up to 8 digits mantissa
-         * if displayed in inch to avoid truncation or rounding made just by the printf function.
-         * otherwise the actual value is rounded when read from dialog and converted
-         * in internal units, and therefore modified.
+         * For readability, if the mantissa has 3 or more digits then any trailing 0's are removed.
+         * This function should be used to display values in dialogs because a value entered in mm
+         * (for instance 2.0 mm) could need up to 8 digits mantissa to preserve precision.
          *
-         * @param aUnit = display units (INCHES, MILLIMETRE ..)
-         * @param aValue = value in Internal_Unit
-         * @param aAddUnitSymbol = true to add symbol unit to the string value
+         * @param aUnits Units (INCHES, MILLIMETRE ..)
+         * @param aValue Value in internal units
+         * @param aAddUnitsText Add units text with appropriate separators
+         * @param aType DISTANCE, AREA, or VOLUME
          * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
          */
-        wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue,
-                                  bool          aAddUnitSymbol = false,
+        wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue,
+                                  bool aAddUnitsText = false,
                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
         /**
-         * Function MessageTextFromValue
-         * is a helper to convert the \a double length \a aValue to a string in inches,
-         * millimeters, or unscaled units.
+         * A helper to convert the \a double length \a aValue to a string in inches, millimeters,
+         * or unscaled units.
          *
-         * Should be used only to display a coordinate in status, but not in dialogs,
-         * files, etc., because the mantissa of the number displayed has 4 digits max
-         * for readability.  The actual internal value could need up to 8 digits to be
-         * printed.
+         * Should be used only to display a coordinate in status, but not in dialogs, files, etc.,
+         * because the mantissa of the number displayed has 4 digits max for readability.  The
+         * actual internal value could need up to 8 digits to preserve precision.
          *
-         * Use StringFromValue() instead where precision matters.
-         *
-         * @param aUnits The units to show the value in.  The unit string is added to the
-         *               message text.
+         * @param aUnits Units (INCHES, MILLIMETRE ..)
          * @param aValue The double value to convert.
-         * @param aAddUnitLabel If true, adds the unit label to the end of the string
-         * @param aType Type of the unit being used (e.g. distance, area, etc.)
+         * @param aAddUnitsText If true, adds the unit label to the end of the string
+         * @param aType DISTANCE, AREA, or VOLUME
          * @return The converted string for display in user interface elements.
          */
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue, bool aAddUnitLabel = true,
+        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                       double aValue, bool aAddUnitsText = true,
                                        EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, int aValue,
-                                       bool          aAddUnitLabel = true,
+        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                       int aValue, bool aAddUnitLabel = true,
                                        EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, long long int aValue,
-                                       bool          aAddUnitLabel = true,
+        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                       long long int aValue, bool aAddUnitLabel = true,
                                        EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
         wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
 
 
         /**
-         * Return in internal units the value "val" given in a real unit
-         * such as "in", "mm" or "deg"
+         * Return in internal units the value "val" given in a real unit such as "in", "mm" or "deg"
          */
         double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 

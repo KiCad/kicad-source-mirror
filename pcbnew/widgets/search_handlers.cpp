@@ -71,9 +71,9 @@ wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int row, int col )
     else if( col == 2 )
         return fp->GetLayerName();
     else if( col == 3 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), fp->GetX() );
+        return m_frame->MessageTextFromValue( fp->GetX() );
     else if( col == 4 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), fp->GetY() );
+        return m_frame->MessageTextFromValue( fp->GetY() );
 
     return wxEmptyString;
 }
@@ -130,9 +130,9 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int row, int col )
     else if( col == 1 )
         return zone->GetLayerName();
     else if( col == 2 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), zone->GetX() );
+        return m_frame->MessageTextFromValue( zone->GetX() );
     else if( col == 3 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), zone->GetY() );
+        return m_frame->MessageTextFromValue( zone->GetY() );
 
     return wxEmptyString;
 }
@@ -189,9 +189,9 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
     if( col == 1 )
         return text->GetLayerName();
     else if( col == 2 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), text->GetX() );
+        return m_frame->MessageTextFromValue( text->GetX() );
     else if( col == 3 )
-        return EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), text->GetY() );
+        return m_frame->MessageTextFromValue( text->GetY() );
 
     return wxEmptyString;
 }

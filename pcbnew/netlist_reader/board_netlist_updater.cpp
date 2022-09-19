@@ -806,8 +806,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 
                     msg.Printf( _( "Copper zone on layer %s at (%s, %s) has no pads connected." ),
                                 m_board->GetLayerName( layer ),
-                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), pos.x ),
-                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_frame->GetUserUnits(), pos.y ) );
+                                m_frame->MessageTextFromValue( pos.x ),
+                                m_frame->MessageTextFromValue( pos.y ) );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );

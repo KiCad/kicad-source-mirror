@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #define _DIALOG_PAD_PROPERTIES_H_
 
 #include <pcb_base_frame.h>
-#include <base_units.h>
 #include <wx/valnum.h>
 #include <board.h>
 #include <footprint.h>
@@ -256,13 +255,12 @@ private:
 
     bool doValidate( bool aRemoveRedundantCorners );
 
-    // The basic shape currently edited
-    PCB_SHAPE*           m_shape;
+private:
+    PCB_BASE_FRAME*       m_frame;
+    PCB_SHAPE*            m_shape;
 
-    // The working copy of the basic shape currently edited
-    std::vector<VECTOR2I> m_currPoints;
-
-    UNIT_BINDER          m_thickness;
+    std::vector<VECTOR2I> m_currPoints;    // The working copy of the data being edited
+    UNIT_BINDER           m_thickness;
 };
 
 

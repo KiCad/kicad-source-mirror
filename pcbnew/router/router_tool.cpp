@@ -199,7 +199,6 @@ protected:
 
     void update() override
     {
-        EDA_UNITS              units = m_frame.GetUserUnits();
         BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
         bool                   useIndex = !bds.m_UseConnectedTrackWidth &&
                                           !bds.UseCustomTrackViaSize();
@@ -231,7 +230,7 @@ protected:
             if( i == 0 )
                 msg = _( "Track netclass width" );
             else
-                msg.Printf( _( "Track %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, width ) );
+                msg.Printf( _( "Track %s" ), m_frame.MessageTextFromValue( width ) );
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -249,11 +248,16 @@ protected:
             else
             {
                 if( via.m_Drill > 0 )
+                {
                     msg.Printf( _("Via %s, hole %s" ),
-                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ),
-                                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Drill ) );
+                                m_frame.MessageTextFromValue( via.m_Diameter ),
+                                m_frame.MessageTextFromValue( via.m_Drill ) );
+                }
                 else
-                    msg.Printf( _( "Via %s" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, via.m_Diameter ) );
+                {
+                    msg.Printf( _( "Via %s" ),
+                                m_frame.MessageTextFromValue( via.m_Diameter ) );
+                }
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
@@ -328,7 +332,6 @@ protected:
 
     void update() override
     {
-        EDA_UNITS                    units = m_frame.GetUserUnits();
         const BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
 
         Clear();
@@ -357,13 +360,13 @@ protected:
                 if( diffPair.m_ViaGap <= 0 )
                 {
                     msg.Printf( _( "Width %s" ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ) );
+                                m_frame.MessageTextFromValue( diffPair.m_Width ) );
                 }
                 else
                 {
                     msg.Printf( _( "Width %s, via gap %s" ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_ViaGap ) );
+                                m_frame.MessageTextFromValue( diffPair.m_Width ),
+                                m_frame.MessageTextFromValue( diffPair.m_ViaGap ) );
                 }
             }
             else
@@ -371,15 +374,15 @@ protected:
                 if( diffPair.m_ViaGap <= 0 )
                 {
                     msg.Printf( _( "Width %s, gap %s" ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Gap ) );
+                                m_frame.MessageTextFromValue( diffPair.m_Width ),
+                                m_frame.MessageTextFromValue( diffPair.m_Gap ) );
                 }
                 else
                 {
                     msg.Printf( _( "Width %s, gap %s, via gap %s" ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Width ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_Gap ),
-                                    EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, diffPair.m_ViaGap ) );
+                                m_frame.MessageTextFromValue( diffPair.m_Width ),
+                                m_frame.MessageTextFromValue( diffPair.m_Gap ),
+                                m_frame.MessageTextFromValue( diffPair.m_ViaGap ) );
                 }
             }
 
@@ -2410,12 +2413,11 @@ void ROUTER_TOOL::UpdateMessagePanel()
 
     items.emplace_back( _( "Corner Style" ), cornerMode );
 
-    EDA_UNITS units = frame()->GetUserUnits();
-
     int width = isDiffPair ? sizes.DiffPairWidth() : sizes.TrackWidth();
     items.emplace_back( wxString::Format( _( "Track Width: %s" ),
-                                          EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, width ) ),
-                        wxString::Format( _( "(from %s)" ), sizes.GetWidthSource() ) );
+                                          frame()->MessageTextFromValue( width ) ),
+                        wxString::Format( _( "(from %s)" ),
+                                          sizes.GetWidthSource() ) );
 
     if( m_startItem )
     {
@@ -2428,15 +2430,16 @@ void ROUTER_TOOL::UpdateMessagePanel()
                                        m_router->GetCurrentLayer(), &constraint ) )
         {
             items.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                        EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, constraint.m_Value.Min() ) ),
-                                wxString::Format( _( "(from %s)" ), constraint.m_RuleName ) );
+                                                  frame()->MessageTextFromValue( constraint.m_Value.Min() ) ),
+                                wxString::Format( _( "(from %s)" ),
+                                                  constraint.m_RuleName ) );
         }
     }
 
     if( isDiffPair )
     {
         items.emplace_back( _( "Diff Pair Gap" ),
-                            EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, sizes.DiffPairGap() ) );
+                            frame()->MessageTextFromValue( sizes.DiffPairGap() ) );
     }
 
     frame()->SetMsgPanel( items );

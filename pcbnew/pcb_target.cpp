@@ -148,22 +148,20 @@ void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
 
 void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     aList.emplace_back( _( "PCB Target" ), wxEmptyString );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    aList.emplace_back( _( "Size" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetSize() ) );
-    aList.emplace_back( _( "Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetWidth() ) );
+    aList.emplace_back( _( "Size" ), aFrame->MessageTextFromValue( GetSize() ) );
+    aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( GetWidth() ) );
     aList.emplace_back( _( "Shape" ), GetShape() == 0 ? wxT( "+" ) : wxT( "X" ) );
 }
 
 
 void PCB_TARGET::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               PCB_LAYER_ID aLayer, int aClearanceValue,
-                                               int aError, ERROR_LOC aErrorLoc,
-                                               bool ignoreLineWidth ) const
+                                                       PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                       int aError, ERROR_LOC aErrorLoc,
+                                                       bool ignoreLineWidth ) const
 {
     int size = GetShape() ? GetSize() / 1.5 : GetSize() / 2.0;
     int radius = GetShape() ? GetSize() / 2.0 : GetSize() / 3.0;

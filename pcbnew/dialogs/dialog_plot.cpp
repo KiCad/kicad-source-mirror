@@ -237,8 +237,13 @@ void DIALOG_PLOT::init_Dialog()
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
     }
 
-    m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED, m_XScaleAdjust ) );
-    m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::UNSCALED, m_YScaleAdjust ) );
+    m_fineAdjustXCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale,
+                                                                      EDA_UNITS::UNSCALED,
+                                                                      m_XScaleAdjust ) );
+
+    m_fineAdjustYCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale,
+                                                                      EDA_UNITS::UNSCALED,
+                                                                      m_YScaleAdjust ) );
 
     // Test for a reasonable PS width correction value. Set to 0 if problem.
     if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
@@ -835,8 +840,8 @@ void DIALOG_PLOT::applyPlotSettings()
         m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
         msg.Printf( _( "Width correction constrained.  The width correction value must be in the"
                        " range of [%s; %s] for the current design rules." ),
-                    EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_widthAdjustMinValue, true ),
-                    EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUserUnits(), m_widthAdjustMaxValue, true ) );
+                    m_parent->StringFromValue( m_widthAdjustMinValue, true ),
+                    m_parent->StringFromValue( m_widthAdjustMaxValue, true ) );
         reporter.Report( msg, RPT_SEVERITY_WARNING );
     }
 

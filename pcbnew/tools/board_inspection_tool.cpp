@@ -204,28 +204,28 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 }
 
 
-wxString reportMin( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+wxString reportMin( PCB_BASE_FRAME* aFrame, DRC_CONSTRAINT& aConstraint )
 {
     if( aConstraint.m_Value.HasMin() )
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, aUnits, aConstraint.m_Value.Min(), true );
+        return aFrame->StringFromValue( aConstraint.m_Value.Min(), true );
     else
         return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
 }
 
 
-wxString reportOpt( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+wxString reportOpt( PCB_BASE_FRAME* aFrame, DRC_CONSTRAINT& aConstraint )
 {
     if( aConstraint.m_Value.HasOpt() )
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, aUnits, aConstraint.m_Value.Opt(), true );
+        return aFrame->StringFromValue( aConstraint.m_Value.Opt(), true );
     else
         return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
 }
 
 
-wxString reportMax( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+wxString reportMax( PCB_BASE_FRAME* aFrame, DRC_CONSTRAINT& aConstraint )
 {
     if( aConstraint.m_Value.HasMax() )
-        return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, aUnits, aConstraint.m_Value.Max(), true );
+        return aFrame->StringFromValue( aConstraint.m_Value.Max(), true );
     else
         return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
 }
@@ -278,7 +278,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMax( m_frame, constraint ) ) );
         break;
     }
 
@@ -293,8 +293,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved height constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_TEXT_THICKNESS:
@@ -308,8 +308,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved thickness constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_TRACK_WIDTH:
@@ -323,8 +323,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved width constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_CONNECTION_WIDTH:
@@ -338,7 +338,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved min connection width constraint: %s." ),
-                                     reportMin( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ) ) );
         break;
 
     case DRCE_VIA_DIAMETER:
@@ -352,8 +352,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_ANNULAR_WIDTH:
@@ -367,8 +367,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved annular width constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_DRILL_OUT_OF_RANGE:
@@ -383,8 +383,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
         break;
 
     case DRCE_HOLE_CLEARANCE:
@@ -403,7 +403,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         {
             constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
-            clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+            clearanceStr = m_frame->StringFromValue( clearance, true );
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
@@ -416,7 +416,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
-        clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+        clearanceStr = m_frame->StringFromValue( clearance, true );
 
         if( !drcEngine.HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
         {
@@ -440,7 +440,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
         clearance = constraint.m_Value.Min();
-        clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+        clearanceStr = m_frame->StringFromValue( clearance, true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
@@ -455,7 +455,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         constraint = drcEngine.EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
-        clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+        clearanceStr = m_frame->StringFromValue( clearance, true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
@@ -504,7 +504,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         {
             constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, a, layer, r );
             clearance = constraint.m_Value.Min();
-            clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+            clearanceStr = m_frame->StringFromValue( clearance, true );
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
@@ -517,7 +517,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
         constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
-        clearanceStr = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, r->GetUnits(), clearance, true );
+        clearanceStr = m_frame->StringFromValue( clearance, true );
 
         if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
         {
@@ -606,8 +606,6 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         std::swap( a, b );
 
     WX_HTML_REPORT_BOX*   r = nullptr;
-    EDA_UNITS             units = m_frame->GetUserUnits();
-
     PCB_LAYER_ID          active = m_frame->GetActiveLayer();
     LSET                  layerIntersection = a->GetLayerSet() & b->GetLayerSet();
     LSET                  copperIntersection = layerIntersection & LSET::AllCuMask();
@@ -651,7 +649,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved thermal relief gap: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, gap, true ) ) );
+                                         m_frame->StringFromValue( gap, true ) ) );
 
             r->Report( "" );
             r->Report( "" );
@@ -665,7 +663,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved thermal relief spoke width: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, width, true ) ) );
+                                         m_frame->StringFromValue( width, true ) ) );
 
             r->Report( "" );
             r->Report( "" );
@@ -692,7 +690,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             clearance = zone->GetLocalClearance();
             r->Report( "" );
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
 
@@ -704,7 +702,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 r->Report( wxString::Format( _( "Overridden by larger physical clearance from %s;"
                                                 "clearance: %s." ),
                                              EscapeHTML( constraint.GetName() ),
-                                             EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                             m_frame->StringFromValue( clearance, true ) ) );
             }
 
             if( !pad->FlashLayer( layer ) )
@@ -720,7 +718,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                     r->Report( wxString::Format( _( "Overridden by larger physical hole clearance from %s;"
                                                     "clearance: %s." ),
                                                  EscapeHTML( constraint.GetName() ),
-                                                 EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                                 m_frame->StringFromValue( clearance, true ) ) );
                 }
             }
 
@@ -729,7 +727,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
         }
         else
         {
@@ -743,7 +741,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             // Report a 0 clearance for solid connections
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, 0, true ) ) );
+                                         m_frame->StringFromValue( 0, true ) ) );
         }
 
         r->Flush();
@@ -774,7 +772,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
         }
 
         r->Flush();
@@ -796,9 +794,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved gap constraints: min %s; opt %s; max %s." ),
-                                         reportMin( r->GetUnits(),  constraint ),
-                                         reportOpt( r->GetUnits(),  constraint ),
-                                         reportMax( r->GetUnits(),  constraint ) ) );
+                                         reportMin( m_frame, constraint ),
+                                         reportOpt( m_frame, constraint ),
+                                         reportMax( m_frame, constraint ) ) );
 
             r->Report( "" );
             r->Report( "" );
@@ -817,7 +815,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
                 r->Report( "" );
                 r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
-                                             reportMax( r->GetUnits(),  constraint ) ) );
+                                             reportMax( m_frame, constraint ) ) );
             }
             r->Flush();
         }
@@ -871,7 +869,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 r->Report( warning );
 
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
         }
@@ -895,7 +893,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
         }
@@ -939,7 +937,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
         }
@@ -968,7 +966,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
         }
@@ -1007,7 +1005,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
         }
@@ -1036,7 +1034,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 {
                     r->Report( "" );
                     r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                                 EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                                 m_frame->StringFromValue( clearance, true ) ) );
                 }
 
                 r->Report( "" );
@@ -1102,7 +1100,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, units, clearance, true ) ) );
+                                         m_frame->StringFromValue( clearance, true ) ) );
         }
     }
 
@@ -1159,9 +1157,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(), constraint ),
-                                     reportOpt( r->GetUnits(), constraint ),
-                                     reportMax( r->GetUnits(), constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Flush();
     }
@@ -1179,9 +1177,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(), constraint ),
-                                     reportOpt( r->GetUnits(), constraint ),
-                                     reportMax( r->GetUnits(), constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Flush();
 
@@ -1196,9 +1194,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(), constraint ),
-                                     reportOpt( r->GetUnits(), constraint ),
-                                     reportMax( r->GetUnits(), constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Flush();
     }
@@ -1217,9 +1215,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(), constraint ),
-                                     reportOpt( r->GetUnits(), constraint ),
-                                     reportMax( r->GetUnits(), constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Flush();
     }
@@ -1238,9 +1236,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Text height constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Report( "" );
         r->Report( "" );
@@ -1254,9 +1252,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Text thickness constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( m_frame, constraint ),
+                                     reportOpt( m_frame, constraint ),
+                                     reportMax( m_frame, constraint ) ) );
 
         r->Flush();
     }

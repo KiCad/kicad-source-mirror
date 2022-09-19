@@ -139,19 +139,17 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "First Page Option" ), msg );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), EDA_UNITS::UNSCALED,
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
                                                     dataItem->m_RepeatCount );
     aList.emplace_back( _( "Repeat Count" ), msg );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), EDA_UNITS::UNSCALED,
+    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED,
                                                     dataItem->m_IncrementLabel );
     aList.emplace_back( _( "Repeat Label Increment" ), msg );
 
     msg.Printf( wxT( "(%s, %s)" ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), aFrame->GetUserUnits(),
-                                      dataItem->m_IncrementVector.x ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aFrame->GetIuScale(), aFrame->GetUserUnits(),
-                                      dataItem->m_IncrementVector.y ) );
+                aFrame->MessageTextFromValue( dataItem->m_IncrementVector.x ),
+                aFrame->MessageTextFromValue( dataItem->m_IncrementVector.y ) );
 
     aList.emplace_back( _( "Repeat Position Increment" ), msg );
 

@@ -635,7 +635,7 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
     text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, aUnits, aValue ) );
 
     if( aIncludeLabel )
-        text += EDA_UNIT_UTILS::GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );
+        text += EDA_UNIT_UTILS::GetText( aUnits, EDA_DATA_TYPE::DISTANCE );
 
     return text;
 }

@@ -62,9 +62,9 @@ protected:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
-    void AppendTrackWidth( const int aWidth );
-    void AppendViaSize( const int aSize, const int aDrill );
-    void AppendDiffPairs( const int aWidth, const int aGap, const int aViaGap );
+    void AppendTrackWidth( int aWidth );
+    void AppendViaSize( int aSize, int aDrill );
+    void AppendDiffPairs( int aWidth, int aGap, int aViaGap );
 
 private:
     PAGED_DIALOG*            m_Parent;

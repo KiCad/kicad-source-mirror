@@ -225,14 +225,6 @@ public:
 
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-
-    /**
-     * Function ShowState
-     * converts a set of state bits to a wxString
-     * @param stateBits Is an OR-ed together set of bits like IN_EDIT, etc.
-     */
-    static wxString ShowState( int stateBits );
-
 #endif
 
 protected:

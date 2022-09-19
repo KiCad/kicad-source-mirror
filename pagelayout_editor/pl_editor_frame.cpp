@@ -941,11 +941,8 @@ void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
     VECTOR2D size = GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );
 
     std::vector<MSG_PANEL_ITEM> msgItems;
-    msgItems.emplace_back( _( "Page Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue(
-                                                      GetIuScale(), GetUserUnits(), size.x ) );
-
-    msgItems.emplace_back( _( "Page Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue(
-                                                       GetIuScale(), GetUserUnits(), size.y ) );
+    msgItems.emplace_back( _( "Page Width" ), MessageTextFromValue( size.x ) );
+    msgItems.emplace_back( _( "Page Height" ), MessageTextFromValue( size.y ) );
 
     SetMsgPanel( msgItems );
 }

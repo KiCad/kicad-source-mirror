@@ -783,10 +783,8 @@ void PCB_BASE_FRAME::DisplayGridMsg()
     wxString line;
 
     line.Printf( wxT( "grid X %s  Y %s" ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.x,
-                                                           false ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), m_userUnits, gridSize.y,
-                                                           false ) );
+                 MessageTextFromValue( gridSize.x, false ),
+                 MessageTextFromValue( gridSize.y, false ) );
 
     SetStatusText( line, 4 );
 }
@@ -812,8 +810,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         double   ro = hypot( dx, dy );
 
         line.Printf( wxT( "r %s  theta %.3f" ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), ro, false ),
-                theta );
+                     MessageTextFromValue( ro, false ),
+                     theta );
 
         SetStatusText( line, 3 );
     }
@@ -824,10 +822,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     // Display absolute coordinates:
     line.Printf( wxT( "X %s  Y %s" ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), userXpos,
-                                                           false ),
-                 EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), userYpos,
-                                                           false ) );
+                 MessageTextFromValue( userXpos, false ),
+                 MessageTextFromValue( userYpos, false ) );
     SetStatusText( line, 2 );
 
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
@@ -841,12 +837,9 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         userYpos = m_originTransforms.ToDisplayRelY( relYpos );
 
         line.Printf( wxT( "dx %s  dy %s  dist %s" ),
-                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
-                                                               userXpos, false ),
-                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
-                                                               userYpos, false ),
-                     EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(),
-                                                               hypot( userXpos, userYpos ), false ) );
+                     MessageTextFromValue( userXpos, false ),
+                     MessageTextFromValue( userYpos, false ),
+                     MessageTextFromValue( hypot( userXpos, userYpos ), false ) );
         SetStatusText( line, 3 );
     }
 

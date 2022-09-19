@@ -85,35 +85,33 @@ void GRID_MENU::update()
 void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
                                  EDA_DRAW_FRAME* aParent )
 {
-    wxString msg;
-
-    EDA_UNITS primaryUnit;
-    EDA_UNITS secondaryUnit;
+    wxString     msg;
+    EDA_IU_SCALE scale = aParent->GetIuScale();
+    EDA_UNITS    primaryUnit;
+    EDA_UNITS    secondaryUnit;
 
     aParent->GetUnitPair( primaryUnit, secondaryUnit );
 
     for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
     {
-        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( aParent->GetIuScale(), EDA_UNITS::MILLIMETRES, gridSize );
+        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::MILLIMETRES,
+                                                             gridSize );
 
-        msg.Printf(
-                _( "Grid: %s (%s)" ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), primaryUnit, val ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), secondaryUnit,
-                                                          val ) );
+        msg.Printf( _( "Grid: %s (%s)" ),
+                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
+                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }
 
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( aParent->GetIuScale(),EDA_UNITS::INCHES,
+        int val = (int) EDA_UNIT_UTILS::UI::ValueFromString( scale, EDA_UNITS::INCHES,
                                                              aCfg->m_Window.grid.user_grid_x );
 
         msg.Printf( _( "User grid: %s (%s)" ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), primaryUnit, val ),
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( aParent->GetIuScale(), secondaryUnit,
-                                                          val ) );
+                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
+                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }

@@ -583,7 +583,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
-        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(), field.GetTextHeight(), true );
+        return m_frame->StringFromValue( field.GetTextHeight(), true );
 
     case FDC_ORIENTATION:
         if( field.GetTextAngle().IsHorizontal() )
@@ -592,12 +592,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
             return _( "Vertical" );
 
     case FDC_POSX:
-        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(),
-                                                    field.GetTextPos().x, true );
+        return m_frame->StringFromValue( field.GetTextPos().x, true );
 
     case FDC_POSY:
-        return EDA_UNIT_UTILS::UI::StringFromValue( schIUScale, m_frame->GetUserUnits(),
-                                                    field.GetTextPos().y, true );
+        return m_frame->StringFromValue( field.GetTextPos().y, true );
 
     case FDC_FONT:
         if( field.GetFont() )

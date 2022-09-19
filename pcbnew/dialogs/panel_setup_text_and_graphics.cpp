@@ -126,7 +126,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_grid->SetCellValue( row, col, EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, m_Frame->GetUserUnits(), val, true ) )
+    m_grid->SetCellValue( row, col, m_Frame->StringFromValue( val, true ) )
 
 #define DISABLE_CELL( row, col ) \
     m_grid->SetReadOnly( row, col ); m_grid->SetCellBackgroundColour( row, col, disabledColour );

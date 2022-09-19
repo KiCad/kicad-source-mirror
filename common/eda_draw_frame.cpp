@@ -576,14 +576,11 @@ void EDA_DRAW_FRAME::DisplayConstraintsMsg( const wxString& msg )
 
 void EDA_DRAW_FRAME::DisplayGridMsg()
 {
-    wxString line;
+    wxString msg;
 
-    line.Printf( "grid %s", EDA_UNIT_UTILS::UI::MessageTextFromValue(
-                                    GetIuScale(), GetUserUnits(),
-                                    GetCanvas()->GetGAL()->GetGridSize().x,
-                                    false ) );
+    msg.Printf( "grid %s", MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x, false ) );
 
-    SetStatusText( line, 4 );
+    SetStatusText( msg, 4 );
 }
 
 

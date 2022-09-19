@@ -301,8 +301,6 @@ void FP_TEXTBOX::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 
 void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), UnescapeString( GetText() ) );
 
@@ -314,17 +312,17 @@ void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
-    aList.emplace_back( _( "Thickness" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextThickness() ) );
-    aList.emplace_back( _( "Text Width" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextWidth() ) );
-    aList.emplace_back( _( "Text Height" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, GetTextHeight() ) );
+    aList.emplace_back( _( "Thickness" ), aFrame->MessageTextFromValue( GetTextThickness() ) );
+    aList.emplace_back( _( "Text Width" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( GetTextHeight() ) );
 
-    wxString msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().x - GetStart().x ) );
+    wxString msg = aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) );
     aList.emplace_back( _( "Box Width" ), msg );
 
-    msg = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units, std::abs( GetEnd().y - GetStart().y ) );
+    msg = aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) );
     aList.emplace_back( _( "Box Height" ), msg );
 
-    m_stroke.GetMsgPanelInfo( pcbIUScale, units, aList );
+    m_stroke.GetMsgPanelInfo( pcbIUScale, aFrame->GetUserUnits(), aList );
 }
 
 
@@ -445,8 +443,8 @@ std::shared_ptr<SHAPE> FP_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 
 
 void FP_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        PCB_LAYER_ID aLayer, int aClearance,
-                                                        int aError, ERROR_LOC aErrorLoc ) const
+                                                           PCB_LAYER_ID aLayer, int aClearance,
+                                                           int aError, ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = GetDrawFont();
@@ -476,9 +474,9 @@ void FP_TEXTBOX::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorn
 
 
 void FP_TEXTBOX::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                    PCB_LAYER_ID aLayer, int aClearance,
-                                                    int aError, ERROR_LOC aErrorLoc,
-                                                    bool aIgnoreLineWidth ) const
+                                                       PCB_LAYER_ID aLayer, int aClearance,
+                                                       int aError, ERROR_LOC aErrorLoc,
+                                                       bool aIgnoreLineWidth ) const
 {
     // Don't use FP_SHAPE::TransformShapeWithClearanceToPolygon.  We want to treat the
     // textbox as filled even if there's no background colour.

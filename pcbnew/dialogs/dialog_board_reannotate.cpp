@@ -367,8 +367,8 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
                                      "rounded to a %s, %s grid." ),
                                   fpLocation ? _( "footprint location" )
                                              : _( "reference designator location" ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, m_sortGridx ),
-                                  EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, m_sortGridy ) );
+                                  m_frame->MessageTextFromValue( m_sortGridx ),
+                                  m_frame->MessageTextFromValue( m_sortGridy ) );
 
     ShowReport( aMessage, RPT_SEVERITY_INFO );
 }
@@ -482,8 +482,8 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
     return wxString::Format( wxT( "%s, %s" ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, aX ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units, aY ) );
+                             m_frame->MessageTextFromValue( aX ),
+                             m_frame->MessageTextFromValue( aY ) );
 }
 
 

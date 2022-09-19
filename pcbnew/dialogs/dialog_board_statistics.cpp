@@ -436,14 +436,11 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     if( m_hasOutline )
     {
         m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
-                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(),
-                                                         m_boardWidth ) + wxS( " " ) );
+                                   m_parentFrame->MessageTextFromValue( m_boardWidth ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
-                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(),
-                                                         m_boardHeight ) + wxS( " " ) );
+                                   m_parentFrame->MessageTextFromValue( m_boardHeight ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardArea, true,
-                                                         EDA_DATA_TYPE::AREA ) );
+                                   m_parentFrame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA ) );
     }
     else
     {
@@ -476,15 +473,9 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 
         switch( type.shape )
         {
-        case PAD_DRILL_SHAPE_CIRCLE:
-            shapeStr = _( "Round" );
-            break;
-        case PAD_DRILL_SHAPE_OBLONG:
-            shapeStr = _( "Slot" );
-            break;
-        default:
-            shapeStr = _( "???" );
-            break;
+        case PAD_DRILL_SHAPE_CIRCLE: shapeStr = _( "Round" ); break;
+        case PAD_DRILL_SHAPE_OBLONG: shapeStr = _( "Slot" );  break;
+        default:                     shapeStr = _( "???" );   break;
         }
 
         if( type.startLayer == UNDEFINED_LAYER )
@@ -497,17 +488,17 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
         else
             stopLayerStr = board->GetLayerName( type.stopLayer );
 
-        m_gridDrills->SetCellValue(
-                currentRow, drillType_t::COL_COUNT, wxString::Format( wxT( "%i" ), type.qty ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_COUNT,
+                                    wxString::Format( wxT( "%i" ), type.qty ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_SHAPE, shapeStr );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_X_SIZE,
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), type.xSize ) );
+                                    m_parentFrame->MessageTextFromValue( type.xSize ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_Y_SIZE,
-                EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), type.ySize ) );
-        m_gridDrills->SetCellValue(
-                currentRow, drillType_t::COL_PLATED, type.isPlated ? _( "PTH" ) : _( "NPTH" ) );
-        m_gridDrills->SetCellValue(
-                currentRow, drillType_t::COL_VIA_PAD, type.isPad ? _( "Pad" ) : _( "Via" ) );
+                                    m_parentFrame->MessageTextFromValue( type.ySize ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_PLATED,
+                                    type.isPlated ? _( "PTH" ) : _( "NPTH" ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_VIA_PAD,
+                                    type.isPad ? _( "Pad" ) : _( "Via" ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_START_LAYER, startLayerStr );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_STOP_LAYER, stopLayerStr );
 
@@ -692,12 +683,12 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( m_hasOutline )
     {
-        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) <<
-               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardWidth ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) <<
-               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardHeight ) << wxT( "\n" );
-        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " ) <<
-               EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
+        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " )
+                << m_parentFrame->MessageTextFromValue( m_boardWidth ) << wxT( "\n" );
+        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " )
+                << m_parentFrame->MessageTextFromValue( m_boardHeight ) << wxT( "\n" );
+        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " )
+                << m_parentFrame->MessageTextFromValue( m_boardArea, true, EDA_DATA_TYPE::AREA );
         msg << wxT( "\n" );
     }
     else

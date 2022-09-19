@@ -109,6 +109,7 @@ constexpr EDA_IU_SCALE gerbIUScale = EDA_IU_SCALE( GERB_IU_PER_MM );
 constexpr EDA_IU_SCALE pcbIUScale = EDA_IU_SCALE( PCB_IU_PER_MM );
 constexpr EDA_IU_SCALE drawSheetIUScale = EDA_IU_SCALE( PL_IU_PER_MM );
 constexpr EDA_IU_SCALE schIUScale = EDA_IU_SCALE( SCH_IU_PER_MM );
+constexpr EDA_IU_SCALE unityScale = EDA_IU_SCALE( 1 );
 
 #ifndef SWIG
 // The max error is the distance between the middle of a segment, and the circle
