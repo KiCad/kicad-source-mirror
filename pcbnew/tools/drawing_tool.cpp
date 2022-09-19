@@ -546,7 +546,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
     {
         image->SetPosition( cursorPos );
         m_view->ClearPreview();
-        m_view->AddToPreview( image->Clone() );
+        m_view->AddToPreview( image, false );   // Add, but not give ownership
     }
 
     m_frame->PushTool( aEvent );
@@ -688,7 +688,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 image->SetLayer( m_frame->GetActiveLayer() );
 
                 m_view->ClearPreview();
-                m_view->AddToPreview( image->Clone() );
+                m_view->AddToPreview( image, false );   // Add, but not give ownership
                 m_view->RecacheAllItems(); // Bitmaps are cached in Opengl
                 selectionTool->AddItemToSel( image, false );
 
@@ -727,7 +727,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             image->SetPosition( cursorPos );
             m_view->ClearPreview();
-            m_view->AddToPreview( image->Clone() );
+            m_view->AddToPreview( image, false );   // Add, but not give ownership
             m_view->RecacheAllItems(); // Bitmaps are cached in Opengl
         }
         else if( image && evt->IsAction( &ACTIONS::doDelete ) )

@@ -458,7 +458,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     {
         image->SetPosition( getViewControls()->GetCursorPosition() );
         m_view->ClearPreview();
-        m_view->AddToPreview( image->Clone() );
+        m_view->AddToPreview( image, false );   // Add, but not give ownership
     }
 
     m_frame->PushTool( aEvent );
@@ -607,7 +607,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_frame->SaveCopyForRepeatItem( image );
 
                 m_view->ClearPreview();
-                m_view->AddToPreview( image->Clone() );
+                m_view->AddToPreview( image, false );   // Add, but not give ownership
                 m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
 
                 m_selectionTool->AddItemToSel( image );
@@ -642,7 +642,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         {
             image->SetPosition( cursorPos );
             m_view->ClearPreview();
-            m_view->AddToPreview( image->Clone() );
+            m_view->AddToPreview( image, false );   // Add, but not give ownership
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
             m_frame->SetMsgPanel( image );
         }
