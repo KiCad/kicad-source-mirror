@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-19 02:29+0000\n"
+"PO-Revision-Date: 2022-09-21 11:21+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -3028,7 +3028,7 @@ msgstr "Mostrar íconos en menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Este cambio surte efecto al reiniciar el editor."
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -16422,11 +16422,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Establecer nombre para mostrar de la unidad..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Establecer el nombre para mostrar de una unidad"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -17627,7 +17627,7 @@ msgstr "Ingrese el número de hoja para la ruta de hoja %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Establecer nombre para mostrar de la unidad"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -39091,6 +39091,8 @@ msgstr "Grupo seleccionado"
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr ""
+"Enrutar secuencialmente los elementos seleccionados desde el ancla de las "
+"líneas aéreas."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
 #, fuzzy
@@ -39100,14 +39102,18 @@ msgstr "Ruta desde el otro extremo"
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
+"Enruta secuencialmente los elementos seleccionados desde otro extremo del "
+"ancla de las líneas aéreas."
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Intento de finalización seleccionado (auto-enrutar)"
 
 #: pcbnew/tools/pcb_actions.cpp:1480
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
+"Secuencialmente intentar enrutar automáticamente todos los pads "
+"seleccionados."
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid ""
