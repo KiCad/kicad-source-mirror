@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-19 02:29+0000\n"
+"PO-Revision-Date: 2022-09-21 11:21+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28647,20 +28647,26 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Мінімальна ширина пояска. Якщо встановлено, то це значення є абсолютним "
+"мінімумом і не перевизначається класом мереж, чи правилами користувача, ні "
+"яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
-msgstr ""
+msgstr "Мінімальний діаметр перехідного отвору:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:117
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Мінімальна діаметр перехідного отвору. Якщо встановлено, то це значення є "
+"абсолютним мінімумом і не перевизначається класом мереж, чи правилами "
+"користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
-msgstr ""
+msgstr "Зазор мідного отвору:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:133
 msgid ""
@@ -28668,10 +28674,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Мінімальний зазор між отворами і іншими елементами. Якщо встановлено, то це "
+"значення є абсолютним мінімумом і не перевизначається класом мереж, чи "
+"правилами користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
-msgstr ""
+msgstr "Відступ міді від краю плати:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid ""
@@ -28679,24 +28688,30 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Мінімальний відступ між краєм плати і мідним шаром. Якщо встановлено, то це "
+"значення є абсолютним мінімумом і не перевизначається класом мереж, чи "
+"правилами користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
-msgstr ""
+msgstr "Отвори"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:185
 msgid "Minimum through hole:"
-msgstr ""
+msgstr "Мінімальний діаметр наскрізного отвору:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:190
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Мінімальний діаметр наскрізного отвору монтажу. Якщо встановлено, то це "
+"значення є абсолютним мінімумом і не перевизначається класом мереж, чи "
+"правилами користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr ""
+msgstr "Відступ між отворами:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -28704,38 +28719,48 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Мінімальна відступ між двома отворами.   Якщо встановлено, то це значення є "
+"абсолютним мінімумом і не перевизначається класом мереж, чи правилами "
+"користувача, ні яким іншим способом. (Примітка: крім фрезерованих отворів.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
-msgstr ""
+msgstr "Мікро отвори"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:242
 msgid "Minimum uVia diameter:"
-msgstr ""
+msgstr "Мінімальний діаметр мікро отвору:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:247
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Мінімальний діаметр мікро отворів.  Якщо встановлено, то це значення є "
+"абсолютним мінімумом і не перевизначається класом мереж, чи правилами "
+"користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia hole:"
-msgstr ""
+msgstr "Мінімальне отвір для мікро отворів:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:263
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Мінімальний діаметр отвору для мікро отвору.   Якщо встановлено, то це "
+"значення є абсолютним мінімумом і не перевизначається класом мереж, чи "
+"правилами користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
 msgid "Silkscreen"
-msgstr ""
+msgstr "Шовкографія"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
+#, fuzzy
 msgid "Minimum item clearance:"
-msgstr ""
+msgstr "Мінімальний відступ для шовкографії."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:304
 msgid ""
@@ -28743,14 +28768,17 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Мінімальний відступ між двома схожими елементами на шару шовкографії.   Якщо "
+"встановлено, то це значення є абсолютним мінімумом і не перевизначається "
+"класом мереж, чи правилами користувача, ні яким іншим способом."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum text height:"
-msgstr ""
+msgstr "Мінімальна висота тексту:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Minimum text thickness:"
-msgstr ""
+msgstr "Мінімальна товщина тексту:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
