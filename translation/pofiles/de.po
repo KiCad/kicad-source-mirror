@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-12 13:20-0700\n"
+"POT-Creation-Date: 2022-09-18 19:34-0700\n"
 "PO-Revision-Date: 2022-08-21 02:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
@@ -13311,7 +13311,7 @@ msgstr "KiCad Schaltplan-Editor"
 msgid "New schematic file is unsaved"
 msgstr "Neue Schaltplandatei ist nicht gespeichert"
 
-#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1634
+#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1635
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:522
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -14756,54 +14756,54 @@ msgstr "Simulationsparameter und -einstellungen"
 msgid "Spice Simulator"
 msgstr "Spice-Simulator"
 
-#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1468
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1469
 msgid "There were errors during netlist export, aborted."
 msgstr ""
 "Es sind Fehler während des Netzlistenexports aufgetreten; es wird "
 "abgebrochen."
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:517
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:639
 msgid "Error: simulation type not defined!\n"
 msgstr "Fehler: Simulationstyp nicht definiert!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:645
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Fehler: Simulationstyp unterstützt kein Plotten!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sim/sim_plot_frame.cpp:836 eeschema/sim/sim_plot_frame.cpp:1676
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1109
+#: eeschema/sim/sim_plot_frame.cpp:1110
 msgid "noname"
 msgstr "namenlos"
 
-#: eeschema/sim/sim_plot_frame.cpp:1158
+#: eeschema/sim/sim_plot_frame.cpp:1159
 msgid "Open simulation workbook"
 msgstr "Arbeitsmappe öffnen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1187
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "Save Simulation Workbook As"
 msgstr "Simulationsarbeitsmappe speichern unter"
 
-#: eeschema/sim/sim_plot_frame.cpp:1203
+#: eeschema/sim/sim_plot_frame.cpp:1204
 msgid "Save Plot as Image"
 msgstr "Speichert den Plot als Bild"
 
-#: eeschema/sim/sim_plot_frame.cpp:1220
+#: eeschema/sim/sim_plot_frame.cpp:1221
 msgid "Save Plot Data"
 msgstr "Plotdaten speichern"
 
-#: eeschema/sim/sim_plot_frame.cpp:1516
+#: eeschema/sim/sim_plot_frame.cpp:1517
 msgid "You need to run plot-providing simulation first."
 msgstr "Sie müssen zuerst eine Plot-Simulation ausführen."
 
-#: eeschema/sim/sim_plot_frame.cpp:1771
+#: eeschema/sim/sim_plot_frame.cpp:1774
 msgid ""
 "\n"
 "\n"
@@ -14815,19 +14815,19 @@ msgstr ""
 "Simulationsergebnisse:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Hide Signal"
 msgstr "Signal verbergen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Erase the signal from plot screen"
 msgstr "Löschen des Signals aus der Plotanzeige"
 
-#: eeschema/sim/sim_plot_frame.cpp:1848
+#: eeschema/sim/sim_plot_frame.cpp:1851
 msgid "Hide Cursor"
 msgstr "Cursor verbergen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1853
 msgid "Show Cursor"
 msgstr "Cursor anzeigen"
 

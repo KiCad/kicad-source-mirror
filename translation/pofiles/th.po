@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-12 13:20-0700\n"
+"POT-Creation-Date: 2022-09-18 19:34-0700\n"
 "PO-Revision-Date: 2022-08-15 01:21+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
@@ -12952,7 +12952,7 @@ msgstr "ตัวแก้ไขวงจร KiCad"
 msgid "New schematic file is unsaved"
 msgstr "ไม่ได้บันทึกไฟล์วงจรใหม่"
 
-#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1634
+#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1635
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:522
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -14336,52 +14336,52 @@ msgstr "พารามิเตอร์และการตั้งค่า
 msgid "Spice Simulator"
 msgstr "เครื่องจำลองสไปส์"
 
-#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1468
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1469
 msgid "There were errors during netlist export, aborted."
 msgstr "มีข้อผิดพลาดระหว่างการส่งออกรายชื่อเน็ต,ถูกยกเลิก"
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:517
 #, c-format
 msgid "Plot%u - "
 msgstr "พล็อต%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:639
 msgid "Error: simulation type not defined!\n"
 msgstr "ข้อผิดพลาด: ไม่ได้กำหนดประเภทการจำลอง!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:645
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "ข้อผิดพลาด: ประเภทการจำลองไม่รองรับการพล็อต!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sim/sim_plot_frame.cpp:836 eeschema/sim/sim_plot_frame.cpp:1676
 msgid "Signal"
 msgstr "สัญญาณ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1109
+#: eeschema/sim/sim_plot_frame.cpp:1110
 msgid "noname"
 msgstr "ไม่มีชื่อ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1158
+#: eeschema/sim/sim_plot_frame.cpp:1159
 msgid "Open simulation workbook"
 msgstr "เปิดสมุดงานจำลอง"
 
-#: eeschema/sim/sim_plot_frame.cpp:1187
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "Save Simulation Workbook As"
 msgstr "บันทึกสมุดงานการจําลองเป็น"
 
-#: eeschema/sim/sim_plot_frame.cpp:1203
+#: eeschema/sim/sim_plot_frame.cpp:1204
 msgid "Save Plot as Image"
 msgstr "บันทึกพล็อตเป็นรูปภาพ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1220
+#: eeschema/sim/sim_plot_frame.cpp:1221
 msgid "Save Plot Data"
 msgstr "บันทึกข้อมูลพล็อต"
 
-#: eeschema/sim/sim_plot_frame.cpp:1516
+#: eeschema/sim/sim_plot_frame.cpp:1517
 msgid "You need to run plot-providing simulation first."
 msgstr "คุณต้องเรียกใช้พล็อตภายในการจำลองก่อน"
 
-#: eeschema/sim/sim_plot_frame.cpp:1771
+#: eeschema/sim/sim_plot_frame.cpp:1774
 msgid ""
 "\n"
 "\n"
@@ -14393,19 +14393,19 @@ msgstr ""
 "ผลการจำลอง:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Hide Signal"
 msgstr "ซ่อนสัญญาณ"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Erase the signal from plot screen"
 msgstr "ลบสัญญาณออกจากหน้าจอพล็อต"
 
-#: eeschema/sim/sim_plot_frame.cpp:1848
+#: eeschema/sim/sim_plot_frame.cpp:1851
 msgid "Hide Cursor"
 msgstr "ซ่อนเคอร์เซอร์"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1853
 msgid "Show Cursor"
 msgstr "แสดงเคอร์เซอร์"
 

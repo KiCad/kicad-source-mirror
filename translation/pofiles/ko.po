@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-12 13:20-0700\n"
+"POT-Creation-Date: 2022-09-18 19:34-0700\n"
 "PO-Revision-Date: 2022-08-15 01:21+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
@@ -13057,7 +13057,7 @@ msgstr "KiCad 회로도 편집기"
 msgid "New schematic file is unsaved"
 msgstr "새 회로도 파일이 저장되지 않음"
 
-#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1634
+#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1635
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:522
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -14473,52 +14473,52 @@ msgstr "시뮬레이션 매개변수 및 설정"
 msgid "Spice Simulator"
 msgstr "Spice 시뮬레이터"
 
-#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1468
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1469
 msgid "There were errors during netlist export, aborted."
 msgstr "네트리스트 내보내기 중에 오류가 발생하였습니다. 내보내기를 중단합니다."
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:517
 #, c-format
 msgid "Plot%u - "
 msgstr "플롯%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:639
 msgid "Error: simulation type not defined!\n"
 msgstr "오류: 시뮬레이션 유형이 정의되지 않았습니다!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:645
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않습니다!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sim/sim_plot_frame.cpp:836 eeschema/sim/sim_plot_frame.cpp:1676
 msgid "Signal"
 msgstr "신호"
 
-#: eeschema/sim/sim_plot_frame.cpp:1109
+#: eeschema/sim/sim_plot_frame.cpp:1110
 msgid "noname"
 msgstr "이름 없음"
 
-#: eeschema/sim/sim_plot_frame.cpp:1158
+#: eeschema/sim/sim_plot_frame.cpp:1159
 msgid "Open simulation workbook"
 msgstr "시뮬레이션 워크북 열기"
 
-#: eeschema/sim/sim_plot_frame.cpp:1187
+#: eeschema/sim/sim_plot_frame.cpp:1188
 msgid "Save Simulation Workbook As"
 msgstr "시뮬레이션 통합 문서 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1203
+#: eeschema/sim/sim_plot_frame.cpp:1204
 msgid "Save Plot as Image"
 msgstr "플롯을 이미지로 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1220
+#: eeschema/sim/sim_plot_frame.cpp:1221
 msgid "Save Plot Data"
 msgstr "플롯 데이터 저장"
 
-#: eeschema/sim/sim_plot_frame.cpp:1516
+#: eeschema/sim/sim_plot_frame.cpp:1517
 msgid "You need to run plot-providing simulation first."
 msgstr "플롯 제공 시뮬레이션을 먼저 실행하여야 합니다."
 
-#: eeschema/sim/sim_plot_frame.cpp:1771
+#: eeschema/sim/sim_plot_frame.cpp:1774
 msgid ""
 "\n"
 "\n"
@@ -14530,19 +14530,19 @@ msgstr ""
 "시뮬레이션 결과:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Hide Signal"
 msgstr "신호 숨김"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Erase the signal from plot screen"
 msgstr "플롯 화면으로부터 신호 삭제"
 
-#: eeschema/sim/sim_plot_frame.cpp:1848
+#: eeschema/sim/sim_plot_frame.cpp:1851
 msgid "Hide Cursor"
 msgstr "커서 숨김"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1853
 msgid "Show Cursor"
 msgstr "커서 표시"
 

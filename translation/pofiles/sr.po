@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-12 13:20-0700\n"
+"POT-Creation-Date: 2022-09-18 19:34-0700\n"
 "PO-Revision-Date: 2022-09-05 11:13+0000\n"
 "Last-Translator: Zoran <zastos@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v6/sr/>\n"
@@ -13279,7 +13279,7 @@ msgstr "Додјела шеме"
 msgid "New schematic file is unsaved"
 msgstr "Додјела шеме"
 
-#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1634
+#: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1635
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:522
 #: eeschema/symbol_editor/symbol_editor.cpp:1186
 #: pagelayout_editor/pl_editor_frame.cpp:381
@@ -14528,57 +14528,57 @@ msgstr "Поставке симулације"
 msgid "Spice Simulator"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1468
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1469
 msgid "There were errors during netlist export, aborted."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:516
+#: eeschema/sim/sim_plot_frame.cpp:517
 #, c-format
 msgid "Plot%u - "
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:638
+#: eeschema/sim/sim_plot_frame.cpp:639
 msgid "Error: simulation type not defined!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:645
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:835 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sim/sim_plot_frame.cpp:836 eeschema/sim/sim_plot_frame.cpp:1676
 msgid "Signal"
 msgstr "Сигнал"
 
-#: eeschema/sim/sim_plot_frame.cpp:1109
+#: eeschema/sim/sim_plot_frame.cpp:1110
 #, fuzzy
 msgid "noname"
 msgstr "Име чиоде"
 
-#: eeschema/sim/sim_plot_frame.cpp:1158
+#: eeschema/sim/sim_plot_frame.cpp:1159
 #, fuzzy
 msgid "Open simulation workbook"
 msgstr "Отвори"
 
-#: eeschema/sim/sim_plot_frame.cpp:1187
+#: eeschema/sim/sim_plot_frame.cpp:1188
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Сачувај &Као..."
 
-#: eeschema/sim/sim_plot_frame.cpp:1203
+#: eeschema/sim/sim_plot_frame.cpp:1204
 #, fuzzy
 msgid "Save Plot as Image"
 msgstr "Сачувај као слику"
 
-#: eeschema/sim/sim_plot_frame.cpp:1220
+#: eeschema/sim/sim_plot_frame.cpp:1221
 #, fuzzy
 msgid "Save Plot Data"
 msgstr "Сачувај &Као..."
 
-#: eeschema/sim/sim_plot_frame.cpp:1516
+#: eeschema/sim/sim_plot_frame.cpp:1517
 msgid "You need to run plot-providing simulation first."
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1771
+#: eeschema/sim/sim_plot_frame.cpp:1774
 msgid ""
 "\n"
 "\n"
@@ -14590,19 +14590,19 @@ msgstr ""
 "Резултати симулације:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Hide Signal"
 msgstr "Сакрити сигнал"
 
-#: eeschema/sim/sim_plot_frame.cpp:1842
+#: eeschema/sim/sim_plot_frame.cpp:1845
 msgid "Erase the signal from plot screen"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:1848
+#: eeschema/sim/sim_plot_frame.cpp:1851
 msgid "Hide Cursor"
 msgstr "Сакрити курсор"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1853
 #, fuzzy
 msgid "Show Cursor"
 msgstr "Курсор"
