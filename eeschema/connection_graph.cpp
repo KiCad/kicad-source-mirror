@@ -3108,10 +3108,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                     allPins += hasPins( neighbor );
                 }
             }
-            else
-            {
-                printf( "No net named %ls?\n", name.wc_str() );
-            }
 
             if( allPins < 2 )
             {
