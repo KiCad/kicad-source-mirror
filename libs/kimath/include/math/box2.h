@@ -114,7 +114,7 @@ public:
     }
 
     /**
-     * Ensure that the height ant width are positive.
+     * Ensure that the height and width are positive.
      */
     BOX2<Vec>& Normalize()
     {
@@ -482,8 +482,8 @@ public:
 
         Vec farpt = FarthestPointTo( aCenter );
         // Farthest point must be further than the inside of the line
-        double fx = (double) farpt.x;
-        double fy = (double) farpt.y;
+        double fx = (double) farpt.x - aCenter.x;
+        double fy = (double) farpt.y - aCenter.y;
 
         double r = (double) aRadius - (double) aWidth / 2;
 
@@ -800,8 +800,20 @@ public:
 
         me.Normalize(); // ensure size is >= 0
 
-        coord_type fx = std::max( std::abs( aPoint.x - me.GetLeft() ), std::abs( aPoint.x - me.GetRight() ) );
-        coord_type fy = std::max( std::abs( aPoint.y - me.GetTop() ), std::abs( aPoint.y - me.GetBottom() ) );
+        coord_type fx;
+        coord_type fy;
+
+        Vec center = me.GetCenter();
+
+        if( aPoint.x < center.x )
+            fx = me.GetRight();
+        else
+            fx = me.GetLeft();
+
+        if( aPoint.y < center.y )
+            fy = me.GetBottom();
+        else
+            fy = me.GetTop();
 
         return Vec( fx, fy );
     }
