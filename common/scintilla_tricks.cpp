@@ -80,13 +80,13 @@ void SCINTILLA_TRICKS::onThemeChanged( wxSysColourChangedEvent &aEvent )
 void SCINTILLA_TRICKS::setupStyles()
 {
     wxTextCtrl     dummy( m_te->GetParent(), wxID_ANY );
-    wxColour       foreground    = dummy.GetForegroundColour();
-    wxColour       background    = dummy.GetBackgroundColour();
+    KIGFX::COLOR4D foreground    = dummy.GetForegroundColour();
+    KIGFX::COLOR4D background    = dummy.GetBackgroundColour();
     KIGFX::COLOR4D highlight     = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
     KIGFX::COLOR4D highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-    m_te->StyleSetForeground( wxSTC_STYLE_DEFAULT, foreground );
-    m_te->StyleSetBackground( wxSTC_STYLE_DEFAULT, background );
+    m_te->StyleSetForeground( wxSTC_STYLE_DEFAULT, foreground.ToColour() );
+    m_te->StyleSetBackground( wxSTC_STYLE_DEFAULT, background.ToColour() );
     m_te->StyleClearAll();
 
     // Scintilla doesn't handle alpha channel, which at least OSX uses in some highlight colours,
@@ -96,7 +96,7 @@ void SCINTILLA_TRICKS::setupStyles()
 
     m_te->SetSelForeground( true, highlightText.ToColour() );
     m_te->SetSelBackground( true, highlight.ToColour() );
-    m_te->SetCaretForeground( foreground );
+    m_te->SetCaretForeground( foreground.ToColour() );
 
     if( !m_singleLine )
     {
@@ -110,9 +110,13 @@ void SCINTILLA_TRICKS::setupStyles()
         m_te->SetTabWidth( 4 );
     }
 
-    // Set up the brace highlighting
+    // Set up the brace highlighting.  Scintilla doesn't handle alpha, so we construct our own
+    // 20% wash by blending with the background.
+    KIGFX::COLOR4D braceText = highlightText;
+    KIGFX::COLOR4D braceHighlight = braceText.Mix( background, 0.2 );
+
     m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText.ToColour() );
-    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight.Saturate( 0.0 ).ToColour() );
+    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, braceHighlight.ToColour() );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 }
 
