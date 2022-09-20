@@ -41,6 +41,7 @@
 #include <stroke_params.h>
 #include <render_settings.h>
 
+
 class COLOR_SETTINGS;
 class SHAPE_ARC;
 class SHAPE_POLY_SET;

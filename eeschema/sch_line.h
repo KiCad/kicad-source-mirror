@@ -26,6 +26,8 @@
 #define _SCH_LINE_H_
 
 #include <sch_item.h>
+#include <wx/pen.h>     // for wxPenStyle
+#include <list>         // for std::list
 
 class NETLIST_OBJECT_LIST;
 

@@ -31,13 +31,13 @@
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
-#include <wx/log.h>
 #include <dialogs/html_message_box.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <core/kicad_algo.h>
 #include <trigo.h>
 #include <lib_textbox.h>
+
 
 using KIGFX::SCH_RENDER_SETTINGS;
 

@@ -32,6 +32,7 @@
 #include <general.h>
 #include <schematic.h>
 #include <sch_shape.h>
+#include "plotters/plotter.h"
 
 
 SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, int aLineWidth, FILL_T aFillType, KICAD_T aType ) :

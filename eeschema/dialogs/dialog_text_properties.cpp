@@ -39,6 +39,7 @@
 #include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <dialog_text_properties.h>
+#include <gr_text.h>
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITEM* aTextItem ) :

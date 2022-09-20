@@ -34,6 +34,8 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include "sch_painter.h"
+#include "plotters/plotter.h"
+
 
 // small margin in internal units between the pin text and the pin line
 #define PIN_TEXT_MARGIN 4

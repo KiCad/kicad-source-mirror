@@ -31,6 +31,7 @@
 #include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_shape.h>
+#include "plotters/plotter.h"
 
 
 LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType,

@@ -44,7 +44,7 @@ namespace SIM_LIBRARY_SPICE_PARSER
 
     template <> struct librarySelector<modelUnit> : std::true_type {};
     template <> struct librarySelector<modelName> : std::true_type {};
-    
+
     // For debugging.
     template <> struct librarySelector<unknownLine> : std::true_type {};
 };

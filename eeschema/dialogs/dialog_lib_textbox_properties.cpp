@@ -36,6 +36,7 @@
 #include <scintilla_tricks.h>
 #include <dialog_lib_textbox_properties.h>
 #include "symbol_editor_drawing_tools.h"
+#include <gr_text.h>
 
 DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                               LIB_TEXTBOX* aTextBox ) :

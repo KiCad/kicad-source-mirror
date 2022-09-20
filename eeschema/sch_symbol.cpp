@@ -37,6 +37,7 @@
 #include <refdes_utils.h>
 #include <wx/log.h>
 #include <string_utils.h>
+#include "plotters/plotter.h"
 
 
 /**

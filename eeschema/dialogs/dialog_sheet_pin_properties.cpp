@@ -33,6 +33,7 @@
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
+#include <gr_text.h>
 
 
 DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent,

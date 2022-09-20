@@ -30,10 +30,11 @@
 #include <set>
 
 #include <eda_item.h>
-#include <plotters/plotter.h>
 #include <default_values.h>
 #include <sch_sheet_path.h>
 #include <netclass.h>
+#include <stroke_params.h>
+#include <layer_ids.h>
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
@@ -45,6 +46,7 @@ class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
+class PLOTTER;
 
 using KIGFX::RENDER_SETTINGS;
 
