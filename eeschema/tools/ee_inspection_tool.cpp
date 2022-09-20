@@ -212,7 +212,6 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    EDA_UNITS units = m_frame->GetUserUnits();
     std::vector<wxString> messages;
     const int grid_size = KiROUND( getView()->GetGAL()->GetGridSize().x );
 

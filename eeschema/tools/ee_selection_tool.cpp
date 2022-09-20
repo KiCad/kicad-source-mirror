@@ -231,13 +231,13 @@ bool EE_SELECTION_TOOL::Init()
                 if ( !m_isSymbolEditor )
                     return false;
 
-                SYMBOL_EDIT_FRAME* symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+                SYMBOL_EDIT_FRAME* symbEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
-                return symbolEditorFrame
-                        && symbolEditorFrame->GetCurSymbol()
-                        && symbolEditorFrame->GetCurSymbol()->IsMulti()
-                        && symbolEditorFrame->IsSymbolEditable()
-                        && !symbolEditorFrame->IsSymbolAlias();
+                return symbEditorFrame
+                        && symbEditorFrame->GetCurSymbol()
+                        && symbEditorFrame->GetCurSymbol()->IsMulti()
+                        && symbEditorFrame->IsSymbolEditable()
+                        && !symbEditorFrame->IsSymbolAlias();
             };
 
     auto& menu = m_menu.GetMenu();
