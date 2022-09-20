@@ -292,8 +292,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_vias )
     {
-        if( m_viaNotFree->GetValue() )
+        if( m_viaNotFree->GetValue() && !m_tracks )
         {
+            // Disable net selector to re-inforce meaning of "Automatically update via nets",
+            // but not when tracks are also selected as then things get harder if you want to
+            // update all the nets to match.
             m_netSelectorLabel->Disable();
             m_netSelector->Disable();
         }
@@ -381,6 +384,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     SetupStandardButtons();
 
     m_frame->Bind( UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
+    m_netSelector->Bind( NET_SELECTED, &DIALOG_TRACK_VIA_PROPERTIES::onNetSelector, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -730,10 +734,19 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_TRACK_VIA_PROPERTIES::onViaNotFreeClicked( wxCommandEvent& event )
+void DIALOG_TRACK_VIA_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
 {
-    m_netSelectorLabel->Enable( !m_viaNotFree->GetValue() );
-    m_netSelector->Enable( !m_viaNotFree->GetValue() );
+    m_viaNotFree->SetValue( false );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onViaNotFreeClicked( wxCommandEvent& aEvent )
+{
+    if( !m_tracks )
+    {
+        m_netSelectorLabel->Enable( !m_viaNotFree->GetValue() );
+        m_netSelector->Enable( !m_viaNotFree->GetValue() );
+    }
 }
 
 
