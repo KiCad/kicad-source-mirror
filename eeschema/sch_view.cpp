@@ -97,7 +97,8 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     m_drawingSheet.reset( new DS_PROXY_VIEW_ITEM( static_cast<int>( schIUScale.IU_PER_MILS ),
                                                   &aScreen->GetPageSettings(),
                                                   &aScreen->Schematic()->Prj(),
-                                                  &aScreen->GetTitleBlock() ) );
+                                                  &aScreen->GetTitleBlock(),
+                                                  aScreen->Schematic()->GetProperties() ) );
     m_drawingSheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
     m_drawingSheet->SetSheetCount( aScreen->GetPageCount() );
     m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );

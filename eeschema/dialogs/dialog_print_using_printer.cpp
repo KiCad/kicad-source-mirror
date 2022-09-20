@@ -501,8 +501,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     if( printReference )
     {
-        m_parent->PrintDrawingSheet( &renderSettings, aScreen, schIUScale.IU_PER_MILS, aScreen->GetFileName(),
-                                     wxEmptyString );
+        m_parent->PrintDrawingSheet( &renderSettings, aScreen, aScreen->Schematic()->GetProperties(),
+                                     schIUScale.IU_PER_MILS, aScreen->GetFileName(), wxEmptyString );
     }
 
     renderSettings.SetIsPrinting( true );

@@ -777,7 +777,8 @@ void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
         }
     }
 
-    PrintDrawingSheet( aSettings, GetScreen(), drawSheetIUScale.IU_PER_MILS, wxEmptyString );
+    PrintDrawingSheet( aSettings, GetScreen(), nullptr, drawSheetIUScale.IU_PER_MILS,
+                       wxEmptyString );
 
     GetCanvas()->DisplayDrawingSheet();
     GetCanvas()->Refresh();

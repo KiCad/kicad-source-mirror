@@ -203,7 +203,8 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
         }
     }
 
-    m_parent->PrintDrawingSheet( &renderSettings, screen, drawSheetIUScale.IU_PER_MILS, wxEmptyString );
+    m_parent->PrintDrawingSheet( &renderSettings, screen, nullptr, drawSheetIUScale.IU_PER_MILS,
+                                 wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
 

@@ -304,13 +304,14 @@ public:
      * Prints the drawing-sheet (frame and title block).
      *
      * @param aScreen screen to draw.
+     * @param aProperties Optional properties for text variable resolution.
      * @param aMils2Iu The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from PcbNew.
      */
     void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
-                            double aMils2Iu, const wxString& aFilename,
-                            const wxString& aSheetLayer = wxEmptyString );
+                            const std::map<wxString, wxString>* aProperties, double aMils2Iu,
+                            const wxString& aFilename, const wxString& aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
 

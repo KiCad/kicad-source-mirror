@@ -674,8 +674,8 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
             GRFilledRect( &memDC, VECTOR2I( 0, 0 ), m_layout_size, 0, bgColor, bgColor );
 
             PrintDrawingSheet( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
-                               m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),
-                               wxEmptyString, m_screen->GetVirtualPageNumber() == 1 );
+                               nullptr, m_screen->GetPageCount(), m_screen->GetPageNumber(), 1,
+                               &Prj(), wxEmptyString, m_screen->GetVirtualPageNumber() == 1 );
 
             memDC.SelectObject( wxNullBitmap );
             m_PageLayoutExampleBitmap->SetBitmap( *m_pageBitmap );

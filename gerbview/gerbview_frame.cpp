@@ -825,8 +825,9 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     GERBVIEW_DRAW_PANEL_GAL* drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
     // Prepare drawing-sheet template
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( gerbIUScale.IU_PER_MILS, &GetPageSettings(),
-                                                               &Prj(), &GetTitleBlock() );
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( gerbIUScale.IU_PER_MILS,
+                                                               &GetPageSettings(), &Prj(),
+                                                               &GetTitleBlock(), nullptr );
 
     if( GetScreen() )
     {

@@ -1276,7 +1276,8 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
     aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aSettings );
-    PrintDrawingSheet( aSettings, GetScreen(), schIUScale.IU_PER_MILS, fileName );
+    PrintDrawingSheet( aSettings, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS,
+                       fileName );
 }
 
 

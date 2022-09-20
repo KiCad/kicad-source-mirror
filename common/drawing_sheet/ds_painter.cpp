@@ -108,8 +108,8 @@ void DS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
 }
 
 
-// returns the full text corresponding to the aTextbase,
-// after replacing format symbols by the corresponding value
+// Returns the full text corresponding to the aTextbase, after replacing any text variable
+// references.
 wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 {
     std::function<bool( wxString* )> wsResolver =
@@ -166,8 +166,14 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 }
                 else if( m_titleBlock )
                 {
-                    // no need for tokenUpdated; TextVarResolver() did a full resolve
+                    // no need for tokenUpdated; TITLE_BLOCK::TextVarResolver() does a full
+                    // resolve
                     return m_titleBlock->TextVarResolver( token, m_project );
+                }
+                else if( m_properties && m_properties->count( *token ) )
+                {
+                    *token = m_properties->at( *token );
+                    tokenUpdated = true;
                 }
 
                 if( tokenUpdated )

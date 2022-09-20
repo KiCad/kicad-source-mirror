@@ -72,12 +72,10 @@ public:
     void Reset();
 
     /// Return a reference to the project this schematic is part of
-    PROJECT& Prj() const override
-    {
-        return *m_project;
-    }
-
+    PROJECT& Prj() const override { return *m_project; }
     void SetProject( PROJECT* aPrj );
+
+    const std::map<wxString, wxString>* GetProperties() { return &m_properties; }
 
     /**
      * Builds and returns an updated schematic hierarchy
@@ -209,6 +207,11 @@ private:
      * used for updating global label intersheet references.
      */
     std::map<wxString, std::set<int>> m_labelToPageRefsMap;
+
+    /**
+     * Properties for text variable substitution (and perhaps other uses in future).
+     */
+    std::map<wxString, wxString>      m_properties;
 };
 
 #endif

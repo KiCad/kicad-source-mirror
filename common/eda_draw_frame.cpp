@@ -957,7 +957,8 @@ static const wxString productName = wxT( "KiCad E.D.A.  " );
 
 void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                         const wxString& aFullSheetName, const wxString& aFileName,
-                        const TITLE_BLOCK& aTitleBlock, int aSheetCount,
+                        const TITLE_BLOCK& aTitleBlock,
+                        const std::map<wxString, wxString>* aProperties, int aSheetCount,
                         const wxString& aPageNumber, double aMils2Iu, const PROJECT* aProject,
                         const wxString& aSheetLayer, bool aIsFirstPage )
 {
@@ -972,6 +973,7 @@ void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPage
     drawList.SetSheetLayer( aSheetLayer );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
+    drawList.SetProperties( aProperties );
 
     drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
@@ -981,6 +983,7 @@ void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPage
 
 
 void EDA_DRAW_FRAME::PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
+                                        const std::map<wxString, wxString>* aProperties,
                                         double aMils2Iu, const wxString &aFilename,
                                         const wxString &aSheetLayer )
 {
@@ -997,8 +1000,8 @@ void EDA_DRAW_FRAME::PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_S
     }
 
     ::PrintDrawingSheet( aSettings, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
-                         aScreen->GetPageCount(), aScreen->GetPageNumber(), aMils2Iu, &Prj(),
-                         aSheetLayer, aScreen->GetVirtualPageNumber() == 1 );
+                         aProperties, aScreen->GetPageCount(), aScreen->GetPageNumber(), aMils2Iu,
+                         &Prj(), aSheetLayer, aScreen->GetVirtualPageNumber() == 1 );
 
     if( origin.y > 0 )
     {
