@@ -229,7 +229,7 @@ public:
         // calculate the right common area coordinate:
         int  right  = std::min( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
         // calculate the upper common area coordinate:
-        int  top    = std::max( me.m_Pos.y, aRect.m_Pos.y );
+        int  top    = std::max( me.m_Pos.y, rect.m_Pos.y );
         // calculate the lower common area coordinate:
         int  bottom = std::min( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
 
