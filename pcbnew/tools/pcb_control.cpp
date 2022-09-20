@@ -1378,7 +1378,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( a->HasHole() || b->HasHole() )
+        if( ( a->HasHole() || b->HasHole() ) )
         {
             PCB_LAYER_ID active = m_frame->GetActiveLayer();
             PCB_LAYER_ID layer = UNDEFINED_LAYER;
@@ -1389,14 +1389,14 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 layer = active;
             else if( a->HasHole() && b->IsOnCopperLayer() )
                 layer = b->GetLayer();
-            else if( b->HasHole() && b->IsOnCopperLayer() )
+            else if( b->HasHole() && a->IsOnCopperLayer() )
                 layer = a->GetLayer();
 
-            if( layer >= 0 )
+            if( IsCopperLayer( layer ) )
             {
                 int actual = std::numeric_limits<int>::max();
 
-                if( a->HasHole() )
+                if( a->HasHole() && b->IsOnCopperLayer() )
                 {
                     std::shared_ptr<SHAPE_SEGMENT> hole = a->GetEffectiveHoleShape();
                     std::shared_ptr<SHAPE>         other( b->GetEffectiveShape( layer ) );
@@ -1404,7 +1404,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     actual = std::min( actual, hole->GetClearance( other.get() ) );
                 }
 
-                if( b->HasHole() )
+                if( b->HasHole() && a->IsOnCopperLayer() )
                 {
                     std::shared_ptr<SHAPE_SEGMENT> hole = b->GetEffectiveHoleShape();
                     std::shared_ptr<SHAPE>         other( a->GetEffectiveShape( layer ) );
@@ -1412,14 +1412,17 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                     actual = std::min( actual, hole->GetClearance( other.get() ) );
                 }
 
-                constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
-                msgItems.emplace_back( _( "Resolved hole clearance" ),
-                                       m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
-
-                if( actual > -1 && actual < std::numeric_limits<int>::max() )
+                if( actual < std::numeric_limits<int>::max() )
                 {
-                    msgItems.emplace_back( _( "Actual hole clearance" ),
-                                           m_frame->MessageTextFromValue( actual ) );
+                    constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer );
+                    msgItems.emplace_back( _( "Resolved hole clearance" ),
+                            m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
+
+                    if( actual > -1 && actual < std::numeric_limits<int>::max() )
+                    {
+                        msgItems.emplace_back( _( "Actual hole clearance" ),
+                                m_frame->MessageTextFromValue( actual ) );
+                    }
                 }
             }
         }

@@ -131,7 +131,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue7325",  2 },
         { "issue8003",  2 },
         { "issue9081",  2 },
-        { "issue12109", 8 }    // Pads fail annular width test
+        { "issue12109", 8 },    // Pads fail annular width test
+        { "reverse_via", 3 }    // Via/track ordering
     };
 
     for( const std::pair<wxString, int>& entry : tests )
