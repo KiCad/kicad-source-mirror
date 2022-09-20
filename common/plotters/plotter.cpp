@@ -161,9 +161,9 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
             startAngle = startAngle.Normalize() - ANGLE_360;
     }
 
-    // In Kicad code, call to Arc() using angles call this function after
-    // sawpping angles and negate them (to compensate the inverted Y axis).
-    // So to mimic the other calls in Kicad, do the same thing
+    // In old Kicad code, calls to Arc() using angles calls this function after
+    // swapping angles and negate them (to compensate the inverted Y axis).
+    // So to be compatible with Arc() calls with angles, do the same thing
     std::swap( startAngle, endAngle );
     startAngle = -startAngle;
     endAngle = -endAngle;

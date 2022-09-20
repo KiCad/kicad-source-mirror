@@ -112,9 +112,7 @@ public:
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
     /**
@@ -208,6 +206,10 @@ public:
     }
 
 protected:
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
     bool           m_textAsLines;
     COLOR4D        m_currentColor;
     PLOT_DASH_TYPE m_currentLineType;

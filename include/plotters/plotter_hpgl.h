@@ -106,22 +106,6 @@ public:
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
 
-    /**
-     * Plot an arc.
-     *
-     * Command
-     * PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, NbSegm; PU;
-     * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
-     *
-     * center is the center of the arc.
-     * StAngled is the start angle of the arc.
-     * aEndAngle is end angle the arc.
-     * Radius is the radius of the arc.
-     */
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
-
     virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                       FILL_T aFill, int aWidth, int aMaxError ) override;
 
@@ -149,6 +133,22 @@ public:
                                       void* aData ) override;
 
 protected:
+    /**
+     * Plot an arc.
+     *
+     * Command
+     * PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, NbSegm; PU;
+     * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
+     *
+     * center is the center of the arc.
+     * StAngled is the start angle of the arc.
+     * aEndAngle is end angle the arc.
+     * Radius is the radius of the arc.
+     */
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
     /**
      * Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
      *

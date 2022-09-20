@@ -469,13 +469,6 @@ void SVG_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     VECTOR2D  centre_device  = userToDeviceCoordinates( aCenter );
     double  radius_device  = userToDeviceSize( aRadius );
 
-    if( !m_yaxisReversed )   // Should be never the case
-    {
-        std::swap( startAngle, endAngle );
-        startAngle = -startAngle;
-        endAngle = -endAngle;
-    }
-
     if( m_plotMirror )
     {
         if( m_mirrorIsHorizontal )

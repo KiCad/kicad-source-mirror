@@ -326,10 +326,6 @@ public:
     virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                       FILL_T aFill, int aWidth, int aMaxError ) override;
 
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius,
-                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
-
     /**
      * Polygon plotting for PDF. Everything is supported
      */
@@ -363,6 +359,11 @@ public:
 
 
 protected:
+
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius,
+                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
     /// convert a wxString unicode string to a char string compatible with the accepted
     /// string PDF format (convert special chars and non ascii7 chars)
     std::string encodeStringForPlotter( const wxString& aUnicode ) override;
@@ -470,9 +471,6 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,
@@ -531,6 +529,10 @@ public:
                        void*                       aData = nullptr ) override;
 
 protected:
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius,
+                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
     /**
      * Initialize m_pen_rgb_color from reduced values r, g ,b
      * ( reduced values are 0.0 to 1.0 )

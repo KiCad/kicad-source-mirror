@@ -224,13 +224,6 @@ public:
                       FILL_T aFill, int aWidth, int aMaxError );
 
     /**
-     * Generic fallback: arc rendered as a polyline.
-     */
-    virtual void Arc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH );
-
-    /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline
      * In KiCad the bezier curves have 4 control points:
      * start ctrl1 ctrl2 end
@@ -309,10 +302,6 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
-
-    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& StAngle,
-                           const EDA_ANGLE& EndAngle, int aRadius, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData );
 
     virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
                            const VECTOR2I& aEnd, int aWidth,
@@ -526,6 +515,17 @@ public:
 
 
 protected:
+    /**
+     * Generic fallback: arc rendered as a polyline.
+     */
+    virtual void Arc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH );
+
+    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& StAngle,
+                           const EDA_ANGLE& EndAngle, int aRadius, int aWidth,
+                           OUTLINE_MODE aTraceMode, void* aData );
+
     // These are marker subcomponents
     /**
      * Plot a circle centered on the position. Building block for markers

@@ -69,17 +69,10 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
-
-    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
-                           const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData ) override;
 
     virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
                            const VECTOR2I& aEnd, int aWidth,
@@ -263,6 +256,14 @@ public:
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+
+    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
+                           const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+                           OUTLINE_MODE aTraceMode, void* aData ) override;
+
     /**
      * Plot a round rect (a round rect shape in fact) as a Gerber region using lines and arcs
      * for corners.
