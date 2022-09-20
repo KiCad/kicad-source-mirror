@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-08-15 08:15+0000\n"
+"PO-Revision-Date: 2022-09-21 11:21+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -119,14 +119,14 @@ msgid "Pad %s\t"
 msgstr "Pad %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Àrea de normes a %s"
+msgstr "Àrea de la regla %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zones"
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -277,9 +277,8 @@ msgid "&Preferences"
 msgstr "&Preferències"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
-#, fuzzy
 msgid "Viewports (Shift+Tab):"
-msgstr "Nom de la xarxa:"
+msgstr "Vistes (Shift+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 #: pcbnew/widgets/appearance_controls.cpp:2673
@@ -310,27 +309,23 @@ msgstr "Visualitzador 3D de KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2722
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Nom de la xarxa:"
+msgstr "Nom de la vista:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:510
 #: pcbnew/widgets/appearance_controls.cpp:2722
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Desa el fitxer de l'informe"
+msgstr "Desa la vista"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:548
 #: pcbnew/widgets/appearance_controls.cpp:2760
-#, fuzzy
 msgid "Viewports"
-msgstr "Informe"
+msgstr "Vistes"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:557
 #: pcbnew/widgets/appearance_controls.cpp:2769
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Elimina la via"
+msgstr "Esborra vista"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:558
 #: pcbnew/widgets/appearance_controls.cpp:2770
@@ -1485,9 +1480,8 @@ msgid "Warning"
 msgstr "Advertència"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Error d'Obertura del Fitxer"
+msgstr "Alerta d'Obertura del Fitxer"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -1821,7 +1815,7 @@ msgstr "Informe"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Xarxes coincidents actualment:</b>"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -3028,9 +3022,8 @@ msgid "Show icons in menus"
 msgstr "Mostra les icones als menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Mostra les icones als menús"
+msgstr "Mostra les barres de desplaçament als editors"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
@@ -7580,20 +7573,20 @@ msgstr ""
 "Script no disponible."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Element sense anotar: %s%s (unitat %d)\n"
+msgstr "Element sense anotar: %s%s (unitat %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Element sense anotar: %s%s\n"
+msgstr "Element sense anotar: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
 msgstr ""
-"Error: el símbol %s%s%s (unitat %d) sobrepassa les unitats definides (%d)\n"
+"Error: el símbol %s%s%s (unitat %d) sobrepassa les unitats definides (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -10077,9 +10070,8 @@ msgstr "Només la fulla actual"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Voleu netejar les anotacions existents del full actual?"
+msgstr "Exporta la llista de xarxes només per la fulla actual"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 #, fuzzy
@@ -32842,9 +32834,8 @@ msgid "Invalid C_pkg value."
 msgstr "Valor de longitud invàlid"
 
 #: pcbnew/ibis/ibis_parser.cpp:173
-#, fuzzy
 msgid "Checking pin "
-msgstr "S'estan verificant els pins..."
+msgstr "S'està verificant el pin "
 
 #: pcbnew/ibis/ibis_parser.cpp:178
 #, fuzzy
@@ -32862,19 +32853,16 @@ msgid "Model name cannot be empty."
 msgstr "El camp %s no pot estar buit."
 
 #: pcbnew/ibis/ibis_parser.cpp:193
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "L'Rpin no és vàlid."
 
 #: pcbnew/ibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "L'Lpin no és vàlid."
 
 #: pcbnew/ibis/ibis_parser.cpp:203
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "El Cpin no és vàlid."
 
 #: pcbnew/ibis/ibis_parser.cpp:217
 #, fuzzy
@@ -32882,9 +32870,8 @@ msgid "Component name cannot be empty."
 msgstr "El camp %s no pot estar buit."
 
 #: pcbnew/ibis/ibis_parser.cpp:222
-#, fuzzy
 msgid "Checking component "
-msgstr "Combina les zones"
+msgstr "S'està verificant el component "
 
 #: pcbnew/ibis/ibis_parser.cpp:227
 #, fuzzy
@@ -32934,9 +32921,8 @@ msgid "Model name cannot be empty"
 msgstr "El camp %s no pot estar buit."
 
 #: pcbnew/ibis/ibis_parser.cpp:433
-#, fuzzy
 msgid "Checking model "
-msgstr "Combina les zones"
+msgstr "S'està verificant el model "
 
 #: pcbnew/ibis/ibis_parser.cpp:438
 #, fuzzy
@@ -32983,9 +32969,8 @@ msgid "Temperature Range is invalid."
 msgstr "Augment de temperatura"
 
 #: pcbnew/ibis/ibis_parser.cpp:504
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "El rang de voltatge no és vàlid."
 
 #: pcbnew/ibis/ibis_parser.cpp:510
 #, fuzzy
@@ -33041,9 +33026,8 @@ msgid "Package model name cannot be empty."
 msgstr "El camp %s no pot estar buit."
 
 #: pcbnew/ibis/ibis_parser.cpp:594
-#, fuzzy
 msgid "Checking package model "
-msgstr "S'estan verificant els forats dels pads..."
+msgstr "S'està verificant el paquet del model "
 
 #: pcbnew/ibis/ibis_parser.cpp:599
 #, fuzzy
@@ -33101,23 +33085,20 @@ msgid "Inductance matrix is nullptr"
 msgstr "Longitud de la inductància per unitat"
 
 #: pcbnew/ibis/ibis_parser.cpp:689
-#, fuzzy
 msgid "Cannot open file "
-msgstr "No es pot obrir el fitxer '%s'"
+msgstr "No es pot obrir el fitxer "
 
 #: pcbnew/ibis/ibis_parser.cpp:695
-#, fuzzy
 msgid "Reading file "
-msgstr "S'estan carregant els fitxers..."
+msgstr "S'està llegint el fitxer "
 
 #: pcbnew/ibis/ibis_parser.cpp:716
 msgid "Unexpected end of file. Missing [END] ?"
 msgstr "Acabament de fitxer inesperat. Falta [END] ?"
 
 #: pcbnew/ibis/ibis_parser.cpp:728
-#, fuzzy
 msgid "Error on line "
-msgstr "Llista dels errors"
+msgstr "Error a la línia "
 
 #: pcbnew/ibis/ibis_parser.cpp:756
 msgid "A line did not end properly.."
@@ -33160,9 +33141,8 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Id de registre desconegut: %d."
+msgstr "Paraula clau desconeguda a "
 
 #: pcbnew/ibis/ibis_parser.cpp:1253
 msgid " context: "
@@ -33226,27 +33206,24 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1865
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Desconegut"
+msgstr "Model_type desconegut "
 
 #: pcbnew/ibis/ibis_parser.cpp:1872
 msgid "Internal Error while reading model_type"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1887
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Capa de PCad %u desconeguda"
+msgstr "Habilitació desconeguda: "
 
 #: pcbnew/ibis/ibis_parser.cpp:1894 pcbnew/ibis/ibis_parser.cpp:1916
 msgid "Internal Error while reading Enable"
 msgstr ""
 
 #: pcbnew/ibis/ibis_parser.cpp:1909
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Transforma l'empremta"
+msgstr "Polaritat desconeguda "
 
 #: pcbnew/ibis/ibis_parser.cpp:1945
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -35473,9 +35450,9 @@ msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "No es pot crear el fitxer de l'arxiu zip «%s»"
+msgstr "No es pot localitzar un stack del pad %s al fitxer %s\n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2332
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2361
