@@ -161,12 +161,12 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
             startAngle = startAngle.Normalize() - ANGLE_360;
     }
 
-    if( m_yaxisReversed )
-    {
-        std::swap( startAngle, endAngle );
-        startAngle = -startAngle;
-        endAngle = -endAngle;
-    }
+    // In Kicad code, call to Arc() using angles call this function after
+    // sawpping angles and negate them (to compensate the inverted Y axis).
+    // So to mimic the other calls in Kicad, do the same thing
+    std::swap( startAngle, endAngle );
+    startAngle = -startAngle;
+    endAngle = -endAngle;
 
     Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
 }
@@ -179,15 +179,15 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     EDA_ANGLE       endAngle( aEndAngle );
     const EDA_ANGLE delta( 5.0, DEGREES_T ); // increment to draw arc
     VECTOR2I        start, end;
+    const int       sign = -1;
 
     if( startAngle > endAngle )
         std::swap( startAngle, endAngle );
 
     SetCurrentLineWidth( aWidth );
 
-    /* Please NOTE the different sign due to Y-axis flip */
-    start.x = aCenter.x + KiROUND( aRadius * -startAngle.Cos() );
-    start.y = aCenter.y + KiROUND( aRadius * -startAngle.Sin() );
+    start.x = aCenter.x + KiROUND( aRadius * startAngle.Cos() );
+    start.y = aCenter.y + sign*KiROUND( aRadius * startAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {
@@ -201,13 +201,13 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
-        end.x = aCenter.x + KiROUND( aRadius * -ii.Cos() );
-        end.y = aCenter.y + KiROUND( aRadius * -ii.Sin() );
+        end.x = aCenter.x + KiROUND( aRadius * ii.Cos() );
+        end.y = aCenter.y + sign*KiROUND( aRadius * ii.Sin() );
         LineTo( end );
     }
 
-    end.x = aCenter.x + KiROUND( aRadius * -endAngle.Cos() );
-    end.y = aCenter.y + KiROUND( aRadius * -endAngle.Sin() );
+    end.x = aCenter.x + KiROUND( aRadius * endAngle.Cos() );
+    end.y = aCenter.y + sign*KiROUND( aRadius * endAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {

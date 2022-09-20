@@ -233,11 +233,10 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     {
     case SHAPE_T::ARC:
     {
-        EDA_ANGLE t1, t2;
-
-        CalcArcAngles( t1, t2 );
-        aTransform.MapAngles( &t1, &t2 );
-        aPlotter->Arc( center, -t2, -t1, GetRadius(), fill, penWidth );
+        // In some plotters (not all) the arc is approximated by segments, and
+        // a error max is needed. We try to approximate by 360/5 segments by 360 deg
+        int arc2segment_error = CircleToEndSegmentDeltaRadius( GetRadius(), 360/5 );
+        aPlotter->Arc( center, start, end, fill, penWidth, arc2segment_error );
     }
         break;
 
