@@ -70,7 +70,7 @@ public:
 
 private:
     PCB_EDIT_FRAME*    m_frame;
-    std::vector<PCB_TEXT*> m_hitlist;
+    std::vector<BOARD_ITEM*> m_hitlist;
 };
 
 

@@ -23,6 +23,7 @@
 #include <tools/pcb_actions.h>
 #include <pcb_edit_frame.h>
 #include <pcb_marker.h>
+#include <pcb_textbox.h>
 #include <pcb_text.h>
 #include <zone.h>
 #include "search_handlers.h"
@@ -150,6 +151,7 @@ void ZONE_SEARCH_HANDLER::SelectItem( int row )
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
         SEARCH_HANDLER( wxT( "Text" ) ), m_frame( aFrame )
 {
+    m_columnNames.emplace_back( wxT( "Type" ) );
     m_columnNames.emplace_back( wxT( "Text" ) );
     m_columnNames.emplace_back( wxT( "Layer" ) );
     m_columnNames.emplace_back( wxT( "X" ) );
@@ -169,10 +171,15 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& query )
     for( BOARD_ITEM* item : board->Drawings() )
     {
         PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
+        PCB_TEXTBOX* textBoxItem = dynamic_cast<PCB_TEXTBOX*>( item );
 
         if( textItem && textItem->Matches( frp, nullptr ) )
         {
             m_hitlist.push_back( textItem );
+        }
+        else if( textBoxItem && textBoxItem->Matches( frp, nullptr ) )
+        {
+            m_hitlist.push_back( textBoxItem );
         }
     }
 
@@ -182,15 +189,35 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& query )
 
 wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
 {
-    PCB_TEXT* text = m_hitlist[row];
+    BOARD_ITEM* text = m_hitlist[row];
 
     if( col == 0 )
-        return text->GetText();
-    if( col == 1 )
+    {
+        if( PCB_TEXT::ClassOf( text ) )
+        {
+            return _( "Text" );
+        }
+        else if( PCB_TEXTBOX::ClassOf( text ) )
+        {
+            return _( "Textbox" );
+        }
+    }
+    else if( col == 1 )
+    {
+        if( PCB_TEXT::ClassOf( text ) )
+        {
+            return dynamic_cast<PCB_TEXT*>( text )->GetText();
+        }
+        else if( PCB_TEXTBOX::ClassOf( text ) )
+        {
+            return dynamic_cast<PCB_TEXTBOX*>( text )->GetShownText();
+        }
+    }
+    if( col == 2 )
         return text->GetLayerName();
-    else if( col == 2 )
-        return m_frame->MessageTextFromValue( text->GetX() );
     else if( col == 3 )
+        return m_frame->MessageTextFromValue( text->GetX() );
+    else if( col == 4 )
         return m_frame->MessageTextFromValue( text->GetY() );
 
     return wxEmptyString;
@@ -199,7 +226,7 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
 
 void TEXT_SEARCH_HANDLER::SelectItem( int row )
 {
-    PCB_TEXT* text = m_hitlist[row];
+    BOARD_ITEM* text = m_hitlist[row];
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, text );
