@@ -275,8 +275,6 @@ set( EESCHEMA_SRCS
     sch_plugins/database/sch_database_plugin.cpp
 
     # Some simulation features must be built even if libngspice is not linked.
-    sim/spice_settings.cpp
-    sim/spice_generator.cpp
     sim/sim_library.cpp
     sim/sim_library_spice.cpp
     sim/sim_model.cpp
@@ -293,6 +291,10 @@ set( EESCHEMA_SRCS
     sim/sim_model_tline.cpp
     sim/sim_model_xspice.cpp
     sim/sim_value.cpp
+    sim/spice_settings.cpp
+    sim/spice_generator.cpp
+    sim/spice_library_parser.cpp
+    sim/spice_model_parser.cpp
 
     tools/assign_footprints.cpp
     tools/backannotate.cpp
@@ -340,8 +342,6 @@ if( KICAD_SPICE )
         sim/sim_plot_panel.cpp
         sim/sim_property.cpp
         sim/sim_workbook.cpp
-        sim/spice_library_parser.cpp
-        sim/spice_model_parser.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
         widgets/tuner_slider.cpp
