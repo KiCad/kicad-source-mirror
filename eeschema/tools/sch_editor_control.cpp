@@ -739,7 +739,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
     EE_SELECTION& selection = aForce ? selTool->RequestSelection() : selTool->GetSelection();
 
-    m_frame->SendSelectItemsToPcb( selection.GetItems(), aForce );
+    m_frame->SendSelectItemsToPcb( selection.GetItemsSortedBySelectionOrder(), aForce );
 }
 
 

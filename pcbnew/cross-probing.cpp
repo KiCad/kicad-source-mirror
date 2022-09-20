@@ -432,7 +432,7 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
 {
     wxArrayString syncArray = wxStringTokenize( syncStr, "," );
 
-    std::vector<BOARD_ITEM*> items;
+    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
 
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
@@ -450,8 +450,10 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
 
         wxString fpRefEscaped = EscapeString( footprint->GetReference(), CTX_IPC );
 
-        for( wxString syncEntry : syncArray )
+        for( unsigned index = 0; index < syncArray.size(); ++index )
         {
+            wxString syncEntry = syncArray[index];
+
             if( syncEntry.empty() )
                 continue;
 
@@ -462,13 +464,13 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
             case 'S': // Select sheet with subsheets: S<Sheet path>
                 if( fpSheetPath.StartsWith( syncData ) )
                 {
-                    items.push_back( footprint );
+                    orderPairs.emplace_back( index, footprint );
                 }
                 break;
             case 'F': // Select footprint: F<Reference>
                 if( syncData == fpRefEscaped )
                 {
-                    items.push_back( footprint );
+                    orderPairs.emplace_back( index, footprint );
                 }
                 break;
             case 'P': // Select pad: P<Footprint reference>/<Pad number>
@@ -484,7 +486,7 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
                     {
                         if( selectPadNumber == pad->GetNumber() )
                         {
-                            items.push_back( pad );
+                            orderPairs.emplace_back( index, pad );
                         }
                     }
                 }
@@ -494,6 +496,19 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
             }
         }
     }
+
+    std::sort(
+            orderPairs.begin(), orderPairs.end(),
+            []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
+            {
+                return a.first < b.first;
+            } );
+
+    std::vector<BOARD_ITEM*> items;
+    items.reserve( orderPairs.size() );
+
+    for( const std::pair<int, BOARD_ITEM*>& pair : orderPairs )
+        items.push_back( pair.second );
 
     return items;
 }

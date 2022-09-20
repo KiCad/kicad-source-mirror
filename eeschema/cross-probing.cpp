@@ -274,9 +274,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, bool aForce )
+void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems, bool aForce )
 {
-    std::set<wxString> parts;
+    std::vector<wxString> parts;
 
     for( EDA_ITEM* item : aItems )
     {
@@ -288,7 +288,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, 
 
             wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
-            parts.emplace( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
+            parts.push_back( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
 
             break;
         }
@@ -300,7 +300,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, 
 
             wxString full_path = GetCurrentSheet().PathAsString() + item->m_Uuid.AsString();
 
-            parts.emplace( wxT( "S" ) + full_path );
+            parts.push_back( wxT( "S" ) + full_path );
 
             break;
         }
@@ -312,8 +312,8 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, 
 
             wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
-            parts.insert( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
-                          + EscapeString( pin->GetShownNumber(), CTX_IPC ) );
+            parts.push_back( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
+                             + EscapeString( pin->GetShownNumber(), CTX_IPC ) );
 
             break;
         }
@@ -347,7 +347,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::deque<EDA_ITEM*>& aItems, 
         // we have existing interpreter of the selection packet on the other
         // side in place, we use that here.
         Kiway().ExpressMail( FRAME_PCB_EDITOR, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION,
-                command, this );
+                             command, this );
     }
 }
 
