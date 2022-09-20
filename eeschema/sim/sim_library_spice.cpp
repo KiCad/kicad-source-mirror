@@ -24,81 +24,19 @@
 
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_spice.h>
-#include <sim/spice_grammar.h>
-#include <ki_exception.h>
-#include <locale_io.h>
-#include <pegtl.hpp>
-#include <pegtl/contrib/parse_tree.hpp>
 
 
-namespace SIM_LIBRARY_SPICE_PARSER
+SIM_LIBRARY_SPICE::SIM_LIBRARY_SPICE() :
+    SIM_LIBRARY(),
+    m_spiceLibraryParser( std::make_unique<SPICE_LIBRARY_PARSER>( *this ) )
 {
-    using namespace SPICE_GRAMMAR;
-
-    // TODO: unknownLine is already handled in spiceUnit.
-    struct libraryGrammar : spiceSourceGrammar {};
-
-
-    template <typename Rule> struct librarySelector : std::false_type {};
-
-    template <> struct librarySelector<modelUnit> : std::true_type {};
-    template <> struct librarySelector<modelName> : std::true_type {};
-    
-    // For debugging.
-    template <> struct librarySelector<unknownLine> : std::true_type {};
-};
+}
 
 
 void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
 {
-    LOCALE_IO toggle;
-
-    try
-    {
-        tao::pegtl::file_input in( aFilePath.ToStdString() );
-        auto root = tao::pegtl::parse_tree::parse<SIM_LIBRARY_SPICE_PARSER::libraryGrammar,
-                                                  SIM_LIBRARY_SPICE_PARSER::librarySelector,
-                                                  tao::pegtl::nothing,
-                                                  SIM_LIBRARY_SPICE_PARSER::control>
-            ( in );
-
-        SIM_LIBRARY::ReadFile( aFilePath );
-
-        m_models.clear();
-        m_modelNames.clear();
-
-        for( const auto& node : root->children )
-        {
-            if( node->is_type<SIM_LIBRARY_SPICE_PARSER::modelUnit>() )
-            {
-                m_models.push_back( SIM_MODEL_SPICE::Create( node->string() ) );
-
-                if( node->children.size() < 1
-                    || !node->children.at( 0 )->is_type<SIM_LIBRARY_SPICE_PARSER::modelName>() )
-                {
-                    THROW_IO_ERROR( wxString::Format( "Model name token not found" ) );
-                }
-
-                m_modelNames.emplace_back( node->children.at( 0 )->string() );
-            }
-            else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::unknownLine>() )
-            {
-                // Do nothing.
-            }
-            else
-            {
-                wxFAIL_MSG( "Unhandled parse tree node" );
-            }
-        }
-    }
-    catch( const std::filesystem::filesystem_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        THROW_IO_ERROR( e.what() );
-    }
+    SIM_LIBRARY::ReadFile( aFilePath );
+    m_spiceLibraryParser->ReadFile( aFilePath );
 }
 
 

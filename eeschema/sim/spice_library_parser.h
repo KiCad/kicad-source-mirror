@@ -22,28 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_LIBRARY_SPICE_H
-#define SIM_LIBRARY_SPICE_H
+#ifndef SPICE_LIBRARY_PARSER_H
+#define SPICE_LIBRARY_PARSER_H
 
-#include <sim/sim_library.h>
-#include <sim/spice_library_parser.h>
+#include <wx/string.h>
+
+class SIM_LIBRARY_SPICE;
 
 
-class SIM_LIBRARY_SPICE : public SIM_LIBRARY
+class SPICE_LIBRARY_PARSER
 {
 public:
-    friend class SPICE_LIBRARY_PARSER;
+    SPICE_LIBRARY_PARSER( SIM_LIBRARY_SPICE& aLibrary ) : m_library( aLibrary ) {}
 
-    SIM_LIBRARY_SPICE();
-
-    // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const wxString& aFilePath ) override;
-
-    // @copydoc SIM_LIBRARY::WriteFile()
-    void WriteFile( const wxString& aFilePath ) override;
+    virtual void ReadFile( const wxString& aFilePath );
 
 private:
-    std::unique_ptr<SPICE_LIBRARY_PARSER> m_spiceLibraryParser;
+    SIM_LIBRARY_SPICE& m_library;
 };
 
-#endif // SIM_LIBRARY_SPICE_H
+#endif // SPICE_LIBRARY_PARSER_H
