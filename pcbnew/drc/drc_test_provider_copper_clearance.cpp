@@ -268,6 +268,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
     int            actual;
     VECTOR2I       pos;
 
+    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
+
     if( other->Type() == PCB_PAD_T )
     {
         PAD* pad = static_cast<PAD*>( other );
@@ -302,8 +304,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
             }
         }
 
-        std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
-
         if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
@@ -325,52 +325,71 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         }
     }
 
-    if( testHoles && ( other->Type() == PCB_VIA_T || other->Type() == PCB_PAD_T ) )
+    if( testHoles )
     {
-        std::unique_ptr<SHAPE_SEGMENT> holeShape;
+        std::array<BOARD_ITEM*, 2> a{ track, other };
+        std::array<BOARD_ITEM*, 2> b{ other, track };
+        std::array<SHAPE*, 2>      a_shape{ trackShape, otherShape.get() };
+        
+        bool has_error = false;
 
-        if( other->Type() == PCB_VIA_T )
+        for( size_t ii = 0; ii < 2 && !has_error; ++ii )
         {
-            PCB_VIA* via = static_cast<PCB_VIA*>( other );
-            pos = via->GetPosition();
+            std::unique_ptr<SHAPE_SEGMENT> holeShape;
 
-            if( via->GetLayerSet().Contains( layer ) )
-                holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
-        }
-        else if( other->Type() == PCB_PAD_T )
-        {
-            PAD* pad = static_cast<PAD*>( other );
+            bool has_hole = b[ii]->Type() == PCB_VIA_T || 
+                ( b[ii]->Type() == PCB_PAD_T && static_cast<PAD*>( b[ii] )->GetDrillSize().x );
 
-            if( pad->GetDrillSize().x )
-                holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
-        }
-
-        if( holeShape )
-        {
-            constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, other, track, layer );
-            clearance = constraint.GetValue().Min();
-
-            if( clearance > 0 && trackShape->Collide( holeShape.get(),
-                                                      std::max( 0, clearance - m_drcEpsilon ),
-                                                      &actual, &pos ) )
+            // We only test a track item here against an item with a hole.
+            // If either case is not valid, simply move on
+            if( !( dynamic_cast<PCB_TRACK*>( a[ii] ) ) || !has_hole )
             {
+                continue;
+            }
+            if( b[ii]->Type() == PCB_VIA_T )
+            {
+                PCB_VIA* via = static_cast<PCB_VIA*>( b[ii] );
+                pos = via->GetPosition();
 
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                wxString msg;
+                if( via->GetLayerSet().Contains( layer ) )
+                    holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+            }
+            else if( b[ii]->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( b[ii] );
 
-                msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( userUnits(), clearance ),
-                              MessageTextFromValue( userUnits(), actual ) );
+                if( pad->GetDrillSize().x )
+                    holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            }
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
-                drce->SetItems( track, other );
-                drce->SetViolatingRule( constraint.GetParentRule() );
+            if( holeShape )
+            {
+                constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
+                clearance = constraint.GetValue().Min();
 
-                reportViolation( drce, (wxPoint) pos );
+                if( clearance > 0 && a_shape[ii]->Collide( holeShape.get(),
+                                                        std::max( 0, clearance - m_drcEpsilon ),
+                                                        &actual, &pos ) )
+                {
 
-                if( !m_drcEngine->GetReportAllTrackErrors() )
-                    return false;
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    wxString msg;
+
+                    msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                constraint.GetName(),
+                                MessageTextFromValue( userUnits(), clearance ),
+                                MessageTextFromValue( userUnits(), actual ) );
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+                    drce->SetItems( a[ii], b[ii] );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drce, (wxPoint) pos );
+                    has_error = true;
+
+                    if( !m_drcEngine->GetReportAllTrackErrors() )
+                        return false;
+                }
             }
         }
     }
