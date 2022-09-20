@@ -88,6 +88,9 @@ public:
     /// Remove all connections belonging to a single net from the active selection
     static TOOL_ACTION deselectNet;
 
+    /// Select unconnected footprints from ratsnest of selection
+    static TOOL_ACTION selectUnconnected;
+
     /// Select all components on sheet from Eeschema crossprobing.
     static TOOL_ACTION selectOnSheetFromEeschema;
 

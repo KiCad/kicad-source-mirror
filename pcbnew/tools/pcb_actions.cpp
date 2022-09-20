@@ -1314,6 +1314,12 @@ TOOL_ACTION PCB_ACTIONS::deselectNet( "pcbnew.InteractiveSelection.DeselectNet",
         _( "Deselect All Tracks in Net" ),
         _( "Deselects all tracks & vias belonging to the same net." ) );
 
+TOOL_ACTION PCB_ACTIONS::selectUnconnected( "pcbnew.InteractiveSelection.SelectUnconnected",
+        AS_GLOBAL,
+        'O', "",
+        _( "Select All Unconnected Footprints" ),
+        _( "Selects all unconnected footprints belonging to each selected net." ) );
+
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL, 0, "",
         _( "Sheet" ),

@@ -833,6 +833,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::deselectNet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
+    mgr->SetConditions( PCB_ACTIONS::selectUnconnected,
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T, PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectOnSchematic,

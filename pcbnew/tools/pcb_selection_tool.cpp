@@ -61,6 +61,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/board_inspection_tool.h>
 #include <connectivity/connectivity_data.h>
+#include <ratsnest/ratsnest_data.h>
 #include <footprint_viewer_frame.h>
 #include <wx/event.h>
 #include <wx/timer.h>
@@ -87,6 +88,8 @@ public:
         // Add( PCB_ACTIONS::deselectNet );
         Add( PCB_ACTIONS::selectSameSheet );
         Add( PCB_ACTIONS::selectOnSchematic );
+
+        Add( PCB_ACTIONS::selectUnconnected );
     }
 
 private:
@@ -1394,6 +1397,51 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
     {
         item->ClearFlags( SKIP_STRUCT );
     }
+}
+
+
+int PCB_SELECTION_TOOL::selectUnconnected( const TOOL_EVENT& aEvent )
+{
+    // Get all pads
+    std::vector<PAD*> pads;
+
+    for( EDA_ITEM* item : m_selection.GetItems() )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+                pads.push_back( pad );
+        }
+        else if( item->Type() == PCB_PAD_T )
+        {
+            pads.push_back( static_cast<PAD*>( item ) );
+        }
+    }
+
+    // Select every footprint on the end of the ratsnest for each pad in our selection
+    std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
+
+    for( PAD* pad : pads )
+    {
+        for( const CN_EDGE& edge : conn->GetRatsnestForPad( pad ) )
+        {
+            BOARD_CONNECTED_ITEM* sourceParent = edge.GetSourceNode()->Parent();
+            BOARD_CONNECTED_ITEM* targetParent = edge.GetTargetNode()->Parent();
+
+            if( sourceParent == pad )
+            {
+                if( targetParent->Type() == PCB_PAD_T )
+                    select( static_cast<PAD*>( targetParent )->GetParent() );
+            }
+            else if( targetParent == pad )
+            {
+                if( sourceParent->Type() == PCB_PAD_T )
+                    select( static_cast<PAD*>( sourceParent )->GetParent() );
+            }
+        }
+    }
+
+    return 0;
 }
 
 
@@ -2988,6 +3036,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::unrouteSelected,     PCB_ACTIONS::unrouteSelected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectUnconnected,   PCB_ACTIONS::selectUnconnected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelection,       PCB_ACTIONS::syncSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelectionWithNets,
         PCB_ACTIONS::syncSelectionWithNets.MakeEvent() );

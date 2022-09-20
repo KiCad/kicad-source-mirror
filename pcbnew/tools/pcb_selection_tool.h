@@ -298,6 +298,11 @@ private:
      */
     int selectNet( const TOOL_EVENT& aEvent );
 
+    /**
+     * Select nearest unconnected footprints on same net as selected items.
+     */
+    int selectUnconnected( const TOOL_EVENT& aEvent );
+
     enum STOP_CONDITION
     {
         /**
