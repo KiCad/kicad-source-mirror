@@ -330,9 +330,7 @@ void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
         break;
 
     case SHAPE_T::POLY:
-        // polygon corners coordinates are always relative to the
-        // footprint position, orientation 0
-        m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
+        m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis, aCentre );
         break;
 
     default:

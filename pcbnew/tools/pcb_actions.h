@@ -117,7 +117,8 @@ public:
     static TOOL_ACTION flip;
 
     /// Mirroring of selected items
-    static TOOL_ACTION mirror;
+    static TOOL_ACTION mirrorH;
+    static TOOL_ACTION mirrorV;
 
     /// Swapping of selected items
     static TOOL_ACTION swap;

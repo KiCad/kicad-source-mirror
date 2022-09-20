@@ -846,7 +846,8 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, bool aPickReference )
         else if( evt->IsAction( &PCB_ACTIONS::rotateCw )
                 || evt->IsAction( &PCB_ACTIONS::rotateCcw )
                 || evt->IsAction( &PCB_ACTIONS::flip )
-                || evt->IsAction( &PCB_ACTIONS::mirror ) )
+                || evt->IsAction( &PCB_ACTIONS::mirrorH )
+                || evt->IsAction( &PCB_ACTIONS::mirrorV ) )
         {
             updateBBox = true;
             eatFirstMouseUp = false;

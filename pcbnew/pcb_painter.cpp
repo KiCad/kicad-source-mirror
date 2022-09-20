@@ -1050,7 +1050,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 if( primitive->IsAnnotationProxy() )
                 {
                     position = aPad->GetPosition() + primitive->GetCenter();
-                    padsize = primitive->GetBotRight() - primitive->GetTopLeft();
+                    padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
+                    padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
 
                     // We normally draw a bit outside the pad, but this will be somewhat
                     // unexpected when the user has drawn a box.
@@ -1080,7 +1081,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->Translate( position );
 
         // Keep the size ratio for the font, but make it smaller
-        if( padsize.x < padsize.y )
+        if( padsize.x < ( padsize.y * 0.95 ) )
         {
             m_gal->Rotate( -ANGLE_90.AsRadians() );
             size = padsize.x;

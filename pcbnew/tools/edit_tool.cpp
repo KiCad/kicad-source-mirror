@@ -197,7 +197,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirror,            inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirrorH,           inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirrorV,           inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
@@ -934,11 +935,10 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 continue;
 
             SHAPE_ARC sArc( t1Seg, t2Seg, filletRadiusIU );
-
-            wxPoint t1newPoint, t2newPoint;
+            VECTOR2I  t1newPoint, t2newPoint;
 
             auto setIfPointOnSeg =
-                    []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
+                    []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
                     {
                         VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
 
@@ -1207,6 +1207,21 @@ static VECTOR2I mirrorPointX( const VECTOR2I& aPoint, const VECTOR2I& aMirrorPoi
 
 
 /**
+ * Mirror a point about the vertical axis passing through another point.
+ */
+static VECTOR2I mirrorPointY( const VECTOR2I& aPoint, const VECTOR2I& aMirrorPoint )
+{
+    VECTOR2I mirrored = aPoint;
+
+    mirrored.y -= aMirrorPoint.y;
+    mirrored.y = -mirrored.y;
+    mirrored.y += aMirrorPoint.y;
+
+    return mirrored;
+}
+
+
+/**
  * Mirror a pad in the vertical axis passing through a point (mirror left to right).
  */
 static void mirrorPadX( PAD& aPad, const VECTOR2I& aMirrorPoint )
@@ -1225,6 +1240,31 @@ static void mirrorPadX( PAD& aPad, const VECTOR2I& aMirrorPoint )
 
     auto tmpz = aPad.GetDelta();
     tmpz.x = -tmpz.x;
+    aPad.SetDelta( tmpz );
+
+    aPad.SetOrientation( -aPad.GetOrientation() );
+}
+
+
+/**
+ * Mirror a pad in the vertical axis passing through a point (mirror left to right).
+ */
+static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
+{
+    if( aPad.GetShape() == PAD_SHAPE::CUSTOM )
+        aPad.FlipPrimitives( false );  // mirror primitives top to bottom
+
+    VECTOR2I tmpPt = mirrorPointY( aPad.GetPosition(), aMirrorPoint );
+    aPad.SetPosition( tmpPt );
+
+    aPad.SetY0( aPad.GetPosition().y );
+
+    tmpPt = aPad.GetOffset();
+    tmpPt.y = -tmpPt.y;
+    aPad.SetOffset( tmpPt );
+
+    auto tmpz = aPad.GetDelta();
+    tmpz.y = -tmpz.y;
     aPad.SetDelta( tmpz );
 
     aPad.SetOrientation( -aPad.GetOrientation() );
@@ -1252,18 +1292,23 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
 
     updateModificationPoint( selection );
-    auto refPoint = selection.GetReferencePoint();
-    wxPoint mirrorPoint( refPoint.x, refPoint.y );
+    VECTOR2I mirrorPoint = selection.GetReferencePoint();
 
     // When editing footprints, all items have the same parent
     if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
-    // Set the mirroring options. We are mirroring here Left to Right.
+    // Set the mirroring options.
     // Unfortunately, the mirror function do not have the same parameter for all items
     // So we need these 2 parameters to avoid mistakes
-    const bool mirrorLeftRight = true;
-    const bool mirrorAroundXaxis = false;
+    bool mirrorLeftRight = true;
+    bool mirrorAroundXaxis = false;
+
+    if( aEvent.IsAction( &PCB_ACTIONS::mirrorV ) )
+    {
+        mirrorLeftRight = false;
+        mirrorAroundXaxis = true;
+    }
 
     for( EDA_ITEM* item : selection )
     {
@@ -1318,7 +1363,11 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
-            mirrorPadX( *pad, mirrorPoint );
+
+            if( mirrorLeftRight )
+                mirrorPadX( *pad, mirrorPoint );
+            else
+                mirrorPadY( *pad, mirrorPoint );
             break;
         }
 
@@ -2192,7 +2241,8 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Duplicate,           ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirrorH.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirrorV.MakeEvent() );
     Go( &EDIT_TOOL::Swap,                PCB_ACTIONS::swap.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
     Go( &EDIT_TOOL::FilletTracks,        PCB_ACTIONS::filletTracks.MakeEvent() );

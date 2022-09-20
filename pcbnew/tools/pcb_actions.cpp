@@ -320,10 +320,15 @@ TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         _( "Change Side / Flip" ), _( "Flips selected item(s) to opposite side of board" ),
         BITMAPS::swap_layer );
 
-TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
+TOOL_ACTION PCB_ACTIONS::mirrorH( "pcbnew.InteractiveEdit.mirrorHoriontally",
         AS_GLOBAL, 0, "",
-        _( "Mirror" ), _( "Mirrors selected item" ),
+        _( "Mirror Horizontally" ), _( "Mirrors selected item across the Y axis" ),
         BITMAPS::mirror_h );
+
+TOOL_ACTION PCB_ACTIONS::mirrorV( "pcbnew.InteractiveEdit.mirrorVertically",
+        AS_GLOBAL, 0, "",
+        _( "Mirror Vertically" ), _( "Mirrors selected item across the X axis" ),
+        BITMAPS::mirror_v );
 
 TOOL_ACTION PCB_ACTIONS::swap( "pcbnew.InteractiveEdit.swap",
         AS_GLOBAL,
