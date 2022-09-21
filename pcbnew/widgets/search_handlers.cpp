@@ -82,12 +82,20 @@ wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 }
 
 
-void FOOTPRINT_SEARCH_HANDLER::SelectItem( int aRow )
+void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
-    FOOTPRINT* fp = m_hitlist[aRow];
+    std::vector<EDA_ITEM*> selectedItems;
+    for( long row : aItemRows )
+    {
+        if( row < m_hitlist.size() )
+        {
+            FOOTPRINT* fp = m_hitlist[row];
+            selectedItems.push_back( fp );
+        }
+    }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, fp );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 }
 
 
@@ -157,12 +165,20 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 }
 
 
-void ZONE_SEARCH_HANDLER::SelectItem( int aRow )
+void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
-    ZONE* zone = m_hitlist[aRow];
+    std::vector<EDA_ITEM*> selectedItems;
+    for( long row : aItemRows )
+    {
+        if( row < m_hitlist.size() )
+        {
+            ZONE* zone = m_hitlist[row];
+            selectedItems.push_back( zone );
+        }
+    }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, zone );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 }
 
 
@@ -242,12 +258,20 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 }
 
 
-void TEXT_SEARCH_HANDLER::SelectItem( int aRow )
+void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
-    BOARD_ITEM* text = m_hitlist[aRow];
+    std::vector<EDA_ITEM*> selectedItems;
+    for( long row : aItemRows )
+    {
+        if( row < m_hitlist.size() )
+        {
+            BOARD_ITEM* text = m_hitlist[row];
+            selectedItems.push_back( text );
+        }
+    }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, text );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 }
 
 

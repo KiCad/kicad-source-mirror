@@ -20,6 +20,7 @@
 #include <widgets/search_pane_tab.h>
 #include <widgets/search_pane.h>
 #include <kiway.h>
+#include <vector>
 
 SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
                                             wxWindowID winid, const wxPoint& pos,
@@ -32,14 +33,36 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     RefreshColumnNames();
 
     Bind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+    Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
+}
+
+
+std::vector<long> SEARCH_PANE_LISTVIEW::GetSelectRowsList()
+{
+    std::vector<long> selectedIdxList;
+    long              idx = GetFirstSelected();
+    selectedIdxList.emplace_back( idx );
+
+    idx = GetNextSelected( idx );
+    while( idx > 0 )
+    {
+        selectedIdxList.emplace_back( idx );
+        idx = GetNextSelected( idx );
+    }
+
+    return selectedIdxList;
 }
 
 
 void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
-    long idx = aEvent.GetIndex();
+    m_handler->SelectItems( GetSelectRowsList() );
+}
 
-    m_handler->SelectItem( idx );
+
+void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
+{
+    m_handler->SelectItems( GetSelectRowsList() );
 }
 
 

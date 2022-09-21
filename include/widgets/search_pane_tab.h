@@ -40,6 +40,9 @@ public:
 protected:
     wxString OnGetItemText( long item, long column ) const override;
     void     OnItemSelected( wxListEvent& aEvent );
+    void     OnItemDeselected( wxListEvent& aEvent );
+
+    std::vector<long> GetSelectRowsList();
 
 private:
     SEARCH_HANDLER*       m_handler;

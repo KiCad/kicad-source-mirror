@@ -39,7 +39,7 @@ public:
     virtual int Search( const wxString& string ) = 0;
     virtual wxString GetResultCell( int row, int col ) = 0;
 
-    virtual void SelectItem(int row) {}
+    virtual void SelectItems( std::vector<long>& aItemRows ) {}
 
 protected:
     wxString              m_name;

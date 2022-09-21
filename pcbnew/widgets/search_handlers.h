@@ -37,7 +37,7 @@ public:
 
     int Search( const wxString& aQuery ) override;
     wxString GetResultCell( int aRow, int aCol ) override;
-    void SelectItem( int aRow ) override;
+    void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
     PCB_EDIT_FRAME*         m_frame;
@@ -51,7 +51,7 @@ public:
 
     int      Search( const wxString& aQuery ) override;
     wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItem( int aRow ) override;
+    void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
     PCB_EDIT_FRAME*         m_frame;
@@ -66,7 +66,7 @@ public:
 
     int      Search( const wxString& aQuery ) override;
     wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItem( int aRow ) override;
+    void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
     PCB_EDIT_FRAME*    m_frame;
