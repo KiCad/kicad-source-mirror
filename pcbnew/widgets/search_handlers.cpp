@@ -40,18 +40,20 @@ FOOTPRINT_SEARCH_HANDLER::FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
 }
 
 
-int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& query )
+int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
     EDA_SEARCH_DATA frp;
-    frp.findString = query;
+    frp.findString = aQuery;
     frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
-        if( fp->Reference().Matches( frp, nullptr ) || fp->Value().Matches( frp, nullptr ) )
+        if( aQuery.IsEmpty() ||
+            ( fp->Reference().Matches( frp, nullptr )
+            || fp->Value().Matches( frp, nullptr ) ) )
         {
             m_hitlist.push_back( fp );
         }
@@ -61,28 +63,28 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& query )
 }
 
 
-wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int row, int col )
+wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
-    FOOTPRINT* fp = m_hitlist[row];
+    FOOTPRINT* fp = m_hitlist[aRow];
 
-    if( col == 0 )
+    if( aCol == 0 )
         return fp->GetReference();
-    else if( col == 1 )
+    else if( aCol == 1 )
         return fp->GetValue();
-    else if( col == 2 )
+    else if( aCol == 2 )
         return fp->GetLayerName();
-    else if( col == 3 )
+    else if( aCol == 3 )
         return m_frame->MessageTextFromValue( fp->GetX() );
-    else if( col == 4 )
+    else if( aCol == 4 )
         return m_frame->MessageTextFromValue( fp->GetY() );
 
     return wxEmptyString;
 }
 
 
-void FOOTPRINT_SEARCH_HANDLER::SelectItem( int row )
+void FOOTPRINT_SEARCH_HANDLER::SelectItem( int aRow )
 {
-    FOOTPRINT* fp = m_hitlist[row];
+    FOOTPRINT* fp = m_hitlist[aRow];
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, fp );
@@ -101,20 +103,20 @@ ZONE_SEARCH_HANDLER::ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
 }
 
 
-int ZONE_SEARCH_HANDLER::Search( const wxString& query )
+int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
     EDA_SEARCH_DATA frp;
-    frp.findString = query;
+    frp.findString = aQuery;
     frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
 
     for( BOARD_ITEM* item : board->Zones() )
     {
         ZONE* zoneItem = dynamic_cast<ZONE*>( item );
 
-        if( zoneItem && zoneItem->Matches( frp, nullptr ) )
+        if( zoneItem && ( aQuery.IsEmpty() || zoneItem->Matches( frp, nullptr ) ) )
         {
             m_hitlist.push_back( zoneItem );
         }
@@ -124,16 +126,15 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& query )
 }
 
 
-wxString ZONE_SEARCH_HANDLER::GetResultCell( int row, int col )
+wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
-    ZONE* zone = m_hitlist[row];
+    ZONE* zone = m_hitlist[aRow];
 
-
-    if( col == 0 )
+    if( aCol == 0 )
         return zone->GetZoneName();
-    if( col == 1 )
+    if( aCol == 1 )
         return zone->GetNetname();
-    else if( col == 2 )
+    else if( aCol == 2 )
     {
         wxArrayString layers;
         BOARD*        board = m_frame->GetBoard();
@@ -145,20 +146,20 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int row, int col )
 
         return wxJoin( layers, ',' );
     }
-    else if( col == 3 )
+    else if( aCol == 3 )
         return wxString::Format( "%d", zone->GetAssignedPriority() );
-    else if( col == 4 )
+    else if( aCol == 4 )
         return m_frame->MessageTextFromValue( zone->GetX() );
-    else if( col == 5 )
+    else if( aCol == 5 )
         return m_frame->MessageTextFromValue( zone->GetY() );
 
     return wxEmptyString;
 }
 
 
-void ZONE_SEARCH_HANDLER::SelectItem( int row )
+void ZONE_SEARCH_HANDLER::SelectItem( int aRow )
 {
-    ZONE* zone = m_hitlist[row];
+    ZONE* zone = m_hitlist[aRow];
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, zone );
@@ -176,13 +177,13 @@ TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
 }
 
 
-int TEXT_SEARCH_HANDLER::Search( const wxString& query )
+int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
     EDA_SEARCH_DATA frp;
-    frp.findString = query;
+    frp.findString = aQuery;
     frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
 
     for( BOARD_ITEM* item : board->Drawings() )
@@ -190,11 +191,11 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& query )
         PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
         PCB_TEXTBOX* textBoxItem = dynamic_cast<PCB_TEXTBOX*>( item );
 
-        if( textItem && textItem->Matches( frp, nullptr ) )
+        if( textItem && ( aQuery.IsEmpty() || textItem->Matches( frp, nullptr ) ) )
         {
             m_hitlist.push_back( textItem );
         }
-        else if( textBoxItem && textBoxItem->Matches( frp, nullptr ) )
+        else if( textBoxItem && ( aQuery.IsEmpty() || textBoxItem->Matches( frp, nullptr ) ) )
         {
             m_hitlist.push_back( textBoxItem );
         }
@@ -204,11 +205,11 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& query )
 }
 
 
-wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
+wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
-    BOARD_ITEM* text = m_hitlist[row];
+    BOARD_ITEM* text = m_hitlist[aRow];
 
-    if( col == 0 )
+    if( aCol == 0 )
     {
         if( PCB_TEXT::ClassOf( text ) )
         {
@@ -219,7 +220,7 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
             return _( "Textbox" );
         }
     }
-    else if( col == 1 )
+    else if( aCol == 1 )
     {
         if( PCB_TEXT::ClassOf( text ) )
         {
@@ -230,20 +231,20 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int row, int col )
             return dynamic_cast<PCB_TEXTBOX*>( text )->GetShownText();
         }
     }
-    if( col == 2 )
+    if( aCol == 2 )
         return text->GetLayerName();
-    else if( col == 3 )
+    else if( aCol == 3 )
         return m_frame->MessageTextFromValue( text->GetX() );
-    else if( col == 4 )
+    else if( aCol == 4 )
         return m_frame->MessageTextFromValue( text->GetY() );
 
     return wxEmptyString;
 }
 
 
-void TEXT_SEARCH_HANDLER::SelectItem( int row )
+void TEXT_SEARCH_HANDLER::SelectItem( int aRow )
 {
-    BOARD_ITEM* text = m_hitlist[row];
+    BOARD_ITEM* text = m_hitlist[aRow];
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, text );
@@ -258,18 +259,18 @@ NETS_SEARCH_HANDLER::NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
 }
 
 
-int NETS_SEARCH_HANDLER::Search( const wxString& query )
+int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
 
     EDA_SEARCH_DATA frp;
-    frp.findString = query;
+    frp.findString = aQuery;
     frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
 
     BOARD* board = m_frame->GetBoard();
     for( NETINFO_ITEM* net : board->GetNetInfo() )
     {
-        if( net && net->Matches( frp, nullptr ) )
+        if( net && ( aQuery.IsEmpty() || net->Matches( frp, nullptr ) ) )
         {
             m_hitlist.push_back( net );
         }
@@ -279,13 +280,13 @@ int NETS_SEARCH_HANDLER::Search( const wxString& query )
 }
 
 
-wxString NETS_SEARCH_HANDLER::GetResultCell( int row, int col )
+wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
-    NETINFO_ITEM* net = m_hitlist[row];
+    NETINFO_ITEM* net = m_hitlist[aRow];
 
-    if( col == 0 )
+    if( aCol == 0 )
         return net->GetNetname();
-    else if( col == 1 )
+    else if( aCol == 1 )
         return net->GetNetClass()->GetName();
 
     return wxEmptyString;

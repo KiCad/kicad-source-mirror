@@ -35,9 +35,9 @@ class FOOTPRINT_SEARCH_HANDLER : public SEARCH_HANDLER
 public:
     FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int Search( const wxString& query ) override;
-    wxString GetResultCell( int row, int col ) override;
-    void SelectItem( int row ) override;
+    int Search( const wxString& aQuery ) override;
+    wxString GetResultCell( int aRow, int aCol ) override;
+    void SelectItem( int aRow ) override;
 
 private:
     PCB_EDIT_FRAME*         m_frame;
@@ -49,9 +49,9 @@ class ZONE_SEARCH_HANDLER : public SEARCH_HANDLER
 public:
     ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& query ) override;
-    wxString GetResultCell( int row, int col ) override;
-    void     SelectItem( int row ) override;
+    int      Search( const wxString& aQuery ) override;
+    wxString GetResultCell( int aRow, int aCol ) override;
+    void     SelectItem( int aRow ) override;
 
 private:
     PCB_EDIT_FRAME*         m_frame;
@@ -64,9 +64,9 @@ class TEXT_SEARCH_HANDLER : public SEARCH_HANDLER
 public:
     TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& query ) override;
-    wxString GetResultCell( int row, int col ) override;
-    void     SelectItem( int row ) override;
+    int      Search( const wxString& aQuery ) override;
+    wxString GetResultCell( int aRow, int aCol ) override;
+    void     SelectItem( int aRow ) override;
 
 private:
     PCB_EDIT_FRAME*    m_frame;
@@ -79,8 +79,8 @@ class NETS_SEARCH_HANDLER : public SEARCH_HANDLER
 public:
     NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int Search( const wxString& query ) override;
-    wxString GetResultCell( int row, int col ) override;
+    int Search( const wxString& aQuery ) override;
+    wxString GetResultCell( int aRow, int aCol ) override;
 
 private:
     PCB_EDIT_FRAME*            m_frame;
