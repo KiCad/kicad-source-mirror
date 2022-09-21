@@ -93,7 +93,9 @@ ZONE_SEARCH_HANDLER::ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
         SEARCH_HANDLER( wxT( "Zones" ) ), m_frame( aFrame )
 {
     m_columnNames.emplace_back( wxT( "Name" ) );
+    m_columnNames.emplace_back( wxT( "Net" ) );
     m_columnNames.emplace_back( wxT( "Layer" ) );
+    m_columnNames.emplace_back( wxT( "Priority" ) );
     m_columnNames.emplace_back( wxT( "X" ) );
     m_columnNames.emplace_back( wxT( "Y" ) );
 }
@@ -126,13 +128,28 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int row, int col )
 {
     ZONE* zone = m_hitlist[row];
 
+
     if( col == 0 )
+        return zone->GetZoneName();
+    if( col == 1 )
         return zone->GetNetname();
-    else if( col == 1 )
-        return zone->GetLayerName();
     else if( col == 2 )
-        return m_frame->MessageTextFromValue( zone->GetX() );
+    {
+        wxArrayString layers;
+        BOARD*        board = m_frame->GetBoard();
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            layers.Add( board->GetLayerName( layer ) );
+        }
+
+        return wxJoin( layers, ',' );
+    }
     else if( col == 3 )
+        return wxString::Format( "%d", zone->GetAssignedPriority() );
+    else if( col == 4 )
+        return m_frame->MessageTextFromValue( zone->GetX() );
+    else if( col == 5 )
         return m_frame->MessageTextFromValue( zone->GetY() );
 
     return wxEmptyString;

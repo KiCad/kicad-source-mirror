@@ -42,8 +42,13 @@
 
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
         BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_T : PCB_ZONE_T ),
-        m_area( 0.0 )
+        m_area( 0.0 ),
+        m_outlinearea( 0.0 )
 {
+    m_Poly = new SHAPE_POLY_SET();              // Outlines
+    m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
+    m_cornerRadius = 0;
+    m_zoneName = wxEmptyString;
     m_CornerSelection = nullptr;                // no corner is selected
     m_isFilled = false;                         // fill status : true when the zone is filled
     m_teardropType = TEARDROP_TYPE::TD_NONE;
@@ -53,7 +58,6 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     m_priority = 0;
     SetIsRuleArea( aInFP );           // Zones living in footprints have the rule area option
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
-    m_Poly = new SHAPE_POLY_SET();    // Outlines
     m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
 
     aParent->GetZoneSettings().ExportSetting( *this );
@@ -167,6 +171,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
 
     m_netinfo                 = aZone.m_netinfo;
     m_area                    = aZone.m_area;
+    m_outlinearea             = aZone.m_outlinearea;
 }
 
 
