@@ -42,7 +42,7 @@ protected:
     void     OnItemSelected( wxListEvent& aEvent );
     void     OnItemDeselected( wxListEvent& aEvent );
 
-    std::vector<long> GetSelectRowsList();
+    void GetSelectRowsList( std::vector<long>& aSelectedList );
 
 private:
     SEARCH_HANDLER*       m_handler;

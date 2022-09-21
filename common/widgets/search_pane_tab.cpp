@@ -37,32 +37,33 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
 }
 
 
-std::vector<long> SEARCH_PANE_LISTVIEW::GetSelectRowsList()
+void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
 {
-    std::vector<long> selectedIdxList;
-    long              idx = GetFirstSelected();
-    selectedIdxList.emplace_back( idx );
+    long idx = GetFirstSelected();
+    aSelectedList.emplace_back( idx );
 
     idx = GetNextSelected( idx );
     while( idx > 0 )
     {
-        selectedIdxList.emplace_back( idx );
+        aSelectedList.emplace_back( idx );
         idx = GetNextSelected( idx );
     }
-
-    return selectedIdxList;
 }
 
 
 void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
-    m_handler->SelectItems( GetSelectRowsList() );
+    std::vector<long> list;
+    GetSelectRowsList( list );
+    m_handler->SelectItems( list );
 }
 
 
 void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
 {
-    m_handler->SelectItems( GetSelectRowsList() );
+    std::vector<long> list;
+    GetSelectRowsList( list );
+    m_handler->SelectItems( list );
 }
 
 

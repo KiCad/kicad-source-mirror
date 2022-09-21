@@ -87,7 +87,7 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     std::vector<EDA_ITEM*> selectedItems;
     for( long row : aItemRows )
     {
-        if( row < m_hitlist.size() )
+        if( row < (long)m_hitlist.size() )
         {
             FOOTPRINT* fp = m_hitlist[row];
             selectedItems.push_back( fp );
@@ -170,7 +170,7 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     std::vector<EDA_ITEM*> selectedItems;
     for( long row : aItemRows )
     {
-        if( row < m_hitlist.size() )
+        if( row < (long)m_hitlist.size() )
         {
             ZONE* zone = m_hitlist[row];
             selectedItems.push_back( zone );
@@ -263,7 +263,7 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     std::vector<EDA_ITEM*> selectedItems;
     for( long row : aItemRows )
     {
-        if( row < m_hitlist.size() )
+        if( row < (long)m_hitlist.size() )
         {
             BOARD_ITEM* text = m_hitlist[row];
             selectedItems.push_back( text );
