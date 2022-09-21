@@ -92,39 +92,3 @@ wxString FP_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUnit )
 {
     return GenerateFootprintInfo( m_libs, aLibId );
 }
-
-
-void FP_TREE_MODEL_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
-                                      unsigned int aCol ) const
-{
-    if( IsFrozen() )
-    {
-        aVariant = wxEmptyString;
-        return;
-    }
-
-    LIB_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
-
-    if( aCol == 0 && node->m_Pinned )
-        aVariant = GetPinningSymbol() + node->m_Name;
-    else
-        aVariant = node->m_Name;
-
-    switch( aCol )
-    {
-    case NAME_COL:
-        if( node->m_Pinned )
-            aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
-        else
-            aVariant = UnescapeString( node->m_Name );
-
-        break;
-
-    case DESC_COL:
-        aVariant = node->m_Desc;
-        break;
-    }
-}
-
-

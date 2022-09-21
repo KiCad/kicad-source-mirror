@@ -64,16 +64,7 @@ protected:
      */
     SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
-    /**
-     * Get the value of an item.
-     *
-     * @param aVariant  wxVariant to receive the data
-     * @param aItem     item whose data will be placed into aVariant
-     * @param aCol      column number of the data
-     */
-    void GetValue( wxVariant&              aVariant,
-                   const wxDataViewItem&   aItem,
-                   unsigned int            aCol ) const override;
+    bool isSymbolModel() override { return true; }
 
 private:
     friend class SYMBOL_ASYNC_LOADER;

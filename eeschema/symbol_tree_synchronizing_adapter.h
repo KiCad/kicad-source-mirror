@@ -61,6 +61,8 @@ protected:
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
                                        SYMBOL_LIBRARY_MANAGER* aLibMgr );
 
+    bool isSymbolModel() override { return true; }
+
 protected:
     SYMBOL_EDIT_FRAME*      m_frame;
     SYMBOL_LIBRARY_MANAGER* m_libMgr;

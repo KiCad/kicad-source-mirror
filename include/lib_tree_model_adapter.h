@@ -290,6 +290,9 @@ public:
     // Allows subclasses to nominate a context menu handler.
     virtual TOOL_INTERACTIVE* GetContextMenuTool() { return nullptr; }
 
+    void PinLibrary( LIB_TREE_NODE* aTreeNode );
+    void UnpinLibrary( LIB_TREE_NODE* aTreeNode );
+
 protected:
     /**
      * Convert #SYM_TREE_NODE -> wxDataViewItem.
@@ -372,6 +375,10 @@ protected:
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
+    virtual bool isSymbolModel() = 0;
+
+    void resortTree();
+
 private:
     /**
      * Find any results worth highlighting and expand them, according to given criteria
@@ -404,7 +411,7 @@ protected:
     std::map<unsigned, wxString> m_colIdxMap;
 
 private:
-    [[maybe_unused]] EDA_BASE_FRAME* m_parent;
+    EDA_BASE_FRAME*         m_parent;
 
     SYM_FILTER_TYPE         m_filter;
     bool                    m_show_units;

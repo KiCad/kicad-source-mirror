@@ -51,16 +51,7 @@ protected:
 
     std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
 
-    /**
-     * Get the value of an item.
-     *
-     * @param aVariant  wxVariant to receive the data
-     * @param aItem     item whose data will be placed into aVariant
-     * @param aCol      column number of the data
-     */
-    void GetValue( wxVariant&              aVariant,
-                   const wxDataViewItem&   aItem,
-                   unsigned int            aCol ) const override;
+    bool isSymbolModel() override { return false; }
 
 protected:
     FP_LIB_TABLE*   m_libs;

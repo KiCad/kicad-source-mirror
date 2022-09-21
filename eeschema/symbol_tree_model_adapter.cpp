@@ -182,12 +182,11 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( progressReporter )
     {
-        // Force immediate deletion of the APP_PROGRESS_DIALOG
-        // ( do not use Destroy(), or use Destroy() followed by wxSafeYield() )
-        // because on Windows, APP_PROGRESS_DIALOG has some side effects on the event loop
-        // manager. A side effect is the call of ShowModal() of a dialog following
-        // the use of SYMBOL_TREE_MODEL_ADAPTER creating a APP_PROGRESS_DIALOG
-        // has a broken behavior (incorrect modal behavior).
+        // Force immediate deletion of the APP_PROGRESS_DIALOG.  Do not use Destroy(), or Destroy()
+        // followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG has some side effects
+        // on the event loop manager.
+        // One in particular is the call of ShowModal() following SYMBOL_TREE_MODEL_ADAPTER
+        // creating a APP_PROGRESS_DIALOG (which has incorrect modal behaviour).
         progressReporter.reset();
         m_show_progress = false;
     }
@@ -226,50 +225,6 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool p
 wxString SYMBOL_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUnit )
 {
     return GenerateAliasInfo( m_libs, aLibId, aUnit );
-}
-
-
-void SYMBOL_TREE_MODEL_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
-                                          unsigned int aCol ) const
-{
-    if( IsFrozen() )
-    {
-        aVariant = wxEmptyString;
-        return;
-    }
-
-    LIB_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
-
-    switch( aCol )
-    {
-    case NAME_COL:
-        if( node->m_Pinned )
-            aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
-        else
-            aVariant = UnescapeString( node->m_Name );
-
-        break;
-
-    case DESC_COL:
-        aVariant = node->m_Desc;
-        break;
-
-    default:
-    {
-        if( m_colIdxMap.count( aCol ) )
-        {
-            const wxString& key = m_colIdxMap.at( aCol );
-
-            if( node->m_Fields.count( key ) )
-                aVariant = node->m_Fields.at( key );
-            else
-                aVariant = wxEmptyString;
-        }
-
-        break;
-    }
-    }
 }
 
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,7 +22,6 @@
 #include <eda_base_frame.h>
 #include <eda_pattern_match.h>
 #include <kiface_base.h>
-#include <config_params.h>
 #include <lib_tree_model_adapter.h>
 #include <project/project_file.h>
 #include <settings/app_settings.h>
@@ -31,8 +30,6 @@
 #include <wx/wupdlock.h>
 #include <string_utils.h>
 
-
-#define PINNED_ITEMS_KEY      wxT( "PinnedItems" )
 
 static const int kDataViewIndent = 20;
 
@@ -262,6 +259,38 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
         if( !it.second )
             doAddColumn( it.first, false );
     }
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::resortTree()
+{
+    Freeze();
+    BeforeReset();
+
+    m_tree.SortNodes();
+
+    AfterReset();
+    Thaw();
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::PinLibrary( LIB_TREE_NODE* aTreeNode )
+{
+    m_parent->Prj().PinLibrary( aTreeNode->m_LibId.GetLibNickname(), isSymbolModel() );
+    aTreeNode->m_Pinned = true;
+
+    resortTree();
+    m_widget->EnsureVisible( ToItem( aTreeNode ) );
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::UnpinLibrary( LIB_TREE_NODE* aTreeNode )
+{
+    m_parent->Prj().UnpinLibrary( aTreeNode->m_LibId.GetLibNickname(), isSymbolModel() );
+    aTreeNode->m_Pinned = false;
+
+    resortTree();
+    // Keep focus at top when unpinning
 }
 
 
@@ -529,7 +558,11 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
     switch( aCol )
     {
     case NAME_COL:
-        aVariant = UnescapeString( node->m_Name );
+        if( node->m_Pinned )
+            aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
+        else
+            aVariant = UnescapeString( node->m_Name );
+
         break;
 
     case DESC_COL:
@@ -537,16 +570,17 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
         break;
 
     default:
-    {
-        wxCHECK_RET( m_colIdxMap.count( aCol ), wxT( "Invalid column in LIB_TREE_MODEL_ADAPTER" ) );
+        if( m_colIdxMap.count( aCol ) )
+        {
+            const wxString& key = m_colIdxMap.at( aCol );
 
-        if( node->m_Fields.count( m_colIdxMap.at( aCol ) ) )
-            aVariant = node->m_Fields[m_colIdxMap.at( aCol )];
-        else
-            aVariant = wxEmptyString;
+            if( node->m_Fields.count( key ) )
+                aVariant = node->m_Fields.at( key );
+            else
+                aVariant = wxEmptyString;
+        }
 
         break;
-    }
     }
 }
 

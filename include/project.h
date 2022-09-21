@@ -142,6 +142,9 @@ public:
      */
     virtual const wxString SymbolLibTableName() const;
 
+    void PinLibrary( const wxString& aLibrary, bool isSymbolLibrary );
+    void UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary );
+
     virtual PROJECT_FILE& GetProjectFile() const
     {
         wxASSERT( m_projectFile );

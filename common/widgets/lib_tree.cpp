@@ -29,10 +29,10 @@
 #include <wx/sizer.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <wx/srchctrl.h>
 #include <wx/settings.h>
 #include <wx/timer.h>
-
 
 constexpr int RECENT_SEARCHES_MAX = 10;
 
@@ -575,9 +575,7 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 
 void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 {
-    TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool();
-
-    if( tool )
+    if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
     {
         tool->Activate();
         tool->GetManager()->VetoContextMenuMouseWarp();
@@ -585,6 +583,30 @@ void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 
         TOOL_EVENT evt( TC_MOUSE, TA_MOUSE_CLICK, BUT_RIGHT );
         tool->GetManager()->DispatchContextMenu( evt );
+    }
+    else
+    {
+        LIB_TREE_NODE* current = GetCurrentTreeNode();
+
+        if( current && current->m_Type == LIB_TREE_NODE::LIB )
+        {
+            ACTION_MENU menu( true, nullptr );
+
+            if( current->m_Pinned )
+            {
+                menu.Add( ACTIONS::unpinLibrary );
+
+                if( GetPopupMenuSelectionFromUser( menu ) )
+                    m_adapter->UnpinLibrary( current );
+            }
+            else
+            {
+                menu.Add( ACTIONS::pinLibrary );
+
+                if( GetPopupMenuSelectionFromUser( menu ) )
+                    m_adapter->PinLibrary( current );
+            }
+        }
     }
 }
 

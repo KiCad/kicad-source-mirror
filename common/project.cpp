@@ -24,8 +24,10 @@
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 
+#include <pgm_base.h>
 #include <confirm.h>
 #include <core/arraydim.h>
+#include <core/kicad_algo.h>
 #include <fp_lib_table.h>
 #include <string_utils.h>
 #include <kiface_ids.h>
@@ -35,7 +37,8 @@
 #include <project/project_file.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
-
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 
 PROJECT::PROJECT() :
         m_readOnly( false ),
@@ -146,6 +149,46 @@ const wxString PROJECT::SymbolLibTableName() const
 const wxString PROJECT::FootprintLibTblName() const
 {
     return libTableName( "fp-lib-table" );
+}
+
+
+void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
+{
+    COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&          project = GetProjectFile();
+    std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
+                                                        : m_projectFile->m_PinnedFootprintLibs;
+
+    if( !alg::contains( pinnedLibs, aLibrary ) )
+        pinnedLibs.push_back( aLibrary );
+
+    Pgm().GetSettingsManager().SaveProject();
+
+    pinnedLibs = isSymbolLibrary ? cfg->m_Session.pinned_symbol_libs
+                                 : cfg->m_Session.pinned_fp_libs;
+
+    if( !alg::contains( pinnedLibs, aLibrary ) )
+        pinnedLibs.push_back( aLibrary );
+
+    cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
+}
+
+
+void PROJECT::UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
+{
+    COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
+    PROJECT_FILE&          project = GetProjectFile();
+    std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
+                                                        : m_projectFile->m_PinnedFootprintLibs;
+
+    alg::delete_matching( pinnedLibs, aLibrary );
+    Pgm().GetSettingsManager().SaveProject();
+
+    pinnedLibs = isSymbolLibrary ? cfg->m_Session.pinned_symbol_libs
+                                 : cfg->m_Session.pinned_fp_libs;
+
+    alg::delete_matching( pinnedLibs, aLibrary );
+    cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
 
 
