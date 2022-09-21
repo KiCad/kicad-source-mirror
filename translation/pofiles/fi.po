@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:33-0700\n"
-"PO-Revision-Date: 2022-09-21 11:21+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2022-09-25 11:47+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -3024,13 +3024,12 @@ msgid "Show icons in menus"
 msgstr "Näytä kuvakkeet valikoissa"
 
 #: common/dialogs/panel_common_settings_base.cpp:124
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Näytä kuvakkeet valikoissa"
+msgstr "Näytä vierityspalkit muokkausohjelmissa"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Tämä muutos tulee voimaan, kun editori käynnistetään uudelleen."
 
 #: common/dialogs/panel_common_settings_base.cpp:133
 msgid "Icon theme:"
@@ -4363,9 +4362,8 @@ msgstr "Piirrä kohde"
 
 #: common/eda_shape.cpp:60
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:163
-#, fuzzy
 msgid "Number Box"
-msgstr "Numero"
+msgstr "Numerolaatikko"
 
 #: common/eda_shape.cpp:65 pcbnew/pad.cpp:1198
 msgid "Rect"
@@ -4438,9 +4436,8 @@ msgid "Points"
 msgstr "Pisteet"
 
 #: common/eda_shape.cpp:607
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Anturan Numero"
+msgstr "Anturan numerolaatikko"
 
 #: common/eda_shape.cpp:613 common/eda_text.cpp:1042
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -5883,9 +5880,8 @@ msgid "Find"
 msgstr "Etsi"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Search for items"
-msgstr "Hae muita tekstikohteita"
+msgstr "Etsi kohteita"
 
 #: common/tool/actions.cpp:215
 msgid "Find text"
@@ -6549,7 +6545,7 @@ msgstr "Valitse tiedosto"
 
 #: common/widgets/lib_tree.cpp:279
 msgid "recent searches"
-msgstr ""
+msgstr "edelliset haut"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -7542,19 +7538,19 @@ msgstr ""
 "ei löydetty. Skripti ei ole käytettävissä."
 
 #: eeschema/component_references_lister.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "Kohdetta ei ole merkitty: %s %s (yksikkö %d)\n"
+msgstr "Kohdetta ei ole merkitty: %s %s (yksikkö %d)"
 
 #: eeschema/component_references_lister.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Item not annotated: %s%s"
-msgstr "Kohdetta ei ole merkitty: %s %s\n"
+msgstr "Kohdetta ei ole merkitty: %s%s"
 
 #: eeschema/component_references_lister.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Virhe: symboli %s%s%s (yksikkö %d) ylittää määritetyt yksiköt (%d)\n"
+msgstr "Virhe: symboli %s%s%s (yksikkö %d) ylittää määritetyt yksiköt (%d)"
 
 #: eeschema/component_references_lister.cpp:752
 #: eeschema/component_references_lister.cpp:780
@@ -8765,14 +8761,12 @@ msgid "Show the field name in addtion to its value"
 msgstr "Näytä kentän nimi sen arvon lisäksi"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
-#, fuzzy
 msgid "Allow autoplacement"
-msgstr "Automaattisen sijoittelun säännöt"
+msgstr "Salli automaattinen sijoittelu"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:105
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Suorittaa valittujen komponenttien automaattisen sijoittamisen"
+msgstr "Salli tämän kentän automaattinen sijoittaminen kytkentäkaavioon"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -9995,15 +9989,13 @@ msgstr "Simulaattori vaatii täysin merkityn kytkentäkaavion."
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 #: eeschema/dialogs/dialog_netlist.cpp:396
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Vain nykyinen lehti"
+msgstr "Käytä nykyistä sivua juurena"
 
 #: eeschema/dialogs/dialog_netlist.cpp:350
 #: eeschema/dialogs/dialog_netlist.cpp:397
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Nollaa olemassa olevat selitteet "
+msgstr "Vie netlist vain nykyiselle taulukolle"
 
 #: eeschema/dialogs/dialog_netlist.cpp:355
 msgid "Save all voltages"
@@ -10492,18 +10484,18 @@ msgid "Pen width:"
 msgstr "Kynän leveys:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:158
-#, fuzzy
 msgid "Other options"
-msgstr "Muut vaihtoehdot:"
+msgstr "Muut vaihtoehdot"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:160
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Yksi tiedosto kerrosta kohti"
+msgstr "Avaa tiedosto plottauksen jälkeen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:162
 msgid "Open output file with associated application after successful plot"
 msgstr ""
+"Avaa tulostiedosto ja siihen liittyvä sovellus onnistuneen plottauksen "
+"jälkeen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:88
 msgid "Plot Schematic Options"
@@ -10999,9 +10991,8 @@ msgstr "Lisää signaali nimen mukaan:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:412
 #: eeschema/dialogs/dialog_sim_model.cpp:773
-#, fuzzy
 msgid "Not Connected"
-msgstr "Ei yhteyttä"
+msgstr "Ei Kytketty"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:460
 #, c-format
@@ -11439,9 +11430,9 @@ msgid "Field name '%s' already in use."
 msgstr "Kentän nimi '%s' on jo käytössä."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1121
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Haluatko poistaa kohteen '%s'?"
+msgstr "Haluatko varmasti poistaa kentän %s?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1369
 msgid "Unsaved data"
@@ -11600,9 +11591,8 @@ msgstr ""
 "ei vaadita levyn, kuten mekaanisten kiinnikkeiden ja koteloiden, asettamista"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Do not populate"
-msgstr "Älä vie"
+msgstr "Älä täytä"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Update Symbol from Library..."
@@ -12701,6 +12691,7 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
+"Tiedostoa '%s' ei voi kopioida, koska uusi juurisivutiedosto korvaa sen."
 
 #: eeschema/eeschema_config.cpp:73 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
@@ -12760,9 +12751,8 @@ msgid "No Connection"
 msgstr "Liittämätön"
 
 #: eeschema/erc.cpp:283
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Piirroslehdellä on tekstimuuttuja, jota ei ole määritelty."
+msgstr "Piirroslehdellä on tekstimuuttuja, jota ei ole määritelty"
 
 #: eeschema/erc.cpp:320
 #, c-format
@@ -12775,9 +12765,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Eri jalanjäljet on osoitettu käyttäjille %s ja %s"
 
 #: eeschema/erc.cpp:438
-#, fuzzy
 msgid "Pins with 'no connection' type are connected"
-msgstr "Nastat, joilla tyyppi \"ei yhteyttä\" on yhdistetty"
+msgstr "'Ei yhteyttä' -tyyppiset nastat on kytketty"
 
 #: eeschema/erc.cpp:563
 #, c-format
@@ -12790,24 +12779,24 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Nasta %s on kytketty molempiin %s ja %s"
 
 #: eeschema/erc.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Tämänhetkiset asetukset eivät sisällä kirjastoa \"%s\"."
+msgstr "Tämänhetkiset asetukset eivät sisällä kirjastoa \"%s\""
 
 #: eeschema/erc.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Kirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa."
+msgstr "Kirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa"
 
 #: eeschema/erc.cpp:761
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Symbolia %s ei löydy kirjastosta '%s'."
+msgstr "Symbolia %s ei löydy kirjastosta '%s'"
 
 #: eeschema/erc.cpp:777
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Symbolia %s ei löydy kirjastosta '%s'."
+msgstr "Symbolia '%s' on muokattu kirjastossa '%s'"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -13832,9 +13821,8 @@ msgid "Net"
 msgstr "Kytkentäverkko"
 
 #: eeschema/sch_label.cpp:934 eeschema/sch_line.cpp:856
-#, fuzzy
 msgid "Resolved netclass"
-msgstr "Ratkaistu Verkkoluokka"
+msgstr "Ratkaistu verkkoluokka"
 
 #: eeschema/sch_label.cpp:1026
 #, c-format
@@ -14016,22 +14004,20 @@ msgstr "Bezier-käyrällä on %d ohjauspistettä. Vähintään 2 tarvitaan."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1433
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr ""
+msgstr "Ei-tuettua ellipsiä ei tuotu (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as ahierarchical sheet. Please "
 "review the imported schematic."
 msgstr ""
-"Altiumin johtosarjan liitin (%s) tuotiin Hierarkkisena sivuna. Ole hyvä ja "
-"tarkista tuotu kytkentäkaavio, koska KiCad ei tue alkuperäisesti näitä "
-"Altium-elementtejä."
+"Altiumin johtosarjan liitin (%s) tuotiin hierarkkisena sivuna. Ole hyvä ja "
+"esikatsele tuotu kytkentäkaavio."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2011
-#, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr "Virtaportilla on tuntematon tyyli, käytetään palkkia sen sijaan."
+msgstr "Virtaportti, jonka tyyli on tuntematon, tuotu 'palkki'-tyyppisenä."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2052
 #, c-format
@@ -14039,13 +14025,13 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Tehosymboli luo globaalin tunnisteen nimellä \"%s\""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
 "imported schematic."
 msgstr ""
-"Altiumin johtosarjaportti (%s) tuotiin tekstilaatikkona. Tarkista tuotu "
-"kytkentäkaavio, koska KiCad ei tue alkuperäisesti näitä Altium-elementtejä."
+"Altiumin johtosarjaportti (%s) tuotiin tekstilaatikkona. Ole hyvä ja "
+"esikatsele tuotu kytkentäkaavio."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
@@ -14431,6 +14417,8 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
+"Taulukkoa %s ei voitu ladata, koska se näkyy jo suorana esi-isänä "
+"kaaviohierarkiassa."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1379
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2094
@@ -14567,19 +14555,16 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarkinen lehtinasta %s"
 
 #: eeschema/sch_symbol.cpp:1156
-#, fuzzy
 msgid "Excluded from BOM"
-msgstr "Sulje pois luettelosta"
+msgstr "Poissuljettu BOM-luettelosta"
 
 #: eeschema/sch_symbol.cpp:1161
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Sulje pois aluksella"
+msgstr "Poissuljettu piirilevyltä"
 
 #: eeschema/sch_symbol.cpp:1166
-#, fuzzy
 msgid "DNP"
-msgstr "Pistettä tuumalla"
+msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1537
 msgid "Power symbol"
@@ -16329,11 +16314,11 @@ msgstr "Päivitä symboli vastaamaan kantasymboliin tehtyjä muutoksia"
 
 #: eeschema/tools/ee_actions.cpp:186
 msgid "Set Unit Display Name..."
-msgstr ""
+msgstr "Aseta Yksikön Näyttönimi..."
 
 #: eeschema/tools/ee_actions.cpp:187
 msgid "Set the display name for a unit"
-msgstr ""
+msgstr "Aseta yksikön näyttönimi"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
@@ -16348,14 +16333,12 @@ msgid "Annotate pins with their electrical types"
 msgstr "Merkitse nastat niiden sähkötyypeillä"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Show Pin Numbers"
-msgstr "Näytä nastanumerot"
+msgstr "Näytä Nastanumerot"
 
 #: eeschema/tools/ee_actions.cpp:201
-#, fuzzy
 msgid "Annotate pins with their numbers"
-msgstr "Merkitse nastat niiden sähkötyypeillä"
+msgstr "Merkitse nastat niiden numeroihin"
 
 #: eeschema/tools/ee_actions.cpp:206
 msgid "Show Symbol Tree"
@@ -16647,12 +16630,11 @@ msgstr "Kääntää valitut kohteet vasemmalta oikealle"
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/edit_tool_move_fct.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:331
 msgid "Swap"
-msgstr ""
+msgstr "Vaihda"
 
 #: eeschema/tools/ee_actions.cpp:429 pcbnew/tools/pcb_actions.cpp:331
-#, fuzzy
 msgid "Swaps selected items' positions"
-msgstr "Kierrä valittuja kohteita myötäpäivään"
+msgstr "Vaihtaa valittujen 'kohteiden' paikkoja"
 
 #: eeschema/tools/ee_actions.cpp:435 pcbnew/tools/pcb_actions.cpp:351
 msgid "Properties..."
@@ -16729,9 +16711,8 @@ msgid "Assign Netclass..."
 msgstr "Määritä Netclass ..."
 
 #: eeschema/tools/ee_actions.cpp:488 pcbnew/tools/pcb_actions.cpp:681
-#, fuzzy
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Määritä verkkoluokka valitun johdon verkoon"
+msgstr "Määritä verkkoluokka verkoille, jotka vastaavat kuviota"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "De Morgan Conversion"
@@ -17059,22 +17040,21 @@ msgid "Line Mode for Wires and Buses"
 msgstr "Viivatila Johtimille ja Väylille"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Draw and drag at any angle"
-msgstr "Viivat piirretty mihin tahansa kulmaan"
+msgstr "Piirrä ja vedä missä tahansa kulmassa"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr ""
+"Rajoita piirtämistä ja vetämistä vaaka- tai pystysuuntaisiin liikkeisiin"
 
 #: eeschema/tools/ee_actions.cpp:721
-#, fuzzy
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Piirrettäessä graafisia viivoja pakota ne vaaka-, pysty- tai 45 asteen "
-"suuntaiseksi."
+"Rajoita piirtämistä ja vetämistä vaaka-, pysty- tai 45 asteen kulman "
+"liikkeisiin"
 
 #: eeschema/tools/ee_actions.cpp:726
 msgid "Switch to next line mode"
@@ -17434,9 +17414,8 @@ msgstr ""
 "vanhempana."
 
 #: eeschema/tools/sch_editor_control.cpp:2083
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "Symbolikirjastoa '%s' ei voi poistaa."
+msgstr "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
 #: eeschema/tools/sch_editor_control.cpp:2377
 #: pcbnew/tools/board_editor_control.cpp:597
@@ -17523,13 +17502,13 @@ msgid "Symbol is not derived from another symbol."
 msgstr "Symboli ei ole johdettu toisesta symbolista."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Enter display name for unit %s"
-msgstr "Syötä arkin polun sivunumero %s"
+msgstr "Anna näyttönimi yksikölle %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:673
 msgid "Set Unit Display Name"
-msgstr ""
+msgstr "Aseta yksikön näyttönimi"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -17857,7 +17836,7 @@ msgid "Negative Objects"
 msgstr "Negatiiviset Kohteet"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
 msgstr "Graafinen kerros %d"
 
@@ -19153,9 +19132,8 @@ msgstr ""
 "Haluatko varmasti päivittää kiinnitetyn paketin versiosta %s versioon %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
-#, fuzzy
 msgid "Confirm update"
-msgstr "Vahvista muutos"
+msgstr "Vahvista päivitys"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:95
 #: kicad/pcm/dialogs/panel_package.cpp:101
@@ -19278,9 +19256,8 @@ msgid "Applying Package Changes"
 msgstr "Hyväksytään Paketin Muutokset"
 
 #: kicad/pcm/dialogs/panel_package.cpp:65
-#, fuzzy
 msgid "Pin package"
-msgstr "Paketti"
+msgstr "Nastapaketti"
 
 #: kicad/pcm/dialogs/panel_package.cpp:66
 msgid ""
@@ -20773,14 +20750,12 @@ msgid "AWG30"
 msgstr "AWG30"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:212
-#, fuzzy
 msgid "Electrical Resistivity in Ohm*m at 20 deg C"
-msgstr "Sähköresistiivisyys ohmina * m"
+msgstr "Sähköresistiivisyys Ohmina *m 20 °C:ssa"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:236
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Lämpötilan nousu"
+msgstr "Lämpötilakerroin"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 msgid "Wire properties"
@@ -20804,9 +20779,8 @@ msgid "Conductor resistivity:"
 msgstr "Johtimen resistanssi:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:71
-#, fuzzy
 msgid "Specific resistance in Ohm*m at 20 deg C"
-msgstr "Ominaisvastus ohmeina * metreinä"
+msgstr "Ominaisvastus Ohmeina*m 20 °C:ssa"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:81
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:103
@@ -20827,13 +20801,12 @@ msgid "ohm-meter"
 msgstr "Vastus-mittari"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:91
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Lämpötilan nousu:"
+msgstr "Lämpötilakerroin:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Thermal coefficient at 20 deg C"
-msgstr ""
+msgstr "Lämpökerroin 20 Celsius asteessa"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:112
 msgid "Linear resistance:"
@@ -20853,13 +20826,12 @@ msgid "Application"
 msgstr "Sovellus"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:162
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Ympäristön lämpötila:"
+msgstr "Kaapelin lämpötila:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:164
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
-msgstr ""
+msgstr "Off-Load maks. johtimen lämpötila. Viite: 20 astetta C"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:171
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:41
@@ -20880,17 +20852,15 @@ msgstr "Pituus:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:188
 msgid "Length includes the return path"
-msgstr ""
+msgstr "Pituus sisältää paluupolun"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:200
-#, fuzzy
 msgid "Resistance DC:"
-msgstr "Vastus:"
+msgstr "Vastus tasavirta(DC):"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:202
-#, fuzzy
 msgid "DC Resistance of the conductor"
-msgstr "Johtimen tyypillinen impedanssi"
+msgstr "Johtimen tasavirtavastus"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:209
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -22428,9 +22398,8 @@ msgid "Epsilon R:"
 msgstr "Epsilon R():"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
-#, fuzzy
 msgid "Loss Tan:"
-msgstr "Häviö Tan"
+msgstr "Häviö Tan:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -26841,9 +26810,8 @@ msgid "angle"
 msgstr "kulma"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "at"
-msgstr "Polku"
+msgstr "at"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "radius"
@@ -26856,9 +26824,8 @@ msgstr "kulmat lasketaan %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:745
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2178
-#, fuzzy
 msgid "Number box"
-msgstr "Numero"
+msgstr "Numerolaatikko"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:754
 msgid "Unknown primitive"
@@ -30959,9 +30926,9 @@ msgid "Checking board setup constraints clearance: min %s."
 msgstr "Tarkistetaan piirilevyasetusten rajoitusvälys: minimi %s."
 
 #: pcbnew/drc/drc_engine.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole to hole: min %s."
-msgstr "Tarkistetaan piirilevyasetuksista reikäkokorajoitukset: min %s."
+msgstr "Tarkistetaan piirilevyn asetusten rajoitukset reiästä reikään: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1033 pcbnew/drc/drc_engine.cpp:1062
 #: pcbnew/drc/drc_engine.cpp:1494
@@ -33573,24 +33540,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Poistettiin %s 'älä lisää BOM:iin' valmistusasetus."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Aseta %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Lisää %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Poista %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Poista %s 'poista pois sijaintitiedostoista' valmistusattribuutti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Lisättiin %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Lisätty %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Poistettiin %s 'älä lisää BOM:iin' valmistusasetus."
+msgstr "Poistettu %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:497
 #, c-format
@@ -33920,9 +33887,9 @@ msgid "NPTH pad of %s"
 msgstr "%s:n NPTH-antura"
 
 #: pcbnew/pad.cpp:1238
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s of %s"
-msgstr "Pad of %s päällä %s"
+msgstr "PTH-antura %s / %s"
 
 #: pcbnew/pad.cpp:1247
 #, c-format
@@ -33932,12 +33899,12 @@ msgstr "Pad %s %s, viite %s, taso %s"
 #: pcbnew/pad.cpp:1255
 #, c-format
 msgid "NPTH of %s"
-msgstr ""
+msgstr "NPTH / %s"
 
 #: pcbnew/pad.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Pad %s / %s päällä %s"
+msgstr "PTH-antura %s %s %s:sta"
 
 #: pcbnew/pad.cpp:1688
 msgid "Edge connector"
@@ -34037,9 +34004,8 @@ msgid "Export netlist used to update schematics"
 msgstr "Kytkentäkaavion päivittämiseen käytettävän verkkolistan vieminen"
 
 #: pcbnew/pcb_edit_frame.cpp:310
-#, fuzzy
 msgid "Search"
-msgstr "Hae Tekstiä"
+msgstr "Etsi"
 
 #: pcbnew/pcb_edit_frame.cpp:382
 msgid "New PCB file is unsaved"
@@ -36498,9 +36464,8 @@ msgid "Selection contains no items with labelled nets."
 msgstr "Valinta ei sisällä kohteita, joissa on nimettyjä verkkoja."
 
 #: pcbnew/tools/board_inspection_tool.cpp:58
-#, fuzzy
 msgid "Net Inspection Tools"
-msgstr "Verkkotarkastaja"
+msgstr "Verkkotarkastustyökalut"
 
 #: pcbnew/tools/board_inspection_tool.cpp:163
 #, c-format
@@ -36658,9 +36623,8 @@ msgstr "Reiästä reikään"
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:961
-#, fuzzy
 msgid "Hole to hole clearance resolution for:"
-msgstr "Reiän välyksen tarkkuus kohteelle:"
+msgstr "Reiästä reikään välyksen tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:450
 msgid "Edge Clearance"
@@ -38044,24 +38008,23 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Korosta kaikki kuparikohteet valitusta verkosta"
 
 #: pcbnew/tools/pcb_actions.cpp:790
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Korosta Ratsnest"
+msgstr "Piilota verkko kytkentärisukosta"
 
 #: pcbnew/tools/pcb_actions.cpp:791
-#, fuzzy
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Siirrä valitut verkot oikeasta luettelosta vasempaan"
+msgstr ""
+"Piilota valittu verkko kytkentärisukon kytkemättömistä verkkoviivoista/"
+"kaarista"
 
 #: pcbnew/tools/pcb_actions.cpp:796
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "Näytä kytkentärisukko"
+msgstr "Näytä Verkko Kytkentärisukossa"
 
 #: pcbnew/tools/pcb_actions.cpp:797
-#, fuzzy
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Siirrä valitut verkot oikeasta luettelosta vasempaan"
+msgstr ""
+"Näytä valittu verkko kytkentärisukon kytkemättömistä verkkoviivoista/kaarista"
 
 #: pcbnew/tools/pcb_actions.cpp:802
 msgid "Switch to Schematic Editor"
@@ -38100,14 +38063,12 @@ msgid "Show/hide the properties panel"
 msgstr "Näytä/piilota ominaisuuspaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Näytä Ominaisuudet Paneeli"
+msgstr "Näytä hakupaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:842
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Näytä/piilota ominaisuuspaneeli"
+msgstr "Näytä/piilota hakupaneeli"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Flip Board View"
@@ -38724,30 +38685,29 @@ msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr "Yritetään suorittaa nykyinen reitti lähimpään rats-verkon päähän."
 
 #: pcbnew/tools/pcb_actions.cpp:1465
-#, fuzzy
 msgid "Route Selected"
-msgstr "Ryhmä Valittu"
+msgstr "Reititä Valittu"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr ""
+msgstr "Reititä valitut kohteet peräkkäin ratsnest-ankkurista."
 
 #: pcbnew/tools/pcb_actions.cpp:1472
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Reititä toisesta päästä"
+msgstr "Reitti valittu toisesta päästä"
 
 #: pcbnew/tools/pcb_actions.cpp:1473
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
+"Reititä valitut kohteet peräkkäin kytkentärisukon ankkurin toisesta päästä."
 
 #: pcbnew/tools/pcb_actions.cpp:1479
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Yritä Lopettaa Valittu (Automaattinen reititys)"
 
 #: pcbnew/tools/pcb_actions.cpp:1480
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "Yritä reitittää kaikki valitut anturat automaattisesti peräkkäin."
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid ""
@@ -38786,6 +38746,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Varoitus: jotkut liitetyt kohteet olivat tasoilla, joita ei ole nykyisellä "
+"piirilevyllä.\n"
+"Näitä kohteita ei voitu liittää.\n"
 
 #: pcbnew/tools/pcb_control.cpp:943
 msgid "Invalid clipboard contents"
