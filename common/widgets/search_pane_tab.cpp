@@ -40,6 +40,10 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
 void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
 {
     long idx = GetFirstSelected();
+
+    if( idx < 0 )   // Nothing selected
+        return;
+
     aSelectedList.emplace_back( idx );
 
     idx = GetNextSelected( idx );

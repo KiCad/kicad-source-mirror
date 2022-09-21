@@ -85,9 +85,10 @@ wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
     std::vector<EDA_ITEM*> selectedItems;
+
     for( long row : aItemRows )
     {
-        if( row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long)m_hitlist.size() )
         {
             FOOTPRINT* fp = m_hitlist[row];
             selectedItems.push_back( fp );
@@ -95,7 +96,11 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    if( selectedItems.size() )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    m_frame->GetCanvas()->Refresh(0);
 }
 
 
@@ -170,7 +175,7 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     std::vector<EDA_ITEM*> selectedItems;
     for( long row : aItemRows )
     {
-        if( row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long)m_hitlist.size() )
         {
             ZONE* zone = m_hitlist[row];
             selectedItems.push_back( zone );
@@ -178,7 +183,11 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    if( selectedItems.size() )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    m_frame->GetCanvas()->Refresh(0);
 }
 
 
@@ -263,7 +272,7 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     std::vector<EDA_ITEM*> selectedItems;
     for( long row : aItemRows )
     {
-        if( row < (long)m_hitlist.size() )
+        if( row >= 0 && row < (long)m_hitlist.size() )
         {
             BOARD_ITEM* text = m_hitlist[row];
             selectedItems.push_back( text );
@@ -271,7 +280,11 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     }
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    if( selectedItems.size() )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    m_frame->GetCanvas()->Refresh(0);
 }
 
 
