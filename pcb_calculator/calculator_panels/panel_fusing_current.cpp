@@ -51,7 +51,7 @@ PANEL_FUSING_CURRENT_BASE( parent, id, pos, size, style, name )
 
     // show markdown formula explanation in lower help panel
     wxString msg;
-    ConvertMarkdown2Html( fusing_current_help, msg );
+    ConvertMarkdown2Html( wxGetTranslation( fusing_current_help ), msg );
     m_htmlHelp->SetPage( msg );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set

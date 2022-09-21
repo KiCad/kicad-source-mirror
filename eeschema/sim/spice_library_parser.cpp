@@ -23,8 +23,8 @@
  */
 
 #include <sim/spice_library_parser.h>
-#include <sim/spice_grammar.h>
 #include <sim/sim_library_spice.h>
+#include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
 #include <ki_exception.h>
 
