@@ -20,6 +20,7 @@
 #ifndef SEARCH_PANE_TAB_H
 #define SEARCH_PANE_TAB_H
 
+#include <vector>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
