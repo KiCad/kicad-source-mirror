@@ -67,6 +67,7 @@ void PCB_SEARCH_PANE::onBoardChanged( wxCommandEvent& event )
     if( m_brd != nullptr )
         m_brd->AddListener( this );
 
+    ClearAllResults();
     RefreshSearch();
 
     event.Skip();

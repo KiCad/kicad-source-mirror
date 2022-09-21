@@ -39,7 +39,7 @@ public:
 
 protected:
     wxString OnGetItemText( long item, long column ) const override;
-    void onItemSelected( wxListEvent& aEvent );
+    void     OnItemSelected( wxListEvent& aEvent );
 
 private:
     SEARCH_HANDLER*       m_handler;
@@ -54,6 +54,7 @@ public:
                      const wxSize&  aSize = wxDefaultSize );
 
     void Search( wxString& query );
+    void Clear();
     void RefreshColumnNames();
 
     SEARCH_HANDLER* GetSearchHandler() const { return m_handler; }

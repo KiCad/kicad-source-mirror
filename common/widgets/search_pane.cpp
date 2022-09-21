@@ -60,9 +60,18 @@ void SEARCH_PANE::AddSearcher( SEARCH_HANDLER* aHandler )
 
 void SEARCH_PANE::RefreshSearch()
 {
+    SEARCH_PANE_TAB* tab = GetCurrentTab();
+
+    if( tab )
+        tab->Search( m_lastQuery );
+}
+
+
+void SEARCH_PANE::ClearAllResults()
+{
     for( SEARCH_PANE_TAB* tab : m_tabs )
     {
-        tab->Search( m_lastQuery );
+        tab->Clear();
     }
 }
 
@@ -79,4 +88,19 @@ void SEARCH_PANE::OnSearchTextEntry( wxCommandEvent& aEvent )
 void SEARCH_PANE::FocusSearch()
 {
     m_searchCtrl1->SetFocus();
+}
+
+
+void SEARCH_PANE::OnNotebookPageChanged( wxBookCtrlEvent& aEvent )
+{
+    SEARCH_PANE_TAB* tab = GetCurrentTab();
+
+    if( tab )
+        tab->Search( m_lastQuery );
+}
+
+
+SEARCH_PANE_TAB* SEARCH_PANE::GetCurrentTab() const
+{
+    return dynamic_cast<SEARCH_PANE_TAB*>( m_notebook->GetCurrentPage() );
 }

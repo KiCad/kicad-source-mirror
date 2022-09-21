@@ -31,11 +31,11 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
 
     RefreshColumnNames();
 
-    Bind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::onItemSelected, this );
+    Bind( wxEVT_LIST_ITEM_SELECTED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
 }
 
 
-void SEARCH_PANE_LISTVIEW::onItemSelected( wxListEvent& aEvent )
+void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
     long idx = aEvent.GetIndex();
 
@@ -85,6 +85,13 @@ void SEARCH_PANE_TAB::Search( wxString& query )
 {
     int results = m_handler->Search( query );
     m_listView->SetItemCount( results );
+    m_listView->Refresh();
+}
+
+
+void SEARCH_PANE_TAB::Clear()
+{
+    m_listView->SetItemCount( 0 );
     m_listView->Refresh();
 }
 
