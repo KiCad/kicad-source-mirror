@@ -311,6 +311,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                                  .PaneBorder( false )
                                                  .MinSize( 180, -1 )
                                                  .BestSize( 180, -1 )
+                                                 .FloatingSize( 480, 200 )
                                                  .CloseButton( true )
                                                  .DestroyOnClose( false ) );
 
