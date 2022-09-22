@@ -101,6 +101,10 @@ public:
 
     const VECTOR2I GetSourcePos() const { return m_source->Pos(); }
     const VECTOR2I GetTargetPos() const { return m_target->Pos(); }
+    const unsigned GetLength() const
+    {
+        return ( m_target->Pos() - m_source->Pos() ).EuclideanNorm();
+    }
 
 private:
     std::shared_ptr<CN_ANCHOR> m_source;

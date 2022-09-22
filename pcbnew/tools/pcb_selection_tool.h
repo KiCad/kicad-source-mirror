@@ -303,6 +303,11 @@ private:
      */
     int selectUnconnected( const TOOL_EVENT& aEvent );
 
+    /**
+     * Select and move other nearest footprint unconnected on same net as selected items.
+     */
+    int grabUnconnected( const TOOL_EVENT& aEvent );
+
     enum STOP_CONDITION
     {
         /**

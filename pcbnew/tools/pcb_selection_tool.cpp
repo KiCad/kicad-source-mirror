@@ -90,6 +90,7 @@ public:
         Add( PCB_ACTIONS::selectOnSchematic );
 
         Add( PCB_ACTIONS::selectUnconnected );
+        Add( PCB_ACTIONS::grabUnconnected );
     }
 
 private:
@@ -1440,6 +1441,74 @@ int PCB_SELECTION_TOOL::selectUnconnected( const TOOL_EVENT& aEvent )
             }
         }
     }
+
+    return 0;
+}
+
+
+int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION originalSelection = m_selection;
+
+    // Get all pads
+    std::vector<PAD*> pads;
+
+    for( EDA_ITEM* item : m_selection.GetItems() )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+                pads.push_back( pad );
+        }
+        else if( item->Type() == PCB_PAD_T )
+        {
+            pads.push_back( static_cast<PAD*>( item ) );
+        }
+    }
+
+    ClearSelection();
+
+    // Select every footprint on the end of the ratsnest for each pad in our selection
+    std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
+
+    for( PAD* pad : pads )
+    {
+        const std::vector<CN_EDGE> edges = conn->GetRatsnestForPad( pad );
+
+        // Need to have something unconnected to grab
+        if( edges.size() == 0 )
+            continue;
+
+        double     currentDistance = DBL_MAX;
+        FOOTPRINT* nearest = nullptr;
+
+        // Check every ratsnest line for the nearest one
+        for( const CN_EDGE& edge : edges )
+        {
+            // Figure out if we are the source or the target node on the ratnest
+            std::shared_ptr<CN_ANCHOR> ourNode = edge.GetSourceNode()->Parent() == pad
+                                                         ? edge.GetSourceNode()
+                                                         : edge.GetTargetNode();
+            std::shared_ptr<CN_ANCHOR> otherNode = edge.GetSourceNode()->Parent() != pad
+                                                           ? edge.GetSourceNode()
+                                                           : edge.GetTargetNode();
+
+            // We only want to grab footprints, so the ratnest has to point to a pad
+            if( otherNode->Parent()->Type() != PCB_PAD_T )
+                continue;
+
+            if( edge.GetLength() < currentDistance )
+            {
+                currentDistance = edge.GetLength();
+                nearest = static_cast<PAD*>( otherNode->Parent() )->GetParent();
+            }
+        }
+
+        if( nearest != nullptr )
+            select( nearest );
+    }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::moveIndividually, true );
 
     return 0;
 }
@@ -3037,6 +3106,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectUnconnected,   PCB_ACTIONS::selectUnconnected.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::grabUnconnected,     PCB_ACTIONS::grabUnconnected.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelection,       PCB_ACTIONS::syncSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::syncSelectionWithNets,
         PCB_ACTIONS::syncSelectionWithNets.MakeEvent() );

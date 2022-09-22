@@ -1320,6 +1320,12 @@ TOOL_ACTION PCB_ACTIONS::selectUnconnected( "pcbnew.InteractiveSelection.SelectU
         _( "Select All Unconnected Footprints" ),
         _( "Selects all unconnected footprints belonging to each selected net." ) );
 
+TOOL_ACTION PCB_ACTIONS::grabUnconnected( "pcbnew.InteractiveSelection.GrabUnconnected",
+        AS_GLOBAL,
+        MD_SHIFT + 'O', "",
+        _( "Grab Nearest Unconnected Footprints" ),
+        _( "Selects and initiates moving the nearest unconnected footprint on each selected net." ) );
+
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL, 0, "",
         _( "Sheet" ),
@@ -1533,5 +1539,4 @@ TOOL_ACTION PCB_ACTIONS::ddAppendBoard( "pcbnew.Control.DdAppendBoard",
         AS_GLOBAL );
 
 
-TOOL_ACTION PCB_ACTIONS::ddImportFootprint( "pcbnew.Control.ddImportFootprint",
-        AS_GLOBAL );
+TOOL_ACTION PCB_ACTIONS::ddImportFootprint( "pcbnew.Control.ddImportFootprint", AS_GLOBAL );

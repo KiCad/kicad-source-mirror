@@ -91,6 +91,9 @@ public:
     /// Select unconnected footprints from ratsnest of selection
     static TOOL_ACTION selectUnconnected;
 
+    /// Select and move nearest unconnected footprint from ratsnest of selection
+    static TOOL_ACTION grabUnconnected;
+
     /// Select all components on sheet from Eeschema crossprobing.
     static TOOL_ACTION selectOnSheetFromEeschema;
 
