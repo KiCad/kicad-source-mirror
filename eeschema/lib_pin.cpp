@@ -180,7 +180,7 @@ KIFONT::FONT* LIB_PIN::GetDrawFont() const
 
 wxString LIB_PIN::GetShownName() const
 {
-    if( m_name == "~" )
+    if( m_name == wxS( "~" ) )
         return wxEmptyString;
     else
         return m_name;

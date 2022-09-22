@@ -557,9 +557,9 @@ wxString SCH_LABEL_BASE::GetShownText( int aDepth ) const
 
     wxString text = EDA_TEXT::GetShownText();
 
-    if( text == "~" )   // Legacy placeholder for empty string
+    if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
-        text = "";
+        text = wxS( "" );
     }
     else if( HasTextVars() )
     {

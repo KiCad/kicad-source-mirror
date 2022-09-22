@@ -1360,22 +1360,10 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
     const BOARD*         board = GetBoard();
-    LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all pads
     if( !aView->IsLayerVisible( LAYER_PADS ) )
         return HIDE;
-
-    // Handle board visibility
-    if( board )
-        visible &= board->GetEnabledLayers();
-
-    // Handle view visibility
-    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
-    {
-        if( !aView->IsLayerVisible( layer ) )
-            visible.set( layer, false );
-    }
 
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
@@ -1395,6 +1383,19 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
+
+    LSET visible = LSET::AllLayersMask();
+
+    // Handle board visibility
+    if( board )
+        visible &= board->GetEnabledLayers();
+
+    // Handle view visibility
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    {
+        if( !aView->IsLayerVisible( layer ) )
+            visible.set( layer, false );
+    }
 
     if( aLayer == LAYER_PADS_TH )
     {

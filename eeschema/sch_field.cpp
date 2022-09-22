@@ -206,11 +206,11 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     wxString  text = EDA_TEXT::GetShownText();
 
     if( IsNameShown() )
-        text = GetName() << wxT( ": " ) << text;
+        text = GetName() << wxS( ": " ) << text;
 
-    if( text == "~" )    // Legacy placeholder for empty string
+    if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
-        text = "";
+        text = wxS( "" );
     }
     else if( HasTextVars() )
     {

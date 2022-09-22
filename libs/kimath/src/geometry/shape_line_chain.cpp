@@ -109,7 +109,10 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
     else
         input = *this;
 
-    for( int i = 0; i < input.PointCount(); i++ )
+    int pointCount = input.PointCount();
+    c_path.reserve( pointCount );
+
+    for( int i = 0; i < pointCount; i++ )
     {
         const VECTOR2I& vertex = input.CPoint( i );
 

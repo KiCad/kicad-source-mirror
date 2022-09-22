@@ -297,25 +297,26 @@ KIID_PATH SCH_SHEET_PATH::PathWithoutRootUuid() const
 wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 {
     wxString s;
-    wxString fileName;
-
-    if( !empty() && at( 0 )->GetScreen() )
-        fileName = at( 0 )->GetScreen()->GetFileName();
 
     if( aUseShortRootName )
     {
-        s = wxT( "/" ); // Use only the short name in netlists
+        s = wxS( "/" ); // Use only the short name in netlists
     }
     else
     {
+        wxString fileName;
+
+        if( !empty() && at( 0 )->GetScreen() )
+            fileName = at( 0 )->GetScreen()->GetFileName();
+
         wxFileName fn = fileName;
 
-        s = fn.GetName() + wxT( "/" );
+        s = fn.GetName() + wxS( "/" );
     }
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
-        s << at( i )->GetFields()[SHEETNAME].GetShownText() << wxT( "/" );
+        s << at( i )->GetFields()[SHEETNAME].GetShownText() << wxS( "/" );
 
     return s;
 }

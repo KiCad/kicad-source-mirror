@@ -98,7 +98,7 @@ wxString SCH_PIN::GetShownName() const
     if( !m_alt.IsEmpty() )
         name = m_alt;
 
-    if( name == "~" )
+    if( name == wxS( "~" ) )
         return wxEmptyString;
     else
         return name;
@@ -107,7 +107,7 @@ wxString SCH_PIN::GetShownName() const
 
 wxString SCH_PIN::GetShownNumber() const
 {
-    if( m_number == "~" )
+    if( m_number == wxS( "~" ) )
         return wxEmptyString;
     else
         return m_number;
