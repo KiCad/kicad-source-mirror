@@ -25,6 +25,8 @@
  */
 
 #include <bitmaps.h>
+#include <core/mirror.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -32,7 +34,6 @@
 #include <geometry/shape_compound.h>
 #include <pcb_shape.h>
 #include <pcb_painter.h>
-#include "macros.h"
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
     BOARD_ITEM( aParent, aItemType ),
@@ -193,6 +194,53 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     flip( aCentre, aFlipLeftRight );
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+}
+
+
+void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+{
+    // Mirror an edge of the footprint. the layer is not modified
+    // This is a footprint shape modification.
+
+    switch( GetShape() )
+    {
+    case SHAPE_T::ARC:
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::BEZIER:
+        if( aMirrorAroundXAxis )
+        {
+            MIRROR( m_start.y, aCentre.y );
+            MIRROR( m_end.y, aCentre.y );
+            MIRROR( m_arcCenter.y, aCentre.y );
+            MIRROR( m_bezierC1.y, aCentre.y );
+            MIRROR( m_bezierC2.y, aCentre.y );
+        }
+        else
+        {
+            MIRROR( m_start.x, aCentre.x );
+            MIRROR( m_end.x, aCentre.x );
+            MIRROR( m_arcCenter.x, aCentre.x );
+            MIRROR( m_bezierC1.x, aCentre.x );
+            MIRROR( m_bezierC2.x, aCentre.x );
+        }
+
+        if( GetShape() == SHAPE_T::ARC )
+            std::swap( m_start, m_end );
+
+        if( GetShape() == SHAPE_T::BEZIER )
+            RebuildBezierToSegmentsPointsList( GetWidth() );
+
+        break;
+
+    case SHAPE_T::POLY:
+        m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis, aCentre );
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
 }
 
 

@@ -68,26 +68,13 @@ public:
 
     void SetArcGeometry0( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
-    /**
-     * Move an edge of the footprint.
-     * This is a footprint shape modification.
-     * (should be only called by a footprint editing function)
-     */
     void Move( const VECTOR2I& aMoveVector ) override;
 
     /**
-     * Mirror an edge of the footprint.
-     * Do not change the layer
-     * This is a footprint shape modification.
-     * (should be only called by a footprint editing function)
+     * Mirror horizontally or vertically.  Do not change the layer.
      */
-    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis ) override;
 
-    /**
-     * Rotate an edge of the footprint.
-     * This is a footprint shape modification.
-     * (should be only called by a footprint editing function )
-     */
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     /**

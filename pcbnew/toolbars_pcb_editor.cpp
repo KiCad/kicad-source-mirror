@@ -264,6 +264,8 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::rotateCcw );
     m_mainToolBar->Add( PCB_ACTIONS::rotateCw );
+    m_mainToolBar->Add( PCB_ACTIONS::mirrorV );
+    m_mainToolBar->Add( PCB_ACTIONS::mirrorH );
     m_mainToolBar->Add( PCB_ACTIONS::group );
     m_mainToolBar->Add( PCB_ACTIONS::ungroup );
     m_mainToolBar->Add( PCB_ACTIONS::lock );

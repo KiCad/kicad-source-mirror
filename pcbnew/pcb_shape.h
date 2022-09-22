@@ -116,6 +116,8 @@ public:
 
     virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
+    virtual void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+
     void Scale( double aScale );
 
     /**

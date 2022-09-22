@@ -99,8 +99,7 @@ ZONE::~ZONE()
 void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
 {
     // members are expected non initialize in this.
-    // InitDataFromSrcInCopyCtor() is expected to be called
-    // only from a copy constructor.
+    // InitDataFromSrcInCopyCtor() is expected to be called only from a copy constructor.
 
     // Copy only useful EDA_ITEM flags:
     m_flags                   = aZone.m_flags;
@@ -249,14 +248,6 @@ bool ZONE::IsOnCopperLayer() const
 }
 
 
-bool ZONE::CommonLayerExists( const LSET aLayerSet ) const
-{
-    LSET common = GetLayerSet() & aLayerSet;
-
-    return common.count() > 0;
-}
-
-
 void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( aLayer ) );
@@ -287,12 +278,6 @@ void ZONE::SetLayerSet( LSET aLayerSet )
     }
 
     m_layerSet = aLayerSet;
-}
-
-
-LSET ZONE::GetLayerSet() const
-{
-    return m_layerSet;
 }
 
 
@@ -653,7 +638,6 @@ void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void ZONE::Mirror( const VECTOR2I& aMirrorRef, bool aMirrorLeftRight )
 {
-    // ZONEs mirror about the x-axis (why?!?)
     m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
 
     HatchBorder();

@@ -88,18 +88,14 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
-    /// Rotate text, in footprint editor
-    /// (for instance in footprint rotation transform)
     void Rotate( const VECTOR2I& aOffset, const EDA_ANGLE& aAngle ) override;
 
-    /// Flip entity during footprint flip
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
-    /// Mirror text position in footprint editing
-    /// the text itself is not mirrored, and the layer not modified,
-    /// only position is mirrored.
-    /// (use Flip to change layer to its paired and mirror the text in fp editor).
-    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+    /**
+     * Mirror the textbox's position, but not the text (or its justification).
+     */
+    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis ) override;
 
     // The Pos0 accessors are for footprint-relative coordinates.
     void SetPos0( const VECTOR2I& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
@@ -108,7 +104,6 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
-
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,

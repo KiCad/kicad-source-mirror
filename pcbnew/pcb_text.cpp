@@ -211,6 +211,27 @@ void PCB_TEXT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+void PCB_TEXT::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+{
+    // the position and justification are mirrored, but not the text itself
+
+    if( aMirrorAroundXAxis )
+    {
+        if( GetTextAngle() == ANGLE_VERTICAL )
+            SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
+
+        SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
+    }
+    else
+    {
+        if( GetTextAngle() == ANGLE_HORIZONTAL )
+            SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
+
+        SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
+    }
+}
+
+
 void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )

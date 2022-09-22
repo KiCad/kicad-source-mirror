@@ -34,7 +34,7 @@
 #include <geometry/shape_compound.h>
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include "macros.h"
+#include <macros.h>
 
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
@@ -352,6 +352,18 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         else
             SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y + abs( diag.y ) ) );
     }
+}
+
+
+void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
+{
+    // the position is mirrored, but not the text (or its justification)
+    PCB_SHAPE::Mirror( aCentre, aMirrorAroundXAxis );
+
+    BOX2I rect( m_start, m_end - m_start );
+    rect.Normalize();
+    m_start = VECTOR2I( rect.GetLeft(), rect.GetTop() );
+    m_end = VECTOR2I( rect.GetRight(), rect.GetBottom() );
 }
 
 

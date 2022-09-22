@@ -90,6 +90,8 @@ public:
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
+    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
+
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
@@ -102,9 +104,6 @@ public:
         return TextHitTest( aPosition, aAccuracy );
     }
 
-    /**
-     * @copydoc BOARD_ITEM::HitTest(const BOX2I& aRect, bool aContained, int aAccuracy ) const
-     */
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );

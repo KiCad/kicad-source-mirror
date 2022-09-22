@@ -31,6 +31,10 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <fp_textbox.h>
+#include <pcb_group.h>
+#include <pcb_target.h>
+#include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -60,8 +64,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
-#include <pcb_group.h>
-#include <pcb_target.h>
 #include <zone_filler.h>
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
@@ -197,8 +199,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorH,           inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorV,           inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirrorH,           SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirrorV,           SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
@@ -1316,15 +1318,19 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
+        case PCB_SHAPE_T:
         case PCB_FP_TEXT_T:
+        case PCB_TEXT_T:
         case PCB_FP_TEXTBOX_T:
+        case PCB_TEXTBOX_T:
         case PCB_FP_ZONE_T:
+        case PCB_ZONE_T:
         case PCB_PAD_T:
-            // Only create undo entry for items on the board
             if( !item->IsNew() && !IsFootprintEditor() )
                 m_commit->Modify( item );
 
             break;
+
         default:
             continue;
         }
@@ -1333,43 +1339,38 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
-        {
-            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-            shape->Mirror( mirrorPoint, mirrorAroundXaxis );
+        case PCB_SHAPE_T:
+            static_cast<PCB_SHAPE*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
-        }
 
         case PCB_FP_ZONE_T:
-        {
-            FP_ZONE* zone = static_cast<FP_ZONE*>( item );
-            zone->Mirror( mirrorPoint, mirrorLeftRight );
+        case PCB_ZONE_T:
+            static_cast<FP_ZONE*>( item )->Mirror( mirrorPoint, mirrorLeftRight );
             break;
-        }
 
         case PCB_FP_TEXT_T:
-        {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
-            text->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<FP_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
-        }
+
+        case PCB_TEXT_T:
+            static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            break;
 
         case PCB_FP_TEXTBOX_T:
-        {
-            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
-            textbox->Mirror( mirrorPoint, mirrorAroundXaxis );
+            static_cast<FP_TEXTBOX*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
-        }
+
+        case PCB_TEXTBOX_T:
+            static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
+            break;
 
         case PCB_PAD_T:
-        {
-            PAD* pad = static_cast<PAD*>( item );
-
             if( mirrorLeftRight )
-                mirrorPadX( *pad, mirrorPoint );
+                mirrorPadX( *static_cast<PAD*>( item ), mirrorPoint );
             else
-                mirrorPadY( *pad, mirrorPoint );
+                mirrorPadY( *static_cast<PAD*>( item ), mirrorPoint );
+
             break;
-        }
 
         default:
             // it's likely the commit object is wrong if you get here

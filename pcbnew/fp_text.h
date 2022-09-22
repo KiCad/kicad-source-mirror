@@ -100,8 +100,6 @@ public:
      */
     void KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation );
 
-    /// Rotate text, in footprint editor
-    /// (for instance in footprint rotation transform)
     void Rotate( const VECTOR2I& aOffset, const EDA_ANGLE& aAngle ) override;
 
     /// Flip entity during footprint flip
@@ -109,17 +107,15 @@ public:
 
     bool IsParentFlipped() const;
 
-    /// Mirror text position in footprint editing
-    /// the text itself is not mirrored, and the layer not modified,
-    /// only position is mirrored.
-    /// (use Flip to change layer to its paired and mirror the text in fp editor).
+    /**
+     * Mirror text position.  Do not mirror the text itself, or change its layer.
+     */
     void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
 
-    /// move text in move transform, in footprint editor
     void Move( const VECTOR2I& aMoveVector ) override;
 
-    /// @deprecated it seems (but the type is used to 'protect'
-    //  reference and value from deletion, and for identification)
+    /// @deprecated it seems (but the type is used to 'protect' reference and value from deletion,
+    /// and for identification)
     void SetType( TEXT_TYPE aType )      { m_Type = aType; }
     TEXT_TYPE GetType() const            { return m_Type; }
 
@@ -169,7 +165,7 @@ public:
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-            FLASHING aFlash = FLASHING::DEFAULT ) const override;
+                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     wxString GetClass() const override
     {

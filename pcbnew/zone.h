@@ -112,7 +112,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void SetLayerSet( LSET aLayerSet ) override;
-    virtual LSET GetLayerSet() const override;
+    virtual LSET GetLayerSet() const override { return m_layerSet; }
 
     wxString GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
@@ -149,11 +149,6 @@ public:
      * @return true if this zone is on a copper layer, false if on a technical layer.
      */
     bool IsOnCopperLayer() const override;
-
-    /**
-     * Test if this zone shares a common layer with the given layer set.
-     */
-    bool CommonLayerExists( const LSET aLayerSet ) const;
 
     virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
 

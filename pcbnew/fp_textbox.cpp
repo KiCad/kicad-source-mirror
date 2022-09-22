@@ -22,15 +22,12 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <base_units.h>
-#include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <core/mirror.h>
 #include <footprint.h>
 #include <fp_textbox.h>
 #include <settings/settings_manager.h>
-#include <trigo.h>
 #include <string_utils.h>
 #include <painter.h>
 #include <geometry/shape_compound.h>
@@ -288,14 +285,15 @@ void FP_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 void FP_TEXTBOX::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 {
-    // the position is mirrored, but the text itself is not mirrored
+    // the position is mirrored, but not the text (or its justification)
+    FP_SHAPE::Mirror( aCentre, aMirrorAroundXAxis );
 
-    if( aMirrorAroundXAxis )
-        SetTextY( ::MIRRORVAL( GetTextPos().y, aCentre.y ) );
-    else
-        SetTextX( ::MIRRORVAL( GetTextPos().x, aCentre.x ) );
+    BOX2I rect( m_start0, m_end0 - m_start0 );
+    rect.Normalize();
+    m_start0 = VECTOR2I( rect.GetLeft(), rect.GetTop() );
+    m_end0 = VECTOR2I( rect.GetRight(), rect.GetBottom() );
 
-    SetLocalCoord();
+    SetDrawCoord();
 }
 
 
