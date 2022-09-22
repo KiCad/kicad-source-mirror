@@ -110,9 +110,13 @@ void SCINTILLA_TRICKS::setupStyles()
         m_te->SetTabWidth( 4 );
     }
 
-    // Set up the brace highlighting
+    // Set up the brace highlighting.  Scintilla doesn't handle alpha, so we construct our own
+    // 20% wash by blending with the background.
+    KIGFX::COLOR4D braceText = foreground;
+    KIGFX::COLOR4D braceHighlight = braceText.Mix( background, 0.2 );
+
     m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText.ToColour() );
-    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight.Saturate( 0.0 ).ToColour() );
+    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, braceHighlight.ToColour() );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 }
 
