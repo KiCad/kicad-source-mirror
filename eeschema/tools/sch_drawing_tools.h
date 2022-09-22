@@ -82,7 +82,6 @@ private:
     TEXT_SPIN_STYLE            m_lastTextOrientation;
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
-    bool                       m_lastNetClassDirectiveItalic;
     EDA_ANGLE                  m_lastTextAngle;
     GR_TEXT_H_ALIGN_T          m_lastTextJust;
     FILL_T                     m_lastFillStyle;

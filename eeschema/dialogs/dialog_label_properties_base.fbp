@@ -1451,9 +1451,9 @@
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">gbSizer1</property>
+                                        <property name="name">m_formattingGB</property>
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                                        <property name="permission">none</property>
+                                        <property name="permission">protected</property>
                                         <property name="vgap">3</property>
                                         <object class="gbsizeritem" expanded="1">
                                             <property name="border">5</property>
@@ -1595,9 +1595,9 @@
                                             <property name="rowspan">1</property>
                                             <object class="wxBoxSizer" expanded="0">
                                                 <property name="minimum_size"></property>
-                                                <property name="name">formattingSizer</property>
+                                                <property name="name">m_iconBar</property>
                                                 <property name="orient">wxHORIZONTAL</property>
-                                                <property name="permission">none</property>
+                                                <property name="permission">protected</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>

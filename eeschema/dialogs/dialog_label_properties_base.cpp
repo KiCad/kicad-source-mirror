@@ -181,70 +181,68 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* formatting;
 	formatting = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formatting") ), wxVERTICAL );
 
-	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 3, 0 );
-	gbSizer1->SetFlexibleDirection( wxBOTH );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_formattingGB = new wxGridBagSizer( 3, 0 );
+	m_formattingGB->SetFlexibleDirection( wxBOTH );
+	m_formattingGB->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_fontLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	gbSizer1->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_formattingGB->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( formatting->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_fontCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_formattingGB->Add( m_fontCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	wxBoxSizer* formattingSizer;
-	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
+	m_iconBar = new wxBoxSizer( wxHORIZONTAL );
 
 	m_separator1 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator1->Enable( false );
 
-	formattingSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_iconBar->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_bold = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
-	formattingSizer->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_italic = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_italic->SetToolTip( _("Italic") );
 
-	formattingSizer->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator2 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
-	formattingSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin0 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	formattingSizer->Add( m_spin0, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_spin0, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin1 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	formattingSizer->Add( m_spin1, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_spin1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin2 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	formattingSizer->Add( m_spin2, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_spin2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin3 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	formattingSizer->Add( m_spin3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_spin3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_autoRotate = new wxCheckBox( formatting->GetStaticBox(), wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
-	formattingSizer->Add( m_autoRotate, 0, wxALL, 5 );
+	m_iconBar->Add( m_autoRotate, 0, wxALL, 5 );
 
 	m_separator3 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );
 
-	formattingSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_iconBar->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer1->Add( formattingSizer, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_textSizeLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_formattingGB->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
@@ -277,10 +275,10 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizer71->Add( m_panelBorderColor1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer1->Add( bSizer71, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	m_formattingGB->Add( bSizer71, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 
-	formatting->Add( gbSizer1, 1, wxEXPAND, 5 );
+	formatting->Add( m_formattingGB, 1, wxEXPAND, 5 );
 
 
 	optionsSizer->Add( formatting, 1, wxEXPAND|wxTOP, 5 );

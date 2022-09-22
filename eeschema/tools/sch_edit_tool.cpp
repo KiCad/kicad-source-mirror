@@ -29,7 +29,6 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
-#include <widgets/infobar.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -51,7 +50,6 @@
 #include <schematic.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
-#include <wx/gdicmn.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_properties.h>
 #include <dialogs/dialog_line_properties.h>
@@ -63,7 +61,6 @@
 #include <dialogs/dialog_shape_properties.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
-#include <math/util.h>      // for KiROUND
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
@@ -158,21 +155,10 @@ bool SCH_EDIT_TOOL::Init()
     auto sheetHasUndefinedPins =
             []( const SELECTION& aSel )
             {
-                if( aSel.Size() != 1 )
-                    return false;
+                if( aSel.Size() == 1 && aSel.Front()->Type() == SCH_SHEET_T )
+                    return static_cast<SCH_SHEET*>( aSel.Front() )->HasUndefinedPins();
 
-                if( !aSel.HasType( SCH_SHEET_T ) )
-                    return false;
-
-                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSel.Front() );
-
-                wxCHECK( item, false );
-
-                SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item );
-
-                wxCHECK( sheet, false );
-
-                return sheet->HasUndefinedPins();
+                return false;
             };
 
     auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
@@ -1908,12 +1894,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             {
                 SCH_DIRECTIVE_LABEL* dirlabel = static_cast<SCH_DIRECTIVE_LABEL*>( item );
 
-                // a SCH_DIRECTIVE_LABEL has no text, but it usually has at least one field
-                // containing the net class name
-                if( dirlabel->GetFields().empty() )
-                    txt = _( "<empty>" );
-                else
-                    txt = dirlabel->GetFields()[0].GetText();
+                // a SCH_DIRECTIVE_LABEL has no text
+                txt = _( "<empty>" );
 
                 orientation = dirlabel->GetTextSpinStyle();
                 href = dirlabel->GetHyperlink();
@@ -1997,7 +1979,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                         local_txt.Replace( " ", "_" );
 
                     // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
-                    return EscapeString( local_txt, CTX_NETNAME );
+                    local_txt = EscapeString( local_txt, CTX_NETNAME );
+
+                    if( local_txt.IsEmpty() )
+                        return _( "<empty>" );
+                    else
+                        return local_txt;
                 };
 
             switch( convertTo )
@@ -2039,12 +2026,17 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             {
                 SCH_LABEL_BASE* new_label = new SCH_DIRECTIVE_LABEL( position );
 
-                // a SCH_DIRECTIVE_LABEL usually has at least one field containing the net class
-                // name
-                SCH_FIELD netclass( position, 0, new_label, wxT( "Netclass" ) );
-                netclass.SetText( txt );
-                netclass.SetVisible( true );
-                new_label->GetFields().push_back( netclass );
+                // A SCH_DIRECTIVE_LABEL usually has at least one field containing the net class
+                // name.  If we're copying from a text object assume the text is the netclass
+                // name.  Otherwise, we'll just copy the fields which will either have a netclass
+                // or not.
+                if( !dynamic_cast<SCH_LABEL_BASE*>( item ) )
+                {
+                    SCH_FIELD netclass( position, 0, new_label, wxT( "Netclass" ) );
+                    netclass.SetText( txt );
+                    netclass.SetVisible( true );
+                    new_label->GetFields().push_back( netclass );
+                }
 
                 new_label->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
                 new_label->SetTextSpinStyle( orientation );
@@ -2134,6 +2126,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             new_eda_text->SetBold( eda_text->IsBold() );
 
             newtext->AutoplaceFields( m_frame->GetScreen(), false );
+
+            SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item );
+            SCH_LABEL_BASE* new_label = dynamic_cast<SCH_LABEL_BASE*>( newtext );
+
+            if( label && new_label )
+                new_label->SetFields( label->GetFields() );
 
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );

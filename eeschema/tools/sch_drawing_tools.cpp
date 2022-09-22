@@ -28,7 +28,7 @@
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <project.h>
-#include <id.h>
+#include <pgm_base.h>
 #include <eeschema_id.h>
 #include <confirm.h>
 #include <view/view_controls.h>
@@ -54,8 +54,6 @@
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
-#include <sch_shape.h>
-#include "pgm_base.h"
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -65,7 +63,6 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextOrientation( TEXT_SPIN_STYLE::RIGHT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
-        m_lastNetClassDirectiveItalic( true ),
         m_lastTextAngle( ANGLE_0 ),
         m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
         m_lastFillStyle( FILL_T::NO_FILL ),
@@ -988,12 +985,12 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     }
 
     textItem->SetParent( schematic );
-    textItem->SetBold( m_lastTextBold );
 
-    if( aType == LAYER_NETCLASS_REFS )
-        textItem->SetItalic( m_lastNetClassDirectiveItalic );
-    else
+    if( aType != LAYER_NETCLASS_REFS )
+    {
+        textItem->SetBold( m_lastTextBold );
         textItem->SetItalic( m_lastTextItalic );
+    }
 
     textItem->SetTextSpinStyle( m_lastTextOrientation );
     textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
@@ -1030,12 +1027,11 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         return nullptr;
     }
 
-    m_lastTextBold = textItem->IsBold();
-
-    if( aType == LAYER_NETCLASS_REFS )
-        m_lastNetClassDirectiveItalic = textItem->IsItalic();
-    else
+    if( aType != LAYER_NETCLASS_REFS )
+    {
+        m_lastTextBold = textItem->IsBold();
         m_lastTextItalic = textItem->IsItalic();
+    }
 
     m_lastTextOrientation = textItem->GetTextSpinStyle();
 

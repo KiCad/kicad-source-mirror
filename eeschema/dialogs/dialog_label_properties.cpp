@@ -28,13 +28,10 @@
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <sch_edit_frame.h>
-#include <base_units.h>
 #include <sch_validators.h>
 #include <tool/tool_manager.h>
-#include <general.h>
 #include <gr_text.h>
 #include <confirm.h>
-#include <sch_reference_list.h>
 #include <schematic.h>
 #include <dialogs/html_message_box.h>
 #include <dialog_label_properties.h>
@@ -170,10 +167,21 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_triState->Hide();
         m_passive->Hide();
 
+        m_fontLabel->SetLabel( _( "Orientation:" ) );
+        m_fontCtrl->Hide();
+        m_separator1->Hide();
+        m_bold->Hide();
+        m_italic->Hide();
+        m_separator2->Hide();
         m_spin0->SetBitmap( KiBitmap( BITMAPS::pinorient_down ) );
         m_spin1->SetBitmap( KiBitmap( BITMAPS::pinorient_up ) );
         m_spin2->SetBitmap( KiBitmap( BITMAPS::pinorient_right ) );
         m_spin3->SetBitmap( KiBitmap( BITMAPS::pinorient_left ) );
+        m_separator3->Hide();
+
+        m_formattingGB->Detach( m_fontCtrl );
+        m_formattingGB->Detach( m_iconBar );
+        m_formattingGB->Add( m_iconBar, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT, 5 );
     }
     else
     {
@@ -211,7 +219,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
 DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
@@ -350,8 +358,7 @@ void DIALOG_LABEL_PROPERTIES::OnValueCharHook( wxKeyEvent& aEvent )
         {
             m_textSizeCtrl->SetFocusFromKbd();
         }
-        else
-         if( !m_fields->empty() )
+        else if( !m_fields->empty() )
         {
             m_grid->SetFocusFromKbd();
             m_grid->MakeCellVisible( 0, 0 );
@@ -371,19 +378,10 @@ void DIALOG_LABEL_PROPERTIES::OnValueCharHook( wxKeyEvent& aEvent )
 
 static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 {
-    if( a.GetPosition() != b.GetPosition() )
-        return true;
-
-    if( a.GetHorizJustify() != b.GetHorizJustify() )
-        return true;
-
-    if( a.GetVertJustify() != b.GetVertJustify() )
-        return true;
-
-    if( a.GetTextAngle() != b.GetTextAngle() )
-        return true;
-
-    return false;
+    return a.GetPosition() != b.GetPosition()
+            || a.GetHorizJustify() != b.GetHorizJustify()
+            || a.GetVertJustify() != b.GetVertJustify()
+            || a.GetTextAngle() != b.GetTextAngle();
 }
 
 

@@ -79,5 +79,4 @@ private:
 };
 
 
-
 #endif // DIALOG_LABEL_PROPERTIES_H

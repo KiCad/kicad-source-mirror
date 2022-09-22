@@ -76,8 +76,10 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxRadioButton* m_circle;
 		wxRadioButton* m_diamond;
 		wxRadioButton* m_rectangle;
+		wxGridBagSizer* m_formattingGB;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
+		wxBoxSizer* m_iconBar;
 		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
