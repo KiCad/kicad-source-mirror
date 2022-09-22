@@ -34,7 +34,7 @@ class SPICE_GENERATOR_MUTUAL_INDUCTOR : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ItemParams() const override;
+    std::string ItemParams() const override;
 };
 
 

@@ -25,13 +25,14 @@
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/spice_model_parser.h>
-
 #include <confirm.h>
 
+#include <boost/algorithm/string/trim.hpp>
 
-wxString SPICE_GENERATOR_SPICE::Preview( const wxString& aModelName ) const
+
+std::string SPICE_GENERATOR_SPICE::Preview( const std::string& aModelName ) const
 {
-    wxString spiceCode = ModelLine( aModelName );
+    std::string spiceCode = ModelLine( aModelName );
 
     if( spiceCode == "" )
         spiceCode = static_cast<const SIM_MODEL_SPICE&>( m_model ).m_spiceCode;
@@ -39,16 +40,17 @@ wxString SPICE_GENERATOR_SPICE::Preview( const wxString& aModelName ) const
     if( spiceCode == "" && m_model.GetBaseModel() )
         spiceCode = static_cast<const SIM_MODEL_SPICE*>( m_model.GetBaseModel() )->m_spiceCode;
 
-    wxString itemLine = ItemLine( "", aModelName );
-    if( spiceCode != "" )
-        spiceCode << "\n";
+    std::string itemLine = ItemLine( "", aModelName );
 
-    spiceCode << itemLine;
-    return spiceCode.Trim();
+    if( spiceCode != "" )
+        spiceCode.append( "\n" );
+
+    spiceCode.append( itemLine );
+    return boost::trim_copy( spiceCode );
 }
 
 
-std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const wxString& aSpiceCode )
+std::unique_ptr<SIM_MODEL_SPICE> SIM_MODEL_SPICE::Create( const std::string& aSpiceCode )
 {
     auto model = static_cast<SIM_MODEL_SPICE*>(
             SIM_MODEL::Create( SPICE_MODEL_PARSER::ReadType( aSpiceCode ) ).release() );
@@ -83,7 +85,7 @@ SIM_MODEL_SPICE::SIM_MODEL_SPICE( TYPE aType,
 }
 
 
-bool SIM_MODEL_SPICE::SetParamValue( unsigned aParamIndex, const wxString& aParamValue,
+bool SIM_MODEL_SPICE::SetParamValue( unsigned aParamIndex, const std::string& aParamValue,
                                      SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Models sourced from a library are immutable.
@@ -94,8 +96,8 @@ bool SIM_MODEL_SPICE::SetParamValue( unsigned aParamIndex, const wxString& aPara
 }
 
 
-bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const wxString& aParamName,
-                                             const wxString& aParamValue,
+bool SIM_MODEL_SPICE::SetParamFromSpiceCode( const std::string& aParamName,
+                                             const std::string& aParamValue,
                                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     return SIM_MODEL::SetParamValue( aParamName, aParamValue, aNotation );

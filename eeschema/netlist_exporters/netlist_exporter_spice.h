@@ -49,12 +49,12 @@ public:
 
     struct ITEM
     {
-        wxString refName;
-        wxString libraryPath;
-        std::vector<wxString> pinNumbers;
-        std::vector<wxString> pinNetNames;
+        std::string refName;
+        std::string libraryPath;
+        std::vector<std::string> pinNumbers;
+        std::vector<std::string> pinNetNames;
         std::unique_ptr<const SIM_MODEL> model;
-        wxString modelName;
+        std::string modelName;
     };
 
     NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic ) : NETLIST_EXPORTER_BASE( aSchematic ) {}
@@ -90,12 +90,12 @@ public:
     /**
      * Replace illegal spice net name characters with underscores.
      */
-    static void ReplaceForbiddenChars( wxString& aNetName );
+    static void ReplaceForbiddenChars( std::string& aNetName );
 
     /**
      * Return the list of nets.
      */
-    std::set<wxString> GetNets() const { return m_nets; }
+    std::set<std::string> GetNets() const { return m_nets; }
     
 
     /**
@@ -107,20 +107,20 @@ public:
      * to the assigned device model type or it is the reference prefixed with a character defining
      * the device model type.
      */
-    wxString GetItemName( const wxString& aRefName ) const;
+    std::string GetItemName( const std::string& aRefName ) const;
 
     /**
      * Return the list of items representing schematic components in the Spice world.
      */
     const std::list<ITEM>& GetItems() const { return m_items; }
 
-    const std::vector<wxString>& GetDirectives() { return m_directives; }
+    const std::vector<std::string>& GetDirectives() { return m_directives; }
 
 protected:
     void ReadDirectives( unsigned aNetlistOptions = 0 );
     virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
-    virtual wxString GenerateItemPinNetName( const wxString& aNetName, int& aNcCounter ) const;
+    virtual std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const;
 
     /**
      * Return the paths of exported sheets (either all or the current one).
@@ -132,23 +132,23 @@ private:
     void readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readEnabledField( SCH_SYMBOL& aSymbol, ITEM& aItem );
     bool readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, ITEM& aItem,
-                      std::set<wxString>& aRefNames );
+                      std::set<std::string>& aRefNames );
     bool readModel( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem );
     void readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem, int& aNcCounter );
 
     void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                       const wxString& aPath );
+                       const std::string& aPath );
 
     void writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
-    wxString                      m_title;        ///< Spice simulation title found in the schematic sheet
-    std::vector<wxString>         m_directives;   ///< Spice directives found in the schematic sheet
-    std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
-    std::set<wxString>            m_rawIncludes;  ///< include directives found in symbols
-    std::set<wxString>            m_nets;
+    std::string                      m_title;        ///< Spice simulation title found in the schematic sheet
+    std::vector<std::string>         m_directives;   ///< Spice directives found in the schematic sheet
+    std::map<std::string, std::unique_ptr<SIM_LIBRARY>> m_libraries; ///< Spice libraries
+    std::set<std::string>            m_rawIncludes;  ///< include directives found in symbols
+    std::set<std::string>            m_nets;
     std::list<ITEM>         m_items;        ///< Items representing schematic symbols in Spice world
 };
 

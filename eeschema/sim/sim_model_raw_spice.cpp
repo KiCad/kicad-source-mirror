@@ -23,6 +23,9 @@
  */
 
 #include <sim/sim_model_raw_spice.h>
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -36,30 +39,30 @@ namespace SIM_MODEL_RAW_SPICE_PARSER
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ModelLine( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::ItemName( const wxString& aRefName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemName( const std::string& aRefName ) const
 {
-    wxString elementType = m_model.GetParam(
+    std::string elementType = m_model.GetParam(
         static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::TYPE ) ).value->ToString();
 
-    if( aRefName != "" && aRefName.StartsWith( elementType ) )
+    if( aRefName != "" && boost::starts_with( aRefName, elementType ) )
         return aRefName;
     else
         return elementType + aRefName;
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::ItemPins( const wxString& aRefName,
-                                              const wxString& aModelName,
-                                              const std::vector<wxString>& aSymbolPinNumbers,
-                                              const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const std::string& aRefName,
+                                                 const std::string& aModelName,
+                                                 const std::vector<std::string>& aSymbolPinNumbers,
+                                                 const std::vector<std::string>& aPinNetNames ) const
 {
-    wxString result;
+    std::string result;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
     {
@@ -69,7 +72,7 @@ wxString SPICE_GENERATOR_RAW_SPICE::ItemPins( const wxString& aRefName,
         if( it != aSymbolPinNumbers.end() )
         {
             long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << " " << aPinNetNames.at( symbolPinIndex );
+            result.append( " " + aPinNetNames.at( symbolPinIndex ) );
         }
     }
 
@@ -77,37 +80,35 @@ wxString SPICE_GENERATOR_RAW_SPICE::ItemPins( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::ItemModelName( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemModelName( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::ItemParams() const
+std::string SPICE_GENERATOR_RAW_SPICE::ItemParams() const
 {
-    wxString result;
+    std::string result;
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
-        if( param.info.name != "model" )
-            result << "";
-        else
-            result << " " << param.value->ToString();
+        if( param.info.name == "model" )
+            result.append( " " + param.value->ToString() );
     }
 
     return result;
 }
 
 
-wxString SPICE_GENERATOR_RAW_SPICE::Preview( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_RAW_SPICE::Preview( const std::string& aModelName ) const
 {
-    std::vector<wxString> pinNumbers;
-    std::vector<wxString> pinNetNames;
+    std::vector<std::string> pinNumbers;
+    std::vector<std::string> pinNetNames;
 
     for( int i = 0; i < m_model.GetPinCount(); ++i )
     {
-        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
-        pinNetNames.push_back( wxString::FromCDouble( i + 1 ) );
+        pinNumbers.push_back( fmt::format( "{0}", i + 1 ) );
+        pinNetNames.push_back( fmt::format( "{0}", i + 1 ) );
     }
 
     return ItemLine( "", aModelName, pinNumbers, pinNetNames );
@@ -162,7 +163,7 @@ void SIM_MODEL_RAW_SPICE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) 
 void SIM_MODEL_RAW_SPICE::CreatePins( unsigned aSymbolPinCount )
 {
     for( unsigned symbolPinIndex = 0; symbolPinIndex < aSymbolPinCount; ++symbolPinIndex )
-        AddPin( { "", wxString::FromCDouble( symbolPinIndex + 1 ) } );
+        AddPin( { "", fmt::format( "{}", symbolPinIndex + 1 ) } );
 }
 
 
@@ -258,7 +259,7 @@ void SIM_MODEL_RAW_SPICE::readLegacyDataFields( unsigned aSymbolPinCount,
 
 
 void SIM_MODEL_RAW_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
-                                                const wxString& aLegacyPinsField )
+                                                const std::string& aLegacyPinsField )
 {
     if( aLegacyPinsField == "" )
         return;
@@ -267,7 +268,7 @@ void SIM_MODEL_RAW_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
     for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
         SetPinSymbolPinNumber( static_cast<int>( modelPinIndex ), "" );
 
-    tao::pegtl::string_input<> in( aLegacyPinsField.ToUTF8(), PINS_FIELD );
+    tao::pegtl::string_input<> in( aLegacyPinsField, PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -287,12 +288,8 @@ void SIM_MODEL_RAW_SPICE::parseLegacyPinsField( unsigned aSymbolPinCount,
         int symbolPinIndex = std::stoi( symbolPinStr ) - 1;
 
         if( symbolPinIndex < 0 || symbolPinIndex >= static_cast<int>( aSymbolPinCount ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Invalid symbol pin index: '%s'" ),
-                                              symbolPinStr ) );
-        }
+            THROW_IO_ERROR( wxString::Format( _( "Invalid symbol pin index: '%s'" ), symbolPinStr ) );
                                               
-
         SetPinSymbolPinNumber( pinIndex, root->children.at( pinIndex )->string() );
     }
 }

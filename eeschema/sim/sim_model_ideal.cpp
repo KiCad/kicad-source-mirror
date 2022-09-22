@@ -27,18 +27,18 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 
-wxString SPICE_GENERATOR_IDEAL::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_IDEAL::ModelLine( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR_IDEAL::ItemLine( const wxString& aRefName,
-                                          const wxString& aModelName,
-                                          const std::vector<wxString>& aSymbolPinNumbers,
-                                          const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR_IDEAL::ItemLine( const std::string& aRefName,
+                                             const std::string& aModelName,
+                                             const std::vector<std::string>& aSymbolPinNumbers,
+                                             const std::vector<std::string>& aPinNetNames ) const
 {
-    wxString valueStr = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
+    std::string valueStr = m_model.GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE );
 
     if( valueStr != "" )
         return SPICE_GENERATOR::ItemLine( aRefName, valueStr, aSymbolPinNumbers,
@@ -108,17 +108,17 @@ void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 template <typename T>
 void SIM_MODEL_IDEAL::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
-    wxString value = GetParam( 0 ).value->ToString();
+    std::string value = GetParam( 0 ).value->ToString();
 
-    if( value.IsEmpty() )
+    if( value == "" )
         value = DeviceTypeInfo( GetDeviceType() ).fieldValue;
 
     WriteInferredDataFields( aFields, value );
 }
 
 
-SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( wxString aName, wxString aDescription,
-                                                       wxString aUnit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( std::string aName, std::string aDescription,
+                                                       std::string aUnit )
 {
     SIM_MODEL::PARAM::INFO paramInfo = {};
 

@@ -34,17 +34,17 @@ class SPICE_GENERATOR_RAW_SPICE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ModelLine( const wxString& aModelName ) const override;
+    std::string ModelLine( const std::string& aModelName ) const override;
 
-    wxString ItemName( const wxString& aRefName ) const override;
-    wxString ItemPins( const wxString& aRefName,
-                       const wxString& aModelName,
-                       const std::vector<wxString>& aSymbolPinNumbers,
-                       const std::vector<wxString>& aPinNetNames ) const override;
-    wxString ItemModelName( const wxString& aModelName ) const override;
-    wxString ItemParams() const override;
+    std::string ItemName( const std::string& aRefName ) const override;
+    std::string ItemPins( const std::string& aRefName,
+                       const std::string& aModelName,
+                       const std::vector<std::string>& aSymbolPinNumbers,
+                       const std::vector<std::string>& aPinNetNames ) const override;
+    std::string ItemModelName( const std::string& aModelName ) const override;
+    std::string ItemParams() const override;
 
-    wxString Preview( const wxString& aModelName ) const override;
+    std::string Preview( const std::string& aModelName ) const override;
 };
 
 
@@ -84,7 +84,7 @@ private:
     template <typename T>
     void readLegacyDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
-    void parseLegacyPinsField( unsigned aSymbolPinCount, const wxString& aLegacyPinsField );
+    void parseLegacyPinsField( unsigned aSymbolPinCount, const std::string& aLegacyPinsField );
 
     bool requiresSpiceModelLine() const override { return false; }
 

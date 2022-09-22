@@ -33,16 +33,16 @@ class SIM_MODEL_SPICE;
 class SPICE_MODEL_PARSER
 {
 public:
-    static SIM_MODEL::TYPE ReadType( const wxString& aSpiceCode );
+    static SIM_MODEL::TYPE ReadType( const std::string& aSpiceCode );
 
     SPICE_MODEL_PARSER( SIM_MODEL_SPICE& aModel ) : m_model( aModel ) {}
 
-    virtual void ReadModel( const wxString& aSpiceCode );
+    virtual void ReadModel( const std::string& aSpiceCode );
 
 protected:
-    static SIM_MODEL::TYPE ReadTypeFromSpiceStrings( const wxString& aTypeString,
-                                                     const wxString& aLevel = "",
-                                                     const wxString& aVersion = "",
+    static SIM_MODEL::TYPE ReadTypeFromSpiceStrings( const std::string& aTypeString,
+                                                     const std::string& aLevel = "",
+                                                     const std::string& aVersion = "",
                                                      bool aSkipDefaultLevel = true );
 
     SIM_MODEL_SPICE& m_model;

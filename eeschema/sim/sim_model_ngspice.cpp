@@ -23,20 +23,20 @@
  */
 
 #include <sim/sim_model_ngspice.h>
-#include <locale_io.h>
+
+#include <boost/algorithm/string/case_conv.hpp>
+#include <fmt/core.h>
 
 
-std::vector<wxString> SPICE_GENERATOR_NGSPICE::CurrentNames( const wxString& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const std::string& aRefName ) const
 {
-    LOCALE_IO toggle;
-
     switch( m_model.GetTypeInfo().deviceType )
     {
         case SIM_MODEL::DEVICE_TYPE_::NPN:
         case SIM_MODEL::DEVICE_TYPE_::PNP:
-            return { wxString::Format( "I(%s:c)", aRefName ),
-                     wxString::Format( "I(%s:b)", aRefName ),
-                     wxString::Format( "I(%s:e)", aRefName ) };
+            return { fmt::format( "I({}:c)", aRefName ),
+                     fmt::format( "I({}:b)", aRefName ),
+                     fmt::format( "I({}:e)", aRefName ) };
 
         case SIM_MODEL::DEVICE_TYPE_::NJFET:
         case SIM_MODEL::DEVICE_TYPE_::PJFET:
@@ -44,9 +44,9 @@ std::vector<wxString> SPICE_GENERATOR_NGSPICE::CurrentNames( const wxString& aRe
         case SIM_MODEL::DEVICE_TYPE_::PMES:
         case SIM_MODEL::DEVICE_TYPE_::NMOS:
         case SIM_MODEL::DEVICE_TYPE_::PMOS:
-            return { wxString::Format( "I(%s:d)", aRefName ),
-                     wxString::Format( "I(%s:g)", aRefName ),
-                     wxString::Format( "I(%s:s)", aRefName ) };
+            return { fmt::format( "I({}:d)", aRefName ),
+                     fmt::format( "I({}:g)", aRefName ),
+                     fmt::format( "I({}:s)", aRefName ) };
 
         case SIM_MODEL::DEVICE_TYPE_::R:
         case SIM_MODEL::DEVICE_TYPE_::C:
@@ -81,7 +81,7 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 }
 
 
-bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // "level" and "version" are not really parameters - they're part of the type - so silently
@@ -107,8 +107,8 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
                                  {
                                       return !param.info.isSpiceInstanceParam
                                           && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
-                                          && ( param.info.name == aParamName.Lower()
-                                               || param.info.name == aParamName.Lower() + "_" );
+                                          && ( param.info.name == boost::to_lower_copy( aParamName )
+                                               || param.info.name == boost::to_lower_copy( aParamName ) + "_" );
                                  } );
 
     if( paramIt != params.end() )
@@ -122,7 +122,7 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
     auto ngspiceParamIt = std::find_if( ngspiceParams.begin(), ngspiceParams.end(),
                                         [aParamName]( const PARAM& param )
                                         {
-                                            return param.info.name == aParamName.Lower();
+                                            return param.info.name == boost::to_lower_copy( aParamName );
                                         } );
 
     if( ngspiceParamIt == ngspiceParams.end() )
@@ -146,7 +146,7 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
 }
 
 
-std::vector<wxString> SIM_MODEL_NGSPICE::getPinNames() const
+std::vector<std::string> SIM_MODEL_NGSPICE::getPinNames() const
 {
     return ModelInfo( getModelType() ).pinNames;
 }

@@ -35,7 +35,7 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
 
     for( auto const& [key, port] : m_ports )
     {
-        wxString portDir;
+        std::string portDir;
 
         switch( port.dir )
         {
@@ -49,7 +49,7 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,
                 break;
         }
 
-        aFormatter.Print( 0, "+       %s ; %s\n", TO_UTF8( port.name ), TO_UTF8( portDir ) );
+        aFormatter.Print( 0, "+       %s ; %s\n", port.name.c_str(), portDir.c_str() );
     }
 
     aFormatter.Print( 0, "\n\n" );
@@ -71,10 +71,10 @@ bool NETLIST_EXPORTER_SPICE_MODEL::ReadSchematicAndLibraries( unsigned aNetlistO
 }
 
 
-wxString NETLIST_EXPORTER_SPICE_MODEL::GenerateItemPinNetName( const wxString& aNetName,
-                                                               int& aNcCounter ) const
+std::string NETLIST_EXPORTER_SPICE_MODEL::GenerateItemPinNetName( const std::string& aNetName,
+                                                                  int& aNcCounter ) const
 {
-    wxString netName = aNetName;
+    std::string netName = aNetName;
 
     if( m_ports.count( netName ) )
         netName = m_ports.at( netName ).name;
@@ -92,10 +92,9 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
             auto label = static_cast<SCH_LABEL_BASE*>( item );
 
             if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
-            {
-                m_ports.insert( { conn->Name(), PORT_INFO{ label->GetText(),
-                                                           label->GetShape() } } );
-            }
+                m_ports.insert( { std::string( conn->Name().ToUTF8() ),
+                                  PORT_INFO{ std::string( label->GetText().ToUTF8() ),
+                                                          label->GetShape() } } );
         }
     }
 }

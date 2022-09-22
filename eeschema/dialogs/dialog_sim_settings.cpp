@@ -133,7 +133,7 @@ wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtr
     {
         // pick device name from exporter when something different than temperature is selected
         if( dcSource.Cmp( "TEMP" ) )
-            dcSource = m_circuitModel->GetItemName( dcSource );
+            dcSource = m_circuitModel->GetItemName( std::string( dcSource.ToUTF8() ) );
 
         return wxString::Format( "%s %s %s %s", dcSource,
                                  SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),

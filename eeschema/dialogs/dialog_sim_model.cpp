@@ -167,14 +167,14 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
-    wxString modelName = "";
+    std::string modelName;
 
     if( m_useLibraryModelRadioButton->GetValue() )
         modelName = m_modelNameCombobox->GetValue();
 
     SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::NAME_FIELD, modelName );
 
-    wxString path = "";
+    std::string path;
 
     if( m_useLibraryModelRadioButton->GetValue() )
     {
@@ -338,7 +338,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         wxTextFile file;
         wxString text;
 
-        text << curModel().SpiceGenerator().Preview( modelName );
+        text << curModel().SpiceGenerator().Preview( std::string( modelName.ToUTF8() ) );
         text << "\n";
         text << "--- FILE SOURCE (" << path << ") ---\n";
         text << "\n";
@@ -356,7 +356,7 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
         }
     }
     else
-        m_codePreview->SetText( curModel().SpiceGenerator().Preview( modelName ) );
+        m_codePreview->SetText( curModel().SpiceGenerator().Preview( std::string( modelName.ToUTF8() ) ) );
 
     m_codePreview->SetEditable( false ); // ???
     m_wasCodePreviewUpdated = true;
@@ -453,7 +453,7 @@ void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
     try
     {
-        m_library->ReadFile( absolutePath );
+        m_library->ReadFile( std::string( absolutePath.ToUTF8() ) );
     }
     catch( const IO_ERROR& e )
     {
@@ -634,9 +634,9 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     // Legacy due to the way we extracted the parameters from Ngspice.
     if( param.isOtherVariant )
-        prop->SetCell( 3, param.info.defaultValueOfOtherVariant );
+        prop->SetCell( 3, wxString( param.info.defaultValueOfOtherVariant ) );
     else
-        prop->SetCell( 3, param.info.defaultValue );
+        prop->SetCell( 3, wxString( param.info.defaultValue ) );
 
     wxString typeStr;
 
@@ -898,7 +898,7 @@ void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
     {
         curModel().SetPinSymbolPinNumber( modelPinIndex,
-                                          m_sortedSymbolPins.at( symbolPinIndex )->GetShownNumber() );
+            std::string( m_sortedSymbolPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
     }
 
     updatePinAssignments();

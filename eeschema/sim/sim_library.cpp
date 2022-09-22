@@ -26,7 +26,7 @@
 #include <sim/sim_library_spice.h>
 
 
-std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( wxString aFilePath )
+std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( std::string aFilePath )
 {
     std::unique_ptr<SIM_LIBRARY> library = std::make_unique<SIM_LIBRARY_SPICE>();
 
@@ -35,17 +35,17 @@ std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( wxString aFilePath )
 }
 
 
-void SIM_LIBRARY::ReadFile( const wxString& aFilePath )
+void SIM_LIBRARY::ReadFile( const std::string& aFilePath )
 {
     m_filePath = aFilePath;
 }
 
 
-SIM_MODEL* SIM_LIBRARY::FindModel( const wxString& aModelName ) const
+SIM_MODEL* SIM_LIBRARY::FindModel( const std::string& aModelName ) const
 {
     for( unsigned i = 0; i < GetModelNames().size(); ++i )
     {
-        wxString curModelName = GetModelNames().at( i );
+        std::string curModelName = GetModelNames().at( i );
 
         if( curModelName == aModelName )
             return m_models.at( i ).get();

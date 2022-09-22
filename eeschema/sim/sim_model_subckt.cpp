@@ -24,6 +24,8 @@
 
 #include <sim/sim_model_subckt.h>
 #include <sim/spice_grammar.h>
+
+#include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -46,30 +48,26 @@ namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 }
 
 
-wxString SPICE_GENERATOR_SUBCKT::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_SUBCKT::ModelLine( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-std::vector<wxString> SPICE_GENERATOR_SUBCKT::CurrentNames( const wxString& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const std::string& aRefName ) const
 {
-    std::vector<wxString> currentNames;
+    std::vector<std::string> currentNames;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
-    {
-        currentNames.push_back( wxString::Format( "I(%s:%s)",
-                                                  ItemName( aRefName ),
-                                                  pin.name ) );
-    }
+        currentNames.push_back( fmt::format( "I({:s}:{:s})", ItemName( aRefName ), pin.name ) );
 
     return currentNames;
 }
 
 
-void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const wxString& aSpiceCode )
+void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const std::string& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "from_content" );
+    tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -98,7 +96,7 @@ void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
-                    model.AddPin( { subnode->string(), wxString::FromCDouble( model.GetPinCount() + 1 ) } );
+                    model.AddPin( { subnode->string(), fmt::format( "{:d}", model.GetPinCount() + 1 ) } );
                 }
                 else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktParams>() )
                 {

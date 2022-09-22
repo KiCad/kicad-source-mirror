@@ -25,11 +25,14 @@
 #include <eeschema_test_utils.h>
 #include <sim/sim_library_spice.h>
 
+#include <boost/algorithm/string/case_conv.hpp>
+#include <fmt/core.h>
+
 
 class TEST_SIM_LIBRARY_SPICE_FIXTURE
 {
 public:
-    wxString GetLibraryPath( const wxString& aBaseName )
+    std::string GetLibraryPath( const std::string& aBaseName )
     {
         wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
         fn.AppendDir( "spice_netlists" );
@@ -37,22 +40,23 @@ public:
         fn.SetName( aBaseName );
         fn.SetExt( "lib.spice" );
 
-        return fn.GetFullPath();
+        return std::string( fn.GetFullPath().ToUTF8() );
     }
 
-    void LoadLibrary( const wxString& aBaseName )
+    void LoadLibrary( const std::string& aBaseName )
     {
-        wxString path = GetLibraryPath( aBaseName );
+        std::string path = GetLibraryPath( aBaseName );
         m_library = std::make_unique<SIM_LIBRARY_SPICE>();
         m_library->ReadFile( path );
     }
 
-    void CompareToUsualDiodeModel( const SIM_MODEL& aModel, const wxString& aModelName, int aModelIndex )
+    void CompareToUsualDiodeModel( const SIM_MODEL& aModel, const std::string& aModelName, int aModelIndex )
     {
         BOOST_CHECK( aModel.GetType() == SIM_MODEL::TYPE::D );
-        BOOST_CHECK_EQUAL( aModelName, aModel.GetSpiceInfo().modelType.Upper()
-                                       + wxString::FromCDouble( aModelIndex )
-                                       + "_Usual" );
+        BOOST_CHECK_EQUAL( aModelName,
+                           fmt::format( "{}{}_Usual",
+                                        boost::to_upper_copy( aModel.GetSpiceInfo().modelType ),
+                                        aModelIndex ) );
         BOOST_CHECK_EQUAL( aModel.FindParam( "bv" )->value->ToString(), "1.1u" );
         BOOST_CHECK_EQUAL( aModel.FindParam( "cjo" )->value->ToString(), "2.2m" );
         BOOST_CHECK_EQUAL( aModel.FindParam( "ibv" )->value->ToString(), "3.3" );
@@ -61,13 +65,14 @@ public:
         BOOST_CHECK_EQUAL( aModel.FindParam( "n" )->value->ToString(), "6.6G" );
     }
 
-    void CompareToEmptyModel( const SIM_MODEL& aModel, const wxString& aModelName, int aModelIndex )
+    void CompareToEmptyModel( const SIM_MODEL& aModel, const std::string& aModelName, int aModelIndex )
     {
         BOOST_TEST_CONTEXT( "Model index: " << aModelIndex )
         {
-            BOOST_CHECK_EQUAL( aModelName, aModel.GetSpiceInfo().modelType.Upper()
-                                           + wxString::FromCDouble( aModelIndex )
-                                           + "_Empty" );
+            BOOST_CHECK_EQUAL( aModelName,
+                               fmt::format( "{}{}_Empty",
+                                            boost::to_upper_copy( aModel.GetSpiceInfo().modelType ),
+                                            aModelIndex ) );
 
             for( unsigned i = 0; i < aModel.GetParamCount(); ++i )
             {
@@ -79,8 +84,8 @@ public:
         }
     }
 
-    void TestTransistor( const SIM_MODEL& aModel, const wxString& aModelName, int aModelIndex,
-                         SIM_MODEL::TYPE aType, const std::vector<wxString>& aParamNames )
+    void TestTransistor( const SIM_MODEL& aModel, const std::string& aModelName, int aModelIndex,
+                         SIM_MODEL::TYPE aType, const std::vector<std::string>& aParamNames )
     {
         BOOST_TEST_CONTEXT( "Model index: " << aModelIndex
                             << ", Model name: " << aModelName
@@ -88,25 +93,24 @@ public:
                             << ", Model type: " << aModel.GetTypeInfo().fieldValue )
         {
             BOOST_CHECK( aModel.GetType() == aType );
-            BOOST_CHECK_EQUAL( aModelName, "_" + wxString::FromCDouble( aModelIndex )
-                                           + "_" + aModel.GetSpiceInfo().modelType.Upper()
-                                           + "_" + aModel.GetTypeInfo().fieldValue );
+            BOOST_CHECK_EQUAL( aModelName,
+                               fmt::format( "_{}_{}_{}",
+                                            aModelIndex,
+                                            boost::to_upper_copy( aModel.GetSpiceInfo().modelType ),
+                                            aModel.GetTypeInfo().fieldValue ) );
 
             for( int i = 0; i < aParamNames.size(); ++i )
             {
-                wxString paramName = aParamNames.at( i );
+                std::string paramName = aParamNames.at( i );
 
                 BOOST_TEST_CONTEXT( "Param name: " << paramName )
                 {
                     if( i == 0 )
-                    {
                         BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value->ToString(), "0" );
-                    }
                     else
                     {
                         BOOST_CHECK_EQUAL( aModel.FindParam( paramName )->value->ToString(),
-                                           wxString::FromCDouble( i ) + ".0000"
-                                           + wxString::FromCDouble( i ) + "G" );
+                                           fmt::format( "{}.0000{}G", i, i ) );
                     }
                 }
             }
@@ -125,14 +129,14 @@ BOOST_AUTO_TEST_CASE( Diodes )
     LoadLibrary( "diodes" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<wxString>& modelNames = m_library->GetModelNames();
+    const std::vector<std::string>& modelNames = m_library->GetModelNames();
 
     BOOST_CHECK_EQUAL( models.size(), 22 );
 
     for( int i = 0; i < models.size(); ++i )
     {
         const SIM_MODEL& model = models.at( i );
-        const wxString& modelName = modelNames.at( i );
+        const std::string& modelName = modelNames.at( i );
 
         switch( i )
         {
@@ -230,14 +234,14 @@ BOOST_AUTO_TEST_CASE( Bjts )
     LoadLibrary( "bjts" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<wxString>& modelNames = m_library->GetModelNames();
+    const std::vector<std::string>& modelNames = m_library->GetModelNames();
 
     BOOST_CHECK_EQUAL( models.size(), 6 );
 
     for( int i = 0; i < models.size(); ++i )
     {
         const SIM_MODEL& model = models.at( i );
-        const wxString& modelName = modelNames.at( i );
+        const std::string& modelName = modelNames.at( i );
 
         switch( i )
         {
@@ -284,14 +288,14 @@ BOOST_AUTO_TEST_CASE( Fets )
     LoadLibrary( "fets" );
 
     const std::vector<std::reference_wrapper<SIM_MODEL>> models = m_library->GetModels();
-    const std::vector<wxString>& modelNames = m_library->GetModelNames();
+    const std::vector<std::string>& modelNames = m_library->GetModelNames();
 
     BOOST_CHECK_EQUAL( models.size(), 44 );
 
     for( int i = 0; i < models.size(); ++i )
     {
         const SIM_MODEL& model = models.at( i );
-        const wxString& modelName = modelNames.at( i );
+        const std::string& modelName = modelNames.at( i );
 
         switch( i )
         {

@@ -23,14 +23,15 @@
  */
 
 #include <sim/sim_model_tline.h>
-#include <locale_io.h>
+
+#include <fmt/core.h>
 
 using PARAM = SIM_MODEL::PARAM;
 
 
-wxString SPICE_GENERATOR_TLINE::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_TLINE::ModelLine( const std::string& aModelName ) const
 {
-    wxString r, l, g, c, len;
+    std::string r, l, g, c, len;
 
     switch( m_model.GetType() )
     {
@@ -40,7 +41,7 @@ wxString SPICE_GENERATOR_TLINE::ModelLine( const wxString& aModelName ) const
         auto td = static_cast<const SIM_VALUE_FLOAT&>( *m_model.FindParam( "td" )->value );
 
         if( !z0.HasValue() || !td.HasValue() )
-            return wxString::Format( ".model %s LTRA()\n", aModelName );
+            return fmt::format( ".model {} LTRA()\n", aModelName );
 
         r = SIM_VALUE_FLOAT( 0 ).ToSpiceString();
         l = ( td * z0 ).ToSpiceString();
@@ -63,8 +64,8 @@ wxString SPICE_GENERATOR_TLINE::ModelLine( const wxString& aModelName ) const
         return "";
     }
 
-    return wxString::Format( ".model %s LTRA( r=%s l=%s g=%s c=%s len=%s )\n",
-                             aModelName, r, l, g, c, len );
+    return fmt::format( ".model {} LTRA( r={} l={} g={} c={} len={} )\n",
+                        aModelName, r, l, g, c, len );
 }
 
 
@@ -116,7 +117,7 @@ void SIM_MODEL_TLINE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) cons
 template <typename T>
 void SIM_MODEL_TLINE::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
-    wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
+    std::string value = GetFieldValue( &aFields, PARAMS_FIELD );
 
     if( value == "" )
         value = GetDeviceTypeInfo().fieldValue;

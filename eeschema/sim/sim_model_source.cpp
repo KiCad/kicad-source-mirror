@@ -23,9 +23,10 @@
  */
 
 #include <sim/sim_model_source.h>
+
+#include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <locale_io.h>
 
 
 namespace SIM_MODEL_SOURCE_PARSER
@@ -38,29 +39,28 @@ namespace SIM_MODEL_SOURCE_PARSER
 }
 
 
-wxString SPICE_GENERATOR_SOURCE::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_SOURCE::ModelLine( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR_SOURCE::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR_SOURCE::ItemLine( const std::string& aRefName,
+                                              const std::string& aModelName,
+                                              const std::vector<std::string>& aSymbolPinNumbers,
+                                              const std::vector<std::string>& aPinNetNames ) const
 {
-    LOCALE_IO toggle;
-    wxString model;
+    std::string model;
 
-    wxString ac = m_model.FindParam( "ac" )->value->ToSpiceString();
-    wxString ph = m_model.FindParam( "ph" )->value->ToSpiceString();
+    std::string ac = m_model.FindParam( "ac" )->value->ToSpiceString();
+    std::string ph = m_model.FindParam( "ph" )->value->ToSpiceString();
 
     if( ac != "" )
-        model << wxString::Format( "AC %s %s ", ac, ph );
+        model.append( fmt::format( "AC {} {} ", ac, ph ) );
 
     if( m_model.GetSpiceInfo().inlineTypeString != "" )
     {
-        wxString args = "";
+        std::string args = "";
         
         switch( m_model.GetType() )
         {
@@ -91,7 +91,7 @@ wxString SPICE_GENERATOR_SOURCE::ItemLine( const wxString& aRefName,
                     {
                         std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( SIM_VALUE::TYPE_FLOAT,
                                                                               node->string() );
-                        args << value->ToString( SIM_VALUE::NOTATION::SPICE ) << " ";
+                        args.append( value->ToString( SIM_VALUE::NOTATION::SPICE ) + " " );
                     }
                 }
             }
@@ -102,96 +102,96 @@ wxString SPICE_GENERATOR_SOURCE::ItemLine( const wxString& aRefName,
 
         case SIM_MODEL::TYPE::V_WHITENOISE:
         case SIM_MODEL::TYPE::I_WHITENOISE:
-            args << getParamValueString( "rms", "0" ) << " ";
-            args << getParamValueString( "dt", "0" ) << " ";
-            args << "0 0 0 0 0 ";
+            args.append( getParamValueString( "rms", "0" ) + " " );
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( "0 0 0 0 0 " );
             break;
 
         case SIM_MODEL::TYPE::V_PINKNOISE:
         case SIM_MODEL::TYPE::I_PINKNOISE:
-            args << "0 ";
-            args << getParamValueString( "dt", "0" ) << " ";
-            args << getParamValueString( "slope", "0" ) << " ";
-            args << getParamValueString( "rms", "0" ) << " ";
-            args << "0 0 0 ";
+            args.append( "0 " );
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( getParamValueString( "slope", "0" ) + " " );
+            args.append( getParamValueString( "rms", "0" ) + " " );
+            args.append( "0 0 0 " );
             break;
 
         case SIM_MODEL::TYPE::V_BURSTNOISE:
         case SIM_MODEL::TYPE::I_BURSTNOISE:
-            args << "0 0 0 0 ";
-            args << getParamValueString( "ampl", "0" ) << " ";
-            args << getParamValueString( "tcapt", "0" ) << " ";
-            args << getParamValueString( "temit", "0" ) << " ";
+            args.append( "0 0 0 0 " );
+            args.append( getParamValueString( "ampl", "0" ) + " " );
+            args.append( getParamValueString( "tcapt", "0" ) + " " );
+            args.append( getParamValueString( "temit", "0" ) + " " );
             break;
         
         case SIM_MODEL::TYPE::V_RANDUNIFORM:
         case SIM_MODEL::TYPE::I_RANDUNIFORM:
         {
-            args << "1 ";
-            args << getParamValueString( "dt", "0" ) << " ";
-            args << getParamValueString( "td", "0" ) << " ";
+            args.append( "1 " );
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( getParamValueString( "td", "0" ) + " " );
 
             auto min = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "max" )->value );
             auto max = dynamic_cast<SIM_VALUE_FLOAT&>( *m_model.FindParam( "min" )->value );
             SIM_VALUE_FLOAT range = max - min;
             SIM_VALUE_FLOAT offset = ( max + min ) / SIM_VALUE_FLOAT( 2 );
 
-            args << range.ToSpiceString() << " ";
-            args << offset.ToSpiceString() << " ";
+            args.append( range.ToSpiceString() + " " );
+            args.append( offset.ToSpiceString() + " " );
         }
             break;
 
         case SIM_MODEL::TYPE::V_RANDNORMAL:
         case SIM_MODEL::TYPE::I_RANDNORMAL:
-            args << "2 ";
-            args << getParamValueString( "dt", "0" ) << " ";
-            args << getParamValueString( "td", "0" ) << " ";
-            args << getParamValueString( "stddev", "0" ) << " ";
-            args << getParamValueString( "mean", "0" ) << " ";
+            args.append( "2 " );
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( getParamValueString( "td", "0" ) + " " );
+            args.append( getParamValueString( "stddev", "0" ) + " " );
+            args.append( getParamValueString( "mean", "0" ) + " " );
             break;
 
         case SIM_MODEL::TYPE::V_RANDEXP:
         case SIM_MODEL::TYPE::I_RANDEXP:
-            args << "3 ";
-            args << getParamValueString( "dt", "0" ) << " ";
-            args << getParamValueString( "td", "0" ) << " ";
-            args << getParamValueString( "mean", "0" ) << " ";
-            args << getParamValueString( "offset", "0" ) << " ";
+            args.append( "3 " );
+            args.append( getParamValueString( "dt", "0" ) + " " );
+            args.append( getParamValueString( "td", "0" ) + " " );
+            args.append( getParamValueString( "mean", "0" ) + " " );
+            args.append( getParamValueString( "offset", "0" ) + " " );
             break;
 
         /*case SIM_MODEL::TYPE::V_RANDPOISSON:
         case SIM_MODEL::TYPE::I_RANDPOISSON:
-            args << "4 ";
-            args << FindParam( "dt" )->value->ToSpiceString() << " ";
-            args << FindParam( "td" )->value->ToSpiceString() << " ";
-            args << FindParam( "lambda" )->value->ToSpiceString() << " ";
-            args << FindParam( "offset" )->value->ToSpiceString() << " ";
+            args.append( "4 " );
+            args.append( FindParam( "dt" )->value->ToSpiceString() + " " );
+            args.append( FindParam( "td" )->value->ToSpiceString() + " " );
+            args.append( FindParam( "lambda" )->value->ToSpiceString() + " " );
+            args.append( FindParam( "offset" )->value->ToSpiceString() + " " );
             break;*/
 
         default:
             for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
             {
-                wxString argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+                std::string argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
                 if( argStr != "" )
-                    args << argStr << " ";
+                    args.append( argStr + " " );
             }
             break;
         }
 
-        model << wxString::Format( "%s( %s)", m_model.GetSpiceInfo().inlineTypeString, args );
+        model.append( fmt::format( "{}( {})", m_model.GetSpiceInfo().inlineTypeString, args ) );
     }
     else
-        model << m_model.GetParam( 0 ).value->ToSpiceString();
+        model.append( m_model.GetParam( 0 ).value->ToSpiceString() );
 
     return SPICE_GENERATOR::ItemLine( aRefName, model, aSymbolPinNumbers, aPinNetNames );
 }
 
 
-wxString SPICE_GENERATOR_SOURCE::getParamValueString( const wxString& aParamName,
-                                               const wxString& aDefaultValue ) const
+std::string SPICE_GENERATOR_SOURCE::getParamValueString( const std::string& aParamName,
+                                                         const std::string& aDefaultValue ) const
 {
-    wxString result = m_model.FindParam( aParamName )->value->ToSpiceString();
+    std::string result = m_model.FindParam( aParamName )->value->ToSpiceString();
 
     if( result == "" )
         result = aDefaultValue;
@@ -227,7 +227,7 @@ void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) con
 }
 
 
-bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const wxString& aValue,
+bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const std::string& aValue,
                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
@@ -254,7 +254,7 @@ bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const wxString& aVal
 }
 
 
-wxString SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+std::string SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
 {
     if( aParam.value->ToString() == "0" )
         return "";
@@ -266,7 +266,7 @@ wxString SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool& aI
 template <typename T>
 void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
-    wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
+    std::string value = GetFieldValue( &aFields, PARAMS_FIELD );
 
     if( value == "" )
         value = GetDeviceTypeInfo().fieldValue;
@@ -357,8 +357,8 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( wxString aPrefix,
-                                                                        wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( std::string aPrefix,
+                                                                        std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -376,8 +376,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( wxString
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( wxString aPrefix,
-                                                                         wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( std::string aPrefix,
+                                                                         std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -437,8 +437,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( wxStrin
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( wxString aPrefix,
-                                                                           wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( std::string aPrefix,
+                                                                           std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -514,8 +514,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( wxStr
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( wxString aPrefix,
-                                                                         wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( std::string aPrefix,
+                                                                         std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -573,7 +573,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( wxStrin
 }
 
 
-/*std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( wxString aPrefix, wxString aUnit )
+/*std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( std::string aPrefix, std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -622,7 +622,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( wxStrin
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( wxString aPrefix, wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( std::string aPrefix, std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -688,9 +688,9 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( wxStri
 }*/
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( wxString aPrefix,
-                                                                         wxString aQuantity,
-                                                                         wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( std::string aPrefix,
+                                                                         std::string aQuantity,
+                                                                         std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -762,8 +762,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( wxStrin
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( wxString aPrefix,
-                                                                                wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( std::string aPrefix,
+                                                                                std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -789,8 +789,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( wxString aPrefix, 
-                                                                               wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( std::string aPrefix, 
+                                                                               std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -824,8 +824,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( w
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( wxString aPrefix,
-                                                                                wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( std::string aPrefix,
+                                                                                std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -859,8 +859,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfos( wxString aPrefix,
-                                                                                   wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfos( std::string aPrefix,
+                                                                                   std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -902,8 +902,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfo
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos( wxString aPrefix,
-                                                                                  wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos( std::string aPrefix,
+                                                                                  std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -945,8 +945,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( wxString aPrefix,
-                                                                               wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( std::string aPrefix,
+                                                                               std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -988,8 +988,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( w
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfos( wxString aPrefix,
-                                                                                   wxString aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfos( std::string aPrefix,
+                                                                                   std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -1030,7 +1030,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfo
     return paramInfos;
 }
 
-void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, wxString aUnit )
+void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, std::string aUnit )
 {
     PARAM::INFO paramInfo;
 

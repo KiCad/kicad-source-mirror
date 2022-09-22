@@ -120,7 +120,7 @@ public:
         //ngspice->Init();
         ngspice->Command( "set ngbehavior=ps" );
         ngspice->Command( "setseed 1" );
-        BOOST_REQUIRE( ngspice->LoadNetlist( netlist.ToStdString() ) );
+        BOOST_REQUIRE( ngspice->LoadNetlist( std::string( netlist.ToUTF8() ) ) );
         BOOST_REQUIRE( ngspice->Run() );
 
         // Test if ngspice cannot run a simulation (missing code models).

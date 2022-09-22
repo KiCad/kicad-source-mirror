@@ -1,5 +1,4 @@
-/*
- * This program source code file is part of KiCad, a free EDA CAD application.
+/* This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
  * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
@@ -24,32 +23,33 @@
 
 #include <sim/sim_model_switch.h>
 
+#include <fmt/core.h>
 
-wxString SPICE_GENERATOR_SWITCH::ItemLine( const wxString& aRefName,
-                                           const wxString& aModelName,
-                                           const std::vector<wxString>& aSymbolPinNumbers,
-                                           const std::vector<wxString>& aPinNetNames ) const
+
+std::string SPICE_GENERATOR_SWITCH::ItemLine( const std::string& aRefName,
+                                              const std::string& aModelName,
+                                              const std::vector<std::string>& aSymbolPinNumbers,
+                                              const std::vector<std::string>& aPinNetNames ) const
 {
-    wxString result;
+    std::string result;
     
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::SW_V:
     {
-        result << SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers,
-                                             aPinNetNames );
+        result = SPICE_GENERATOR::ItemLine( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
         break;
     }
 
     case SIM_MODEL::TYPE::SW_I:
     {
-        wxString vsourceName = "V__" + aRefName;
+        std::string vsourceName = "V__" + aRefName;
 
         // Current switches measure input current through a voltage source.
-        result << vsourceName << " " << aPinNetNames[0] << " " << aPinNetNames[1] << " 0\n";
-
-        result << SPICE_GENERATOR::ItemLine( aRefName, vsourceName + " " + aModelName,
-                                             aSymbolPinNumbers, aPinNetNames );
+        result.append( fmt::format( "{0} {1} 0\n", aPinNetNames[0], aPinNetNames[1] ) );
+        result.append( SPICE_GENERATOR::ItemLine( aRefName, fmt::format( "{0} {1}",
+                                                                         vsourceName, aModelName ),
+                                                  aSymbolPinNumbers, aPinNetNames ) );
         break;
     }
 
@@ -62,19 +62,17 @@ wxString SPICE_GENERATOR_SWITCH::ItemLine( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR_SWITCH::ItemParams() const
+std::string SPICE_GENERATOR_SWITCH::ItemParams() const
 {
-    wxString result;
+    std::string result;
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
         // The only instance param is "ic", which is positional.
-        wxString value = param.value->ToSpiceString();
+        std::string value = param.value->ToSpiceString();
         
-        if( value == "none" )
-            result << "";
-        else
-            result << value;
+        if( value != "none" )
+            result.append( value );
     }
 
     return result;
@@ -125,7 +123,7 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
 }
 
 
-wxString SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+std::string SIM_MODEL_SWITCH::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
 {
     if( aParam.info.name == "ic" && aParam.value->ToString() == "none" )
     {

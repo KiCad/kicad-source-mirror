@@ -35,7 +35,7 @@ class SPICE_GENERATOR_SPICE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString Preview( const wxString& aModelName ) const override;
+    std::string Preview( const std::string& aModelName ) const override;
 };
 
 
@@ -45,7 +45,7 @@ public:
     friend class SPICE_GENERATOR_SPICE;
     friend class SPICE_MODEL_PARSER;
 
-    static std::unique_ptr<SIM_MODEL_SPICE> Create( const wxString& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL_SPICE> Create( const std::string& aSpiceCode );
 
     SIM_MODEL_SPICE( TYPE aType,
                      std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator );
@@ -55,15 +55,16 @@ public:
                      std::unique_ptr<SPICE_MODEL_PARSER> aSpiceModelParser );
 
 protected:
-    bool SetParamValue( unsigned aParamIndex, const wxString& aParamValue,
+    bool SetParamValue( unsigned aParamIndex, const std::string& aParamValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation
                             = SIM_VALUE_GRAMMAR::NOTATION::SI ) override;
 
-    virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+    virtual bool SetParamFromSpiceCode( const std::string& aParamName,
+                                        const std::string& aParamValue,
                                         SIM_VALUE_GRAMMAR::NOTATION aNotation
                                             = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
-    wxString m_spiceCode;
+    std::string m_spiceCode;
 
 private:
     std::unique_ptr<SPICE_MODEL_PARSER> m_spiceModelParser;

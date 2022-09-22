@@ -33,14 +33,14 @@ SIM_LIBRARY_SPICE::SIM_LIBRARY_SPICE() :
 }
 
 
-void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath )
+void SIM_LIBRARY_SPICE::ReadFile( const std::string& aFilePath )
 {
     SIM_LIBRARY::ReadFile( aFilePath );
     m_spiceLibraryParser->ReadFile( aFilePath );
 }
 
 
-void SIM_LIBRARY_SPICE::WriteFile( const wxString& aFilePath )
+void SIM_LIBRARY_SPICE::WriteFile( const std::string& aFilePath )
 {
     // Not implemented yet.
 }

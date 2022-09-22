@@ -26,6 +26,8 @@
 #include <sim/spice_grammar.h>
 #include <sim/sim_model_spice.h>
 
+#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -46,9 +48,9 @@ namespace SIM_MODEL_SPICE_PARSER
 }
 
 
-SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const wxString& aSpiceCode )
+SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const std::string& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
+    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -69,10 +71,10 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const wxString& aSpiceCode )
     {
         if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
-            wxString paramName;
-            wxString typeString;
-            wxString level;
-            wxString version;
+            std::string paramName;
+            std::string typeString;
+            std::string level;
+            std::string version;
 
             for( const auto& subnode : node->children )
             {
@@ -128,12 +130,12 @@ SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadType( const wxString& aSpiceCode )
 }
 
 
-void SPICE_MODEL_PARSER::ReadModel( const wxString& aSpiceCode )
+void SPICE_MODEL_PARSER::ReadModel( const std::string& aSpiceCode )
 {
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
 
-    tao::pegtl::string_input<> in( aSpiceCode.ToUTF8(), "Spice_Code" );
+    tao::pegtl::string_input<> in( aSpiceCode, "Spice_Code" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -153,7 +155,7 @@ void SPICE_MODEL_PARSER::ReadModel( const wxString& aSpiceCode )
     {
         if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
-            wxString paramName = "";
+            std::string paramName = "";
 
             for( const auto& subnode : node->children )
             {
@@ -171,7 +173,7 @@ void SPICE_MODEL_PARSER::ReadModel( const wxString& aSpiceCode )
                 }
                 else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
                 {
-                    wxASSERT( !paramName.IsEmpty() );
+                    wxASSERT( paramName != "" );
 
                     if( !m_model.SetParamFromSpiceCode( paramName, subnode->string() ) )
                     {
@@ -197,26 +199,25 @@ void SPICE_MODEL_PARSER::ReadModel( const wxString& aSpiceCode )
 }
 
 
-SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const wxString& aTypeString,
-                                                              const wxString& aLevel,
-                                                              const wxString& aVersion,
+SIM_MODEL::TYPE SPICE_MODEL_PARSER::ReadTypeFromSpiceStrings( const std::string& aTypeString,
+                                                              const std::string& aLevel,
+                                                              const std::string& aVersion,
                                                               bool aSkipDefaultLevel )
 {
-    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT,
-                                                              aLevel.ToStdString() );
+    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE_INT, aLevel );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        wxString typePrefix = SIM_MODEL::SpiceInfo( type ).modelType;
-        wxString level = SIM_MODEL::SpiceInfo( type ).level;
-        wxString version = SIM_MODEL::SpiceInfo( type ).version;
+        std::string typePrefix = SIM_MODEL::SpiceInfo( type ).modelType;
+        std::string level = SIM_MODEL::SpiceInfo( type ).level;
+        std::string version = SIM_MODEL::SpiceInfo( type ).version;
         bool isDefaultLevel = SIM_MODEL::SpiceInfo( type ).isDefaultLevel;
 
         if( typePrefix == "" )
             continue;
 
         // Check if `aTypeString` starts with `typePrefix`.
-        if( aTypeString.Upper().StartsWith( typePrefix )
+        if( boost::starts_with( boost::to_upper_copy( aTypeString ), typePrefix )
             && ( level == readLevel->ToString()
                  || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
             && version == aVersion )

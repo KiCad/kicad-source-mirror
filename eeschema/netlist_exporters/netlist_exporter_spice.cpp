@@ -35,9 +35,12 @@
 #include <sch_text.h>
 #include <sch_textbox.h>
 #include <string_utils.h>
+
+
+#include <boost/algorithm/string/replace.hpp>
+#include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <locale_io.h>
 
 
 namespace NETLIST_EXPORTER_SPICE_PARSER
@@ -74,8 +77,6 @@ bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigne
 
 bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    LOCALE_IO dummy;
-
     // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
     m_rawIncludes.clear();
 
@@ -100,7 +101,7 @@ bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsign
 
 void NETLIST_EXPORTER_SPICE::WriteHead( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
 {
-    aFormatter.Print( 0, ".title %s\n", TO_UTF8( m_title ) );
+    aFormatter.Print( 0, ".title %s\n", m_title.c_str() );
 }
 
 
@@ -112,7 +113,7 @@ void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aN
 
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions )
 {
-    std::set<wxString> refNames; // Set of reference names to check for duplication.
+    std::set<std::string> refNames; // Set of reference names to check for duplication.
     int ncCounter = 1;
 
     ReadDirectives( aNetlistOptions );
@@ -156,15 +157,15 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 }
 
 
-void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( wxString& aNetName )
+void NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( std::string& aNetName )
 {
-    aNetName.Replace( "(", "_" );
-    aNetName.Replace( ")", "_" );
-    aNetName.Replace( " ", "_" );
+    boost::replace_all( aNetName, "(", "_" );
+    boost::replace_all( aNetName, ")", "_" );
+    boost::replace_all( aNetName, " ", "_" );
 }
 
 
-wxString NETLIST_EXPORTER_SPICE::GetItemName( const wxString& aRefName ) const
+std::string NETLIST_EXPORTER_SPICE::GetItemName( const std::string& aRefName ) const
 {
     const std::list<ITEM>& spiceItems = GetItems();
 
@@ -223,7 +224,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                 }
                 else if( node->is_type<NETLIST_EXPORTER_SPICE_PARSER::dotInclude>() )
                 {
-                    wxString path = node->children.at( 0 )->string();
+                    std::string path = node->children.at( 0 )->string();
 
                     try
                     {
@@ -247,19 +248,19 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
-    wxString path;
+    std::string path;
 
     if( field )
-        path = field->GetShownText();
+        path = std::string( field->GetShownText().ToUTF8() );
 
-    if( path.IsEmpty() )
+    if( path == "" )
         return;
 
     wxString absolutePath = m_schematic->Prj().AbsolutePath( path );
 
     try
     {
-        m_libraries.try_emplace( path, SIM_LIBRARY::Create( absolutePath ) );
+        m_libraries.try_emplace( path, SIM_LIBRARY::Create( std::string( absolutePath.ToUTF8() ) ) );
     }
     catch( const IO_ERROR& e )
     {
@@ -281,7 +282,7 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem )
         if( !field )
             return;
 
-        wxString modelName = field->GetShownText();
+        std::string modelName = std::string( field->GetShownText().ToUTF8() );
         const SIM_LIBRARY& library = *m_libraries.at( aItem.libraryPath );
         const SIM_MODEL* baseModel = library.FindModel( modelName );
 
@@ -312,7 +313,7 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, ITEM& aItem )
 
 bool NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
                                           ITEM& aItem,
-                                          std::set<wxString>& aRefNames )
+                                          std::set<std::string>& aRefNames )
 {
     aItem.refName = aSymbol.GetRef( &aSheet );
 
@@ -351,7 +352,7 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
     if( auto model = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model.get() ) )
     {
         unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
-        wxString path = model->GetParam( libParamIndex ).value->ToString();
+        std::string path = model->GetParam( libParamIndex ).value->ToString();
 
         if( path != "" )
             m_rawIncludes.insert( path );
@@ -364,7 +365,7 @@ bool NETLIST_EXPORTER_SPICE::readModel( SCH_SYMBOL& aSymbol, ITEM& aItem )
 void NETLIST_EXPORTER_SPICE::readPinNumbers( SCH_SYMBOL& aSymbol, ITEM& aItem )
 {
     for( const PIN_INFO& pin : m_sortedSymbolPinList )
-        aItem.pinNumbers.push_back( pin.num );
+        aItem.pinNumbers.emplace_back( std::string( pin.num.ToUTF8() ) );
 }
 
 
@@ -373,7 +374,8 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem,
 {
     for( const PIN_INFO& pinInfo : m_sortedSymbolPinList )
     {
-        wxString netName = GenerateItemPinNetName( pinInfo.netName, aNcCounter );
+        std::string netName = GenerateItemPinNetName( std::string( pinInfo.netName.ToUTF8() ),
+                                                      aNcCounter );
 
         aItem.pinNetNames.push_back( netName );
         m_nets.insert( netName );
@@ -382,7 +384,7 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, ITEM& aItem,
 
 
 void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                                           const wxString& aPath )
+                                           const std::string& aPath )
 {
     // First, expand env vars, if any.
     wxString expandedPath = ExpandEnvVarSubstitutions( aPath, &m_schematic->Prj() );
@@ -397,8 +399,8 @@ void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned
         if( fullPath.IsEmpty() )
         {
             DisplayErrorMessage( nullptr,
-                    wxString::Format( _( "Could not find library file '%s'" ),
-                                      expandedPath ) );
+                                 wxString::Format( _( "Could not find library file '%s'" ),
+                                                   expandedPath ) );
             fullPath = expandedPath;
         }
     }
@@ -414,7 +416,7 @@ void NETLIST_EXPORTER_SPICE::writeIncludes( OUTPUTFORMATTER& aFormatter, unsigne
     for( auto&& [path, library] : m_libraries )
         writeInclude( aFormatter, aNetlistOptions, path );
 
-    for( const wxString& path : m_rawIncludes )
+    for( const std::string& path : m_rawIncludes )
         writeInclude( aFormatter, aNetlistOptions, path );
 }
 
@@ -426,7 +428,8 @@ void NETLIST_EXPORTER_SPICE::writeModels( OUTPUTFORMATTER& aFormatter )
         if( !item.model->IsEnabled() )
             continue;
 
-        aFormatter.Print( 0, "%s", TO_UTF8( item.model->SpiceGenerator().ModelLine( item.modelName ) ) );
+        aFormatter.Print( 0, "%s",
+                          item.model->SpiceGenerator().ModelLine( item.modelName ).c_str() );
     }
 }
 
@@ -439,10 +442,10 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
             continue;
 
         aFormatter.Print( 0, "%s",
-                          TO_UTF8( item.model->SpiceGenerator().ItemLine( item.refName,
-                                                                          item.modelName,
-                                                                          item.pinNumbers,
-                                                                          item.pinNetNames ) ) );
+                          item.model->SpiceGenerator().ItemLine( item.refName,
+                                                                 item.modelName,
+                                                                 item.pinNumbers,
+                                                                 item.pinNetNames ).c_str() );
     }
 }
 
@@ -456,21 +459,21 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
     if( aNetlistOptions & OPTION_SAVE_ALL_CURRENTS )
         aFormatter.Print( 0, ".probe alli\n" );
 
-    for( const wxString& directive : m_directives )
-        aFormatter.Print( 0, "%s\n", TO_UTF8( directive ) );
+    for( const std::string& directive : m_directives )
+        aFormatter.Print( 0, "%s\n", directive.c_str() );
 }
 
 
-wxString NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const wxString& aNetName,
-                                                         int& aNcCounter ) const
+std::string NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const std::string& aNetName,
+                                                            int& aNcCounter ) const
 {
-    wxString netName = aNetName;
+    std::string netName = aNetName;
 
     ReplaceForbiddenChars( netName );
-    netName = UnescapeString( netName );
+    netName = std::string( UnescapeString( netName ).ToUTF8() );
 
     if( netName == "" )
-        netName = wxString::Format( wxT( "NC-%u" ), aNcCounter++ );
+        netName = fmt::format( "NC-{}", aNcCounter++ );
 
     return netName;
 }

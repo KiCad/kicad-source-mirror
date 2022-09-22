@@ -33,30 +33,30 @@ class SPICE_GENERATOR
 public:
     SPICE_GENERATOR( const SIM_MODEL& aModel ) : m_model( aModel ) {}
 
-    virtual wxString ModelLine( const wxString& aModelName ) const;
+    virtual std::string ModelLine( const std::string& aModelName ) const;
 
-    wxString ItemLine( const wxString& aRefName,
-                       const wxString& aModelName ) const;
-    wxString ItemLine( const wxString& aRefName,
-                       const wxString& aModelName,
-                       const std::vector<wxString>& aSymbolPinNumbers ) const;
-    virtual wxString ItemLine( const wxString& aRefName,
-                               const wxString& aModelName,
-                               const std::vector<wxString>& aSymbolPinNumbers,
-                               const std::vector<wxString>& aPinNetNames ) const;
-    virtual wxString ItemName( const wxString& aRefName ) const;
-    virtual wxString ItemPins( const wxString& aRefName,
-                               const wxString& aModelName,
-                               const std::vector<wxString>& aSymbolPinNumbers,
-                               const std::vector<wxString>& aPinNetNames ) const;
-    virtual wxString ItemModelName( const wxString& aModelName ) const;
-    virtual wxString ItemParams() const;
+    std::string ItemLine( const std::string& aRefName,
+                          const std::string& aModelName ) const;
+    std::string ItemLine( const std::string& aRefName,
+                          const std::string& aModelName,
+                          const std::vector<std::string>& aSymbolPinNumbers ) const;
+    virtual std::string ItemLine( const std::string& aRefName,
+                                  const std::string& aModelName,
+                                  const std::vector<std::string>& aSymbolPinNumbers,
+                                  const std::vector<std::string>& aPinNetNames ) const;
+    virtual std::string ItemName( const std::string& aRefName ) const;
+    virtual std::string ItemPins( const std::string& aRefName,
+                                  const std::string& aModelName,
+                                  const std::vector<std::string>& aSymbolPinNumbers,
+                                  const std::vector<std::string>& aPinNetNames ) const;
+    virtual std::string ItemModelName( const std::string& aModelName ) const;
+    virtual std::string ItemParams() const;
 
-    virtual wxString TuningLine( const wxString& aSymbol ) const;
-    
-    virtual std::vector<wxString> CurrentNames( const wxString& aRefName ) const;
+    virtual std::string TuningLine( const std::string& aSymbol ) const;
 
-    virtual wxString Preview( const wxString& aModelName ) const;
+    virtual std::vector<std::string> CurrentNames( const std::string& aRefName ) const;
+
+    virtual std::string Preview( const std::string& aModelName ) const;
 
 protected:
     virtual std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const

@@ -391,11 +391,22 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     }
     else
     {
-        m_model->SetParamValue( m_paramIndex, aText );
+        m_model->SetParamValue( m_paramIndex, std::string( aText.ToUTF8() ) );
         aVariant = GetParam().value->ToString();
     }
 
     return true;
+}
+
+
+static wxArrayString convertStringsToWx( const std::vector<std::string>& aStrings )
+{
+    wxArrayString result;
+
+    for( const std::string& string : aStrings )
+        result.Add( string );
+
+    return result;
 }
 
 
@@ -406,8 +417,7 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
                                       SIM_VALUE::TYPE aValueType,
                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxEnumProperty( aLabel, aName,
-                      wxArrayString( aModel->GetParam( aParamIndex ).info.enumValues.size(),
-                                     &aModel->GetParam( aParamIndex ).info.enumValues[0]  ) ),
+                      convertStringsToWx( aModel->GetParam( aParamIndex ).info.enumValues ) ),
       SIM_PROPERTY( aLibrary, aModel, aParamIndex )
 {
     auto it = std::find( GetParam().info.enumValues.begin(), GetParam().info.enumValues.end(),

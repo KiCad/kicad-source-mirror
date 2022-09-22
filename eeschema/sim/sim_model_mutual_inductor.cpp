@@ -25,12 +25,12 @@
 #include <sim/sim_model_mutual_inductor.h>
 
 
-wxString SPICE_GENERATOR_MUTUAL_INDUCTOR::ItemParams() const
+std::string SPICE_GENERATOR_MUTUAL_INDUCTOR::ItemParams() const
 {
-    wxString result;
+    std::string result;
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
-        result << " " << param.value->ToSpiceString();
+        result.append( " " + param.value->ToSpiceString() );
 
     return result;
 }

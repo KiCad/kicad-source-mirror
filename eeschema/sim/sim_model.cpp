@@ -34,9 +34,13 @@
 #include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 
-#include <locale_io.h>
 #include <lib_symbol.h>
 #include <confirm.h>
+
+#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string.hpp>
+#include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -373,8 +377,8 @@ template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFiel
 template <typename T>
 TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 {
-    wxString deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
-    wxString typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
+    std::string deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
+    std::string typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
 
     if( deviceTypeFieldValue != "" )
     {
@@ -404,9 +408,9 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 }
 
 
-TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& aValue )
+TYPE SIM_MODEL::InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue )
 {
-    static std::map<wxString, TYPE> refPrefixToType = {
+    static std::map<std::string, TYPE> refPrefixToType = {
         { "R", TYPE::R },
         { "C", TYPE::C },
         { "L", TYPE::L },
@@ -443,7 +447,7 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
 
     for( auto&& [curPrefix, curType] : refPrefixToType )
     {
-        if( aRef.StartsWith( curPrefix ) )
+        if( boost::starts_with( aRef, curPrefix ) )
         {
             type = curType;
             break;
@@ -452,46 +456,46 @@ TYPE SIM_MODEL::InferTypeFromRefAndValue( const wxString& aRef, const wxString& 
 
     // We handle "V" and "I" later because it collides and std::map is unordered.
 
-    if( type == TYPE::NONE && aRef.StartsWith( "V" ) )
+    if( type == TYPE::NONE && boost::starts_with( aRef, "V" ) )
         type = TYPE::V;
 
-    if( type == TYPE::NONE && aRef.StartsWith( "I" ) )
+    if( type == TYPE::NONE && boost::starts_with( aRef, "I" ) )
         type = TYPE::I;
 
-    wxString value = aValue;
+    std::string value = aValue;
 
     // Some types have to be inferred from Value field.
     switch( type )
     {
     case TYPE::R:
-        if( value.Trim( false ).StartsWith( "=" ) )
+        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
             type = TYPE::R_BEHAVIORAL;
         break;
 
     case TYPE::C:
-        if( value.Trim( false ).StartsWith( "=" ) )
+        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
             type = TYPE::C_BEHAVIORAL;
         break;
 
     case TYPE::L:
-        if( value.Trim( false ).StartsWith( "=" ) )
+        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
             type = TYPE::L_BEHAVIORAL;
         break;
 
     case TYPE::V:
-        if( value.Trim( false ).StartsWith( "=" ) )
+        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
             type = TYPE::V_BEHAVIORAL;
         break;
 
     case TYPE::I:
-        if( value.Trim( false ).StartsWith( "=" ) )
+        if( boost::starts_with( boost::trim_left_copy( value ), "=" ) )
             type = TYPE::I_BEHAVIORAL;
         break;
 
     case TYPE::TLINE_Z0:
         try
         {
-            tao::pegtl::string_input<> in( aValue.ToUTF8(), "Value" );
+            tao::pegtl::string_input<> in( aValue, "Value" );
             auto root = tao::pegtl::parse_tree::parse<
                 SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
                 SIM_MODEL_PARSER::fieldParamValuePairsSelector>
@@ -655,12 +659,12 @@ template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
 
 
 template <typename T>
-wxString SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName )
+std::string SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName )
 {
     static_assert( std::is_same<T, SCH_FIELD>::value || std::is_same<T, LIB_FIELD>::value );
 
     if( !aFields )
-        return wxEmptyString; // Should not happen, T=void specialization will be called instead.
+        return ""; // Should not happen, T=void specialization will be called instead.
 
     auto fieldIt = std::find_if( aFields->begin(), aFields->end(),
                                  [aFieldName]( const T& field )
@@ -669,23 +673,23 @@ wxString SIM_MODEL::GetFieldValue( const std::vector<T>* aFields, const wxString
                                  } );
 
     if( fieldIt != aFields->end() )
-        return fieldIt->GetText();
+        return std::string( fieldIt->GetText().ToUTF8() );
 
-    return wxEmptyString;
+    return "";
 }
 
 
 // This specialization is used when no fields are passed.
 template <>
-wxString SIM_MODEL::GetFieldValue( const std::vector<void>* aFields, const wxString& aFieldName )
+std::string SIM_MODEL::GetFieldValue( const std::vector<void>* aFields, const std::string& aFieldName )
 {
-    return wxEmptyString;
+    return "";
 }
 
 
 template <typename T>
-void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
-                               const wxString& aValue )
+void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const std::string& aFieldName,
+                               const std::string& aValue )
 {
     static_assert( std::is_same<T, SCH_FIELD>::value || std::is_same<T, LIB_FIELD>::value );
 
@@ -697,7 +701,7 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldNa
 
     if( fieldIt != aFields.end() )
     {
-        if( aValue.IsEmpty() )
+        if( aValue == "" )
             aFields.erase( fieldIt );
         else
             fieldIt->SetText( aValue );
@@ -705,7 +709,7 @@ void SIM_MODEL::SetFieldValue( std::vector<T>& aFields, const wxString& aFieldNa
         return;
     }
 
-    if( aValue.IsEmpty() )
+    if( aValue == "" )
         return;
 
     if constexpr( std::is_same<T, SCH_FIELD>::value )
@@ -731,7 +735,7 @@ void SIM_MODEL::AddPin( const PIN& aPin )
 }
 
 
-int SIM_MODEL::FindModelPinIndex( const wxString& aSymbolPinNumber )
+int SIM_MODEL::FindModelPinIndex( const std::string& aSymbolPinNumber )
 {
     for( int modelPinIndex = 0; modelPinIndex < GetPinCount(); ++modelPinIndex )
     {
@@ -769,14 +773,14 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 }
 
 
-const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const wxString& aParamName ) const
+const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const std::string& aParamName ) const
 {
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     auto it = std::find_if( params.begin(), params.end(),
                             [aParamName]( const PARAM& param )
                             {
-                                return param.info.name == aParamName.Lower();
+                                return param.info.name == boost::to_lower_copy( aParamName );
                             } );
 
     if( it == params.end() )
@@ -812,14 +816,14 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 }
 
 
-bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const wxString& aValue,
+bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const std::string& aValue,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
-    return m_params.at( aParamIndex ).value->FromString( aValue.ToStdString(), aNotation );
+    return m_params.at( aParamIndex ).value->FromString( aValue, aNotation );
 }
 
 
-bool SIM_MODEL::SetParamValue( const wxString& aParamName, const wxString& aValue,
+bool SIM_MODEL::SetParamValue( const std::string& aParamName, const std::string& aValue,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
@@ -827,7 +831,7 @@ bool SIM_MODEL::SetParamValue( const wxString& aParamName, const wxString& aValu
     auto it = std::find_if( params.begin(), params.end(),
                             [aParamName]( const PARAM& param )
                             {
-                                return param.info.name == aParamName.Lower();
+                                return param.info.name == boost::to_lower_copy( aParamName );
                             } );
     
     if( it == params.end() )
@@ -967,13 +971,13 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
     // Excess model pins are set as Not Connected.
     // Note that intentionally nothing is added if `getPinNames()` returns an empty vector.
 
-    // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by code that
+    // SIM_MODEL pins must be ordered by symbol pin numbers -- this is assumed by the code that
     // accesses them.
 
     for( unsigned modelPinIndex = 0; modelPinIndex < getPinNames().size(); ++modelPinIndex )
     {
         if( modelPinIndex < aSymbolPinCount )
-            AddPin( { getPinNames().at( modelPinIndex ), wxString::FromCDouble( modelPinIndex + 1 ) } );
+            AddPin( { getPinNames().at( modelPinIndex ), fmt::format( "{}", modelPinIndex + 1 ) } );
         else
             AddPin( { getPinNames().at( modelPinIndex ), "" } );
     }
@@ -981,12 +985,12 @@ void SIM_MODEL::CreatePins( unsigned aSymbolPinCount )
 
 
 template void SIM_MODEL::WriteInferredDataFields( std::vector<SCH_FIELD>& aFields,
-                                                  const wxString& aValue ) const;
+                                                  const std::string& aValue ) const;
 template void SIM_MODEL::WriteInferredDataFields( std::vector<LIB_FIELD>& aFields,
-                                                  const wxString& aValue ) const;
+                                                  const std::string& aValue ) const;
 
 template <typename T>
-void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const
+void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue ) const
 {
     if( GetPinCount() == 2
         && GetPin( 0 ).symbolPinNumber == "1"
@@ -1003,33 +1007,33 @@ void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString
 }
 
 
-wxString SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+std::string SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
 {
-    wxString result;
+    std::string result;
 
     if( aIsFirst )
         aIsFirst = false;
     else
-        result << " ";
+        result.append( " " );
 
-    wxString name = aParam.info.name;
+    std::string name = aParam.info.name;
 
     // Because of collisions with instance parameters, we append some model parameters with "_".
-    if( aParam.info.name.EndsWith( "_" ) )
-        name = aParam.info.name.BeforeLast( '_' );
+    if( boost::ends_with( aParam.info.name, "_" ) )
+        name = aParam.info.name.substr( 0, aParam.info.name.length() - 1);
 
-    wxString value = aParam.value->ToString();
-    if( value.Contains( " " ) )
+    std::string value = aParam.value->ToString();
+    if( value.find( " " ) != std::string::npos )
         value = "\"" + value + "\"";
 
-    result << aParam.info.name + "=" + value;
+    result.append( fmt::format( "{}={}", aParam.info.name, value ) );
     return result;
 }
 
 
-wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
+std::string SIM_MODEL::GenerateParamsField( const std::string& aPairSeparator ) const
 {
-    wxString result;
+    std::string result;
     bool isFirst = true;
 
     for( const PARAM& param : m_params )
@@ -1037,18 +1041,16 @@ wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
         if( param.value->ToString() == "" )
             continue;
 
-        result << GenerateParamValuePair( param, isFirst );
+        result.append( GenerateParamValuePair( param, isFirst ) );
     }
 
     return result;
 }
 
 
-void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
+void SIM_MODEL::ParseParamsField( const std::string& aParamsField )
 {
-    LOCALE_IO toggle;
-
-    tao::pegtl::string_input<> in( aParamsField.ToUTF8(), "Sim_Params" );
+    tao::pegtl::string_input<> in( aParamsField, "Sim_Params" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -1065,7 +1067,7 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
         THROW_IO_ERROR( e.what() );
     }
 
-    wxString paramName;
+    std::string paramName;
 
     for( const auto& node : root->children )
     {
@@ -1083,12 +1085,10 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
         }
         else if( node->is_type<SIM_MODEL_PARSER::quotedString>() )
         {
-            wxASSERT( !paramName.IsEmpty() );
-
-            wxString str = node->string();
+            std::string str = node->string();
 
             // Unescape quotes.
-            str.Replace( "\\\"", "\"" );
+            boost::replace_all( str, "\\\"", "\"" );
 
             SetParamValue( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
         }
@@ -1100,14 +1100,14 @@ void SIM_MODEL::ParseParamsField( const wxString& aParamsField )
 }
 
 
-void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField )
+void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const std::string& aPinsField )
 {
     CreatePins( aSymbolPinCount );
 
     if( aPinsField == "" )
         return;
 
-    tao::pegtl::string_input<> in( aPinsField.ToUTF8(), PINS_FIELD );
+    tao::pegtl::string_input<> in( aPinsField, PINS_FIELD );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -1138,12 +1138,12 @@ void SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsF
 }
 
 
-void SIM_MODEL::ParseDisabledField( const wxString& aDisabledField )
+void SIM_MODEL::ParseDisabledField( const std::string& aDisabledField )
 {
     if( aDisabledField == "" )
         return;
 
-    char c = aDisabledField.Lower()[0];
+    char c = boost::to_lower_copy( aDisabledField )[0];
 
     if( c == 'y' || c == 't' || c == '1' )
         m_isEnabled = false;
@@ -1179,7 +1179,7 @@ void SIM_MODEL::InferredReadDataFields( unsigned aSymbolPinCount, const std::vec
         return;
     }
 
-    wxString valueField = GetFieldValue( aFields, VALUE_FIELD );
+    std::string valueField = GetFieldValue( aFields, VALUE_FIELD );
 
     if( aAllowParamValuePairs ) // The usual param-value pairs have precedence.
     {
@@ -1228,21 +1228,21 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 }
 
 
-wxString SIM_MODEL::generateDeviceTypeField() const
+std::string SIM_MODEL::generateDeviceTypeField() const
 {
     return DeviceTypeInfo( TypeInfo( m_type ).deviceType ).fieldValue;
 }
 
 
-wxString SIM_MODEL::generateTypeField() const
+std::string SIM_MODEL::generateTypeField() const
 {
     return TypeInfo( m_type ).fieldValue;
 }
 
 
-wxString SIM_MODEL::generatePinsField() const
+std::string SIM_MODEL::generatePinsField() const
 {
-    wxString result = "";
+    std::string result = "";
     bool isFirst = true;
 
     for( const PIN& pin : GetPins() )
@@ -1250,29 +1250,29 @@ wxString SIM_MODEL::generatePinsField() const
         if( isFirst )
             isFirst = false;
         else
-            result << " ";
+            result.append( " " );
 
         if( pin.symbolPinNumber == "" )
-            result << "~";
+            result.append( "~" );
         else
-            result << pin.symbolPinNumber; // Note that it's numbered from 1.
+            result.append( pin.symbolPinNumber ); // Note that it's numbered from 1.
     }
 
     return result;
 }
 
 
-wxString SIM_MODEL::generateDisabledField() const
+std::string SIM_MODEL::generateDisabledField() const
 {
     return m_isEnabled ? "" : "1";
 }
 
 
-wxString SIM_MODEL::parseFieldFloatValue( wxString aFieldFloatValue )
+std::string SIM_MODEL::parseFieldFloatValue( std::string aFieldFloatValue )
 {
     try
     {
-        tao::pegtl::string_input<> in( aFieldFloatValue.ToUTF8(), "Value" );
+        tao::pegtl::string_input<> in( aFieldFloatValue, "Value" );
         auto root = tao::pegtl::parse_tree::parse<
                 SIM_MODEL_PARSER::fieldFloatValueGrammar,
                 SIM_MODEL_PARSER::fieldFloatValueSelector>

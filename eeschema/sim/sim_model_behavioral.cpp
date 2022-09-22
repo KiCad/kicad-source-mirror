@@ -23,22 +23,23 @@
  */
 
 #include <sim/sim_model_behavioral.h>
-#include <locale_io.h>
+
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <fmt/core.h>
 
 
-wxString SPICE_GENERATOR_BEHAVIORAL::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR_BEHAVIORAL::ModelLine( const std::string& aModelName ) const
 {
     return "";
 }
 
 
-wxString SPICE_GENERATOR_BEHAVIORAL::ItemLine( const wxString& aRefName,
-                                               const wxString& aModelName,
-                                               const std::vector<wxString>& aSymbolPinNumbers,
-                                               const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const std::string& aRefName,
+                                                  const std::string& aModelName,
+                                                  const std::vector<std::string>& aSymbolPinNumbers,
+                                                  const std::vector<std::string>& aPinNetNames ) const
 {
-    LOCALE_IO toggle;
-
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::R_BEHAVIORAL:
@@ -51,13 +52,15 @@ wxString SPICE_GENERATOR_BEHAVIORAL::ItemLine( const wxString& aRefName,
 
     case SIM_MODEL::TYPE::V_BEHAVIORAL:
         return SPICE_GENERATOR::ItemLine( aRefName,
-                                          wxString::Format( "V=%s", m_model.GetParam( 0 ).value->ToString() ),
+                                          fmt::format( "V={0}",
+                                                       m_model.GetParam( 0 ).value->ToString() ),
                                           aSymbolPinNumbers,
                                           aPinNetNames );
 
     case SIM_MODEL::TYPE::I_BEHAVIORAL:
         return SPICE_GENERATOR::ItemLine( aRefName,
-                                          wxString::Format( "I=%s", m_model.GetParam( 0 ).value->ToString() ),
+                                          fmt::format( "I={0}",
+                                                       m_model.GetParam( 0 ).value->ToString() ),
                                           aSymbolPinNumbers,
                                           aPinNetNames );
 
@@ -129,14 +132,16 @@ void SIM_MODEL_BEHAVIORAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields )
 }
 
 
-bool SIM_MODEL_BEHAVIORAL::parseValueField( const wxString& aValueField )
+bool SIM_MODEL_BEHAVIORAL::parseValueField( const std::string& aValueField )
 {
-    wxString expr = aValueField;
-    
-    if( !expr.Replace( "=", "", false ) )
-        return false;
+    std::string expr = aValueField;
 
-    SetParamValue( 0, expr.Trim( false ).Trim( true ) );
+    if( expr.find( "=" ) == std::string::npos )
+        return false;
+    
+    boost::replace_first( expr, "=", "" );
+
+    SetParamValue( 0, boost::trim_copy( expr ) );
     return true;
 }
 
@@ -161,7 +166,7 @@ void SIM_MODEL_BEHAVIORAL::inferredReadDataFields( unsigned aSymbolPinCount,
 template <typename T>
 void SIM_MODEL_BEHAVIORAL::inferredWriteDataFields( std::vector<T>& aFields ) const
 {
-    wxString value = GetParam( 0 ).value->ToString();
+    std::string value = GetParam( 0 ).value->ToString();
 
     if( value == "" )
         value = GetDeviceTypeInfo().fieldValue;
@@ -170,8 +175,8 @@ void SIM_MODEL_BEHAVIORAL::inferredWriteDataFields( std::vector<T>& aFields ) co
 }
 
 
-SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParams( wxString aName, wxString aDescription,
-                                                         wxString aUnit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParams( std::string aName, std::string aDescription,
+                                                         std::string aUnit )
 {
     PARAM::INFO paramInfo = {};
 

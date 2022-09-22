@@ -23,61 +23,63 @@
  */
 
 #include <sim/spice_generator.h>
-#include <locale_io.h>
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <fmt/core.h>
 
 
-wxString SPICE_GENERATOR::ModelLine( const wxString& aModelName ) const
+std::string SPICE_GENERATOR::ModelLine( const std::string& aModelName ) const
 {
-    LOCALE_IO toggle;
-
     if( !m_model.HasSpiceNonInstanceOverrides() && !m_model.requiresSpiceModelLine() )
         return "";
 
-    wxString result = "";
+    std::string result = "";
 
-    result << wxString::Format( ".model %s ", aModelName );
-    size_t indentLength = result.Length();
+    result.append( fmt::format( ".model {} ", aModelName ) );
+    size_t indentLength = result.length();
 
-    result << wxString::Format( "%s \n", m_model.GetSpiceInfo().modelType );
+    result.append( fmt::format( "{}\n", m_model.GetSpiceInfo().modelType ) );
 
     for( const SIM_MODEL::PARAM& param : m_model.GetParams() )
     {
         if( param.info.isSpiceInstanceParam )
             continue;
 
-        wxString name = ( param.info.spiceModelName == "" ) ?
+        std::string name = ( param.info.spiceModelName == "" ) ?
             param.info.name : param.info.spiceModelName;
-        wxString value = param.value->ToSpiceString();
+        std::string value = param.value->ToSpiceString();
 
         if( value == "" )
             continue;
 
-        result << wxString::Format( "+%s%s=%s\n", wxString( ' ', indentLength - 1 ), name, value );
+        result.append( fmt::format( "+{}{}={}\n", std::string( indentLength - 1, ' ' ),
+                                    name, value ) );
     }
 
     return result;
 }
 
 
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName ) const
+std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
+                                       const std::string& aModelName ) const
 {
     // Use linear symbol pin numbers enumeration. Used in model preview.
 
-    std::vector<wxString> pinNumbers;
+    std::vector<std::string> pinNumbers;
 
     for( int i = 0; i < m_model.GetPinCount(); ++i )
-        pinNumbers.push_back( wxString::FromCDouble( i + 1 ) );
+        pinNumbers.push_back( fmt::format( "{}", i + 1 ) );
 
     return ItemLine( aRefName, aModelName, pinNumbers );
 }
 
 
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers ) const
+std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
+                                       const std::string& aModelName,
+                                       const std::vector<std::string>& aSymbolPinNumbers ) const
 {
-    std::vector<wxString> pinNetNames;
+    std::vector<std::string> pinNetNames;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
         pinNetNames.push_back( pin.name );
@@ -86,36 +88,36 @@ wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR::ItemLine( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR::ItemLine( const std::string& aRefName,
+                                       const std::string& aModelName,
+                                       const std::vector<std::string>& aSymbolPinNumbers,
+                                       const std::vector<std::string>& aPinNetNames ) const
 {
-    wxString result;
-    result << ItemName( aRefName );
-    result << ItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames );
-    result << ItemModelName( aModelName );
-    result << ItemParams();
-    result << "\n";
+    std::string result;
+    result.append( ItemName( aRefName ) );
+    result.append( ItemPins( aRefName, aModelName, aSymbolPinNumbers, aPinNetNames ) );
+    result.append( ItemModelName( aModelName ) );
+    result.append( ItemParams() );
+    result.append( "\n" );
     return result;
 }
 
 
-wxString SPICE_GENERATOR::ItemName( const wxString& aRefName ) const
+std::string SPICE_GENERATOR::ItemName( const std::string& aRefName ) const
 {
-    if( aRefName != "" && aRefName.StartsWith( m_model.GetSpiceInfo().itemType ) )
+    if( aRefName != "" && boost::starts_with( aRefName, m_model.GetSpiceInfo().itemType ) )
         return aRefName;
     else
         return m_model.GetSpiceInfo().itemType + aRefName;
 }
 
 
-wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
-                                    const wxString& aModelName,
-                                    const std::vector<wxString>& aSymbolPinNumbers,
-                                    const std::vector<wxString>& aPinNetNames ) const
+std::string SPICE_GENERATOR::ItemPins( const std::string& aRefName,
+                                       const std::string& aModelName,
+                                       const std::vector<std::string>& aSymbolPinNumbers,
+                                       const std::vector<std::string>& aPinNetNames ) const
 {
-    wxString result;
+    std::string result;
     int ncCounter = 0;
 
     for( const SIM_MODEL::PIN& pin : GetPins() )
@@ -124,14 +126,11 @@ wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
                              pin.symbolPinNumber );
 
         if( it == aSymbolPinNumbers.end() )
-        {
-            LOCALE_IO toggle;
-            result << wxString::Format( " NC-%s-%u", aRefName, ncCounter++ );
-        }
+            result.append( fmt::format( " NC-{}-{}", aRefName, ncCounter++ ) );
         else
         {
             long symbolPinIndex = std::distance( aSymbolPinNumbers.begin(), it );
-            result << " " << aPinNetNames.at( symbolPinIndex );
+            result.append( " " + aPinNetNames.at( symbolPinIndex ) );
         }
     }
 
@@ -139,54 +138,53 @@ wxString SPICE_GENERATOR::ItemPins( const wxString& aRefName,
 }
 
 
-wxString SPICE_GENERATOR::ItemModelName( const wxString& aModelName ) const
+std::string SPICE_GENERATOR::ItemModelName( const std::string& aModelName ) const
 {
     return " " + aModelName;
 }
 
 
-wxString SPICE_GENERATOR::ItemParams() const
+std::string SPICE_GENERATOR::ItemParams() const
 {
-    wxString result;
+    std::string result;
 
     for( const SIM_MODEL::PARAM& param : GetInstanceParams() )
     {
-        wxString name = ( param.info.spiceInstanceName == "" ) ?
+        std::string name = ( param.info.spiceInstanceName == "" ) ?
             param.info.name : param.info.spiceInstanceName;
-        wxString value = param.value->ToSpiceString();
+        std::string value = param.value->ToSpiceString();
 
         if( value != "" )
-            result << " " << name << "=" << value;
+            result.append( fmt::format( " {}={}", name, value ) );
     }
 
     return result;
 }
 
 
-wxString SPICE_GENERATOR::TuningLine( const wxString& aSymbol ) const
+std::string SPICE_GENERATOR::TuningLine( const std::string& aSymbol ) const
 {
     // TODO.
     return "";
 }
 
 
-std::vector<wxString> SPICE_GENERATOR::CurrentNames( const wxString& aRefName ) const
+std::vector<std::string> SPICE_GENERATOR::CurrentNames( const std::string& aRefName ) const
 {
-    LOCALE_IO toggle;
-    return { wxString::Format( "I(%s)", ItemName( aRefName ) ) };
+    return { fmt::format( "I({})", ItemName( aRefName ) ) };
 }
 
 
-wxString SPICE_GENERATOR::Preview( const wxString& aModelName ) const
+std::string SPICE_GENERATOR::Preview( const std::string& aModelName ) const
 {
-    wxString spiceCode = ModelLine( aModelName );
+    std::string spiceCode = ModelLine( aModelName );
 
-    wxString itemLine = ItemLine( "", aModelName );
+    std::string itemLine = ItemLine( "", aModelName );
     if( spiceCode != "" )
-        spiceCode << "\n";
+        spiceCode.append( "\n" );
 
-    spiceCode << itemLine;
-    return spiceCode.Trim();
+    spiceCode.append( itemLine );
+    return boost::trim_copy( spiceCode );
 }
 
 

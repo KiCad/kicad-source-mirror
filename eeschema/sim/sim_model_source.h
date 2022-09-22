@@ -49,15 +49,15 @@ class SPICE_GENERATOR_SOURCE : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ModelLine( const wxString& aModelName ) const override;
-    wxString ItemLine( const wxString& aRefName,
-                       const wxString& aModelName,
-                       const std::vector<wxString>& aSymbolPinNumbers,
-                       const std::vector<wxString>& aPinNetNames ) const override;
+    std::string ModelLine( const std::string& aModelName ) const override;
+    std::string ItemLine( const std::string& aRefName,
+                          const std::string& aModelName,
+                          const std::vector<std::string>& aSymbolPinNumbers,
+                          const std::vector<std::string>& aPinNetNames ) const override;
 
 private:
-    wxString getParamValueString( const wxString& aParamName,
-                                  const wxString& aDefaultValue ) const;
+    std::string getParamValueString( const std::string& aParamName,
+                                  const std::string& aDefaultValue ) const;
 };
 
 
@@ -69,40 +69,40 @@ public:
     void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
     void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
 
-    bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
+    bool SetParamValue( unsigned aParamIndex, const std::string& aValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI )
         override;
 
     bool HasAutofill() const override { return true; }
 
 protected:
-    wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
 
 private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
-    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
+    std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
 
-    static std::vector<PARAM::INFO> makeDcParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSinParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePulseParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeExpParamInfos( wxString aPrefix, wxString aUnit );
-    //static std::vector<PARAM::INFO> makeSfamParamInfos( wxString aPrefix, wxString aUnit );
-    //static std::vector<PARAM::INFO> makeSffmParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePwlParamInfos( wxString aPrefix, wxString aQuantity,
-                                                       wxString aUnit );
-    static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePinkNoiseParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeBurstNoiseParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomUniformParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomNormalParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomExpParamInfos( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeDcParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeSinParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makePulseParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeExpParamInfos( std::string aPrefix, std::string aUnit );
+    //static std::vector<PARAM::INFO> makeSfamParamInfos( std::string aPrefix, std::string aUnit );
+    //static std::vector<PARAM::INFO> makeSffmParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makePwlParamInfos( std::string aPrefix, std::string aQuantity,
+                                                       std::string aUnit );
+    static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makePinkNoiseParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeBurstNoiseParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeRandomUniformParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeRandomNormalParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeRandomExpParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( std::string aPrefix, std::string aUnit );
 
-    static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, wxString aUnit );
+    static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, std::string aUnit );
 
 
     bool m_isInferred;

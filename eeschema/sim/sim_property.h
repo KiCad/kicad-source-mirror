@@ -69,7 +69,7 @@ private:
     SIM_VALUE_GRAMMAR::NOTATION m_notation;
     wxString                    m_prevText;
     long                        m_prevInsertionPoint;
-    
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -112,7 +112,7 @@ public:
                        int aParamIndex );
 
     wxValidator* DoGetValidator() const override;
-    
+
     void OnSetValue() override;
 };
 

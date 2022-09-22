@@ -797,7 +797,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         try
                         {
-                            library = SIM_LIBRARY::Create( path );
+                            library = SIM_LIBRARY::Create( std::string( path.ToUTF8() ) );
                         }
                         catch( const IO_ERROR& e )
                         {
@@ -810,7 +810,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         if( !nameField )
                             return true;
 
-                        SIM_MODEL* baseModel = library->FindModel( nameField->GetShownText() );
+                        SIM_MODEL* baseModel = library->FindModel( std::string( nameField->GetShownText().ToUTF8() ) );
 
                         if( !baseModel )
                             return true;
@@ -823,8 +823,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         model = SIM_MODEL::Create( static_cast<int>( pins.size() ),
                                                    symbol->GetFields() );
 
-                    wxString ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
-                    std::vector<wxString> currentNames = model->SpiceGenerator().CurrentNames( ref );
+                    auto ref = std::string( symbol->GetRef( &m_frame->GetCurrentSheet() ).ToUTF8() );
+                    std::vector<std::string> currentNames = model->SpiceGenerator().CurrentNames( ref );
 
                     if( currentNames.size() == 0 )
                         return true;
@@ -834,7 +834,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         return true;
                     }
 
-                    int modelPinIndex = model->FindModelPinIndex( pin->GetNumber() );
+                    int modelPinIndex = model->FindModelPinIndex( std::string( pin->GetNumber().ToUTF8() ) );
 
                     if( modelPinIndex != SIM_MODEL::PIN::NOT_CONNECTED )
                     {
@@ -846,7 +846,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     {
-                        wxString spiceNet = UnescapeString( conn->Name() );
+                        std::string spiceNet = std::string( UnescapeString( conn->Name() ).ToUTF8() );
                         NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( spiceNet );
 
                         simFrame->AddVoltagePlot( wxString::Format( "V(%s)", spiceNet ) );

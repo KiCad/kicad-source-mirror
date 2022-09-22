@@ -34,8 +34,8 @@ class SPICE_GENERATOR_SUBCKT : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ModelLine( const wxString& aModelName ) const override;
-    std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+    std::string ModelLine( const std::string& aModelName ) const override;
+    std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
 };
 
 
@@ -44,7 +44,7 @@ class SPICE_MODEL_PARSER_SUBCKT : public SPICE_MODEL_PARSER
 public:
     using SPICE_MODEL_PARSER::SPICE_MODEL_PARSER;
 
-    void ReadModel( const wxString& aSpiceCode ) override;
+    void ReadModel( const std::string& aSpiceCode ) override;
 };
 
 

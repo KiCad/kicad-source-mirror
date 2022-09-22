@@ -34,10 +34,10 @@ class SPICE_GENERATOR_SWITCH : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ItemLine( const wxString& aRefName, const wxString& aModelName,
-                       const std::vector<wxString>& aSymbolPinNumbers,
-                       const std::vector<wxString>& aPinNetNames ) const override;
-    wxString ItemParams() const override;
+    std::string ItemLine( const std::string& aRefName, const std::string& aModelName,
+                       const std::vector<std::string>& aSymbolPinNumbers,
+                       const std::vector<std::string>& aPinNetNames ) const override;
+    std::string ItemParams() const override;
     std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> GetPins() const override;
 };
 
@@ -48,10 +48,10 @@ public:
     SIM_MODEL_SWITCH( TYPE aType );
 
 protected:
-    wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+    std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
 
 private:
-    std::vector<wxString> getPinNames() const override
+    std::vector<std::string> getPinNames() const override
     {
         return { "ctrl+", "ctrl-", "no+", "no-" };
     }

@@ -40,18 +40,18 @@ public:
     bool ReadSchematicAndLibraries( unsigned aNetlistOptions ) override;
 
 protected:
-    wxString GenerateItemPinNetName( const wxString& aNetName, int& aNcCounter ) const override;
+    std::string GenerateItemPinNetName( const std::string& aNetName, int& aNcCounter ) const override;
 
 private:
     struct PORT_INFO
     {
-        wxString name;
+        std::string name;
         LABEL_FLAG_SHAPE dir;
     };
 
     void readPorts( unsigned aNetlistOptions );
 
-    std::map<wxString, PORT_INFO> m_ports;
+    std::map<std::string, PORT_INFO> m_ports;
 };
 
 #endif // NETLIST_EXPORTER_SPICE_MODEL_H

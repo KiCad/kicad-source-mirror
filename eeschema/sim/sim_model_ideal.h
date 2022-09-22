@@ -34,11 +34,11 @@ class SPICE_GENERATOR_IDEAL : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
-    wxString ModelLine( const wxString& aModelName ) const override;
-    wxString ItemLine( const wxString& aRefName,
-                       const wxString& aModelName,
-                       const std::vector<wxString>& aSymbolPinNumbers,
-                       const std::vector<wxString>& aPinNetNames ) const override;
+    std::string ModelLine( const std::string& aModelName ) const override;
+    std::string ItemLine( const std::string& aRefName,
+                          const std::string& aModelName,
+                          const std::vector<std::string>& aSymbolPinNumbers,
+                          const std::vector<std::string>& aPinNetNames ) const override;
 };
 
 
@@ -57,9 +57,9 @@ private:
     template <typename T>
     void inferredWriteDataFields( std::vector<T>& aFields ) const;
 
-    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
+    std::vector<std::string> getPinNames() const override { return { "+", "-" }; }
 
-    static PARAM::INFO makeParamInfo( wxString aName, wxString aDescription, wxString aUnit );
+    static PARAM::INFO makeParamInfo( std::string aName, std::string aDescription, std::string aUnit );
 
     bool m_isInferred;
 };

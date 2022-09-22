@@ -146,8 +146,8 @@ public:
 
     struct DEVICE_INFO
     {
-        wxString fieldValue;
-        wxString description;
+        std::string fieldValue;
+        std::string description;
     };
 
 
@@ -302,27 +302,27 @@ public:
     struct INFO
     {
         DEVICE_TYPE_ deviceType;
-        wxString fieldValue;
-        wxString description;
+        std::string fieldValue;
+        std::string description;
     };
 
 
     struct SPICE_INFO
     {
-        wxString itemType;
-        wxString modelType = "";
-        wxString inlineTypeString = "";
-        wxString level = "";
+        std::string itemType;
+        std::string modelType = "";
+        std::string inlineTypeString = "";
+        std::string level = "";
         bool isDefaultLevel = false;
         bool hasExpression = false;
-        wxString version = "";
+        std::string version = "";
     };
 
 
     struct PIN
     {
-        const wxString name;
-        wxString symbolPinNumber;
+        const std::string name;
+        std::string symbolPinNumber;
 
         static constexpr auto NOT_CONNECTED = -1;
     };
@@ -359,38 +359,38 @@ public:
 
         struct INFO
         {
-            wxString name = "";
+            std::string name = "";
             unsigned id = 0; // Legacy (don't remove).
             DIR dir = DIR_INOUT;
             SIM_VALUE::TYPE type = SIM_VALUE::TYPE_FLOAT;
             FLAGS flags = {}; // Legacy (don't remove).
-            wxString unit = "";
+            std::string unit = "";
             CATEGORY category = CATEGORY::PRINCIPAL;
-            wxString defaultValue = "";
-            wxString defaultValueOfOtherVariant = ""; // Legacy (don't remove).
-            wxString description = "";
+            std::string defaultValue = "";
+            std::string defaultValueOfOtherVariant = ""; // Legacy (don't remove).
+            std::string description = "";
             bool isSpiceInstanceParam = false;
             bool isInstanceParam = false;
-            wxString spiceModelName = "";
-            wxString spiceInstanceName = "";
-            std::vector<wxString> enumValues = {};
+            std::string spiceModelName = "";
+            std::string spiceInstanceName = "";
+            std::vector<std::string> enumValues = {};
 
             // TODO: Stop using brace-initializers, use this constructor for all info structs.
-            INFO( wxString aName = "",
+            INFO( std::string aName = "",
                   unsigned aId = 0,
                   DIR aDir = DIR_INOUT,
                   SIM_VALUE::TYPE aType = SIM_VALUE::TYPE_FLOAT,
                   FLAGS aFlags = {},
-                  const wxString& aUnit = "",
+                  const std::string& aUnit = "",
                   CATEGORY aCategory = CATEGORY::PRINCIPAL,
-                  const wxString& aDefaultValue = "",
-                  const wxString& aDefaultValueOfOtherVariant = "",
-                  const wxString& aDescription = "",
+                  const std::string& aDefaultValue = "",
+                  const std::string& aDefaultValueOfOtherVariant = "",
+                  const std::string& aDescription = "",
                   bool aIsSpiceInstanceParam = false,
                   bool aIsInstanceParam = false,
-                  const wxString& aSpiceModelName = "",
-                  const wxString& aSpiceInstanceName = "",
-                  std::vector<wxString> aEnumValues = {} ) :
+                  const std::string& aSpiceModelName = "",
+                  const std::string& aSpiceInstanceName = "",
+                  std::vector<std::string> aEnumValues = {} ) :
                 name( aName ),
                 id( aId ),
                 dir( aDir ),
@@ -430,7 +430,7 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
-    static TYPE InferTypeFromRefAndValue( const wxString& aRef, const wxString& aValue );
+    static TYPE InferTypeFromRefAndValue( const std::string& aRef, const std::string& aValue );
 
     template <typename T>
     static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
@@ -449,11 +449,11 @@ public:
                                               const std::vector<T>& aFields );
 
     template <typename T>
-    static wxString GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName );
+    static std::string GetFieldValue( const std::vector<T>* aFields, const std::string& aFieldName );
 
     template <typename T>
-    static void SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
-                               const wxString& aValue );
+    static void SetFieldValue( std::vector<T>& aFields, const std::string& aFieldName,
+                               const std::string& aValue );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
 
@@ -487,7 +487,7 @@ public:
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 
     void AddPin( const PIN& aPin );
-    int FindModelPinIndex( const wxString& aSymbolPinNumber );
+    int FindModelPinIndex( const std::string& aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
     DEVICE_INFO GetDeviceTypeInfo() const { return DeviceTypeInfo( GetDeviceType() ); }
@@ -504,7 +504,7 @@ public:
 
     std::vector<std::reference_wrapper<const PIN>> GetPins() const;
 
-    void SetPinSymbolPinNumber( int aPinIndex, const wxString& aSymbolPinNumber )
+    void SetPinSymbolPinNumber( int aPinIndex, const std::string& aSymbolPinNumber )
     {
         m_pins.at( aPinIndex ).symbolPinNumber = aSymbolPinNumber;
     }
@@ -513,18 +513,18 @@ public:
     int GetParamCount() const { return static_cast<int>( m_params.size() ); }
     const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
 
-    const PARAM* FindParam( const wxString& aParamName ) const;
+    const PARAM* FindParam( const std::string& aParamName ) const;
 
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
 
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
 
-    virtual bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
+    virtual bool SetParamValue( unsigned aParamIndex, const std::string& aValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
                                     = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
-    bool SetParamValue( const wxString& aParamName, const wxString& aValue,
+    bool SetParamValue( const std::string& aParamName, const std::string& aValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     bool HasOverrides() const;
@@ -546,15 +546,15 @@ protected:
     virtual void CreatePins( unsigned aSymbolPinCount );
 
     template <typename T>
-    void WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const;
+    void WriteInferredDataFields( std::vector<T>& aFields, const std::string& aValue ) const;
 
-    virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
+    virtual std::string GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
 
-    wxString GenerateParamsField( const wxString& aPairSeparator ) const;
-    void ParseParamsField( const wxString& aParamsField );
+    std::string GenerateParamsField( const std::string& aPairSeparator ) const;
+    void ParseParamsField( const std::string& aParamsField );
 
-    void ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
-    void ParseDisabledField( const wxString& aDisabledField );
+    void ParsePinsField( unsigned aSymbolPinCount, const std::string& aPinsField );
+    void ParseDisabledField( const std::string& aDisabledField );
 
     template <typename T>
     void InferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields,
@@ -562,9 +562,9 @@ protected:
                                  bool aAllowParamValuePairs = true );
 
 private:
-    static TYPE readTypeFromSpiceStrings( const wxString& aTypeString,
-                                          const wxString& aLevel = "",
-                                          const wxString& aVersion = "",
+    static TYPE readTypeFromSpiceStrings( const std::string& aTypeString,
+                                          const std::string& aLevel = "",
+                                          const std::string& aVersion = "",
                                           bool aSkipDefaultLevel = true );
 
 
@@ -574,17 +574,17 @@ private:
     template <typename T>
     void doWriteFields( std::vector<T>& aFields ) const;
 
-    wxString generateDeviceTypeField() const;
-    wxString generateTypeField() const;
+    std::string generateDeviceTypeField() const;
+    std::string generateTypeField() const;
 
-    wxString generatePinsField() const;
-    wxString generateDisabledField() const;
+    std::string generatePinsField() const;
+    std::string generateDisabledField() const;
 
-    wxString parseFieldFloatValue( wxString aFieldFloatValue );
+    std::string parseFieldFloatValue( std::string aFieldFloatValue );
 
     virtual bool requiresSpiceModelLine() const;
 
-    virtual std::vector<wxString> getPinNames() const { return {}; }
+    virtual std::vector<std::string> getPinNames() const { return {}; }
 
 
     std::unique_ptr<SPICE_GENERATOR> m_spiceGenerator;

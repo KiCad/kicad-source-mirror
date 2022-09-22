@@ -34,7 +34,7 @@ class SPICE_GENERATOR_NGSPICE : public SPICE_GENERATOR_SPICE
 public:
     using SPICE_GENERATOR_SPICE::SPICE_GENERATOR_SPICE;
 
-    std::vector<wxString> CurrentNames( const wxString& aRefName ) const override;
+    std::vector<std::string> CurrentNames( const std::string& aRefName ) const override;
 };
 
 
@@ -46,7 +46,7 @@ public:
 
     SIM_MODEL_NGSPICE( TYPE aType );
 
-    bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+    bool SetParamFromSpiceCode( const std::string& aParamName, const std::string& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
     // Protected because it's accessed by QA tests.
@@ -92,11 +92,11 @@ protected:
 
     struct MODEL_INFO
     {
-        wxString name;
-        wxString variant1;
-        wxString variant2;
-        std::vector<wxString> pinNames;
-        wxString description;
+        std::string name;
+        std::string variant1;
+        std::string variant2;
+        std::vector<std::string> pinNames;
+        std::string description;
         std::vector<SIM_MODEL::PARAM::INFO> modelParams;
         std::vector<SIM_MODEL::PARAM::INFO> instanceParams;
     };
@@ -106,7 +106,7 @@ protected:
 private:
     bool requiresSpiceModelLine() const override { return false; }
 
-    std::vector<wxString> getPinNames() const override;
+    std::vector<std::string> getPinNames() const override;
 
     MODEL_TYPE getModelType() const;
     bool getIsOtherVariant();
