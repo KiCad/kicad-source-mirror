@@ -525,8 +525,9 @@ class PCM_SYM_LIB_TRAVERSER final : public wxDirTraverser
 public:
     explicit PCM_SYM_LIB_TRAVERSER( const wxString& aPath, SYMBOL_LIB_TABLE& aTable,
                                     const wxString& aPrefix ) :
+            m_lib_table( aTable ),
             m_path_prefix( aPath ),
-            m_lib_table( aTable ), m_lib_prefix( aPrefix )
+            m_lib_prefix( aPrefix )
     {
         wxFileName f( aPath, "" );
         m_prefix_dir_count = f.GetDirCount();

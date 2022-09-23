@@ -155,7 +155,6 @@ const wxString PROJECT::FootprintLibTblName() const
 void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&          project = GetProjectFile();
     std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
                                                         : m_projectFile->m_PinnedFootprintLibs;
 
@@ -177,7 +176,6 @@ void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 void PROJECT::UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&          project = GetProjectFile();
     std::vector<wxString>& pinnedLibs = isSymbolLibrary ? m_projectFile->m_PinnedSymbolLibs
                                                         : m_projectFile->m_PinnedFootprintLibs;
 
