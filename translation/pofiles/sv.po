@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 19:34-0700\n"
-"PO-Revision-Date: 2022-09-21 11:23+0000\n"
+"PO-Revision-Date: 2022-09-24 14:24+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -24031,7 +24031,7 @@ msgstr "Termisk avlastning"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
 msgid "Clearance Overrides and Settings"
-msgstr "Lokala avstånd och inställningar"
+msgstr "Lokala undantag för frigång och inställningar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
 msgid ""
@@ -28799,7 +28799,7 @@ msgstr "Tessellating kopparzoner ..."
 #: pcbnew/drc/drc_engine.cpp:802 pcbnew/drc/drc_engine.cpp:812
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokal åsidosättning på %s; godkännande: %s."
+msgstr "Lokalt undantag för %s; frigång: %s."
 
 #: pcbnew/drc/drc_engine.cpp:827
 msgid "board minimum"
@@ -29106,9 +29106,8 @@ msgid "Rule: %s"
 msgstr "Regel: %s"
 
 #: pcbnew/drc/drc_item.cpp:360
-#, fuzzy
 msgid "Local override"
-msgstr "Lokalt åsidosättande"
+msgstr "Lokalt undantag"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29840,7 +29839,7 @@ msgstr "(lödyta '%s')"
 
 #: pcbnew/footprint.cpp:2385 pcbnew/pad.cpp:1787 pcbnew/zone.cpp:1429
 msgid "Clearance Override"
-msgstr "Åsidosatt isolationsavstånd"
+msgstr "Undantag för isolationsavstånd"
 
 #: pcbnew/footprint.cpp:2388 pcbnew/pad.cpp:1764
 msgid "Solderpaste Margin Override"
@@ -31126,7 +31125,7 @@ msgstr "Prefix"
 
 #: pcbnew/pcb_dimension.cpp:307
 msgid "Override Text"
-msgstr "Åsidosätt text"
+msgstr "Undantag för text"
 
 #: pcbnew/pcb_dimension.cpp:317
 msgid "Suffix"
