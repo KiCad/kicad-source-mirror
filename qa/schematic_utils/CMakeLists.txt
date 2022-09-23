@@ -56,3 +56,7 @@ set_source_files_properties( schematic_file_util.cpp PROPERTIES
 target_include_directories( qa_schematic_utils PRIVATE
     $<TARGET_PROPERTY:eeschema_kiface_objects,INTERFACE_INCLUDE_DIRECTORIES>
     )
+
+# Ensure that schematic_lexer.h, which needs to be included, is
+# created before building this
+add_dependencies( qa_schematic_utils eeschema_kiface_objects)
