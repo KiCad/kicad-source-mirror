@@ -37,7 +37,7 @@
 /**
  * Enumeration of tools
  */
-enum EDA_TOOLS
+enum class EDA_TOOLS
 {
     EAGLE
 };

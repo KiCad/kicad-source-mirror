@@ -34,7 +34,7 @@ bool IsFileFromEDATool( const wxFileName& aFileName, const EDA_TOOLS aTool )
     {
         switch( aTool )
         {
-        case EAGLE:
+        case EDA_TOOLS::EAGLE:
             if( textFile.GetLineCount() > 2
                 && textFile[1].StartsWith( wxT( "<!DOCTYPE eagle SYSTEM" ) )
                 && textFile[2].StartsWith( wxT( "<eagle version" ) ) )

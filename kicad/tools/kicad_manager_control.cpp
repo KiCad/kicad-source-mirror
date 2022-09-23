@@ -359,7 +359,7 @@ int KICAD_MANAGER_CONTROL::ImportNonKicadProj( const TOOL_EVENT& aEvent )
     {
         // Check if droppedFile is an eagle file.
         // If not, return and do not import files.
-        if( !IsFileFromEDATool( droppedFileName, EAGLE ) )
+        if( !IsFileFromEDATool( droppedFileName, EDA_TOOLS::EAGLE ) )
             return -1;
 
         schFileExtension = EagleSchematicFileExtension;
@@ -367,19 +367,18 @@ int KICAD_MANAGER_CONTROL::ImportNonKicadProj( const TOOL_EVENT& aEvent )
         schFileType = SCH_IO_MGR::SCH_EAGLE;
         pcbFileType = IO_MGR::EAGLE;
     }
+    // Cadstar project.
+    else if( droppedFileName.GetExt() == CadstarSchematicFileExtension
+             || droppedFileName.GetExt() == CadstarPcbFileExtension )
+    {
+        schFileExtension = CadstarSchematicFileExtension;
+        pcbFileExtension = CadstarPcbFileExtension;
+        schFileType = SCH_IO_MGR::SCH_CADSTAR_ARCHIVE;
+        pcbFileType = IO_MGR::CADSTAR_PCB_ARCHIVE;
+    }
     else
     {
-        // Cadstar project.
-        if( droppedFileName.GetExt() == CadstarSchematicFileExtension
-            || droppedFileName.GetExt() == CadstarPcbFileExtension )
-        {
-            schFileExtension = CadstarSchematicFileExtension;
-            pcbFileExtension = CadstarPcbFileExtension;
-            schFileType = SCH_IO_MGR::SCH_CADSTAR_ARCHIVE;
-            pcbFileType = IO_MGR::CADSTAR_PCB_ARCHIVE;
-        }
-        else
-            return -1;
+        return -1;
     }
 
     IMPORT_PROJ_HELPER importProj( m_frame, droppedFileName.GetFullPath(), schFileExtension,
